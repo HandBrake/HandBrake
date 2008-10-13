@@ -22,13 +22,18 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Declarations *******************************************************
-        Functions.Common hb_common_func = new Functions.Common();
-        Functions.x264Panel x264PanelFunctions = new Functions.x264Panel();
+        // Objects which may be used by one or more other objects
+        Functions.Main hb_common_func = new Functions.Main();
         Functions.Encode cliObj = new Functions.Encode();
         Functions.Queue encodeQueue = new Functions.Queue();
         Functions.Presets presetHandler = new Functions.Presets();
-        Functions.QueryGenerator queryGen = new Functions.QueryGenerator();
         Parsing.Title selectedTitle;
+
+        // Objects belonging to this window only
+        PresetLoader presetLoader = new PresetLoader();
+        x264Panel x264PanelFunctions = new x264Panel();
+        QueryGenerator queryGen = new QueryGenerator();
+
         internal Process hbProc;
         private Parsing.DVD thisDVD;
         private frmQueue queueWindow;
@@ -47,7 +52,6 @@ namespace Handbrake
 
             // Initialize the queue window.
             queueWindow = new frmQueue(this);
-
             //Create a label that can be updated from the parent thread.
             Label lblStatus = new Label();
             lblStatus.Size = new Size(250, 20);
@@ -166,7 +170,7 @@ namespace Handbrake
             else
             {
                 Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
-                hb_common_func.presetLoader(this, presetQuery, "User Defaults ");
+                presetLoader.presetLoader(this, presetQuery, "User Defaults ");
             }
         }
         private void queueRecovery()
@@ -250,7 +254,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -528,16 +532,21 @@ namespace Handbrake
             }
 
             // Run the autoName & chapterNaming functions
-            hb_common_func.autoName(this);
-            hb_common_func.chapterNaming(this);
+            if (Properties.Settings.Default.autoNaming == "Checked")
+                text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+
+            data_chpt.Rows.Clear();
+            DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterStart.Text, drop_chapterFinish.Text);
+            if (chapterGridView != null)
+                data_chpt = chapterGridView;
         }
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
             int c_start, c_end = 1;
 
             if (drop_chapterFinish.Text == "Auto" && drop_chapterFinish.Items.Count != 0)
-                drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count-1;
-           
+                drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count - 1;
+
             int.TryParse(drop_chapterStart.Text, out c_start);
             int.TryParse(drop_chapterFinish.Text, out c_end);
 
@@ -547,10 +556,11 @@ namespace Handbrake
                     drop_chapterFinish.Text = c_start.ToString();
             }
 
-            calculateDuration();
+            lbl_duration.Text = hb_common_func.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
 
             // Run the Autonaming function
-            hb_common_func.autoName(this);
+            if (Properties.Settings.Default.autoNaming == "Checked")
+                text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -568,10 +578,11 @@ namespace Handbrake
                     drop_chapterFinish.Text = c_start.ToString();
             }
 
-            calculateDuration();
+            lbl_duration.Text = hb_common_func.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
 
             // Run the Autonaming function
-            hb_common_func.autoName(this);
+            if (Properties.Settings.Default.autoNaming == "Checked")
+                text_destination.Text =  hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
         }
 
         //Destination
@@ -617,17 +628,16 @@ namespace Handbrake
         // Output Settings
         private void drop_format_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             if (drop_format.SelectedIndex == 0)
-                setExtension(".mp4");
+                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".mp4");
             else if (drop_format.SelectedIndex == 1)
-                setExtension(".m4v");
+                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".m4v");
             else if (drop_format.SelectedIndex == 2)
-                setExtension(".mkv");
+                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".mkv");
             else if (drop_format.SelectedIndex == 3)
-                setExtension(".avi");
+                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".avi");
             else if (drop_format.SelectedIndex == 4)
-                setExtension(".ogm");
+                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".ogm");
         }
 
         //Video Tab
@@ -730,7 +740,7 @@ namespace Handbrake
                 {
                     if (drp_anamorphic.Text == "None")
                     {
-                        int height = cacluateNonAnamorphicHeight(width);
+                        int height = hb_common_func.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value,text_left.Value, text_right.Value, selectedTitle);
                         text_height.Text = height.ToString();
                     }
                 }
@@ -1212,7 +1222,9 @@ namespace Handbrake
                 text_destination.Text = destination;
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
-                hb_common_func.chapterNaming(this);
+                DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterStart.Text, drop_chapterFinish.Text);
+                if (chapterGridView != null)
+                    data_chpt = chapterGridView;
             }
             else
             {
@@ -1337,7 +1349,7 @@ namespace Handbrake
         // Presets
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
             preset.ShowDialog();
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
@@ -1373,7 +1385,7 @@ namespace Handbrake
             Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
 
             // Now load the preset
-            hb_common_func.presetLoader(this, presetQuery, presetName);
+            presetLoader.presetLoader(this, presetQuery, presetName);
 
             // The x264 widgets will need updated, so do this now:
             x264PanelFunctions.X264_StandardizeOptString(this);
@@ -1397,97 +1409,60 @@ namespace Handbrake
         #endregion
 
         #region Functions
-        // Replace File extenstion.
-        public void setExtension(string newExtension)
+        private void loadNormalPreset()
         {
-            text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".avi", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".ogm", newExtension);
-        }
-
-        // DVD Parsing
-        public void setStreamReader(Parsing.DVD dvd)
-        {
-            this.thisDVD = dvd;
-        }
-
-        // Chapter Selection Duration calculation
-        public void calculateDuration()
-        {
-            TimeSpan Duration = TimeSpan.FromSeconds(0.0);
-
-            // Get the durations between the 2 chapter points and add them together.
-            if (drop_chapterStart.Text != "Auto" && drop_chapterFinish.Text != "Auto")
+            foreach (TreeNode treenode in treeView_presets.Nodes)
             {
-                int start_chapter, end_chapter = 0;
-                int.TryParse(drop_chapterStart.Text, out start_chapter);
-                int.TryParse(drop_chapterFinish.Text, out end_chapter);
-
-                int position = start_chapter - 1;
-
-                if (start_chapter <= end_chapter)
+                if (treenode.Text.ToString().Equals("Normal"))
+                    treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index];
+            }
+        }
+        #endregion
+        
+        #region Drive Detection
+        // Source Button Drive Detection
+        private delegate void ProgressUpdateHandler();
+        private void getDriveInfoThread()
+        {
+            try
+            {
+                if (this.InvokeRequired)
                 {
-                    if (end_chapter > selectedTitle.Chapters.Count)
-                        end_chapter = selectedTitle.Chapters.Count;
+                    this.BeginInvoke(new ProgressUpdateHandler(getDriveInfoThread));
+                    return;
+                }
 
-                    while (position != end_chapter)
+                Boolean foundDrive = false;
+                DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
+                foreach (DriveInfo curDrive in theCollectionOfDrives)
+                {
+                    if (curDrive.DriveType == DriveType.CDRom)
                     {
-                        TimeSpan dur = selectedTitle.Chapters[position].Duration;
-                        Duration = Duration + dur;
-                        position++;
+                        if (curDrive.IsReady)
+                        {
+                            if (File.Exists(curDrive.RootDirectory.ToString() + "VIDEO_TS\\VIDEO_TS.IFO"))
+                                mnu_dvd_drive.Text = curDrive.RootDirectory.ToString() + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
+                            else
+                                mnu_dvd_drive.Text = "[No DVD Drive Ready]";
+
+                            foundDrive = true;
+
+                        }
                     }
                 }
-            }
 
-            // Set the Duration
-            lbl_duration.Text = Duration.ToString();
+                if (foundDrive == false)
+                    mnu_dvd_drive.Text = "[No DVD Drive Ready]";
+            }
+            catch (Exception)
+            {
+                mnu_dvd_drive.Text = "[No DVD Drive Ready / Found]";
+            }
         }
-        public int cacluateNonAnamorphicHeight(int width)
-        {
-            float aspect = selectedTitle.AspectRatio;
-            int aw;
-            int ah;
-            if (aspect.ToString() == "1.78")
-            {
-                aw = 16;
-                ah = 9;
-            }
-            else
-            {
-                aw = 4;
-                ah = 3;
-            }
+        #endregion
 
-            double a = width * selectedTitle.Resolution.Width * ah * (selectedTitle.Resolution.Height - (double)text_top.Value - (double)text_bottom.Value);
-            double b = selectedTitle.Resolution.Height * aw * (selectedTitle.Resolution.Width - (double)text_left.Value - (double)text_right.Value);
-
-            double y = a / b;
-
-            // If it's not Mod 16, make it mod 16
-            if ((y % 16) != 0)
-            {
-                double mod16 = y % 16;
-                if (mod16 >= 8)
-                {
-                    mod16 = 16 - mod16;
-                    y = y + mod16;
-                }
-                else
-                {
-                    y = y - mod16;
-                }
-            }
-
-            //16 * (421 / 16)
-            //double z = ( 16 * (( y + 8 ) / 16 ) );
-            int x = int.Parse(y.ToString());
-            return x;
-        }
-
-        // Audio system functions
-        private void setAudioByContainer(String path)
+        #region Audio Panel Stuff
+        public void setAudioByContainer(String path)
         {
             string oldval = "";
 
@@ -1636,7 +1611,7 @@ namespace Handbrake
                 }
             }
         }
-        private void setVideoByContainer(String path)
+        public void setVideoByContainer(String path)
         {
             string oldval = "";
 
@@ -1688,7 +1663,7 @@ namespace Handbrake
                 drp_videoEncoder.Text = oldval;
             }
         }
-        private void setBitrateSelections384(ComboBox dropDown)
+        public void setBitrateSelections384(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1707,7 +1682,7 @@ namespace Handbrake
             dropDown.Items.Add("320");
             dropDown.Items.Add("384");
         }
-        private void setBitrateSelections320(ComboBox dropDown)
+        public void setBitrateSelections320(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1725,7 +1700,7 @@ namespace Handbrake
             dropDown.Items.Add("256");
             dropDown.Items.Add("320");
         }
-        private void setBitrateSelections160(ComboBox dropDown)
+        public void setBitrateSelections160(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1739,84 +1714,6 @@ namespace Handbrake
             dropDown.Items.Add("128");
             dropDown.Items.Add("160");
         }
-
-        // Preset system functions
-        private void loadNormalPreset()
-        {
-            foreach (TreeNode treenode in treeView_presets.Nodes)
-            {
-                if (treenode.Text.ToString().Equals("Normal"))
-                    treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index];
-            }
-        }
-        public void loadPresetPanel()
-        {
-            presetHandler.loadPresetFiles();
-
-            treeView_presets.Nodes.Clear();
-            List<string> presetNameList = new List<string>();
-            TreeNode preset_treeview = new TreeNode();          
-
-            presetNameList = presetHandler.getBuildInPresetNames();
-            foreach (string preset in presetNameList)
-            {
-                preset_treeview = new TreeNode(preset);
-
-                // Now Fill Out List View with Items
-                treeView_presets.Nodes.Add(preset_treeview);
-            }
-
-            presetNameList = presetHandler.getUserPresetNames();
-            foreach (string preset in presetNameList)
-            {
-                preset_treeview = new TreeNode(preset);
-                preset_treeview.ForeColor = Color.Black;
-
-                // Now Fill Out List View with Items
-                treeView_presets.Nodes.Add(preset_treeview);
-            }
-        }
-
-        // Source Button Drive Detection
-        private delegate void ProgressUpdateHandler();
-        private void getDriveInfoThread()
-        {
-            try
-            {
-                if (this.InvokeRequired)
-                {
-                    this.BeginInvoke(new ProgressUpdateHandler(getDriveInfoThread));
-                    return;
-                }
-
-                Boolean foundDrive = false;
-                DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
-                foreach (DriveInfo curDrive in theCollectionOfDrives)
-                {
-                    if (curDrive.DriveType == DriveType.CDRom)
-                    {
-                        if (curDrive.IsReady)
-                        {
-                            if (File.Exists(curDrive.RootDirectory.ToString() + "VIDEO_TS\\VIDEO_TS.IFO"))
-                                mnu_dvd_drive.Text = curDrive.RootDirectory.ToString() + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
-                            else
-                                mnu_dvd_drive.Text = "[No DVD Drive Ready]";
-
-                            foundDrive = true;
-
-                        }
-                    }
-                }
-
-                if (foundDrive == false)
-                    mnu_dvd_drive.Text = "[No DVD Drive Ready]";
-            }
-            catch (Exception)
-            {
-                mnu_dvd_drive.Text = "[No DVD Drive Ready / Found]";
-            }
-        }
-
         #endregion
 
         #region Encoding
@@ -1876,6 +1773,7 @@ namespace Handbrake
             else
                 return true;
         }
+
         /// <summary>
         /// Action can be "encode" or "scan"
         /// Set the last action varible in the main window.
@@ -1886,6 +1784,48 @@ namespace Handbrake
         {
             this.lastAction = last;
         }
+
+        /// <summary>
+        /// DVD parseing. Pass in a parsed DVD.
+        /// </summary>
+        /// <param name="dvd"></param>
+        public void setStreamReader(Parsing.DVD dvd)
+        {
+            this.thisDVD = dvd;
+        }
+
+
+        /// <summary>
+        /// Reload the preset panel display
+        /// </summary>
+        public void loadPresetPanel()
+        {
+            presetHandler.loadPresetFiles();
+
+            treeView_presets.Nodes.Clear();
+            List<string> presetNameList = new List<string>();
+            TreeNode preset_treeview = new TreeNode();
+
+            presetNameList = presetHandler.getBuildInPresetNames();
+            foreach (string preset in presetNameList)
+            {
+                preset_treeview = new TreeNode(preset);
+
+                // Now Fill Out List View with Items
+                treeView_presets.Nodes.Add(preset_treeview);
+            }
+
+            presetNameList = presetHandler.getUserPresetNames();
+            foreach (string preset in presetNameList)
+            {
+                preset_treeview = new TreeNode(preset);
+                preset_treeview.ForeColor = Color.Black;
+
+                // Now Fill Out List View with Items
+                treeView_presets.Nodes.Add(preset_treeview);
+            }
+        }
+
         #endregion
 
         #region Taskbar Tray Icon

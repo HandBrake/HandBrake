@@ -146,15 +146,16 @@
     <Compile Include="frmUpdater.designer.cs">
       <DependentUpon>frmUpdater.cs</DependentUpon>
     </Compile>
-    <Compile Include="Functions\QueryGenerator.cs" />
+    <Compile Include="frmMain\PresetLoader.cs" />
+    <Compile Include="frmMain\QueryGenerator.cs" />
     <Compile Include="Functions\SystemInfo.cs" />
-    <Compile Include="Functions\Common.cs" />
+    <Compile Include="Functions\Main.cs" />
     <Compile Include="Functions\Presets.cs" />
     <Compile Include="Functions\Queue.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
-    <Compile Include="Functions\x264Panel.cs" />
+    <Compile Include="frmMain\x264Panel.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\DVD.cs" />

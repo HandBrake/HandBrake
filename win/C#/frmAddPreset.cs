@@ -17,21 +17,20 @@ namespace Handbrake
 {
     public partial class frmAddPreset : Form
     {
-        Functions.QueryGenerator queryGen = new Functions.QueryGenerator();
         private frmMain frmMainWindow;
         Functions.Presets presetCode;
-
-        public frmAddPreset(frmMain fmw, Functions.Presets presetHandler)
+        private string query = "";
+   
+        public frmAddPreset(frmMain fmw, string query_string, Functions.Presets presetHandler)
         {
             InitializeComponent();
             frmMainWindow = fmw;
             presetCode = presetHandler;
+            this.query = query_string;
         }
 
         private void btn_add_Click(object sender, EventArgs e)
         {
-            String query = queryGen.generateTabbedComponentsQuery(frmMainWindow);
-
             if (presetCode.addPreset(txt_preset_name.Text.Trim(), query) == true)
             {
                 frmMainWindow.loadPresetPanel();

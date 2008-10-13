@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -641,9 +641,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -3384,7 +3384,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem btn_new_preset;
         private System.Windows.Forms.ToolStripMenuItem mnu_handbrake_forums;
         private System.Windows.Forms.ToolStripMenuItem mnu_user_guide;
-        private System.Windows.Forms.ToolStripMenuItem mnu_dvd_drive;
         private System.Windows.Forms.ToolStripDropDownButton btn_source;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem btn_dvd_source;
@@ -3402,6 +3401,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label label8;
         internal System.Windows.Forms.OpenFileDialog ISO_Open;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
+        internal System.Windows.Forms.ToolStripMenuItem mnu_dvd_drive;
 
     }
 }

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
 
-namespace Handbrake.Functions
+namespace Handbrake
 {
     class QueryGenerator
     {

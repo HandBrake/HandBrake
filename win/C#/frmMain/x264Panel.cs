@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Handbrake.Functions
+namespace Handbrake
 {
     class x264Panel
     {
-
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
         /// </summary>

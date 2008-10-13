@@ -26,7 +26,7 @@ namespace Handbrake
         private Parsing.DVD thisDvd;
         private delegate void UpdateUIHandler();
         Process hbproc;
-        Functions.Common hb_common_func = new Functions.Common();
+        Functions.Main hb_common_func = new Functions.Main();
         Functions.Encode process = new Functions.Encode();
 
         public frmReadDVD(string inputFile, frmMain parent)
@@ -49,6 +49,7 @@ namespace Handbrake
                 MessageBox.Show("frmReadDVD.cs - startScan " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void startProc(object state)
         {
             try
@@ -112,7 +113,7 @@ namespace Handbrake
 
                 // Now select the longest title
                 if (thisDvd.Titles.Count != 0)
-                    hb_common_func.selectLongestTitle(mainWindow);
+                    mainWindow.drp_dvdtitle.SelectedItem = hb_common_func.selectLongestTitle(mainWindow.drp_dvdtitle);
 
                 this.Close();
             }
@@ -122,6 +123,7 @@ namespace Handbrake
                 this.Close();
             }
         }
+
         private void closeWindowAfterError()
         {
             try
