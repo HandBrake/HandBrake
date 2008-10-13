@@ -183,10 +183,7 @@ namespace Handbrake.Functions
             #region Chapter Markers
 
             if (presetQuery.ChapterMarkers == true)
-            {
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
-                mainWindow.drop_format.SelectedIndex = 1;
-            }
             else
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Unchecked;
 
@@ -289,6 +286,11 @@ namespace Handbrake.Functions
             mainWindow.drp_audenc_3.Text = presetQuery.AudioEncoder3;
             mainWindow.drp_audenc_4.Text = presetQuery.AudioEncoder4;
 
+            mainWindow.drp_audmix_1.Text = presetQuery.AudioTrackMix1;
+            mainWindow.drp_audmix_2.Text = presetQuery.AudioTrackMix2;
+            mainWindow.drp_audmix_3.Text = presetQuery.AudioTrackMix3;
+            mainWindow.drp_audmix_4.Text = presetQuery.AudioTrackMix4;
+
             if (presetQuery.AudioBitrate1 != null)
                 mainWindow.drp_audbit_1.Text = presetQuery.AudioBitrate1;
             mainWindow.drp_audbit_2.Text = presetQuery.AudioBitrate2;
@@ -300,12 +302,6 @@ namespace Handbrake.Functions
             mainWindow.drp_audsr_2.Text = presetQuery.AudioSamplerate2;
             mainWindow.drp_audsr_3.Text = presetQuery.AudioSamplerate3;
             mainWindow.drp_audsr_4.Text = presetQuery.AudioSamplerate4;
-
-            mainWindow.drp_audmix_1.Text = presetQuery.AudioTrackMix1;
-            mainWindow.drp_audmix_2.Text = presetQuery.AudioTrackMix2;
-            mainWindow.drp_audmix_3.Text = presetQuery.AudioTrackMix3;
-            mainWindow.drp_audmix_4.Text = presetQuery.AudioTrackMix4;
-
 
             // Dynamic Range Compression (Should be a float but we use double for ease)
             double value = 0;
