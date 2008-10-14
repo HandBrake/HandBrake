@@ -289,6 +289,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
                          hb_work_info_t *info )
 {
     int i, rate, bitrate, flags;
+    int old_rate = 0, old_bitrate = 0;
 
     memset( info, 0, sizeof(*info) );
 
@@ -298,7 +299,22 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     {
         if( a52_syncinfo( &b->data[i], &flags, &rate, &bitrate ) != 0 )
         {
-            break;
+            /*
+             * Got sync apparently, save these values and check that they
+             * also match when we get sync again.
+             */
+            if( old_rate ) 
+            {
+                if( rate == old_rate && bitrate == old_bitrate )
+                {
+                    break;
+                } else {
+                    hb_log( "AC3 sync didn't return the same values two times in a row, still looking" );
+                }
+            } 
+            
+            old_rate = rate;
+            old_bitrate = bitrate;
         }
     }
     if ( i >= b->size - 7 )
