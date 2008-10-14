@@ -4714,35 +4714,112 @@ the user is using "Custom" settings by determining the sender*/
 #pragma mark Preset Outline View Methods
 #pragma mark - Required
 /* These are required by the NSOutlineView Datasource Delegate */
-/* We use this to deterimine children of an item */
-- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(NSInteger)index ofItem:(id)item
-{
-if (item == nil)
-        return [UserPresets objectAtIndex:index];
-    
-    // We are only one level deep, so we can't be asked about children
-    NSAssert (NO, @"Presets View outlineView:child:ofItem: currently can't handle nested items.");
-    return nil;
-}
-/* We use this to determine if an item should be expandable */
-- (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item
-{
 
-    /* For now, we maintain one level, so set to no
-    * when nested, we set to yes for any preset "folders"
-    */
-    return NO;
 
-}
 /* used to specify the number of levels to show for each item */
 - (int)outlineView:(NSOutlineView *)fPresetsOutlineView numberOfChildrenOfItem:(id)item
 {
     /* currently use no levels to test outline view viability */
-    if (item == nil)
+    if (item == nil) // for an outline view the root level of the hierarchy is always nil
+    {
         return [UserPresets count];
+    }
     else
-        return 0;
+    {
+        /* we need to return the count of the array in ChildrenArray for this folder */
+        NSArray *children = nil;
+        children = [item objectForKey:@"ChildrenArray"];
+        if ([children count] > 0)
+        {
+            return [children count];
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }
+
+/* We use this to deterimine children of an item */
+- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(int)index ofItem:(id)item
+{
+    
+    /* we need to return the count of the array in ChildrenArray for this folder */
+    NSArray *children = nil;
+    if (item == nil)
+    {
+        children = UserPresets;
+    }
+    else
+    {
+        if ([item objectForKey:@"ChildrenArray"])
+        {
+            children = [item objectForKey:@"ChildrenArray"];
+        }
+    }   
+    if ((children == nil) || ([children count] <= index))
+    {
+        return nil;
+    }
+    else
+    {
+        return [children objectAtIndex:index];
+    }
+    
+    
+    // We are only one level deep, so we can't be asked about children
+    //NSAssert (NO, @"Presets View outlineView:child:ofItem: currently can't handle nested items.");
+    //return nil;
+}
+
+/* We use this to determine if an item should be expandable */
+- (BOOL)outlineView:(NSOutlineView *)fPresetsOutlineView isItemExpandable:(id)item
+{
+    
+    /* we need to return the count of the array in ChildrenArray for this folder */
+    NSArray *children= nil;
+    if (item == nil)
+    {
+        children = UserPresets;
+    }
+    else
+    {
+        if ([item objectForKey:@"ChildrenArray"])
+        {
+            children = [item objectForKey:@"ChildrenArray"];
+        }
+    }   
+    
+    /* To deterimine if an item should show a disclosure triangle
+     * we could do it by the children count as so:
+     * if ([children count] < 1)
+     * However, lets leave the triangle show even if there are no
+     * children to help indicate a folder, just like folder in the
+     * finder can show a disclosure triangle even when empty
+     */
+    
+    /* We need to determine if the item is a folder */
+   if ([[item objectForKey:@"Folder"] intValue] == 1)
+   {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+    
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item
+{
+    // Our outline view has no levels, but we can still expand every item. Doing so
+    // just makes the row taller. See heightOfRowByItem below.
+//return ![(HBQueueOutlineView*)outlineView isDragging];
+
+return YES;
+}
+
+
 /* Used to tell the outline view which information is to be displayed per item */
 - (id)outlineView:(NSOutlineView *)fPresetsOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
 {
@@ -4754,7 +4831,8 @@ if (item == nil)
     }
     else
     {
-        return @"something";
+        //return @"";
+        return nil;
     }
 }
 
@@ -4764,7 +4842,6 @@ if (item == nil)
 {
     if ([[tableColumn identifier] isEqualToString:@"PresetName"])
     {
-        NSDictionary *userPresetDict = item;
         NSFont *txtFont;
         NSColor *fontColor;
         NSColor *shadowColor;
@@ -4778,7 +4855,7 @@ if (item == nil)
         }
         else
         {
-            if ([[userPresetDict objectForKey:@"Type"] intValue] == 0)
+            if ([[item objectForKey:@"Type"] intValue] == 0)
             {
                 fontColor = [NSColor blueColor];
             }
@@ -4786,15 +4863,21 @@ if (item == nil)
             {
                 fontColor = [NSColor blackColor];
             }
-            shadowColor = nil;
+            /* check to see if its a folder */
+            //if ([[item objectForKey:@"Folder"] intValue] == 1)
+            //{
+            //fontColor = [NSColor greenColor];
+            //}
+            
+            
         }
         /* We use Bold Text for the HB Default */
-        if ([[userPresetDict objectForKey:@"Default"] intValue] == 1)// 1 is HB default
+        if ([[item objectForKey:@"Default"] intValue] == 1)// 1 is HB default
         {
             txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
         }
         /* We use Bold Text for the User Specified Default */
-        if ([[userPresetDict objectForKey:@"Default"] intValue] == 2)// 2 is User default
+        if ([[item objectForKey:@"Default"] intValue] == 2)// 2 is User default
         {
             txtFont = [NSFont boldSystemFontOfSize: [NSFont smallSystemFontSize]];
         }
@@ -4851,7 +4934,8 @@ if (item == nil)
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
 {
 	// Dragging is only allowed for custom presets.
-	if ([[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
+    //[[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Default"] intValue] != 1
+	if ([[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Type"] intValue] == 0) // 0 is built in preset
     {
         return NO;
     }
@@ -4869,16 +4953,15 @@ if (item == nil)
 
 - (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
 {
+	
 	// Don't allow dropping ONTO an item since they can't really contain any children.
     
     BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
     if (isOnDropTypeProposal)
         return NSDragOperationNone;
     
-    
-	// Don't allow dropping INTO an item since they can't really contain any children as of yet.
-	
-    if (item != nil)
+    // Don't allow dropping INTO an item since they can't really contain any children as of yet.
+	if (item != nil)
 	{
 		index = [fPresetsOutlineView rowForItem: item] + 1;
 		item = nil;
@@ -4889,7 +4972,7 @@ if (item == nil)
     {
         return NSDragOperationNone;
         index = MAX (index, presetCurrentBuiltInCount);
-	}
+	}    
 	
     [outlineView setDropItem:item dropChildIndex:index];
     return NSDragOperationGeneric;
@@ -4899,16 +4982,27 @@ if (item == nil)
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index
 {
-    NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
-    
-    id obj;
-    NSEnumerator *enumerator = [fDraggedNodes objectEnumerator];
-    while (obj = [enumerator nextObject])
-    {
-        [moveItems addIndex:[UserPresets indexOfObject:obj]];
+    /* first, lets see if we are dropping into a folder */
+    if ([[fPresetsOutlineView itemAtRow:index] objectForKey:@"Folder"] && [[[fPresetsOutlineView itemAtRow:index] objectForKey:@"Folder"] intValue] == 1) // if its a folder
+	{
+    NSMutableArray *childrenArray = [[NSMutableArray alloc] init];
+    childrenArray = [[fPresetsOutlineView itemAtRow:index] objectForKey:@"ChildrenArray"];
+    [childrenArray addObject:item];
+    [[fPresetsOutlineView itemAtRow:index] setObject:[NSMutableArray arrayWithArray: childrenArray] forKey:@"ChildrenArray"];
+    [childrenArray autorelease];
     }
-    // Successful drop, lets rearrange the view and save it all
-    [self moveObjectsInPresetsArray:UserPresets fromIndexes:moveItems toIndex: index];
+    else // We are not, so we just move the preset into the existing array 
+    {
+        NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
+        id obj;
+        NSEnumerator *enumerator = [fDraggedNodes objectEnumerator];
+        while (obj = [enumerator nextObject])
+        {
+            [moveItems addIndex:[UserPresets indexOfObject:obj]];
+        }
+        // Successful drop, lets rearrange the view and save it all
+        [self moveObjectsInPresetsArray:UserPresets fromIndexes:moveItems toIndex: index];
+    }
     [fPresetsOutlineView reloadData];
     [self savePreset];
     return YES;
@@ -4949,12 +5043,12 @@ if (item == nil)
 
 - (IBAction)selectPreset:(id)sender
 {
-
-    if ([fPresetsOutlineView selectedRow] >= 0)
+    
+    if ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1)
     {
         chosenPreset = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
-        /* we set the preset display field in main window here */
         [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
+        
         if ([[chosenPreset objectForKey:@"Default"] intValue] == 1)
         {
             [fPresetSelectedDisplay setStringValue:[NSString stringWithFormat:@"%@ (Default)", [chosenPreset objectForKey:@"PresetName"]]];
@@ -4963,17 +5057,18 @@ if (item == nil)
         {
             [fPresetSelectedDisplay setStringValue:[chosenPreset objectForKey:@"PresetName"]];
         }
+        
         /* File Format */
         [fDstFormatPopUp selectItemWithTitle:[chosenPreset objectForKey:@"FileFormat"]];
         [self formatPopUpChanged:nil];
-
+        
         /* Chapter Markers*/
         [fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
         /* Allow Mpeg4 64 bit formatting +4GB file sizes */
         [fDstMp4LargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
         /* Mux mp4 with http optimization */
         [fDstMp4HttpOptFileCheck setState:[[chosenPreset objectForKey:@"Mp4HttpOptimize"] intValue]];
-
+        
         /* Video encoder */
         /* We set the advanced opt string here if applicable*/
         [fAdvancedOptions setOptions:[chosenPreset objectForKey:@"x264Option"]];
@@ -5008,22 +5103,22 @@ if (item == nil)
         {
             [fVidEncoderPopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoEncoder"]];
         }
-
+        
         /* Lets run through the following functions to get variables set there */
         [self videoEncoderPopUpChanged:nil];
         /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
         [fDstMp4iPodFileCheck setState:[[chosenPreset objectForKey:@"Mp4iPodCompatible"] intValue]];
         [self calculateBitrate:nil];
-
+        
         /* Video quality */
         [fVidQualityMatrix selectCellAtRow:[[chosenPreset objectForKey:@"VideoQualityType"] intValue] column:0];
-
+        
         [fVidTargetSizeField setStringValue:[chosenPreset objectForKey:@"VideoTargetSize"]];
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
         [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
-
+        
         [self videoMatrixChanged:nil];
-
+        
         /* Video framerate */
         /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
          detected framerate in the fVidRatePopUp so we use index 0*/
@@ -5035,16 +5130,16 @@ if (item == nil)
         {
             [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
         }
-
+        
         /* GrayScale */
         [fVidGrayscaleCheck setState:[[chosenPreset objectForKey:@"VideoGrayScale"] intValue]];
-
+        
         /* 2 Pass Encoding */
         [fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
         [self twoPassCheckboxChanged:nil];
         /* Turbo 1st pass for 2 Pass Encoding */
         [fVidTurboPassCheck setState:[[chosenPreset objectForKey:@"VideoTurboTwoPass"] intValue]];
-
+        
         /*Audio*/
         if ([chosenPreset objectForKey:@"FileCodecs"])
         {
@@ -5163,7 +5258,7 @@ if (item == nil)
                 }
             }
             /* We detect here if we have the old audio sample rate and if so we apply samplerate and bitrate to the existing four tracks if chosen
-            * UNLESS the CodecPopUp is AC3 in which case the preset values are ignored in favor of rates set in audioTrackMixdownChanged*/
+             * UNLESS the CodecPopUp is AC3 in which case the preset values are ignored in favor of rates set in audioTrackMixdownChanged*/
             if ([chosenPreset objectForKey:@"AudioSampleRate"])
             {
                 if ([fAudLang1PopUp indexOfSelectedItem] > 0 && [fAudTrack1CodecPopUp titleOfSelectedItem] != @"AC3 Passthru")
@@ -5314,10 +5409,10 @@ if (item == nil)
                 [fAudTrack4DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio4TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack4DrcSlider];
             }
-
-
+            
+            
         }
-
+        
         /* We now cleanup any extra audio tracks that may be previously set if we need to, we do it here so we don't have to
          * duplicate any code for legacy presets.*/
         /* First we handle the legacy Codecs crazy AVC/H.264 Video / AAC + AC3 Audio atv hybrid */
@@ -5346,12 +5441,12 @@ if (item == nil)
                 [self audioTrackPopUpChanged: fAudLang4PopUp];
             }
         }
-
+        
         /*Subtitles*/
         [fSubPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Subtitles"]];
         /* Forced Subtitles */
         [fSubForcedCheck setState:[[chosenPreset objectForKey:@"SubtitlesForced"] intValue]];
-
+        
         /* Picture Settings */
         /* Note: objectForKey:@"UsesPictureSettings" now refers to picture size, this encompasses:
          * height, width, keep ar, anamorphic and crop settings.
@@ -5489,21 +5584,21 @@ if (item == nil)
                     /* Deblock */
                     if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
                     {
-                       /* since we used to use 1 to turn on deblock, we now use a 5 in our sliding scale */
-                         [fPictureController setDeblock:5];
+                        /* since we used to use 1 to turn on deblock, we now use a 5 in our sliding scale */
+                        [fPictureController setDeblock:5];
                     }
                     else
                     {
                         [fPictureController setDeblock:0];
-                     
+                        
                     }
-
-                   [self calculatePictureSizing:nil];
+                    
+                    [self calculatePictureSizing:nil];
                 }
-
+                
             }
-
-
+            
+            
         }
         /* If the preset has an objectForKey:@"UsesPictureFilters", then we know it is a newer style filters preset
          * and handle the filters here depending on whether or not the preset specifies applying the filter.
@@ -5614,6 +5709,8 @@ if (item == nil)
     [fPresetNewPicSettingsPopUp selectItemAtIndex: 0];	
     /* Uncheck the preset use filters checkbox */
     [fPresetNewPicFiltersCheck setState:NSOffState];
+    // fPresetNewFolderCheck
+    [fPresetNewFolderCheck setState:NSOffState];
     /* Erase info from the input fields*/
 	[fPresetNewName setStringValue: @""];
 	[fPresetNewDesc setStringValue: @""];
@@ -5685,130 +5782,141 @@ if (item == nil)
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
     [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
+    /* Set whether or not this is to be a folder fPresetNewFolderCheck*/
+    [preset setObject:[NSNumber numberWithBool:[fPresetNewFolderCheck state]] forKey:@"Folder"];
 	/*Set whether or not this is a user preset or factory 0 is factory, 1 is user*/
 	[preset setObject:[NSNumber numberWithInt:1] forKey:@"Type"];
 	/*Set whether or not this is default, at creation set to 0*/
 	[preset setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
-	/*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
-	[preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsPopUp indexOfSelectedItem]] forKey:@"UsesPictureSettings"];
-    /* Get whether or not to use the current Picture Filter settings for the preset */
-    [preset setObject:[NSNumber numberWithInt:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
- 
-    /* Get New Preset Description from the field in the AddPresetPanel*/
-	[preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
-	/* File Format */
-    [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
-	/* Chapter Markers fCreateChapterMarkers*/
-	[preset setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
-	/* Allow Mpeg4 64 bit formatting +4GB file sizes */
-	[preset setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
-    /* Mux mp4 with http optimization */
-    [preset setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
-    /* Add iPod uuid atom */
-    [preset setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
-
-    /* Codecs */
-	/* Video encoder */
-	[preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
-	/* x264 Option String */
-	[preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
-
-	[preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
-	[preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	[preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
-	[preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
-
-	/* Video framerate */
-    if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
-	{
-        [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
-    }
-    else // we can record the actual titleOfSelectedItem
+    if ([fPresetNewFolderCheck state] == YES)
     {
-    [preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+        /* initialize and set an empty array for children here since we are a new folder */
+        NSMutableArray *childrenArray = [[NSMutableArray alloc] init];
+        [preset setObject:[NSMutableArray arrayWithArray: childrenArray] forKey:@"ChildrenArray"];
+        [childrenArray autorelease];
     }
-	/* GrayScale */
-	[preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
-	/* 2 Pass Encoding */
-	[preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
-	/* Turbo 2 pass Encoding fVidTurboPassCheck*/
-	[preset setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
-	/*Picture Settings*/
-	hb_job_t * job = fTitle->job;
-	/* Picture Sizing */
-	/* Use Max Picture settings for whatever the dvd is.*/
-	[preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
-	[preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
-	[preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
-	[preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
-    
-    /* Set crop settings here */
-	[preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
-    [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
-    [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
-	[preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
-	[preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
-    
-    /* Picture Filters */
-    [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
-	[preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-    //[preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
-	[preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
-    [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
-    [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
-    
-    
-    /*Audio*/
-    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+    else // we are not creating a preset folder, so we go ahead with the rest of the preset info
     {
-        [preset setObject:[NSNumber numberWithInt:[fAudLang1PopUp indexOfSelectedItem]] forKey:@"Audio1Track"];
-        [preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"Audio1TrackDescription"];
-        [preset setObject:[fAudTrack1CodecPopUp titleOfSelectedItem] forKey:@"Audio1Encoder"];
-        [preset setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"Audio1Mixdown"];
-        [preset setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"Audio1Samplerate"];
-        [preset setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"Audio1Bitrate"];
-        [preset setObject:[NSNumber numberWithFloat:[fAudTrack1DrcSlider floatValue]] forKey:@"Audio1TrackDRCSlider"];
+        /*Get the whether or not to apply pic Size and Cropping (includes Anamorphic)*/
+        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicSettingsPopUp indexOfSelectedItem]] forKey:@"UsesPictureSettings"];
+        /* Get whether or not to use the current Picture Filter settings for the preset */
+        [preset setObject:[NSNumber numberWithInt:[fPresetNewPicFiltersCheck state]] forKey:@"UsesPictureFilters"];
+        
+        /* Get New Preset Description from the field in the AddPresetPanel*/
+        [preset setObject:[fPresetNewDesc stringValue] forKey:@"PresetDescription"];
+        /* File Format */
+        [preset setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
+        /* Chapter Markers fCreateChapterMarkers*/
+        [preset setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
+        /* Allow Mpeg4 64 bit formatting +4GB file sizes */
+        [preset setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
+        /* Mux mp4 with http optimization */
+        [preset setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
+        /* Add iPod uuid atom */
+        [preset setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
+        
+        /* Codecs */
+        /* Video encoder */
+        [preset setObject:[fVidEncoderPopUp titleOfSelectedItem] forKey:@"VideoEncoder"];
+        /* x264 Option String */
+        [preset setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
+        
+        [preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
+        [preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
+        [preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
+        [preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+        
+        /* Video framerate */
+        if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected
+        {
+            [preset setObject:@"Same as source" forKey:@"VideoFramerate"];
+        }
+        else // we can record the actual titleOfSelectedItem
+        {
+            [preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+        }
+        /* GrayScale */
+        [preset setObject:[NSNumber numberWithInt:[fVidGrayscaleCheck state]] forKey:@"VideoGrayScale"];
+        /* 2 Pass Encoding */
+        [preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
+        /* Turbo 2 pass Encoding fVidTurboPassCheck*/
+        [preset setObject:[NSNumber numberWithInt:[fVidTurboPassCheck state]] forKey:@"VideoTurboTwoPass"];
+        /*Picture Settings*/
+        hb_job_t * job = fTitle->job;
+        /* Picture Sizing */
+        /* Use Max Picture settings for whatever the dvd is.*/
+        [preset setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+        
+        /* Set crop settings here */
+        [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
+        [preset setObject:[NSNumber numberWithInt:job->crop[0]] forKey:@"PictureTopCrop"];
+        [preset setObject:[NSNumber numberWithInt:job->crop[1]] forKey:@"PictureBottomCrop"];
+        [preset setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
+        [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
+        
+        /* Picture Filters */
+        [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+        //[preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
+        [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+        
+        
+        /*Audio*/
+        if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+        {
+            [preset setObject:[NSNumber numberWithInt:[fAudLang1PopUp indexOfSelectedItem]] forKey:@"Audio1Track"];
+            [preset setObject:[fAudLang1PopUp titleOfSelectedItem] forKey:@"Audio1TrackDescription"];
+            [preset setObject:[fAudTrack1CodecPopUp titleOfSelectedItem] forKey:@"Audio1Encoder"];
+            [preset setObject:[fAudTrack1MixPopUp titleOfSelectedItem] forKey:@"Audio1Mixdown"];
+            [preset setObject:[fAudTrack1RatePopUp titleOfSelectedItem] forKey:@"Audio1Samplerate"];
+            [preset setObject:[fAudTrack1BitratePopUp titleOfSelectedItem] forKey:@"Audio1Bitrate"];
+            [preset setObject:[NSNumber numberWithFloat:[fAudTrack1DrcSlider floatValue]] forKey:@"Audio1TrackDRCSlider"];
+        }
+        if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+        {
+            [preset setObject:[NSNumber numberWithInt:[fAudLang2PopUp indexOfSelectedItem]] forKey:@"Audio2Track"];
+            [preset setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"Audio2TrackDescription"];
+            [preset setObject:[fAudTrack2CodecPopUp titleOfSelectedItem] forKey:@"Audio2Encoder"];
+            [preset setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"Audio2Mixdown"];
+            [preset setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"Audio2Samplerate"];
+            [preset setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"Audio2Bitrate"];
+            [preset setObject:[NSNumber numberWithFloat:[fAudTrack2DrcSlider floatValue]] forKey:@"Audio2TrackDRCSlider"];
+        }
+        if ([fAudLang3PopUp indexOfSelectedItem] > 0)
+        {
+            [preset setObject:[NSNumber numberWithInt:[fAudLang3PopUp indexOfSelectedItem]] forKey:@"Audio3Track"];
+            [preset setObject:[fAudLang3PopUp titleOfSelectedItem] forKey:@"Audio3TrackDescription"];
+            [preset setObject:[fAudTrack3CodecPopUp titleOfSelectedItem] forKey:@"Audio3Encoder"];
+            [preset setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"Audio3Mixdown"];
+            [preset setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"Audio3Samplerate"];
+            [preset setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"Audio3Bitrate"];
+            [preset setObject:[NSNumber numberWithFloat:[fAudTrack3DrcSlider floatValue]] forKey:@"Audio3TrackDRCSlider"];
+        }
+        if ([fAudLang4PopUp indexOfSelectedItem] > 0)
+        {
+            [preset setObject:[NSNumber numberWithInt:[fAudLang4PopUp indexOfSelectedItem]] forKey:@"Audio4Track"];
+            [preset setObject:[fAudLang4PopUp titleOfSelectedItem] forKey:@"Audio4TrackDescription"];
+            [preset setObject:[fAudTrack4CodecPopUp titleOfSelectedItem] forKey:@"Audio4Encoder"];
+            [preset setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"Audio4Mixdown"];
+            [preset setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"Audio4Samplerate"];
+            [preset setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"Audio4Bitrate"];
+            [preset setObject:[NSNumber numberWithFloat:[fAudTrack4DrcSlider floatValue]] forKey:@"Audio4TrackDRCSlider"];
+        }
+        
+        /* Subtitles*/
+        [preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+        /* Forced Subtitles */
+        [preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
     }
-    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
-    {
-        [preset setObject:[NSNumber numberWithInt:[fAudLang2PopUp indexOfSelectedItem]] forKey:@"Audio2Track"];
-        [preset setObject:[fAudLang2PopUp titleOfSelectedItem] forKey:@"Audio2TrackDescription"];
-        [preset setObject:[fAudTrack2CodecPopUp titleOfSelectedItem] forKey:@"Audio2Encoder"];
-        [preset setObject:[fAudTrack2MixPopUp titleOfSelectedItem] forKey:@"Audio2Mixdown"];
-        [preset setObject:[fAudTrack2RatePopUp titleOfSelectedItem] forKey:@"Audio2Samplerate"];
-        [preset setObject:[fAudTrack2BitratePopUp titleOfSelectedItem] forKey:@"Audio2Bitrate"];
-        [preset setObject:[NSNumber numberWithFloat:[fAudTrack2DrcSlider floatValue]] forKey:@"Audio2TrackDRCSlider"];
-    }
-    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
-    {
-        [preset setObject:[NSNumber numberWithInt:[fAudLang3PopUp indexOfSelectedItem]] forKey:@"Audio3Track"];
-        [preset setObject:[fAudLang3PopUp titleOfSelectedItem] forKey:@"Audio3TrackDescription"];
-        [preset setObject:[fAudTrack3CodecPopUp titleOfSelectedItem] forKey:@"Audio3Encoder"];
-        [preset setObject:[fAudTrack3MixPopUp titleOfSelectedItem] forKey:@"Audio3Mixdown"];
-        [preset setObject:[fAudTrack3RatePopUp titleOfSelectedItem] forKey:@"Audio3Samplerate"];
-        [preset setObject:[fAudTrack3BitratePopUp titleOfSelectedItem] forKey:@"Audio3Bitrate"];
-        [preset setObject:[NSNumber numberWithFloat:[fAudTrack3DrcSlider floatValue]] forKey:@"Audio3TrackDRCSlider"];
-    }
-    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
-    {
-        [preset setObject:[NSNumber numberWithInt:[fAudLang4PopUp indexOfSelectedItem]] forKey:@"Audio4Track"];
-        [preset setObject:[fAudLang4PopUp titleOfSelectedItem] forKey:@"Audio4TrackDescription"];
-        [preset setObject:[fAudTrack4CodecPopUp titleOfSelectedItem] forKey:@"Audio4Encoder"];
-        [preset setObject:[fAudTrack4MixPopUp titleOfSelectedItem] forKey:@"Audio4Mixdown"];
-        [preset setObject:[fAudTrack4RatePopUp titleOfSelectedItem] forKey:@"Audio4Samplerate"];
-        [preset setObject:[fAudTrack4BitratePopUp titleOfSelectedItem] forKey:@"Audio4Bitrate"];
-        [preset setObject:[NSNumber numberWithFloat:[fAudTrack4DrcSlider floatValue]] forKey:@"Audio4TrackDRCSlider"];
-    }
-    
-	/* Subtitles*/
-	[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
-    /* Forced Subtitles */
-	[preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
-    
     [preset autorelease];
     return preset;
-
+    
 }
 
 - (void)savePreset
@@ -5821,30 +5929,49 @@ if (item == nil)
 
 - (IBAction)deletePreset:(id)sender
 {
-    int status;
-    NSEnumerator *enumerator;
-    NSNumber *index;
-    NSMutableArray *tempArray;
-    id tempObject;
+    
     
     if ( [fPresetsOutlineView numberOfSelectedRows] == 0 )
+    {
         return;
+    }
     /* Alert user before deleting preset */
-	/* Comment out for now, tie to user pref eventually */
-
-    //NSBeep();
+	int status;
     status = NSRunAlertPanel(@"Warning!", @"Are you sure that you want to delete the selected preset?", @"OK", @"Cancel", nil);
     
-    if ( status == NSAlertDefaultReturn ) {
-        enumerator = [fPresetsOutlineView selectedRowEnumerator];
-        tempArray = [NSMutableArray array];
+    if ( status == NSAlertDefaultReturn ) 
+    {
+        int presetToModLevel = [fPresetsOutlineView levelForItem: [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
+        NSDictionary *presetToMod = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+        NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
         
-        while ( (index = [enumerator nextObject]) ) {
-            tempObject = [UserPresets objectAtIndex:[index intValue]];
-            [tempArray addObject:tempObject];
+        NSEnumerator *enumerator;
+        NSMutableArray *presetsArrayToMod;
+        NSMutableArray *tempArray;
+        id tempObject;
+        /* If we are a root level preset, we are modding the UserPresets array */
+        if (presetToModLevel == 0)
+        {
+            presetsArrayToMod = UserPresets;
+        }
+        else // We have a parent preset, so we modify the chidren array object for key
+        {
+            presetsArrayToMod = [presetToModParent objectForKey:@"ChildrenArray"]; 
         }
         
-        [UserPresets removeObjectsInArray:tempArray];
+        enumerator = [presetsArrayToMod objectEnumerator];
+        tempArray = [NSMutableArray array];
+        
+        while (tempObject = [enumerator nextObject]) 
+        {
+            NSDictionary *thisPresetDict = tempObject;
+            if (thisPresetDict == presetToMod)
+            {
+                [tempArray addObject:tempObject];
+            }
+        }
+        
+        [presetsArrayToMod removeObjectsInArray:tempArray];
         [fPresetsOutlineView reloadData];
         [self savePreset];   
     }
@@ -5855,72 +5982,224 @@ if (item == nil)
 
 - (IBAction)getDefaultPresets:(id)sender
 {
-	int i = 0;
+	presetHbDefault = nil;
+    presetUserDefault = nil;
+    presetUserDefaultParent = nil;
+    presetUserDefaultParentParent = nil;
+    NSMutableDictionary *presetHbDefaultParent = nil;
+    NSMutableDictionary *presetHbDefaultParentParent = nil;
+    
+    int i = 0;
+    BOOL userDefaultFound = NO;
     presetCurrentBuiltInCount = 0;
+    /* First we iterate through the root UserPresets array to check for defaults */
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
 	id tempObject;
 	while (tempObject = [enumerator nextObject])
 	{
-		NSDictionary *thisPresetDict = tempObject;
+		NSMutableDictionary *thisPresetDict = tempObject;
 		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
 		{
-			presetHbDefault = i;	
+			presetHbDefault = thisPresetDict;	
 		}
 		if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
 		{
-			presetUserDefault = i;	
-		}
+			presetUserDefault = thisPresetDict;
+            userDefaultFound = YES;
+        }
         if ([[thisPresetDict objectForKey:@"Type"] intValue] == 0) // Type 0 is a built in preset		
         {
 			presetCurrentBuiltInCount++; // <--increment the current number of built in presets	
 		}
 		i++;
+        
+        /* if we run into a folder, go to level 1 and iterate through the children arrays for the default */
+        if ([thisPresetDict objectForKey:@"ChildrenArray"])
+        {
+            NSMutableDictionary *thisPresetDictParent = thisPresetDict;
+            NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
+            id tempObject;
+            while (tempObject = [enumerator nextObject])
+            {
+                NSMutableDictionary *thisPresetDict = tempObject;
+                if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
+                {
+                    presetHbDefault = thisPresetDict;
+                    presetHbDefaultParent = thisPresetDictParent;
+                }
+                if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
+                {
+                    presetUserDefault = thisPresetDict;
+                    presetUserDefaultParent = thisPresetDictParent;
+                    userDefaultFound = YES;
+                }
+                
+                /* if we run into a folder, go to level 2 and iterate through the children arrays for the default */
+                if ([thisPresetDict objectForKey:@"ChildrenArray"])
+                {
+                    NSMutableDictionary *thisPresetDictParentParent = thisPresetDict;
+                    NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
+                    id tempObject;
+                    while (tempObject = [enumerator nextObject])
+                    {
+                        NSMutableDictionary *thisPresetDict = tempObject;
+                        if ([[thisPresetDict objectForKey:@"Default"] intValue] == 1) // 1 is HB default
+                        {
+                            presetHbDefault = thisPresetDict;
+                            presetHbDefaultParent = thisPresetDictParent;
+                            presetHbDefaultParentParent = thisPresetDictParentParent;	
+                        }
+                        if ([[thisPresetDict objectForKey:@"Default"] intValue] == 2) // 2 is User specified default
+                        {
+                            presetUserDefault = thisPresetDict;
+                            presetUserDefaultParent = thisPresetDictParent;
+                            presetUserDefaultParentParent = thisPresetDictParentParent;
+                            userDefaultFound = YES;	
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
 	}
+    /* check to see if a user specified preset was found, if not then assign the parents for
+     * the presetHbDefault so that we can open the parents for the nested presets
+     */
+    if (userDefaultFound == NO)
+    {
+        presetUserDefaultParent = presetHbDefaultParent;
+        presetUserDefaultParentParent = presetHbDefaultParentParent;
+    }
 }
 
 - (IBAction)setDefaultPreset:(id)sender
 {
+/* We need to determine if the item is a folder */
+   if ([[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] == 1)
+   {
+   return;
+   }
+
     int i = 0;
     NSEnumerator *enumerator = [UserPresets objectEnumerator];
 	id tempObject;
 	/* First make sure the old user specified default preset is removed */
-	while (tempObject = [enumerator nextObject])
+    while (tempObject = [enumerator nextObject])
 	{
-		/* make sure we are not removing the default HB preset */
-		if ([[[UserPresets objectAtIndex:i] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
+		NSMutableDictionary *thisPresetDict = tempObject;
+		if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
 		{
-			[[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+			[[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
 		}
-		i++;
+		
+		/* if we run into a folder, go to level 1 and iterate through the children arrays for the default */
+        if ([thisPresetDict objectForKey:@"ChildrenArray"])
+        {
+            NSEnumerator *enumerator = [[thisPresetDict objectForKey:@"ChildrenArray"] objectEnumerator];
+            id tempObject;
+            int ii = 0;
+            while (tempObject = [enumerator nextObject])
+            {
+                NSMutableDictionary *thisPresetDict1 = tempObject;
+                if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
+                {
+                    [[[thisPresetDict objectForKey:@"ChildrenArray"] objectAtIndex:ii] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
+                }
+                /* if we run into a folder, go to level 2 and iterate through the children arrays for the default */
+                if ([thisPresetDict1 objectForKey:@"ChildrenArray"])
+                {
+                    NSEnumerator *enumerator = [[thisPresetDict1 objectForKey:@"ChildrenArray"] objectEnumerator];
+                    id tempObject;
+                    int iii = 0;
+                    while (tempObject = [enumerator nextObject])
+                    {
+                        if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 0
+                        {
+                            [[[thisPresetDict1 objectForKey:@"ChildrenArray"] objectAtIndex:iii] setObject:[NSNumber numberWithInt:0] forKey:@"Default"];	
+                        }
+                        iii++;
+                    }
+                }
+                ii++;
+            }
+            
+        }
+        i++; 
 	}
-	/* Second, go ahead and set the appropriate user specfied preset */
-	/* we get the chosen preset from the UserPresets array */
-	if ([[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] objectForKey:@"Default"] intValue] != 1) // 1 is HB default
-	{
-		[[UserPresets objectAtIndex:[fPresetsOutlineView selectedRow]] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];
-	}
-	/*FIX ME: I think we now need to use the items not rows in NSOutlineView */
-    presetUserDefault = [fPresetsOutlineView selectedRow];
-	
-	/* We save all of the preset data here */
+    
+    
+    int presetToModLevel = [fPresetsOutlineView levelForItem: [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
+    NSDictionary *presetToMod = [fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]];
+    NSDictionary *presetToModParent = [fPresetsOutlineView parentForItem: presetToMod];
+    
+    
+    NSMutableArray *presetsArrayToMod;
+    NSMutableArray *tempArray;
+    
+    /* If we are a root level preset, we are modding the UserPresets array */
+    if (presetToModLevel == 0)
+    {
+        presetsArrayToMod = UserPresets;
+    }
+    else // We have a parent preset, so we modify the chidren array object for key
+    {
+        presetsArrayToMod = [presetToModParent objectForKey:@"ChildrenArray"]; 
+    }
+    
+    enumerator = [presetsArrayToMod objectEnumerator];
+    tempArray = [NSMutableArray array];
+    int iiii = 0;
+    while (tempObject = [enumerator nextObject]) 
+    {
+        NSDictionary *thisPresetDict = tempObject;
+        if (thisPresetDict == presetToMod)
+        {
+            if ([[tempObject objectForKey:@"Default"] intValue] != 1) // if not the default HB Preset, set to 2
+            {
+                [[presetsArrayToMod objectAtIndex:iiii] setObject:[NSNumber numberWithInt:2] forKey:@"Default"];	
+            }
+        }
+     iiii++;
+     }
+    
+    
+    /* We save all of the preset data here */
     [self savePreset];
-	/* We Reload the New Table data for presets */
+    /* We Reload the New Table data for presets */
     [fPresetsOutlineView reloadData];
 }
 
 - (IBAction)selectDefaultPreset:(id)sender
 {
-	/* if there is a user specified default, we use it */
+	NSMutableDictionary *presetToMod;
+    /* if there is a user specified default, we use it */
 	if (presetUserDefault)
 	{
-	[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetUserDefault] byExtendingSelection:NO];
-	[self selectPreset:nil];
-	}
+        presetToMod = presetUserDefault;
+    }
 	else if (presetHbDefault) //else we use the built in default presetHbDefault
 	{
-	[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:presetHbDefault] byExtendingSelection:NO];
-	[self selectPreset:nil];
+        presetToMod = presetHbDefault;
 	}
+    else
+    {
+    return;
+    }
+    
+    if (presetUserDefaultParent != nil)
+    {
+        [fPresetsOutlineView expandItem:presetUserDefaultParent];
+        
+    }
+    if (presetUserDefaultParentParent != nil)
+    {
+        [fPresetsOutlineView expandItem:presetUserDefaultParentParent];
+        
+    }
+    
+    [fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[fPresetsOutlineView rowForItem: presetToMod]] byExtendingSelection:NO];
+	[self selectPreset:nil];
 }
 
 
@@ -5988,7 +6267,7 @@ if (item == nil)
 
     // By default, NSTableView only drags an image of the first column. Change this to
     // drag an image of the queue's icon and PresetName columns.
-    NSArray * cols = [NSArray arrayWithObjects: [self tableColumnWithIdentifier:@"icon"], [self tableColumnWithIdentifier:@"PresetName"], nil];
+    NSArray * cols = [NSArray arrayWithObjects: [self tableColumnWithIdentifier:@"PresetName"], nil];
     return [super dragImageForRowsWithIndexes:dragRows tableColumns:cols event:dragEvent offset:dragImageOffset];
 }
 

@@ -215,6 +215,7 @@ BOOL                        fIsDragging;
 	IBOutlet NSTextField         * fPresetNewDesc;
 	IBOutlet NSPopUpButton       * fPresetNewPicSettingsPopUp;
     IBOutlet NSButton            * fPresetNewPicFiltersCheck;
+    IBOutlet NSButton            * fPresetNewFolderCheck;
 	IBOutlet NSTextField         * fPresetSelectedDisplay;
 	
 	NSString                     * AppSupportDirectory;
@@ -224,8 +225,10 @@ BOOL                        fIsDragging;
 	NSMutableDictionary          * chosenPreset;
     int                            curUserPresetChosenNum;
 	 
-	int                            presetHbDefault; // this is 1 in "Default" preset key
-	int                            presetUserDefault;// this is 2 in "Default" preset key
+	NSMutableDictionary          *presetHbDefault; // this is 1 in "Default" preset key
+	NSMutableDictionary          *presetUserDefault;// this is 2 in "Default" preset key
+    NSMutableDictionary          *presetUserDefaultParent;
+    NSMutableDictionary          *presetUserDefaultParentParent;
     int                        presetCurrentBuiltInCount; // keeps track of the current number of built in presets
     IBOutlet NSPanel             * fAddPresetPanel;
 	/* new NSOutline View for the presets */

@@ -13,15 +13,18 @@
 - (NSMutableArray *) generateBuiltinPresets: (NSMutableArray *) UserPresets;
 
 /* Built-In Preset Dictionaries (one for each built in preset) */
+- (NSDictionary *)createApplePresetFolder;
+- (NSDictionary *)createAppleIpodFamilyPresetFolder;
+- (NSDictionary *)createBasicPresetFolder;
+- (NSDictionary *)createGamingConsolesPresetFolder;
+- (NSDictionary *)createHiProfilePresetFolder;
+
 - (NSDictionary *)create360Preset;
 - (NSDictionary *)createAnimationPreset;
 - (NSDictionary *)createAppleTVPreset;
-- (NSDictionary *)createBedlamPreset;
-- (NSDictionary *)createBlindPreset;
-- (NSDictionary *)createBrokePreset;
+- (NSDictionary *)createAppleUniversalPreset;
 - (NSDictionary *)createClassicPreset;
 - (NSDictionary *)createCRFPreset;
-- (NSDictionary *)createDeuxSixQuatrePreset;
 - (NSDictionary *)createFilmPreset;
 - (NSDictionary *)createiPhonePreset;
 - (NSDictionary *)createIpodHighPreset;
