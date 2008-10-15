@@ -261,30 +261,19 @@ LibMp3Lame $(SUBDIR)/lib/libmp3lame.a : $(SUBDIR)/lame.tar.gz ;
 rule LibMp4v2
 {
     LIBMP4V2_PATCH = "" ;
-    if $(OS) = CYGWIN
-    {
-        LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch_mpeg4ip_cygwin.patch && " ;
-    }
-    LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip.patch && " ;
-    LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-nasm-2.00-configure.patch && " ;
-    LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-ac3.patch && " ;
-    LIBMP4V2_PATCH += "$(PATCH) -p1 < ../patch-mpeg4ip-colr.patch && " ;
     Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
 actions LibMp4v2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
-    rm -rf mpeg4ip && (gzip -dc mpeg4ip.tar.gz | tar xf - ) &&
-    cd mpeg4ip && $(LIBMP4V2_PATCH)
-    ./bootstrap --cache-file=$CONTRIB/config.cache --disable-mp3lame --disable-faac --disable-x264 --disable-server --disable-player &&
-    $(MAKE) -C lib/mp4v2 libmp4v2.la && cp lib/mp4v2/.libs/libmp4v2.a $CONTRIB/lib &&
-    cp mpeg4ip_config.h include/mpeg4ip.h include/mpeg4ip_version.h \
-        include/mpeg4ip_win32.h lib/mp4v2/*.h $CONTRIB/include &&
+    rm -rf libmp4v2 && (gzip -dc libmp4v2.tar.gz | tar xf - ) &&
+    cd mp4v2 && $(LIBMP4V2_PATCH) ./configure --prefix=$CONTRIB &&
+    $(MAKE) && make install &&
     $(STRIP) $CONTRIB/lib/libmp4v2.a
 }
-Wget     $(SUBDIR)/mpeg4ip.tar.gz : $(SUBDIR)/version_mpeg4ip.txt ;
-LibMp4v2 $(SUBDIR)/lib/libmp4v2.a : $(SUBDIR)/mpeg4ip.tar.gz ;
+Wget     $(SUBDIR)/libmp4v2.tar.gz : $(SUBDIR)/version_libmp4v2.txt ;
+LibMp4v2 $(SUBDIR)/lib/libmp4v2.a : $(SUBDIR)/libmp4v2.tar.gz ;
 
 rule LibMkv
 {

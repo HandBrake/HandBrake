@@ -147,7 +147,7 @@ static int MP4Init( hb_mux_object_t * m )
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
     int i;
-    u_int16_t language_code;
+    uint16_t language_code;
 
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
@@ -201,13 +201,7 @@ static int MP4Init( hb_mux_object_t * m )
     if( job->vcodec == HB_VCODEC_X264 )
     {
         /* Stolen from mp4creator */
-        if(!(MP4SetVideoProfileLevel( m->file, 0x7F )))
-        {
-            hb_error("muxmp4.c: MP4SetVideoProfileLevel failed!");
-            *job->die = 1;
-            return 0;
-        }
-
+        MP4SetVideoProfileLevel( m->file, 0x7F );
 		mux_data->track = MP4AddH264VideoTrack( m->file, m->samplerate,
 		        MP4_INVALID_DURATION, job->width, job->height,
 		        job->config.h264.sps[1], /* AVCProfileIndication */
@@ -231,12 +225,7 @@ static int MP4Init( hb_mux_object_t * m )
     }
     else /* FFmpeg or XviD */
     {
-        if(!(MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 )))
-        {
-            hb_error("muxmp4.c: MP4SetVideoProfileLevel failed!");
-            *job->die = 1;
-            return 0;
-        }
+        MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 );
         mux_data->track = MP4AddVideoTrack( m->file, m->samplerate,
                 MP4_INVALID_DURATION, job->width, job->height,
                 MP4_MPEG4_VIDEO_TYPE );
@@ -293,7 +282,7 @@ static int MP4Init( hb_mux_object_t * m )
 	/* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-    	static u_int8_t reserved2[16] = {
+    	static uint8_t reserved2[16] = {
     		0x00, 0x00, 0x00, 0x00,
     		0x00, 0x00, 0x00, 0x00,
     		0x00, 0x02, 0x00, 0x10,
@@ -313,13 +302,13 @@ static int MP4Init( hb_mux_object_t * m )
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
                     "udta.name.value",
-                    (const u_int8_t*)"Surround", strlen("Surround"));
+                    (const uint8_t*)"Surround", strlen("Surround"));
             }
             else {
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
                     "udta.name.value",
-                    (const u_int8_t*)(audio->config.out.name),
+                    (const uint8_t*)(audio->config.out.name),
                     strlen(audio->config.out.name));
             }
         } else {
@@ -330,13 +319,13 @@ static int MP4Init( hb_mux_object_t * m )
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
                     "udta.name.value",
-                    (const u_int8_t*)"Stereo", strlen("Stereo"));
+                    (const uint8_t*)"Stereo", strlen("Stereo"));
             }
             else {
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
                     "udta.name.value",
-                    (const u_int8_t*)(audio->config.out.name),
+                    (const uint8_t*)(audio->config.out.name),
                     strlen(audio->config.out.name));
             }
 
@@ -346,11 +335,7 @@ static int MP4Init( hb_mux_object_t * m )
                 audio->priv.config.aac.bytes, audio->priv.config.aac.length );
 
             /* Set the correct number of channels for this track */
-            reserved2[9] = (u_int8_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
-            MP4SetTrackBytesProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.reserved2", reserved2, sizeof(reserved2));
-
-            /* If we ever upgrade mpeg4ip, the line above should be replaced with the line below.*/
-            // MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels", (u_int16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->amixdown));
+             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels", (uint16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown));
         }
 
         /* Set the language for this track */
