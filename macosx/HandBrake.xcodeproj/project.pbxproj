@@ -26,7 +26,6 @@
 		0DFA5CCA0B8DD3FE0020BC09 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C880B8DD3B60020BC09 /* encxvid.c */; };
 		0DFA5CCB0B8DD3FE0020BC09 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C890B8DD3B60020BC09 /* fifo.c */; };
 		0DFA5CCC0B8DD3FE0020BC09 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C8A0B8DD3B60020BC09 /* hb.c */; };
-		0DFA5CCD0B8DD3FE0020BC09 /* ipodutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C8D0B8DD3B60020BC09 /* ipodutil.cpp */; };
 		0DFA5CCE0B8DD3FE0020BC09 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C910B8DD3B60020BC09 /* muxavi.c */; };
 		0DFA5CCF0B8DD3FE0020BC09 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C920B8DD3B60020BC09 /* muxcommon.c */; };
 		0DFA5CD00B8DD3FE0020BC09 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C930B8DD3B60020BC09 /* muxmp4.c */; };
@@ -51,7 +50,6 @@
 		0DFA5CE30B8DD4210020BC09 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C880B8DD3B60020BC09 /* encxvid.c */; };
 		0DFA5CE40B8DD4210020BC09 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C890B8DD3B60020BC09 /* fifo.c */; };
 		0DFA5CE50B8DD4210020BC09 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C8A0B8DD3B60020BC09 /* hb.c */; };
-		0DFA5CE60B8DD4210020BC09 /* ipodutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C8D0B8DD3B60020BC09 /* ipodutil.cpp */; };
 		0DFA5CE70B8DD4210020BC09 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C910B8DD3B60020BC09 /* muxavi.c */; };
 		0DFA5CE80B8DD4210020BC09 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C920B8DD3B60020BC09 /* muxcommon.c */; };
 		0DFA5CE90B8DD4210020BC09 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C930B8DD3B60020BC09 /* muxmp4.c */; };
@@ -213,7 +211,6 @@
 		0DFA5C880B8DD3B60020BC09 /* encxvid.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = encxvid.c; path = ../libhb/encxvid.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C890B8DD3B60020BC09 /* fifo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = fifo.c; path = ../libhb/fifo.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C8A0B8DD3B60020BC09 /* hb.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = hb.c; path = ../libhb/hb.c; sourceTree = SOURCE_ROOT; };
-		0DFA5C8D0B8DD3B60020BC09 /* ipodutil.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ipodutil.cpp; path = ../libhb/ipodutil.cpp; sourceTree = SOURCE_ROOT; };
 		0DFA5C910B8DD3B60020BC09 /* muxavi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxavi.c; path = ../libhb/muxavi.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C920B8DD3B60020BC09 /* muxcommon.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxcommon.c; path = ../libhb/muxcommon.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C930B8DD3B60020BC09 /* muxmp4.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = muxmp4.c; path = ../libhb/muxmp4.c; sourceTree = SOURCE_ROOT; };
@@ -445,7 +442,6 @@
 				0DFA5C880B8DD3B60020BC09 /* encxvid.c */,
 				0DFA5C890B8DD3B60020BC09 /* fifo.c */,
 				0DFA5C8A0B8DD3B60020BC09 /* hb.c */,
-				0DFA5C8D0B8DD3B60020BC09 /* ipodutil.cpp */,
 				0DFA5C920B8DD3B60020BC09 /* muxcommon.c */,
 				A273E0950C57C19500493A45 /* muxmkv.c */,
 				0DFA5C930B8DD3B60020BC09 /* muxmp4.c */,
@@ -744,7 +740,6 @@
 				0DFA5CE30B8DD4210020BC09 /* encxvid.c in Sources */,
 				0DFA5CE40B8DD4210020BC09 /* fifo.c in Sources */,
 				0DFA5CE50B8DD4210020BC09 /* hb.c in Sources */,
-				0DFA5CE60B8DD4210020BC09 /* ipodutil.cpp in Sources */,
 				0DFA5CE70B8DD4210020BC09 /* muxavi.c in Sources */,
 				0DFA5CE80B8DD4210020BC09 /* muxcommon.c in Sources */,
 				0DFA5CE90B8DD4210020BC09 /* muxmp4.c in Sources */,
@@ -787,7 +782,6 @@
 				0DFA5CCA0B8DD3FE0020BC09 /* encxvid.c in Sources */,
 				0DFA5CCB0B8DD3FE0020BC09 /* fifo.c in Sources */,
 				0DFA5CCC0B8DD3FE0020BC09 /* hb.c in Sources */,
-				0DFA5CCD0B8DD3FE0020BC09 /* ipodutil.cpp in Sources */,
 				0DFA5CCE0B8DD3FE0020BC09 /* muxavi.c in Sources */,
 				0DFA5CCF0B8DD3FE0020BC09 /* muxcommon.c in Sources */,
 				0DFA5CD00B8DD3FE0020BC09 /* muxmp4.c in Sources */,

@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/libmp4v2-r19.tar.gz
+http://download.m0k.org/handbrake/contrib/libmp4v2-r21.tar.gz

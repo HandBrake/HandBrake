@@ -218,7 +218,7 @@ static int MP4Init( hb_mux_object_t * m )
 		if( job->h264_level == 30 || job->ipod_atom)
 		{
 			hb_deep_log( 2, "muxmp4: adding iPod atom");
-			AddIPodUUID(m->file, mux_data->track);
+			MP4AddIPodUUID(m->file, mux_data->track);
 		}
 
         m->init_delay = job->config.h264.init_delay;

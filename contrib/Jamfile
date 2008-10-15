@@ -268,8 +268,8 @@ actions LibMp4v2
 {
     cd `dirname $(>)` && CONTRIB=`pwd` &&
     rm -rf libmp4v2 && (gzip -dc libmp4v2.tar.gz | tar xf - ) &&
-    cd mp4v2 && $(LIBMP4V2_PATCH) ./configure --prefix=$CONTRIB &&
-    $(MAKE) && make install && cp *.h $CONTRIB/include &&
+    cd libmp4v2 && $(LIBMP4V2_PATCH) ./configure --prefix=$CONTRIB &&
+    $(MAKE) && make install &&
     $(STRIP) $CONTRIB/lib/libmp4v2.a
 }
 Wget     $(SUBDIR)/libmp4v2.tar.gz : $(SUBDIR)/version_libmp4v2.txt ;
