@@ -128,11 +128,13 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gboolean markers;
 	gboolean preset_modified;
 	gint mux;
+	const GValue *path;
 
 	container = ghb_settings_combo_option(settings, "container");
 	mux = ghb_settings_combo_int(settings, "container");
 	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
-	preset = ghb_settings_get_string(settings, "preset");
+	path = ghb_settings_get_value(settings, "preset");
+	preset = ghb_preset_path_string(path);
 	markers = ghb_settings_get_boolean(settings, "chapter_markers");
 
 	if (preset_modified)

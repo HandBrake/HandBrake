@@ -919,14 +919,21 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gint container, track, titleindex, acodec;
 	gboolean httpopt;
     hb_audio_config_t *audio = NULL;
+	GValue *gval;
 	
 	widget = GHB_WIDGET (builder, "title");
-	titleindex = ghb_lookup_combo_int("title", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	titleindex = ghb_lookup_combo_int("title", gval);
+	ghb_value_free(gval);
 	widget = GHB_WIDGET (builder, "audio_track");
-	track = ghb_lookup_combo_int("audio_track", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	track = ghb_lookup_combo_int("audio_track", gval);
+	ghb_value_free(gval);
 	audio = get_hb_audio(titleindex, track);
 	widget = GHB_WIDGET (builder, "container");
-	container = ghb_lookup_combo_int("container", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	container = ghb_lookup_combo_int("container", gval);
+	ghb_value_free(gval);
 	widget = GHB_WIDGET (builder, "http_optimize_mp4");
 	httpopt = ghb_widget_boolean(widget);
 
@@ -954,7 +961,9 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "video_codec", HB_VCODEC_THEORA, FALSE);
 
 	widget = GHB_WIDGET (builder, "audio_codec");
-	acodec = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	acodec = ghb_lookup_combo_int("audio_codec", gval);
+	ghb_value_free(gval);
 	if (acodec != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "audio_mix", 0, TRUE);

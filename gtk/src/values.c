@@ -45,7 +45,7 @@ ghb_value_dup(const GValue *val)
 	return copy;
 }
 
-static void
+void
 debug_show_type(GType tp)
 {
 	const gchar *str = "unknown";
@@ -60,6 +60,10 @@ debug_show_type(GType tp)
 	else if (tp == G_TYPE_INT64)
 	{
 		str ="int64";
+	}
+	else if (tp == G_TYPE_DOUBLE)
+	{
+		str ="double";
 	}
 	else if (tp == G_TYPE_BOOLEAN)
 	{
@@ -650,6 +654,22 @@ ghb_array_replace(GValue *gval, guint ii, GValue *val)
 	if (ii >= arr->len) return;
 	ghb_value_free(((GValue**)arr->data)[ii]);
 	((GValue**)arr->data)[ii] = val;
+}
+
+void
+ghb_array_copy(GValue *arr1, GValue *arr2, gint count)
+{
+	gint len, ii;
+
+	// empty the first array if it is not already empty
+	len = ghb_array_len(arr1);
+	for (ii = 0; ii < len; ii++)
+		ghb_array_remove(arr1, 0);
+
+	len = ghb_array_len(arr2);
+	count = MIN(count, len);
+	for (ii = 0; ii < count; ii++)
+		ghb_array_append(arr1, ghb_value_dup(ghb_array_get_nth(arr2, ii)));
 }
 
 gint

@@ -25,17 +25,24 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	gint titleindex, audioindex, acodec, mix;
 	ghb_audio_info_t ainfo;
 	GtkWidget *widget;
+	GValue *gval;
 	
 	g_debug("ghb_adjust_audio_rate_combos ()");
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
 
 	widget = GHB_WIDGET(ud->builder, "audio_track");
-	audioindex = ghb_lookup_combo_int("audio_track", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	audioindex = ghb_lookup_combo_int("audio_track", gval);
+	ghb_value_free(gval);
 
 	widget = GHB_WIDGET(ud->builder, "audio_codec");
-	acodec = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	acodec = ghb_lookup_combo_int("audio_codec", gval);
+	ghb_value_free(gval);
 	widget = GHB_WIDGET(ud->builder, "audio_mix");
-	mix = ghb_lookup_combo_int("audio_mix", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	mix = ghb_lookup_combo_int("audio_mix", gval);
+	ghb_value_free(gval);
 
 	if (ghb_audio_is_passthru (acodec))
 	{
@@ -61,7 +68,9 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		gint br;
 
 		widget = GHB_WIDGET(ud->builder, "audio_bitrate");
-		br = ghb_lookup_combo_int("audio_bitrate", ghb_widget_value(widget));
+		gval = ghb_widget_value(widget);
+		br = ghb_lookup_combo_int("audio_bitrate", gval);
+		ghb_value_free(gval);
 		if (br > 160)
 			ghb_ui_update(ud, "audio_bitrate", ghb_int64_value(160));
 		ghb_set_default_bitrate_opts (ud->builder, 160);
@@ -275,10 +284,12 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	static gint prev_acodec = 0;
 	gint acodec_code, mix_code;
-	GValue *asettings;
+	GValue *asettings, *gval;
 	
 	g_debug("audio_codec_changed_cb ()");
-	acodec_code = ghb_lookup_combo_int("audio_codec", ghb_widget_value(widget));
+	gval = ghb_widget_value(widget);
+	acodec_code = ghb_lookup_combo_int("audio_codec", gval);
+	ghb_value_free(gval);
 	if (ghb_audio_is_passthru (prev_acodec) && 
 		!ghb_audio_is_passthru (acodec_code))
 	{

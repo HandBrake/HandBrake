@@ -73,7 +73,7 @@ AM_CFLAGS =\
 	 -g
 
 bin_PROGRAMS = ghb 
-noinst_PROGRAMS = makewidgetdeps quotestring create_resources
+noinst_PROGRAMS = makewidgetdeps quotestring create_resources preset_xlat
 
 BUILT_SOURCES = HandBrakeCLI
 
@@ -145,7 +145,18 @@ create_resources_SOURCES = \
 
 create_resources_LDADD = $(GHBTOOLS_LIBS)
 
+preset_xlat_SOURCES = \
+	preset_xlat.c \
+	plist.c \
+	plist.h \
+	values.c \
+	values.h
+
+preset_xlat_LDADD = $(GHBTOOLS_LIBS)
+
 quotestring_SOURCES = quotestring.c
+
+dumbell: preset_xlat
 
 resources.c: resource_data.h
 

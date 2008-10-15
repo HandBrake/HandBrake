@@ -290,8 +290,18 @@ ghb_widget_value(GtkWidget *widget)
 	else if (type == GTK_TYPE_HSCALE)
 	{
 		gdouble dval;
+		gint digits;
+
+		digits = gtk_scale_get_digits(GTK_SCALE(widget));
 		dval = gtk_range_get_value(GTK_RANGE(widget));
-		value = ghb_double_value_new(dval);
+		if (digits)
+		{
+			value = ghb_double_value_new(dval);
+		}
+		else
+		{
+			value = ghb_int_value_new(dval);
+		}
 	}
 	else if (type == GTK_TYPE_TEXT_VIEW)
 	{

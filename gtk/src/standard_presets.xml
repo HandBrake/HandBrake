@@ -3,1280 +3,1210 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>preset_name</key>
-		<string>Animation</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mkv</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>slower</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
+		<key>preset_folder</key>
 		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for cartoons, anime, and CGI.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1000</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=5:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>AppleTV</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>large_mp4</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
-			</dict>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>ac3</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
 				<string>none</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and optimizes performance.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>2500</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>bframes=3:ref=1:me=umh:no-fast-pskip=1:trellis=1:cabac=0</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Bedlam</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mkv</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>ac3</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
+				<key>denoise</key>
 				<string>none</string>
-				<key>audio_rate</key>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
 				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings maxed out for slowest encoding and highest quality. Use at your own risk. So slow it's not just insane...it's a trip to the looney bin.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1800</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=16:mixed-refs:bframes=16:weightb:direct=auto:b-pyramid:me=esa:subme=7:me-range=64:analyse=all:8x8dct:trellis=1:no-fast-pskip:no-dct-decimate:filter=-2,-1</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Blind</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>512</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>128</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's preset for impatient people who don't care about picture quality.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<false />
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>512</integer>
-		<key>video_codec</key>
-		<string>ffmpeg</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Broke</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>640</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>128</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's preset for people without a lot of money to waste on hard drives. Tries to maximize quality for burning to CDs, so you can party like it's 1999.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1600</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>695</integer>
-		<key>vquality_type_target</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=3:mixed-refs:bframes=16:weightb:b-pyramid:direct=auto:me=umh:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Classic</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<false />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's traditional, faster, lower-quality settings.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>1000</integer>
-		<key>video_codec</key>
-		<string>ffmpeg</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Constant Quality Rate</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mkv</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>ac3</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>large_mp4</key>
+				<true />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>720</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>48</string>
+					</dict>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>ac3</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>none</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s universally compatible, full resolution settings for all current Apple devices: iPod, iPhone, AppleTV, and Macs</string>
+				<key>preset_name</key>
+				<string>Universal</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<true />
+				<key>subtitle_lang</key>
 				<string>none</string>
-				<key>audio_rate</key>
-				<string>source</string>
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>2500</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>59</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<false />
+				<key>vquality_type_constant</key>
+				<true />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1:subme=8</string>
 			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's preset for consistently excellent quality in one pass, with the downside of entirely unpredictable file sizes and bitrates.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<false />
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>2000</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_constant</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=3:mixed-refs:bframes=3:b-pyramid:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Deux Six Quatre</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mkv</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>ac3</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
 				<string>none</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's preset for true high profile x264 quality. A good balance of quality and speed, based on community standards found in the wild. This preset will give you a much better sense of x264's capabilities than vanilla main profile.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1600</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=5:mixed-refs:bframes=3:weightb:b-pyramid:me=umh:subme=7:trellis=1:analyse=all:8x8dct:no-fast-pskip</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Film</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mkv</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>ac3</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
+				<key>denoise</key>
 				<string>none</string>
-				<key>audio_rate</key>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
 				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>large_mp4</key>
+				<true />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>960</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>48</string>
+					</dict>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>ac3</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>none</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and optimizes performance.</string>
+				<key>preset_name</key>
+				<string>AppleTV</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<true />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>2500</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>59</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<false />
+				<key>vquality_type_constant</key>
+				<true />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all</string>
 			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's preset for feature films.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1800</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Normal</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
+				<key>preset_folder</key>
+				<array>
+					<dict>
+						<key>Default</key>
+						<false />
+						<key>anamorphic</key>
+						<false />
+						<key>autocrop</key>
+						<true />
+						<key>chapter_markers</key>
+						<true />
+						<key>container</key>
+						<string>mp4</string>
+						<key>deblock</key>
+						<integer>0</integer>
+						<key>deinterlace</key>
+						<string>none</string>
+						<key>denoise</key>
+						<string>none</string>
+						<key>detelecine</key>
+						<false />
+						<key>framerate</key>
+						<string>source</string>
+						<key>grayscale</key>
+						<false />
+						<key>ipod_file</key>
+						<true />
+						<key>keep_aspect</key>
+						<true />
+						<key>max_height</key>
+						<integer>0</integer>
+						<key>max_width</key>
+						<integer>320</integer>
+						<key>pref_audio_list</key>
+						<array>
+							<dict>
+								<key>audio_bitrate</key>
+								<string>160</string>
+								<key>audio_codec</key>
+								<string>faac</string>
+								<key>audio_drc</key>
+								<real>1</real>
+								<key>audio_mix</key>
+								<string>dpl2</string>
+								<key>audio_rate</key>
+								<string>48</string>
+							</dict>
+						</array>
+						<key>preset_description</key>
+						<string>HandBrake&apos;s low resolution settings for the iPod. Optimized for great playback on the iPod screen, with smaller file size.</string>
+						<key>preset_name</key>
+						<string>iPod Classic &amp; iPod Nano</string>
+						<key>preset_type</key>
+						<integer>0</integer>
+						<key>round_dimensions</key>
+						<true />
+						<key>subtitle_lang</key>
+						<string>none</string>
+						<key>two_pass</key>
+						<false />
+						<key>video_bitrate</key>
+						<integer>700</integer>
+						<key>video_codec</key>
+						<string>x264</string>
+						<key>video_quality</key>
+						<integer>65</integer>
+						<key>video_target_size</key>
+						<integer>700</integer>
+						<key>vquality_type_bitrate</key>
+						<true />
+						<key>vquality_type_constant</key>
+						<false />
+						<key>vquality_type_target</key>
+						<false />
+						<key>x264_options</key>
+						<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
+					</dict>
+					<dict>
+						<key>Default</key>
+						<false />
+						<key>anamorphic</key>
+						<false />
+						<key>autocrop</key>
+						<true />
+						<key>chapter_markers</key>
+						<true />
+						<key>container</key>
+						<string>mp4</string>
+						<key>deblock</key>
+						<integer>0</integer>
+						<key>deinterlace</key>
+						<string>none</string>
+						<key>denoise</key>
+						<string>none</string>
+						<key>detelecine</key>
+						<false />
+						<key>framerate</key>
+						<string>source</string>
+						<key>grayscale</key>
+						<false />
+						<key>ipod_file</key>
+						<true />
+						<key>keep_aspect</key>
+						<true />
+						<key>max_height</key>
+						<integer>0</integer>
+						<key>max_width</key>
+						<integer>480</integer>
+						<key>pref_audio_list</key>
+						<array>
+							<dict>
+								<key>audio_bitrate</key>
+								<string>128</string>
+								<key>audio_codec</key>
+								<string>faac</string>
+								<key>audio_drc</key>
+								<real>1</real>
+								<key>audio_mix</key>
+								<string>dpl2</string>
+								<key>audio_rate</key>
+								<string>48</string>
+							</dict>
+						</array>
+						<key>preset_description</key>
+						<string>HandBrake&apos;s settings for the iPhone and iPod Touch.</string>
+						<key>preset_name</key>
+						<string>iPhone &amp; iPod Touch</string>
+						<key>preset_type</key>
+						<integer>0</integer>
+						<key>round_dimensions</key>
+						<true />
+						<key>subtitle_lang</key>
+						<string>none</string>
+						<key>two_pass</key>
+						<false />
+						<key>video_bitrate</key>
+						<integer>960</integer>
+						<key>video_codec</key>
+						<string>x264</string>
+						<key>video_quality</key>
+						<integer>65</integer>
+						<key>video_target_size</key>
+						<integer>700</integer>
+						<key>vquality_type_bitrate</key>
+						<true />
+						<key>vquality_type_constant</key>
+						<false />
+						<key>vquality_type_target</key>
+						<false />
+						<key>x264_options</key>
+						<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1</string>
+					</dict>
+					<dict>
+						<key>Default</key>
+						<false />
+						<key>anamorphic</key>
+						<false />
+						<key>autocrop</key>
+						<true />
+						<key>chapter_markers</key>
+						<true />
+						<key>container</key>
+						<string>mp4</string>
+						<key>deblock</key>
+						<integer>0</integer>
+						<key>deinterlace</key>
+						<string>none</string>
+						<key>denoise</key>
+						<string>none</string>
+						<key>detelecine</key>
+						<false />
+						<key>framerate</key>
+						<string>source</string>
+						<key>grayscale</key>
+						<false />
+						<key>ipod_file</key>
+						<true />
+						<key>keep_aspect</key>
+						<true />
+						<key>max_height</key>
+						<integer>0</integer>
+						<key>max_width</key>
+						<integer>640</integer>
+						<key>pref_audio_list</key>
+						<array>
+							<dict>
+								<key>audio_bitrate</key>
+								<string>160</string>
+								<key>audio_codec</key>
+								<string>faac</string>
+								<key>audio_drc</key>
+								<real>1</real>
+								<key>audio_mix</key>
+								<string>dpl2</string>
+								<key>audio_rate</key>
+								<string>48</string>
+							</dict>
+						</array>
+						<key>preset_description</key>
+						<string>HandBrake&apos;s high resolution settings for older 5 and 5.5G iPods. Good video quality, great for viewing on a TV using your iPod</string>
+						<key>preset_name</key>
+						<string>iPod Legacy</string>
+						<key>preset_type</key>
+						<integer>0</integer>
+						<key>round_dimensions</key>
+						<true />
+						<key>subtitle_lang</key>
+						<string>none</string>
+						<key>two_pass</key>
+						<false />
+						<key>video_bitrate</key>
+						<integer>1500</integer>
+						<key>video_codec</key>
+						<string>x264</string>
+						<key>video_quality</key>
+						<integer>65</integer>
+						<key>video_target_size</key>
+						<integer>700</integer>
+						<key>vquality_type_bitrate</key>
+						<true />
+						<key>vquality_type_constant</key>
+						<false />
+						<key>vquality_type_target</key>
+						<false />
+						<key>x264_options</key>
+						<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
+					</dict>
+				</array>
+				<key>preset_name</key>
+				<string>iPod &amp; iPhone</string>
+				<key>preset_type</key>
+				<integer>2</integer>
+			</dict>
+			<dict>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
 				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s high profile settings for use with QuickTime. It can be slow, so use it when the Normal preset doesn&apos;t look good enough.</string>
+				<key>preset_name</key>
+				<string>QuickTime</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>turbo</key>
+				<true />
+				<key>two_pass</key>
+				<true />
+				<key>video_bitrate</key>
+				<integer>1800</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1</string>
 			</dict>
 		</array>
-		<key>preset_description</key>
-		<string>HandBrake's normal, default settings.</string>
+		<key>preset_name</key>
+		<string>Apple</string>
 		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1500</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=2:bframes=2:me=umh</string>
+		<integer>2</integer>
 	</dict>
 	<dict>
-		<key>preset_name</key>
-		<string>PS3</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<false />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
+		<key>preset_folder</key>
 		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for the Sony PlayStation 3.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>2500</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>level=41:me=umh</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>PSP</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>208</integer>
-		<key>max_width</key>
-		<integer>368</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>128</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for the Sony PlayStation Portable.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>1024</integer>
-		<key>video_codec</key>
-		<string>ffmpeg</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>QuickTime</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
+				<key>Default</key>
+				<true />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
 				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s normal, default settings.</string>
+				<key>preset_name</key>
+				<string>Normal</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>turbo</key>
+				<true />
+				<key>two_pass</key>
+				<true />
+				<key>video_bitrate</key>
+				<integer>1500</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>ref=2:bframes=2:me=umh</string>
 			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's high quality settings for use with QuickTime. It can be slow, so use it when the Normal preset doesn't look good enough.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>2000</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:analyse=all:trellis=1:no-fast-pskip</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>Television</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mkv</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>slower</string>
-		<key>denoise</key>
-		<integer>1</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<false />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<false />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
 				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<true />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s traditional, faster, lower-quality settings.</string>
+				<key>preset_name</key>
+				<string>Classic</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<true />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>1000</integer>
+				<key>video_codec</key>
+				<string>ffmpeg</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string></string>
 			</dict>
 		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for video from television.</string>
+		<key>preset_name</key>
+		<string>Basic</string>
 		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<true />
-		<key>two_pass</key>
-		<true />
-		<key>video_bitrate</key>
-		<integer>1300</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip</string>
+		<integer>2</integer>
 	</dict>
 	<dict>
-		<key>preset_name</key>
-		<string>Xbox 360</string>
-		<key>anamorphic</key>
-		<true />
-		<key>autoscale</key>
-		<true />
-		<key>chapter_markers</key>
-		<false />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>keep_aspect</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
+		<key>preset_folder</key>
 		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mkv</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>decomb</key>
+				<true />
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<true />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s settings for cartoons, anime, and CGI.</string>
+				<key>preset_name</key>
+				<string>Animation</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>turbo</key>
+				<true />
+				<key>two_pass</key>
+				<true />
+				<key>video_bitrate</key>
+				<integer>1000</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>ref=5:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2:psy-rd=1,1:subme=9</string>
+			</dict>
+			<dict>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mkv</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>ac3</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>none</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s preset for consistently excellent quality in one pass, with the downside of entirely unpredictable file sizes and bitrates.</string>
+				<key>preset_name</key>
+				<string>Constant Quality Rate</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>turbo</key>
+				<false />
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>2000</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>60</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<false />
+				<key>vquality_type_constant</key>
+				<true />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>ref=3:mixed-refs:bframes=3:b-pyramid:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh:subme=9:psy-rd=1,1</string>
+			</dict>
+			<dict>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mkv</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>ac3</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>none</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s preset for feature films.</string>
+				<key>preset_name</key>
+				<string>Film</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>turbo</key>
+				<true />
+				<key>two_pass</key>
+				<true />
+				<key>video_bitrate</key>
+				<integer>1800</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:no-fast-pskip:psy-rd=1,1</string>
+			</dict>
+			<dict>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mkv</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>decomb</key>
+				<true />
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<true />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>source</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s settings for video from television.</string>
+				<key>preset_name</key>
+				<string>Television</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>turbo</key>
+				<true />
+				<key>two_pass</key>
+				<true />
+				<key>video_bitrate</key>
+				<integer>1300</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip=1:psy-rd=1,1</string>
 			</dict>
 		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for the Microsoft Xbox 360.</string>
+		<key>preset_name</key>
+		<string>High Profile</string>
 		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>2000</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>level=40:ref=2:mixed-refs:bframes=3:weightb:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
+		<integer>2</integer>
 	</dict>
 	<dict>
-		<key>preset_name</key>
-		<string>iPhone / iPod Touch</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>ipod_file</key>
-		<true />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>480</integer>
-		<key>pref_audio_list</key>
+		<key>preset_folder</key>
 		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>128</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<false />
+				<key>autocrop</key>
+				<true />
+				<key>chapter_markers</key>
+				<true />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<true />
+				<key>max_height</key>
+				<integer>208</integer>
+				<key>max_width</key>
+				<integer>368</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>128</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>48</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s settings for the Sony PlayStation Portable.</string>
+				<key>preset_name</key>
+				<string>PSP</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<true />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>1024</integer>
+				<key>video_codec</key>
+				<string>ffmpeg</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string></string>
 			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's settings for the iPhone and iPod Touch.</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>960</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>iPod High-Rez</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>ipod_file</key>
-		<true />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>640</integer>
-		<key>pref_audio_list</key>
-		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autocrop</key>
+				<false />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<false />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>48</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s settings for the Sony PlayStation 3.</string>
+				<key>preset_name</key>
+				<string>PS3</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>2500</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>level=41:me=umh</string>
 			</dict>
-		</array>
-		<key>preset_description</key>
-		<string>HandBrake's high resolution settings for the iPod. Good video quality, great for viewing on a TV using your iPod</string>
-		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>1500</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
-	</dict>
-	<dict>
-		<key>preset_name</key>
-		<string>iPod Low-Rez</string>
-		<key>anamorphic</key>
-		<false />
-		<key>autocrop</key>
-		<true />
-		<key>autoscale</key>
-		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<real>0</real>
-		<key>decomb</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<integer>0</integer>
-		<key>detelecine</key>
-		<false />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>ipod_file</key>
-		<true />
-		<key>keep_aspect</key>
-		<true />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>320</integer>
-		<key>pref_audio_list</key>
-		<array>
 			<dict>
-				<key>audio_bitrate</key>
-				<string>160</string>
-				<key>audio_codec</key>
-				<string>faac</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>48</string>
+				<key>Default</key>
+				<false />
+				<key>anamorphic</key>
+				<true />
+				<key>autoscale</key>
+				<true />
+				<key>chapter_markers</key>
+				<false />
+				<key>container</key>
+				<string>mp4</string>
+				<key>deblock</key>
+				<integer>0</integer>
+				<key>deinterlace</key>
+				<string>none</string>
+				<key>denoise</key>
+				<string>none</string>
+				<key>detelecine</key>
+				<false />
+				<key>framerate</key>
+				<string>source</string>
+				<key>grayscale</key>
+				<false />
+				<key>keep_aspect</key>
+				<false />
+				<key>max_height</key>
+				<integer>0</integer>
+				<key>max_width</key>
+				<integer>0</integer>
+				<key>pref_audio_list</key>
+				<array>
+					<dict>
+						<key>audio_bitrate</key>
+						<string>160</string>
+						<key>audio_codec</key>
+						<string>faac</string>
+						<key>audio_drc</key>
+						<real>1</real>
+						<key>audio_mix</key>
+						<string>dpl2</string>
+						<key>audio_rate</key>
+						<string>48</string>
+					</dict>
+				</array>
+				<key>preset_description</key>
+				<string>HandBrake&apos;s settings for the Microsoft Xbox 360.</string>
+				<key>preset_name</key>
+				<string>Xbox 360</string>
+				<key>preset_type</key>
+				<integer>0</integer>
+				<key>round_dimensions</key>
+				<false />
+				<key>subtitle_lang</key>
+				<string>none</string>
+				<key>two_pass</key>
+				<false />
+				<key>video_bitrate</key>
+				<integer>2000</integer>
+				<key>video_codec</key>
+				<string>x264</string>
+				<key>video_quality</key>
+				<integer>65</integer>
+				<key>video_target_size</key>
+				<integer>700</integer>
+				<key>vquality_type_bitrate</key>
+				<true />
+				<key>vquality_type_constant</key>
+				<false />
+				<key>vquality_type_target</key>
+				<false />
+				<key>x264_options</key>
+				<string>level=40:ref=2:mixed-refs:bframes=3:weightb:subme=7:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
 			</dict>
 		</array>
-		<key>preset_description</key>
-		<string>HandBrake's low resolution settings for the iPod. Optimized for great playback on the iPod screen, with smaller file size.</string>
+		<key>preset_name</key>
+		<string>Gaming Consoles</string>
 		<key>preset_type</key>
-		<integer>0</integer>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>700</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
-		<key>vquality_type_bitrate</key>
-		<true />
-		<key>x264_options</key>
-		<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
+		<integer>2</integer>
 	</dict>
 </array>
 </plist>

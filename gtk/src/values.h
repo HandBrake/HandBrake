@@ -35,6 +35,7 @@ void ghb_array_replace(GValue *gval, guint ii, GValue *val);
 void ghb_array_append(GValue *gval, GValue *val);
 void ghb_array_remove(GValue *gval, guint ii);
 gint ghb_array_len(const GValue *gval);
+void ghb_array_copy(GValue *arr1, GValue *arr2, gint count);
 
 void ghb_value_free(GValue *gval);
 GValue* ghb_value_new(GType gtype);

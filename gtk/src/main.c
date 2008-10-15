@@ -486,8 +486,7 @@ main (int argc, char *argv[])
 {
  	GtkWidget *window;
 	signal_user_data_t *ud;
-	gchar *preset;
-	gchar *folder;
+	GValue *preset;
 	GError *error = NULL;
 	GOptionContext *context;
 
@@ -589,19 +588,20 @@ main (int argc, char *argv[])
 	ghb_x264_parse_options(ud, "");
 
 	// Populate the presets tree view
-	ghb_presets_list_init(ud, NULL, NULL, NULL);
+	ghb_presets_list_init(ud, NULL, 0);
 	// Get the first preset name
 	if (arg_preset != NULL)
 	{
-		ghb_select_preset(ud->builder, NULL, arg_preset);
+		preset = ghb_parse_preset_path(arg_preset);
+		if (preset)
+		{
+			ghb_select_preset(ud->builder, preset);
+			ghb_value_free(preset);
+		}
 	}
 	else
 	{
-		preset = ghb_settings_get_string (ud->settings, "default_preset");
-		folder = ghb_settings_get_string (ud->settings, "default_folder");
-		ghb_select_preset(ud->builder, folder, preset);
-		g_free(preset);
-		g_free(folder);
+		ghb_select_default_preset(ud->builder);
 	}
 
 	// Grey out widgets that are dependent on a disabled feature

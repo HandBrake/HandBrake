@@ -1,691 +1,721 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 #include <glib.h>
-#include <fcntl.h>
+#include <glib/gstdio.h>
+#include "plist.h"
+#include "values.h"
 
-#define BUF_SIZ	(128*1024)
-#define IS_TAG(a,b)	(strcmp((a),(b)) == 0)
-#define IS_KEY(a,b)	(strcmp((a),(b)) == 0)
-#define IS_VAL(a,b)	(strcmp((a),(b)) == 0)
-
-enum
-{
-	NONE,
-	START,
-	ARRAY,
-	DICT,
-	KEY,
-	INT,
-	STR,
-	REAL,
-};
+static GValue *defaults;
 
 typedef struct
 {
-	gint state;
-	gchar *preset;
-	gchar *key;
-	gchar *value;
-	GHashTable *settings;
-	GHashTable *xlat_key;
-	GHashTable *xlat_value;
-} parse_data_t;
+	gchar *mac_val;
+	gchar *lin_val;
+} value_map_t;
 
-static void
-start_element(
-	GMarkupParseContext *ctx, 
-	const gchar *name, 
-	const gchar **attr_names,
-	const gchar **attr_values,
-	gpointer ud,
-	GError **error)
+static value_map_t vcodec_xlat[] =
 {
-	parse_data_t *pd = (parse_data_t*)ud;
-
-	if (IS_TAG(name, "array"))
-	{
-		pd->state = ARRAY;
-	}
-	else if (IS_TAG(name, "dict"))
-	{
-		g_hash_table_remove_all(pd->settings);
-		pd->state = DICT;
-	}
-	else if (IS_TAG(name, "key"))
-	{
-		pd->state = KEY;
-	}
-	else if (IS_TAG(name, "string"))
-	{
-		pd->state = STR;
-	}
-	else if (IS_TAG(name, "integer"))
-	{
-		pd->state = INT;
-	}
-	else if (IS_TAG(name, "real"))
-	{
-		pd->state = REAL;
-	}
-	else
-	{
-		g_debug("start unrecognized (%s)", name);
-	}
-}
-
-gchar *settings[] = 
-{
-	"preset_description",
-	"preset_type",
-	"subtitle_lang",
-	"forced_subtitles",
-	"source_audio_lang",
-	"pref_audio_codec",
-	"pref_audio_bitrate",
-	"pref_audio_rate",
-	"pref_audio_mix",
-	"pref_audio_drc",
-	"chapter_markers",
-	"container",
-	"ipod_file",
-	"large_mp4",
-	"autocrop",
-	"autoscale",
-	"max_width",
-	"max_height",
-	"anamorphic",
-	"round_dimensions",
-	"keep_aspect",
-	"detelecine",
-	"decomb",
-	"deinterlace",
-	"denoise",
-	"grayscale",
-	"deblock",
-	"video_codec",
-	"two_pass",
-	"turbo",
-	"constant_rate_factor",
-	"variable_frame_rate",
-	"framerate",
-	"vquality_type_constant",
-	"vquality_type_bitrate",
-	"vquality_type_target",
-	"video_bitrate",
-	"video_target_size",
-	"video_quality",
-	"x264_options",
-	"directqp",
-	NULL
+	{"MPEG-4 (FFmpeg)", "ffmpeg"},
+	{"MPEG-4 (XviD)", "xvid"},
+	{"H.264 (x264)", "x264"},
+	{"VP3 (Theora)", "theora"},
+	{NULL,NULL}
 };
 
-static void
-verify_keys(parse_data_t *pd)
-{
-	GList *keys, *link;
-
-	link = keys = g_hash_table_get_keys(pd->settings);
-	while (link)
-	{
-		gboolean found = FALSE;
-		gchar *key = (gchar*)link->data;
-		gint ii;
-		for (ii = 0; settings[ii] != NULL; ii++)
-		{
-			if (IS_KEY(settings[ii], key))
-			{
-				found = TRUE;
-			}
-		}
-		if (!found)
-		{
-			g_message("bad key (%s)", key);
-		}
-		link = link->next;
-	}
-	g_list_free(keys);
-}
-
-GKeyFile *presets;
-
-static void
-save_preset(parse_data_t *pd)
-{
-	gint ii;
-	if (pd->preset == NULL)
-	{
-		g_message("failed to save preset");
-		return;
-	}
-	for (ii = 0; settings[ii] != NULL; ii++)
-	{
-		const gchar *value;
-		value = (const gchar*)g_hash_table_lookup( pd->settings, settings[ii]);
-		if (value)
-		{
-			g_key_file_set_value(presets, pd->preset, settings[ii], value);
-		}
-	}
-	verify_keys(pd);
-}
-
-gchar *audio_track[2];
-gchar *audio_enc[2];
-gchar *audio_bitrate[2];
-gchar *audio_rate[2];
-gchar *audio_mix[2];
-gchar *audio_drc[2];
-
-static void
-add_keys(parse_data_t *pd)
-{
-	// These are needed to override default values that
-	// are not set in the xml file (yet)
-	const gchar *val;
-	// Check to see if its really not set. Future xml versions will set it.
-	val = (const gchar*)g_hash_table_lookup(pd->settings, "decomb");
-	if (!val)
-		g_hash_table_insert(pd->settings, g_strdup("decomb"), g_strdup("0"));
-}
-
-static void
-do_one(gchar **strs, GString *res)
-{
-	gint ii;
-	for (ii = 0; ii < 2 && strs[ii]; ii++)
-	{
-		if (audio_track[ii] == NULL) break;
-		if (ii)
-			g_string_append_c(res, ',');
-		g_string_append_printf(res, "%s", strs[ii]);
-	}
-}
-
-static void
-do_audio(parse_data_t *pd)
-{
-	gint ii;
-	GString *enc, *br, *rate, *mix, *drc;
-	gchar *res;
-
-	enc = g_string_new("");
-	br = g_string_new("");
-	rate = g_string_new("");
-	mix = g_string_new("");
-	drc = g_string_new("");
-	do_one(audio_enc, enc);
-	do_one(audio_bitrate, br);
-	do_one(audio_rate, rate);
-	do_one(audio_mix, mix);
-	do_one(audio_drc, drc);
-	res = g_string_free(enc, FALSE);
-	g_hash_table_insert(pd->settings, g_strdup("pref_audio_codec"), res);
-	res = g_string_free(br, FALSE);
-	g_hash_table_insert(pd->settings, g_strdup("pref_audio_bitrate"), res);
-	res = g_string_free(rate, FALSE);
-	g_hash_table_insert(pd->settings, g_strdup("pref_audio_rate"), res);
-	res = g_string_free(mix, FALSE);
-	g_hash_table_insert(pd->settings, g_strdup("pref_audio_mix"), res);
-	res = g_string_free(drc, FALSE);
-	g_hash_table_insert(pd->settings, g_strdup("pref_audio_drc"), res);
-}
-
-static void
-null_audio()
-{
-	gint ii;
-	for (ii = 0; ii < 2; ii++)
-	{
-		audio_track[ii] = NULL;
-		audio_enc[ii] = NULL;
-		audio_bitrate[ii] = NULL;
-		audio_rate[ii] = NULL;
-		audio_mix[ii] = NULL;
-		audio_drc[ii] = NULL;
-	}
-}
-
-static void
-clear_audio()
-{
-	gint ii;
-	for (ii = 0; ii < 2; ii++)
-	{
-		if (audio_track[ii]) g_free(audio_track[ii]);
-		if (audio_enc[ii]) g_free(audio_enc[ii]);
-		if (audio_bitrate[ii]) g_free(audio_bitrate[ii]);
-		if (audio_rate[ii]) g_free(audio_rate[ii]);
-		if (audio_mix[ii]) g_free(audio_mix[ii]);
-		if (audio_drc[ii]) g_free(audio_drc[ii]);
-		audio_track[ii] = NULL;
-		audio_enc[ii] = NULL;
-		audio_bitrate[ii] = NULL;
-		audio_rate[ii] = NULL;
-		audio_mix[ii] = NULL;
-		audio_drc[ii] = NULL;
-	}
-}
-
-static void
-end_element(
-	GMarkupParseContext *ctx, 
-	const gchar *name, 
-	gpointer ud,
-	GError **error)
-{
-	parse_data_t *pd = (parse_data_t*)ud;
-
-	if (IS_TAG(name, "string") ||
-		IS_TAG(name, "integer") ||
-		IS_TAG(name, "real"))
-	{
-		if (IS_KEY(pd->key, "PresetName"))
-		{
-			if (pd->preset)
-			{
-				g_message("Preset named twice");
-			}
-			else
-				pd->preset = g_strdup(pd->value);
-			pd->state = NONE;
-			return;
-		}
-		const gchar *my_key;
-		my_key = (const gchar*)g_hash_table_lookup(pd->xlat_key, pd->key);
-		if (my_key != NULL)
-		{ // Do something with it
-			if (my_key[0] != 0) // intentionally ignored keys
-			{
-				if (pd->value != NULL)
-				{
-					g_hash_table_insert(pd->settings, 
-						g_strdup(my_key), g_strdup(pd->value));
-				}
-				else
-				{
-					g_message("NULL value");
-				}
-			}
-		}
-		else if (IS_KEY(pd->key, "Audio1Encoder"))
-		{
-			if (audio_enc[0]) g_free(audio_enc[0]);
-			audio_enc[0] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio1Bitrate"))
-		{
-			if (audio_bitrate[0]) g_free(audio_bitrate[0]);
-			audio_bitrate[0] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio1Samplerate"))
-		{
-			if (audio_rate[0]) g_free(audio_rate[0]);
-			audio_rate[0] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio1Mixdown"))
-		{
-			if (audio_mix[0]) g_free(audio_mix[0]);
-			audio_mix[0] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio1TrackDRCSlider"))
-		{
-			if (audio_drc[0]) g_free(audio_drc[0]);
-			audio_drc[0] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio1Track"))
-		{
-			if (audio_track[0]) g_free(audio_track[0]);
-			audio_track[0] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio2Encoder"))
-		{
-			if (audio_enc[1]) g_free(audio_enc[1]);
-			audio_enc[1] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio2Bitrate"))
-		{
-			if (audio_bitrate[1]) g_free(audio_bitrate[1]);
-			audio_bitrate[1] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio2Samplerate"))
-		{
-			if (audio_rate[1]) g_free(audio_rate[1]);
-			audio_rate[1] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio2Mixdown"))
-		{
-			if (audio_mix[1]) g_free(audio_mix[1]);
-			audio_mix[1] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio2TrackDRCSlider"))
-		{
-			if (audio_drc[1]) g_free(audio_drc[1]);
-			audio_drc[1] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "Audio2Track"))
-		{
-			if (audio_track[1]) g_free(audio_track[1]);
-			audio_track[1] = g_strdup(pd->value);
-		}
-		else if (IS_KEY(pd->key, "VideoQualityType"))
-		{
-			// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
-			if (IS_VAL(pd->value, "0"))
-			{
-				g_hash_table_insert(pd->settings, 
-						g_strdup("vquality_type_target"), 
-						g_strdup("1"));
-				g_hash_table_remove(pd->settings, "vquality_type_bitrate");
-				g_hash_table_remove(pd->settings, "vquality_type_constant");
-			}
-			else if (IS_VAL(pd->value, "1"))
-			{
-				g_hash_table_remove(pd->settings, "vquality_type_target");
-				g_hash_table_insert(pd->settings, 
-						g_strdup("vquality_type_bitrate"), 
-						g_strdup("1"));
-				g_hash_table_remove(pd->settings, "vquality_type_constant");
-			}
-			else if (IS_VAL(pd->value, "2"))
-			{
-				g_hash_table_remove(pd->settings, "vquality_type_target");
-				g_hash_table_remove(pd->settings, "vquality_type_bitrate");
-				g_hash_table_insert(pd->settings, 
-						g_strdup("vquality_type_constant"), 
-						g_strdup("1"));
-			}
-		}
-		else
-		{
-			g_message("Key not found (%s)", pd->key);
-		}
-	}
-	else if (IS_TAG(name, "dict"))
-	{
-		gint ii;
-		add_keys(pd);
-		do_audio(pd);
-		clear_audio();
-		save_preset(pd);
-
-		if (pd->preset) 
-		{
-			g_free(pd->preset);
-			pd->preset = NULL;
-		}
-		else
-			g_message("Preset has no name");
-		g_hash_table_remove_all(pd->settings);
-	}
-	pd->state = NONE;
-}
-
-static gboolean
-is_number(const gchar *str)
-{
-	gboolean result = TRUE;
-	gint ii;
-	for (ii = 0; str[ii] != 0; ii++)
-	{
-		if (!g_ascii_isdigit(str[ii]) && str[ii] != '.')
-			result = FALSE;
-	}
-	return result;
-}
-
-static void
-text_data(
-	GMarkupParseContext *ctx, 
-	const gchar *text, 
-	gsize len,
-	gpointer ud,
-	GError **error)
-{
-	gboolean is_value = FALSE;
-	parse_data_t *pd = (parse_data_t*)ud;
-	const gchar *val = NULL;
-
-	if (pd->state == KEY)
-	{
-		if (pd->key) g_free(pd->key);
-		pd->key = g_strdup(text);
-		return;
-	}
-	if (pd->state == STR)
-	{
-		val = (gchar*)g_hash_table_lookup(pd->xlat_value, text);
-		if (val != NULL)
-		{ // Do something with it
-		}
-		else if (IS_KEY(pd->key, "PresetName") ||
-				IS_KEY(pd->key, "PresetDescription") ||
-				IS_KEY(pd->key, "x264Option") ||
-				is_number(text))
-		{
-			val = text;
-		}
-		else
-		{
-			g_message("Unrecognized val (%s)", text);
-		}
-	}
-	if (pd->state == INT || pd->state == REAL)
-	{
-		val = text;
-	}
-
-	// Some keys need further translation of their values
-	if (val)
-	{
-		if (IS_KEY(pd->key, "PictureDeinterlace"))
-		{
-			if (IS_VAL(val, "0"))
-			{
-				val = "none";
-			}
-			else if (IS_VAL(val, "1"))
-			{
-				val = "fast";
-			}
-			else if (IS_VAL(val, "2"))
-			{
-				val = "slow";
-			}
-			else if (IS_VAL(val, "3"))
-			{
-				val = "slower";
-			}
-		}
-		else if (IS_KEY(pd->key, "VideoQualitySlider"))
-		{
-			gdouble dval;
-			dval = g_strtod(val, NULL);
-			dval *= 100;
-			if (pd->value) g_free(pd->value);
-			pd->value = g_strdup_printf("%d", (gint)dval);
-			return;
-		}
-		else if (IS_KEY(pd->key, "Audio1Samplerate") ||
-				IS_KEY(pd->key, "Audio2Samplerate"))
-		{
-			if (IS_VAL(val, "auto"))
-			{
-				val = "source";
-			}
-		}
-		else if (IS_KEY(pd->key, "Audio1Mixdown") ||
-				IS_KEY(pd->key, "Audio2Mixdown"))
-		{
-			if (IS_VAL(val, "ac3"))
-			{
-				val = "none";
-			}
-		}
-		if (pd->value) g_free(pd->value);
-		pd->value = g_strdup(val);
-	}
-}
-
-static void
-passthrough(
-	GMarkupParseContext *ctx, 
-	const gchar *text, 
-	gsize len,
-	gpointer ud,
-	GError **error)
-{
-	parse_data_t *pd = (parse_data_t*)ud;
-
-	g_debug("passthrough %s", text);
-}
-
-static void
-delete_key(gpointer str)
-{
-	g_free(str);
-}
-
-static void
-delete_value(gpointer str)
-{
-	g_free(str);
-}
-
-typedef struct
-{
-	gchar *from;
-	gchar *to;
-} xlat_t;
-
-static xlat_t keys[] =
-{
-	{"VFR", "variable_frame_rate"},
-	{"ChapterMarkers", "chapter_markers"},
-	{"Default", ""},
-	{"FileFormat", "container"},
-	{"PictureAutoCrop", "autocrop"},
-	{"PictureBottomCrop", ""},
-	{"PictureTopCrop", ""},
-	{"PictureLeftCrop", ""},
-	{"PictureRightCrop", ""},
-	{"PictureDeblock", "deblock"},
-	{"PictureDeinterlace", "deinterlace"}, // v
-	{"PictureDenoise", "denoise"}, // v
-	{"PictureDetelecine", "detelecine"},
-	{"PictureHeight", "max_height"},
-	{"PictureWidth", "max_width"},
-	{"PictureKeepRatio", "keep_aspect"},
-	{"PicturePAR", "anamorphic"}, // v
-	{"PresetDescription", "preset_description"},
-	{"Subtitles", "subtitle_lang"},
-	{"Subtitles", "subtitle_lang"},
-	{"Type", "preset_type"}, // preset type builtin/custom
-	{"UsesMaxPictureSettings", "autoscale"},
-	{"UsesPictureFilters", ""},
-	{"UsesPictureSettings", ""},
-	{"VideoAvgBitrate", "video_bitrate"},
-	{"VideoEncoder", "video_codec"},
-	{"VideoFramerate", "framerate"},
-	{"VideoGrayScale", "grayscale"},
-	{"VideoQualitySlider", "video_quality"},
-	{"VideoTargetSize", "video_target_size"},
-	{"VideoTurboTwoPass", "turbo"},
-	{"VideoTwoPass", "two_pass"},
-	{"x264Option", "x264_options"},
-	{"Mp4LargeFile", "large_mp4"},
-	{"Mp4iPodCompatible", "ipod_file"},
-	{NULL, NULL}
-};
-
-// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
-// Audio1Bitrate - pref_audio_bitrate
-// Audio1Encoder - pref_audio_codec
-// Audio1Mixdown - pref_audio_mix
-// Audio1Samplerate - pref_audio_rate
-// Audio1Track - na
-// Audio1DRCSlider - pref_audio_drc
-
-static xlat_t values[] =
+static value_map_t acodec_xlat[] =
 {
 	{"AAC (faac)", "faac"},
 	{"AC3 Passthru", "ac3"},
-	{"H.264 (x264)", "x264"},
-	{"MPEG-4 (FFmpeg)", "ffmpeg"},
-	{"Dolby Pro Logic II", "dpl2"},
-	{"Auto", "auto"},
-	{"MKV file", "mkv"},
+	{"MP3 (lame)", "lame"},
+	{"Vorbis (vorbis)", "vorbis"},
+	{NULL,NULL}
+};
+
+static value_map_t subtitle_xlat[] =
+{ 
+	{ "None", "none" },
+	{ "Auto", "auto" },
+	{ "Any", "und" },
+	{ "Afar", "aar" },
+	{ "Abkhazian", "abk" },
+	{ "Afrikaans", "afr" },
+	{ "Akan", "aka" },
+	{ "Albanian", "sqi" },
+	{ "Amharic", "amh" },
+	{ "Arabic", "ara" },
+	{ "Aragonese", "arg" },
+	{ "Armenian", "hye" },
+	{ "Assamese", "asm" },
+	{ "Avaric", "ava" },
+	{ "Avestan", "ave" },
+	{ "Aymara", "aym" },
+	{ "Azerbaijani", "aze" },
+	{ "Bashkir", "bak" },
+	{ "Bambara", "bam" },
+	{ "Basque", "eus" },
+	{ "Belarusian", "bel" },
+	{ "Bengali", "ben" },
+	{ "Bihari", "bih" },
+	{ "Bislama", "bis" },
+	{ "Bosnian", "bos" },
+	{ "Breton", "bre" },
+	{ "Bulgarian", "bul" },
+	{ "Burmese", "mya" },
+	{ "Catalan", "cat" },
+	{ "Chamorro", "cha" },
+	{ "Chechen", "che" },
+	{ "Chinese", "zho" },
+	{ "Church Slavic", "chu" },
+	{ "Chuvash", "chv" },
+	{ "Cornish", "cor" },
+	{ "Corsican", "cos" },
+	{ "Cree", "cre" },
+	{ "Czech", "ces" },
+	{ "Danish", "dan" },
+	{ "Divehi", "div" },
+	{ "Dutch", "nld" },
+	{ "Dzongkha", "dzo" },
+	{ "English", "eng" },
+	{ "Esperanto", "epo" },
+	{ "Estonian", "est" },
+	{ "Ewe", "ewe" },
+	{ "Faroese", "fao" },
+	{ "Fijian", "fij" },
+	{ "Finnish", "fin" },
+	{ "French", "fra" },
+	{ "Western Frisian", "fry" },
+	{ "Fulah", "ful" },
+	{ "Georgian", "kat" },
+	{ "German", "deu" },
+	{ "Gaelic (Scots)", "gla" },
+	{ "Irish", "gle" },
+	{ "Galician", "glg" },
+	{ "Manx", "glv" },
+	{ "Greek, Modern", "ell" },
+	{ "Guarani", "grn" },
+	{ "Gujarati", "guj" },
+	{ "Haitian", "hat" },
+	{ "Hausa", "hau" },
+	{ "Hebrew", "heb" },
+	{ "Herero", "her" },
+	{ "Hindi", "hin" },
+	{ "Hiri Motu", "hmo" },
+	{ "Hungarian", "hun" },
+	{ "Igbo", "ibo" },
+	{ "Icelandic", "isl" },
+	{ "Ido", "ido" },
+	{ "Sichuan Yi", "iii" },
+	{ "Inuktitut", "iku" },
+	{ "Interlingue", "ile" },
+	{ "Interlingua", "ina" },
+	{ "Indonesian", "ind" },
+	{ "Inupiaq", "ipk" },
+	{ "Italian", "ita" },
+	{ "Javanese", "jav" },
+	{ "Japanese", "jpn" },
+	{ "Kalaallisut", "kal" },
+	{ "Kannada", "kan" },
+	{ "Kashmiri", "kas" },
+	{ "Kanuri", "kau" },
+	{ "Kazakh", "kaz" },
+	{ "Central Khmer", "khm" },
+	{ "Kikuyu", "kik" },
+	{ "Kinyarwanda", "kin" },
+	{ "Kirghiz", "kir" },
+	{ "Komi", "kom" },
+	{ "Kongo", "kon" },
+	{ "Korean", "kor" },
+	{ "Kuanyama", "kua" },
+	{ "Kurdish", "kur" },
+	{ "Lao", "lao" },
+	{ "Latin", "lat" },
+	{ "Latvian", "lav" },
+	{ "Limburgan", "lim" },
+	{ "Lingala", "lin" },
+	{ "Lithuanian", "lit" },
+	{ "Luxembourgish", "ltz" },
+	{ "Luba-Katanga", "lub" },
+	{ "Ganda", "lug" },
+	{ "Macedonian", "mkd" },
+	{ "Marshallese", "mah" },
+	{ "Malayalam", "mal" },
+	{ "Maori", "mri" },
+	{ "Marathi", "mar" },
+	{ "Malay", "msa" },
+	{ "Malagasy", "mlg" },
+	{ "Maltese", "mlt" },
+	{ "Moldavian", "mol" },
+	{ "Mongolian", "mon" },
+	{ "Nauru", "nau" },
+	{ "Navajo", "nav" },
+	{ "Ndebele, South", "nbl" },
+	{ "Ndebele, North", "nde" },
+	{ "Ndonga", "ndo" },
+	{ "Nepali", "nep" },
+	{ "Norwegian Nynorsk", "nno" },
+	{ "Norwegian Bokmål", "nob" },
+	{ "Norwegian", "nor" },
+	{ "Chichewa; Nyanja", "nya" },
+	{ "Occitan", "oci" },
+	{ "Ojibwa", "oji" },
+	{ "Oriya", "ori" },
+	{ "Oromo", "orm" },
+	{ "Ossetian", "oss" },
+	{ "Panjabi", "pan" },
+	{ "Persian", "fas" },
+	{ "Pali", "pli" },
+	{ "Polish", "pol" },
+	{ "Portuguese", "por" },
+	{ "Pushto", "pus" },
+	{ "Quechua", "que" },
+	{ "Romansh", "roh" },
+	{ "Romanian", "ron" },
+	{ "Rundi", "run" },
+	{ "Russian", "rus" },
+	{ "Sango", "sag" },
+	{ "Sanskrit", "san" },
+	{ "Serbian", "srp" },
+	{ "Croatian", "hrv" },
+	{ "Sinhala", "sin" },
+	{ "Slovak", "slk" },
+	{ "Slovenian", "slv" },
+	{ "Northern Sami", "sme" },
+	{ "Samoan", "smo" },
+	{ "Shona", "sna" },
+	{ "Sindhi", "snd" },
+	{ "Somali", "som" },
+	{ "Sotho, Southern", "sot" },
+	{ "Spanish", "spa" },
+	{ "Sardinian", "srd" },
+	{ "Swati", "ssw" },
+	{ "Sundanese", "sun" },
+	{ "Swahili", "swa" },
+	{ "Swedish", "swe" },
+	{ "Tahitian", "tah" },
+	{ "Tamil", "tam" },
+	{ "Tatar", "tat" },
+	{ "Telugu", "tel" },
+	{ "Tajik", "tgk" },
+	{ "Tagalog", "tgl" },
+	{ "Thai", "tha" },
+	{ "Tibetan", "bod" },
+	{ "Tigrinya", "tir" },
+	{ "Tonga", "ton" },
+	{ "Tswana", "tsn" },
+	{ "Tsonga", "tso" },
+	{ "Turkmen", "tuk" },
+	{ "Turkish", "tur" },
+	{ "Twi", "twi" },
+	{ "Uighur", "uig" },
+	{ "Ukrainian", "ukr" },
+	{ "Urdu", "urd" },
+	{ "Uzbek", "uzb" },
+	{ "Venda", "ven" },
+	{ "Vietnamese", "vie" },
+	{ "Volapük", "vol" },
+	{ "Welsh", "cym" },
+	{ "Walloon", "wln" },
+	{ "Wolof", "wol" },
+	{ "Xhosa", "xho" },
+	{ "Yiddish", "yid" },
+	{ "Yoruba", "yor" },
+	{ "Zhuang", "zha" },
+	{ "Zulu", "zul" },
+	{NULL, NULL}
+};
+
+value_map_t container_xlat[] =
+{
 	{"MP4 file", "mp4"},
-	{"None", "none"},
+	{"M4V file", "m4v"},
+	{"MKV file", "mkv"},
+	{"AVI file", "avi"},
+	{"OGM file", "ogm"},
+	{NULL, NULL}
+};
+
+value_map_t framerate_xlat[] =
+{
 	{"Same as source", "source"},
-	{"160", "160"},
+	{"5", "5"},
+	{"10", "10"},
+	{"12", "12"},
+	{"15", "15"},
+	{"23.976", "23.976"},
+	{"24", "24"},
+	{"25", "25"},
+	{"29.97", "29.97"},
+	{NULL, NULL}
+};
+
+value_map_t samplerate_xlat[] =
+{
+	{"Auto", "source"},
+	{"22.05", "22.05"},
+	{"24", "24"},
+	{"32", "32"},
+	{"44.1", "44.1"},
+	{"48", "48"},
+	{NULL, NULL}
+};
+
+value_map_t mix_xlat[] =
+{
+	{"Mono", "mono"},
+	{"Stereo", "stereo"},
+	{"Dolby Surround", "dpl1"},
+	{"Dolby Pro Logic II", "dpl2"},
+	{"6-channel discrete", "6ch"},
+	{"AC3 Passthru", "none"},
+	{NULL, NULL}
+};
+
+value_map_t deint_xlat[] =
+{
+	{"0", "none"},
+	{"1", "fast"},
+	{"2", "slow"},
+	{"3", "slower"},
+	{NULL, NULL}
+};
+
+value_map_t denoise_xlat[] =
+{
+	{"0", "none"},
+	{"1", "weak"},
+	{"2", "medium"},
+	{"3", "strong"},
+	{NULL, NULL}
+};
+
+typedef struct
+{
+	gchar *mac_key;
+	gchar *lin_key;
+	value_map_t *value_map;
+	gboolean ignore;
+} key_map_t;
+
+key_map_t key_map[] = 
+{
+	{"Audio1Bitrate", NULL, NULL, FALSE},
+	{"Audio1Encoder", NULL, NULL, FALSE},
+	{"Audio1Mixdown", NULL, NULL, FALSE},
+	{"Audio1Samplerate", NULL, NULL, FALSE},
+	{"Audio1Track", NULL, NULL, FALSE},
+	{"Audio1TrackDescription", NULL, NULL, FALSE},
+	{"Audio1TrackDRCSlider", NULL, NULL, FALSE},
+	{"Audio2Bitrate", NULL, NULL, FALSE},
+	{"Audio2Encoder", NULL, NULL, FALSE},
+	{"Audio2Mixdown", NULL, NULL, FALSE},
+	{"Audio2Samplerate", NULL, NULL, FALSE},
+	{"Audio2Track", NULL, NULL, FALSE},
+	{"Audio2TrackDescription", NULL, NULL, FALSE},
+	{"Audio2TrackDRCSlider", NULL, NULL, FALSE},
+	{"ChapterMarkers", "chapter_markers", NULL, FALSE},
+	{"Default", "Default", NULL, FALSE},
+	{"FileFormat", "container", container_xlat, FALSE},
+	{"Folder", NULL, NULL, TRUE},
+	{"Mp4HttpOptimize", "http_optimize_mp4", NULL, FALSE},
+	{"Mp4iPodCompatible", "ipod_file", NULL, FALSE},
+	{"Mp4LargeFile", "large_mp4", NULL, FALSE},
+	{"PictureAutoCrop", "autocrop", NULL, FALSE},
+	{"PictureBottomCrop", NULL, NULL, TRUE},
+	{"PictureDeblock", "deblock", NULL, FALSE},
+	{"PictureDecomb", "decomb", NULL, FALSE},
+	{"PictureDeinterlace", "deinterlace", deint_xlat, FALSE},
+	{"PictureDenoise", "denoise", denoise_xlat, FALSE},
+	{"PictureDetelecine", "detelecine", NULL, FALSE},
+	{"PictureHeight", "max_height", NULL, FALSE},
+	{"PictureKeepRatio", "keep_aspect", NULL, FALSE},
+	{"PictureLeftCrop", NULL, NULL, TRUE},
+	{"PicturePAR", NULL, NULL, FALSE},
+	{"PictureRightCrop", NULL, NULL, TRUE},
+	{"PictureTopCrop", NULL, NULL, TRUE},
+	{"PictureWidth", "max_width", NULL, FALSE},
+	{"PresetDescription", "preset_description", NULL, FALSE},
+	{"PresetName", "preset_name", NULL, FALSE},
+	{"Subtitles", "subtitle_lang", subtitle_xlat, FALSE},
+	{"SubtitlesForced", "forced_subtitles", NULL, FALSE},
+	{"Type", NULL, NULL, TRUE},
+	{"UsesMaxPictureSettings", NULL, NULL, FALSE},
+	{"UsesPictureFilters", NULL, NULL, TRUE},
+	{"UsesPictureSettings", NULL, NULL, FALSE},
+	{"VFR", NULL, NULL, TRUE},
+	{"VideoAvgBitrate", "video_bitrate", NULL, FALSE},
+	{"VideoEncoder", "video_codec", vcodec_xlat, FALSE},
+	{"VideoFramerate", "framerate", framerate_xlat, FALSE},
+	{"VideoGrayScale", "grayscale", NULL, FALSE},
+	{"VideoQualitySlider", NULL, NULL, FALSE},
+	{"VideoQualityType", NULL, NULL, FALSE},
+	{"VideoTargetSize", "video_target_size", NULL, FALSE},
+	{"VideoTwoPass", "two_pass", NULL, FALSE},
+	{"VideoTurboTwoPass", "turbo", NULL, FALSE},
+	{"x264Option", "x264_options", NULL, FALSE},
+	{NULL, NULL}
+};
+
+const gint
+key_xlat(key_map_t *key_map, const gchar *mac_key)
+{
+	gint ii;
+
+	for (ii = 0; key_map[ii].mac_key; ii++)
+	{
+		if (strcmp(mac_key, key_map[ii].mac_key) == 0)
+		{
+			if (key_map[ii].ignore)
+				return -1;
+			return ii;
+		}
+	}
+	g_warning("Unrecognized key: (%s)", mac_key);
+	return -1;
+}
+
+static GValue*
+value_xlat(
+	GValue *defaults, 
+	key_map_t *key_map, 
+	gint key_index, 
+	GValue *mac_val)
+{
+	GValue *gval, *def_val;
+	const gchar *lin_key = key_map[key_index].lin_key;
+	value_map_t *value_map = key_map[key_index].value_map;
+
+	def_val = ghb_dict_lookup(defaults, lin_key);
+	if (def_val)
+	{
+		if (value_map)
+		{
+			gint ii;
+			gchar *str;
+			GValue *sval;
+
+			str = ghb_value_string(mac_val);
+			for (ii = 0; value_map[ii].mac_val; ii++)
+			{
+				if (strcmp(str, value_map[ii].mac_val) == 0)
+				{
+					sval = ghb_string_value_new(value_map[ii].lin_val);
+					g_free(str);
+					gval = ghb_value_new(G_VALUE_TYPE(def_val));
+					if (!g_value_transform(sval, gval))
+					{
+						g_warning("1 can't transform");
+						ghb_value_free(gval);
+						ghb_value_free(sval);
+						return NULL;
+					}
+					ghb_value_free(sval);
+					return gval;
+				}
+			}
+			g_warning("Can't map value: (%s)", str);
+			g_free(str);
+		}
+		else
+		{
+			gval = ghb_value_new(G_VALUE_TYPE(def_val));
+			if (!g_value_transform(mac_val, gval))
+			{
+				g_warning("2 can't transform");
+				ghb_value_free(gval);
+				return NULL;
+			}
+			return gval;
+		}
+	}
+	else
+	{
+		g_warning("Bad key: (%s)", lin_key);
+		return NULL;
+	}
+	return NULL;
+}
+
+key_map_t audio_key_map[] =
+{
+	{"Audio1Bitrate", "audio_bitrate", NULL, FALSE},
+	{"Audio1Encoder", "audio_codec", acodec_xlat, FALSE},
+	{"Audio1Mixdown", "audio_mix", mix_xlat, FALSE},
+	{"Audio1Samplerate", "audio_rate", samplerate_xlat, FALSE},
+	{"Audio1Track", NULL, NULL, TRUE},
+	{"Audio1TrackDescription", NULL, NULL, TRUE},
+	{"Audio1TrackDRCSlider", "audio_drc", NULL, FALSE},
+	{"Audio2Bitrate", "audio_bitrate", NULL, FALSE},
+	{"Audio2Encoder", "audio_codec", acodec_xlat, FALSE},
+	{"Audio2Mixdown", "audio_mix", mix_xlat, FALSE},
+	{"Audio2Samplerate", "audio_rate", samplerate_xlat, FALSE},
+	{"Audio2Track", NULL, NULL, TRUE},
+	{"Audio2TrackDescription", NULL, NULL, TRUE},
+	{"Audio2TrackDRCSlider", "audio_drc", NULL, FALSE},
 	{NULL, NULL}
 };
 
 static void
-store_key_file(GKeyFile *key_file, const gchar *name)
+hard_value_xlat(GValue *lin_dict, const gchar *mac_key, GValue *mac_val)
 {
-    gchar *settingsString;
-    gsize length;
-    gint fd;
+	if (strcmp(mac_key, "VideoQualitySlider") == 0)
+	{
+		gint vquality;
 
-    settingsString = g_key_file_to_data(key_file, &length, NULL);
+		vquality = (ghb_value_double(mac_val) + 0.005) * 100.0;
+		ghb_dict_insert(lin_dict, "video_quality", 
+							ghb_int_value_new(vquality));
+	}
+	else if (strcmp(mac_key, "UsesMaxPictureSettings") == 0)
+	{
+		GValue *gval;
 
-    fd = g_open(name, O_RDWR|O_CREAT|O_TRUNC, 0777);
-    write(fd, settingsString, length);
-    close(fd);
-    g_free(settingsString);
+		gval = ghb_dict_lookup(lin_dict, "autoscale");
+		if (gval == NULL && ghb_value_boolean(mac_val))
+		{
+			ghb_dict_insert(lin_dict, "autoscale", ghb_boolean_value_new(TRUE));
+		}
+	}
+	else if (strcmp(mac_key, "UsesPictureSettings") == 0)
+	{
+		GValue *gval;
+
+		gval = ghb_dict_lookup(lin_dict, "autoscale");
+		if (gval == NULL && ghb_value_int(mac_val) == 2)
+		{
+			ghb_dict_insert(lin_dict, "autoscale", ghb_boolean_value_new(TRUE));
+		}
+	}
+	else if (strcmp(mac_key, "PicturePAR") == 0)
+	{
+		gint ana;
+
+		ana = ghb_value_int(mac_val);
+		switch (ana)
+		{
+		case 0:
+		{
+			ghb_dict_insert(lin_dict, "anamorphic", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "round_dimensions", 
+							ghb_boolean_value_new(TRUE));
+		} break;
+		case 1:
+		{
+			ghb_dict_insert(lin_dict, "anamorphic", 
+							ghb_boolean_value_new(TRUE));
+			ghb_dict_insert(lin_dict, "round_dimensions", 
+							ghb_boolean_value_new(FALSE));
+		} break;
+		case 2:
+		{
+			ghb_dict_insert(lin_dict, "anamorphic", 
+							ghb_boolean_value_new(TRUE));
+			ghb_dict_insert(lin_dict, "round_dimensions", 
+							ghb_boolean_value_new(TRUE));
+		} break;
+		default:
+		{
+			ghb_dict_insert(lin_dict, "anamorphic", 
+							ghb_boolean_value_new(TRUE));
+			ghb_dict_insert(lin_dict, "round_dimensions", 
+							ghb_boolean_value_new(TRUE));
+		} break;
+		}
+	}
+	else if (strcmp(mac_key, "VideoQualityType") == 0)
+	{
+		// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
+		gint vqtype;
+
+		vqtype = ghb_value_int(mac_val);
+		switch (vqtype)
+		{
+		case 0:
+		{
+			ghb_dict_insert(lin_dict, "vquality_type_target", 
+							ghb_boolean_value_new(TRUE));
+			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "vquality_type_constant", 
+							ghb_boolean_value_new(FALSE));
+		} break;
+		case 1:
+		{
+			ghb_dict_insert(lin_dict, "vquality_type_target", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
+							ghb_boolean_value_new(TRUE));
+			ghb_dict_insert(lin_dict, "vquality_type_constant", 
+							ghb_boolean_value_new(FALSE));
+		} break;
+		case 2:
+		{
+			ghb_dict_insert(lin_dict, "vquality_type_target", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "vquality_type_constant", 
+							ghb_boolean_value_new(TRUE));
+		} break;
+		default:
+		{
+			ghb_dict_insert(lin_dict, "vquality_type_target", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
+							ghb_boolean_value_new(FALSE));
+			ghb_dict_insert(lin_dict, "vquality_type_constant", 
+							ghb_boolean_value_new(TRUE));
+		} break;
+		}
+	}
+	else
+	{
+		gint key_index;
+		GValue *audio_defaults;
+
+		audio_defaults = ghb_array_get_nth(
+			ghb_dict_lookup(defaults, "pref_audio_list"), 0);
+		key_index = key_xlat(audio_key_map, mac_key);
+		if (key_index >= 0)
+		{
+			gint audio_index, count, ii;
+			GValue *alist, *adict, *val;
+
+			audio_index = mac_key[5] - '1';
+			alist = ghb_dict_lookup(lin_dict, "pref_audio_list");
+			if (alist == NULL)
+			{
+				alist = ghb_array_value_new(8);
+				ghb_dict_insert(lin_dict, "pref_audio_list", alist);
+			}
+			count = ghb_array_len(alist);
+			for (ii = count; ii <= audio_index; ii++)
+			{
+				adict = ghb_value_dup(audio_defaults);
+				ghb_array_append(alist, adict);
+			}
+			adict = ghb_array_get_nth(alist, audio_index);
+			val = value_xlat(audio_defaults, audio_key_map, key_index, mac_val);
+			if (val)
+			{
+				ghb_dict_insert(adict, 
+							g_strdup(audio_key_map[key_index].lin_key), val);
+			}
+		}
+	}
 }
 
 static void
-parse_it(gchar *buf, gssize len)
+parse_preset_dict(GValue *mac_dict, GValue *lin_dict)
 {
-	GMarkupParseContext *ctx;
-	GMarkupParser parser;
-	parse_data_t pd;
+    GHashTableIter iter;
+    gchar *key;
+    GValue *mac_val, *val;
 
-	null_audio();
-	presets = g_key_file_new();
-	pd.state = START;
-	pd.key = NULL;
-	pd.value = NULL;
-	pd.preset = NULL;
-	pd.settings = g_hash_table_new_full(g_str_hash, g_str_equal, 
-									  delete_key, delete_value);
-	pd.xlat_key = g_hash_table_new(g_str_hash, g_str_equal);
-	gint ii;
-	for (ii = 0; keys[ii].from != NULL; ii++)
+    ghb_dict_iter_init(&iter, mac_dict);
+    // middle (void*) cast prevents gcc warning "defreferencing type-punned
+    // pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&mac_val))
 	{
-		g_hash_table_insert(pd.xlat_key, keys[ii].from, keys[ii].to);
+		gint key_index;
+
+		key_index = key_xlat(key_map, key);
+		if (key_index >= 0)
+		{ // The simple translations
+			if (key_map[key_index].lin_key)
+			{
+				val = value_xlat(defaults, key_map, key_index, mac_val);
+				if (val)
+				{
+					ghb_dict_insert(lin_dict, 
+								g_strdup(key_map[key_index].lin_key), val);
+				}
+			}
+			else
+			{
+				hard_value_xlat(lin_dict, key, mac_val);
+			}
+		}
 	}
-	pd.xlat_value = g_hash_table_new(g_str_hash, g_str_equal);
-	for (ii = 0; values[ii].from != NULL; ii++)
+}
+
+static void
+parse_preset_array(GValue *mac_array, GValue *lin_array)
+{
+	gint count, ii;
+	GValue *mac_dict, *lin_dict, *gval;
+
+	count = ghb_array_len(mac_array);
+	for (ii = 0; ii < count; ii++)
 	{
-		g_hash_table_insert(pd.xlat_value, values[ii].from, values[ii].to);
+		mac_dict = ghb_array_get_nth(mac_array, ii);
+		
+		// Only process builtin types
+		if (ghb_value_int(ghb_dict_lookup(mac_dict, "Type")) != 0)
+			continue;
+
+		lin_dict = ghb_dict_value_new();
+		ghb_array_append(lin_array, lin_dict);
+		gval = ghb_dict_lookup(mac_dict, "PresetName");
+		if (gval)
+		{
+			ghb_dict_insert(lin_dict, g_strdup("preset_name"), 
+							ghb_value_dup(gval));
+		}
+		gval = ghb_dict_lookup(mac_dict, "PresetDescription");
+		if (gval)
+		{
+			ghb_dict_insert(lin_dict, g_strdup("preset_description"), 
+							ghb_value_dup(gval));
+		}
+		gval = ghb_dict_lookup(mac_dict, "Folder");
+		if (gval && ghb_value_boolean(gval))
+		{ // Folder
+			GValue *mval, *lval;
+
+			mval = ghb_dict_lookup(mac_dict, "ChildrenArray");
+			lval = ghb_array_value_new(32);
+			ghb_dict_insert(lin_dict, g_strdup("preset_folder"), lval);
+			ghb_dict_insert(lin_dict, g_strdup("preset_type"), 
+							ghb_int_value_new(2));
+			parse_preset_array(mval, lval);
+		}
+		else
+		{ // Normal preset
+			ghb_dict_insert(lin_dict, g_strdup("preset_type"), 
+							ghb_int_value_new(0));
+			parse_preset_dict(mac_dict, lin_dict);
+		}
 	}
-	parser.start_element = start_element;
-	parser.end_element = end_element;
-	parser.text = text_data;
-	parser.passthrough = passthrough;
-	ctx = g_markup_parse_context_new(&parser, 0, &pd, NULL);
-	g_markup_parse_context_parse(ctx, buf, len, NULL);
-	store_key_file(presets, "xlat_presets");
+}
+
+static void
+xlat(GValue *mac, GValue *lin)
+{
+	return parse_preset_array(mac, lin);
 }
 
 gint
 main(gint argc, gchar *argv[])
 {
-	FILE *fd;
-	gchar buffer[BUF_SIZ];
-	size_t size;
+	GValue *mac_plist, *lin_plist;
+	GValue *internal;
 
-	fd = fopen(argv[1], "r");
-	size = fread(buffer, 1, BUF_SIZ, fd);
-	if (size >= BUF_SIZ)
+	if (argc < 3)
 	{
-		g_error("buffer too small");
-		exit(1);
+		fprintf(stderr, "Usage: <mac plist> <lin plist>\n");
+		return 1;
 	}
-	buffer[size] = 0;
-	parse_it(buffer, (gssize)size);
+	g_type_init();
+
+	ghb_register_transforms();
+	internal = ghb_plist_parse_file("internal_defaults.xml");
+	defaults = ghb_dict_lookup(internal, "Presets");
+	mac_plist = ghb_plist_parse_file(argv[1]);
+	lin_plist = ghb_array_value_new(32);
+	xlat(mac_plist, lin_plist);
+	ghb_plist_write_file(argv[2], lin_plist);
+	return 0;
 }
 

@@ -17,7 +17,13 @@
 		<key>folder</key>
 		<string></string>
 		<key>preset</key>
-		<string>Normal</string>
+		<array>
+			<string>Normal</string>
+		</array>
+		<key>preset_selection</key>
+		<array>
+			<string>Normal</string>
+		</array>
 		<key>preset_type_folder</key>
 		<false />
 		<key>preset_type_normal</key>
@@ -76,10 +82,6 @@
 		<false />
 		<key>chapters_in_destination</key>
 		<false />
-		<key>default_folder</key>
-		<string></string>
-		<key>default_preset</key>
-		<string>Normal</string>
 		<key>default_source</key>
 		<string>/dev/dvd</string>
 		<key>destination_dir</key>
@@ -108,7 +110,7 @@
 		<key>autocrop</key>
 		<true />
 		<key>autoscale</key>
-		<true />
+		<false />
 		<key>chapter_markers</key>
 		<true />
 		<key>constant_rate_factor</key>
@@ -116,9 +118,11 @@
 		<key>container</key>
 		<string>mp4</string>
 		<key>deblock</key>
-		<real>0</real>
+		<integer>0</integer>
 		<key>decomb</key>
-		<true />
+		<false />
+		<key>Default</key>
+		<false />
 		<key>deinterlace</key>
 		<string>none</string>
 		<key>denoise</key>
@@ -161,6 +165,8 @@
 			</dict>
 		</array>
 		<key>preset_description</key>
+		<string></string>
+		<key>preset_name</key>
 		<string></string>
 		<key>preset_type</key>
 		<integer>1</integer>
