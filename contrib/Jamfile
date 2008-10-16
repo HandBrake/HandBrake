@@ -96,7 +96,7 @@ rule LibAvCodec
        # don't. When we get new versions of FFMPEG we can try enabling
        # then again.
        #
-       FFMPEG_EXTRA_OPTIONS = "--disable-vis --disable-demuxer=mpc8 --disable-vhook" ;
+       FFMPEG_EXTRA_OPTIONS = "--disable-vis --disable-demuxer=mpc8 --disable-vhook --disable-network" ;
     }
 
     Depends $(<) : $(>) ;

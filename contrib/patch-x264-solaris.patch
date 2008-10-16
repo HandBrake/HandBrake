@@ -65,17 +65,3 @@ diff -ru x264/version.sh x264.solaris/version.sh
      VER=`git-rev-list origin/master | sort | join config.git-hash - | wc -l | awk '{print $1}'`
      if [ $VER != $LOCALVER ] ; then
          VER="$VER+$(($LOCALVER-$VER))"
-diff -ru x264/common/osdep.h x264.solaris/common/osdep.h
---- x264/common/osdep.h	Mon Jun  9 01:36:08 2008
-+++ x264.solaris/common/osdep.h	Thu Jun 19 10:52:56 2008
-@@ -48,6 +48,10 @@
- #define X264_VERSION "" // no configure script for msvc
- #endif
- 
-+#if defined(SYS_SunOS)
-+#define isfinite _finite
-+#endif
-+
- #ifdef SYS_OPENBSD
- #define isfinite finite
- #endif
