@@ -308,9 +308,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
                 if( rate == old_rate && bitrate == old_bitrate )
                 {
                     break;
-                } else {
-                    hb_log( "AC3 sync didn't return the same values two times in a row, still looking" );
-                }
+                } 
             } 
             
             old_rate = rate;
