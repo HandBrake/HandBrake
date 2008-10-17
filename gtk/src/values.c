@@ -87,21 +87,21 @@ ghb_value_int(const GValue *val)
 
 	if (val == NULL) return 0;
 	GValue xform = {0,};
-	if (G_VALUE_TYPE(val) != G_TYPE_INT64)
+	if (G_VALUE_TYPE(val) != G_TYPE_INT)
 	{
-		g_value_init(&xform, G_TYPE_INT64);
+		g_value_init(&xform, G_TYPE_INT);
 		if (!g_value_transform(val, &xform))
 		{
 			debug_show_type(G_VALUE_TYPE(val));
 			g_warning("int can't transform");
 			return 0;
 		}
-		result = (gint)g_value_get_int64(&xform);
+		result = g_value_get_int(&xform);
 		g_value_unset(&xform);
 	}
 	else
 	{
-		result = (gint)g_value_get_int64(val);
+		result = g_value_get_int(val);
 	}
 	return result;
 }
@@ -688,7 +688,7 @@ xform_string_int(const GValue *sval, GValue *ival)
 	const gchar *str = g_value_get_string(sval);
 	gint val = g_strtod(str, &end);
 	if (*end)
-		val = ~0>>1;
+		val = (guint)(~0)>>1;
 	g_value_set_int(ival, val);
 }
 
@@ -699,7 +699,7 @@ xform_string_int64(const GValue *sval, GValue *ival)
 	const gchar *str = g_value_get_string(sval);
 	gint64 val = g_strtod(str, &end);
 	if (*end)
-		val = ~0L>>1;
+		val = (guint64)(~0L)>>1;
 	g_value_set_int64(ival, val);
 }
 
