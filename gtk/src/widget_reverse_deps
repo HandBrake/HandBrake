@@ -2,35 +2,157 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>audio_bitrate</key>
+	<key>AudioBitrate</key>
 	<array>
 		<array>
-			<string>audio_codec</string>
+			<string>AudioEncoder</string>
 			<string>ac3</string>
 			<true />
 		</array>
 	</array>
-	<key>audio_drc</key>
+	<key>AudioMixdown</key>
 	<array>
 		<array>
-			<string>audio_codec</string>
+			<string>AudioEncoder</string>
 			<string>ac3</string>
 			<true />
 		</array>
 	</array>
-	<key>audio_mix</key>
+	<key>AudioSamplerate</key>
 	<array>
 		<array>
-			<string>audio_codec</string>
+			<string>AudioEncoder</string>
 			<string>ac3</string>
 			<true />
 		</array>
 	</array>
-	<key>audio_rate</key>
+	<key>AudioTrackDRCSlider</key>
 	<array>
 		<array>
-			<string>audio_codec</string>
+			<string>AudioEncoder</string>
 			<string>ac3</string>
+			<true />
+		</array>
+	</array>
+	<key>Mp4HttpOptimize</key>
+	<array>
+		<array>
+			<string>FileFormat</string>
+			<string>mp4|m4v</string>
+			<false />
+		</array>
+	</array>
+	<key>Mp4LargeFile</key>
+	<array>
+		<array>
+			<string>FileFormat</string>
+			<string>mp4|m4v</string>
+			<false />
+		</array>
+	</array>
+	<key>Mp4iPodCompatible</key>
+	<array>
+		<array>
+			<string>FileFormat</string>
+			<string>mp4|m4v</string>
+			<false />
+		</array>
+		<array>
+			<string>VideoEncoder</string>
+			<string>x264</string>
+			<false />
+		</array>
+	</array>
+	<key>PictureBottomCrop</key>
+	<array>
+		<array>
+			<string>PictureAutoCrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>PictureDeinterlace</key>
+	<array>
+		<array>
+			<string>PictureDecomb</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+	</array>
+	<key>PictureKeepRatio</key>
+	<array>
+		<array>
+			<string>anamorphic</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>PictureLeftCrop</key>
+	<array>
+		<array>
+			<string>PictureAutoCrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>PictureRightCrop</key>
+	<array>
+		<array>
+			<string>PictureAutoCrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>PictureTopCrop</key>
+	<array>
+		<array>
+			<string>PictureAutoCrop</string>
+			<string>FALSE</string>
+			<false />
+		</array>
+	</array>
+	<key>VideoAvgBitrate</key>
+	<array>
+		<array>
+			<string>vquality_type_bitrate</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>VideoQualitySlider</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>VideoTargetSize</key>
+	<array>
+		<array>
+			<string>vquality_type_target</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>VideoTurboTwoPass</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
+			<true />
+		</array>
+		<array>
+			<string>VideoTwoPass</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
+	<key>VideoTwoPass</key>
+	<array>
+		<array>
+			<string>vquality_type_constant</string>
+			<string>TRUE</string>
 			<true />
 		</array>
 	</array>
@@ -53,7 +175,7 @@
 	<key>chapters_list</key>
 	<array>
 		<array>
-			<string>chapter_markers</string>
+			<string>ChapterMarkers</string>
 			<string>TRUE</string>
 			<false />
 		</array>
@@ -74,44 +196,12 @@
 			<false />
 		</array>
 	</array>
-	<key>crop_bottom</key>
+	<key>directqp</key>
 	<array>
 		<array>
-			<string>autocrop</string>
-			<string>FALSE</string>
+			<string>VideoEncoder</string>
+			<string>x264|ffmpeg</string>
 			<false />
-		</array>
-	</array>
-	<key>crop_left</key>
-	<array>
-		<array>
-			<string>autocrop</string>
-			<string>FALSE</string>
-			<false />
-		</array>
-	</array>
-	<key>crop_right</key>
-	<array>
-		<array>
-			<string>autocrop</string>
-			<string>FALSE</string>
-			<false />
-		</array>
-	</array>
-	<key>crop_top</key>
-	<array>
-		<array>
-			<string>autocrop</string>
-			<string>FALSE</string>
-			<false />
-		</array>
-	</array>
-	<key>deinterlace</key>
-	<array>
-		<array>
-			<string>decomb</string>
-			<string>TRUE</string>
-			<true />
 		</array>
 	</array>
 	<key>end_chapter</key>
@@ -120,43 +210,6 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
-		</array>
-	</array>
-	<key>http_optimize_mp4</key>
-	<array>
-		<array>
-			<string>container</string>
-			<string>mp4|m4v</string>
-			<false />
-		</array>
-	</array>
-	<key>ipod_file</key>
-	<array>
-		<array>
-			<string>container</string>
-			<string>mp4|m4v</string>
-			<false />
-		</array>
-		<array>
-			<string>video_codec</string>
-			<string>x264</string>
-			<false />
-		</array>
-	</array>
-	<key>keep_aspect</key>
-	<array>
-		<array>
-			<string>anamorphic</string>
-			<string>FALSE</string>
-			<false />
-		</array>
-	</array>
-	<key>large_mp4</key>
-	<array>
-		<array>
-			<string>container</string>
-			<string>mp4|m4v</string>
-			<false />
 		</array>
 	</array>
 	<key>picture_label</key>
@@ -220,7 +273,7 @@
 			<false />
 		</array>
 		<array>
-			<string>keep_aspect</string>
+			<string>PictureKeepRatio</string>
 			<string>FALSE</string>
 			<false />
 		</array>
@@ -257,57 +310,12 @@
 			<true />
 		</array>
 	</array>
-	<key>turbo</key>
+	<key>tweak_PictureDeinterlace</key>
 	<array>
 		<array>
-			<string>vquality_type_constant</string>
+			<string>PictureDecomb</string>
 			<string>TRUE</string>
 			<true />
-		</array>
-		<array>
-			<string>two_pass</string>
-			<string>TRUE</string>
-			<false />
-		</array>
-	</array>
-	<key>tweak_deinterlace</key>
-	<array>
-		<array>
-			<string>decomb</string>
-			<string>TRUE</string>
-			<true />
-		</array>
-	</array>
-	<key>two_pass</key>
-	<array>
-		<array>
-			<string>vquality_type_constant</string>
-			<string>TRUE</string>
-			<true />
-		</array>
-	</array>
-	<key>video_bitrate</key>
-	<array>
-		<array>
-			<string>vquality_type_bitrate</string>
-			<string>TRUE</string>
-			<false />
-		</array>
-	</array>
-	<key>video_quality</key>
-	<array>
-		<array>
-			<string>vquality_type_constant</string>
-			<string>TRUE</string>
-			<false />
-		</array>
-	</array>
-	<key>video_target_size</key>
-	<array>
-		<array>
-			<string>vquality_type_target</string>
-			<string>TRUE</string>
-			<false />
 		</array>
 	</array>
 	<key>x264_bpyramid</key>
@@ -345,7 +353,7 @@
 	<key>x264_tab</key>
 	<array>
 		<array>
-			<string>video_codec</string>
+			<string>VideoEncoder</string>
 			<string>x264</string>
 			<false />
 		</array>
@@ -353,7 +361,7 @@
 	<key>x264_tab_label</key>
 	<array>
 		<array>
-			<string>video_codec</string>
+			<string>VideoEncoder</string>
 			<string>x264</string>
 			<false />
 		</array>

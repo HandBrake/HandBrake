@@ -119,12 +119,12 @@
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment5&quot;&gt;
-    &lt;property name=&quot;upper&quot;&gt;100&lt;/property&gt;
+    &lt;property name=&quot;upper&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
-    &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
-    &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;page_increment&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;step_increment&quot;&gt;0.1&lt;/property&gt;
     &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
-    &lt;property name=&quot;value&quot;&gt;63&lt;/property&gt;
+    &lt;property name=&quot;value&quot;&gt;0.63&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment6&quot;&gt;
     &lt;property name=&quot;upper&quot;&gt;4&lt;/property&gt;
@@ -801,7 +801,7 @@
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkComboBox&quot; id=&quot;container&quot;&gt;
+                                  &lt;object class=&quot;GtkComboBox&quot; id=&quot;FileFormat&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Output file container type&lt;/property&gt;
                                     &lt;signal handler=&quot;container_changed_cb&quot; name=&quot;changed&quot;/&gt;
@@ -818,7 +818,7 @@
                                     &lt;property name=&quot;xalign&quot;&gt;0.10000000149011612&lt;/property&gt;
                                     &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;ipod_file&quot;&gt;
+                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;Mp4iPodCompatible&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -834,7 +834,7 @@
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkCheckButton&quot; id=&quot;http_optimize_mp4&quot;&gt;
+                                  &lt;object class=&quot;GtkCheckButton&quot; id=&quot;Mp4HttpOptimize&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -848,7 +848,7 @@
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkCheckButton&quot; id=&quot;large_mp4&quot;&gt;
+                                  &lt;object class=&quot;GtkCheckButton&quot; id=&quot;Mp4LargeFile&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1307,7 +1307,7 @@
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;grayscale&quot;&gt;
+                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;VideoGrayScale&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1320,7 +1320,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;detelecine&quot;&gt;
+                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;PictureDetelecine&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1335,7 +1335,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;decomb&quot;&gt;
+                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;PictureDecomb&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;De-Comb&lt;/property&gt;
@@ -1369,7 +1369,7 @@
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                             &lt;property name=&quot;xscale&quot;&gt;0.55&lt;/property&gt;
                                             &lt;child&gt;
-                                              &lt;object class=&quot;GtkHScale&quot; id=&quot;deblock&quot;&gt;
+                                              &lt;object class=&quot;GtkHScale&quot; id=&quot;PictureDeblock&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;This is a filter that gets applied before encoding.  If the source looks blocky before encoding, you may want to use this.&lt;/property&gt;
@@ -1409,7 +1409,7 @@
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkComboBox&quot; id=&quot;deinterlace&quot;&gt;
+                                          &lt;object class=&quot;GtkComboBox&quot; id=&quot;PictureDeinterlace&quot;&gt;
                                             &lt;property name=&quot;width_request&quot;&gt;100&lt;/property&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1422,7 +1422,7 @@
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkComboBoxEntry&quot; id=&quot;tweak_deinterlace&quot;&gt;
+                                          &lt;object class=&quot;GtkComboBoxEntry&quot; id=&quot;tweak_PictureDeinterlace&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;False&lt;/property&gt;
                                             &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
                                             &lt;child internal-child=&quot;entry&quot;&gt;
@@ -1464,7 +1464,7 @@
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkComboBox&quot; id=&quot;denoise&quot;&gt;
+                                          &lt;object class=&quot;GtkComboBox&quot; id=&quot;PictureDenoise&quot;&gt;
                                             &lt;property name=&quot;width_request&quot;&gt;100&lt;/property&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1477,7 +1477,7 @@
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkComboBoxEntry&quot; id=&quot;tweak_denoise&quot;&gt;
+                                          &lt;object class=&quot;GtkComboBoxEntry&quot; id=&quot;tweak_PictureDenoise&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;False&lt;/property&gt;
                                             &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
                                             &lt;child internal-child=&quot;entry&quot;&gt;
@@ -1650,7 +1650,7 @@
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                             &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
                                             &lt;child&gt;
-                                              &lt;object class=&quot;GtkComboBox&quot; id=&quot;video_codec&quot;&gt;
+                                              &lt;object class=&quot;GtkComboBox&quot; id=&quot;VideoEncoder&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;signal handler=&quot;vcodec_changed_cb&quot; name=&quot;changed&quot;/&gt;
                                               &lt;/object&gt;
@@ -1689,7 +1689,7 @@
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                             &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
                                             &lt;child&gt;
-                                              &lt;object class=&quot;GtkComboBox&quot; id=&quot;framerate&quot;&gt;
+                                              &lt;object class=&quot;GtkComboBox&quot; id=&quot;VideoFramerate&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                                 &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
@@ -1708,7 +1708,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;two_pass&quot;&gt;
+                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;VideoTwoPass&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1726,7 +1726,7 @@
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                         &lt;property name=&quot;xscale&quot;&gt;0.23999999463558197&lt;/property&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;turbo&quot;&gt;
+                                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;VideoTurboTwoPass&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1816,7 +1816,7 @@
                                             &lt;property name=&quot;xalign&quot;&gt;0.11999999731779099&lt;/property&gt;
                                             &lt;property name=&quot;xscale&quot;&gt;0.10000000149011612&lt;/property&gt;
                                             &lt;child&gt;
-                                              &lt;object class=&quot;GtkSpinButton&quot; id=&quot;video_bitrate&quot;&gt;
+                                              &lt;object class=&quot;GtkSpinButton&quot; id=&quot;VideoAvgBitrate&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1856,7 +1856,7 @@
                                             &lt;property name=&quot;xalign&quot;&gt;0.11999999731779099&lt;/property&gt;
                                             &lt;property name=&quot;xscale&quot;&gt;0.10000000149011612&lt;/property&gt;
                                             &lt;child&gt;
-                                              &lt;object class=&quot;GtkSpinButton&quot; id=&quot;video_target_size&quot;&gt;
+                                              &lt;object class=&quot;GtkSpinButton&quot; id=&quot;VideoTargetSize&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -1894,14 +1894,15 @@
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkHScale&quot; id=&quot;video_quality&quot;&gt;
+                                          &lt;object class=&quot;GtkHScale&quot; id=&quot;VideoQualitySlider&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                             &lt;property name=&quot;adjustment&quot;&gt;adjustment5&lt;/property&gt;
-                                            &lt;property name=&quot;digits&quot;&gt;0&lt;/property&gt;
+                                            &lt;property name=&quot;digits&quot;&gt;3&lt;/property&gt;
                                             &lt;property name=&quot;value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;
                                             &lt;signal handler=&quot;setting_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
+                                            &lt;signal handler=&quot;format_vquality_cb&quot; name=&quot;format-value&quot;/&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
                                             &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
@@ -2061,7 +2062,7 @@
                                               &lt;/object&gt;
                                             &lt;/child&gt;
                                             &lt;child&gt;
-                                              &lt;object class=&quot;GtkHScale&quot; id=&quot;audio_drc&quot;&gt;
+                                              &lt;object class=&quot;GtkHScale&quot; id=&quot;AudioTrackDRCSlider&quot;&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -2094,7 +2095,7 @@
                                     &lt;property name=&quot;n_rows&quot;&gt;2&lt;/property&gt;
                                     &lt;property name=&quot;n_columns&quot;&gt;5&lt;/property&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;audio_track&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;AudioTrack&quot;&gt;
                                         &lt;property name=&quot;width_request&quot;&gt;215&lt;/property&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -2106,7 +2107,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;audio_codec&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;AudioEncoder&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                         &lt;signal handler=&quot;audio_codec_changed_cb&quot; name=&quot;changed&quot;/&gt;
@@ -2120,7 +2121,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;audio_rate&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;AudioSamplerate&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                         &lt;signal handler=&quot;audio_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
@@ -2196,7 +2197,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;audio_mix&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;AudioMixdown&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                         &lt;signal handler=&quot;audio_mix_changed_cb&quot; name=&quot;changed&quot;/&gt;
@@ -2210,7 +2211,7 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;audio_bitrate&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;AudioBitrate&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                         &lt;signal handler=&quot;audio_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
@@ -2279,7 +2280,7 @@
                                     &lt;property name=&quot;spacing&quot;&gt;5&lt;/property&gt;
 
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;source_audio_lang&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;SourceAudioLang&quot;&gt;
                                         &lt;property name=&quot;width_request&quot;&gt;150&lt;/property&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -2321,7 +2322,7 @@
                                     &lt;property name=&quot;spacing&quot;&gt;5&lt;/property&gt;
 
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;subtitle_lang&quot;&gt;
+                                      &lt;object class=&quot;GtkComboBox&quot; id=&quot;Subtitles&quot;&gt;
                                         &lt;property name=&quot;width_request&quot;&gt;150&lt;/property&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -2329,7 +2330,7 @@
                                       &lt;/object&gt;
                                     &lt;/child&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;forced_subtitles&quot;&gt;
+                                      &lt;object class=&quot;GtkCheckButton&quot; id=&quot;SubtitlesForced&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;has_tooltip&quot;&gt;True&lt;/property&gt;
@@ -2643,7 +2644,7 @@
                                 &lt;property name=&quot;left_padding&quot;&gt;12&lt;/property&gt;
                                 &lt;property name=&quot;right_padding&quot;&gt;2&lt;/property&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkTextView&quot; id=&quot;x264_options&quot;&gt;
+                                  &lt;object class=&quot;GtkTextView&quot; id=&quot;x264Option&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Your selected options will appear here. 
@@ -3090,7 +3091,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
                       &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox30&quot;&gt;
                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                         &lt;child&gt;
-                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;chapter_markers&quot;&gt;
+                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;ChapterMarkers&quot;&gt;
                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -3425,22 +3426,6 @@ auto-generated destination name.&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
-                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;linear_vquality&quot;&gt;
-                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                            &lt;property name=&quot;tooltip_text&quot;&gt;x264 uses a different scale for video quality than
-other codecs.  This adjusts the scale so that 
-similar values give similar quality across all the
-video codecs.&lt;/property&gt;
-                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Adjust x264 video quality scale&lt;/property&gt;
-                            &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
-                            &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
-                          &lt;/object&gt;
-                          &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
-                          &lt;/packing&gt;
-                        &lt;/child&gt;
-                        &lt;child&gt;
                           &lt;object class=&quot;GtkCheckButton&quot; id=&quot;noscale&quot;&gt;
                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
@@ -3454,7 +3439,7 @@ the required multiple.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3473,7 +3458,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;vcodec_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3484,7 +3469,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;tweaks_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3495,7 +3480,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;hbfd_feature_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;6&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                       &lt;/object&gt;
@@ -3667,7 +3652,7 @@ this setting.&lt;/property&gt;
                   &lt;/packing&gt;
                 &lt;/child&gt;
                 &lt;child&gt;
-                  &lt;object class=&quot;GtkEntry&quot; id=&quot;preset_name&quot;&gt;
+                  &lt;object class=&quot;GtkEntry&quot; id=&quot;PresetName&quot;&gt;
                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -3701,7 +3686,7 @@ this setting.&lt;/property&gt;
                     &lt;property name=&quot;left_padding&quot;&gt;12&lt;/property&gt;
                     &lt;property name=&quot;right_padding&quot;&gt;4&lt;/property&gt;
                     &lt;child&gt;
-                      &lt;object class=&quot;GtkTextView&quot; id=&quot;preset_description&quot;&gt;
+                      &lt;object class=&quot;GtkTextView&quot; id=&quot;PresetDescription&quot;&gt;
                         &lt;property name=&quot;height_request&quot;&gt;60&lt;/property&gt;
                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                         &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
@@ -4152,7 +4137,7 @@ this setting.&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;crop_left&quot;&gt;
+                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;PictureLeftCrop&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4182,7 +4167,7 @@ this setting.&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;crop_top&quot;&gt;
+                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;PictureTopCrop&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4198,7 +4183,7 @@ this setting.&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;crop_bottom&quot;&gt;
+                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;PictureBottomCrop&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4214,7 +4199,7 @@ this setting.&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;crop_right&quot;&gt;
+                                  &lt;object class=&quot;GtkSpinButton&quot; id=&quot;PictureRightCrop&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4251,7 +4236,7 @@ this setting.&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
-                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;autocrop&quot;&gt;
+                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;PictureAutoCrop&quot;&gt;
                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4375,7 +4360,7 @@ this setting.&lt;/property&gt;
                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                             &lt;child&gt;
-                              &lt;object class=&quot;GtkCheckButton&quot; id=&quot;round_dimensions&quot;&gt;
+                              &lt;object class=&quot;GtkCheckButton&quot; id=&quot;ModDimensions&quot;&gt;
                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4417,7 +4402,7 @@ adjusted to keep the video&apos;s original aspect ratio.&lt;/property&gt;
                               &lt;/packing&gt;
                             &lt;/child&gt;
                             &lt;child&gt;
-                              &lt;object class=&quot;GtkCheckButton&quot; id=&quot;keep_aspect&quot;&gt;
+                              &lt;object class=&quot;GtkCheckButton&quot; id=&quot;PictureKeepRatio&quot;&gt;
                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                 &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
@@ -4850,17 +4835,13 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 	<dict>
 		<key>Initialization</key>
 		<dict>
+			<key>anamorphic</key>
+			<true />
 			<key>audio_list</key>
 			<array>
 			</array>
-			<key>crop_bottom</key>
-			<integer>0</integer>
-			<key>crop_left</key>
-			<integer>0</integer>
-			<key>crop_right</key>
-			<integer>0</integer>
-			<key>crop_top</key>
-			<integer>0</integer>
+			<key>autoscale</key>
+			<false />
 			<key>end_chapter</key>
 			<integer>100</integer>
 			<key>folder</key>
@@ -4878,15 +4859,25 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>preset_type_normal</key>
 			<true />
 			<key>scale_height</key>
-			<integer>480</integer>
+			<integer>0</integer>
 			<key>scale_width</key>
-			<integer>720</integer>
+			<integer>0</integer>
 			<key>start_chapter</key>
 			<integer>1</integer>
 			<key>title</key>
 			<string>none</string>
+			<key>tweak_PictureDecomb</key>
+			<string></string>
+			<key>tweak_PictureDetelecine</key>
+			<string></string>
 			<key>volume_label</key>
 			<string>New Video</string>
+			<key>vquality_type_bitrate</key>
+			<false />
+			<key>vquality_type_constant</key>
+			<false />
+			<key>vquality_type_target</key>
+			<false />
 			<key>x264_8x8dct</key>
 			<false />
 			<key>x264_analyse</key>
@@ -4936,8 +4927,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<false />
 			<key>hbfd_feature</key>
 			<false />
-			<key>linear_vquality</key>
-			<false />
 			<key>nocheckvquality</key>
 			<false />
 			<key>noscale</key>
@@ -4951,1355 +4940,1569 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		</dict>
 		<key>Presets</key>
 		<dict>
+			<key>AudioList</key>
+			<array>
+				<dict>
+					<key>AudioBitrate</key>
+					<string>192</string>
+					<key>AudioEncoder</key>
+					<string>ac3</string>
+					<key>AudioMixdown</key>
+					<string>dpl2</string>
+					<key>AudioSamplerate</key>
+					<string>source</string>
+					<key>AudioTrack</key>
+					<integer>1</integer>
+					<key>AudioTrackDRCSlider</key>
+					<real>1</real>
+					<key>AudioTrackDescription</key>
+					<string></string>
+				</dict>
+			</array>
+			<key>ChapterMarkers</key>
+			<true />
 			<key>Default</key>
 			<false />
-			<key>anamorphic</key>
-			<true />
-			<key>autocrop</key>
-			<true />
-			<key>autoscale</key>
-			<false />
-			<key>chapter_markers</key>
-			<true />
-			<key>constant_rate_factor</key>
-			<true />
-			<key>container</key>
+			<key>FileFormat</key>
 			<string>mp4</string>
-			<key>deblock</key>
-			<integer>0</integer>
-			<key>decomb</key>
+			<key>Folder</key>
 			<false />
-			<key>deinterlace</key>
+			<key>ModDimensions</key>
+			<true />
+			<key>Mp4HttpOptimize</key>
+			<false />
+			<key>Mp4LargeFile</key>
+			<false />
+			<key>Mp4iPodCompatible</key>
+			<false />
+			<key>PictureAutoCrop</key>
+			<true />
+			<key>PictureBottomCrop</key>
+			<integer>0</integer>
+			<key>PictureDeblock</key>
+			<integer>0</integer>
+			<key>PictureDecomb</key>
+			<false />
+			<key>PictureDeinterlace</key>
 			<string>none</string>
-			<key>denoise</key>
+			<key>PictureDenoise</key>
 			<string>none</string>
-			<key>detelecine</key>
+			<key>PictureDetelecine</key>
+			<true />
+			<key>PictureHeight</key>
+			<integer>0</integer>
+			<key>PictureKeepRatio</key>
+			<true />
+			<key>PictureLeftCrop</key>
+			<integer>0</integer>
+			<key>PicturePAR</key>
+			<integer>2</integer>
+			<key>PictureRightCrop</key>
+			<integer>0</integer>
+			<key>PictureTopCrop</key>
+			<integer>0</integer>
+			<key>PictureWidth</key>
+			<integer>0</integer>
+			<key>PresetDescription</key>
+			<string></string>
+			<key>PresetName</key>
+			<string>Name Missing</string>
+			<key>SourceAudioLang</key>
+			<string>und</string>
+			<key>Subtitles</key>
+			<string>none</string>
+			<key>SubtitlesForced</key>
+			<true />
+			<key>Type</key>
+			<integer>1</integer>
+			<key>UsesMaxPictureSettings</key>
+			<false />
+			<key>UsesPictureFilters</key>
+			<true />
+			<key>UsesPictureSettings</key>
+			<integer>2</integer>
+			<key>VideoAvgBitrate</key>
+			<integer>1800</integer>
+			<key>VideoEncoder</key>
+			<string>x264</string>
+			<key>VideoFramerate</key>
+			<string>source</string>
+			<key>VideoGrayScale</key>
+			<false />
+			<key>VideoQualitySlider</key>
+			<real>0.59999999999999998</real>
+			<key>VideoQualityType</key>
+			<integer>2</integer>
+			<key>VideoTargetSize</key>
+			<integer>700</integer>
+			<key>VideoTurboTwoPass</key>
+			<false />
+			<key>VideoTwoPass</key>
+			<false />
+			<key>constant_rate_factor</key>
 			<true />
 			<key>directqp</key>
 			<false />
-			<key>forced_subtitles</key>
+			<key>x264Option</key>
+			<string></string>
+		</dict>
+		<key>XlatPresets</key>
+		<dict>
+			<key>anamorphic</key>
 			<true />
-			<key>framerate</key>
-			<string>source</string>
-			<key>grayscale</key>
+			<key>autoscale</key>
 			<false />
-			<key>http_optimize_mp4</key>
-			<false />
-			<key>ipod_file</key>
-			<false />
-			<key>keep_aspect</key>
-			<true />
-			<key>large_mp4</key>
-			<false />
-			<key>max_height</key>
-			<integer>0</integer>
-			<key>max_width</key>
-			<integer>0</integer>
-			<key>pref_audio_list</key>
-			<array>
-				<dict>
-					<key>audio_bitrate</key>
-					<string>192</string>
-					<key>audio_codec</key>
-					<string>ac3</string>
-					<key>audio_drc</key>
-					<real>1</real>
-					<key>audio_mix</key>
-					<string>dpl2</string>
-					<key>audio_rate</key>
-					<string>source</string>
-				</dict>
-			</array>
-			<key>preset_description</key>
-			<string></string>
-			<key>preset_name</key>
-			<string></string>
-			<key>preset_type</key>
-			<integer>1</integer>
-			<key>round_dimensions</key>
-			<true />
-			<key>source_audio_lang</key>
-			<string>und</string>
-			<key>subtitle_lang</key>
-			<string>none</string>
-			<key>turbo</key>
-			<false />
-			<key>tweak_decomb</key>
-			<string></string>
-			<key>tweak_detelecine</key>
-			<string></string>
-			<key>two_pass</key>
-			<false />
-			<key>video_bitrate</key>
-			<integer>1800</integer>
-			<key>video_codec</key>
-			<string>x264</string>
-			<key>video_quality</key>
-			<integer>64</integer>
-			<key>video_target_size</key>
-			<integer>700</integer>
 			<key>vquality_type_bitrate</key>
 			<false />
 			<key>vquality_type_constant</key>
 			<false />
 			<key>vquality_type_target</key>
 			<false />
-			<key>x264_options</key>
-			<string></string>
 		</dict>
 	</dict>
 	<key>standard-presets</key>
 	<array>
 		<dict>
-			<key>preset_folder</key>
+			<key>ChildrenArray</key>
 			<array>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>large_mp4</key>
-					<true />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>720</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
-							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
 							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>ac3</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AC3 Passthru</string>
+							<key>AudioMixdown</key>
+							<string>AC3 Passthru</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>none</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s universally compatible, full resolution settings for all current Apple devices: iPod, iPhone, AppleTV, and Macs</string>
-					<key>preset_name</key>
-					<string>Universal</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>Folder</key>
+					<false />
+					<key>Mp4LargeFile</key>
+					<true />
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
-					<true />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>two_pass</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>video_bitrate</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<false />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>2</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>720</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s universally compatible, full resolution settings for all current Apple devices: iPod, iPhone, AppleTV, and Macs</string>
+					<key>PresetName</key>
+					<string>Universal</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>2500</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>59</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.5899999737739563</real>
+					<key>VideoQualityType</key>
+					<integer>2</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTwoPass</key>
 					<false />
-					<key>vquality_type_constant</key>
-					<true />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>x264Option</key>
 					<string>level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1:subme=8</string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>large_mp4</key>
-					<true />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>960</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
-							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
 							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>ac3</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AC3 Passthru</string>
+							<key>AudioMixdown</key>
+							<string>AC3 Passthru</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>none</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and optimizes performance.</string>
-					<key>preset_name</key>
-					<string>AppleTV</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>Folder</key>
+					<false />
+					<key>Mp4LargeFile</key>
+					<true />
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
-					<true />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>two_pass</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>video_bitrate</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<false />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>2</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>960</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and optimizes performance.</string>
+					<key>PresetName</key>
+					<string>AppleTV</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>2500</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>59</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.5899999737739563</real>
+					<key>VideoQualityType</key>
+					<integer>2</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTwoPass</key>
 					<false />
-					<key>vquality_type_constant</key>
-					<true />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>x264Option</key>
 					<string>level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all</string>
 				</dict>
 				<dict>
-					<key>preset_folder</key>
+					<key>ChildrenArray</key>
 					<array>
 						<dict>
-							<key>Default</key>
-							<false />
-							<key>anamorphic</key>
-							<false />
-							<key>autocrop</key>
-							<true />
-							<key>chapter_markers</key>
-							<true />
-							<key>container</key>
-							<string>mp4</string>
-							<key>deblock</key>
-							<integer>0</integer>
-							<key>deinterlace</key>
-							<string>none</string>
-							<key>denoise</key>
-							<string>none</string>
-							<key>detelecine</key>
-							<false />
-							<key>framerate</key>
-							<string>source</string>
-							<key>grayscale</key>
-							<false />
-							<key>ipod_file</key>
-							<true />
-							<key>keep_aspect</key>
-							<true />
-							<key>max_height</key>
-							<integer>0</integer>
-							<key>max_width</key>
-							<integer>320</integer>
-							<key>pref_audio_list</key>
+							<key>AudioList</key>
 							<array>
 								<dict>
-									<key>audio_bitrate</key>
+									<key>AudioBitrate</key>
 									<string>160</string>
-									<key>audio_codec</key>
-									<string>faac</string>
-									<key>audio_drc</key>
-									<real>1</real>
-									<key>audio_mix</key>
-									<string>dpl2</string>
-									<key>audio_rate</key>
+									<key>AudioEncoder</key>
+									<string>AAC (faac)</string>
+									<key>AudioMixdown</key>
+									<string>Dolby Pro Logic II</string>
+									<key>AudioSamplerate</key>
 									<string>48</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
 								</dict>
 							</array>
-							<key>preset_description</key>
-							<string>HandBrake&apos;s low resolution settings for the iPod. Optimized for great playback on the iPod screen, with smaller file size.</string>
-							<key>preset_name</key>
-							<string>iPod Classic &amp; iPod Nano</string>
-							<key>preset_type</key>
+							<key>ChapterMarkers</key>
+							<true />
+							<key>Default</key>
+							<false />
+							<key>FileFormat</key>
+							<string>MP4 file</string>
+							<key>Mp4iPodCompatible</key>
+							<true />
+							<key>PictureAutoCrop</key>
+							<true />
+							<key>PictureBottomCrop</key>
 							<integer>0</integer>
-							<key>round_dimensions</key>
+							<key>PictureDeblock</key>
+							<integer>0</integer>
+							<key>PictureDeinterlace</key>
+							<string>0</string>
+							<key>PictureDenoise</key>
+							<string>0</string>
+							<key>PictureDetelecine</key>
+							<false />
+							<key>PictureHeight</key>
+							<integer>0</integer>
+							<key>PictureKeepRatio</key>
 							<true />
-							<key>subtitle_lang</key>
-							<string>none</string>
-							<key>two_pass</key>
+							<key>PictureLeftCrop</key>
+							<integer>0</integer>
+							<key>PicturePAR</key>
+							<integer>0</integer>
+							<key>PictureRightCrop</key>
+							<integer>0</integer>
+							<key>PictureTopCrop</key>
+							<integer>0</integer>
+							<key>PictureWidth</key>
+							<integer>320</integer>
+							<key>PresetDescription</key>
+							<string>HandBrake&apos;s low resolution settings for the iPod. Optimized for great playback on the iPod screen, with smaller file size.</string>
+							<key>PresetName</key>
+							<string>iPod Classic &amp; iPod Nano</string>
+							<key>Subtitles</key>
+							<string>None</string>
+							<key>Type</key>
+							<integer>0</integer>
+							<key>UsesMaxPictureSettings</key>
 							<false />
-							<key>video_bitrate</key>
-							<integer>700</integer>
-							<key>video_codec</key>
-							<string>x264</string>
-							<key>video_quality</key>
-							<integer>65</integer>
-							<key>video_target_size</key>
-							<integer>700</integer>
-							<key>vquality_type_bitrate</key>
+							<key>UsesPictureFilters</key>
 							<true />
-							<key>vquality_type_constant</key>
+							<key>UsesPictureSettings</key>
+							<integer>1</integer>
+							<key>VideoAvgBitrate</key>
+							<integer>700</integer>
+							<key>VideoEncoder</key>
+							<string>H.264 (x264)</string>
+							<key>VideoFramerate</key>
+							<string>Same as source</string>
+							<key>VideoGrayScale</key>
 							<false />
-							<key>vquality_type_target</key>
+							<key>VideoQualitySlider</key>
+							<real>0.64709997177124023</real>
+							<key>VideoQualityType</key>
+							<integer>1</integer>
+							<key>VideoTargetSize</key>
+							<integer>700</integer>
+							<key>VideoTwoPass</key>
 							<false />
-							<key>x264_options</key>
+							<key>x264Option</key>
 							<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
 						</dict>
 						<dict>
-							<key>Default</key>
-							<false />
-							<key>anamorphic</key>
-							<false />
-							<key>autocrop</key>
-							<true />
-							<key>chapter_markers</key>
-							<true />
-							<key>container</key>
-							<string>mp4</string>
-							<key>deblock</key>
-							<integer>0</integer>
-							<key>deinterlace</key>
-							<string>none</string>
-							<key>denoise</key>
-							<string>none</string>
-							<key>detelecine</key>
-							<false />
-							<key>framerate</key>
-							<string>source</string>
-							<key>grayscale</key>
-							<false />
-							<key>ipod_file</key>
-							<true />
-							<key>keep_aspect</key>
-							<true />
-							<key>max_height</key>
-							<integer>0</integer>
-							<key>max_width</key>
-							<integer>480</integer>
-							<key>pref_audio_list</key>
+							<key>AudioList</key>
 							<array>
 								<dict>
-									<key>audio_bitrate</key>
+									<key>AudioBitrate</key>
 									<string>128</string>
-									<key>audio_codec</key>
-									<string>faac</string>
-									<key>audio_drc</key>
-									<real>1</real>
-									<key>audio_mix</key>
-									<string>dpl2</string>
-									<key>audio_rate</key>
+									<key>AudioEncoder</key>
+									<string>AAC (faac)</string>
+									<key>AudioMixdown</key>
+									<string>Dolby Pro Logic II</string>
+									<key>AudioSamplerate</key>
 									<string>48</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
 								</dict>
 							</array>
-							<key>preset_description</key>
-							<string>HandBrake&apos;s settings for the iPhone and iPod Touch.</string>
-							<key>preset_name</key>
-							<string>iPhone &amp; iPod Touch</string>
-							<key>preset_type</key>
+							<key>ChapterMarkers</key>
+							<true />
+							<key>Default</key>
+							<false />
+							<key>FileFormat</key>
+							<string>MP4 file</string>
+							<key>Mp4iPodCompatible</key>
+							<true />
+							<key>PictureAutoCrop</key>
+							<true />
+							<key>PictureBottomCrop</key>
 							<integer>0</integer>
-							<key>round_dimensions</key>
-							<true />
-							<key>subtitle_lang</key>
-							<string>none</string>
-							<key>two_pass</key>
+							<key>PictureDeblock</key>
+							<integer>0</integer>
+							<key>PictureDeinterlace</key>
+							<string>0</string>
+							<key>PictureDenoise</key>
+							<string>0</string>
+							<key>PictureDetelecine</key>
 							<false />
-							<key>video_bitrate</key>
+							<key>PictureHeight</key>
+							<integer>0</integer>
+							<key>PictureKeepRatio</key>
+							<true />
+							<key>PictureLeftCrop</key>
+							<integer>0</integer>
+							<key>PicturePAR</key>
+							<integer>0</integer>
+							<key>PictureRightCrop</key>
+							<integer>0</integer>
+							<key>PictureTopCrop</key>
+							<integer>0</integer>
+							<key>PictureWidth</key>
+							<integer>480</integer>
+							<key>PresetDescription</key>
+							<string>HandBrake&apos;s settings for the iPhone and iPod Touch.</string>
+							<key>PresetName</key>
+							<string>iPhone &amp; iPod Touch</string>
+							<key>Subtitles</key>
+							<string>None</string>
+							<key>Type</key>
+							<integer>0</integer>
+							<key>UsesMaxPictureSettings</key>
+							<false />
+							<key>UsesPictureFilters</key>
+							<true />
+							<key>UsesPictureSettings</key>
+							<integer>1</integer>
+							<key>VideoAvgBitrate</key>
 							<integer>960</integer>
-							<key>video_codec</key>
-							<string>x264</string>
-							<key>video_quality</key>
-							<integer>65</integer>
-							<key>video_target_size</key>
+							<key>VideoEncoder</key>
+							<string>H.264 (x264)</string>
+							<key>VideoFramerate</key>
+							<string>Same as source</string>
+							<key>VideoGrayScale</key>
+							<false />
+							<key>VideoQualitySlider</key>
+							<real>0.64709997177124023</real>
+							<key>VideoQualityType</key>
+							<integer>1</integer>
+							<key>VideoTargetSize</key>
 							<integer>700</integer>
-							<key>vquality_type_bitrate</key>
-							<true />
-							<key>vquality_type_constant</key>
+							<key>VideoTwoPass</key>
 							<false />
-							<key>vquality_type_target</key>
-							<false />
-							<key>x264_options</key>
+							<key>x264Option</key>
 							<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1</string>
 						</dict>
 						<dict>
-							<key>Default</key>
-							<false />
-							<key>anamorphic</key>
-							<false />
-							<key>autocrop</key>
-							<true />
-							<key>chapter_markers</key>
-							<true />
-							<key>container</key>
-							<string>mp4</string>
-							<key>deblock</key>
-							<integer>0</integer>
-							<key>deinterlace</key>
-							<string>none</string>
-							<key>denoise</key>
-							<string>none</string>
-							<key>detelecine</key>
-							<false />
-							<key>framerate</key>
-							<string>source</string>
-							<key>grayscale</key>
-							<false />
-							<key>ipod_file</key>
-							<true />
-							<key>keep_aspect</key>
-							<true />
-							<key>max_height</key>
-							<integer>0</integer>
-							<key>max_width</key>
-							<integer>640</integer>
-							<key>pref_audio_list</key>
+							<key>AudioList</key>
 							<array>
 								<dict>
-									<key>audio_bitrate</key>
+									<key>AudioBitrate</key>
 									<string>160</string>
-									<key>audio_codec</key>
-									<string>faac</string>
-									<key>audio_drc</key>
-									<real>1</real>
-									<key>audio_mix</key>
-									<string>dpl2</string>
-									<key>audio_rate</key>
+									<key>AudioEncoder</key>
+									<string>AAC (faac)</string>
+									<key>AudioMixdown</key>
+									<string>Dolby Pro Logic II</string>
+									<key>AudioSamplerate</key>
 									<string>48</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
 								</dict>
 							</array>
-							<key>preset_description</key>
-							<string>HandBrake&apos;s high resolution settings for older 5 and 5.5G iPods. Good video quality, great for viewing on a TV using your iPod</string>
-							<key>preset_name</key>
-							<string>iPod Legacy</string>
-							<key>preset_type</key>
+							<key>ChapterMarkers</key>
+							<true />
+							<key>Default</key>
+							<false />
+							<key>FileFormat</key>
+							<string>MP4 file</string>
+							<key>Mp4iPodCompatible</key>
+							<true />
+							<key>PictureAutoCrop</key>
+							<true />
+							<key>PictureBottomCrop</key>
 							<integer>0</integer>
-							<key>round_dimensions</key>
-							<true />
-							<key>subtitle_lang</key>
-							<string>none</string>
-							<key>two_pass</key>
+							<key>PictureDeblock</key>
+							<integer>0</integer>
+							<key>PictureDeinterlace</key>
+							<string>0</string>
+							<key>PictureDenoise</key>
+							<string>0</string>
+							<key>PictureDetelecine</key>
 							<false />
-							<key>video_bitrate</key>
+							<key>PictureHeight</key>
+							<integer>0</integer>
+							<key>PictureKeepRatio</key>
+							<true />
+							<key>PictureLeftCrop</key>
+							<integer>0</integer>
+							<key>PicturePAR</key>
+							<integer>0</integer>
+							<key>PictureRightCrop</key>
+							<integer>0</integer>
+							<key>PictureTopCrop</key>
+							<integer>0</integer>
+							<key>PictureWidth</key>
+							<integer>640</integer>
+							<key>PresetDescription</key>
+							<string>HandBrake&apos;s high resolution settings for older 5 and 5.5G iPods. Good video quality, great for viewing on a TV using your iPod</string>
+							<key>PresetName</key>
+							<string>iPod Legacy</string>
+							<key>Subtitles</key>
+							<string>None</string>
+							<key>Type</key>
+							<integer>0</integer>
+							<key>UsesMaxPictureSettings</key>
+							<false />
+							<key>UsesPictureFilters</key>
+							<true />
+							<key>UsesPictureSettings</key>
+							<integer>1</integer>
+							<key>VideoAvgBitrate</key>
 							<integer>1500</integer>
-							<key>video_codec</key>
-							<string>x264</string>
-							<key>video_quality</key>
-							<integer>65</integer>
-							<key>video_target_size</key>
+							<key>VideoEncoder</key>
+							<string>H.264 (x264)</string>
+							<key>VideoFramerate</key>
+							<string>Same as source</string>
+							<key>VideoGrayScale</key>
+							<false />
+							<key>VideoQualitySlider</key>
+							<real>0.64709997177124023</real>
+							<key>VideoQualityType</key>
+							<integer>1</integer>
+							<key>VideoTargetSize</key>
 							<integer>700</integer>
-							<key>vquality_type_bitrate</key>
-							<true />
-							<key>vquality_type_constant</key>
+							<key>VideoTwoPass</key>
 							<false />
-							<key>vquality_type_target</key>
-							<false />
-							<key>x264_options</key>
+							<key>x264Option</key>
 							<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
 						</dict>
 					</array>
-					<key>preset_name</key>
+					<key>Folder</key>
+					<true />
+					<key>PresetName</key>
 					<string>iPod &amp; iPhone</string>
-					<key>preset_type</key>
-					<integer>2</integer>
+					<key>Type</key>
+					<integer>0</integer>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s high profile settings for use with QuickTime. It can be slow, so use it when the Normal preset doesn&apos;t look good enough.</string>
-					<key>preset_name</key>
-					<string>QuickTime</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>turbo</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<false />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s high profile settings for use with QuickTime. It can be slow, so use it when the Normal preset doesn&apos;t look good enough.</string>
+					<key>PresetName</key>
+					<string>QuickTime</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>two_pass</key>
+					<key>UsesPictureFilters</key>
 					<true />
-					<key>video_bitrate</key>
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1800</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTurboTwoPass</key>
 					<true />
-					<key>vquality_type_constant</key>
-					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>VideoTwoPass</key>
+					<true />
+					<key>x264Option</key>
 					<string>ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1</string>
 				</dict>
 			</array>
-			<key>preset_name</key>
+			<key>Folder</key>
+			<true />
+			<key>PresetName</key>
 			<string>Apple</string>
-			<key>preset_type</key>
-			<integer>2</integer>
+			<key>Type</key>
+			<integer>0</integer>
 		</dict>
 		<dict>
-			<key>preset_folder</key>
+			<key>ChildrenArray</key>
 			<array>
 				<dict>
-					<key>Default</key>
-					<true />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s normal, default settings.</string>
-					<key>preset_name</key>
-					<string>Normal</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<true />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>turbo</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<false />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s normal, default settings.</string>
+					<key>PresetName</key>
+					<string>Normal</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>two_pass</key>
+					<key>UsesPictureFilters</key>
 					<true />
-					<key>video_bitrate</key>
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1500</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTurboTwoPass</key>
 					<true />
-					<key>vquality_type_constant</key>
-					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>VideoTwoPass</key>
+					<true />
+					<key>x264Option</key>
 					<string>ref=2:bframes=2:me=umh</string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<false />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<false />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<true />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s traditional, faster, lower-quality settings.</string>
-					<key>preset_name</key>
-					<string>Classic</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<false />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
-					<true />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>two_pass</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>video_bitrate</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<true />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>0</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s traditional, faster, lower-quality settings.</string>
+					<key>PresetName</key>
+					<string>Classic</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
+					<true />
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1000</integer>
-					<key>video_codec</key>
-					<string>ffmpeg</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>MPEG-4 (FFmpeg)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
-					<true />
-					<key>vquality_type_constant</key>
+					<key>VideoTwoPass</key>
 					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>x264Option</key>
 					<string></string>
 				</dict>
 			</array>
-			<key>preset_name</key>
+			<key>Folder</key>
+			<true />
+			<key>PresetName</key>
 			<string>Basic</string>
-			<key>preset_type</key>
-			<integer>2</integer>
+			<key>Type</key>
+			<integer>0</integer>
 		</dict>
 		<dict>
-			<key>preset_folder</key>
+			<key>ChildrenArray</key>
 			<array>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mkv</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>decomb</key>
-					<true />
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<true />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s settings for cartoons, anime, and CGI.</string>
-					<key>preset_name</key>
-					<string>Animation</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MKV file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDecomb</key>
+					<true />
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
+					<true />
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>turbo</key>
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for cartoons, anime, and CGI.</string>
+					<key>PresetName</key>
+					<string>Animation</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>two_pass</key>
+					<key>UsesPictureFilters</key>
 					<true />
-					<key>video_bitrate</key>
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1000</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTurboTwoPass</key>
 					<true />
-					<key>vquality_type_constant</key>
-					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>VideoTwoPass</key>
+					<true />
+					<key>x264Option</key>
 					<string>ref=5:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2:psy-rd=1,1:subme=9</string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mkv</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>ac3</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AC3 Passthru</string>
+							<key>AudioMixdown</key>
+							<string>AC3 Passthru</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>none</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s preset for consistently excellent quality in one pass, with the downside of entirely unpredictable file sizes and bitrates.</string>
-					<key>preset_name</key>
-					<string>Constant Quality Rate</string>
-					<key>preset_type</key>
-					<integer>0</integer>
-					<key>round_dimensions</key>
-					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>turbo</key>
-					<false />
-					<key>two_pass</key>
-					<false />
-					<key>video_bitrate</key>
-					<integer>2000</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>60</integer>
-					<key>video_target_size</key>
-					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
-					<false />
-					<key>vquality_type_constant</key>
+					<key>ChapterMarkers</key>
 					<true />
-					<key>vquality_type_target</key>
+					<key>Default</key>
 					<false />
-					<key>x264_options</key>
+					<key>FileFormat</key>
+					<string>MKV file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
+					<integer>0</integer>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
+					<false />
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<false />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s preset for consistently excellent quality in one pass, with the downside of entirely unpredictable file sizes and bitrates.</string>
+					<key>PresetName</key>
+					<string>Constant Quality Rate</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
+					<true />
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
+					<integer>2000</integer>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.60000002384185791</real>
+					<key>VideoQualityType</key>
+					<integer>2</integer>
+					<key>VideoTargetSize</key>
+					<integer>700</integer>
+					<key>VideoTurboTwoPass</key>
+					<false />
+					<key>VideoTwoPass</key>
+					<false />
+					<key>x264Option</key>
 					<string>ref=3:mixed-refs:bframes=3:b-pyramid:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh:subme=9:psy-rd=1,1</string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mkv</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>ac3</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AC3 Passthru</string>
+							<key>AudioMixdown</key>
+							<string>AC3 Passthru</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>none</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s preset for feature films.</string>
-					<key>preset_name</key>
-					<string>Film</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MKV file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>turbo</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<false />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s preset for feature films.</string>
+					<key>PresetName</key>
+					<string>Film</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>two_pass</key>
+					<key>UsesPictureFilters</key>
 					<true />
-					<key>video_bitrate</key>
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1800</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTurboTwoPass</key>
 					<true />
-					<key>vquality_type_constant</key>
-					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>VideoTwoPass</key>
+					<true />
+					<key>x264Option</key>
 					<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:no-fast-pskip:psy-rd=1,1</string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mkv</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>decomb</key>
-					<true />
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<true />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>Auto</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
 							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
-							<string>source</string>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s settings for video from television.</string>
-					<key>preset_name</key>
-					<string>Television</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MKV file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDecomb</key>
+					<true />
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
+					<true />
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>turbo</key>
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for video from television.</string>
+					<key>PresetName</key>
+					<string>Television</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>two_pass</key>
+					<key>UsesPictureFilters</key>
 					<true />
-					<key>video_bitrate</key>
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1300</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>VideoTurboTwoPass</key>
 					<true />
-					<key>vquality_type_constant</key>
-					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>VideoTwoPass</key>
+					<true />
+					<key>x264Option</key>
 					<string>ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip=1:psy-rd=1,1</string>
 				</dict>
 			</array>
-			<key>preset_name</key>
+			<key>Folder</key>
+			<true />
+			<key>PresetName</key>
 			<string>High Profile</string>
-			<key>preset_type</key>
-			<integer>2</integer>
+			<key>Type</key>
+			<integer>0</integer>
 		</dict>
 		<dict>
-			<key>preset_folder</key>
+			<key>ChildrenArray</key>
 			<array>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<false />
-					<key>autocrop</key>
-					<true />
-					<key>chapter_markers</key>
-					<true />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<true />
-					<key>max_height</key>
-					<integer>208</integer>
-					<key>max_width</key>
-					<integer>368</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>128</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
-							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
 							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s settings for the Sony PlayStation Portable.</string>
-					<key>preset_name</key>
-					<string>PSP</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
-					<true />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>two_pass</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>video_bitrate</key>
+					<key>PictureHeight</key>
+					<integer>208</integer>
+					<key>PictureKeepRatio</key>
+					<true />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>0</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>368</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for the Sony PlayStation Portable.</string>
+					<key>PresetName</key>
+					<string>PSP</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
+					<false />
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
 					<integer>1024</integer>
-					<key>video_codec</key>
-					<string>ffmpeg</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
+					<key>VideoEncoder</key>
+					<string>MPEG-4 (FFmpeg)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
 					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
-					<true />
-					<key>vquality_type_constant</key>
+					<key>VideoTwoPass</key>
 					<false />
-					<key>vquality_type_target</key>
-					<false />
-					<key>x264_options</key>
+					<key>x264Option</key>
 					<string></string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autocrop</key>
-					<false />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<false />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
-							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
 							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s settings for the Sony PlayStation 3.</string>
-					<key>preset_name</key>
-					<string>PS3</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<false />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>PictureAutoCrop</key>
+					<false />
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>two_pass</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
 					<false />
-					<key>video_bitrate</key>
-					<integer>2500</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
-					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for the Sony PlayStation 3.</string>
+					<key>PresetName</key>
+					<string>PS3</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>vquality_type_constant</key>
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
+					<integer>2500</integer>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
 					<false />
-					<key>vquality_type_target</key>
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
+					<integer>700</integer>
+					<key>VideoTwoPass</key>
 					<false />
-					<key>x264_options</key>
+					<key>x264Option</key>
 					<string>level=41:me=umh</string>
 				</dict>
 				<dict>
-					<key>Default</key>
-					<false />
-					<key>anamorphic</key>
-					<true />
-					<key>autoscale</key>
-					<true />
-					<key>chapter_markers</key>
-					<false />
-					<key>container</key>
-					<string>mp4</string>
-					<key>deblock</key>
-					<integer>0</integer>
-					<key>deinterlace</key>
-					<string>none</string>
-					<key>denoise</key>
-					<string>none</string>
-					<key>detelecine</key>
-					<false />
-					<key>framerate</key>
-					<string>source</string>
-					<key>grayscale</key>
-					<false />
-					<key>keep_aspect</key>
-					<false />
-					<key>max_height</key>
-					<integer>0</integer>
-					<key>max_width</key>
-					<integer>0</integer>
-					<key>pref_audio_list</key>
+					<key>AudioList</key>
 					<array>
 						<dict>
-							<key>audio_bitrate</key>
+							<key>AudioBitrate</key>
 							<string>160</string>
-							<key>audio_codec</key>
-							<string>faac</string>
-							<key>audio_drc</key>
-							<real>1</real>
-							<key>audio_mix</key>
-							<string>dpl2</string>
-							<key>audio_rate</key>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
 							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
 						</dict>
 					</array>
-					<key>preset_description</key>
-					<string>HandBrake&apos;s settings for the Microsoft Xbox 360.</string>
-					<key>preset_name</key>
-					<string>Xbox 360</string>
-					<key>preset_type</key>
+					<key>ChapterMarkers</key>
+					<false />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>PictureBottomCrop</key>
 					<integer>0</integer>
-					<key>round_dimensions</key>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
 					<false />
-					<key>subtitle_lang</key>
-					<string>none</string>
-					<key>two_pass</key>
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
 					<false />
-					<key>video_bitrate</key>
-					<integer>2000</integer>
-					<key>video_codec</key>
-					<string>x264</string>
-					<key>video_quality</key>
-					<integer>65</integer>
-					<key>video_target_size</key>
-					<integer>700</integer>
-					<key>vquality_type_bitrate</key>
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>1</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>0</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for the Microsoft Xbox 360.</string>
+					<key>PresetName</key>
+					<string>Xbox 360</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
 					<true />
-					<key>vquality_type_constant</key>
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
+					<integer>2000</integer>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
 					<false />
-					<key>vquality_type_target</key>
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
+					<integer>700</integer>
+					<key>VideoTwoPass</key>
 					<false />
-					<key>x264_options</key>
+					<key>x264Option</key>
 					<string>level=40:ref=2:mixed-refs:bframes=3:weightb:subme=7:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
 				</dict>
 			</array>
-			<key>preset_name</key>
+			<key>Folder</key>
+			<true />
+			<key>PresetName</key>
 			<string>Gaming Consoles</string>
-			<key>preset_type</key>
-			<integer>2</integer>
+			<key>Type</key>
+			<integer>0</integer>
 		</dict>
 	</array>
 	<key>widget-deps</key>
 	<dict>
-		<key>anamorphic</key>
+		<key>AudioEncoder</key>
 		<array>
-			<string>keep_aspect</string>
+			<string>AudioBitrate</string>
+			<string>AudioSamplerate</string>
+			<string>AudioMixdown</string>
+			<string>AudioTrackDRCSlider</string>
+		</array>
+		<key>ChapterMarkers</key>
+		<array>
+			<string>chapters_list</string>
+		</array>
+		<key>FileFormat</key>
+		<array>
+			<string>Mp4LargeFile</string>
+			<string>Mp4HttpOptimize</string>
+			<string>Mp4iPodCompatible</string>
+		</array>
+		<key>PictureAutoCrop</key>
+		<array>
+			<string>PictureTopCrop</string>
+			<string>PictureBottomCrop</string>
+			<string>PictureLeftCrop</string>
+			<string>PictureRightCrop</string>
+		</array>
+		<key>PictureDecomb</key>
+		<array>
+			<string>PictureDeinterlace</string>
+			<string>tweak_PictureDeinterlace</string>
+		</array>
+		<key>PictureKeepRatio</key>
+		<array>
 			<string>scale_height</string>
 		</array>
-		<key>audio_codec</key>
+		<key>VideoEncoder</key>
 		<array>
-			<string>audio_bitrate</string>
-			<string>audio_rate</string>
-			<string>audio_mix</string>
-			<string>audio_drc</string>
+			<string>x264_tab</string>
+			<string>x264_tab_label</string>
+			<string>Mp4iPodCompatible</string>
+			<string>directqp</string>
 		</array>
-		<key>autocrop</key>
+		<key>VideoTwoPass</key>
 		<array>
-			<string>crop_top</string>
-			<string>crop_bottom</string>
-			<string>crop_left</string>
-			<string>crop_right</string>
+			<string>VideoTurboTwoPass</string>
+		</array>
+		<key>anamorphic</key>
+		<array>
+			<string>PictureKeepRatio</string>
+			<string>scale_height</string>
 		</array>
 		<key>autoscale</key>
 		<array>
 			<string>scale_width</string>
-			<string>scale_height</string>
-		</array>
-		<key>chapter_markers</key>
-		<array>
-			<string>chapters_list</string>
-		</array>
-		<key>container</key>
-		<array>
-			<string>large_mp4</string>
-			<string>http_optimize_mp4</string>
-			<string>ipod_file</string>
-		</array>
-		<key>decomb</key>
-		<array>
-			<string>deinterlace</string>
-			<string>tweak_deinterlace</string>
-		</array>
-		<key>keep_aspect</key>
-		<array>
 			<string>scale_height</string>
 		</array>
 		<key>title</key>
@@ -6317,34 +6520,24 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>start_chapter</string>
 			<string>end_chapter</string>
 		</array>
-		<key>two_pass</key>
-		<array>
-			<string>turbo</string>
-		</array>
 		<key>use_source_name</key>
 		<array>
 			<string>chapters_in_destination</string>
 		</array>
-		<key>video_codec</key>
-		<array>
-			<string>x264_tab</string>
-			<string>x264_tab_label</string>
-			<string>ipod_file</string>
-		</array>
 		<key>vquality_type_bitrate</key>
 		<array>
-			<string>video_bitrate</string>
+			<string>VideoAvgBitrate</string>
 		</array>
 		<key>vquality_type_constant</key>
 		<array>
-			<string>video_quality</string>
+			<string>VideoQualitySlider</string>
 			<string>constant_rate_factor</string>
-			<string>two_pass</string>
-			<string>turbo</string>
+			<string>VideoTwoPass</string>
+			<string>VideoTurboTwoPass</string>
 		</array>
 		<key>vquality_type_target</key>
 		<array>
-			<string>video_target_size</string>
+			<string>VideoTargetSize</string>
 		</array>
 		<key>x264_bframes</key>
 		<array>
@@ -6367,35 +6560,157 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 	</dict>
 	<key>widget-reverse-deps</key>
 	<dict>
-		<key>audio_bitrate</key>
+		<key>AudioBitrate</key>
 		<array>
 			<array>
-				<string>audio_codec</string>
+				<string>AudioEncoder</string>
 				<string>ac3</string>
 				<true />
 			</array>
 		</array>
-		<key>audio_drc</key>
+		<key>AudioMixdown</key>
 		<array>
 			<array>
-				<string>audio_codec</string>
+				<string>AudioEncoder</string>
 				<string>ac3</string>
 				<true />
 			</array>
 		</array>
-		<key>audio_mix</key>
+		<key>AudioSamplerate</key>
 		<array>
 			<array>
-				<string>audio_codec</string>
+				<string>AudioEncoder</string>
 				<string>ac3</string>
 				<true />
 			</array>
 		</array>
-		<key>audio_rate</key>
+		<key>AudioTrackDRCSlider</key>
 		<array>
 			<array>
-				<string>audio_codec</string>
+				<string>AudioEncoder</string>
 				<string>ac3</string>
+				<true />
+			</array>
+		</array>
+		<key>Mp4HttpOptimize</key>
+		<array>
+			<array>
+				<string>FileFormat</string>
+				<string>mp4|m4v</string>
+				<false />
+			</array>
+		</array>
+		<key>Mp4LargeFile</key>
+		<array>
+			<array>
+				<string>FileFormat</string>
+				<string>mp4|m4v</string>
+				<false />
+			</array>
+		</array>
+		<key>Mp4iPodCompatible</key>
+		<array>
+			<array>
+				<string>FileFormat</string>
+				<string>mp4|m4v</string>
+				<false />
+			</array>
+			<array>
+				<string>VideoEncoder</string>
+				<string>x264</string>
+				<false />
+			</array>
+		</array>
+		<key>PictureBottomCrop</key>
+		<array>
+			<array>
+				<string>PictureAutoCrop</string>
+				<string>FALSE</string>
+				<false />
+			</array>
+		</array>
+		<key>PictureDeinterlace</key>
+		<array>
+			<array>
+				<string>PictureDecomb</string>
+				<string>TRUE</string>
+				<true />
+			</array>
+		</array>
+		<key>PictureKeepRatio</key>
+		<array>
+			<array>
+				<string>anamorphic</string>
+				<string>FALSE</string>
+				<false />
+			</array>
+		</array>
+		<key>PictureLeftCrop</key>
+		<array>
+			<array>
+				<string>PictureAutoCrop</string>
+				<string>FALSE</string>
+				<false />
+			</array>
+		</array>
+		<key>PictureRightCrop</key>
+		<array>
+			<array>
+				<string>PictureAutoCrop</string>
+				<string>FALSE</string>
+				<false />
+			</array>
+		</array>
+		<key>PictureTopCrop</key>
+		<array>
+			<array>
+				<string>PictureAutoCrop</string>
+				<string>FALSE</string>
+				<false />
+			</array>
+		</array>
+		<key>VideoAvgBitrate</key>
+		<array>
+			<array>
+				<string>vquality_type_bitrate</string>
+				<string>TRUE</string>
+				<false />
+			</array>
+		</array>
+		<key>VideoQualitySlider</key>
+		<array>
+			<array>
+				<string>vquality_type_constant</string>
+				<string>TRUE</string>
+				<false />
+			</array>
+		</array>
+		<key>VideoTargetSize</key>
+		<array>
+			<array>
+				<string>vquality_type_target</string>
+				<string>TRUE</string>
+				<false />
+			</array>
+		</array>
+		<key>VideoTurboTwoPass</key>
+		<array>
+			<array>
+				<string>vquality_type_constant</string>
+				<string>TRUE</string>
+				<true />
+			</array>
+			<array>
+				<string>VideoTwoPass</string>
+				<string>TRUE</string>
+				<false />
+			</array>
+		</array>
+		<key>VideoTwoPass</key>
+		<array>
+			<array>
+				<string>vquality_type_constant</string>
+				<string>TRUE</string>
 				<true />
 			</array>
 		</array>
@@ -6418,7 +6733,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>chapters_list</key>
 		<array>
 			<array>
-				<string>chapter_markers</string>
+				<string>ChapterMarkers</string>
 				<string>TRUE</string>
 				<false />
 			</array>
@@ -6439,44 +6754,12 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<false />
 			</array>
 		</array>
-		<key>crop_bottom</key>
+		<key>directqp</key>
 		<array>
 			<array>
-				<string>autocrop</string>
-				<string>FALSE</string>
+				<string>VideoEncoder</string>
+				<string>x264|ffmpeg</string>
 				<false />
-			</array>
-		</array>
-		<key>crop_left</key>
-		<array>
-			<array>
-				<string>autocrop</string>
-				<string>FALSE</string>
-				<false />
-			</array>
-		</array>
-		<key>crop_right</key>
-		<array>
-			<array>
-				<string>autocrop</string>
-				<string>FALSE</string>
-				<false />
-			</array>
-		</array>
-		<key>crop_top</key>
-		<array>
-			<array>
-				<string>autocrop</string>
-				<string>FALSE</string>
-				<false />
-			</array>
-		</array>
-		<key>deinterlace</key>
-		<array>
-			<array>
-				<string>decomb</string>
-				<string>TRUE</string>
-				<true />
 			</array>
 		</array>
 		<key>end_chapter</key>
@@ -6485,43 +6768,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
-			</array>
-		</array>
-		<key>http_optimize_mp4</key>
-		<array>
-			<array>
-				<string>container</string>
-				<string>mp4|m4v</string>
-				<false />
-			</array>
-		</array>
-		<key>ipod_file</key>
-		<array>
-			<array>
-				<string>container</string>
-				<string>mp4|m4v</string>
-				<false />
-			</array>
-			<array>
-				<string>video_codec</string>
-				<string>x264</string>
-				<false />
-			</array>
-		</array>
-		<key>keep_aspect</key>
-		<array>
-			<array>
-				<string>anamorphic</string>
-				<string>FALSE</string>
-				<false />
-			</array>
-		</array>
-		<key>large_mp4</key>
-		<array>
-			<array>
-				<string>container</string>
-				<string>mp4|m4v</string>
-				<false />
 			</array>
 		</array>
 		<key>picture_label</key>
@@ -6585,7 +6831,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<false />
 			</array>
 			<array>
-				<string>keep_aspect</string>
+				<string>PictureKeepRatio</string>
 				<string>FALSE</string>
 				<false />
 			</array>
@@ -6622,57 +6868,12 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<true />
 			</array>
 		</array>
-		<key>turbo</key>
+		<key>tweak_PictureDeinterlace</key>
 		<array>
 			<array>
-				<string>vquality_type_constant</string>
+				<string>PictureDecomb</string>
 				<string>TRUE</string>
 				<true />
-			</array>
-			<array>
-				<string>two_pass</string>
-				<string>TRUE</string>
-				<false />
-			</array>
-		</array>
-		<key>tweak_deinterlace</key>
-		<array>
-			<array>
-				<string>decomb</string>
-				<string>TRUE</string>
-				<true />
-			</array>
-		</array>
-		<key>two_pass</key>
-		<array>
-			<array>
-				<string>vquality_type_constant</string>
-				<string>TRUE</string>
-				<true />
-			</array>
-		</array>
-		<key>video_bitrate</key>
-		<array>
-			<array>
-				<string>vquality_type_bitrate</string>
-				<string>TRUE</string>
-				<false />
-			</array>
-		</array>
-		<key>video_quality</key>
-		<array>
-			<array>
-				<string>vquality_type_constant</string>
-				<string>TRUE</string>
-				<false />
-			</array>
-		</array>
-		<key>video_target_size</key>
-		<array>
-			<array>
-				<string>vquality_type_target</string>
-				<string>TRUE</string>
-				<false />
 			</array>
 		</array>
 		<key>x264_bpyramid</key>
@@ -6710,7 +6911,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>x264_tab</key>
 		<array>
 			<array>
-				<string>video_codec</string>
+				<string>VideoEncoder</string>
 				<string>x264</string>
 				<false />
 			</array>
@@ -6718,7 +6919,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>x264_tab_label</key>
 		<array>
 			<array>
-				<string>video_codec</string>
+				<string>VideoEncoder</string>
 				<string>x264</string>
 				<false />
 			</array>

@@ -91,12 +91,4 @@ void ghb_widget_to_setting(GValue *settings, GtkWidget *widget);
 int ghb_ui_update(
 	signal_user_data_t *ud, const gchar *name, const GValue *value);
 
-
-gint ghb_pref_acount(GValue *settings);
-gint ghb_pref_acodec(GValue *settings, gint index);
-gint ghb_pref_bitrate(GValue *settings, gint index);
-gint ghb_pref_rate(GValue *settings, gint index);
-gint ghb_pref_mix(GValue *settings, gint index);
-gdouble ghb_pref_drc(GValue *settings, gint index);
-
 #endif // _SETTINGS_H_

@@ -683,16 +683,23 @@ ghb_array_len(const GValue *gval)
 static void
 xform_string_int(const GValue *sval, GValue *ival)
 {
+	gchar *end;
+
 	const gchar *str = g_value_get_string(sval);
-	gint val = g_strtod(str, NULL);
+	gint val = g_strtod(str, &end);
+	if (*end)
+		val = ~0>>1;
 	g_value_set_int(ival, val);
 }
 
 static void
 xform_string_int64(const GValue *sval, GValue *ival)
 {
+	gchar *end;
 	const gchar *str = g_value_get_string(sval);
-	gint64 val = g_strtod(str, NULL);
+	gint64 val = g_strtod(str, &end);
+	if (*end)
+		val = ~0L>>1;
 	g_value_set_int64(ival, val);
 }
 

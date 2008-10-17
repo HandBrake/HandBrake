@@ -114,12 +114,12 @@
     <property name="value">0</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">100</property>
+    <property name="upper">1</property>
     <property name="lower">0</property>
-    <property name="page_increment">10</property>
-    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+    <property name="step_increment">0.1</property>
     <property name="page_size">0</property>
-    <property name="value">63</property>
+    <property name="value">0.63</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
     <property name="upper">4</property>
@@ -796,7 +796,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="container">
+                                  <object class="GtkComboBox" id="FileFormat">
                                     <property name="visible">True</property>
                                     <property name="tooltip-text" translatable="yes">Output file container type</property>
                                     <signal handler="container_changed_cb" name="changed"/>
@@ -813,7 +813,7 @@
                                     <property name="xalign">0.10000000149011612</property>
                                     <property name="xscale">0</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="ipod_file">
+                                      <object class="GtkCheckButton" id="Mp4iPodCompatible">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -829,7 +829,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="http_optimize_mp4">
+                                  <object class="GtkCheckButton" id="Mp4HttpOptimize">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -843,7 +843,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="large_mp4">
+                                  <object class="GtkCheckButton" id="Mp4LargeFile">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1302,7 +1302,7 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
-                                      <object class="GtkCheckButton" id="grayscale">
+                                      <object class="GtkCheckButton" id="VideoGrayScale">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1315,7 +1315,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="detelecine">
+                                      <object class="GtkCheckButton" id="PictureDetelecine">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1330,7 +1330,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="decomb">
+                                      <object class="GtkCheckButton" id="PictureDecomb">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="label" translatable="yes">De-Comb</property>
@@ -1364,7 +1364,7 @@
                                             <property name="xalign">0</property>
                                             <property name="xscale">0.55</property>
                                             <child>
-                                              <object class="GtkHScale" id="deblock">
+                                              <object class="GtkHScale" id="PictureDeblock">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="tooltip-text" translatable="yes">This is a filter that gets applied before encoding.  If the source looks blocky before encoding, you may want to use this.</property>
@@ -1404,7 +1404,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="deinterlace">
+                                          <object class="GtkComboBox" id="PictureDeinterlace">
                                             <property name="width_request">100</property>
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1417,7 +1417,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBoxEntry" id="tweak_deinterlace">
+                                          <object class="GtkComboBoxEntry" id="tweak_PictureDeinterlace">
                                             <property name="visible">False</property>
                                             <signal handler="setting_widget_changed_cb" name="changed"/>
                                             <child internal-child="entry">
@@ -1459,7 +1459,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBox" id="denoise">
+                                          <object class="GtkComboBox" id="PictureDenoise">
                                             <property name="width_request">100</property>
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1472,7 +1472,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkComboBoxEntry" id="tweak_denoise">
+                                          <object class="GtkComboBoxEntry" id="tweak_PictureDenoise">
                                             <property name="visible">False</property>
                                             <signal handler="setting_widget_changed_cb" name="changed"/>
                                             <child internal-child="entry">
@@ -1645,7 +1645,7 @@
                                             <property name="xalign">0</property>
                                             <property name="xscale">0</property>
                                             <child>
-                                              <object class="GtkComboBox" id="video_codec">
+                                              <object class="GtkComboBox" id="VideoEncoder">
                                                 <property name="visible">True</property>
                                                 <signal handler="vcodec_changed_cb" name="changed"/>
                                               </object>
@@ -1684,7 +1684,7 @@
                                             <property name="xalign">0</property>
                                             <property name="xscale">0</property>
                                             <child>
-                                              <object class="GtkComboBox" id="framerate">
+                                              <object class="GtkComboBox" id="VideoFramerate">
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <signal handler="setting_widget_changed_cb" name="changed"/>
@@ -1703,7 +1703,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="two_pass">
+                                      <object class="GtkCheckButton" id="VideoTwoPass">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1721,7 +1721,7 @@
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="xscale">0.23999999463558197</property>
                                         <child>
-                                          <object class="GtkCheckButton" id="turbo">
+                                          <object class="GtkCheckButton" id="VideoTurboTwoPass">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1811,7 +1811,7 @@
                                             <property name="xalign">0.11999999731779099</property>
                                             <property name="xscale">0.10000000149011612</property>
                                             <child>
-                                              <object class="GtkSpinButton" id="video_bitrate">
+                                              <object class="GtkSpinButton" id="VideoAvgBitrate">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1851,7 +1851,7 @@
                                             <property name="xalign">0.11999999731779099</property>
                                             <property name="xscale">0.10000000149011612</property>
                                             <child>
-                                              <object class="GtkSpinButton" id="video_target_size">
+                                              <object class="GtkSpinButton" id="VideoTargetSize">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1889,14 +1889,15 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkHScale" id="video_quality">
+                                          <object class="GtkHScale" id="VideoQualitySlider">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="adjustment">adjustment5</property>
-                                            <property name="digits">0</property>
+                                            <property name="digits">3</property>
                                             <property name="value_pos">GTK_POS_RIGHT</property>
                                             <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                            <signal handler="format_vquality_cb" name="format-value"/>
                                           </object>
                                           <packing>
                                             <property name="position">1</property>
@@ -2056,7 +2057,7 @@
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkHScale" id="audio_drc">
+                                              <object class="GtkHScale" id="AudioTrackDRCSlider">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2089,7 +2090,7 @@
                                     <property name="n_rows">2</property>
                                     <property name="n_columns">5</property>
                                     <child>
-                                      <object class="GtkComboBox" id="audio_track">
+                                      <object class="GtkComboBox" id="AudioTrack">
                                         <property name="width_request">215</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2101,7 +2102,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="audio_codec">
+                                      <object class="GtkComboBox" id="AudioEncoder">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <signal handler="audio_codec_changed_cb" name="changed"/>
@@ -2115,7 +2116,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="audio_rate">
+                                      <object class="GtkComboBox" id="AudioSamplerate">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <signal handler="audio_widget_changed_cb" name="changed"/>
@@ -2191,7 +2192,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="audio_mix">
+                                      <object class="GtkComboBox" id="AudioMixdown">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <signal handler="audio_mix_changed_cb" name="changed"/>
@@ -2205,7 +2206,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="audio_bitrate">
+                                      <object class="GtkComboBox" id="AudioBitrate">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <signal handler="audio_widget_changed_cb" name="changed"/>
@@ -2274,7 +2275,7 @@
                                     <property name="spacing">5</property>
 
                                     <child>
-                                      <object class="GtkComboBox" id="source_audio_lang">
+                                      <object class="GtkComboBox" id="SourceAudioLang">
                                         <property name="width_request">150</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2316,7 +2317,7 @@
                                     <property name="spacing">5</property>
 
                                     <child>
-                                      <object class="GtkComboBox" id="subtitle_lang">
+                                      <object class="GtkComboBox" id="Subtitles">
                                         <property name="width_request">150</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2324,7 +2325,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="forced_subtitles">
+                                      <object class="GtkCheckButton" id="SubtitlesForced">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="has_tooltip">True</property>
@@ -2638,7 +2639,7 @@
                                 <property name="left_padding">12</property>
                                 <property name="right_padding">2</property>
                                 <child>
-                                  <object class="GtkTextView" id="x264_options">
+                                  <object class="GtkTextView" id="x264Option">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                         <property name="tooltip-text" translatable="yes">Your selected options will appear here. 
@@ -3085,7 +3086,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       <object class="GtkHBox" id="hbox30">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkCheckButton" id="chapter_markers">
+                          <object class="GtkCheckButton" id="ChapterMarkers">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3420,22 +3421,6 @@ auto-generated destination name.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="linear_vquality">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text">x264 uses a different scale for video quality than
-other codecs.  This adjusts the scale so that 
-similar values give similar quality across all the
-video codecs.</property>
-                            <property name="label" translatable="yes">Adjust x264 video quality scale</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
-                          </object>
-                          <packing>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkCheckButton" id="noscale">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -3449,7 +3434,7 @@ the required multiple.</property>
                             <signal name="toggled" handler="pref_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">3</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -3468,7 +3453,7 @@ this setting.</property>
                             <signal name="toggled" handler="vcodec_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">4</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -3479,7 +3464,7 @@ this setting.</property>
                             <signal name="toggled" handler="tweaks_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">5</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -3490,7 +3475,7 @@ this setting.</property>
                             <signal name="toggled" handler="hbfd_feature_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">6</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                       </object>
@@ -3662,7 +3647,7 @@ this setting.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="preset_name">
+                  <object class="GtkEntry" id="PresetName">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3696,7 +3681,7 @@ this setting.</property>
                     <property name="left_padding">12</property>
                     <property name="right_padding">4</property>
                     <child>
-                      <object class="GtkTextView" id="preset_description">
+                      <object class="GtkTextView" id="PresetDescription">
                         <property name="height_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -4147,7 +4132,7 @@ this setting.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="crop_left">
+                                  <object class="GtkSpinButton" id="PictureLeftCrop">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4177,7 +4162,7 @@ this setting.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="crop_top">
+                                  <object class="GtkSpinButton" id="PictureTopCrop">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4193,7 +4178,7 @@ this setting.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="crop_bottom">
+                                  <object class="GtkSpinButton" id="PictureBottomCrop">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4209,7 +4194,7 @@ this setting.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinButton" id="crop_right">
+                                  <object class="GtkSpinButton" id="PictureRightCrop">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4246,7 +4231,7 @@ this setting.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="autocrop">
+                          <object class="GtkCheckButton" id="PictureAutoCrop">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4370,7 +4355,7 @@ this setting.</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
-                              <object class="GtkCheckButton" id="round_dimensions">
+                              <object class="GtkCheckButton" id="ModDimensions">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -4412,7 +4397,7 @@ adjusted to keep the video's original aspect ratio.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCheckButton" id="keep_aspect">
+                              <object class="GtkCheckButton" id="PictureKeepRatio">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

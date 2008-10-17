@@ -80,7 +80,13 @@ typedef struct
 #define GHB_FRAMERATE 3
 
 const gchar* ghb_version(void);
-void ghb_vquality_range(signal_user_data_t *ud, gint *min, gint *max);
+void ghb_vquality_range(
+	signal_user_data_t *ud, 
+	gdouble *min, 
+	gdouble *max,
+	gdouble *step,
+	gdouble *page,
+	gint *digits);
 //const gchar* ghb_get_rate_string(gint rate, gint type);
 void ghb_backend_init(GtkBuilder *builder, gint debug, gint update);
 void ghb_backend_close(void);
@@ -123,7 +129,6 @@ gint ghb_calculate_target_bitrate(GValue *settings, gint titleindex);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_get_title_number(gint titleindex);
 
-gint ghb_guess_bitrate(GValue *settings);
 gboolean ghb_validate_container(signal_user_data_t *ud);
 gboolean ghb_validate_vquality(GValue *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);

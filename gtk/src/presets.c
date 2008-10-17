@@ -24,14 +24,14 @@
 #include "resources.h"
 #include "presets.h"
 #include "values.h"
+#include "lang.h"
 
 #define MAX_NESTED_PRESET 3
 
-// These are flags.  One bit for each feature
 enum
 {
-	PRESETS_CUST = 0x01,
-	PRESETS_FOLDER = 0x02,
+	PRESETS_BUILTIN = 0,
+	PRESETS_CUSTOM
 };
 
 static GValue *presetsPlist = NULL;
@@ -40,6 +40,7 @@ static GValue *prefsPlist = NULL;
 
 static const GValue* preset_dict_get_value(GValue *dict, const gchar *key);
 static void store_plist(GValue *plist, const gchar *name);
+static void store_presets(void);
 
 // This only handle limited depth
 GtkTreePath*
@@ -95,18 +96,19 @@ preset_path_from_indices(GValue *presets, gint *indices, gint len)
 	for (ii = 0; ii < len; ii++)
 	{
 		GValue *dict;
-		gint count, ptype;
+		gint count, folder;
 		const GValue *name;
 
 		count = ghb_array_len(presets);
 		if (indices[ii] >= count) break;
 		dict = ghb_array_get_nth(presets, indices[ii]);
-		name = ghb_dict_lookup(dict, "preset_name");
-		ghb_array_append(path, ghb_value_dup(name));
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-		if (!(ptype & PRESETS_FOLDER))
+		name = ghb_dict_lookup(dict, "PresetName");
+		if (name)
+			ghb_array_append(path, ghb_value_dup(name));
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (!folder)
 			break;
-		presets = ghb_dict_lookup(dict, "preset_folder");
+		presets = ghb_dict_lookup(dict, "ChildrenArray");
 	}
 	return path;
 }
@@ -225,7 +227,7 @@ preset_path_cmp(const GValue *path1, const GValue *path2)
 static GValue*
 presets_get_dict(GValue *presets, gint *indices, gint len)
 {
-	gint ii, count, ptype;
+	gint ii, count, folder;
 	GValue *dict = NULL;
 
 	g_debug("presets_get_dict ()");
@@ -236,10 +238,10 @@ presets_get_dict(GValue *presets, gint *indices, gint len)
 		dict = ghb_array_get_nth(presets, indices[ii]);
 		if (ii < len-1)
 		{
-			ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-			if (!(ptype & PRESETS_FOLDER))
+			folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+			if (!folder)
 				return NULL;
-			presets = ghb_dict_lookup(dict, "preset_folder");
+			presets = ghb_dict_lookup(dict, "ChildrenArray");
 		}
 	}
 	if (ii < len)
@@ -250,7 +252,7 @@ presets_get_dict(GValue *presets, gint *indices, gint len)
 static GValue*
 presets_get_folder(GValue *presets, gint *indices, gint len)
 {
-	gint ii, count, ptype;
+	gint ii, count, folder;
 	GValue *dict;
 
 	g_debug("presets_get_folder ()");
@@ -259,10 +261,10 @@ presets_get_folder(GValue *presets, gint *indices, gint len)
 		count = ghb_array_len(presets);
 		if (indices[ii] >= count) return NULL;
 		dict = ghb_array_get_nth(presets, indices[ii]);
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-		if (!(ptype & PRESETS_FOLDER))
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (!folder)
 			break;
-		presets = ghb_dict_lookup(dict, "preset_folder");
+		presets = ghb_dict_lookup(dict, "ChildrenArray");
 	}
 	if (ii < len)
 		return NULL;
@@ -279,21 +281,19 @@ plist_get_dict(GValue *presets, const gchar *name)
 static const gchar*
 preset_get_name(GValue *dict)
 {
-	return g_value_get_string(ghb_dict_lookup(dict, "preset_name"));
+	return g_value_get_string(preset_dict_get_value(dict, "PresetName"));
+}
+
+gboolean
+ghb_preset_folder(GValue *dict)
+{
+	return ghb_value_int(preset_dict_get_value(dict, "Folder"));
 }
 
 gint
-ghb_preset_flags(GValue *dict)
+ghb_preset_type(GValue *dict)
 {
-	const GValue *gval;
-	gint ptype = 0;
-
-	gval = preset_dict_get_value(dict, "preset_type");
-	if (gval)
-	{
-		ptype = ghb_value_int(gval);
-	}
-	return ptype;
+	return ghb_value_int(preset_dict_get_value(dict, "Type"));
 }
 
 static void
@@ -403,7 +403,7 @@ single_find_pos(GValue *presets, const gchar *name, gint type)
 		const gchar *str;
 		dict = ghb_array_get_nth(presets, ii);
 		str = preset_get_name(dict);
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
+		ptype = ghb_value_int(preset_dict_get_value(dict, "Type"));
 		if (strcasecmp(name, str) <= 0 && ptype == type)
 		{
 			return ii;
@@ -419,7 +419,8 @@ presets_find_pos(const GValue *path, gint type, gint *len)
 {
 	GValue *nested;
 	GValue *val;
-	gint count, ii, ptype;
+	gint count, ii;
+	gboolean folder;
 	gint *indices = NULL;
 	const gchar *name;
 	GValue *dict;
@@ -435,11 +436,11 @@ presets_find_pos(const GValue *path, gint type, gint *len)
 		indices[ii] = presets_find_element(nested, name);
 		if (indices[ii] == -1) return NULL;
 		dict = ghb_array_get_nth(nested, indices[ii]);
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
 		nested = NULL;
-		if (!(ptype & PRESETS_FOLDER))
+		if (!folder)
 			break;
-		nested = ghb_dict_lookup(dict, "preset_folder");
+		nested = ghb_dict_lookup(dict, "ChildrenArray");
 	}
 	if (nested)
 	{
@@ -456,16 +457,16 @@ presets_find_pos(const GValue *path, gint type, gint *len)
 static gint
 preset_tree_depth(GValue *dict)
 {
-	gint ptype;
+	gboolean folder;
 
-	ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-	if (ptype & PRESETS_FOLDER)
+	folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+	if (folder)
 	{
 		gint depth = 0;
 		gint count, ii;
 		GValue *presets;
 
-		presets = ghb_dict_lookup(dict, "preset_folder");
+		presets = ghb_dict_lookup(dict, "ChildrenArray");
 		count = ghb_array_len(presets);
 		for (ii = 0; ii < count; ii++)
 		{
@@ -489,7 +490,7 @@ preset_is_default(GValue *dict)
 	const GValue *val;
 
 	val = preset_dict_get_value(dict, "Default");
-	return g_value_get_boolean(val);
+	return ghb_value_boolean(val);
 }
 
 static gint*
@@ -502,16 +503,16 @@ presets_find_default2(GValue *presets, gint *len)
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *dict;
-		gint ptype;
+		gboolean folder;
 
 		dict = ghb_array_get_nth(presets, ii);
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-		if (ptype & PRESETS_FOLDER)
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (folder)
 		{
 			GValue *nested;
 			gint pos = *len;
 
-			nested = ghb_dict_lookup(dict, "preset_folder");
+			nested = ghb_dict_lookup(dict, "ChildrenArray");
 			(*len)++;
 			indices = presets_find_default2(nested, len);
 			if (indices)
@@ -551,10 +552,11 @@ ghb_preset_indices_from_path(
 {
 	GValue *nested;
 	GValue *val;
-	gint count, ii, ptype;
+	gint count, ii;
 	gint *indices = NULL;
 	const gchar *name;
 	GValue *dict;
+	gboolean folder;
 
 	g_debug("ghb_preset_indices_from_path () ");
 	nested = presets;
@@ -575,13 +577,13 @@ ghb_preset_indices_from_path(
 		if (ii < count-1)
 		{
 			dict = ghb_array_get_nth(nested, indices[ii]);
-			ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-			if (!(ptype & PRESETS_FOLDER))
+			folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+			if (!folder)
 			{
 				g_free(indices);
 				return NULL;
 			}
-			nested = ghb_dict_lookup(dict, "preset_folder");
+			nested = ghb_dict_lookup(dict, "ChildrenArray");
 		}
 	}
 	*len = ii;
@@ -595,19 +597,41 @@ ghb_presets_get_type(
 	gint len)
 {
 	GValue *dict;
-	gint flags = 0;
+	gint type = 0;
 
 	dict = presets_get_dict(presets, indices, len);
 	if (dict)
 	{
-		flags = ghb_preset_flags(dict);
+		type = ghb_preset_type(dict);
 	}
 	else
 	{
 		g_warning("ghb_presets_get_type ()");
 		g_warning("internal preset lookup error");
 	}
-	return flags;
+	return type;
+}
+
+static gboolean
+ghb_presets_get_folder(
+	GValue *presets, 
+	gint *indices,
+	gint len)
+{
+	GValue *dict;
+	gboolean folder = FALSE;
+
+	dict = presets_get_dict(presets, indices, len);
+	if (dict)
+	{
+		folder = ghb_preset_folder(dict);
+	}
+	else
+	{
+		g_warning("ghb_presets_get_folder ()");
+		g_warning("internal preset lookup error");
+	}
+	return folder;
 }
 
 void
@@ -632,7 +656,7 @@ presets_set_default(gint *indices, gint len)
 	{
 		ghb_dict_insert(dict, g_strdup("Default"), ghb_boolean_value_new(TRUE));
 	}
-	store_plist(presetsPlist, "presets");
+	store_presets();
 }
 
 // Used for sorting dictionaries.
@@ -671,27 +695,11 @@ ghb_presets_get_description(GValue *pdict)
 
 	if (pdict == NULL) return NULL;
 	desc = g_value_get_string(
-			preset_dict_get_value(pdict, "preset_description"));
+			preset_dict_get_value(pdict, "PresetDescription"));
 	if (desc[0] == 0) return NULL;
 	return desc;
 }
 
-
-static const GValue*
-preset_get_value(const GValue *preset, const gchar *key)
-{
-	GValue *dict = NULL;
-	gint *indices, len;
-
-
-	indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
-	if (indices)
-	{
-		dict = presets_get_dict(presetsPlist, indices, len);
-		g_free(indices);
-	}
-	return preset_dict_get_value(dict, key);
-}
 
 static void init_settings_from_dict(
 	GValue *dest, GValue *internal, GValue *dict);
@@ -821,32 +829,35 @@ preset_to_ui(signal_user_data_t *ud, GValue *dict)
 {
 	g_debug("preset_to_ui()\n");
 	// Initialize the ui from presets file.
-	GValue *internal;
+	GValue *internal, *hidden;
 
 	// Get key list from internal default presets.  This way we do not
 	// load any unknown keys.
 	if (internalPlist == NULL) return;
 	internal = plist_get_dict(internalPlist, "Presets");
+	hidden = plist_get_dict(internalPlist, "XlatPresets");
 	// Setting a ui widget will cause the corresponding setting
 	// to be set, but it also triggers a callback that can 
 	// have the side effect of using other settings values
 	// that have not yet been set.  So set *all* settings first
 	// then update the ui.
 	init_settings_from_dict(ud->settings, internal, dict);
+	init_settings_from_dict(ud->settings, hidden, dict);
 	init_ui_from_dict(ud, internal, dict);
+	init_ui_from_dict(ud, hidden, dict);
 
 	if (ghb_settings_get_boolean(ud->settings, "allow_tweaks"))
 	{
 		const GValue *gval;
-		gval = preset_dict_get_value(dict, "deinterlace");
+		gval = preset_dict_get_value(dict, "PictureDeinterlace");
 		if (gval)
 		{
-			ghb_ui_update(ud, "tweak_deinterlace", gval);
+			ghb_ui_update(ud, "tweak_PictureDeinterlace", gval);
 		}
-		gval = preset_dict_get_value(dict, "denoise");
+		gval = preset_dict_get_value(dict, "PictureDenoise");
 		if (gval)
 		{
-			ghb_ui_update(ud, "tweak_denoise", gval);
+			ghb_ui_update(ud, "tweak_PictureDenoise", gval);
 		}
 	}
 }
@@ -856,6 +867,8 @@ ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict)
 {
 	init_ui_from_dict(ud, dict, dict);
 }
+
+static GValue *current_preset = NULL;
 
 void
 ghb_set_preset_from_indices(signal_user_data_t *ud, gint *indices, gint len)
@@ -874,14 +887,16 @@ ghb_set_preset_from_indices(signal_user_data_t *ud, gint *indices, gint len)
 	if (dict == NULL)
 	{
 		preset_to_ui(ud, NULL);
+		current_preset = NULL;
 	}
 	else
 	{
-		gint ptype;
 		GValue *path;
+		gboolean folder;
 
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-		if (ptype & PRESETS_FOLDER)
+		current_preset = dict;
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (folder)
 			preset_to_ui(ud, NULL);
 		else
 			preset_to_ui(ud, dict);
@@ -891,31 +906,85 @@ ghb_set_preset_from_indices(signal_user_data_t *ud, gint *indices, gint len)
 	}
 }
 
-void
-ghb_set_preset(signal_user_data_t *ud, const GValue *path)
+static const GValue*
+curr_preset_get_value(const gchar *key)
 {
-	gint *indices, len;
-	
-	g_debug("ghb_set_preset()");
-	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
-	ghb_set_preset_from_indices(ud, indices, len);
-	if (indices) g_free(indices);
+	if (current_preset == NULL) return NULL;
+	return preset_dict_get_value(current_preset, key);
 }
 
 void
 ghb_update_from_preset(
 	signal_user_data_t *ud, 
-	const GValue *preset, 
 	const gchar *key)
 {
 	const GValue *gval;
 	
 	g_debug("ghb_update_from_preset() %s", key);
-	if (preset == NULL) return;
-	gval = preset_get_value(preset, key);
+	gval = curr_preset_get_value(key);
 	if (gval != NULL)
 	{
 		ghb_ui_update(ud, key, gval);
+	}
+}
+
+static void
+ghb_select_preset2(
+	GtkBuilder *builder, 
+	gint *indices, 
+	gint len)
+{
+	GtkTreeView *treeview;
+	GtkTreeSelection *selection;
+	GtkTreeModel *store;
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	
+	g_debug("ghb_select_preset2()");
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(builder, "presets_list"));
+	selection = gtk_tree_view_get_selection (treeview);
+	store = gtk_tree_view_get_model (treeview);
+	path = ghb_tree_path_new_from_indices(indices, len);
+	if (path)
+	{
+		if (gtk_tree_model_get_iter(store, &iter, path))
+		{
+			gtk_tree_selection_select_iter (selection, &iter);
+		}
+		else
+		{
+			if (gtk_tree_model_get_iter_first(store, &iter))
+				gtk_tree_selection_select_iter (selection, &iter);
+		}
+		gtk_tree_path_free(path);
+	}
+}
+
+void
+ghb_select_preset(GtkBuilder *builder, const GValue *path)
+{
+	gint *indices, len;
+
+	g_debug("ghb_select_preset()");
+	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
+	if (indices)
+	{
+		ghb_select_preset2(builder, indices, len);
+		g_free(indices);
+	}
+}
+
+void
+ghb_select_default_preset(GtkBuilder *builder)
+{
+	gint *indices, len;
+
+	g_debug("ghb_select_default_preset()");
+	indices = presets_find_default(&len);
+	if (indices)
+	{
+		ghb_select_preset2(builder, indices, len);
+		g_free(indices);
 	}
 }
 
@@ -1248,14 +1317,14 @@ ghb_prefs_load(signal_user_data_t *ud)
 }
 
 static const gchar*
-get_preset_color(gint flags)
+get_preset_color(gint type, gboolean folder)
 {
 	const gchar *color;
 
-	if (flags & PRESETS_CUST)
+	if (type == PRESETS_CUSTOM)
 	{
 		color = "DimGray";
-		if (flags & PRESETS_FOLDER)
+		if (folder)
 		{
 			color = "black";
 		}
@@ -1263,7 +1332,7 @@ get_preset_color(gint flags)
 	else
 	{
 		color = "blue";
-		if (flags & PRESETS_FOLDER)
+		if (folder)
 		{
 			color = "Navy";
 		}
@@ -1284,7 +1353,6 @@ ghb_presets_list_init(
 	const gchar *preset;
 	GtkTreePath *parent_path;
 	const gchar *description;
-	gint flags;
 	gboolean def;
 	gint count, ii;
 	GValue *dict;
@@ -1317,6 +1385,8 @@ ghb_presets_list_init(
 	for (ii = 0; ii < count; ii++)
 	{
 		const gchar *color;
+		gint type;
+		gboolean folder;
 
 		// Additional settings, add row
 		dict = ghb_array_get_nth(presets, ii);
@@ -1326,8 +1396,9 @@ ghb_presets_list_init(
 
 		description = ghb_presets_get_description(dict);
 		gtk_tree_store_append(store, &iter, piter);
-		flags = ghb_preset_flags(dict);
-		color = get_preset_color(flags);
+		type = ghb_preset_type(dict);
+		folder = ghb_preset_folder(dict);
+		color = get_preset_color(type, folder);
 		gtk_tree_store_set(store, &iter, 0, preset, 
 						   	1, def ? 800 : 400, 
 						   	2, def ? 2 : 0,
@@ -1350,7 +1421,7 @@ ghb_presets_list_init(
 			gtk_tree_view_expand_row(treeview, path, FALSE);
 			gtk_tree_path_free(path);
 		}
-		if (flags & PRESETS_FOLDER)
+		if (folder)
 		{
 			ghb_presets_list_init(ud, more_indices, len+1);
 		}
@@ -1370,8 +1441,8 @@ presets_list_update_item(
 	GtkTreePath *treepath;
 	const gchar *name;
 	const gchar *description;
-	gint flags;
-	gboolean def;
+	gint type;
+	gboolean def, folder;
 	GValue *dict;
 	const gchar *color;
 	
@@ -1388,15 +1459,16 @@ presets_list_update_item(
 	def = preset_is_default(dict);
 
 	description = ghb_presets_get_description(dict);
-	flags = ghb_preset_flags(dict);
-	color = get_preset_color(flags);
+	type = ghb_preset_type(dict);
+	folder = ghb_preset_folder(dict);
+	color = get_preset_color(type, folder);
 	gtk_tree_store_set(store, &iter, 0, name, 
 					   	1, def ? 800 : 400, 
 					   	2, def ? 2 : 0,
 					   	3, color,
 						4, description,
 					   	-1);
-	if (flags & PRESETS_FOLDER)
+	if (folder)
 	{
 		ghb_presets_list_init(ud, indices, len);
 	}
@@ -1413,8 +1485,8 @@ presets_list_insert(
 	GtkTreeStore *store;
 	const gchar *preset;
 	const gchar *description;
-	gint flags;
-	gboolean def;
+	gint type;
+	gboolean def, folder;
 	gint count;
 	GValue *presets;
 	GtkTreePath *parent_path;
@@ -1451,15 +1523,16 @@ presets_list_insert(
 
 	description = ghb_presets_get_description(dict);
 	gtk_tree_store_insert(store, &iter, piter, indices[len-1]);
-	flags = ghb_preset_flags(dict);
-	color = get_preset_color(flags);
+	type = ghb_preset_type(dict);
+	folder = ghb_preset_folder(dict);
+	color = get_preset_color(type, folder);
 	gtk_tree_store_set(store, &iter, 0, preset, 
 					   	1, def ? 800 : 400, 
 					   	2, def ? 2 : 0,
 					   	3, color,
 						4, description,
 					   	-1);
-	if (flags & PRESETS_FOLDER)
+	if (folder)
 	{
 		ghb_presets_list_init(ud, indices, len);
 	}
@@ -1501,8 +1574,8 @@ remove_std_presets(signal_user_data_t *ud)
 		gint ptype;
 
 		dict = ghb_array_get_nth(presetsPlist, ii);
-		ptype = ghb_value_int(preset_dict_get_value(dict, "preset_type"));
-		if (!(ptype & PRESETS_CUST))
+		ptype = ghb_value_int(preset_dict_get_value(dict, "Type"));
+		if (ptype == PRESETS_BUILTIN)
 		{
 			if (ghb_presets_remove(presetsPlist, &indices, 1))
 			{
@@ -1510,6 +1583,705 @@ remove_std_presets(signal_user_data_t *ud)
 			}
 		}
 	}
+}
+
+void
+ghb_save_queue(GValue *queue)
+{
+	store_plist(queue, "queue");
+}
+
+GValue*
+ghb_load_queue()
+{
+	return load_plist("queue");
+}
+
+void
+ghb_remove_queue_file()
+{
+	remove_plist("queue");
+}
+
+typedef struct
+{
+	gchar *mac_val;
+	gchar *lin_val;
+} value_map_t;
+
+static value_map_t vcodec_xlat[] =
+{
+	{"MPEG-4 (FFmpeg)", "ffmpeg"},
+	{"MPEG-4 (XviD)", "xvid"},
+	{"H.264 (x264)", "x264"},
+	{"VP3 (Theora)", "theora"},
+	{NULL,NULL}
+};
+
+static value_map_t acodec_xlat[] =
+{
+	{"AAC (faac)", "faac"},
+	{"AC3 Passthru", "ac3"},
+	{"MP3 (lame)", "lame"},
+	{"Vorbis (vorbis)", "vorbis"},
+	{NULL,NULL}
+};
+
+value_map_t container_xlat[] =
+{
+	{"MP4 file", "mp4"},
+	{"M4V file", "m4v"},
+	{"MKV file", "mkv"},
+	{"AVI file", "avi"},
+	{"OGM file", "ogm"},
+	{NULL, NULL}
+};
+
+value_map_t framerate_xlat[] =
+{
+	{"Same as source", "source"},
+	{"5", "5"},
+	{"10", "10"},
+	{"12", "12"},
+	{"15", "15"},
+	{"23.976", "23.976"},
+	{"24", "24"},
+	{"25", "25"},
+	{"29.97", "29.97"},
+	{NULL, NULL}
+};
+
+value_map_t samplerate_xlat[] =
+{
+	{"Auto", "source"},
+	{"22.05", "22.05"},
+	{"24", "24"},
+	{"32", "32"},
+	{"44.1", "44.1"},
+	{"48", "48"},
+	{NULL, NULL}
+};
+
+value_map_t mix_xlat[] =
+{
+	{"Mono", "mono"},
+	{"Stereo", "stereo"},
+	{"Dolby Surround", "dpl1"},
+	{"Dolby Pro Logic II", "dpl2"},
+	{"6-channel discrete", "6ch"},
+	{"AC3 Passthru", "none"},
+	{NULL, NULL}
+};
+
+value_map_t deint_xlat[] =
+{
+	{"0", "none"},
+	{"1", "fast"},
+	{"2", "slow"},
+	{"3", "slower"},
+	{NULL, NULL}
+};
+
+value_map_t denoise_xlat[] =
+{
+	{"0", "none"},
+	{"1", "weak"},
+	{"2", "medium"},
+	{"3", "strong"},
+	{NULL, NULL}
+};
+
+extern iso639_lang_t ghb_language_table[];
+
+static GValue*
+export_lang_xlat2(GValue *lin_val)
+{
+	GValue *gval;
+
+	if (lin_val == NULL) return NULL;
+	gint ii;
+	gchar *str;
+
+	str = ghb_value_string(lin_val);
+	for (ii = 0; ghb_language_table[ii].eng_name; ii++)
+	{
+		if (strcmp(str, ghb_language_table[ii].iso639_2) == 0)
+		{
+			gval = ghb_string_value_new(ghb_language_table[ii].eng_name);
+			g_free(str);
+			return gval;
+		}
+	}
+	g_debug("Can't map language value: (%s)", str);
+	g_free(str);
+	return NULL;
+}
+
+static GValue*
+export_subtitle_xlat2(GValue *lin_val)
+{
+	gchar *str;
+	GValue *gval;
+
+	str = ghb_value_string(lin_val);
+	if (strcmp(str, "none") == 0)
+	{
+		gval = ghb_string_value_new("None");
+	}
+	else if (strcmp(str, "auto") == 0)
+	{
+		gval = ghb_string_value_new("Autoselect");
+	}
+	else
+	{
+		gval = export_lang_xlat2(lin_val);
+	}
+	g_free(str);
+	return gval;
+}
+
+static GValue*
+import_lang_xlat2(GValue *mac_val)
+{
+	GValue *gval;
+
+	if (mac_val == NULL) return NULL;
+	gint ii;
+	gchar *str;
+
+	str = ghb_value_string(mac_val);
+	for (ii = 0; ghb_language_table[ii].eng_name; ii++)
+	{
+		if (strcmp(str, ghb_language_table[ii].eng_name) == 0)
+		{
+			gval = ghb_string_value_new(ghb_language_table[ii].iso639_2);
+			g_free(str);
+			return gval;
+		}
+	}
+	g_debug("Can't map language value: (%s)", str);
+	g_free(str);
+	return NULL;
+}
+
+static GValue*
+import_subtitle_xlat2(GValue *mac_val)
+{
+	gchar *str;
+	GValue *gval;
+
+	str = ghb_value_string(mac_val);
+	if (strcmp(str, "None") == 0)
+	{
+		gval = ghb_string_value_new("none");
+	}
+	else if (strcmp(str, "Autoselect") == 0)
+	{
+		gval = ghb_string_value_new("auto");
+	}
+	else
+	{
+		gval = import_lang_xlat2(mac_val);
+	}
+	g_free(str);
+	return gval;
+}
+
+static GValue*
+export_audio_track_xlat2(GValue *lin_val)
+{
+	gchar *str;
+	GValue *gval = NULL;
+
+	str = ghb_value_string(lin_val);
+	if (strcmp(str, "none") == 0)
+	{
+		gval = ghb_int_value_new(1);
+	}
+	else
+	{
+		gint val = ghb_value_int(lin_val) + 1;
+		gval = ghb_int_value_new(val);
+	}
+	g_free(str);
+	return gval;
+}
+
+static GValue*
+import_audio_track_xlat2(GValue *mac_val)
+{
+	gint val;
+	gchar *str;
+	GValue *gval;
+
+	val = ghb_value_int(mac_val);
+	if (val <= 0)
+	{
+		val = 0;
+	}
+	else
+	{
+		val--;
+	}
+	str = g_strdup_printf("%d", val);
+	gval = ghb_string_value_new(str);
+	g_free(str);
+	return gval;
+}
+
+static GValue*
+export_value_xlat2(value_map_t *value_map, GValue *lin_val, GType mac_type)
+{
+	GValue *gval;
+
+	if (lin_val == NULL) return NULL;
+	gint ii;
+	gchar *str;
+	GValue *sval;
+
+	str = ghb_value_string(lin_val);
+	for (ii = 0; value_map[ii].mac_val; ii++)
+	{
+		if (strcmp(str, value_map[ii].lin_val) == 0)
+		{
+			sval = ghb_string_value_new(value_map[ii].mac_val);
+			g_free(str);
+			gval = ghb_value_new(mac_type);
+			if (!g_value_transform(sval, gval))
+			{
+				g_warning("can't transform");
+				ghb_value_free(gval);
+				ghb_value_free(sval);
+				return NULL;
+			}
+			ghb_value_free(sval);
+			return gval;
+		}
+	}
+	g_debug("Can't map value: (%s)", str);
+	g_free(str);
+	return NULL;
+}
+
+static void
+export_value_xlat(GValue *dict)
+{
+	GValue *lin_val, *gval;
+	const gchar *key;
+
+	key = "VideoEncoder";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(vcodec_xlat, lin_val, G_TYPE_STRING);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "FileFormat";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(container_xlat, lin_val, G_TYPE_STRING);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "VideoFramerate";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(framerate_xlat, lin_val, G_TYPE_STRING);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "PictureDeinterlace";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(deint_xlat, lin_val, G_TYPE_INT);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	else
+		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
+	key = "PictureDenoise";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(denoise_xlat, lin_val, G_TYPE_INT);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	else
+		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
+	key = "Subtitles";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_subtitle_xlat2(lin_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+
+	GValue *alist;
+	GValue *adict;
+	gint count, ii;
+
+	alist = ghb_dict_lookup(dict, "AudioList");
+	count = ghb_array_len(alist);
+	for (ii = 0; ii < count; ii++)
+	{
+		adict = ghb_array_get_nth(alist, ii);
+		key = "AudioTrack";
+		lin_val = ghb_dict_lookup(adict, key);
+		gval = export_audio_track_xlat2(lin_val);
+		if (gval)
+			ghb_dict_insert(adict, g_strdup(key), gval);
+		key = "AudioEncoder";
+		lin_val = ghb_dict_lookup(adict, key);
+		gval = export_value_xlat2(acodec_xlat, lin_val, G_TYPE_STRING);
+		if (gval)
+			ghb_dict_insert(adict, g_strdup(key), gval);
+		key = "AudioSamplerate";
+		lin_val = ghb_dict_lookup(adict, key);
+		gval = export_value_xlat2(samplerate_xlat, lin_val, G_TYPE_STRING);
+		if (gval)
+			ghb_dict_insert(adict, g_strdup(key), gval);
+		key = "AudioMixdown";
+		lin_val = ghb_dict_lookup(adict, key);
+		gval = export_value_xlat2(mix_xlat, lin_val, G_TYPE_STRING);
+		if (gval)
+			ghb_dict_insert(adict, g_strdup(key), gval);
+	}
+}
+
+
+static GValue*
+import_value_xlat2(
+	GValue *defaults, 
+	value_map_t *value_map,
+	const gchar *key, 
+	GValue *mac_val)
+{
+	GValue *gval, *def_val;
+
+	if (mac_val == NULL) return NULL;
+	def_val = ghb_dict_lookup(defaults, key);
+	if (def_val)
+	{
+		gint ii;
+		gchar *str;
+		GValue *sval;
+
+		str = ghb_value_string(mac_val);
+		for (ii = 0; value_map[ii].mac_val; ii++)
+		{
+			if (strcmp(str, value_map[ii].mac_val) == 0)
+			{
+				sval = ghb_string_value_new(value_map[ii].lin_val);
+				g_free(str);
+				gval = ghb_value_new(G_VALUE_TYPE(def_val));
+				if (!g_value_transform(sval, gval))
+				{
+					g_warning("can't transform");
+					ghb_value_free(gval);
+					ghb_value_free(sval);
+					return NULL;
+				}
+				ghb_value_free(sval);
+				return gval;
+			}
+		}
+		//g_warning("Can't map value: (%s)", str);
+		g_free(str);
+	}
+	else
+	{
+		g_warning("Bad key: (%s)", key);
+		return NULL;
+	}
+	return NULL;
+}
+
+static void
+import_value_xlat(GValue *dict)
+{
+	GValue *defaults, *mac_val, *gval;
+	const gchar *key;
+
+	defaults = plist_get_dict(internalPlist, "Presets");
+	key = "VideoEncoder";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, vcodec_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "FileFormat";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, container_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "VideoFramerate";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, framerate_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "PictureDeinterlace";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, deint_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "PictureDenoise";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, denoise_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "Subtitles";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_subtitle_xlat2(mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+
+	GValue *alist;
+	GValue *adict;
+	GValue *adefaults;
+	GValue *adeflist;
+	gint count, ii;
+
+	adeflist = ghb_dict_lookup(dict, "AudioList");
+	if (adeflist)
+	{
+		adefaults = ghb_array_get_nth(adeflist, 0);
+		alist = ghb_dict_lookup(dict, "AudioList");
+		count = ghb_array_len(alist);
+		for (ii = 0; ii < count; ii++)
+		{
+			adict = ghb_array_get_nth(alist, ii);
+			key = "AudioTrack";
+			mac_val = ghb_dict_lookup(adict, key);
+			gval = import_audio_track_xlat2(mac_val);
+			if (gval)
+				ghb_dict_insert(adict, g_strdup(key), gval);
+			key = "AudioEncoder";
+			mac_val = ghb_dict_lookup(adict, key);
+			gval = import_value_xlat2(adefaults, acodec_xlat, key, mac_val);
+			if (gval)
+				ghb_dict_insert(adict, g_strdup(key), gval);
+			key = "AudioSamplerate";
+			mac_val = ghb_dict_lookup(adict, key);
+			gval = import_value_xlat2(adefaults, samplerate_xlat, key, mac_val);
+			if (gval)
+				ghb_dict_insert(adict, g_strdup(key), gval);
+			key = "AudioMixdown";
+			mac_val = ghb_dict_lookup(adict, key);
+			gval = import_value_xlat2(adefaults, mix_xlat, key, mac_val);
+			if (gval)
+				ghb_dict_insert(adict, g_strdup(key), gval);
+		}
+	}
+}
+
+static void
+import_xlat_preset(GValue *dict)
+{
+	gboolean uses_max;
+	gint uses_pic;
+	gint par;
+	gint vqtype;
+
+	g_debug("import_xlat_preset ()");
+	uses_max = ghb_value_boolean(
+						preset_dict_get_value(dict, "UsesMaxPictureSettings"));
+	uses_pic = ghb_value_int(
+						preset_dict_get_value(dict, "UsesPictureSettings"));
+	par = ghb_value_int(preset_dict_get_value(dict, "PicturePAR"));
+	vqtype = ghb_value_int(preset_dict_get_value(dict, "VideoQualityType"));
+
+	if (uses_max || uses_pic == 2)
+	{
+		ghb_dict_insert(dict, g_strdup("autoscale"), 
+						ghb_boolean_value_new(TRUE));
+	}
+	switch (par)
+	{
+	case 0:
+	{
+		ghb_dict_insert(dict, g_strdup("anamorphic"), 
+						ghb_boolean_value_new(FALSE));
+		if (ghb_dict_lookup(dict, "ModDimensions") == NULL)
+			ghb_dict_insert(dict, g_strdup("ModDimensions"), 
+							ghb_boolean_value_new(TRUE));
+	} break;
+	case 1:
+	{
+		ghb_dict_insert(dict, g_strdup("anamorphic"), 
+						ghb_boolean_value_new(TRUE));
+		ghb_dict_insert(dict, g_strdup("ModDimensions"), 
+						ghb_boolean_value_new(FALSE));
+	} break;
+	case 2:
+	{
+		ghb_dict_insert(dict, g_strdup("anamorphic"), 
+						ghb_boolean_value_new(TRUE));
+		ghb_dict_insert(dict, g_strdup("ModDimensions"), 
+						ghb_boolean_value_new(TRUE));
+	} break;
+	default:
+	{
+		ghb_dict_insert(dict, g_strdup("anamorphic"), 
+						ghb_boolean_value_new(TRUE));
+		ghb_dict_insert(dict, g_strdup("ModDimensions"), 
+						ghb_boolean_value_new(TRUE));
+	} break;
+	}
+	// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
+	switch (vqtype)
+	{
+	case 0:
+	{
+		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
+						ghb_boolean_value_new(TRUE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
+						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
+						ghb_boolean_value_new(FALSE));
+	} break;
+	case 1:
+	{
+		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
+						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
+						ghb_boolean_value_new(TRUE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
+						ghb_boolean_value_new(FALSE));
+	} break;
+	case 2:
+	{
+		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
+						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
+						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
+						ghb_boolean_value_new(TRUE));
+	} break;
+	default:
+	{
+		ghb_dict_insert(dict, g_strdup("vquality_type_target"), 
+						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_bitrate"), 
+						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("vquality_type_constant"), 
+						ghb_boolean_value_new(TRUE));
+	} break;
+	}
+	import_value_xlat(dict);
+}
+
+static void
+import_xlat_presets(GValue *presets)
+{
+	gint count, ii;
+	GValue *dict;
+	gboolean folder;
+
+	g_debug("import_xlat_presets ()");
+	if (presets == NULL) return;
+	count = ghb_array_len(presets);
+	for (ii = 0; ii < count; ii++)
+	{
+		dict = ghb_array_get_nth(presets, ii);
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (folder)
+		{
+			GValue *nested;
+
+			nested = ghb_dict_lookup(dict, "ChildrenArray");
+			import_xlat_presets(nested);
+		}
+		else
+		{
+			import_xlat_preset(dict);
+		}
+	}
+}
+
+static void
+export_xlat_preset(GValue *dict)
+{
+	gboolean ana, round, autoscale, target, br, constant;
+
+	g_debug("export_xlat_prest ()");
+	autoscale = ghb_value_boolean(preset_dict_get_value(dict, "autoscale"));
+	ana = ghb_value_boolean(preset_dict_get_value(dict, "anamorphic"));
+	round = ghb_value_boolean(preset_dict_get_value(dict, "ModDimensions"));
+	target = ghb_value_boolean(
+				preset_dict_get_value(dict, "vquality_type_target"));
+	br = ghb_value_boolean(
+				preset_dict_get_value(dict, "vquality_type_bitrate"));
+	constant = ghb_value_boolean(
+				preset_dict_get_value(dict, "vquality_type_constant"));
+
+	if (autoscale)
+		ghb_dict_insert(dict, g_strdup("UsesPictureSettings"), 
+						ghb_int_value_new(2));
+	else
+		ghb_dict_insert(dict, g_strdup("UsesPictureSettings"), 
+						ghb_int_value_new(1));
+
+	if (ana)
+	{
+		if (round)
+			ghb_dict_insert(dict, g_strdup("PicturePAR"), 
+						ghb_int_value_new(2));
+		else
+			ghb_dict_insert(dict, g_strdup("PicturePAR"), 
+						ghb_int_value_new(1));
+	}
+	else
+	{
+		ghb_dict_insert(dict, g_strdup("PicturePAR"), 
+						ghb_int_value_new(0));
+	}
+	// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
+	if (target)
+	{
+		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
+						ghb_int_value_new(0));
+	}
+	else if (br)
+	{
+		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
+						ghb_int_value_new(1));
+	}
+	else if (constant)
+	{
+		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
+						ghb_int_value_new(2));
+	}
+	ghb_dict_remove(dict, "autoscale");
+	ghb_dict_remove(dict, "anamorphic");
+	ghb_dict_remove(dict, "vquality_type_target");
+	ghb_dict_remove(dict, "vquality_type_bitrate");
+	ghb_dict_remove(dict, "vquality_type_constant");
+	export_value_xlat(dict);
+}
+
+static void
+export_xlat_presets(GValue *presets)
+{
+	gint count, ii;
+	GValue *dict;
+	gboolean folder;
+
+	if (presets == NULL) return;
+	count = ghb_array_len(presets);
+	for (ii = 0; ii < count; ii++)
+	{
+		dict = ghb_array_get_nth(presets, ii);
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (folder)
+		{
+			GValue *nested;
+
+			nested = ghb_dict_lookup(dict, "ChildrenArray");
+			export_xlat_presets(nested);
+		}
+		else
+		{
+			export_xlat_preset(dict);
+		}
+	}
+}
+
+static void
+store_presets()
+{
+	GValue *export;
+
+	export = ghb_value_dup(presetsPlist);
+	export_xlat_presets(export);
+	store_plist(export, "presets");
+	ghb_value_free(export);
 }
 
 void
@@ -1547,25 +2319,8 @@ ghb_presets_reload(signal_user_data_t *ud)
 		}
 		presets_list_insert(ud, &indices, 1);
 	}
-	store_plist(presetsPlist, "presets");
-}
-
-void
-ghb_save_queue(GValue *queue)
-{
-	store_plist(queue, "queue");
-}
-
-GValue*
-ghb_load_queue()
-{
-	return load_plist("queue");
-}
-
-void
-ghb_remove_queue_file()
-{
-	remove_plist("queue");
+	import_xlat_presets(presetsPlist);
+	store_presets();
 }
 
 void
@@ -1575,43 +2330,15 @@ ghb_presets_load()
 	if (presetsPlist == NULL)
 	{
 		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
-		store_plist(presetsPlist, "presets");
+		store_presets();
 	}
-	if (G_VALUE_TYPE(presetsPlist) == ghb_dict_get_type())
+	else if (G_VALUE_TYPE(presetsPlist) == ghb_dict_get_type())
 	{ // Presets is older dictionary format. Convert to array
-		GHashTableIter old_iter;
-		GValue *presets;
-		gchar *name;
-		GValue *orig_dict;
-
-		presets = ghb_array_value_new(32);
-		ghb_dict_iter_init(&old_iter, presetsPlist);
-		// middle (void*) cast prevents gcc warning "defreferencing type-punned
-		// pointer will break strict-aliasing rules"
-		while (g_hash_table_iter_next(
-			&old_iter, (gpointer*)(void*)&name, (gpointer*)(void*)&orig_dict))
-		{
-			GHashTableIter iter;
-			gchar *key;
-			GValue *value, *dict;
-
-			dict = ghb_dict_value_new();
-			ghb_dict_insert(dict, g_strdup("preset_name"), 
-				ghb_string_value_new(name));
-			ghb_array_append(presets, dict);
-			ghb_dict_iter_init(&iter, orig_dict);
-			// middle (void*) cast prevents gcc warning "defreferencing 
-			// type-punned pointer will break strict-aliasing rules"
-			while (g_hash_table_iter_next(
-				&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
-			{
-				ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
-			}
-		}
 		ghb_value_free(presetsPlist);
-		presetsPlist = presets;
-		store_plist(presetsPlist, "presets");
+		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
+		store_presets();
 	}
+	import_xlat_presets(presetsPlist);
 }
 
 static void
@@ -1633,8 +2360,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
 	if (indices)
 	{
-		if (ghb_presets_get_type(presetsPlist, indices, len) & 
-			PRESETS_FOLDER)
+		if (ghb_presets_get_folder(presetsPlist, indices, len))
 		{
 			gchar *message;
 			message = g_strdup_printf(
@@ -1651,7 +2377,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 	}
 	else
 	{
-		indices = presets_find_pos(path, PRESETS_CUST, &len);
+		indices = presets_find_pos(path, PRESETS_CUSTOM, &len);
 		if (indices)
 		{
 			dict = ghb_dict_value_new();
@@ -1663,26 +2389,25 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 			return;
 		}
 	}
-	ghb_dict_insert(dict, g_strdup("preset_name"), ghb_string_value_new(name));
 
 	if (ghb_settings_get_boolean(ud->settings, "allow_tweaks"))
 	{
 		gchar *str;
-		str = ghb_settings_get_string(ud->settings, "tweak_deinterlace");
+		str = ghb_settings_get_string(ud->settings, "tweak_PictureDeinterlace");
 		if (str)
 		{
-			ghb_settings_set_string(ud->settings, "deinterlace", str);
+			ghb_settings_set_string(ud->settings, "PictureDeinterlace", str);
 			g_free(str);
 		}
-		str = ghb_settings_get_string(ud->settings, "tweak_denoise");
+		str = ghb_settings_get_string(ud->settings, "tweak_PictureDenoise");
 		if (str)
 		{
-			ghb_settings_set_string(ud->settings, "denoise", str);
+			ghb_settings_set_string(ud->settings, "PictureDenoise", str);
 			g_free(str);
 		}
 	}
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
-	ghb_settings_set_int64(ud->settings, "preset_type", PRESETS_CUST);
+	ghb_settings_set_int64(ud->settings, "Type", PRESETS_CUSTOM);
 
 	internal = plist_get_dict(internalPlist, "Presets");
 	ghb_dict_iter_init(&iter, internal);
@@ -1697,11 +2422,11 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 		key2 = key;
 		if (!autoscale)
 		{
-			if (strcmp(key, "max_width") == 0)
+			if (strcmp(key, "PictureWidth") == 0)
 			{
 				key2 = "scale_width";
 			}
-			else if (strcmp(key, "max_height") == 0)
+			else if (strcmp(key, "PictureHeight") == 0)
 			{
 				key2 = "scale_height";
 			}
@@ -1709,15 +2434,27 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 		gval = ghb_settings_get_value(ud->settings, key2);
 		if (gval == NULL)
 		{
-			g_debug("Setting (%s) is not in defaults\n", (gchar*)key);
 			continue;
 		}
-		if (ghb_value_cmp(gval, value) != 0)
-		{
-			// Differs from default value.  Store it.
-			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
-		}
+		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
 	}
+	internal = plist_get_dict(internalPlist, "XlatPresets");
+	ghb_dict_iter_init(&iter, internal);
+	// middle (void*) cast prevents gcc warning "defreferencing type-punned
+	// pointer will break strict-aliasing rules"
+	while (g_hash_table_iter_next(
+			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
+	{
+		const GValue *gval;
+
+		gval = ghb_settings_get_value(ud->settings, key);
+		if (gval == NULL)
+		{
+			continue;
+		}
+		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
+	}
+	ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
 	if (replace)
 		presets_list_update_item(ud, indices, len);
 	else
@@ -1726,10 +2463,11 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 						ghb_boolean_value_new(FALSE));
 		presets_list_insert(ud, indices, len);
 	}
-	g_free(indices);
-	store_plist(presetsPlist, "presets");
+	store_presets();
 	ud->dont_clear_presets = TRUE;
-	ghb_set_preset(ud, path);
+	// Make the new preset the selected item
+	ghb_select_preset2(ud->builder, indices, len);
+	g_free(indices);
 	ud->dont_clear_presets = FALSE;
 	return;
 }
@@ -1746,8 +2484,7 @@ folder_save(signal_user_data_t *ud, const GValue *path)
 	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
 	if (indices)
 	{
-		if (!(ghb_presets_get_type(presetsPlist, indices, len) & 
-			PRESETS_FOLDER))
+		if (!ghb_presets_get_folder(presetsPlist, indices, len))
 		{
 			gchar *message;
 			message = g_strdup_printf(
@@ -1761,15 +2498,15 @@ folder_save(signal_user_data_t *ud, const GValue *path)
 		}
 		// Already exists, update its description
 		dict = presets_get_dict(presetsPlist, indices, len);
-		ghb_dict_insert(dict, g_strdup("preset_description"), 
+		ghb_dict_insert(dict, g_strdup("PresetDescription"), 
 			ghb_value_dup(preset_dict_get_value(
-				ud->settings, "preset_description")));
+				ud->settings, "PresetDescription")));
 		g_free(indices);
 		return;
 	}
 	else
 	{
-		indices = presets_find_pos(path, PRESETS_CUST, &len);
+		indices = presets_find_pos(path, PRESETS_CUSTOM, &len);
 		if (indices)
 		{
 			dict = ghb_dict_value_new();
@@ -1781,21 +2518,19 @@ folder_save(signal_user_data_t *ud, const GValue *path)
 			return;
 		}
 	}
-	ghb_dict_insert(dict, g_strdup("preset_description"), 
+	ghb_dict_insert(dict, g_strdup("PresetDescription"), 
 		ghb_value_dup(preset_dict_get_value(
-			ud->settings, "preset_description")));
-	ghb_dict_insert(dict, g_strdup("preset_name"), ghb_string_value_new(name));
+			ud->settings, "PresetDescription")));
+	ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
 	folder = ghb_array_value_new(8);
-	ghb_dict_insert(dict, g_strdup("preset_folder"), folder);
-	ghb_dict_insert(dict, g_strdup("preset_type"),
-							ghb_int64_value_new(PRESETS_FOLDER|PRESETS_CUST));
+	ghb_dict_insert(dict, g_strdup("ChildrenArray"), folder);
+	ghb_dict_insert(dict, g_strdup("Type"),
+							ghb_int64_value_new(PRESETS_CUSTOM));
+	ghb_dict_insert(dict, g_strdup("Folder"), ghb_boolean_value_new(TRUE));
 
 	presets_list_insert(ud, indices, len);
 	g_free(indices);
-	store_plist(presetsPlist, "presets");
-	ud->dont_clear_presets = TRUE;
-	ghb_set_preset(ud, path);
-	ud->dont_clear_presets = FALSE;
+	store_presets();
 	return;
 }
 
@@ -1858,73 +2593,13 @@ ghb_presets_list_clear_default(signal_user_data_t *ud)
 }
 
 static void
-ghb_select_preset2(
-	GtkBuilder *builder, 
-	gint *indices, 
-	gint len)
-{
-	GtkTreeView *treeview;
-	GtkTreeSelection *selection;
-	GtkTreeModel *store;
-	GtkTreeIter iter;
-	GtkTreePath *path;
-	
-	g_debug("ghb_select_preset2()");
-	treeview = GTK_TREE_VIEW(GHB_WIDGET(builder, "presets_list"));
-	selection = gtk_tree_view_get_selection (treeview);
-	store = gtk_tree_view_get_model (treeview);
-	path = ghb_tree_path_new_from_indices(indices, len);
-	if (path)
-	{
-		if (gtk_tree_model_get_iter(store, &iter, path))
-		{
-			gtk_tree_selection_select_iter (selection, &iter);
-		}
-		else
-		{
-			if (gtk_tree_model_get_iter_first(store, &iter))
-				gtk_tree_selection_select_iter (selection, &iter);
-		}
-		gtk_tree_path_free(path);
-	}
-}
-
-void
-ghb_select_preset(GtkBuilder *builder, const GValue *path)
-{
-	gint *indices, len;
-
-	g_debug("ghb_select_preset()");
-	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
-	if (indices)
-	{
-		ghb_select_preset2(builder, indices, len);
-		g_free(indices);
-	}
-}
-
-void
-ghb_select_default_preset(GtkBuilder *builder)
-{
-	gint *indices, len;
-
-	g_debug("ghb_select_default_preset()");
-	indices = presets_find_default(&len);
-	if (indices)
-	{
-		ghb_select_preset2(builder, indices, len);
-		g_free(indices);
-	}
-}
-
-static void
 update_audio_presets(signal_user_data_t *ud)
 {
 	g_debug("update_audio_presets");
 	const GValue *audio_list;
 
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
-	ghb_settings_set_value(ud->settings, "pref_audio_list", audio_list);
+	ghb_settings_set_value(ud->settings, "AudioList", audio_list);
 }
 
 void
@@ -1932,22 +2607,22 @@ enforce_preset_type(signal_user_data_t *ud, const GValue *path)
 {
 	gint *indices, len;
 	GtkWidget *normal, *folder;
-	gint ptype;
+	gboolean fold;
 
 	normal = GHB_WIDGET(ud->builder, "preset_type_normal");
 	folder = GHB_WIDGET(ud->builder, "preset_type_folder");
 	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
 	if (indices)
 	{
-		ptype = ghb_presets_get_type(presetsPlist, indices, len);
-		if (ptype & PRESETS_FOLDER)
+		fold = ghb_presets_get_folder(presetsPlist, indices, len);
+		if (fold)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(folder), 
 									TRUE);
 		else
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(normal), 
 									TRUE);
-		gtk_widget_set_sensitive(folder,  ptype & PRESETS_FOLDER);
-		gtk_widget_set_sensitive(normal,  !(ptype & PRESETS_FOLDER));
+		gtk_widget_set_sensitive(folder,  fold);
+		gtk_widget_set_sensitive(normal,  !fold);
 		g_free(indices);
 	}
 	else
@@ -1977,9 +2652,9 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	else
 		count = 1;
 	// Clear the description
-	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "preset_description"));
+	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
 	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
-	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "preset_name"));
+	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
 	gtk_entry_set_text(entry, name);
 	enforce_preset_type(ud, preset);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -2004,7 +2679,7 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			gint ptype;
 
 			ptype = ghb_presets_get_type(presetsPlist, indices, len);
-			if (ptype & PRESETS_CUST)
+			if (ptype == PRESETS_CUSTOM)
 			{
 				ghb_array_copy(dest, preset, count-1);
 			}
@@ -2022,8 +2697,6 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			update_audio_presets(ud);
 			settings_save(ud, dest);
 		}
-		// Make the new preset the selected item
-		ghb_select_preset(ud->builder, dest);
 		ghb_value_free(dest);
 	}
 }
@@ -2082,18 +2755,18 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		GtkWidget *dialog;
 		GtkTreePath *path;
 		gint *indices, len;
-		gint ptype;
+		gboolean folder;
 
 		gtk_tree_model_get(store, &iter, 0, &preset, -1);
 		path = gtk_tree_model_get_path(store, &iter);
 		indices = gtk_tree_path_get_indices(path);
 		len = gtk_tree_path_get_depth(path);
 
-		ptype = ghb_presets_get_type(presetsPlist, indices, len);
+		folder = ghb_presets_get_folder(presetsPlist, indices, len);
 		dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
 							GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
 							"Confirm deletion of %s:\n\n%s", 
-							(ptype & PRESETS_FOLDER) ? "folder" : "preset",
+							folder ? "folder" : "preset",
 							preset);
 		response = gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy (dialog);
@@ -2113,7 +2786,7 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			gtk_tree_selection_unselect_iter (selection, &iter);
 			if (ghb_presets_remove(presetsPlist, indices, len))
 			{
-				store_plist(presetsPlist, "presets");
+				store_presets();
 				presets_list_remove(ud, indices, len);
 			}
 			if (!valid)
@@ -2150,6 +2823,7 @@ presets_drag_motion_cb(
 	GtkTreeModel *model;
 	GtkTreeSelection *select;
 	gint src_ptype, dst_ptype;
+	gboolean src_folder, dst_folder;
 	GValue *preset;
 	gint tree_depth, ii;
 
@@ -2165,9 +2839,10 @@ presets_drag_motion_cb(
 	tree_depth = preset_tree_depth(preset);
 
 	src_ptype = ghb_presets_get_type(presetsPlist, indices, len);
+	src_folder = ghb_presets_get_folder(presetsPlist, indices, len);
 	gtk_tree_path_free(path);
 
-	if ((src_ptype & PRESETS_FOLDER) && tree_depth == 1)
+	if (src_folder && tree_depth == 1)
 		tree_depth = 2;
 
 	// The rest checks that the destination is a valid position
@@ -2179,7 +2854,7 @@ presets_drag_motion_cb(
 		return TRUE;
 	}
 	// Don't allow repositioning of builtin presets
-	if (!(src_ptype & PRESETS_CUST))
+	if (src_ptype != PRESETS_CUSTOM)
 	{
 		gdk_drag_status(ctx, 0, time);
 		return TRUE;
@@ -2198,15 +2873,16 @@ presets_drag_motion_cb(
 	indices = gtk_tree_path_get_indices(path);
 	len = gtk_tree_path_get_depth(path);
 	dst_ptype = ghb_presets_get_type(presetsPlist, indices, len);
+	dst_folder = ghb_presets_get_folder(presetsPlist, indices, len);
 	// Don't allow mixing custom presets in the builtins
-	if (!(dst_ptype & PRESETS_CUST))
+	if (dst_ptype != PRESETS_CUSTOM)
 	{
 		gdk_drag_status(ctx, 0, time);
 		return TRUE;
 	}
 
 	// Only allow *drop into* for folders
-	if (!(dst_ptype & PRESETS_FOLDER))
+	if (!dst_folder)
 	{ 
 		if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
 			drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
@@ -2234,7 +2910,8 @@ presets_drag_cb(
 	GtkTreeViewDropPosition drop_pos;
 	GtkTreeIter dstiter, srciter;
 	gint *dst_indices, dst_len, *src_indices, src_len;
-	gint src_ptype, dst_ptype;
+	gint src_ptype;
+	gboolean src_folder, dst_folder;
 	
 	GtkTreeModel *dstmodel = gtk_tree_view_get_model(dstwidget);
 			
@@ -2277,16 +2954,17 @@ presets_drag_cb(
 		src_indices = gtk_tree_path_get_indices(srcpath);
 		src_len = gtk_tree_path_get_depth(srcpath);
 		src_ptype = ghb_presets_get_type(presetsPlist, src_indices, src_len);
+		src_folder = ghb_presets_get_folder(presetsPlist, src_indices, src_len);
 		preset = ghb_value_dup(
 					presets_get_dict(presetsPlist, src_indices, src_len));
 		gtk_tree_path_free(srcpath);
 
 		// Don't allow repositioning of builtin presets
-		if (!(src_ptype & PRESETS_CUST))
+		if (src_ptype != PRESETS_CUSTOM)
 			return;
 
 		tree_depth = preset_tree_depth(preset);
-		if ((src_ptype & PRESETS_FOLDER) && tree_depth == 1)
+		if (src_folder && tree_depth == 1)
 			tree_depth = 2;
 
 		dst_len = gtk_tree_path_get_depth(path);
@@ -2302,9 +2980,9 @@ presets_drag_cb(
 			gtk_tree_path_up(path);
 		dst_indices = gtk_tree_path_get_indices(path);
 		dst_len = gtk_tree_path_get_depth(path);
-		dst_ptype = ghb_presets_get_type(presetsPlist, dst_indices, dst_len);
+		dst_folder = ghb_presets_get_folder(presetsPlist, dst_indices, dst_len);
 		// Only allow *drop into* for folders
-		if (!(dst_ptype & PRESETS_FOLDER))
+		if (!dst_folder)
 		{ 
 			if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
 				drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
@@ -2362,7 +3040,7 @@ presets_drag_cb(
 			presets_list_update_item(ud, dst_indices, dst_len);
 			gtk_tree_path_free(dstpath);
 
-			store_plist(presetsPlist, "presets");
+			store_presets();
 		}
 		gtk_tree_path_free(path);
 	}
@@ -2377,7 +3055,7 @@ preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 			ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated
 	gboolean keep_aspect, anamorphic;
-	keep_aspect = ghb_settings_get_boolean(ud->settings, "keep_aspect");
+	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
 	anamorphic = ghb_settings_get_boolean(ud->settings, "anamorphic");
 	if (!(keep_aspect || anamorphic))
 	{
@@ -2389,28 +3067,21 @@ preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	// you pass it a cropped width or height == 0.
 	gint bound;
 	bound = tinfo->height / 2 - 2;
-	widget = GHB_WIDGET (ud->builder, "crop_top");
+	widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	widget = GHB_WIDGET (ud->builder, "crop_bottom");
+	widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	bound = tinfo->width / 2 - 2;
-	widget = GHB_WIDGET (ud->builder, "crop_left");
+	widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	widget = GHB_WIDGET (ud->builder, "crop_right");
+	widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	if (ghb_settings_get_boolean(ud->settings, "autocrop"))
+	if (ghb_settings_get_boolean(ud->settings, "PictureAutoCrop"))
 	{
-		ghb_ui_update(ud, "crop_top", ghb_int64_value(tinfo->crop[0]));
-		ghb_ui_update(ud, "crop_bottom", ghb_int64_value(tinfo->crop[1]));
-		ghb_ui_update(ud, "crop_left", ghb_int64_value(tinfo->crop[2]));
-		ghb_ui_update(ud, "crop_right", ghb_int64_value(tinfo->crop[3]));
-	}
-	else
-	{
-		ghb_ui_update(ud, "crop_top", ghb_int64_value(0));
-		ghb_ui_update(ud, "crop_bottom", ghb_int64_value(0));
-		ghb_ui_update(ud, "crop_left", ghb_int64_value(0));
-		ghb_ui_update(ud, "crop_right", ghb_int64_value(0));
+		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(tinfo->crop[0]));
+		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(tinfo->crop[1]));
+		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
+		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
 	}
 }
 
@@ -2427,8 +3098,9 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
 		GtkTreePath *treepath;
-		gint *indices, len, ptype;
+		gint *indices, len;
 		GValue *path;
+		gboolean folder;
 
 		treepath = gtk_tree_model_get_path(store, &iter);
 		indices = gtk_tree_path_get_indices(treepath);
@@ -2437,15 +3109,16 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		path = preset_path_from_indices(presetsPlist, indices, len);
 		ghb_settings_take_value(ud->settings, "preset_selection", path);
 
-		ptype = ghb_presets_get_type(presetsPlist, indices, len);
-		if (!(ptype & PRESETS_FOLDER))
+		folder = ghb_presets_get_folder(presetsPlist, indices, len);
+		if (!folder)
 		{
 			ud->dont_clear_presets = TRUE;
 			// Temporarily set the video_quality range to (0,100)
 			// This is needed so the video_quality value does not get
 			// truncated when set.  The range will be readjusted below
-			GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
+			GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
 			gtk_range_set_range (GTK_RANGE(qp), 0, 100);
+			gtk_scale_set_digits(GTK_SCALE(qp), 3);
 			// Clear the audio list prior to changing the preset.  Existing 
 			// audio can cause the container extension to be automatically 
 			// changed when it shouldn't be
@@ -2463,11 +3136,27 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			}
 			ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 
-			gint vqmin, vqmax;
-			ghb_vquality_range(ud, &vqmin, &vqmax);
+			gdouble vqmin, vqmax, step, page;
+			gint digits;
+			ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits);
 			gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
-			gtk_widget_set_sensitive(widget, TRUE);
+			gtk_range_set_increments (GTK_RANGE(qp), step, page);
+			gtk_scale_set_digits(GTK_SCALE(qp), digits);
+
+			gchar *text;
+			gint crop[4];
+			GtkWidget *crop_widget;
+			crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+			crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+			crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+			crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+			crop_widget = GHB_WIDGET (ud->builder, "crop_values");
+			text = g_strdup_printf("%d:%d:%d:%d", 
+									crop[0], crop[1], crop[2], crop[3]);
+			gtk_label_set_text (GTK_LABEL(crop_widget), text);
+			g_free(text);
 		}
+		gtk_widget_set_sensitive(widget, TRUE);
 	}
 	else
 	{
@@ -2521,8 +3210,7 @@ presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
 	if (indices)
 	{
-		if (!(ghb_presets_get_type(presetsPlist, indices, len) & 
-			PRESETS_FOLDER))
+		if (!ghb_presets_get_folder(presetsPlist, indices, len))
 		{
 			ghb_presets_list_clear_default(ud);
 			presets_set_default(indices, len);

@@ -13,24 +13,7 @@ typedef struct
 	gchar *lin_val;
 } value_map_t;
 
-static value_map_t vcodec_xlat[] =
-{
-	{"MPEG-4 (FFmpeg)", "ffmpeg"},
-	{"MPEG-4 (XviD)", "xvid"},
-	{"H.264 (x264)", "x264"},
-	{"VP3 (Theora)", "theora"},
-	{NULL,NULL}
-};
-
-static value_map_t acodec_xlat[] =
-{
-	{"AAC (faac)", "faac"},
-	{"AC3 Passthru", "ac3"},
-	{"MP3 (lame)", "lame"},
-	{"Vorbis (vorbis)", "vorbis"},
-	{NULL,NULL}
-};
-
+#if 0
 static value_map_t subtitle_xlat[] =
 { 
 	{ "None", "none" },
@@ -224,6 +207,15 @@ static value_map_t subtitle_xlat[] =
 	{NULL, NULL}
 };
 
+static value_map_t vcodec_xlat[] =
+{
+	{"MPEG-4 (FFmpeg)", "ffmpeg"},
+	{"MPEG-4 (XviD)", "xvid"},
+	{"H.264 (x264)", "x264"},
+	{"VP3 (Theora)", "theora"},
+	{NULL,NULL}
+};
+
 value_map_t container_xlat[] =
 {
 	{"MP4 file", "mp4"},
@@ -248,6 +240,33 @@ value_map_t framerate_xlat[] =
 	{NULL, NULL}
 };
 
+value_map_t deint_xlat[] =
+{
+	{"0", "none"},
+	{"1", "fast"},
+	{"2", "slow"},
+	{"3", "slower"},
+	{NULL, NULL}
+};
+
+value_map_t denoise_xlat[] =
+{
+	{"0", "none"},
+	{"1", "weak"},
+	{"2", "medium"},
+	{"3", "strong"},
+	{NULL, NULL}
+};
+
+static value_map_t acodec_xlat[] =
+{
+	{"AAC (faac)", "faac"},
+	{"AC3 Passthru", "ac3"},
+	{"MP3 (lame)", "lame"},
+	{"Vorbis (vorbis)", "vorbis"},
+	{NULL,NULL}
+};
+
 value_map_t samplerate_xlat[] =
 {
 	{"Auto", "source"},
@@ -269,89 +288,73 @@ value_map_t mix_xlat[] =
 	{"AC3 Passthru", "none"},
 	{NULL, NULL}
 };
-
-value_map_t deint_xlat[] =
-{
-	{"0", "none"},
-	{"1", "fast"},
-	{"2", "slow"},
-	{"3", "slower"},
-	{NULL, NULL}
-};
-
-value_map_t denoise_xlat[] =
-{
-	{"0", "none"},
-	{"1", "weak"},
-	{"2", "medium"},
-	{"3", "strong"},
-	{NULL, NULL}
-};
+#endif
 
 typedef struct
 {
 	gchar *mac_key;
 	gchar *lin_key;
 	value_map_t *value_map;
+	gboolean same;
 	gboolean ignore;
 } key_map_t;
 
 key_map_t key_map[] = 
 {
-	{"Audio1Bitrate", NULL, NULL, FALSE},
-	{"Audio1Encoder", NULL, NULL, FALSE},
-	{"Audio1Mixdown", NULL, NULL, FALSE},
-	{"Audio1Samplerate", NULL, NULL, FALSE},
-	{"Audio1Track", NULL, NULL, FALSE},
-	{"Audio1TrackDescription", NULL, NULL, FALSE},
-	{"Audio1TrackDRCSlider", NULL, NULL, FALSE},
-	{"Audio2Bitrate", NULL, NULL, FALSE},
-	{"Audio2Encoder", NULL, NULL, FALSE},
-	{"Audio2Mixdown", NULL, NULL, FALSE},
-	{"Audio2Samplerate", NULL, NULL, FALSE},
-	{"Audio2Track", NULL, NULL, FALSE},
-	{"Audio2TrackDescription", NULL, NULL, FALSE},
-	{"Audio2TrackDRCSlider", NULL, NULL, FALSE},
-	{"ChapterMarkers", "chapter_markers", NULL, FALSE},
-	{"Default", "Default", NULL, FALSE},
-	{"FileFormat", "container", container_xlat, FALSE},
-	{"Folder", NULL, NULL, TRUE},
-	{"Mp4HttpOptimize", "http_optimize_mp4", NULL, FALSE},
-	{"Mp4iPodCompatible", "ipod_file", NULL, FALSE},
-	{"Mp4LargeFile", "large_mp4", NULL, FALSE},
-	{"PictureAutoCrop", "autocrop", NULL, FALSE},
-	{"PictureBottomCrop", NULL, NULL, TRUE},
-	{"PictureDeblock", "deblock", NULL, FALSE},
-	{"PictureDecomb", "decomb", NULL, FALSE},
-	{"PictureDeinterlace", "deinterlace", deint_xlat, FALSE},
-	{"PictureDenoise", "denoise", denoise_xlat, FALSE},
-	{"PictureDetelecine", "detelecine", NULL, FALSE},
-	{"PictureHeight", "max_height", NULL, FALSE},
-	{"PictureKeepRatio", "keep_aspect", NULL, FALSE},
-	{"PictureLeftCrop", NULL, NULL, TRUE},
-	{"PicturePAR", NULL, NULL, FALSE},
-	{"PictureRightCrop", NULL, NULL, TRUE},
-	{"PictureTopCrop", NULL, NULL, TRUE},
-	{"PictureWidth", "max_width", NULL, FALSE},
-	{"PresetDescription", "preset_description", NULL, FALSE},
-	{"PresetName", "preset_name", NULL, FALSE},
-	{"Subtitles", "subtitle_lang", subtitle_xlat, FALSE},
-	{"SubtitlesForced", "forced_subtitles", NULL, FALSE},
-	{"Type", NULL, NULL, TRUE},
-	{"UsesMaxPictureSettings", NULL, NULL, FALSE},
-	{"UsesPictureFilters", NULL, NULL, TRUE},
-	{"UsesPictureSettings", NULL, NULL, FALSE},
-	{"VFR", NULL, NULL, TRUE},
-	{"VideoAvgBitrate", "video_bitrate", NULL, FALSE},
-	{"VideoEncoder", "video_codec", vcodec_xlat, FALSE},
-	{"VideoFramerate", "framerate", framerate_xlat, FALSE},
-	{"VideoGrayScale", "grayscale", NULL, FALSE},
-	{"VideoQualitySlider", NULL, NULL, FALSE},
-	{"VideoQualityType", NULL, NULL, FALSE},
-	{"VideoTargetSize", "video_target_size", NULL, FALSE},
-	{"VideoTwoPass", "two_pass", NULL, FALSE},
-	{"VideoTurboTwoPass", "turbo", NULL, FALSE},
-	{"x264Option", "x264_options", NULL, FALSE},
+	{"Audio1Bitrate", NULL, NULL, FALSE, FALSE},
+	{"Audio1Encoder", NULL, NULL, FALSE, FALSE},
+	{"Audio1Mixdown", NULL, NULL, FALSE, FALSE},
+	{"Audio1Samplerate", NULL, NULL, FALSE, FALSE},
+	{"Audio1Track", NULL, NULL, FALSE, FALSE},
+	{"Audio1TrackDescription", NULL, NULL, FALSE, FALSE},
+	{"Audio1TrackDRCSlider", NULL, NULL, FALSE, FALSE},
+	{"Audio2Bitrate", NULL, NULL, FALSE, FALSE},
+	{"Audio2Encoder", NULL, NULL, FALSE, FALSE},
+	{"Audio2Mixdown", NULL, NULL, FALSE, FALSE},
+	{"Audio2Samplerate", NULL, NULL, FALSE, FALSE},
+	{"Audio2Track", NULL, NULL, FALSE, FALSE},
+	{"Audio2TrackDescription", NULL, NULL, FALSE, FALSE},
+	{"Audio2TrackDRCSlider", NULL, NULL, FALSE, FALSE},
+	{"ChapterMarkers", NULL, NULL, TRUE, FALSE},
+	{"Default", NULL, NULL, TRUE, FALSE},
+	{"FileFormat", NULL, NULL, TRUE, FALSE},
+	{"Folder", NULL, NULL, TRUE, FALSE},
+	{"Mp4HttpOptimize", NULL, NULL, TRUE, FALSE},
+	{"Mp4iPodCompatible", NULL, NULL, TRUE, FALSE},
+	{"Mp4LargeFile", NULL, NULL, TRUE, FALSE},
+	{"PictureAutoCrop", NULL, NULL, TRUE, FALSE},
+	{"PictureBottomCrop", NULL, NULL, TRUE, FALSE},
+	{"PictureDeblock", NULL, NULL, TRUE, FALSE},
+	{"PictureDecomb", NULL, NULL, TRUE, FALSE},
+	{"PictureDeinterlace", NULL, NULL, TRUE, FALSE},
+	{"PictureDenoise", NULL, NULL, TRUE, FALSE},
+	{"PictureDetelecine", NULL, NULL, TRUE, FALSE},
+	{"PictureHeight", NULL, NULL, TRUE, FALSE},
+	{"PictureKeepRatio", NULL, NULL, TRUE, FALSE},
+	{"PictureLeftCrop", NULL, NULL, TRUE, FALSE},
+	{"PicturePAR", NULL, NULL, TRUE, FALSE},
+	{"PictureRightCrop", NULL, NULL, TRUE, FALSE},
+	{"PictureTopCrop", NULL, NULL, TRUE, FALSE},
+	{"PictureWidth", NULL, NULL, TRUE, FALSE},
+	{"PresetDescription", NULL, NULL, TRUE, FALSE},
+	{"PresetName", NULL, NULL, TRUE, FALSE},
+	{"Subtitles", NULL, NULL, TRUE, FALSE},
+	{"SubtitlesForced", NULL, NULL, TRUE, FALSE},
+	{"Type", NULL, NULL, TRUE, FALSE},
+	{"UsesMaxPictureSettings", NULL, NULL, TRUE, FALSE},
+	{"UsesPictureFilters", NULL, NULL, TRUE, FALSE},
+	{"UsesPictureSettings", NULL, NULL, TRUE, FALSE},
+	{"VFR", NULL, NULL, FALSE, TRUE},
+	{"VideoAvgBitrate", NULL, NULL, TRUE, FALSE},
+	{"VideoEncoder", NULL, NULL, TRUE, FALSE},
+	{"VideoFramerate", NULL, NULL, TRUE, FALSE},
+	{"VideoGrayScale", NULL, NULL, TRUE, FALSE},
+	{"VideoQualitySlider", NULL, NULL, TRUE, FALSE},
+	{"VideoQualityType", NULL, NULL, TRUE, FALSE},
+	{"VideoTargetSize", NULL, NULL, TRUE, FALSE},
+	{"VideoTwoPass", NULL, NULL, TRUE, FALSE},
+	{"VideoTurboTwoPass", NULL, NULL, TRUE, FALSE},
+	{"x264Option", NULL, NULL, TRUE, FALSE},
 	{NULL, NULL}
 };
 
@@ -381,7 +384,11 @@ value_xlat(
 	GValue *mac_val)
 {
 	GValue *gval, *def_val;
-	const gchar *lin_key = key_map[key_index].lin_key;
+	const gchar *lin_key;
+	if (key_map[key_index].same)
+		lin_key = key_map[key_index].mac_key;
+	else
+		lin_key = key_map[key_index].lin_key;
 	value_map_t *value_map = key_map[key_index].value_map;
 
 	def_val = ghb_dict_lookup(defaults, lin_key);
@@ -437,156 +444,49 @@ value_xlat(
 
 key_map_t audio_key_map[] =
 {
-	{"Audio1Bitrate", "audio_bitrate", NULL, FALSE},
-	{"Audio1Encoder", "audio_codec", acodec_xlat, FALSE},
-	{"Audio1Mixdown", "audio_mix", mix_xlat, FALSE},
-	{"Audio1Samplerate", "audio_rate", samplerate_xlat, FALSE},
-	{"Audio1Track", NULL, NULL, TRUE},
-	{"Audio1TrackDescription", NULL, NULL, TRUE},
-	{"Audio1TrackDRCSlider", "audio_drc", NULL, FALSE},
-	{"Audio2Bitrate", "audio_bitrate", NULL, FALSE},
-	{"Audio2Encoder", "audio_codec", acodec_xlat, FALSE},
-	{"Audio2Mixdown", "audio_mix", mix_xlat, FALSE},
-	{"Audio2Samplerate", "audio_rate", samplerate_xlat, FALSE},
-	{"Audio2Track", NULL, NULL, TRUE},
-	{"Audio2TrackDescription", NULL, NULL, TRUE},
-	{"Audio2TrackDRCSlider", "audio_drc", NULL, FALSE},
+	{"Audio1Bitrate", "AudioBitrate", NULL, FALSE, FALSE},
+	{"Audio1Encoder", "AudioEncoder", NULL, FALSE, FALSE},
+	{"Audio1Mixdown", "AudioMixdown", NULL, FALSE},
+	{"Audio1Samplerate", "AudioSamplerate", NULL, FALSE, FALSE},
+	{"Audio1Track", "AudioTrack", NULL, FALSE, FALSE},
+	{"Audio1TrackDescription", "AudioTrackDescription", NULL, FALSE, FALSE},
+	{"Audio1TrackDRCSlider", "AudioTrackDRCSlider", NULL, FALSE, FALSE},
+	{"Audio2Bitrate", "AudioBitrate", NULL, FALSE, FALSE},
+	{"Audio2Encoder", "AudioEncoder", NULL, FALSE, FALSE},
+	{"Audio2Mixdown", "AudioMixdown", NULL, FALSE, FALSE},
+	{"Audio2Samplerate", "AudioSamplerate", NULL, FALSE, FALSE},
+	{"Audio2Track", "AudioTrack", NULL, FALSE, FALSE},
+	{"Audio2TrackDescription", "AudioTrackDescription", NULL, FALSE, FALSE},
+	{"Audio2TrackDRCSlider", "AudioTrackDRCSlider", NULL, FALSE, FALSE},
 	{NULL, NULL}
 };
 
 static void
 hard_value_xlat(GValue *lin_dict, const gchar *mac_key, GValue *mac_val)
 {
-	if (strcmp(mac_key, "VideoQualitySlider") == 0)
-	{
-		gint vquality;
-
-		vquality = (ghb_value_double(mac_val) + 0.005) * 100.0;
-		ghb_dict_insert(lin_dict, "video_quality", 
-							ghb_int_value_new(vquality));
-	}
-	else if (strcmp(mac_key, "UsesMaxPictureSettings") == 0)
-	{
-		GValue *gval;
-
-		gval = ghb_dict_lookup(lin_dict, "autoscale");
-		if (gval == NULL && ghb_value_boolean(mac_val))
-		{
-			ghb_dict_insert(lin_dict, "autoscale", ghb_boolean_value_new(TRUE));
-		}
-	}
-	else if (strcmp(mac_key, "UsesPictureSettings") == 0)
-	{
-		GValue *gval;
-
-		gval = ghb_dict_lookup(lin_dict, "autoscale");
-		if (gval == NULL && ghb_value_int(mac_val) == 2)
-		{
-			ghb_dict_insert(lin_dict, "autoscale", ghb_boolean_value_new(TRUE));
-		}
-	}
-	else if (strcmp(mac_key, "PicturePAR") == 0)
-	{
-		gint ana;
-
-		ana = ghb_value_int(mac_val);
-		switch (ana)
-		{
-		case 0:
-		{
-			ghb_dict_insert(lin_dict, "anamorphic", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "round_dimensions", 
-							ghb_boolean_value_new(TRUE));
-		} break;
-		case 1:
-		{
-			ghb_dict_insert(lin_dict, "anamorphic", 
-							ghb_boolean_value_new(TRUE));
-			ghb_dict_insert(lin_dict, "round_dimensions", 
-							ghb_boolean_value_new(FALSE));
-		} break;
-		case 2:
-		{
-			ghb_dict_insert(lin_dict, "anamorphic", 
-							ghb_boolean_value_new(TRUE));
-			ghb_dict_insert(lin_dict, "round_dimensions", 
-							ghb_boolean_value_new(TRUE));
-		} break;
-		default:
-		{
-			ghb_dict_insert(lin_dict, "anamorphic", 
-							ghb_boolean_value_new(TRUE));
-			ghb_dict_insert(lin_dict, "round_dimensions", 
-							ghb_boolean_value_new(TRUE));
-		} break;
-		}
-	}
-	else if (strcmp(mac_key, "VideoQualityType") == 0)
-	{
-		// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
-		gint vqtype;
-
-		vqtype = ghb_value_int(mac_val);
-		switch (vqtype)
-		{
-		case 0:
-		{
-			ghb_dict_insert(lin_dict, "vquality_type_target", 
-							ghb_boolean_value_new(TRUE));
-			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "vquality_type_constant", 
-							ghb_boolean_value_new(FALSE));
-		} break;
-		case 1:
-		{
-			ghb_dict_insert(lin_dict, "vquality_type_target", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
-							ghb_boolean_value_new(TRUE));
-			ghb_dict_insert(lin_dict, "vquality_type_constant", 
-							ghb_boolean_value_new(FALSE));
-		} break;
-		case 2:
-		{
-			ghb_dict_insert(lin_dict, "vquality_type_target", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "vquality_type_constant", 
-							ghb_boolean_value_new(TRUE));
-		} break;
-		default:
-		{
-			ghb_dict_insert(lin_dict, "vquality_type_target", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "vquality_type_bitrate", 
-							ghb_boolean_value_new(FALSE));
-			ghb_dict_insert(lin_dict, "vquality_type_constant", 
-							ghb_boolean_value_new(TRUE));
-		} break;
-		}
-	}
-	else
 	{
 		gint key_index;
 		GValue *audio_defaults;
 
 		audio_defaults = ghb_array_get_nth(
-			ghb_dict_lookup(defaults, "pref_audio_list"), 0);
+			ghb_dict_lookup(defaults, "AudioList"), 0);
 		key_index = key_xlat(audio_key_map, mac_key);
 		if (key_index >= 0)
 		{
 			gint audio_index, count, ii;
 			GValue *alist, *adict, *val;
+			const gchar *lin_key;
 
+			if (audio_key_map[key_index].same)
+				lin_key = audio_key_map[key_index].mac_key;
+			else
+				lin_key = audio_key_map[key_index].lin_key;
 			audio_index = mac_key[5] - '1';
-			alist = ghb_dict_lookup(lin_dict, "pref_audio_list");
+			alist = ghb_dict_lookup(lin_dict, "AudioList");
 			if (alist == NULL)
 			{
 				alist = ghb_array_value_new(8);
-				ghb_dict_insert(lin_dict, "pref_audio_list", alist);
+				ghb_dict_insert(lin_dict, "AudioList", alist);
 			}
 			count = ghb_array_len(alist);
 			for (ii = count; ii <= audio_index; ii++)
@@ -598,8 +498,7 @@ hard_value_xlat(GValue *lin_dict, const gchar *mac_key, GValue *mac_val)
 			val = value_xlat(audio_defaults, audio_key_map, key_index, mac_val);
 			if (val)
 			{
-				ghb_dict_insert(adict, 
-							g_strdup(audio_key_map[key_index].lin_key), val);
+				ghb_dict_insert(adict, g_strdup(lin_key), val);
 			}
 		}
 	}
@@ -623,13 +522,18 @@ parse_preset_dict(GValue *mac_dict, GValue *lin_dict)
 		key_index = key_xlat(key_map, key);
 		if (key_index >= 0)
 		{ // The simple translations
-			if (key_map[key_index].lin_key)
+			const gchar *lin_key;
+
+			if (key_map[key_index].same)
+				lin_key = key_map[key_index].mac_key;
+			else
+				lin_key = key_map[key_index].lin_key;
+			if (lin_key)
 			{
 				val = value_xlat(defaults, key_map, key_index, mac_val);
 				if (val)
 				{
-					ghb_dict_insert(lin_dict, 
-								g_strdup(key_map[key_index].lin_key), val);
+					ghb_dict_insert(lin_dict, g_strdup(lin_key), val);
 				}
 			}
 			else
@@ -660,13 +564,13 @@ parse_preset_array(GValue *mac_array, GValue *lin_array)
 		gval = ghb_dict_lookup(mac_dict, "PresetName");
 		if (gval)
 		{
-			ghb_dict_insert(lin_dict, g_strdup("preset_name"), 
+			ghb_dict_insert(lin_dict, g_strdup("PresetName"), 
 							ghb_value_dup(gval));
 		}
 		gval = ghb_dict_lookup(mac_dict, "PresetDescription");
 		if (gval)
 		{
-			ghb_dict_insert(lin_dict, g_strdup("preset_description"), 
+			ghb_dict_insert(lin_dict, g_strdup("PresetDescription"), 
 							ghb_value_dup(gval));
 		}
 		gval = ghb_dict_lookup(mac_dict, "Folder");
@@ -676,14 +580,16 @@ parse_preset_array(GValue *mac_array, GValue *lin_array)
 
 			mval = ghb_dict_lookup(mac_dict, "ChildrenArray");
 			lval = ghb_array_value_new(32);
-			ghb_dict_insert(lin_dict, g_strdup("preset_folder"), lval);
-			ghb_dict_insert(lin_dict, g_strdup("preset_type"), 
-							ghb_int_value_new(2));
+			ghb_dict_insert(lin_dict, g_strdup("ChildrenArray"), lval);
+			ghb_dict_insert(lin_dict, g_strdup("Folder"), 
+							ghb_boolean_value_new(TRUE));
+			ghb_dict_insert(lin_dict, g_strdup("Type"), 
+							ghb_int_value_new(0));
 			parse_preset_array(mval, lval);
 		}
 		else
 		{ // Normal preset
-			ghb_dict_insert(lin_dict, g_strdup("preset_type"), 
+			ghb_dict_insert(lin_dict, g_strdup("Type"), 
 							ghb_int_value_new(0));
 			parse_preset_dict(mac_dict, lin_dict);
 		}

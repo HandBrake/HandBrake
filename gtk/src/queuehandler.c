@@ -70,7 +70,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gchar *dest, *preset, *vol_name, *basename;
 	const gchar *vcodec, *container;
 	gchar *fps, *vcodec_abbr;
-	gint title, start_chapter, end_chapter, width, height, vqvalue;
+	gint title, start_chapter, end_chapter, width, height;
 	gint source_width, source_height;
 	gboolean pass2, anamorphic, round_dim, keep_aspect, vqtype, turbo;
 	gboolean tweaks;
@@ -84,7 +84,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	title = ghb_settings_combo_int(settings, "title");
 	start_chapter = ghb_settings_get_int(settings, "start_chapter");
 	end_chapter = ghb_settings_get_int(settings, "end_chapter");
-	pass2 = ghb_settings_get_boolean(settings, "two_pass");
+	pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
 	vol_name = ghb_settings_get_string(settings, "volume_label");
 	dest = ghb_settings_get_string(settings, "destination");
 	basename = g_path_get_basename(dest);
@@ -130,12 +130,12 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gint mux;
 	const GValue *path;
 
-	container = ghb_settings_combo_option(settings, "container");
-	mux = ghb_settings_combo_int(settings, "container");
+	container = ghb_settings_combo_option(settings, "FileFormat");
+	mux = ghb_settings_combo_int(settings, "FileFormat");
 	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
 	path = ghb_settings_get_value(settings, "preset");
 	preset = ghb_preset_path_string(path);
-	markers = ghb_settings_get_boolean(settings, "chapter_markers");
+	markers = ghb_settings_get_boolean(settings, "ChapterMarkers");
 
 	if (preset_modified)
 		g_string_append_printf(str, 
@@ -161,9 +161,9 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	{
 		gboolean ipod, http, large;
 
-		ipod = ghb_settings_get_boolean(settings, "ipod_file");
-		http = ghb_settings_get_boolean(settings, "http_optimize_mp4");
-		large = ghb_settings_get_boolean(settings, "large_mp4");
+		ipod = ghb_settings_get_boolean(settings, "Mp4iPodCompatible");
+		http = ghb_settings_get_boolean(settings, "Mp4HttpOptimize");
+		large = ghb_settings_get_boolean(settings, "Mp4LargeFile");
 		if (http || ipod || large)
 		{
 			g_string_append_printf(str, "<b>MP4 Options:</b><small>");
@@ -182,8 +182,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	width = ghb_settings_get_int(settings, "scale_width");
 	height = ghb_settings_get_int(settings, "scale_height");
 	anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
-	round_dim = ghb_settings_get_boolean(settings, "round_dimensions");
-	keep_aspect = ghb_settings_get_boolean(settings, "keep_aspect");
+	round_dim = ghb_settings_get_boolean(settings, "ModDimensions");
+	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
 
 	gchar *aspect_desc;
 	if (anamorphic)
@@ -209,39 +209,51 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		}
 	}
 	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
-	vqvalue = 0;
 
 	gchar *vq_desc = "Error";
 	gchar *vq_units = "";
+	gchar *vqstr;
+	gdouble vqvalue;
 	if (!vqtype)
 	{
 		vqtype = ghb_settings_get_boolean(settings, "vquality_type_target");
 		if (!vqtype)
 		{
 			// Has to be bitrate
-			vqvalue = ghb_settings_get_int(settings, "video_bitrate");
+			vqvalue = ghb_settings_get_int(settings, "VideoAvgBitrate");
 			vq_desc = "Bitrate:";
 			vq_units = "kbps";
 		}
 		else
 		{
 			// Target file size
-			vqvalue = ghb_settings_get_int(settings, "video_target_size");
+			vqvalue = ghb_settings_get_int(settings, "VideoTargetSize");
 			vq_desc = "Target Size:";
 			vq_units = "MB";
 		}
+		vqstr = g_strdup_printf("%d", (gint)vqvalue);
 	}
 	else
 	{
 		// Constant quality
-		vqvalue = ghb_settings_get_int(settings, "video_quality");
+		vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
 		vq_desc = "Constant Quality:";
+		if (ghb_settings_get_boolean(settings, "directqp"))
+		{
+			vqstr = g_strdup_printf("%d", (gint)vqvalue);
+			vq_units = "(crf)";
+		}
+		else
+		{
+			vqstr = g_strdup_printf("%.1f", 100*vqvalue);
+			vq_units = "%";
+		}
 	}
-	fps = ghb_settings_get_string(settings, "framerate");
+	fps = ghb_settings_get_string(settings, "VideoFramerate");
 	if (strcmp("source", fps) == 0)
 	{
 		g_free(fps);
-		if (ghb_settings_get_boolean(settings, "detelecine"))
+		if (ghb_settings_get_boolean(settings, "PictureDetelecine"))
 			fps = g_strdup("Same As Source (vfr detelecine)");
 		else
 			fps = g_strdup("Same As Source (variable)");
@@ -253,8 +265,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		g_free(fps);
 		fps = tmp;
 	}
-	vcodec = ghb_settings_combo_option(settings, "video_codec");
-	vcodec_abbr = ghb_settings_get_string(settings, "video_codec");
+	vcodec = ghb_settings_combo_option(settings, "VideoEncoder");
+	vcodec_abbr = ghb_settings_get_string(settings, "VideoEncoder");
 	source_width = ghb_settings_get_int(settings, "source_width");
 	source_height = ghb_settings_get_int(settings, "source_height");
 	g_string_append_printf(str,
@@ -264,9 +276,9 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gboolean decomb;
 	gboolean filters = FALSE;
 
-	decomb = ghb_settings_get_boolean(settings, "decomb");
+	decomb = ghb_settings_get_boolean(settings, "PictureDecomb");
 	g_string_append_printf(str, "<b>Filters:</b><small>");
-	if (ghb_settings_get_boolean(settings, "detelecine"))
+	if (ghb_settings_get_boolean(settings, "PictureDetelecine"))
 	{
 		g_string_append_printf(str, " - Detelecine");
 		filters = TRUE;
@@ -279,31 +291,31 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	else
 	{
 		gint deint = ghb_settings_combo_int(settings, 
-					tweaks ? "tweak_deinterlace":"deinterlace");
+					tweaks ? "tweak_PictureDeinterlace":"PictureDeinterlace");
 		if (deint)
 		{
 			const gchar *opt = ghb_settings_combo_option(settings,
-					tweaks ? "tweak_deinterlace":"deinterlace");
+					tweaks ? "tweak_PictureDeinterlace":"PictureDeinterlace");
 			g_string_append_printf(str, " - Deinterlace: %s", opt);
 			filters = TRUE;
 		}
 	}
 	gint denoise = ghb_settings_combo_int(settings, 
-				tweaks ? "tweak_denoise":"denoise");
+				tweaks ? "tweak_PictureDenoise":"PictureDenoise");
 	if (denoise)
 	{
 		const gchar *opt = ghb_settings_combo_option(settings,
-				tweaks ? "tweak_denoise":"denoise");
+				tweaks ? "tweak_PictureDenoise":"PictureDenoise");
 		g_string_append_printf(str, " - Denoise: %s", opt);
 		filters = TRUE;
 	}
-	gint deblock = ghb_settings_get_int(settings, "deblock");
+	gint deblock = ghb_settings_get_int(settings, "PictureDeblock");
 	if (deblock >= 5)
 	{
 		g_string_append_printf(str, " - Deblock (%d)", deblock);
 		filters = TRUE;
 	}
-	if (ghb_settings_get_boolean(settings, "grayscale"))
+	if (ghb_settings_get_boolean(settings, "VideoGrayScale"))
 	{
 		g_string_append_printf(str, " - Grayscale");
 		filters = TRUE;
@@ -313,10 +325,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	g_string_append_printf(str, "</small>\n");
 
 	g_string_append_printf(str,
-		"<b>Video:</b> <small>%s, Framerate: %s, %s %d%s</small>\n",
-		 vcodec, fps, vq_desc, vqvalue, vq_units);
+		"<b>Video:</b> <small>%s, Framerate: %s, %s %s%s</small>\n",
+		 vcodec, fps, vq_desc, vqstr, vq_units);
 
-	turbo = ghb_settings_get_boolean(settings, "turbo");
+	turbo = ghb_settings_get_boolean(settings, "VideoTurboTwoPass");
 	if (turbo)
 	{
 		g_string_append_printf(str, "<b>Turbo:</b> <small>On</small>\n");
@@ -342,16 +354,16 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
 		asettings = ghb_array_get_nth(audio_list, ii);
 
-		acodec = ghb_settings_combo_option(asettings, "audio_codec");
-		bitrate = ghb_settings_get_string(asettings, "audio_bitrate");
-		samplerate = ghb_settings_get_string(asettings, "audio_rate");
+		acodec = ghb_settings_combo_option(asettings, "AudioEncoder");
+		bitrate = ghb_settings_get_string(asettings, "AudioBitrate");
+		samplerate = ghb_settings_get_string(asettings, "AudioSamplerate");
 		if (strcmp("source", samplerate) == 0)
 		{
 			g_free(samplerate);
 			samplerate = g_strdup("Same As Source");
 		}
-		track = ghb_settings_get_string(asettings, "audio_track_long");
-		mix = ghb_settings_combo_option(asettings, "audio_mix");
+		track = ghb_settings_get_string(asettings, "AudioTrackDescription");
+		mix = ghb_settings_combo_option(asettings, "AudioMixdown");
 		g_string_append_printf(str,
 			"<b>Audio:</b><small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s</small>",
 			 track, acodec, mix, samplerate, bitrate);
@@ -370,25 +382,6 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	g_free(vol_name);
 	g_free(dest);
 	g_free(preset);
-}
-
-static gint64
-estimate_file_size(signal_user_data_t *ud)
-{
-	ghb_title_info_t tinfo;
-	gint duration;
-	gint bitrate;
-	gint64 size;
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	if (titleindex < 0) return 0;
-			
-	if (!ghb_get_title_info(&tinfo, titleindex)) return 0;
-	duration = ((tinfo.hours*60)+tinfo.minutes)*60+tinfo.seconds;
-	bitrate = ghb_guess_bitrate(ud->settings);
-	size = (gint64)duration * (gint64)bitrate/8;
-	return size;
 }
 
 void
@@ -418,19 +411,19 @@ audio_list_refresh(signal_user_data_t *ud)
 				return;
 			asettings = ghb_array_get_nth(audio_list, row);
 
-			track = ghb_settings_combo_option(asettings, "audio_track");
-			codec = ghb_settings_combo_option(asettings, "audio_codec");
-			br = ghb_settings_combo_option(asettings, "audio_bitrate");
-			sr = ghb_settings_combo_option(asettings, "audio_rate");
-			mix = ghb_settings_combo_option(asettings, "audio_mix");
-			drc = ghb_settings_get_string(asettings, "audio_drc");
+			track = ghb_settings_combo_option(asettings, "AudioTrack");
+			codec = ghb_settings_combo_option(asettings, "AudioEncoder");
+			br = ghb_settings_combo_option(asettings, "AudioBitrate");
+			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
+			mix = ghb_settings_combo_option(asettings, "AudioMixdown");
+			drc = ghb_settings_get_string(asettings, "AudioTrackDRCSlider");
 
-			s_track = ghb_settings_get_string(asettings, "audio_track");
-			s_codec = ghb_settings_get_string(asettings, "audio_codec");
-			s_br = ghb_settings_get_string(asettings, "audio_bitrate");
-			s_sr = ghb_settings_get_string(asettings, "audio_rate");
-			s_mix = ghb_settings_get_string(asettings, "audio_mix");
-			s_drc = ghb_settings_get_double(asettings, "audio_drc");
+			s_track = ghb_settings_get_string(asettings, "AudioTrack");
+			s_codec = ghb_settings_get_string(asettings, "AudioEncoder");
+			s_br = ghb_settings_get_string(asettings, "AudioBitrate");
+			s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
+			s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
+			s_drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
 
 			gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 				// These are displayed in list
@@ -539,7 +532,7 @@ validate_settings(signal_user_data_t *ud)
 			size = g_file_info_get_attribute_uint64(info, 
 									G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
 			
-			gint64 fsize = estimate_file_size(ud);
+			gint64 fsize = 10L * 1024L * 1024L * 1024L;
 			if (size < fsize)
 			{
 				message = g_strdup_printf(

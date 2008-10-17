@@ -273,7 +273,7 @@ set_destination(signal_user_data_t *ud)
 		gchar *dir, *new_name;
 		
 		filename = ghb_settings_get_string(ud->settings, "destination");
-		extension = ghb_settings_get_string(ud->settings, "container");
+		extension = ghb_settings_get_string(ud->settings, "FileFormat");
 		dir = g_path_get_dirname (filename);
 		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
 		if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
@@ -695,7 +695,7 @@ update_destination_extension(signal_user_data_t *ud)
 	GtkEntry *entry;
 
 	g_debug("update_destination_extension ()");
-	extension = ghb_settings_get_string(ud->settings, "container");
+	extension = ghb_settings_get_string(ud->settings, "FileFormat");
 	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "destination"));
 	filename = g_strdup(gtk_entry_get_text(entry));
 	for (ii = 0; containers[ii] != NULL; ii++)
@@ -875,10 +875,10 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		gchar *container;
 
-		container = ghb_settings_get_string(ud->settings, "container");
+		container = ghb_settings_get_string(ud->settings, "FileFormat");
 		if (strcmp(container, "mp4") == 0)
 		{
-			ghb_ui_update(ud, "container", ghb_string_value("m4v"));
+			ghb_ui_update(ud, "FileFormat", ghb_string_value("m4v"));
 		}
 		g_free(container);
 	}
@@ -948,7 +948,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 		ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated
 	gboolean keep_aspect, anamorphic;
-	keep_aspect = ghb_settings_get_boolean(ud->settings, "keep_aspect");
+	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
 	anamorphic = ghb_settings_get_boolean(ud->settings, "anamorphic");
 	if (!(keep_aspect || anamorphic))
 	{
@@ -960,29 +960,34 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	// you pass it a cropped width or height == 0.
 	gint bound;
 	bound = tinfo->height / 2 - 2;
-	widget = GHB_WIDGET (ud->builder, "crop_top");
+	widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	widget = GHB_WIDGET (ud->builder, "crop_bottom");
+	widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	bound = tinfo->width / 2 - 2;
-	widget = GHB_WIDGET (ud->builder, "crop_left");
+	widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	widget = GHB_WIDGET (ud->builder, "crop_right");
+	widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	if (ghb_settings_get_boolean(ud->settings, "autocrop"))
+	if (ghb_settings_get_boolean(ud->settings, "PictureAutoCrop"))
 	{
-		ghb_ui_update(ud, "crop_top", ghb_int64_value(tinfo->crop[0]));
-		ghb_ui_update(ud, "crop_bottom", ghb_int64_value(tinfo->crop[1]));
-		ghb_ui_update(ud, "crop_left", ghb_int64_value(tinfo->crop[2]));
-		ghb_ui_update(ud, "crop_right", ghb_int64_value(tinfo->crop[3]));
+		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(tinfo->crop[0]));
+		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(tinfo->crop[1]));
+		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
+		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
 	}
-	else
-	{
-		ghb_ui_update(ud, "crop_top", ghb_int64_value(0));
-		ghb_ui_update(ud, "crop_bottom", ghb_int64_value(0));
-		ghb_ui_update(ud, "crop_left", ghb_int64_value(0));
-		ghb_ui_update(ud, "crop_right", ghb_int64_value(0));
-	}
+	gint width, height, crop[4];
+	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+	crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+	crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+	width = tinfo->width - crop[2] - crop[3];
+	height = tinfo->height - crop[0] - crop[1];
+	widget = GHB_WIDGET (ud->builder, "crop_dimensions");
+	text = g_strdup_printf ("%d x %d", width, height);
+	gtk_label_set_text (GTK_LABEL(widget), text);
+	g_free(text);
+
 	g_debug("setting max end chapter %d", tinfo->num_chapters);
 	widget = GHB_WIDGET (ud->builder, "end_chapter");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
@@ -1045,18 +1050,16 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_title_info_t tinfo;
 	gint titleindex;
-	GValue *preset;
 	
 	g_debug("title_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	ghb_update_ui_combo_box (ud->builder, "audio_track", titleindex, FALSE);
-	ghb_update_ui_combo_box (ud->builder, "subtitle_lang", titleindex, FALSE);
+	ghb_update_ui_combo_box (ud->builder, "AudioTrack", titleindex, FALSE);
+	ghb_update_ui_combo_box (ud->builder, "Subtitles", titleindex, FALSE);
 
-	preset = ghb_settings_get_value (ud->settings, "preset");
-	ghb_update_from_preset(ud, preset, "subtitle_lang");
+	ghb_update_from_preset(ud, "Subtitles");
 	if (ghb_get_title_info (&tinfo, titleindex))
 	{
 		show_title_info(ud, &tinfo);
@@ -1067,7 +1070,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
 	{
 		gint bitrate = ghb_calculate_target_bitrate (ud->settings, titleindex);
-		ghb_ui_update(ud, "video_bitrate", ghb_int64_value(bitrate));
+		ghb_ui_update(ud, "VideoAvgBitrate", ghb_int64_value(bitrate));
 	}
 
 	// Unfortunately, there is no way to query how many frames were
@@ -1127,7 +1130,7 @@ deint_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 	signal_user_data_t *ud)
 {
 	g_debug("deint_tweak_focus_out_cb ()");
-	validate_filter_widget(ud, "tweak_deinterlace");
+	validate_filter_widget(ud, "tweak_PictureDeinterlace");
 	return FALSE;
 }
 
@@ -1136,7 +1139,7 @@ denoise_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 	signal_user_data_t *ud)
 {
 	g_debug("denoise_tweak_focus_out_cb ()");
-	validate_filter_widget(ud, "tweak_noise");
+	validate_filter_widget(ud, "tweak_PictureDenoise");
 	return FALSE;
 }
 
@@ -1153,14 +1156,23 @@ http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 void
 vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	gint vqmin, vqmax;
+	gdouble vqmin, vqmax, step, page;
+	gint digits;
+	gint vcodec;
 
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
-	ghb_vquality_range(ud, &vqmin, &vqmax);
-	GtkWidget *qp = GHB_WIDGET(ud->builder, "video_quality");
+	ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits);
+	GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
 	gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
+	gtk_range_set_increments (GTK_RANGE(qp), step, page);
+	gtk_scale_set_digits(GTK_SCALE(qp), digits);
+	vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+	if (vcodec != HB_VCODEC_X264 && vcodec != HB_VCODEC_FFMPEG)
+	{
+		ghb_ui_update(ud, "directqp", ghb_boolean_value(FALSE));
+	}
 }
 
 void
@@ -1176,7 +1188,7 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		gint titleindex;
 		titleindex = ghb_settings_combo_int(ud->settings, "title");
 		gint bitrate = ghb_calculate_target_bitrate (ud->settings, titleindex);
-		ghb_ui_update(ud, "video_bitrate", ghb_int64_value(bitrate));
+		ghb_ui_update(ud, "VideoAvgBitrate", ghb_int64_value(bitrate));
 	}
 }
 
@@ -1263,10 +1275,10 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 
-	crop[0] = ghb_settings_get_int(ud->settings, "crop_top");
-	crop[1] = ghb_settings_get_int(ud->settings, "crop_bottom");
-	crop[2] = ghb_settings_get_int(ud->settings, "crop_left");
-	crop[3] = ghb_settings_get_int(ud->settings, "crop_right");
+	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+	crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+	crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (ghb_get_title_info (&tinfo, titleindex))
 	{
@@ -1300,7 +1312,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	
 	gchar *text;
 	
-	text = ghb_settings_get_boolean(ud->settings, "autocrop") ? "On" : "Off";
+	text = ghb_settings_get_boolean(ud->settings, "PictureAutoCrop") ? "On" : "Off";
 	widget = GHB_WIDGET (ud->builder, "crop_auto");
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	text = ghb_settings_get_boolean(ud->settings, "autoscale") ? "On" : "Off";
@@ -2232,30 +2244,30 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_pref_save(ud->settings, name);
 
 	gboolean tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
-	widget = GHB_WIDGET(ud->builder, "deinterlace");
+	widget = GHB_WIDGET(ud->builder, "PictureDeinterlace");
 	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_deinterlace");
+	widget = GHB_WIDGET(ud->builder, "tweak_PictureDeinterlace");
 	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
 
-	widget = GHB_WIDGET(ud->builder, "denoise");
+	widget = GHB_WIDGET(ud->builder, "PictureDenoise");
 	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_denoise");
+	widget = GHB_WIDGET(ud->builder, "tweak_PictureDenoise");
 	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
 	if (tweaks)
 	{
 		const GValue *value;
-		value = ghb_settings_get_value(ud->settings, "deinterlace");
-		ghb_ui_update(ud, "tweak_deinterlace", value);
-		value = ghb_settings_get_value(ud->settings, "denoise");
-		ghb_ui_update(ud, "tweak_denoise", value);
+		value = ghb_settings_get_value(ud->settings, "PictureDeinterlace");
+		ghb_ui_update(ud, "tweak_PictureDeinterlace", value);
+		value = ghb_settings_get_value(ud->settings, "PictureDenoise");
+		ghb_ui_update(ud, "tweak_PictureDenoise", value);
 	}
 	else
 	{
 		const GValue *value;
-		value = ghb_settings_get_value(ud->settings, "tweak_deinterlace");
-		ghb_ui_update(ud, "deinterlace", value);
-		value = ghb_settings_get_value(ud->settings, "tweak_denoise");
-		ghb_ui_update(ud, "denoise", value);
+		value = ghb_settings_get_value(ud->settings, "tweak_PictureDeinterlace");
+		ghb_ui_update(ud, "PictureDeinterlace", value);
+		value = ghb_settings_get_value(ud->settings, "tweak_PictureDenoise");
+		ghb_ui_update(ud, "PictureDenoise", value);
 	}
 }
 
@@ -2571,5 +2583,26 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	else
 	{
 		return g_strdup_printf("%d", (gint)val);
+	}
+}
+
+gchar*
+format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+	if (ghb_settings_get_boolean(ud->settings, "directqp"))
+	{
+		gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+		// Only x264 and ffmpeg currently support direct qp/crf entry
+		if (vcodec != HB_VCODEC_X264 && vcodec != HB_VCODEC_FFMPEG)
+		{
+			val *= 100;
+			return g_strdup_printf("%.1f", val);
+		}
+		return g_strdup_printf("%d", (gint)val);
+	}
+	else
+	{
+		val *= 100;
+		return g_strdup_printf("%.1f", val);
 	}
 }

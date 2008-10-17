@@ -48,9 +48,9 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		GtkWidget *textview;
 		gchar *options;
 
-		textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264_options"));
+		textview = GTK_WIDGET(GHB_WIDGET(ud->builder, "x264Option"));
 		ghb_widget_to_setting(ud->settings, textview);
-		options = ghb_settings_get_string(ud->settings, "x264_options");
+		options = ghb_settings_get_string(ud->settings, "x264Option");
 		ignore_options_update = TRUE;
 		ghb_x264_parse_options(ud, options);
 		if (!GTK_WIDGET_HAS_FOCUS(textview))
@@ -58,7 +58,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 			gchar *sopts;
 
 			sopts = sanitize_x264opts(ud, options);
-			ghb_ui_update(ud, "x264_options", ghb_string_value(sopts));
+			ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
 			ghb_x264_parse_options(ud, sopts);
 			g_free(sopts);
 		}
@@ -74,12 +74,12 @@ x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 	gchar *options, *sopts;
 
 	ghb_widget_to_setting(ud->settings, widget);
-	options = ghb_settings_get_string(ud->settings, "x264_options");
+	options = ghb_settings_get_string(ud->settings, "x264Option");
 	sopts = sanitize_x264opts(ud, options);
 	ignore_options_update = TRUE;
 	if (sopts != NULL)
 	{
-		ghb_ui_update(ud, "x264_options", ghb_string_value(sopts));
+		ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
 		ghb_x264_parse_options(ud, sopts);
 	}
 	g_free(options);
@@ -415,7 +415,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 		gint ii;
 		gboolean foundit = FALSE;
 
-		options = ghb_settings_get_string(ud->settings, "x264_options");
+		options = ghb_settings_get_string(ud->settings, "x264Option");
 		if (options)
 		{
 			split = g_strsplit(options, ":", -1);
@@ -505,7 +505,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 		if (len > 0) result[len - 1] = 0;
 		gchar *sopts;
 		sopts = sanitize_x264opts(ud, result);
-		ghb_ui_update(ud, "x264_options", ghb_string_value(sopts));
+		ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
 		ghb_x264_parse_options(ud, sopts);
 		g_free(sopts);
 		g_free(result);

@@ -533,7 +533,7 @@ main (int argc, char *argv[])
 	// since it can't be done automatically
 	GtkTextView *textview;
 	GtkTextBuffer *buffer;
-	textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "x264_options"));
+	textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "x264Option"));
 	buffer = gtk_text_view_get_buffer (textview);
 	g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
 
@@ -570,14 +570,14 @@ main (int argc, char *argv[])
 	}
 	gboolean tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
 	GtkWidget *widget;
-	widget = GHB_WIDGET(ud->builder, "deinterlace");
+	widget = GHB_WIDGET(ud->builder, "PictureDeinterlace");
 	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_deinterlace");
+	widget = GHB_WIDGET(ud->builder, "tweak_PictureDeinterlace");
 	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
 
-	widget = GHB_WIDGET(ud->builder, "denoise");
+	widget = GHB_WIDGET(ud->builder, "PictureDenoise");
 	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_denoise");
+	widget = GHB_WIDGET(ud->builder, "tweak_PictureDenoise");
 	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
 
 	gchar *source = ghb_settings_get_string(ud->settings, "default_source");

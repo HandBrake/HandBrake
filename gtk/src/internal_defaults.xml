@@ -4,14 +4,10 @@
 <dict>
 	<key>Initialization</key>
 	<dict>
-		<key>crop_bottom</key>
-		<integer>0</integer>
-		<key>crop_left</key>
-		<integer>0</integer>
-		<key>crop_right</key>
-		<integer>0</integer>
-		<key>crop_top</key>
-		<integer>0</integer>
+		<key>anamorphic</key>
+		<true />
+		<key>autoscale</key>
+		<false />
 		<key>end_chapter</key>
 		<integer>100</integer>
 		<key>folder</key>
@@ -29,9 +25,9 @@
 		<key>preset_type_normal</key>
 		<true />
 		<key>scale_height</key>
-		<integer>480</integer>
+		<integer>0</integer>
 		<key>scale_width</key>
-		<integer>720</integer>
+		<integer>0</integer>
 		<key>start_chapter</key>
 		<integer>1</integer>
 		<key>title</key>
@@ -75,6 +71,16 @@
 		<key>audio_list</key>
 		<array>
 		</array>
+		<key>tweak_PictureDecomb</key>
+		<string></string>
+		<key>tweak_PictureDetelecine</key>
+		<string></string>
+		<key>vquality_type_bitrate</key>
+		<false />
+		<key>vquality_type_constant</key>
+		<false />
+		<key>vquality_type_target</key>
+		<false />
 	</dict>
 	<key>Preferences</key>
 	<dict>
@@ -90,8 +96,6 @@
 		<false />
 		<key>hbfd_feature</key>
 		<false />
-		<key>linear_vquality</key>
-		<false />
 		<key>nocheckvquality</key>
 		<false />
 		<key>noscale</key>
@@ -103,102 +107,125 @@
 		<key>version</key>
 		<string>0.1</string>
 	</dict>
-	<key>Presets</key>
+	<key>XlatPresets</key>
 	<dict>
 		<key>anamorphic</key>
 		<true />
-		<key>autocrop</key>
-		<true />
 		<key>autoscale</key>
 		<false />
-		<key>chapter_markers</key>
-		<true />
-		<key>constant_rate_factor</key>
-		<true />
-		<key>container</key>
-		<string>mp4</string>
-		<key>deblock</key>
-		<integer>0</integer>
-		<key>decomb</key>
-		<false />
-		<key>Default</key>
-		<false />
-		<key>deinterlace</key>
-		<string>none</string>
-		<key>denoise</key>
-		<string>none</string>
-		<key>detelecine</key>
-		<true />
-		<key>directqp</key>
-		<false />
-		<key>forced_subtitles</key>
-		<true />
-		<key>framerate</key>
-		<string>source</string>
-		<key>grayscale</key>
-		<false />
-		<key>http_optimize_mp4</key>
-		<false />
-		<key>ipod_file</key>
-		<false />
-		<key>keep_aspect</key>
-		<true />
-		<key>large_mp4</key>
-		<false />
-		<key>max_height</key>
-		<integer>0</integer>
-		<key>max_width</key>
-		<integer>0</integer>
-		<key>pref_audio_list</key>
-		<array>
-			<dict>
-				<key>audio_bitrate</key>
-				<string>192</string>
-				<key>audio_codec</key>
-				<string>ac3</string>
-				<key>audio_drc</key>
-				<real>1</real>
-				<key>audio_mix</key>
-				<string>dpl2</string>
-				<key>audio_rate</key>
-				<string>source</string>
-			</dict>
-		</array>
-		<key>preset_description</key>
-		<string></string>
-		<key>preset_name</key>
-		<string></string>
-		<key>preset_type</key>
-		<integer>1</integer>
-		<key>round_dimensions</key>
-		<true />
-		<key>source_audio_lang</key>
-		<string>und</string>
-		<key>subtitle_lang</key>
-		<string>none</string>
-		<key>turbo</key>
-		<false />
-		<key>tweak_decomb</key>
-		<string></string>
-		<key>tweak_detelecine</key>
-		<string></string>
-		<key>two_pass</key>
-		<false />
-		<key>video_bitrate</key>
-		<integer>1800</integer>
-		<key>video_codec</key>
-		<string>x264</string>
-		<key>video_quality</key>
-		<integer>64</integer>
-		<key>video_target_size</key>
-		<integer>700</integer>
 		<key>vquality_type_bitrate</key>
 		<false />
 		<key>vquality_type_constant</key>
 		<false />
 		<key>vquality_type_target</key>
 		<false />
-		<key>x264_options</key>
+	</dict>
+	<key>Presets</key>
+	<dict>
+		<key>PictureAutoCrop</key>
+		<true />
+		<key>ChapterMarkers</key>
+		<true />
+		<key>constant_rate_factor</key>
+		<true />
+		<key>FileFormat</key>
+		<string>mp4</string>
+		<key>Folder</key>
+		<false />
+		<key>PictureDeblock</key>
+		<integer>0</integer>
+		<key>PictureDecomb</key>
+		<false />
+		<key>Default</key>
+		<false />
+		<key>PictureBottomCrop</key>
+		<integer>0</integer>
+		<key>PictureLeftCrop</key>
+		<integer>0</integer>
+		<key>PictureRightCrop</key>
+		<integer>0</integer>
+		<key>PictureTopCrop</key>
+		<integer>0</integer>
+		<key>PictureDeinterlace</key>
+		<string>none</string>
+		<key>PictureDenoise</key>
+		<string>none</string>
+		<key>PictureDetelecine</key>
+		<true />
+		<key>directqp</key>
+		<false />
+		<key>SubtitlesForced</key>
+		<true />
+		<key>VideoFramerate</key>
+		<string>source</string>
+		<key>VideoGrayScale</key>
+		<false />
+		<key>Mp4HttpOptimize</key>
+		<false />
+		<key>Mp4iPodCompatible</key>
+		<false />
+		<key>PictureKeepRatio</key>
+		<true />
+		<key>Mp4LargeFile</key>
+		<false />
+		<key>ModDimensions</key>
+		<true />
+		<key>PicturePAR</key>
+		<integer>2</integer>
+		<key>PictureHeight</key>
+		<integer>0</integer>
+		<key>PictureWidth</key>
+		<integer>0</integer>
+		<key>AudioList</key>
+		<array>
+			<dict>
+				<key>AudioBitrate</key>
+				<string>192</string>
+				<key>AudioEncoder</key>
+				<string>ac3</string>
+				<key>AudioTrack</key>
+				<integer>1</integer>
+				<key>AudioTrackDescription</key>
+				<string></string>
+				<key>AudioTrackDRCSlider</key>
+				<real>1</real>
+				<key>AudioMixdown</key>
+				<string>dpl2</string>
+				<key>AudioSamplerate</key>
+				<string>source</string>
+			</dict>
+		</array>
+		<key>PresetDescription</key>
+		<string></string>
+		<key>PresetName</key>
+		<string>Name Missing</string>
+		<key>Type</key>
+		<integer>1</integer>
+		<key>SourceAudioLang</key>
+		<string>und</string>
+		<key>Subtitles</key>
+		<string>none</string>
+		<key>VideoTurboTwoPass</key>
+		<false />
+		<key>UsesPictureFilters</key>
+		<true />
+		<key>UsesPictureSettings</key>
+		<integer>2</integer>
+		<key>UsesMaxPictureSettings</key>
+		<false />
+		<key>VideoTwoPass</key>
+		<false />
+		<key>VideoAvgBitrate</key>
+		<integer>1800</integer>
+		<key>VideoEncoder</key>
+		<string>x264</string>
+		<key>VideoQualityType</key>
+		<integer>2</integer>
+		<key>VideoQualitySlider</key>
+		<real>0.60</real>
+		<key>VideoTargetSize</key>
+		<integer>700</integer>
+		<key>x264Option</key>
 		<string></string>
 	</dict>
 </dict>

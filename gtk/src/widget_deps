@@ -2,47 +2,58 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>anamorphic</key>
+	<key>AudioEncoder</key>
 	<array>
-		<string>keep_aspect</string>
+		<string>AudioBitrate</string>
+		<string>AudioSamplerate</string>
+		<string>AudioMixdown</string>
+		<string>AudioTrackDRCSlider</string>
+	</array>
+	<key>ChapterMarkers</key>
+	<array>
+		<string>chapters_list</string>
+	</array>
+	<key>FileFormat</key>
+	<array>
+		<string>Mp4LargeFile</string>
+		<string>Mp4HttpOptimize</string>
+		<string>Mp4iPodCompatible</string>
+	</array>
+	<key>PictureAutoCrop</key>
+	<array>
+		<string>PictureTopCrop</string>
+		<string>PictureBottomCrop</string>
+		<string>PictureLeftCrop</string>
+		<string>PictureRightCrop</string>
+	</array>
+	<key>PictureDecomb</key>
+	<array>
+		<string>PictureDeinterlace</string>
+		<string>tweak_PictureDeinterlace</string>
+	</array>
+	<key>PictureKeepRatio</key>
+	<array>
 		<string>scale_height</string>
 	</array>
-	<key>audio_codec</key>
+	<key>VideoEncoder</key>
 	<array>
-		<string>audio_bitrate</string>
-		<string>audio_rate</string>
-		<string>audio_mix</string>
-		<string>audio_drc</string>
+		<string>x264_tab</string>
+		<string>x264_tab_label</string>
+		<string>Mp4iPodCompatible</string>
+		<string>directqp</string>
 	</array>
-	<key>autocrop</key>
+	<key>VideoTwoPass</key>
 	<array>
-		<string>crop_top</string>
-		<string>crop_bottom</string>
-		<string>crop_left</string>
-		<string>crop_right</string>
+		<string>VideoTurboTwoPass</string>
+	</array>
+	<key>anamorphic</key>
+	<array>
+		<string>PictureKeepRatio</string>
+		<string>scale_height</string>
 	</array>
 	<key>autoscale</key>
 	<array>
 		<string>scale_width</string>
-		<string>scale_height</string>
-	</array>
-	<key>chapter_markers</key>
-	<array>
-		<string>chapters_list</string>
-	</array>
-	<key>container</key>
-	<array>
-		<string>large_mp4</string>
-		<string>http_optimize_mp4</string>
-		<string>ipod_file</string>
-	</array>
-	<key>decomb</key>
-	<array>
-		<string>deinterlace</string>
-		<string>tweak_deinterlace</string>
-	</array>
-	<key>keep_aspect</key>
-	<array>
 		<string>scale_height</string>
 	</array>
 	<key>title</key>
@@ -60,34 +71,24 @@
 		<string>start_chapter</string>
 		<string>end_chapter</string>
 	</array>
-	<key>two_pass</key>
-	<array>
-		<string>turbo</string>
-	</array>
 	<key>use_source_name</key>
 	<array>
 		<string>chapters_in_destination</string>
 	</array>
-	<key>video_codec</key>
-	<array>
-		<string>x264_tab</string>
-		<string>x264_tab_label</string>
-		<string>ipod_file</string>
-	</array>
 	<key>vquality_type_bitrate</key>
 	<array>
-		<string>video_bitrate</string>
+		<string>VideoAvgBitrate</string>
 	</array>
 	<key>vquality_type_constant</key>
 	<array>
-		<string>video_quality</string>
+		<string>VideoQualitySlider</string>
 		<string>constant_rate_factor</string>
-		<string>two_pass</string>
-		<string>turbo</string>
+		<string>VideoTwoPass</string>
+		<string>VideoTurboTwoPass</string>
 	</array>
 	<key>vquality_type_target</key>
 	<array>
-		<string>video_target_size</string>
+		<string>VideoTargetSize</string>
 	</array>
 	<key>x264_bframes</key>
 	<array>
