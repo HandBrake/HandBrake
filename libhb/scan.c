@@ -162,6 +162,7 @@ static void ScanFunc( void * _data )
         /* If we don't have any audio streams left, remove the title */
         if( !hb_list_count( title->list_audio ) )
         {
+            hb_log("scan: ignoring title %i, no audio tracks found", title->index );
             hb_list_rem( data->list_title, title );
             free( title );
             continue;
