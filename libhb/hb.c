@@ -566,7 +566,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
     int cropped_height = title->height - job->crop[0] - job->crop[1] ;
     double storage_aspect = (double)cropped_width / (double)cropped_height;
     int width = job->width;
-    int height; // Gets set later, ignore user value
+    int height; // Gets set later, ignore user job->height value
     int mod = job->modulus;
     double aspect = title->aspect;
 
@@ -580,22 +580,11 @@ void hb_set_anamorphic_size( hb_job_t * job,
     */
 
     if ( job->maxWidth && (job->maxWidth < job->width) )
-            width = job->maxWidth;
+        width = job->maxWidth;
 
     height = (double)width / storage_aspect;
     if ( job->maxHeight && (job->maxHeight < height) )
-    {
         height = job->maxHeight;
-    }
-    else
-    {
-        height = (double)width / storage_aspect;
-    }
-
-
-    /* Time to get picture dimensions that divide cleanly.
-       These variables will store temporary dimensions as we iterate. */
-    int i, w, h;
 
     /* In case the user specified a modulus, use it */
     if (job->modulus)
@@ -603,55 +592,16 @@ void hb_set_anamorphic_size( hb_job_t * job,
     else
         mod = 16;
 
-    /* Iterate through multiples of mod to find one close to job->width. */
-    for( i = 1;; i++ )
-    {
-        w = mod * i;
+    /* Time to get picture dimensions that divide cleanly.*/
+    width  = MULTIPLE_MOD( width, mod);
+    height = MULTIPLE_MOD( height, mod);
 
-        if (w < width)
-        {
-            if ( ( width - w ) <= ( mod / 2 ) )
-                /* We'll take a width that's
-                   smaller, but close enough. */
-                break;
-        }
-        if (w == width)
-            /* Mod 16 dimensions, how nice! */
-            break;
-        if( w > width )
-        {
-            if ( ( w - width ) < (mod/2) )
-                /* We'll take a width that's bigger, if we have to. */
-                break;
-        }
-    }
-    width  = mod * (i);
-
-    /* Now do the same for a mod-friendly value near job->height. */
-    for( i = 1;; i++)
-    {
-        h = i * mod;
-
-        if (h < height)
-            {
-                if ( ( height - h ) <= ( mod / 2 ))
-                    /* Go with a smaller height,
-                       if it's close enough.    */
-                    break;
-            }
-        if (h == height)
-            /* Mod 16 dimensions, how nice! */
-            break;
-
-        if ( h > height)
-        {
-            if ( ( h - height ) < ( mod / 2 ))
-                /* Use a taller height if necessary */
-                break;
-        }
-    }
-    height = mod  * (i);
-
+    /* Verify these new dimensions don't violate max height and width settings */
+    if ( job->maxWidth && (job->maxWidth < job->width) )
+        width = job->maxWidth;
+    if ( job->maxHeight && (job->maxHeight < height) )
+        height = job->maxHeight;
+    
     int pixel_aspect_width = job->pixel_aspect_width;
     int pixel_aspect_height = job->pixel_aspect_height;
     

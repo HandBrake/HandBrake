@@ -27,7 +27,7 @@
 
 #define EVEN( a )        ( (a) + ( (a) & 1 ) )
 #define MULTIPLE_16( a ) ( 16 * ( ( (a) + 8 ) / 16 ) )
-#define MULTIPLE_MOD( a, b ) ( b * ( ( (a) + (b / 2) ) / b ) )
+#define MULTIPLE_MOD( a, b ) ( b * ( ( (a) + (b / 2) - 1) / b ) )
 
 #define HB_DVD_READ_BUFFER_SIZE 2048
 
