@@ -71,7 +71,7 @@
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment17&quot;&gt;
-    &lt;property name=&quot;upper&quot;&gt;1000&lt;/property&gt;
+    &lt;property name=&quot;upper&quot;&gt;2000&lt;/property&gt;
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;16&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;2&lt;/property&gt;
@@ -79,7 +79,7 @@
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment18&quot;&gt;
-    &lt;property name=&quot;upper&quot;&gt;1000&lt;/property&gt;
+    &lt;property name=&quot;upper&quot;&gt;1200&lt;/property&gt;
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;16&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;2&lt;/property&gt;
