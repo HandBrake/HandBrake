@@ -285,8 +285,10 @@ hb_display_job_info( hb_job_t * job )
         {
             audio = hb_list_item( title->list_audio, i );
 
-            hb_log( " * audio track %d (%s)", audio->config.out.track,
-                    audio->config.out.name ?  audio->config.out.name : "no-name" );
+            hb_log( " * audio track %d", audio->config.out.track );
+            
+            if( audio->config.out.name )
+                hb_log( "   + name: %s", audio->config.out.name );
 
             hb_log( "   + decoder: %s (track %d, id %x)", audio->config.lang.description, audio->config.in.track, audio->id );
 
