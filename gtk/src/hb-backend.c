@@ -3453,6 +3453,9 @@ ghb_pause_queue()
     }
 }
 
+#define RED_HEIGHT	720.0
+#define RED_WIDTH	1280.0
+
 GdkPixbuf*
 ghb_get_preview_image(
 	gint titleindex, 
@@ -3588,6 +3591,21 @@ ghb_get_preview_image(
 			dstWidth = dstWidth * par_width / par_height;
 		else
 			dstHeight = dstHeight * par_height / par_width;
+	}
+	if (ghb_settings_get_boolean(settings, "reduce_hd_preview"))
+	{
+		gdouble factor = 1.0;
+
+		if (dstHeight > RED_HEIGHT)
+		{
+			factor = RED_HEIGHT / (gdouble)dstHeight;
+		}
+		if (dstWidth * factor > RED_WIDTH)
+		{
+			factor = RED_WIDTH / (gdouble)dstWidth;
+		}
+		dstHeight = dstHeight * factor + 0.5;
+		dstWidth = dstWidth * factor + 0.5;
 	}
 	
 	g_debug("scaled %d x %d\n", dstWidth, dstHeight);

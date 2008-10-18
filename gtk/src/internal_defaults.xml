@@ -98,6 +98,8 @@
 		<false />
 		<key>nocheckvquality</key>
 		<false />
+		<key>reduce_hd_preview</key>
+		<true />
 		<key>noscale</key>
 		<false />
 		<key>show_presets</key>

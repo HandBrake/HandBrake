@@ -1723,6 +1723,7 @@ export_subtitle_xlat2(GValue *lin_val)
 	gchar *str;
 	GValue *gval;
 
+	if (lin_val == NULL) return NULL;
 	str = ghb_value_string(lin_val);
 	if (strcmp(str, "none") == 0)
 	{
@@ -1770,6 +1771,7 @@ import_subtitle_xlat2(GValue *mac_val)
 	gchar *str;
 	GValue *gval;
 
+	if (mac_val == NULL) return NULL;
 	str = ghb_value_string(mac_val);
 	if (strcmp(str, "None") == 0)
 	{
@@ -1793,6 +1795,7 @@ export_audio_track_xlat2(GValue *lin_val)
 	gchar *str;
 	GValue *gval = NULL;
 
+	if (lin_val == NULL) return NULL;
 	str = ghb_value_string(lin_val);
 	if (strcmp(str, "none") == 0)
 	{
@@ -1814,6 +1817,7 @@ import_audio_track_xlat2(GValue *mac_val)
 	gchar *str;
 	GValue *gval;
 
+	if (mac_val == NULL) return NULL;
 	val = ghb_value_int(mac_val);
 	if (val <= 0)
 	{
@@ -2323,6 +2327,25 @@ ghb_presets_reload(signal_user_data_t *ud)
 	store_presets();
 }
 
+static gboolean
+check_old_presets()
+{
+	gint count, ii;
+
+	count = ghb_array_len(presetsPlist);
+	for (ii = count-1; ii >= 0; ii--)
+	{
+		GValue *dict;
+		GValue *type;
+
+		dict = ghb_array_get_nth(presetsPlist, ii);
+		type = ghb_dict_lookup(dict, "Type");
+		if (type == NULL)
+			return TRUE;
+	}
+	return FALSE;
+}
+
 void
 ghb_presets_load()
 {
@@ -2334,6 +2357,12 @@ ghb_presets_load()
 	}
 	else if (G_VALUE_TYPE(presetsPlist) == ghb_dict_get_type())
 	{ // Presets is older dictionary format. Convert to array
+		ghb_value_free(presetsPlist);
+		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
+		store_presets();
+	}
+	else if (check_old_presets())
+	{
 		ghb_value_free(presetsPlist);
 		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
 		store_presets();

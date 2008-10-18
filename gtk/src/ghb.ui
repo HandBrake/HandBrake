@@ -3421,6 +3421,21 @@ auto-generated destination name.</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="reduce_hd_preview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text"> Automatically reduce the size of High Definition previews.
+This is helpfull when working on laptops or similar
+non-hidef screens.  </property>
+                            <property name="label" translatable="yes">Scale down High Definition previews</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb"/>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="noscale">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -3434,7 +3449,7 @@ the required multiple.</property>
                             <signal name="toggled" handler="pref_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -3453,7 +3468,7 @@ this setting.</property>
                             <signal name="toggled" handler="vcodec_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -3464,7 +3479,7 @@ this setting.</property>
                             <signal name="toggled" handler="tweaks_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -3475,7 +3490,7 @@ this setting.</property>
                             <signal name="toggled" handler="hbfd_feature_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                       </object>

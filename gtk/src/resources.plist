@@ -3426,6 +3426,21 @@ auto-generated destination name.&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
+                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;reduce_hd_preview&quot;&gt;
+                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;tooltip_text&quot;&gt; Automatically reduce the size of High Definition previews.
+This is helpfull when working on laptops or similar
+non-hidef screens.  &lt;/property&gt;
+                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Scale down High Definition previews&lt;/property&gt;
+                            &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
+                            &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
+                          &lt;/object&gt;
+                          &lt;packing&gt;
+                            &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+                          &lt;/packing&gt;
+                        &lt;/child&gt;
+                        &lt;child&gt;
                           &lt;object class=&quot;GtkCheckButton&quot; id=&quot;noscale&quot;&gt;
                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
@@ -3439,7 +3454,7 @@ the required multiple.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3458,7 +3473,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;vcodec_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3469,7 +3484,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;tweaks_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3480,7 +3495,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;hbfd_feature_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;6&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                       &lt;/object&gt;
@@ -4931,6 +4946,8 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<false />
 			<key>noscale</key>
 			<false />
+			<key>reduce_hd_preview</key>
+			<true />
 			<key>show_presets</key>
 			<true />
 			<key>use_source_name</key>
