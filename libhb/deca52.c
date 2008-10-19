@@ -288,7 +288,8 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
                          hb_work_info_t *info )
 {
-    int i, rate, bitrate, flags;
+    int i;
+    int rate = 0, bitrate = 0, flags = 0;
     int old_rate = 0, old_bitrate = 0;
 
     memset( info, 0, sizeof(*info) );
@@ -315,7 +316,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
             old_bitrate = bitrate;
         }
     }
-    if ( i >= b->size - 7 )
+    if ( rate == 0 || bitrate == 0 )
     {
         /* didn't find AC3 sync */
         return 0;
