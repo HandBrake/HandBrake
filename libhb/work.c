@@ -214,6 +214,15 @@ hb_display_job_info( hb_job_t * job )
                 title->width, title->height, job->width, job->height,
                 job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
     }
+    
+    if( job->color_matrix )
+    {
+        hb_log( "   + color space: %s", job->color_matrix == 1 ? "ITU Bt.601 (SD)" : "ITU Bt.709 (HD)");
+    }
+    else
+    {
+        hb_log( "   + color space: %s", ( title->width < 1280 || title->height < 720 ) ? "ITU Bt.601 (SD)" : "ITU Bt.709 (HD)");        
+    }
 
     if ( job->grayscale )
         hb_log( "   + grayscale mode" );

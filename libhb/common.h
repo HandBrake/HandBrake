@@ -187,6 +187,7 @@ struct hb_job_s
     int             crf;
     char            *x264opts;
     int             areBframes;
+    int             color_matrix;
 
     /* List of audio settings. */
     hb_list_t     * list_audio;

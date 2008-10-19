@@ -195,8 +195,21 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* set up the VUI color model & gamma to match what the COLR atom
      * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
-
-    if ( job->title->height >= 720 )
+    if( job->color_matrix == 1 )
+    {
+        // ITU BT.601 DVD or SD TV content
+        param.vui.i_colorprim = 6;
+        param.vui.i_transfer = 1;
+        param.vui.i_colmatrix = 6;
+    }
+    else if( job->color_matrix == 2 )
+    {
+        // ITU BT.709 HD content
+        param.vui.i_colorprim = 1;
+        param.vui.i_transfer = 1;
+        param.vui.i_colmatrix = 1;
+    }
+    else if ( job->title->width >= 1280 || job->title->width >= 720 )
     {
         // we guess that 720p or above is ITU BT.709 HD content
         param.vui.i_colorprim = 1;

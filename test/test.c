@@ -91,6 +91,7 @@ static char * preset_name   = 0;
 static int    cfr           = 0;
 static int    mp4_optimize  = 0;
 static int    ipod_atom     = 0;
+static int    color_matrix  = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -1302,6 +1303,11 @@ static int HandleEvents( hb_handle_t * h )
             {
                 job->crf = 1;
             }
+            
+            if( color_matrix )
+            {
+                job->color_matrix = color_matrix;
+            }
 
             if( x264opts != NULL && *x264opts != '\0' )
             {
@@ -1605,6 +1611,9 @@ static void ShowHelp()
     "          <MOD:PARX:PARY>   Takes as optional arguments what number you want\n"
     "                            the dimensions to divide cleanly by (default 16)\n"
     "                            and the pixel ratio to use (default autodetected)\n"
+    "    -M  --color-matrix      Set the color space signalled by the output\n"
+    "          <601 or 709>      (Bt.601 is mostly for SD content, Bt.709 for HD,\n"
+    "                             default: set by resolution)\n"
 
 
 	"\n"
@@ -1761,6 +1770,7 @@ static int ParseOptions( int argc, char ** argv )
             { "preset-list", no_argument,       NULL,    'z' },
 
             { "aname",       required_argument, NULL,    'A' },
+            { "color-matrix",required_argument, NULL,    'M' },
 
             { 0, 0, 0, 0 }
           };
@@ -1769,7 +1779,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hv::uC:f:4i:Io:t:Lc:m::a:A:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2106,7 +2116,12 @@ static int ParseOptions( int argc, char ** argv )
                     anames = strdup( optarg );
                 }
                 break;
-
+            case 'M':
+                if( atoi( optarg ) == 601 )
+                    color_matrix = 1;
+                else if( atoi( optarg ) == 709 )
+                    color_matrix = 2;
+                break;
             default:
                 fprintf( stderr, "unknown option (%s)\n", argv[optind] );
                 return -1;
