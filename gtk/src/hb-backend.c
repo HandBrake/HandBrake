@@ -1612,6 +1612,9 @@ ghb_find_audio_track(gint titleindex, const gchar *lang, gint index)
 			match++;
 		}
 	}
+	if (match) return track;
+	if (index < count)
+		track = index;
 	return track;
 }
 
