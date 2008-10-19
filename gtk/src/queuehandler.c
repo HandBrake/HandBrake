@@ -532,7 +532,7 @@ validate_settings(signal_user_data_t *ud)
 			size = g_file_info_get_attribute_uint64(info, 
 									G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
 			
-			gint64 fsize = 10L * 1024L * 1024L * 1024L;
+			gint64 fsize = (guint64)10 * 1024 * 1024 * 1024;
 			if (size < fsize)
 			{
 				message = g_strdup_printf(
