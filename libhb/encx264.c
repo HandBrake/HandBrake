@@ -209,7 +209,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.vui.i_transfer = 1;
         param.vui.i_colmatrix = 1;
     }
-    else if ( job->title->width >= 1280 || job->title->width >= 720 )
+    else if ( job->title->width >= 1280 || job->title->height >= 720 )
     {
         // we guess that 720p or above is ITU BT.709 HD content
         param.vui.i_colorprim = 1;
