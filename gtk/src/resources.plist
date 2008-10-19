@@ -595,7 +595,7 @@
                                         &lt;child&gt;
                                           &lt;object class=&quot;GtkLabel&quot; id=&quot;label5&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;to&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt; thru &lt;/property&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
                                             &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;

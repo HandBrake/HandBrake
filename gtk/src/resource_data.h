@@ -888,7 +888,7 @@
 "                                            &lt;property name=&quot;vis"
 "ible&quot;&gt;True&lt;/property&gt;\n"
 "                                            &lt;property name=&quot;lab"
-"el&quot; translatable=&quot;yes&quot;&gt;to&lt;/property&gt;\n"
+"el&quot; translatable=&quot;yes&quot;&gt; thru &lt;/property&gt;\n"
 "                                          &lt;/object&gt;\n"
 "                                          &lt;packing&gt;\n"
 "                                            &lt;property name=&quot;exp"
