@@ -48,6 +48,7 @@
         @"NO",              @"DefaultAutoNaming",
         @"NO",              @"DisableDvdAutoDetect",
         @"Alert Window",    @"AlertWhenDone",
+        @"1",               @"LoggingLevel",
         @"4:10:15:9:10:35:9",    @"DecombCustomString",
         nil]];
 }

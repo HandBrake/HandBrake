@@ -73,9 +73,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) applicationDidFinishLaunching: (NSNotification *) notification
 {
     /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
-    fHandle = hb_init(HB_DEBUG_ALL, 0);
+    int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+    fHandle = hb_init(loggingLevel, 0);
     /* Init a separate instance of libhb for user scanning and setting up jobs */
-    fQueueEncodeLibhb = hb_init(HB_DEBUG_ALL, 0);
+    fQueueEncodeLibhb = hb_init(loggingLevel, 0);
     
 	// Set the Growl Delegate
     [GrowlApplicationBridge setGrowlDelegate: self];
