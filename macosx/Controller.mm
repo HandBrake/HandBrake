@@ -3638,13 +3638,7 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) revertPictureSizeToMax: (id) sender
 {
 	hb_job_t * job = fTitle->job;
-	[fPictureController setAutoCrop:YES];
-	/* Here we use the auto crop values determined right after scan */
-	job->crop[0] = AutoCropTop;
-	job->crop[1] = AutoCropBottom;
-	job->crop[2] = AutoCropLeft;
-	job->crop[3] = AutoCropRight;
-    /* Here we apply the max source storage width and height */
+	/* Here we apply the max source storage width and height */
     job->width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
     job->height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
     
@@ -5460,6 +5454,32 @@ return YES;
         if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] > 0)
         {
             hb_job_t * job = fTitle->job;
+            
+            /* If Cropping is set to custom, then recall all four crop values from
+                 when the preset was created and apply them */
+                if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
+                {
+                    [fPictureController setAutoCrop:NO];
+                    
+                    /* Here we use the custom crop values saved at the time the preset was saved */
+                    job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
+                    job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
+                    job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
+                    job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
+                    
+                }
+                else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
+                {
+                    [fPictureController setAutoCrop:YES];
+                    /* Here we use the auto crop values determined right after scan */
+                    job->crop[0] = AutoCropTop;
+                    job->crop[1] = AutoCropBottom;
+                    job->crop[2] = AutoCropLeft;
+                    job->crop[3] = AutoCropRight;
+                    
+                }
+
+            
             /* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
             if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
             {
@@ -5505,30 +5525,7 @@ return YES;
                 job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
                 
                 
-                /* If Cropping is set to custom, then recall all four crop values from
-                 when the preset was created and apply them */
-                if ([[chosenPreset objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-                {
-                    [fPictureController setAutoCrop:NO];
-                    
-                    /* Here we use the custom crop values saved at the time the preset was saved */
-                    job->crop[0] = [[chosenPreset objectForKey:@"PictureTopCrop"]  intValue];
-                    job->crop[1] = [[chosenPreset objectForKey:@"PictureBottomCrop"]  intValue];
-                    job->crop[2] = [[chosenPreset objectForKey:@"PictureLeftCrop"]  intValue];
-                    job->crop[3] = [[chosenPreset objectForKey:@"PictureRightCrop"]  intValue];
-                    
-                }
-                else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-                {
-                    [fPictureController setAutoCrop:YES];
-                    /* Here we use the auto crop values determined right after scan */
-                    job->crop[0] = AutoCropTop;
-                    job->crop[1] = AutoCropBottom;
-                    job->crop[2] = AutoCropLeft;
-                    job->crop[3] = AutoCropRight;
-                    
-                }
-                /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
+                                /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
                  * and handle the filters here as before.
                  * NOTE: This should be removed when the update presets code is done as we can be assured that legacy
                  * presets are updated to work properly with new keys.
