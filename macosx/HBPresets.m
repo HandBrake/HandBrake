@@ -521,7 +521,7 @@
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
 
     /* 64-bit MP4 file */
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"Mp4LargeFile"];
+    [preset setObject:[NSNumber numberWithInt:0] forKey:@"Mp4LargeFile"];
 
     /* Chapter Markers*/
      [preset setObject:[NSNumber numberWithInt:1] forKey:@"ChapterMarkers"];
