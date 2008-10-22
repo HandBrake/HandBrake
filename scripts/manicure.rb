@@ -11,6 +11,8 @@
 # For handling command line arguments to the script
 require 'optparse'
 require 'ostruct'
+require 'rubygems'
+require 'plist'
 
 # CLI options: (code based on http://www.ruby-doc.org/stdlib/libdoc/optparse/rdoc/index.html )
 def readOptions
@@ -78,110 +80,21 @@ class Presets
   # and display output.
   def initialize
     
-    # Grab input from the user's presets .plist
-    rawPresets = readPresetPlist
-    
-    # Store all the presets in here
-    presetStew = []
-
-    # Each item in the array is one line from the .plist
-    presetStew = rawPresets.split("\n")
-    
-    # Now get rid of white space
-    presetStew = cleanStew(presetStew)
-    
-    # This stores the offsets between presets.
-    presetBreaks = findPresetBreaks(presetStew)
-
-    # Now it's time to use that info to store each
-    # preset individually, in the master list.
-    @presetMasterList = []
-    i = 0
-    while i <= presetBreaks.size    
-      if i == 0 #first preset
-        # Grab the stew, up to the 1st offset.
-        @presetMasterList[i] = presetStew.slice(0..presetBreaks[i].to_i)
-      elsif i < presetBreaks.size #middle presets
-        # Grab the stew from the last offset to the current..
-        @presetMasterList[i] = presetStew.slice(presetBreaks[i-1].to_i..presetBreaks[i].to_i)
-      else #final preset
-        # Grab the stew, starting at the last offset, all the way to the end.
-        @presetMasterList[i] = presetStew.slice(presetBreaks[i-1].to_i..presetStew.length)
-      end
-      i += 1
-    end
-    
+   # Grab the user's home path
+   homeLocation = `echo $HOME`.chomp
+   
+   # Use that to build a path to the presets .plist
+   inputFile = homeLocation+'/Library/Application Support/HandBrake/UserPresets.plist'
+   
     # Parse the presets into hashes
-    @hashMasterList = []
+    @hashMasterList = Plist::parse_xml( inputFile )
     
-    buildPresetHash
-    
-  end
-
-  def readPresetPlist # Grab the .plist and store it in presets
-    
-    # Grab the user's home path
-    homeLocation = `echo $HOME`.chomp
-    
-    # Use that to build a path to the presets .plist
-    inputFile = homeLocation+'/Library/Application\ Support/HandBrake/UserPresets.plist'
-    
-    # Builds a command that inputs the .plist, but not before stripping all the XML gobbledygook.
-    parseCommand = 'cat '+inputFile+' | sed -e \'s/<[a-z]*>//\' -e \'s/<\/[a-z]*>//\'  -e \'/<[?!]/d\' '
-    
-    puts "\n\n"
-    
-    # Run the command, return the raw presets
-    rawPresets = `#{parseCommand}`
-  end
-
-  def cleanStew(presetStew) #remove tabbed white space
-    presetStew.each do |oneline|
-      oneline.strip!
-    end
-  end
-
-  def findPresetBreaks(presetStew) #figure out where each preset starts and ends
-    i = 0
-    j = 0
-    presetBreaks =[]
-    presetStew.each do |presetLine|
-      if presetLine =~ /Audio1Bitrate/ # This is the first line of a new preset.
-        presetBreaks[j] = i-1         # So mark down how long the last one was.
-        j += 1
-      end
-    i += 1
-    end
-    return presetBreaks
-  end
-
-  def buildPresetHash #fill up @hashMasterList with hashes of all key/value pairs
-    j = 0
-    
-    # Iterate through all presets, treating each in turn as singleServing
-    @presetMasterList.each do |singleServing|
-      
-      # Initialize the hash for preset j (aka singleServing)
-      @hashMasterList[j] = Hash.new
-      
-      # Each key and value are on sequential lines.
-      # Iterating through by twos, use that to build a hash.
-      # Each key, on line i, paired with its value, on line i+1  
-      i = 1
-      while i < singleServing.length
-        @hashMasterList[j].store( singleServing[i],  singleServing[i+1] )
-        i += 2
-      end
-            
-      j += 1  
-    end   
   end
 
 end
 
 # This class displays the presets to stdout in various formats.
 class Display
-  
   
   def initialize(hashMasterList, options)
   
@@ -201,34 +114,59 @@ class Display
     # Iterate through the hashes.    
     @hashMasterList.each do |hash|
     
-      # Check to make there are valid contents
-      if hash.key?("PresetName")
-        
-        if @options.header == true
-          # First throw up a header to make each preset distinct
-          displayHeader(hash)
+      # Check to see whether we've got a preset or afolder
+      if !hash["Folder"]
+        # It's a top-level preset
+       displayIndividualPreset(hash, 0) 
+      else
+        # It's a folder, yay
+        displayFolder( hash, 0 )
+        hash["ChildrenArray"].each do |subhash|
+          # Drill down to see its contents
+          if !subhash["Folder"]
+            # It's a preset
+            displayIndividualPreset(subhash, 1)
+          else
+            # It's a folder
+            displayFolder( subhash, 1 )
+            subhash["ChildrenArray"].each do |subsubhash|
+              # At this point we're far enough down we won't try to drill further
+              if !subsubhash["Folder"]
+                displayIndividualPreset(subsubhash, 2)
+              end
+            end
+            displayFolderCloser( 1 )
+          end
         end
-        
-        if @options.cliraw == true
-          # Show the preset's full CLI string equivalent
-          generateCLIString(hash)
-        end
-        
-        if @options.cliparse == true
-          generateCLIParse(hash)
-        end
-        
-        if @options.api == true
-          # Show the preset as code for test/test.c, HandBrakeCLI
-          generateAPIcalls(hash)
-        end
-        
-        if @options.apilist == true
-          # Show the preset as print statements, for CLI wrappers to parse.
-          generateAPIList(hash) 
-        end
+        displayFolderCloser( 0 )
       end
-    end    
+    end
+  end
+  
+  def displayIndividualPreset(hash, depth)
+    if @options.header == true
+      # First throw up a header to make each preset distinct
+      displayHeader(hash)
+    end
+    
+    if @options.cliraw == true
+      # Show the preset's full CLI string equivalent
+      generateCLIString(hash, depth)
+    end
+    
+    if @options.cliparse == true
+      generateCLIParse(hash, depth)
+    end
+    
+    if @options.api == true
+      # Show the preset as code for test/test.c, HandBrakeCLI
+      generateAPIcalls(hash)
+    end
+    
+    if @options.apilist == true
+      # Show the preset as print statements, for CLI wrappers to parse.
+      generateAPIList(hash, depth) 
+    end
   end
   
   def displayHeader(hash) # A distinct banner to separate each preset
@@ -252,12 +190,12 @@ class Display
     puts "#{hash["FileCodecs"]}".center(@columnWidth)
     
     # Note if the preset isn't built-in
-    if hash["Type"].to_i == 1
+    if hash["Type"] == 1
       puts "Custom Preset".center(@columnWidth)
     end
 
     # Note if the preset is marked as default.
-    if hash["Default"].to_i == 1
+    if hash["Default"] == 1
       puts "This is your default preset.".center(@columnWidth)
     end
     
@@ -266,8 +204,71 @@ class Display
     
   end
   
-  def generateCLIString(hash) # Makes a full CLI equivalent of a preset
+  def displayFolder( hash, depth )
+
+    if @options.cliraw == true
+      # Show the folder's full in a format that matches the CLI equivalents
+      generateCLIFolderString(hash, depth)
+    end
+    
+    if @options.cliparse == true
+      # Show the folder in a format that matches the CLI wrapper equivalents
+      generateCLIFolderParse(hash, depth)
+    end
+    
+    if @options.apilist == true
+      # Show the folder as print statements, for CLI wrappers to parse.
+      generateAPIFolderList(hash, depth) 
+    end
+    
+  end
+  
+  def displayFolderCloser( depth )
+    if @options.cliraw == true
+      # Show the folder's full in a format that matches the CLI equivalents
+      generateCLIFolderCloserString( depth )
+    end
+    
+    if @options.cliparse == true
+      # Show the folder in a format that matches the CLI wrapper equivalents
+      generateCLIFolderCloserParse( depth )
+    end
+    
+    if @options.apilist == true
+      # Show the folder as print statements, for CLI wrappers to parse.
+      generateAPIFolderCloserList( depth ) 
+    end
+  end
+  
+  def generateCLIFolderString( hash, depth ) # Shows the folder for the CLI equivalents
     commandString = ""
+    depth.times do
+      commandString << "   "
+    end
+    (depth+1).times do
+      commandString << "<"
+    end
+    commandString << " " << hash["PresetName"] << "\n\n"
+    puts commandString
+  end
+  
+  def generateCLIFolderCloserString( depth )
+    commandString = ""
+    depth.times do
+      commandString << "   "
+    end
+    (depth+1).times do
+      commandString << ">"
+    end
+    commandString << "\n\n"
+    puts commandString
+  end
+  
+  def generateCLIString(hash, depth) # Makes a full CLI equivalent of a preset
+    commandString = ""
+    depth.times do
+      commandString << "   "
+    end
     commandString << './HandBrakeCLI -i DVD -o ~/Movies/movie.'
     
     #Filename suffix
@@ -294,13 +295,13 @@ class Display
     end
 
     #VideoRateControl
-    case hash["VideoQualityType"].to_i
+    case hash["VideoQualityType"]
     when 0
       commandString << " -S " << hash["VideoTargetSize"]
     when 1
       commandString << " -b " << hash["VideoAvgBitrate"]
     when 2
-      commandString << " -q " << hash["VideoQualitySlider"]
+      commandString << " -q " << hash["VideoQualitySlider"].to_s
     end
 
     #FPS
@@ -316,15 +317,15 @@ class Display
     
     #Audio tracks
     commandString << " -a "
-    commandString << hash["Audio1Track"]
+    commandString << hash["Audio1Track"].to_s
     if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"]
+      commandString << "," << hash["Audio2Track"].to_s
     end
     if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"]
+      commandString << "," << hash["Audio3Track"].to_s
     end
     if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"]
+      commandString << "," << hash["Audio4Track"].to_s
     end
     
     #Audio encoders
@@ -495,30 +496,30 @@ class Display
     end
     
     # 64-bit files
-    if hash["Mp4LargeFile"].to_i == 1
+    if hash["Mp4LargeFile"] == 1
       commandString << " -4"
     end
     
     #Cropping
-    if !hash["PictureAutoCrop"].to_i
+    if hash["PictureAutoCrop"] == 0
       commandString << " --crop "
-      commandString << hash["PictureTopCrop"]
+      commandString << hash["PictureTopCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureBottomCrop"]
+      commandString << hash["PictureBottomCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureLeftCrop"]
+      commandString << hash["PictureLeftCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureRightCrop"]
+      commandString << hash["PictureRightCrop"].to_s
     end
     
     #Dimensions
-    if hash["PictureWidth"].to_i != 0
-      commandString << " -w "
-      commandString << hash["PictureWidth"]
+    if hash["PictureWidth"] != 0
+      commandString << " -X "
+      commandString << hash["PictureWidth"].to_s
     end
-    if hash["PictureHeight"].to_i != 0
-      commandString << " -l "
-      commandString << hash["PictureHeight"]
+    if hash["PictureHeight"] != 0
+      commandString << " -Y "
+      commandString << hash["PictureHeight"].to_s
     end
     
     #Subtitles
@@ -528,9 +529,9 @@ class Display
     end
 
     #Video Filters
-    if hash["UsesPictureFilters"].to_i == 1
+    if hash["UsesPictureFilters"] == 1
       
-      case hash["PictureDeinterlace"].to_i
+      case hash["PictureDeinterlace"]
       when 1
         commandString << " --deinterlace=\"fast\""
       when 2
@@ -541,7 +542,7 @@ class Display
         commandString << " --deinterlace=\"slowest\""
       end
       
-      case hash["PictureDenoise"].to_i
+      case hash["PictureDenoise"]
       when 1
         commandString << " --denoise=\"weak\""
       when 2
@@ -550,17 +551,25 @@ class Display
         commandString << " --denoise=\"strong\""
       end
       
-      if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
-      if hash["PictureDeblock"].to_i == 1 then commandString << " --deblock" end
+      if hash["PictureDetelecine"] == 1 then commandString << " --detelecine" end
+      if hash["PictureDeblock"] == 1 then commandString << " --deblock" end
       if hash["VFR"].to_i == 1 then commandString << " --vfr" end
+      if hash["PictureDecomb"] == 1 then commandString << " --decomb" end
+      
+    end
+    
+    #Anamorphic
+    if hash["PicturePAR"] == 1
+      commandString << " -p"
+    elsif hash["PicturePAR"] == 2
+      commandString << " -P"
     end
 
     #Booleans
-    if hash["ChapterMarkers"].to_i == 1 then commandString << " -m" end
-    if hash["PicturePAR"].to_i == 1 then commandString << " -p" end
-    if hash["VideoGrayScale"].to_i == 1 then commandString << " -g" end
-    if hash["VideoTwoPass"].to_i == 1 then commandString << " -2" end
-    if hash["VideoTurboTwoPass"].to_i == 1 then commandString << " -T" end
+    if hash["ChapterMarkers"] == 1 then commandString << " -m" end
+    if hash["VideoGrayScale"] == 1 then commandString << " -g" end
+    if hash["VideoTwoPass"] == 1 then commandString << " -2" end
+    if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
 
     #x264 Options
     if hash["x264Option"] != ""
@@ -575,9 +584,36 @@ class Display
 
     puts  "\n"
   end
-
-  def generateCLIParse(hash) # Makes a CLI equivalent of all user presets, for wrappers to parse
+  
+  def generateCLIFolderParse( hash, depth ) # Shows the folder for wrappers to parse
     commandString = ""
+    depth.times do
+      commandString << "   "
+    end
+    (depth+1).times do
+      commandString << "<"
+    end
+    commandString << " " << hash["PresetName"] << "\n\n"
+    puts commandString
+  end
+  
+  def generateCLIFolderCloserParse( depth )
+    commandString = ""
+    depth.times do
+      commandString << "   "
+    end
+    (depth+1).times do
+      commandString << ">"
+    end
+    commandString << "\n\n"
+    puts commandString
+  end
+  
+  def generateCLIParse(hash, depth) # Makes a CLI equivalent of all user presets, for wrappers to parse
+    commandString = ""
+    depth.times do
+      commandString << "   "
+    end
     commandString << '+ ' << hash["PresetName"] << ":"
         
     #Video encoder
@@ -592,13 +628,13 @@ class Display
     end
 
     #VideoRateControl
-    case hash["VideoQualityType"].to_i
+    case hash["VideoQualityType"]
     when 0
       commandString << " -S " << hash["VideoTargetSize"]
     when 1
       commandString << " -b " << hash["VideoAvgBitrate"]
     when 2
-      commandString << " -q " << hash["VideoQualitySlider"]
+      commandString << " -q " << hash["VideoQualitySlider"].to_s
     end
 
     #FPS
@@ -614,15 +650,15 @@ class Display
     
     #Audio tracks
     commandString << " -a "
-    commandString << hash["Audio1Track"]
+    commandString << hash["Audio1Track"].to_s
     if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"]
+      commandString << "," << hash["Audio2Track"].to_s
     end
     if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"]
+      commandString << "," << hash["Audio3Track"].to_s
     end
     if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"]
+      commandString << "," << hash["Audio4Track"].to_s
     end
     
     #Audio encoders
@@ -794,30 +830,30 @@ class Display
     end
     
     # 64-bit files
-    if hash["Mp4LargeFile"].to_i == 1
+    if hash["Mp4LargeFile"] == 1
       commandString << " -4"
     end
     
     #Cropping
-    if !hash["PictureAutoCrop"].to_i
+    if hash["PictureAutoCrop"] == 0
       commandString << " --crop "
-      commandString << hash["PictureTopCrop"]
+      commandString << hash["PictureTopCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureBottomCrop"]
+      commandString << hash["PictureBottomCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureLeftCrop"]
+      commandString << hash["PictureLeftCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureRightCrop"]
+      commandString << hash["PictureRightCrop"].to_s
     end
     
     #Dimensions
-    if hash["PictureWidth"].to_i != 0
-      commandString << " -w "
-      commandString << hash["PictureWidth"]
+    if hash["PictureWidth"] != 0
+      commandString << " -X "
+      commandString << hash["PictureWidth"].to_s
     end
-    if hash["PictureHeight"].to_i != 0
-      commandString << " -l "
-      commandString << hash["PictureHeight"]
+    if hash["PictureHeight"] != 0
+      commandString << " -Y "
+      commandString << hash["PictureHeight"].to_s
     end
     
     #Subtitles
@@ -827,9 +863,9 @@ class Display
     end
     
     #Video Filters
-    if hash["UsesPictureFilters"].to_i == 1
+    if hash["UsesPictureFilters"] == 1
       
-      case hash["PictureDeinterlace"].to_i
+      case hash["PictureDeinterlace"]
       when 1
         commandString << " --deinterlace=\"fast\""
       when 2
@@ -840,7 +876,7 @@ class Display
         commandString << " --deinterlace=\"slowest\""
       end
       
-      case hash["PictureDenoise"].to_i
+      case hash["PictureDenoise"]
       when 1
         commandString << " --denoise=\"weak\""
       when 2
@@ -849,17 +885,24 @@ class Display
         commandString << " --denoise=\"strong\""
       end
       
-      if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
-      if hash["PictureDeblock"].to_i == 1 then commandString << " --deblock" end
+      if hash["PictureDetelecine"] == 1 then commandString << " --detelecine" end
+      if hash["PictureDeblock"] == 1 then commandString << " --deblock" end
       if hash["VFR"].to_i == 1 then commandString << " --vfr" end
+      if hash["PictureDecomb"] == 1 then commandString << " --decomb" end
     end
 
+    #Anamorphic
+    if hash["PicturePAR"] == 1
+      commandString << " -p"
+    elsif hash["PicturePAR"] == 2
+      commandString << " -P"
+    end
+    
     #Booleans
-    if hash["ChapterMarkers"].to_i == 1 then commandString << " -m" end
-    if hash["PicturePAR"].to_i == 1 then commandString << " -p" end
-    if hash["VideoGrayScale"].to_i == 1 then commandString << " -g" end
-    if hash["VideoTwoPass"].to_i == 1 then commandString << " -2" end
-    if hash["VideoTurboTwoPass"].to_i == 1 then commandString << " -T" end
+    if hash["ChapterMarkers"] == 1 then commandString << " -m" end
+    if hash["VideoGrayScale"] == 1 then commandString << " -g" end
+    if hash["VideoTwoPass"] == 1 then commandString << " -2" end
+    if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
 
     #x264 Options
     if hash["x264Option"] != ""
@@ -897,8 +940,8 @@ class Display
     end
     
     # 64-bit files
-    if hash["Mp4LargeFile"].to_i == 1
-      commandString << "job->largeFileSize = 1;\n"
+    if hash["Mp4LargeFile"] == 1
+      commandString << "job->largeFileSize = 1;\n    "
     end
     
     #Video encoder
@@ -913,13 +956,13 @@ class Display
     end
 
     #VideoRateControl
-    case hash["VideoQualityType"].to_i
+    case hash["VideoQualityType"]
     when 0
       commandString << "size = " << hash["VideoTargetSize"] << ";\n    "
     when 1
       commandString << "job->vbitrate = " << hash["VideoAvgBitrate"] << ";\n    "
     when 2
-      commandString << "job->vquality = " << hash["VideoQualitySlider"] << ";\n    "
+      commandString << "job->vquality = " << hash["VideoQualitySlider"].to_s << ";\n    "
       commandString << "job->crf = 1;\n    "
     end
 
@@ -935,21 +978,21 @@ class Display
     end
     
     #Audio tracks
-    commandString << "atracks = \""
-    commandString << hash["Audio1Track"]
+    commandString << "atracks = strdup(\""
+    commandString << hash["Audio1Track"].to_s
     if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"]
+      commandString << "," << hash["Audio2Track"].to_s
     end
     if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"]
+      commandString << "," << hash["Audio3Track"].to_s
     end
     if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"]
+      commandString << "," << hash["Audio4Track"].to_s
     end
-    commandString << "\";\n    "
+    commandString << "\");\n    "
     
     # Audio bitrate
-    commandString << "abitrates = \""
+    commandString << "abitrates = strdup(\""
     if hash["Audio1Encoder"] != "AC3 Passthru"
       commandString << hash["Audio1Bitrate"]
     else
@@ -976,10 +1019,10 @@ class Display
         commandString << "," << "auto"
       end
     end
-    commandString << "\";\n   "
+    commandString << "\");\n    "
         
     #Audio samplerate
-    commandString << "arates = \""
+    commandString << "arates = strdup(\""
     commandString << hash["Audio1Samplerate"]
     if hash["Audio2Samplerate"]
       commandString << "," << hash["Audio2Samplerate"]
@@ -990,10 +1033,10 @@ class Display
     if hash["Audio4Samplerate"]
       commandString << "," << hash["Audio4Samplerate"]
     end
-    commandString << "\";\n    "
+    commandString << "\");\n    "
       
     #Audio encoder
-    commandString << "acodecs = \""
+    commandString << "acodecs = strdup(\""
     case hash["Audio1Encoder"]
     when /AC3/
       commandString << "ac3"
@@ -1034,10 +1077,10 @@ class Display
     when /MP3/
       commandString << ",lame"
     end
-    commandString << "\";\n    "
+    commandString << "\");\n    "
     
     #Audio mixdowns
-    commandString << "mixdowns = \""
+    commandString << "mixdowns = strdup(\""
     case hash["Audio1Mixdown"]
     when /Mono/
       commandString << "mono"
@@ -1100,24 +1143,24 @@ class Display
         commandString << ",auto"
       end
     end
-    commandString << "\";\n    "
+    commandString << "\");\n    "
     
     #Cropping
-    if !hash["PictureAutoCrop"].to_i
-      commandString << "job->crop[0] = " << hash["PictureTopCrop"] << ";\n    "
-      commandString << "job->crop[1] = " << hash["PictureBottomCrop"] << ";\n    "
-      commandString << "job->crop[2] = " << hash["PictureLeftCrop"] << ";\n    "
-      commandString << "job->crop[4] - " << hash["PictureRightCrop"] << ";\n    "
+    if hash["PictureAutoCrop"] == 0
+      commandString << "job->crop[0] = " << hash["PictureTopCrop"].to_s << ";\n    "
+      commandString << "job->crop[1] = " << hash["PictureBottomCrop"].to_s << ";\n    "
+      commandString << "job->crop[2] = " << hash["PictureLeftCrop"].to_s << ";\n    "
+      commandString << "job->crop[4] - " << hash["PictureRightCrop"].to_s << ";\n    "
     end
     
     #Dimensions
-    if hash["PictureWidth"].to_i != 0
-      commandString << "job->width = "
-      commandString << hash["PictureWidth"] << ";\n    "
+    if hash["PictureWidth"] != 0
+      commandString << "maxWidth = "
+      commandString << hash["PictureWidth"].to_s << ";\n    "
     end
-    if hash["PictureHeight"].to_i != 0
-      commandString << "job->height = "
-      commandString << hash["PictureHeight"] << ";\n    "
+    if hash["PictureHeight"] != 0
+      commandString << "maxHeight = "
+      commandString << hash["PictureHeight"].to_s << ";\n    "
     end
     
     #Subtitles
@@ -1133,9 +1176,9 @@ class Display
     end
     
     #Video Filters
-    if hash["UsesPictureFilters"].to_i == 1
+    if hash["UsesPictureFilters"] == 1
       
-      case hash["PictureDeinterlace"].to_i
+      case hash["PictureDeinterlace"]
       when 1
         commandString << "deinterlace = 1;\n    "
         commandString << "deinterlace_opt = \"-1\";\n    "
@@ -1150,7 +1193,7 @@ class Display
         commandString << "deinterlace_opt = \"1:-1:1\";\n    "
       end
       
-      case hash["PictureDenoise"].to_i
+      case hash["PictureDenoise"]
       when 1
         commandString << "denoise = 1;\n    "
         commandString << "denoise_opt = \"2:1:2:3\";\n    "
@@ -1162,17 +1205,25 @@ class Display
         commandString << "denoise_opt = \"7:7:5:5\";\n    "
       end
       
-      if hash["PictureDetelecine"].to_i == 1 then commandString << "detelecine = 1;\n    " end
-      if hash["PictureDeblock"].to_i == 1 then commandString << "deblock = 1;\n    " end
+      if hash["PictureDetelecine"] == 1 then commandString << "detelecine = 1;\n    " end
+      if hash["PictureDeblock"] == 1 then commandString << "deblock = 1;\n    " end
       if hash["VFR"].to_i == 1 then commandString << "vfr = 1;\n    " end
+      if hash["PictureDecomb"] == 1 then commandString << "decomb = 1;\n    " end
+      
+    end
+    
+    #Anamorphic
+    if hash["PicturePAR"] == 1
+      commandString << "pixelratio = 1;\n    "
+    elsif hash["PicturePAR"] == 2
+      commandString << "pixelratio = 2;\n    "
     end
     
     #Booleans
-    if hash["ChapterMarkers"].to_i == 1 then commandString << "job->chapter_markers = 1;\n    " end
-    if hash["PicturePAR"].to_i == 1 then commandString << "pixelratio = 1;\n    " end
-    if hash["VideoGrayScale"].to_i == 1 then commandString << "job->grayscale = 1;\n    " end
-    if hash["VideoTwoPass"].to_i == 1 then commandString << "twoPass = 1;\n    " end
-    if hash["VideoTurboTwoPass"].to_i == 1 then commandString << "turbo_opts_enabled = 1;\n" end
+    if hash["ChapterMarkers"] == 1 then commandString << "job->chapter_markers = 1;\n    " end
+    if hash["VideoGrayScale"] == 1 then commandString << "job->grayscale = 1;\n    " end
+    if hash["VideoTwoPass"] == 1 then commandString << "twoPass = 1;\n    " end
+    if hash["VideoTurboTwoPass"] == 1 then commandString << "turbo_opts_enabled = 1;\n" end
     
     commandString << "}"
     
@@ -1181,10 +1232,44 @@ class Display
     #puts "*" * @columnWidth
     puts  "\n"
   end
-
-  def generateAPIList(hash) # Makes a list of the CLI options a built-in CLI preset uses, for wrappers to parse
+  
+  def generateAPIFolderList( hash, depth )
     commandString = ""
-    commandString << "    printf(\"\\n+ " << hash["PresetName"] << ": "
+    
+    commandString << "    printf(\"\\n"
+    depth.times do
+      commandString << "   "
+    end
+    (depth+1).times do
+      commandString << "<"
+    end
+    commandString << " " << hash["PresetName"]
+    commandString << "\\n\");\n\n"    
+    puts commandString
+  end
+  
+  def generateAPIFolderCloserList( depth )
+    commandString = ""
+    
+    commandString << "    printf(\"\\n"
+    depth.times do
+      commandString << "   "
+    end
+    (depth+1).times do
+      commandString << ">"
+    end
+    commandString << "\\n\");\n\n"    
+    puts commandString
+  end
+  
+  def generateAPIList(hash, depth) # Makes a list of the CLI options a built-in CLI preset uses, for wrappers to parse
+    commandString = ""
+    commandString << "    printf(\"\\n"
+    depth.times do
+      commandString << "   "
+    end
+           
+    commandString << "+ " << hash["PresetName"] << ": "
         
     #Video encoder
     if hash["VideoEncoder"] != "MPEG-4 (FFmpeg)"
@@ -1198,13 +1283,13 @@ class Display
     end
 
     #VideoRateControl
-    case hash["VideoQualityType"].to_i
+    case hash["VideoQualityType"]
     when 0
       commandString << " -S " << hash["VideoTargetSize"]
     when 1
       commandString << " -b " << hash["VideoAvgBitrate"]
     when 2
-      commandString << " -q " << hash["VideoQualitySlider"]
+      commandString << " -q " << hash["VideoQualitySlider"].to_s
     end
 
     #FPS
@@ -1220,15 +1305,15 @@ class Display
     
     #Audio tracks
     commandString << " -a "
-    commandString << hash["Audio1Track"]
+    commandString << hash["Audio1Track"].to_s
     if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"]
+      commandString << "," << hash["Audio2Track"].to_s
     end
     if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"]
+      commandString << "," << hash["Audio3Track"].to_s
     end
     if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"]
+      commandString << "," << hash["Audio4Track"].to_s
     end
     
     #Audio encoders
@@ -1399,30 +1484,30 @@ class Display
     end
     
     # 64-bit files
-    if hash["Mp4LargeFile"].to_i == 1
+    if hash["Mp4LargeFile"] == 1
       commandString << " -4"
     end
     
     #Cropping
-    if !hash["PictureAutoCrop"].to_i
+    if hash["PictureAutoCrop"] == 0
       commandString << " --crop "
-      commandString << hash["PictureTopCrop"]
+      commandString << hash["PictureTopCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureBottomCrop"]
+      commandString << hash["PictureBottomCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureLeftCrop"]
+      commandString << hash["PictureLeftCrop"].to_s
       commandString << ":"
-      commandString << hash["PictureRightCrop"]
+      commandString << hash["PictureRightCrop"].to_s
     end
     
     #Dimensions
-    if hash["PictureWidth"].to_i != 0
-      commandString << " -w "
-      commandString << hash["PictureWidth"]
+    if hash["PictureWidth"] != 0
+      commandString << " -X "
+      commandString << hash["PictureWidth"].to_s
     end
-    if hash["PictureHeight"].to_i != 0
-      commandString << " -l "
-      commandString << hash["PictureHeight"]
+    if hash["PictureHeight"] != 0
+      commandString << " -Y "
+      commandString << hash["PictureHeight"].to_s
     end
     
     #Subtitles
@@ -1432,9 +1517,9 @@ class Display
     end
     
     #Video Filters
-    if hash["UsesPictureFilters"].to_i == 1
+    if hash["UsesPictureFilters"] == 1
       
-      case hash["PictureDeinterlace"].to_i
+      case hash["PictureDeinterlace"]
       when 1
         commandString << " --deinterlace=\\\"fast\\\""
       when 2
@@ -1445,7 +1530,7 @@ class Display
         commandString << " --deinterlace=\\\"slowest\\\""
       end
       
-      case hash["PictureDenoise"].to_i
+      case hash["PictureDenoise"]
       when 1
         commandString << " --denoise=\\\"weak\\\""
       when 2
@@ -1454,17 +1539,24 @@ class Display
         commandString << " --denoise=\\\"strong\\\""
       end
       
-      if hash["PictureDetelecine"].to_i == 1 then commandString << " --detelecine" end
-      if hash["PictureDeblock"].to_i == 1 then commandString << " --deblock" end
+      if hash["PictureDetelecine"] == 1 then commandString << " --detelecine" end
+      if hash["PictureDeblock"] == 1 then commandString << " --deblock" end
       if hash["VFR"].to_i == 1 then commandString << " --vfr" end
+      if hash["PictureDecomb"] == 1 then commandString << " --decomb" end
+    end
+    
+    #Anamorphic
+    if hash["PicturePAR"] == 1
+      commandString << " -p"
+    elsif hash["PicturePAR"] == 2
+      commandString << " -P"
     end
     
     #Booleans
-    if hash["ChapterMarkers"].to_i == 1 then commandString << " -m" end
-    if hash["PicturePAR"].to_i == 1 then commandString << " -p" end
-    if hash["VideoGrayScale"].to_i == 1 then commandString << " -g" end
-    if hash["VideoTwoPass"].to_i == 1 then commandString << " -2" end
-    if hash["VideoTurboTwoPass"].to_i == 1 then commandString << " -T" end
+    if hash["ChapterMarkers"] == 1 then commandString << " -m" end
+    if hash["VideoGrayScale"] == 1 then commandString << " -g" end
+    if hash["VideoTwoPass"] == 1 then commandString << " -2" end
+    if hash["VideoTurboTwoPass"] == 1 then commandString << " -T" end
     
       #x264 Options
       if hash["x264Option"] != ""
