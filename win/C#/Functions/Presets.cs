@@ -194,10 +194,10 @@ namespace Handbrake.Functions
                 StreamReader presetInput = new StreamReader(filePath);
                 while (!presetInput.EndOfStream)
                 {
-                    if ((char)presetInput.Peek() == '+')
-                        presets.Add(presetInput.ReadLine().Replace("+ ", ""));
-                    else
-                        presetInput.ReadLine();
+                    string line = presetInput.ReadLine();
+
+                    if (line.Contains("+"))
+                        presets.Add(line.Replace("+ ", "").Trim());
                 }
                 presetInput.Close();
                 presetInput.Dispose();
