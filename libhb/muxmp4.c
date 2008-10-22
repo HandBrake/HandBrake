@@ -5,7 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 /* libmp4v2 header */
-#include "mp4.h"
+#include "mp4v2/mp4v2.h"
 
 #include "hb.h"
 
