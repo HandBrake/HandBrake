@@ -310,6 +310,8 @@ class Display
         commandString << " -r " << "23.976"
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
         commandString << " -r " << "29.97"
+      elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
+        commandString << " -r " << "25"
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
@@ -524,8 +526,12 @@ class Display
     
     #Subtitles
     if hash["Subtitles"] != "None"
-      commandString << " -s "
-      commandString << hash["Subtitles"]
+      if hash["Subtitles"] == "Autoselect"
+        commandString << " --subtitle-scan"
+      else
+        commandString << " -s "
+        commandString << hash["Subtitles"]
+      end
     end
 
     #Video Filters
@@ -643,6 +649,8 @@ class Display
         commandString << " -r " << "23.976"
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
         commandString << " -r " << "29.97"
+      elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
+        commandString << " -r " << "25"
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
@@ -858,8 +866,12 @@ class Display
     
     #Subtitles
     if hash["Subtitles"] != "None"
-      commandString << " -s "
-      commandString << hash["Subtitles"]
+      if hash["Subtitles"] == "Autoselect"
+        commandString << " --subtitle-scan"
+      else
+        commandString << " -s "
+        commandString << hash["Subtitles"]
+      end
     end
     
     #Video Filters
@@ -972,6 +984,8 @@ class Display
         commandString << "job->vrate_base = " << "1126125;\n    "
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
         commandString << "job->vrate_base = " << "900900;\n    "
+      elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
+        commandString << "job->vrate_base = " << "1080000\n    "
       # Gotta add the rest of the framerates for completion's sake.
       end
       commandString << "job->cfr = 1;\n    "
@@ -1165,8 +1179,12 @@ class Display
     
     #Subtitles
     if hash["Subtitles"] != "None"
-      commandString << "job->subtitle = "
-      commandString << ( hash["Subtitles"].to_i - 1).to_s << ";\n    "
+      if hash["Subtitles"] == "Autoselect"
+        commandString << "subtitle_scan = 1;\n    "
+      else
+        commandString << "job->subtitle = "
+        commandString << ( hash["Subtitles"].to_i - 1).to_s << ";\n    "
+      end
     end
     
     #x264 Options
@@ -1298,6 +1316,8 @@ class Display
         commandString << " -r " << "23.976"
       elsif hash["VideoFramerate"] == "29.97 (NTSC Video)"
         commandString << " -r " << "29.97"
+      elsif hash["VideoFramerate"] == "25 (PAL Film/Video)"
+        commandString << " -r " << "25"
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
@@ -1512,8 +1532,12 @@ class Display
     
     #Subtitles
     if hash["Subtitles"] != "None"
-      commandString << " -s "
-      commandString << hash["Subtitles"]
+      if hash["Subtitles"] == "Autoselect"
+        commandString << " --subtitle-scan"
+      else
+        commandString << " -s "
+        commandString << hash["Subtitles"]
+      end
     end
     
     #Video Filters
