@@ -165,6 +165,11 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         goto fail;
     }
 
+    if( global_verbosity_level == 3 )
+    {
+        ifoPrint( d->reader, title->vts );
+    }
+
     /* Position of the title in the VTS */
     title->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
 
@@ -237,6 +242,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         int          audio_format, lang_code, audio_control,
                      position, j;
         iso639_lang_t * lang;
+        int lang_extension = 0;
 
         hb_log( "scan: checking audio %d", i + 1 );
 
@@ -244,6 +250,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
 
         audio_format  = vts->vtsi_mat->vts_audio_attr[i].audio_format;
         lang_code     = vts->vtsi_mat->vts_audio_attr[i].lang_code;
+        lang_extension = vts->vtsi_mat->vts_audio_attr[i].code_extension;
         audio_control =
             vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->audio_control[i];
 
@@ -309,6 +316,8 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             continue;
         }
 
+        audio->config.lang.type = lang_extension;
+
         lang = lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code );
 
         snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)",
@@ -321,8 +330,27 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ), "%s",
                   lang->iso639_2);
 
-        hb_log( "scan: id=%x, lang=%s, 3cc=%s", audio->id,
-                audio->config.lang.description, audio->config.lang.iso639_2 );
+        switch( lang_extension )
+        {
+        case 0:
+        case 1:
+            break;
+        case 2:
+            strcat( audio->config.lang.description, " (Visually Impaired)" );
+            break;
+        case 3:
+            strcat( audio->config.lang.description, " (Director's Commentary 1)" );
+            break;
+        case 4:
+            strcat( audio->config.lang.description, " (Director's Commentary 2)" );
+            break;
+        default:
+            break;
+        }
+
+        hb_log( "scan: id=%x, lang=%s, 3cc=%s ext=%i", audio->id,
+                audio->config.lang.description, audio->config.lang.iso639_2,
+                lang_extension );
 
         audio->config.in.track = i;
         hb_list_add( title->list_audio, audio );
@@ -345,6 +373,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         int spu_control;
         int position;
         iso639_lang_t * lang;
+        int lang_extension = 0;
 
         hb_log( "scan: checking subtitle %d", i + 1 );
 
@@ -376,14 +405,64 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
             position = ( spu_control >> 24 ) & 0x7F;
         }
 
+        lang_extension = vts->vtsi_mat->vts_subp_attr[i].code_extension;
+
         lang = lang_for_code( vts->vtsi_mat->vts_subp_attr[i].lang_code );
 
         subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
         subtitle->id = ( ( 0x20 + position ) << 8 ) | 0xbd;
         snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
-       snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
-                 lang->iso639_2);
+        snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
+                  lang->iso639_2);
+
+        subtitle->type = lang_extension;
+
+        switch( lang_extension )
+        {  
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            strcat( subtitle->lang, " (Caption with bigger size character)");
+            break;
+        case 3: 
+            strcat( subtitle->lang, " (Caption for Children)");
+            break;
+        case 4:
+            break;
+        case 5:
+            strcat( subtitle->lang, " (Closed Caption)");
+            break;
+        case 6:
+            strcat( subtitle->lang, " (Closed Caption with bigger size character)");
+            break;
+        case 7:
+            strcat( subtitle->lang, " (Closed Caption for Children)");
+            break;
+        case 8:
+            break;
+        case 9:
+            strcat( subtitle->lang, " (Forced Caption)");
+            break;
+        case 10:
+            break;
+        case 11:
+            break;
+        case 12:
+            break;
+        case 13:
+            strcat( subtitle->lang, " (Director's Commentary)");
+            break;
+        case 14:
+            strcat( subtitle->lang, " (Director's Commentary with bigger size character)");
+            break;
+        case 15:
+            strcat( subtitle->lang, " (Director's Commentary for Children)");
+        default:
+            break;
+        }
 
         hb_log( "scan: id=%x, lang=%s, 3cc=%s", subtitle->id,
                 subtitle->lang, subtitle->iso639_2 );

@@ -299,7 +299,7 @@ hb_display_job_info( hb_job_t * job )
             if( audio->config.out.name )
                 hb_log( "   + name: %s", audio->config.out.name );
 
-            hb_log( "   + decoder: %s (track %d, id %x)", audio->config.lang.description, audio->config.in.track, audio->id );
+            hb_log( "   + decoder: %s (track %d, id %x)", audio->config.lang.description, audio->config.in.track + 1, audio->id );
 
             if( ( audio->config.in.codec == HB_ACODEC_AC3 ) || ( audio->config.in.codec == HB_ACODEC_DCA) )
             {

@@ -360,6 +360,7 @@ struct hb_audio_config_s
         PRIVATE char description[1024];
         PRIVATE char simple[1024];
         PRIVATE char iso639_2[4];
+        PRIVATE uint8_t type; /* normal, visually impared, directors */
     } lang;
 };
 
@@ -408,6 +409,7 @@ struct hb_subtitle_s
     int  id;
     char lang[1024];
     char iso639_2[4];
+    uint8_t type; /* Closed Caption, Childrens, Directors etc */
 
     int hits;     /* How many hits/occurrences of this subtitle */
     int forced_hits; /* How many forced hits in this subtitle */
