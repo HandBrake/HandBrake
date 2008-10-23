@@ -181,8 +181,8 @@ namespace Handbrake.Parsing
         public static Title[] ParseList(string output)
         {
             List<Title> titles = new List<Title>();
-
             StringReader sr = new StringReader(output);
+
             while ((char)sr.Peek() == '+')
             {
                 titles.Add(Title.Parse(sr));
@@ -190,10 +190,22 @@ namespace Handbrake.Parsing
                  * Fix for the line "+ combing detected, may be interlaced or telecined"
                  * If the next character is not a [ or +, then there are titles left to parse, but we are not where
                  * we expect to be in the output, so read one line ahead to skip over the unknown line
+                 * 
+                 * HACK: FIX THIS PROPERLY
+                 * The try cactch is used to fix a bug introduced with 1819. The level of verbosity needs to be 2
+                 * in order for the code to run correctly without the hack below. It gets upset about 2 lines of
+                 * log missing with -v 1. To fix this just break out the loop so that sr.Peek() isn't run.
                  */
+                try
+                {
+                    if ((char)sr.Peek() != '[' && (char)sr.Peek() != '+') // Hack, Fix later
+                        sr.ReadLine();
+                }
+                catch (Exception)
+                {
+                    break;
+                }
 
-                if ((char)sr.Peek() != '[' && (char)sr.Peek() != '+' ) // Hack, Fix later
-                    sr.ReadLine();
             }
 
             return titles.ToArray();
