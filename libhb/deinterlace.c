@@ -216,7 +216,7 @@ void yadif_filter_thread( void *thread_args_v )
     int segment, segment_start, segment_stop;
     yadif_thread_arg_t *thread_args = thread_args_v;
     uint8_t **dst;
-    int parity, tff, y, w, h, ref_stride;
+    int parity, tff, y, w, h, ref_stride, penultimate, ultimate;
 
 
     pv = thread_args->pv;
@@ -261,6 +261,8 @@ void yadif_filter_thread( void *thread_args_v )
             tff = yadif_work->tff;
             w = pv->width[plane];
             h = pv->height[plane];
+            penultimate = h -2;
+            ultimate = h - 1;
             ref_stride = pv->yadif_ref_stride[plane];
             segment_start = ( h / pv->cpu_count ) * segment;
             if( segment == pv->cpu_count - 1 )
@@ -275,24 +277,62 @@ void yadif_filter_thread( void *thread_args_v )
 
             for( y = segment_start; y < segment_stop; y++ )
             {
-                if( (y ^ parity) &  1 )
+                if( ( ( y ^ parity ) &  1 ) )
                 {
-                    uint8_t *prev = &pv->yadif_ref[0][plane][y*ref_stride];
-                    uint8_t *cur  = &pv->yadif_ref[1][plane][y*ref_stride];
-                    uint8_t *next = &pv->yadif_ref[2][plane][y*ref_stride];
-                    uint8_t *dst2 = &dst[plane][y*w];
-                    
-                    yadif_filter_line( dst2, 
-                                       prev, 
-                                       cur, 
-                                       next, 
-                                       plane, 
-                                       parity ^ tff, 
-                                       pv );
-                    
+                    /* This is the bottom field when TFF and vice-versa.
+                       It's the field that gets filtered. Because yadif
+                       needs 2 lines above and below the one being filtered,
+                       we need to mirror the edges. When TFF, this means
+                       replacing the 2nd line with a copy of the 1st,
+                       and the last with the second-to-last.                  */
+                    if( y > 1 && y < ( h -2 ) )
+                    {
+                        /* This isn't the top or bottom, proceed as normal to yadif. */
+                        uint8_t *prev = &pv->yadif_ref[0][plane][y*ref_stride];
+                        uint8_t *cur  = &pv->yadif_ref[1][plane][y*ref_stride];
+                        uint8_t *next = &pv->yadif_ref[2][plane][y*ref_stride];
+                        uint8_t *dst2 = &dst[plane][y*w];
+
+                        yadif_filter_line( dst2, 
+                                           prev, 
+                                           cur, 
+                                           next, 
+                                           plane, 
+                                           parity ^ tff, 
+                                           pv );
+                    }
+                    else if( y == 0 )
+                    {
+                        /* BFF, so y0 = y1 */
+                        memcpy( &dst[plane][y*w],
+                                &pv->yadif_ref[1][plane][1*ref_stride],
+                                w * sizeof(uint8_t) );
+                    }
+                    else if( y == 1 )
+                    {
+                        /* TFF, so y1 = y0 */
+                        memcpy( &dst[plane][y*w],
+                                &pv->yadif_ref[1][plane][0],
+                                w * sizeof(uint8_t) );
+                    }
+                    else if( y == penultimate )
+                    {
+                        /* BFF, so penultimate y = ultimate y */
+                        memcpy( &dst[plane][y*w],
+                                &pv->yadif_ref[1][plane][ultimate*ref_stride],
+                                w * sizeof(uint8_t) );
+                    }
+                    else if( y == ultimate )
+                    {
+                        /* TFF, so ultimate y = penultimate y */
+                        memcpy( &dst[plane][y*w],
+                                &pv->yadif_ref[1][plane][penultimate*ref_stride],
+                                w * sizeof(uint8_t) );
+                    }
                 }
                 else
                 {
+                    /* Preserve this field unfiltered */
                     memcpy( &dst[plane][y*w],
                             &pv->yadif_ref[1][plane][y*ref_stride],
                             w * sizeof(uint8_t) );
