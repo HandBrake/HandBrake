@@ -1912,30 +1912,17 @@ fWorkingCount = 0;
     
     
     [queueFileJob setObject:[NSNumber numberWithInt:[[fDstFormatPopUp selectedItem] tag]] forKey:@"JobFileFormatMux"];
-    	/* Chapter Markers fCreateChapterMarkers*/
-	//[queueFileJob setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
-	/* Allow Mpeg4 64 bit formatting +4GB file sizes */
-	//[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4LargeFileCheck state]] forKey:@"Mp4LargeFile"];
-    /* Mux mp4 with http optimization */
-    //[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4HttpOptFileCheck state]] forKey:@"Mp4HttpOptimize"];
-    /* Add iPod uuid atom */
-    //[queueFileJob setObject:[NSNumber numberWithInt:[fDstMp4iPodFileCheck state]] forKey:@"Mp4iPodCompatible"];
     
     /* Codecs */
 	/* Video encoder */
 	[queueFileJob setObject:[NSNumber numberWithInt:[[fVidEncoderPopUp selectedItem] tag]] forKey:@"JobVideoEncoderVcodec"];
-	/* x264 Option String */
-	//[queueFileJob setObject:[fAdvancedOptions optionsString] forKey:@"x264Option"];
-
-	//[queueFileJob setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
-	//[queueFileJob setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
-	//[queueFileJob setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
-	//[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	
     /* Framerate */
     [queueFileJob setObject:[NSNumber numberWithInt:[fVidRatePopUp indexOfSelectedItem]] forKey:@"JobIndexVideoFramerate"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->rate] forKey:@"JobVrate"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->rate_base] forKey:@"JobVrateBase"];
-	/* Picture Sizing */
+	
+    /* Picture Sizing */
 	/* Use Max Picture settings for whatever the dvd is.*/
 	[queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"UsesMaxPictureSettings"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
@@ -2709,14 +2696,11 @@ fWorkingCount = 0;
             job->vfr = 1;
         }
     }
-    if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 0 )
+    if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] != 2 )
     {
         /* Target size.
          Bitrate should already have been calculated and displayed
-         in fVidBitrateField, so let's just use it */
-    }
-    if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 1 )
-    {
+         in fVidBitrateField, so let's just use it same as abr*/
         job->vquality = -1.0;
         job->vbitrate = [[queueToApply objectForKey:@"VideoAvgBitrate"] intValue];
     }
@@ -3477,6 +3461,7 @@ the user is using "Custom" settings by determining the sender*/
 
 		curUserPresetChosenNum = nil;
 	}
+[self calculateBitrate:nil];
 }
 
 
@@ -3624,9 +3609,98 @@ the user is using "Custom" settings by determining the sender*/
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
-     
-    [fVidBitrateField setIntValue: hb_calc_bitrate( job,
-            [fVidTargetSizeField intValue] )];
+    hb_audio_config_t * audio;
+    /* For  hb_calc_bitrate in addition to the Target Size in MB out of the
+     * Target Size Field, we also need the job info for the Muxer, the Chapters
+     * as well as all of the audio track info.
+     * This used to be accomplished by simply calling prepareJob here, however
+     * since the resilient queue sets the queue array values instead of the job
+     * values directly, we duplicate the old prepareJob code here for the variables
+     * needed
+     */
+    job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
+    job->chapter_end = [fSrcChapterEndPopUp indexOfSelectedItem] + 1; 
+    job->mux = [[fDstFormatPopUp selectedItem] tag];
+    
+    /* Audio goes here */
+    int audiotrack_count = hb_list_count(job->list_audio);
+    for( int i = 0; i < audiotrack_count;i++)
+    {
+        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
+        hb_list_rem(job->list_audio, temp_audio);
+    }
+    /* Now we need our audio info here for each track if applicable */
+    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack1CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack1BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack1RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack1DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+    }  
+    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack2CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack2BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack2RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack2DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+        
+    }
+    
+    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack3CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack3MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack3BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack3RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack3DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+        
+    }
+
+    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack4CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack4MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack4BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack4RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack4DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+        
+    }
+       
+[fVidBitrateField setIntValue: hb_calc_bitrate( job, [fVidTargetSizeField intValue] )];
 }
 
 #pragma mark -
@@ -4589,7 +4663,7 @@ the user is using "Custom" settings by determining the sender*/
         [drcSlider setEnabled: YES];
         [drcField setEnabled: YES];
     }
-    
+[self calculateBitrate:nil];    
 }
 
 - (IBAction) audioDRCSliderChanged: (id) sender
