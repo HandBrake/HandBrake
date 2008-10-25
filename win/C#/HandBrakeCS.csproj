@@ -150,7 +150,8 @@
     <Compile Include="frmMain\QueryGenerator.cs" />
     <Compile Include="Functions\SystemInfo.cs" />
     <Compile Include="Functions\Main.cs" />
-    <Compile Include="Functions\Presets.cs" />
+    <Compile Include="Presets\preset.cs" />
+    <Compile Include="Presets\PresetsHandler.cs" />
     <Compile Include="Functions\Queue.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\Encode.cs" />

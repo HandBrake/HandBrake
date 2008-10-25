@@ -26,7 +26,7 @@ namespace Handbrake
         Functions.Main hb_common_func = new Functions.Main();
         Functions.Encode cliObj = new Functions.Encode();
         Functions.Queue encodeQueue = new Functions.Queue();
-        Functions.Presets presetHandler = new Functions.Presets();
+        Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
         Parsing.Title selectedTitle;
 
         // Objects belonging to this window only
@@ -193,7 +193,7 @@ namespace Handbrake
 
         #endregion
 
-        // The Applications Main Menu *****************************************
+        // The Applications Main Menu and Menus *******************************
 
         #region File Menu
         private void mnu_exit_Click(object sender, EventArgs e)
@@ -229,7 +229,7 @@ namespace Handbrake
         #region Presets Menu
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            presetHandler.grabCLIPresets();
+            presetHandler.updateBuiltInPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -240,10 +240,19 @@ namespace Handbrake
         {
             // Empty the preset file
             string presetsFile = Application.StartupPath.ToString() + "\\presets.dat";
-            StreamWriter line = new StreamWriter(presetsFile);
-            line.WriteLine("");
-            line.Close();
-            line.Dispose();
+            if (File.Exists(presetsFile))
+                File.Delete(presetsFile);
+
+            try
+            {
+                FileStream strm = new FileStream(presetsFile, FileMode.Create, FileAccess.Write);
+                strm.Close();
+                strm.Dispose();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("An error has occured during the preset removal process.\n If you are using Windows Vista, you may need to run under Administrator Mode to complete this task. \n" + exc.ToString());
+            }
 
             // Reload the preset panel
             loadPresetPanel();
@@ -289,6 +298,30 @@ namespace Handbrake
             About.ShowDialog();
         }
         #endregion
+
+        #region Preset Menu
+        private void pmnu_expandAll_Click(object sender, EventArgs e)
+        {
+            treeView_presets.ExpandAll();
+        }
+        private void pmnu_collapse_Click(object sender, EventArgs e)
+        {
+            treeView_presets.CollapseAll();
+        }
+        private void pmnu_delete_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                if (treeView_presets.SelectedNode != null)
+                    presetHandler.remove(treeView_presets.SelectedNode.Text);
+                // Now reload the preset panel
+                loadPresetPanel();
+            }
+            treeView_presets.Select();
+        }
+        #endregion
+
 
         // MainWindow Components, Actions and Functions ***********************
 
@@ -582,7 +615,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming == "Checked")
-                text_destination.Text =  hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
         }
 
         //Destination
@@ -740,7 +773,7 @@ namespace Handbrake
                 {
                     if (drp_anamorphic.Text == "None")
                     {
-                        int height = hb_common_func.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value,text_left.Value, text_right.Value, selectedTitle);
+                        int height = hb_common_func.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value, text_left.Value, text_right.Value, selectedTitle);
                         text_height.Text = height.ToString();
                     }
                 }
@@ -1378,18 +1411,21 @@ namespace Handbrake
             string presetName = treeView_presets.SelectedNode.Text;
             string query = presetHandler.getCliForPreset(presetName);
 
-            //Ok, Reset all the H264 widgets before changing the preset
-            x264PanelFunctions.reset2Defaults(this);
+            if (query != null)
+            {
+                //Ok, Reset all the H264 widgets before changing the preset
+                x264PanelFunctions.reset2Defaults(this);
 
-            // Send the query from the file to the Query Parser class
-            Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+                // Send the query from the file to the Query Parser class
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
 
-            // Now load the preset
-            presetLoader.presetLoader(this, presetQuery, presetName);
+                // Now load the preset
+                presetLoader.presetLoader(this, presetQuery, presetName);
 
-            // The x264 widgets will need updated, so do this now:
-            x264PanelFunctions.X264_StandardizeOptString(this);
-            x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                // The x264 widgets will need updated, so do this now:
+                x264PanelFunctions.X264_StandardizeOptString(this);
+                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+            }
         }
         private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
         {
@@ -1418,7 +1454,7 @@ namespace Handbrake
             }
         }
         #endregion
-        
+
         #region Drive Detection
         // Source Button Drive Detection
         private delegate void ProgressUpdateHandler();
@@ -1794,29 +1830,93 @@ namespace Handbrake
             this.thisDVD = dvd;
         }
 
-
         /// <summary>
         /// Reload the preset panel display
         /// </summary>
         public void loadPresetPanel()
         {
-            presetHandler.loadPresetFiles();
+            presetHandler.loadPresetData();
 
             treeView_presets.Nodes.Clear();
-            List<string> presetNameList = new List<string>();
+
+            List<Presets.Preset> presetNameList = new List<Presets.Preset>();
+            List<string> presetNames = new List<string>();
             TreeNode preset_treeview = new TreeNode();
 
-            presetNameList = presetHandler.getBuildInPresetNames();
-            foreach (string preset in presetNameList)
-            {
-                preset_treeview = new TreeNode(preset);
+            TreeNode rootNode = new TreeNode();
+            TreeNode rootNodeTwo = new TreeNode();
+            TreeNode childNode = new TreeNode();
+            int workingLevel = 0;
+            string previousCategory = String.Empty;
+            string currentCategory = String.Empty;
 
-                // Now Fill Out List View with Items
-                treeView_presets.Nodes.Add(preset_treeview);
+            presetNameList = presetHandler.getBuildInPresets();
+            if (presetNameList.Count != 0)
+            {
+                foreach (Presets.Preset preset in presetNameList)
+                {
+                    // Handle Root Nodes
+
+                    // First Case - No presets have been read yet so setup the root category
+                    if (preset.Level == 1 && currentCategory == String.Empty)
+                    {
+                        rootNode = new TreeNode(preset.Category);
+                        workingLevel = preset.Level;
+                        currentCategory = preset.Category;
+                        previousCategory = preset.Category;
+                    }
+
+                    // Second Case - This is the first sub child node.
+                    if (preset.Level == 2 && workingLevel == 1 && currentCategory != preset.Category)
+                    {
+                        rootNodeTwo = new TreeNode(preset.Category);
+                        workingLevel = preset.Level;
+                        currentCategory = preset.Category;
+                        rootNode.Nodes.Add(rootNodeTwo);
+                    }
+
+                    // Third Case - Any presets the sub presets detected in the above if statment.
+                    if (preset.Level == 1 && workingLevel == 2 && previousCategory == preset.Category)
+                    {
+                        workingLevel = preset.Level;
+                        currentCategory = preset.Category;
+                    }
+
+                    // Fourth Case - We've finished this root node and are onto the next root node.
+                    if (preset.Level == 1 && workingLevel == 1 && previousCategory != preset.Category)
+                    {
+                        treeView_presets.Nodes.Add(rootNode); // Add the finished node
+
+                        rootNode = new TreeNode(preset.Category);
+                        workingLevel = preset.Level;
+                        currentCategory = preset.Category;
+                        previousCategory = preset.Category;
+                    }
+
+                    // Handle Child Nodes
+                    // Add First level child nodes to the current root node
+                    if (preset.Level == 1 && workingLevel == 1 && currentCategory == preset.Category)
+                    {
+                        childNode = new TreeNode(preset.Name);
+                        rootNode.Nodes.Add(childNode);
+                    }
+
+                    // Add Second level child nodes to the current sub root node
+                    if (preset.Level == 2 && workingLevel == 2 && currentCategory == preset.Category)
+                    {
+                        childNode = new TreeNode(preset.Name);
+                        rootNodeTwo.Nodes.Add(childNode);
+                    }
+                }
+
+                // Add the final root node which does not get added above.
+                treeView_presets.Nodes.Add(rootNode);
             }
 
-            presetNameList = presetHandler.getUserPresetNames();
-            foreach (string preset in presetNameList)
+
+            // User Presets
+            presetNames = presetHandler.getUserPresetNames();
+            foreach (string preset in presetNames)
             {
                 preset_treeview = new TreeNode(preset);
                 preset_treeview.ForeColor = Color.Black;
