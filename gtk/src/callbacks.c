@@ -976,6 +976,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
 		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
 	}
+	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 	gint width, height, crop[4];
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
 	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");

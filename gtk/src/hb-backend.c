@@ -2938,7 +2938,6 @@ ghb_add_job(GValue *js, gint unique_id)
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
-		g_message("No title found.\n");
 		return;
 	}
 
