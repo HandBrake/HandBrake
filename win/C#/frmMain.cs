@@ -308,14 +308,17 @@ namespace Handbrake
         {
             treeView_presets.CollapseAll();
         }
-        private void pmnu_delete_Click(object sender, EventArgs e)
+        private void treeview_presets_mouseUp(object sender, MouseEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
+            if (e.Button == MouseButtons.Right)
+                treeView_presets.SelectedNode = treeView_presets.GetNodeAt(e.Location);
+            treeView_presets.Select();
+        }
+        private void pmnu_delete_click(object sender, EventArgs e)
+        {
+            if (treeView_presets.SelectedNode != null)
             {
-                if (treeView_presets.SelectedNode != null)
-                    presetHandler.remove(treeView_presets.SelectedNode.Text);
-                // Now reload the preset panel
+                presetHandler.remove(treeView_presets.SelectedNode.Text);
                 loadPresetPanel();
             }
             treeView_presets.Select();

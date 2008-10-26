@@ -237,6 +237,11 @@ namespace Handbrake
             this.btn_destBrowse = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.treeView_presets = new System.Windows.Forms.TreeView();
+            this.presets_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.pmnu_expandAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.pmnu_collapse = new System.Windows.Forms.ToolStripMenuItem();
+            this.sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.pmnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_source = new System.Windows.Forms.ToolStripDropDownButton();
             this.btn_file_source = new System.Windows.Forms.ToolStripMenuItem();
@@ -254,11 +259,7 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.presets_menu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.pmnu_delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.pmnu_expandAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.sep1 = new System.Windows.Forms.ToolStripSeparator();
-            this.pmnu_collapse = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -285,9 +286,12 @@ namespace Handbrake
             this.tabPage4.SuspendLayout();
             this.groupBox_dest.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.presets_menu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.StatusStrip.SuspendLayout();
-            this.presets_menu.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -307,12 +311,12 @@ namespace Handbrake
             this.btn_restore});
             notifyIconMenu.Name = "notifyIconMenu";
             notifyIconMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            notifyIconMenu.Size = new System.Drawing.Size(153, 48);
+            notifyIconMenu.Size = new System.Drawing.Size(129, 26);
             // 
             // btn_restore
             // 
             this.btn_restore.Name = "btn_restore";
-            this.btn_restore.Size = new System.Drawing.Size(152, 22);
+            this.btn_restore.Size = new System.Drawing.Size(128, 22);
             this.btn_restore.Text = "Restore";
             this.btn_restore.Click += new System.EventHandler(this.btn_restore_Click);
             // 
@@ -549,7 +553,7 @@ namespace Handbrake
             this.btn_setDefault.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_setDefault.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_setDefault.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_setDefault.Location = new System.Drawing.Point(873, 584);
+            this.btn_setDefault.Location = new System.Drawing.Point(108, 8);
             this.btn_setDefault.Name = "btn_setDefault";
             this.btn_setDefault.Size = new System.Drawing.Size(72, 22);
             this.btn_setDefault.TabIndex = 1;
@@ -666,7 +670,7 @@ namespace Handbrake
             this.btn_addPreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_addPreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addPreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addPreset.Location = new System.Drawing.Point(768, 584);
+            this.btn_addPreset.Location = new System.Drawing.Point(3, 8);
             this.btn_addPreset.Name = "btn_addPreset";
             this.btn_addPreset.Size = new System.Drawing.Size(35, 22);
             this.btn_addPreset.TabIndex = 3;
@@ -681,7 +685,7 @@ namespace Handbrake
             this.btn_removePreset.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_removePreset.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_removePreset.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_removePreset.Location = new System.Drawing.Point(809, 584);
+            this.btn_removePreset.Location = new System.Drawing.Point(44, 8);
             this.btn_removePreset.Name = "btn_removePreset";
             this.btn_removePreset.Size = new System.Drawing.Size(58, 22);
             this.btn_removePreset.TabIndex = 4;
@@ -2939,12 +2943,12 @@ namespace Handbrake
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.treeView_presets);
+            this.groupBox2.Controls.Add(this.splitContainer1);
             this.groupBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.Black;
             this.groupBox2.Location = new System.Drawing.Point(728, 70);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(245, 508);
+            this.groupBox2.Size = new System.Drawing.Size(245, 546);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Presets";
@@ -2957,13 +2961,51 @@ namespace Handbrake
             this.treeView_presets.FullRowSelect = true;
             this.treeView_presets.HideSelection = false;
             this.treeView_presets.ItemHeight = 21;
-            this.treeView_presets.Location = new System.Drawing.Point(3, 17);
+            this.treeView_presets.Location = new System.Drawing.Point(0, 0);
             this.treeView_presets.Name = "treeView_presets";
             this.treeView_presets.ShowLines = false;
-            this.treeView_presets.Size = new System.Drawing.Size(239, 488);
+            this.treeView_presets.Size = new System.Drawing.Size(239, 485);
             this.treeView_presets.TabIndex = 0;
             this.treeView_presets.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_presets_AfterSelect);
             this.treeView_presets.KeyUp += new System.Windows.Forms.KeyEventHandler(this.treeView_presets_deleteKey);
+            this.treeView_presets.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeview_presets_mouseUp);
+
+            // 
+            // presets_menu
+            // 
+            this.presets_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.pmnu_expandAll,
+            this.pmnu_collapse,
+            this.sep1,
+            this.pmnu_delete});
+            this.presets_menu.Name = "presets_menu";
+            this.presets_menu.Size = new System.Drawing.Size(146, 76);
+            // 
+            // pmnu_expandAll
+            // 
+            this.pmnu_expandAll.Name = "pmnu_expandAll";
+            this.pmnu_expandAll.Size = new System.Drawing.Size(145, 22);
+            this.pmnu_expandAll.Text = "Expand All";
+            this.pmnu_expandAll.Click += new System.EventHandler(this.pmnu_expandAll_Click);
+            // 
+            // pmnu_collapse
+            // 
+            this.pmnu_collapse.Name = "pmnu_collapse";
+            this.pmnu_collapse.Size = new System.Drawing.Size(145, 22);
+            this.pmnu_collapse.Text = "Collapse All";
+            this.pmnu_collapse.Click += new System.EventHandler(this.pmnu_collapse_Click);
+            // 
+            // sep1
+            // 
+            this.sep1.Name = "sep1";
+            this.sep1.Size = new System.Drawing.Size(142, 6);
+            // 
+            // pmnu_delete
+            // 
+            this.pmnu_delete.Name = "pmnu_delete";
+            this.pmnu_delete.Size = new System.Drawing.Size(145, 22);
+            this.pmnu_delete.Text = "Delete";
+            this.pmnu_delete.Click += new System.EventHandler(this.pmnu_delete_click);
             // 
             // toolStrip1
             // 
@@ -3128,52 +3170,33 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
-            // presets_menu
+            // splitContainer1
             // 
-            this.presets_menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pmnu_expandAll,
-            this.pmnu_collapse,
-            this.sep1,
-            this.pmnu_delete});
-            this.presets_menu.Name = "presets_menu";
-            this.presets_menu.Size = new System.Drawing.Size(146, 76);
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 17);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // pmnu_delete
+            // splitContainer1.Panel1
             // 
-            this.pmnu_delete.Name = "pmnu_delete";
-            this.pmnu_delete.Size = new System.Drawing.Size(145, 22);
-            this.pmnu_delete.Text = "Delete";
-            this.pmnu_delete.Click += new System.EventHandler(this.pmnu_delete_Click);
+            this.splitContainer1.Panel1.Controls.Add(this.treeView_presets);
             // 
-            // pmnu_expandAll
+            // splitContainer1.Panel2
             // 
-            this.pmnu_expandAll.Name = "pmnu_expandAll";
-            this.pmnu_expandAll.Size = new System.Drawing.Size(145, 22);
-            this.pmnu_expandAll.Text = "Expand All";
-            this.pmnu_expandAll.Click += new System.EventHandler(this.pmnu_expandAll_Click);
-            // 
-            // sep1
-            // 
-            this.sep1.Name = "sep1";
-            this.sep1.Size = new System.Drawing.Size(142, 6);
-            // 
-            // pmnu_collapse
-            // 
-            this.pmnu_collapse.Name = "pmnu_collapse";
-            this.pmnu_collapse.Size = new System.Drawing.Size(145, 22);
-            this.pmnu_collapse.Text = "Collapse All";
-            this.pmnu_collapse.Click += new System.EventHandler(this.pmnu_collapse_Click);
+            this.splitContainer1.Panel2.Controls.Add(this.btn_addPreset);
+            this.splitContainer1.Panel2.Controls.Add(this.btn_removePreset);
+            this.splitContainer1.Panel2.Controls.Add(this.btn_setDefault);
+            this.splitContainer1.Size = new System.Drawing.Size(239, 526);
+            this.splitContainer1.SplitterDistance = 485;
+            this.splitContainer1.TabIndex = 1;
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(985, 651);
-            this.Controls.Add(this.btn_setDefault);
             this.Controls.Add(this.GroupBox1);
-            this.Controls.Add(this.btn_removePreset);
             this.Controls.Add(this.groupBox_dest);
-            this.Controls.Add(this.btn_addPreset);
             this.Controls.Add(this.groupBox_output);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.toolStrip1);
@@ -3220,11 +3243,14 @@ namespace Handbrake
             this.groupBox_dest.ResumeLayout(false);
             this.groupBox_dest.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.presets_menu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
-            this.presets_menu.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3452,6 +3478,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem pmnu_collapse;
         private System.Windows.Forms.ToolStripSeparator sep1;
         private System.Windows.Forms.ToolStripMenuItem pmnu_delete;
+        private System.Windows.Forms.SplitContainer splitContainer1;
 
     }
 }

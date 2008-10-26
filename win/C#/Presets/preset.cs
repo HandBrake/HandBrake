@@ -16,10 +16,6 @@ namespace Handbrake.Presets
         private string name;
         private string query;
 
-        public Preset()
-        {
-        }
-
         /// <summary>
         /// Get or Set the preset's level. This indicated if it is a root or child node
         /// </summary>
