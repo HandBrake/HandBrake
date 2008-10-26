@@ -63,6 +63,7 @@
 
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
+#include "libswscale/swscale.h"
 
 static int  decavcodecInit( hb_work_object_t *, hb_job_t * );
 static int  decavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
@@ -108,6 +109,7 @@ struct hb_work_private_s
     hb_buffer_t*    delayq[HEAP_SIZE];
     pts_heap_t      pts_heap;
     void*           buffer;
+    struct SwsContext *sws_context; // if we have to rescale or convert color space
 };
 
 static int64_t heap_pop( pts_heap_t *heap )
@@ -213,6 +215,10 @@ static void decavcodecClose( hb_work_object_t * w )
             hb_log( "%s-decoder done: %u frames, %u decoder errors, %u drops",
                     pv->context->codec->name, pv->nframes, pv->decode_errors,
                     pv->ndrops );
+        }
+        if ( pv->sws_context )
+        {
+            sws_freeContext( pv->sws_context );
         }
         if ( pv->parser )
         {
@@ -401,18 +407,52 @@ static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride
     return dst;
 }
 
-/* Note: assumes frame format is PIX_FMT_YUV420P */
-static hb_buffer_t *copy_frame( AVCodecContext *context, AVFrame *frame )
+// copy one video frame into an HB buf. If the frame isn't in our color space
+// or at least one of its dimensions is odd, use sws_scale to convert/rescale it.
+// Otherwise just copy the bits.
+static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
 {
-    int w = context->width, h = context->height;
+    AVCodecContext *context = pv->context;
+    int w, h;
+    if ( ! pv->job )
+    {
+        // if the dimensions are odd, drop the lsb since h264 requires that
+        // both width and height be even.
+        w = ( context->width >> 1 ) << 1;
+        h = ( context->height >> 1 ) << 1;
+    }
+    else
+    {
+        w =  pv->job->title->width;
+        h =  pv->job->title->height;
+    }
     hb_buffer_t *buf = hb_buffer_init( w * h * 3 / 2 );
     uint8_t *dst = buf->data;
 
-    dst = copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
-    w >>= 1; h >>= 1;
-    dst = copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
-    dst = copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
+    if ( context->pix_fmt != PIX_FMT_YUV420P || w != context->width ||
+         h != context->height )
+    {
+        // have to convert to our internal color space and/or rescale
+        AVPicture dstpic;
+        avpicture_fill( &dstpic, dst, PIX_FMT_YUV420P, w, h );
 
+        if ( ! pv->sws_context )
+        {
+            pv->sws_context = sws_getContext( context->width, context->height, context->pix_fmt,
+                                              w, h, PIX_FMT_YUV420P,
+                                              SWS_LANCZOS|SWS_ACCURATE_RND,
+                                              NULL, NULL, NULL );
+        }
+        sws_scale( pv->sws_context, frame->data, frame->linesize, 0, h,
+                   dstpic.data, dstpic.linesize );
+    }
+    else
+    {
+        dst = copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
+        w >>= 1; h >>= 1;
+        dst = copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
+        dst = copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
+    }
     return buf;
 }
 
@@ -503,7 +543,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
         // by Microsoft we don't worry about timestamp reordering
         if ( ! pv->job || ! pv->brokenByMicrosoft )
         {
-            buf = copy_frame( pv->context, &frame );
+            buf = copy_frame( pv, &frame );
             buf->start = pts;
             hb_list_add( pv->list, buf );
             ++pv->nframes;
@@ -552,7 +592,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
         }
 
         // add the new frame to the delayq & push its timestamp on the heap
-        pv->delayq[slot] = copy_frame( pv->context, &frame );
+        pv->delayq[slot] = copy_frame( pv, &frame );
         heap_push( &pv->pts_heap, pts );
 
         ++pv->nframes;
