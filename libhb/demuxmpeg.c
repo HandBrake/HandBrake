@@ -211,6 +211,14 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
 // for example, ffmpeg.
 int hb_demux_null( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state )
 {
+    // if we don't have a time offset yet, use this timestamp as the offset.
+    if ( state && state->scr_changes == 0 &&
+         ( buf_ps->start >= 0 || buf_ps->renderOffset >= 0 ) )
+    {
+        ++state->scr_changes;
+        state->last_scr = buf_ps->start >= 0 ? buf_ps->start : buf_ps->renderOffset;
+    }
+
     hb_buffer_t *buf = hb_buffer_init( buf_ps->size );
 
     // copy everything from the old to the new except the data ptr & alloc
