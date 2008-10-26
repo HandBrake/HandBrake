@@ -102,6 +102,8 @@ namespace Handbrake
                 loadUserDefaults();
             else
                 loadNormalPreset();
+            // Expand the preset Nodes
+            treeView_presets.ExpandAll();
             // Enabled GUI tooltip's if Required
             if (Properties.Settings.Default.tooltipEnable == "Checked")
                 ToolTip.Active = true;
@@ -319,7 +321,24 @@ namespace Handbrake
             if (treeView_presets.SelectedNode != null)
             {
                 presetHandler.remove(treeView_presets.SelectedNode.Text);
+
+                // Remember each nodes expanded status so we can reload it
+                List<Boolean> nodeStatus = new List<Boolean>();
+                foreach (TreeNode node in treeView_presets.Nodes)
+                {
+                    nodeStatus.Add(node.IsExpanded);
+                }
+
                 loadPresetPanel();
+
+                int i = 0;
+                foreach (TreeNode node in treeView_presets.Nodes)
+                {
+                    if (nodeStatus[i] == true)
+                        node.Expand();
+
+                    i++;
+                }
             }
             treeView_presets.Select();
         }
@@ -1385,8 +1404,25 @@ namespace Handbrake
         // Presets
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
+            // Remember each nodes expanded status so we can reload it
+            List<Boolean> nodeStatus = new List<Boolean>();
+            foreach (TreeNode node in treeView_presets.Nodes)
+                nodeStatus.Add(node.IsExpanded);
+            nodeStatus.Add(true);
+
+            // Now add the new preset
             Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
             preset.ShowDialog();
+
+            // And finally, re-expand any of the nodes if required
+            int i = 0;
+            foreach (TreeNode node in treeView_presets.Nodes)
+            {
+                if (nodeStatus[i] == true)
+                    node.Expand();
+
+                i++;
+            }
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
@@ -1395,8 +1431,24 @@ namespace Handbrake
             {
                 if (treeView_presets.SelectedNode != null)
                     presetHandler.remove(treeView_presets.SelectedNode.Text);
+               
+                // Remember each nodes expanded status so we can reload it
+                List<Boolean> nodeStatus = new List<Boolean>();
+                foreach (TreeNode node in treeView_presets.Nodes)
+                    nodeStatus.Add(node.IsExpanded);
+
                 // Now reload the preset panel
                 loadPresetPanel();
+
+                // And finally, re-expand any of the nodes if required
+                int i = 0;
+                foreach (TreeNode node in treeView_presets.Nodes)
+                {
+                    if (nodeStatus[i] == true)
+                        node.Expand();
+
+                    i++;
+                }
             }
             treeView_presets.Select();
         }
@@ -1439,8 +1491,24 @@ namespace Handbrake
                 {
                     if (treeView_presets.SelectedNode != null)
                         presetHandler.remove(treeView_presets.SelectedNode.Text);
+
+                    // Remember each nodes expanded status so we can reload it
+                    List<Boolean> nodeStatus = new List<Boolean>();
+                    foreach (TreeNode node in treeView_presets.Nodes)
+                        nodeStatus.Add(node.IsExpanded);
+
                     // Now reload the preset panel
                     loadPresetPanel();
+
+                    // And finally, re-expand any of the nodes if required
+                    int i = 0;
+                    foreach (TreeNode node in treeView_presets.Nodes)
+                    {
+                        if (nodeStatus[i] == true)
+                            node.Expand();
+
+                        i++;
+                    }
                 }
             }
         }
