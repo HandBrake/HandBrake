@@ -245,7 +245,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
     
     /* x264 Option String */
-    [preset setObject:@"level=40:ref=2:mixed-refs:bframes=3:weightb:subme=7:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1" forKey:@"x264Option"];
+    [preset setObject:@"level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"VideoQualityType"];
@@ -530,7 +530,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1:subme=8" forKey:@"x264Option"];
+    [preset setObject:@"level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];

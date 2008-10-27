@@ -488,7 +488,7 @@ static int HandleEvents( hb_handle_t * h )
                     acodecs = strdup("faac,ac3");
                     mixdowns = strdup("dpl2,auto");
                     maxWidth = 720;
-                    x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1:subme=8");
+                    x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1");
                     pixelratio = 2;
                     job->chapter_markers = 1;
                 }
@@ -717,7 +717,7 @@ static int HandleEvents( hb_handle_t * h )
                     arates = strdup("48");
                     acodecs = strdup("faac");
                     mixdowns = strdup("dpl2");
-                    x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:weightb:subme=7:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1");
+                    x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1");
                     pixelratio = 1;
                 }
             }
@@ -1678,7 +1678,7 @@ static void ShowPresets()
 {
     printf("\n< Apple\n");
 
-    printf("\n   + Universal:  -e x264  -q 0.589999973773956 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -X 720 -P -m -x level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1:subme=8\n");
+    printf("\n   + Universal:  -e x264  -q 0.589999973773956 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -X 720 -P -m -x level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1\n");
 
     printf("\n   + AppleTV:  -e x264  -q 0.589999973773956 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -4 -X 960 -P -m -x level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all\n");
 
@@ -1722,7 +1722,7 @@ static void ShowPresets()
 
     printf("\n   + PS3:  -e x264  -b 2500 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 --crop 0:0:0:0 -p -x level=41:me=umh\n");
 
-    printf("\n   + Xbox 360:  -e x264  -b 2000 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 -p -x level=40:ref=2:mixed-refs:bframes=3:weightb:subme=7:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1\n");
+    printf("\n   + Xbox 360:  -e x264  -b 2000 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 -p -x level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1\n");
 
     printf("\n>\n");
 }
