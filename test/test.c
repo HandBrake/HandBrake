@@ -1845,7 +1845,7 @@ static int ParseOptions( int argc, char ** argv )
                 char *devName = bsd_name_for_path( input );
                 if( devName == NULL )
                 {
-                    return 0;
+                    break;
                 }
                 if( device_is_dvd( devName ) )
                 {
