@@ -1128,7 +1128,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         
         if ([[item objectForKey:@"VideoQualityType"] intValue] == 0)// Target Size MB
         {
-            videoInfo = [NSString stringWithFormat:@"%@ Target Size: %@(MB)", videoInfo ,[item objectForKey:@"VideoTargetSize"]];
+            videoInfo = [NSString stringWithFormat:@"%@ Target Size: %@(MB) (%d(kbps) abr)", videoInfo ,[item objectForKey:@"VideoTargetSize"],[[item objectForKey:@"VideoAvgBitrate"] intValue]];
         }
         else if ([[item objectForKey:@"VideoQualityType"] intValue] == 1) // ABR
         {
