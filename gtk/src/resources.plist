@@ -5127,7 +5127,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>Folder</key>
 					<false />
 					<key>Mp4LargeFile</key>
-					<true />
+					<false />
 					<key>PictureAutoCrop</key>
 					<true />
 					<key>PictureBottomCrop</key>
@@ -5183,7 +5183,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>VideoTwoPass</key>
 					<false />
 					<key>x264Option</key>
-					<string>level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1:subme=8</string>
+					<string>level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1</string>
 				</dict>
 				<dict>
 					<key>AudioList</key>
@@ -6455,7 +6455,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>VideoTwoPass</key>
 					<false />
 					<key>x264Option</key>
-					<string>level=40:ref=2:mixed-refs:bframes=3:weightb:subme=7:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
+					<string>level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1</string>
 				</dict>
 			</array>
 			<key>Folder</key>
