@@ -2323,8 +2323,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	{
 		width = crop_width;
 		height = crop_height;
-		max_width = crop_width;
-		max_height = crop_height;
+		max_width = 0; //crop_width;
+		max_height = 0; //crop_height;
 	}
 	else
 	{
