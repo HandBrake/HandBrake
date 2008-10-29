@@ -4,8 +4,8 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
-/* libmp4v2 header */
 #include "mp4v2/mp4v2.h"
+#include "a52dec/a52.h"
 
 #include "hb.h"
 
@@ -306,9 +306,110 @@ static int MP4Init( hb_mux_object_t * m )
 
         if( audio->config.out.codec == HB_ACODEC_AC3 )
         {
+            uint8_t fscod = 0;
+            uint8_t bsid = audio->config.in.version;
+            uint8_t bsmod = audio->config.in.mode;
+            uint8_t acmod = audio->config.flags.ac3 & 0x7;
+            uint8_t lfeon = (audio->config.flags.ac3 & A52_LFE) ? 1 : 0;
+            uint8_t bit_rate_code = 0;
+
+            /*
+             * Rewrite AC3 information into correct format for dac3 atom
+             */
+            switch( audio->config.in.samplerate )
+            {
+            case 48000:
+                fscod = 0;
+                break;
+            case 44100:
+                fscod = 1;
+                break;
+            case 32000:
+                fscod = 2;
+                break;
+            default:
+                /*
+                 * Error value, tells decoder to not decode this audio.
+                 */
+                fscod = 3;
+                break;
+            }
+
+            switch( audio->config.in.bitrate )
+            {
+            case 32000:
+                bit_rate_code = 0;
+                break;
+            case 40000:
+                bit_rate_code = 1;
+                break;
+            case 48000:
+                bit_rate_code = 2;
+                break;
+            case 56000:
+                bit_rate_code = 3;
+                break;
+            case 64000:
+                bit_rate_code = 4;
+                break;
+            case 80000:
+                bit_rate_code = 5;
+                break;
+            case 96000:
+                bit_rate_code = 6;
+                break;
+            case 112000:
+                bit_rate_code = 7;
+                break;
+            case 128000:
+                bit_rate_code = 8;
+                break;
+            case 160000:
+                bit_rate_code = 9;
+                break;
+            case 192000:
+                bit_rate_code = 10;
+                break;
+            case 224000:
+                bit_rate_code = 11;
+                break;
+            case 256000:
+                bit_rate_code = 12;
+                break;
+            case 320000:
+                bit_rate_code = 13;
+                break;
+            case 384000:
+                bit_rate_code = 14;
+                break;
+            case 448000:
+                bit_rate_code = 15;
+                break;
+            case 512000:
+                bit_rate_code = 16;
+                break;
+            case 576000:
+                bit_rate_code = 17;
+                break;
+            case 640000:
+                bit_rate_code = 18;
+                break;
+            default:
+                hb_error("Unknown AC3 bitrate");
+                bit_rate_code = 0;
+                break;
+            }
+
             mux_data->track = MP4AddAC3AudioTrack(
                 m->file,
-                m->samplerate, 1536, MP4_MPEG4_AUDIO_TYPE );
+                m->samplerate, 
+                fscod,
+                bsid,
+                bsmod,
+                acmod,
+                lfeon,
+                bit_rate_code);
+
             if (audio->config.out.name == NULL) {
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,

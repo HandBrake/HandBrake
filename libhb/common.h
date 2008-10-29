@@ -339,6 +339,8 @@ struct hb_audio_config_s
         int track;                /* Input track number */
         PRIVATE uint32_t codec;   /* Input audio codec */
         PRIVATE uint32_t codec_param; /* per-codec config info */
+        PRIVATE uint32_t version; /* Bitsream version */
+        PRIVATE uint32_t mode;    /* Bitstream mode, codec dependent encoding */
         PRIVATE int samplerate; /* Input sample rate (Hz) */
         PRIVATE int bitrate;    /* Input bitrate (kbps) */
         PRIVATE int channel_layout;
@@ -534,6 +536,8 @@ typedef struct hb_work_info_s
     int     rate;
     int     rate_base;
     int     flags;
+    int     version;
+    int     mode;
     union {
         struct {    // info only valid for video decoders
             int     width;

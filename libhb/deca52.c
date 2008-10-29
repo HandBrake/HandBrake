@@ -291,6 +291,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
     int i;
     int rate = 0, bitrate = 0, flags = 0;
     int old_rate = 0, old_bitrate = 0;
+    uint8_t raw;
 
     memset( info, 0, sizeof(*info) );
 
@@ -314,6 +315,7 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
             
             old_rate = rate;
             old_bitrate = bitrate;
+            raw = b->data[i+5];
         }
     }
     if ( rate == 0 || bitrate == 0 )
@@ -322,11 +324,21 @@ static int deca52BSInfo( hb_work_object_t *w, const hb_buffer_t *b,
         return 0;
     }
 
+    /*
+     * bsid | bsmod | acmod | cmixlev | surmixlev | dsurmod | lfeon | dialnorm | compre
+     *    5       3       3         2           2         2       1          5        1
+     * [    byte1  ][         byte2                    ][   byte3                     ]
+     */
+
+
     info->name = "AC-3";
     info->rate = rate;
     info->rate_base = 1;
     info->bitrate = bitrate;
     info->flags = flags;
+    info->version = raw >> 3;    /* bsid is the first 5 bits */
+    info->mode = raw & 0x7;      /* bsmod is the following 3 bits */
+
     if ( (flags & A52_CHANNEL_MASK) == A52_DOLBY )
     {
         info->flags |= AUDIO_F_DOLBY;

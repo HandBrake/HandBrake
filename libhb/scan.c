@@ -814,6 +814,8 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     audio->config.in.samplerate = info.rate;
     audio->config.in.bitrate = info.bitrate;
     audio->config.in.channel_layout = info.channel_layout;
+    audio->config.in.version = info.version;
+    audio->config.in.mode = info.mode;
     audio->config.flags.ac3 = info.flags;
 
     // update the audio description string based on the info we found

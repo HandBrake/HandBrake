@@ -727,6 +727,8 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->in.bitrate = -1;
     audiocfg->in.samplerate = -1;
     audiocfg->in.channel_layout = 0;
+    audiocfg->in.version = 0;
+    audiocfg->in.mode = 0;
     audiocfg->flags.ac3 = 0;
     audiocfg->lang.description[0] = 0;
     audiocfg->lang.simple[0] = 0;
