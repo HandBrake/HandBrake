@@ -7,6 +7,8 @@
 #include "hb.h"
 
 #include "mpeg2dec/mpeg2.h"
+#include "libavcodec/avcodec.h"
+#include "libswscale/swscale.h"
 
 /* Cadence tracking */
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD
@@ -63,6 +65,65 @@ static hb_libmpeg2_t * hb_libmpeg2_init()
     return m;
 }
 
+static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
+                                   uint8_t* y, uint8_t *u, uint8_t *v )
+{
+    int dst_w = width, dst_h = height;
+    if ( job )
+    {
+        dst_w = job->title->width;
+        dst_h = job->title->height;
+    }
+    int dst_wh = dst_w * dst_h;
+    hb_buffer_t *buf  = hb_buffer_init( dst_wh + ( dst_wh >> 1 ) );
+
+    if ( dst_w != width || dst_h != height )
+    {
+        // we're encoding and the frame dimensions don't match the title dimensions -
+        // rescale & matte Y, U, V into our output buf.
+        AVPicture in, out;
+        avpicture_alloc(&in,  PIX_FMT_YUV420P, width, height );
+        avpicture_alloc(&out, PIX_FMT_YUV420P, dst_w, dst_h );
+
+        int src_wh = width * height;
+        memcpy( in.data[0], y, src_wh );
+        memcpy( in.data[1], u, src_wh >> 2 );
+        memcpy( in.data[2], v, src_wh >> 2 );
+        struct SwsContext *context = sws_getContext( width, height, PIX_FMT_YUV420P,
+                                                     dst_w, dst_h, PIX_FMT_YUV420P,
+                                                     SWS_LANCZOS|SWS_ACCURATE_RND,
+                                                     NULL, NULL, NULL );
+        sws_scale( context, in.data, in.linesize, 0, height, out.data, out.linesize );
+        sws_freeContext( context );
+
+        u_int8_t *data = buf->data;
+        memcpy( data, out.data[0], dst_wh );
+        data += dst_wh;
+        // U & V planes are 1/4 the size of Y plane.
+        dst_wh >>= 2;
+        memcpy( data, out.data[1], dst_wh );
+        data += dst_wh;
+        memcpy( data, out.data[2], dst_wh );
+
+        avpicture_free( &out );
+        avpicture_free( &in );
+    }
+    else
+    {
+        // we're scanning or the frame dimensions match the title's dimensions
+        // so we can do a straight copy.
+        u_int8_t *data = buf->data;
+        memcpy( data, y, dst_wh );
+        data += dst_wh;
+        // U & V planes are 1/4 the size of Y plane.
+        dst_wh >>= 2;
+        memcpy( data, u, dst_wh );
+        data += dst_wh;
+        memcpy( data, v, dst_wh );
+    }
+    return buf;
+}
+
 /**********************************************************************
  * hb_libmpeg2_decode
  **********************************************************************
@@ -73,7 +134,6 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
 {
     mpeg2_state_t   state;
     hb_buffer_t   * buf;
-    uint8_t       * data;
 
     if ( buf_es->size )
     {
@@ -135,29 +195,18 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
 
             if( m->got_iframe )
             {
-                buf  = hb_buffer_init( m->width * m->height * 3 / 2 );
-                data = buf->data;
-
+                buf  = hb_copy_frame( m->job, m->info->sequence->width,
+                                      m->info->sequence->height,
+                                      m->info->display_fbuf->buf[0],
+                                      m->info->display_fbuf->buf[1],
+                                      m->info->display_fbuf->buf[2] );
                 buf->sequence = buf_es->sequence;
-
-                memcpy( data, m->info->display_fbuf->buf[0],
-                        m->width * m->height );
-                data += m->width * m->height;
-                memcpy( data, m->info->display_fbuf->buf[1],
-                        m->width * m->height / 4 );
-                data += m->width * m->height / 4;
-                memcpy( data, m->info->display_fbuf->buf[2],
-                        m->width * m->height / 4 );
 
                 if( m->info->display_picture->flags & PIC_FLAG_TAGS )
                 {
                     buf->start =
                         ( (uint64_t) m->info->display_picture->tag << 32 ) |
                         ( (uint64_t) m->info->display_picture->tag2 );
-		    /*
-		      * Add back in again to track PTS of MPEG2 frames
-		      * hb_log("MPEG2: Normal buf->start = %lld", buf->start);
-		    */
                 }
                 else if( m->last_pts > -1 )
                 {
