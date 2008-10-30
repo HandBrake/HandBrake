@@ -268,5 +268,13 @@ namespace Handbrake
 
             this.Close();
         }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rtf_actLog.SelectedText != "")
+                Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
+            else
+                Clipboard.SetDataObject(rtf_actLog.Text, true);
+        }
     }
 }
