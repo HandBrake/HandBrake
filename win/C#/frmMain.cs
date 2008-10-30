@@ -237,6 +237,8 @@ namespace Handbrake
                 MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            treeView_presets.ExpandAll();
         }
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
@@ -265,8 +267,15 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
+            // Remember each nodes expanded status so we can reload it
+            List<Boolean> nodeStatus = saveTreeViewState();
+            nodeStatus.Add(true);
+
             Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
             preset.ShowDialog();
+
+            // Now reload the TreeView states
+            loadTreeViewStates(nodeStatus);
         }
         #endregion
 
@@ -323,30 +332,19 @@ namespace Handbrake
                 presetHandler.remove(treeView_presets.SelectedNode.Text);
 
                 // Remember each nodes expanded status so we can reload it
-                List<Boolean> nodeStatus = new List<Boolean>();
-                foreach (TreeNode node in treeView_presets.Nodes)
-                {
-                    nodeStatus.Add(node.IsExpanded);
-                }
+                List<Boolean> nodeStatus = saveTreeViewState();
 
+                // Now reload the preset panel
                 loadPresetPanel();
 
-                int i = 0;
-                foreach (TreeNode node in treeView_presets.Nodes)
-                {
-                    if (nodeStatus[i] == true)
-                        node.Expand();
-
-                    i++;
-                }
+                // Now reload the TreeView states
+                loadTreeViewStates(nodeStatus);
             }
             treeView_presets.Select();
         }
         #endregion
 
-
         // MainWindow Components, Actions and Functions ***********************
-
         #region Actions
 
         // ToolBar
@@ -1405,24 +1403,15 @@ namespace Handbrake
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
             // Remember each nodes expanded status so we can reload it
-            List<Boolean> nodeStatus = new List<Boolean>();
-            foreach (TreeNode node in treeView_presets.Nodes)
-                nodeStatus.Add(node.IsExpanded);
+            List<Boolean> nodeStatus = saveTreeViewState();
             nodeStatus.Add(true);
 
             // Now add the new preset
             Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
             preset.ShowDialog();
 
-            // And finally, re-expand any of the nodes if required
-            int i = 0;
-            foreach (TreeNode node in treeView_presets.Nodes)
-            {
-                if (nodeStatus[i] == true)
-                    node.Expand();
-
-                i++;
-            }
+            // Now reload the TreeView states
+            loadTreeViewStates(nodeStatus);
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
@@ -1433,22 +1422,13 @@ namespace Handbrake
                     presetHandler.remove(treeView_presets.SelectedNode.Text);
                
                 // Remember each nodes expanded status so we can reload it
-                List<Boolean> nodeStatus = new List<Boolean>();
-                foreach (TreeNode node in treeView_presets.Nodes)
-                    nodeStatus.Add(node.IsExpanded);
+                List<Boolean> nodeStatus = saveTreeViewState();
 
                 // Now reload the preset panel
                 loadPresetPanel();
 
-                // And finally, re-expand any of the nodes if required
-                int i = 0;
-                foreach (TreeNode node in treeView_presets.Nodes)
-                {
-                    if (nodeStatus[i] == true)
-                        node.Expand();
-
-                    i++;
-                }
+                // Now reload the TreeView states
+                loadTreeViewStates(nodeStatus);
             }
             treeView_presets.Select();
         }
@@ -1513,6 +1493,40 @@ namespace Handbrake
             }
         }
 
+        #endregion
+
+        #region Preset Expand / Collaspe
+        private List<Boolean> saveTreeViewState()
+        {
+            // Remember each nodes expanded status so we can reload it
+            List<Boolean> nodeStatus = new List<Boolean>();
+            foreach (TreeNode node in treeView_presets.Nodes)
+            {
+                nodeStatus.Add(node.IsExpanded);
+                foreach (TreeNode subNode in node.Nodes)
+                    nodeStatus.Add(node.IsExpanded);
+            }
+            return nodeStatus;
+        }
+
+        private void loadTreeViewStates(List<Boolean> nodeStatus)
+        {
+            // And finally, re-expand any of the nodes if required
+            int i = 0;
+            foreach (TreeNode node in treeView_presets.Nodes)
+            {
+                if (nodeStatus[i] == true)
+                    node.Expand();
+
+                foreach (TreeNode subNode in node.Nodes)
+                {
+                    if (nodeStatus[i] == true)
+                        subNode.Expand();
+                }
+
+                i++;
+            }
+        }
         #endregion
 
         #region Functions
