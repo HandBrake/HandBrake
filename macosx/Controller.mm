@@ -748,8 +748,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [fWindow setFrame:frame display:YES animate:YES];
 				fRipIndicatorShown = NO;
 			}
-            
-			/* Check to see if the encode state has not been cancelled
+            /* Since we are done with this encode, tell output to stop writing to the
+             * individual encode log
+             */
+			[outputPanel endEncodeLog];
+            /* Check to see if the encode state has not been cancelled
              to determine if we should check for encode done notifications */
 			if( fEncodeState != 2 )
             {
@@ -2054,8 +2057,10 @@ fWorkingCount = 0;
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
 - (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
 {
-   //NSRunAlertPanel(@"Hello!", @"We are now performing a new queue scan!", @"OK", nil, nil);
-
+   /* Tell HB to output a new activity log file for this encode */
+    [outputPanel startEncodeLog:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"]];
+    
+    
      /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
     /* set the bool so that showNewScan knows to apply the appropriate queue
@@ -2437,10 +2442,10 @@ fWorkingCount = 0;
     }
     
     NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-    [self writeToActivityLog: "processNewQueueEncode currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
+    //[self writeToActivityLog: "processNewQueueEncode currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
     [self writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
-    [self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
+    //[self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
     [self prepareJob];
     if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
         job->subtitle_force = 1;

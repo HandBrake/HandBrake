@@ -21,12 +21,18 @@
 
     /// Path to log text file.
     NSString *outputLogFile;
+    /// Path to individual log text file.
+    NSString *outputLogFileForEncode;
+    BOOL encodeLogOn;
 }
 
 - (IBAction)showOutputPanel:(id)sender;
 - (IBAction)clearOutput:(id)sender;
 - (IBAction)copyAllOutputToPasteboard:(id)sender;
 - (IBAction)openActivityLogFile:(id)sender;
+- (IBAction)openEncodeLogDirectory:(id)sender;
 - (IBAction)clearActivityLogFile:(id)sender;
+- (void) startEncodeLog:(NSString *) logPath;
+- (void) endEncodeLog;
 
 @end

@@ -60,7 +60,6 @@
         /* We overwrite the existing output log with the date for starters the output log to start fresh with the new session */
         /* Use the current date and time for the new output log header */
         NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for Session (Cleared): %@\n\n", [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
-
         [startOutputLogString writeToFile:outputLogFile atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 
         [[HBOutputRedirect stderrRedirect] addListener:self];
@@ -70,6 +69,8 @@
         [[textView layoutManager] replaceTextStorage:outputTextStorage];
         [[textView enclosingScrollView] setLineScroll:10];
         [[textView enclosingScrollView] setPageScroll:20];
+        
+        encodeLogOn = NO;
     }
     return self;
 }
@@ -96,6 +97,56 @@
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
 }
 
+- (void) startEncodeLog:(NSString *) logPath
+{
+    encodeLogOn = YES;
+    NSString *outputFileForEncode = logPath ;
+    /* Since the destination path matches the extension of the output file, replace the
+     * output movie extension and replace it with ".txt"
+     */
+    NSFileManager * fileManager = [NSFileManager defaultManager];
+    /* Establish the log file location to write to */
+    /* We are initially using a .txt file as opposed to a .log file since it will open by
+     * default with the users text editor instead of the .log default Console.app, should
+     * create less confusion for less experienced users when we ask them to paste the log for support
+     */
+    /* We need to get the current time in YY-MM-DD HH-MM-SS format to put at the beginning of the name of the log file */
+    time_t _now = time( NULL );
+    struct tm * now  = localtime( &_now );
+    NSString *dateForLogTitle = [NSString stringWithFormat:@"%02d-%02d-%02d %02d-%02d-%02d",now->tm_year + 1900, now->tm_mon, now->tm_mday,now->tm_hour, now->tm_min, now->tm_sec]; 
+    
+    /* Assemble the new log file name as YY-MM-DD HH-MM-SS mymoviename.txt */
+    NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",dateForLogTitle,[[outputFileForEncode lastPathComponent] stringByDeletingPathExtension]];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"EncodeLogLocation"]) // if we are putting it in the same directory with the movie
+    {
+        
+        outputLogFileForEncode = [[NSString stringWithFormat:@"%@/%@",[outputFileForEncode stringByDeletingLastPathComponent],outputDateFileName] retain];
+    }
+    else // if we are putting it in the default ~/Libraries/Application Support/HandBrake/EncodeLogs logs directory
+    {
+        NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
+                                                                    NSUserDomainMask,
+                                                                    YES ) objectAtIndex:0];
+        NSString *encodeLogDirectory = [[[libraryDir stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"HandBrake"] stringByAppendingPathComponent:@"EncodeLogs"];
+        if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
+        {
+            [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
+                                                       attributes:nil];
+        }
+        outputLogFileForEncode = [[NSString stringWithFormat:@"%@/%@",encodeLogDirectory,outputDateFileName] retain];   
+    }
+    [fileManager createFileAtPath:outputLogFileForEncode contents:nil attributes:nil];
+    
+    /* Similar to the regular activity log, we print a header containing the date and time of the encode as well as what directory it was encoded to */
+    NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for %@: %@\n\n",outputFileForEncode, [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil]];
+    [startOutputLogString writeToFile:outputLogFileForEncode atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+}
+
+- (void) endEncodeLog
+{
+    encodeLogOn = NO;
+}
+
 /**
  * Displays text received from HBOutputRedirect in the text view.
  */
@@ -120,7 +171,12 @@
     fprintf(f, "%s", [text UTF8String]);
     fclose(f);
     
-    
+    if (encodeLogOn == YES && outputLogFileForEncode != nil)
+    {
+    FILE *e = fopen([outputLogFileForEncode UTF8String], "a");
+    fprintf(e, "%s", [text UTF8String]);
+    fclose(e);
+    }
     /* Below uses Objective-C to write to the file, though it is slow and uses
         * more memory than the c function above. For now, leaving this in here
         * just in case and commented out.
@@ -174,6 +230,27 @@
 {
     /* Opens the activity window log file in the users default text editor */
     NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", outputLogFile, @"\")"]];
+    [myScript executeAndReturnError: nil];
+    [myScript release];
+}
+
+/**
+ * Opens the activity log txt file in users default editor.
+ */
+- (IBAction)openEncodeLogDirectory:(id)sender
+{
+    /* Opens the activity window log file in the users default text editor */
+    NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
+                                                                NSUserDomainMask,
+                                                                YES ) objectAtIndex:0];
+    NSString *encodeLogDirectory = [[[libraryDir stringByAppendingPathComponent:@"Application Support"] stringByAppendingPathComponent:@"HandBrake"] stringByAppendingPathComponent:@"EncodeLogs"];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
+                                                   attributes:nil];
+    }
+    
+    NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", encodeLogDirectory, @"\")"]];
     [myScript executeAndReturnError: nil];
     [myScript release];
 }
