@@ -147,10 +147,11 @@ namespace Handbrake
                     hbProc = cliObj.runCli(this, query);
 
                     hbProc.WaitForExit();
+                    cliObj.copyLog(query);
+
                     hbProc.Close();
                     hbProc.Dispose();
                     hbProc = null;
-
                     query = "";
 
                     if (cancel == true)

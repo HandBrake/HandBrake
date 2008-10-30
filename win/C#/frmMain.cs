@@ -1849,6 +1849,7 @@ namespace Handbrake
                 }
 
                 // After the encode is done, we may want to shutdown, suspend etc.
+                cliObj.copyLog((string)state);
                 cliObj.afterEncodeAction();
             }
         }

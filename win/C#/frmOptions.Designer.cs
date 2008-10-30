@@ -57,6 +57,13 @@ namespace Handbrake
             this.txt_decomb = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
+            this.label15 = new System.Windows.Forms.Label();
+            this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
+            this.btn_saveLog = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.text_logPath = new System.Windows.Forms.TextBox();
+            this.check_keepLogs = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.check_cli_minimized = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.drp_Priority = new System.Windows.Forms.ComboBox();
@@ -331,6 +338,13 @@ namespace Handbrake
             // 
             // tab_cli
             // 
+            this.tab_cli.Controls.Add(this.label15);
+            this.tab_cli.Controls.Add(this.check_saveLogWithVideo);
+            this.tab_cli.Controls.Add(this.btn_saveLog);
+            this.tab_cli.Controls.Add(this.label14);
+            this.tab_cli.Controls.Add(this.text_logPath);
+            this.tab_cli.Controls.Add(this.check_keepLogs);
+            this.tab_cli.Controls.Add(this.label9);
             this.tab_cli.Controls.Add(this.check_cli_minimized);
             this.tab_cli.Controls.Add(this.label12);
             this.tab_cli.Controls.Add(this.drp_Priority);
@@ -343,6 +357,84 @@ namespace Handbrake
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(195, 197);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(24, 13);
+            this.label15.TabIndex = 84;
+            this.label15.Text = "OR";
+            // 
+            // check_saveLogWithVideo
+            // 
+            this.check_saveLogWithVideo.AutoSize = true;
+            this.check_saveLogWithVideo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_saveLogWithVideo.Location = new System.Drawing.Point(71, 177);
+            this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
+            this.check_saveLogWithVideo.Size = new System.Drawing.Size(349, 17);
+            this.check_saveLogWithVideo.TabIndex = 83;
+            this.check_saveLogWithVideo.Text = "Put individual encode logs in the same location as movie";
+            this.ToolTip.SetToolTip(this.check_saveLogWithVideo, "Place a copy of the encode log in the same folder as the encoded movie.");
+            this.check_saveLogWithVideo.UseVisualStyleBackColor = true;
+            this.check_saveLogWithVideo.CheckedChanged += new System.EventHandler(this.check_saveLogWithVideo_CheckedChanged);
+            // 
+            // btn_saveLog
+            // 
+            this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_saveLog.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_saveLog.Location = new System.Drawing.Point(343, 218);
+            this.btn_saveLog.Name = "btn_saveLog";
+            this.btn_saveLog.Size = new System.Drawing.Size(68, 22);
+            this.btn_saveLog.TabIndex = 82;
+            this.btn_saveLog.Text = "Browse";
+            this.btn_saveLog.UseVisualStyleBackColor = true;
+            this.btn_saveLog.Click += new System.EventHandler(this.btn_saveLog_Click);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(68, 221);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(61, 13);
+            this.label14.TabIndex = 81;
+            this.label14.Text = "Log Path:";
+            // 
+            // text_logPath
+            // 
+            this.text_logPath.Location = new System.Drawing.Point(135, 218);
+            this.text_logPath.Name = "text_logPath";
+            this.text_logPath.Size = new System.Drawing.Size(202, 21);
+            this.text_logPath.TabIndex = 80;
+            this.ToolTip.SetToolTip(this.text_logPath, "The default location where auto named files are stored.");
+            this.text_logPath.TextChanged += new System.EventHandler(this.text_logPath_TextChanged);
+            // 
+            // check_keepLogs
+            // 
+            this.check_keepLogs.AutoSize = true;
+            this.check_keepLogs.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_keepLogs.Location = new System.Drawing.Point(71, 135);
+            this.check_keepLogs.Name = "check_keepLogs";
+            this.check_keepLogs.Size = new System.Drawing.Size(185, 17);
+            this.check_keepLogs.TabIndex = 79;
+            this.check_keepLogs.Text = "Keep individual encode logs";
+            this.ToolTip.SetToolTip(this.check_keepLogs, "Save encode logs to a file after the encode has completed.");
+            this.check_keepLogs.UseVisualStyleBackColor = true;
+            this.check_keepLogs.CheckedChanged += new System.EventHandler(this.check_keepLogs_CheckedChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(12, 136);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(41, 13);
+            this.label9.TabIndex = 77;
+            this.label9.Text = "Logs:";
             // 
             // check_cli_minimized
             // 
@@ -589,5 +681,12 @@ namespace Handbrake
         internal System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txt_autoNameFormat;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label9;
+        internal System.Windows.Forms.Label label15;
+        internal System.Windows.Forms.Button btn_saveLog;
+        internal System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox text_logPath;
+        internal System.Windows.Forms.CheckBox check_keepLogs;
+        internal System.Windows.Forms.CheckBox check_saveLogWithVideo;
     }
 }

@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 namespace Handbrake.Functions
 {
     public class Encode
-    {       
+    {
         /// <summary>
         /// CLI output is based on en-US locale,
         /// we use this CultureInfo as IFormatProvider to *.Parse() calls
@@ -104,6 +104,39 @@ namespace Handbrake.Functions
                     break;
                 default:
                     break;
+            }
+        }
+
+        public void copyLog(string query)
+        {
+            // The user may wish to do something with the log.
+            if (Properties.Settings.Default.saveLog == "Checked")
+            {
+                string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+                Functions.QueryParser parsed = Functions.QueryParser.Parse(query);
+
+                if (Properties.Settings.Default.saveLogWithVideo == "Checked")
+                {
+                    string[] destName = parsed.Destination.Split('\\');
+                    string destinationFile = "";
+                    for (int i = 0; i < destName.Length - 1; i++)
+                    {
+                        destinationFile += destName[i] + "\\";
+                    }
+
+                    destinationFile += DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destName[destName.Length - 1] + ".txt"; 
+
+                    File.Copy(logPath, destinationFile);
+                }
+                else if (Properties.Settings.Default.saveLogPath != String.Empty)
+                {
+                    string[] destName = parsed.Destination.Split('\\');
+                    string dest = destName[destName.Length - 1];
+                    string filename = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + dest + ".txt";
+                    string useDefinedLogPath = Path.Combine(Properties.Settings.Default.saveLogPath, filename);
+
+                    File.Copy(logPath, useDefinedLogPath);
+                }
             }
         }
     }

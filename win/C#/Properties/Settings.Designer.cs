@@ -262,5 +262,41 @@ namespace Handbrake.Properties {
                 this["autoNameFormat"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string saveLog {
+            get {
+                return ((string)(this["saveLog"]));
+            }
+            set {
+                this["saveLog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string saveLogPath {
+            get {
+                return ((string)(this["saveLogPath"]));
+            }
+            set {
+                this["saveLogPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string saveLogWithVideo {
+            get {
+                return ((string)(this["saveLogWithVideo"]));
+            }
+            set {
+                this["saveLogWithVideo"] = value;
+            }
+        }
     }
 }
