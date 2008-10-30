@@ -1401,9 +1401,20 @@ static void
 submit_job(GValue *settings)
 {
 	static gint unique_id = 1;
+	gchar *type, *modified, *preset;
+	GValue *path;
+	gboolean preset_modified;
 
 	g_debug("submit_job");
 	if (settings == NULL) return;
+	preset_modified = ghb_settings_get_boolean(settings, "preset_modified");
+	path = ghb_settings_get_value(settings, "preset");
+	preset = ghb_preset_path_string(path);
+	type = ghb_preset_is_custom() ? "Custom " : "";
+	modified = preset_modified ? "Modified " : "";
+	ghb_log("%s%sPreset: %s", modified, type, preset);
+	g_free(preset);
+
 	ghb_settings_set_int(settings, "job_unique_id", unique_id);
 	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_RUNNING);
 	ghb_add_job (settings, unique_id);
@@ -1880,6 +1891,30 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 }
 
 void
+show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
+	gtk_widget_show (widget);
+}
+
+void
+ghb_log(gchar *log, ...)
+{
+	va_list args;
+	time_t _now;
+    struct tm *now;
+	gchar fmt[362];
+
+	_now = time(NULL);
+	now = localtime( &_now );
+	snprintf(fmt, 362, "[%02d:%02d:%02d] lingui: %s\n", 
+			now->tm_hour, now->tm_min, now->tm_sec, log);
+	va_start(args, log);
+	vfprintf(stderr, fmt, args);
+	va_end(args);
+}
+
+void
 about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "hb_about");
@@ -1921,13 +1956,6 @@ void
 hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
 {
 	gtk_widget_hide (widget);
-}
-
-void
-show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-	gtk_widget_show (widget);
 }
 
 void

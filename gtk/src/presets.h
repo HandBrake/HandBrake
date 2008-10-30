@@ -37,5 +37,6 @@ void ghb_select_default_preset(GtkBuilder *builder);
 void ghb_presets_list_init(signal_user_data_t *ud, gint *indices, gint len);
 GValue* ghb_parse_preset_path(const gchar *path);
 gchar* ghb_preset_path_string(const GValue *path);
+gboolean ghb_preset_is_custom(void);
 
 #endif // _GHB_PRESETS_H_

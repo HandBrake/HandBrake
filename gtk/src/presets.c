@@ -323,8 +323,7 @@ ghb_presets_remove(
 		presets_remove_nth(folder, indices[len-1]);
 	else
 	{
-		g_warning("ghb_presets_remove ()");
-		g_warning("internal preset lookup error");
+		g_warning("ghb_presets_remove (): internal preset lookup error");
 		return FALSE;
 	}
 	return TRUE;
@@ -344,8 +343,7 @@ ghb_presets_replace(
 		ghb_array_replace(folder, indices[len-1], dict);
 	else
 	{
-		g_warning("ghb_presets_replace ()");
-		g_warning("internal preset lookup error");
+		g_warning("ghb_presets_replace (): internal preset lookup error");
 	}
 }
 
@@ -363,8 +361,7 @@ ghb_presets_insert(
 		ghb_array_insert(folder, indices[len-1], dict);
 	else
 	{
-		g_warning("ghb_presets_insert ()");
-		g_warning("internal preset lookup error");
+		g_warning("ghb_presets_insert (): internal preset lookup error");
 	}
 }
 
@@ -637,8 +634,7 @@ ghb_presets_get_type(
 	}
 	else
 	{
-		g_warning("ghb_presets_get_type ()");
-		g_warning("internal preset lookup error");
+		g_warning("ghb_presets_get_type (): internal preset lookup error");
 	}
 	return type;
 }
@@ -659,8 +655,7 @@ ghb_presets_get_folder(
 	}
 	else
 	{
-		g_warning("ghb_presets_get_folder ()");
-		g_warning("internal preset lookup error");
+		g_warning("ghb_presets_get_folder (): internal preset lookup error");
 	}
 	return folder;
 }
@@ -890,6 +885,16 @@ ghb_settings_to_ui(signal_user_data_t *ud, GValue *dict)
 }
 
 static GValue *current_preset = NULL;
+
+gboolean
+ghb_preset_is_custom()
+{
+	const GValue *val;
+
+	if (current_preset == NULL) return FALSE;
+	val = preset_dict_get_value(current_preset, "Type");
+	return (ghb_value_int(val) == 1);
+}
 
 void
 ghb_set_preset_from_indices(signal_user_data_t *ud, gint *indices, gint len)

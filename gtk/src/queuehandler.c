@@ -139,7 +139,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
 	if (preset_modified)
 		g_string_append_printf(str, 
-			"<b>Customized Preset Based On:</b> <small>%s</small>\n", 
+			"<b>Modified Preset Based On:</b> <small>%s</small>\n", 
 			preset);
 	else
 		g_string_append_printf(str, 

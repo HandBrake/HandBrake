@@ -35,6 +35,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
+#include "hbversion.h"
 #include "renderer_button.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
@@ -527,6 +528,7 @@ main (int argc, char *argv[])
 	ud->builder = create_builder_or_die (BUILDER_NAME);
 	// Redirect stderr to the activity window
 	IoRedirect(ud);
+	ghb_log("Handbrake Version: %s (%d)", HB_VERSION, HB_BUILD);
 	ghb_init_dep_map();
 
 	// Need to connect x264_options textview buffer to the changed signal
