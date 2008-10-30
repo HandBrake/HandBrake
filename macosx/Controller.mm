@@ -2442,7 +2442,7 @@ fWorkingCount = 0;
     }
     
     NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-    //[self writeToActivityLog: "processNewQueueEncode currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
+    [self writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
     [self writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
     //[self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
