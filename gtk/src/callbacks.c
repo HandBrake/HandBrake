@@ -40,6 +40,7 @@
 
 static void update_chapter_list(signal_user_data_t *ud);
 static GList* dvd_device_list();
+static void prune_logs(signal_user_data_t *ud);
 
 // This is a dependency map used for greying widgets
 // that are dependent on the state of another widget.
@@ -254,12 +255,14 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 		if (ghb_cancel_encode("Closing HandBrake will terminate encoding.\n"))
 		{
 			ghb_hb_cleanup(FALSE);
+			prune_logs(ud);
 			gtk_main_quit();
 			return;
 		}
 		return;
 	}
 	ghb_hb_cleanup(FALSE);
+	prune_logs(ud);
 	gtk_main_quit();
 }
 
@@ -603,6 +606,7 @@ ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force)
 			gtk_progress_bar_set_fraction (progress, 0);
 			gtk_progress_bar_set_text (progress, "Scanning ...");
 			ghb_hb_cleanup(TRUE);
+			prune_logs(ud);
 			ghb_backend_scan (path, 0);
 			g_free(path);
 		}
@@ -829,6 +833,7 @@ window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *
 {
 	g_debug("window_destroy_event_cb ()");
 	ghb_hb_cleanup(FALSE);
+	prune_logs(ud);
 	gtk_main_quit();
 	return FALSE;
 }
@@ -843,12 +848,14 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 		if (ghb_cancel_encode("Closing HandBrake will terminate encoding.\n"))
 		{
 			ghb_hb_cleanup(FALSE);
+			prune_logs(ud);
 			gtk_main_quit();
 			return FALSE;
 		}
 		return TRUE;
 	}
 	ghb_hb_cleanup(FALSE);
+	prune_logs(ud);
 	gtk_main_quit();
 	return FALSE;
 }
@@ -1420,6 +1427,41 @@ submit_job(GValue *settings)
 	ghb_add_job (settings, unique_id);
 	ghb_start_queue();
 	unique_id++;
+}
+
+static void
+prune_logs(signal_user_data_t *ud)
+{
+	gchar *dest_dir;
+
+	// Only prune logs stored in the default config dir location
+	dest_dir = ghb_get_user_config_dir("EncodeLogs");
+	if (g_file_test(dest_dir, G_FILE_TEST_IS_DIR))
+	{
+		const gchar *file;
+		int week = 7*24*60*60;
+		GDir *gdir = g_dir_open(dest_dir, 0, NULL);
+		time_t now;
+
+		now = time(NULL);
+		file = g_dir_read_name(gdir);
+		while (file)
+		{
+			gchar *path;
+			struct stat stbuf;
+
+			path = g_strdup_printf("%s/%s", dest_dir, file);
+			g_stat(path, &stbuf);
+			if (now - stbuf.st_mtime > week)
+			{
+				g_unlink(path);
+			}
+			g_free(path);
+			file = g_dir_read_name(gdir);
+		}
+		g_dir_close(gdir);
+	}
+	g_free(dest_dir);
 }
 
 static void
@@ -2484,11 +2526,13 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			gtk_progress_bar_set_fraction (progress, 0);
  			update_source_label(ud, device);
 			ghb_hb_cleanup(TRUE);
+			prune_logs(ud);
 			ghb_backend_scan(device, 0);
 		}
 		else
 		{
 			ghb_hb_cleanup(TRUE);
+			prune_logs(ud);
 			ghb_backend_scan("/dev/null", 0);
 		}
 	}
