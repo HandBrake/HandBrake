@@ -1015,7 +1015,7 @@ ghb_select_default_preset(GtkBuilder *builder)
 }
 
 gchar*
-ghb_get_user_config_dir()
+ghb_get_user_config_dir(gchar *subdir)
 {
 	const gchar *dir;
 	gchar *config;
@@ -1034,6 +1034,23 @@ ghb_get_user_config_dir()
 		if (!g_file_test(config, G_FILE_TEST_IS_DIR))
 			g_mkdir (config, 0755);
 	}
+	if (subdir)
+	{
+		gchar **split;
+		gint ii;
+
+		split = g_strsplit(subdir, "/", -1);
+		for (ii = 0; split[ii] != NULL; ii++)
+		{
+			gchar *tmp;
+
+			tmp = g_strdup_printf ("%s/%s", config, split[ii]);
+			g_free(config);
+			config = tmp;
+			if (!g_file_test(config, G_FILE_TEST_IS_DIR))
+				g_mkdir (config, 0755);
+		}
+	}
 	return config;
 }
 
@@ -1043,7 +1060,7 @@ store_plist(GValue *plist, const gchar *name)
 	gchar *config, *path;
 	FILE *file;
 
-	config = ghb_get_user_config_dir();
+	config = ghb_get_user_config_dir(NULL);
 	path = g_strdup_printf ("%s/%s", config, name);
 	file = g_fopen(path, "w");
 	g_free(config);
@@ -1058,7 +1075,7 @@ load_plist(const gchar *name)
 	gchar *config, *path;
 	GValue *plist = NULL;
 
-	config = ghb_get_user_config_dir();
+	config = ghb_get_user_config_dir(NULL);
 	path = g_strdup_printf ("%s/%s", config, name);
 	if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
 	{
@@ -1074,7 +1091,7 @@ remove_plist(const gchar *name)
 {
 	gchar *config, *path;
 
-	config = ghb_get_user_config_dir();
+	config = ghb_get_user_config_dir(NULL);
 	path = g_strdup_printf ("%s/%s", config, name);
 	if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
 	{

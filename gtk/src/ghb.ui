@@ -3472,6 +3472,22 @@ this setting.</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="EncodeLogLocation">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text"> HandBrake produces 2 activity logs.  
+One for the session and one for each encoding.
+Store the individual encode logs in the same
+location as the movie.</property>
+                            <property name="label" translatable="yes">Store logs in destination video directory</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb"/>
+                          </object>
+                          <packing>
+                            <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="allow_tweaks">
                             <property name="can_focus">True</property>
                             <property name="label" translatable="yes">Allow Tweaks</property>
@@ -3479,7 +3495,7 @@ this setting.</property>
                             <signal name="toggled" handler="tweaks_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -3490,7 +3506,7 @@ this setting.</property>
                             <signal name="toggled" handler="hbfd_feature_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
                       </object>

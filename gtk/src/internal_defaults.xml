@@ -84,6 +84,8 @@
 	</dict>
 	<key>Preferences</key>
 	<dict>
+		<key>EncodeLogLocation</key>
+		<false />
 		<key>allow_tweaks</key>
 		<false />
 		<key>chapters_in_destination</key>

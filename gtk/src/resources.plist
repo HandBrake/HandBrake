@@ -3477,6 +3477,22 @@ this setting.&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
+                          &lt;object class=&quot;GtkCheckButton&quot; id=&quot;EncodeLogLocation&quot;&gt;
+                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;tooltip_text&quot;&gt; HandBrake produces 2 activity logs.  
+One for the session and one for each encoding.
+Store the individual encode logs in the same
+location as the movie.&lt;/property&gt;
+                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Store logs in destination video directory&lt;/property&gt;
+                            &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
+                            &lt;signal name=&quot;toggled&quot; handler=&quot;pref_changed_cb&quot;/&gt;
+                          &lt;/object&gt;
+                          &lt;packing&gt;
+                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
+                          &lt;/packing&gt;
+                        &lt;/child&gt;
+                        &lt;child&gt;
                           &lt;object class=&quot;GtkCheckButton&quot; id=&quot;allow_tweaks&quot;&gt;
                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                             &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Allow Tweaks&lt;/property&gt;
@@ -3484,7 +3500,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;tweaks_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;6&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3495,7 +3511,7 @@ this setting.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;hbfd_feature_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;6&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;7&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                       &lt;/object&gt;
@@ -4930,6 +4946,8 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		</dict>
 		<key>Preferences</key>
 		<dict>
+			<key>EncodeLogLocation</key>
+			<false />
 			<key>allow_tweaks</key>
 			<false />
 			<key>chapters_in_destination</key>

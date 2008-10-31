@@ -1423,10 +1423,52 @@ submit_job(GValue *settings)
 }
 
 static void
-queue_scan(GValue *js)
+queue_scan(signal_user_data_t *ud, GValue *js)
 {
 	gchar *path;
 	gint titlenum;
+	time_t	_now;
+	struct tm *now;
+	gchar *log_path, *pos, *destname, *basename, *dest_dir;
+
+	_now = time(NULL);
+	now = localtime(&_now);
+	destname = ghb_settings_get_string(js, "destination");
+	basename = g_path_get_basename(destname);
+	if (ghb_settings_get_boolean(ud->settings, "EncodeLogLocation"))
+	{
+		dest_dir = g_path_get_dirname (destname);
+	}
+	else
+	{
+		dest_dir = ghb_get_user_config_dir("EncodeLogs");
+	}
+	g_free(destname);
+	pos = g_strrstr( basename, "." );
+	if (pos != NULL)
+	{
+		*pos = 0;
+	}
+	log_path = g_strdup_printf("%s/%d-%02d-%02d %02d-%02d-%02d %s.log",
+		dest_dir,
+		now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,
+		now->tm_hour, now->tm_min, now->tm_sec, basename);
+	g_free(basename);
+	g_free(dest_dir);
+	if (ud->job_activity_log)
+		g_io_channel_unref(ud->job_activity_log);
+	ud->job_activity_log = g_io_channel_new_file (log_path, "w", NULL);
+	if (ud->job_activity_log)
+	{
+		gchar *ver_str;
+
+		ver_str = g_strdup_printf("Handbrake Version: %s (%d)\n", 
+									HB_VERSION, HB_BUILD);
+		g_io_channel_write_chars (ud->job_activity_log, ver_str, 
+									-1, NULL, NULL);
+		g_free(ver_str);
+	}
+	g_free(log_path);
 
 	path = ghb_settings_get_string( js, "source");
 	titlenum = ghb_settings_get_int(js, "titlenum");
@@ -1455,7 +1497,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 			if (status == GHB_QUEUE_PENDING)
 			{
 				current = ii;
-				queue_scan(js);
+				queue_scan(ud, js);
 				return js;
 			}
 		}
@@ -1476,7 +1518,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 				if (status == GHB_QUEUE_PENDING)
 				{
 					current = jj;
-					queue_scan(js);
+					queue_scan(ud, js);
 					return js;
 				}
 			}
@@ -1491,7 +1533,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 		if (status == GHB_QUEUE_PENDING)
 		{
 			current = ii;
-			queue_scan(js);
+			queue_scan(ud, js);
 			return js;
 		}
 	}
@@ -1737,6 +1779,8 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_settings_set_int(js, "job_status", qstatus);
 		ghb_save_queue(ud->queue);
 		ud->cancel_encode = FALSE;
+		g_io_channel_unref(ud->job_activity_log);
+		ud->job_activity_log = NULL;
 	}
 	else if (status.queue_state & GHB_STATE_MUXING)
 	{
@@ -1870,7 +1914,11 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 			mark = gtk_text_buffer_get_insert (buffer);
 			gtk_text_view_scroll_mark_onscreen(textview, mark);
 		}
-		g_io_channel_write_chars (ud->activity_log, text, length, &length, NULL);
+		g_io_channel_write_chars (ud->activity_log, text, 
+								length, &length, NULL);
+		if (ud->job_activity_log)
+			g_io_channel_write_chars (ud->job_activity_log, text, 
+									length, &length, NULL);
 		g_free(text);
 	}
 	if (status != G_IO_STATUS_NORMAL)

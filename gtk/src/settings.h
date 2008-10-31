@@ -47,6 +47,7 @@ typedef struct
 	GValue *queue;
 	GValue *current_job;
 	GIOChannel *activity_log;
+	GIOChannel *job_activity_log;
 } signal_user_data_t;
 
 enum

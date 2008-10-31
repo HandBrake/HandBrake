@@ -420,9 +420,10 @@ IoRedirect(signal_user_data_t *ud)
 	}
 	// Open activity log.
 	// TODO: Put this in the same directory as the encode destination
-	config = ghb_get_user_config_dir();
+	config = ghb_get_user_config_dir(NULL);
 	path = g_strdup_printf("%s/%s", config, "Activity.log");
 	ud->activity_log = g_io_channel_new_file (path, "w", NULL);
+	ud->job_activity_log = NULL;
 	ghb_ui_update(ud, "activity_location", ghb_string_value(path));
 	g_free(path);
 	g_free(config);
