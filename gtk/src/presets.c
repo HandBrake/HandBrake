@@ -2392,18 +2392,21 @@ ghb_presets_load()
 	if (presetsPlist == NULL)
 	{
 		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
+		import_xlat_presets(presetsPlist);
 		store_presets();
 	}
 	else if (G_VALUE_TYPE(presetsPlist) == ghb_dict_get_type())
 	{ // Presets is older dictionary format. Convert to array
 		ghb_value_free(presetsPlist);
 		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
+		import_xlat_presets(presetsPlist);
 		store_presets();
 	}
 	else if (check_old_presets())
 	{
 		ghb_value_free(presetsPlist);
 		presetsPlist = ghb_value_dup(ghb_resource_get("standard-presets"));
+		import_xlat_presets(presetsPlist);
 		store_presets();
 	}
 	import_xlat_presets(presetsPlist);
