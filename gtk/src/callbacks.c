@@ -1369,7 +1369,7 @@ ghb_message_dialog(GtkMessageType type, const gchar *message, const gchar *no, c
 	// Toss up a warning dialog
 	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
 							type, GTK_BUTTONS_NONE,
-							message);
+							"%s", message);
 	gtk_dialog_add_buttons( GTK_DIALOG(dialog), 
 						   no, GTK_RESPONSE_NO,
 						   yes, GTK_RESPONSE_YES, NULL);
