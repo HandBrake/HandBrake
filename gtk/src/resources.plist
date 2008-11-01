@@ -19,7 +19,7 @@
     &lt;property name=&quot;lower&quot;&gt;4&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;16&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment11&quot;&gt;
@@ -27,7 +27,7 @@
     &lt;property name=&quot;lower&quot;&gt;-6&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment12&quot;&gt;
@@ -35,7 +35,7 @@
     &lt;property name=&quot;lower&quot;&gt;-6&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment13&quot;&gt;
@@ -43,7 +43,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment14&quot;&gt;
@@ -51,7 +51,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment15&quot;&gt;
@@ -59,7 +59,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment16&quot;&gt;
@@ -67,7 +67,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment17&quot;&gt;
@@ -75,7 +75,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;16&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;2&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;16&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment18&quot;&gt;
@@ -83,7 +83,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;16&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;2&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;16&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment19&quot;&gt;
@@ -91,7 +91,7 @@
     &lt;property name=&quot;lower&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;10&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;1&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment2&quot;&gt;
@@ -107,7 +107,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;100&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;10&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;100&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment4&quot;&gt;
@@ -115,7 +115,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;1000&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;100&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;1000&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment5&quot;&gt;
@@ -147,7 +147,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;3&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment9&quot;&gt;
@@ -155,7 +155,7 @@
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;1&lt;/property&gt;
-    &lt;property name=&quot;page_size&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment20&quot;&gt;
