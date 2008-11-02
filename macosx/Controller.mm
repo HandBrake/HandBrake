@@ -422,7 +422,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [self setEnabledStateOfAudioMixdownControls:nil];
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
         [self calculatePictureSizing:nil];
-        [self shouldEnableHttpMp4CheckBox: nil];
 
 	} else {
 
@@ -3442,16 +3441,6 @@ fWorkingCount = 0;
                                     [[fDstFile2Field stringValue] stringByDeletingPathExtension], extension]];
 }
 
-- (void) shouldEnableHttpMp4CheckBox: (id) sender
-{
-    if( [[fAudTrack1CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
-                                                        [[fAudTrack3CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 ||
-                                                        [[fAudTrack4CodecPopUp selectedItem] tag] == HB_ACODEC_AC3 )
-        [fDstMp4HttpOptFileCheck setEnabled: NO];
-    else
-        [fDstMp4HttpOptFileCheck setEnabled: YES];
-}
-        
 /* Method to determine if we should change the UI
 To reflect whether or not a Preset is being used or if
 the user is using "Custom" settings by determining the sender*/
@@ -4466,7 +4455,6 @@ the user is using "Custom" settings by determining the sender*/
     if( [fDstFormatPopUp indexOfSelectedItem] == 0 )
     {
         [self autoSetM4vExtension: sender];
-        [self shouldEnableHttpMp4CheckBox: sender];
     }
 }
 

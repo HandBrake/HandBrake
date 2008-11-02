@@ -278,7 +278,6 @@ BOOL                        fIsDragging;
 - (IBAction) formatPopUpChanged: (id) sender;
 - (IBAction) videoEncoderPopUpChanged: (id) sender;
 - (IBAction) autoSetM4vExtension: (id) sender;
-- (void) shouldEnableHttpMp4CheckBox: (id) sender;
 - (IBAction) twoPassCheckboxChanged: (id) sender;
 - (IBAction) videoFrameRateChanged: (id) sender;
 - (IBAction) audioAddAudioTrackCodecs: (id)sender;
