@@ -129,7 +129,6 @@ gint ghb_calculate_target_bitrate(GValue *settings, gint titleindex);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_get_title_number(gint titleindex);
 
-gboolean ghb_validate_container(signal_user_data_t *ud);
 gboolean ghb_validate_vquality(GValue *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
 gboolean ghb_validate_video(signal_user_data_t *ud);

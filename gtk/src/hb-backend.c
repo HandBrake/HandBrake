@@ -798,6 +798,7 @@ get_acodec_value(gint val)
 	return value;
 }
 
+#if 0
 static GValue*
 get_abitrate_value(gint val)
 {
@@ -814,6 +815,7 @@ get_abitrate_value(gint val)
 	}
 	return value;
 }
+#endif
 
 static GValue*
 get_amix_value(gint val)
@@ -936,7 +938,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 {
 	GtkWidget *widget;
 	gint container, track, titleindex, acodec;
-	gboolean httpopt;
     hb_audio_config_t *audio = NULL;
 	GValue *gval;
 	
@@ -953,8 +954,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gval = ghb_widget_value(widget);
 	container = ghb_lookup_combo_int("FileFormat", gval);
 	ghb_value_free(gval);
-	widget = GHB_WIDGET (builder, "Mp4HttpOptimize");
-	httpopt = ghb_widget_boolean(widget);
 
 	grey_combo_box_item(builder, "x264_analyse", 3, TRUE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FAAC, FALSE);
@@ -962,9 +961,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
 
 	gboolean allow_ac3 = TRUE;
-	allow_ac3 = 
-		!(container == HB_MUX_MP4 && httpopt) &&
-		(container != HB_MUX_OGM);
+	allow_ac3 = (container != HB_MUX_OGM);
 
 	if (allow_ac3)
 	{
@@ -2608,56 +2605,6 @@ ghb_validate_video(signal_user_data_t *ud)
 		g_free(message);
 		vcodec = HB_VCODEC_XVID;
 		ghb_ui_update(ud, "VideoEncoder", ghb_int64_value(vcodec));
-	}
-	return TRUE;
-}
-
-gboolean
-ghb_validate_container(signal_user_data_t *ud)
-{
-	gint container;
-	gchar *message;
-
-	container = ghb_settings_combo_int(ud->settings, "FileFormat");
-	if (container == HB_MUX_MP4)
-	{
-		const GValue *audio_list;
-		gboolean httpopt;
-
-		audio_list = ghb_settings_get_value(ud->settings, "audio_list");
-		httpopt = ghb_settings_get_boolean(ud->settings, "Mp4HttpOptimize");
-		if (httpopt && ghb_ac3_in_audio_list(audio_list))
-		{
-			message = g_strdup_printf(
-					"AC3 audio in HTTP optimized MP4 is not supported.\n\n"
-					"You should choose a different audio codec.\n"
-					"If you continue, FAAC will be chosen for you.");
-			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
-			{
-				g_free(message);
-				return FALSE;
-			}
-			g_free(message);
-
-			gint count, ii;
-
-			count = ghb_array_len(audio_list);
-			for (ii = 0; ii < count; ii++)
-			{
-				GValue *asettings;
-
-				asettings = ghb_array_get_nth(audio_list, ii);
-				gint acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
-				if (acodec == HB_ACODEC_AC3)
-				{
-					GValue *value;
-					value = get_acodec_value(HB_ACODEC_FAAC);
-					ghb_settings_take_value(asettings, "AudioEncoder", value);
-					value = get_abitrate_value(160);
-					ghb_settings_take_value(asettings, "AudioBitrate", value);
-				}
-			}
-		}
 	}
 	return TRUE;
 }

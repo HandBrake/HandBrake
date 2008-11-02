@@ -585,11 +585,6 @@ validate_settings(signal_user_data_t *ud)
 	{
 		return FALSE;
 	}
-	// Validate container settings
-	if (!ghb_validate_container(ud))
-	{
-		return FALSE;
-	}
 	// Validate filter settings
 	if (!ghb_validate_filters(ud))
 	{
