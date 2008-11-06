@@ -1553,10 +1553,15 @@ namespace Handbrake
         #region Functions
         private void loadNormalPreset()
         {
+            treeView_presets.Nodes.Find("Normal", true);
+
             foreach (TreeNode treenode in treeView_presets.Nodes)
             {
-                if (treenode.Text.ToString().Equals("Normal"))
-                    treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index];
+                foreach (TreeNode node in treenode.Nodes)
+                {
+                    if (node.Text.ToString().Equals("Normal"))
+                       treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
+                }
             }
         }
         #endregion
