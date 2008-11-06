@@ -1002,6 +1002,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), tinfo->num_chapters);
 	widget = GHB_WIDGET (ud->builder, "start_chapter");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
 }
 
 static gint preview_button_width;

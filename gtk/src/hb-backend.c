@@ -2388,12 +2388,13 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			// Height and width are always multiples of 2, so do the rounding
 			new_height = ((new_height + 1) >> 1) << 1;
 			new_width = ((new_width + 1) >> 1) << 1;
-			g_debug("max w %d, new w %d\n", max_width, new_width);
-			if (max_width && (new_width > max_width))
+			if ((max_width && new_width > max_width) || 
+				new_width > title->width)
 			{
 				height = new_height;
 			}
-			else if (max_height && (new_height > max_height))
+			else if ((max_height && new_height > max_height) || 
+						new_height > title->height)
 			{
 				width = new_width;
 			}
