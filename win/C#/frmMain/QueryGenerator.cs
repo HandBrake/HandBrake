@@ -101,11 +101,30 @@ namespace Handbrake
             // Picture Settings Tab
             #region Picture Settings Tab
 
-            if (mainWindow.text_width.Text != "")
-                query += " -w " + mainWindow.text_width.Text;
+            // Use MaxWidth for built-in presets and width for user settings.
+            if (mainWindow.maxWidth == 0)
+            {
 
-            if (mainWindow.text_height.Text != "")
-                query += " -l " + mainWindow.text_height.Text;
+                if (mainWindow.text_width.Text != "")
+                    query += " -w " + mainWindow.text_width.Text;
+            }
+            else
+            {
+                if (mainWindow.text_width.Text != "")
+                    query += " -X " + mainWindow.text_width.Text;
+            }
+
+            // Use MaxHeight for built-in presets and height for user settings.
+            if (mainWindow.maxHeight == 0)
+            {
+                if (mainWindow.text_height.Text != "")
+                    query += " -l " + mainWindow.text_height.Text;
+            }
+            else
+            {
+                if (mainWindow.text_height.Text != "")
+                    query += " -Y " + mainWindow.text_height.Text;
+            }
 
             string cropTop = mainWindow.text_top.Text;
             string cropBottom = mainWindow.text_bottom.Text;

@@ -142,6 +142,32 @@ namespace Handbrake.Functions
             }
         }
 
+        private int q_maxWidth;
+        /// <summary>
+        /// Returns an Int
+        /// The selected Width for the encoding.
+        /// </summary>
+        public int MaxWidth
+        {
+            get
+            {
+                return this.q_maxWidth;
+            }
+        }
+
+        private int q_maxHeight;
+        /// <summary>
+        /// Returns an Int
+        /// The selected Height for the encoding.
+        /// </summary>
+        public int MaxHeight
+        {
+            get
+            {
+                return this.q_maxHeight;
+            }
+        }
+
         private string q_cropValues;
         /// <summary>
         /// Returns an String
@@ -800,6 +826,8 @@ namespace Handbrake.Functions
             //Picture Settings Tab
             Match width = Regex.Match(input, @"-w ([0-9]*)");
             Match height = Regex.Match(input, @"-l ([0-9]*)");
+            Match maxWidth = Regex.Match(input, @"-X ([0-9]*)");
+            Match maxHeight = Regex.Match(input, @"-Y ([0-9]*)");
             Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z]*)\""");
             Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z]*)\""");
             Match deblock = Regex.Match(input, @"--deblock=([0-9]*)");
@@ -929,6 +957,12 @@ namespace Handbrake.Functions
 
                 if (height.Success != false)
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
+
+                if (maxWidth.Success != false)
+                    thisQuery.q_maxWidth = int.Parse(maxWidth.ToString().Replace("-X ", ""));
+
+                if (maxHeight.Success != false)
+                    thisQuery.q_maxHeight = int.Parse(maxHeight.ToString().Replace("-Y ", ""));
 
                 if (crop.Success != false)
                 {
@@ -1194,7 +1228,7 @@ namespace Handbrake.Functions
                     thisQuery.q_drc1 = drcValue;
                 }
                 else
-                    thisQuery.q_drc1 = 0;
+                    thisQuery.q_drc1 = 10;
 
                 if (drc2.Success != false)
                 {
@@ -1205,7 +1239,7 @@ namespace Handbrake.Functions
                     thisQuery.q_drc2 = drcValue;
                 }
                 else
-                    thisQuery.q_drc2 = 0;
+                    thisQuery.q_drc2 = 10;
 
                 if (drc3.Success != false)
                 {
@@ -1216,7 +1250,7 @@ namespace Handbrake.Functions
                     thisQuery.q_drc3 = drcValue;
                 }
                 else
-                    thisQuery.q_drc3 = 0;
+                    thisQuery.q_drc3 = 10;
 
                 if (drc4.Success != false)
                 {
@@ -1227,7 +1261,7 @@ namespace Handbrake.Functions
                     thisQuery.q_drc4 = drcValue;
                 }
                 else
-                    thisQuery.q_drc4 = 0;
+                    thisQuery.q_drc4 = 10;
 
 
                 // Subtitle Stuff

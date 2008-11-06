@@ -129,6 +129,21 @@ namespace Handbrake
                 mainWindow.text_height.Text = "";
             }
 
+            // Set the public max width and max height varibles in frmMain
+            // These are used by the query generator to determine if it should use -X or -w  / -Y or -h
+            if (presetQuery.MaxWidth != 0)
+            {
+                mainWindow.text_width.Text = presetQuery.MaxWidth.ToString();
+                mainWindow.maxWidth = presetQuery.MaxWidth;
+            }
+
+            if (presetQuery.MaxHeight != 0)
+            {
+                mainWindow.text_height.Text = presetQuery.MaxHeight.ToString();
+                mainWindow.maxHeight = presetQuery.MaxHeight;
+            }
+              
+
             #endregion
 
             // Video Settings Tab

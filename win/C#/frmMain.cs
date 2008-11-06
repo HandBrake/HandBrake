@@ -39,6 +39,8 @@ namespace Handbrake
         private frmQueue queueWindow;
         private delegate void updateStatusChanger();
         private string lastAction = null;
+        public int maxWidth = 0;
+        public int maxHeight = 0;
 
         // Applicaiton Startup ************************************************
 
@@ -422,6 +424,9 @@ namespace Handbrake
         //Source
         private void btn_dvd_source_Click(object sender, EventArgs e)
         {
+            // Enable the creation of chapter markers.
+            Check_ChapterMarkers.Enabled = true;
+
             // Set the last action to scan. 
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
@@ -484,10 +489,22 @@ namespace Handbrake
                     MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 lbl_encode.Text = "";
+
+                // Enable the creation of chapter markers if the file is an image of a dvd.
+                if (filename.ToLower().Contains(".iso"))
+                    Check_ChapterMarkers.Enabled = true;
+                else
+                {
+                    Check_ChapterMarkers.Enabled = false;
+                    data_chpt.Rows.Clear();
+                }
             }
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
+            // Enable the creation of chapter markers.
+            Check_ChapterMarkers.Enabled = true;
+
             // Set the last action to scan. 
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
@@ -779,6 +796,8 @@ namespace Handbrake
         //Picture Tab
         private void text_width_TextChanged(object sender, EventArgs e)
         {
+            maxWidth = 0;  // Reset max width so that it's not using the MaxWidth -X. Quick hack to allow -X for preset usage.
+
             int width;
             Boolean parsed = int.TryParse(text_width.Text, out width);
             if (parsed != false)
@@ -801,6 +820,8 @@ namespace Handbrake
         }
         private void text_height_TextChanged(object sender, EventArgs e)
         {
+            maxHeight = 0;  // Reset max height so that it's not using the MaxHeight -Y. Quick hack to allow -Y for preset usage.
+
             int height;
             Boolean parsed = int.TryParse(text_height.Text, out height);
             if (parsed != false)
