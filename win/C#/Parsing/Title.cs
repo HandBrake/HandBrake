@@ -148,7 +148,7 @@ namespace Handbrake.Parsing
             if (m.Success)
                 thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
 
-            output.ReadLine();
+            String testData = output.ReadLine();
 
             // Get duration for this title
 
@@ -183,29 +183,13 @@ namespace Handbrake.Parsing
             List<Title> titles = new List<Title>();
             StringReader sr = new StringReader(output);
 
-            while ((char)sr.Peek() == '+')
+            while (sr.Peek() == '+' || sr.Peek() == ' ')
             {
-                titles.Add(Title.Parse(sr));
-                /*
-                 * Fix for the line "+ combing detected, may be interlaced or telecined"
-                 * If the next character is not a [ or +, then there are titles left to parse, but we are not where
-                 * we expect to be in the output, so read one line ahead to skip over the unknown line
-                 * 
-                 * HACK: FIX THIS PROPERLY
-                 * The try cactch is used to fix a bug introduced with 1819. The level of verbosity needs to be 2
-                 * in order for the code to run correctly without the hack below. It gets upset about 2 lines of
-                 * log missing with -v 1. To fix this just break out the loop so that sr.Peek() isn't run.
-                 */
-                try
-                {
-                    if ((char)sr.Peek() != '[' && (char)sr.Peek() != '+') // Hack, Fix later
-                        sr.ReadLine();
-                }
-                catch (Exception)
-                {
-                    break;
-                }
-
+                // If the the character is a space, then chances are the line
+                if (sr.Peek() == ' ') // If the character is a space, then chances are it's the combing detected line.
+                    sr.ReadLine(); // Skip over it
+                else
+                    titles.Add(Title.Parse(sr));              
             }
 
             return titles.ToArray();
