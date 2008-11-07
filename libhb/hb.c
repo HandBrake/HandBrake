@@ -321,16 +321,18 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     AVPicture            pic_in, pic_preview, pic_deint, pic_crop, pic_scale;
     struct SwsContext  * context;
     int                  i;
+    int                  rgb_width = ((job->width + 7) >> 3) << 3;
+    int                  preview_size;
 
     swsflags = SWS_LANCZOS;
 #ifndef __x86_64__
     swsflags |= SWS_ACCURATE_RND;
 #endif  /* __x86_64__ */
 
-    buf1 = malloc( title->width * title->height * 3 / 2 );
-    buf2 = malloc( title->width * title->height * 3 / 2 );
-    buf3 = malloc( title->width * title->height * 3 / 2 );
-    buf4 = malloc( title->width * title->height * 4 );
+    buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
+    buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
+    buf3 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, job->width, job->height ) );
+    buf4 = av_malloc( avpicture_get_size( PIX_FMT_RGBA32, rgb_width, job->height ) );
     avpicture_fill( &pic_in, buf1, PIX_FMT_YUV420P,
                     title->width, title->height );
     avpicture_fill( &pic_deint, buf2, PIX_FMT_YUV420P,
@@ -338,7 +340,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     avpicture_fill( &pic_scale, buf3, PIX_FMT_YUV420P,
                     job->width, job->height );
     avpicture_fill( &pic_preview, buf4, PIX_FMT_RGBA32,
-                    job->width, job->height );
+                    rgb_width, job->height );
 
     // Allocate the AVPicture frames and fill in
 
@@ -354,7 +356,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
         return;
     }
 
-    fread( buf1, title->width * title->height * 3 / 2, 1, file );
+    fread( buf1, avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height), 1, file );
     fclose( file );
 
     if( job->deinterlace )
@@ -386,8 +388,8 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     sws_freeContext( context );
 
     // Get preview context
-    context = sws_getContext(job->width, job->height, PIX_FMT_YUV420P,
-                              job->width, job->height, PIX_FMT_RGBA32,
+    context = sws_getContext(rgb_width, job->height, PIX_FMT_YUV420P,
+                              rgb_width, job->height, PIX_FMT_RGBA32,
                               swsflags, NULL, NULL, NULL);
 
     // Create preview
@@ -407,6 +409,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     }
 
     /* Draw the picture, centered, and draw the cropping zone */
+    preview_size = pic_preview.linesize[0];
     pen = buffer + ( title->height - job->height ) *
         ( title->width + 2 ) * 2 + ( title->width - job->width ) * 2;
     memset( pen, 0xFF, 4 * ( job->width + 2 ) );
@@ -417,7 +420,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
         nextLine = pen + 4 * ( title->width + 2 );
         memset( pen, 0xFF, 4 );
         pen += 4;
-        memcpy( pen, buf4 + 4 * job->width * i, 4 * job->width );
+        memcpy( pen, buf4 + preview_size * i, 4 * job->width );
         pen += 4 * job->width;
         memset( pen, 0xFF, 4 );
         pen = nextLine;
