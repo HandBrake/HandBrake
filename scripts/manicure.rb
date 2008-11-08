@@ -992,7 +992,9 @@ class Display
     end
     
     #Audio tracks
-    commandString << "atracks = strdup(\""
+    commandString << "if( !atracks )\n    "
+    commandString << "{\n    "
+    commandString << "    atracks = strdup(\""
     commandString << hash["Audio1Track"].to_s
     if hash["Audio2Track"]
       commandString << "," << hash["Audio2Track"].to_s
@@ -1004,9 +1006,12 @@ class Display
       commandString << "," << hash["Audio4Track"].to_s
     end
     commandString << "\");\n    "
+    commandString << "}\n    "
     
     # Audio bitrate
-    commandString << "abitrates = strdup(\""
+    commandString << "if( !abitrates )\n    "
+    commandString << "{\n    "
+    commandString << "    abitrates = strdup(\""
     if hash["Audio1Encoder"] != "AC3 Passthru"
       commandString << hash["Audio1Bitrate"]
     else
@@ -1034,9 +1039,12 @@ class Display
       end
     end
     commandString << "\");\n    "
+    commandString << "}\n    "
         
     #Audio samplerate
-    commandString << "arates = strdup(\""
+    commandString << "if( !arates )\n    "
+    commandString << "{\n    "
+    commandString << "    arates = strdup(\""
     commandString << hash["Audio1Samplerate"]
     if hash["Audio2Samplerate"]
       commandString << "," << hash["Audio2Samplerate"]
@@ -1048,9 +1056,12 @@ class Display
       commandString << "," << hash["Audio4Samplerate"]
     end
     commandString << "\");\n    "
+    commandString << "}\n    "
       
     #Audio encoder
-    commandString << "acodecs = strdup(\""
+    commandString << "if( !acodecs )\n    "
+    commandString << "{\n    "
+    commandString << "    acodecs = strdup(\""
     case hash["Audio1Encoder"]
     when /AC3/
       commandString << "ac3"
@@ -1092,9 +1103,12 @@ class Display
       commandString << ",lame"
     end
     commandString << "\");\n    "
+    commandString << "}\n    "
     
     #Audio mixdowns
-    commandString << "mixdowns = strdup(\""
+    commandString << "if( !mixdowns )\n    "
+    commandString << "{\n    "
+    commandString << "    mixdowns = strdup(\""
     case hash["Audio1Mixdown"]
     when /Mono/
       commandString << "mono"
@@ -1158,6 +1172,7 @@ class Display
       end
     end
     commandString << "\");\n    "
+    commandString << "}\n    "
     
     #Cropping
     if hash["PictureAutoCrop"] == 0
@@ -1189,8 +1204,11 @@ class Display
     
     #x264 Options
     if hash["x264Option"] != ""
-      commandString << "x264opts = strdup(\""
+      commandString << "if( !x264opts )\n    "
+      commandString << "{\n    "
+      commandString << "    x264opts = strdup(\""
       commandString << hash["x264Option"] << "\");\n    "
+      commandString << "}\n    "
     end
     
     #Video Filters

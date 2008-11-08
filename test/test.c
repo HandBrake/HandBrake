@@ -482,13 +482,31 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 0.589999973773956;
                     job->crf = 1;
-                    atracks = strdup("1,1");
-                    abitrates = strdup("160,auto");
-                    arates = strdup("48,Auto");
-                    acodecs = strdup("faac,ac3");
-                    mixdowns = strdup("dpl2,auto");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1,1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160,auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48,Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac,ac3");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2,auto");
+                    }
                     maxWidth = 720;
-                    x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1");
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1");
+                    }
                     pixelratio = 2;
                     job->chapter_markers = 1;
                 }
@@ -500,13 +518,31 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 0.589999973773956;
                     job->crf = 1;
-                    atracks = strdup("1,1");
-                    abitrates = strdup("160,auto");
-                    arates = strdup("48,Auto");
-                    acodecs = strdup("faac,ac3");
-                    mixdowns = strdup("dpl2,auto");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1,1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160,auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48,Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac,ac3");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2,auto");
+                    }
                     maxWidth = 960;
-                    x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all");
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all");
+                    }
                     pixelratio = 2;
                     job->chapter_markers = 1;
                 }
@@ -517,13 +553,31 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 700;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("48");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
                     maxWidth = 320;
-                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -533,13 +587,31 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 960;
-                    atracks = strdup("1");
-                    abitrates = strdup("128");
-                    arates = strdup("48");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("128");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
                     maxWidth = 480;
-                    x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1");
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1");
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -549,13 +621,31 @@ static int HandleEvents( hb_handle_t * h )
                     job->ipod_atom = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1500;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("48");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
                     maxWidth = 640;
-                    x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -564,12 +654,30 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1800;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("Auto");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
-                    x264opts = strdup("ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1");
+                    }
                     pixelratio = 1;
                     job->chapter_markers = 1;
                     twoPass = 1;
@@ -581,12 +689,30 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1500;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("Auto");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
-                    x264opts = strdup("ref=2:bframes=2:me=umh");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=2:bframes=2:me=umh");
+                    }
                     pixelratio = 1;
                     job->chapter_markers = 1;
                     twoPass = 1;
@@ -597,11 +723,26 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     mux = HB_MUX_MP4;
                     job->vbitrate = 1000;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("Auto");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
                 }
 
                 if (!strcmp(preset_name, "Animation"))
@@ -609,12 +750,30 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1000;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("Auto");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
-                    x264opts = strdup("ref=5:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2:psy-rd=1,1:subme=9");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=5:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip:filter=2,2:psy-rd=1,1:subme=9");
+                    }
                     detelecine = 1;
                     decomb = 1;
                     pixelratio = 1;
@@ -629,12 +788,30 @@ static int HandleEvents( hb_handle_t * h )
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 0.600000023841858;
                     job->crf = 1;
-                    atracks = strdup("1");
-                    abitrates = strdup("auto");
-                    arates = strdup("Auto");
-                    acodecs = strdup("ac3");
-                    mixdowns = strdup("auto");
-                    x264opts = strdup("ref=3:mixed-refs:bframes=3:b-pyramid:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh:subme=9:psy-rd=1,1");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("ac3");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("auto");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=3:mixed-refs:bframes=3:b-pyramid:weightb:filter=-2,-1:trellis=1:analyse=all:8x8dct:me=umh:subme=9:psy-rd=1,1");
+                    }
                     pixelratio = 1;
                     job->chapter_markers = 1;
                 }
@@ -644,12 +821,30 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1800;
-                    atracks = strdup("1");
-                    abitrates = strdup("auto");
-                    arates = strdup("Auto");
-                    acodecs = strdup("ac3");
-                    mixdowns = strdup("auto");
-                    x264opts = strdup("ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:no-fast-pskip:psy-rd=1,1");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("ac3");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("auto");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:no-fast-pskip:psy-rd=1,1");
+                    }
                     pixelratio = 1;
                     job->chapter_markers = 1;
                     twoPass = 1;
@@ -661,12 +856,30 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MKV;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 1300;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("Auto");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
-                    x264opts = strdup("ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip=1:psy-rd=1,1");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=3:mixed-refs:bframes=6:weightb:direct=auto:b-pyramid:me=umh:subme=9:analyse=all:8x8dct:trellis=1:nr=150:no-fast-pskip=1:psy-rd=1,1");
+                    }
                     detelecine = 1;
                     decomb = 1;
                     pixelratio = 1;
@@ -679,11 +892,26 @@ static int HandleEvents( hb_handle_t * h )
                 {
                     mux = HB_MUX_MP4;
                     job->vbitrate = 1024;
-                    atracks = strdup("1");
-                    abitrates = strdup("128");
-                    arates = strdup("48");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("128");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
                     maxWidth = 368;
                     maxHeight = 208;
                     job->chapter_markers = 1;
@@ -694,16 +922,34 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2500;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("48");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
                     job->crop[0] = 0;
                     job->crop[1] = 0;
                     job->crop[2] = 0;
                     job->crop[4] - 0;
-                    x264opts = strdup("level=41:me=umh");
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=41:me=umh");
+                    }
                     pixelratio = 1;
                 }
 
@@ -712,12 +958,30 @@ static int HandleEvents( hb_handle_t * h )
                     mux = HB_MUX_MP4;
                     vcodec = HB_VCODEC_X264;
                     job->vbitrate = 2000;
-                    atracks = strdup("1");
-                    abitrates = strdup("160");
-                    arates = strdup("48");
-                    acodecs = strdup("faac");
-                    mixdowns = strdup("dpl2");
-                    x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1");
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1");
+                    }
                     pixelratio = 1;
                 }
             }
