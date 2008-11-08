@@ -368,8 +368,7 @@ hb_filter_private_t * hb_denoise_init( int pix_fmt,
     hqdn3d_precalc_coef( pv->hqdn3d_coef[2], spatial_chroma );
     hqdn3d_precalc_coef( pv->hqdn3d_coef[3], temporal_chroma );
 
-    int buf_size = 3 * width * height / 2;
-    pv->buf_out = hb_buffer_init( buf_size );
+    pv->buf_out = hb_video_buffer_init( width, height );
 
     return pv;
 }

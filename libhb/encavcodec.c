@@ -237,7 +237,7 @@ int encavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     frame->quality = pv->context->global_quality;
 
     /* Should be way too large */
-    buf = hb_buffer_init( 3 * job->width * job->height / 2 );
+    buf = hb_video_buffer_init( job->width, job->height );
     buf->size = avcodec_encode_video( pv->context, buf->data, buf->alloc,
                                       frame );
     buf->start = in->start;

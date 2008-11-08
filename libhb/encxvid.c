@@ -158,7 +158,7 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     /* Should be way too large */
-    buf = hb_buffer_init( 3 * job->width * job->height / 2 );
+    buf = hb_video_buffer_init( job->width, job->height );
     buf->start = in->start;
     buf->stop  = in->stop;
 

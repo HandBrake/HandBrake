@@ -96,6 +96,21 @@ void          hb_fifo_push( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_push_head( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_close( hb_fifo_t ** );
 
+// this routine gets a buffer for an uncompressed YUV420 video frame
+// with dimensions width x height.
+static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
+{
+    // Y requires w x h bytes. U & V each require (w+1)/2 x
+    // (h+1)/2 bytes (the "+1" is to round up). We shift rather
+    // than divide by 2 since the compiler can't know these ints
+    // are positive so it generates very expensive integer divides
+    // if we do "/2". The code here matches the calculation for
+    // PIX_FMT_YUV420P in ffmpeg's avpicture_fill() which is required
+    // for most of HB's filters to work right.
+    return hb_buffer_init( width * height + ( ( width+1 ) >> 1 ) *
+                           ( ( height+1 ) >> 1 ) * 2 );
+}
+
 /***********************************************************************
  * Threads: update.c, scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/

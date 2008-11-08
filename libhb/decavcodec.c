@@ -426,7 +426,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
         w =  pv->job->title->width;
         h =  pv->job->title->height;
     }
-    hb_buffer_t *buf = hb_buffer_init( w * h * 3 / 2 );
+    hb_buffer_t *buf = hb_video_buffer_init( w, h );
     uint8_t *dst = buf->data;
 
     if ( context->pix_fmt != PIX_FMT_YUV420P || w != context->width ||
@@ -449,7 +449,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv, AVFrame *frame )
     else
     {
         dst = copy_plane( dst, frame->data[0], w, frame->linesize[0], h );
-        w >>= 1; h >>= 1;
+        w = (w + 1) >> 1; h = (h + 1) >> 1;
         dst = copy_plane( dst, frame->data[1], w, frame->linesize[1], h );
         dst = copy_plane( dst, frame->data[2], w, frame->linesize[2], h );
     }

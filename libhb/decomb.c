@@ -1113,9 +1113,8 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     pv->width[1]  = pv->width[2]  = width >> 1;
     pv->height[1] = pv->height[2] = height >> 1;
 
-    int buf_size = 3 * width * height / 2;
-    pv->buf_out[0] = hb_buffer_init( buf_size );
-    pv->buf_out[1] = hb_buffer_init( buf_size );
+    pv->buf_out[0] = hb_video_buffer_init( width, height );
+    pv->buf_out[1] = hb_video_buffer_init( width, height );
     pv->buf_settings = hb_buffer_init( 0 );
 
     pv->yadif_deinterlaced_frames = 0;

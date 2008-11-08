@@ -142,13 +142,13 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     yuv.y_height = job->height;
     yuv.y_stride = job->width;
 
-    yuv.uv_width = job->width / 2;
-    yuv.uv_height = job->height / 2;
-    yuv.uv_stride = job->width / 2;
+    yuv.uv_width = (job->width + 1) / 2;
+    yuv.uv_height = (job->height + 1) / 2;
+    yuv.uv_stride = yuv.uv_width;
 
     yuv.y = in->data;
     yuv.u = in->data + job->width * job->height;
-    yuv.v = in->data + job->width * job->height * 5/4;
+    yuv.v = in->data + yuv.uv_width * yuv.uv_height;
 
     theora_encode_YUVin(&pv->theora, &yuv);
 

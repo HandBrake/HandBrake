@@ -405,8 +405,7 @@ hb_filter_private_t * hb_deblock_init( int pix_fmt,
 
     pv->pp7_src = (uint8_t*)malloc( pv->pp7_temp_stride*(h+8)*sizeof(uint8_t) );
 
-    int buf_size = 3 * width * height / 2;
-    pv->buf_out = hb_buffer_init( buf_size );
+    pv->buf_out = hb_video_buffer_init( width, height );
 
     return pv;
 }

@@ -75,7 +75,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
         dst_h = job->title->height;
     }
     int dst_wh = dst_w * dst_h;
-    hb_buffer_t *buf  = hb_buffer_init( dst_wh + ( dst_wh >> 1 ) );
+    hb_buffer_t *buf  = hb_video_buffer_init( dst_w, dst_h );
 
     if ( dst_w != width || dst_h != height )
     {

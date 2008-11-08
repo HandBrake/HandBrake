@@ -55,13 +55,13 @@ hb_work_object_t hb_render =
  */
 static uint8_t *getU(uint8_t *data, int width, int height, int x, int y)
 {
-    return(&data[(((y/2) * (width/2)) + (x/2)) + (width*height)]);
+    return(&data[(y>>1) * ((width+1)>>1) + (x>>1) + width*height]);
 }
 
 static uint8_t *getV(uint8_t *data, int width, int height, int x, int y)
 {
-    return(&data[(((y/2) * (width/2)) + (x/2)) + (width*height) +
-                 (width*height)/4]);
+    int w2 = (width+1) >> 1, h2 = (height+1) >> 1;
+    return(&data[(y>>1) * w2 + (x>>1) + width*height + w2*h2]);
 }
 
 static void ApplySub( hb_job_t * job, hb_buffer_t * buf,
@@ -248,7 +248,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     /* Setup render buffer */
-    hb_buffer_t * buf_render = hb_buffer_init( 3 * job->width * job->height / 2 );
+    hb_buffer_t * buf_render = hb_video_buffer_init( job->width, job->height );
 
     /* Apply filters */
     if( job->filters )

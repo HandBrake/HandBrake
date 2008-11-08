@@ -312,6 +312,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
 
+    pv->pic_in.img.i_stride[2] = pv->pic_in.img.i_stride[1] = ( ( job->width + 1 ) >> 1 );
     pv->x264_allocated_pic = pv->pic_in.img.plane[0];
 
     if (job->areBframes)
@@ -391,7 +392,7 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     hb_job_t *job = pv->job;
 
     /* Should be way too large */
-    buf = hb_buffer_init( 3 * job->width * job->height / 2 );
+    buf = hb_video_buffer_init( job->width, job->height );
     buf->size = 0;
     buf->frametype = 0;
 
@@ -505,17 +506,18 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
     /* Point x264 at our current buffers Y(UV) data.  */
     pv->pic_in.img.plane[0] = in->data;
 
+    int uvsize = ( (job->width + 1) >> 1 ) * ( (job->height + 1) >> 1 );
     if( job->grayscale )
     {
         /* XXX x264 has currently no option for grayscale encoding */
-        memset( pv->pic_in.img.plane[1], 0x80, job->width * job->height / 4 );
-        memset( pv->pic_in.img.plane[2], 0x80, job->width * job->height / 4 );
+        memset( pv->pic_in.img.plane[1], 0x80, uvsize );
+        memset( pv->pic_in.img.plane[2], 0x80, uvsize );
     }
     else
     {
         /* Point x264 at our buffers (Y)UV data */
         pv->pic_in.img.plane[1] = in->data + job->width * job->height;
-        pv->pic_in.img.plane[2] = in->data + 5 * job->width * job->height / 4;
+        pv->pic_in.img.plane[2] = pv->pic_in.img.plane[1] + uvsize;
     }
     if( in->new_chap && job->chapter_markers )
     {
