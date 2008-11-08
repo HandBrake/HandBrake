@@ -14,6 +14,7 @@ struct hb_work_private_s
     /* libdca handle */
     dca_state_t * state;
 
+    double        next_pts;
     int           flags_in;
     int           flags_out;
     int           rate;
@@ -145,7 +146,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
     int           i, j, k;
-    uint64_t      pts, pos;
+    int64_t       pts, pos;
     int           num_blocks;
 
     /* Get a frame header if don't have one yet */
@@ -181,8 +182,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         }
     }
 
-    if( !pv->sync ||
-        hb_list_bytes( pv->list ) < pv->size )
+    if( !pv->sync || hb_list_bytes( pv->list ) < pv->size )
     {
         /* Need more data */
         return NULL;
@@ -198,9 +198,22 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     num_blocks = dca_blocks_num( pv->state );
 
     /* num_blocks blocks per frame, 256 samples per block, channelsused channels */
-    buf        = hb_buffer_init( num_blocks * 256 * pv->out_discrete_channels * sizeof( float ) );
-    buf->start = pts + ( pos / pv->size ) * num_blocks * 256 * 90000 / pv->rate;
-    buf->stop  = buf->start + num_blocks * 256 * 90000 / pv->rate;
+    int nsamp = num_blocks * 256;
+    buf = hb_buffer_init( nsamp * pv->out_discrete_channels * sizeof( float ) );
+
+    // mkv files typically use a 1ms timebase which results in a lot of
+    // truncation error in their timestamps. Also, TSMuxer or something
+    // in the m2ts-to-mkv toolchain seems to take a very casual attitude
+    // about time - timestamps seem to randomly offset by ~40ms for a few
+    // seconds then recover. So, if the pts we got is within 50ms of the
+    // pts computed from the data stream, use the data stream pts.
+    if ( pts < 0 || fabs( (double)pts - pv->next_pts ) < 50.*90. )
+    {
+        pts = pv->next_pts;
+    }
+    buf->start = pts;
+    pv->next_pts += (double)nsamp / (double)pv->rate * 90000.;
+    buf->stop  = pv->next_pts;
 
     for( i = 0; i < num_blocks; i++ )
     {

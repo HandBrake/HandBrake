@@ -2520,6 +2520,10 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
         {
             audio->config.in.codec = HB_ACODEC_AC3;
         }
+        else if ( codec->codec_id == CODEC_ID_DTS )
+        {
+            audio->config.in.codec = HB_ACODEC_DCA;
+        }
         else
         {
             audio->config.in.codec = HB_ACODEC_FFMPEG;
