@@ -148,7 +148,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     yuv.y = in->data;
     yuv.u = in->data + job->width * job->height;
-    yuv.v = in->data + yuv.uv_width * yuv.uv_height;
+    yuv.v = in->data + ( job->width * job->height ) + ( yuv.uv_width * yuv.uv_height );
 
     theora_encode_YUVin(&pv->theora, &yuv);
 
