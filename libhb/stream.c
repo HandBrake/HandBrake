@@ -370,6 +370,10 @@ static int hb_stream_get_type(hb_stream_t *stream)
             stream->packetsize = psize;
             stream->hb_stream_type = transport;
             hb_ts_stream_init(stream);
+            if ( !stream->ts_number_video_pids || !stream->ts_number_audio_pids )
+            {
+                return 0;
+            }
             return 1;
         }
         if ( hb_stream_check_for_dvd_ps(buf) != 0 )
@@ -1509,6 +1513,10 @@ int decode_program_map(hb_stream_t* stream)
         }
 
 
+        if ( index_of_pid( elementary_PID, stream ) < 0 )
+        {
+            // already have this pid - do nothing
+        }
         if (stream->ts_number_video_pids == 0 && st2codec[stream_type].kind == V )
         {
             stream->ts_video_pids[0] = elementary_PID;
@@ -1771,6 +1779,14 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 		if ((stream->ts_number_video_pids > 0) && (stream->ts_number_audio_pids > 0))
 		  break;
 	}
+    // XXX - until we figure out how to handle VC1 just bail when we find it so
+    // that ffmpeg will claim the input stream.
+    if ( stream->ts_stream_type[0] == 0xea )
+    {
+        stream->ts_number_video_pids = 0;
+        stream->ts_number_audio_pids = 0;
+        return;
+    }
 
 	hb_log("hb_ts_stream_find_pids - found the following PIDS");
 	hb_log("    Video PIDS : ");
