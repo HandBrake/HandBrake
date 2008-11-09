@@ -36,6 +36,21 @@ hb_work_object_t hb_encfaac =
     encfaacClose
 };
 
+static const int valid_rates[] =
+{
+    22050, 24000, 32000, 44100, 48000, 0
+};
+
+static int find_samplerate( int rate )
+{
+    int i;
+
+    for ( i = 0; valid_rates[i] && rate > valid_rates[i]; ++i )
+    {
+    }
+    return i;
+}
+
 /***********************************************************************
  * hb_work_encfaac_init
  ***********************************************************************
@@ -55,6 +70,28 @@ int encfaacInit( hb_work_object_t * w, hb_job_t * job )
 
 	/* pass the number of channels used into the private work data */
     pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+
+    /* if the sample rate is 'auto' and that has given us an invalid output */
+    /* rate, map it to the next highest output rate or 48K if above the highest. */
+    int rate_index = find_samplerate(audio->config.out.samplerate);
+    if ( audio->config.out.samplerate != valid_rates[rate_index] )
+    {
+        int rate = valid_rates[valid_rates[rate_index]? rate_index : rate_index - 1];
+        hb_log( "encfaac changing output samplerate from %d to %d",
+                audio->config.out.samplerate, rate );
+        audio->config.out.samplerate = rate;
+
+        /* if the new rate is over the max bandwidth per channel limit */
+        /* lower the bandwidth. */
+        double bw = audio->config.out.bitrate * 1000 / pv->out_discrete_channels;
+        if ( bw > (double)rate * (6144./1024.) )
+        {
+            int newbr = (double)rate * (6.144/1024.) * pv->out_discrete_channels;
+            hb_log( "encfaac changing output bitrate from %d to %d",
+                    audio->config.out.bitrate, newbr );
+            audio->config.out.bitrate = newbr;
+        }
+    }
 
     pv->faac = faacEncOpen( audio->config.out.samplerate, pv->out_discrete_channels,
                             &pv->input_samples, &pv->output_bytes );
