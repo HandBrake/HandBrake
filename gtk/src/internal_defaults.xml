@@ -108,6 +108,8 @@
 		<true />
 		<key>use_source_name</key>
 		<true />
+		<key>update_skip_version</key>
+		<integer>0</integer>
 		<key>version</key>
 		<string>0.1</string>
 	</dict>

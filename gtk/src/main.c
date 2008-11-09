@@ -515,15 +515,10 @@ main (int argc, char *argv[])
 	ghb_hal_init();
 #endif
 
-	ud = g_malloc(sizeof(signal_user_data_t));
+	ud = g_malloc0(sizeof(signal_user_data_t));
 	ud->debug = ghb_debug;
-	ud->cancel_encode = FALSE;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
 	ud->settings = ghb_settings_new();
-	ud->queue = NULL;
-	ud->current_job = NULL;
-	ud->current_dvd_device = NULL;
-	ud->dont_clear_presets = FALSE;
 	// Enable events that alert us to media change events
 	watch_volumes (ud);
 	ud->builder = create_builder_or_die (BUILDER_NAME);
@@ -617,6 +612,7 @@ main (int argc, char *argv[])
 	}
 	// Reload and check status of the last saved queue
 	g_idle_add((GSourceFunc)ghb_reload_queue, ud);
+	g_idle_add((GSourceFunc)ghb_check_update, ud);
 	// Start timer for monitoring libhb status, 500ms
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!

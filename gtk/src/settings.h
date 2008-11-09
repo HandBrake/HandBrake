@@ -48,6 +48,8 @@ typedef struct
 	GValue *current_job;
 	GIOChannel *activity_log;
 	GIOChannel *job_activity_log;
+	gchar *appcast;
+	gint appcast_len;
 } signal_user_data_t;
 
 enum

@@ -19,8 +19,11 @@
 #include <poll.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include <libhal-storage.h>
 #include <gtk/gtk.h>
+#include <gtkhtml/gtkhtml.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
@@ -34,6 +37,7 @@
 #include "presets.h"
 #include "values.h"
 #include "plist.h"
+#include "appcast.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
@@ -2013,12 +2017,13 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gtk_widget_show (widget);
 }
 
-void
-guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+static void
+browse_url(const gchar *url)
 {
 	gboolean result;
 	char *argv[] = 
-		{"xdg-open","http://trac.handbrake.fr/wiki/HandBrakeGuide",NULL,NULL};
+		{"xdg-open",NULL,NULL,NULL};
+	argv[1] = (gchar*)url;
 	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
 				NULL, NULL, NULL);
 	if (result) return;
@@ -2040,7 +2045,12 @@ guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	argv[2] = NULL;
 	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
 				NULL, NULL, NULL);
-	if (result) return;
+}
+
+void
+guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	browse_url("http://trac.handbrake.fr/wiki/HandBrakeGuide");
 }
 
 void
@@ -2728,3 +2738,213 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 		return g_strdup_printf("%.1f", val);
 	}
 }
+
+static void
+html_link_cb(GtkHTML *html, const gchar *url, signal_user_data_t *ud)
+{
+	browse_url(url);
+}
+
+static gboolean check_stable_update(signal_user_data_t *ud);
+static gboolean stable_update_lock = FALSE;
+
+static void
+process_appcast(signal_user_data_t *ud)
+{
+	gchar *description = NULL, *build = NULL, *version = NULL, *msg;
+	GtkWidget *html, *window, *dialog, *label;
+	gint	response, ibuild = 0, skip;
+
+	if (ud->appcast == NULL || ud->appcast_len < 15 || 
+		strncmp(&(ud->appcast[9]), "200 OK", 6))
+	{
+		if (!stable_update_lock && HB_BUILD % 100)
+			g_idle_add((GSourceFunc)check_stable_update, ud);
+		goto done;
+	}
+	ghb_appcast_parse(ud->appcast, &description, &build, &version);
+	if (build)
+		ibuild = g_strtod(build, NULL);
+	skip = ghb_settings_get_int(ud->settings, "update_skip_version");
+	if (description == NULL || build == NULL || version == NULL 
+		|| ibuild <= HB_BUILD || skip == ibuild)
+	{
+		if (!stable_update_lock && HB_BUILD % 100)
+			g_idle_add((GSourceFunc)check_stable_update, ud);
+		goto done;
+	}
+	msg = g_strdup_printf("HandBrake %s/%s is now available (you have %s/%d).",
+			version, build, HB_VERSION, HB_BUILD);
+	label = GHB_WIDGET(ud->builder, "update_message");
+	gtk_label_set_text(GTK_LABEL(label), msg);
+	html = gtk_html_new_from_string(description, -1);
+	g_signal_connect(html, "link_clicked", G_CALLBACK(html_link_cb), ud);
+	window = GHB_WIDGET(ud->builder, "update_scroll");
+	gtk_container_add(GTK_CONTAINER(window), html);
+	// Show it
+	dialog = GHB_WIDGET(ud->builder, "update_dialog");
+	gtk_widget_set_size_request(html, 420, 240);
+	gtk_widget_show(html);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
+	gtk_widget_destroy(html);
+	if (response == GTK_RESPONSE_OK)
+	{
+		// Skip
+		ghb_settings_set_int(ud->settings, "update_skip_version", ibuild);
+		ghb_pref_save(ud->settings, "update_skip_version");
+	}
+	g_free(msg);
+
+done:
+	if (description) g_free(description);
+	if (build) g_free(build);
+	if (version) g_free(version);
+	g_free(ud->appcast);
+	ud->appcast_len = 0;
+	ud->appcast = NULL;
+}
+
+void
+ghb_net_close(GIOChannel *ioc)
+{
+	gint fd;
+
+	g_debug("ghb_net_close");
+	fd = g_io_channel_unix_get_fd(ioc);
+	close(fd);
+	g_io_channel_unref(ioc);
+}
+
+gboolean
+ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
+{
+	gchar buf[2048];
+	gsize len;
+	GError *gerror = NULL;
+	GIOStatus status;
+	
+	g_debug("ghb_net_recv_cb");
+	signal_user_data_t *ud = (signal_user_data_t*)data;
+
+	status = g_io_channel_read_chars (ioc, buf, 2048, &len, &gerror);
+	if ((status == G_IO_STATUS_NORMAL || status == G_IO_STATUS_EOF) &&
+		len > 0)
+	{
+		gint new_len = ud->appcast_len + len;
+		ud->appcast = g_realloc(ud->appcast, new_len + 1);
+		memcpy(&(ud->appcast[ud->appcast_len]), buf, len);
+		ud->appcast_len = new_len;
+	}
+	if (status == G_IO_STATUS_EOF)
+	{
+		ud->appcast[ud->appcast_len] = 0;
+		process_appcast(ud);
+		ghb_net_close(ioc);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+static gboolean
+appcast_timeout_cb(GIOChannel *ioc)
+{
+	g_debug("appcast_timeout_cb");
+	ghb_net_close(ioc);
+	return FALSE;
+}
+
+GIOChannel*
+ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
+{
+	GIOChannel *ioc;
+	gint fd;
+
+	struct sockaddr_in   sock;
+	struct hostent     * host;
+
+	g_debug("ghb_net_open");
+	if( !( host = gethostbyname( address ) ) )
+	{
+		g_warning( "gethostbyname failed (%s)", address );
+		return NULL;
+	}
+
+	memset( &sock, 0, sizeof( struct sockaddr_in ) );
+	sock.sin_family = host->h_addrtype;
+	sock.sin_port   = htons( port );
+	memcpy( &sock.sin_addr, host->h_addr, host->h_length );
+
+	fd = socket(host->h_addrtype, SOCK_STREAM, 0);
+	if( fd < 0 )
+	{
+		g_debug( "socket failed" );
+		return NULL;
+	}
+
+	if(connect(fd, (struct sockaddr*)&sock, sizeof(struct sockaddr_in )) < 0 )
+	{
+		g_debug( "connect failed" );
+		return NULL;
+	}
+	ioc = g_io_channel_unix_new(fd);
+	g_io_channel_set_encoding (ioc, NULL, NULL);
+	g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
+	g_io_add_watch (ioc, G_IO_IN, ghb_net_recv_cb, (gpointer)ud );
+	g_timeout_add_seconds(20, (GSourceFunc)appcast_timeout_cb, ioc);
+
+	return ioc;
+}
+
+gboolean
+ghb_check_update(signal_user_data_t *ud)
+{
+	gchar *query;
+	gsize len;
+	GIOChannel *ioc;
+	GError *gerror = NULL;
+
+	g_debug("ghb_check_update");
+	if (HB_BUILD % 100)
+	{
+    	query = 
+		"GET /appcast_unstable.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+	}
+	else
+	{
+		stable_update_lock = TRUE;
+    	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+	}
+	ioc = ghb_net_open(ud, "handbrake.fr", 80);
+	if (ioc == NULL)
+		return FALSE;
+
+	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
+	g_io_channel_flush(ioc, &gerror);
+	// This function is initiated by g_idle_add.  Must return false
+	// so that it is not called again
+	return FALSE;
+}
+
+static gboolean
+check_stable_update(signal_user_data_t *ud)
+{
+	gchar *query;
+	gsize len;
+	GIOChannel *ioc;
+	GError *gerror = NULL;
+
+	g_debug("check_stable_update");
+	stable_update_lock = TRUE;
+   	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+	ioc = ghb_net_open(ud, "handbrake.fr", 80);
+	if (ioc == NULL)
+		return FALSE;
+
+	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
+	g_io_channel_flush(ioc, &gerror);
+	// This function is initiated by g_idle_add.  Must return false
+	// so that it is not called again
+	return FALSE;
+}
+
