@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/x264-r1016-dbc5ef0.tar.gz
+http://download.m0k.org/handbrake/contrib/x264-r1024-2652abe.tar.gz
