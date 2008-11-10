@@ -496,6 +496,7 @@ namespace Handbrake
                 else
                 {
                     Check_ChapterMarkers.Enabled = false;
+                    Check_ChapterMarkers.Checked = false;
                     data_chpt.Rows.Clear();
                 }
             }
