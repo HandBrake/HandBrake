@@ -2811,6 +2811,7 @@ ghb_net_close(GIOChannel *ioc)
 	gint fd;
 
 	g_debug("ghb_net_close");
+	if (ioc == NULL) return;
 	fd = g_io_channel_unix_get_fd(ioc);
 	close(fd);
 	g_io_channel_unref(ioc);
@@ -2839,19 +2840,11 @@ ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	if (status == G_IO_STATUS_EOF)
 	{
 		ud->appcast[ud->appcast_len] = 0;
-		process_appcast(ud);
 		ghb_net_close(ioc);
+		process_appcast(ud);
 		return FALSE;
 	}
 	return TRUE;
-}
-
-static gboolean
-appcast_timeout_cb(GIOChannel *ioc)
-{
-	g_debug("appcast_timeout_cb");
-	ghb_net_close(ioc);
-	return FALSE;
 }
 
 GIOChannel*
@@ -2891,7 +2884,6 @@ ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
 	g_io_channel_set_encoding (ioc, NULL, NULL);
 	g_io_channel_set_flags(ioc, G_IO_FLAG_NONBLOCK, NULL);
 	g_io_add_watch (ioc, G_IO_IN, ghb_net_recv_cb, (gpointer)ud );
-	g_timeout_add_seconds(20, (GSourceFunc)appcast_timeout_cb, ioc);
 
 	return ioc;
 }
