@@ -222,6 +222,14 @@ struct hb_job_s
     int subtitle_force;
     char * native_language;
 
+    int64_t         pts_to_stop;        // declare eof when we pass this pts in
+                                        //  the time-linearized input stream
+    int             start_at_preview;   // if non-zero, encoding will start
+                                        //  at the position of preview n (1-10)
+    uint32_t        frames_to_skip;     // decode but discard this many frames
+                                        //  initially (for frame accurate positioning
+                                        //  to non-I frames).
+
 #ifdef __LIBHB__
     /* Internal data */
     hb_handle_t   * h;

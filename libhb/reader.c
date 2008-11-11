@@ -181,30 +181,41 @@ static void ReaderFunc( void * _r )
 
     if (r->dvd)
     {
-      /*
-       * XXX this code is a temporary hack that should go away if/when
-       *     chapter merging goes away in libhb/dvd.c
-       * map the start and end chapter numbers to on-media chapter
-       * numbers since chapter merging could cause the handbrake numbers
-       * to diverge from the media numbers and, if our chapter_end is after
-       * a media chapter that got merged, we'll stop ripping too early.
-       */
-      int start = r->job->chapter_start;
-      hb_chapter_t * chap = hb_list_item( r->title->list_chapter, chapter_end - 1 );
+        /*
+         * XXX this code is a temporary hack that should go away if/when
+         *     chapter merging goes away in libhb/dvd.c
+         * map the start and end chapter numbers to on-media chapter
+         * numbers since chapter merging could cause the handbrake numbers
+         * to diverge from the media numbers and, if our chapter_end is after
+         * a media chapter that got merged, we'll stop ripping too early.
+         */
+        int start = r->job->chapter_start;
+        hb_chapter_t *chap = hb_list_item( r->title->list_chapter, chapter_end - 1 );
 
-      chapter_end = chap->index;
-      if (start > 1)
-      {
-         chap = hb_list_item( r->title->list_chapter, start - 1 );
-         start = chap->index;
-      }
-      /* end chapter mapping XXX */
+        chapter_end = chap->index;
+        if (start > 1)
+        {
+           chap = hb_list_item( r->title->list_chapter, start - 1 );
+           start = chap->index;
+        }
+        /* end chapter mapping XXX */
 
-      if( !hb_dvd_start( r->dvd, r->title->index, start ) )
-      {
-          hb_dvd_close( &r->dvd );
-          return;
-      }
+        if( !hb_dvd_start( r->dvd, r->title->index, start ) )
+        {
+            hb_dvd_close( &r->dvd );
+            return;
+        }
+
+        if ( r->job->start_at_preview )
+        {
+            // XXX code from DecodePreviews - should go into its own routine
+            hb_dvd_seek( r->dvd, (float)r->job->start_at_preview / 11. );
+        }
+    }
+    else if ( r->stream && r->job->start_at_preview )
+    {
+        // XXX code from DecodePreviews - should go into its own routine
+        hb_stream_seek( r->stream, (float)( r->job->start_at_preview - 1 ) / 11. );
     }
 
     list  = hb_list_init();
@@ -351,7 +362,16 @@ static void ReaderFunc( void * _r )
                     }
                 }
                 if ( buf->start != -1 )
+                {
                     buf->start -= r->scr_offset;
+                    if ( r->job->pts_to_stop && buf->start > r->job->pts_to_stop )
+                    {
+                        // we're doing a subset of the input and we've hit the
+                        // stopping point.
+                        hb_buffer_close( &buf );
+                        goto done;
+                    }
+                }
 
                 buf->sequence = r->sequence++;
                 /* if there are mutiple output fifos, send a copy of the
@@ -374,6 +394,7 @@ static void ReaderFunc( void * _r )
         }
     }
 
+  done:
     // send empty buffers downstream to video & audio decoders to signal we're done.
     push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
 

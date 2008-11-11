@@ -97,14 +97,21 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     pv->pts_offset     = INT64_MIN;
 
     /* Calculate how many video frames we are expecting */
-    duration = 0;
-    for( i = job->chapter_start; i <= job->chapter_end; i++ )
+    if (job->pts_to_stop)
     {
-        chapter   = hb_list_item( title->list_chapter, i - 1 );
-        duration += chapter->duration;
+        duration = job->pts_to_stop + 90000;
     }
-    duration += 90000;
+    else
+    {
+        duration = 0;
+        for( i = job->chapter_start; i <= job->chapter_end; i++ )
+        {
+            chapter   = hb_list_item( title->list_chapter, i - 1 );
+            duration += chapter->duration;
+        }
+        duration += 90000;
         /* 1 second safety so we're sure we won't miss anything */
+    }
     pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
 
     hb_log( "sync: expecting %d video frames", pv->count_frames_max );
