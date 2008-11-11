@@ -1577,19 +1577,6 @@ static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
 
     // Get pointer length - only valid in packets with a start flag
     int pointer_len = 0;
-	if (start && stream->pmt_info.reading)
-	{
-		// We just finished a bunch of packets - parse the program map details
-		int decode_ok = 0;
-		if (stream->pmt_info.tablebuf[0] == 0x02)
-			decode_ok = decode_program_map(stream);
-		free(stream->pmt_info.tablebuf);
-		stream->pmt_info.tablebuf = NULL;
-		stream->pmt_info.tablepos = 0;
-        stream->pmt_info.reading = 0;
-        if (decode_ok)
-			return decode_ok;
-	}
 
 	if (start)
 	{
@@ -1614,6 +1601,27 @@ static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
 
             memcpy(stream->pmt_info.tablebuf + stream->pmt_info.tablepos, buf + 4 + adapt_len + pointer_len, amount_to_copy);
             stream->pmt_info.tablepos += amount_to_copy;
+    }
+    if (stream->pmt_info.tablepos > 3)
+    {
+        // We have enough to check the section length
+        int length;
+        length = ((stream->pmt_info.tablebuf[1] << 8) + 
+                  stream->pmt_info.tablebuf[2]) & 0xFFF;
+        if (stream->pmt_info.tablepos > length + 1)
+        {
+            // We just finished a bunch of packets - parse the program map details
+            int decode_ok = 0;
+            if (stream->pmt_info.tablebuf[0] == 0x02)
+                decode_ok = decode_program_map(stream);
+            free(stream->pmt_info.tablebuf);
+            stream->pmt_info.tablebuf = NULL;
+            stream->pmt_info.tablepos = 0;
+            stream->pmt_info.reading = 0;
+            if (decode_ok)
+                return decode_ok;
+        }
+
     }
 
     return 0;
@@ -1740,6 +1748,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 	for (;;)
 	{
         const uint8_t *buf = next_packet( stream );
+
         if ( buf == NULL )
         {
 			hb_log("hb_ts_stream_find_pids - end of file");
@@ -1769,7 +1778,8 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 			// on the first pat entry for which we find a matching program map PID.  The ideal solution would
 			// be to build a title choice popup from the PAT program number details and then select from
 			// their - but right now the API's not capable of that.
-			if (pid == stream->pat_info[pat_index].program_map_PID)
+            if (stream->pat_info[pat_index].program_number != 0 &&
+                pid == stream->pat_info[pat_index].program_map_PID)
 			{
 			  if (build_program_map(buf, stream) > 0)
 				break;
