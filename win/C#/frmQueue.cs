@@ -147,6 +147,7 @@ namespace Handbrake
                     hbProc = cliObj.runCli(this, query);
 
                     hbProc.WaitForExit();
+                    cliObj.addCLIQueryToLog(query);
                     cliObj.copyLog(query);
 
                     hbProc.Close();

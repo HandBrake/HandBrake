@@ -107,6 +107,32 @@ namespace Handbrake.Functions
             }
         }
 
+        /// <summary>
+        /// Append the CLI query to the start of the log file.
+        /// </summary>
+        /// <param name="query"></param>
+        public void addCLIQueryToLog(string query)
+        {
+            string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+
+            StreamReader reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read));
+            String log = reader.ReadToEnd();
+            reader.Close();
+
+            StreamWriter writer = new StreamWriter(File.Create(logPath));
+
+            writer.Write("### CLI Query: " + query + "\n\n");
+            writer.Write("#########################################\n\n");
+            writer.WriteLine(log);
+            writer.Flush();
+            writer.Close();
+        }
+
+        /// <summary>
+        /// Save a copy of the log to the users desired location or a default location
+        /// if this feature is enabled in options.
+        /// </summary>
+        /// <param name="query"></param>
         public void copyLog(string query)
         {
             // The user may wish to do something with the log.

@@ -1890,7 +1890,8 @@ namespace Handbrake
                 }
 
                 // After the encode is done, we may want to shutdown, suspend etc.
-                cliObj.copyLog((string)state);
+                cliObj.addCLIQueryToLog((string)state);
+                cliObj.copyLog((string)state); // Make a copy of the log in the users desired location if necessary
                 cliObj.afterEncodeAction();
             }
         }
