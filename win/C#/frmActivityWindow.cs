@@ -37,6 +37,9 @@ namespace Handbrake
             InitializeComponent();
             this.rtf_actLog.Text = string.Empty;
 
+            // When the window closes, we want to abort the monitor thread.
+            this.Disposed += new EventHandler(forceQuit);
+
             mainWindow = fm;
             queueWindow = fq;
             read_file = file;
@@ -45,17 +48,13 @@ namespace Handbrake
             // Print the Log header in the Rich text box.
             displayLogHeader();
 
-            // Start a new thread which will montior and keep the log window up to date if required/
-            startLogThread(read_file);
-
             if (file == "dvdinfo.dat")
                 txt_log.Text = "Scan Log";
             else if (file == "hb_encode_log.dat")
                 txt_log.Text = "Encode Log";
 
-
-            // When the window closes, we want to abort the monitor thread.
-            this.Disposed += new EventHandler(forceQuit);
+            // Start a new thread which will montior and keep the log window up to date if required/
+            startLogThread(read_file);            
         }
 
         /// <summary>
@@ -84,16 +83,24 @@ namespace Handbrake
         /// <param name="file"> File which will be used to populate the Rich text box.</param>
         private void startLogThread(string file)
         {
-            string logFile = Path.Combine(Path.GetTempPath(), file);
-            if (File.Exists(logFile))
+            try
             {
-                // Start a new thread to run the autoUpdate process
-                monitor = new Thread(autoUpdate);
-                monitor.IsBackground = true;
-                monitor.Start();
+                string logFile = Path.Combine(Path.GetTempPath(), file);
+                if (File.Exists(logFile))
+                {
+                    // Start a new thread to run the autoUpdate process
+                    monitor = new Thread(autoUpdate);
+                    monitor.IsBackground = true;
+                    monitor.Start();
+                }
+                else
+                    rtf_actLog.AppendText("\n\n\nERROR: The log file could not be found. \nMaybe you cleared your system's tempory folder or maybe you just havn't run an encode yet. \nTried to find the log file in: " + logFile);
+
             }
-            else
-                rtf_actLog.AppendText("\n\n\nERROR: The log file could not be found. \nMaybe you cleared your system's tempory folder or maybe you just havn't run an encode yet. \nTried to find the log file in: " + logFile);
+            catch (Exception exc)
+            {
+                MessageBox.Show("startLogThread(): Exception: \n" + exc);
+            }
         }
 
         /// <summary>
@@ -151,22 +158,34 @@ namespace Handbrake
         /// <param name="state"></param>
         private void autoUpdate(object state)
         {
-            Boolean lastUpdate = false;
-            updateTextFromThread();
-            while (true)
+            try
             {
-                if ((mainWindow.isEncoding() == true) || (queueWindow.isEncoding() == true))
-                    updateTextFromThread();
-                else
+                Boolean lastUpdate = false;
+                updateTextFromThread();
+                while (true)
                 {
-                    // The encode may just have stoped, so, refresh the log one more time before restarting it.
-                    if (lastUpdate == false)
+                    if ((mainWindow.isEncoding() == true) || (queueWindow.isEncoding() == true))
                         updateTextFromThread();
+                    else
+                    {
+                        // The encode may just have stoped, so, refresh the log one more time before restarting it.
+                        if (lastUpdate == false)
+                            updateTextFromThread();
 
-                    lastUpdate = true; // Prevents the log window from being updated when there is no encode going.
-                    position = 0; // There is no encoding, so reset the log position counter to 0 so it can be reused
+                        lastUpdate = true; // Prevents the log window from being updated when there is no encode going.
+                        position = 0; // There is no encoding, so reset the log position counter to 0 so it can be reused
+                    }
+                    Thread.Sleep(5000);
                 }
-                Thread.Sleep(5000);
+            }
+            catch (ThreadAbortException)
+            {
+                // Do Nothing. This is needed since we run thread.abort(). 
+                // Should probably find a better way of making this work at some point.
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("autoUpdate(): Exception: \n" + exc);
             }
         }
 
@@ -175,18 +194,25 @@ namespace Handbrake
         /// </summary>
         private void updateTextFromThread()
         {
-            string text = "";
-            List<string> data = readFile();
-            int count = data.Count;
-
-            while (position < count)
+            try
             {
-                text = data[position].ToString();
-                if (data[position].ToString().Contains("has exited"))
-                    text = "\n ############ End of Log ############## \n";
-                position++;
+                string text = "";
+                List<string> data = readFile();
+                int count = data.Count;
 
-                SetText(text);
+                while (position < count)
+                {
+                    text = data[position].ToString();
+                    if (data[position].ToString().Contains("has exited"))
+                        text = "\n ############ End of Log ############## \n";
+                    position++;
+
+                    SetText(text);
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("updateTextFromThread(): Exception: \n" + exc);
             }
         }
 
@@ -196,17 +222,25 @@ namespace Handbrake
         /// <param name="text"></param>
         private void SetText(string text)
         {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.rtf_actLog.InvokeRequired)
+            try
             {
-                SetTextCallback d = new SetTextCallback(SetText);
-                this.Invoke(d, new object[] { text });
+                // InvokeRequired required compares the thread ID of the
+                // calling thread to the thread ID of the creating thread.
+                // If these threads are different, it returns true.
+                if (this.IsHandleCreated) // Make sure the windows has a handle before doing anything
+                {
+                    if (this.rtf_actLog.InvokeRequired)
+                    {
+                        SetTextCallback d = new SetTextCallback(SetText);
+                        this.Invoke(d, new object[] { text });
+                    }
+                    else
+                        this.rtf_actLog.AppendText(text);
+                }
             }
-            else
+            catch (Exception exc)
             {
-                this.rtf_actLog.AppendText(text);
+                MessageBox.Show("SetText(): Exception: \n" + exc);
             }
         }
 
@@ -264,7 +298,10 @@ namespace Handbrake
         private void forceQuit(object sender, EventArgs e)
         {
             if (monitor != null)
-                monitor.Abort();
+            {
+                while (monitor.IsAlive)
+                    monitor.Abort();
+            }
 
             this.Close();
         }
