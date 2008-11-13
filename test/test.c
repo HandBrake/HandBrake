@@ -1786,7 +1786,7 @@ static void ShowHelp()
     fprintf( stderr,
     "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
     "\n"
-	"### General Handbrake Options------------------------------------------------\n\n"
+    "### General Handbrake Options------------------------------------------------\n\n"
     "    -h, --help              Print help\n"
     "    -u, --update            Check for updates and exit\n"
     "    -v, --verbose <#>       Be verbose (optional argument: logging level)\n"
@@ -1797,33 +1797,128 @@ static void ShowHelp()
     "    -z, --preset-list       See a list of available built-in presets\n"
     "\n"
 
-	"### Source Options-----------------------------------------------------------\n\n"
-	"    -i, --input <string>    Set input device\n"
-	"    -t, --title <number>    Select a title to encode (0 to scan only,\n"
+    "### Source Options-----------------------------------------------------------\n\n"
+    "    -i, --input <string>    Set input device\n"
+    "    -t, --title <number>    Select a title to encode (0 to scan only,\n"
     "                            default: 1)\n"
     "    -L, --longest           Select the longest title\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
-	"\n"
-
-	"### Destination Options------------------------------------------------------\n\n"
-    "    -o, --output <string>   Set output file name\n"
-	"    -f, --format <string>   Set output format (avi/mp4/ogm/mkv, default:\n"
-    "                            autodetected from file name)\n"
-    "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
-    "                            4 GB. Note: Breaks iPod, @TV, PS3 compatibility.\n"""
-    "    -O, --optimize          Optimize mp4 files for HTTP streaming\n"
-    "    -I, --ipod-atom         Mark mp4 files so iPods will accept them\n"
     "\n"
 
-	"### Picture Settings---------------------------------------------------------\n\n"
+    "### Destination Options------------------------------------------------------\n\n"
+    "    -o, --output <string>   Set output file name\n"
+    "    -f, --format <string>   Set output format (avi/mp4/ogm/mkv, default:\n"
+    "                            autodetected from file name)\n"
+    "    -m, --markers           Add chapter markers (mp4 and mkv output formats only)\n"
+    "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
+    "                            4 GB. Note: Breaks iPod, PS3 compatibility.\n"""
+    "    -O, --optimize          Optimize mp4 files for HTTP streaming\n"
+    "    -I, --ipod-atom         Mark mp4 files so 5.5G iPods will accept them\n"
+    "\n"
+
+
+    "### Video Options------------------------------------------------------------\n\n"
+    "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
+    "                            x264,theora default: ffmpeg)\n"
+    "    -x, --x264opts <string> Specify advanced x264 options in the\n"
+    "                            same style as mencoder:\n"
+    "                            option1=value1:option2=value2\n"
+    "    -q, --quality <float>   Set video quality (0.0..1.0)\n"
+    "    -Q, --cqp               Use with -q for CQP instead of CRF\n"
+    "    -S, --size <MB>         Set target size\n"
+    "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
+    "    -2, --two-pass          Use two-pass mode\n"
+    "    -T, --turbo             When using 2-pass use the turbo options\n"
+    "                            on the first pass to improve speed\n"
+    "                            (only works with x264, affects PSNR by about 0.05dB,\n"
+    "                            and increases first pass speed two to four times)\n"
+    "    -r, --rate              Set video framerate (" );
+    for( i = 0; i < hb_video_rates_count; i++ )
+    {
+        fprintf( stderr, hb_video_rates[i].string );
+        if( i != hb_video_rates_count - 1 )
+            fprintf( stderr, "/" );
+    }
+    fprintf( stderr, ")\n"
+    "                            Be aware that not specifying a framerate lets\n"
+    "                            HandBrake preserve a source's time stamps,\n"
+    "                            potentially creating variable framerate video\n"
+
+    "\n"
+    "### Audio Options-----------------------------------------------------------\n\n"
+    "    -a, --audio <string>    Select audio track(s), separated by commas\n"
+    "                            More than one output track can be used for one\n"
+    "                            input.\n"
+    "                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
+    "                             tracks, default: first one)\n"
+    "    -E, --aencoder <string> Audio encoder(s) (faac/lame/vorbis/ac3) \n"
+    "                            ac3 meaning passthrough\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "                            (default: guessed)\n"
+    "    -B, --ab <kb/s>         Set audio bitrate(s)  (default: 160)\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
+    "    -R, --arate             Set audio samplerate(s) (" );
+    for( i = 0; i < hb_audio_rates_count; i++ )
+    {
+        fprintf( stderr, hb_audio_rates[i].string );
+        if( i != hb_audio_rates_count - 1 )
+            fprintf( stderr, "/" );
+    }
+    fprintf( stderr, " kHz)\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "    -D, --drc <float>       Apply extra dynamic range compression to the audio,\n"
+    "                            making soft sounds louder. Range is 1.0 to 4.0\n"
+    "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "    -A, --aname <string>    Audio track name(s),\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "\n"
+
+    "### Picture Settings---------------------------------------------------------\n\n"
     "    -w, --width <number>    Set picture width\n"
     "    -l, --height <number>   Set picture height\n"
     "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
-	"    -Y, --maxHeight <#>     Set maximum height\n"
-	"    -X, --maxWidth <#>      Set maximum width\n"
-	"    -s, --subtitle <number> Select subtitle (default: none)\n"
+    "    -Y, --maxHeight <#>     Set maximum height\n"
+    "    -X, --maxWidth <#>      Set maximum width\n"
+    "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
+    "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
+    "          <MOD:PARX:PARY>   Takes as optional arguments what number you want\n"
+    "                            the dimensions to divide cleanly by (default 16)\n"
+    "                            and the pixel ratio to use (default autodetected)\n"
+    "    -M  --color-matrix      Set the color space signaled by the output\n"
+    "          <601 or 709>      (Bt.601 is mostly for SD content, Bt.709 for HD,\n"
+    "                             default: set by resolution)\n"
+    "\n"
+
+    "### Filters---------------------------------------------------------\n\n"
+
+     "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
+     "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
+     "           or\n"
+     "          <fast/slow/slower>\n"
+     "    -5, --decomb            Selectively deinterlaces when it detects combing\n"
+     "          <MO:ME:MT:ST:BT:BX:BY>     (default: 1:2:6:9:80:16:16)\n"
+     "    -9, --detelecine        Detelecine (ivtc) video with pullup filter\n"
+     "                            Note: this filter drops duplicate frames to\n"
+     "                            restore the pre-telecine framerate, unless you\n"
+     "                            specify a constant framerate (--rate 29.97)\n"
+     "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
+     "    -8, --denoise           Denoise video with hqdn3d filter\n"
+     "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
+     "           or\n"
+     "          <weak/medium/strong>\n"
+     "    -7, --deblock           Deblock video with pp7 filter\n"
+     "          <QP:M>            (default 5:2)\n"
+    "    -g, --grayscale         Grayscale encoding\n"
+    "\n"
+
+    "### Subtitle Options------------------------------------------------------------\n\n"
+    "    -s, --subtitle <number> Select subtitle (default: none)\n"
     "    -U, --subtitle-scan     Scan for subtitles in an extra 1st pass, and choose\n"
     "                            the one that's only used 10 percent of the time\n"
     "                            or less. This should locate subtitles for short\n"
@@ -1836,102 +1931,11 @@ static void ShowHelp()
     "    -N, --native-language   Select subtitles with this language if it does not\n"
     "          <string>          match the Audio language. Provide the language's\n"
     "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"
-	"    -m, --markers           Add chapter markers (mp4 output format only)\n"
-	"\n"
-
-	"### Video Options------------------------------------------------------------\n\n"
-	"    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
-    "                            x264,theora default: ffmpeg)\n"
-	"    -q, --quality <float>   Set video quality (0.0..1.0)\n"
-	"    -Q, --cqp               Use with -q for CQP instead of CRF\n"
-    "    -S, --size <MB>         Set target size\n"
-	"    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
-	"    -r, --rate              Set video framerate (" );
-    for( i = 0; i < hb_video_rates_count; i++ )
-    {
-        fprintf( stderr, hb_video_rates[i].string );
-        if( i != hb_video_rates_count - 1 )
-            fprintf( stderr, "/" );
-    }
-    fprintf( stderr, ")\n"
-    "                            Be aware that not specifying a framerate lets\n"
-    "                            HandBrake preserve a source's time stamps,\n"
-    "                            potentially creating variable framerate video\n"
-	"    -2, --two-pass          Use two-pass mode\n"
-     "    -d, --deinterlace       Deinterlace video with yadif/mcdeint filter\n"
-     "          <YM:FD:MM:QP>     (default 0:-1:-1:1)\n"
-     "           or\n"
-     "          <fast/slow/slower>\n"
-     "    -7, --deblock           Deblock video with pp7 filter\n"
-     "          <QP:M>            (default 5:2)\n"
-     "    -8, --denoise           Denoise video with hqdn3d filter\n"
-     "          <SL:SC:TL:TC>     (default 4:3:6:4.5)\n"
-     "           or\n"
-     "          <weak/medium/strong>\n"
-     "    -9, --detelecine        Detelecine (ivtc) video with pullup filter\n"
-     "                            Note: this filter drops duplicate frames to\n"
-     "                            restore the pre-telecine framerate, unless you\n"
-     "                            specify a constant framerate (--rate 29.97)\n"
-     "          <L:R:T:B:SB:MP>   (default 1:1:4:4:0:0)\n"
-     "    -5, --decomb            Selectively deinterlaces when it detects combing\n"
-     "          <MO:ME:MT:ST:BT:BX:BY>     (default: 1:2:6:9:80:16:16)\n"
-    "    -g, --grayscale         Grayscale encoding\n"
-    "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
-    "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
-    "          <MOD:PARX:PARY>   Takes as optional arguments what number you want\n"
-    "                            the dimensions to divide cleanly by (default 16)\n"
-    "                            and the pixel ratio to use (default autodetected)\n"
-    "    -M  --color-matrix      Set the color space signalled by the output\n"
-    "          <601 or 709>      (Bt.601 is mostly for SD content, Bt.709 for HD,\n"
-    "                             default: set by resolution)\n"
 
 
-	"\n"
+    "\n"
 
 
-	"### Audio Options-----------------------------------------------------------\n\n"
-	"    -a, --audio <string>    Select audio channel(s), separated by commas\n"
-    "                            More than one output track can be used for one\n"
-    "                            input.\n"
-    "                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
-    "                             tracks, default: first one)\n"
-    "    -E, --aencoder <string> Audio encoder(s) (faac/lame/vorbis/ac3) \n"
-	"                            ac3 meaning passthrough\n"
-	"                            Seperated by commas for more than one audio track.\n"
-	"                            (default: guessed)\n"
-	"    -B, --ab <kb/s>         Set audio bitrate(s)  (default: 128)\n"
-    "                            Seperated by commas for more than one audio track.\n"
-	"    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
-    "                            Seperated by commas for more than one audio track.\n"
-    "                            (mono/stereo/dpl1/dpl2/6ch, default: dpl2)\n"
-    "    -R, --arate             Set audio samplerate(s) (" );
-    for( i = 0; i < hb_audio_rates_count; i++ )
-    {
-        fprintf( stderr, hb_audio_rates[i].string );
-        if( i != hb_audio_rates_count - 1 )
-            fprintf( stderr, "/" );
-    }
-    fprintf( stderr, " kHz)\n"
-    "                            Seperated by commas for more than one audio track.\n"
-    "    -D, --drc <float>       Apply extra dynamic range compression to the audio,\n"
-    "                            making soft sounds louder. Range is 1.0 to 4.0\n"
-    "                            (too loud), with 1.5 - 2.5 being a useful range.\n"
-    "                            Seperated by commas for more than one audio track.\n"
-    "    -A, --aname <string>    Audio channel name(s),\n"
-    "                            Separated by commas for more than one audio track.\n"
-
-
-	"\n"
-
-
-    "### Advanced Options---------------------------------------------------------\n\n"
-    "    -x, --x264opts <string> Specify advanced x264 options in the\n"
-    "                            same style as mencoder:\n"
-    "                            option1=value1:option2=value2\n"
-    "    -T, --turbo             When using 2-pass use the turbo options\n"
-    "                            on the first pass to improve speed\n"
-    "                            (only works with x264, affects PSNR by about 0.05dB,\n"
-    "                            and increases first pass speed two to four times)\n"
     );
 }
 
