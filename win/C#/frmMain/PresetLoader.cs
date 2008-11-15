@@ -187,7 +187,10 @@ namespace Handbrake
             #region Chapter Markers
 
             if (presetQuery.ChapterMarkers == true)
+            {
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
+                mainWindow.Check_ChapterMarkers.Enabled = true;
+            }
             else
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Unchecked;
 
