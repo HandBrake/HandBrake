@@ -809,7 +809,7 @@ namespace Handbrake
                     text_width.BackColor = Color.LightGreen;
 
 
-                if (lbl_Aspect.Text != "Select a Title")
+                if (lbl_Aspect.Text != "Select a Title" && maxWidth != 0 && maxHeight != 0)
                 {
                     if (drp_anamorphic.Text == "None")
                     {
