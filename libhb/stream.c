@@ -62,7 +62,7 @@ static const stream2codec_t st2codec[256] = {
 
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
-    st(0x80, U, 0,                 0,              "DigiCipher II Video"),
+    //st(0x80, U, 0,                 0,              "DigiCipher II Video"),
     se(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
     se(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
@@ -119,6 +119,8 @@ struct hb_stream_s
     uint8_t *fwrite_buf;        /* PS buffer (set by hb_ts_stream_decode) */
     uint8_t *fwrite_buf_orig;   /* PS buffer start (set by hb_ts_stream_decode) */
 
+    uint8_t need_keyframe;
+
     /*
      * Stuff before this point is dynamic state updated as we read the
      * stream. Stuff after this point is stream description state that
@@ -143,6 +145,7 @@ struct hb_stream_s
     AVFormatContext *ffmpeg_ic;
     AVPacket *ffmpeg_pkt;
     double ffmpeg_tsconv[MAX_STREAMS];
+    uint8_t ffmpeg_video_id;
 
     struct {
         int lang_code;
@@ -1078,6 +1081,7 @@ int hb_stream_seek( hb_stream_t * src_stream, float f )
         // We need to drop the current decoder output and move
         // forwards to the next transport stream packet.
         hb_ts_stream_reset(src_stream);
+        src_stream->need_keyframe = ( f != 0 );
     }
     else if ( src_stream->hb_stream_type == program )
     {
@@ -2074,6 +2078,14 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
                     // h.264 IDR picture start
                     return 1;
 
+                if ( stream->packetsize == 192 )
+                {
+                    // m2ts files have idr frames so keep looking for one
+                    continue;
+                }
+
+                // h226 in ts files (ATSC or DVB video) often seem to be
+                // missing IDR frames so look for at least an I
                 if ( nal_type == 0x01 )
                 {
                     // h.264 slice: has to be start MB 0 & type I (2, 4, 7 or 9)
@@ -2234,10 +2246,14 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
             {
                 if ( !stream->ts_foundfirst[0] )
                 {
-                    if ( !isIframe( stream, buf, adapt_len ) )
+                    if ( stream->need_keyframe )
                     {
-                        // didn't find an I frame
-                        continue;
+                        if ( !isIframe( stream, buf, adapt_len ) )
+                        {
+                            // didn't find an I frame
+                            continue;
+                        }
+                        stream->need_keyframe = 0;
                     }
                     stream->ts_foundfirst[0] = 1;
                 }
@@ -2329,6 +2345,7 @@ static void hb_ts_stream_reset(hb_stream_t *stream)
 
     stream->frames = 0;
     stream->errors = 0;
+    stream->need_keyframe = 0;
     stream->last_error_frame = -10000;
     stream->last_error_count = 0;
 
@@ -2610,6 +2627,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
              title->video_codec == 0 )
         {
             title->video_id = i;
+            stream->ffmpeg_video_id = i;
 
             // We have to use the 'internal' avcodec decoder because
             // it needs to share the codec context from this video
@@ -2674,6 +2692,10 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
         buf->size = stream->ffmpeg_pkt->size;
     }
     buf->id = stream->ffmpeg_pkt->stream_index;
+    if ( buf->id == stream->ffmpeg_video_id )
+    {
+        ++stream->frames;
+    }
 
     // if we haven't done it already, compute a conversion factor to go
     // from the ffmpeg timebase for the stream to HB's 90KHz timebase.
@@ -2699,6 +2721,14 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
     int64_t pos = (double)ic->duration * (double)frac;
-    av_seek_frame( ic, -1, pos, pos? 0 : AVSEEK_FLAG_BACKWARD );
+    if ( pos )
+    {
+        av_seek_frame( ic, -1, pos, 0 );
+        stream->need_keyframe = 1;
+    }
+    else
+    {
+        av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BYTE );
+    }
     return 1;
 }
