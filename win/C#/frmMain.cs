@@ -664,18 +664,31 @@ namespace Handbrake
             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
 
             // Show the dialog and set the main form file path
-            DVD_Save.ShowDialog();
-            if (DVD_Save.FileName.StartsWith("\\"))
-                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
+
+            if (text_destination.Text.EndsWith(".mp4"))
+                DVD_Save.FilterIndex = 1;
+            else if (text_destination.Text.EndsWith(".m4v"))
+                DVD_Save.FilterIndex = 2;
+            else if (text_destination.Text.EndsWith(".avi"))
+                DVD_Save.FilterIndex = 3;
+            else if (text_destination.Text.EndsWith(".ogm"))
+                DVD_Save.FilterIndex = 4;
+            else if (text_destination.Text.EndsWith(".mkv"))
+                DVD_Save.FilterIndex = 5;
+
+            if (DVD_Save.ShowDialog() == DialogResult.OK)
             {
-                setAudioByContainer(DVD_Save.FileName);
+                if (DVD_Save.FileName.StartsWith("\\"))
+                    MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                else
+                {
+                    setAudioByContainer(DVD_Save.FileName);
+                    text_destination.Text = DVD_Save.FileName;
 
-                text_destination.Text = DVD_Save.FileName;
-
-                // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
-                if (Check_ChapterMarkers.Checked)
-                    text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
+                    // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
+                    if (Check_ChapterMarkers.Checked)
+                        text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
+                }
             }
         }
         private void text_destination_TextChanged(object sender, EventArgs e)
@@ -1442,7 +1455,7 @@ namespace Handbrake
             {
                 if (treeView_presets.SelectedNode != null)
                     presetHandler.remove(treeView_presets.SelectedNode.Text);
-               
+
                 // Remember each nodes expanded status so we can reload it
                 List<Boolean> nodeStatus = saveTreeViewState();
 
@@ -1561,7 +1574,7 @@ namespace Handbrake
                 foreach (TreeNode node in treenode.Nodes)
                 {
                     if (node.Text.ToString().Equals("Normal"))
-                       treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
+                        treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
                 }
             }
         }
