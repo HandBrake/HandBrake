@@ -2685,6 +2685,13 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     {
         if ( stream->ffmpeg_pkt->size > buf->alloc )
         {
+            // sometimes we get absurd sizes from ffmpeg
+            if ( stream->ffmpeg_pkt->size >= (1 << 25) )
+            {
+                hb_log( "ffmpeg_read: pkt too big: %d bytes", stream->ffmpeg_pkt->size );
+                av_free_packet( stream->ffmpeg_pkt );
+                return ffmpeg_read( stream, buf );
+            }
             // need to expand buffer
             hb_buffer_realloc( buf, stream->ffmpeg_pkt->size );
         }
