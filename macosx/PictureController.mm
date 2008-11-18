@@ -182,10 +182,7 @@ are maintained across different sources */
                                     @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
                                     fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
         
-        /* FIXME: use the original aspect ratio to calculate the displaySize, 
-            probably the size will not be the right one,
-            but at least the windows does not resize every time. */
-        displaySize.width *= ( ( CGFloat )fTitle->job->pixel_aspect_width) / ( ( CGFloat )fTitle->job->pixel_aspect_height );
+        displaySize.width = display_width;
     }
     else // No Anamorphic
     {
@@ -197,8 +194,12 @@ are maintained across different sources */
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     if( [self viewNeedsToResizeToSize:viewSize] )
     {
-        [self resizeSheetForViewSize:viewSize];
-        [self setViewSize:viewSize];
+        /* In the case of loose anamorphic, do not resize the window when scaling down */
+        if (fTitle->job->pixel_ratio != 2 || [fWidthField intValue] == fTitle->width)
+        {
+            [self resizeSheetForViewSize:viewSize];
+            [self setViewSize:viewSize];
+        }
     }
 
     // Show the scaled text (use the height to check since the width can vary
