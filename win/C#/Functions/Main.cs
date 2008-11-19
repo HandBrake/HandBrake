@@ -354,7 +354,9 @@ namespace Handbrake.Functions
             while (!cliProcess.HasExited)
             {
                 line = stdOutput.ReadLine();
-                Match m = Regex.Match(line, @"HandBrake [0-9\.]*svn[0-9]*[M]* \([0-9]*\)");
+                if (line == null) line = "";
+                Match m = Regex.Match(line, @"HandBrake ([0-9\.]*)*(svn[0-9]*[M]*)* \([0-9]*\)");
+
                 if (m.Success != false)
                 {
                     string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
