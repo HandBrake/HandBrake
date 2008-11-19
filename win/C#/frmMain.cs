@@ -713,15 +713,16 @@ namespace Handbrake
         private void drop_format_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drop_format.SelectedIndex == 0)
-                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".mp4");
+                setExtension(".mp4");
             else if (drop_format.SelectedIndex == 1)
-                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".m4v");
+                setExtension(".m4v");
             else if (drop_format.SelectedIndex == 2)
-                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".mkv");
+                setExtension(".mkv");
             else if (drop_format.SelectedIndex == 3)
-                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".avi");
+                setExtension(".avi");
             else if (drop_format.SelectedIndex == 4)
-                text_destination.Text = hb_common_func.setExtension(text_destination.Text, ".ogm");
+                setExtension(".ogm");
+
         }
 
         //Video Tab
@@ -1577,6 +1578,20 @@ namespace Handbrake
                         treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
                 }
             }
+        }
+        /// <summary>
+        /// Take in a File destination and change it's file extension to a new Extension
+        /// </summary>
+        /// <param name="destination"></param>
+        /// <param name="newExtension"></param>
+        /// <returns>String of the new file path and extension</returns>
+        public void setExtension(string newExtension)
+        {
+            text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".avi", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".ogm", newExtension);
         }
         #endregion
 

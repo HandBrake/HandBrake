@@ -19,23 +19,6 @@ namespace Handbrake.Functions
     class Main
     {
         /// <summary>
-        /// Take in a File destination and change it's file extension to a new Extension
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="newExtension"></param>
-        /// <returns>String of the new file path and extension</returns>
-        public string setExtension(string destination, string newExtension)
-        {
-            destination.Replace(".mp4", newExtension);
-            destination.Replace(".m4v", newExtension);
-            destination.Replace(".mkv", newExtension);
-            destination.Replace(".avi", newExtension);
-            destination.Replace(".ogm", newExtension);
-
-            return destination;
-        }
-
-        /// <summary>
         /// Calculate the duration of the selected title and chapters
         /// </summary>
         public TimeSpan calculateDuration(string chapter_start, string chapter_end, Parsing.Title selectedTitle)
