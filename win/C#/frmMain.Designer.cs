@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -340,7 +340,7 @@ namespace Handbrake
             // 
             this.drop_chapterFinish.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_chapterFinish.FormattingEnabled = true;
-            this.drop_chapterFinish.Location = new System.Drawing.Point(397, 52);
+            this.drop_chapterFinish.Location = new System.Drawing.Point(427, 52);
             this.drop_chapterFinish.Name = "drop_chapterFinish";
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterFinish.TabIndex = 10;
@@ -651,9 +651,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1414,7 +1414,7 @@ namespace Handbrake
             this.lbl_duration.AutoSize = true;
             this.lbl_duration.BackColor = System.Drawing.Color.Transparent;
             this.lbl_duration.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_duration.Location = new System.Drawing.Point(553, 56);
+            this.lbl_duration.Location = new System.Drawing.Point(569, 56);
             this.lbl_duration.Name = "lbl_duration";
             this.lbl_duration.Size = new System.Drawing.Size(72, 12);
             this.lbl_duration.TabIndex = 43;
@@ -1425,7 +1425,7 @@ namespace Handbrake
             this.label_duration.AutoSize = true;
             this.label_duration.BackColor = System.Drawing.Color.Transparent;
             this.label_duration.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_duration.Location = new System.Drawing.Point(486, 55);
+            this.label_duration.Location = new System.Drawing.Point(502, 55);
             this.label_duration.Name = "label_duration";
             this.label_duration.Size = new System.Drawing.Size(61, 13);
             this.label_duration.TabIndex = 42;
@@ -1669,9 +1669,9 @@ namespace Handbrake
             this.Label13.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label13.Location = new System.Drawing.Point(370, 55);
             this.Label13.Name = "Label13";
-            this.Label13.Size = new System.Drawing.Size(21, 13);
+            this.Label13.Size = new System.Drawing.Size(51, 13);
             this.Label13.TabIndex = 10;
-            this.Label13.Text = "To";
+            this.Label13.Text = "through";
             // 
             // Label17
             // 
