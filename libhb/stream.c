@@ -2486,7 +2486,6 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
         // indexed its stream so we need to remap them so they point
         // to this stream.
         ffmpeg_remap_stream( stream, title );
-        ffmpeg_seek( stream, 0. );
         av_log_set_level( AV_LOG_ERROR );
     }
     else
@@ -2659,6 +2658,7 @@ static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
 static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 {
     int err;
+  again:
     if ( ( err = av_read_frame( stream->ffmpeg_ic, stream->ffmpeg_pkt )) < 0 )
     {
         // XXX the following conditional is to handle avi files that
@@ -2701,6 +2701,20 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     buf->id = stream->ffmpeg_pkt->stream_index;
     if ( buf->id == stream->ffmpeg_video_id )
     {
+        if ( stream->need_keyframe &&
+             stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->codec_id == 
+               CODEC_ID_VC1 )
+        {
+            // XXX the VC1 codec doesn't seek to key frames so to get previews
+            // we do it ourselves here. The decoder gets messed up if it
+            // doesn't get a SEQ header first so we consider that to be a key frame.
+            uint8_t *pkt = stream->ffmpeg_pkt->data;
+            if ( pkt[0] || pkt[1] || pkt[2] != 1 || pkt[3] != 0x0f )
+            {
+                goto again;
+            }
+            stream->need_keyframe = 0;
+        }
         ++stream->frames;
     }
 
@@ -2735,7 +2749,7 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
     }
     else
     {
-        av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BYTE );
+        av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BACKWARD );
     }
     return 1;
 }
