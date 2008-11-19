@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="2"/>
 			<integer value="1868"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -40,7 +41,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="168918359">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2802,7 +2803,7 @@
 						<object class="NSPopUpButton" id="453345136">
 							<reference key="NSNextResponder" ref="168918359"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{476, 490}, {65, 22}}</string>
+							<string key="NSFrame">{{510, 490}, {65, 22}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="564669343">
@@ -2850,13 +2851,13 @@
 						<object class="NSTextField" id="200266929">
 							<reference key="NSNextResponder" ref="168918359"/>
 							<int key="NSvFlags">264</int>
-							<string key="NSFrame">{{455, 495}, {19, 14}}</string>
+							<string key="NSFrame">{{455, 494}, {51, 15}}</string>
 							<reference key="NSSuperview" ref="168918359"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="904849236">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">138412032</int>
-								<string key="NSContents">to</string>
+								<string key="NSContents">through</string>
 								<reference key="NSSupport" ref="26"/>
 								<reference key="NSControlView" ref="200266929"/>
 								<reference key="NSBackgroundColor" ref="242973447"/>
@@ -3242,6 +3243,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{760, 550}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -11434,7 +11436,6 @@
 							<string>selectPreset:</string>
 							<string>setDefaultPreset:</string>
 							<string>setEnabledStateOfAudioMixdownControls:</string>
-							<string>shouldEnableHttpMp4CheckBox:</string>
 							<string>showAddPresetPanel:</string>
 							<string>showDebugOutputPanel:</string>
 							<string>showNewScan:</string>
@@ -11451,7 +11452,6 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
