@@ -5385,6 +5385,180 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 							<key>AudioTrackDescription</key>
 							<string></string>
 						</dict>
+					</array>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>Mp4iPodCompatible</key>
+					<true />
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
+					<integer>0</integer>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
+					<false />
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<true />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>0</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>320</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s low resolution settings for the iPod. Optimized for great playback on the iPod screen, with smaller file size.</string>
+					<key>PresetName</key>
+					<string>iPod</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
+					<false />
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
+					<integer>700</integer>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.64709997177124023</real>
+					<key>VideoQualityType</key>
+					<integer>1</integer>
+					<key>VideoTargetSize</key>
+					<integer>700</integer>
+					<key>VideoTwoPass</key>
+					<false />
+					<key>x264Option</key>
+					<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
+				</dict>
+				<dict>
+					<key>AudioList</key>
+					<array>
+						<dict>
+							<key>AudioBitrate</key>
+							<string>128</string>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
+						</dict>
+					</array>
+					<key>ChapterMarkers</key>
+					<true />
+					<key>Default</key>
+					<false />
+					<key>FileFormat</key>
+					<string>MP4 file</string>
+					<key>Mp4iPodCompatible</key>
+					<false />
+					<key>PictureAutoCrop</key>
+					<true />
+					<key>PictureBottomCrop</key>
+					<integer>0</integer>
+					<key>PictureDeblock</key>
+					<integer>0</integer>
+					<key>PictureDeinterlace</key>
+					<string>0</string>
+					<key>PictureDenoise</key>
+					<string>0</string>
+					<key>PictureDetelecine</key>
+					<false />
+					<key>PictureHeight</key>
+					<integer>0</integer>
+					<key>PictureKeepRatio</key>
+					<true />
+					<key>PictureLeftCrop</key>
+					<integer>0</integer>
+					<key>PicturePAR</key>
+					<integer>0</integer>
+					<key>PictureRightCrop</key>
+					<integer>0</integer>
+					<key>PictureTopCrop</key>
+					<integer>0</integer>
+					<key>PictureWidth</key>
+					<integer>480</integer>
+					<key>PresetDescription</key>
+					<string>HandBrake&apos;s settings for the iPhone and iPod Touch.</string>
+					<key>PresetName</key>
+					<string>iPhone &amp; iPod Touch</string>
+					<key>Subtitles</key>
+					<string>None</string>
+					<key>Type</key>
+					<integer>0</integer>
+					<key>UsesMaxPictureSettings</key>
+					<false />
+					<key>UsesPictureFilters</key>
+					<true />
+					<key>UsesPictureSettings</key>
+					<integer>1</integer>
+					<key>VideoAvgBitrate</key>
+					<integer>960</integer>
+					<key>VideoEncoder</key>
+					<string>H.264 (x264)</string>
+					<key>VideoFramerate</key>
+					<string>Same as source</string>
+					<key>VideoGrayScale</key>
+					<false />
+					<key>VideoQualitySlider</key>
+					<real>0.5899999737739563</real>
+					<key>VideoQualityType</key>
+					<integer>2</integer>
+					<key>VideoTargetSize</key>
+					<integer>700</integer>
+					<key>VideoTwoPass</key>
+					<false />
+					<key>x264Option</key>
+					<string>level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1</string>
+				</dict>
+				<dict>
+					<key>AudioList</key>
+					<array>
+						<dict>
+							<key>AudioBitrate</key>
+							<string>160</string>
+							<key>AudioEncoder</key>
+							<string>AAC (faac)</string>
+							<key>AudioMixdown</key>
+							<string>Dolby Pro Logic II</string>
+							<key>AudioSamplerate</key>
+							<string>48</string>
+							<key>AudioTrack</key>
+							<integer>1</integer>
+							<key>AudioTrackDRCSlider</key>
+							<real>1</real>
+							<key>AudioTrackDescription</key>
+							<string></string>
+						</dict>
 						<dict>
 							<key>AudioBitrate</key>
 							<string>160</string>
@@ -5467,279 +5641,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>VideoTwoPass</key>
 					<false />
 					<key>x264Option</key>
-					<string>level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all</string>
-				</dict>
-				<dict>
-					<key>ChildrenArray</key>
-					<array>
-						<dict>
-							<key>AudioList</key>
-							<array>
-								<dict>
-									<key>AudioBitrate</key>
-									<string>160</string>
-									<key>AudioEncoder</key>
-									<string>AAC (faac)</string>
-									<key>AudioMixdown</key>
-									<string>Dolby Pro Logic II</string>
-									<key>AudioSamplerate</key>
-									<string>48</string>
-									<key>AudioTrack</key>
-									<integer>1</integer>
-									<key>AudioTrackDRCSlider</key>
-									<real>1</real>
-									<key>AudioTrackDescription</key>
-									<string></string>
-								</dict>
-							</array>
-							<key>ChapterMarkers</key>
-							<true />
-							<key>Default</key>
-							<false />
-							<key>FileFormat</key>
-							<string>MP4 file</string>
-							<key>Mp4iPodCompatible</key>
-							<true />
-							<key>PictureAutoCrop</key>
-							<true />
-							<key>PictureBottomCrop</key>
-							<integer>0</integer>
-							<key>PictureDeblock</key>
-							<integer>0</integer>
-							<key>PictureDeinterlace</key>
-							<string>0</string>
-							<key>PictureDenoise</key>
-							<string>0</string>
-							<key>PictureDetelecine</key>
-							<false />
-							<key>PictureHeight</key>
-							<integer>0</integer>
-							<key>PictureKeepRatio</key>
-							<true />
-							<key>PictureLeftCrop</key>
-							<integer>0</integer>
-							<key>PicturePAR</key>
-							<integer>0</integer>
-							<key>PictureRightCrop</key>
-							<integer>0</integer>
-							<key>PictureTopCrop</key>
-							<integer>0</integer>
-							<key>PictureWidth</key>
-							<integer>320</integer>
-							<key>PresetDescription</key>
-							<string>HandBrake&apos;s low resolution settings for the iPod. Optimized for great playback on the iPod screen, with smaller file size.</string>
-							<key>PresetName</key>
-							<string>iPod Classic &amp; iPod Nano</string>
-							<key>Subtitles</key>
-							<string>None</string>
-							<key>Type</key>
-							<integer>0</integer>
-							<key>UsesMaxPictureSettings</key>
-							<false />
-							<key>UsesPictureFilters</key>
-							<true />
-							<key>UsesPictureSettings</key>
-							<integer>1</integer>
-							<key>VideoAvgBitrate</key>
-							<integer>700</integer>
-							<key>VideoEncoder</key>
-							<string>H.264 (x264)</string>
-							<key>VideoFramerate</key>
-							<string>Same as source</string>
-							<key>VideoGrayScale</key>
-							<false />
-							<key>VideoQualitySlider</key>
-							<real>0.64709997177124023</real>
-							<key>VideoQualityType</key>
-							<integer>1</integer>
-							<key>VideoTargetSize</key>
-							<integer>700</integer>
-							<key>VideoTwoPass</key>
-							<false />
-							<key>x264Option</key>
-							<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
-						</dict>
-						<dict>
-							<key>AudioList</key>
-							<array>
-								<dict>
-									<key>AudioBitrate</key>
-									<string>128</string>
-									<key>AudioEncoder</key>
-									<string>AAC (faac)</string>
-									<key>AudioMixdown</key>
-									<string>Dolby Pro Logic II</string>
-									<key>AudioSamplerate</key>
-									<string>48</string>
-									<key>AudioTrack</key>
-									<integer>1</integer>
-									<key>AudioTrackDRCSlider</key>
-									<real>1</real>
-									<key>AudioTrackDescription</key>
-									<string></string>
-								</dict>
-							</array>
-							<key>ChapterMarkers</key>
-							<true />
-							<key>Default</key>
-							<false />
-							<key>FileFormat</key>
-							<string>MP4 file</string>
-							<key>Mp4iPodCompatible</key>
-							<true />
-							<key>PictureAutoCrop</key>
-							<true />
-							<key>PictureBottomCrop</key>
-							<integer>0</integer>
-							<key>PictureDeblock</key>
-							<integer>0</integer>
-							<key>PictureDeinterlace</key>
-							<string>0</string>
-							<key>PictureDenoise</key>
-							<string>0</string>
-							<key>PictureDetelecine</key>
-							<false />
-							<key>PictureHeight</key>
-							<integer>0</integer>
-							<key>PictureKeepRatio</key>
-							<true />
-							<key>PictureLeftCrop</key>
-							<integer>0</integer>
-							<key>PicturePAR</key>
-							<integer>0</integer>
-							<key>PictureRightCrop</key>
-							<integer>0</integer>
-							<key>PictureTopCrop</key>
-							<integer>0</integer>
-							<key>PictureWidth</key>
-							<integer>480</integer>
-							<key>PresetDescription</key>
-							<string>HandBrake&apos;s settings for the iPhone and iPod Touch.</string>
-							<key>PresetName</key>
-							<string>iPhone &amp; iPod Touch</string>
-							<key>Subtitles</key>
-							<string>None</string>
-							<key>Type</key>
-							<integer>0</integer>
-							<key>UsesMaxPictureSettings</key>
-							<false />
-							<key>UsesPictureFilters</key>
-							<true />
-							<key>UsesPictureSettings</key>
-							<integer>1</integer>
-							<key>VideoAvgBitrate</key>
-							<integer>960</integer>
-							<key>VideoEncoder</key>
-							<string>H.264 (x264)</string>
-							<key>VideoFramerate</key>
-							<string>Same as source</string>
-							<key>VideoGrayScale</key>
-							<false />
-							<key>VideoQualitySlider</key>
-							<real>0.64709997177124023</real>
-							<key>VideoQualityType</key>
-							<integer>1</integer>
-							<key>VideoTargetSize</key>
-							<integer>700</integer>
-							<key>VideoTwoPass</key>
-							<false />
-							<key>x264Option</key>
-							<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1</string>
-						</dict>
-						<dict>
-							<key>AudioList</key>
-							<array>
-								<dict>
-									<key>AudioBitrate</key>
-									<string>160</string>
-									<key>AudioEncoder</key>
-									<string>AAC (faac)</string>
-									<key>AudioMixdown</key>
-									<string>Dolby Pro Logic II</string>
-									<key>AudioSamplerate</key>
-									<string>48</string>
-									<key>AudioTrack</key>
-									<integer>1</integer>
-									<key>AudioTrackDRCSlider</key>
-									<real>1</real>
-									<key>AudioTrackDescription</key>
-									<string></string>
-								</dict>
-							</array>
-							<key>ChapterMarkers</key>
-							<true />
-							<key>Default</key>
-							<false />
-							<key>FileFormat</key>
-							<string>MP4 file</string>
-							<key>Mp4iPodCompatible</key>
-							<true />
-							<key>PictureAutoCrop</key>
-							<true />
-							<key>PictureBottomCrop</key>
-							<integer>0</integer>
-							<key>PictureDeblock</key>
-							<integer>0</integer>
-							<key>PictureDeinterlace</key>
-							<string>0</string>
-							<key>PictureDenoise</key>
-							<string>0</string>
-							<key>PictureDetelecine</key>
-							<false />
-							<key>PictureHeight</key>
-							<integer>0</integer>
-							<key>PictureKeepRatio</key>
-							<true />
-							<key>PictureLeftCrop</key>
-							<integer>0</integer>
-							<key>PicturePAR</key>
-							<integer>0</integer>
-							<key>PictureRightCrop</key>
-							<integer>0</integer>
-							<key>PictureTopCrop</key>
-							<integer>0</integer>
-							<key>PictureWidth</key>
-							<integer>640</integer>
-							<key>PresetDescription</key>
-							<string>HandBrake&apos;s high resolution settings for older 5 and 5.5G iPods. Good video quality, great for viewing on a TV using your iPod</string>
-							<key>PresetName</key>
-							<string>iPod Legacy</string>
-							<key>Subtitles</key>
-							<string>None</string>
-							<key>Type</key>
-							<integer>0</integer>
-							<key>UsesMaxPictureSettings</key>
-							<false />
-							<key>UsesPictureFilters</key>
-							<true />
-							<key>UsesPictureSettings</key>
-							<integer>1</integer>
-							<key>VideoAvgBitrate</key>
-							<integer>1500</integer>
-							<key>VideoEncoder</key>
-							<string>H.264 (x264)</string>
-							<key>VideoFramerate</key>
-							<string>Same as source</string>
-							<key>VideoGrayScale</key>
-							<false />
-							<key>VideoQualitySlider</key>
-							<real>0.64709997177124023</real>
-							<key>VideoQualityType</key>
-							<integer>1</integer>
-							<key>VideoTargetSize</key>
-							<integer>700</integer>
-							<key>VideoTwoPass</key>
-							<false />
-							<key>x264Option</key>
-							<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
-						</dict>
-					</array>
-					<key>Folder</key>
-					<true />
-					<key>PresetName</key>
-					<string>iPod &amp; iPhone</string>
-					<key>Type</key>
-					<integer>0</integer>
+					<string>level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=7:analyse=all</string>
 				</dict>
 				<dict>
 					<key>AudioList</key>
@@ -5827,6 +5729,292 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<true />
 					<key>x264Option</key>
 					<string>ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1</string>
+				</dict>
+				<dict>
+					<key>ChildrenArray</key>
+					<array>
+						<dict>
+							<key>AudioList</key>
+							<array>
+								<dict>
+									<key>AudioBitrate</key>
+									<string>160</string>
+									<key>AudioEncoder</key>
+									<string>AAC (faac)</string>
+									<key>AudioMixdown</key>
+									<string>Dolby Pro Logic II</string>
+									<key>AudioSamplerate</key>
+									<string>48</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
+								</dict>
+								<dict>
+									<key>AudioBitrate</key>
+									<string>160</string>
+									<key>AudioEncoder</key>
+									<string>AC3 Passthru</string>
+									<key>AudioMixdown</key>
+									<string>AC3 Passthru</string>
+									<key>AudioSamplerate</key>
+									<string>Auto</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
+								</dict>
+							</array>
+							<key>ChapterMarkers</key>
+							<true />
+							<key>Default</key>
+							<false />
+							<key>FileFormat</key>
+							<string>MP4 file</string>
+							<key>Mp4LargeFile</key>
+							<true />
+							<key>PictureBottomCrop</key>
+							<integer>0</integer>
+							<key>PictureDeblock</key>
+							<integer>0</integer>
+							<key>PictureDeinterlace</key>
+							<string>0</string>
+							<key>PictureDenoise</key>
+							<string>0</string>
+							<key>PictureDetelecine</key>
+							<false />
+							<key>PictureHeight</key>
+							<integer>0</integer>
+							<key>PictureKeepRatio</key>
+							<false />
+							<key>PictureLeftCrop</key>
+							<integer>0</integer>
+							<key>PicturePAR</key>
+							<integer>1</integer>
+							<key>PictureRightCrop</key>
+							<integer>0</integer>
+							<key>PictureTopCrop</key>
+							<integer>0</integer>
+							<key>PictureWidth</key>
+							<integer>0</integer>
+							<key>PresetDescription</key>
+							<string>HandBrake&apos;s deprecated settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and optimizes performance. This is the AppleTV preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no longer supported.</string>
+							<key>PresetName</key>
+							<string>AppleTV Legacy</string>
+							<key>Subtitles</key>
+							<string>None</string>
+							<key>Type</key>
+							<integer>0</integer>
+							<key>UsesMaxPictureSettings</key>
+							<true />
+							<key>UsesPictureFilters</key>
+							<true />
+							<key>UsesPictureSettings</key>
+							<integer>1</integer>
+							<key>VideoAvgBitrate</key>
+							<integer>2500</integer>
+							<key>VideoEncoder</key>
+							<string>H.264 (x264)</string>
+							<key>VideoFramerate</key>
+							<string>Same as source</string>
+							<key>VideoGrayScale</key>
+							<false />
+							<key>VideoQualitySlider</key>
+							<real>0.64709997177124023</real>
+							<key>VideoQualityType</key>
+							<integer>1</integer>
+							<key>VideoTargetSize</key>
+							<integer>700</integer>
+							<key>VideoTwoPass</key>
+							<false />
+							<key>x264Option</key>
+							<string>bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0</string>
+						</dict>
+						<dict>
+							<key>AudioList</key>
+							<array>
+								<dict>
+									<key>AudioBitrate</key>
+									<string>128</string>
+									<key>AudioEncoder</key>
+									<string>AAC (faac)</string>
+									<key>AudioMixdown</key>
+									<string>Dolby Pro Logic II</string>
+									<key>AudioSamplerate</key>
+									<string>48</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
+								</dict>
+							</array>
+							<key>ChapterMarkers</key>
+							<true />
+							<key>Default</key>
+							<false />
+							<key>FileFormat</key>
+							<string>MP4 file</string>
+							<key>Mp4iPodCompatible</key>
+							<true />
+							<key>PictureAutoCrop</key>
+							<true />
+							<key>PictureBottomCrop</key>
+							<integer>0</integer>
+							<key>PictureDeblock</key>
+							<integer>0</integer>
+							<key>PictureDeinterlace</key>
+							<string>0</string>
+							<key>PictureDenoise</key>
+							<string>0</string>
+							<key>PictureDetelecine</key>
+							<false />
+							<key>PictureHeight</key>
+							<integer>0</integer>
+							<key>PictureKeepRatio</key>
+							<true />
+							<key>PictureLeftCrop</key>
+							<integer>0</integer>
+							<key>PicturePAR</key>
+							<integer>0</integer>
+							<key>PictureRightCrop</key>
+							<integer>0</integer>
+							<key>PictureTopCrop</key>
+							<integer>0</integer>
+							<key>PictureWidth</key>
+							<integer>480</integer>
+							<key>PresetDescription</key>
+							<string>HandBrake&apos;s deprecated settings for the iPhone and iPod Touch. This is the iPhone preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no supported.</string>
+							<key>PresetName</key>
+							<string>iPhone Legacy</string>
+							<key>Subtitles</key>
+							<string>None</string>
+							<key>Type</key>
+							<integer>0</integer>
+							<key>UsesMaxPictureSettings</key>
+							<false />
+							<key>UsesPictureFilters</key>
+							<true />
+							<key>UsesPictureSettings</key>
+							<integer>1</integer>
+							<key>VideoAvgBitrate</key>
+							<integer>960</integer>
+							<key>VideoEncoder</key>
+							<string>H.264 (x264)</string>
+							<key>VideoFramerate</key>
+							<string>Same as source</string>
+							<key>VideoGrayScale</key>
+							<false />
+							<key>VideoQualitySlider</key>
+							<real>0.64709997177124023</real>
+							<key>VideoQualityType</key>
+							<integer>1</integer>
+							<key>VideoTargetSize</key>
+							<integer>700</integer>
+							<key>VideoTwoPass</key>
+							<false />
+							<key>x264Option</key>
+							<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1</string>
+						</dict>
+						<dict>
+							<key>AudioList</key>
+							<array>
+								<dict>
+									<key>AudioBitrate</key>
+									<string>160</string>
+									<key>AudioEncoder</key>
+									<string>AAC (faac)</string>
+									<key>AudioMixdown</key>
+									<string>Dolby Pro Logic II</string>
+									<key>AudioSamplerate</key>
+									<string>48</string>
+									<key>AudioTrack</key>
+									<integer>1</integer>
+									<key>AudioTrackDRCSlider</key>
+									<real>1</real>
+									<key>AudioTrackDescription</key>
+									<string></string>
+								</dict>
+							</array>
+							<key>ChapterMarkers</key>
+							<true />
+							<key>Default</key>
+							<false />
+							<key>FileFormat</key>
+							<string>MP4 file</string>
+							<key>Mp4iPodCompatible</key>
+							<true />
+							<key>PictureAutoCrop</key>
+							<true />
+							<key>PictureBottomCrop</key>
+							<integer>0</integer>
+							<key>PictureDeblock</key>
+							<integer>0</integer>
+							<key>PictureDeinterlace</key>
+							<string>0</string>
+							<key>PictureDenoise</key>
+							<string>0</string>
+							<key>PictureDetelecine</key>
+							<false />
+							<key>PictureHeight</key>
+							<integer>0</integer>
+							<key>PictureKeepRatio</key>
+							<true />
+							<key>PictureLeftCrop</key>
+							<integer>0</integer>
+							<key>PicturePAR</key>
+							<integer>0</integer>
+							<key>PictureRightCrop</key>
+							<integer>0</integer>
+							<key>PictureTopCrop</key>
+							<integer>0</integer>
+							<key>PictureWidth</key>
+							<integer>640</integer>
+							<key>PresetDescription</key>
+							<string>HandBrake&apos;s high resolution settings for older 5 and 5.5G iPods. Good video quality, great for viewing on a TV using your iPod. This is the iPod High-Rez preset from 0.9.2.</string>
+							<key>PresetName</key>
+							<string>iPod Legacy</string>
+							<key>Subtitles</key>
+							<string>None</string>
+							<key>Type</key>
+							<integer>0</integer>
+							<key>UsesMaxPictureSettings</key>
+							<false />
+							<key>UsesPictureFilters</key>
+							<true />
+							<key>UsesPictureSettings</key>
+							<integer>1</integer>
+							<key>VideoAvgBitrate</key>
+							<integer>1500</integer>
+							<key>VideoEncoder</key>
+							<string>H.264 (x264)</string>
+							<key>VideoFramerate</key>
+							<string>Same as source</string>
+							<key>VideoGrayScale</key>
+							<false />
+							<key>VideoQualitySlider</key>
+							<real>0.64709997177124023</real>
+							<key>VideoQualityType</key>
+							<integer>1</integer>
+							<key>VideoTargetSize</key>
+							<integer>700</integer>
+							<key>VideoTwoPass</key>
+							<false />
+							<key>x264Option</key>
+							<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
+						</dict>
+					</array>
+					<key>Folder</key>
+					<true />
+					<key>PresetName</key>
+					<string>Legacy</string>
+					<key>Type</key>
+					<integer>0</integer>
 				</dict>
 			</array>
 			<key>Folder</key>
