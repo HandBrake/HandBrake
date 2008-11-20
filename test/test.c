@@ -511,43 +511,7 @@ static int HandleEvents( hb_handle_t * h )
                     job->chapter_markers = 1;
                 }
 
-                if (!strcmp(preset_name, "AppleTV"))
-                {
-                    mux = HB_MUX_MP4;
-                    job->largeFileSize = 1;
-                    vcodec = HB_VCODEC_X264;
-                    job->vquality = 0.589999973773956;
-                    job->crf = 1;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1,1");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160,auto");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("48,Auto");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac,ac3");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2,auto");
-                    }
-                    maxWidth = 960;
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all");
-                    }
-                    pixelratio = 2;
-                    job->chapter_markers = 1;
-                }
-
-                if (!strcmp(preset_name, "iPod Classic & iPod Nano"))
+                if (!strcmp(preset_name, "iPod"))
                 {
                     mux = HB_MUX_MP4;
                     job->ipod_atom = 1;
@@ -582,6 +546,145 @@ static int HandleEvents( hb_handle_t * h )
                 }
 
                 if (!strcmp(preset_name, "iPhone & iPod Touch"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->vquality = 0.589999973773956;
+                    job->crf = 1;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("128");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    maxWidth = 480;
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1");
+                    }
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "AppleTV"))
+                {
+                    mux = HB_MUX_MP4;
+                    job->largeFileSize = 1;
+                    vcodec = HB_VCODEC_X264;
+                    job->vquality = 0.589999973773956;
+                    job->crf = 1;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1,1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160,auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48,Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac,ac3");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2,auto");
+                    }
+                    maxWidth = 960;
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=7:analyse=all");
+                    }
+                    pixelratio = 2;
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "QuickTime"))
+                {
+                    mux = HB_MUX_MP4;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 1800;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1");
+                    }
+                    pixelratio = 1;
+                    job->chapter_markers = 1;
+                    twoPass = 1;
+                    turbo_opts_enabled = 1;
+                }
+
+                if (!strcmp(preset_name, "AppleTV Legacy"))
+                {
+                    mux = HB_MUX_MP4;
+                    job->largeFileSize = 1;
+                    vcodec = HB_VCODEC_X264;
+                    job->vbitrate = 2500;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1,1");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160,auto");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48,Auto");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac,ac3");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2,auto");
+                    }
+                    if( !x264opts )
+                    {
+                        x264opts = strdup("bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0");
+                    }
+                    pixelratio = 1;
+                    job->chapter_markers = 1;
+                }
+
+                if (!strcmp(preset_name, "iPhone Legacy"))
                 {
                     mux = HB_MUX_MP4;
                     job->ipod_atom = 1;
@@ -647,41 +750,6 @@ static int HandleEvents( hb_handle_t * h )
                         x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
                     }
                     job->chapter_markers = 1;
-                }
-
-                if (!strcmp(preset_name, "QuickTime"))
-                {
-                    mux = HB_MUX_MP4;
-                    vcodec = HB_VCODEC_X264;
-                    job->vbitrate = 1800;
-                    if( !atracks )
-                    {
-                        atracks = strdup("1");
-                    }
-                    if( !abitrates )
-                    {
-                        abitrates = strdup("160");
-                    }
-                    if( !arates )
-                    {
-                        arates = strdup("Auto");
-                    }
-                    if( !acodecs )
-                    {
-                        acodecs = strdup("faac");
-                    }
-                    if( !mixdowns )
-                    {
-                        mixdowns = strdup("dpl2");
-                    }
-                    if( !x264opts )
-                    {
-                        x264opts = strdup("ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1");
-                    }
-                    pixelratio = 1;
-                    job->chapter_markers = 1;
-                    twoPass = 1;
-                    turbo_opts_enabled = 1;
                 }
 
                 if (!strcmp(preset_name, "Normal"))
@@ -983,7 +1051,7 @@ static int HandleEvents( hb_handle_t * h )
                         x264opts = strdup("level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1");
                     }
                     pixelratio = 1;
-                }
+                    }
             }
 
 			if ( chapter_markers )
@@ -1948,19 +2016,23 @@ static void ShowPresets()
 
     printf("\n   + Universal:  -e x264  -q 0.589999973773956 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -X 720 -P -m -x level=30:cabac=0:ref=3:mixed-refs=1:analyse=all:me=umh:no-fast-pskip=1\n");
 
-    printf("\n   + AppleTV:  -e x264  -q 0.589999973773956 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -4 -X 960 -P -m -x level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=9:analyse=all\n");
+    printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 -I -X 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
 
-    printf("\n   << iPod & iPhone\n");
+    printf("\n   + iPhone & iPod Touch:  -e x264  -q 0.589999973773956 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -X 480 -m -x level=30:cabac=0:ref=2:mixed-refs:analyse=all:me=umh:no-fast-pskip=1\n");
 
-    printf("\n      + iPod Classic & iPod Nano:  -e x264  -b 700 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 -I -X 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
+    printf("\n   + AppleTV:  -e x264  -q 0.589999973773956 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -4 -X 960 -P -m -x level=30:cabac=0:ref=3:mixed-refs=1:bframes=6:weightb=1:direct=auto:no-fast-pskip=1:me=umh:subq=7:analyse=all\n");
 
-    printf("\n      + iPhone & iPod Touch:  -e x264  -b 960 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1\n");
+    printf("\n   + QuickTime:  -e x264  -b 1800 -a 1 -E faac -B 160 -R Auto -6 dpl2 -f mp4 -p -m -2 -T -x ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1\n");
+
+    printf("\n   << Legacy\n");
+
+    printf("\n      + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3 -B 160,auto -R 48,Auto -6 dpl2,auto -f mp4 -4 -p -m -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:trellis=1:cabac=0\n");
+
+    printf("\n      + iPhone Legacy:  -e x264  -b 960 -a 1 -E faac -B 128 -R 48 -6 dpl2 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:trellis=1\n");
 
     printf("\n      + iPod Legacy:  -e x264  -b 1500 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 -I -X 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
 
     printf("\n   >>\n");
-
-    printf("\n   + QuickTime:  -e x264  -b 1800 -a 1 -E faac -B 160 -R Auto -6 dpl2 -f mp4 -p -m -2 -T -x ref=3:mixed-refs:bframes=3:weightb:direct=auto:me=umh:subme=7:analyse=all:8x8dct:trellis=1:no-fast-pskip=1:psy-rd=1,1\n");
 
     printf("\n>\n");
 
@@ -1993,6 +2065,7 @@ static void ShowPresets()
     printf("\n   + Xbox 360:  -e x264  -b 2000 -a 1 -E faac -B 160 -R 48 -6 dpl2 -f mp4 -p -x level=40:ref=2:mixed-refs:bframes=3:weightb:subme=9:direct=auto:b-pyramid:me=umh:analyse=all:no-fast-pskip:filter=-2,-1\n");
 
     printf("\n>\n");
+
 }
 
 /****************************************************************************
