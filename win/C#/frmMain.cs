@@ -2018,7 +2018,7 @@ namespace Handbrake
                     }
 
                     // Third Case - Any presets the sub presets detected in the above if statment.
-                    if (preset.Level == 1 && workingLevel == 2 && previousCategory == preset.Category)
+                    if (preset.Level == 1 && workingLevel == 2)
                     {
                         workingLevel = preset.Level;
                         currentCategory = preset.Category;
