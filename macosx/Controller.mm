@@ -3047,46 +3047,6 @@ fWorkingCount = 0;
 
 
 //------------------------------------------------------------------------------------
-// Cancels and deletes the current job and stops libhb from processing the remaining
-// encodes.
-//------------------------------------------------------------------------------------
-- (void) doCancelCurrentJob
-{
-    // Stop the current job. hb_stop will only cancel the current pass and then set
-    // its state to HB_STATE_WORKDONE. It also does this asynchronously. So when we
-    // see the state has changed to HB_STATE_WORKDONE (in updateUI), we'll delete the
-    // remaining passes of the job and then start the queue back up if there are any
-    // remaining jobs.
-     
-    
-    hb_stop( fQueueEncodeLibhb );
-    fEncodeState = 2;   // don't alert at end of processing since this was a cancel
-    
-    // now that we've stopped the currently encoding job, lets mark it as cancelled
-    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
-    // and as always, save it in the queue .plist...
-    /* We save all of the Queue data here */
-    [self saveQueueFileItem];
-    // so now lets move to 
-    currentQueueEncodeIndex++ ;
-    // ... and see if there are more items left in our queue
-    int queueItems = [QueueFileArray count];
-    /* If we still have more items in our queue, lets go to the next one */
-    if (currentQueueEncodeIndex < queueItems)
-    {
-    [self writeToActivityLog: "doCancelCurrentJob currentQueueEncodeIndex is incremented to: %d", currentQueueEncodeIndex];
-    [self writeToActivityLog: "doCancelCurrentJob moving to the next job"];
-    
-    [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
-    }
-    else
-    {
-        [self writeToActivityLog: "doCancelCurrentJob the item queue is complete"];
-    }
-
-}
-
-//------------------------------------------------------------------------------------
 // Displays an alert asking user if the want to cancel encoding of current job.
 // Cancel: returns immediately after posting the alert. Later, when the user
 // acknowledges the alert, doCancelCurrentJob is called.
@@ -3130,9 +3090,62 @@ fWorkingCount = 0;
     }
 }
 
+//------------------------------------------------------------------------------------
+// Cancels and deletes the current job and stops libhb from processing the remaining
+// encodes.
+//------------------------------------------------------------------------------------
+- (void) doCancelCurrentJob
+{
+    // Stop the current job. hb_stop will only cancel the current pass and then set
+    // its state to HB_STATE_WORKDONE. It also does this asynchronously. So when we
+    // see the state has changed to HB_STATE_WORKDONE (in updateUI), we'll delete the
+    // remaining passes of the job and then start the queue back up if there are any
+    // remaining jobs.
+     
+    
+    hb_stop( fQueueEncodeLibhb );
+    
+    // Delete all remaining jobs since libhb doesn't do this on its own.
+            hb_job_t * job;
+            while( ( job = hb_job(fQueueEncodeLibhb, 0) ) )
+                hb_rem( fQueueEncodeLibhb, job );
+                
+    fEncodeState = 2;   // don't alert at end of processing since this was a cancel
+    
+    // now that we've stopped the currently encoding job, lets mark it as cancelled
+    [[QueueFileArray objectAtIndex:currentQueueEncodeIndex] setObject:[NSNumber numberWithInt:3] forKey:@"Status"];
+    // and as always, save it in the queue .plist...
+    /* We save all of the Queue data here */
+    [self saveQueueFileItem];
+    // so now lets move to 
+    currentQueueEncodeIndex++ ;
+    // ... and see if there are more items left in our queue
+    int queueItems = [QueueFileArray count];
+    /* If we still have more items in our queue, lets go to the next one */
+    if (currentQueueEncodeIndex < queueItems)
+    {
+    [self writeToActivityLog: "doCancelCurrentJob currentQueueEncodeIndex is incremented to: %d", currentQueueEncodeIndex];
+    [self writeToActivityLog: "doCancelCurrentJob moving to the next job"];
+    
+    [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
+    }
+    else
+    {
+        [self writeToActivityLog: "doCancelCurrentJob the item queue is complete"];
+    }
+
+}
+
 - (void) doCancelCurrentJobAndStop
 {
     hb_stop( fQueueEncodeLibhb );
+    
+    // Delete all remaining jobs since libhb doesn't do this on its own.
+            hb_job_t * job;
+            while( ( job = hb_job(fQueueEncodeLibhb, 0) ) )
+                hb_rem( fQueueEncodeLibhb, job );
+                
+                
     fEncodeState = 2;   // don't alert at end of processing since this was a cancel
     
     // now that we've stopped the currently encoding job, lets mark it as cancelled
