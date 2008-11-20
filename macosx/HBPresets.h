@@ -17,11 +17,12 @@
 - (NSDictionary *)createBasicPresetFolder;
 - (NSDictionary *)createGamingConsolesPresetFolder;
 - (NSDictionary *)createHiProfilePresetFolder;
+- (NSDictionary *)createLegacyPresetFolder;
 
 - (NSDictionary *)create360Preset;
 - (NSDictionary *)createAnimationPreset;
 - (NSDictionary *)createAppleTVPreset;
-- (NSDictionary *)createAppleTVLegacuPreset;
+- (NSDictionary *)createAppleTVLegacyPreset;
 - (NSDictionary *)createAppleUniversalPreset;
 - (NSDictionary *)createClassicPreset;
 - (NSDictionary *)createCRFPreset;
