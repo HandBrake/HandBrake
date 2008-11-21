@@ -9,7 +9,11 @@ SYSTEM = $(shell uname -s)
 #
 ifeq ($(SYSTEM),Darwin)
 
-snapshot:   clean snapshot-app
+snapshot:   clean unstable-libhb/hbversion.h snapshot-app
+official:   clean force-hbversion app
+
+force-hbversion:
+	rm -f libhb/hbversion.h
 
 all:    clean app
 
@@ -19,13 +23,16 @@ test:	clean cli
 
 dev:	clean internal
 
-app:    libhb/hbversion.h
+ub-app:    libhb/hbversion.h
 	(./DownloadMacOsXContribBinaries.sh ; cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration UB HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast.xml" build | sed '/^$$/d'  )
+
+app: contrib/.contrib libhb/hbversion.h
+		( cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration Deployment HB_BUILD="$(HB_BUILD)" HB_VERSION="$(HB_VERSION)" CURRENT_PROJECT_VERSION="$(HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast.xml" build | sed '/^$$/d' )
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-snapshot-app: contrib/.contrib unstable-libhb/hbversion.h
+snapshot-app: contrib/.contrib libhb/hbversion.h
 	( cd macosx ; xcodebuild -target libhb -target HandBrake -target HandBrakeCLI -configuration Deployment HB_BUILD="$(SNAP_HB_BUILD)" HB_VERSION="$(SNAP_HB_VERSION)" CURRENT_PROJECT_VERSION="$(SNAP_HB_VERSION)" APPCAST_URL="http://handbrake.fr/appcast_unstable.xml" build | sed '/^$$/d' )
 
 app-chunky: libhb/hbversion.h
@@ -62,13 +69,20 @@ endif
 #
 ifeq ($(SYSTEM),Linux)
 
-all:	contrib/.contrib HandBrakeCLI
+snapshot: unstable-libhb/hbversion.h all
+
+official: force-hbversion all
+
+force-hbversion:
+	rm -f libhb/hbversion.h
+
+all:	contrib/.contrib libhb/hbversion.h HandBrakeCLI
 	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
 
-libhb/libhb.a: unstable-libhb/hbversion.h
+libhb/libhb.a: libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
 
 HandBrakeCLI: libhb/libhb.a
