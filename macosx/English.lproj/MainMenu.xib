@@ -8,8 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2"/>
-			<integer value="1868"/>
+			<integer value="1478"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4284,7 +4283,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{338, 232}</string>
 				<object class="NSView" key="NSWindowView" id="69290042">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4608,7 +4607,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{338, 318}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{338, 254}</string>
@@ -6558,6 +6556,14 @@
 						<reference key="destination" ref="786415813"/>
 					</object>
 					<int key="connectionID">5155</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fVidEncoderField</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="1064150725"/>
+					</object>
+					<int key="connectionID">5156</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -11028,10 +11034,10 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{104, 306}, {760, 550}}</string>
+					<string>{{171, 168}, {760, 550}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="8"/>
-					<string>{{104, 306}, {760, 550}}</string>
+					<string>{{171, 168}, {760, 550}}</string>
 					<reference ref="9"/>
 					<string>{{65, 541}, {760, 550}}</string>
 					<reference ref="9"/>
@@ -11387,7 +11393,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">5155</int>
+			<int key="maxID">5156</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
