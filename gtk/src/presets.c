@@ -2460,7 +2460,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 			return;
 		}
 	}
-
+	current_preset = dict;
 	if (ghb_settings_get_boolean(ud->settings, "allow_tweaks"))
 	{
 		gchar *str;
