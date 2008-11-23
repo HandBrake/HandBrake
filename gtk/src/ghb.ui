@@ -834,6 +834,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="label" translatable="yes">Web optimized</property>
+                                    <property name="tooltip-text" translatable="yes">Tunes the MP4 to be better suited for streaming</property>
                                     <property name="draw_indicator">True</property>
                                     <signal handler="http_opt_changed_cb" name="toggled"/>
                                   </object>
@@ -1306,6 +1307,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">This filter removes the color components of the picture.</property>
                                         <property name="label" translatable="yes">Grayscale</property>
                                         <property name="draw_indicator">True</property>
                                         <signal handler="setting_widget_changed_cb" name="toggled"/>
@@ -1319,6 +1321,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">Remove interlacing artifacts caused by the telecine process often applied to movies.</property>
                                         <property name="label" translatable="yes">Detelecine</property>
                                         <property name="draw_indicator">True</property>
                                         <signal handler="setting_widget_changed_cb" name="toggled"/>
@@ -1333,6 +1336,7 @@
                                       <object class="GtkCheckButton" id="PictureDecomb">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
+                                        <property name="tooltip-text" translatable="yes">Decomb is a selective deinterlacer. It will only deinterlace frames that appear to need it. It generally produces better quality than the normal deinterlacer.</property>
                                         <property name="label" translatable="yes">De-Comb</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
@@ -1408,6 +1412,7 @@
                                             <property name="width_request">100</property>
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">Removes interlacing artifacts. Since deinterlacing degrades picture quality, leave it off unless you know you need it.</property>
                                             <signal handler="setting_widget_changed_cb" name="changed"/>
                                             <signal handler="tweak_setting_cb" name="button-press-event"/>
                                           </object>
@@ -1463,6 +1468,7 @@
                                             <property name="width_request">100</property>
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">This filter removes noise or grain from the picture.</property>
                                             <signal handler="setting_widget_changed_cb" name="changed"/>
                                             <signal handler="tweak_setting_cb" name="button-press-event"/>
                                           </object>
@@ -3361,7 +3367,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                   <object class="GtkEventBox" id="eventbox1">
                     <property name="visible">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="visible_window">False</property>
+                    <property name="visible_window">True</property>
                     <property name="above_child">True</property>
                     <signal name="button_press_event" handler="easter_egg_cb"/>
                     <child>
@@ -4538,8 +4544,8 @@ the other to maintain the video's original aspect ratio.</property>
     <property name="program_name">HandBrake</property>
     <property name="version">0.9.2</property>
     <property name="copyright" translatable="yes">Copyright &#xA9; 2008 John Stebbins
-Copyright &#xA9; Copyright © 2004 - 2008, HandBrake Devs </property>
-    <property name="comments" translatable="yes">HandBrake is an open-source, GPL-licensed, multiplatform, multithreaded DVD to MPEG-4 converter, available for MacOS X, Linux and Windows.</property>
+Copyright &#xA9; Copyright © 2004 - 2008, HandBrake Devs</property>
+    <property name="comments" translatable="yes">HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder.</property>
     <property name="website">http://handbrake.fr</property>
     <property name="website_label" translatable="yes">http://handbrake.fr</property>
     <property name="license" translatable="yes">HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
@@ -4771,7 +4777,7 @@ libxvidcore authors:
               <object class="GtkVBox" id="vbox19">
                 <property name="visible">True</property>
                 <child>
-                  <object class="GtkEventBox" id="eventbox1">
+                  <object class="GtkEventBox" id="eventbox2">
                     <property name="visible">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="visible_window">False</property>

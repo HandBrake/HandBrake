@@ -631,7 +631,7 @@
 						<key>PictureWidth</key>
 						<integer>480</integer>
 						<key>PresetDescription</key>
-						<string>HandBrake&apos;s deprecated settings for the iPhone and iPod Touch. This is the iPhone preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no supported.</string>
+						<string>HandBrake&apos;s deprecated settings for the iPhone and iPod Touch. This is the iPhone preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no longer supported.</string>
 						<key>PresetName</key>
 						<string>iPhone Legacy</string>
 						<key>Subtitles</key>
