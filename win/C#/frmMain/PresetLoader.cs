@@ -27,10 +27,6 @@ namespace Handbrake
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
 
             // Now load all the new settings onto the main window
-            mainWindow.drp_dvdtitle.Text = "Automatic";
-            mainWindow.drop_chapterStart.Text = "Auto";
-            mainWindow.drop_chapterFinish.Text = "Auto";
-
             if (presetQuery.Format != null)
             {
                 string destination = mainWindow.text_destination.Text;
@@ -61,6 +57,9 @@ namespace Handbrake
                     mainWindow.drop_format.SelectedIndex = 3;
                 else if (presetQuery.Format == "ogm")
                     mainWindow.drop_format.SelectedIndex = 4;
+
+                if (presetQuery.ChapterMarkers == true && presetQuery.Format == "mp4")
+                    mainWindow.drop_format.SelectedIndex = 1;
             }
 
             if (presetQuery.IpodAtom == true)
