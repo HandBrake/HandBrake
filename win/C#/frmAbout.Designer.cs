@@ -52,10 +52,9 @@ namespace Handbrake
             this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label4.Location = new System.Drawing.Point(168, 58);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(349, 26);
+            this.Label4.Size = new System.Drawing.Size(346, 26);
             this.Label4.TabIndex = 28;
-            this.Label4.Text = "HandBrake is an open-source, GPL-licensed, multiplatform, \r\nmultithreaded DVD lik" +
-                "e source to MPEG-4 converter.";
+            this.Label4.Text = "HandBrake is a GPL-licensed, multiplatform, multithreaded \r\nvideo transcoder. ";
             // 
             // btn_close
             // 

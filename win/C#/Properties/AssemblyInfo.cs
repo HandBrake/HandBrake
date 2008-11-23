@@ -13,7 +13,7 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("HandBrake")]
-[assembly: AssemblyDescription("GPL'd DVD Like Source to MPEG-4 converter")]
+[assembly: AssemblyDescription("HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake")]
 [assembly: AssemblyProduct("HandBrake")]
