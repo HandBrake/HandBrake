@@ -1080,7 +1080,7 @@
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
-    [preset setObject:@"HandBrake's deprecated settings for the iPhone and iPod Touch. This is the iPhone preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no supported." forKey:@"PresetDescription"];
+    [preset setObject:@"HandBrake's deprecated settings for the iPhone and iPod Touch. This is the iPhone preset from HandBrake 0.9.2, and while it is offered as a service to legacy users, it is no longer supported." forKey:@"PresetDescription"];
 
     /* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
