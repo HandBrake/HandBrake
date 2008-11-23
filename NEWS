@@ -1,5 +1,221 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes between 0.9.2 and 0.9.3:
+
+0.9.3 Snapshot 5 -> 0.9.3 Final
+- Better PMT processing
+- Basic underlying support for live previews (encode from a seek point for a set number of frames)
+- Better searching for IDR frames in H.264 streams
+- Preset changes (iPhone goes CRF, some old Apple presets resurrected as Legacy)
+- Assorted bug fixes
+
+0.9.3 Snapshot 4 -> 0.9.3 Snapshot 5 (r1913)
+Core Library
+- VC-1 stream input
+- Newer libmp4v2, which fixes the issue with output > 2 gigs in Linux
+- Proper allocation for preview frames
+- Avoids corruption of previews of sources that use widths that aren't cleanly divisible by 8
+- Decodes DTS internally instead of using ffmpeg, to allow mixdowns
+- Better support for DTS in MKV files with implicit timestamps or large timestamp errors
+- Ensures proper chroma size by rounding up when dealing with odd dimensions
+- Ensures "auto" samplerate sends a valid value to faac (22050, 24000, 32000, 44100, or 48000)
+- Bumped Theora to 1.0 final
+- Bumped x264 to r1024, which includes Nehalem optimizations as well as speed boosts for things such as b-adapt=2
+
+Mac GUI
+- Allows multibyte characters in chapter titles
+
+Windows GUI
+- Fixes issue parsing presets that use maxWidth and maxHeight (-X and -Y)
+- DRC defaults to 1 now
+- Chapter markers disabled for non-DVD sources
+- Makes sure Normal preset gets loaded
+- Fixes arithmetic overflow crash when scanning
+
+Linux GUI
+- Update checker
+- Limits range of chapters to encode to the number of chapters on the DVD
+- Disabled entry of dimensions larger than the source
+
+CLI
+- Allows overriding of audio (tracks, bitrates, samplerates, codecs, mixdowns) and x264 options in built-in presets
+
+Documentation
+- Documentation updates have begun on the wiki, although they are not yet complete
+
+0.9.3 Snapshot 3 -> 0.9.3 Snapshot 4 (r1896)
+Core Library
+- Converts video in other color spaces to YUV420 (this means DV support)
+- Official, standards-based AC3-in-MP4
+- Tries to base the AV timing for streams off audio when possible
+- Keeps some audio fixes for lost packets in over the air streams from interfering with other sources
+- Handles rendering of sources where the picture resolution changes mid-stream (this fixes the long-standing bug reading a particular episode of Doctor Who)
+- Wider window for clock references (AV sync)
+- Fixed a crash when closing out data for AAC encoding on aborted encodes
+- Rejiggered verbose activity log display to be more laconic by default
+- Updated x264 to r1016, which means b-rdo and bime are gone and replaced with new subme modes
+- DTS and HDMV DTS audio support in streams
+- Doesn't show the audio track button on iPhones/iPod Touches unless there's more than 1 track
+- Tries to avoid garbage data from AC3 sync by searching for two agreeing packets
+- As the MPEG4IP project is defunct, switched to an independently maintained libmp4v2 which has folded in all our cumbersome patches
+- Fixed SunOS compilation
+- Fixed conflict between maxHeight and maxWidth and loose anamorphic
+- Warn in the log when titles are being ignored during scan for lack of audio
+- Fixed bug with Slow/Slowest deinterlacing and decomb which could leave a flickering line at the top or bottom of the screen
+- Extracts audio and subtitle types from DVD sources, to do things like label commentary tracks
+- Better handling of the beginning of AVI and WMV sources that start after time 0
+- Optimize MP4 for web download works with AC3 tracks now
+
+Mac GUI
+- Nested presets
+- Individual activity logs for each encode (stored by default in ~/Application Support/HandBrake, can be co-located with encoded file destination by preference)
+- Allows reading from ZFS volumes
+- Fixed target size mode. It keeps breaking itself. Maybe it should just be put out of its misery...
+- Assorted other improvements
+
+Windows GUI
+- Nested presets
+- Individual activity logs for each encode
+- Slow and slower deinterlacing and decomb work now in Windows
+- Added resizeable update window
+- Fixed parsing of non-DVD source audio formats
+- Restored Copy to Clipboard to the Activity Log Window, among other enhancements to it
+- Fixed bug with MKV presets showing up as .m4v
+- Assorted other improvements
+
+Linux GUI (GTK)
+- Nested presets
+- Individual activity logs for each encode
+- Allows pending queue items to be removed, and reloaded in the main window for editing
+- Better handling of HD previews
+- Assorted other improvements
+
+CLI
+- Updated presets to the equivalent of the nested ones in the GUIs
+- Allows setting custom audio track names in MP4 files
+- Allows selection of the COLR atom in MP4 files, between Bt.601 and Bt.709
+- Fixed reading of device paths in OS X
+
+A special note on the new presets (they're collapsible-triangle-folder-thing-errific!)
+- Deux Six Quatre, Blind, Broke, and Bedlam are gone. They were dead weight.
+- iPod Low-Rez is now iPod Classic & iPod Nano
+- iPod High-Rez is now iPod Legacy
+- iPhone / iPod Touch is now iPhone & iPod Touch, so take care CLI users
+- Animation and Television now use the decomb and detelecine (VFR) filters
+- High Profile presets now use psy-trellis and the new subme 9 mode with B-frame RD refinement
+- AppleTV is now CRF, so sizes will vary with content
+- PS3 preset should be fixed
+- Constant Quality Rate still needs its quality % lowered, probably
+
+The keen reader is already asking "iPod Legacy? WTF is iPod High-Rez called iPod Legacy now?"
+
+The answer is Universal.
+
+The Universal preset is designed to play on all modern iPods (anything newer than the iPod 5.5G). It also plays on iPhones. It also plays on AppleTVs. It should also play just about anywhere else, hence the name. It is full anamorphic DVD resolution--no tricks with downscaling like stuff from the iTunes Store. It includes chapters, and has the first audio track in both AAC (DPL2 downmixed) and AC3 pass-thru, just like the AppleTV preset. In fact, it should give the same quality as the AppleTV preset, but faster...and at a larger file size. Like the AppleTV preset, it used CRF, so sizes will vary.
+
+0.9.3 Snapshot2 -> 0.9.3 Snapshot 3 (r1797)
+Core Library:
+- Universal input support, utilizing libavcodec from the FFmpeg project for decoding non-MPEG-2 video
+- Newer, faster, better version of the x264 codec, including psychovisual optimizations
+- Better AV sync through full compliance with the MPEG Standard Target Decoder timing model
+- More accurate auto-cropping
+- Support for New Zealand and Norwegian HDTV broadcasts (H.264 and AAC-LATM in MPEG-TS)
+- Detelecine is now "VFR detelecine" by default, dropping some frames and extending others to make up lost time, old behavior of keeping duplicate frames is enabled by selecting a framerate besides "Same as source"
+- Threaded deinterlacing in Slow and Slower modes
+- Threaded and entirely rewritten decomb filter
+- Better audio resampling interpolator
+- Better gamma in QuickTime through the use of the COLR MP4 atom
+- Better constant quality encoding when using FFmpeg
+- Hopefully better cache and virtual memory performance by recycling buffers that were most recently used instead of least
+- Fix for MP4s with "negative duration" errors.
+- Set the detelecine filter to work better with PAL by using "loose" breaks
+- Fix for missing initial H.264 NAL units, improves reliability of 8x8dct
+- Fix for subtitle-scan with XviD encoding
+- Fix for crash at the end of 2nd pass using x264
+- Deblock filter works now
+- Rewritten update system, so the core library can read a portion of Sparkle appcasts.
+- Updates for libsamplerate, libogg, xvidcore, libtheora, libmpeg2, lame, faac, and of course ffmpeg and x264.
+
+Mac GUI
+- Entirely rewritten and far more flexible queue that can be saved between sessions, capable of preserving queued items after a crash
+- Now requires vlc 0.9.xx to read protected dvd's in the users /Applications folder
+- Fix for 4x3 loose anamorphic to keep it from downscaling
+- Countless other improvements
+
+Windows GUI
+- Resolution calculation
+- Better preset bar
+- Better queue (including queue recovery feature)
+- Better activity log window
+- Improved UI (layout changes, animated x264 options, DVD drive detection, duration displayed)
+- More options - includes support for custom auto name format & starting the CLI minimized
+- Countless other improvements
+
+Linux GUI (GTK)
+- It's alive!
+
+Known Issues in Snapshot 3
+- Possibility of a flickering line at the top or bottom of the frame after Slow or Slower deinterlacing or decombing
+- Input bitrate display may be off by a factor of 100 for H.264-in-TS sources
+- Constant Quality Rate preset probably needs a lower quality level (60% - 55%)
+- With non-DVD sources that don't have AC3 audio, you can't encode 1 input audio track to multiple output audio tracks
+- Slow and Slower deinterlacing and decombing are BROKEN in Windows
+- QuickTime won't read Xvid-in-MP4 output, although VLC will
+- Windows GUI does not detect all audio tracks from non-DVD sources
+
+0.9.3 Snapshot 1 -> 0.9.3 Snapshot 2 (r1477)
+Core Library:
+- Anamorphic PAR for the AVI container
+- Allow constant frame rates when they different from the source's frame rate (otherwise pass through the variable MPEG-2 frame durations )
+- Decomb filter (selectively deinterlaces when it sees interlacing in the frame)
+- Filter bug fixed, that would skip any filters after detelecine, if VFR wasn't enabled
+- Loose anamorphic + FFmpeg video bug fixed
+
+Windows GUI:
+- Title dropdown list bug fixed
+- Missing log file bug fixed
+
+CLI:
+- Default audio samplerate changed to 48kHz, audio bitrate changed to 160kbps.
+- Samplerate entry bug fixed
+
+0.9.2 -> 0.9.3 Snapshot 1 (r1457)
+Core Library:
+- New audio subsystem (no more AAC+AC3, control each track's codec and settings individually)
+- Removed libdvdcss (HandBrake no longer decrypts DVDs on its own, will use VLC to do so if it's available)
+- Added Theora encoder
+- Fixed x264-in-avi and ffmpeg-in-avi
+- Fixed xvid
+- More accurate scaling
+- Major sync improvements
+- Major stream improvements
+- AAC+AC3 support in MKV
+- MKV seeking fixes
+- Make sure subtitles get displayed long enough to read them
+- Updated VBV 2-pass and VBV 1-pass patch for x264
+- Adaptive Quantization for x264
+- Recover from bad preview scans
+- Recover from invalid PGNs
+- Fixed vorbis bitrate control
+- Snapshot builds
+
+Mac:
+- New audio interface
+- Loads libdvdcss from VLC at runtime if it's present on the user's system
+- No more general-purpose "Codecs" menu -- set video and audio codecs individually
+- More robust preset system, in preparation for nested presets
+- Made 64-bit MP4 file widget more prominent
+- Only allow useful x264 options in the advanced tab
+- Various fixes and improvements
+
+Windows:
+- New x264 tab
+- New audio interface
+- Various fixes and improvements
+
+CLI:
+- New audio interface
+
 Changes between 0.9.1 and 0.9.2:
 
 CORE
