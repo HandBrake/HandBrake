@@ -99,6 +99,7 @@ ghb_SOURCES = \
 	resources.h \
 	presets.c \
 	presets.h \
+	preview.c \
 	icons.c \
 	icons.h \
 	icon_tools.c \

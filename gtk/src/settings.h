@@ -36,6 +36,8 @@ enum
 	GHB_STATE_MUXING 	= 0x40,
 };
 
+typedef struct preview_s preview_t;
+
 typedef struct
 {
 	gchar *current_dvd_device;
@@ -48,6 +50,7 @@ typedef struct
 	GValue *current_job;
 	GIOChannel *activity_log;
 	GIOChannel *job_activity_log;
+	preview_t *preview;
 	gchar *appcast;
 	gint appcast_len;
 } signal_user_data_t;

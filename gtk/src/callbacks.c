@@ -35,6 +35,7 @@
 #include "resources.h"
 #include "settings.h"
 #include "presets.h"
+#include "preview.h"
 #include "values.h"
 #include "plist.h"
 #include "appcast.h"
@@ -880,6 +881,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	update_acodec_combo(ud);
 	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
 
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 	if (ghb_ac3_in_audio_list (audio_list))
@@ -1009,54 +1011,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
 }
 
-static gint preview_button_width;
-static gint preview_button_height;
 static gboolean update_preview = FALSE;
-
-static void
-set_preview_image(signal_user_data_t *ud)
-{
-	GtkWidget *widget;
-	gint preview_width, preview_height, target_height, width, height;
-
-	g_debug("set_preview_button_image ()");
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	if (titleindex < 0) return;
-	widget = GHB_WIDGET (ud->builder, "preview_frame");
-	gint frame = ghb_widget_int(widget) - 1;
-	GdkPixbuf *preview = ghb_get_preview_image (titleindex, frame, ud->settings, TRUE);
-	if (preview == NULL) return;
-	widget = GHB_WIDGET (ud->builder, "preview_image");
-	gtk_image_set_from_pixbuf(GTK_IMAGE(widget), preview);
-
-	preview_width = gdk_pixbuf_get_width(preview);
-	preview_height = gdk_pixbuf_get_height(preview);
-	gchar *text = g_strdup_printf("%d x %d", preview_width, preview_height);
-	widget = GHB_WIDGET (ud->builder, "preview_dims");
-	gtk_label_set_text(GTK_LABEL(widget), text);
-	g_free(text);
-	
-	g_debug("preview %d x %d", preview_width, preview_height);
-	target_height = MIN(preview_button_height - 12, 128);
-	height = target_height;
-	width = preview_width * height / preview_height;
-
-	if ((height >= 16) && (width >= 16))
-	{
-		GdkPixbuf *scaled_preview;
-		scaled_preview = gdk_pixbuf_scale_simple (preview, width, height, GDK_INTERP_NEAREST);
-		if (scaled_preview != NULL)
-		{
-			g_object_unref (preview);
-			
-			widget = GHB_WIDGET (ud->builder, "preview_button_image");
-			gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
-			g_object_unref (scaled_preview);
-		}
-	}
-}
 
 void
 title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
@@ -1092,7 +1047,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	// control range here.
 	ghb_ui_update(ud, "preview_frame", ghb_int64_value(1));
 
-	set_preview_image (ud);
+	ghb_set_preview_image (ud);
 }
 
 void
@@ -1101,6 +1056,7 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
 }
 
 static void
@@ -1162,6 +1118,7 @@ http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
 	// AC3 is not allowed when Web optimized
 	ghb_grey_combo_options (ud->builder);
 }
@@ -1176,6 +1133,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
 	ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits);
 	GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
 	gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
@@ -1196,6 +1154,7 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
 	{
 		gint titleindex;
@@ -1258,6 +1217,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	text = g_strdup_printf ("%d x %d", width, height);
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
+	ghb_live_reset(ud);
 }
 
 void
@@ -1275,6 +1235,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	text = g_strdup_printf ("%d x %d", width, height);
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
+	ghb_live_reset(ud);
 }
 
 void
@@ -1311,6 +1272,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
 	update_preview = TRUE;
+	ghb_live_reset(ud);
 }
 
 void
@@ -1320,6 +1282,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
 	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 	update_preview = TRUE;
 	
@@ -1467,6 +1430,7 @@ prune_logs(signal_user_data_t *ud)
 		g_dir_close(gdir);
 	}
 	g_free(dest_dir);
+	ghb_preview_cleanup(ud);
 }
 
 static void
@@ -1612,7 +1576,7 @@ find_queue_job(GValue *queue, gint unique_id, GValue **job)
 }
 
 gchar*
-working_status_string(signal_user_data_t *ud, ghb_status_t *status)
+working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 {
 	gchar *task_str, *job_str, *status_str;
 	gint qcount;
@@ -1680,26 +1644,26 @@ ghb_backend_events(signal_user_data_t *ud)
 	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
 	// First handle the status of title scans
 	// Then handle the status of the queue
-	if (status.state & GHB_STATE_SCANNING)
+	if (status.scan.state & GHB_STATE_SCANNING)
 	{
-		if (status.title_cur == 0)
+		if (status.scan.title_cur == 0)
 		{
 			status_str = g_strdup ("Scanning...");
 		}
 		else
 		{
 			status_str = g_strdup_printf ("Scanning title %d of %d...", 
-								  status.title_cur, status.title_count );
+							  status.scan.title_cur, status.scan.title_count );
 		}
 		gtk_progress_bar_set_text (progress, status_str);
 		g_free(status_str);
-		if (status.title_count > 0)
+		if (status.scan.title_count > 0)
 		{
 			gtk_progress_bar_set_fraction (progress, 
-				(gdouble)status.title_cur / status.title_count);
+				(gdouble)status.scan.title_cur / status.scan.title_count);
 		}
 	}
-	else if (status.state & GHB_STATE_SCANDONE)
+	else if (status.scan.state & GHB_STATE_SCANDONE)
 	{
 		status_str = g_strdup_printf ("Scan done"); 
 		gtk_progress_bar_set_text (progress, status_str);
@@ -1720,7 +1684,7 @@ ghb_backend_events(signal_user_data_t *ud)
 			gtk_progress_bar_set_fraction (progress, 0);
 			gtk_progress_bar_set_text (progress, "No Source");
 		}
-		ghb_clear_state(GHB_STATE_SCANDONE);
+		ghb_clear_scan_state(GHB_STATE_SCANDONE);
 		ghb_queue_buttons_grey(ud, work_started);
 		if (ghb_queue_edit_settings)
 		{
@@ -1736,43 +1700,43 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_queue_edit_settings = NULL;
 		}
 	}
-	else if (status.queue_state & GHB_STATE_SCANNING)
+	else if (status.queue.state & GHB_STATE_SCANNING)
 	{
 		status_str = g_strdup_printf ("Scanning ...");
 		gtk_progress_bar_set_text (progress, status_str);
 		g_free(status_str);
 		gtk_progress_bar_set_fraction (progress, 0);
 	}
-	else if (status.queue_state & GHB_STATE_SCANDONE)
+	else if (status.queue.state & GHB_STATE_SCANDONE)
 	{
 		ghb_clear_queue_state(GHB_STATE_SCANDONE);
 		submit_job(ud->current_job);
 	}
-	else if (status.queue_state & GHB_STATE_PAUSED)
+	else if (status.queue.state & GHB_STATE_PAUSED)
 	{
 		status_str = g_strdup_printf ("Paused"); 
 		gtk_progress_bar_set_text (progress, status_str);
 		g_free(status_str);
 	}
-	else if (status.queue_state & GHB_STATE_WORKING)
+	else if (status.queue.state & GHB_STATE_WORKING)
 	{
-		status_str = working_status_string(ud, &status);
+		status_str = working_status_string(ud, &status.queue);
 		gtk_progress_bar_set_text (progress, status_str);
-		gtk_progress_bar_set_fraction (progress, status.progress);
+		gtk_progress_bar_set_fraction (progress, status.queue.progress);
 		g_free(status_str);
 	}
-	else if (status.queue_state & GHB_STATE_WORKDONE)
+	else if (status.queue.state & GHB_STATE_WORKDONE)
 	{
 		gint qstatus;
 
 		work_started = FALSE;
 		ghb_queue_buttons_grey(ud, FALSE);
-		index = find_queue_job(ud->queue, status.unique_id, &js);
+		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
 		treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 		store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 		if (ud->cancel_encode)
-			status.error = GHB_ERROR_CANCELED;
-		switch( status.error )
+			status.queue.error = GHB_ERROR_CANCELED;
+		switch( status.queue.error )
 		{
 			case GHB_ERROR_NONE:
 				gtk_progress_bar_set_text( progress, "Rip done!" );
@@ -1829,11 +1793,11 @@ ghb_backend_events(signal_user_data_t *ud)
 		g_io_channel_unref(ud->job_activity_log);
 		ud->job_activity_log = NULL;
 	}
-	else if (status.queue_state & GHB_STATE_MUXING)
+	else if (status.queue.state & GHB_STATE_MUXING)
 	{
 		gtk_progress_bar_set_text(progress, "Muxing: this may take awhile...");
 	}
-	if (status.queue_state & GHB_STATE_SCANNING)
+	if (status.queue.state & GHB_STATE_SCANNING)
 	{
 		// This needs to be in scanning and working since scanning
 		// happens fast enough that it can be missed
@@ -1843,7 +1807,7 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_queue_buttons_grey(ud, TRUE);
 		}
 	}
-	if (status.queue_state & GHB_STATE_WORKING)
+	if (status.queue.state & GHB_STATE_WORKING)
 	{
 		// This needs to be in scanning and working since scanning
 		// happens fast enough that it can be missed
@@ -1852,8 +1816,8 @@ ghb_backend_events(signal_user_data_t *ud)
 			work_started = TRUE;
 			ghb_queue_buttons_grey(ud, TRUE);
 		}
-		index = find_queue_job(ud->queue, status.unique_id, &js);
-		if (status.unique_id != 0 && index >= 0)
+		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+		if (status.queue.unique_id != 0 && index >= 0)
 		{
 			gchar working_icon[] = "hb-working0";
 			working_icon[10] = '0' + working;
@@ -1871,10 +1835,35 @@ ghb_backend_events(signal_user_data_t *ud)
 		GtkLabel *label;
 		gchar *status_str;
 
-		status_str = working_status_string(ud, &status);
+		status_str = working_status_string(ud, &status.queue);
 		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
 		gtk_label_set_text (label, status_str);
 		g_free(status_str);
+	}
+	if (status.scan.state & GHB_STATE_WORKING)
+	{
+		GtkProgressBar *live_progress;
+		live_progress = GTK_PROGRESS_BAR(
+			GHB_WIDGET(ud->builder, "live_encode_progress"));
+		status_str = working_status_string(ud, &status.scan);
+		gtk_progress_bar_set_text (live_progress, status_str);
+		gtk_progress_bar_set_fraction (live_progress, status.scan.progress);
+		g_free(status_str);
+	}
+	if (status.scan.state & GHB_STATE_WORKDONE)
+	{
+		switch( status.scan.error )
+		{
+			case GHB_ERROR_NONE:
+			{
+				ghb_live_encode_done(ud, TRUE);
+			} break;
+			default:
+			{
+				ghb_live_encode_done(ud, FALSE);
+			} break;
+		}
+		ghb_clear_scan_state(GHB_STATE_WORKDONE);
 	}
 }
 
@@ -1883,6 +1872,7 @@ ghb_timer_cb(gpointer data)
 {
 	signal_user_data_t *ud = (signal_user_data_t*)data;
 
+	ghb_live_preview_progress(ud);
 	ghb_backend_events(ud);
 	if (update_default_destination)
 	{
@@ -1902,7 +1892,7 @@ ghb_timer_cb(gpointer data)
 	}
 	if (update_preview)
 	{
-		set_preview_image (ud);
+		ghb_set_preview_image (ud);
 		update_preview = FALSE;
 	}
 	return TRUE;
@@ -2255,42 +2245,6 @@ chapter_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 }
 
 void
-preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	if (titleindex < 0) return;
-	g_debug("titleindex %d", titleindex);
-
-	GtkWidget *widget = GHB_WIDGET (ud->builder, "preview_window");
-	gtk_widget_show (widget);
-}
-
-void
-preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	set_preview_image(ud);
-}
-
-void
-preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, signal_user_data_t *ud)
-{
-	g_debug("-------------------------------allocate %d x %d", allocation->width, allocation->height);
-	if (preview_button_width == allocation->width &&
-		preview_button_height == allocation->height)
-	{
-		// Nothing to do. Bug out.
-		g_debug("nothing to do");
-		return;
-	}
-	g_debug("-------------------------------prev allocate %d x %d", preview_button_width, preview_button_height);
-	preview_button_width = allocation->width;
-	preview_button_height = allocation->height;
-	set_preview_image(ud);
-}
-
-void
 debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer data)
 {
 	signal_user_data_t *ud = (signal_user_data_t*)data;
@@ -2512,9 +2466,10 @@ void
 drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 {
 	gchar *device;
-	gint state = ghb_get_state();
+	gint state = ghb_get_scan_state();
 	static gboolean first_time = TRUE;
 
+	if (state != GHB_STATE_IDLE) return;
 	if (ud->current_dvd_device == NULL) return;
 	// A drive change event happens when the program initially starts
 	// and I don't want to automatically scan at that time.
@@ -2523,7 +2478,6 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 		first_time = FALSE;
 		return;
 	}
-	if (state != GHB_STATE_IDLE) return;
 	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
 	
 	// DVD insertion detected.  Scan it.

@@ -12,6 +12,8 @@
 		<integer>100</integer>
 		<key>folder</key>
 		<string></string>
+		<key>live_duration</key>
+		<integer>15</integer>
 		<key>preset</key>
 		<array>
 			<string>Normal</string>
@@ -30,6 +32,8 @@
 		<integer>0</integer>
 		<key>start_chapter</key>
 		<integer>1</integer>
+		<key>start_frame</key>
+		<integer>-1</integer>
 		<key>title</key>
 		<string>none</string>
 		<key>volume_label</key>

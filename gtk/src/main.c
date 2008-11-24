@@ -33,6 +33,7 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
+#include <gst/gst.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 #include "hbversion.h"
@@ -47,6 +48,7 @@
 #include "settings.h"
 #include "resources.h"
 #include "presets.h"
+#include "preview.h"
 
 
 /*
@@ -491,6 +493,7 @@ main (int argc, char *argv[])
 	GValue *preset;
 	GError *error = NULL;
 	GOptionContext *context;
+	GtkWidget *widget;
 
 	mm_flags = mm_support();
 #ifdef ENABLE_NLS
@@ -499,9 +502,12 @@ main (int argc, char *argv[])
 	textdomain (GETTEXT_PACKAGE);
 #endif
 
+	if (!g_thread_supported())
+		g_thread_init(NULL);
 	context = g_option_context_new ("- Rip and encode DVD or MPEG file");
 	g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
+	g_option_context_add_group (context, gst_init_get_option_group ());
 	g_option_context_parse (context, &argc, &argv, &error);
 	g_option_context_free(context);
 	
@@ -523,6 +529,7 @@ main (int argc, char *argv[])
 	watch_volumes (ud);
 	ud->builder = create_builder_or_die (BUILDER_NAME);
 	// Redirect stderr to the activity window
+	ghb_preview_init(ud);
 	IoRedirect(ud);
 	ghb_log("Handbrake Version: %s (%d)", HB_VERSION, HB_BUILD);
 	ghb_init_dep_map();
@@ -567,7 +574,6 @@ main (int argc, char *argv[])
 		ghb_hbfd(ud, TRUE);
 	}
 	gboolean tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
-	GtkWidget *widget;
 	widget = GHB_WIDGET(ud->builder, "PictureDeinterlace");
 	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
 	widget = GHB_WIDGET(ud->builder, "tweak_PictureDeinterlace");

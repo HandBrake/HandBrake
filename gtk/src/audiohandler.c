@@ -17,6 +17,7 @@
 #include "hb-backend.h"
 #include "values.h"
 #include "callbacks.h"
+#include "preview.h"
 #include "audiohandler.h"
 
 void
@@ -332,6 +333,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		}
 		g_free(container);
 	}
+	ghb_live_reset(ud);
 }
 
 void
@@ -353,6 +355,7 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		track = ghb_settings_combo_option(asettings, "AudioTrack");
 		ghb_settings_set_string(asettings, "AudioTrackDescription", track);
 	}
+	ghb_live_reset(ud);
 }
 
 void
@@ -369,6 +372,7 @@ audio_mix_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_widget_to_setting(asettings, widget);
 		audio_list_refresh_selected(ud);
 	}
+	ghb_live_reset(ud);
 }
 
 void
@@ -384,6 +388,7 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_widget_to_setting(asettings, widget);
 		audio_list_refresh_selected(ud);
 	}
+	ghb_live_reset(ud);
 }
 
 // subtitles differ from other settings in that
@@ -397,6 +402,7 @@ subtitle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("subtitle_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
+	ghb_live_reset(ud);
 }
 
 void

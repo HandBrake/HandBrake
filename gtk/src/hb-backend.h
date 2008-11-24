@@ -26,10 +26,9 @@ enum
 	GHB_ERROR_FAIL,
 };
 
-typedef struct ghb_status_s
+typedef struct
 {
 	gint state;
-	gint queue_state;
 
 	// SCANNING
 	gint title_count;
@@ -46,6 +45,12 @@ typedef struct ghb_status_s
 	gint minutes;
 	gint seconds;
 	gint error;
+} ghb_instance_status_t;
+
+typedef struct
+{
+	ghb_instance_status_t scan;
+	ghb_instance_status_t queue;
 } ghb_status_t;
 
 #define GHB_SCALE_KEEP_NONE 0
@@ -96,11 +101,15 @@ void ghb_start_queue(void);
 void ghb_stop_queue(void);
 void ghb_pause_queue(void);
 
-gint ghb_get_state(void);
-void ghb_clear_state(gint state);
+void ghb_add_live_job(GValue *js, gint unique_id);
+void ghb_start_live_encode();
+void ghb_stop_live_encode();
+
+void ghb_clear_scan_state(gint state);
 void ghb_clear_queue_state(gint state);
 
 void ghb_set_state(gint state);
+gint ghb_get_scan_state();
 gint ghb_get_queue_state();
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
@@ -137,5 +146,6 @@ gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GValue *acodec);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *acodec);
+gchar* ghb_get_tmp_dir();
 
 #endif // _HBBACKEND_H_

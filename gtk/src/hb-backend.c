@@ -840,6 +840,15 @@ static hb_handle_t * h_queue = NULL;
 
 extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
 
+gchar*
+ghb_get_tmp_dir()
+{
+	char dir[512];
+
+	hb_get_tempory_directory(h_scan, dir);
+	return g_strdup(dir);
+}
+
 void
 ghb_hb_cleanup(gboolean partial)
 {
@@ -1990,11 +1999,11 @@ void
 ghb_backend_scan(const gchar *path, gint titleindex)
 {
     hb_scan( h_scan, path, titleindex );
-	hb_status.state |= GHB_STATE_SCANNING;
+	hb_status.scan.state |= GHB_STATE_SCANNING;
 	// initialize count and cur to something that won't cause FPE
 	// when computing progress
-	hb_status.title_count = 1;
-	hb_status.title_cur = 0;
+	hb_status.scan.title_count = 1;
+	hb_status.scan.title_cur = 0;
 }
 
 void
@@ -2002,43 +2011,43 @@ ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
 	g_debug("ghb_backend_queue_scan()");
 	hb_scan( h_queue, path, titlenum );
-	hb_status.queue_state |= GHB_STATE_SCANNING;
+	hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 
 gint
-ghb_get_state()
+ghb_get_scan_state()
 {
-	return hb_status.state;
+	return hb_status.scan.state;
 }
 
 gint
 ghb_get_queue_state()
 {
-	return hb_status.queue_state;
+	return hb_status.queue.state;
 }
 
 void
-ghb_clear_state(gint state)
+ghb_clear_scan_state(gint state)
 {
-	hb_status.state &= ~state;
+	hb_status.scan.state &= ~state;
 }
 
 void
 ghb_clear_queue_state(gint state)
 {
-	hb_status.queue_state &= ~state;
+	hb_status.queue.state &= ~state;
 }
 
 void
-ghb_set_state(gint state)
+ghb_set_scan_state(gint state)
 {
-	hb_status.state |= state;
+	hb_status.scan.state |= state;
 }
 
 void
 ghb_set_queue_state(gint state)
 {
-	hb_status.queue_state |= state;
+	hb_status.queue.state |= state;
 }
 
 void
@@ -2050,66 +2059,125 @@ ghb_get_status(ghb_status_t *status)
 void 
 ghb_track_status()
 {
-    hb_state_t s;
+    hb_state_t s_scan;
     hb_state_t s_queue;
 
 	if (h_scan == NULL) return;
-    hb_get_state( h_scan, &s );
-	switch( s.state )
+    hb_get_state( h_scan, &s_scan );
+	switch( s_scan.state )
     {
-#define p s.param.scanning
+#define p s_scan.param.scanning
         case HB_STATE_SCANNING:
 		{
-			hb_status.state |= GHB_STATE_SCANNING;
-			hb_status.title_count = p.title_count;
-			hb_status.title_cur = p.title_cur;
+			hb_status.scan.state |= GHB_STATE_SCANNING;
+			hb_status.scan.title_count = p.title_count;
+			hb_status.scan.title_cur = p.title_cur;
 		} break;
 #undef p
 
         case HB_STATE_SCANDONE:
         {
-			hb_status.state &= ~GHB_STATE_SCANNING;
-			hb_status.state |= GHB_STATE_SCANDONE;
+			hb_status.scan.state &= ~GHB_STATE_SCANNING;
+			hb_status.scan.state |= GHB_STATE_SCANDONE;
         } break;
 
-    }
-    hb_get_state( h_queue, &s_queue );
-	switch( s_queue.state )
-    {
-        case HB_STATE_SCANNING:
-		{
-			hb_status.queue_state |= GHB_STATE_SCANNING;
-		} break;
-
-        case HB_STATE_SCANDONE:
-        {
-			hb_status.queue_state &= ~GHB_STATE_SCANNING;
-			hb_status.queue_state |= GHB_STATE_SCANDONE;
-        } break;
-
-#define p s_queue.param.working
+#define p s_scan.param.working
         case HB_STATE_WORKING:
-			hb_status.queue_state |= GHB_STATE_WORKING;
-			hb_status.queue_state &= ~GHB_STATE_PAUSED;
-			hb_status.job_cur = p.job_cur;
-			hb_status.job_count = p.job_count;
-			hb_status.progress = p.progress;
-			hb_status.rate_cur = p.rate_cur;
-			hb_status.rate_avg = p.rate_avg;
-			hb_status.hours = p.hours;
-			hb_status.minutes = p.minutes;
-			hb_status.seconds = p.seconds;
-			hb_status.unique_id = p.sequence_id & 0xFFFFFF;
+			hb_status.scan.state |= GHB_STATE_WORKING;
+			hb_status.scan.state &= ~GHB_STATE_PAUSED;
+			hb_status.scan.job_cur = p.job_cur;
+			hb_status.scan.job_count = p.job_count;
+			hb_status.scan.progress = p.progress;
+			hb_status.scan.rate_cur = p.rate_cur;
+			hb_status.scan.rate_avg = p.rate_avg;
+			hb_status.scan.hours = p.hours;
+			hb_status.scan.minutes = p.minutes;
+			hb_status.scan.seconds = p.seconds;
+			hb_status.scan.unique_id = p.sequence_id & 0xFFFFFF;
             break;
 #undef p
 
         case HB_STATE_PAUSED:
-			hb_status.queue_state |= GHB_STATE_PAUSED;
+			hb_status.scan.state |= GHB_STATE_PAUSED;
             break;
 				
         case HB_STATE_MUXING:
         {
-			hb_status.queue_state |= GHB_STATE_MUXING;
+			hb_status.scan.state |= GHB_STATE_MUXING;
+        } break;
+
+#define p s_scan.param.workdone
+        case HB_STATE_WORKDONE:
+		{
+            hb_job_t *job;
+
+			hb_status.scan.state |= GHB_STATE_WORKDONE;
+			hb_status.scan.state &= ~GHB_STATE_MUXING;
+			hb_status.scan.state &= ~GHB_STATE_PAUSED;
+			hb_status.scan.state &= ~GHB_STATE_WORKING;
+			switch (p.error)
+			{
+			case HB_ERROR_NONE:
+				hb_status.scan.error = GHB_ERROR_NONE;
+				break;
+			case HB_ERROR_CANCELED:
+				hb_status.scan.error = GHB_ERROR_CANCELED;
+				break;
+			default:
+				hb_status.scan.error = GHB_ERROR_FAIL;
+				break;
+			}
+			// Delete all remaining jobs of this encode.
+			// An encode can be composed of multiple associated jobs.
+			// When a job is stopped, libhb removes it from the job list,
+			// but does not remove other jobs that may be associated with it.
+			// Associated jobs are taged in the sequence id.
+            while ((job = hb_job(h_scan, 0)) != NULL) 
+                hb_rem( h_scan, job );
+		} break;
+#undef p
+    }
+    hb_get_state( h_queue, &s_queue );
+	switch( s_queue.state )
+    {
+#define p s_queue.param.scanning
+        case HB_STATE_SCANNING:
+		{
+			hb_status.queue.state |= GHB_STATE_SCANNING;
+			hb_status.queue.title_count = p.title_count;
+			hb_status.queue.title_cur = p.title_cur;
+		} break;
+#undef p
+
+        case HB_STATE_SCANDONE:
+        {
+			hb_status.queue.state &= ~GHB_STATE_SCANNING;
+			hb_status.queue.state |= GHB_STATE_SCANDONE;
+        } break;
+
+#define p s_queue.param.working
+        case HB_STATE_WORKING:
+			hb_status.queue.state |= GHB_STATE_WORKING;
+			hb_status.queue.state &= ~GHB_STATE_PAUSED;
+			hb_status.queue.job_cur = p.job_cur;
+			hb_status.queue.job_count = p.job_count;
+			hb_status.queue.progress = p.progress;
+			hb_status.queue.rate_cur = p.rate_cur;
+			hb_status.queue.rate_avg = p.rate_avg;
+			hb_status.queue.hours = p.hours;
+			hb_status.queue.minutes = p.minutes;
+			hb_status.queue.seconds = p.seconds;
+			hb_status.queue.unique_id = p.sequence_id & 0xFFFFFF;
+            break;
+#undef p
+
+        case HB_STATE_PAUSED:
+			hb_status.queue.state |= GHB_STATE_PAUSED;
+            break;
+				
+        case HB_STATE_MUXING:
+        {
+			hb_status.queue.state |= GHB_STATE_MUXING;
         } break;
 
 #define p s_queue.param.workdone
@@ -2117,20 +2185,22 @@ ghb_track_status()
 		{
             hb_job_t *job;
 
-			hb_status.queue_state |= GHB_STATE_WORKDONE;
-			hb_status.queue_state &= ~GHB_STATE_MUXING;
-			hb_status.queue_state &= ~GHB_STATE_PAUSED;
-			hb_status.queue_state &= ~GHB_STATE_WORKING;
+			hb_status.queue.state |= GHB_STATE_WORKDONE;
+			hb_status.queue.state &= ~GHB_STATE_MUXING;
+			hb_status.queue.state &= ~GHB_STATE_PAUSED;
+			hb_status.queue.state &= ~GHB_STATE_WORKING;
 			switch (p.error)
 			{
 			case HB_ERROR_NONE:
-				hb_status.error = GHB_ERROR_NONE;
+				hb_status.queue.error = GHB_ERROR_NONE;
+				break;
 			case HB_ERROR_CANCELED:
-				hb_status.error = GHB_ERROR_CANCELED;
+				hb_status.queue.error = GHB_ERROR_CANCELED;
+				break;
 			default:
-				hb_status.error = GHB_ERROR_FAIL;
+				hb_status.queue.error = GHB_ERROR_FAIL;
+				break;
 			}
-			hb_status.error = p.error;
 			// Delete all remaining jobs of this encode.
 			// An encode can be composed of multiple associated jobs.
 			// When a job is stopped, libhb removes it from the job list,
@@ -2320,8 +2390,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	{
 		width = crop_width;
 		height = crop_height;
-		max_width = 0; //crop_width;
-		max_height = 0; //crop_height;
+		max_width = 0;
+		max_height = 0;
 	}
 	else
 	{
@@ -2864,8 +2934,8 @@ ghb_validate_vquality(GValue *settings)
 	return TRUE;
 }
 
-void
-ghb_add_job(GValue *js, gint unique_id)
+static void
+add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -2880,25 +2950,27 @@ ghb_add_job(GValue *js, gint unique_id)
 	gchar *denoise_str = NULL;
 	gchar *dest_str = NULL;
 
-	g_debug("ghb_add_job()\n");
-	if (h_queue == NULL) return;
-	list = hb_get_titles( h_queue );
+	g_debug("add_job()\n");
+	if (h == NULL) return;
+	list = hb_get_titles( h );
 	if( !hb_list_count( list ) )
 	{
 		/* No valid title, stop right there */
 		return;
 	}
 
-	// Since I'm doing a scan of the single title I want just prior 
-	// to adding the job, there is only the one title to choose from.
-	//gint titleindex = ghb_settings_get_int(js, "title");
-    gint titleindex = 0;
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return;
 
 	/* Set job settings */
 	job   = title->job;
 	if (job == NULL) return;
+
+	job->start_at_preview = ghb_settings_get_int(js, "start_frame") + 1;
+	if (job->start_at_preview)
+	{
+		job->pts_to_stop = ghb_settings_get_int(js, "live_duration") * 90000LL;
+	}
 
 	tweaks = ghb_settings_get_boolean(js, "allow_tweaks");
 	job->mux = ghb_settings_combo_int(js, "FileFormat");
@@ -3138,6 +3210,7 @@ ghb_add_job(GValue *js, gint unique_id)
 			}
 			else
 			{
+printf("switching to faac\n");
 				audio.out.codec = HB_ACODEC_FAAC;
 			}
 		}
@@ -3269,7 +3342,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		 * Add the pre-scan job
 		 */
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h_queue, job );
+		hb_add( h, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 
@@ -3322,7 +3395,7 @@ ghb_add_job(GValue *js, gint unique_id)
 			job->x264opts = x264opts;
 		}
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h_queue, job );
+		hb_add( h, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 
@@ -3337,7 +3410,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->indepth_scan = 0;
 		job->x264opts = x264opts2;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h_queue, job );
+		hb_add( h, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 	}
@@ -3346,7 +3419,7 @@ ghb_add_job(GValue *js, gint unique_id)
 		job->indepth_scan = 0;
 		job->pass = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
-		hb_add( h_queue, job );
+		hb_add( h, job );
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 	}
@@ -3356,6 +3429,23 @@ ghb_add_job(GValue *js, gint unique_id)
 	if (deblock_str) g_free(deblock_str);
 	if (denoise_str) g_free(denoise_str);
 	if (dest_str) g_free(dest_str);
+}
+
+void
+ghb_add_job(GValue *js, gint unique_id)
+{
+	// Since I'm doing a scan of the single title I want just prior 
+	// to adding the job, there is only the one title to choose from.
+	add_job(h_queue, js, unique_id, 0);
+}
+
+void
+ghb_add_live_job(GValue *js, gint unique_id)
+{
+	// Since I'm doing a scan of the single title I want just prior 
+	// to adding the job, there is only the one title to choose from.
+	gint titleindex = ghb_settings_combo_int(js, "title");
+	add_job(h_scan, js, unique_id, titleindex);
 }
 
 void
@@ -3385,6 +3475,18 @@ void
 ghb_stop_queue()
 {
 	hb_stop( h_queue );
+}
+
+void
+ghb_start_live_encode()
+{
+	hb_start( h_scan );
+}
+
+void
+ghb_stop_live_encode()
+{
+	hb_stop( h_scan );
 }
 
 void

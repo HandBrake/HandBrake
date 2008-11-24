@@ -161,6 +161,13 @@
     <property name="page_size">0</property>
     <property name="value">0</property>
   </object>
+  <object class="GtkAdjustment" id="preview_progress_adj">
+    <property name="upper">100</property>
+    <property name="lower">0</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <property name="value">0</property>
+  </object>
   <object class="GtkUIManager" id="uimanager1">
     <child>
       <object class="GtkActionGroup" id="actiongroup1">
@@ -545,6 +552,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkComboBox" id="title">
+                    				<property name="height_request">16</property>
                                     <property name="width_request">150</property>
                                     <property name="visible">True</property>
                                     <property name="has_frame">False</property>
@@ -3168,6 +3176,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
             </child>
             <child>
               <object class="GtkProgressBar" id="progressbar">
+                <property name="height_request">16</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="text" translatable="yes"/>
@@ -4044,9 +4053,76 @@ location as the movie.</property>
                 <property name="left_padding">12</property>
                 <property name="right_padding">4</property>
                 <child>
-                  <object class="GtkImage" id="preview_image">
+                  <object class="GtkTable" id="table1">
                     <property name="visible">True</property>
-                    <property name="icon_name">hb-icon</property>
+                    <property name="n_rows">3</property>
+                    <property name="n_columns">3</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label45">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label44">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label43">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label42">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkDrawingArea" id="preview_image">
+                        <property name="visible">True</property>
+                        <property name="app_paintable">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="x_options"></property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -4059,6 +4135,86 @@ location as the movie.</property>
               </object>
             </child>
           </object>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox7">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkButton" id="live_preview_play">
+                <property name="height_request">30</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <signal handler="live_preview_start_cb" name="clicked"/>
+                <child>
+                  <object class="GtkImage" id="live_preview_play_image">
+                    <property name="visible">True</property>
+                    <property name="stock">gtk-media-play</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHScale" id="live_preview_progress">
+                <property name="visible">False</property>
+                <property name="can_focus">True</property>
+                <property name="adjustment">preview_progress_adj</property>
+                <property name="draw_value">False</property>
+                <property name="value_pos">right</property>
+                <signal handler="live_preview_seek_cb" name="value_changed"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="live_progress_box">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkLabel" id="label1">
+                    <property name="height_request">1</property>
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkProgressBar" id="live_encode_progress">
+                    <property name="height_request">16</property>
+                    <property name="visible">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="text" translatable="yes"></property>
+                  </object>
+                  <packing>
+            		<property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label2">
+                    <property name="height_request">1</property>
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">1</property>
+          </packing>
         </child>
         <child>
           <object class="GtkHBox" id="hbox8">
@@ -4529,7 +4685,7 @@ the other to maintain the video's original aspect ratio.</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
