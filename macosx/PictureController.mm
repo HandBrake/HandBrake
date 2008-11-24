@@ -262,6 +262,7 @@ are maintained across different sources */
                                  scale * 100.0];
         [fInfoField setStringValue: [[fInfoField stringValue] stringByAppendingString:scaleString]];
     }
+
 }
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
@@ -463,7 +464,8 @@ are maintained across different sources */
      no human can see any meaningful detail below that */
     if (job->width >= 64 && job->height >= 64)
     {
-        // Purge the existing picture previews so they get recreated the next time
+       
+         // Purge the existing picture previews so they get recreated the next time
         // they are needed.
         [self purgeImageCache];
         /* We actually call displayPreview now from pictureSliderChanged which keeps
@@ -473,7 +475,12 @@ are maintained across different sources */
         [self pictureSliderChanged:nil];
 
     }
-    
+
+    if (sender != nil)
+    {
+        if ([delegate respondsToSelector:@selector(pictureSettingsDidChange)])
+            [delegate pictureSettingsDidChange];
+    }   
     
 }
 
