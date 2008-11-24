@@ -391,7 +391,7 @@ BOOL                        fIsDragging;
 - (IBAction)showDebugOutputPanel:(id)sender;
 - (void)setupToolbar;
 
-
+- (void) prepareJobForPreview;
 - (void) remindUserOfSleepOrShutdown;
 
 - (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;

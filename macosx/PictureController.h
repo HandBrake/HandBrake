@@ -7,6 +7,8 @@
 #import <Cocoa/Cocoa.h>
 
 #include "hb.h"
+/* Needed for Quicktime movie previews */
+#import <QTKit/QTKit.h> 
 
 #define HB_NUM_HBLIB_PICTURES      10   // hbilb generates 10 preview pictures
 
@@ -42,8 +44,7 @@
     IBOutlet NSSlider        * fDeblockSlider;
 	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
-    IBOutlet NSButton        * fPrevButton;
-    IBOutlet NSButton        * fNextButton;
+    IBOutlet NSSlider        * fPictureSlider;
     IBOutlet NSTextField     * fInfoField;
 	
     int     MaxOutputWidth;
@@ -67,6 +68,18 @@
     } fPictureFilterSettings;
 
     id delegate;
+    
+    /* Movie Previews */
+    IBOutlet NSButton               * fCreatePreviewMovieButton;
+    IBOutlet NSButton               * fShowPreviewMovieButton;
+    NSString                        * fPreviewMoviePath;
+    IBOutlet NSProgressIndicator    * fMovieCreationProgressIndicator;
+    hb_handle_t                     * fPreviewLibhb;           // private libhb for creating previews
+    NSTimer                         * fLibhbTimer;             // timer for retrieving state from libhb
+    IBOutlet NSTextField            * fPreviewMovieStatusField;
+    BOOL                              play_movie; // flag used to determine whether or not to automatically play the movie when done.   
+    IBOutlet QTMovieView            * fMovieView;
+    IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
 }
 - (id)initWithDelegate:(id)del;
 
@@ -76,8 +89,18 @@
 - (void) displayPreview;
 
 - (IBAction) SettingsChanged: (id) sender;
-- (IBAction) PreviousPicture: (id) sender;
-- (IBAction) NextPicture: (id) sender;
+- (IBAction) pictureSliderChanged: (id) sender;
+
+/* Movie Previews */
+- (void) startReceivingLibhbNotifications;
+- (void) stopReceivingLibhbNotifications;
+
+- (IBAction) createMoviePreview: (id) sender;
+- (void) libhbStateChanged: (hb_state_t &) state;
+- (IBAction) showMoviePreview: (NSString *) path;
+- (IBAction) previewDurationPopUpChanged: (id) sender;
+
+
 - (IBAction) ClosePanel: (id) sender;
 
 - (BOOL) autoCrop;
@@ -97,7 +120,7 @@
 - (int) deblock;
 - (void) setDeblock: (int) setting;
 
-- (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title;
+- (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title;
 
 + (NSImage *) makeImageForPicture: (int)pictureIndex
                 libhb:(hb_handle_t*)handle
@@ -109,4 +132,5 @@
 
 @interface NSObject (PictureControllertDelegateMethod)
 - (void)pictureSettingsDidChange;
+- (void)prepareJobForPreview;
 @end

@@ -34,7 +34,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         return nil;
     }
-
+    
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
     fQueueEncodeLibhb = NULL;
@@ -42,24 +42,30 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * outputPanel needs it right away, as may other future methods
      */
     NSString *libraryDir = [NSSearchPathForDirectoriesInDomains( NSLibraryDirectory,
-                                                                 NSUserDomainMask,
-                                                                 YES ) objectAtIndex:0];
+                                                                NSUserDomainMask,
+                                                                YES ) objectAtIndex:0];
     AppSupportDirectory = [[libraryDir stringByAppendingPathComponent:@"Application Support"]
-                                       stringByAppendingPathComponent:@"HandBrake"];
+                           stringByAppendingPathComponent:@"HandBrake"];
     if( ![[NSFileManager defaultManager] fileExistsAtPath:AppSupportDirectory] )
     {
         [[NSFileManager defaultManager] createDirectoryAtPath:AppSupportDirectory
                                                    attributes:nil];
     }
-
+    /* Check for and create the App Support Preview directory if necessary */
+    NSString *PreviewDirectory = [AppSupportDirectory stringByAppendingPathComponent:@"Previews"];
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:PreviewDirectory] )
+    {
+        [[NSFileManager defaultManager] createDirectoryAtPath:PreviewDirectory
+                                                   attributes:nil];
+    }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] initWithDelegate:self];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     /* we init the HBPresets class which currently is only used
-    * for updating built in presets, may move more functionality
-    * there in the future
-    */
+     * for updating built in presets, may move more functionality
+     * there in the future
+     */
     fPresetsBuiltin = [[HBPresets alloc] init];
     fPreferencesController = [[HBPreferencesController alloc] init];
     /* Lets report the HandBrake version number here to the activity log and text log file */
@@ -2529,6 +2535,297 @@ fWorkingCount = 0;
     [self doRip];
 }
 
+#pragma mark -
+#pragma mark Live Preview
+/* Note,this is much like prepareJob, but directly sets the job vars so Picture Preview
+ * can encode to its temp preview directory and playback. This is *not* used for any actual user
+ * encodes
+ */
+- (void) prepareJobForPreview
+{
+    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_title_t * title = (hb_title_t *) hb_list_item( list,
+            [fSrcTitlePopUp indexOfSelectedItem] );
+    hb_job_t * job = title->job;
+    hb_audio_config_t * audio;
+
+    /* Chapter selection */
+    job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
+    job->chapter_end   = [fSrcChapterEndPopUp   indexOfSelectedItem] + 1;
+	
+    /* Format (Muxer) and Video Encoder */
+    job->mux = [[fDstFormatPopUp selectedItem] tag];
+    job->vcodec = [[fVidEncoderPopUp selectedItem] tag];
+
+
+    /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
+	if( [fDstFormatPopUp indexOfSelectedItem] == 0 )
+	{
+        /* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
+		mpeg4 and the checkbox being checked 
+		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
+		if( [fDstMp4LargeFileCheck state] == NSOnState )
+		{
+			job->largeFileSize = 1;
+		}
+		else
+		{
+			job->largeFileSize = 0;
+		}
+        /* We set http optimized mp4 here */
+        if( [fDstMp4HttpOptFileCheck state] == NSOnState && [fDstMp4HttpOptFileCheck isEnabled] )
+		{
+        job->mp4_optimize = 1;
+        }
+        else
+        {
+        job->mp4_optimize = 0;
+        }
+    }
+	if( [fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 1 )
+	{
+	  /* We set the chapter marker extraction here based on the format being
+		mpeg4 or mkv and the checkbox being checked */
+		if ([fCreateChapterMarkers state] == NSOnState)
+		{
+			job->chapter_markers = 1;
+		}
+		else
+		{
+			job->chapter_markers = 0;
+		}
+	}
+	
+    if( job->vcodec & HB_VCODEC_X264 )
+    {
+		if ([fDstMp4iPodFileCheck state] == NSOnState)
+	    {
+            job->ipod_atom = 1;
+		}
+        else
+        {
+        job->ipod_atom = 0;
+        }
+		
+		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
+         Currently only used with Constant Quality setting*/
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
+		{
+	        job->crf = 1;
+		}
+		
+		/* Below Sends x264 options to the core library if x264 is selected*/
+		/* Lets use this as per Nyx, Thanks Nyx!*/
+		job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */
+		/* For previews we ignore the turbo option for the first pass of two since we only use 1 pass */
+		strcpy(job->x264opts, [[fAdvancedOptions optionsString] UTF8String]);
+
+        
+    }
+
+    /* Video settings */
+   /* Set vfr to 0 as it's only on if using same as source in the framerate popup
+     * and detelecine is on, so we handle that in the logic below
+     */
+    job->vfr = 0;
+    if( [fVidRatePopUp indexOfSelectedItem] > 0 )
+    {
+        /* a specific framerate has been chosen */
+        job->vrate      = 27000000;
+        job->vrate_base = hb_video_rates[[fVidRatePopUp indexOfSelectedItem]-1].rate;
+        /* We are not same as source so we set job->cfr to 1 
+         * to enable constant frame rate since user has specified
+         * a specific framerate*/
+        job->cfr = 1;
+    }
+    else
+    {
+        /* We are same as source (variable) */
+        job->vrate      = title->rate;
+        job->vrate_base = title->rate_base;
+        /* We are same as source so we set job->cfr to 0 
+         * to enable true same as source framerate */
+        job->cfr = 0;
+        /* If we are same as source and we have detelecine on, we need to turn on
+         * job->vfr
+         */
+        if ([fPictureController detelecine] == 1)
+        {
+            job->vfr = 1;
+        }
+    }
+
+    switch( [fVidQualityMatrix selectedRow] )
+    {
+        case 0:
+            /* Target size.
+               Bitrate should already have been calculated and displayed
+               in fVidBitrateField, so let's just use it */
+        case 1:
+            job->vquality = -1.0;
+            job->vbitrate = [fVidBitrateField intValue];
+            break;
+        case 2:
+            job->vquality = [fVidQualitySlider floatValue];
+            job->vbitrate = 0;
+            break;
+    }
+
+    job->grayscale = ( [fVidGrayscaleCheck state] == NSOnState );
+
+    /* Subtitle settings */
+    job->subtitle = [fSubPopUp indexOfSelectedItem] - 2;
+
+    /* Audio tracks and mixdowns */
+    /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
+    int audiotrack_count = hb_list_count(job->list_audio);
+    for( int i = 0; i < audiotrack_count;i++)
+    {
+        hb_audio_t * temp_audio = (hb_audio_t*) hb_list_item( job->list_audio, 0 );
+        hb_list_rem(job->list_audio, temp_audio);
+    }
+    /* Now lets add our new tracks to the audio list here */
+    if ([fAudLang1PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang1PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack1CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack1MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack1BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack1RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack1DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+    }  
+    if ([fAudLang2PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang2PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack2CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack2MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack2BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack2RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack2DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+        
+    }
+    
+    if ([fAudLang3PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang3PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack3CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack3MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack3BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack3RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack3DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+        
+    }
+
+    if ([fAudLang4PopUp indexOfSelectedItem] > 0)
+    {
+        audio = (hb_audio_config_t *) calloc(1, sizeof(*audio));
+        hb_audio_config_init(audio);
+        audio->in.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
+        /* We go ahead and assign values to our audio->out.<properties> */
+        audio->out.track = [fAudLang4PopUp indexOfSelectedItem] - 1;
+        audio->out.codec = [[fAudTrack4CodecPopUp selectedItem] tag];
+        audio->out.mixdown = [[fAudTrack4MixPopUp selectedItem] tag];
+        audio->out.bitrate = [[fAudTrack4BitratePopUp selectedItem] tag];
+        audio->out.samplerate = [[fAudTrack4RatePopUp selectedItem] tag];
+        audio->out.dynamic_range_compression = [fAudTrack4DrcField floatValue];
+        
+        hb_audio_add( job, audio );
+        free(audio);
+        
+    }
+
+    
+    
+    /* Filters */ 
+    job->filters = hb_list_init();
+    
+    /* Now lets call the filters if applicable.
+    * The order of the filters is critical
+    */
+    
+	/* Detelecine */
+    if ([fPictureController detelecine])
+    {
+        hb_list_add( job->filters, &hb_filter_detelecine );
+    }
+    
+    /* Decomb */
+    if ([fPictureController decomb] > 0)
+    {
+        /* Run old deinterlacer fd by default */
+        //fPicSettingDecomb
+        hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
+        //hb_filter_decomb.settings = "4:10:15:9:10:35:9"; // <-- jbrjakes recommended parameters as of 5/23/08
+        hb_list_add( job->filters, &hb_filter_decomb );
+    }
+
+    
+    /* Deinterlace */
+    if ([fPictureController deinterlace] == 1)
+    {
+        /* Run old deinterlacer fd by default */
+        hb_filter_deinterlace.settings = "-1"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );
+    }
+    else if ([fPictureController deinterlace] == 2)
+    {
+        /* Yadif mode 0 (without spatial deinterlacing.) */
+        hb_filter_deinterlace.settings = "2"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );            
+    }
+    else if ([fPictureController deinterlace] == 3)
+    {
+        /* Yadif (with spatial deinterlacing) */
+        hb_filter_deinterlace.settings = "0"; 
+        hb_list_add( job->filters, &hb_filter_deinterlace );            
+    }
+	
+    /* Denoise */
+	if ([fPictureController denoise] == 1) // Weak in popup
+	{
+		hb_filter_denoise.settings = "2:1:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([fPictureController denoise] == 2) // Medium in popup
+	{
+		hb_filter_denoise.settings = "3:2:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([fPictureController denoise] == 3) // Strong in popup
+	{
+		hb_filter_denoise.settings = "7:7:5:5"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+    
+    /* Deblock  (uses pp7 default) */
+    if ([fPictureController deblock])
+    {
+        hb_list_add( job->filters, &hb_filter_deblock );
+    }
+
+}
+
 
 #pragma mark -
 #pragma mark Job Handling
@@ -2610,10 +2907,6 @@ fWorkingCount = 0;
     {
         job->chapter_markers = 0;
     }
-    
-
-    
-    
     
     if( job->vcodec & HB_VCODEC_X264 )
     {
@@ -2700,6 +2993,7 @@ fWorkingCount = 0;
             job->vfr = 1;
         }
     }
+    
     if ( [[queueToApply objectForKey:@"VideoQualityType"] intValue] != 2 )
     {
         /* Target size.
@@ -3210,11 +3504,14 @@ fWorkingCount = 0;
     /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
 	fTitle = title;
-
+    
+    /* Reset the new title in fPictureController */
+    [fPictureController SetTitle:title];
+    
 	/*Set Source Size Field Here */
     [fPicSettingsSrc setStringValue: [NSString stringWithFormat: @"%d x %d", fTitle->width, fTitle->height]];
 	
-	/* Set Auto Crop to on upon selecting a new title */
+	/* Set Auto Crop to on upon selecting a new title  */
     [fPictureController setAutoCrop:YES];
     
 	/* We get the originial output picture width and height and put them
@@ -3869,9 +4166,13 @@ the user is using "Custom" settings by determining the sender*/
 	else
 	{
 		[fPicSettingAutoCrop setStringValue: @"Auto"];
-	}	
-	
-    
+	}		
+
+//[self showPicturePanel:self];
+hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_title_t * title = (hb_title_t *) hb_list_item( list,
+            [fSrcTitlePopUp indexOfSelectedItem] );
+    [fPictureController SetTitle:title];    
 }
 
 
@@ -4782,7 +5083,8 @@ the user is using "Custom" settings by determining the sender*/
 	hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
-    [fPictureController showPanelInWindow:fWindow forTitle:title];
+    //[fPictureController SetTitle:title];
+    [fPictureController showPreviewPanel:sender forTitle:title];
 }
 
 #pragma mark -

@@ -30,15 +30,28 @@
         // If/when we switch a lot of this stuff to bindings, this can probably
         // go away.
         [self window];
-
+        
 		delegate = del;
         fPicturePreviews = [[NSMutableDictionary dictionaryWithCapacity: HB_NUM_HBLIB_PICTURES] retain];
+        /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
+        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+        fPreviewLibhb = hb_init(loggingLevel, 0);
 	}
 	return self;
 }
 
 - (void) dealloc
 {
+    hb_stop(fPreviewLibhb);
+    if (fPreviewMoviePath)
+    {
+        [[NSFileManager defaultManager] removeFileAtPath:fPreviewMoviePath handler:nil];
+        [fPreviewMoviePath release];
+    }    
+    
+    [fLibhbTimer invalidate];
+    [fLibhbTimer release];
+    
     [fPicturePreviews release];
     [super dealloc];
 }
@@ -46,14 +59,14 @@
 - (void) SetHandle: (hb_handle_t *) handle
 {
     fHandle = handle;
-
+    
     [fWidthStepper  setValueWraps: NO];
     [fWidthStepper  setIncrement: 16];
     [fWidthStepper  setMinValue: 64];
     [fHeightStepper setValueWraps: NO];
     [fHeightStepper setIncrement: 16];
     [fHeightStepper setMinValue: 64];
-
+    
     [fCropTopStepper    setIncrement: 2];
     [fCropTopStepper    setMinValue:  0];
     [fCropBottomStepper setIncrement: 2];
@@ -62,6 +75,31 @@
     [fCropLeftStepper   setMinValue:  0];
     [fCropRightStepper  setIncrement: 2];
     [fCropRightStepper  setMinValue:  0];
+    
+    /* we set the preview length popup in seconds */
+    [fPreviewMovieLengthPopUp removeAllItems];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"5"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"10"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"15"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"20"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"25"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"30"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"35"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"40"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"45"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"50"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"55"];
+    [fPreviewMovieLengthPopUp addItemWithTitle: @"60"];
+    
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewLength"])
+    {
+        [fPreviewMovieLengthPopUp selectItemWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewLength"]];
+    }
+    else
+    {
+        /* currently hard set default to 10 seconds */
+        [fPreviewMovieLengthPopUp selectItemAtIndex: 1];
+    }
 }
 
 - (void) SetTitle: (hb_title_t *) title
@@ -161,6 +199,17 @@ are maintained across different sources */
 // necessary to display as much of the picture as possible.
 - (void) displayPreview
 {
+
+    /* lets make sure that the still picture view is not hidden and that 
+     * the movie preview is 
+     */
+    [fMovieView pause:nil];
+    [fMovieView setHidden:YES];
+    [fMovieCreationProgressIndicator stopAnimation: nil];
+    [fMovieCreationProgressIndicator setHidden: YES];
+    
+    [fPictureView setHidden:NO];
+
     [fPictureView setImage: [self imageForPicture: fPicture]];
     	
 	NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
@@ -213,10 +262,16 @@ are maintained across different sources */
                                  scale * 100.0];
         [fInfoField setStringValue: [[fInfoField stringValue] stringByAppendingString:scaleString]];
     }
-
-    [fPrevButton setEnabled: ( fPicture > 0 )];
-    [fNextButton setEnabled: ( fPicture < 9 )];
 }
+
+- (IBAction) previewDurationPopUpChanged: (id) sender
+{
+
+[[NSUserDefaults standardUserDefaults] setObject:[fPreviewMovieLengthPopUp titleOfSelectedItem] forKey:@"PreviewLength"];
+
+}    
+    
+    
 
 - (IBAction) deblockSliderChanged: (id) sender
 {
@@ -411,29 +466,329 @@ are maintained across different sources */
         // Purge the existing picture previews so they get recreated the next time
         // they are needed.
         [self purgeImageCache];
-        [self displayPreview];
+        /* We actually call displayPreview now from pictureSliderChanged which keeps
+         * our picture preview slider in sync with the previews being shown
+         */
+        //[self displayPreview];
+        [self pictureSliderChanged:nil];
+
     }
+    
+    
 }
 
-- (IBAction) PreviousPicture: (id) sender
-{   
-    if( fPicture <= 0 )
-    {
-        return;
-    }
-    fPicture--;
-    [self displayPreview];
-}
-
-- (IBAction) NextPicture: (id) sender
+- (IBAction) pictureSliderChanged: (id) sender
 {
-    if( fPicture >= 9 )
+    // Show the picture view
+    [fCreatePreviewMovieButton setTitle: @"Live Preview"];
+    [fPictureView setHidden:NO];
+    [fMovieView pause:nil];
+    [fMovieView setHidden:YES];
+    [fPreviewMovieStatusField setHidden: YES];
+    
+    int newPicture = [fPictureSlider intValue];
+    if (newPicture != fPicture)
     {
+        fPicture = newPicture;
+    }
+    [self displayPreview];
+    
+}
+
+#pragma mark Movie Preview
+- (IBAction) createMoviePreview: (id) sender
+{
+    /* Lets make sure the still picture previews are showing in case
+     * there is currently a movie showing */
+    [self pictureSliderChanged:nil];
+    
+    /* Rip or Cancel ? */
+    hb_state_t s;
+    hb_get_state2( fPreviewLibhb, &s );
+    
+    if(s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED)
+	{
+        
+        play_movie = NO;
+        hb_stop( fPreviewLibhb );
+        [fPictureView setHidden:NO];
+        [fMovieView pause:nil];
+        [fMovieView setHidden:YES];
+        [fPictureSlider setHidden:NO];
+        [fCreatePreviewMovieButton setTitle: @"Live Preview"];
         return;
     }
-    fPicture++;
-    [self displayPreview];
+    
+    /* we use controller.mm's prepareJobForPreview to go ahead and set all of our settings
+     * however, we want to use a temporary destination field of course
+     * so that we do not put our temp preview in the users chosen
+     * directory */
+    
+    hb_job_t * job = fTitle->job;
+    /* We run our current setting through prepeareJob in Controller.mm
+     * just as if it were a regular encode */
+    if ([delegate respondsToSelector:@selector(prepareJobForPreview)])
+    {
+        [delegate prepareJobForPreview];
+    }
+    
+    /* Destination file. We set this to our preview directory
+     * changing the extension appropriately.*/
+    if (fTitle->job->mux == HB_MUX_MP4) // MP4 file
+    {
+        /* we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly */
+        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.m4v";
+    }
+    else if (fTitle->job->mux == HB_MUX_MKV) // MKV file
+    {
+        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.mkv";
+    }
+    else if (fTitle->job->mux == HB_MUX_AVI) // AVI file
+    {
+        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.avi";
+    }
+    else if (fTitle->job->mux == HB_MUX_OGM) // OGM file
+    {
+        fPreviewMoviePath = @"~/Library/Application Support/HandBrake/Previews/preview_temp.ogm";
+    }
+    
+    fPreviewMoviePath = [[fPreviewMoviePath stringByExpandingTildeInPath]retain];
+    
+    /* See if there is an existing preview file, if so, delete it */
+    if( ![[NSFileManager defaultManager] fileExistsAtPath:fPreviewMoviePath] )
+    {
+        [[NSFileManager defaultManager] removeFileAtPath:fPreviewMoviePath
+                                                 handler:nil];
+    }
+    
+    /* We now direct our preview encode to fPreviewMoviePath */
+    fTitle->job->file = [fPreviewMoviePath UTF8String];
+    
+    job->start_at_preview = fPicture + 1;
+    
+    /* we use the preview duration popup to get the specified
+     * number of seconds for the preview encode.
+     */
+    
+    job->pts_to_stop = [[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue] * 90000LL;
+    
+    /* lets go ahead and send it off to libhb
+     * Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
+     * this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
+     */
+    hb_add( fPreviewLibhb, job );
+    
+    [fPictureSlider setHidden:YES];
+    [fMovieCreationProgressIndicator setHidden: NO];
+    [fPreviewMovieStatusField setHidden: NO];
+    [self startReceivingLibhbNotifications];
+    
+    
+    [fCreatePreviewMovieButton setTitle: @"Cancel Preview"];
+    
+    play_movie = YES;
+    
+    /* Let fPreviewLibhb do the job */
+    hb_start( fPreviewLibhb );
+	
 }
+
+- (void) startReceivingLibhbNotifications
+{
+    if (!fLibhbTimer)
+    {
+        fLibhbTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(libhbTimerFired:) userInfo:nil repeats:YES];
+        [fLibhbTimer retain];
+    }
+}
+
+- (void) stopReceivingLibhbNotifications
+{
+    if (fLibhbTimer)
+    {
+        [fLibhbTimer invalidate];
+        [fLibhbTimer release];
+        fLibhbTimer = nil;
+    }
+}
+- (void) libhbTimerFired: (NSTimer*)theTimer
+{
+    hb_state_t s;
+    hb_get_state( fPreviewLibhb, &s );
+    [self libhbStateChanged: s];
+}
+- (void) libhbStateChanged: (hb_state_t &)state
+{
+    switch( state.state )
+    {
+        case HB_STATE_IDLE:
+        case HB_STATE_SCANNING:
+        case HB_STATE_SCANDONE:
+            break;
+            
+        case HB_STATE_WORKING:
+        {
+#define p state.param.working
+            
+            NSMutableString * string;
+			/* Update text field */
+			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding %d seconds of preview %d:  %.2f %%", @"" ), [[fPreviewMovieLengthPopUp titleOfSelectedItem] intValue], fPicture + 1, 100.0 * p.progress];
+            
+			if( p.seconds > -1 )
+            {
+                [string appendFormat:
+                 NSLocalizedString( @" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"" ),
+                 p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
+            }
+            [fPreviewMovieStatusField setStringValue: string];
+            
+            [fMovieCreationProgressIndicator setIndeterminate: NO];
+            /* Update slider */
+			[fMovieCreationProgressIndicator setDoubleValue: 100.0 * p.progress];
+            
+            [fCreatePreviewMovieButton setTitle: @"Cancel Preview"];
+            
+            break;
+            
+        }
+#undef p
+            
+#define p state.param.muxing            
+        case HB_STATE_MUXING:
+        {
+            // Update fMovieCreationProgressIndicator
+            [fMovieCreationProgressIndicator setIndeterminate: YES];
+            [fMovieCreationProgressIndicator startAnimation: nil];
+            [fPreviewMovieStatusField setStringValue: [NSString stringWithFormat:
+                                         NSLocalizedString( @"Muxing Preview ...", @"" )]];
+            break;
+        }
+#undef p			
+        case HB_STATE_PAUSED:
+            [fMovieCreationProgressIndicator stopAnimation: nil];
+            break;
+			
+        case HB_STATE_WORKDONE:
+        {
+            // Delete all remaining jobs since libhb doesn't do this on its own.
+            hb_job_t * job;
+            while( ( job = hb_job(fPreviewLibhb, 0) ) )
+                hb_rem( fHandle, job );
+            
+            [self stopReceivingLibhbNotifications];
+            [fPreviewMovieStatusField setStringValue: @""];
+            [fPreviewMovieStatusField setHidden: YES];
+            
+            [fMovieCreationProgressIndicator stopAnimation: nil];
+            [fMovieCreationProgressIndicator setHidden: YES];
+            /* we make sure the picture slider and preview match */
+            [self pictureSliderChanged:nil];
+            [fPictureSlider setHidden:NO];
+            
+            // Show the movie view
+            if (play_movie)
+            {
+            [self showMoviePreview:fPreviewMoviePath];
+            }
+            
+            [fCreatePreviewMovieButton setTitle: @"Live Preview"];
+            
+            
+            break;
+        }
+    }
+	
+}
+
+- (IBAction) showMoviePreview: (NSString *) path
+{
+    /* Since the gray background for the still images is part of
+     * fPictureView, lets leave the picture view visible and postion
+     * the fMovieView over the image portion of fPictureView so
+     * we retain the gray cropping border  we have already established
+     * with the still previews
+     */
+    [fMovieView setHidden:NO];
+    
+    /* Load the new movie into fMovieView */
+    QTMovie * aMovie;
+    NSRect movieBounds;
+    if (path)
+    {
+        [fMovieView setControllerVisible: YES];
+        /* let's make sure there is no movie currently set */
+        [fMovieView setMovie:nil];
+        
+        aMovie = [QTMovie movieWithFile:path error:nil];
+        
+        /* we get some size information from the preview movie */
+        Rect movieBox;
+        GetMovieBox ([aMovie quickTimeMovie], &movieBox);
+        movieBounds = [fMovieView movieBounds];
+        movieBounds.size.height = movieBox.bottom - movieBox.top;
+        
+        if ([fMovieView isControllerVisible])
+            movieBounds.size.height += [fMovieView controllerBarHeight];
+        /* since for whatever the reason I cannot seem to get the [fMovieView controllerBarHeight]
+         * For now just use 15 for additional height as it seems to line up well
+         */
+        movieBounds.size.height += 15;
+        
+        movieBounds.size.width = movieBox.right - movieBox.left;
+        
+        /* We need to find out if the preview movie needs to be scaled down so
+         * that it doesn't overflow our available viewing container (just like for image
+         * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
+        if( ((int)movieBounds.size.height) > [fPictureView frame].size.height )
+        {
+            /* The preview movie would be larger than the available viewing area
+             * in the preview movie, so we go ahead and scale it down to the same size
+             * as the still preview  or we readjust our window to allow for the added height if need be
+             */
+            NSSize displaySize = NSMakeSize( (float)movieBounds.size.width, (float)movieBounds.size.height );
+            //NSSize displaySize = NSMakeSize( (float)fTitle->width, (float)fTitle->height );
+            NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+            if( [self viewNeedsToResizeToSize:viewSize] )
+            {
+                
+                [self resizeSheetForViewSize:viewSize];
+                [self setViewSize:viewSize];
+                
+            }
+            
+            [fMovieView setFrameSize:viewSize];
+        }
+        else
+        {
+            /* Since the preview movie is smaller than the available viewing area
+             * we can go ahead and use the preview movies native size */
+            [fMovieView setFrameSize:movieBounds.size];
+        }
+        
+        // lets reposition the movie if need be
+        NSPoint origin = [fPictureViewArea frame].origin;
+        origin.x += trunc(([fPictureViewArea frame].size.width -
+                           [fMovieView frame].size.width) / 2.0);
+        /* Since we are adding 15 to the height to allow for the controller bar
+         * we need to subtract half of that for the origin.y to get the controller bar
+         * below the movie to it lines up vertically with where our still preview was
+         */
+        origin.y += trunc((([fPictureViewArea frame].size.height -
+                            [fMovieView frame].size.height) / 2.0) - 7.5);
+        [fMovieView setFrameOrigin:origin]; 
+        
+        [fMovieView setMovie:aMovie];
+        /// to actually play the movie
+        [fMovieView play:aMovie];
+    }
+    else
+    {
+        aMovie = nil;
+    }       
+    
+}
+
+#pragma mark -
 
 - (IBAction) ClosePanel: (id) sender
 {
@@ -509,15 +864,11 @@ are maintained across different sources */
     fPictureFilterSettings.deblock = setting;
 }
 
-- (void)showPanelInWindow: (NSWindow *)fWindow forTitle: (hb_title_t *)title
+- (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title
 {
     [self SetTitle:title];
+    [self showWindow:sender];
 
-    [NSApp beginSheet:[self window]
-       modalForWindow:fWindow
-        modalDelegate:nil
-       didEndSelector:nil
-          contextInfo:NULL];
 }
 
 
@@ -707,14 +1058,20 @@ are maintained across different sources */
     CGFloat minWidth = 320.0;
     CGFloat minHeight = 240.0;
 
-    // The max size of the view is when the sheet is taking up 85% of the screen.
     NSSize screenSize = [[NSScreen mainScreen] frame].size;
     NSSize sheetSize = [[self window] frame].size;
     NSSize viewAreaSize = [fPictureViewArea frame].size;
     CGFloat paddingX = sheetSize.width - viewAreaSize.width;
     CGFloat paddingY = sheetSize.height - viewAreaSize.height;
-    CGFloat maxWidth = (0.85 * screenSize.width) - paddingX;
-    CGFloat maxHeight = (0.85 * screenSize.height) - paddingY;
+    /* Since we are now non-modal, lets go ahead and allow the mac size to
+     * go up to the full screen height or width below. Am leaving the original
+     * code here that blindjimmy setup for 85% in case we don't like it.
+     */
+    // The max size of the view is when the sheet is taking up 85% of the screen.
+    //CGFloat maxWidth = (0.85 * screenSize.width) - paddingX;
+    //CGFloat maxHeight = (0.85 * screenSize.height) - paddingY;
+    CGFloat maxWidth =  screenSize.width - paddingX;
+    CGFloat maxHeight = screenSize.height - paddingY;
     
     NSSize resultSize = imageSize;
     
