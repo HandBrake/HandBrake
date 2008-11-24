@@ -70,7 +70,7 @@ PKG_CHECK_MODULES(GHBTOOLS, [glib-2.0 gobject-2.0 gdk-pixbuf-2.0])
 AC_SUBST(GHBTOOLS_CFLAGS)
 AC_SUBST(GHBTOOLS_LIBS)
 
-PKG_CHECK_MODULES(GHB, [gtk+-2.0 >= 2.8 gio-2.0 hal hal-storage libgtkhtml-3.14])
+PKG_CHECK_MODULES(GHB, [gtk+-2.0 >= 2.8 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage libgtkhtml-3.14])
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)
 
