@@ -2699,7 +2699,7 @@ html_link_cb(GtkHTML *html, const gchar *url, signal_user_data_t *ud)
 	browse_url(url);
 }
 
-static gboolean check_stable_update(signal_user_data_t *ud);
+static gpointer check_stable_update(signal_user_data_t *ud);
 static gboolean stable_update_lock = FALSE;
 
 static void
@@ -2724,7 +2724,7 @@ process_appcast(signal_user_data_t *ud)
 		|| ibuild <= HB_BUILD || skip == ibuild)
 	{
 		if (!stable_update_lock && HB_BUILD % 100)
-			g_idle_add((GSourceFunc)check_stable_update, ud);
+			g_thread_create((GThreadFunc)check_stable_update, ud, FALSE, NULL);
 		goto done;
 	}
 	msg = g_strdup_printf("HandBrake %s/%s is now available (you have %s/%d).",
@@ -2842,7 +2842,7 @@ ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
 	return ioc;
 }
 
-gboolean
+gpointer
 ghb_check_update(signal_user_data_t *ud)
 {
 	gchar *query;
@@ -2863,16 +2863,16 @@ ghb_check_update(signal_user_data_t *ud)
 	}
 	ioc = ghb_net_open(ud, "handbrake.fr", 80);
 	if (ioc == NULL)
-		return FALSE;
+		return NULL;
 
 	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
 	g_io_channel_flush(ioc, &gerror);
 	// This function is initiated by g_idle_add.  Must return false
 	// so that it is not called again
-	return FALSE;
+	return NULL;
 }
 
-static gboolean
+static gpointer
 check_stable_update(signal_user_data_t *ud)
 {
 	gchar *query;
@@ -2885,12 +2885,12 @@ check_stable_update(signal_user_data_t *ud)
    	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
 	ioc = ghb_net_open(ud, "handbrake.fr", 80);
 	if (ioc == NULL)
-		return FALSE;
+		return NULL;
 
 	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
 	g_io_channel_flush(ioc, &gerror);
 	// This function is initiated by g_idle_add.  Must return false
 	// so that it is not called again
-	return FALSE;
+	return NULL;
 }
 

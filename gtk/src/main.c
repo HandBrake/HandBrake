@@ -618,7 +618,7 @@ main (int argc, char *argv[])
 	}
 	// Reload and check status of the last saved queue
 	g_idle_add((GSourceFunc)ghb_reload_queue, ud);
-	g_idle_add((GSourceFunc)ghb_check_update, ud);
+	g_thread_create((GThreadFunc)ghb_check_update, ud, FALSE, NULL);
 	// Start timer for monitoring libhb status, 500ms
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!
