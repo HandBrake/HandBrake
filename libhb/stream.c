@@ -26,17 +26,14 @@
  * doesn't handle the stream type.
  */
 typedef struct {
-    enum { U, A, V } kind; /* unknown / audio / video */
+    enum { U = 1, A, V } kind; /* unknown / audio / video */
     int codec;          /* HB worker object id of codec */
     int codec_param;    /* param for codec (usually ffmpeg codec id) */
     const char* name;   /* description of type */
-    int extra_hdr;      /* needs a substream header added to PS pack */
 } stream2codec_t;
 
 #define st(id, kind, codec, codec_param, name) \
- [id] = { kind, codec, codec_param, name, 0 }
-#define se(id, kind, codec, codec_param, name) \
- [id] = { kind, codec, codec_param, name, 1 }
+ [id] = { kind, codec, codec_param, name }
 
 static const stream2codec_t st2codec[256] = {
     st(0x01, V, WORK_DECMPEG2,     0,              "MPEG1"),
@@ -63,17 +60,17 @@ static const stream2codec_t st2codec[256] = {
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
     //st(0x80, U, 0,                 0,              "DigiCipher II Video"),
-    se(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
-    se(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
+    st(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
+    st(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
     st(0x84, A, 0,                 0,              "SDDS"),
     st(0x85, U, 0,                 0,              "ATSC Program ID"),
-    st(0x86, U, 0,                 0,              "SCTE 35 splice info"),
+    st(0x86, A, HB_ACODEC_DCA,     0,              "DTS-HD"),
     st(0x87, A, 0,                 0,              "E-AC-3"),
 
-    se(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
+    st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
 
-    se(0x91, A, HB_ACODEC_AC3,     0,              "AC-3"),
+    st(0x91, A, HB_ACODEC_AC3,     0,              "AC-3"),
     st(0x92, U, 0,                 0,              "Subtitle"),
 
     st(0x94, A, 0,                 0,              "SDDS"),
@@ -105,21 +102,22 @@ struct hb_stream_s
     int     last_error_count;   /* # errors at last error message */
     int     packetsize;         /* Transport Stream packet size */
 
-    int64_t ts_lastpcr;         /* the last pcr we found in the TS stream */
-    int64_t ts_nextpcr;         /* the next pcr to put in a PS packet */
+    int8_t  need_keyframe;      // non-zero if want to start at a keyframe
+    int8_t  ts_no_RAP;          // non-zero if there are no random access points
+
+    int8_t  ts_found_pcr;       // non-zero if we've found at least one input pcr
+    int     ts_pcr_out;         // sequence number of most recent output pcr
+    int     ts_pcr_in;          // sequence number of most recent input pcr
+    int64_t ts_pcr;             // most recent input pcr
+    int64_t ts_pcrhist[4];      // circular buffer of output pcrs
 
     uint8_t *ts_packet;         /* buffer for one TS packet */
-    uint8_t *ts_buf[kMaxNumberDecodeStreams];
+    hb_buffer_t *ts_buf[kMaxNumberDecodeStreams];
     int     ts_pos[kMaxNumberDecodeStreams];
-    int8_t  ts_foundfirst[kMaxNumberDecodeStreams];
     int8_t  ts_skipbad[kMaxNumberDecodeStreams];
     int8_t  ts_streamcont[kMaxNumberDecodeStreams];
-    int8_t  ts_start[kMaxNumberDecodeStreams];
 
-    uint8_t *fwrite_buf;        /* PS buffer (set by hb_ts_stream_decode) */
-    uint8_t *fwrite_buf_orig;   /* PS buffer start (set by hb_ts_stream_decode) */
-
-    uint8_t need_keyframe;
+    hb_buffer_t *fwrite_buf;      /* PS buffer (set by hb_ts_stream_decode) */
 
     /*
      * Stuff before this point is dynamic state updated as we read the
@@ -133,9 +131,10 @@ struct hb_stream_s
     int16_t ts_video_pids[kMaxNumberVideoPIDS];
     int16_t ts_audio_pids[kMaxNumberAudioPIDS];
 
-    uint8_t ts_streamid[kMaxNumberDecodeStreams];
+    uint32_t ts_format_id[kMaxNumberDecodeStreams];
+#define TS_FORMAT_ID_AC3 (('A' << 24) | ('C' << 16) | ('-' << 8) | '3')
     uint8_t ts_stream_type[kMaxNumberDecodeStreams];
-    uint8_t ts_extra_hdr[kMaxNumberDecodeStreams];
+    uint8_t ts_multiplexed[kMaxNumberDecodeStreams];
 
     char    *path;
     FILE    *file_handle;
@@ -189,7 +188,7 @@ struct hb_stream_s
 static void hb_stream_duration(hb_stream_t *stream, hb_title_t *inTitle);
 static void hb_ts_stream_init(hb_stream_t *stream);
 static void hb_ts_stream_find_pids(hb_stream_t *stream);
-static int hb_ts_stream_decode(hb_stream_t *stream, uint8_t *obuf);
+static int hb_ts_stream_decode(hb_stream_t *stream, hb_buffer_t *obuf);
 static void hb_ts_stream_reset(hb_stream_t *stream);
 static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                                                        int aud_pid_index);
@@ -414,7 +413,7 @@ static void hb_stream_delete_dynamic( hb_stream_t *d )
 	{
 		if (d->ts_buf[i])
 		{
-			free(d->ts_buf[i]);
+			hb_buffer_close(&(d->ts_buf[i]));
 			d->ts_buf[i] = NULL;
 		}
 	}
@@ -474,7 +473,8 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
             int i = 0;
             for ( ; i < d->ts_number_video_pids + d->ts_number_audio_pids; i++)
             {
-                d->ts_buf[i] = malloc( HB_DVD_READ_BUFFER_SIZE );
+                d->ts_buf[i] = hb_buffer_init(d->packetsize);
+				d->ts_buf[i]->size = 0;
             }
             hb_stream_seek( d, 0. );
 
@@ -575,20 +575,12 @@ void hb_stream_close( hb_stream_t ** _d )
  * now have an audio codec, type, rate, etc., associated with them. At the end
  * of the scan we delete all the audio entries that weren't found by the scan
  * or don't have a format we support. This routine deletes audio entry 'indx'
- * by copying all later entries down one slot. */
+ * by setting its PID to an invalid value so no packet will match it. (We can't
+ * move any of the entries since the index of the entry is used as the id
+ * of the media stream for HB. */
 static void hb_stream_delete_audio_entry(hb_stream_t *stream, int indx)
 {
-    int i;
-
-    for (i = indx+1; i < stream->ts_number_audio_pids; ++i)
-    {
-        stream->ts_audio_pids[indx] = stream->ts_audio_pids[i];
-        stream->ts_stream_type[1 + indx] = stream->ts_stream_type[1+i];
-        stream->ts_extra_hdr[1 + indx] = stream->ts_extra_hdr[1+i];
-        stream->ts_streamid[1 + indx] = stream->ts_streamid[1 + i];
-        ++indx;
-    }
-    --stream->ts_number_audio_pids;
+    stream->ts_audio_pids[indx] = -stream->ts_audio_pids[indx];
 }
 
 static int index_of_pid(int pid, hb_stream_t *stream)
@@ -661,20 +653,21 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
             {
                 free(audio);
                 hb_stream_delete_audio_entry(stream, i);
-                --i;
             }
         }
 
-        // add the PCR PID if we don't already have it
+        // make sure we're grabbing the PCR PID
         if ( index_of_pid( stream->pmt_info.PCR_PID, stream ) < 0 )
         {
             stream->ts_audio_pids[stream->ts_number_audio_pids++] =
                 stream->pmt_info.PCR_PID;
         }
 
-        // set up the video codec to use for this title
+        // set the video id, codec & muxer
+        aTitle->video_id = 0;
         aTitle->video_codec = st2codec[stream->ts_stream_type[0]].codec;
         aTitle->video_codec_param = st2codec[stream->ts_stream_type[0]].codec_param;
+        aTitle->demuxer = HB_MPEG2_TS_DEMUXER;
 	}
     else
     {
@@ -741,6 +734,44 @@ static void skip_to_next_pack( hb_stream_t *src_stream )
     {
         fseeko( src_stream->file_handle, -4, SEEK_CUR );
     }
+}
+
+/*
+ * scan the next MB of 'stream' to try to find a random access point
+ */
+static void hb_ts_stream_find_RAP( hb_stream_t *stream )
+{
+    off_t starting_point = ftello(stream->file_handle);
+    int npack = 300000; // max packets to read
+
+    while (--npack >= 0)
+    {
+        off_t cur = ftello(stream->file_handle);
+        const uint8_t *buf = next_packet( stream );
+        if ( buf == NULL )
+        {
+            break;
+        }
+        switch (buf[3] & 0x30)
+        {
+            case 0x00: // illegal
+                continue;
+
+            case 0x20: // fill packet
+            case 0x30: // adaptation
+                if ( buf[5] & 0x40 )
+                {
+                    // found a random access point
+                    fseeko( stream->file_handle, cur, SEEK_SET );
+                    return;
+                }
+                continue;
+        }
+    }
+
+    /* didn't find it */
+    fseeko( stream->file_handle, starting_point, SEEK_SET );
+    stream->ts_no_RAP = 1;
 }
 
 /*
@@ -1047,7 +1078,7 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
         }
         return 1;
     }
-    return hb_ts_stream_decode( src_stream, b->data );
+    return hb_ts_stream_decode( src_stream, b );
 }
 
 /***********************************************************************
@@ -1055,37 +1086,51 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
  ***********************************************************************
  *
  **********************************************************************/
-int hb_stream_seek( hb_stream_t * src_stream, float f )
+int hb_stream_seek( hb_stream_t * stream, float f )
 {
-	if ( src_stream->hb_stream_type == ffmpeg )
+	if ( stream->hb_stream_type == ffmpeg )
     {
-        return ffmpeg_seek( src_stream, f );
+        return ffmpeg_seek( stream, f );
     }
     off_t stream_size, cur_pos, new_pos;
     double pos_ratio = f;
-    cur_pos = ftello( src_stream->file_handle );
-    fseeko( src_stream->file_handle, 0, SEEK_END );
-    stream_size = ftello( src_stream->file_handle );
+    cur_pos = ftello( stream->file_handle );
+    fseeko( stream->file_handle, 0, SEEK_END );
+    stream_size = ftello( stream->file_handle );
     new_pos = (off_t) ((double) (stream_size) * pos_ratio);
     new_pos &=~ (HB_DVD_READ_BUFFER_SIZE - 1);
 
-    int r = fseeko( src_stream->file_handle, new_pos, SEEK_SET );
+    int r = fseeko( stream->file_handle, new_pos, SEEK_SET );
     if (r == -1)
     {
-        fseeko( src_stream->file_handle, cur_pos, SEEK_SET );
+        fseeko( stream->file_handle, cur_pos, SEEK_SET );
         return 0;
     }
 
-    if ( src_stream->hb_stream_type == transport )
+    if ( stream->hb_stream_type == transport )
     {
         // We need to drop the current decoder output and move
         // forwards to the next transport stream packet.
-        hb_ts_stream_reset(src_stream);
-        src_stream->need_keyframe = ( f != 0 );
+        hb_ts_stream_reset(stream);
+        if ( f > 0 )
+        {
+            if ( !stream->ts_no_RAP )
+            {
+                // we're not at the beginning - try to find a random access point
+                hb_ts_stream_find_RAP( stream );
+            }
+            stream->need_keyframe = 1;
+        }
+        else
+        {
+            // we're at the beginning - say we have video sync so that we
+            // won't drop initial SPS & PPS data on an AVC stream.
+            stream->need_keyframe = 0;
+        }
     }
-    else if ( src_stream->hb_stream_type == program )
+    else if ( stream->hb_stream_type == program )
     {
-        skip_to_next_pack( src_stream );
+        skip_to_next_pack( stream );
     }
 
     return 1;
@@ -1166,15 +1211,12 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
     uint8_t stype = 0;
     if (buf && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
     {
-        // 0xbd is the normal container for AC3/DCA/PCM/etc. 0xfd indicates an
-        // extended stream id (ISO 13818-1(2007)). If we cared about the
-        // real id we'd have to look inside the PES extension to find it.
-        // But since we remap stream id's when we generate PS packets from
-        // the TS packets we can just ignore the actual id.
-        if ( buf[3] == 0xbd || buf[3] == 0xfd )
+        stype = stream->ts_stream_type[1 + aud_pid_index];
+
+        // 0xbd ("private stream 1") is the normal container for non-ISO
+        // media - AC3/DCA/PCM/etc.
+        if ( buf[3] == 0xbd )
         {
-            audio->id = 0x80bd | (aud_pid_index << 8);
-            stype = stream->ts_stream_type[1 + aud_pid_index];
             if ( st2codec[stype].kind == U )
             {
                 // XXX assume unknown stream types are AC-3 (if they're not
@@ -1183,12 +1225,38 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 stype = 0x81;
                 stream->ts_stream_type[1 + aud_pid_index] = 0x81;
             }
-            stream->ts_streamid[1 + aud_pid_index] = 0xbd;
+        }
+        else if ( buf[3] == 0xfd )
+        {
+            // 0xfd indicates an extended stream id (ISO 13818-1(2007)).
+            // the blu ray consortium apparently forgot to read the portion
+            // of the MPEG spec that says one PID should map to one media
+            // stream and multiplexed multiple types of audio into one PID
+            // using the extended stream identifier of the PES header to
+            // distinguish them. So we have to check if that's happening and
+            // if so tell the runtime what esid we want.
+            if ( st2codec[stype].kind == A && stype == 0x83 &&
+                 stream->ts_format_id[1 + aud_pid_index] == TS_FORMAT_ID_AC3 )
+            {
+                // This is an interleaved TrueHD/AC-3 stream and the esid of
+                // the AC-3 is 0x76
+                stream->ts_multiplexed[1 + aud_pid_index] = 0x76;
+                stype = 0x81;
+                stream->ts_stream_type[1 + aud_pid_index] = 0x81;
+            }
+            if ( st2codec[stype].kind == A && stype == 0x86 )
+            {
+                // This is an interleaved DTS-HD/DTS stream and the esid of
+                // the DTS is 0x71
+                stream->ts_multiplexed[1 + aud_pid_index] = 0x71;
+                stype = 0x82;
+                stream->ts_stream_type[1 + aud_pid_index] = 0x82;
+            }
         }
         else if ((buf[3] & 0xe0) == 0xc0)
         {
-            audio->id = 0xc0 | aud_pid_index;
-            stype = stream->ts_stream_type[1 + aud_pid_index];
+            // 0xC0 - 0xCF are the normal containers for ISO-standard
+            // media (mpeg2 audio and mpeg4 AAC).
             if ( st2codec[stype].kind == U )
             {
                 // XXX assume unknown stream types are MPEG audio
@@ -1196,13 +1264,16 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 stream->ts_stream_type[1 + aud_pid_index] = 0x03;
             }
         }
+        else
+        {
+            stype = 0;
+        }
     }
     // if we found an audio stream type & HB has a codec that can decode it
     // finish configuring the audio so we'll add it to the title's list.
     if ( st2codec[stype].kind == A && st2codec[stype].codec )
     {
-        stream->ts_streamid[1 + aud_pid_index] = audio->id;
-        stream->ts_extra_hdr[1 + aud_pid_index] = st2codec[stype].extra_hdr;
+        audio->id = 1 + aud_pid_index;
         audio->config.in.codec = st2codec[stype].codec;
         audio->config.in.codec_param = st2codec[stype].codec_param;
 		set_audio_description( audio,
@@ -1339,10 +1410,9 @@ static void hb_ts_stream_init(hb_stream_t *stream)
 	for (i = 0; i < stream->ts_number_video_pids + stream->ts_number_audio_pids; i++)
 	{
         // demuxing buffer for TS to PS conversion
-		stream->ts_buf[i] = malloc( HB_DVD_READ_BUFFER_SIZE );
+		stream->ts_buf[i] = hb_buffer_init(stream->packetsize);
+		stream->ts_buf[i]->size = 0;
 	}
-
-    stream->ts_streamid[0] = 0xE0;		// stream 0 must be video
 }
 
 #define MAX_HOLE 208*80
@@ -1452,6 +1522,11 @@ static void decode_element_descriptors(hb_stream_t* stream, int esindx,
     {
         switch (dp[0])
         {
+            case 5:    // Registration descriptor
+                stream->ts_format_id[esindx] = (dp[2] << 24) | (dp[3] << 16) |
+                                               (dp[4] << 8)  | dp[5];
+                break;
+
             case 10:    // ISO_639_language descriptor
                 stream->a52_info[esindx].lang_code = lang_to_code(lang_for_code2((const char *)&dp[2]));
                 break;
@@ -1823,202 +1898,87 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
  }
 
 
-static void fwrite64( hb_stream_t *stream, void *buf, int size )
+static void fwrite64( hb_stream_t *stream, void *buf, int len )
 {
-    if ( (stream->fwrite_buf - stream->fwrite_buf_orig) + size > 2048 )
+    int pos;
+
+    pos = stream->fwrite_buf->size;
+    if ( pos + len > stream->fwrite_buf->alloc )
     {
-        hb_log( "steam fwrite64 buffer overflow - writing %d with %d already",
-                size, stream->fwrite_buf - stream->fwrite_buf_orig );
-        return;
+        int size = MAX(stream->fwrite_buf->alloc * 2, pos + len);
+        hb_buffer_realloc(stream->fwrite_buf, size);
     }
-    memcpy( stream->fwrite_buf, buf, size );
-    stream->fwrite_buf += size;
+    memcpy( &(stream->fwrite_buf->data[pos]), buf, len );
+    stream->fwrite_buf->size += len;
 }
 
-static void write_pack(hb_stream_t* stream, uint64_t time, int stuffing)
+// convert a PES PTS or DTS to an int64
+static int64_t pes_timestamp( const uint8_t *pes )
 {
-	uint8_t buf[24];
-
-    buf[0] = 0x00;      // pack id
-    buf[1] = 0x00;
-    buf[2] = 0x01;
-    buf[3] = 0xba;
-
-    buf[4] = 0x44 |     // SCR
-             ( ( ( time >> 30 ) & 7 ) << 3 ) |
-             ( ( time >> 28 ) & 3 );
-    buf[5] = time >> 20;
-    buf[6] = 0x04 |
-             ( ( ( time >> 15 ) & 0x1f ) << 3 ) |
-             ( ( time >> 13 ) & 3 );
-    buf[7] = time >> 5;
-    buf[8] = 0x04 | ( time << 3 );
-
-    buf[9] = 0x01;      // SCR extension
-
-    buf[10] = 384000 >> (22 - 8);     // program mux rate
-    buf[11] = (uint8_t)( 384000 >> (22 - 16) );
-    buf[12] = (uint8_t)( 384000 << 2 ) | 0x03;
-
-    buf[13] = 0xf8 | stuffing;
-
-    int i;
-    for (i = 0; i < stuffing; ++i )
-        buf[14+i] = 0xff;
-
-	fwrite64(stream, buf, 14 + stuffing );
-}
-
-static void pad_buffer(hb_stream_t* stream, int pad)
-{
-	pad -= 6;
-
-	uint8_t buf[6];
-	buf[0] = 0;
-    buf[1] = 0;
-    buf[2] = 0;
-    buf[3] = 0xbe;
-	buf[4] = pad >> 8;
-    buf[5] = pad;
-
-	fwrite64(stream, buf, 6);
-
-	buf[0] = 0xff;
-    while ( --pad >= 0 )
-    {
-		fwrite64(stream, buf, 1);
-	}
-}
-
-static void make_pes_header(hb_stream_t* stream, int len, uint8_t streamid)
-{
-	uint8_t buf[9];
-
-    memset(buf, 0, sizeof(buf) );
-    buf[2] = 1;
-    buf[3] = streamid;
-    buf[4] = ( len + 3 ) >> 8;
-    buf[5] = len + 3;
-    buf[6] = 0x88;
-
-    fwrite64(stream, buf, 9);
+    int64_t ts = ( (uint64_t)(pes[0] & 0xe ) << 29 );
+    ts |= ( pes[1] << 22 ) | ( ( pes[2] >> 1 ) << 15 ) |
+          ( pes[3] << 7 ) | ( pes[4] >> 1 );
+    return ts;
 }
 
 static void generate_output_data(hb_stream_t *stream, int curstream)
 {
-    uint8_t *tdat = stream->ts_buf[curstream];
-    int len;
+    hb_buffer_t *buf = stream->fwrite_buf;
+    uint8_t *tdat = stream->ts_buf[curstream]->data;
 
-    // we always ship a PACK header plus all the data in our demux buf.
-    // AC3 audio also always needs its substream header.
-    len = 14 + stream->ts_pos[curstream];
-    if ( stream->ts_extra_hdr[curstream] )
+    buf->id = curstream;
+
+    // check if this packet was referenced to an older pcr and if that
+    // pcr was significantly different than the one we're using now.
+    // (the reason for the uint cast on the pcr difference is that the
+    // difference is significant if it advanced by more than 200ms or if
+    // it went backwards by any amount. The negative numbers look like huge
+    // unsigned ints so the cast allows both conditions to be checked at once.
+    int bufpcr = stream->ts_buf[curstream]->cur;
+    int curpcr = stream->ts_pcr_out;
+    if ( bufpcr && bufpcr < curpcr &&
+         (uint64_t)(stream->ts_pcrhist[curpcr & 3] - stream->ts_pcrhist[bufpcr & 3]) > 200*90LL )
     {
-        len += 4;
-    }
-
-    if ( ! stream->ts_start[curstream] )
-    {
-        // we're in the middle of a chunk of PES data - we need to add
-        // a 'continuation' PES header after the PACK header.
-        len += 9;
-    }
-
-    // Write out pack header
-    // If we don't have 2048 bytes we need to pad to 2048. We can
-    // add a padding frame after our data but we need at least 7
-    // bytes of space to do it (6 bytes of header & 1 of pad). If
-    // we have fewer than 7 bytes left we need to fill the excess
-    // space with stuffing bytes added to the pack header.
-    int stuffing = 0;
-    if ( len > HB_DVD_READ_BUFFER_SIZE )
-    {
-        hb_log( "stream ts length botch %d", len );
-    }
-    if ( HB_DVD_READ_BUFFER_SIZE - len < 8)
-    {
-        stuffing = HB_DVD_READ_BUFFER_SIZE - len;
-    }
-    write_pack(stream, stream->ts_nextpcr, stuffing );
-    stream->ts_nextpcr += 10;
-
-    if ( stream->ts_start[curstream] )
-    {
-        // Start frames already have a PES header but we have modify it
-        // to map from TS PID to PS stream id. Also, if the stream is AC3
-        // audio we have to insert an AC3 stream header between the end of
-        // the PES header and the start of the stream data.
-
-        stream->ts_start[curstream] = 0;
-        tdat[3] = stream->ts_streamid[curstream];
-
-        uint16_t plen = stream->ts_pos[curstream] - 6;
-        if ( stream->ts_extra_hdr[curstream] )
-        {
-            // We have to add an AC3 header in front of the data. Add its
-            // size to the PES packet length.
-            plen += 4;
-            tdat[4] = plen >> 8;
-            tdat[5] = plen;
-
-            // Write out the PES header
-            int hdrsize = 9 + tdat[8];
-            fwrite64(stream, tdat, hdrsize);
-
-            // add a four byte DVD ac3 stream header
-            uint8_t ac3_substream_id[4];
-            int ssid = (curstream - stream->ts_number_video_pids) & 0xf;
-            ac3_substream_id[0] = 0x80 | ssid;  // substream id
-            ac3_substream_id[1] = 0x01;         // number of sync words
-            ac3_substream_id[2] = 0x00;         // first offset (16 bits)
-            ac3_substream_id[3] = 0x02;
-            fwrite64(stream, ac3_substream_id, 4);
-
-            // add the rest of the data
-            fwrite64(stream, tdat + hdrsize, stream->ts_pos[curstream] - hdrsize);
-        }
-        else
-        {
-            // not audio - don't need to modify the stream so write what we've got
-            tdat[4] = plen >> 8;
-            tdat[5] = plen;
-            fwrite64( stream,  tdat, stream->ts_pos[curstream] );
-        }
+        // we've sent up a new pcr but have a packet referenced to an
+        // old pcr and the difference was enough to trigger a discontinuity
+        // correction. smash the timestamps or we'll mess up the correction.
+        buf->start = -1;
+        buf->renderOffset = -1;
     }
     else
     {
-        // data without a PES start header needs a simple 'continuation'
-        // PES header. AC3 audio also needs its substream header.
-        if ( stream->ts_extra_hdr[curstream] == 0 )
+        if ( stream->ts_pcr_out != stream->ts_pcr_in )
         {
-            make_pes_header(stream, stream->ts_pos[curstream],
-                            stream->ts_streamid[curstream]);
+            // we have a new pcr
+            stream->ts_pcr_out = stream->ts_pcr_in;
+            buf->stop = stream->ts_pcr;
+            stream->ts_pcrhist[stream->ts_pcr_out & 3] = stream->ts_pcr;
         }
         else
         {
-            make_pes_header(stream, stream->ts_pos[curstream] + 4,
-                            stream->ts_streamid[curstream]);
-
-            // add a four byte DVD ac3 stream header
-            uint8_t ac3_substream_id[4];
-            int ssid = (curstream - stream->ts_number_video_pids) & 0xf;
-            ac3_substream_id[0] = 0x80 | ssid;  // substream id
-            ac3_substream_id[1] = 0x01;         // number of sync words
-            ac3_substream_id[2] = 0x00;         // first offset (16 bits)
-            ac3_substream_id[3] = 0x02;
-            fwrite64(stream, ac3_substream_id, 4);
+            buf->stop = -1;
         }
-        fwrite64( stream, tdat, stream->ts_pos[curstream] );
-    }
 
-    // Write padding
-    int left = HB_DVD_READ_BUFFER_SIZE - len;
-    if ( left >= 8 )
-    {
-        pad_buffer(stream, left);
+        // put the PTS & possible DTS into 'start' & 'renderOffset' then strip
+        // off the PES header.
+        if ( tdat[7] & 0xc0 )
+        {
+            buf->start = pes_timestamp( tdat + 9 );
+            buf->renderOffset = ( tdat[7] & 0x40 )? pes_timestamp( tdat + 14 ) :
+                                                    buf->start;
+        }
+        else
+        {
+            buf->start = -1;
+            buf->renderOffset = -1;
+        }
     }
+    int hlen = tdat[8] + 9;
+
+    fwrite64( stream,  tdat + hlen, stream->ts_pos[curstream] - hlen );
 
     stream->ts_pos[curstream] = 0;
+    stream->ts_buf[curstream]->size = 0;
 }
 
 static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
@@ -2084,7 +2044,7 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
                     continue;
                 }
 
-                // h226 in ts files (ATSC or DVB video) often seem to be
+                // h.264 in ts files (ATSC or DVB video) often seem to be
                 // missing IDR frames so look for at least an I
                 if ( nal_type == 0x01 )
                 {
@@ -2107,24 +2067,37 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
     return 1;
 }
 
+static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx, const uint8_t *buf, int len)
+{
+    if (stream->ts_pos[idx] + len > stream->ts_buf[idx]->alloc)
+    {
+        int size;
+
+        size = MAX(stream->ts_buf[idx]->alloc * 2, stream->ts_pos[idx] + len);
+        hb_buffer_realloc(stream->ts_buf[idx], size);
+    }
+    memcpy(stream->ts_buf[idx]->data + stream->ts_pos[idx], buf, len);
+    stream->ts_pos[idx] += len;
+    stream->ts_buf[idx]->size += len;
+}
+
 /***********************************************************************
  * hb_ts_stream_decode
  ***********************************************************************
  *
  **********************************************************************/
-static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
+static int hb_ts_stream_decode( hb_stream_t *stream, hb_buffer_t *obuf )
 {
     /*
      * stash the output buffer pointer in our stream so we don't have to
      * pass it & its original value to everything we call.
      */
+    obuf->size = 0;
     stream->fwrite_buf = obuf;
-    stream->fwrite_buf_orig = obuf;
 
 	// spin until we get a packet of data from some stream or hit eof
 	while ( 1 )
 	{
-        int64_t pcr = stream->ts_lastpcr;
         int curstream;
 
         const uint8_t *buf = next_packet(stream);
@@ -2171,19 +2144,24 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
 			}
 		}
 
-        // if there's an adaptation header & PCR_flag is set
-        // get the PCR (Program Clock Reference)
-        if ( adapt_len > 7 && ( buf[5] & 0x10 ) != 0 )
+        if ( adapt_len > 0 )
         {
-            pcr = ( (uint64_t)buf[6] << (33 - 8) ) |
-                  ( (uint64_t)buf[7] << (33 - 16) ) |
-                  ( (uint64_t)buf[8] << (33 - 24) ) |
-                  ( (uint64_t)buf[9] << (33 - 32) ) |
-                  ( buf[10] >> 7 );
-            stream->ts_nextpcr = pcr;
-
-            // remember the pcr across calls to this routine
-            stream->ts_lastpcr = pcr;
+            if ( buf[5] & 0x40 )
+            {
+                // found a random access point
+            }
+            // if there's an adaptation header & PCR_flag is set
+            // get the PCR (Program Clock Reference)
+            if ( adapt_len > 7 && ( buf[5] & 0x10 ) != 0 )
+            {
+                stream->ts_pcr = ( (uint64_t)buf[6] << (33 - 8) ) |
+                                 ( (uint64_t)buf[7] << (33 - 16) ) |
+                                 ( (uint64_t)buf[8] << (33 - 24) ) |
+                                 ( (uint64_t)buf[9] << (33 - 32) ) |
+                                 ( buf[10] >> 7 );
+                ++stream->ts_pcr_in;
+                stream->ts_found_pcr = 1;
+            }
         }
 
         // If we don't have a pcr yet, the right thing to do here would
@@ -2210,7 +2188,7 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
                 continue;
             }
             if ( !start && (stream->ts_streamcont[curstream] != -1) &&
-                 stream->ts_foundfirst[curstream] &&
+                 !stream->ts_skipbad[curstream] &&
                  (continuity != ( (stream->ts_streamcont[curstream] + 1) & 0xf ) ) )
 			{
 				ts_err( stream, curstream,  "continuity error: got %d expected %d",
@@ -2228,39 +2206,30 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
         {
             // Found a random access point (now we can start a frame/audio packet..)
 
+            if ( stream->need_keyframe )
+            {
+                // we're looking for the first video frame because we're
+                // doing random access during 'scan'
+                if (curstream != 0 || !isIframe( stream, buf, adapt_len ) )
+                {
+                    // not the video stream or didn't find an I frame
+                    continue;
+                }
+                stream->need_keyframe = 0;
+            }
+
 			// If we were skipping a bad packet, start fresh on this new PES packet..
 			if (stream->ts_skipbad[curstream] == 1)
 			{
-                // video skips to an iframe after a bad packet to minimize
-                // screen corruption
-                if ( curstream == 0 && !isIframe( stream, buf, adapt_len ) )
-                {
-                    continue;
-                }
 				stream->ts_skipbad[curstream] = 0;
 			}
 
-			// If we don't have video yet, check to see if this is an
-            // i_frame (group of picture start)
 			if ( curstream == 0 )
             {
-                if ( !stream->ts_foundfirst[0] )
-                {
-                    if ( stream->need_keyframe )
-                    {
-                        if ( !isIframe( stream, buf, adapt_len ) )
-                        {
-                            // didn't find an I frame
-                            continue;
-                        }
-                        stream->need_keyframe = 0;
-                    }
-                    stream->ts_foundfirst[0] = 1;
-                }
                 ++stream->frames;
 
                 // if we don't have a pcr yet use the dts from this frame
-                if ( pcr == -1 )
+                if ( !stream->ts_found_pcr )
                 {
                     // PES must begin with an mpeg start code & contain
                     // a DTS or PTS.
@@ -2271,55 +2240,65 @@ static int hb_ts_stream_decode( hb_stream_t *stream, uint8_t *obuf )
                         continue;
                     }
                     // if we have a dts use it otherwise use the pts
-                    pes += (pes[7] & 0x40)? 14 : 9;
-
-                    pcr = ( (uint64_t)(pes[0] & 0xe ) << 29 );
-                    pcr |= ( pes[1] << 22 ) |
-                           ( ( pes[2] >> 1 ) << 15 ) |
-                           ( pes[3] << 7 ) |
-                           ( pes[4] >> 1 );
-                    stream->ts_nextpcr = pcr;
+                    stream->ts_pcr = pes_timestamp( pes + ( pes[7] & 0x40? 14 : 9 ) );
+                    ++stream->ts_pcr_in;
                 }
             }
-            else if ( ! stream->ts_foundfirst[curstream] )
+
+            // if this is a multiplexed stream make sure this is the
+            // substream we want.
+            if ( stream->ts_multiplexed[curstream] )
             {
-                // start other streams only after first video frame found.
-                if ( ! stream->ts_foundfirst[0] )
+                // PES must begin with an mpeg start code & contain
+                // a DTS or PTS.
+                const uint8_t *pes = buf + adapt_len + 4;
+                if ( pes[0] != 0x00 || pes[1] != 0x00 || pes[2] != 0x01 ||
+                     pes[3] != 0xfd )
                 {
+                    stream->ts_skipbad[curstream] = 1;
                     continue;
                 }
-                stream->ts_foundfirst[curstream] = 1;
-			}
+                // the last byte of the header is the extension id. see if
+                // it's the one we want.
+                if ( pes[pes[8]+8] != stream->ts_multiplexed[curstream] )
+                {
+                    stream->ts_skipbad[curstream] = 1;
+                    continue;
+                }
+            }
 
             // If we have some data already on this stream, turn it into
             // a program stream packet. Then add the payload for this
             // packet to the current pid's buffer.
             if ( stream->ts_pos[curstream] )
             {
+                // we have to ship the old packet before updating the pcr
+                // since the packet we've been accumulating is referenced
+                // to the old pcr.
                 generate_output_data(stream, curstream);
-                stream->ts_start[curstream] = 1;
-                memcpy(stream->ts_buf[curstream],
-                       buf + 4 + adapt_len, 184 - adapt_len);
-                stream->ts_pos[curstream] = 184 - adapt_len;
+
+                // remember the pcr that was in effect when we started
+                // this packet.
+                stream->ts_buf[curstream]->cur = stream->ts_pcr_in;
+                hb_ts_stream_append_pkt(stream, curstream, buf + 4 + adapt_len,
+                                        184 - adapt_len);
                 return 1;
             }
-            stream->ts_start[curstream] = 1;
+            // remember the pcr that was in effect when we started this packet.
+            stream->ts_buf[curstream]->cur = stream->ts_pcr_in;
         }
 
 		// Add the payload for this packet to the current buffer
-		if (!stream->ts_skipbad[curstream] && stream->ts_foundfirst[curstream] &&
-            (184 - adapt_len) > 0)
+		if (!stream->ts_skipbad[curstream] && (184 - adapt_len) > 0)
 		{
-			memcpy(stream->ts_buf[curstream] + stream->ts_pos[curstream],
-                   buf + 4 + adapt_len, 184 - adapt_len);
-			stream->ts_pos[curstream] += 184 - adapt_len;
-
-            // if the next TS packet could possibly overflow our 2K output buffer
-            // we need to generate a packet now. Overflow would be 184 bytes of
-            // data + the 9 byte PES hdr + the 14 byte PACK hdr = 211 bytes.
-            if ( stream->ts_pos[curstream] >= (HB_DVD_READ_BUFFER_SIZE - 216) )
+            hb_ts_stream_append_pkt(stream, curstream, buf + 4 + adapt_len,
+                                    184 - adapt_len);
+            // see if we've hit the end of this PES packet
+            const uint8_t *pes = stream->ts_buf[curstream]->data;
+            int len = ( pes[4] << 8 ) + pes[5] + 6;
+            if ( len > 6 && stream->ts_pos[curstream] == len &&
+                 pes[0] == 0x00 && pes[1] == 0x00 && pes[2] == 0x01 )
             {
-                // we have enough data to make a PS packet
                 generate_output_data(stream, curstream);
                 return 1;
             }
@@ -2334,18 +2313,19 @@ static void hb_ts_stream_reset(hb_stream_t *stream)
 	for (i=0; i < kMaxNumberDecodeStreams; i++)
 	{
 		stream->ts_pos[i] = 0;
-		stream->ts_foundfirst[i] = 0;
-		stream->ts_skipbad[i] = 0;
+		stream->ts_skipbad[i] = 1;
 		stream->ts_streamcont[i] = -1;
-		stream->ts_start[i] = 0;
 	}
 
-    stream->ts_lastpcr = -1;
-    stream->ts_nextpcr = -1;
+    stream->need_keyframe = 0;
+
+    stream->ts_found_pcr = 0;
+    stream->ts_pcr_out = 0;
+    stream->ts_pcr_in = 0;
+    stream->ts_pcr = 0;
 
     stream->frames = 0;
     stream->errors = 0;
-    stream->need_keyframe = 0;
     stream->last_error_frame = -10000;
     stream->last_error_count = 0;
 

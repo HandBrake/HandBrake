@@ -458,14 +458,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                   goto skip_preview;
               }
             }
-            if ( title->demuxer == HB_NULL_DEMUXER )
-            {
-                hb_demux_null( buf_ps, list_es, 0 );
-            }
-            else
-            {
-                hb_demux_ps( buf_ps, list_es, 0 );
-            }
+            (hb_demux[title->demuxer])(buf_ps, list_es, 0 );
 
             while( ( buf_es = hb_list_item( list_es, 0 ) ) )
             {

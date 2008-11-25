@@ -111,6 +111,22 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
                            ( ( height+1 ) >> 1 ) * 2 );
 }
 
+// this routine 'moves' data from src to dst by interchanging 'data',
+// 'size' & 'alloc' between them and copying the rest of the fields
+// from src to dst.
+static inline void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
+{
+    uint8_t *data  = dst->data;
+    int      size  = dst->size;
+    int      alloc = dst->alloc;
+
+    *dst = *src;
+
+    src->data  = data;
+    src->size  = size;
+    src->alloc = alloc;
+}
+
 /***********************************************************************
  * Threads: update.c, scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
@@ -135,8 +151,13 @@ typedef struct {
     int     dts_drops;      /* number of drops because DTS too far from SCR */
 } hb_psdemux_t;
 
+typedef int (*hb_muxer_t)(hb_buffer_t *, hb_list_t *, hb_psdemux_t*);
+
 int hb_demux_ps( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+int hb_demux_ss( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
 int hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
+
+extern const hb_muxer_t hb_demux[];
 
 /***********************************************************************
  * dvd.c

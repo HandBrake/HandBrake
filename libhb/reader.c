@@ -278,14 +278,7 @@ static void ReaderFunc( void * _r )
             hb_set_state( r->job->h, &state );
         }
 
-        if ( r->title->demuxer == HB_NULL_DEMUXER )
-        {
-            hb_demux_null( ps, list, &r->demux );
-        }
-        else
-        {
-            hb_demux_ps( ps, list, &r->demux );
-        }
+        (hb_demux[r->title->demuxer])( ps, list, &r->demux );
 
         while( ( buf = hb_list_item( list, 0 ) ) )
         {

@@ -461,7 +461,7 @@ struct hb_title_s
     int         rate;
     int         rate_base;
     int         crop[4];
-    enum { HB_MPEG2_DEMUXER = 0, HB_NULL_DEMUXER } demuxer;
+    enum { HB_MPEG2_PS_DEMUXER = 0, HB_MPEG2_TS_DEMUXER, HB_NULL_DEMUXER } demuxer;
     int         detected_interlacing;
     int         video_id;               /* demuxer stream id for video */
     int         video_codec;            /* worker object id of video codec */
