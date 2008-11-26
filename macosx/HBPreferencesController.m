@@ -23,12 +23,17 @@
 @interface HBPreferencesController (Private)
 
 - (void) setPrefView: (id) sender;
+- (NSToolbarItem *)toolbarItemWithIdentifier: (NSString *)identifier
+                                       label: (NSString *)label
+                                       image: (NSImage *)image;
 
 @end
 
 @implementation HBPreferencesController
 
 /**
+ * +[HBPreferencesController registerUserDefaults]
+ *
  * Registers default values to user defaults. This is called immediately
  * when HandBrake starts, from [HBController init].
  */
@@ -55,7 +60,10 @@
 }
 
 /**
+ * -[HBPreferencesController init]
+ *
  * Initializes the preferences controller by loading Preferences.nib file.
+ *
  */
 - (id)init
 {
@@ -66,6 +74,13 @@
     return self;
 }
 
+/**
+ * -[HBPreferencesController awakeFromNib]
+ *
+ * Called after all the outlets in the nib file have been attached. Sets up the
+ * toolbar and shows the "General" pane.
+ *
+ */
 - (void) awakeFromNib
 {
     NSToolbar * toolbar = [[[NSToolbar alloc] initWithIdentifier: @"Preferences Toolbar"] autorelease];
@@ -79,50 +94,36 @@
     [self setPrefView:nil];
 }
 
-- (NSToolbarItem *) toolbar: (NSToolbar *) toolbar itemForItemIdentifier: (NSString *) ident
-                    willBeInsertedIntoToolbar: (BOOL) flag
+- (NSToolbarItem *)toolbar: (NSToolbar *)toolbar
+     itemForItemIdentifier: (NSString *)ident
+ willBeInsertedIntoToolbar: (BOOL)flag
 {
-    NSToolbarItem * item;
-    item = [[[NSToolbarItem alloc] initWithItemIdentifier: ident] autorelease];
-
-    if ([ident isEqualToString: TOOLBAR_GENERAL])
+    if ( [ident isEqualToString:TOOLBAR_GENERAL] )
     {
-        [item setLabel: NSLocalizedString(@"General", "General")];
-        [item setImage: [NSImage imageNamed: @"NSPreferencesGeneral"]];
-        [item setTarget: self];
-        [item setAction: @selector(setPrefView:)];
-        [item setAutovalidates: NO];
+        return [self toolbarItemWithIdentifier:ident
+                                         label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
+                                         image:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
     }
-    else if ([ident isEqualToString: TOOLBAR_PICTURE])
+    else if ( [ident isEqualToString:TOOLBAR_PICTURE] )
     {
-        [item setLabel: NSLocalizedString(@"Picture", "Picture")];
-        [item setImage: [NSImage imageNamed: @"pref-picture"]];
-        [item setTarget: self];
-        [item setAction: @selector(setPrefView:)];
-        [item setAutovalidates: NO];
+        return [self toolbarItemWithIdentifier:ident
+                                         label:NSLocalizedString(@"Picture", @"Preferences Picture Toolbar Item")
+                                         image:[NSImage imageNamed:@"pref-picture"]];
     }
-    else if ([ident isEqualToString: TOOLBAR_AUDIO])
+    else if ( [ident isEqualToString:TOOLBAR_AUDIO] )
     {
-        [item setLabel: NSLocalizedString(@"Audio", "Audio")];
-        [item setImage: [NSImage imageNamed: @"pref-audio"]];
-        [item setTarget: self];
-        [item setAction: @selector(setPrefView:)];
-        [item setAutovalidates: NO];
+        return [self toolbarItemWithIdentifier:ident
+                                         label:NSLocalizedString(@"Audio", @"Preferences Audio Toolbar Item")
+                                         image:[NSImage imageNamed:@"pref-audio"]];
     }
-    else if ([ident isEqualToString: TOOLBAR_ADVANCED])
+    else if ( [ident isEqualToString:TOOLBAR_ADVANCED] )
     {
-        [item setLabel: NSLocalizedString(@"Advanced", "Advanced")];
-        [item setImage: [NSImage imageNamed: @"NSAdvanced"]];
-        [item setTarget: self];
-        [item setAction: @selector(setPrefView:)];
-        [item setAutovalidates: NO];
-    }
-    else
-    {
-        return nil;
+        return [self toolbarItemWithIdentifier:ident
+                                         label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
+                                         image:[NSImage imageNamed:NSImageNameAdvanced]];
     }
 
-    return item;
+    return nil;
 }
 
 - (NSArray *) toolbarSelectableItemIdentifiers: (NSToolbar *) toolbar
@@ -188,6 +189,24 @@
                 break;
             }
     }
+}
+
+/**
+ * -[HBPreferencesController(Private) toolbarItemWithIdentifier:label:image:]
+ *
+ * Shared code for creating the NSToolbarItems for the Preferences toolbar.
+ *
+ */
+- (NSToolbarItem *)toolbarItemWithIdentifier: (NSString *)identifier
+                                       label: (NSString *)label
+                                       image: (NSImage *)image
+{
+    NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:identifier];
+    [item setLabel:label];
+    [item setImage:image];
+    [item setAction:@selector(setPrefView:)];
+    [item setAutovalidates:NO];
+    return [item autorelease];
 }
 
 @end
