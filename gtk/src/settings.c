@@ -321,6 +321,12 @@ ghb_widget_value(GtkWidget *widget)
 		str = gtk_label_get_text (GTK_LABEL(widget));
 		value = ghb_string_value_new(str);
 	}
+	else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
+	{
+		const gchar *str;
+		str = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(widget));
+		value = ghb_string_value_new(str);
+	}
 	else
 	{
 		g_debug("Attempt to set unknown widget type: %s\n", name);
@@ -568,6 +574,20 @@ update_widget(GtkWidget *widget, const GValue *value)
 	else if (type == GTK_TYPE_LABEL)
 	{
 		gtk_label_set_text (GTK_LABEL(widget), str);
+	}
+	else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
+	{
+		GtkFileChooserAction act;
+		act = gtk_file_chooser_get_action(GTK_FILE_CHOOSER(widget));
+		if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+			act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+		{
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(widget), str);
+		}
+		else
+		{
+			gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
+		}
 	}
 	else
 	{

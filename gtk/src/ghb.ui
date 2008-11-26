@@ -714,78 +714,53 @@
                             <child>
                               <object class="GtkHBox" id="hbox6">
                                 <property name="visible">True</property>
+                                <property name="spacing">5</property>
+
+
+
+
                                 <child>
-                                  <object class="GtkLabel" id="label8">
+                                  <object class="GtkFileChooserButton" id="dest_dir">
+                                    <property name="visible">True</property>
+                                    <property name="action">select-folder</property>
+                                    <property name="title" translatable="yes">Destination Directory</property>
+                                    <signal name="selection_changed" handler="dest_dir_set_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label18">
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">File:</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">False</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkEntry" id="destination">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip-text" translatable="yes">Destination path with file name for output.</property>
-                                    <property name="width_chars">41</property>
-                                    <signal handler="destination_entry_changed_cb" name="changed"/>
-                                    <signal handler="destination_grab_cb" name="grab-focus" after="yes"/>
-                                    <accelerator key="d" signal="grab-focus" modifiers="GDK_MOD1_MASK"/>
-                                  </object>
-                                  <packing>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkButton" id="destination_browse">
+                                  <object class="GtkEntry" id="dest_file">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="relief">GTK_RELIEF_NONE</property>
-                                    <signal handler="destination_browse_clicked_cb" name="clicked"/>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment4">
-                                        <property name="visible">True</property>
-                                        <property name="xscale">0</property>
-                                        <property name="yscale">0</property>
-                                        <child>
-                                          <object class="GtkHBox" id="hbox7">
-                                            <property name="visible">True</property>
-                                            <property name="spacing">2</property>
-                                            <child>
-                                              <object class="GtkImage" id="image2">
-                                                <property name="visible">True</property>
-                                                <property name="stock">gtk-open</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <object class="GtkLabel" id="label9">
-                                                <property name="visible">True</property>
-                                                <property name="label" translatable="yes">Browse</property>
-                                                <property name="use_underline">True</property>
-                                              </object>
-                                              <packing>
-                                                <property name="expand">False</property>
-                                                <property name="fill">False</property>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
+                                    <property name="width_chars">20</property>
+                                    <accelerator key="d" signal="grab-focus" modifiers="GDK_MOD1_MASK"/>
+                                    <signal name="changed" handler="dest_file_changed_cb"/>
+                                    <signal name="grab_focus" handler="destination_grab_cb" after="yes"/>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
+
+
+
+
+
+
+
                               </object>
                             </child>
                             <child>

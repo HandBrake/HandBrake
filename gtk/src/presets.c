@@ -1177,12 +1177,14 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
 	}
 	gval = ghb_settings_get_value(ud->settings, "default_source");
 	ghb_settings_set_value (ud->settings, "source", gval);
-	str = ghb_settings_get_string(ud->settings, "destination_dir");
 
-	gchar *path = g_strdup_printf ("%s/new_video.mp4", str);
-	ghb_ui_update(ud, "destination", ghb_string_value(path));
+	str = ghb_settings_get_string(ud->settings, "destination_dir");
+	ghb_ui_update(ud, "dest_dir", ghb_string_value(str));
+
+	gchar *file = g_strdup_printf ("new_video.mp4");
+	ghb_ui_update(ud, "dest_file", ghb_string_value(file));
 	g_free(str);
-	g_free(path);
+	g_free(file);
 
 	prefs_initializing = FALSE;
 }

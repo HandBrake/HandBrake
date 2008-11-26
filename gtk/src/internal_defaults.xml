@@ -8,6 +8,10 @@
 		<true />
 		<key>autoscale</key>
 		<false />
+		<key>dest_dir</key>
+		<string></string>
+		<key>dest_file</key>
+		<string>new_video.mp4</string>
 		<key>end_chapter</key>
 		<integer>100</integer>
 		<key>folder</key>

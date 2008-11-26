@@ -216,40 +216,6 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 	}
 }
 
-static gchar*
-expand_tilde(const gchar *path)
-{
-	const gchar *user_home;
-	gchar *home;
-	const gchar *suffix;
-	gchar *expanded_path = NULL;
-	
-	g_debug("expand_tilde ()");
-	if (path[0] == '~')
-	{
-		user_home = g_get_home_dir();
-		home = NULL; // squash warning about home uninitialized
-		if (path[1] == 0)
-		{
-			home = g_strdup(user_home);
-			suffix = "";
-		}
-		else if (path[1] == '/')
-		{
-			home = g_strdup(user_home);
-			suffix = &path[2];
-		}
-		else
-		{
-			home = g_path_get_dirname(user_home);
-			suffix = &path[1];
-		}
-		expanded_path = g_strdup_printf("%s/%s", home, suffix);
-		g_free(home);
-	}
-	return expanded_path;
-}
-
 void
 on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 {
@@ -278,11 +244,10 @@ set_destination(signal_user_data_t *ud)
 	if (ghb_settings_get_boolean(ud->settings, "use_source_name"))
 	{
 		gchar *vol_name, *filename, *extension;
-		gchar *dir, *new_name;
+		gchar *new_name;
 		
-		filename = ghb_settings_get_string(ud->settings, "destination");
+		filename = ghb_settings_get_string(ud->settings, "dest_file");
 		extension = ghb_settings_get_string(ud->settings, "FileFormat");
-		dir = g_path_get_dirname (filename);
 		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
 		if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
 		{
@@ -292,24 +257,23 @@ set_destination(signal_user_data_t *ud)
 			end = ghb_settings_get_int(ud->settings, "end_chapter");
 			if (start == end)
 			{
-				new_name = g_strdup_printf("%s/%s-%d.%s", 
-					dir, vol_name, start, extension);
+				new_name = g_strdup_printf("%s-%d.%s", 
+					vol_name, start, extension);
 			}
 			else
 			{
-				new_name = g_strdup_printf("%s/%s-%d-%d.%s", 
-					dir, vol_name, start, end, extension);
+				new_name = g_strdup_printf("%s-%d-%d.%s", 
+					vol_name, start, end, extension);
 			}
 		}
 		else
 		{
-			new_name = g_strdup_printf("%s/%s.%s", dir, vol_name, extension);
+			new_name = g_strdup_printf("%s.%s", vol_name, extension);
 		}
-		ghb_ui_update(ud, "destination", ghb_string_value(new_name));
+		ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
 		g_free(filename);
 		g_free(extension);
 		g_free(vol_name);
-		g_free(dir);
 		g_free(new_name);
 	}
 }
@@ -705,7 +669,7 @@ update_destination_extension(signal_user_data_t *ud)
 
 	g_debug("update_destination_extension ()");
 	extension = ghb_settings_get_string(ud->settings, "FileFormat");
-	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "destination"));
+	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "dest_file"));
 	filename = g_strdup(gtk_entry_get_text(entry));
 	for (ii = 0; containers[ii] != NULL; ii++)
 	{
@@ -727,7 +691,7 @@ update_destination_extension(signal_user_data_t *ud)
 				break;
 			}
 			new_name = g_strjoin(".", filename, extension, NULL); 
-			ghb_ui_update(ud, "destination", ghb_string_value(new_name));
+			ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
 			g_free(new_name);
 			break;
 		}
@@ -758,6 +722,7 @@ destination_select_title(GtkEntry *entry)
 			break;
 		}
 	}
+	if (start < 0) start = 0;
 	if (start < end)
 	{
 		gtk_editable_select_region(GTK_EDITABLE(entry), start, end);
@@ -776,20 +741,39 @@ destination_grab_cb(
 static gboolean update_default_destination = FALSE;
 
 void
-destination_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
+dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
 {
-	gchar *dest;
+	gchar *dest_file, *dest_dir, *dest;
 	
-	g_debug("destination_entry_changed_cb ()");
-	if ((dest = expand_tilde(gtk_entry_get_text(entry))) != NULL)
-	{
-		gtk_entry_set_text(entry, dest);
-		g_free(dest);
-	}
+	g_debug("dest_dir_set_cb ()");
+	ghb_widget_to_setting(ud->settings, (GtkWidget*)dest_chooser);
+	dest_file = ghb_settings_get_string(ud->settings, "dest_file");
+	dest_dir = ghb_settings_get_string(ud->settings, "dest_dir");
+	dest = g_strdup_printf("%s/%s", dest_dir, dest_file);
+	ghb_settings_set_string(ud->settings, "destination", dest);
+	g_free(dest_file);
+	g_free(dest_dir);
+	g_free(dest);
+	update_default_destination = TRUE;
+}
+
+void
+dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
+{
+	gchar *dest_file, *dest_dir, *dest;
+	
+	g_debug("dest_file_changed_cb ()");
 	update_destination_extension(ud);
 	ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
 	// This signal goes off with ever keystroke, so I'm putting this
 	// update on the timer.
+	dest_file = ghb_settings_get_string(ud->settings, "dest_file");
+	dest_dir = ghb_settings_get_string(ud->settings, "dest_dir");
+	dest = g_strdup_printf("%s/%s", dest_dir, dest_file);
+	ghb_settings_set_string(ud->settings, "destination", dest);
+	g_free(dest_file);
+	g_free(dest_dir);
+	g_free(dest);
 	update_default_destination = TRUE;
 }
 
@@ -816,18 +800,18 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 	g_free(basename);
 	if (gtk_dialog_run(GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		char *filename;
+		char *filename, *dirname;
+		GtkFileChooser *dest_chooser;
 		
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-		entry = (GtkEntry*)GHB_WIDGET(ud->builder, "destination");
-		if (entry == NULL)
-		{
-			g_debug("Failed to find widget: %s", "destination");
-		}
-		else
-		{
-			gtk_entry_set_text(entry, filename);
-		}
+		basename = g_path_get_basename(filename);
+		dirname = g_path_get_dirname(filename);
+		entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
+		gtk_entry_set_text(entry, basename);
+		dest_chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "dest_dir"));
+		gtk_file_chooser_set_filename(dest_chooser, dirname);
+		g_free (dirname);
+		g_free (basename);
 		g_free (filename);
 	}
 	gtk_widget_destroy(dialog);
