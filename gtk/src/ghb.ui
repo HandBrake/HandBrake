@@ -1374,8 +1374,9 @@
                   <object class="GtkHBox" id="hbox17">
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+
                     <child>
-                      <object class="GtkVBox" id="vbox12">
+                      <object class="GtkVBox" id="vbox_j18">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
@@ -1383,7 +1384,7 @@
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignment10">
                                 <property name="visible">True</property>
@@ -1395,7 +1396,7 @@
                                   <object class="GtkVBox" id="vbox13">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="spacing">2</property>
+                                    <property name="spacing">4</property>
                                     <child>
                                       <object class="GtkHBox" id="hbox18">
                                         <property name="visible">True</property>
@@ -1492,7 +1493,7 @@
                                       <object class="GtkAlignment" id="alignment13">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xscale">0.23999999463558197</property>
+                                        <property name="left_padding">16</property>
                                         <child>
                                           <object class="GtkCheckButton" id="VideoTurboTwoPass">
                                             <property name="visible">True</property>
@@ -1509,57 +1510,6 @@
                                         <property name="position">3</property>
                                       </packing>
                                     </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label30">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Encoding&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="padding">2</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="padding">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkVBox" id="vbox14">
-                        <property name="visible">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <child>
-                          <object class="GtkFrame" id="frame6">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
-                            <child>
-                              <object class="GtkAlignment" id="alignment14">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="top_padding">2</property>
-                                <property name="bottom_padding">2</property>
-                                <property name="left_padding">12</property>
-                                <child>
-                                  <object class="GtkVBox" id="vbox15">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
                                       <object class="GtkHBox" id="hbox20">
                                         <property name="visible">True</property>
@@ -1598,6 +1548,9 @@
                                           </packing>
                                         </child>
                                       </object>
+                                      <packing>
+                                        <property name="position">4</property>
+                                      </packing>
                                     </child>
                                     <child>
                                       <object class="GtkHBox" id="hbox21">
@@ -1639,7 +1592,7 @@
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="position">1</property>
+                                        <property name="position">5</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1678,14 +1631,14 @@
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="position">2</property>
+                                        <property name="position">6</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <object class="GtkAlignment" id="alignment17">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xscale">0.8399999737739563</property>
+                                        <property name="left_padding">16</property>
                                         <child>
                                           <object class="GtkCheckButton" id="constant_rate_factor">
                                             <property name="visible">True</property>
@@ -1699,18 +1652,21 @@
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="position">3</property>
+                                        <property name="position">7</property>
                                       </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
                                     </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <child type="label">
-                              <object class="GtkLabel" id="label31">
+                              <object class="GtkLabel" id="label30">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Quality&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Encoding&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -1720,13 +1676,10 @@
                             <property name="padding">2</property>
                           </packing>
                         </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="padding">2</property>
-                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -1750,7 +1703,7 @@
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="label_xalign">0</property>
-                        <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                        <property name="shadow_type">none</property>
                         <child>
                           <object class="GtkAlignment" id="alignment18">
                             <property name="visible">True</property>
@@ -2032,7 +1985,7 @@
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignmentj01">
                                 <property name="visible">True</property>
@@ -2074,7 +2027,7 @@
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignmentj02">
                                 <property name="visible">True</property>
@@ -2154,13 +2107,14 @@
                     <child>
                       <object class="GtkVBox" id="vbox21">
                         <property name="visible">True</property>
+                        <property name="spacing">10</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
                           <object class="GtkFrame" id="frame9">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignment25">
                                 <property name="visible">True</property>
@@ -2239,7 +2193,7 @@
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignment26">
                                 <property name="visible">True</property>
@@ -2402,7 +2356,7 @@
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">out</property>
                             <child>
                               <object class="GtkAlignment" id="alignment29">
                                 <property name="visible">True</property>
@@ -2451,15 +2405,25 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkVSeparator" id="vseparator_j3">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkVBox" id="vbox25">
                         <property name="visible">True</property>
+                        <property name="spacing">10</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
                           <object class="GtkFrame" id="frame12">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignment30">
                                 <property name="visible">True</property>
@@ -2680,7 +2644,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignment35">
                                 <property name="visible">True</property>
@@ -2837,7 +2801,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
