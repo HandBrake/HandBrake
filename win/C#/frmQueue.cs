@@ -26,7 +26,7 @@ namespace Handbrake
         Functions.Encode cliObj = new Functions.Encode();
         Boolean cancel = false;
         Process hbProc = null;
-        Functions.Queue queue;
+        Queue.Queue queue;
         frmMain mainWindow = null;
 
         public frmQueue(frmMain main)
@@ -39,11 +39,20 @@ namespace Handbrake
         /// Initializes the Queue list with the Arraylist from the Queue class
         /// </summary>
         /// <param name="qw"></param>
-        public void setQueue(Functions.Queue qw)
+        public void setQueue(Queue.Queue qw)
         {
             queue = qw;
             redrawQueue();
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
+
+            // Recalculate the progress bar, but only if the queue has already started.       
+            if (progressBar.Value != 0)
+            {
+                progressBar.Value = 0;
+                progressBar.Step = 100 / queue.count();
+                progressBar.PerformStep();
+                lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
+            }
         }
 
         /// <summary>
@@ -62,10 +71,10 @@ namespace Handbrake
         private void redrawQueue()
         {
             list_queue.Items.Clear();
-            ArrayList theQueue = queue.getQueue();
-            foreach (ArrayList queue_item in theQueue)
+            List<Queue.QueueItem> theQueue = queue.getQueue();
+            foreach (Queue.QueueItem queue_item in theQueue)
             {
-                string q_item = queue_item[1].ToString();
+                string q_item = queue_item.Query;
                 Functions.QueryParser parsed = Functions.QueryParser.Parse(q_item);
 
                 // Get the DVD Title
@@ -89,8 +98,8 @@ namespace Handbrake
                 ListViewItem item = new ListViewItem();
                 item.Text = title; // Title
                 item.SubItems.Add(chapters); // Chapters
-                item.SubItems.Add(parsed.Source); // Source
-                item.SubItems.Add(parsed.Destination); // Destination
+                item.SubItems.Add(queue_item.Source); // Source
+                item.SubItems.Add(queue_item.Destination); // Destination
                 item.SubItems.Add(parsed.VideoEncoder); // Video
                 item.SubItems.Add(parsed.AudioEncoder1); // Audio
 
@@ -139,7 +148,7 @@ namespace Handbrake
                 while (queue.count() != 0)
                 {
                     string query = queue.getNextItemForEncoding();
-                    queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
+                    queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
 
                     setEncValue();
                     updateUIElements();
@@ -148,7 +157,7 @@ namespace Handbrake
 
                     hbProc.WaitForExit();
                     cliObj.addCLIQueryToLog(query);
-                    cliObj.copyLog(query);
+                    cliObj.copyLog(query, queue.getLastQuery().Destination);
 
                     hbProc.Close();
                     hbProc.Dispose();
@@ -255,9 +264,9 @@ namespace Handbrake
                 }
 
                 // found query is a global varible
-                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.getLastQuery());
-                lbl_source.Text = parsed.Source;
-                lbl_dest.Text = parsed.Destination;
+                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.getLastQuery().Query);
+                lbl_source.Text = queue.getLastQuery().Source;
+                lbl_dest.Text = queue.getLastQuery().Destination;
 
 
                 if (parsed.DVDTitle == 0)
@@ -295,7 +304,7 @@ namespace Handbrake
                 int selected = list_queue.SelectedIndices[0];
 
                 queue.moveUp(selected);
-                queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
+                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 redrawQueue();
 
                 if (selected - 1 > 0) 
@@ -313,7 +322,7 @@ namespace Handbrake
                 int selected = list_queue.SelectedIndices[0];
 
                 queue.moveDown(list_queue.SelectedIndices[0]);
-                queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
+                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 redrawQueue();
 
                 if (selected +1 < list_queue.Items.Count) 
@@ -329,7 +338,7 @@ namespace Handbrake
             if (list_queue.SelectedIndices.Count != 0)
             {
                 queue.remove(list_queue.SelectedIndices[0]);
-                queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
+                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 redrawQueue();
                 lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
@@ -373,7 +382,7 @@ namespace Handbrake
                 if (list_queue.SelectedIndices.Count != 0)
                 {
                     queue.remove(list_queue.SelectedIndices[0]);
-                    queue.write2disk("hb_queue_recovery.dat"); // Update the queue recovery file
+                    queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                     redrawQueue();
                 }
             }
@@ -392,7 +401,6 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
-
 
     }
 }

@@ -133,7 +133,7 @@ namespace Handbrake.Functions
         /// if this feature is enabled in options.
         /// </summary>
         /// <param name="query"></param>
-        public void copyLog(string query)
+        public void copyLog(string query, string destination)
         {
             // The user may wish to do something with the log.
             if (Properties.Settings.Default.saveLog == "Checked")
@@ -143,7 +143,7 @@ namespace Handbrake.Functions
 
                 if (Properties.Settings.Default.saveLogWithVideo == "Checked")
                 {
-                    string[] destName = parsed.Destination.Split('\\');
+                    string[] destName = destination.Split('\\');
                     string destinationFile = "";
                     for (int i = 0; i < destName.Length - 1; i++)
                     {
@@ -156,7 +156,7 @@ namespace Handbrake.Functions
                 }
                 else if (Properties.Settings.Default.saveLogPath != String.Empty)
                 {
-                    string[] destName = parsed.Destination.Split('\\');
+                    string[] destName = destination.Split('\\');
                     string dest = destName[destName.Length - 1];
                     string filename = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + dest + ".txt";
                     string useDefinedLogPath = Path.Combine(Properties.Settings.Default.saveLogPath, filename);

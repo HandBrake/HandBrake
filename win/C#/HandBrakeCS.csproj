@@ -90,12 +90,6 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="PresentationFramework">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -103,13 +97,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="frmActivityWindow.cs">
@@ -166,7 +154,7 @@
     <Compile Include="Functions\Main.cs" />
     <Compile Include="Presets\preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="Functions\Queue.cs" />
+    <Compile Include="Queue\QueueHandler.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
@@ -250,6 +238,7 @@
     <Compile Include="frmSplashScreen.Designer.cs">
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Queue\QueueItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />

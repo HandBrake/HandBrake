@@ -13,11 +13,16 @@ using System.IO;
 using System.Drawing;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Handbrake.Functions
 {
     class Main
     {
+        // Private Variables
+        private static XmlSerializer ser = new XmlSerializer(typeof(List<Queue.QueueItem>));
+
         /// <summary>
         /// Calculate the duration of the selected title and chapters
         /// </summary>
@@ -361,28 +366,21 @@ namespace Handbrake.Functions
         {
             try
             {
-                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
-                using (StreamReader reader = new StreamReader(tempPath))
+                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
+                if (File.Exists(tempPath))
                 {
-                    string queue_item = reader.ReadLine();
-                    if (queue_item == null)
+                    using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
                     {
-                        reader.Close();
-                        reader.Dispose();
-                        return false;
-                    }
-                    else // There exists an item in the recovery queue file, so try and recovr it.
-                    {
-                        reader.Close();
-                        reader.Dispose();
-                        return true;
+                        List<Queue.QueueItem> list = ser.Deserialize(strm) as List<Queue.QueueItem>;
+                        if (list.Count != 0)
+                            return true;
                     }
                 }
+                return false;
             }
             catch (Exception)
             {
-                // Keep quiet about the error.
-                return false;
+                return false; // Keep quiet about the error.
             }
         }
 

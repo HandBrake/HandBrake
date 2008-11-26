@@ -25,7 +25,7 @@ namespace Handbrake
         // Objects which may be used by one or more other objects
         Functions.Main hb_common_func = new Functions.Main();
         Functions.Encode cliObj = new Functions.Encode();
-        Functions.Queue encodeQueue = new Functions.Queue();
+        Queue.Queue encodeQueue = new Queue.Queue();
         Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
         Parsing.Title selectedTitle;
 
@@ -184,11 +184,11 @@ namespace Handbrake
                 DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
-                    encodeQueue.recoverQueue("hb_queue_recovery.dat"); // Start Recovery
+                    encodeQueue.recoverQueue("hb_queue_recovery.xml"); // Start Recovery
                 else
                 {
                     // Remove the Queue recovery file if the user doesn't want to recovery the last queue.
-                    string queuePath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
+                    string queuePath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
                     if (File.Exists(queuePath))
                         File.Delete(queuePath);
                 }
@@ -397,8 +397,8 @@ namespace Handbrake
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
-                encodeQueue.add(query);
-                encodeQueue.write2disk("hb_queue_recovery.dat"); // Writes the queue to the recovery file, just incase the GUI crashes.
+                encodeQueue.add(query, text_source.Text, text_destination.Text);
+                encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
 
                 queueWindow.setQueue(encodeQueue);
                 queueWindow.Show();
@@ -1919,7 +1919,7 @@ namespace Handbrake
 
                 // After the encode is done, we may want to shutdown, suspend etc.
                 cliObj.addCLIQueryToLog((string)state);
-                cliObj.copyLog((string)state); // Make a copy of the log in the users desired location if necessary
+                cliObj.copyLog((string)state, text_destination.Text); // Make a copy of the log in the users desired location if necessary
                 cliObj.afterEncodeAction();
             }
         }

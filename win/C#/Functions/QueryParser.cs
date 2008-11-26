@@ -19,20 +19,6 @@ namespace Handbrake.Functions
         #region Varibles
 
         #region Source
-
-        private string q_source;
-        /// <summary>
-        /// Returns a String 
-        /// Full path of the source.
-        /// </summary>
-        public string Source
-        {
-            get
-            {
-                return this.q_source;
-            }
-        }
-
         private int q_dvdTitle;
         /// <summary>
         /// Returns an Integer
@@ -74,20 +60,6 @@ namespace Handbrake.Functions
 #endregion
 
         #region Destination
-
-        private string q_destination;
-        /// <summary>
-        /// Returns a String 
-        /// Full path of the destination.
-        /// </summary>
-        public string Destination
-        {
-            get
-            {
-                return this.q_destination;
-            }
-        }
-
         private string q_format;
         /// <summary>
         /// Returns a String 
@@ -811,16 +783,16 @@ namespace Handbrake.Functions
             QueryParser thisQuery = new QueryParser();
 
             #region Regular Expressions
+            // Useful Destination Finder
+            //Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9?';!^%&*()_\-:\\\s\.]+)(?:\"")");
+            //Match source = r1.Match(input.Replace('"', '\"'));
+
             //Source
-            Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9_\-:\\\s\.]+)(?:\"")");
-            Match source = r1.Match(input.Replace('"', '\"'));
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
             Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
 
             //Destination
-            Regex r2 = new Regex(@"(-o)(?:\s\"")([a-zA-Z0-9_\-:\\\s\.]+)(?:\"")");
-            Match destination = r2.Match(input.Replace('"', '\"'));
             Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
 
             //Picture Settings Tab
@@ -896,12 +868,9 @@ namespace Handbrake.Functions
             #region Set Varibles
             try
             {
-      
                 #region Source Tab
-
-                thisQuery.q_source = source.ToString().Replace("-i ", "").Replace("\"", "");
                 if (title.Success != false)
-                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
+ 	                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
 
                 if (chapters.Success != false)
                 {
@@ -923,11 +892,8 @@ namespace Handbrake.Functions
                 #endregion
 
                 #region Destination
-                thisQuery.q_destination = destination.ToString().Replace("-o ", "").Replace("\"", "");
 
-                string videoEncoderConvertion;
-
-                videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
+                string videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
                 switch (videoEncoderConvertion)
                 {
                     case "ffmpeg":

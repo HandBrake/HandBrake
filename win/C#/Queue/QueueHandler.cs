@@ -4,16 +4,18 @@ using System.Text;
 using System.Collections;
 using System.IO;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
-namespace Handbrake.Functions
+namespace Handbrake.Queue
 {
     public class Queue
     {
-        ArrayList queue = new ArrayList();
-        ArrayList lastQuery;
+        private static XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
+        List<QueueItem> queue = new List<QueueItem>();
         int id = 0; // Unique identifer number for each job
+        private QueueItem lastItem;
 
-        public ArrayList getQueue()
+        public List<QueueItem> getQueue()
         {
              return queue;
         }
@@ -22,24 +24,35 @@ namespace Handbrake.Functions
         /// Get's the next CLI query for encoding
         /// </summary>
         /// <returns>String</returns>
-        public String getNextItemForEncoding()
+        public string getNextItemForEncoding()
         {
-            Object query = queue[0];
-            lastQuery = (ArrayList)query;
+            QueueItem job = queue[0];
+            String query = job.Query;
+            lastItem = job;
             remove(0);    // Remove the item which we are about to pass out.
-            return lastQuery[1].ToString();
+            return query;
+        }
+
+        /// <summary>
+        /// Get the last query that was returned by getNextItemForEncoding()
+        /// </summary>
+        /// <returns></returns>
+        public QueueItem getLastQuery()
+        {
+            return lastItem;
         }
 
         /// <summary>
         /// Add's a new item to the queue
         /// </summary>
         /// <param name="query">String</param>
-        public void add(string query)
+        public void add(string query, string source, string destination)
         {
-            // Creates a new job with a unique identifer and cli query
-            ArrayList newJob = new ArrayList();
-            newJob.Add(id);
-            newJob.Add(query);
+            QueueItem newJob = new QueueItem();
+            newJob.Id = id;
+            newJob.Query = query;
+            newJob.Source = source;
+            newJob.Destination = destination;
             id++;
 
             // Adds the job to the queue
@@ -67,15 +80,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Get's the last query to be selected for encoding by getNextItemForEncoding()
-        /// </summary>
-        /// <returns>String</returns>
-        public string getLastQuery()
-        {
-            return lastQuery[1].ToString();
-        }
-
-        /// <summary>
         /// Move an item with an index x, up in the queue
         /// </summary>
         /// <param name="index">Int</param>
@@ -83,7 +87,7 @@ namespace Handbrake.Functions
         {
             if (index != 0)
             {
-                ArrayList item = (ArrayList)queue[index];
+                QueueItem item = (QueueItem)queue[index];
 
                 queue.Insert((index - 1), item);
                 queue.RemoveAt((index + 1));
@@ -98,7 +102,7 @@ namespace Handbrake.Functions
         {
             if (index != queue.Count - 1)
             {
-                ArrayList item = (ArrayList)queue[index];
+                QueueItem item = (QueueItem)queue[index];
 
                 queue.Insert((index + 2), item);
                 queue.RemoveAt((index));
@@ -106,31 +110,30 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Writes the current queue to disk. hb_queue_recovery.dat
+        /// Writes the current queue to disk. hb_queue_recovery.xml
         /// This function is called after getNextItemForEncoding()
         /// </summary>
         public void write2disk(string file)
         {
+            string tempPath = "";
+            if (file == "hb_queue_recovery.xml")
+                tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
+            else
+                tempPath = file;
+
             try
             {
-                string tempPath = "";
-                if (file == "hb_queue_recovery.dat")
-                    tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
-                else
-                    tempPath = file;
-                using (StreamWriter writer = new StreamWriter(tempPath))
+                using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
                 {
-                    foreach (ArrayList item in queue)
-                    {
-                        writer.WriteLine(item[1].ToString());
-                    }
-                    writer.Close();
-                    writer.Dispose();
+                    ser.Serialize(strm, queue);
+                    strm.Close();
+                    strm.Dispose();
                 }
             }
             catch (Exception)
             {
-                // Any Errors will be out of diskspace/permissions problems. Don't report them as they'll annoy the user.
+                // Any Errors will be out of diskspace/permissions problems. 
+                // Don't report them as they'll annoy the user.
             }
         }
 
@@ -141,9 +144,9 @@ namespace Handbrake.Functions
         public void writeBatchScript(string file)
         {
             string queries = "";
-            foreach (ArrayList queue_item in queue)
+            foreach (QueueItem queue_item in queue)
             {
-                string q_item = queue_item[1].ToString();
+                string q_item = queue_item.Query;
                 string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + q_item;
 
                 if (queries == string.Empty)
@@ -174,33 +177,29 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Recover the queue from hb_queue_recovery.dat
+        /// Recover the queue from hb_queue_recovery.xml
         /// </summary>
         public void recoverQueue(string file)
         {
-            try
-            {
-                string tempPath = "";
-                if (file == "hb_queue_recovery.dat")
-                    tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.dat");
-                else
-                    tempPath = file;
-                using (StreamReader reader = new StreamReader(tempPath))
-                {
-                    string queue_item = reader.ReadLine();
+            string tempPath = "";
+            if (file == "hb_queue_recovery.xml")
+                tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
+            else
+                tempPath = file;
 
-                    while (queue_item != null)
+            if (File.Exists(tempPath))
+            {
+                using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
+                {
+                    if (strm.Length != 0)
                     {
-                        this.add(queue_item);
-                        queue_item = reader.ReadLine();
+                        List<QueueItem> list = ser.Deserialize(strm) as List<QueueItem>;
+
+                        foreach (QueueItem item in list)
+                            queue.Add(item);
                     }
                 }
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("HandBrake was unable to recover the queue. \nError Information:" + exc.ToString(), "Queue Recovery Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
-
     }
 }
