@@ -2041,14 +2041,15 @@ show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 void
-show_presets_toggled_cb(GtkToggleButton *button, signal_user_data_t *ud)
+show_presets_toggled_cb(GtkWidget *action, signal_user_data_t *ud)
 {
 	GtkWidget *widget;
 	GtkWindow *hb_window;
 	
 	g_debug("show_presets_clicked_cb ()");
 	widget = GHB_WIDGET (ud->builder, "presets_frame");
-	if (gtk_toggle_button_get_active(button))
+	ghb_widget_to_setting(ud->settings, action);
+	if (ghb_settings_get_boolean(ud->settings, "show_presets"))
 	{
 		gtk_widget_show_now(widget);
 	}
@@ -2058,7 +2059,6 @@ show_presets_toggled_cb(GtkToggleButton *button, signal_user_data_t *ud)
 		hb_window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
 		gtk_window_resize(hb_window, 16, 16);
 	}
-	ghb_widget_to_setting(ud->settings, GTK_WIDGET(button));
 	ghb_pref_save(ud->settings, "show_presets");
 }
 

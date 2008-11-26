@@ -264,6 +264,15 @@
           </object>
         </child>
         <child>
+          <object class="GtkToggleAction" id="show_presets">
+            <property name="visible">True</property>
+            <property name="active">False</property>
+            <property name="name">show_presets</property>
+            <property name="label" translatable="yes">Show Presets</property>
+            <signal handler="show_presets_toggled_cb" name="toggled"/>
+          </object>
+        </child>
+        <child>
           <object class="GtkAction" id="show_activity_menu">
             <property name="icon-name">hb-activity</property>
             <property name="name">show_activity_menu</property>
@@ -326,6 +335,7 @@
         </menu>
         <menu action="menuitem3">
           <menuitem action="hbfd"/>
+          <menuitem action="show_presets"/>
           <menuitem action="show_activity_menu"/>
           <menuitem action="show_preview_menu"/>
           <menuitem action="show_queue_menu"/>
@@ -346,6 +356,111 @@
     <signal handler="window_destroy_event_cb" name="destroy_event"/>
     <signal handler="window_delete_event_cb" name="delete_event"/>
     <child>
+      <object class="GtkVBox" id="vbox_j1">
+        <property name="visible">True</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <child>
+          <object class="GtkMenuBar" constructor="uimanager1" id="menubar1">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="toolbar1">
+            <property name="visible">True</property>
+            <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+            <property name="icon_size">GTK_ICON_SIZE_DND</property>
+            <child>
+              <object class="GtkToolButton" id="toolbutton1">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Choose Video Source</property>
+                <property name="label" translatable="yes">Source</property>
+                <property name="icon_name">hb-source</property>
+                <signal handler="source_button_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="queue_start1">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Start Encoding</property>
+                <property name="label" translatable="yes">Start</property>
+                <property name="icon_name">hb-play</property>
+                <signal handler="queue_start_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="queue_pause1">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Pause Encoding</property>
+                <property name="label" translatable="yes">Pause</property>
+                <property name="icon_name">hb-pause</property>
+                <signal handler="queue_pause_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="queue_add">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Add to Queue</property>
+                <property name="label" translatable="yes">Add to Queue</property>
+                <property name="icon_name">hb-add-queue</property>
+                <signal handler="queue_add_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="show_queue">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Show Queue</property>
+                <property name="label" translatable="yes">Show Queue</property>
+                <property name="icon_name">hb-queue</property>
+                <signal handler="show_queue_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="show_activity">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Show Activity Window</property>
+                <property name="label" translatable="yes">Activity Window</property>
+                <property name="icon_name">hb-activity</property>
+                <signal handler="show_activity_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+
+    <child>
       <object class="GtkHBox" id="hbox1">
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -355,154 +470,6 @@
             <child>
               <object class="GtkVBox" id="vbox2">
                 <property name="visible">True</property>
-                <child>
-                  <object class="GtkMenuBar" constructor="uimanager1" id="menubar1">
-                    <property name="visible">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHBox" id="hbox3">
-                    <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <child>
-                      <object class="GtkToolbar" id="toolbar1">
-                        <property name="visible">True</property>
-                        <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
-                        <property name="icon_size">GTK_ICON_SIZE_DND</property>
-                        <child>
-                          <object class="GtkToolButton" id="toolbutton1">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Choose Video Source</property>
-                            <property name="label" translatable="yes">Source</property>
-                            <property name="icon_name">hb-source</property>
-                            <signal handler="source_button_clicked_cb" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="queue_start1">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Start Encoding</property>
-                            <property name="label" translatable="yes">Start</property>
-                            <property name="icon_name">hb-play</property>
-                            <signal handler="queue_start_clicked_cb" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="queue_pause1">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Pause Encoding</property>
-                            <property name="label" translatable="yes">Pause</property>
-                            <property name="icon_name">hb-pause</property>
-                            <signal handler="queue_pause_clicked_cb" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="queue_add">
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Add to Queue</property>
-                            <property name="label" translatable="yes">Add to Queue</property>
-                            <property name="icon_name">hb-add-queue</property>
-                            <signal handler="queue_add_clicked_cb" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="show_queue">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Show Queue</property>
-                            <property name="label" translatable="yes">Show Queue</property>
-                            <property name="icon_name">hb-queue</property>
-                            <signal handler="show_queue_clicked_cb" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="show_activity">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Show Activity Window</property>
-                            <property name="label" translatable="yes">Activity Window</property>
-                            <property name="icon_name">hb-activity</property>
-                            <signal handler="show_activity_clicked_cb" name="clicked"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                          </packing>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox48">
-                        <property name="visible">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="show_presets">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="tooltip-text" translatable="yes">Show/Hide the presets list</property>
-                            <property name="relief">GTK_RELIEF_NONE</property>
-                            <property name="active">True</property>
-                            <property name="draw_indicator">True</property>
-                            <signal handler="show_presets_toggled_cb" name="toggled"/>
-                            <child>
-                              <object class="GtkImage" id="drawerimage">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="icon_size">5</property>
-                                <property name="icon_name">hb-drawer</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">2</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkFrame" id="frame1">
                     <property name="visible">True</property>
@@ -687,7 +654,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">2</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -696,7 +663,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">3</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
@@ -859,16 +826,7 @@
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkHSeparator" id="hseparator2">
-                    <property name="visible">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">5</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
@@ -2994,11 +2952,11 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
         </child>
         <child>
           <object class="GtkFrame" id="presets_frame">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="border_width">3</property>
             <property name="label_xalign">0</property>
-            <property name="shadow_type">GTK_SHADOW_ETCHED_OUT</property>
+            <property name="shadow_type">out</property>
             <signal handler="presets_frame_size_allocate_cb" name="size_allocate"/>
             <child>
               <object class="GtkAlignment" id="alignment21">
@@ -3152,7 +3110,14 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="position">2</property>
+      </packing>
     </child>
+
+      </object>
+    </child>
+
   </object>
   <object class="GtkDialog" id="prefs_dialog">
     <property name="border_width">5</property>
