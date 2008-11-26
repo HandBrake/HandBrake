@@ -66,13 +66,20 @@ namespace Handbrake
             this.EncoderVideo = new System.Windows.Forms.ColumnHeader();
             this.Audio = new System.Windows.Forms.ColumnHeader();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.lbl_progressValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
-            this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_down
@@ -81,7 +88,7 @@ namespace Handbrake
             this.btn_down.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_down.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_down.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_down.Location = new System.Drawing.Point(613, 110);
+            this.btn_down.Location = new System.Drawing.Point(607, 66);
             this.btn_down.Name = "btn_down";
             this.btn_down.Size = new System.Drawing.Size(75, 22);
             this.btn_down.TabIndex = 33;
@@ -97,7 +104,7 @@ namespace Handbrake
             this.btn_up.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_up.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_up.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_up.Location = new System.Drawing.Point(543, 110);
+            this.btn_up.Location = new System.Drawing.Point(537, 66);
             this.btn_up.Name = "btn_up";
             this.btn_up.Size = new System.Drawing.Size(64, 22);
             this.btn_up.TabIndex = 32;
@@ -113,7 +120,7 @@ namespace Handbrake
             this.btn_delete.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_delete.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_delete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_delete.Location = new System.Drawing.Point(695, 110);
+            this.btn_delete.Location = new System.Drawing.Point(689, 66);
             this.btn_delete.Name = "btn_delete";
             this.btn_delete.Size = new System.Drawing.Size(75, 22);
             this.btn_delete.TabIndex = 31;
@@ -127,7 +134,7 @@ namespace Handbrake
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(225, 98);
+            this.label4.Location = new System.Drawing.Point(225, 57);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(47, 26);
             this.label4.TabIndex = 70;
@@ -136,7 +143,7 @@ namespace Handbrake
             // lbl_chapt
             // 
             this.lbl_chapt.AutoSize = true;
-            this.lbl_chapt.Location = new System.Drawing.Point(158, 110);
+            this.lbl_chapt.Location = new System.Drawing.Point(158, 69);
             this.lbl_chapt.Name = "lbl_chapt";
             this.lbl_chapt.Size = new System.Drawing.Size(12, 13);
             this.lbl_chapt.TabIndex = 69;
@@ -146,7 +153,7 @@ namespace Handbrake
             // 
             this.lbl_title.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.lbl_title.AutoSize = true;
-            this.lbl_title.Location = new System.Drawing.Point(158, 97);
+            this.lbl_title.Location = new System.Drawing.Point(158, 56);
             this.lbl_title.Name = "lbl_title";
             this.lbl_title.Size = new System.Drawing.Size(12, 13);
             this.lbl_title.TabIndex = 68;
@@ -155,7 +162,7 @@ namespace Handbrake
             // lbl_aEnc
             // 
             this.lbl_aEnc.AutoSize = true;
-            this.lbl_aEnc.Location = new System.Drawing.Point(286, 111);
+            this.lbl_aEnc.Location = new System.Drawing.Point(286, 70);
             this.lbl_aEnc.Name = "lbl_aEnc";
             this.lbl_aEnc.Size = new System.Drawing.Size(12, 13);
             this.lbl_aEnc.TabIndex = 67;
@@ -164,7 +171,7 @@ namespace Handbrake
             // lbl_vEnc
             // 
             this.lbl_vEnc.AutoSize = true;
-            this.lbl_vEnc.Location = new System.Drawing.Point(286, 98);
+            this.lbl_vEnc.Location = new System.Drawing.Point(286, 57);
             this.lbl_vEnc.Name = "lbl_vEnc";
             this.lbl_vEnc.Size = new System.Drawing.Size(12, 13);
             this.lbl_vEnc.TabIndex = 66;
@@ -173,7 +180,7 @@ namespace Handbrake
             // lbl_dest
             // 
             this.lbl_dest.AutoSize = true;
-            this.lbl_dest.Location = new System.Drawing.Point(158, 85);
+            this.lbl_dest.Location = new System.Drawing.Point(158, 44);
             this.lbl_dest.Name = "lbl_dest";
             this.lbl_dest.Size = new System.Drawing.Size(12, 13);
             this.lbl_dest.TabIndex = 65;
@@ -183,7 +190,7 @@ namespace Handbrake
             // lbl_source
             // 
             this.lbl_source.AutoSize = true;
-            this.lbl_source.Location = new System.Drawing.Point(158, 72);
+            this.lbl_source.Location = new System.Drawing.Point(158, 31);
             this.lbl_source.Name = "lbl_source";
             this.lbl_source.Size = new System.Drawing.Size(12, 13);
             this.lbl_source.TabIndex = 64;
@@ -193,7 +200,7 @@ namespace Handbrake
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 72);
+            this.label1.Location = new System.Drawing.Point(12, 31);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(99, 52);
             this.label1.TabIndex = 63;
@@ -203,7 +210,7 @@ namespace Handbrake
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(12, 50);
+            this.label3.Location = new System.Drawing.Point(12, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(82, 13);
             this.label3.TabIndex = 62;
@@ -301,14 +308,15 @@ namespace Handbrake
             this.Destination,
             this.EncoderVideo,
             this.Audio});
+            this.list_queue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.list_queue.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.list_queue.FullRowSelect = true;
             this.list_queue.GridLines = true;
             this.list_queue.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.list_queue.Location = new System.Drawing.Point(15, 138);
+            this.list_queue.Location = new System.Drawing.Point(15, 0);
             this.list_queue.MultiSelect = false;
             this.list_queue.Name = "list_queue";
-            this.list_queue.Size = new System.Drawing.Size(755, 202);
+            this.list_queue.Size = new System.Drawing.Size(749, 210);
             this.list_queue.TabIndex = 72;
             this.list_queue.UseCompatibleStateImageBehavior = false;
             this.list_queue.View = System.Windows.Forms.View.Details;
@@ -332,7 +340,7 @@ namespace Handbrake
             // Destination
             // 
             this.Destination.Text = "Destination";
-            this.Destination.Width = 215;
+            this.Destination.Width = 210;
             // 
             // EncoderVideo
             // 
@@ -357,6 +365,14 @@ namespace Handbrake
             this.statusStrip1.TabIndex = 73;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // lbl_encodesPending
+            // 
+            this.lbl_encodesPending.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lbl_encodesPending.Margin = new System.Windows.Forms.Padding(0, 3, 10, 2);
+            this.lbl_encodesPending.Name = "lbl_encodesPending";
+            this.lbl_encodesPending.Size = new System.Drawing.Size(122, 26);
+            this.lbl_encodesPending.Text = "0 encode(s) pending";
+            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -380,37 +396,75 @@ namespace Handbrake
             // 
             this.OpenFile.Filter = "HandBrake Queue|*.queue";
             // 
-            // lbl_encodesPending
+            // splitContainer1
             // 
-            this.lbl_encodesPending.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.lbl_encodesPending.Margin = new System.Windows.Forms.Padding(0, 3, 10, 2);
-            this.lbl_encodesPending.Name = "lbl_encodesPending";
-            this.lbl_encodesPending.Size = new System.Drawing.Size(122, 26);
-            this.lbl_encodesPending.Text = "0 encode(s) pending";
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.IsSplitterFixed = true;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 39);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.label3);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Panel1.Controls.Add(this.btn_down);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_title);
+            this.splitContainer1.Panel1.Controls.Add(this.btn_up);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_aEnc);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_source);
+            this.splitContainer1.Panel1.Controls.Add(this.label4);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_chapt);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_dest);
+            this.splitContainer1.Panel1.Controls.Add(this.lbl_vEnc);
+            this.splitContainer1.Panel1.Controls.Add(this.btn_delete);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.list_queue);
+            this.splitContainer1.Panel2.Controls.Add(this.panel3);
+            this.splitContainer1.Panel2.Controls.Add(this.panel2);
+            this.splitContainer1.Panel2.Controls.Add(this.panel1);
+            this.splitContainer1.Size = new System.Drawing.Size(779, 320);
+            this.splitContainer1.SplitterDistance = 94;
+            this.splitContainer1.SplitterWidth = 1;
+            this.splitContainer1.TabIndex = 74;
+            // 
+            // panel3
+            // 
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(15, 210);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(749, 15);
+            this.panel3.TabIndex = 77;
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(764, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(15, 225);
+            this.panel2.TabIndex = 76;
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(15, 225);
+            this.panel1.TabIndex = 75;
             // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(779, 390);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.list_queue);
-            this.Controls.Add(this.btn_down);
-            this.Controls.Add(this.btn_up);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.lbl_dest);
-            this.Controls.Add(this.btn_delete);
-            this.Controls.Add(this.lbl_vEnc);
-            this.Controls.Add(this.lbl_chapt);
-            this.Controls.Add(this.lbl_source);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.lbl_aEnc);
-            this.Controls.Add(this.lbl_title);
-            this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(787, 417);
             this.Name = "frmQueue";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -419,6 +473,10 @@ namespace Handbrake
             this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -461,5 +519,9 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_export;
         private System.Windows.Forms.OpenFileDialog OpenFile;
         private System.Windows.Forms.ToolStripStatusLabel lbl_encodesPending;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel3;
     }
 }
