@@ -30,10 +30,6 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
-            // Development Code Expiry.
-            // Remember to comment out on public release!!!
-            //if (DateTime.Now > DateTime.Parse("2008/02/25", new CultureInfo("en-US"))) { MessageBox.Show("Sorry, This development build of Handbrake has expired."); return; } 
-
             // Check the system meets the system requirements.
             Boolean launch = true;
             try
@@ -43,16 +39,6 @@ namespace Handbrake
                 if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 720))
                 {
                     MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n" + "Your screen is running at: " + scr.Bounds.Width.ToString() + "x" + scr.Bounds.Height.ToString() + " \nScreen resolution is too Low. Must be 1024x720 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    launch = false;
-                }
-
-                // Make sure the system has enough RAM. 384MB or greater
-                Functions.SystemInfo info = new Functions.SystemInfo();
-                uint memory = info.TotalPhysicalMemory();
-                
-                if (memory < 256)
-                {
-                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n Insufficient RAM. 384MB or greater required. You have: " + memory.ToString() + "MB", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     launch = false;
                 }
             }
@@ -69,9 +55,7 @@ namespace Handbrake
                 Application.Run(new frmMain());
             }
             else
-            {
                 Application.Exit();
-            }
         }
     }
 

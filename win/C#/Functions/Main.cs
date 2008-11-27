@@ -323,9 +323,10 @@ namespace Handbrake.Functions
         public ArrayList getCliVersionData()
         {
             ArrayList cliVersionData = new ArrayList();
+            String line;
+
             // 0 = SVN Build / Version
             // 1 = Build Date
-
             Process cliProcess = new Process();
             ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u");
             handBrakeCLI.UseShellExecute = false;
@@ -333,28 +334,37 @@ namespace Handbrake.Functions
             handBrakeCLI.RedirectStandardOutput = true;
             handBrakeCLI.CreateNoWindow = true;
             cliProcess.StartInfo = handBrakeCLI;
-            cliProcess.Start();
 
-            // Retrieve standard output and report back to parent thread until the process is complete
-            String line;
-            TextReader stdOutput = cliProcess.StandardError;
-
-            while (!cliProcess.HasExited)
+            try
             {
-                line = stdOutput.ReadLine();
-                if (line == null) line = "";
-                Match m = Regex.Match(line, @"HandBrake ([0-9\.]*)*(svn[0-9]*[M]*)* \([0-9]*\)");
+                cliProcess.Start();
+                // Retrieve standard output and report back to parent thread until the process is complete
+                TextReader stdOutput = cliProcess.StandardError;
 
-                if (m.Success != false)
+                while (!cliProcess.HasExited)
                 {
-                    string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
-                    string[] arr = data.Split(' ');
-                    cliVersionData.Add(arr[0]);
-                    cliVersionData.Add(arr[1]);
-                    return cliVersionData;
+                    line = stdOutput.ReadLine();
+                    if (line == null) line = "";
+                    Match m = Regex.Match(line, @"HandBrake ([0-9\.]*)*(svn[0-9]*[M]*)* \([0-9]*\)");
+
+                    if (m.Success != false)
+                    {
+                        string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
+                        string[] arr = data.Split(' ');
+                        cliVersionData.Add(arr[0]);
+                        cliVersionData.Add(arr[1]);
+                        return cliVersionData;
+                    }
                 }
             }
-            return null;
+            catch (Exception e)
+            {
+                MessageBox.Show("Unable to retrieve version information from the CLI. \nError:\n" + e);
+            }
+     
+            cliVersionData.Add(0);
+            cliVersionData.Add("0");
+            return cliVersionData;
         }
 
         /// <summary>

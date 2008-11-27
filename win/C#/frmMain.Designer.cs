@@ -381,6 +381,7 @@ namespace Handbrake
             this.text_source.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.text_source.Location = new System.Drawing.Point(99, 19);
             this.text_source.Name = "text_source";
+            this.text_source.ReadOnly = true;
             this.text_source.Size = new System.Drawing.Size(584, 21);
             this.text_source.TabIndex = 1;
             this.text_source.Text = "Click \'Source\' to continue";

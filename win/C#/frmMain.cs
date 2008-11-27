@@ -21,23 +21,22 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
-        // Declarations *******************************************************
         // Objects which may be used by one or more other objects
         Functions.Main hb_common_func = new Functions.Main();
         Functions.Encode cliObj = new Functions.Encode();
         Queue.Queue encodeQueue = new Queue.Queue();
         Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
         Parsing.Title selectedTitle;
+        Parsing.DVD thisDVD;
 
         // Objects belonging to this window only
         PresetLoader presetLoader = new PresetLoader();
         x264Panel x264PanelFunctions = new x264Panel();
         QueryGenerator queryGen = new QueryGenerator();
 
+        // Globals: Mainly used for tracking.
         internal Process hbProc;
-        private Parsing.DVD thisDVD;
         private frmQueue queueWindow;
-        private delegate void updateStatusChanger();
         private string lastAction = null;
         public int maxWidth = 0;
         public int maxHeight = 0;
@@ -52,33 +51,19 @@ namespace Handbrake
             Form splash = new frmSplashScreen();
             splash.Show();
 
-            // Initialize the queue window.
-            queueWindow = new frmQueue(this);
             //Create a label that can be updated from the parent thread.
             Label lblStatus = new Label();
             lblStatus.Size = new Size(250, 20);
             lblStatus.Location = new Point(10, 280);
             splash.Controls.Add(lblStatus);
-
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
             lblStatus.Text = "Setting Version Data ...";
             Application.DoEvents();
             ArrayList x = hb_common_func.getCliVersionData();
-            if (x != null)
-            {
-                try
-                {
-                    Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
-                    Properties.Settings.Default.hb_version = x[0].ToString();
-                }
-                catch (Exception)
-                {
-                    Properties.Settings.Default.hb_build = 0;
-                    Properties.Settings.Default.hb_version = "0";
-                }
-            }
+            Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
+            Properties.Settings.Default.hb_version = x[0].ToString();
 
             // show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
@@ -97,32 +82,33 @@ namespace Handbrake
             // Setup the GUI components
             lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
-            setupH264Panel();               // Initalize the H.264 Panel
-            loadPresetPanel();              // Load the Preset Panel
+            x264PanelFunctions.reset2Defaults(this); // Initialize all the x264 widgets to their default values
+            loadPresetPanel();                       // Load the Preset Panel
+            treeView_presets.ExpandAll();
+            lbl_encode.Text = "";
+            queueWindow = new frmQueue(this);        // Prepare the Queue
+
             // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultSettings == "Checked")
-                loadUserDefaults();
+            if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
+            {
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(Properties.Settings.Default.defaultUserSettings);
+                presetLoader.presetLoader(this, presetQuery, "User Defaults ");
+            }
             else
                 loadNormalPreset();
-            // Expand the preset Nodes
-            treeView_presets.ExpandAll();
+
             // Enabled GUI tooltip's if Required
             if (Properties.Settings.Default.tooltipEnable == "Checked")
                 ToolTip.Active = true;
-            lbl_encode.Text = "";
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
             Application.DoEvents();
-
-            //Close the splash screen
             splash.Close();
             splash.Dispose();
-
-            // Turn the interface back to the user
             this.Enabled = true;
 
-            // Some event Handlers. Used for minimize to taskbar
+            // Event Handlers
             this.Resize += new EventHandler(frmMain_Resize);
 
             // Queue Recovery
@@ -130,6 +116,7 @@ namespace Handbrake
         }
 
         // Startup Functions
+        private delegate void updateStatusChanger();
         private void startupUpdateCheck()
         {
             try
@@ -149,34 +136,6 @@ namespace Handbrake
             }
             catch (Exception) { /* Do Nothing*/ }
         }
-        private void setupH264Panel()
-        {
-            // Set the default settings of the x264 panel
-            drop_bFrames.Text = "Default (0)";
-            drop_refFrames.Text = "Default (1)";
-            drop_subpixelMotionEstimation.Text = "Default (4)";
-            drop_trellis.Text = "Default (0)";
-            drop_MotionEstimationMethod.Text = "Default (Hexagon)";
-            drop_MotionEstimationRange.Text = "Default (16)";
-            drop_directPrediction.Text = "Default (Spatial)";
-            drop_deblockAlpha.Text = "Default (0)";
-            drop_deblockBeta.Text = "Default (0)";
-            drop_analysis.Text = "Default (some)";
-            rtf_x264Query.Text = "";
-        }
-        private void loadUserDefaults()
-        {
-            // Try to load the users default settings.
-            string userDefaults = Properties.Settings.Default.defaultUserSettings;
-
-            if (userDefaults == "")
-                loadNormalPreset();
-            else
-            {
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(userDefaults);
-                presetLoader.presetLoader(this, presetQuery, "User Defaults ");
-            }
-        }
         private void queueRecovery()
         {
             if (hb_common_func.check_queue_recovery() == true)
@@ -194,10 +153,9 @@ namespace Handbrake
                 }
             }
         }
-
         #endregion
 
-        // The Applications Main Menu and Menus *******************************
+        // User Interface Menus / Tool Strips *********************************
 
         #region File Menu
         private void mnu_exit_Click(object sender, EventArgs e)
@@ -236,7 +194,7 @@ namespace Handbrake
             presetHandler.updateBuiltInPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
-                MessageBox.Show("Unable to load the presets.dat file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -245,7 +203,7 @@ namespace Handbrake
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
             // Empty the preset file
-            string presetsFile = Application.StartupPath.ToString() + "\\presets.dat";
+            string presetsFile = Application.StartupPath.ToString() + "\\presets.xml";
             if (File.Exists(presetsFile))
                 File.Delete(presetsFile);
 
@@ -312,7 +270,8 @@ namespace Handbrake
         }
         #endregion
 
-        #region Preset Menu
+        #region Preset Bar
+        // Right Click Menu Code
         private void pmnu_expandAll_Click(object sender, EventArgs e)
         {
             treeView_presets.ExpandAll();
@@ -344,12 +303,146 @@ namespace Handbrake
             }
             treeView_presets.Select();
         }
+
+        // Presets Management
+        private void btn_addPreset_Click(object sender, EventArgs e)
+        {
+            // Remember each nodes expanded status so we can reload it
+            List<Boolean> nodeStatus = saveTreeViewState();
+            nodeStatus.Add(true);
+
+            // Now add the new preset
+            Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
+            preset.ShowDialog();
+
+            // Now reload the TreeView states
+            loadTreeViewStates(nodeStatus);
+        }
+        private void btn_removePreset_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                if (treeView_presets.SelectedNode != null)
+                    presetHandler.remove(treeView_presets.SelectedNode.Text);
+
+                // Remember each nodes expanded status so we can reload it
+                List<Boolean> nodeStatus = saveTreeViewState();
+
+                // Now reload the preset panel
+                loadPresetPanel();
+
+                // Now reload the TreeView states
+                loadTreeViewStates(nodeStatus);
+            }
+            treeView_presets.Select();
+        }
+        private void btn_setDefault_Click(object sender, EventArgs e)
+        {
+            String query = queryGen.GenerateTheQuery(this);
+            Properties.Settings.Default.defaultUserSettings = query;
+            // Save the new default Settings
+            Properties.Settings.Default.Save();
+            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
+        private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // Ok, so, we've selected a preset. Now we want to load it.
+            string presetName = treeView_presets.SelectedNode.Text;
+            string query = presetHandler.getCliForPreset(presetName);
+
+            if (query != null)
+            {
+                //Ok, Reset all the H264 widgets before changing the preset
+                x264PanelFunctions.reset2Defaults(this);
+
+                // Send the query from the file to the Query Parser class
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+
+                // Now load the preset
+                presetLoader.presetLoader(this, presetQuery, presetName);
+
+                // The x264 widgets will need updated, so do this now:
+                x264PanelFunctions.X264_StandardizeOptString(this);
+                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+            }
+        }
+        private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    if (treeView_presets.SelectedNode != null)
+                        presetHandler.remove(treeView_presets.SelectedNode.Text);
+
+                    // Remember each nodes expanded status so we can reload it
+                    List<Boolean> nodeStatus = new List<Boolean>();
+                    foreach (TreeNode node in treeView_presets.Nodes)
+                        nodeStatus.Add(node.IsExpanded);
+
+                    // Now reload the preset panel
+                    loadPresetPanel();
+
+                    // And finally, re-expand any of the nodes if required
+                    int i = 0;
+                    foreach (TreeNode node in treeView_presets.Nodes)
+                    {
+                        if (nodeStatus[i] == true)
+                            node.Expand();
+
+                        i++;
+                    }
+                }
+            }
+        }
+        private List<Boolean> saveTreeViewState()
+        {
+            // Remember each nodes expanded status so we can reload it
+            List<Boolean> nodeStatus = new List<Boolean>();
+            foreach (TreeNode node in treeView_presets.Nodes)
+            {
+                nodeStatus.Add(node.IsExpanded);
+                foreach (TreeNode subNode in node.Nodes)
+                    nodeStatus.Add(node.IsExpanded);
+            }
+            return nodeStatus;
+        }
+        private void loadTreeViewStates(List<Boolean> nodeStatus)
+        {
+            // And finally, re-expand any of the nodes if required
+            int i = 0;
+            foreach (TreeNode node in treeView_presets.Nodes)
+            {
+                if (nodeStatus[i] == true)
+                    node.Expand();
+
+                foreach (TreeNode subNode in node.Nodes)
+                {
+                    if (nodeStatus[i] == true)
+                        subNode.Expand();
+                }
+
+                i++;
+            }
+        }
+        private void loadNormalPreset()
+        {
+            treeView_presets.Nodes.Find("Normal", true);
+
+            foreach (TreeNode treenode in treeView_presets.Nodes)
+            {
+                foreach (TreeNode node in treenode.Nodes)
+                {
+                    if (node.Text.ToString().Equals("Normal"))
+                        treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
+                }
+            }
+        }
         #endregion
 
-        // MainWindow Components, Actions and Functions ***********************
-        #region Actions
-
-        // ToolBar
+        #region ToolStrip
         private void btn_source_Click(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.drive_detection == "Checked")
@@ -420,6 +513,45 @@ namespace Handbrake
             frmActivityWindow ActivityWindow = new frmActivityWindow(file, this, queueWindow);
             ActivityWindow.Show();
         }
+        #endregion
+
+        #region System Tray Icon
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                notifyIcon.Visible = true;
+                if (lbl_encode.Text != "")
+                    notifyIcon.BalloonTipText = lbl_encode.Text;
+                else
+                    notifyIcon.BalloonTipText = "Not Encoding";
+                notifyIcon.ShowBalloonTip(500);
+                this.Hide();
+            }
+            else if (FormWindowState.Normal == this.WindowState)
+                notifyIcon.Visible = false;
+        }
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Visible = true;
+            this.Activate();
+            this.WindowState = FormWindowState.Normal;
+            notifyIcon.Visible = false;
+        }
+        private void btn_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+        private void btn_restore_Click(object sender, EventArgs e)
+        {
+            this.Visible = true;
+            this.Activate();
+            this.WindowState = FormWindowState.Normal;
+            notifyIcon.Visible = false;
+        }
+        #endregion
+
+        #region Tab Control
 
         //Source
         private void btn_dvd_source_Click(object sender, EventArgs e)
@@ -722,7 +854,14 @@ namespace Handbrake
                 setExtension(".avi");
             else if (drop_format.SelectedIndex == 4)
                 setExtension(".ogm");
-
+        }
+        private void setExtension(string newExtension)
+        {
+            text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".avi", newExtension);
+            text_destination.Text = text_destination.Text.Replace(".ogm", newExtension);
         }
 
         //Video Tab
@@ -1434,168 +1573,57 @@ namespace Handbrake
         {
             rtf_query.Clear();
         }
+        #endregion
 
-        // Presets
-        private void btn_addPreset_Click(object sender, EventArgs e)
+        // MainWindow Components, Actions and Functions ***********************
+
+        #region Encoding
+
+        // Declarations
+        private delegate void UpdateUIHandler();
+
+        // Encoding Functions
+        private void procMonitor(object state)
         {
-            // Remember each nodes expanded status so we can reload it
-            List<Boolean> nodeStatus = saveTreeViewState();
-            nodeStatus.Add(true);
-
-            // Now add the new preset
-            Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
-            preset.ShowDialog();
-
-            // Now reload the TreeView states
-            loadTreeViewStates(nodeStatus);
-        }
-        private void btn_removePreset_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
+            // Make sure we are not already encoding and if we are then display an error.
+            if (hbProc != null)
+                hbProc.CloseMainWindow();
+            else
             {
-                if (treeView_presets.SelectedNode != null)
-                    presetHandler.remove(treeView_presets.SelectedNode.Text);
+                hbProc = cliObj.runCli(this, (string)state);
+                hbProc.WaitForExit();
+                setEncodeLabelFinished();
+                hbProc = null;
 
-                // Remember each nodes expanded status so we can reload it
-                List<Boolean> nodeStatus = saveTreeViewState();
-
-                // Now reload the preset panel
-                loadPresetPanel();
-
-                // Now reload the TreeView states
-                loadTreeViewStates(nodeStatus);
-            }
-            treeView_presets.Select();
-        }
-        private void btn_setDefault_Click(object sender, EventArgs e)
-        {
-            String query = queryGen.GenerateTheQuery(this);
-            Properties.Settings.Default.defaultUserSettings = query;
-            // Save the new default Settings
-            Properties.Settings.Default.Save();
-            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-        }
-        private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            // Ok, so, we've selected a preset. Now we want to load it.
-            string presetName = treeView_presets.SelectedNode.Text;
-            string query = presetHandler.getCliForPreset(presetName);
-
-            if (query != null)
-            {
-                //Ok, Reset all the H264 widgets before changing the preset
-                x264PanelFunctions.reset2Defaults(this);
-
-                // Send the query from the file to the Query Parser class
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
-
-                // Now load the preset
-                presetLoader.presetLoader(this, presetQuery, presetName);
-
-                // The x264 widgets will need updated, so do this now:
-                x264PanelFunctions.X264_StandardizeOptString(this);
-                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
-            }
-        }
-        private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete)
-            {
-                DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
+                // If the window is minimized, display the notification in a popup.
+                if (FormWindowState.Minimized == this.WindowState)
                 {
-                    if (treeView_presets.SelectedNode != null)
-                        presetHandler.remove(treeView_presets.SelectedNode.Text);
-
-                    // Remember each nodes expanded status so we can reload it
-                    List<Boolean> nodeStatus = new List<Boolean>();
-                    foreach (TreeNode node in treeView_presets.Nodes)
-                        nodeStatus.Add(node.IsExpanded);
-
-                    // Now reload the preset panel
-                    loadPresetPanel();
-
-                    // And finally, re-expand any of the nodes if required
-                    int i = 0;
-                    foreach (TreeNode node in treeView_presets.Nodes)
-                    {
-                        if (nodeStatus[i] == true)
-                            node.Expand();
-
-                        i++;
-                    }
+                    notifyIcon.BalloonTipText = lbl_encode.Text;
+                    notifyIcon.ShowBalloonTip(500);
                 }
+
+                // After the encode is done, we may want to shutdown, suspend etc.
+                cliObj.addCLIQueryToLog((string)state);
+                cliObj.copyLog((string)state, text_destination.Text); // Make a copy of the log in the users desired location if necessary
+                cliObj.afterEncodeAction();
             }
+        }
+        private void setEncodeLabelFinished()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateUIHandler(setEncodeLabelFinished));
+                return;
+            }
+            lbl_encode.Text = "Encoding Finished";
+            btn_start.Text = "Start";
+            btn_start.ToolTipText = "Start the encoding process";
+            btn_start.Image = Properties.Resources.Play;
         }
 
         #endregion
 
-        #region Preset Expand / Collaspe
-        private List<Boolean> saveTreeViewState()
-        {
-            // Remember each nodes expanded status so we can reload it
-            List<Boolean> nodeStatus = new List<Boolean>();
-            foreach (TreeNode node in treeView_presets.Nodes)
-            {
-                nodeStatus.Add(node.IsExpanded);
-                foreach (TreeNode subNode in node.Nodes)
-                    nodeStatus.Add(node.IsExpanded);
-            }
-            return nodeStatus;
-        }
-
-        private void loadTreeViewStates(List<Boolean> nodeStatus)
-        {
-            // And finally, re-expand any of the nodes if required
-            int i = 0;
-            foreach (TreeNode node in treeView_presets.Nodes)
-            {
-                if (nodeStatus[i] == true)
-                    node.Expand();
-
-                foreach (TreeNode subNode in node.Nodes)
-                {
-                    if (nodeStatus[i] == true)
-                        subNode.Expand();
-                }
-
-                i++;
-            }
-        }
-        #endregion
-
-        #region Functions
-        private void loadNormalPreset()
-        {
-            treeView_presets.Nodes.Find("Normal", true);
-
-            foreach (TreeNode treenode in treeView_presets.Nodes)
-            {
-                foreach (TreeNode node in treenode.Nodes)
-                {
-                    if (node.Text.ToString().Equals("Normal"))
-                        treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
-                }
-            }
-        }
-        /// <summary>
-        /// Take in a File destination and change it's file extension to a new Extension
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="newExtension"></param>
-        /// <returns>String of the new file path and extension</returns>
-        public void setExtension(string newExtension)
-        {
-            text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".avi", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".ogm", newExtension);
-        }
-        #endregion
-
-        #region Drive Detection
+        #region DVD Drive Detection
         // Source Button Drive Detection
         private delegate void ProgressUpdateHandler();
         private void getDriveInfoThread()
@@ -1637,7 +1665,7 @@ namespace Handbrake
         }
         #endregion
 
-        #region Audio Panel Stuff
+        #region Audio Panel Code Helpers
         public void setAudioByContainer(String path)
         {
             string oldval = "";
@@ -1892,52 +1920,6 @@ namespace Handbrake
         }
         #endregion
 
-        #region Encoding
-
-        // Declarations
-        private delegate void UpdateUIHandler();
-
-        // Encoding Functions
-        private void procMonitor(object state)
-        {
-            // Make sure we are not already encoding and if we are then display an error.
-            if (hbProc != null)
-                hbProc.CloseMainWindow();
-            else
-            {
-                hbProc = cliObj.runCli(this, (string)state);
-                hbProc.WaitForExit();
-                setEncodeLabelFinished();
-                hbProc = null;
-
-                // If the window is minimized, display the notification in a popup.
-                if (FormWindowState.Minimized == this.WindowState)
-                {
-                    notifyIcon.BalloonTipText = lbl_encode.Text;
-                    notifyIcon.ShowBalloonTip(500);
-                }
-
-                // After the encode is done, we may want to shutdown, suspend etc.
-                cliObj.addCLIQueryToLog((string)state);
-                cliObj.copyLog((string)state, text_destination.Text); // Make a copy of the log in the users desired location if necessary
-                cliObj.afterEncodeAction();
-            }
-        }
-        private void setEncodeLabelFinished()
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new UpdateUIHandler(setEncodeLabelFinished));
-                return;
-            }
-            lbl_encode.Text = "Encoding Finished";
-            btn_start.Text = "Start";
-            btn_start.ToolTipText = "Start the encoding process";
-            btn_start.Image = Properties.Resources.Play;
-        }
-
-        #endregion
-
         #region Public Methods
 
         /// <summary>
@@ -2068,42 +2050,6 @@ namespace Handbrake
             }
         }
 
-        #endregion
-
-        #region Taskbar Tray Icon
-        private void frmMain_Resize(object sender, EventArgs e)
-        {
-            if (FormWindowState.Minimized == this.WindowState)
-            {
-                notifyIcon.Visible = true;
-                if (lbl_encode.Text != "")
-                    notifyIcon.BalloonTipText = lbl_encode.Text;
-                else
-                    notifyIcon.BalloonTipText = "Not Encoding";
-                notifyIcon.ShowBalloonTip(500);
-                this.Hide();
-            }
-            else if (FormWindowState.Normal == this.WindowState)
-                notifyIcon.Visible = false;
-        }
-        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            this.Visible = true;
-            this.Activate();
-            this.WindowState = FormWindowState.Normal;
-            notifyIcon.Visible = false;
-        }
-        private void btn_minimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
-        }
-        private void btn_restore_Click(object sender, EventArgs e)
-        {
-            this.Visible = true;
-            this.Activate();
-            this.WindowState = FormWindowState.Normal;
-            notifyIcon.Visible = false;
-        }
         #endregion
 
         // This is the END of the road ------------------------------------------------------------------------------

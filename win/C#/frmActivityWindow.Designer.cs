@@ -37,6 +37,8 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmActivityWindow));
             this.rtf_actLog = new System.Windows.Forms.RichTextBox();
+            this.rightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_copy_log = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -47,11 +49,9 @@ namespace Handbrake
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_slb = new System.Windows.Forms.ToolStripStatusLabel();
             this.txt_log = new System.Windows.Forms.ToolStripStatusLabel();
-            this.rightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rightClickMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.rightClickMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // rtf_actLog
@@ -66,6 +66,21 @@ namespace Handbrake
             this.rtf_actLog.Size = new System.Drawing.Size(471, 530);
             this.rtf_actLog.TabIndex = 29;
             this.rtf_actLog.Text = "";
+            // 
+            // rightClickMenu
+            // 
+            this.rightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_copy_log});
+            this.rightClickMenu.Name = "rightClickMenu";
+            this.rightClickMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // mnu_copy_log
+            // 
+            this.mnu_copy_log.Image = global::Handbrake.Properties.Resources.copy;
+            this.mnu_copy_log.Name = "mnu_copy_log";
+            this.mnu_copy_log.Size = new System.Drawing.Size(152, 22);
+            this.mnu_copy_log.Text = "Copy";
+            this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
             // 
             // ToolTip
             // 
@@ -156,21 +171,6 @@ namespace Handbrake
             this.txt_log.Size = new System.Drawing.Size(85, 17);
             this.txt_log.Text = "{selected log}";
             // 
-            // rightClickMenu
-            // 
-            this.rightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyToolStripMenuItem});
-            this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(153, 48);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Image = global::Handbrake.Properties.Resources.copy;
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
             // frmActivityWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -189,11 +189,11 @@ namespace Handbrake
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Activity Window";
+            this.rightClickMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.rightClickMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,6 +213,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripButton btn_copy;
         private System.Windows.Forms.ToolStripStatusLabel lbl_slb;
         private System.Windows.Forms.ContextMenuStrip rightClickMenu;
-        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnu_copy_log;
     }
 }

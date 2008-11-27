@@ -16,6 +16,7 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 
 namespace Handbrake
@@ -62,15 +63,12 @@ namespace Handbrake
         /// </summary>
         private void displayLogHeader()
         {
-            // System Information
-            Functions.SystemInfo info = new Functions.SystemInfo();
-
             // Add a header to the log file indicating that it's from the Windows GUI and display the windows version
             rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
             rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion.ToString()));
-            rtf_actLog.AppendText(String.Format("### CPU: {0} \n", info.getCpuCount()));
-            rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", info.TotalPhysicalMemory()));
-            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", info.screenBounds().Bounds.Width, info.screenBounds().Bounds.Height));
+            rtf_actLog.AppendText(String.Format("### CPU: {0} \n", getCpuCount()));
+            rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", TotalPhysicalMemory()));
+            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", screenBounds().Bounds.Width, screenBounds().Bounds.Height));
             rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
             rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
             rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
@@ -306,12 +304,74 @@ namespace Handbrake
             this.Close();
         }
 
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Copy Log Menu Item on the right click menu for the log rtf box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mnu_copy_log_Click(object sender, EventArgs e)
         {
             if (rtf_actLog.SelectedText != "")
                 Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
             else
                 Clipboard.SetDataObject(rtf_actLog.Text, true);
         }
+
+        #region System Information
+        private struct MEMORYSTATUS
+        {
+            public UInt32 dwLength;
+            public UInt32 dwMemoryLoad;
+            public UInt32 dwTotalPhys; // Used
+            public UInt32 dwAvailPhys;
+            public UInt32 dwTotalPageFile;
+            public UInt32 dwAvailPageFile;
+            public UInt32 dwTotalVirtual;
+            public UInt32 dwAvailVirtual;
+        }
+
+        [DllImport("kernel32.dll")]
+        private static extern void GlobalMemoryStatus
+        (
+            ref MEMORYSTATUS lpBuffer
+        );
+
+        /// <summary>
+        /// Returns the total physical ram in a system
+        /// </summary>
+        /// <returns></returns>
+        public uint TotalPhysicalMemory()
+        {
+            MEMORYSTATUS memStatus = new MEMORYSTATUS();
+            GlobalMemoryStatus(ref memStatus);
+
+            uint MemoryInfo = memStatus.dwTotalPhys;
+            MemoryInfo = MemoryInfo / 1024 / 1024;
+
+            return MemoryInfo;
+        }
+
+        /// <summary>
+        /// Get the number of CPU Cores
+        /// </summary>
+        /// <returns>Object</returns>
+        public Object getCpuCount()
+        {
+            RegistryKey RegKey = Registry.LocalMachine;
+            RegKey = RegKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
+            return RegKey.GetValue("ProcessorNameString");
+        }
+
+        /// <summary>
+        /// Get the System screen size information.
+        /// </summary>
+        /// <returns>System.Windows.Forms.Scree</returns>
+        public System.Windows.Forms.Screen screenBounds()
+        {
+            return System.Windows.Forms.Screen.PrimaryScreen;
+        }
+
+        #endregion
+
     }
 }

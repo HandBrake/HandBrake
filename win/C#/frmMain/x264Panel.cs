@@ -7,6 +7,7 @@ namespace Handbrake
 {
     class x264Panel
     {
+
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
         /// </summary>
