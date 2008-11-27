@@ -123,12 +123,25 @@ int encvorbisInit( hb_work_object_t * w, hb_job_t * job )
             pv->channel_map[0] = 0;
             break;
         case 6:
-            pv->channel_map[0] = 0;
-            pv->channel_map[1] = 2;
-            pv->channel_map[2] = 1;
-            pv->channel_map[3] = 4;
-            pv->channel_map[4] = 5;
-            pv->channel_map[5] = 3;
+            // Vorbis use the following channels map = L C R Ls Rs Lfe
+            if( audio->config.in.codec == HB_ACODEC_AC3 )
+            {
+                pv->channel_map[0] = 1;
+                pv->channel_map[1] = 2;
+                pv->channel_map[2] = 3;
+                pv->channel_map[3] = 4;
+                pv->channel_map[4] = 5;
+                pv->channel_map[5] = 0;
+            }
+            else
+            {
+                pv->channel_map[0] = 1;
+                pv->channel_map[1] = 0;
+                pv->channel_map[2] = 2;
+                pv->channel_map[3] = 3;
+                pv->channel_map[4] = 4;
+                pv->channel_map[5] = 5;
+            }
             break;
         default:
             hb_log("encvorbis.c: Unable to correctly proccess %d channels, assuming stereo.", pv->out_discrete_channels);
