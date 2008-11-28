@@ -63,43 +63,47 @@ namespace Handbrake.Functions
         public int cacluateNonAnamorphicHeight(int width, decimal top, decimal bottom, decimal left, decimal right, Parsing.Title selectedTitle)
         {
             float aspect = selectedTitle.AspectRatio;
-            int aw;
-            int ah;
+            int aw = 0;
+            int ah = 0;
             if (aspect.ToString() == "1.78")
             {
                 aw = 16;
                 ah = 9;
             }
-            else
+            else if (aspect.ToString() == "1.33")
             {
                 aw = 4;
                 ah = 3;
             }
 
-            double a = width * selectedTitle.Resolution.Width * ah * (selectedTitle.Resolution.Height - (double)top - (double)bottom);
-            double b = selectedTitle.Resolution.Height * aw * (selectedTitle.Resolution.Width - (double)left - (double)right);
-
-            double y = a / b;
-
-            // If it's not Mod 16, make it mod 16
-            if ((y % 16) != 0)
+            if (aw != 0)
             {
-                double mod16 = y % 16;
-                if (mod16 >= 8)
-                {
-                    mod16 = 16 - mod16;
-                    y = y + mod16;
-                }
-                else
-                {
-                    y = y - mod16;
-                }
-            }
+                double a = width * selectedTitle.Resolution.Width * ah * (selectedTitle.Resolution.Height - (double)top - (double)bottom);
+                double b = selectedTitle.Resolution.Height * aw * (selectedTitle.Resolution.Width - (double)left - (double)right);
 
-            //16 * (421 / 16)
-            //double z = ( 16 * (( y + 8 ) / 16 ) );
-            int x = int.Parse(y.ToString());
-            return x;
+                double y = a / b;
+
+                // If it's not Mod 16, make it mod 16
+                if ((y % 16) != 0)
+                {
+                    double mod16 = y % 16;
+                    if (mod16 >= 8)
+                    {
+                        mod16 = 16 - mod16;
+                        y = y + mod16;
+                    }
+                    else
+                    {
+                        y = y - mod16;
+                    }
+                }
+
+                //16 * (421 / 16)
+                //double z = ( 16 * (( y + 8 ) / 16 ) );
+                int x = int.Parse(y.ToString());
+                return x;
+            }
+            return 0;
         }
 
         /// <summary>
@@ -158,36 +162,26 @@ namespace Handbrake.Functions
         /// <param name="mainWindow"></param>
         public DataGridView chapterNaming(DataGridView data_chpt, string chapter_start, string chapter_end)
         {
-            try
+            int i = 0, rowCount = 0, start = 0, finish = 0;
+
+            if (chapter_end != "Auto")
+                int.TryParse(chapter_end, out finish);
+
+            if (chapter_start != "Auto")
+                int.TryParse(chapter_start, out start);
+
+            rowCount = finish - (start - 1);
+
+            while (i < rowCount)
             {
-                int i = 0;
-                int rowCount = 0;
-                int start = 0;
-                int finish = 0;
-                if (chapter_end != "Auto")
-                    finish = int.Parse(chapter_end);
+                DataGridViewRow row = new DataGridViewRow();
 
-                if (chapter_start != "Auto")
-                    start = int.Parse(chapter_start);
-
-                rowCount = finish - (start - 1);
-
-                while (i < rowCount)
-                {
-                    DataGridViewRow row = new DataGridViewRow();
-
-                    data_chpt.Rows.Insert(i, row);
-                    data_chpt.Rows[i].Cells[0].Value = (i + 1);
-                    data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
-                    i++;
-                }
-                return data_chpt;
+                data_chpt.Rows.Insert(i, row);
+                data_chpt.Rows[i].Cells[0].Value = (i + 1);
+                data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
+                i++;
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show("chapterNaming() Error has occured: \n" + exc.ToString());
-                return null;
-            }
+            return data_chpt;
         }
 
         /// <summary>
@@ -197,49 +191,38 @@ namespace Handbrake.Functions
         /// <param name="mainWindow"></param>
         public string autoName(ComboBox drp_dvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
         {
-
             string AutoNamePath = string.Empty;
-
             if (drp_dvdtitle.Text != "Automatic")
             {
-                // Todo: This code is a tad messy. Clean it up at some point.
-                // Get the Source Name
+                // Get the Source Name - THIS NEEDS FIXED
                 string[] sourceName = source.Split('\\');
                 source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
+                source.Replace(".wmv", "").Replace(".mp4", "").Replace(".m4v", "").Replace(".avi", "").Replace(".ogm", "").Replace(".tivo", "").Replace(".img", "");
+                source.Replace(".mov", "").Replace(".rm", "");
 
                 // Get the Selected Title Number
-                string title = drp_dvdtitle.Text;
-                string[] titlesplit = title.Split(' ');
-                title = titlesplit[0];
+                string[] titlesplit = drp_dvdtitle.Text.Split(' ');
+                string dvdTitle = titlesplit[0].Replace("Automatic", "");
 
                 // Get the Chapter Start and Chapter End Numbers
-                string cs = chapter_start;
-                string cf = chatper_end;
-
-                // Just incase the above are set to their default Automatic values, set the varible to ""
-                if (title == "Automatic")
-                    title = "";
-                if (cs == "Auto")
-                    cs = "";
-                if (cf == "Auto")
-                    cf = "";
-
-                // If both CS and CF are populated, set the dash varible
-                string dash = "";
-                if (cf != "Auto")
-                    dash = "-";
+                string chapterStart = chapter_start.Replace("Auto", "");
+                string chapterFinish = chatper_end.Replace("Auto", "");
+                string combinedChapterTag = chapterStart;
+                if (chapterFinish != chapterStart && chapterFinish != "")
+                    combinedChapterTag = chapterStart + "-" + chapterFinish;
 
                 // Get the destination filename.
                 string destination_filename = "";
                 if (Properties.Settings.Default.autoNameFormat != "")
                 {
                     destination_filename = Properties.Settings.Default.autoNameFormat;
-                    destination_filename = destination_filename.Replace("{source}", source).Replace("{title}", title).Replace("{chapters}", cs + dash + cf);
+                    destination_filename = destination_filename.Replace("{source}", source).Replace("{title}", dvdTitle).Replace("{chapters}", combinedChapterTag);
                 }
                 else
-                    destination_filename = source + "_T" + title + "_C" + cs + dash + cf;
+                    destination_filename = source + "_T" + dvdTitle + "_C" + combinedChapterTag;
 
-                // If the text box is blank
+                // Now work out the path where the file will be stored.
+                // First case: If the destination box doesn't already contain a path, make one.
                 if (!dest.Contains("\\"))
                 {
                     string filePath = "";
@@ -260,7 +243,7 @@ namespace Handbrake.Functions
                     else if (format == 4)
                         AutoNamePath = filePath + destination_filename + ".ogm";
                 }
-                else // If the text box already has a path and file
+                else // Otherwise, use the path that is already there.
                 {
                     string destination = AutoNamePath;
                     string[] destName = dest.Split('\\');
@@ -280,6 +263,7 @@ namespace Handbrake.Functions
                     return fullDest;
                 }
             }
+
             return AutoNamePath;
         }
 
@@ -361,7 +345,7 @@ namespace Handbrake.Functions
             {
                 MessageBox.Show("Unable to retrieve version information from the CLI. \nError:\n" + e);
             }
-     
+
             cliVersionData.Add(0);
             cliVersionData.Add("0");
             return cliVersionData;

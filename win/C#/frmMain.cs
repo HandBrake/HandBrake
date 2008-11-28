@@ -948,7 +948,7 @@ namespace Handbrake
         //Picture Tab
         private void text_width_TextChanged(object sender, EventArgs e)
         {
-            maxWidth = 0;  // Reset max width so that it's not using the MaxWidth -X. Quick hack to allow -X for preset usage.
+            maxWidth = 0; maxHeight = 0;  // Reset max width so that it's not using the MaxWidth -X. Quick hack to allow -X for preset usage.
 
             int width;
             Boolean parsed = int.TryParse(text_width.Text, out width);
@@ -960,12 +960,13 @@ namespace Handbrake
                     text_width.BackColor = Color.LightGreen;
 
 
-                if (lbl_Aspect.Text != "Select a Title" && maxWidth != 0 && maxHeight != 0)
+                if (lbl_Aspect.Text != "Select a Title" && maxWidth == 0 && maxHeight == 0)
                 {
                     if (drp_anamorphic.Text == "None")
                     {
                         int height = hb_common_func.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value, text_left.Value, text_right.Value, selectedTitle);
-                        text_height.Text = height.ToString();
+                        if (height != 0)
+                            text_height.Text = height.ToString();
                     }
                 }
             }
