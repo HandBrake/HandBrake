@@ -796,7 +796,6 @@ namespace Handbrake
             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
 
             // Show the dialog and set the main form file path
-
             if (text_destination.Text.EndsWith(".mp4"))
                 DVD_Save.FilterIndex = 1;
             else if (text_destination.Text.EndsWith(".m4v"))
@@ -882,7 +881,6 @@ namespace Handbrake
                 check_optimiseMP4.Checked = false;
                 check_iPodAtom.Checked = false;
             }
-
 
             //Turn off some options which are H.264 only when the user selects a non h.264 encoder
             if (drp_videoEncoder.Text.Contains("H.264"))
@@ -1079,6 +1077,7 @@ namespace Handbrake
             }
             else
             {
+                // Enable the 2nd Track
                 drp_audbit_2.Enabled = true;
                 drp_audenc_2.Enabled = true;
                 drp_audsr_2.Enabled = true;
@@ -1101,6 +1100,7 @@ namespace Handbrake
         {
             if (drp_track3Audio.SelectedItem.Equals("None"))
             {
+                // Disable the 3rd track
                 drp_audbit_3.Enabled = false;
                 drp_audenc_3.Enabled = false;
                 drp_audsr_3.Enabled = false;
@@ -1123,6 +1123,7 @@ namespace Handbrake
             }
             else
             {
+                // Enable the 3rd track
                 drp_audbit_3.Enabled = true;
                 drp_audenc_3.Enabled = true;
                 drp_audsr_3.Enabled = true;
@@ -1176,40 +1177,28 @@ namespace Handbrake
             if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_1);
             else if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text != "6 Channel Discrete"))
-            {
-                setBitrateSelections160(drp_audbit_1);
-                drp_audbit_1.Text = "160";
-            }
+                setBitrateSelections160(drp_audbit_1); drp_audbit_1.Text = "160";
         }
         private void drp_audmix_2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((drp_audenc_2.Text == "AAC") && (drp_audmix_2.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_2);
             else if ((drp_audenc_2.Text == "AAC") && (drp_audmix_2.Text != "6 Channel Discrete"))
-            {
-                setBitrateSelections160(drp_audbit_2);
-                drp_audbit_2.Text = "160";
-            }
+                setBitrateSelections160(drp_audbit_2); drp_audbit_2.Text = "160";
         }
         private void drp_audmix_3_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((drp_audenc_3.Text == "AAC") && (drp_audmix_3.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_3);
             else if ((drp_audenc_3.Text == "AAC") && (drp_audmix_3.Text != "6 Channel Discrete"))
-            {
-                setBitrateSelections160(drp_audbit_3);
-                drp_audbit_3.Text = "160";
-            }
+                setBitrateSelections160(drp_audbit_3); drp_audbit_3.Text = "160";
         }
         private void drp_audmix_4_SelectedIndexChanged(object sender, EventArgs e)
         {
             if ((drp_audenc_4.Text == "AAC") && (drp_audmix_4.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_4);
             else if ((drp_audenc_4.Text == "AAC") && (drp_audmix_4.Text != "6 Channel Discrete"))
-            {
-                setBitrateSelections160(drp_audbit_4);
-                drp_audbit_4.Text = "160";
-            }
+                setBitrateSelections160(drp_audbit_4); drp_audbit_4.Text = "160";
         }
 
         private void drp_audenc_1_SelectedIndexChanged(object sender, EventArgs e)
@@ -1231,201 +1220,84 @@ namespace Handbrake
                 drp_audsr_1.Text = "Auto";
             }
 
-
             if (drp_audenc_1.Text == "AAC")
             {
-                drp_audmix_1.Items.Clear();
-                drp_audmix_1.Items.Add("Mono");
-                drp_audmix_1.Items.Add("Stereo");
-                drp_audmix_1.Items.Add("Dolby Surround");
-                drp_audmix_1.Items.Add("Dolby Pro Logic II");
-                drp_audmix_1.Items.Add("6 Channel Discrete");
-
+                setMixDownAllOptions(drp_audmix_1);
                 setBitrateSelections160(drp_audbit_1);
             }
             else
             {
-                drp_audmix_1.Items.Clear();
-                drp_audmix_1.Items.Add("Stereo");
-                drp_audmix_1.Items.Add("Dolby Surround");
-                drp_audmix_1.Items.Add("Dolby Pro Logic II");
-
+                setMixDownNotAAC(drp_audmix_1);
                 setBitrateSelections320(drp_audbit_1);
             }
         }
         private void drp_audenc_2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audenc_2.Text == "AC3")
-            {
-                drp_audmix_2.Enabled = false;
-                drp_audbit_2.Enabled = false;
-                drp_audsr_2.Enabled = false;
-
-                drp_audmix_2.Text = "Automatic";
-                drp_audbit_2.Text = "160";
-                drp_audsr_2.Text = "Auto";
-            }
-            else
-            {
-                // Just make sure not to re-enable the following boxes if the track2 is none
-                if (drp_track2Audio.Text != "None")
-                {
-                    drp_audmix_2.Enabled = true;
-                    drp_audbit_2.Enabled = true;
-                    drp_audsr_2.Enabled = true;
-
-                    drp_audmix_2.Text = "Automatic";
-                    drp_audbit_2.Text = "160";
-                    drp_audsr_2.Text = "Auto";
-                }
-            }
+            // Setup the other audio configuration options as required.
+            audioEncoderChange(drp_audenc_2, drp_audmix_2, drp_audbit_2, drp_audsr_2);
 
             if (drp_audenc_2.Text == "AAC")
             {
-                drp_audmix_2.Items.Clear();
-                drp_audmix_2.Items.Add("Mono");
-                drp_audmix_2.Items.Add("Stereo");
-                drp_audmix_2.Items.Add("Dolby Surround");
-                drp_audmix_2.Items.Add("Dolby Pro Logic II");
-                drp_audmix_2.Items.Add("6 Channel Discrete");
-
+                setMixDownAllOptions(drp_audmix_2);
                 setBitrateSelections160(drp_audbit_2);
             }
             else
             {
-                drp_audmix_2.Items.Clear();
-                drp_audmix_2.Items.Add("Stereo");
-                drp_audmix_2.Items.Add("Dolby Surround");
-                drp_audmix_2.Items.Add("Dolby Pro Logic II");
-
+                setMixDownNotAAC(drp_audmix_2);
                 setBitrateSelections320(drp_audbit_2);
             }
         }
         private void drp_audenc_3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audenc_3.Text == "AC3")
-            {
-                drp_audmix_3.Enabled = false;
-                drp_audbit_3.Enabled = false;
-                drp_audsr_3.Enabled = false;
-
-                drp_audmix_3.Text = "Automatic";
-                drp_audbit_3.Text = "160";
-                drp_audsr_3.Text = "Auto";
-            }
-            else
-            {
-                // Just make sure not to re-enable the following boxes if the track above is none
-                if (drp_track2Audio.Text != "None")
-                {
-                    drp_audmix_3.Enabled = true;
-                    drp_audbit_3.Enabled = true;
-                    drp_audsr_3.Enabled = true;
-
-                    drp_audmix_3.Text = "Automatic";
-                    drp_audbit_3.Text = "160";
-                    drp_audsr_3.Text = "Auto";
-                }
-            }
-
+            // Setup the other audio configuration options as required.
+            audioEncoderChange(drp_audenc_3, drp_audmix_3, drp_audbit_3, drp_audsr_3);
 
             if (drp_audenc_3.Text == "AAC")
             {
-                drp_audmix_3.Items.Clear();
-                drp_audmix_3.Items.Add("Mono");
-                drp_audmix_3.Items.Add("Stereo");
-                drp_audmix_3.Items.Add("Dolby Surround");
-                drp_audmix_3.Items.Add("Dolby Pro Logic II");
-                drp_audmix_3.Items.Add("6 Channel Discrete");
-
+                setMixDownAllOptions(drp_audmix_3);
                 setBitrateSelections160(drp_audbit_3);
             }
             else
             {
-                drp_audmix_3.Items.Clear();
-                drp_audmix_3.Items.Add("Stereo");
-                drp_audmix_3.Items.Add("Dolby Surround");
-                drp_audmix_3.Items.Add("Dolby Pro Logic II");
-
+                setMixDownNotAAC(drp_audmix_3);
                 setBitrateSelections320(drp_audbit_3);
             }
         }
         private void drp_audenc_4_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audenc_4.Text == "AC3")
-            {
-                drp_audmix_4.Enabled = false;
-                drp_audbit_4.Enabled = false;
-                drp_audsr_4.Enabled = false;
-
-                drp_audmix_4.Text = "Automatic";
-                drp_audbit_4.Text = "160";
-                drp_audsr_4.Text = "Auto";
-            }
-            else
-            {
-                // Just make sure not to re-enable the following boxes if the track above is none
-                if (drp_track2Audio.Text != "None")
-                {
-                    drp_audmix_4.Enabled = true;
-                    drp_audbit_4.Enabled = true;
-                    drp_audsr_4.Enabled = true;
-
-                    drp_audmix_4.Text = "Automatic";
-                    drp_audbit_4.Text = "160";
-                    drp_audsr_4.Text = "Auto";
-                }
-            }
-
+            // Setup the other audio configuration options as required.
+            audioEncoderChange(drp_audenc_4, drp_audmix_4, drp_audbit_4, drp_audsr_4);
 
             if (drp_audenc_4.Text == "AAC")
             {
-                drp_audmix_4.Items.Clear();
-                drp_audmix_4.Items.Add("Mono");
-                drp_audmix_4.Items.Add("Stereo");
-                drp_audmix_4.Items.Add("Dolby Surround");
-                drp_audmix_4.Items.Add("Dolby Pro Logic II");
-                drp_audmix_4.Items.Add("6 Channel Discrete");
-
+                setMixDownAllOptions(drp_audmix_4);
                 setBitrateSelections160(drp_audbit_4);
             }
             else
             {
-                drp_audmix_4.Items.Clear();
-                drp_audmix_4.Items.Add("Stereo");
-                drp_audmix_4.Items.Add("Dolby Surround");
-                drp_audmix_4.Items.Add("Dolby Pro Logic II");
-
+                setMixDownNotAAC(drp_audmix_4);
                 setBitrateSelections320(drp_audbit_4);
             }
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            double value = trackBar1.Value / 10.0;
-            value++;
-
+            double value = (trackBar1.Value / 10.0) + 1;
             lbl_drc1.Text = value.ToString();
         }
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            double value = trackBar2.Value / 10.0;
-            value++;
-
+            double value = (trackBar2.Value / 10.0) + 1;
             lbl_drc2.Text = value.ToString();
         }
         private void trackBar3_Scroll(object sender, EventArgs e)
         {
-            double value = trackBar3.Value / 10.0;
-            value++;
-
+            double value = (trackBar3.Value / 10.0) + 1;
             lbl_drc3.Text = value.ToString();
         }
         private void trackBar4_Scroll(object sender, EventArgs e)
         {
-            double value = trackBar4.Value / 10.0;
-            value++;
-
+            double value = (trackBar4.Value / 10.0) + 1;
             lbl_drc4.Text = value.ToString();
         }
 
@@ -1445,9 +1317,7 @@ namespace Handbrake
         {
             if (Check_ChapterMarkers.Checked)
             {
-                string destination = text_destination.Text;
-                destination = destination.Replace(".mp4", ".m4v");
-                text_destination.Text = destination;
+                text_destination.Text = text_destination.Text.Replace(".m4v", ".mp4");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
                 DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterStart.Text, drop_chapterFinish.Text);
@@ -1456,9 +1326,7 @@ namespace Handbrake
             }
             else
             {
-                string destination = text_destination.Text;
-                destination = destination.Replace(".m4v", ".mp4");
-                text_destination.Text = destination;
+                text_destination.Text = text_destination.Text.Replace(".m4v", ".mp4");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
             }
@@ -1666,7 +1534,7 @@ namespace Handbrake
         #endregion
 
         #region Audio Panel Code Helpers
-        public void setAudioByContainer(String path)
+        private void setAudioByContainer(String path)
         {
             string oldval = "";
 
@@ -1815,7 +1683,7 @@ namespace Handbrake
                 }
             }
         }
-        public void setVideoByContainer(String path)
+        private void setVideoByContainer(String path)
         {
             string oldval = "";
 
@@ -1867,7 +1735,7 @@ namespace Handbrake
                 drp_videoEncoder.Text = oldval;
             }
         }
-        public void setBitrateSelections384(ComboBox dropDown)
+        private void setBitrateSelections384(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1886,7 +1754,7 @@ namespace Handbrake
             dropDown.Items.Add("320");
             dropDown.Items.Add("384");
         }
-        public void setBitrateSelections320(ComboBox dropDown)
+        private void setBitrateSelections320(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1904,7 +1772,7 @@ namespace Handbrake
             dropDown.Items.Add("256");
             dropDown.Items.Add("320");
         }
-        public void setBitrateSelections160(ComboBox dropDown)
+        private void setBitrateSelections160(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1917,6 +1785,49 @@ namespace Handbrake
             dropDown.Items.Add("112");
             dropDown.Items.Add("128");
             dropDown.Items.Add("160");
+        }
+        private void setMixDownAllOptions(ComboBox dropdown)
+        {
+            dropdown.Items.Clear();
+            dropdown.Items.Add("Mono");
+            dropdown.Items.Add("Stereo");
+            dropdown.Items.Add("Dolby Surround");
+            dropdown.Items.Add("Dolby Pro Logic II");
+            dropdown.Items.Add("6 Channel Discrete");
+        }
+        private void setMixDownNotAAC(ComboBox dropdown)
+        {
+            dropdown.Items.Clear();
+            dropdown.Items.Add("Stereo");
+            dropdown.Items.Add("Dolby Surround");
+            dropdown.Items.Add("Dolby Pro Logic II");
+        }
+        private void audioEncoderChange(ComboBox audenc, ComboBox audMix, ComboBox audbit, ComboBox audsr)
+        {
+            if (audenc.Text == "AC3")
+            {
+                audMix.Enabled = false;
+                audbit.Enabled = false;
+                audsr.Enabled = false;
+
+                audMix.Text = "Automatic";
+                audbit.Text = "160";
+                audsr.Text = "Auto";
+            }
+            else
+            {
+                // Just make sure not to re-enable the following boxes if the track above is none
+                if (drp_track2Audio.Text != "None")
+                {
+                    audMix.Enabled = true;
+                    audbit.Enabled = true;
+                    audsr.Enabled = true;
+
+                    audMix.Text = "Automatic";
+                    audbit.Text = "160";
+                    audsr.Text = "Auto";
+                }
+            }
         }
         #endregion
 
