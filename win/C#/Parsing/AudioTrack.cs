@@ -94,7 +94,10 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {track #} {language} ({format}) ({sub-format})</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2}) ({3})", this.m_trackNumber, this.m_language, this.m_format, this.m_subFormat);
+            if (this.m_subFormat == null)
+                return string.Format("{0} {1} ({2})", this.m_trackNumber, this.m_language, this.m_format);
+            else
+                return string.Format("{0} {1} ({2}) ({3})", this.m_trackNumber, this.m_language, this.m_format, this.m_subFormat);
         }
 
         public static AudioTrack Parse(StringReader output)
