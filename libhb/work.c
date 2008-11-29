@@ -7,6 +7,7 @@
 #include "hb.h"
 #include "a52dec/a52.h"
 #include "dca.h"
+#include "libavformat/avformat.h"
 
 typedef struct
 {
@@ -113,7 +114,7 @@ hb_work_object_t * hb_codec_encoder( int codec )
  * Displays job parameters in the debug log.
  * @param job Handle work hb_job_t.
  */
-hb_display_job_info( hb_job_t * job )
+void hb_display_job_info( hb_job_t * job )
 {
     hb_title_t * title = job->title;
     hb_audio_t   * audio;
@@ -524,9 +525,14 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     if( !job->indepth_scan )
     {
-    /* if we are doing passthru, and the input codec is not the same as the output
-     * codec, then remove this audio from the job */
-    /* otherwise, Bad Things will happen */
+    // if we are doing passthru, and the input codec is not the same as the output
+    // codec, then remove this audio from the job. If we're not doing passthru and
+    // the input codec is the 'internal' ffmpeg codec, make sure that only one
+    // audio references that audio stream since the codec context is specific to
+    // the audio id & multiple copies of the same stream will garble the audio
+    // or cause aborts.
+    uint8_t aud_id_uses[MAX_STREAMS];
+    memset( aud_id_uses, 0, sizeof(aud_id_uses) );
     for( i = 0; i < hb_list_count( title->list_audio ); )
     {
         audio = hb_list_item( title->list_audio, i );
@@ -538,6 +544,18 @@ static void do_job( hb_job_t * job, int cpu_count )
             hb_list_rem( title->list_audio, audio );
             free( audio );
             continue;
+        }
+        if ( audio->config.in.codec == HB_ACODEC_FFMPEG )
+        {
+            if ( aud_id_uses[audio->id] )
+            {
+                hb_log( "Multiple decodes of audio id %d, removing track %d",
+                        audio->id, audio->config.out.track );
+                hb_list_rem( title->list_audio, audio );
+                free( audio );
+                continue;
+            }
+            ++aud_id_uses[audio->id];
         }
         /* Adjust output track number, in case we removed one.
          * Output tracks sadly still need to be in sequential order.
