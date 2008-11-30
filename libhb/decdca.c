@@ -15,6 +15,7 @@ struct hb_work_private_s
     dca_state_t * state;
 
     double        next_pts;
+    int64_t       last_buf_pts;
     int           flags_in;
     int           flags_out;
     int           rate;
@@ -122,6 +123,13 @@ static int decdcaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_DONE;
     }
 
+    if ( (*buf_in)->start < -1 && pv->next_pts == 0 )
+    {
+        // discard buffers that start before video time 0
+        *buf_out = NULL;
+        return HB_WORK_OK;
+    }
+
     hb_list_add( pv->list, *buf_in );
     *buf_in = NULL;
 
@@ -190,6 +198,17 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 
     /* Get the whole frame */
     hb_list_getbytes( pv->list, pv->frame, pv->size, &pts, &pos );
+    if ( pts != pv->last_buf_pts )
+    {
+        pv->last_buf_pts = pts;
+    }
+    else
+    {
+        // spec says that the PTS is the start time of the first frame
+        // that starts in the PES frame so we only use the PTS once then
+        // get the following frames' PTS from the frame length.
+        pts = -1;
+    }
 
     /* Feed libdca */
     dca_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
@@ -207,12 +226,12 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     // about time - timestamps seem to randomly offset by ~40ms for a few
     // seconds then recover. So, if the pts we got is within 50ms of the
     // pts computed from the data stream, use the data stream pts.
-    if ( pts < 0 || fabs( (double)pts - pv->next_pts ) < 50.*90. )
+    if ( pts == -1 || ( pv->next_pts && fabs( pts - pv->next_pts ) < 50.*90. ) )
     {
         pts = pv->next_pts;
     }
     buf->start = pts;
-    pv->next_pts += (double)nsamp / (double)pv->rate * 90000.;
+    pv->next_pts = pts + (double)nsamp / (double)pv->rate * 90000.;
     buf->stop  = pv->next_pts;
 
     for( i = 0; i < num_blocks; i++ )
