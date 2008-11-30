@@ -136,9 +136,9 @@ namespace Handbrake
             this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(225, 57);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 26);
+            this.label4.Size = new System.Drawing.Size(48, 26);
             this.label4.TabIndex = 70;
-            this.label4.Text = "Video:\r\nAudo:";
+            this.label4.Text = "Video:\r\nAudio:";
             // 
             // lbl_chapt
             // 
