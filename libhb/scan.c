@@ -8,6 +8,8 @@
 #include "a52dec/a52.h"
 #include "dca.h"
 
+#define HB_MAX_PREVIEWS 30 // 30 previews = every 5 minutes of a 2.5 hour video
+
 typedef struct
 {
     hb_handle_t * h;
@@ -18,6 +20,9 @@ typedef struct
 
     hb_dvd_t    * dvd;
 	hb_stream_t * stream;
+	
+    int           preview_count;
+    int           store_previews;
 
 } hb_scan_t;
 
@@ -39,7 +44,8 @@ static const char *aspect_to_string( double aspect )
 }
 
 hb_thread_t * hb_scan_init( hb_handle_t * handle, const char * path,
-                            int title_index, hb_list_t * list_title )
+                            int title_index, hb_list_t * list_title,
+                            int preview_count, int store_previews )
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
@@ -47,7 +53,10 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, const char * path,
     data->path         = strdup( path );
     data->title_index  = title_index;
     data->list_title   = list_title;
-
+    
+    data->preview_count  = preview_count;
+    data->store_previews = store_previews;
+    
     return hb_thread_init( "scan", ScanFunc, data, HB_NORMAL_PRIORITY );
 }
 
@@ -316,10 +325,10 @@ static int column_all_dark( hb_title_t *title, uint8_t* luma, int top, int botto
 
 typedef struct {
     int n;
-    int t[10];
-    int b[10];
-    int l[10];
-    int r[10];
+    int t[HB_MAX_PREVIEWS];
+    int b[HB_MAX_PREVIEWS];
+    int l[HB_MAX_PREVIEWS];
+    int r[HB_MAX_PREVIEWS];
 } crop_record_t;
 
 static void record_crop( crop_record_t *crops, int t, int b, int l, int r )
@@ -397,7 +406,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     hb_list_t     * list_es;
     int progressive_count = 0;
     int interlaced_preview_count = 0;
-    info_list_t * info_list = calloc( 10+1, sizeof(*info_list) );
+    info_list_t * info_list = calloc( data->preview_count+1, sizeof(*info_list) );
     crop_record_t *crops = calloc( 1, sizeof(*crops) );
 
     buf_ps   = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
@@ -408,7 +417,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
     if (data->dvd)
       hb_dvd_start( data->dvd, title->index, 1 );
 
-    for( i = 0; i < 10; i++ )
+    for( i = 0; i < data->preview_count; i++ )
     {
         int j;
         FILE * file_preview;
@@ -416,7 +425,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
         if (data->dvd)
         {
-          if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / 11.0 ) )
+          if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / ( data->preview_count + 1.0 ) ) )
           {
               continue;
           }
@@ -426,7 +435,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
           /* we start reading streams at zero rather than 1/11 because
            * short streams may have only one sequence header in the entire
            * file and we need it to decode any previews. */
-          if (!hb_stream_seek(data->stream, (float) i / 11.0 ) )
+          if (!hb_stream_seek(data->stream, (float) i / ( data->preview_count + 1.0 ) ) )
           {
               continue;
           }
@@ -560,20 +569,23 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             hb_deep_log( 2, "Interlacing detected in preview frame %i", i+1);
             interlaced_preview_count++;
         }
-
-        hb_get_tempory_filename( data->h, filename, "%x%d",
-                                 (intptr_t)title, i );
-
-        file_preview = fopen( filename, "w" );
-        if( file_preview )
+        
+        if( data->store_previews )
         {
-            fwrite( vid_buf->data, title->width * title->height * 3 / 2,
-                    1, file_preview );
-            fclose( file_preview );
-        }
-        else
-        {
-            hb_log( "scan: fopen failed (%s)", filename );
+            hb_get_tempory_filename( data->h, filename, "%x%d",
+                                     (intptr_t)title, i );
+
+            file_preview = fopen( filename, "w" );
+            if( file_preview )
+            {
+                fwrite( vid_buf->data, title->width * title->height * 3 / 2,
+                        1, file_preview );
+                fclose( file_preview );
+            }
+            else
+            {
+                hb_log( "scan: fopen failed (%s)", filename );
+            }
         }
 
         /* Detect black borders */

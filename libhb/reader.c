@@ -209,13 +209,16 @@ static void ReaderFunc( void * _r )
         if ( r->job->start_at_preview )
         {
             // XXX code from DecodePreviews - should go into its own routine
-            hb_dvd_seek( r->dvd, (float)r->job->start_at_preview / 11. );
+            hb_dvd_seek( r->dvd, (float)r->job->start_at_preview /
+                         ( r->job->seek_points ? ( r->job->seek_points + 1.0 ) : 11.0 ) );
         }
     }
     else if ( r->stream && r->job->start_at_preview )
     {
         // XXX code from DecodePreviews - should go into its own routine
-        hb_stream_seek( r->stream, (float)( r->job->start_at_preview - 1 ) / 11. );
+        hb_stream_seek( r->stream, (float)( r->job->start_at_preview - 1 ) /
+                        ( r->job->seek_points ? ( r->job->seek_points + 1.0 ) : 11.0 ) );
+
     }
 
     list  = hb_list_init();

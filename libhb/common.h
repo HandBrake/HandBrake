@@ -225,7 +225,8 @@ struct hb_job_s
     int64_t         pts_to_stop;        // declare eof when we pass this pts in
                                         //  the time-linearized input stream
     int             start_at_preview;   // if non-zero, encoding will start
-                                        //  at the position of preview n (1-10)
+                                        //  at the position of preview n
+    int             seek_points;        //  out of N previews
     uint32_t        frames_to_skip;     // decode but discard this many frames
                                         //  initially (for frame accurate positioning
                                         //  to non-I frames).

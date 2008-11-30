@@ -277,8 +277,11 @@ void hb_set_cpu_count( hb_handle_t * h, int cpu_count )
  * @param h Handle to hb_handle_t
  * @param path location of VIDEO_TS folder.
  * @param title_index Desired title to scan.  0 for all titles.
+ * @param preview_count Number of preview images to generate.
+ * @param store_previews Whether or not to write previews to disk.
  */
-void hb_scan( hb_handle_t * h, const char * path, int title_index )
+void hb_scan( hb_handle_t * h, const char * path, int title_index,
+              int preview_count, int store_previews )
 {
     hb_title_t * title;
 
@@ -290,7 +293,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index )
     }
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
-    h->scan_thread = hb_scan_init( h, path, title_index, h->list_title );
+    h->scan_thread = hb_scan_init( h, path, title_index, h->list_title,
+                                   preview_count, store_previews );
 }
 
 /**

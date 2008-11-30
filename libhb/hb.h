@@ -77,7 +77,8 @@ char *        hb_dvd_name( char * path );
    Scan the specified path. Can be a DVD device, a VIDEO_TS folder or
    a VOB file. If title_index is 0, scan all titles. */
 void          hb_scan( hb_handle_t *, const char * path,
-                       int title_index );
+                       int title_index, int preview_count,
+                       int store_previews );
 
 /* hb_get_titles()
    Returns the list of valid titles detected by the latest scan. */

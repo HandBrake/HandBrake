@@ -92,6 +92,8 @@ static int    cfr           = 0;
 static int    mp4_optimize  = 0;
 static int    ipod_atom     = 0;
 static int    color_matrix  = 0;
+static int    preview_count = 10;
+static int    store_previews = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -196,7 +198,8 @@ int main( int argc, char ** argv )
          */
         titleindex = 0;
     }
-    hb_scan( h, input, titleindex );
+
+    hb_scan( h, input, titleindex, preview_count, store_previews );
 
     /* Wait... */
     while( !die )
@@ -1873,6 +1876,9 @@ static void ShowHelp()
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
+    "        --previews <#:B>    Select how many preview images are generated (max 30),\n"
+    "                            and whether or not they're stored to disk (0 or 1).\n"
+    "                            (default: 10:0)\n"
     "\n"
 
     "### Destination Options------------------------------------------------------\n\n"
@@ -2073,6 +2079,9 @@ static void ShowPresets()
  ****************************************************************************/
 static int ParseOptions( int argc, char ** argv )
 {
+    
+    #define PREVIEWS 257
+    
     for( ;; )
     {
         static struct option long_options[] =
@@ -2132,6 +2141,7 @@ static int ParseOptions( int argc, char ** argv )
 
             { "aname",       required_argument, NULL,    'A' },
             { "color-matrix",required_argument, NULL,    'M' },
+            { "previews",    required_argument, NULL,    PREVIEWS },
 
             { 0, 0, 0, 0 }
           };
@@ -2476,6 +2486,9 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     anames = strdup( optarg );
                 }
+                break;
+            case PREVIEWS:
+                sscanf( optarg, "%i:%i", &preview_count, &store_previews );
                 break;
             case 'M':
                 if( atoi( optarg ) == 601 )
