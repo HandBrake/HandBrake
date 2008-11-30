@@ -2985,42 +2985,45 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->largeFileSize = FALSE;
 		job->mp4_optimize = FALSE;
 	}
-	gint chapter_start, chapter_end;
-	chapter_start = ghb_settings_get_int(js, "start_chapter");
-	chapter_end = ghb_settings_get_int(js, "end_chapter");
-	gint num_chapters = hb_list_count(title->list_chapter);
-	job->chapter_start = MIN( num_chapters, chapter_start );
-	job->chapter_end   = MAX( job->chapter_start, chapter_end );
-
-	job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
-	if ( job->chapter_markers )
+	if (!job->start_at_preview)
 	{
-		GValue *chapters;
-		GValue *chapter;
-		gint chap;
-		gint count;
-		
-		chapters = ghb_settings_get_value(js, "chapter_list");
-		count = ghb_array_len(chapters);
-		for(chap = chapter_start; chap <= chapter_end; chap++)
+		gint chapter_start, chapter_end;
+		chapter_start = ghb_settings_get_int(js, "start_chapter");
+		chapter_end = ghb_settings_get_int(js, "end_chapter");
+		gint num_chapters = hb_list_count(title->list_chapter);
+		job->chapter_start = MIN( num_chapters, chapter_start );
+		job->chapter_end   = MAX( job->chapter_start, chapter_end );
+
+		job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
+		if ( job->chapter_markers )
 		{
-			hb_chapter_t * chapter_s;
-			gchar *name;
-			
-			name = NULL;
-			if (chap-1 < count)
+			GValue *chapters;
+			GValue *chapter;
+			gint chap;
+			gint count;
+		
+			chapters = ghb_settings_get_value(js, "chapter_list");
+			count = ghb_array_len(chapters);
+			for(chap = chapter_start; chap <= chapter_end; chap++)
 			{
-				chapter = ghb_array_get_nth(chapters, chap-1);
-				name = ghb_value_string(chapter); 
+				hb_chapter_t * chapter_s;
+				gchar *name;
+				
+				name = NULL;
+				if (chap-1 < count)
+				{
+					chapter = ghb_array_get_nth(chapters, chap-1);
+					name = ghb_value_string(chapter); 
+				}
+				if (name == NULL)
+				{
+					name = g_strdup_printf ("Chapter %2d", chap);
+				}
+				chapter_s = hb_list_item( job->title->list_chapter, chap - 1);
+				strncpy(chapter_s->title, name, 1023);
+				chapter_s->title[1023] = '\0';
+				g_free(name);
 			}
-			if (name == NULL)
-			{
-				name = g_strdup_printf ("Chapter %2d", chap);
-			}
-			chapter_s = hb_list_item( job->title->list_chapter, chap - 1);
-			strncpy(chapter_s->title, name, 1023);
-			chapter_s->title[1023] = '\0';
-			g_free(name);
 		}
 	}
 	job->crop[0] = ghb_settings_get_int(js, "PictureTopCrop");
