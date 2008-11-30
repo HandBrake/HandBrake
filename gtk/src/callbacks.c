@@ -576,7 +576,9 @@ ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force)
 			gtk_progress_bar_set_text (progress, "Scanning ...");
 			ghb_hb_cleanup(TRUE);
 			prune_logs(ud);
-			ghb_backend_scan (path, 0);
+			gint preview_count;
+			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+			ghb_backend_scan(path, 0, preview_count);
 			g_free(path);
 		}
 		else
@@ -1026,10 +1028,15 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 
 	// Unfortunately, there is no way to query how many frames were
-	// actually generated during the scan.  It attempts to make 10.
+	// actually generated during the scan.
 	// If I knew how many were generated, I would adjust the spin
 	// control range here.
-	ghb_ui_update(ud, "preview_frame", ghb_int64_value(1));
+	// I do know how many were asked for.
+	gint preview_count;
+	preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+	widget = GHB_WIDGET(ud->builder, "preview_frame");
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, preview_count);
+	ghb_ui_update(ud, "preview_frame", ghb_int64_value(2));
 
 	ghb_set_preview_image (ud);
 }
@@ -2476,13 +2483,15 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
  			update_source_label(ud, device);
 			ghb_hb_cleanup(TRUE);
 			prune_logs(ud);
-			ghb_backend_scan(device, 0);
+			gint preview_count;
+			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+			ghb_backend_scan(device, 0, preview_count);
 		}
 		else
 		{
 			ghb_hb_cleanup(TRUE);
 			prune_logs(ud);
-			ghb_backend_scan("/dev/null", 0);
+			ghb_backend_scan("/dev/null", 0, 1);
 		}
 	}
 	g_free(device);

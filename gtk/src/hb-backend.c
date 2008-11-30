@@ -1996,9 +1996,9 @@ ghb_backend_close()
 }
 
 void
-ghb_backend_scan(const gchar *path, gint titleindex)
+ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count)
 {
-    hb_scan( h_scan, path, titleindex );
+    hb_scan( h_scan, path, titleindex, preview_count, 1 );
 	hb_status.scan.state |= GHB_STATE_SCANNING;
 	// initialize count and cur to something that won't cause FPE
 	// when computing progress
@@ -2010,7 +2010,7 @@ void
 ghb_backend_queue_scan(const gchar *path, gint titlenum)
 {
 	g_debug("ghb_backend_queue_scan()");
-	hb_scan( h_queue, path, titlenum );
+	hb_scan( h_queue, path, titlenum, 10, 0 );
 	hb_status.queue.state |= GHB_STATE_SCANNING;
 }
 

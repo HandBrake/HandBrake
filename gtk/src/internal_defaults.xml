@@ -112,6 +112,8 @@
 		<true />
 		<key>noscale</key>
 		<false />
+		<key>preview_count</key>
+		<integer>10</integer>
 		<key>show_presets</key>
 		<true />
 		<key>use_source_name</key>
