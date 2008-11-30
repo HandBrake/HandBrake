@@ -10,7 +10,7 @@
 /* Needed for Quicktime movie previews */
 #import <QTKit/QTKit.h> 
 
-#define HB_NUM_HBLIB_PICTURES      10   // hbilb generates 10 preview pictures
+#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
 
 @interface PictureController : NSWindowController
 {

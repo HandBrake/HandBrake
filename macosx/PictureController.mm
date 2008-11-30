@@ -91,6 +91,12 @@
     [fPreviewMovieLengthPopUp addItemWithTitle: @"55"];
     [fPreviewMovieLengthPopUp addItemWithTitle: @"60"];
     
+    /* adjust the preview slider length */
+    /* We use our advance pref to determine how many previews we scanned */
+    int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+    [fPictureSlider setMaxValue: hb_num_previews - 1.0];
+    [fPictureSlider setNumberOfTickMarks: hb_num_previews];
+    
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewLength"])
     {
         [fPreviewMovieLengthPopUp selectItemWithTitle:[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewLength"]];
@@ -571,7 +577,10 @@ are maintained across different sources */
     /* We now direct our preview encode to fPreviewMoviePath */
     fTitle->job->file = [fPreviewMoviePath UTF8String];
     
+    /* We use our advance pref to determine how many previews to scan */
+    int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
     job->start_at_preview = fPicture + 1;
+    job->seek_points = hb_num_previews;
     
     /* we use the preview duration popup to get the specified
      * number of seconds for the preview encode.

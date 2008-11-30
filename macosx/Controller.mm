@@ -1404,8 +1404,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
-
-        hb_scan( fHandle, [path UTF8String], scanTitleNum );
+        /* We use our advance pref to determine how many previews to scan */
+        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 );
         [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
     }
 }
@@ -2144,8 +2145,11 @@ fWorkingCount = 0;
         {
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
+        
         [self writeToActivityLog: "performNewQueueScan currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
-        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum );
+        /* We use our advance pref to determine how many previews to scan */
+        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, hb_num_previews, 0 );
     }
 }
 
