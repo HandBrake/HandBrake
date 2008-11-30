@@ -37,7 +37,7 @@
     IBOutlet NSTextField     * fCropRightField;
     IBOutlet NSStepper       * fCropRightStepper;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
-    IBOutlet NSPopUpButton   * fDecombPopUp;
+    IBOutlet NSButton        * fDecombCheck;
 	IBOutlet NSButton        * fDetelecineCheck;
     IBOutlet NSButton        * fDeblockCheck;
     IBOutlet NSTextField     * fDeblockField;

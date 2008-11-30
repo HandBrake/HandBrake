@@ -161,6 +161,7 @@
     [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
     [fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     [fDeblockCheck setState: fPictureFilterSettings.deblock];
+    [fDecombCheck setState: fPictureFilterSettings.decomb];
     
     fPicture = 0;
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
@@ -191,13 +192,6 @@ are maintained across different sources */
 	/* Set denoises level according to the integer in the main window */
 	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     
-    /* we use a popup to show the decomb settings */
-	[fDecombPopUp removeAllItems];
-    [fDecombPopUp addItemWithTitle: @"None"];
-    [fDecombPopUp addItemWithTitle: @"Default"];
-    [fDecombPopUp addItemWithTitle: @"Custom"];
-	/* Set denoises level according to the integer in the main window */
-	[fDecombPopUp selectItemAtIndex: fPictureFilterSettings.decomb];
 
 }
 
@@ -417,7 +411,7 @@ are maintained across different sources */
     fPictureFilterSettings.deblock  = [fDeblockField intValue];
     }
     
-    fPictureFilterSettings.decomb = [fDecombPopUp indexOfSelectedItem];
+    fPictureFilterSettings.decomb = [fDecombCheck state];
 
     if( job->keep_ratio )
     {

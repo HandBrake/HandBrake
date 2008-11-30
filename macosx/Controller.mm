@@ -4083,26 +4083,25 @@ the user is using "Custom" settings by determining the sender*/
 	}	
     
     /* Detelecine */
-    if ([fPictureController detelecine]) {
+    if ([fPictureController detelecine]) 
+    {
         [fPicSettingDetelecine setStringValue: @"Yes"];
     }
-    else {
-        [fPicSettingDetelecine setStringValue: @"No"];
+    else 
+    {
+        [fPicSettingDetelecine setStringValue: @"Off"];
     }
     
     /* Decomb */
-	if ([fPictureController decomb] == 0)
-	{
-		[fPicSettingDecomb setStringValue: @"Off"];
-	}
-	else if ([fPictureController decomb] == 1)
+	if ([fPictureController decomb])
 	{
 		[fPicSettingDecomb setStringValue: @"1:2:6:9:80:16:16"];
 	}
-    else if ([fPictureController decomb] == 2)
-    {
-        [fPicSettingDecomb setStringValue:[[NSUserDefaults standardUserDefaults] stringForKey:@"DecombCustomString"]];
-    }
+	else
+	{
+		[fPicSettingDecomb setStringValue: @"Off"];
+	}
+    
 
     /* VFR (Variable Frame Rate) */
     
@@ -5912,7 +5911,7 @@ return YES;
                 job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
                 
                 
-                                /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
+                /* If the preset has no objectForKey:@"UsesPictureFilters", then we know it is a legacy preset
                  * and handle the filters here as before.
                  * NOTE: This should be removed when the update presets code is done as we can be assured that legacy
                  * presets are updated to work properly with new keys.
@@ -6041,7 +6040,7 @@ return YES;
             /* Decomb */
             /* Even though we currently allow for a custom setting for decomb, ultimately it will only have Off and
              * Default so we just pay attention to anything greater than 0 as 1 (Default). 0 is Off. */
-            if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
+            if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 1)
             {
                 [fPictureController setDecomb:1];
             }
