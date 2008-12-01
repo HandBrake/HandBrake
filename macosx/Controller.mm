@@ -2823,8 +2823,14 @@ fWorkingCount = 0;
 	}
     
     /* Deblock  (uses pp7 default) */
-    if ([fPictureController deblock])
+    /* NOTE: even though there is a valid deblock setting of 0 for the filter, for 
+     * the macgui's purposes a value of 0 actually means to not even use the filter
+     * current hb_filter_deblock.settings valid ranges are from 5 - 15 
+     */
+    if ([fPictureController deblock] != 0)
     {
+        NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureController deblock]];
+        hb_filter_deblock.settings = (char *) [deblockStringValue UTF8String];
         hb_list_add( job->filters, &hb_filter_deblock );
     }
 
