@@ -214,7 +214,11 @@ caps_set(GstCaps *caps, preview_t *preview)
 		gst_video_calculate_display_ratio(
 			&num, &den, width, height, par_n, par_d, disp_par_n, disp_par_d);
 
-		width = gst_util_uint64_scale_int(height, num, den);
+		if (par_n > par_d)
+			width = gst_util_uint64_scale_int(height, num, den);
+		else
+			height = gst_util_uint64_scale_int(width, den, num);
+		
 		if (width != preview->width || height != preview->height)
 		{
 			gtk_widget_set_size_request(preview->view, width, height);
