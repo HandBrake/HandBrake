@@ -1,1 +1,1 @@
-http://download.m0k.org/handbrake/contrib/ffmpeg-r15462.tar.gz
+http://download.m0k.org/handbrake/contrib/ffmpeg-r15974.tar.gz

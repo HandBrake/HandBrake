@@ -111,7 +111,7 @@ actions LibAvCodec
         --disable-shared --enable-static --disable-encoders \
         --enable-encoder=mpeg4 --enable-encoder=ac3 --enable-encoder=snow \
         --enable-libfaad --disable-ffmpeg --disable-ffserver \
-        --disable-muxers --enable-muxer=ipod --disable-bsfs \
+        --disable-muxers --enable-muxer=ipod --disable-bsfs --disable-vhook \
         --extra-cflags="-I$CONTRIB/include" \
         --extra-ldflags="-L$CONTRIB/lib" $(FFMPEG_EXTRA_OPTIONS) &&
     $(MAKE) && $(MAKE) install &&

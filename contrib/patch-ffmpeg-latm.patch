@@ -11,10 +11,10 @@ Index: libavcodec/Makefile
  OBJS-$(CONFIG_LIBGSM)                  += libgsm.o
  OBJS-$(CONFIG_LIBMP3LAME)              += libmp3lame.o
  OBJS-$(CONFIG_LIBSCHROEDINGER_DECODER) += libschroedingerdec.o libschroedinger.o libdirac_libschro.o
-@@ -333,7 +333,7 @@
+@@ -350,7 +350,7 @@
  OBJS-$(CONFIG_LIBXVID)                 += libxvidff.o libxvid_rc.o
  
- 
+ # parsers
 -OBJS-$(CONFIG_AAC_PARSER)              += aac_parser.o aac_ac3_parser.o mpeg4audio.o
 +OBJS-$(CONFIG_AAC_PARSER)              += aac_parser.o aac_ac3_parser.o mpeg4audio.o latm_parser.o
  OBJS-$(CONFIG_AC3_PARSER)              += ac3_parser.o ac3tab.o aac_ac3_parser.o
