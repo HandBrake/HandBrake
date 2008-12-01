@@ -77,7 +77,7 @@ x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 	options = ghb_settings_get_string(ud->settings, "x264Option");
 	sopts = sanitize_x264opts(ud, options);
 	ignore_options_update = TRUE;
-	if (sopts != NULL)
+	if (sopts != NULL && strcmp(sopts, options) != 0)
 	{
 		ghb_ui_update(ud, "x264Option", ghb_string_value(sopts));
 		ghb_x264_parse_options(ud, sopts);
