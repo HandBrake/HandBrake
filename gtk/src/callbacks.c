@@ -1915,7 +1915,7 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 		buffer = gtk_text_view_get_buffer (textview);
 		// I would like to auto-scroll the window when the scrollbar
 		// is at the bottom, 
-		// must determining whether the insert point is at
+		// must determine whether the insert point is at
 		// the bottom of the window 
 		window = gtk_text_view_get_window(textview, GTK_TEXT_WINDOW_TEXT);
 		if (window != NULL)
@@ -1938,8 +1938,8 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 		gtk_text_buffer_insert(buffer, &iter, text, -1);
 		if (bottom)
 		{
-			//gtk_text_view_scroll_to_iter(textview, &iter, 0, FALSE, 0, 0);
-			mark = gtk_text_buffer_get_insert (buffer);
+			gtk_text_buffer_get_end_iter(buffer, &iter);
+			mark = gtk_text_buffer_create_mark(buffer, NULL, &iter, FALSE);
 			gtk_text_view_scroll_mark_onscreen(textview, mark);
 		}
 		g_io_channel_write_chars (ud->activity_log, text, 
