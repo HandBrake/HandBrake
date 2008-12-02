@@ -168,15 +168,6 @@ static void ScanFunc( void * _data )
             j++;
         }
 
-        /* If we don't have any audio streams left, remove the title */
-        if( !hb_list_count( title->list_audio ) )
-        {
-            hb_log("scan: ignoring title %i, no audio tracks found", title->index );
-            hb_list_rem( data->list_title, title );
-            free( title );
-            continue;
-        }
-
         i++;
     }
 
@@ -463,6 +454,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
               if ( !hb_stream_read(data->stream,buf_ps) )
               {
+                  if ( vid_buf )
+                  {
+                    break;
+                  }
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
                   goto skip_preview;
               }
