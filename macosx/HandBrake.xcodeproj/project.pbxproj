@@ -115,6 +115,8 @@
 		A2D7AD6F0C998AD30082CA33 /* Source.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD660C998AD30082CA33 /* Source.tiff */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
+		B453420A0EE3619C005D6F26 /* decmetadata.c in Sources */ = {isa = PBXBuildFile; fileRef = B45342080EE3619C005D6F26 /* decmetadata.c */; };
+		B453420B0EE3619C005D6F26 /* decmetadata.c in Sources */ = {isa = PBXBuildFile; fileRef = B45342080EE3619C005D6F26 /* decmetadata.c */; };
 		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D289A9F20DBBE7AC00CE614B /* CoreServices.framework */; };
 		D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
@@ -275,6 +277,7 @@
 		A2D7AD660C998AD30082CA33 /* Source.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Source.tiff; sourceTree = "<group>"; };
 		A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
 		A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
+		B45342080EE3619C005D6F26 /* decmetadata.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = decmetadata.c; path = ../libhb/decmetadata.c; sourceTree = SOURCE_ROOT; };
 		B48359A70C82960500E04440 /* lang.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lang.c; path = ../libhb/lang.c; sourceTree = SOURCE_ROOT; };
 		D289A9F20DBBE7AC00CE614B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DeleteHighlightPressed.png; sourceTree = "<group>"; };
@@ -373,6 +376,7 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
+				B45342080EE3619C005D6F26 /* decmetadata.c */,
 				526FBC930B4CAA260064E04C /* HandBrake Sources */,
 				526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */,
 				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
@@ -770,6 +774,7 @@
 				FC8519560C59A02C0073812C /* deblock.c in Sources */,
 				FC8519570C59A02C0073812C /* detelecine.c in Sources */,
 				749701100DC281BB009200D8 /* decomb.c in Sources */,
+				B453420B0EE3619C005D6F26 /* decmetadata.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -815,6 +820,7 @@
 				B48359A80C82960500E04440 /* lang.c in Sources */,
 				A25289E60D87A27D00461D5B /* enctheora.c in Sources */,
 				7497010F0DC281BB009200D8 /* decomb.c in Sources */,
+				B453420A0EE3619C005D6F26 /* decmetadata.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

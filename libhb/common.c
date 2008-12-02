@@ -674,6 +674,15 @@ void hb_title_close( hb_title_t ** _t )
     }
     hb_list_close( &t->list_subtitle );
 
+    if( t->metadata )
+    {
+        if( t->metadata->coverart )
+        {
+            free( t->metadata->coverart );
+        }
+        free( t->metadata );
+    }
+
     free( t );
     *_t = NULL;
 }

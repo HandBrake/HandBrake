@@ -820,6 +820,34 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         hb_list_add( title_copy->list_chapter, chapter_copy );
     }
 
+    /*
+     * Copy the metadata
+     */
+    if( title->metadata )
+    {
+        title_copy->metadata = malloc( sizeof( hb_metadata_t ) );
+        
+        if( title_copy->metadata ) 
+        {
+            memcpy( title_copy->metadata, title->metadata, sizeof( hb_metadata_t ) );
+
+            /*
+             * Need to copy the artwork seperatly (TODO).
+             */
+            if( title->metadata->coverart )
+            {
+                title_copy->metadata->coverart = malloc( title->metadata->coverart_size );
+                if( title_copy->metadata->coverart )
+                {
+                    memcpy( title_copy->metadata->coverart, title->metadata->coverart,
+                            title->metadata->coverart_size );
+                } else {
+                    title_copy->metadata->coverart_size = 0; 
+                }
+            }
+        }
+    }
+
     /* Copy the audio track(s) we want */
     title_copy->list_audio = hb_list_init();
 

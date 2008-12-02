@@ -43,96 +43,6 @@ struct hb_mux_data_s
     MP4TrackId track;
 };
 
-struct hb_text_sample_s
-{
-    uint8_t     sample[1280];
-    uint32_t    length;
-    MP4Duration duration;
-};
-
-/**********************************************************************
- * MP4CreateTextSample
- **********************************************************************
- * Creates a buffer for a text track sample
- *********************************************************************/
-static struct hb_text_sample_s *MP4CreateTextSample( char *textString, uint64_t duration )
-{
-    struct hb_text_sample_s *sample = NULL;
-    int stringLength = strlen(textString);
-    int x;
-
-    if( stringLength < 1024 )
-    {
-        sample = malloc( sizeof( struct hb_text_sample_s ) );
-
-        //textLength = (stringLength; // Account for BOM
-        sample->length = stringLength + 2 + 12; // Account for text length code and other marker
-        sample->duration = (MP4Duration)duration;
-
-        // 2-byte length marker
-        sample->sample[0] = (stringLength >> 8) & 0xff;
-        sample->sample[1] = stringLength & 0xff;
-
-        strncpy( (char *)&(sample->sample[2]), textString, stringLength );
-
-        x = 2 + stringLength;
-
-        // Modifier Length Marker
-        sample->sample[x] = 0x00;
-        sample->sample[x+1] = 0x00;
-        sample->sample[x+2] = 0x00;
-        sample->sample[x+3] = 0x0C;
-
-        // Modifier Type Code
-        sample->sample[x+4] = 'e';
-        sample->sample[x+5] = 'n';
-        sample->sample[x+6] = 'c';
-        sample->sample[x+7] = 'd';
-
-        // Modifier Value
-        sample->sample[x+8] = 0x00;
-        sample->sample[x+9] = 0x00;
-        sample->sample[x+10] = (256 >> 8) & 0xff;
-        sample->sample[x+11] = 256 & 0xff;
-    }
-
-    return sample;
-}
-
-/**********************************************************************
- * MP4GenerateChapterSample
- **********************************************************************
- * Creates a buffer for a text track sample
- *********************************************************************/
-static struct hb_text_sample_s *MP4GenerateChapterSample( hb_mux_object_t * m,
-                                                          uint64_t duration,
-                                                          int chapter )
-{
-    // We substract 1 from the chapter number because the chapters start at
-    // 1 but our name array starts at 0. We substract another 1 because we're
-    // writing the text of the previous chapter mark (when we get the start
-    // of chapter 2 we know the duration of chapter 1 & can write its mark).
-    hb_chapter_t *chapter_data = hb_list_item( m->job->title->list_chapter,
-                                               chapter - 2 );
-    char tmp_buffer[1024];
-    char *string = tmp_buffer;
-
-    tmp_buffer[0] = '\0';
-
-    if( chapter_data != NULL )
-    {
-        string = chapter_data->title;
-    }
-
-    if( strlen(string) == 0 || strlen(string) >= 1024 )
-    {
-        snprintf( tmp_buffer, 1023, "Chapter %03i", chapter - 2 );
-        string = tmp_buffer;
-    }
-
-    return MP4CreateTextSample( string, duration );
-}
-
 
 /**********************************************************************
  * MP4Init
@@ -477,14 +387,14 @@ static int MP4Init( hb_mux_object_t * m )
 
     }
 
-	if (job->chapter_markers)
+    if (job->chapter_markers)
     {
         /* add a text track for the chapters. We add the 'chap' atom to track
            one which is usually the video track & should never be disabled.
            The Quicktime spec says it doesn't matter which media track the
            chap atom is on but it has to be an enabled track. */
         MP4TrackId textTrack;
-        textTrack = MP4AddChapterTextTrack(m->file, 1);
+        textTrack = MP4AddChapterTextTrack(m->file, 1, 0);
 
         m->chapter_track = textTrack;
         m->chapter_duration = 0;
@@ -519,13 +429,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             offset = ( buf->start + m->init_delay ) * m->samplerate / 90000 -
                      m->sum_dur;
         }
+
         /* Add the sample before the new frame.
            It is important that this be calculated prior to the duration
            of the new video sample, as we want to sync to right after it.
            (This is because of how durations for text tracks work in QT) */
         if( job->chapter_markers && buf->new_chap )
-        {
-            struct hb_text_sample_s *sample;
+        {    
+            hb_chapter_t *chapter = NULL;
 
             // this chapter is postioned by writing out the previous chapter.
             // the duration of the previous chapter is the duration up to but
@@ -542,19 +453,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 duration = 1000 * m->samplerate / 90000;
             }
 
-            sample = MP4GenerateChapterSample( m, duration, buf->new_chap );
+            chapter = hb_list_item( m->job->title->list_chapter,
+                                    buf->new_chap - 2 );
 
-            if( !MP4WriteSample(m->file,
-                                m->chapter_track,
-                                sample->sample,
-                                sample->length,
-                                sample->duration,
-                                0, true) )
-            {
-                hb_error("Failed to write to output file, disk full?");
-                *job->die = 1;
-            }
-            free(sample);
+            MP4AddChapter( m->file,
+                           m->chapter_track,
+                           duration,
+                           (chapter != NULL) ? chapter->title : NULL);
+
             m->current_chapter = buf->new_chap;
             m->chapter_duration += duration;
         }
@@ -612,25 +518,25 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 static int MP4End( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
+    hb_title_t * title = job->title;
 
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
     {
+        hb_chapter_t *chapter = NULL;
         int64_t duration = m->sum_dur - m->chapter_duration;
         /* The final chapter can have a very short duration - if it's less
          * than a second just skip it. */
         if ( duration >= m->samplerate )
         {
 
-            struct hb_text_sample_s *sample = MP4GenerateChapterSample( m, duration,
-                                                    m->current_chapter + 1 );
-            if( ! MP4WriteSample(m->file, m->chapter_track, sample->sample,
-                                 sample->length, sample->duration, 0, true) )
-            {
-                hb_error("Failed to write to output file, disk full?");
-                *job->die = 1;
-            }
-            free(sample);
+            chapter = hb_list_item( m->job->title->list_chapter,
+                                    m->current_chapter - 1 );
+
+            MP4AddChapter( m->file,
+                           m->chapter_track,
+                           duration,
+                           (chapter != NULL) ? chapter->title : NULL);
         }
     }
 
@@ -649,6 +555,28 @@ static int MP4End( hb_mux_object_t * m )
                                 MP4GetTrackDuration(m->file, m->chapter_track), 0);
             }
      }
+
+    /*
+     * Write the MP4 iTunes metadata if we have any metadata
+     */
+    if( title->metadata )
+    {
+        hb_metadata_t *md = title->metadata;
+
+        hb_deep_log( 2, "Writing Metadata to output file...");
+
+        MP4SetMetadataName( m->file, md->name );
+        MP4SetMetadataArtist( m->file, md->artist );
+        MP4SetMetadataComposer( m->file, md->composer );
+        MP4SetMetadataComment( m->file, md->comment );
+        MP4SetMetadataReleaseDate( m->file, md->release_date );
+        MP4SetMetadataAlbum( m->file, md->album );
+        MP4SetMetadataGenre( m->file, md->genre );
+        if( md->coverart )
+        {
+            MP4SetMetadataCoverArt( m->file, md->coverart, md->coverart_size);
+        }
+    }
 
     MP4Close( m->file );
 

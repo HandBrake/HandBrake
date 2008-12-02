@@ -332,6 +332,10 @@ static void SyncVideo( hb_work_object_t * w )
             }
         }
 
+        if( cur->new_chap ) {
+            hb_log("sync got new chapter %d", cur->new_chap );
+        }
+
         /*
          * since the first frame is always 0 and the upstream reader code
          * is taking care of adjusting for pts discontinuities, we just have

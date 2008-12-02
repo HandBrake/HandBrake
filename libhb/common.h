@@ -41,6 +41,7 @@ typedef struct hb_chapter_s hb_chapter_t;
 typedef struct hb_audio_s hb_audio_t;
 typedef struct hb_audio_config_s hb_audio_config_t;
 typedef struct hb_subtitle_s hb_subtitle_t;
+typedef struct hb_metadata_s hb_metadata_t;
 typedef struct hb_state_s hb_state_t;
 typedef union  hb_esconfig_u     hb_esconfig_t;
 typedef struct hb_work_private_s hb_work_private_t;
@@ -432,6 +433,20 @@ struct hb_subtitle_s
 #endif
 };
 
+struct hb_metadata_s 
+{
+    char  name[255];
+    char  artist[255];
+    char  composer[255];
+    char  release_date[255];
+    char  comment[1024];
+    char  album[255];
+    char  genre[255];
+    enum arttype {UNKNOWN, BMP, GIF87A, GIF89A, JPG, PNG, TIFFL, TIFFB} coverart_type;
+    uint32_t coverart_size;
+    uint8_t *coverart;
+};
+
 struct hb_title_s
 {
     char        dvd[1024];
@@ -475,6 +490,8 @@ struct hb_title_s
     int         data_rate;
 
     uint32_t    palette[16];
+
+    hb_metadata_t *metadata;
 
     hb_list_t * list_chapter;
     hb_list_t * list_audio;

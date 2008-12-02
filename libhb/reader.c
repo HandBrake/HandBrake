@@ -215,10 +215,32 @@ static void ReaderFunc( void * _r )
     }
     else if ( r->stream && r->job->start_at_preview )
     {
+        
         // XXX code from DecodePreviews - should go into its own routine
         hb_stream_seek( r->stream, (float)( r->job->start_at_preview - 1 ) /
                         ( r->job->seek_points ? ( r->job->seek_points + 1.0 ) : 11.0 ) );
 
+    } 
+    else if( r->stream )
+    {
+        /*
+         * Standard stream, seek to the starting chapter, if set, and track the
+         * end chapter so that we end at the right time.
+         */
+        int start = r->job->chapter_start;
+        hb_chapter_t *chap = hb_list_item( r->title->list_chapter, chapter_end - 1 );
+        
+        chapter_end = chap->index;
+        if (start > 1)
+        {
+            chap = hb_list_item( r->title->list_chapter, start - 1 );
+            start = chap->index;
+        }
+        
+        /*
+         * Seek to the start chapter.
+         */
+        hb_stream_seek_chapter( r->stream, start );
     }
 
     list  = hb_list_init();
@@ -228,9 +250,9 @@ static void ReaderFunc( void * _r )
     while( !*r->die && !r->job->done )
     {
         if (r->dvd)
-          chapter = hb_dvd_chapter( r->dvd );
+            chapter = hb_dvd_chapter( r->dvd );
         else if (r->stream)
-          chapter = 1;
+            chapter = hb_stream_chapter( r->stream );
 
         if( chapter < 0 )
         {

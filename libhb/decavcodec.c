@@ -190,6 +190,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     /*XXX*/
     if ( codec_id == 0 )
         codec_id = CODEC_ID_MP2;
+
     codec = avcodec_find_decoder( codec_id );
     pv->parser = av_parser_init( codec_id );
 

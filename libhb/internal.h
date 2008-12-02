@@ -161,6 +161,11 @@ int hb_demux_null( hb_buffer_t * ps_buf, hb_list_t * es_list, hb_psdemux_t * );
 extern const hb_muxer_t hb_demux[];
 
 /***********************************************************************
+ * decmetadata.c
+ **********************************************************************/
+extern void decmetadata( hb_title_t *title );
+
+/***********************************************************************
  * dvd.c
  **********************************************************************/
 typedef struct hb_dvd_s hb_dvd_t;
