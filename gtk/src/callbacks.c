@@ -1941,6 +1941,7 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 			gtk_text_buffer_get_end_iter(buffer, &iter);
 			mark = gtk_text_buffer_create_mark(buffer, NULL, &iter, FALSE);
 			gtk_text_view_scroll_mark_onscreen(textview, mark);
+			gtk_text_buffer_delete_mark(buffer, mark);
 		}
 		g_io_channel_write_chars (ud->activity_log, text, 
 								length, &length, NULL);
