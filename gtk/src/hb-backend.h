@@ -93,7 +93,8 @@ void ghb_vquality_range(
 	gdouble *page,
 	gint *digits);
 //const gchar* ghb_get_rate_string(gint rate, gint type);
-void ghb_backend_init(GtkBuilder *builder, gint debug, gint update);
+void ghb_combo_init(GtkBuilder *builder);
+void ghb_backend_init(gint debug);
 void ghb_backend_close(void);
 void ghb_add_job(GValue *js, gint unique_id);
 void ghb_remove_job(gint unique_id);

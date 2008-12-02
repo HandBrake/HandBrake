@@ -63,6 +63,18 @@ static const gchar *index_str[] =
 	"10",
 };
 
+static options_map_t d_logging_opts[] =
+{
+	{"0", "0", 0, "0"},
+	{"1", "1", 1, "1"},
+	{"2", "2", 2, "2"},
+};
+combo_opts_t logging_opts =
+{
+	sizeof(d_logging_opts)/sizeof(options_map_t),
+	d_logging_opts
+};
+
 static options_map_t d_container_opts[] =
 {
 	{"MKV", "mkv", HB_MUX_MKV, "mkv"},
@@ -224,6 +236,7 @@ typedef struct
 
 combo_name_map_t combo_name_map[] =
 {
+	{"LoggingLevel", &logging_opts},
 	{"FileFormat", &container_opts},
 	{"PictureDeinterlace", &deint_opts},
 	{"tweak_PictureDeinterlace", &deint_opts},
@@ -1742,6 +1755,7 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		subtitle_opts_set(builder, "Subtitles", user_data);
 		title_opts_set(builder, "title");
 		audio_track_opts_set(builder, "AudioTrack", user_data);
+		generic_opts_set(builder, "LoggingLevel", &logging_opts);
 		generic_opts_set(builder, "FileFormat", &container_opts);
 		generic_opts_set(builder, "PictureDeinterlace", &deint_opts);
 		generic_opts_set(builder, "tweak_PictureDeinterlace", &deint_opts);
@@ -1977,15 +1991,20 @@ ghb_set_default_bitrate_opts(GtkBuilder *builder, gint last_rate)
 static ghb_status_t hb_status;
 
 void
-ghb_backend_init(GtkBuilder *builder, gint debug, gint update)
+ghb_combo_init(GtkBuilder *builder)
 {
-    /* Init libhb */
-    h_scan = hb_init( debug, update );
-    h_queue = hb_init( debug, 0 );
 	// Set up the list model for the combos
 	init_ui_combo_boxes(builder);
 	// Populate all the combos
 	ghb_update_ui_combo_box(builder, NULL, 0, TRUE);
+}
+
+void
+ghb_backend_init(gint debug)
+{
+    /* Init libhb */
+    h_scan = hb_init( debug, 0 );
+    h_queue = hb_init( debug, 0 );
 }
 
 void

@@ -3275,6 +3275,44 @@ location as the movie.</property>
                             <property name="position">6</property>
                           </packing>
                         </child>
+
+                        <child>
+                          <object class="GtkAlignment" id="alignment_j6">
+                            <property name="visible">True</property>
+                            <property name="left_padding">4</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox1">
+                                <property name="visible">True</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkComboBox" id="LoggingLevel">
+                                    <property name="visible">True</property>
+                                    <property name="width_request">55</property>
+                                    <signal name="changed" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label1">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Logging Level</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">7</property>
+                          </packing>
+                        </child>
+
                         <child>
                           <object class="GtkCheckButton" id="allow_tweaks">
                             <property name="can_focus">True</property>
@@ -3283,7 +3321,7 @@ location as the movie.</property>
                             <signal name="toggled" handler="tweaks_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
                         <child>
@@ -3294,7 +3332,7 @@ location as the movie.</property>
                             <signal name="toggled" handler="hbfd_feature_changed_cb"/>
                           </object>
                           <packing>
-                            <property name="position">8</property>
+                            <property name="position">9</property>
                           </packing>
                         </child>
                       </object>

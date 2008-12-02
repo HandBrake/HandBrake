@@ -3280,6 +3280,44 @@ location as the movie.&lt;/property&gt;
                             &lt;property name=&quot;position&quot;&gt;6&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
+
+                        &lt;child&gt;
+                          &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment_j6&quot;&gt;
+                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                            &lt;property name=&quot;left_padding&quot;&gt;4&lt;/property&gt;
+                            &lt;child&gt;
+                              &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox1&quot;&gt;
+                                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                &lt;property name=&quot;spacing&quot;&gt;4&lt;/property&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkComboBox&quot; id=&quot;LoggingLevel&quot;&gt;
+                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;width_request&quot;&gt;55&lt;/property&gt;
+                                    &lt;signal name=&quot;changed&quot; handler=&quot;pref_changed_cb&quot;/&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+                                    &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkLabel&quot; id=&quot;label1&quot;&gt;
+                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Logging Level&lt;/property&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+                              &lt;/object&gt;
+                            &lt;/child&gt;
+                          &lt;/object&gt;
+                          &lt;packing&gt;
+                            &lt;property name=&quot;position&quot;&gt;7&lt;/property&gt;
+                          &lt;/packing&gt;
+                        &lt;/child&gt;
+
                         &lt;child&gt;
                           &lt;object class=&quot;GtkCheckButton&quot; id=&quot;allow_tweaks&quot;&gt;
                             &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
@@ -3288,7 +3326,7 @@ location as the movie.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;tweaks_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;7&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;8&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                         &lt;child&gt;
@@ -3299,7 +3337,7 @@ location as the movie.&lt;/property&gt;
                             &lt;signal name=&quot;toggled&quot; handler=&quot;hbfd_feature_changed_cb&quot;/&gt;
                           &lt;/object&gt;
                           &lt;packing&gt;
-                            &lt;property name=&quot;position&quot;&gt;8&lt;/property&gt;
+                            &lt;property name=&quot;position&quot;&gt;9&lt;/property&gt;
                           &lt;/packing&gt;
                         &lt;/child&gt;
                       &lt;/object&gt;
@@ -5196,6 +5234,8 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<dict>
 			<key>EncodeLogLocation</key>
 			<false />
+			<key>LoggingLevel</key>
+			<string>1</string>
 			<key>allow_tweaks</key>
 			<false />
 			<key>chapters_in_destination</key>

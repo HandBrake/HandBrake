@@ -226,6 +226,7 @@ bind_chapter_tree_model (signal_user_data_t *ud)
 	g_debug("Done\n");
 }
 
+
 extern void queue_list_selection_changed_cb(void);
 extern void queue_remove_clicked_cb(void);
 extern void queue_list_size_allocate_cb(void);
@@ -543,7 +544,7 @@ main (int argc, char *argv[])
 	g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
 
 	ghb_file_menu_add_dvd(ud);
-	ghb_backend_init(ud->builder, 1, 0);
+	ghb_combo_init(ud->builder);
 
 	g_debug("ud %p\n", ud);
 	g_debug("ud->builder %p\n", ud->builder);
@@ -568,6 +569,10 @@ main (int argc, char *argv[])
 	gtk_widget_show (window);
 
 	ghb_prefs_to_ui(ud);
+
+	gint logLevel;
+	logLevel = ghb_settings_get_int(ud->settings, "LoggingLevel");
+	ghb_backend_init(logLevel);
 
 	if (ghb_settings_get_boolean(ud->settings, "hbfd"))
 	{

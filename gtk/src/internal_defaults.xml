@@ -106,6 +106,8 @@
 		<false />
 		<key>hbfd_feature</key>
 		<false />
+		<key>LoggingLevel</key>
+		<string>1</string>
 		<key>nocheckvquality</key>
 		<false />
 		<key>reduce_hd_preview</key>
