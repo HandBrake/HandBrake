@@ -508,7 +508,7 @@
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
-                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Source Title&lt;/property&gt;
+                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;&lt;/property&gt;
                                   &lt;/object&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -549,7 +549,9 @@
                                   &lt;object class=&quot;GtkAlignment&quot; id=&quot;chapter_box&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;left_padding&quot;&gt;16&lt;/property&gt;
                                     &lt;child&gt;
                                       &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox4&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
@@ -580,7 +582,7 @@
                                         &lt;child&gt;
                                           &lt;object class=&quot;GtkLabel&quot; id=&quot;label5&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt; thru &lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt; through &lt;/property&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
                                             &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
@@ -605,6 +607,7 @@
                                     &lt;/child&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
+                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
                                     &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
@@ -612,8 +615,9 @@
                                   &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment41&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                    &lt;property name=&quot;xalign&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;left_padding&quot;&gt;16&lt;/property&gt;
                                     &lt;child&gt;
                                       &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox42&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
@@ -647,6 +651,7 @@
                                     &lt;/child&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
+                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
                                     &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;

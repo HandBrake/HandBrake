@@ -503,7 +503,7 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Source Title</property>
+                                    <property name="label" translatable="yes"></property>
                                   </object>
                                 </child>
                                 <child>
@@ -544,7 +544,9 @@
                                   <object class="GtkAlignment" id="chapter_box">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="xalign">0</property>
                                     <property name="xscale">0</property>
+                                    <property name="left_padding">16</property>
                                     <child>
                                       <object class="GtkHBox" id="hbox4">
                                         <property name="visible">True</property>
@@ -575,7 +577,7 @@
                                         <child>
                                           <object class="GtkLabel" id="label5">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes"> thru </property>
+                                            <property name="label" translatable="yes"> through </property>
                                           </object>
                                           <packing>
                                             <property name="expand">False</property>
@@ -600,6 +602,7 @@
                                     </child>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
@@ -607,8 +610,9 @@
                                   <object class="GtkAlignment" id="alignment41">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xalign">1</property>
+                                    <property name="xalign">0</property>
                                     <property name="xscale">0</property>
+                                    <property name="left_padding">16</property>
                                     <child>
                                       <object class="GtkHBox" id="hbox42">
                                         <property name="visible">True</property>
@@ -642,6 +646,7 @@
                                     </child>
                                   </object>
                                   <packing>
+                                    <property name="expand">False</property>
                                     <property name="position">3</property>
                                   </packing>
                                 </child>
