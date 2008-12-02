@@ -77,6 +77,10 @@ namespace Handbrake
             // Picture Settings Tab
             #region Picture
             mainWindow.check_autoCrop.Checked = true;
+            if (presetQuery.CropBottom == "0" && presetQuery.CropTop == "0")
+                if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
+                    mainWindow.check_customCrop.Checked = true;
+            
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
 

@@ -709,7 +709,6 @@ namespace Handbrake
                 drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 drp_track1Audio.SelectedIndex = 0;
 
-
                 if (!treeView_presets.SelectedNode.Text.Contains("AppleTV"))
                 {
                     drp_track2Audio.Items.Clear();
