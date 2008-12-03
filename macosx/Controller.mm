@@ -4176,12 +4176,7 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingAutoCrop setStringValue: @"Auto"];
 	}		
-
-//[self showPicturePanel:self];
-hb_list_t  * list  = hb_get_titles( fHandle );
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
-    [fPictureController SetTitle:title];    
+   
 }
 
 
@@ -6056,6 +6051,7 @@ return YES;
             }
         }
         [self calculatePictureSizing:nil];
+        [fPictureController SetTitle:fTitle]; 
     }
 }
 
