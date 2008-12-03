@@ -1,9 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-## Created by Anjuta
-
-#HB_LIBS=$(HB_DIR)/libhb/libhb.a -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread -lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz -lbz2 -lpthread
-
 HB_LIBS=\
 	$(HB_DIR)/libhb/libhb.a \
 	$(HB_DIR)/contrib/lib/liba52.a \
@@ -122,9 +118,9 @@ ghb_SOURCES = \
 	marshalers.h
 
 ghb_LDFLAGS = \
-	-Wl,--export-dynamic
+	-Wl,--export-dynamic -Wl,--exclude-libs,ALL
 
-ghb_LDADD = $(GHB_LIBS) $(HB_LIBS)
+ghb_LDADD = $(HB_LIBS) $(GHB_LIBS)
 
 ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhb.a
 
