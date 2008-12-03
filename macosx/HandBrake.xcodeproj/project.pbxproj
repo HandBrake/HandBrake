@@ -376,7 +376,6 @@
 		29B97314FDCFA39411CA2CEA /* HandBrake */ = {
 			isa = PBXGroup;
 			children = (
-				B45342080EE3619C005D6F26 /* decmetadata.c */,
 				526FBC930B4CAA260064E04C /* HandBrake Sources */,
 				526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */,
 				526FBC8D0B4CA9F90064E04C /* libhb Sources */,
@@ -433,6 +432,7 @@
 		526FBC8D0B4CA9F90064E04C /* libhb Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B45342080EE3619C005D6F26 /* decmetadata.c */,
 				A25289E50D87A27D00461D5B /* enctheora.c */,
 				7497010E0DC281BB009200D8 /* decomb.c */,
 				B48359A70C82960500E04440 /* lang.c */,
