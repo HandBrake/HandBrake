@@ -1941,14 +1941,6 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 		if ((stream->ts_number_video_pids > 0) && (stream->ts_number_audio_pids > 0))
 		  break;
 	}
-    // XXX - until we figure out how to handle VC1 just bail when we find it so
-    // that ffmpeg will claim the input stream.
-    if ( stream->ts_stream_type[0] == 0xea )
-    {
-        stream->ts_number_video_pids = 0;
-        stream->ts_number_audio_pids = 0;
-        return;
-    }
 
 	hb_log("hb_ts_stream_find_pids - found the following PIDS");
 	hb_log("    Video PIDS : ");
@@ -2129,6 +2121,22 @@ static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
                         return 1;
                     }
                 }
+            }
+        }
+        // didn't find an I-frame
+        return 0;
+    }
+    if ( stream->ts_stream_type[0] == 0xea )
+    {
+        // we have an vc1 stream 
+        for (i = 13 + adapt_len; i < 188; i++)
+        {
+            strid = (strid << 8) | buf[i];
+            if ( strid == 0x10f )
+            {
+                // the ffmpeg vc1 decoder requires a seq hdr code in the first
+                // frame.
+                return 1;
             }
         }
         // didn't find an I-frame

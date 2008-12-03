@@ -673,17 +673,91 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     pv->context->opaque = pv;
     pv->context->get_buffer = get_frame_buf;
 
-    AVCodec *codec = avcodec_find_decoder( codec_id );
+    return 0;
+}
+
+static int next_hdr( hb_buffer_t *in, int offset )
+{
+    uint8_t *dat = in->data;
+    uint16_t last2 = 0xffff;
+    for ( ; in->size - offset > 1; ++offset )
+    {
+        if ( last2 == 0 && dat[offset] == 0x01 )
+            // found an mpeg start code
+            return offset - 2;
+
+        last2 = ( last2 << 8 ) | dat[offset];
+    }
+
+    return -1;
+}
+
+static int find_hdr( hb_buffer_t *in, int offset, uint8_t hdr_type )
+{
+    if ( in->size - offset < 4 )
+        // not enough room for an mpeg start code
+        return -1;
+
+    for ( ; ( offset = next_hdr( in, offset ) ) >= 0; ++offset )
+    {
+        if ( in->data[offset+3] == hdr_type )
+            // found it
+            break;
+    }
+    return offset;
+}
+
+static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
+{
+    hb_work_private_t *pv = w->private_data;
 
     // we can't call the avstream funcs but the read_header func in the
     // AVInputFormat may set up some state in the AVContext. In particular 
     // vc1t_read_header allocates 'extradata' to deal with header issues
     // related to Microsoft's bizarre engineering notions. We alloc a chunk
     // of space to make vc1 work then associate the codec with the context.
-    pv->context->extradata_size = 32;
-    pv->context->extradata = av_malloc(pv->context->extradata_size);
-    avcodec_open( pv->context, codec );
+    if ( w->codec_param != CODEC_ID_VC1 )
+    {
+        // we haven't been inflicted with M$ - allocate a little space as
+        // a marker and return success.
+        pv->context->extradata_size = 16;
+        pv->context->extradata = av_malloc(pv->context->extradata_size);
+        return 0;
+    }
 
+    // find the start and and of the sequence header
+    int shdr, shdr_end;
+    if ( ( shdr = find_hdr( in, 0, 0x0f ) ) < 0 )
+    {
+        // didn't find start of seq hdr
+        return 1;
+    }
+    if ( ( shdr_end = next_hdr( in, shdr + 4 ) ) < 0 )
+    {
+        shdr_end = in->size;
+    }
+    shdr_end -= shdr;
+
+    // find the start and and of the entry point header
+    int ehdr, ehdr_end;
+    if ( ( ehdr = find_hdr( in, 0, 0x0e ) ) < 0 )
+    {
+        // didn't find start of entry point hdr
+        return 1;
+    }
+    if ( ( ehdr_end = next_hdr( in, ehdr + 4 ) ) < 0 )
+    {
+        ehdr_end = in->size;
+    }
+    ehdr_end -= ehdr;
+
+    // found both headers - allocate an extradata big enough to hold both
+    // then copy them into it.
+    pv->context->extradata_size = shdr_end + ehdr_end;
+    pv->context->extradata = av_malloc(pv->context->extradata_size + 8);
+    memcpy( pv->context->extradata, in->data + shdr, shdr_end );
+    memcpy( pv->context->extradata + shdr_end, in->data + ehdr, ehdr_end );
+    memset( pv->context->extradata + shdr_end + ehdr_end, 0, 8);
     return 0;
 }
 
@@ -704,6 +778,27 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
         return HB_WORK_DONE;
+    }
+
+    // if this is the first frame open the codec (we have to wait for the
+    // first frame because of M$ VC1 braindamage).
+    if ( pv->context->extradata_size == 0 )
+    {
+        if ( setup_extradata( w, in ) )
+        {
+            // we didn't find the headers needed to set up extradata.
+            // the codec will abort if we open it so just free the buf
+            // and hope we eventually get the info we need.
+            hb_buffer_close( &in );
+            return HB_WORK_OK;
+        }
+        AVCodec *codec = avcodec_find_decoder( w->codec_param );
+        // There's a mis-feature in ffmpeg that causes the context to be 
+        // incorrectly initialized the 1st time avcodec_open is called.
+        // If you close it and open a 2nd time, it finishes the job.
+        avcodec_open( pv->context, codec );
+        avcodec_close( pv->context );
+        avcodec_open( pv->context, codec );
     }
 
     if( in->start >= 0 )
