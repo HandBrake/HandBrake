@@ -1,6 +1,24 @@
 ghb requires recent a recent version of glib with gio.  These
 are available in ubuntu 8.04 and fedora 9.  I don't know about other
-distributions.
+distributions. Dependencies needed for building:
+
+    * subversion
+    * jam
+    * yasm
+    * build-essential
+    * autogen
+    * autoconf
+    * intltool
+    * libtool
+    * zlib1g-dev
+    * libbz2-dev
+    * libglib2.0-dev
+    * libgtk2.0-dev
+    * libhal-dev
+    * libhal-storage-dev
+    * libgtkhtml3.14-dev
+    * libgstreamer0.10-dev
+    * libgstreamer-plugins-base0.10-dev 
 
 Currently, to build you must build handbrake separately, then
 autogen and build the gtk ui. e.g.
