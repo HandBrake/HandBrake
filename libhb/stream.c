@@ -27,7 +27,7 @@
  * doesn't handle the stream type.
  */
 typedef struct {
-    enum { U = 1, A, V } kind; /* unknown / audio / video */
+    enum { N, U, A, V } kind; /* not handled / unknown / audio / video */
     int codec;          /* HB worker object id of codec */
     int codec_param;    /* param for codec (usually ffmpeg codec id) */
     const char* name;   /* description of type */
@@ -41,26 +41,26 @@ static const stream2codec_t st2codec[256] = {
     st(0x02, V, WORK_DECMPEG2,     0,              "MPEG2"),
     st(0x03, A, HB_ACODEC_MPGA,    CODEC_ID_MP2,   "MPEG1"),
     st(0x04, A, HB_ACODEC_MPGA,    CODEC_ID_MP2,   "MPEG2"),
-    st(0x05, U, 0,                 0,              "ISO 13818-1 private section"),
+    st(0x05, N, 0,                 0,              "ISO 13818-1 private section"),
     st(0x06, U, 0,                 0,              "ISO 13818-1 PES private data"),
-    st(0x07, U, 0,                 0,              "ISO 13522 MHEG"),
-    st(0x08, U, 0,                 0,              "ISO 13818-1 DSM-CC"),
-    st(0x09, U, 0,                 0,              "ISO 13818-1 auxiliary"),
-    st(0x0a, U, 0,                 0,              "ISO 13818-6 encap"),
-    st(0x0b, U, 0,                 0,              "ISO 13818-6 DSM-CC U-N msgs"),
-    st(0x0c, U, 0,                 0,              "ISO 13818-6 Stream descriptors"),
-    st(0x0d, U, 0,                 0,              "ISO 13818-6 Sections"),
-    st(0x0e, U, 0,                 0,              "ISO 13818-1 auxiliary"),
+    st(0x07, N, 0,                 0,              "ISO 13522 MHEG"),
+    st(0x08, N, 0,                 0,              "ISO 13818-1 DSM-CC"),
+    st(0x09, N, 0,                 0,              "ISO 13818-1 auxiliary"),
+    st(0x0a, N, 0,                 0,              "ISO 13818-6 encap"),
+    st(0x0b, N, 0,                 0,              "ISO 13818-6 DSM-CC U-N msgs"),
+    st(0x0c, N, 0,                 0,              "ISO 13818-6 Stream descriptors"),
+    st(0x0d, N, 0,                 0,              "ISO 13818-6 Sections"),
+    st(0x0e, N, 0,                 0,              "ISO 13818-1 auxiliary"),
     st(0x0f, A, HB_ACODEC_MPGA,    CODEC_ID_AAC,   "ISO 13818-7 AAC Audio"),
     st(0x10, V, WORK_DECAVCODECV,  CODEC_ID_MPEG4, "MPEG4"),
     st(0x11, A, HB_ACODEC_MPGA,    CODEC_ID_AAC_LATM, "MPEG4 LATM AAC"),
     st(0x12, U, 0,                 0,              "MPEG4 generic"),
 
-    st(0x14, U, 0,                 0,              "ISO 13818-6 DSM-CC download"),
+    st(0x14, N, 0,                 0,              "ISO 13818-6 DSM-CC download"),
 
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
-    //st(0x80, U, 0,                 0,              "DigiCipher II Video"),
+    st(0x80, N, 0,                 0,              "DigiCipher II Video"),
     st(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
     st(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
@@ -72,7 +72,7 @@ static const stream2codec_t st2codec[256] = {
     st(0x8a, A, HB_ACODEC_DCA,     0,              "DTS"),
 
     st(0x91, A, HB_ACODEC_AC3,     0,              "AC-3"),
-    st(0x92, U, 0,                 0,              "Subtitle"),
+    st(0x92, N, 0,                 0,              "Subtitle"),
 
     st(0x94, A, 0,                 0,              "SDDS"),
     st(0xa0, V, 0,                 0,              "MSCODEC"),
@@ -430,6 +430,37 @@ static void hb_stream_delete( hb_stream_t *d )
     free( d );
 }
 
+static int audio_inactive( hb_stream_t *stream, int indx )
+{
+    int aud_indx = indx - 1;
+
+    if ( stream->ts_audio_pids[aud_indx] < 0 )
+    {
+        // PID declared inactive by hb_stream_title_scan
+        return 1;
+    }
+    if ( stream->ts_audio_pids[aud_indx] == stream->pmt_info.PCR_PID )
+    {
+        // PCR PID is always active
+        return 0;
+    }
+
+    // see if we should make the stream inactive because scan.c didn't
+    // find a valid audio bitstream.
+    int i;
+    for ( i = 0; i < hb_list_count( stream->title->list_audio ); ++i )
+    {
+        hb_audio_t *audio = hb_list_item( stream->title->list_audio, i );
+        if ( audio->id == indx )
+        {
+            return 0;
+        }
+    }
+    // not in the title's audio list - declare the PID inactive
+    stream->ts_audio_pids[aud_indx] = -stream->ts_audio_pids[aud_indx];
+    return 1;
+}
+
 /***********************************************************************
  * hb_stream_open
  ***********************************************************************
@@ -477,6 +508,12 @@ hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
             int i = 0;
             for ( ; i < d->ts_number_video_pids + d->ts_number_audio_pids; i++)
             {
+                if ( i && audio_inactive( d, i ) )
+                {
+                    // this PID isn't wanted (we don't have a codec for it
+                    // or scan didn't find audio parameters)
+                    continue;
+                }
                 d->ts_buf[i] = hb_buffer_init(d->packetsize);
 				d->ts_buf[i]->size = 0;
             }
@@ -584,7 +621,10 @@ void hb_stream_close( hb_stream_t ** _d )
  * of the media stream for HB. */
 static void hb_stream_delete_audio_entry(hb_stream_t *stream, int indx)
 {
-    stream->ts_audio_pids[indx] = -stream->ts_audio_pids[indx];
+    if ( stream->ts_audio_pids[indx] > 0 )
+    {
+        stream->ts_audio_pids[indx] = -stream->ts_audio_pids[indx];
+    }
 }
 
 static int index_of_pid(int pid, hb_stream_t *stream)
@@ -1351,7 +1391,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
         audio->config.in.codec_param = st2codec[stype].codec_param;
 		set_audio_description( audio,
                   lang_for_code( stream->a52_info[aud_pid_index].lang_code ) );
-        hb_log("transport stream pid 0x%x (type 0x%x) is %s audio id 0x%x",
+        hb_log("transport stream pid 0x%x (type 0x%x) may be %s audio (id 0x%x)",
                stream->ts_audio_pids[aud_pid_index],
                stype, st2codec[stype].name, audio->id);
     }
@@ -2782,6 +2822,7 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
             uint8_t *pkt = stream->ffmpeg_pkt->data;
             if ( pkt[0] || pkt[1] || pkt[2] != 1 || pkt[3] != 0x0f )
             {
+                av_free_packet( stream->ffmpeg_pkt );
                 goto again;
             }
             stream->need_keyframe = 0;
