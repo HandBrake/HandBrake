@@ -113,7 +113,7 @@
     /* We need to get the current time in YY-MM-DD HH-MM-SS format to put at the beginning of the name of the log file */
     time_t _now = time( NULL );
     struct tm * now  = localtime( &_now );
-    NSString *dateForLogTitle = [NSString stringWithFormat:@"%02d-%02d-%02d %02d-%02d-%02d",now->tm_year + 1900, now->tm_mon, now->tm_mday,now->tm_hour, now->tm_min, now->tm_sec]; 
+    NSString *dateForLogTitle = [NSString stringWithFormat:@"%02d-%02d-%02d %02d-%02d-%02d",now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,now->tm_hour, now->tm_min, now->tm_sec]; 
     
     /* Assemble the new log file name as YY-MM-DD HH-MM-SS mymoviename.txt */
     NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",dateForLogTitle,[[outputFileForEncode lastPathComponent] stringByDeletingPathExtension]];
