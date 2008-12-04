@@ -233,7 +233,11 @@ union hb_esconfig_u
     struct
     {
     	/* ac3flags stores the flags from the AC3 source, as found in scan.c */
-    	int  ac3flags;
+    	int     ac3flags;
+        // next two items are used by the bsinfo routine to accumulate small
+        // frames until we have enough to validate the crc.
+        int     len;        // space currently used in 'buf'
+        uint8_t buf[HB_CONFIG_MAX_SIZE-sizeof(int)];
     } a52;
 
     struct
