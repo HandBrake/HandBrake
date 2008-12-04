@@ -5705,7 +5705,6 @@ return YES;
             
         }
         /* If the preset has an objectForKey:@"UsesPictureFilters", and handle the filters here */
-         */
         if ([chosenPreset objectForKey:@"UsesPictureFilters"] && [[chosenPreset objectForKey:@"UsesPictureFilters"]  intValue] > 0)
         {
             /* Filters */
