@@ -20,6 +20,14 @@ Laurent Aimar <fenrir@via.ecp.fr>
  + Gtk2 interface
  + wxWidgets interface
 
+Van Jacobson <vanj.hb@gmail.com> (van)
+ + Universal input architecture
+ + MPEG Standard Target Decoder timing model
+ + Auto-typing MPEG stream files
+ + Minor bug fixing in MPEG stream support
+ + Minor dvd reader fixes
+ + Chapter mark bug fixes
+
 John Allen (?) <johnallenemail@gmail.com> (johnallen)
  + Core enhancements
  + Threading enhancements
@@ -83,16 +91,16 @@ Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
 Scott <sr55ww@googlemail.com> (sr55)
  + Windows GUI
  + Windows CLI port
-
+ 
+John Stebbins <jstebbins.hb@gmail.com> (j45)
+ + GTK GUI
+ + TrueHD demuxing
+ + libavcodec video encoding quality enhancements
+ + Numerous bug fixes
+ 
 Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
  + Ported video filters from libmpcodec
 
 Mark Krenek <markkrenek@mac.com> (travistex)
  + Mac OS X GUI enhancements
  + Mac OS X GUI Queueing system
-
-Van Jacobson <vanj.hb@gmail.com> (van)
- + Auto-typing MPEG stream files
- + Minor bug fixing in MPEG stream support
- + Minor dvd reader fixes
- + Chapter mark bug fixes
