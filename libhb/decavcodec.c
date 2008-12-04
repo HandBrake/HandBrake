@@ -1065,7 +1065,14 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
             // the buffer is allocated on our stack. Rather than doing
             // complicated, machine dependent alignment here we use the
             // fact that malloc returns an aligned pointer on most architectures.
-            pv->buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
+
+            #ifdef SYS_CYGWIN
+                // Cygwin's malloc doesn't appear to return 16-byte aligned memory so use memalign instead.
+               pv->buffer = memalign(16, AVCODEC_MAX_AUDIO_FRAME_SIZE);
+            #else
+                pv->buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
+            #endif
+
             buffer = pv->buffer;
         }
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
