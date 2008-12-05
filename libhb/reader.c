@@ -245,7 +245,6 @@ static void ReaderFunc( void * _r )
 
     list  = hb_list_init();
     hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
-    r->demux.flaky_clock = r->title->flaky_clock;
 
     while( !*r->die && !r->job->done )
     {

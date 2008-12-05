@@ -39,6 +39,7 @@ static inline void check_mpeg_scr( hb_psdemux_t *state, int64_t scr, int tol )
     if ( scr_delta > 90*tol || scr_delta < -90*10 )
     {
         ++state->scr_changes;
+        state->last_pts = -1;
     }
     state->last_scr = scr;
 }
@@ -143,26 +144,6 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
             {
                 dts = pts;
             }
-            if ( state && state->flaky_clock )
-            {
-                // Program streams have an SCR in every PACK header so they
-                // can't lose their clock reference. But the PCR in Transport
-                // streams is typically on <.1% of the packets. If a PCR
-                // packet gets lost and it marks a clock discontinuity then
-                // the data following it will be referenced to the wrong
-                // clock & introduce huge gaps or throw our A/V sync off.
-                // We try to protect against that here by sanity checking
-                // timestamps against the current reference clock and discarding
-                // packets where the DTS is "too far" from its clock.
-                int64_t fdelta = dts - state->last_scr;
-                if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
-                {
-                    // packet too far behind or ahead of its clock reference
-                    ++state->dts_drops;
-                    pos = pes_packet_end;
-                    continue;
-                }
-            }
         }
 
         pos = pes_header_end;
@@ -228,7 +209,7 @@ int hb_demux_ts( hb_buffer_t *buf_ps, hb_list_t *list_es, hb_psdemux_t *state )
             check_mpeg_scr( state, buf_ps->stop, 300 );
             buf_ps->stop = -1;
         }
-        if ( buf_ps->renderOffset >= 0 )
+        if ( buf_ps->start >= 0 )
         {
             // Program streams have an SCR in every PACK header so they
             // can't lose their clock reference. But the PCR in Transport
@@ -239,13 +220,27 @@ int hb_demux_ts( hb_buffer_t *buf_ps, hb_list_t *list_es, hb_psdemux_t *state )
             // We try to protect against that here by sanity checking
             // timestamps against the current reference clock and discarding
             // packets where the DTS is "too far" from its clock.
-            int64_t fdelta = buf_ps->renderOffset - state->last_scr;
+            int64_t fdelta = buf_ps->start - state->last_scr;
             if ( fdelta < -300 * 90000LL || fdelta > 300 * 90000LL )
             {
                 // packet too far behind or ahead of its clock reference
                 ++state->dts_drops;
                 return 1;
             }
+            if ( state->last_pts >= 0 )
+            {
+                fdelta = buf_ps->start - state->last_pts;
+                if ( fdelta < -5 * 90000LL || fdelta > 5 * 90000LL )
+                {
+                    // Packet too far from last. This may be a NZ TV broadcast
+                    // as they like to change the PCR without sending a PCR
+                    // update. Since it may be a while until they actually tell
+                    // us the new PCR use the PTS as the PCR.
+                    ++state->scr_changes;
+                    state->last_scr = buf_ps->start;
+                }
+            }
+            state->last_pts = buf_ps->start;
         }
     }
 
