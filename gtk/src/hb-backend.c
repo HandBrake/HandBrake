@@ -31,6 +31,7 @@
 #include "hb-backend.h"
 #include "settings.h"
 #include "callbacks.h"
+#include "preview.h"
 #include "values.h"
 #include "lang.h"
 
@@ -3535,12 +3536,16 @@ GdkPixbuf*
 ghb_get_preview_image(
 	gint titleindex, 
 	gint index, 
-	GValue *settings, 
-	gboolean borders)
+	signal_user_data_t *ud,
+	gboolean borders,
+	gint *out_width,
+	gint *out_height)
 {
+	GValue *settings;
 	hb_title_t *title;
 	hb_list_t  *list;
 	
+	settings = ud->settings;
 	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 	{
@@ -3662,27 +3667,37 @@ ghb_get_preview_image(
 	if (anamorphic)
 	{
 		hb_set_anamorphic_size( title->job, &width, &height, &par_width, &par_height );
-		if (par_width > par_height)
-			dstWidth = dstWidth * par_width / par_height;
-		else
-			dstHeight = dstHeight * par_height / par_width;
+		ghb_par_scale(ud, &dstWidth, &dstHeight, par_width, par_height);
 	}
+	else
+	{
+		ghb_par_scale(ud, &dstWidth, &dstHeight, 1, 1);
+	}
+	*out_width = dstWidth;
+	*out_height = dstHeight;
 	if (ghb_settings_get_boolean(settings, "reduce_hd_preview"))
 	{
-		gdouble factor = 1.0;
+		GdkScreen *ss;
+		gint s_w, s_h;
+		gint num, den;
 
-		if (dstHeight > RED_HEIGHT)
+		ss = gdk_screen_get_default();
+		s_w = gdk_screen_get_width(ss);
+		s_h = gdk_screen_get_height(ss);
+		num = dstWidth * par_width;
+		den = dstHeight * par_height;
+
+		if (dstWidth > s_w * 80 / 100)
 		{
-			factor = RED_HEIGHT / (gdouble)dstHeight;
+			dstWidth = s_w * 80 / 100;
+			dstHeight = dstWidth * den / num;
 		}
-		if (dstWidth * factor > RED_WIDTH)
+		if (dstHeight > s_h * 80 / 100)
 		{
-			factor = RED_WIDTH / (gdouble)dstWidth;
+			dstHeight = s_h * 80 / 100;
+			dstWidth = dstHeight * num / den;
 		}
-		dstHeight = dstHeight * factor + 0.5;
-		dstWidth = dstWidth * factor + 0.5;
 	}
-	
 	g_debug("scaled %d x %d\n", dstWidth, dstHeight);
 	GdkPixbuf *scaled_preview;
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);

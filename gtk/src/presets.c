@@ -555,7 +555,7 @@ presets_find_default2(GValue *presets, gint *len)
 		{
 			if (preset_is_default(dict))
 			{
-				indices = malloc(MAX_NESTED_PRESET * sizeof(gint));
+				indices = g_malloc(MAX_NESTED_PRESET * sizeof(gint));
 				indices[*len] = ii;
 				(*len)++;
 				return indices;

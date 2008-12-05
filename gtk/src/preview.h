@@ -22,5 +22,6 @@ void ghb_live_preview_progress(signal_user_data_t *ud);
 void ghb_live_encode_done(signal_user_data_t *ud, gboolean success);
 void ghb_preview_cleanup(signal_user_data_t *ud);
 void ghb_live_reset(signal_user_data_t *ud);
+void ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gint par_d);
 
 #endif // _GHB_PREVIEW_H_

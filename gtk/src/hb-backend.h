@@ -134,7 +134,8 @@ gint ghb_find_audio_track(gint titleindex, const gchar *lang, gint index);
 gint ghb_longest_title(void);
 gchar* ghb_build_x264opts_string(GValue *settings);
 GdkPixbuf* ghb_get_preview_image(
-	gint titleindex, gint index, GValue *settings, gboolean borders);
+	gint titleindex, gint index, signal_user_data_t *ud,
+	gboolean borders, gint *width, gint *height);
 gint ghb_calculate_target_bitrate(GValue *settings, gint titleindex);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_get_title_number(gint titleindex);

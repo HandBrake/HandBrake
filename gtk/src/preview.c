@@ -60,6 +60,54 @@ gboolean preview_expose_cb(GtkWidget *widget, GdkEventExpose *event,
 				signal_user_data_t *ud);
 
 void
+ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
+{
+	GValue disp_par = {0,};
+	GstElement *xover;
+	GObjectClass *klass;
+	GParamSpec *pspec;
+
+	g_value_init(&disp_par, GST_TYPE_FRACTION);
+	gst_value_set_fraction(&disp_par, 1, 1);
+	g_object_get(ud->preview->play, "video-sink", &xover, NULL);
+	klass = G_OBJECT_GET_CLASS(xover);
+	pspec = g_object_class_find_property(klass, "pixel-aspect_ratio");
+	if (pspec)
+	{
+		GValue par_prop = {0,};
+
+		g_value_init(&par_prop, pspec->value_type);
+		g_object_get_property(G_OBJECT(xover), "pixel-aspect-ratio",
+								&par_prop);
+		if (!g_value_transform(&par_prop, &disp_par))
+		{
+			g_warning("transform failed");
+			gst_value_set_fraction(&disp_par, 1, 1);
+		}
+		g_value_unset(&par_prop);
+	}
+	*par_n = gst_value_get_fraction_numerator(&disp_par);
+	*par_d = gst_value_get_fraction_denominator(&disp_par);
+	g_value_unset(&disp_par);
+}
+
+void
+ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gint par_d)
+{
+	gint disp_par_n, disp_par_d;
+	gint64 num, den;
+
+	ghb_screen_par(ud, &disp_par_n, &disp_par_d);
+	num = par_n * disp_par_d;
+	den = par_d * disp_par_n;
+
+	if (num > den)
+		*width = *width * num / den;
+	else
+		*height = *height * den / num;
+}
+
+void
 ghb_preview_init(signal_user_data_t *ud)
 {
 	GstBus *bus;
@@ -166,7 +214,7 @@ get_stream_info_objects_for_type (GstElement *play, const gchar *typestr)
 }
 
 static void
-caps_set(GstCaps *caps, preview_t *preview)
+caps_set(GstCaps *caps, signal_user_data_t *ud)
 {
 	GstStructure *ss;
 
@@ -175,12 +223,8 @@ caps_set(GstCaps *caps, preview_t *preview)
 	{
 		gint fps_n, fps_d, width, height;
 		guint num, den, par_n, par_d;
-		guint disp_par_n, disp_par_d;
+		gint disp_par_n, disp_par_d;
 		const GValue *par;
-		GValue disp_par = {0,};
-		GstElement *xover;
-		GObjectClass *klass;
-		GParamSpec *pspec;
 
 		gst_structure_get_fraction(ss, "framerate", &fps_n, &fps_d);
 		gst_structure_get_int(ss, "width", &width);
@@ -189,28 +233,7 @@ caps_set(GstCaps *caps, preview_t *preview)
 		par_n = gst_value_get_fraction_numerator(par);
 		par_d = gst_value_get_fraction_denominator(par);
 
-		g_value_init(&disp_par, GST_TYPE_FRACTION);
-		gst_value_set_fraction(&disp_par, 1, 1);
-		g_object_get(preview->play, "video-sink", &xover, NULL);
-		klass = G_OBJECT_GET_CLASS(xover);
-		pspec = g_object_class_find_property(klass, "pixel-aspect_ratio");
-		if (pspec)
-		{
-			GValue par_prop = {0,};
-
-			g_value_init(&par_prop, pspec->value_type);
-			g_object_get_property(G_OBJECT(xover), "pixel-aspect-ratio",
-									&par_prop);
-			if (!g_value_transform(&par_prop, &disp_par))
-			{
-				g_warning("transform failed");
-				gst_value_set_fraction(&disp_par, 1, 1);
-			}
-			g_value_unset(&par_prop);
-		}
-		disp_par_n = gst_value_get_fraction_numerator(&disp_par);
-		disp_par_d = gst_value_get_fraction_denominator(&disp_par);
-		g_value_unset(&disp_par);
+		ghb_screen_par(ud, &disp_par_n, &disp_par_d);
 		gst_video_calculate_display_ratio(
 			&num, &den, width, height, par_n, par_d, disp_par_n, disp_par_d);
 
@@ -218,23 +241,44 @@ caps_set(GstCaps *caps, preview_t *preview)
 			width = gst_util_uint64_scale_int(height, num, den);
 		else
 			height = gst_util_uint64_scale_int(width, den, num);
-		
-		if (width != preview->width || height != preview->height)
+
+		if (ghb_settings_get_boolean(ud->settings, "reduce_hd_preview"))
 		{
-			gtk_widget_set_size_request(preview->view, width, height);
-			preview->width = width;
-			preview->height = height;
+			GdkScreen *ss;
+			gint s_w, s_h;
+
+			ss = gdk_screen_get_default();
+			s_w = gdk_screen_get_width(ss);
+			s_h = gdk_screen_get_height(ss);
+
+			if (width > s_w * 80 / 100)
+			{
+				width = s_w * 80 / 100;
+				height = gst_util_uint64_scale_int(width, den, num);
+			}
+			if (height > s_h * 80 / 100)
+			{
+				height = s_h * 80 / 100;
+				width = gst_util_uint64_scale_int(height, num, den);
+			}
+		}
+		
+		if (width != ud->preview->width || height != ud->preview->height)
+		{
+			gtk_widget_set_size_request(ud->preview->view, width, height);
+			ud->preview->width = width;
+			ud->preview->height = height;
 		}
 	}
 }
 
 static void
-update_stream_info(preview_t *preview)
+update_stream_info(signal_user_data_t *ud)
 {
 	GList *vstreams, *ll;
 	GstPad *vpad = NULL;
 
-	vstreams = get_stream_info_objects_for_type(preview->play, "video");
+	vstreams = get_stream_info_objects_for_type(ud->preview->play, "video");
 	if (vstreams)
 	{
 		for (ll = vstreams; vpad == NULL && ll != NULL; ll = ll->next)
@@ -249,7 +293,7 @@ update_stream_info(preview_t *preview)
 		caps = gst_pad_get_negotiated_caps(vpad);
 		if (caps)
 		{
-			caps_set(caps, preview);
+			caps_set(caps, ud);
 			gst_caps_unref(caps);
 		}
 		//g_signal_connect(vpad, "notify::caps", G_CALLBACK(caps_set_cb), preview);
@@ -300,7 +344,7 @@ live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
 		gst_element_get_state(ud->preview->play, &state, &pending, 0);
 		if (state == GST_STATE_PAUSED || state == GST_STATE_PLAYING)
 		{
-			update_stream_info(ud->preview);
+			update_stream_info(ud);
 		}
 	} break;
 
@@ -568,8 +612,10 @@ ghb_set_preview_image(signal_user_data_t *ud)
 	}
 	if (ud->preview->pix != NULL)
 		g_object_unref(ud->preview->pix);
-	ud->preview->pix = ghb_get_preview_image(titleindex, ud->preview->frame, 
-											ud->settings, TRUE);
+
+	ud->preview->pix = 
+		ghb_get_preview_image(titleindex, ud->preview->frame, 
+								ud, TRUE, &width, &height);
 	if (ud->preview->pix == NULL) return;
 	preview_width = gdk_pixbuf_get_width(ud->preview->pix);
 	preview_height = gdk_pixbuf_get_height(ud->preview->pix);
@@ -585,7 +631,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
 		widget->window, NULL, ud->preview->pix, 0, 0, 0, 0,
 		-1, -1, GDK_RGB_DITHER_NONE, 0, 0);
 
-	gchar *text = g_strdup_printf("%d x %d", preview_width, preview_height);
+	gchar *text = g_strdup_printf("%d x %d", width, height);
 	widget = GHB_WIDGET (ud->builder, "preview_dims");
 	gtk_label_set_text(GTK_LABEL(widget), text);
 	g_free(text);
