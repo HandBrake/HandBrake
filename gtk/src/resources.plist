@@ -3849,7 +3849,7 @@ location as the movie.&lt;/property&gt;
     &lt;property name=&quot;type_hint&quot;&gt;GDK_WINDOW_TYPE_HINT_DIALOG&lt;/property&gt;
     &lt;property name=&quot;skip_taskbar_hint&quot;&gt;True&lt;/property&gt;
     &lt;property name=&quot;skip_pager_hint&quot;&gt;True&lt;/property&gt;
-    &lt;signal handler=&quot;gtk_widget_hide_on_delete&quot; name=&quot;delete_event&quot;/&gt;
+    &lt;signal handler=&quot;preview_window_delete_cb&quot; name=&quot;delete_event&quot;/&gt;
     &lt;child&gt;
       &lt;object class=&quot;GtkVBox&quot; id=&quot;vbox32&quot;&gt;
         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;

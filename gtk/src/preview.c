@@ -745,3 +745,13 @@ preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_set_preview_image(ud);
 }
 
+gboolean
+preview_window_delete_cb(
+	GtkWidget *widget, 
+	GdkEvent *event, 
+	signal_user_data_t *ud)
+{
+	live_preview_stop(ud);
+	gtk_widget_hide(widget);
+	return TRUE;
+}

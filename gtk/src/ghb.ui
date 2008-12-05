@@ -3844,7 +3844,7 @@ location as the movie.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
+    <signal handler="preview_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox32">
         <property name="visible">True</property>
