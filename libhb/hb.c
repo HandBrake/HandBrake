@@ -589,7 +589,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
     if ( job->maxWidth && (job->maxWidth < job->width) )
         width = job->maxWidth;
 
-    height = (double)width / storage_aspect;
+    height = ((double)width / storage_aspect) + 0.5;
     if ( job->maxHeight && (job->maxHeight < height) )
         height = job->maxHeight;
 

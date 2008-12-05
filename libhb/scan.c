@@ -200,7 +200,7 @@ static void ScanFunc( void * _data )
             !job->pixel_aspect_width && !job->pixel_aspect_height)
         {
             hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
-                       (int)(title->aspect * title->height), title->width );
+                       (int)(title->aspect * title->height + 0.5), title->width );
         }
 
         job->width = title->width - job->crop[2] - job->crop[3];
@@ -686,14 +686,14 @@ skip_preview:
             // aspect ratio from the DVD metadata. So, if the aspect computed
             // from the PAR is different from the container's aspect we use
             // the container's aspect & recompute the PAR from it.
-            if( title->container_aspect && title->aspect != title->container_aspect )
+            if( title->container_aspect && (int)(title->aspect * 9) != (int)(title->container_aspect * 9) )
             {
                 hb_log("scan: content PAR gives wrong aspect %.2f; "
                        "using container aspect %.2f", title->aspect,
                        title->container_aspect );
                 title->aspect = title->container_aspect;
                 hb_reduce( &title->pixel_aspect_width, &title->pixel_aspect_height,
-                           (int)(title->aspect * title->height), title->width );
+                           (int)(title->aspect * title->height + 0.5), title->width );
             }
         }
 
