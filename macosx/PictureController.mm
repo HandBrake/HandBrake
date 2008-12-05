@@ -776,15 +776,28 @@ are maintained across different sources */
         }
         
         // lets reposition the movie if need be
+        
         NSPoint origin = [fPictureViewArea frame].origin;
         origin.x += trunc(([fPictureViewArea frame].size.width -
                            [fMovieView frame].size.width) / 2.0);
-        /* Since we are adding 15 to the height to allow for the controller bar
+        /* We need to detect whether or not we are currently less than the available height.*/
+        if (movieBounds.size.height < [fPictureView frame].size.height)
+        {
+        /* If we are, we are adding 15 to the height to allow for the controller bar so
          * we need to subtract half of that for the origin.y to get the controller bar
          * below the movie to it lines up vertically with where our still preview was
          */
         origin.y += trunc((([fPictureViewArea frame].size.height -
                             [fMovieView frame].size.height) / 2.0) - 7.5);
+        }
+        else
+        {
+        /* if we are >= to the height of the picture view area, the controller bar
+         * gets taken care of with picture resizing, so we do not want to offset the height
+         */
+        origin.y += trunc(([fPictureViewArea frame].size.height -
+                            [fMovieView frame].size.height) / 2.0);
+        }
         [fMovieView setFrameOrigin:origin]; 
         
         [fMovieView setMovie:aMovie];

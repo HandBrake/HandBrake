@@ -3515,10 +3515,7 @@ fWorkingCount = 0;
 	hb_job_t * job = title->job;
 	fTitle = title;
     
-    /* Reset the new title in fPictureController */
-    [fPictureController SetTitle:title];
-    
-	/*Set Source Size Field Here */
+    /*Set Source Size Field Here */
     [fPicSettingsSrc setStringValue: [NSString stringWithFormat: @"%d x %d", fTitle->width, fTitle->height]];
 	
 	/* Set Auto Crop to on upon selecting a new title  */
@@ -3533,10 +3530,8 @@ fWorkingCount = 0;
 	AutoCropLeft = job->crop[2];
 	AutoCropRight = job->crop[3];
 
-	/* Run Through encoderPopUpChanged to see if there
-		needs to be any pic value modifications based on encoder settings */
-	//[self encoderPopUpChanged: NULL];
-	/* END Get and set the initial pic size for display */ 
+	/* Reset the new title in fPictureController */
+    [fPictureController SetTitle:title];
 
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
@@ -4027,9 +4022,9 @@ the user is using "Custom" settings by determining the sender*/
 - (IBAction) revertPictureSizeToMax: (id) sender
 {
 	hb_job_t * job = fTitle->job;
-	/* Here we apply the max source storage width and height */
-    job->width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
-    job->height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
+	/* Here we apply the title source and height */
+    job->width = fTitle->width;
+    job->height = fTitle->height;
     
     [self calculatePictureSizing: sender];
     /* We call method to change UI to reflect whether a preset is used or not*/    
@@ -5766,9 +5761,9 @@ return YES;
                 [fPictureController setDecomb:0];
             }
         }
-        [self calculatePictureSizing:nil];
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-        [fPictureController SetTitle:fTitle]; 
+        [fPictureController SetTitle:fTitle];
+        [self calculatePictureSizing:nil];
     }
 }
 
