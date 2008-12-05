@@ -16,8 +16,6 @@
 		<integer>100</integer>
 		<key>folder</key>
 		<string></string>
-		<key>live_duration</key>
-		<integer>15</integer>
 		<key>preset</key>
 		<array>
 			<string>Normal</string>
@@ -106,6 +104,8 @@
 		<false />
 		<key>hbfd_feature</key>
 		<false />
+		<key>live_duration</key>
+		<integer>15</integer>
 		<key>LoggingLevel</key>
 		<string>1</string>
 		<key>nocheckvquality</key>

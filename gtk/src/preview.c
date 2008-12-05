@@ -22,6 +22,7 @@
 #include <gst/video/video.h>
 #include <gst/pbutils/missing-plugins.h>
 #include "settings.h"
+#include "presets.h"
 #include "callbacks.h"
 #include "hb-backend.h"
 #include "preview.h"
@@ -50,6 +51,7 @@ struct preview_s
 	gboolean pause;
 	gboolean encoded[10];
 	gint encode_frame;
+	gint live_id;
 	gchar *current;
 };
 
@@ -122,6 +124,8 @@ ghb_preview_init(signal_user_data_t *ud)
 
 	ud->preview->play = gst_element_factory_make("playbin", "play");
 	ud->preview->pause = TRUE;
+	ud->preview->encode_frame = -1;
+	ud->preview->live_id = -1;
 	//xover = gst_element_factory_make("xvimagesink", "xover");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
 	g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
@@ -427,6 +431,12 @@ ghb_live_reset(signal_user_data_t *ud)
 {
 	gboolean encoded;
 
+	if (ud->preview->live_id >= 0)
+	{
+		ghb_stop_live_encode();
+	}
+	ud->preview->live_id = -1;
+	ud->preview->encode_frame = -1;
 	if (!ud->preview->pause)
 		live_preview_stop(ud);
 	if (ud->preview->current)
@@ -471,8 +481,8 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		js = ghb_value_dup(ud->settings);
 		ghb_settings_set_string(js, "destination", name);
 		ghb_settings_set_int(js, "start_frame", ud->preview->frame);
-		ghb_settings_set_int(js, "live_duration", 15);
-		ghb_add_live_job(js, 0);
+		ud->preview->live_id = 0;
+		ghb_add_live_job(js, ud->preview->live_id);
 		ghb_start_live_encode();
 		ghb_value_free(js);
 	}
@@ -484,6 +494,7 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
 	GtkWidget *widget;
 	GtkWidget *prog;
 
+	ud->preview->live_id = -1;
 	prog = GHB_WIDGET(ud->builder, "live_encode_progress");
 	if (success && 
 		ud->preview->encode_frame == ud->preview->frame)
@@ -742,6 +753,12 @@ preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 void
 preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
+	if (ud->preview->live_id >= 0)
+	{
+		ghb_stop_live_encode();
+		ud->preview->live_id = -1;
+		ud->preview->encode_frame = -1;
+	}
 	ghb_set_preview_image(ud);
 }
 
@@ -755,3 +772,15 @@ preview_window_delete_cb(
 	gtk_widget_hide(widget);
 	return TRUE;
 }
+
+void
+preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("preview_duration_changed_cb ()");
+	ghb_live_reset(ud);
+	ghb_widget_to_setting (ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
+}
+
