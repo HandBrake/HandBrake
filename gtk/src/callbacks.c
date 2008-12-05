@@ -1945,9 +1945,13 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 		}
 		g_io_channel_write_chars (ud->activity_log, text, 
 								length, &length, NULL);
+		g_io_channel_flush(ud->activity_log, NULL);
 		if (ud->job_activity_log)
+		{
 			g_io_channel_write_chars (ud->job_activity_log, text, 
 									length, &length, NULL);
+			g_io_channel_flush(ud->job_activity_log, NULL);
+		}
 		g_free(text);
 	}
 	if (status != G_IO_STATUS_NORMAL)
