@@ -62,6 +62,8 @@
 #include "hb.h"
 
 #include "libavcodec/avcodec.h"
+//#include "libavcodec/audioconvert.h"
+#include "../contrib/ffmpeg/libavcodec/audioconvert.h"
 #include "libavformat/avformat.h"
 #include "libswscale/swscale.h"
 
@@ -1085,6 +1087,35 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
         pos += len;
         if( out_size > 0 )
         {
+            // We require signed 16-bit ints for the output format. If
+            // we got something different convert it.
+            if ( context->sample_fmt != SAMPLE_FMT_S16 )
+            {
+                // Note: av_audio_convert seems to be a work-in-progress but
+                //       looks like it will eventually handle general audio
+                //       mixdowns which would allow us much more flexibility
+                //       in handling multichannel audio in HB. If we were doing
+                //       anything more complicated than a one-for-one format
+                //       conversion we'd probably want to cache the converter
+                //       context in the pv.
+                int isamp = av_get_bits_per_sample_format( context->sample_fmt ) / 8;
+                AVAudioConvert *ctx = av_audio_convert_alloc( SAMPLE_FMT_S16, 1,
+                                                              context->sample_fmt, 1,
+                                                              NULL, 0 );
+                // get output buffer size (in 2-byte samples) then malloc a buffer
+                out_size = ( out_size * 2 ) / isamp;
+                buffer = malloc( out_size );
+
+                // we're doing straight sample format conversion which behaves as if
+                // there were only one channel.
+                const void * const ibuf[6] = { pv->buffer };
+                void * const obuf[6] = { buffer };
+                const int istride[6] = { isamp };
+                const int ostride[6] = { 2 };
+
+                av_audio_convert( ctx, obuf, ostride, ibuf, istride, out_size >> 1 );
+                av_audio_convert_free( ctx );
+            }
             hb_buffer_t *buf = hb_buffer_init( 2 * out_size );
 
             // convert from bytes to total samples
@@ -1103,6 +1134,12 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
                 fl32[i] = buffer[i];
             }
             hb_list_add( pv->list, buf );
+
+            // if we allocated a buffer for sample format conversion, free it
+            if ( buffer != pv->buffer )
+            {
+                free( buffer );
+            }
         }
     }
 }
