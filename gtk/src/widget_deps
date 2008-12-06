@@ -100,10 +100,6 @@
 	<array>
 		<string>x264_trellis</string>
 	</array>
-	<key>x264_me</key>
-	<array>
-		<string>x264_merange</string>
-	</array>
 	<key>x264_refs</key>
 	<array>
 		<string>x264_mixed_refs</string>

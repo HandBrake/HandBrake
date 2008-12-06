@@ -157,10 +157,11 @@ combo_opts_t direct_opts =
 
 static options_map_t d_me_opts[] =
 {
-	{"Diamond",              "dia", 0, "dia"},
-	{"Hexagon",              "hex", 1, "hex"},
-	{"Uneven Multi-Hexagon", "umh", 2, "umh"},
-	{"Exhaustive",           "esa", 3, "esa"},
+	{"Diamond",              "dia",  0, "dia"},
+	{"Hexagon",              "hex",  1, "hex"},
+	{"Uneven Multi-Hexagon", "umh",  2, "umh"},
+	{"Exhaustive",           "esa",  3, "esa"},
+	{"Hadamard Exhaustive",  "tesa", 4, "tesa"},
 };
 combo_opts_t me_opts =
 {

@@ -98,7 +98,7 @@ ghb_settings_set_boolean(GValue *settings, const gchar *key, gboolean bval)
 }
 
 GValue*
-ghb_settings_get_value(GValue *settings, const gchar *key)
+ghb_settings_get_value(const GValue *settings, const gchar *key)
 {
 	GValue *value;
 	value = ghb_dict_lookup(settings, key);
@@ -108,7 +108,7 @@ ghb_settings_get_value(GValue *settings, const gchar *key)
 }
 
 gboolean
-ghb_settings_get_boolean(GValue *settings, const gchar *key)
+ghb_settings_get_boolean(const GValue *settings, const gchar *key)
 {
 	const GValue* value;
 	value = ghb_settings_get_value(settings, key);
@@ -117,7 +117,7 @@ ghb_settings_get_boolean(GValue *settings, const gchar *key)
 }
 
 gint64
-ghb_settings_get_int64(GValue *settings, const gchar *key)
+ghb_settings_get_int64(const GValue *settings, const gchar *key)
 {
 	const GValue* value;
 	value = ghb_settings_get_value(settings, key);
@@ -126,7 +126,7 @@ ghb_settings_get_int64(GValue *settings, const gchar *key)
 }
 
 gint
-ghb_settings_get_int(GValue *settings, const gchar *key)
+ghb_settings_get_int(const GValue *settings, const gchar *key)
 {
 	const GValue* value;
 	value = ghb_settings_get_value(settings, key);
@@ -135,7 +135,7 @@ ghb_settings_get_int(GValue *settings, const gchar *key)
 }
 
 gdouble
-ghb_settings_get_double(GValue *settings, const gchar *key)
+ghb_settings_get_double(const GValue *settings, const gchar *key)
 {
 	const GValue* value;
 	value = ghb_settings_get_value(settings, key);
@@ -144,7 +144,7 @@ ghb_settings_get_double(GValue *settings, const gchar *key)
 }
 
 gchar*
-ghb_settings_get_string(GValue *settings, const gchar *key)
+ghb_settings_get_string(const GValue *settings, const gchar *key)
 {
 	const GValue* value;
 	value = ghb_settings_get_value(settings, key);
@@ -153,13 +153,13 @@ ghb_settings_get_string(GValue *settings, const gchar *key)
 }
 
 gint
-ghb_settings_combo_int(GValue *settings, const gchar *key)
+ghb_settings_combo_int(const GValue *settings, const gchar *key)
 {
 	return ghb_lookup_combo_int(key, ghb_settings_get_value(settings, key));
 }
 
 const gchar*
-ghb_settings_combo_option(GValue *settings, const gchar *key)
+ghb_settings_combo_option(const GValue *settings, const gchar *key)
 {
 	return ghb_lookup_combo_option(key, ghb_settings_get_value(settings, key));
 }

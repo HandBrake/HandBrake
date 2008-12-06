@@ -2485,7 +2485,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
                                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                                 &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                                 &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;This sets the shape of the area x264 searches when estimating motion. Your choices are a diamond, a hexagon, a more complex hexagonal shape, or searching the entire frame. You are best off using Uneven Multi-Hexagonal searching.&lt;/property&gt;
-                                                &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
+                                                &lt;signal handler=&quot;x264_me_changed_cb&quot; name=&quot;changed&quot;/&gt;
                                               &lt;/object&gt;
                                             &lt;/child&gt;
                                           &lt;/object&gt;
@@ -7159,10 +7159,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<string>x264_trellis</string>
 		</array>
-		<key>x264_me</key>
-		<array>
-			<string>x264_merange</string>
-		</array>
 		<key>x264_refs</key>
 		<array>
 			<string>x264_mixed_refs</string>
@@ -7500,14 +7496,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>x264_bframes</string>
 				<string>0</string>
 				<true />
-			</array>
-		</array>
-		<key>x264_merange</key>
-		<array>
-			<array>
-				<string>x264_me</string>
-				<string>umh|esa</string>
-				<false />
 			</array>
 		</array>
 		<key>x264_mixed_refs</key>

@@ -334,14 +334,6 @@
 			<true />
 		</array>
 	</array>
-	<key>x264_merange</key>
-	<array>
-		<array>
-			<string>x264_me</string>
-			<string>umh|esa</string>
-			<false />
-		</array>
-	</array>
 	<key>x264_mixed_refs</key>
 	<array>
 		<array>

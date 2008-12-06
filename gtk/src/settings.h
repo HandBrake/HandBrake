@@ -77,14 +77,14 @@ void ghb_settings_set_boolean(
 	GValue *settings, const gchar *key, gboolean bval);
 void ghb_settings_copy(
 	GValue *settings, const gchar *key, const GValue *value);
-GValue* ghb_settings_get_value(GValue *settings, const gchar *key);
-gboolean ghb_settings_get_boolean(GValue *settings, const gchar *key);
-gint64 ghb_settings_get_int64(GValue *settings, const gchar *key);
-gint ghb_settings_get_int(GValue *settings, const gchar *key);
-gdouble ghb_settings_get_double(GValue *settings, const gchar *key);
-gchar* ghb_settings_get_string(GValue *settings, const gchar *key);
-gint ghb_settings_combo_int(GValue *settings, const gchar *key);
-const gchar* ghb_settings_combo_option(GValue *settings, const gchar *key);
+GValue* ghb_settings_get_value(const GValue *settings, const gchar *key);
+gboolean ghb_settings_get_boolean(const GValue *settings, const gchar *key);
+gint64 ghb_settings_get_int64(const GValue *settings, const gchar *key);
+gint ghb_settings_get_int(const GValue *settings, const gchar *key);
+gdouble ghb_settings_get_double(const GValue *settings, const gchar *key);
+gchar* ghb_settings_get_string(const GValue *settings, const gchar *key);
+gint ghb_settings_combo_int(const GValue *settings, const gchar *key);
+const gchar* ghb_settings_combo_option(const GValue *settings, const gchar *key);
 
 GValue* ghb_widget_value(GtkWidget *widget);
 gchar* ghb_widget_string(GtkWidget *widget);

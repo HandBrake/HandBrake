@@ -93,8 +93,8 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	GHashTable *track_indicies;
 	gint *iptr;
 
-	GValue *pref_audio;
-	GValue *audio, *acodec, *bitrate, *rate, *mix, *drc;
+	const GValue *pref_audio;
+	const GValue *audio, *acodec, *bitrate, *rate, *mix, *drc;
 	gint count, ii, list_count;
 	
 	g_debug("set_pref_audio");

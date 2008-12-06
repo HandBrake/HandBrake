@@ -392,7 +392,7 @@ audio_list_refresh(signal_user_data_t *ud)
 	GtkListStore *store;
 	gboolean done;
 	gint row = 0;
-	GValue *audio_list;
+	const GValue *audio_list;
 
 	g_debug("ghb_audio_list_refresh ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));

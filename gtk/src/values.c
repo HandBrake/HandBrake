@@ -533,7 +533,7 @@ ghb_dict_iter_init(GHashTableIter *iter, GValue *gval)
 }
 
 GValue*
-ghb_dict_lookup(GValue *gval, const gchar *key)
+ghb_dict_lookup(const GValue *gval, const gchar *key)
 {
 	GHashTable *dict = g_value_get_boxed(gval);
 	return g_hash_table_lookup(dict, key);

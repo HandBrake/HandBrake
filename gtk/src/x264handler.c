@@ -17,6 +17,7 @@
 #include "values.h"
 #include "callbacks.h"
 #include "presets.h"
+#include "hb-backend.h"
 #include "x264handler.h"
 
 static void x264_opt_update(signal_user_data_t *ud, GtkWidget *widget);
@@ -37,6 +38,36 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
+}
+
+void
+x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	const GValue *gval;
+	gint me;
+
+	ghb_widget_to_setting(ud->settings, widget);
+	if (!ignore_options_update)
+	{
+		ignore_options_update = TRUE;
+		x264_opt_update(ud, widget);
+		ignore_options_update = FALSE;
+	}
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	widget = GHB_WIDGET(ud->builder, "x264_merange");
+	gval = ghb_settings_get_value(ud->settings, "x264_me");
+	me = ghb_lookup_combo_int("x264_me", gval);
+	if (me < 2)
+	{	// me < umh
+		// me_range 4 - 16
+		gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 4, 16);
+	}
+	else
+	{
+		// me_range 4 - 64
+		gtk_spin_button_set_range(GTK_SPIN_BUTTON(widget), 4, 64);
+	}
 }
 
 void
@@ -581,12 +612,6 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_bpyramid_syns);
 	}
-	gchar *me = ghb_settings_get_string(ud->settings, "x264_me");
-	if (!(strcmp(me, "umh") == 0 || strcmp(me, "esa") == 0))
-	{
-		x264_remove_opt(split, x264_merange_syns);
-	}
-	g_free(me);
 	if (!ghb_settings_get_boolean(ud->settings, "x264_cabac"))
 	{
 		x264_remove_opt(split, x264_trellis_syns);

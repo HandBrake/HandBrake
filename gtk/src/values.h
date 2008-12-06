@@ -67,7 +67,7 @@ GValue* ghb_rawdata_value_new(ghb_rawdata_t *data);
 
 void ghb_dict_insert(GValue *gval, gchar *key, GValue *val);
 void ghb_dict_iter_init(GHashTableIter *iter, GValue *gval);
-GValue* ghb_dict_lookup(GValue *gval, const gchar *key);
+GValue* ghb_dict_lookup(const GValue *gval, const gchar *key);
 gboolean ghb_dict_remove(GValue *gval, const gchar *key);
 void ghb_register_transforms(void);
 

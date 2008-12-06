@@ -1368,7 +1368,7 @@ submit_job(GValue *settings)
 {
 	static gint unique_id = 1;
 	gchar *type, *modified, *preset;
-	GValue *path;
+	const GValue *path;
 	gboolean preset_modified;
 
 	g_debug("submit_job");
@@ -2184,7 +2184,7 @@ chapter_edited_cb(
 		-1);
 	gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 0, &index, -1);
 
-	GValue *chapters;
+	const GValue *chapters;
 	GValue *chapter;
 
 	chapters = ghb_settings_get_value(ud->settings, "chapter_list");

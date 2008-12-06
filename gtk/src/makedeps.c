@@ -61,7 +61,6 @@ static dependency_t dep_map[] =
 	{"x264_bframes", "x264_direct", "0", TRUE},
 	{"x264_refs", "x264_mixed_refs", "<2", TRUE},
 	{"x264_cabac", "x264_trellis", "TRUE", FALSE},
-	{"x264_me", "x264_merange", "umh|esa", FALSE},
 	{"ChapterMarkers", "chapters_list", "TRUE", FALSE},
 	{"use_source_name", "chapters_in_destination", "TRUE", FALSE},
 };
