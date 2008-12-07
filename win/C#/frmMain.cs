@@ -709,12 +709,15 @@ namespace Handbrake
                 drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 drp_track1Audio.SelectedIndex = 0;
 
-                if (!treeView_presets.SelectedNode.Text.Contains("AppleTV"))
+                if (treeView_presets.Nodes.Count != 0)
                 {
-                    drp_track2Audio.Items.Clear();
-                    drp_track2Audio.Items.Add("None");
-                    drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                    drp_track2Audio.SelectedIndex = 0;
+                    if (!treeView_presets.SelectedNode.Text.Contains("AppleTV"))
+                    {
+                        drp_track2Audio.Items.Clear();
+                        drp_track2Audio.Items.Add("None");
+                        drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+                        drp_track2Audio.SelectedIndex = 0;
+                    }
                 }
 
                 drp_track3Audio.Items.Clear();
