@@ -935,7 +935,7 @@ struct pts_pos {
     uint64_t pts;   /* PTS from video stream */
 };
 
-#define NDURSAMPLES 16
+#define NDURSAMPLES 64
 
 // get one (position, timestamp) sampple from a transport or program
 // stream.
@@ -992,7 +992,7 @@ static int dur_compare( const void *a, const void *b )
 static double compute_stream_rate( struct pts_pos *pp, int n )
 {
     int i, j;
-    double rates[NDURSAMPLES * NDURSAMPLES / 2];
+    double rates[NDURSAMPLES * NDURSAMPLES / 8];
     double *rp = rates;
 
     // the following nested loops compute the rates between all pairs.
@@ -1007,11 +1007,13 @@ static double compute_stream_rate( struct pts_pos *pp, int n )
         // could easily fall in the inter-piece part of the data which
         // would give a bogus estimate. The 'ns' index creates an
         // asymmetry that favors locality.
-        int ns = i + ( n >> 1 );
+        int ns = i + ( n >> 3 );
         if ( ns > n )
             ns = n;
         for ( j = i+1; j < ns; ++j )
         {
+            if ( (uint64_t)(pp[j].pts - pp[i].pts) > 90000LL*3600*6 )
+                break;
             if ( pp[j].pts != pp[i].pts && pp[j].pos > pp[i].pos )
             {
                 *rp = ((double)( pp[j].pts - pp[i].pts )) /
