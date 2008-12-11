@@ -301,14 +301,13 @@ static int check_ps_sync(const uint8_t *buf)
            (buf[2] == 0x01) && (buf[3] == 0xba);
 }
 
-static int check_ps_sys(const uint8_t *buf)
+static int check_ps_sc(const uint8_t *buf)
 {
     // a legal MPEG program stream must start with a Pack followed by a
-    // SYS. If we've already verified the pack, this skips over it and checks
-    // for the sys header.
+    // some other start code. If we've already verified the pack, this skip
+    // it and checks for a start code prefix.
     int pos = 14 + ( buf[13] & 0x7 );   // skip over the PACK
-    return (buf[pos+0] == 0x00) && (buf[pos+1] == 0x00) &&
-           (buf[pos+2] == 0x01) && (buf[pos+3] == 0xbb);
+    return (buf[pos+0] == 0x00) && (buf[pos+1] == 0x00) && (buf[pos+2] == 0x01);
 }
 
 static int check_ts_sync(const uint8_t *buf)
@@ -348,8 +347,9 @@ static int hb_stream_check_for_ts(const uint8_t *buf)
 
 static int hb_stream_check_for_ps(const uint8_t *buf)
 {
-    // program streams should start with a PACK then a SYS header.
-    return check_ps_sync(buf) && check_ps_sys(buf);
+    // program streams should start with a PACK then some other mpeg start
+    // code (usually a SYS but that might be missing if we only have a clip).
+    return check_ps_sync(buf) && check_ps_sc(buf);
 }
 
 static int hb_stream_check_for_dvd_ps(const uint8_t *buf)
