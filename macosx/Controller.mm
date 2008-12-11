@@ -1519,11 +1519,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 - (void) browseFileDone: (NSSavePanel *) sheet
-    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+             returnCode: (int) returnCode contextInfo: (void *) contextInfo
 {
     if( returnCode == NSOKButton )
     {
         [fDstFile2Field setStringValue: [sheet filename]];
+        /* Save this path to the prefs so that on next browse destination window it opens there */
+        NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];   
     }
 }
 
@@ -3276,15 +3279,13 @@ fWorkingCount = 0;
          otherwise, just rip the queue */
         if(fPendingCount == 0)
         {
-         [self writeToActivityLog: "Rip: No pending jobs, so sending this one to doAddToQueue"];
-               [self doAddToQueue];
+            [self writeToActivityLog: "Rip: No pending jobs, so sending this one to doAddToQueue"];
+            [self doAddToQueue];
         }
         
-        NSString *destinationDirectory = [[fDstFile2Field stringValue] stringByDeletingLastPathComponent];
-        [[NSUserDefaults standardUserDefaults] setObject:destinationDirectory forKey:@"LastDestinationDirectory"];
         /* go right to processing the new queue encode */
-       [self writeToActivityLog: "Rip: Going right to performNewQueueScan"];
-         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
+        [self writeToActivityLog: "Rip: Going right to performNewQueueScan"];
+        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
         
     }
 }
