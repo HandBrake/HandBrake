@@ -159,7 +159,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if( avcodec_open( context, codec ) )
+    if( hb_avcodec_open( context, codec ) )
     {
         hb_log( "hb_work_encavcodec_init: avcodec_open failed" );
     }
@@ -194,7 +194,7 @@ void encavcodecClose( hb_work_object_t * w )
     {
         hb_deep_log( 2, "encavcodec: closing libavcodec" );
         avcodec_flush_buffers( pv->context );
-        avcodec_close( pv->context );
+        hb_avcodec_close( pv->context );
     }
     if( pv->file )
     {

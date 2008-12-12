@@ -197,7 +197,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     pv->parser = av_parser_init( codec_id );
 
     pv->context = avcodec_alloc_context();
-    avcodec_open( pv->context, codec );
+    hb_avcodec_open( pv->context, codec );
 
     return 0;
 }
@@ -229,7 +229,7 @@ static void decavcodecClose( hb_work_object_t * w )
         }
         if ( pv->context && pv->context->codec )
         {
-            avcodec_close( pv->context );
+            hb_avcodec_close( pv->context );
         }
         if ( pv->list )
         {
@@ -798,9 +798,9 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // There's a mis-feature in ffmpeg that causes the context to be 
         // incorrectly initialized the 1st time avcodec_open is called.
         // If you close it and open a 2nd time, it finishes the job.
-        avcodec_open( pv->context, codec );
-        avcodec_close( pv->context );
-        avcodec_open( pv->context, codec );
+        hb_avcodec_open( pv->context, codec );
+        hb_avcodec_close( pv->context );
+        hb_avcodec_open( pv->context, codec );
     }
 
     if( in->start >= 0 )
@@ -902,7 +902,7 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     if ( ! pv->context->codec )
     {
         AVCodec *codec = avcodec_find_decoder( pv->context->codec_id );
-        avcodec_open( pv->context, codec );
+        hb_avcodec_open( pv->context, codec );
     }
     // set up our best guess at the frame duration.
     // the frame rate in the codec is usually bogus but it's sometimes

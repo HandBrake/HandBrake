@@ -653,7 +653,7 @@ hb_filter_private_t * hb_deinterlace_init( int pix_fmt,
                     avctx_enc->flags |= CODEC_FLAG_QPEL;
             }
 
-            avcodec_open(avctx_enc, enc);
+            hb_avcodec_open(avctx_enc, enc);
         }
 
         pv->mcdeint_frame       = avcodec_alloc_frame();
@@ -726,7 +726,7 @@ void hb_deinterlace_close( hb_filter_private_t * pv )
     {
         if( pv->mcdeint_avctx_enc )
         {
-            avcodec_close( pv->mcdeint_avctx_enc );
+            hb_avcodec_close( pv->mcdeint_avctx_enc );
             av_freep( &pv->mcdeint_avctx_enc );
         }
         if( pv->mcdeint_outbuf )

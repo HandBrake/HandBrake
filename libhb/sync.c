@@ -238,7 +238,7 @@ static void InitAudio( hb_work_object_t * w, int i )
         c->sample_rate = sync->audio->config.in.samplerate;
         c->channels    = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( sync->audio->config.in.channel_layout );
 
-        if( avcodec_open( c, codec ) < 0 )
+        if( hb_avcodec_open( c, codec ) < 0 )
         {
             hb_log( "sync: avcodec_open failed" );
             return;
@@ -257,7 +257,7 @@ static void InitAudio( hb_work_object_t * w, int i )
         }
 
         free( zeros );
-        avcodec_close( c );
+        hb_avcodec_close( c );
         av_free( c );
     }
     else

@@ -44,9 +44,34 @@ struct hb_handle_s
 
 };
 
+hb_lock_t *hb_avcodec_lock;
 hb_work_object_t * hb_objects = NULL;
 
 static void thread_func( void * );
+
+void hb_avcodec_init()
+{
+    hb_avcodec_lock  = hb_lock_init();
+    av_register_all();
+}
+
+int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec)
+{
+    int ret;
+    hb_lock( hb_avcodec_lock );
+    ret = avcodec_open(avctx, codec);
+    hb_unlock( hb_avcodec_lock );
+    return ret;
+}
+
+int hb_avcodec_close(AVCodecContext *avctx)
+{
+    int ret;
+    hb_lock( hb_avcodec_lock );
+    ret = avcodec_close(avctx);
+    hb_unlock( hb_avcodec_lock );
+    return ret;
+}
 
 /**
  * Registers work objects, by adding the work object to a liked list.
@@ -121,7 +146,7 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     h->pause_lock = hb_lock_init();
 
     /* libavcodec */
-    av_register_all();
+    hb_avcodec_init();
 
     /* Start library thread */
     hb_log( "hb_init: starting libhb thread" );

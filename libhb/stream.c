@@ -2460,7 +2460,7 @@ static void ffmpeg_add_codec( hb_stream_t *stream, int stream_index )
     context->error_recognition = 1;
     context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
     AVCodec *codec = avcodec_find_decoder( context->codec_id );
-    avcodec_open( context, codec );
+    hb_avcodec_open( context, codec );
 }
 
 // The ffmpeg stream reader / parser shares a lot of state with the 
