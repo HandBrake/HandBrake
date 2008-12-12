@@ -18,6 +18,7 @@ static NSString *        StartEncodingIdentifier            = @"Start Encoding I
 static NSString *        PauseEncodingIdentifier            = @"Pause Encoding Item Identifier";
 static NSString *        ShowQueueIdentifier                = @"Show Queue Item Identifier";
 static NSString *        AddToQueueIdentifier               = @"Add to Queue Item Identifier";
+static NSString *        ShowPictureIdentifier             = @"Show Picture Window Item Identifier";
 static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
@@ -410,7 +411,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudTrack1BitratePopUp, fAudTrack2BitratePopUp, fAudTrack3BitratePopUp, fAudTrack4BitratePopUp,
         fAudDrcLabel, fAudTrack1DrcSlider, fAudTrack1DrcField, fAudTrack2DrcSlider,
         fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
-        fPictureButton,fQueueStatus,fPicSettingARkeep, fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,
+        fQueueStatus,fPicSettingARkeep, fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,
         fPicLabelOutp,fPicSettingsSrc,fPicSettingsOutp,fPicSettingsAnamorphic,
 		fPicLabelAr,fPicLabelDeinterlace,fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
@@ -924,7 +925,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setTarget: self];
         [item setAction: @selector(Pause:)];
     }
-    else if ([itemIdent isEqualToString: ShowActivityIdentifier]) {
+    else if ([itemIdent isEqualToString: ShowPictureIdentifier])
+    {
+        [item setLabel: @"Picture Settings"];
+        [item setPaletteLabel: @"Show Picture Settings"];
+        [item setToolTip: @"Show Picture Settings"];
+        [item setImage: [NSImage imageNamed: @"pref-picture"]];
+        [item setTarget: self];
+        [item setAction: @selector(showPicturePanel:)];
+    }
+    else if ([itemIdent isEqualToString: ShowActivityIdentifier]) 
+    {
         [item setLabel: @"Activity Window"];
         [item setPaletteLabel: @"Show Activity Window"];
         [item setToolTip: @"Show Activity Window"];
@@ -954,13 +965,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier,
         PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier, NSToolbarFlexibleSpaceItemIdentifier, 
-		NSToolbarSpaceItemIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
+		NSToolbarSpaceItemIdentifier, ShowPictureIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
 {
     return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
-        ChooseSourceIdentifier, ShowQueueIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
+        ChooseSourceIdentifier, ShowQueueIdentifier, ShowPictureIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
         NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
         NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
 }
@@ -993,8 +1004,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return YES;
             }
             if (SuccessfulScan)
+            {
                 if ([ident isEqualToString: AddToQueueIdentifier])
                     return YES;
+                if ([ident isEqualToString: ShowPictureIdentifier])
+                    return YES;
+            }
         }
         else if (s.state == HB_STATE_PAUSED)
         {
@@ -1009,6 +1024,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if ([ident isEqualToString: StartEncodingIdentifier])
                 return YES;
             if ([ident isEqualToString: AddToQueueIdentifier])
+                return YES;
+            if ([ident isEqualToString: ShowPictureIdentifier])
                 return YES;
         }
         else if (s.state == HB_STATE_SCANNING)
@@ -1027,6 +1044,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 return YES;
             }
             if ([ident isEqualToString: AddToQueueIdentifier])
+                return YES;
+            if ([ident isEqualToString: ShowPictureIdentifier])
                 return YES;
         }
 

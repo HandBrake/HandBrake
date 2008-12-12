@@ -198,7 +198,6 @@ BOOL                        fIsDragging;
 	ChapterTitles                * fChapterTitlesDelegate;
 	
     /* Bottom */
-    IBOutlet NSButton            * fPictureButton;
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fRipIndicator;
 	BOOL                           fRipIndicatorShown;

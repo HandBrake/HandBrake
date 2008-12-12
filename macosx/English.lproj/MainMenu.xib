@@ -414,29 +414,6 @@
 													<reference key="NSTextColor" ref="701609070"/>
 												</object>
 											</object>
-											<object class="NSButton" id="37121296">
-												<reference key="NSNextResponder" ref="1053078401"/>
-												<int key="NSvFlags">256</int>
-												<string key="NSFrame">{{580, 95}, {122, 28}}</string>
-												<reference key="NSSuperview" ref="1053078401"/>
-												<bool key="NSEnabled">YES</bool>
-												<object class="NSButtonCell" key="NSCell" id="969536223">
-													<int key="NSCellFlags">-2080244224</int>
-													<int key="NSCellFlags2">134348800</int>
-													<string type="base64-UTF8" key="NSContents">UGljdHVyZSBTZXR0aW5nc+KApg</string>
-													<reference key="NSSupport" ref="26"/>
-													<reference key="NSControlView" ref="37121296"/>
-													<int key="NSButtonFlags">-2038284033</int>
-													<int key="NSButtonFlags2">1</int>
-													<reference key="NSAlternateImage" ref="26"/>
-													<string key="NSAlternateContents"/>
-													<object class="NSMutableString" key="NSKeyEquivalent">
-														<characters key="NS.bytes"/>
-													</object>
-													<int key="NSPeriodicDelay">200</int>
-													<int key="NSPeriodicInterval">25</int>
-												</object>
-											</object>
 											<object class="NSTextField" id="690364175">
 												<reference key="NSNextResponder" ref="1053078401"/>
 												<int key="NSvFlags">256</int>
@@ -5214,14 +5191,6 @@
 					<int key="connectionID">1637</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">showPicturePanel:</string>
-						<reference key="source" ref="2258723"/>
-						<reference key="destination" ref="37121296"/>
-					</object>
-					<int key="connectionID">1735</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fPicLabelSrc</string>
 						<reference key="source" ref="2258723"/>
@@ -5252,14 +5221,6 @@
 						<reference key="destination" ref="946417297"/>
 					</object>
 					<int key="connectionID">1748</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">fPictureButton</string>
-						<reference key="source" ref="2258723"/>
-						<reference key="destination" ref="37121296"/>
-					</object>
-					<int key="connectionID">1750</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -6942,7 +6903,6 @@
 							<reference ref="946167393"/>
 							<reference ref="554762309"/>
 							<reference ref="219409733"/>
-							<reference ref="37121296"/>
 						</object>
 						<reference key="parent" ref="107038816"/>
 					</object>
@@ -7060,15 +7020,6 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="531797832"/>
-						</object>
-						<reference key="parent" ref="1053078401"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">1713</int>
-						<reference key="object" ref="37121296"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="969536223"/>
 						</object>
 						<reference key="parent" ref="1053078401"/>
 					</object>
@@ -8650,11 +8601,6 @@
 						<reference key="parent" ref="586924601"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">4882</int>
-						<reference key="object" ref="969536223"/>
-						<reference key="parent" ref="37121296"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">4883</int>
 						<reference key="object" ref="215270136"/>
 						<reference key="parent" ref="219409733"/>
@@ -10176,8 +10122,6 @@
 					<string>1636.ImportedFromIB2</string>
 					<string>1638.IBPluginDependency</string>
 					<string>1638.ImportedFromIB2</string>
-					<string>1713.IBPluginDependency</string>
-					<string>1713.ImportedFromIB2</string>
 					<string>1714.IBPluginDependency</string>
 					<string>1714.ImportedFromIB2</string>
 					<string>1717.IBPluginDependency</string>
@@ -10783,8 +10727,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{673, 530}, {83, 20}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
