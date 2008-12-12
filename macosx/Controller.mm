@@ -3221,18 +3221,51 @@ fWorkingCount = 0;
 		NSRunAlertPanel(@"Warning!", @"This is not a valid destination directory!", @"OK", nil, nil);
         return;
 	}
-
-    /* We check for duplicate name here */
-	if( [[NSFileManager defaultManager] fileExistsAtPath:
-            [fDstFile2Field stringValue]] )
+    
+    BOOL fileExists;
+    fileExists = NO;
+    
+    BOOL fileExistsInQueue;
+    fileExistsInQueue = NO;
+    
+    /* We check for and existing file here */
+    if([[NSFileManager defaultManager] fileExistsAtPath: [fDstFile2Field stringValue]])
     {
-        NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists", @"" ),
-            NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
-            @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
-            NULL, NULL, [NSString stringWithFormat:
-            NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
-            [fDstFile2Field stringValue]] );
-        // overwriteAddToQueueAlertDone: will be called when the alert is dismissed.
+        fileExists = YES;
+    }
+    
+    /* We now run through the queue and make sure we are not overwriting an exisiting queue item */
+    int i = 0;
+    NSEnumerator *enumerator = [QueueFileArray objectEnumerator];
+	id tempObject;
+	while (tempObject = [enumerator nextObject])
+	{
+		NSDictionary *thisQueueDict = tempObject;
+		if ([[thisQueueDict objectForKey:@"DestinationPath"] isEqualToString: [fDstFile2Field stringValue]])
+		{
+			fileExistsInQueue = YES;	
+		}
+        i++;
+	}
+    
+    
+	if(fileExists == YES)
+    {
+        NSBeginCriticalAlertSheet( NSLocalizedString( @"File already exists.", @"" ),
+                                  NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
+                                  @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
+                                  NULL, NULL, [NSString stringWithFormat:
+                                               NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
+                                               [fDstFile2Field stringValue]] );
+    }
+    else if (fileExistsInQueue == YES)
+    {
+    NSBeginCriticalAlertSheet( NSLocalizedString( @"There is already a queue item for this destination.", @"" ),
+                                  NSLocalizedString( @"Cancel", @"" ), NSLocalizedString( @"Overwrite", @"" ), nil, fWindow, self,
+                                  @selector( overwriteAddToQueueAlertDone:returnCode:contextInfo: ),
+                                  NULL, NULL, [NSString stringWithFormat:
+                                               NSLocalizedString( @"Do you want to overwrite %@?", @"" ),
+                                               [fDstFile2Field stringValue]] );
     }
     else
     {
