@@ -73,7 +73,7 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
                       ((uint64_t)(d[pos+2] & 3) << 13) |
                       ((uint64_t)(d[pos+3]) << 5) |
                       (d[pos+4] >> 3);
-        check_mpeg_scr( state, scr, 100 );
+        check_mpeg_scr( state, scr, 300 );
     }
 
     pos += 9;                    /* pack_header */
