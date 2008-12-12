@@ -158,10 +158,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
+        /* We show whichever open source window specified in LaunchSourceBehavior preference key */
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+        {
+            [self browseSources:nil];
+        }
         
-        /* Show Browse Sources Window ASAP */
-        [self performSelectorOnMainThread:@selector(browseSources:)
-                               withObject:nil waitUntilDone:NO];
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
+        {
+            [self browseSources:(id)fOpenSourceTitleMMenu];
+        }
     }
 }
 
@@ -170,8 +176,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if (returnCode == NSAlertOtherReturn)
     {
         [self clearQueueAllItems];
-        [self performSelectorOnMainThread:@selector(browseSources:)
-                           withObject:nil waitUntilDone:NO];
+        /* We show whichever open source window specified in LaunchSourceBehavior preference key */
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source"])
+        {
+            [self browseSources:nil];
+        }
+        
+        if ([[[NSUserDefaults standardUserDefaults] stringForKey:@"LaunchSourceBehavior"] isEqualToString: @"Open Source (Title Specific)"])
+        {
+            [self browseSources:(id)fOpenSourceTitleMMenu];
+        }
     }
     else
     {

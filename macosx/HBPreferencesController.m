@@ -43,6 +43,7 @@
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
         @"YES",             @"CheckForUpdates",
+        @"Open Source",     @"LaunchSourceBehavior",
         @"English",         @"DefaultLanguage",
         @"NO",              @"DefaultMpegName",
         @"YES",             @"DefaultCrf",
