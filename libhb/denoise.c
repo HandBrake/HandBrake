@@ -17,7 +17,7 @@
 */
 
 #include "hb.h"
-#include "libavcodec/avcodec.h"
+#include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
 
 #define HQDN3D_SPATIAL_LUMA_DEFAULT    4.0f

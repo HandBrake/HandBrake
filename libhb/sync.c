@@ -5,10 +5,9 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
+#include "hbffmpeg.h"
 #include <stdio.h>
-
 #include "samplerate.h"
-#include "libavcodec/avcodec.h"
 
 #ifdef INT64_MIN
 #undef INT64_MIN /* Because it isn't defined correctly in Zeta */

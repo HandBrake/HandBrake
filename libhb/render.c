@@ -5,9 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
-
-#include "libavcodec/avcodec.h"
-#include "libswscale/swscale.h"
+#include "hbffmpeg.h"
 
 struct hb_work_private_s
 {

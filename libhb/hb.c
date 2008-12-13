@@ -1,8 +1,5 @@
 #include "hb.h"
-
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
+#include "hbffmpeg.h"
 
 struct hb_handle_s
 {

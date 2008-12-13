@@ -5,10 +5,8 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
-
+#include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
-#include "libavcodec/avcodec.h"
-#include "libswscale/swscale.h"
 
 /* Cadence tracking */
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD

@@ -1,5 +1,5 @@
 #include "hb.h"
-#include "libavcodec/avcodec.h"
+#include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
 
 /*
