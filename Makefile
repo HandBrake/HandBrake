@@ -70,22 +70,17 @@ endif
 ifeq ($(SYSTEM),Linux)
 
 snapshot: unstable-libhb/hbversion.h all
+	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(SNAP_HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
 
 official: force-hbversion all
+	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
 
 force-hbversion:
 	rm -f libhb/hbversion.h
 
-all:	contrib/.contrib libhb/hbversion.h HandBrakeCLI
-	(rm -rf HandBrake HandBrake*.tar.gz ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; tar zcvf HandBrake-$(HB_VERSION)_i386.tar.gz HandBrake ; rm -rf HandBrake )
-
-contrib/.contrib:
+all:	libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C contrib all
-
-libhb/libhb.a: libhb/hbversion.h
 	@$(MAKE) --no-print-directory -C libhb all
-
-HandBrakeCLI: libhb/libhb.a
 	@$(MAKE) --no-print-directory -C test all
 
 clean:
