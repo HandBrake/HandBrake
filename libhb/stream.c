@@ -9,10 +9,9 @@
 #include <errno.h>
 
 #include "hb.h"
+#include "hbffmpeg.h"
 #include "lang.h"
 #include "a52dec/a52.h"
-#include "libavcodec/avcodec.h"
-#include "libavformat/avformat.h"
 #include "mp4v2/mp4v2.h"
 
 #define min(a, b) a < b ? a : b
@@ -2761,6 +2760,52 @@ static int64_t av_to_hb_pts( int64_t pts, double conv_factor )
     return (int64_t)( (double)pts * conv_factor );
 }
 
+static int ffmpeg_is_keyframe( hb_stream_t *stream )
+{
+    uint8_t *pkt;
+
+    switch ( stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->codec_id )
+    {
+        case CODEC_ID_VC1:
+            // XXX the VC1 codec doesn't mark key frames so to get previews
+            // we do it ourselves here. The decoder gets messed up if it
+            // doesn't get a SEQ header first so we consider that to be a key frame.
+            pkt = stream->ffmpeg_pkt->data;
+            if ( pkt[0] && pkt[1] && pkt[2] == 1 && pkt[3] == 0x0f )
+                return 1;
+
+            return 0;
+
+        case CODEC_ID_WMV3:
+            // XXX the ffmpeg WMV3 codec doesn't mark key frames.
+            // Only M$ could make I-frame detection this complicated: there
+            // are two to four bits of unused junk ahead of the frame type
+            // so we have to look at the sequence header to find out how much
+            // to skip. Then there are three different ways of coding the type
+            // depending on whether it's main or advanced profile then whether
+            // there are bframes or not so we have to look at the sequence
+            // header to get that.
+            pkt = stream->ffmpeg_pkt->data;
+            uint8_t *seqhdr = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->extradata;
+            int pshift = 2;
+            if ( ( seqhdr[3] & 0x02 ) == 0 )
+                // no FINTERPFLAG
+                ++pshift;
+            if ( ( seqhdr[3] & 0x80 ) == 0 )
+                // no RANGEREDUCTION
+                ++pshift;
+            if ( seqhdr[3] & 0x70 )
+                // stream has b-frames
+                return ( ( pkt[0] >> pshift ) & 0x3 ) == 0x01;
+
+            return ( ( pkt[0] >> pshift ) & 0x2 ) == 0;
+
+        default:
+            break;
+    }
+    return ( stream->ffmpeg_pkt->flags & PKT_FLAG_KEY );
+}
+
 static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 {
     int err;
@@ -2807,15 +2852,13 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     buf->id = stream->ffmpeg_pkt->stream_index;
     if ( buf->id == stream->ffmpeg_video_id )
     {
-        if ( stream->need_keyframe &&
-             stream->ffmpeg_ic->streams[stream->ffmpeg_video_id]->codec->codec_id == 
-               CODEC_ID_VC1 )
+        if ( stream->need_keyframe )
         {
-            // XXX the VC1 codec doesn't seek to key frames so to get previews
-            // we do it ourselves here. The decoder gets messed up if it
-            // doesn't get a SEQ header first so we consider that to be a key frame.
-            uint8_t *pkt = stream->ffmpeg_pkt->data;
-            if ( pkt[0] || pkt[1] || pkt[2] != 1 || pkt[3] != 0x0f )
+            // we've just done a seek (generally for scan or live preview) and
+            // want to start at a keyframe. Some ffmpeg codecs seek to a key
+            // frame but most don't. So we spin until we either get a keyframe
+            // or we've looked through 50 video frames without finding one.
+            if ( ! ffmpeg_is_keyframe( stream ) && ++stream->need_keyframe < 50 )
             {
                 av_free_packet( stream->ffmpeg_pkt );
                 goto again;
@@ -2896,15 +2939,19 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 static int ffmpeg_seek( hb_stream_t *stream, float frac )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
-    int64_t pos = (double)ic->duration * (double)frac;
-    if ( pos )
+    if ( frac > 0. )
     {
+        int64_t pos = (double)ic->duration * (double)frac;
+        if ( ic->start_time != AV_NOPTS_VALUE )
+        {
+            pos += ic->start_time;
+        }
         av_seek_frame( ic, -1, pos, 0 );
         stream->need_keyframe = 1;
     }
     else
     {
-        av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BACKWARD );
+        av_seek_frame( ic, -1, 0LL, AVSEEK_FLAG_BACKWARD );
     }
     return 1;
 }
