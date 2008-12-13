@@ -60,12 +60,10 @@
  */
 
 #include "hb.h"
+#include "hbffmpeg.h"
 
-#include "libavcodec/avcodec.h"
 //#include "libavcodec/audioconvert.h"
 #include "../contrib/ffmpeg/libavcodec/audioconvert.h"
-#include "libavformat/avformat.h"
-#include "libswscale/swscale.h"
 
 static int  decavcodecInit( hb_work_object_t *, hb_job_t * );
 static int  decavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
@@ -271,6 +269,12 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     *buf_out = NULL;
 
+    if ( in->start < -1 && pv->pts_next <= 0 )
+    {
+        // discard buffers that start before video time 0
+        return HB_WORK_OK;
+    }
+
     cur = ( in->start < 0 )? pv->pts_next : in->start;
 
     pos = 0;
@@ -358,10 +362,23 @@ static int decavcodecInfo( hb_work_object_t *w, hb_work_info_t *info )
     return 0;
 }
 
+static const int chan2layout[] = {
+    HB_INPUT_CH_LAYOUT_MONO,  // We should allow no audio really.
+    HB_INPUT_CH_LAYOUT_MONO,   
+    HB_INPUT_CH_LAYOUT_STEREO,
+    HB_INPUT_CH_LAYOUT_2F1R,   
+    HB_INPUT_CH_LAYOUT_2F2R,
+    HB_INPUT_CH_LAYOUT_3F2R,   
+    HB_INPUT_CH_LAYOUT_4F2R,
+    HB_INPUT_CH_LAYOUT_STEREO, 
+    HB_INPUT_CH_LAYOUT_STEREO,
+};
+
 static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                              hb_work_info_t *info )
 {
     hb_work_private_t *pv = w->private_data;
+    int ret = 0;
 
     memset( info, 0, sizeof(*info) );
 
@@ -374,18 +391,52 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     // now we just return dummy values if there's a codec that will handle it.
     AVCodec *codec = avcodec_find_decoder( w->codec_param? w->codec_param :
                                                            CODEC_ID_MP2 );
-    if ( codec )
+    if ( ! codec )
     {
-        static char codec_name[64];
-
-        info->name =  strncpy( codec_name, codec->name, sizeof(codec_name)-1 );
-        info->bitrate = 384000;
-        info->rate = 48000;
-        info->rate_base = 1;
-        info->channel_layout = HB_INPUT_CH_LAYOUT_STEREO;
-        return 1;
+        // there's no ffmpeg codec for this audio type - give up
+        return -1;
     }
-    return -1;
+
+    static char codec_name[64];
+    info->name =  strncpy( codec_name, codec->name, sizeof(codec_name)-1 );
+
+    AVCodecParserContext *parser = av_parser_init( codec->id );
+    AVCodecContext *context = avcodec_alloc_context();
+    hb_avcodec_open( context, codec );
+#ifdef SYS_CYGWIN
+    uint8_t *buffer = memalign(16, AVCODEC_MAX_AUDIO_FRAME_SIZE);
+#else
+    uint8_t *buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
+#endif
+    int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
+    unsigned char *pbuffer;
+    int pos = 0, pbuffer_size;
+
+    while ( pos < buf->size )
+    {
+        int len = av_parser_parse( parser, context, &pbuffer, &pbuffer_size,
+                                   buf->data + pos, buf->size - pos,
+                                   buf->start, buf->start );
+        pos += len;
+        if ( pbuffer_size > 0 )
+        {
+            len = avcodec_decode_audio2( context, (int16_t*)buffer, &out_size,
+                                         pbuffer, pbuffer_size );
+            if ( len > 0 && context->sample_rate > 0 )
+            {
+                info->bitrate = context->bit_rate;
+                info->rate = context->sample_rate;
+                info->rate_base = 1;
+                info->channel_layout = chan2layout[context->channels & 7];
+                ret = 1;
+                break;
+            }
+        }
+    }
+    free( buffer );
+    av_parser_close( parser );
+    hb_avcodec_close( context );
+    return ret;
 }
 
 /* -------------------------------------------------------------
@@ -1156,6 +1207,14 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
     }
 
     hb_work_private_t *pv = w->private_data;
+
+    if ( (*buf_in)->start < -1 && pv->pts_next <= 0 )
+    {
+        // discard buffers that start before video time 0
+        *buf_out = NULL;
+        return HB_WORK_OK;
+    }
+
     if ( ! pv->context )
     {
         init_ffmpeg_context( w );
