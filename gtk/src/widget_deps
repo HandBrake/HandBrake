@@ -60,7 +60,7 @@
 	<array>
 		<string>queue_add</string>
 		<string>queue_add_menu</string>
-		<string>preview_button</string>
+		<string>show_picture</string>
 		<string>show_preview_menu</string>
 		<string>preview_frame</string>
 		<string>picture_label</string>

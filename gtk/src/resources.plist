@@ -294,18 +294,19 @@
           &lt;/object&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&quot;GtkAction&quot; id=&quot;show_activity_menu&quot;&gt;
-            &lt;property name=&quot;icon-name&quot;&gt;hb-activity&lt;/property&gt;
-            &lt;property name=&quot;name&quot;&gt;show_activity_menu&lt;/property&gt;
-            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Show _Activity&lt;/property&gt;
-            &lt;signal handler=&quot;show_activity_clicked_cb&quot; name=&quot;activate&quot;/&gt;
+          &lt;object class=&quot;GtkAction&quot; id=&quot;show_preview_menu&quot;&gt;
+            &lt;property name=&quot;icon-name&quot;&gt;hb-picture&lt;/property&gt;
+            &lt;property name=&quot;name&quot;&gt;show_preview_menu&lt;/property&gt;
+            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;_Picture Settings&lt;/property&gt;
+            &lt;signal handler=&quot;preview_button_clicked_cb&quot; name=&quot;activate&quot;/&gt;
           &lt;/object&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&quot;GtkAction&quot; id=&quot;show_preview_menu&quot;&gt;
-            &lt;property name=&quot;name&quot;&gt;show_preview_menu&lt;/property&gt;
-            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Show _Preview&lt;/property&gt;
-            &lt;signal handler=&quot;preview_button_clicked_cb&quot; name=&quot;activate&quot;/&gt;
+          &lt;object class=&quot;GtkAction&quot; id=&quot;show_activity_menu&quot;&gt;
+            &lt;property name=&quot;icon-name&quot;&gt;hb-activity&lt;/property&gt;
+            &lt;property name=&quot;name&quot;&gt;show_activity_menu&lt;/property&gt;
+            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;_Activity Window&lt;/property&gt;
+            &lt;signal handler=&quot;show_activity_clicked_cb&quot; name=&quot;activate&quot;/&gt;
           &lt;/object&gt;
         &lt;/child&gt;
         &lt;child&gt;
@@ -357,9 +358,9 @@
         &lt;menu action=&quot;menuitem3&quot;&gt;
           &lt;menuitem action=&quot;hbfd&quot;/&gt;
           &lt;menuitem action=&quot;show_presets&quot;/&gt;
-          &lt;menuitem action=&quot;show_activity_menu&quot;/&gt;
-          &lt;menuitem action=&quot;show_preview_menu&quot;/&gt;
           &lt;menuitem action=&quot;show_queue_menu&quot;/&gt;
+          &lt;menuitem action=&quot;show_preview_menu&quot;/&gt;
+          &lt;menuitem action=&quot;show_activity_menu&quot;/&gt;
         &lt;/menu&gt;
         &lt;menu action=&quot;menuitem4&quot;&gt;
           &lt;menuitem action=&quot;about&quot;/&gt;
@@ -457,6 +458,19 @@
                 &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Show Queue&lt;/property&gt;
                 &lt;property name=&quot;icon_name&quot;&gt;hb-queue&lt;/property&gt;
                 &lt;signal handler=&quot;show_queue_clicked_cb&quot; name=&quot;clicked&quot;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&quot;GtkToolButton&quot; id=&quot;show_picture&quot;&gt;
+                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Open Picture Settings&lt;/property&gt;
+                &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Picture Settings&lt;/property&gt;
+                &lt;property name=&quot;icon_name&quot;&gt;hb-picture&lt;/property&gt;
+                &lt;signal name=&quot;clicked&quot; handler=&quot;preview_button_clicked_cb&quot;/&gt;
               &lt;/object&gt;
               &lt;packing&gt;
                 &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
@@ -901,7 +915,7 @@
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
-                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Dimenstions:&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Dimensions:&lt;/property&gt;
                                             &lt;property name=&quot;width_chars&quot;&gt;15&lt;/property&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
@@ -1313,44 +1327,33 @@
                           &lt;/packing&gt;
                         &lt;/child&gt;
 
-
                         &lt;child&gt;
-                          &lt;object class=&quot;GtkButton&quot; id=&quot;preview_button&quot;&gt;
-                            &lt;property name=&quot;width_request&quot;&gt;118&lt;/property&gt;
+                          &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox7&quot;&gt;
                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                            &lt;property name=&quot;receives_default&quot;&gt;True&lt;/property&gt;
-                            &lt;property name=&quot;relief&quot;&gt;half&lt;/property&gt;
-                            &lt;signal name=&quot;clicked&quot; handler=&quot;preview_button_clicked_cb&quot;/&gt;
+                            &lt;property name=&quot;spacing&quot;&gt;4&lt;/property&gt;
                             &lt;child&gt;
-                              &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox7&quot;&gt;
+                              &lt;object class=&quot;GtkLabel&quot; id=&quot;previewlabel1&quot;&gt;
                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;spacing&quot;&gt;4&lt;/property&gt;
-                                &lt;child&gt;
-                                  &lt;object class=&quot;GtkLabel&quot; id=&quot;previewlabel1&quot;&gt;
-                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Full Size Preview:&lt;/property&gt;
-                                    &lt;property name=&quot;justify&quot;&gt;right&lt;/property&gt;
-                                  &lt;/object&gt;
-                                  &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
-                                  &lt;/packing&gt;
-                                &lt;/child&gt;
-                                &lt;child&gt;
-                                  &lt;object class=&quot;GtkLabel&quot; id=&quot;preview_dims&quot;&gt;
-                                    &lt;property name=&quot;width_request&quot;&gt;85&lt;/property&gt;
-                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;xalign&quot;&gt;0.20999999344348907&lt;/property&gt;
-                                    &lt;property name=&quot;yalign&quot;&gt;0&lt;/property&gt;
-                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;--&lt;/property&gt;
-                                  &lt;/object&gt;
-                                  &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
-                                  &lt;/packing&gt;
-                                &lt;/child&gt;
+                                &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Presentation Dimensions:&lt;/property&gt;
+                                &lt;property name=&quot;justify&quot;&gt;right&lt;/property&gt;
                               &lt;/object&gt;
+                              &lt;packing&gt;
+                                &lt;property name=&quot;expand&quot;&gt;True&lt;/property&gt;
+                                &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
+                              &lt;/packing&gt;
+                            &lt;/child&gt;
+                            &lt;child&gt;
+                              &lt;object class=&quot;GtkLabel&quot; id=&quot;preview_dims&quot;&gt;
+                                &lt;property name=&quot;width_request&quot;&gt;85&lt;/property&gt;
+                                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                &lt;property name=&quot;xalign&quot;&gt;0.2&lt;/property&gt;
+                                &lt;property name=&quot;yalign&quot;&gt;0&lt;/property&gt;
+                                &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;--&lt;/property&gt;
+                              &lt;/object&gt;
+                              &lt;packing&gt;
+                                &lt;property name=&quot;expand&quot;&gt;True&lt;/property&gt;
+                                &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                              &lt;/packing&gt;
                             &lt;/child&gt;
 
                           &lt;/object&gt;
@@ -5166,6 +5169,10 @@ R2RrUAABABgBAQACAAACAAAAAIAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 		<data>
 R2RrUAAAEBgBAQACAAAAgAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEfKhNEO1AkgFJwMrNkiT3bcZlE9nGZRPZkiT3bUnAysztQJIAfKhNEAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnNRhWTmsvrZzDb//A4Zb/2PGw/+f5wv/w/s3/8P7N/+f5wv/Y8bD/weGW/5zDb/9Pay+tJzUYVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPFQkiP1YmjpzDcPzN6qT/4Pa6/9Hxpv/B65L/tOaB/6vidv+r4nb/tOaB/8Hrkv/R8ab/3/a5/83qpP+cw3H8P1Ymjg8VCSIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFRwNMEplLau12Yr/2fKy/8ntnf+x5H7/p+Bx/6fgcv+n4HL/qOBy/6fgcv+n4HH/p+By/6fgcv+x5H7/ye2d/9nysv+22Yr/SmUtqxUcDTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4UCSJIYyyrut2Q/9byrv+654v/pt9x/6becf+m3nH/pt5y/6becf+n33H/pt9x/6bfcf+n3nL/pt9x/6bfcf+m33H/uueL/9byr/+63JD/SGMsqw4UCSIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOlAkjrDUhv/S76v/s+OD/6Xdcf+l3XH/pd1w/6Xecf+l3nH/pd1w/6Xdcf+l3XD/pd1x/6Xdcf+l3XH/pd1x/6Xecf+l3nH/tOSD/9Pvq/+w1If/OlAkjgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIvFVaSuGn8zuun/7bihv+k3HH/o9tw/6PbcP+j23D/o9xw/6PbcP+k23D/pNtw/6TccP+k23D/pNtw/6Tbcf+k23D/pNtw/6PccP+k3HD/teKH/87sp/+SuGr8Ii8VVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABQlsprbzflP+95JL/otlw/6Lab/+i2m//otlv/6LacP+i2m//otlw/6LacP+i2m//o9pw/6LZcP+j2m//otpw/6LacP+i2m//otlw/6LZcP+i2XD/veSS/7zfk/9CWymtAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABkiD0SJsGL/yOih/6jaeP+g2HD/odhv/6DYb/+h2HD/oNhv/0BWLP9AViz/QFYs/6DYb/+h12//QFYs/0BWLP9AVSz/nNJr/5rOaf+Xy2f/lcll/5TGY/+by23/w+Kd/4GjWv8ZIg9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALj4cgKjPf/+54Y7/n9Vv/5/Vbv+f1m7/n9Vv/5/Vbv+f1m//QFUs/0BWLP9AViz/n9Vu/53TbP89Uir/PFAo/ztPJ/+Rw2H/kcNh/5HDYf+Rw2H/kcNh/5HDYf+z2In/ncB2/y0+HIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8VCWzttuO/6vaf/+e027/ntNu/57Tbv+d027/ntRu/53Tbv8/VSz/P1Qs/z1SKv+Wymb/ksVi/zpOJ/86Tif/Ok4n/5HDYf+Rw2H/kcNh/5HDYf+Rw2H/kcNh/6PPd/+v0oj/PFQlswAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEdiLNu53pL/otR0/5zSbv+c0W7/nNFu/5zRbf+c0W3/nNFt/z1SKv88UCj/Ok4n/5HDYf+Rw2H/Ok4n/zpOJ/86Tif/kcNh/5HDYf+Rw2H/kcNh/5HDYf+Rw2H/mchq/7fbkP9GYizbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATGku9rfckf+b0G7/mtBs/5rPbf+az23/ms9t/5nOa/+UyGb/Ok4n/zlOJ/86Tib/kMJg/5DCYf86Tif/Ok0n/zpOJ/+QwmD/j8Jg/4/CYf+QwWH/kMFg/5DCYP+RwmL/ttyQ/0xoLvYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIYyz2sNmK/5rObf+Zzmz/mc5s/5nObf+WyWj/ksRj/47AYP85TSb/OU0m/zlNJv+OwF//jr9g/zlNJv85TSb/OU0m/47AYP+PwF//jsBg/47AX/+Ov1//j8Bg/5DBYv+w2In/SGMs9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADxTJtun04D/m85v/5jMbP+YzGz/k8dm/46/Yf+MvV//jb1e/zhMJv84TCb/OEwm/42+Xv+Mvl//OEwm/zhMJv84TCb/jL1e/42+Xv+MvV//jL1e/4y+X/+Mvl7/kcJk/6XPff88UyXbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALkEds5zKc/+bzXH/l8ts/5LEZv+LvF7/irtd/4u7Xf+Ku13/N0sl/zdLJf84SyX/irtd/4q7Xf83SyX/N0sl/zdLJf+Ku13/irte/4q7Xf+Ku13/irtd/4q7Xf+Tw2j/lcBt/y5BHbMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgLBSAirhk/5rMcf+QwmX/iblc/4i4XP+IuFz/iLhc/4i4XP82SiX/Nkol/zZKJP+HuFv/iLlc/zZKJP82SiX/Nkol/4i5W/+HuFz/iLlc/4i5XP+IuVz/iLlc/5TFav99p1n/HywUgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8WCkRoj0j/lcds/4q7YP+Gtlv/hbVb/4a2Wv+Gtlv/hrVb/zVJJP81SST/NUgk/4a2Wv+Gtlr/Nkkk/zZIJP81SST/hrVb/4a2W/+GtVv/hbVb/4a2W/+IuV7/kcNq/1x+Pv8PFgpEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASU0F62BsVv/ibxg/4SzWf+Es1n/g7NZ/4OzWf+Esln/g7NZ/4OzWv+Ds1n/g7JZ/4OzWf+Es1n/g7NZ/4OyWv+Ds1n/g7Ja/4OzWf+Ds1n/g7JZ/4q8YP9/rVj/JTQYrQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERgLVlZ3OfuFulz/hLZb/4GwWP+AsFf/gbBY/4GwWP+BsFj/gLBY/4GwWP+BsFf/gbBY/4GwV/+BsFj/gLBY/4GwWP+BsFj/gbBY/4GwWP+EtVv/hbpc/1Z3OvsRGAtWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGyYRjmeQRf+DuVn/gLJY/3+tV/9/rlf/f65W/3+tV/9/rVf/f65X/3+tVv9/rlf/f61X/36tV/9/rlb/fq5X/36uV/9/rVf/gLFY/4K6Wf9mkUX/GyURjgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGCAQiHioTq2iWRv9+uFX/frFW/32rVf98q1X/fKtW/32rVf99q1b/fatV/32sVf98q1X/faxW/32rVv99rFb/faxV/36xVv9/t1X/aJZG/x4qE6sGCAQiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICwUwGygSq1+KP/94sE//fLFT/3usVP97qlT/e6lV/3upVf97qlT/e6lV/3upVf97qlX/e6pV/3urVP97sVP/eLBQ/1+LP/8cKBKsCAsFMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIFBwMnFR8Nk0hpL/tqn0b/d7JN/3ixT/95rVH/eqpT/3qpVP96qVT/eqpT/3mtUf94sVD/drJN/2qeRv9IaS/7FR8OlgUHAywAAAAGAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABgAAABEAAAAeDBIIcRgkD7xEZCz/Xo09/22lRv9yr0j/c7RI/3O0Sf9ysEn/baRG/16OPf9EZC3/GSMQvgwSCHYAAAApAAAAHgAAABEAAAAGAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAJAAAAGAAAACoAAAA3AAAAQQkNBncRGQylGCIPyx0rE+chMBb5IS8V+R0rE+cYIg/LEBkLpwkOBnsAAABHAAAAQAAAADcAAAAqAAAAGAAAAAkAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAYAAAARAAAAHgAAACkAAAAwAAAANgAAADoAAAA+AAAAQgAAAEQAAABEAAAARAAAAEIAAAA+AAAAOgAAADYAAAAwAAAAKQAAAB4AAAARAAAABgAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAYAAAAMAAAAEQAAABQAAAAXAAAAGgAAABwAAAAeAAAAHwAAAB8AAAAfAAAAHgAAABwAAAAaAAAAFwAAABQAAAARAAAADAAAAAYAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAAEAAAABQAAAAYAAAAGAAAABwAAAAcAAAAIAAAACAAAAAgAAAAHAAAABwAAAAYAAAAGAAAABQAAAAQAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 		</data>
+		<key>hb-picture</key>
+		<data>
+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/MzMz/wAAABkAAAAeGBcXoDMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8zMzP/MzMz/zMzM/8YFxegAAAAHgAAABQAAAAtAAAAOQAAAD4AAABDAAAARQAAAEUAAABFAAAARQAAAEUAAABFAAAARQAAAEUAAABFAAAARgAAAEUAAABFAAAARQAAAEUAAABFAAAARQAAAEUAAABFAAAARQAAAEUAAABFAAAARQAAAEUAAABFAAAARAAAADgAAAAYAAAAEAAAABoAAAAhAAAAJAAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAlAAAAJQAAACUAAAAkAAAAHQAAAA4AAAACAAAABAAAAAcAAAAHAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAcAAAAFAAAAAg==
+		</data>
 		<key>hb-play</key>
 		<data>
 R2RrUAAAEBgBAQACAAAAgAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEfKhNEO1AkgFJwMrNkiT3bcZlE9nGZRPZkiT3bUnAysztQJIAfKhNEAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnNRhWTmsvrZzDb//A4Zb/2PGw/+f5wv/w/s3/8P7N/+f5wv/Y8bD/weGW/5zDb/9Pay+tJzUYVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPFQkiP1YmjpzDcPzN6qT/4Pa6/9Hxpv/B65L/tOaB/6vidv+r4nb/tOaB/8Hrkv/R8ab/3/a5/83qpP+cw3H8P1Ymjg8VCSIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFRwNMEplLau12Yr/2fKy/8ntnf+x5H7/p+Bx/6fgcv+n4HL/qOBy/6fgcv+n4HH/p+By/6fgcv+x5H7/ye2d/9nysv+22Yr/SmUtqxUcDTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4UCSJIYyyrut2Q/9byrv+654v/pt9x/6becf+m3nH/pt5y/6becf+n33H/pt9x/6bfcf+n3nL/pt9x/6bfcf+m33H/uueL/9byr/+63JD/SGMsqw4UCSIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOlAkjrDUhv/S76v/s+OD/6Xdcf+l3XH/pd1w/6Xecf+l3nH/pd1w/6Xdcf+l3XD/pd1x/6Xdcf+l3XH/pd1x/6Xecf+l3nH/tOSD/9Pvq/+w1If/OlAkjgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIvFVaSuGn8zuun/7bihv+k3HH/o9tw/6PbcP+j23D/o9xw/6PbcP+k23D/pNtw/6TccP+k23D/pNtw/6Tbcf+k23D/pNtw/6PccP+k3HD/teKH/87sp/+SuGr8Ii8VVgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQABQlsprbzflP+95JL/otlw/6Lab/+i2m//otlv/6LacP+i2m//mc1q/6LacP+i2m//o9pw/6LZcP+j2m//otpw/6LacP+i2m//otlw/6LZcP+i2XD/veSS/7zfk/9CWymtAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABkiD0SJsGL/yOih/6jaeP+g2HD/odhv/6DYb/+h2HD/oNhv/6DYb/9JYjL/cJdN/53Ubf+h12//oddv/6HYb/+f1W7/nNJr/5rOaf+Xy2f/lcll/5TGY/+by23/w+Kd/4GjWv8ZIg9EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALj4cgKjPf/+54Y7/n9Vv/5/Vbv+f1m7/n9Vv/5/Vbv+f1m//n9Vv/0VdMP9AViz/S2Q0/36qV/+ZzWn/lsll/5PFYv+Rw2H/kcNh/5HDYf+Rw2H/kcNh/5HDYf+z2In/ncB2/y0+HIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8VCWzttuO/6vaf/+e027/ntNu/57Tbv+d027/ntRu/53Tbv+e1G7/RVww/z1SKv88USn/Ok8n/1BrNf+DsFf/kcNh/5HDYf+Rw2H/kcNh/5HDYf+Rw2H/kcNh/6PPd/+v0oj/PFQlswAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEdiLNu53pL/otR0/5zSbv+c0W7/nNFu/5zRbf+c0W3/nNFt/5nNav9BVyz/Ok4n/zpOJ/86Tif/Ok4n/ztQKP9fgED/jLxe/5HDYf+Rw2H/kcNh/5HDYf+Rw2H/mchq/7fbkP9GYizbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATGku9rfckf+b0G7/mtBs/5rPbf+az23/ms9t/5nOa/+UyGb/kcNh/z5UKv86Tib/Ok4m/zpOJ/86Tif/Ok0n/zpOJ/9AViv/cZlM/4/CYf+QwWH/kMFg/5DCYP+RwmL/ttyQ/0xoLvYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIYyz2sNmK/5rObf+Zzmz/mc5s/5nObf+WyWj/ksRj/47AYP+OwF//PlQq/zlNJv85TSb/OUwm/zlNJv85TSb/OU0m/1NwOP+EsVj/jsBg/47AX/+Ov1//j8Bg/5DBYv+w2In/SGMs9gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADxTJtun04D/m85v/5jMbP+YzGz/k8dm/46/Yf+MvV//jb1e/429X/89Uin/OEwm/zhMJv84TCb/OEwm/0NaLf9ym03/jL1e/42+Xv+MvV//jL1e/4y+X/+Mvl7/kcJk/6XPff88UyXbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALkEds5zKc/+bzXH/l8ts/5LEZv+LvF7/irtd/4u7Xf+Ku13/irtd/zxRKP84SyX/N0sl/zlOJ/9gg0H/h7db/4q7Xf+Ku13/irte/4q7Xf+Ku13/irtd/4q7Xf+Tw2j/lcBt/y5BHbMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgLBSAirhk/5rMcf+QwmX/iblc/4i4XP+IuFz/iLhc/4i4XP+IuFz/O1Ao/zZKJP9MZzP/fKlU/4i4W/+IuFz/iLhc/4i5W/+HuFz/iLlc/4i5XP+IuVz/iLlc/5TFav99p1n/HywUgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8WCkRoj0j/lcds/4q7YP+Gtlv/hbVb/4a2Wv+Gtlv/hrVb/4W2Wv9DXC7/a5JI/4a2Wv+Gtlr/hrZb/4a1W/+Ftlv/hrVb/4a2W/+GtVv/hbVb/4a2W/+IuV7/kcNq/1x+Pv8PFgpEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASU0F62BsVv/ibxg/4SzWf+Es1n/g7NZ/4OzWf+Esln/g7NZ/4CvWP+Ds1n/g7JZ/4OzWf+Es1n/g7NZ/4OyWv+Ds1n/g7Ja/4OzWf+Ds1n/g7JZ/4q8YP9/rVj/JTQYrQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERgLVlZ3OfuFulz/hLZb/4GwWP+AsFf/gbBY/4GwWP+BsFj/gLBY/4GwWP+BsFf/gbBY/4GwV/+BsFj/gLBY/4GwWP+BsFj/gbBY/4GwWP+EtVv/hbpc/1Z3OvsRGAtWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGyYRjmeQRf+DuVn/gLJY/3+tV/9/rlf/f65W/3+tV/9/rVf/f65X/3+tVv9/rlf/f61X/36tV/9/rlb/fq5X/36uV/9/rVf/gLFY/4K6Wf9mkUX/GyURjgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGCAQiHioTq2iWRv9+uFX/frFW/32rVf98q1X/fKtW/32rVf99q1b/fatV/32sVf98q1X/faxW/32rVv99rFb/faxV/36xVv9/t1X/aJZG/x4qE6sGCAQiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAICwUwGygSq1+KP/94sE//fLFT/3usVP97qlT/e6lV/3upVf97qlT/e6lV/3upVf97qlX/e6pV/3urVP97sVP/eLBQ/1+LP/8cKBKsCAsFMQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIFBwMnFR8Nk0hpL/tqn0b/d7JN/3ixT/95rVH/eqpT/3qpVP96qVT/eqpT/3mtUf94sVD/drJN/2qeRv9IaS/7FR8OlgUHAywAAAAGAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABgAAABEAAAAeDBIIcRgkD7xEZCz/Xo09/22lRv9yr0j/c7RI/3O0Sf9ysEn/baRG/16OPf9EZC3/GSMQvgwSCHYAAAApAAAAHgAAABEAAAAGAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAJAAAAGAAAACoAAAA3AAAAQQkNBncRGQylGCIPyx0rE+chMBb5IS8V+R0rE+cYIg/LEBkLpwkOBnsAAABHAAAAQAAAADcAAAAqAAAAGAAAAAkAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAYAAAARAAAAHgAAACkAAAAwAAAANgAAADoAAAA+AAAAQgAAAEQAAABEAAAARAAAAEIAAAA+AAAAOgAAADYAAAAwAAAAKQAAAB4AAAARAAAABgAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAYAAAAMAAAAEQAAABQAAAAXAAAAGgAAABwAAAAeAAAAHwAAAB8AAAAfAAAAHgAAABwAAAAaAAAAFwAAABQAAAARAAAADAAAAAYAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAAEAAAABQAAAAYAAAAGAAAABwAAAAcAAAAIAAAACAAAAAgAAAAHAAAABwAAAAYAAAAGAAAABQAAAAQAAAACAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
@@ -7119,7 +7126,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<string>queue_add</string>
 			<string>queue_add_menu</string>
-			<string>preview_button</string>
+			<string>show_picture</string>
 			<string>show_preview_menu</string>
 			<string>preview_frame</string>
 			<string>picture_label</string>
@@ -7392,14 +7399,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<true />
 			</array>
 		</array>
-		<key>preview_button</key>
-		<array>
-			<array>
-				<string>title</string>
-				<string>none</string>
-				<true />
-			</array>
-		</array>
 		<key>preview_frame</key>
 		<array>
 			<array>
@@ -7448,6 +7447,14 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>autoscale</string>
 				<string>FALSE</string>
 				<false />
+			</array>
+		</array>
+		<key>show_picture</key>
+		<array>
+			<array>
+				<string>title</string>
+				<string>none</string>
+				<true />
 			</array>
 		</array>
 		<key>show_preview_menu</key>

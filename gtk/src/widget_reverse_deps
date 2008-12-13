@@ -228,14 +228,6 @@
 			<true />
 		</array>
 	</array>
-	<key>preview_button</key>
-	<array>
-		<array>
-			<string>title</string>
-			<string>none</string>
-			<true />
-		</array>
-	</array>
 	<key>preview_frame</key>
 	<array>
 		<array>
@@ -284,6 +276,14 @@
 			<string>autoscale</string>
 			<string>FALSE</string>
 			<false />
+		</array>
+	</array>
+	<key>show_picture</key>
+	<array>
+		<array>
+			<string>title</string>
+			<string>none</string>
+			<true />
 		</array>
 	</array>
 	<key>show_preview_menu</key>

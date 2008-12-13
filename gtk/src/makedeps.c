@@ -17,7 +17,7 @@ static dependency_t dep_map[] =
 {
 	{"title", "queue_add", "none", TRUE},
 	{"title", "queue_add_menu", "none", TRUE},
-	{"title", "preview_button", "none", TRUE},
+	{"title", "show_picture", "none", TRUE},
 	{"title", "show_preview_menu", "none", TRUE},
 	{"title", "preview_frame", "none", TRUE},
 	{"title", "picture_label", "none", TRUE},

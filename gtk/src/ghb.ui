@@ -289,18 +289,19 @@
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="show_activity_menu">
-            <property name="icon-name">hb-activity</property>
-            <property name="name">show_activity_menu</property>
-            <property name="label" translatable="yes">Show _Activity</property>
-            <signal handler="show_activity_clicked_cb" name="activate"/>
+          <object class="GtkAction" id="show_preview_menu">
+            <property name="icon-name">hb-picture</property>
+            <property name="name">show_preview_menu</property>
+            <property name="label" translatable="yes">_Picture Settings</property>
+            <signal handler="preview_button_clicked_cb" name="activate"/>
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="show_preview_menu">
-            <property name="name">show_preview_menu</property>
-            <property name="label" translatable="yes">Show _Preview</property>
-            <signal handler="preview_button_clicked_cb" name="activate"/>
+          <object class="GtkAction" id="show_activity_menu">
+            <property name="icon-name">hb-activity</property>
+            <property name="name">show_activity_menu</property>
+            <property name="label" translatable="yes">_Activity Window</property>
+            <signal handler="show_activity_clicked_cb" name="activate"/>
           </object>
         </child>
         <child>
@@ -352,9 +353,9 @@
         <menu action="menuitem3">
           <menuitem action="hbfd"/>
           <menuitem action="show_presets"/>
-          <menuitem action="show_activity_menu"/>
-          <menuitem action="show_preview_menu"/>
           <menuitem action="show_queue_menu"/>
+          <menuitem action="show_preview_menu"/>
+          <menuitem action="show_activity_menu"/>
         </menu>
         <menu action="menuitem4">
           <menuitem action="about"/>
@@ -452,6 +453,19 @@
                 <property name="label" translatable="yes">Show Queue</property>
                 <property name="icon_name">hb-queue</property>
                 <signal handler="show_queue_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToolButton" id="show_picture">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
+                <property name="label" translatable="yes">Picture Settings</property>
+                <property name="icon_name">hb-picture</property>
+                <signal name="clicked" handler="preview_button_clicked_cb"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -896,7 +910,7 @@
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Dimenstions:</property>
+                                            <property name="label" translatable="yes">Dimensions:</property>
                                             <property name="width_chars">15</property>
                                           </object>
                                           <packing>
@@ -1308,44 +1322,33 @@
                           </packing>
                         </child>
 
-
                         <child>
-                          <object class="GtkButton" id="preview_button">
-                            <property name="width_request">118</property>
+                          <object class="GtkHBox" id="hbox7">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="relief">half</property>
-                            <signal name="clicked" handler="preview_button_clicked_cb"/>
+                            <property name="spacing">4</property>
                             <child>
-                              <object class="GtkHBox" id="hbox7">
+                              <object class="GtkLabel" id="previewlabel1">
                                 <property name="visible">True</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkLabel" id="previewlabel1">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Full Size Preview:</property>
-                                    <property name="justify">right</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="preview_dims">
-                                    <property name="width_request">85</property>
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0.20999999344348907</property>
-                                    <property name="yalign">0</property>
-                                    <property name="label" translatable="yes">--</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
+                                <property name="label" translatable="yes">Presentation Dimensions:</property>
+                                <property name="justify">right</property>
                               </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="preview_dims">
+                                <property name="width_request">85</property>
+                                <property name="visible">True</property>
+                                <property name="xalign">0.2</property>
+                                <property name="yalign">0</property>
+                                <property name="label" translatable="yes">--</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
 
                           </object>

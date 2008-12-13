@@ -9,6 +9,7 @@
 		<icon name="hb-pause" file="hb-pause.32.png" />
 		<icon name="hb-play" file="hb-play.32.png" />
 		<icon name="hb-pref" file="hb-pref.32.png" />
+		<icon name="hb-picture" file="hb-picture.32.png" />
 		<icon name="hb-queue" file="hb-queue.32.png" />
 		<icon name="hb-queue-delete" file="hb-queue-delete.16.png" />
 		<icon name="hb-queue-job" file="hb-queue-job.16.png" />
