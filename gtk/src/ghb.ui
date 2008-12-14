@@ -282,7 +282,7 @@
         <child>
           <object class="GtkToggleAction" id="show_presets">
             <property name="visible">True</property>
-            <property name="active">True</property>
+            <property name="active">False</property>
             <property name="name">show_presets</property>
             <property name="label" translatable="yes">Show Presets</property>
             <signal handler="show_presets_toggled_cb" name="toggled"/>
@@ -729,13 +729,14 @@
                                     <property name="right_attach">2</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkEntry" id="dest_file">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="width_chars">30</property>
+                                    <property name="width_chars">40</property>
                                     <signal name="changed" handler="dest_file_changed_cb"/>
                                     <signal name="grab_focus" handler="destination_grab_cb" after="yes"/>
                                     <accelerator key="d" signal="grab-focus" modifiers="GDK_MOD1_MASK"/>
@@ -743,6 +744,7 @@
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -750,6 +752,9 @@
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">File:</property>
                                   </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                  </packing>
                                 </child>
                               </object>
                               <packing>
@@ -787,6 +792,9 @@
                                       </packing>
                                     </child>
                                   </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="Mp4iPodCompatible">
@@ -795,12 +803,14 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -810,12 +820,14 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="http_opt_changed_cb"/>
                                   </object>
                                   <packing>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -825,6 +837,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb"/>
                                   </object>
@@ -833,6 +846,7 @@
                                     <property name="right_attach">2</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                               </object>
@@ -2935,7 +2949,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
         </child>
         <child>
           <object class="GtkFrame" id="presets_frame">
-            <property name="visible">True</property>
+            <property name="visible">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="border_width">3</property>
             <property name="label_xalign">0</property>
@@ -3091,11 +3105,13 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
           </object>
           <packing>
             <property name="position">1</property>
+            <property name="expand">False</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="position">2</property>
+        <property name="expand">False</property>
       </packing>
     </child>
 

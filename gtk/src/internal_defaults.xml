@@ -117,7 +117,7 @@
 		<key>preview_count</key>
 		<integer>10</integer>
 		<key>show_presets</key>
-		<true />
+		<false />
 		<key>use_source_name</key>
 		<true />
 		<key>update_skip_version</key>

@@ -287,7 +287,7 @@
         &lt;child&gt;
           &lt;object class=&quot;GtkToggleAction&quot; id=&quot;show_presets&quot;&gt;
             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-            &lt;property name=&quot;active&quot;&gt;True&lt;/property&gt;
+            &lt;property name=&quot;active&quot;&gt;False&lt;/property&gt;
             &lt;property name=&quot;name&quot;&gt;show_presets&lt;/property&gt;
             &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Show Presets&lt;/property&gt;
             &lt;signal handler=&quot;show_presets_toggled_cb&quot; name=&quot;toggled&quot;/&gt;
@@ -734,13 +734,14 @@
                                     &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                     &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
                                     &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkEntry&quot; id=&quot;dest_file&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;width_chars&quot;&gt;30&lt;/property&gt;
+                                    &lt;property name=&quot;width_chars&quot;&gt;40&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;dest_file_changed_cb&quot;/&gt;
                                     &lt;signal name=&quot;grab_focus&quot; handler=&quot;destination_grab_cb&quot; after=&quot;yes&quot;/&gt;
                                     &lt;accelerator key=&quot;d&quot; signal=&quot;grab-focus&quot; modifiers=&quot;GDK_MOD1_MASK&quot;/&gt;
@@ -748,6 +749,7 @@
                                   &lt;packing&gt;
                                     &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
                                     &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -755,6 +757,9 @@
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;File:&lt;/property&gt;
                                   &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
+                                  &lt;/packing&gt;
                                 &lt;/child&gt;
                               &lt;/object&gt;
                               &lt;packing&gt;
@@ -792,6 +797,9 @@
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                   &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
+                                  &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkCheckButton&quot; id=&quot;Mp4iPodCompatible&quot;&gt;
@@ -800,12 +808,14 @@
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;receives_default&quot;&gt;False&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                                     &lt;signal name=&quot;toggled&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
                                     &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
                                     &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -815,12 +825,14 @@
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;receives_default&quot;&gt;False&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                                     &lt;signal name=&quot;toggled&quot; handler=&quot;http_opt_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
                                     &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
                                     &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -830,6 +842,7 @@
                                     &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;receives_default&quot;&gt;False&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
                                     &lt;signal name=&quot;toggled&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
@@ -838,6 +851,7 @@
                                     &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                     &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
                                     &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                               &lt;/object&gt;
@@ -2940,7 +2954,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
         &lt;/child&gt;
         &lt;child&gt;
           &lt;object class=&quot;GtkFrame&quot; id=&quot;presets_frame&quot;&gt;
-            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+            &lt;property name=&quot;visible&quot;&gt;False&lt;/property&gt;
             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
             &lt;property name=&quot;border_width&quot;&gt;3&lt;/property&gt;
             &lt;property name=&quot;label_xalign&quot;&gt;0&lt;/property&gt;
@@ -3096,11 +3110,13 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
           &lt;/packing&gt;
         &lt;/child&gt;
       &lt;/object&gt;
       &lt;packing&gt;
         &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
       &lt;/packing&gt;
     &lt;/child&gt;
 
@@ -5359,7 +5375,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>reduce_hd_preview</key>
 			<true />
 			<key>show_presets</key>
-			<true />
+			<false />
 			<key>update_skip_version</key>
 			<integer>0</integer>
 			<key>use_source_name</key>
