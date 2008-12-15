@@ -60,7 +60,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                                    attributes:nil];
     }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
-    fPictureController = [[PictureController alloc] initWithDelegate:self];
+    fPictureController = [[PictureController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     /* we init the HBPresets class which currently is only used
@@ -89,6 +89,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [GrowlApplicationBridge setGrowlDelegate: self];
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
+    [fPictureController   setHBController: self];
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
 
@@ -239,6 +240,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[browsedSourceDisplayName release];
     [outputPanel release];
 	[fQueueController release];
+    [fPictureController release];
 	hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
 }
@@ -4102,7 +4104,8 @@ the user is using "Custom" settings by determining the sender*/
  * Registers changes made in the Picture Settings Window.
  */
 
-- (void)pictureSettingsDidChange {
+- (void)pictureSettingsDidChange 
+{
 	[self calculatePictureSizing:nil];
 }
 
@@ -5146,11 +5149,13 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) showPicturePanel: (id) sender
 {
-	hb_list_t  * list  = hb_get_titles( fHandle );
+	/*
+    hb_list_t  * list  = hb_get_titles( fHandle );
     hb_title_t * title = (hb_title_t *) hb_list_item( list,
             [fSrcTitlePopUp indexOfSelectedItem] );
-    //[fPictureController SetTitle:title];
-    [fPictureController showPreviewPanel:sender forTitle:title];
+            */
+    //[fPictureController showPreviewPanel:sender forTitle:title];
+    [fPictureController showPictureWindow:sender];
 }
 
 #pragma mark -

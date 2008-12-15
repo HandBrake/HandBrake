@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import "PictureController.h"
+#import "Controller.h"
 
 @interface PictureController (Private)
 
@@ -17,7 +18,7 @@
 
 @implementation PictureController
 
-- (id)initWithDelegate:(id)del
+- (id)init
 {
 	if (self = [super initWithWindowNibName:@"PictureSettings"])
 	{
@@ -31,13 +32,46 @@
         // go away.
         [self window];
         
-		delegate = del;
-        fPicturePreviews = [[NSMutableDictionary dictionaryWithCapacity: HB_NUM_HBLIB_PICTURES] retain];
+		fPicturePreviews = [[NSMutableDictionary dictionaryWithCapacity: HB_NUM_HBLIB_PICTURES] retain];
         /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
         fPreviewLibhb = hb_init(loggingLevel, 0);
 	}
 	return self;
+}
+
+//------------------------------------------------------------------------------------
+// Displays and brings the picture window to the front
+//------------------------------------------------------------------------------------
+- (IBAction) showPictureWindow: (id)sender
+{
+    [self showWindow:sender];
+}
+
+- (void)setHBController: (HBController *)controller
+{
+    fHBController = controller;
+}
+
+- (void)awakeFromNib
+{
+    [fPictureWindow setDelegate:self];
+}
+
+
+- (void)windowWillClose:(NSNotification *)aNotification
+{
+    /* Upon Closing the picture window, we make sure we clean up any
+     * preview movie that might be playing
+     */
+    play_movie = NO;
+    hb_stop( fPreviewLibhb );
+    [self pictureSliderChanged:nil];
+}
+
+- (BOOL)windowShouldClose:(id)fPictureWindow
+{
+    return YES;
 }
 
 - (void) dealloc
@@ -478,8 +512,7 @@ are maintained across different sources */
 
     if (sender != nil)
     {
-        if ([delegate respondsToSelector:@selector(pictureSettingsDidChange)])
-            [delegate pictureSettingsDidChange];
+        [fHBController pictureSettingsDidChange];
     }   
     
 }
@@ -505,6 +538,8 @@ are maintained across different sources */
 #pragma mark Movie Preview
 - (IBAction) createMoviePreview: (id) sender
 {
+    
+    
     /* Lets make sure the still picture previews are showing in case
      * there is currently a movie showing */
     [self pictureSliderChanged:nil];
@@ -526,18 +561,18 @@ are maintained across different sources */
         return;
     }
     
+    
     /* we use controller.mm's prepareJobForPreview to go ahead and set all of our settings
      * however, we want to use a temporary destination field of course
      * so that we do not put our temp preview in the users chosen
      * directory */
     
     hb_job_t * job = fTitle->job;
+    
     /* We run our current setting through prepeareJob in Controller.mm
      * just as if it were a regular encode */
-    if ([delegate respondsToSelector:@selector(prepareJobForPreview)])
-    {
-        [delegate prepareJobForPreview];
-    }
+    
+    [fHBController prepareJobForPreview];
     
     /* Destination file. We set this to our preview directory
      * changing the extension appropriately.*/
@@ -812,15 +847,6 @@ are maintained across different sources */
 }
 
 #pragma mark -
-
-- (IBAction) ClosePanel: (id) sender
-{
-    if ([delegate respondsToSelector:@selector(pictureSettingsDidChange)])
-        [delegate pictureSettingsDidChange];
-
-    [NSApp endSheet:[self window]];
-    [[self window] orderOut:self];
-}
 
 - (BOOL) autoCrop
 {

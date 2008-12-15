@@ -11528,7 +11528,6 @@
 							<string>fPicSettingsAnamorphic</string>
 							<string>fPicSettingsOutp</string>
 							<string>fPicSettingsSrc</string>
-							<string>fPictureButton</string>
 							<string>fPresetDrawer</string>
 							<string>fPresetNewDesc</string>
 							<string>fPresetNewFolderCheck</string>
@@ -11653,7 +11652,6 @@
 							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
-							<string>NSButton</string>
 							<string>NSDrawer</string>
 							<string>NSTextField</string>
 							<string>NSButton</string>

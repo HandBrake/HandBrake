@@ -10,6 +10,8 @@
 /* Needed for Quicktime movie previews */
 #import <QTKit/QTKit.h> 
 
+@class HBController;
+
 #define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
 
 @interface PictureController : NSWindowController
@@ -17,6 +19,8 @@
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
 
+    HBController             *fHBController;        // reference to HBController
+    IBOutlet NSWindow        * fPictureWindow;
     NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
 
@@ -81,10 +85,13 @@
     IBOutlet QTMovieView            * fMovieView;
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
 }
-- (id)initWithDelegate:(id)del;
+- (id)init;
 
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
+- (void)setHBController: (HBController *)controller;
+- (IBAction) showPictureWindow: (id)sender;
+
 - (void) setInitialPictureFilters;
 - (void) displayPreview;
 
@@ -99,9 +106,6 @@
 - (void) libhbStateChanged: (hb_state_t &) state;
 - (IBAction) showMoviePreview: (NSString *) path;
 - (IBAction) previewDurationPopUpChanged: (id) sender;
-
-
-- (IBAction) ClosePanel: (id) sender;
 
 - (BOOL) autoCrop;
 - (void) setAutoCrop: (BOOL) setting;
@@ -130,7 +134,3 @@
 - (void) purgeImageCache;
 @end
 
-@interface NSObject (PictureControllertDelegateMethod)
-- (void)pictureSettingsDidChange;
-- (void)prepareJobForPreview;
-@end

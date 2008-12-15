@@ -15,6 +15,7 @@
 #import "HBAdvancedController.h"
 #import "HBPreferencesController.h"
 #import "HBPresets.h"
+
 @class HBOutputPanelController;
 
 /* We subclass NSView so that our drags show both the icon as well as PresetName columns */
@@ -102,7 +103,7 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fVidTurboPassCheck;
 	
 	/* Picture Settings box */
-	IBOutlet NSTextField         * fPicLabelSettings;
+    IBOutlet NSTextField         * fPicLabelSettings;
 	IBOutlet NSTextField         * fPicLabelSrc;
     IBOutlet NSTextField         * fPicSettingsSrc;
 	IBOutlet NSTextField         * fPicLabelOutp;
@@ -298,6 +299,7 @@ BOOL                        fIsDragging;
 - (IBAction) audioDRCSliderChanged: (id) sender;
 
 - (IBAction) showPicturePanel: (id) sender;
+- (void)pictureSettingsDidChange;
 - (IBAction) calculatePictureSizing: (id) sender;
 - (IBAction) openMainWindow: (id) sender;
 
