@@ -162,7 +162,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if ((mainWindow.isEncoding() == true) || (queueWindow.isEncoding() == true))
+                    if (queueWindow.isEncoding() == true)
                         updateTextFromThread();
                     else
                     {

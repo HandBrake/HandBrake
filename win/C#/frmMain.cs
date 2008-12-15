@@ -35,7 +35,6 @@ namespace Handbrake
         QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking.
-        internal Process hbProc;
         private frmQueue queueWindow;
         private string lastAction = null;
         public int maxWidth = 0;
@@ -470,13 +469,12 @@ namespace Handbrake
                 else
                     query = queryGen.GenerateTheQuery(this);
 
-                ThreadPool.QueueUserWorkItem(procMonitor, query);
-                lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding in Progress";
+                encodeQueue.add(query, text_source.Text, text_destination.Text);
+                encodeQueue.write2disk("hb_queue_recovery.xml");
+                queueWindow.setQueue(encodeQueue);
+                queueWindow.frmMain_encode();
 
-                btn_start.Text = "Stop";
-                btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
-                btn_start.Image = Properties.Resources.stop;
+                setEncodeStatus(1); // Encode is running, so setup the GUI appropriately
             }
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
@@ -485,7 +483,6 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-
                 String query = queryGen.GenerateTheQuery(this);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
@@ -1452,52 +1449,6 @@ namespace Handbrake
 
         // MainWindow Components, Actions and Functions ***********************
 
-        #region Encoding
-
-        // Declarations
-        private delegate void UpdateUIHandler();
-
-        // Encoding Functions
-        private void procMonitor(object state)
-        {
-            // Make sure we are not already encoding and if we are then display an error.
-            if (hbProc != null)
-                hbProc.CloseMainWindow();
-            else
-            {
-                hbProc = cliObj.runCli(this, (string)state);
-                hbProc.WaitForExit();
-                setEncodeLabelFinished();
-                hbProc = null;
-
-                // If the window is minimized, display the notification in a popup.
-                if (FormWindowState.Minimized == this.WindowState)
-                {
-                    notifyIcon.BalloonTipText = lbl_encode.Text;
-                    notifyIcon.ShowBalloonTip(500);
-                }
-
-                // After the encode is done, we may want to shutdown, suspend etc.
-                cliObj.addCLIQueryToLog((string)state);
-                cliObj.copyLog((string)state, text_destination.Text); // Make a copy of the log in the users desired location if necessary
-                cliObj.afterEncodeAction();
-            }
-        }
-        private void setEncodeLabelFinished()
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new UpdateUIHandler(setEncodeLabelFinished));
-                return;
-            }
-            lbl_encode.Text = "Encoding Finished";
-            btn_start.Text = "Start";
-            btn_start.ToolTipText = "Start the encoding process";
-            btn_start.Image = Properties.Resources.Play;
-        }
-
-        #endregion
-
         #region DVD Drive Detection
         // Source Button Drive Detection
         private delegate void ProgressUpdateHandler();
@@ -1841,15 +1792,35 @@ namespace Handbrake
         #region Public Methods
 
         /// <summary>
-        /// Is the mainWindow currently monitoring an encoding session
+        /// Setup the GUI for Encoding or finished Encoding.
+        /// 1 = Encode Running
+        /// 0 = Encode Finished.
         /// </summary>
-        /// <returns>boolean</returns>
-        public Boolean isEncoding()
+        /// <param name="i">Int</param>
+        public void setEncodeStatus(int i)
         {
-            if (hbProc == null)
-                return false;
+            if (i == 0)
+            {
+                lbl_encode.Text = "Encoding Finished";
+                btn_start.Text = "Start";
+                btn_start.ToolTipText = "Start the encoding process";
+                btn_start.Image = Properties.Resources.Play;
+
+                // If the window is minimized, display the notification in a popup.
+                if (FormWindowState.Minimized == this.WindowState)
+                {
+                    notifyIcon.BalloonTipText = lbl_encode.Text;
+                    notifyIcon.ShowBalloonTip(500);
+                }
+            }
             else
-                return true;
+            {
+                lbl_encode.Visible = true;
+                lbl_encode.Text = "Encoding in Progress";
+                btn_start.Text = "Stop";
+                btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
+                btn_start.Image = Properties.Resources.stop;
+            }
         }
 
         /// <summary>

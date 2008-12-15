@@ -49,7 +49,10 @@ namespace Handbrake
             if (progressBar.Value != 0)
             {
                 progressBar.Value = 0;
-                progressBar.Step = 100 / queue.count();
+                if (queue.count() == 0)
+                    progressBar.Step = 100;
+                else
+                    progressBar.Step = 100 / queue.count();
                 progressBar.PerformStep();
                 lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
             }
@@ -65,6 +68,28 @@ namespace Handbrake
                 return false;
             else
                 return true;
+        }
+
+        /// <summary>
+        /// This disables encoding from the queue when a single encode from the main window is running.
+        /// </summary>
+        public void frmMain_encode()
+        {
+            cancel = false;
+            // Start the encode
+            try
+            {
+                if (queue.count() != 0)
+                {
+                    Thread theQ = new Thread(startProc);
+                    theQ.IsBackground = true;
+                    theQ.Start();
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
         }
 
         // Redraw's the queue with the latest data from the Queue class
@@ -111,6 +136,7 @@ namespace Handbrake
         private void btn_encode_Click(object sender, EventArgs e)
         {
             mainWindow.setLastAction("encode");
+            mainWindow.setEncodeStatus(1);
             
             if (queue.count() != 0)
             {
@@ -124,10 +150,14 @@ namespace Handbrake
                 if (queue.count() != 0)
                 {
                     // Setup or reset some values
+                    btn_encode.Enabled = false;
                     btn_stop.Visible = true;
                     progressBar.Value = 0;
                     lbl_progressValue.Text = "0 %";
-                    progressBar.Step = 100 / queue.count();
+                    if (queue.count() == 0)
+                        progressBar.Step = 100;
+                    else
+                        progressBar.Step = 100 / queue.count();
                     Thread theQ = new Thread(startProc);
                     theQ.IsBackground = true;
                     theQ.Start();
@@ -151,7 +181,8 @@ namespace Handbrake
                     queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
 
                     setEncValue();
-                    updateUIElements();
+                    if (this.Created)
+                        updateUIElements();
 
                     hbProc = cliObj.runCli(this, query);
 
@@ -171,6 +202,7 @@ namespace Handbrake
                 }
 
                 resetQueue();
+                mainWindow.setEncodeStatus(0); // Tell the main window encodes have finished.
 
                 // After the encode is done, we may want to shutdown, suspend etc.
                 cliObj.afterEncodeAction();
@@ -296,7 +328,7 @@ namespace Handbrake
             }
         }
 
-        // Move an item up the Queue
+        // Queue Management
         private void btn_up_Click(object sender, EventArgs e)
         {
             if (list_queue.SelectedIndices.Count != 0)
@@ -313,8 +345,6 @@ namespace Handbrake
                 list_queue.Select();
             }
         }
-
-        // Move an item down the Queue
         private void btn_down_Click(object sender, EventArgs e)
         {
             if (list_queue.SelectedIndices.Count != 0)
@@ -331,8 +361,6 @@ namespace Handbrake
                 list_queue.Select();
             }
         }
-
-        // Remove an item from the queue
         private void btn_delete_Click(object sender, EventArgs e)
         {
             if (list_queue.SelectedIndices.Count != 0)
@@ -343,38 +371,6 @@ namespace Handbrake
                 lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
         }
-
-        // Generate a Saveable batch script on the users request
-        private void mnu_batch_Click(object sender, EventArgs e)
-        {
-            SaveFile.FileName = "";
-            SaveFile.Filter = "Batch|.bat";
-            SaveFile.ShowDialog();
-            if (SaveFile.FileName != String.Empty)
-                queue.writeBatchScript(SaveFile.FileName);
-        }
-
-        // Export the HandBrake Queue to a file.
-        private void mnu_export_Click(object sender, EventArgs e)
-        {
-            SaveFile.FileName = "";
-            SaveFile.Filter = "HandBrake Queue|*.queue";
-            SaveFile.ShowDialog();
-            if (SaveFile.FileName != String.Empty)
-                queue.write2disk(SaveFile.FileName);
-        }
-
-        // Import an exported queue
-        private void mnu_import_Click(object sender, EventArgs e)
-        {
-            OpenFile.FileName = "";
-            OpenFile.ShowDialog();
-            if (OpenFile.FileName != String.Empty)
-                queue.recoverQueue(OpenFile.FileName);
-            redrawQueue();
-        }
-
-        // Delete a selected item on the queue, if the delete key is pressed.
         private void list_queue_deleteKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -388,10 +384,30 @@ namespace Handbrake
             }
         }
 
-        // Hide's the window from the users view.
-        private void btn_Close_Click(object sender, EventArgs e)
+        // Queue Import/Export Features
+        private void mnu_batch_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            SaveFile.FileName = "";
+            SaveFile.Filter = "Batch|.bat";
+            SaveFile.ShowDialog();
+            if (SaveFile.FileName != String.Empty)
+                queue.writeBatchScript(SaveFile.FileName);
+        }
+        private void mnu_export_Click(object sender, EventArgs e)
+        {
+            SaveFile.FileName = "";
+            SaveFile.Filter = "HandBrake Queue|*.queue";
+            SaveFile.ShowDialog();
+            if (SaveFile.FileName != String.Empty)
+                queue.write2disk(SaveFile.FileName);
+        }
+        private void mnu_import_Click(object sender, EventArgs e)
+        {
+            OpenFile.FileName = "";
+            OpenFile.ShowDialog();
+            if (OpenFile.FileName != String.Empty)
+                queue.recoverQueue(OpenFile.FileName);
+            redrawQueue();
         }
 
         // Hide's the window when the user tries to "x" out of the window instead of closing it.
