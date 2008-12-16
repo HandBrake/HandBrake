@@ -3703,6 +3703,10 @@ fWorkingCount = 0;
     [fDstMp4iPodFileCheck setHidden: YES];
     
     /* Update the Video Codec PopUp */
+    /* lets get the tag of the currently selected item first so we might reset it later */
+    int selectedVidEncoderTag;
+    selectedVidEncoderTag = [[fVidEncoderPopUp selectedItem] tag];
+    
     /* Note: we now store the video encoder int values from common.c in the tags of each popup for easy retrieval later */
     [fVidEncoderPopUp removeAllItems];
     NSMenuItem *menuItem;
@@ -3765,7 +3769,15 @@ fWorkingCount = 0;
 			[fCreateChapterMarkers setState: NSOffState];
 			break;
     }
-    [fVidEncoderPopUp selectItemAtIndex: 0];
+    /* if we have a previously selected vid encoder tag, then try to select it */
+    if (selectedVidEncoderTag)
+    {
+        [fVidEncoderPopUp selectItemWithTag: selectedVidEncoderTag];
+    }
+    else
+    {
+        [fVidEncoderPopUp selectItemAtIndex: 0];
+    }
 
     [self audioAddAudioTrackCodecs: fAudTrack1CodecPopUp];
     [self audioAddAudioTrackCodecs: fAudTrack2CodecPopUp];
