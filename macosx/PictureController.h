@@ -26,6 +26,9 @@
 
     IBOutlet NSImageView     * fPictureView;
     IBOutlet NSBox           * fPictureViewArea;
+    IBOutlet NSBox           * fPictureSizeBox;
+    IBOutlet NSBox           * fPictureCropBox;
+    IBOutlet NSBox           * fPictureFilterBox;
     IBOutlet NSTextField     * fWidthField;
     IBOutlet NSStepper       * fWidthStepper;
     IBOutlet NSTextField     * fHeightField;
