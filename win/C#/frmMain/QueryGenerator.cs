@@ -49,8 +49,11 @@ namespace Handbrake
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <returns>Returns a CLI query String.</returns>
-        public string GeneratePreviewQuery(frmMain mainWindow)
+        public string GeneratePreviewQuery(frmMain mainWindow, string duration)
         {
+            int seconds = 0;
+            int.TryParse(duration, out seconds);
+
             // Source tab
             string query = "";
 

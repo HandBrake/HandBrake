@@ -124,6 +124,12 @@
     <Compile Include="frmDownload.Designer.cs">
       <DependentUpon>frmDownload.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmGenPreview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGenPreview.Designer.cs">
+      <DependentUpon>frmGenPreview.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,12 @@
     </Compile>
     <Compile Include="frmOptions.Designer.cs">
       <DependentUpon>frmOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Experimental\frmPreviewAX.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Experimental\frmPreviewAX.Designer.cs">
+      <DependentUpon>frmPreviewAX.cs</DependentUpon>
     </Compile>
     <Compile Include="frmQueue.cs">
       <SubType>Form</SubType>
@@ -182,6 +194,9 @@
       <SubType>Designer</SubType>
       <DependentUpon>frmDownload.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmGenPreview.resx">
+      <DependentUpon>frmGenPreview.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -189,6 +204,9 @@
     <EmbeddedResource Include="frmOptions.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Experimental\frmPreviewAX.resx">
+      <DependentUpon>frmPreviewAX.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmQueue.resx">
       <SubType>Designer</SubType>
@@ -256,9 +274,11 @@
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />
+    <None Include="Resources\picture.png" />
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />
     <Content Include="Resources\Queue_Small.png" />
+    <Content Include="Resources\window.png" />
     <None Include="Resources\save.png" />
     <None Include="Resources\stop.png" />
     <None Include="Resources\SplashScreen.jpg" />
@@ -296,6 +316,24 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxAXVLC">
+      <Guid>{DF2BBE39-40A8-433B-A279-073F48DA94B6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

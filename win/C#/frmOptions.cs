@@ -66,6 +66,9 @@ namespace Handbrake
             // Store decomb value string
             txt_decomb.Text = Properties.Settings.Default.decomb;
 
+            // VLC Path
+            txt_vlcPath.Text = Properties.Settings.Default.VLC_Path;
+
             // #############################
             // CLI
             // #############################
@@ -176,6 +179,17 @@ namespace Handbrake
         {
             Properties.Settings.Default.decomb = txt_decomb.Text;
         }
+
+        private void btn_vlcPath_Click(object sender, EventArgs e)
+        {
+            openFile_vlc.ShowDialog();
+            if (openFile_vlc.FileName != string.Empty)
+                txt_vlcPath.Text = openFile_vlc.FileName;
+        }
+        private void txt_vlcPath_TextChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.VLC_Path = txt_vlcPath.Text;
+        }
         #endregion
 
         #region CLI
@@ -240,5 +254,6 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
     }
 }

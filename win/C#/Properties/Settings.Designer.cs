@@ -298,5 +298,17 @@ namespace Handbrake.Properties {
                 this["saveLogWithVideo"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("T:\\\\Program Files\\\\VideoLAN\\\\vlc\\\\vlc.exe")]
+        public string VLC_Path {
+            get {
+                return ((string)(this["VLC_Path"]));
+            }
+            set {
+                this["VLC_Path"] = value;
+            }
+        }
     }
 }

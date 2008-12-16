@@ -257,6 +257,8 @@ namespace Handbrake
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_minimize = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btn_vidPreview = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
@@ -3038,9 +3040,11 @@ namespace Handbrake
             this.btn_add2Queue,
             this.btn_showQueue,
             this.toolStripSeparator4,
+            this.btn_vidPreview,
             this.btn_ActivityWindow,
             this.toolStripSeparator8,
-            this.btn_minimize});
+            this.btn_minimize,
+            this.toolStripSeparator2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -3163,6 +3167,21 @@ namespace Handbrake
             this.btn_minimize.Size = new System.Drawing.Size(162, 36);
             this.btn_minimize.Text = "Minimize To System Tray";
             this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
+            // 
+            // btn_vidPreview
+            // 
+            this.btn_vidPreview.Image = global::Handbrake.Properties.Resources.picture;
+            this.btn_vidPreview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_vidPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_vidPreview.Name = "btn_vidPreview";
+            this.btn_vidPreview.Size = new System.Drawing.Size(86, 36);
+            this.btn_vidPreview.Text = "Preview";
+            this.btn_vidPreview.Click += new System.EventHandler(this.btn_vidPreview_Click);
             // 
             // notifyIcon
             // 
@@ -3480,6 +3499,8 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator sep1;
         private System.Windows.Forms.ToolStripMenuItem pmnu_delete;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btn_vidPreview;
 
     }
 }

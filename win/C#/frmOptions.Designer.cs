@@ -79,6 +79,38 @@ namespace Handbrake
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label18 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label24 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.checkBox6 = new System.Windows.Forms.CheckBox();
+            this.checkBox7 = new System.Windows.Forms.CheckBox();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.btn_vlcPath = new System.Windows.Forms.Button();
+            this.txt_vlcPath = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -308,6 +340,9 @@ namespace Handbrake
             // 
             // tab_picture
             // 
+            this.tab_picture.Controls.Add(this.btn_vlcPath);
+            this.tab_picture.Controls.Add(this.txt_vlcPath);
+            this.tab_picture.Controls.Add(this.label29);
             this.tab_picture.Controls.Add(this.txt_decomb);
             this.tab_picture.Controls.Add(this.label3);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
@@ -319,7 +354,7 @@ namespace Handbrake
             // 
             // txt_decomb
             // 
-            this.txt_decomb.Location = new System.Drawing.Point(90, 16);
+            this.txt_decomb.Location = new System.Drawing.Point(98, 16);
             this.txt_decomb.Name = "txt_decomb";
             this.txt_decomb.Size = new System.Drawing.Size(181, 21);
             this.txt_decomb.TabIndex = 78;
@@ -613,6 +648,367 @@ namespace Handbrake
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Tooltip";
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(197, 222);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(242, 12);
+            this.label16.TabIndex = 81;
+            this.label16.Text = "Available Options: {source} {title} {chapters}";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(111, 201);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(52, 13);
+            this.label17.TabIndex = 80;
+            this.label17.Text = "Format:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(199, 198);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(255, 20);
+            this.textBox1.TabIndex = 79;
+            this.ToolTip.SetToolTip(this.textBox1, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
+                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
+                    "sources values.");
+            // 
+            // button1
+            // 
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.Location = new System.Drawing.Point(386, 171);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(68, 22);
+            this.button1.TabIndex = 78;
+            this.button1.Text = "Browse";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(111, 174);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(82, 13);
+            this.label18.TabIndex = 77;
+            this.label18.Text = "Default Path:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(199, 171);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(181, 20);
+            this.textBox2.TabIndex = 76;
+            this.ToolTip.SetToolTip(this.textBox2, "The default location where auto named files are stored.");
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox1.Location = new System.Drawing.Point(114, 148);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(206, 17);
+            this.checkBox1.TabIndex = 72;
+            this.checkBox1.Text = "Automatically name output files";
+            this.ToolTip.SetToolTip(this.checkBox1, "Automatically name output files");
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(10, 149);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(86, 13);
+            this.label19.TabIndex = 71;
+            this.label19.Text = "Output files:";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox2.Location = new System.Drawing.Point(114, 41);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(135, 17);
+            this.checkBox2.TabIndex = 70;
+            this.checkBox2.Text = "Enable GUI tooltips";
+            this.ToolTip.SetToolTip(this.checkBox2, "Enable the built in tooltips for gui controls.");
+            this.checkBox2.UseVisualStyleBackColor = false;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox3.Location = new System.Drawing.Point(114, 18);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(131, 17);
+            this.checkBox3.TabIndex = 68;
+            this.checkBox3.Text = "Check for updates";
+            this.ToolTip.SetToolTip(this.checkBox3, "Enables the built in update checker. This check is performed when the application" +
+                    " starts.");
+            this.checkBox3.UseVisualStyleBackColor = false;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox4.Location = new System.Drawing.Point(114, 64);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(166, 17);
+            this.checkBox4.TabIndex = 69;
+            this.checkBox4.Text = "Load my default settings";
+            this.ToolTip.SetToolTip(this.checkBox4, "Loads the users default settings rather than the Normal preset.");
+            this.checkBox4.UseVisualStyleBackColor = false;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.BackColor = System.Drawing.Color.Transparent;
+            this.label20.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(21, 19);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(75, 13);
+            this.label20.TabIndex = 67;
+            this.label20.Text = "At Launch:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(12, 103);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(84, 13);
+            this.label21.TabIndex = 54;
+            this.label21.Text = "When Done:";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Do Nothing",
+            "Shutdown",
+            "Suspend",
+            "Hibernate",
+            "Lock System",
+            "Log Off",
+            "Quit HandBrake"});
+            this.comboBox1.Location = new System.Drawing.Point(114, 100);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(166, 21);
+            this.comboBox1.TabIndex = 43;
+            this.ToolTip.SetToolTip(this.comboBox1, "Performs an action when an encode or queue has completed.");
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(197, 222);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(242, 12);
+            this.label22.TabIndex = 81;
+            this.label22.Text = "Available Options: {source} {title} {chapters}";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(111, 201);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(52, 13);
+            this.label23.TabIndex = 80;
+            this.label23.Text = "Format:";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(199, 198);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(255, 20);
+            this.textBox3.TabIndex = 79;
+            this.ToolTip.SetToolTip(this.textBox3, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
+                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
+                    "sources values.");
+            // 
+            // button2
+            // 
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button2.Location = new System.Drawing.Point(386, 171);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(68, 22);
+            this.button2.TabIndex = 78;
+            this.button2.Text = "Browse";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(111, 174);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(82, 13);
+            this.label24.TabIndex = 77;
+            this.label24.Text = "Default Path:";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(199, 171);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(181, 20);
+            this.textBox4.TabIndex = 76;
+            this.ToolTip.SetToolTip(this.textBox4, "The default location where auto named files are stored.");
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox5.Location = new System.Drawing.Point(114, 148);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(206, 17);
+            this.checkBox5.TabIndex = 72;
+            this.checkBox5.Text = "Automatically name output files";
+            this.ToolTip.SetToolTip(this.checkBox5, "Automatically name output files");
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(10, 149);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(86, 13);
+            this.label25.TabIndex = 71;
+            this.label25.Text = "Output files:";
+            // 
+            // checkBox6
+            // 
+            this.checkBox6.AutoSize = true;
+            this.checkBox6.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox6.Location = new System.Drawing.Point(114, 41);
+            this.checkBox6.Name = "checkBox6";
+            this.checkBox6.Size = new System.Drawing.Size(135, 17);
+            this.checkBox6.TabIndex = 70;
+            this.checkBox6.Text = "Enable GUI tooltips";
+            this.ToolTip.SetToolTip(this.checkBox6, "Enable the built in tooltips for gui controls.");
+            this.checkBox6.UseVisualStyleBackColor = false;
+            // 
+            // checkBox7
+            // 
+            this.checkBox7.AutoSize = true;
+            this.checkBox7.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox7.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox7.Location = new System.Drawing.Point(114, 18);
+            this.checkBox7.Name = "checkBox7";
+            this.checkBox7.Size = new System.Drawing.Size(131, 17);
+            this.checkBox7.TabIndex = 68;
+            this.checkBox7.Text = "Check for updates";
+            this.ToolTip.SetToolTip(this.checkBox7, "Enables the built in update checker. This check is performed when the application" +
+                    " starts.");
+            this.checkBox7.UseVisualStyleBackColor = false;
+            // 
+            // checkBox8
+            // 
+            this.checkBox8.AutoSize = true;
+            this.checkBox8.BackColor = System.Drawing.Color.Transparent;
+            this.checkBox8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox8.Location = new System.Drawing.Point(114, 64);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(166, 17);
+            this.checkBox8.TabIndex = 69;
+            this.checkBox8.Text = "Load my default settings";
+            this.ToolTip.SetToolTip(this.checkBox8, "Loads the users default settings rather than the Normal preset.");
+            this.checkBox8.UseVisualStyleBackColor = false;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.BackColor = System.Drawing.Color.Transparent;
+            this.label26.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(21, 19);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(75, 13);
+            this.label26.TabIndex = 67;
+            this.label26.Text = "At Launch:";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(12, 103);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(84, 13);
+            this.label27.TabIndex = 54;
+            this.label27.Text = "When Done:";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Do Nothing",
+            "Shutdown",
+            "Suspend",
+            "Hibernate",
+            "Lock System",
+            "Log Off",
+            "Quit HandBrake"});
+            this.comboBox2.Location = new System.Drawing.Point(114, 100);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(166, 21);
+            this.comboBox2.TabIndex = 43;
+            this.ToolTip.SetToolTip(this.comboBox2, "Performs an action when an encode or queue has completed.");
+            // 
+            // btn_vlcPath
+            // 
+            this.btn_vlcPath.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_vlcPath.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_vlcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_vlcPath.Location = new System.Drawing.Point(398, 56);
+            this.btn_vlcPath.Name = "btn_vlcPath";
+            this.btn_vlcPath.Size = new System.Drawing.Size(68, 22);
+            this.btn_vlcPath.TabIndex = 83;
+            this.btn_vlcPath.Text = "Browse";
+            this.btn_vlcPath.UseVisualStyleBackColor = true;
+            this.btn_vlcPath.Click += new System.EventHandler(this.btn_vlcPath_Click);
+            // 
+            // txt_vlcPath
+            // 
+            this.txt_vlcPath.Location = new System.Drawing.Point(98, 56);
+            this.txt_vlcPath.Name = "txt_vlcPath";
+            this.txt_vlcPath.Size = new System.Drawing.Size(294, 21);
+            this.txt_vlcPath.TabIndex = 81;
+            this.ToolTip.SetToolTip(this.txt_vlcPath, "The default location where auto named files are stored.");
+            this.txt_vlcPath.TextChanged += new System.EventHandler(this.txt_vlcPath_TextChanged);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(17, 61);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(67, 13);
+            this.label29.TabIndex = 79;
+            this.label29.Text = "VLC Path:";
+            // 
+            // openFile_vlc
+            // 
+            this.openFile_vlc.DefaultExt = "exe";
+            this.openFile_vlc.Filter = "exe|*.exe";
+            // 
             // frmOptions
             // 
             this.ClientSize = new System.Drawing.Size(514, 375);
@@ -688,5 +1084,37 @@ namespace Handbrake
         private System.Windows.Forms.TextBox text_logPath;
         internal System.Windows.Forms.CheckBox check_keepLogs;
         internal System.Windows.Forms.CheckBox check_saveLogWithVideo;
+        internal System.Windows.Forms.Button btn_vlcPath;
+        private System.Windows.Forms.TextBox txt_vlcPath;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Label label16;
+        internal System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox textBox1;
+        internal System.Windows.Forms.Button button1;
+        internal System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox textBox2;
+        internal System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Label label19;
+        internal System.Windows.Forms.CheckBox checkBox2;
+        internal System.Windows.Forms.CheckBox checkBox3;
+        internal System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
+        internal System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label22;
+        internal System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox textBox3;
+        internal System.Windows.Forms.Button button2;
+        internal System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox textBox4;
+        internal System.Windows.Forms.CheckBox checkBox5;
+        private System.Windows.Forms.Label label25;
+        internal System.Windows.Forms.CheckBox checkBox6;
+        internal System.Windows.Forms.CheckBox checkBox7;
+        internal System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.Label label27;
+        internal System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.OpenFileDialog openFile_vlc;
     }
 }

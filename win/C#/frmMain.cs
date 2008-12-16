@@ -36,6 +36,7 @@ namespace Handbrake
 
         // Globals: Mainly used for tracking.
         private frmQueue queueWindow;
+        private frmGenPreview preview;
         private string lastAction = null;
         public int maxWidth = 0;
         public int maxHeight = 0;
@@ -498,6 +499,26 @@ namespace Handbrake
         {
             queueWindow.setQueue(encodeQueue);
             queueWindow.Show();
+        }
+        private void btn_vidPreview_Click(object sender, EventArgs e)
+        {
+            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                if (preview == null)
+                {
+                    preview = new frmGenPreview(this);
+                    preview.Show();
+                }
+                else if (preview.IsDisposed)
+                {
+                    preview = new frmGenPreview(this);
+                    preview.Show();
+                }
+                else
+                    MessageBox.Show("The preview window is already open!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
@@ -1925,7 +1946,6 @@ namespace Handbrake
                 // Add the final root node which does not get added above.
                 treeView_presets.Nodes.Add(rootNode);
             }
-
 
             // User Presets
             presetNames = presetHandler.getUserPresetNames();
