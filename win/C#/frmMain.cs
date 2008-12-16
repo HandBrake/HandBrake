@@ -109,7 +109,8 @@ namespace Handbrake
             this.Enabled = true;
 
             // Event Handlers
-            this.Resize += new EventHandler(frmMain_Resize);
+            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+                this.Resize += new EventHandler(frmMain_Resize);
 
             // Queue Recovery
             queueRecovery();
@@ -555,10 +556,6 @@ namespace Handbrake
             this.Activate();
             this.WindowState = FormWindowState.Normal;
             notifyIcon.Visible = false;
-        }
-        private void btn_minimize_Click(object sender, EventArgs e)
-        {
-            this.WindowState = FormWindowState.Minimized;
         }
         private void btn_restore_Click(object sender, EventArgs e)
         {
@@ -1960,6 +1957,9 @@ namespace Handbrake
         }
 
         #endregion
+
+
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

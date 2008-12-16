@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -254,11 +254,8 @@ namespace Handbrake
             this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
             this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.btn_minimize = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_vidPreview = new System.Windows.Forms.ToolStripButton();
+            this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
@@ -655,9 +652,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -3041,10 +3038,7 @@ namespace Handbrake
             this.btn_showQueue,
             this.toolStripSeparator4,
             this.btn_vidPreview,
-            this.btn_ActivityWindow,
-            this.toolStripSeparator8,
-            this.btn_minimize,
-            this.toolStripSeparator2});
+            this.btn_ActivityWindow});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -3142,6 +3136,16 @@ namespace Handbrake
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
             // 
+            // btn_vidPreview
+            // 
+            this.btn_vidPreview.Image = global::Handbrake.Properties.Resources.picture;
+            this.btn_vidPreview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_vidPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_vidPreview.Name = "btn_vidPreview";
+            this.btn_vidPreview.Size = new System.Drawing.Size(86, 36);
+            this.btn_vidPreview.Text = "Preview";
+            this.btn_vidPreview.Click += new System.EventHandler(this.btn_vidPreview_Click);
+            // 
             // btn_ActivityWindow
             // 
             this.btn_ActivityWindow.Image = global::Handbrake.Properties.Resources.ActivityWindow;
@@ -3153,35 +3157,6 @@ namespace Handbrake
             this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
                 "ently running encode.";
             this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 39);
-            // 
-            // btn_minimize
-            // 
-            this.btn_minimize.Image = global::Handbrake.Properties.Resources.hb32;
-            this.btn_minimize.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_minimize.Name = "btn_minimize";
-            this.btn_minimize.Size = new System.Drawing.Size(162, 36);
-            this.btn_minimize.Text = "Minimize To System Tray";
-            this.btn_minimize.Click += new System.EventHandler(this.btn_minimize_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
-            // 
-            // btn_vidPreview
-            // 
-            this.btn_vidPreview.Image = global::Handbrake.Properties.Resources.picture;
-            this.btn_vidPreview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_vidPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_vidPreview.Name = "btn_vidPreview";
-            this.btn_vidPreview.Size = new System.Drawing.Size(86, 36);
-            this.btn_vidPreview.Text = "Preview";
-            this.btn_vidPreview.Click += new System.EventHandler(this.btn_vidPreview_Click);
             // 
             // notifyIcon
             // 
@@ -3384,7 +3359,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripButton btn_showQueue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripMenuItem mnu_handbrake_home;
         internal System.Windows.Forms.Button btn_removePreset;
         internal System.Windows.Forms.Button btn_addPreset;
@@ -3463,7 +3437,6 @@ namespace Handbrake
         internal System.Windows.Forms.TreeView treeView_presets;
         internal System.Windows.Forms.RichTextBox rtf_query;
         private System.Windows.Forms.NotifyIcon notifyIcon;
-        private System.Windows.Forms.ToolStripButton btn_minimize;
         private System.Windows.Forms.ToolStripMenuItem btn_restore;
         internal System.Windows.Forms.Label lbl_src_res;
         internal System.Windows.Forms.Label label7;
@@ -3499,7 +3472,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator sep1;
         private System.Windows.Forms.ToolStripMenuItem pmnu_delete;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btn_vidPreview;
 
     }

@@ -310,5 +310,17 @@ namespace Handbrake.Properties {
                 this["VLC_Path"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
+        public string MainWindowMinimize {
+            get {
+                return ((string)(this["MainWindowMinimize"]));
+            }
+            set {
+                this["MainWindowMinimize"] = value;
+            }
+        }
     }
 }

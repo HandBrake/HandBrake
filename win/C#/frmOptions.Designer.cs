@@ -54,6 +54,9 @@ namespace Handbrake
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tab_picture = new System.Windows.Forms.TabPage();
+            this.btn_vlcPath = new System.Windows.Forms.Button();
+            this.txt_vlcPath = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
             this.txt_decomb = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
@@ -71,7 +74,6 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
-            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
             this.check_snapshot = new System.Windows.Forms.CheckBox();
             this.btn_drive_detect = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -79,38 +81,37 @@ namespace Handbrake
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.label18 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.label19 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.label24 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
-            this.label25 = new System.Windows.Forms.Label();
             this.checkBox6 = new System.Windows.Forms.CheckBox();
             this.checkBox7 = new System.Windows.Forms.CheckBox();
             this.checkBox8 = new System.Windows.Forms.CheckBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.btn_vlcPath = new System.Windows.Forms.Button();
-            this.txt_vlcPath = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
+            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
+            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -352,6 +353,38 @@ namespace Handbrake
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
             // 
+            // btn_vlcPath
+            // 
+            this.btn_vlcPath.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_vlcPath.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_vlcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_vlcPath.Location = new System.Drawing.Point(398, 56);
+            this.btn_vlcPath.Name = "btn_vlcPath";
+            this.btn_vlcPath.Size = new System.Drawing.Size(68, 22);
+            this.btn_vlcPath.TabIndex = 83;
+            this.btn_vlcPath.Text = "Browse";
+            this.btn_vlcPath.UseVisualStyleBackColor = true;
+            this.btn_vlcPath.Click += new System.EventHandler(this.btn_vlcPath_Click);
+            // 
+            // txt_vlcPath
+            // 
+            this.txt_vlcPath.Location = new System.Drawing.Point(98, 56);
+            this.txt_vlcPath.Name = "txt_vlcPath";
+            this.txt_vlcPath.Size = new System.Drawing.Size(294, 21);
+            this.txt_vlcPath.TabIndex = 81;
+            this.ToolTip.SetToolTip(this.txt_vlcPath, "The default location where auto named files are stored.");
+            this.txt_vlcPath.TextChanged += new System.EventHandler(this.txt_vlcPath_TextChanged);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(17, 61);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(67, 13);
+            this.label29.TabIndex = 79;
+            this.label29.Text = "VLC Path:";
+            // 
             // txt_decomb
             // 
             this.txt_decomb.Location = new System.Drawing.Point(98, 16);
@@ -562,6 +595,7 @@ namespace Handbrake
             // tab_advanced
             // 
             this.tab_advanced.Controls.Add(this.lbl_appcastUnstable);
+            this.tab_advanced.Controls.Add(this.check_mainMinimize);
             this.tab_advanced.Controls.Add(this.check_snapshot);
             this.tab_advanced.Controls.Add(this.btn_drive_detect);
             this.tab_advanced.Controls.Add(this.label6);
@@ -570,25 +604,15 @@ namespace Handbrake
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
             this.tab_advanced.Size = new System.Drawing.Size(482, 259);
             this.tab_advanced.TabIndex = 4;
-            this.tab_advanced.Text = "Advanced";
+            this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
-            // 
-            // lbl_appcastUnstable
-            // 
-            this.lbl_appcastUnstable.AutoSize = true;
-            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 42);
-            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
-            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
-            this.lbl_appcastUnstable.TabIndex = 81;
-            this.lbl_appcastUnstable.Text = "Updates:";
             // 
             // check_snapshot
             // 
             this.check_snapshot.AutoSize = true;
             this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
             this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_snapshot.Location = new System.Drawing.Point(76, 41);
+            this.check_snapshot.Location = new System.Drawing.Point(76, 81);
             this.check_snapshot.Name = "check_snapshot";
             this.check_snapshot.Size = new System.Drawing.Size(273, 17);
             this.check_snapshot.TabIndex = 80;
@@ -648,26 +672,6 @@ namespace Handbrake
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Tooltip";
             // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(197, 222);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(242, 12);
-            this.label16.TabIndex = 81;
-            this.label16.Text = "Available Options: {source} {title} {chapters}";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(111, 201);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(52, 13);
-            this.label17.TabIndex = 80;
-            this.label17.Text = "Format:";
-            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(199, 198);
@@ -677,28 +681,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.textBox1, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
                     "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
                     "sources values.");
-            // 
-            // button1
-            // 
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.Location = new System.Drawing.Point(386, 171);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(68, 22);
-            this.button1.TabIndex = 78;
-            this.button1.Text = "Browse";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label18.Location = new System.Drawing.Point(111, 174);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(82, 13);
-            this.label18.TabIndex = 77;
-            this.label18.Text = "Default Path:";
             // 
             // textBox2
             // 
@@ -719,16 +701,6 @@ namespace Handbrake
             this.checkBox1.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.checkBox1, "Automatically name output files");
             this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(10, 149);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(86, 13);
-            this.label19.TabIndex = 71;
-            this.label19.Text = "Output files:";
             // 
             // checkBox2
             // 
@@ -770,27 +742,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.checkBox4, "Loads the users default settings rather than the Normal preset.");
             this.checkBox4.UseVisualStyleBackColor = false;
             // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.BackColor = System.Drawing.Color.Transparent;
-            this.label20.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label20.Location = new System.Drawing.Point(21, 19);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(75, 13);
-            this.label20.TabIndex = 67;
-            this.label20.Text = "At Launch:";
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(12, 103);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(84, 13);
-            this.label21.TabIndex = 54;
-            this.label21.Text = "When Done:";
-            // 
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -810,26 +761,6 @@ namespace Handbrake
             this.comboBox1.TabIndex = 43;
             this.ToolTip.SetToolTip(this.comboBox1, "Performs an action when an encode or queue has completed.");
             // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(197, 222);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(242, 12);
-            this.label22.TabIndex = 81;
-            this.label22.Text = "Available Options: {source} {title} {chapters}";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(111, 201);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(52, 13);
-            this.label23.TabIndex = 80;
-            this.label23.Text = "Format:";
-            // 
             // textBox3
             // 
             this.textBox3.Location = new System.Drawing.Point(199, 198);
@@ -839,28 +770,6 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.textBox3, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
                     "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
                     "sources values.");
-            // 
-            // button2
-            // 
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.button2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button2.Location = new System.Drawing.Point(386, 171);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(68, 22);
-            this.button2.TabIndex = 78;
-            this.button2.Text = "Browse";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(111, 174);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(82, 13);
-            this.label24.TabIndex = 77;
-            this.label24.Text = "Default Path:";
             // 
             // textBox4
             // 
@@ -881,16 +790,6 @@ namespace Handbrake
             this.checkBox5.Text = "Automatically name output files";
             this.ToolTip.SetToolTip(this.checkBox5, "Automatically name output files");
             this.checkBox5.UseVisualStyleBackColor = true;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(10, 149);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(86, 13);
-            this.label25.TabIndex = 71;
-            this.label25.Text = "Output files:";
             // 
             // checkBox6
             // 
@@ -932,6 +831,150 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.checkBox8, "Loads the users default settings rather than the Normal preset.");
             this.checkBox8.UseVisualStyleBackColor = false;
             // 
+            // comboBox2
+            // 
+            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Do Nothing",
+            "Shutdown",
+            "Suspend",
+            "Hibernate",
+            "Lock System",
+            "Log Off",
+            "Quit HandBrake"});
+            this.comboBox2.Location = new System.Drawing.Point(114, 100);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(166, 21);
+            this.comboBox2.TabIndex = 43;
+            this.ToolTip.SetToolTip(this.comboBox2, "Performs an action when an encode or queue has completed.");
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(197, 222);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(242, 12);
+            this.label16.TabIndex = 81;
+            this.label16.Text = "Available Options: {source} {title} {chapters}";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(111, 201);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(52, 13);
+            this.label17.TabIndex = 80;
+            this.label17.Text = "Format:";
+            // 
+            // button1
+            // 
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.Location = new System.Drawing.Point(386, 171);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(68, 22);
+            this.button1.TabIndex = 78;
+            this.button1.Text = "Browse";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(111, 174);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(82, 13);
+            this.label18.TabIndex = 77;
+            this.label18.Text = "Default Path:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(10, 149);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(86, 13);
+            this.label19.TabIndex = 71;
+            this.label19.Text = "Output files:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.BackColor = System.Drawing.Color.Transparent;
+            this.label20.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.Location = new System.Drawing.Point(21, 19);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(75, 13);
+            this.label20.TabIndex = 67;
+            this.label20.Text = "At Launch:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(12, 103);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(84, 13);
+            this.label21.TabIndex = 54;
+            this.label21.Text = "When Done:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(197, 222);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(242, 12);
+            this.label22.TabIndex = 81;
+            this.label22.Text = "Available Options: {source} {title} {chapters}";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(111, 201);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(52, 13);
+            this.label23.TabIndex = 80;
+            this.label23.Text = "Format:";
+            // 
+            // button2
+            // 
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.button2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button2.Location = new System.Drawing.Point(386, 171);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(68, 22);
+            this.button2.TabIndex = 78;
+            this.button2.Text = "Browse";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(111, 174);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(82, 13);
+            this.label24.TabIndex = 77;
+            this.label24.Text = "Default Path:";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(10, 149);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(86, 13);
+            this.label25.TabIndex = 71;
+            this.label25.Text = "Output files:";
+            // 
             // label26
             // 
             this.label26.AutoSize = true;
@@ -953,61 +996,36 @@ namespace Handbrake
             this.label27.TabIndex = 54;
             this.label27.Text = "When Done:";
             // 
-            // comboBox2
-            // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "Do Nothing",
-            "Shutdown",
-            "Suspend",
-            "Hibernate",
-            "Lock System",
-            "Log Off",
-            "Quit HandBrake"});
-            this.comboBox2.Location = new System.Drawing.Point(114, 100);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(166, 21);
-            this.comboBox2.TabIndex = 43;
-            this.ToolTip.SetToolTip(this.comboBox2, "Performs an action when an encode or queue has completed.");
-            // 
-            // btn_vlcPath
-            // 
-            this.btn_vlcPath.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_vlcPath.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_vlcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_vlcPath.Location = new System.Drawing.Point(398, 56);
-            this.btn_vlcPath.Name = "btn_vlcPath";
-            this.btn_vlcPath.Size = new System.Drawing.Size(68, 22);
-            this.btn_vlcPath.TabIndex = 83;
-            this.btn_vlcPath.Text = "Browse";
-            this.btn_vlcPath.UseVisualStyleBackColor = true;
-            this.btn_vlcPath.Click += new System.EventHandler(this.btn_vlcPath_Click);
-            // 
-            // txt_vlcPath
-            // 
-            this.txt_vlcPath.Location = new System.Drawing.Point(98, 56);
-            this.txt_vlcPath.Name = "txt_vlcPath";
-            this.txt_vlcPath.Size = new System.Drawing.Size(294, 21);
-            this.txt_vlcPath.TabIndex = 81;
-            this.ToolTip.SetToolTip(this.txt_vlcPath, "The default location where auto named files are stored.");
-            this.txt_vlcPath.TextChanged += new System.EventHandler(this.txt_vlcPath_TextChanged);
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(17, 61);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(67, 13);
-            this.label29.TabIndex = 79;
-            this.label29.Text = "VLC Path:";
-            // 
             // openFile_vlc
             // 
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
+            // 
+            // check_mainMinimize
+            // 
+            this.check_mainMinimize.AutoSize = true;
+            this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
+            this.check_mainMinimize.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_mainMinimize.Location = new System.Drawing.Point(76, 41);
+            this.check_mainMinimize.Name = "check_mainMinimize";
+            this.check_mainMinimize.Size = new System.Drawing.Size(286, 17);
+            this.check_mainMinimize.TabIndex = 82;
+            this.check_mainMinimize.Text = "Minimize to System Tray rather than task bar";
+            this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
+                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
+                    "");
+            this.check_mainMinimize.UseVisualStyleBackColor = false;
+            this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
+            // 
+            // lbl_appcastUnstable
+            // 
+            this.lbl_appcastUnstable.AutoSize = true;
+            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 82);
+            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
+            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
+            this.lbl_appcastUnstable.TabIndex = 83;
+            this.lbl_appcastUnstable.Text = "Updates:";
             // 
             // frmOptions
             // 
@@ -1069,7 +1087,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_cli_minimized;
         private System.Windows.Forms.Label label12;
         internal System.Windows.Forms.ToolTip ToolTip;
-        private System.Windows.Forms.Label lbl_appcastUnstable;
         internal System.Windows.Forms.CheckBox check_snapshot;
         private System.Windows.Forms.TabPage tab_picture;
         private System.Windows.Forms.TextBox txt_decomb;
@@ -1116,5 +1133,7 @@ namespace Handbrake
         private System.Windows.Forms.Label label27;
         internal System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.OpenFileDialog openFile_vlc;
+        private System.Windows.Forms.Label lbl_appcastUnstable;
+        internal System.Windows.Forms.CheckBox check_mainMinimize;
     }
 }

@@ -114,6 +114,9 @@ namespace Handbrake
             if (Properties.Settings.Default.drive_detection == "Checked")
                 btn_drive_detect.CheckState = CheckState.Checked;
 
+            // Enable snapshot updating
+            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+                check_mainMinimize.CheckState = CheckState.Checked;
         }
 
         #region General
@@ -243,6 +246,11 @@ namespace Handbrake
             Properties.Settings.Default.drive_detection = btn_drive_detect.CheckState.ToString();
         }
 
+        private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.CheckState.ToString();
+        }
+
         private void check_snapshot_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.checkSnapshot = check_snapshot.CheckState.ToString();
@@ -254,6 +262,5 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
-
     }
 }
