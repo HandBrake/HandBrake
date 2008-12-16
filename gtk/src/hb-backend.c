@@ -2990,7 +2990,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	job->start_at_preview = ghb_settings_get_int(js, "start_frame") + 1;
 	if (job->start_at_preview)
 	{
-g_message("duration %d", ghb_settings_get_int(js, "live_duration"));
 		job->seek_points = ghb_settings_get_int(js, "preview_count");
 		job->pts_to_stop = ghb_settings_get_int(js, "live_duration") * 90000LL;
 	}
