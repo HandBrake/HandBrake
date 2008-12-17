@@ -81,6 +81,15 @@ namespace Handbrake
             {
                 if (queue.count() != 0)
                 {
+                    // Setup or reset some values
+                    btn_encode.Enabled = false;
+                    btn_stop.Visible = true;
+                    progressBar.Value = 0;
+                    lbl_progressValue.Text = "0 %";
+                    if (queue.count() == 0)
+                        progressBar.Step = 100;
+                    else
+                        progressBar.Step = 100 / queue.count();
                     Thread theQ = new Thread(startProc);
                     theQ.IsBackground = true;
                     theQ.Start();
@@ -135,19 +144,16 @@ namespace Handbrake
         // Initializes the encode process
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            mainWindow.setLastAction("encode");
-            mainWindow.setEncodeStatus(1);
-            
             if (queue.count() != 0)
             {
                 btn_encode.Enabled = false;
-            }
-            cancel = false;
+                mainWindow.setLastAction("encode");
+                mainWindow.setEncodeStatus(1);
 
-            // Start the encode
-            try
-            {
-                if (queue.count() != 0)
+                cancel = false;
+
+                // Start the encode
+                try
                 {
                     // Setup or reset some values
                     btn_encode.Enabled = false;
@@ -162,10 +168,10 @@ namespace Handbrake
                     theQ.IsBackground = true;
                     theQ.Start();
                 }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
+                catch (Exception exc)
+                {
+                    MessageBox.Show(exc.ToString());
+                }
             }
         }
 
@@ -339,8 +345,8 @@ namespace Handbrake
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 redrawQueue();
 
-                if (selected - 1 > 0) 
-                    list_queue.Items[selected -1].Selected = true;
+                if (selected - 1 > 0)
+                    list_queue.Items[selected - 1].Selected = true;
 
                 list_queue.Select();
             }
@@ -355,7 +361,7 @@ namespace Handbrake
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 redrawQueue();
 
-                if (selected +1 < list_queue.Items.Count) 
+                if (selected + 1 < list_queue.Items.Count)
                     list_queue.Items[selected + 1].Selected = true;
 
                 list_queue.Select();

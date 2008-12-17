@@ -24,6 +24,7 @@ namespace Handbrake
         {
             InitializeComponent();
             this.mainWindow = mw;
+            cb_duration.SelectedIndex = 0;
         }
 
         private void btn_play_Click(object sender, EventArgs e)

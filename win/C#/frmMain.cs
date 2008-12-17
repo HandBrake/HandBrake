@@ -471,9 +471,13 @@ namespace Handbrake
                 else
                     query = queryGen.GenerateTheQuery(this);
 
-                encodeQueue.add(query, text_source.Text, text_destination.Text);
-                encodeQueue.write2disk("hb_queue_recovery.xml");
+                if (encodeQueue.count() == 0)
+                {
+                    encodeQueue.add(query, text_source.Text, text_destination.Text);
+                    encodeQueue.write2disk("hb_queue_recovery.xml");
+                }
                 queueWindow.setQueue(encodeQueue);
+                queueWindow.Show();
                 queueWindow.frmMain_encode();
 
                 setEncodeStatus(1); // Encode is running, so setup the GUI appropriately

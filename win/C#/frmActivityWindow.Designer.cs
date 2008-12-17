@@ -72,13 +72,13 @@ namespace Handbrake
             this.rightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu_copy_log});
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(153, 48);
+            this.rightClickMenu.Size = new System.Drawing.Size(111, 26);
             // 
             // mnu_copy_log
             // 
             this.mnu_copy_log.Image = global::Handbrake.Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
-            this.mnu_copy_log.Size = new System.Drawing.Size(152, 22);
+            this.mnu_copy_log.Size = new System.Drawing.Size(110, 22);
             this.mnu_copy_log.Text = "Copy";
             this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
             // 
@@ -109,14 +109,14 @@ namespace Handbrake
             this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(94, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(85, 22);
             this.toolStripDropDownButton1.Text = "Select Log";
             // 
             // btn_encode_log
             // 
             this.btn_encode_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btn_encode_log.Name = "btn_encode_log";
-            this.btn_encode_log.Size = new System.Drawing.Size(151, 22);
+            this.btn_encode_log.Size = new System.Drawing.Size(140, 22);
             this.btn_encode_log.Text = "Encode Log";
             this.btn_encode_log.Click += new System.EventHandler(this.btn_encode_log_Click);
             // 
@@ -124,7 +124,7 @@ namespace Handbrake
             // 
             this.btn_scan_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btn_scan_log.Name = "btn_scan_log";
-            this.btn_scan_log.Size = new System.Drawing.Size(151, 22);
+            this.btn_scan_log.Size = new System.Drawing.Size(140, 22);
             this.btn_scan_log.Text = "Scan Log";
             this.btn_scan_log.Click += new System.EventHandler(this.btn_scan_log_Click);
             // 
@@ -134,7 +134,7 @@ namespace Handbrake
             this.btn_copy.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_copy.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_copy.Name = "btn_copy";
-            this.btn_copy.Size = new System.Drawing.Size(122, 22);
+            this.btn_copy.Size = new System.Drawing.Size(111, 22);
             this.btn_copy.Text = "Copy to clipboard";
             this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
             // 
@@ -159,6 +159,7 @@ namespace Handbrake
             // 
             // lbl_slb
             // 
+            this.lbl_slb.BackColor = System.Drawing.Color.Transparent;
             this.lbl_slb.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_slb.Name = "lbl_slb";
             this.lbl_slb.Size = new System.Drawing.Size(94, 17);
@@ -168,7 +169,7 @@ namespace Handbrake
             // 
             this.txt_log.BackColor = System.Drawing.Color.Transparent;
             this.txt_log.Name = "txt_log";
-            this.txt_log.Size = new System.Drawing.Size(85, 17);
+            this.txt_log.Size = new System.Drawing.Size(74, 17);
             this.txt_log.Text = "{selected log}";
             // 
             // frmActivityWindow

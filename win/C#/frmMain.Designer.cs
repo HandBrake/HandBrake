@@ -1639,7 +1639,8 @@ namespace Handbrake
             this.HelpToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
-            this.frmMainMenu.Size = new System.Drawing.Size(985, 24);
+            this.frmMainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.frmMainMenu.Size = new System.Drawing.Size(983, 24);
             this.frmMainMenu.TabIndex = 0;
             this.frmMainMenu.Text = "MenuStrip1";
             // 
@@ -3042,7 +3043,7 @@ namespace Handbrake
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(985, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(983, 39);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -3172,9 +3173,9 @@ namespace Handbrake
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lbl_encode});
-            this.StatusStrip.Location = new System.Drawing.Point(0, 629);
+            this.StatusStrip.Location = new System.Drawing.Point(0, 627);
             this.StatusStrip.Name = "StatusStrip";
-            this.StatusStrip.Size = new System.Drawing.Size(985, 22);
+            this.StatusStrip.Size = new System.Drawing.Size(983, 22);
             this.StatusStrip.TabIndex = 7;
             this.StatusStrip.Text = "statusStrip1";
             // 
@@ -3189,7 +3190,7 @@ namespace Handbrake
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(985, 651);
+            this.ClientSize = new System.Drawing.Size(983, 649);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);
