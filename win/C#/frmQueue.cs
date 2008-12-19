@@ -44,18 +44,6 @@ namespace Handbrake
             queue = qw;
             redrawQueue();
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
-
-            // Recalculate the progress bar, but only if the queue has already started.       
-            if (progressBar.Value != 0)
-            {
-                progressBar.Value = 0;
-                if (queue.count() == 0)
-                    progressBar.Step = 100;
-                else
-                    progressBar.Step = 100 / queue.count();
-                progressBar.PerformStep();
-                lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
-            }
         }
 
         /// <summary>
@@ -84,12 +72,7 @@ namespace Handbrake
                     // Setup or reset some values
                     btn_encode.Enabled = false;
                     btn_stop.Visible = true;
-                    progressBar.Value = 0;
-                    lbl_progressValue.Text = "0 %";
-                    if (queue.count() == 0)
-                        progressBar.Step = 100;
-                    else
-                        progressBar.Step = 100 / queue.count();
+
                     Thread theQ = new Thread(startProc);
                     theQ.IsBackground = true;
                     theQ.Start();
@@ -98,6 +81,17 @@ namespace Handbrake
             catch (Exception exc)
             {
                 MessageBox.Show(exc.ToString());
+            }
+        }
+
+        public void frmMain_cancelEncode()
+        {
+            Process[] aProc = Process.GetProcessesByName("HandBrakeCLI");
+            Process HandBrakeCLI;
+            if (aProc.Length > 0)
+            {
+                HandBrakeCLI = aProc[0];
+                HandBrakeCLI.Kill();
             }
         }
 
@@ -158,12 +152,7 @@ namespace Handbrake
                     // Setup or reset some values
                     btn_encode.Enabled = false;
                     btn_stop.Visible = true;
-                    progressBar.Value = 0;
-                    lbl_progressValue.Text = "0 %";
-                    if (queue.count() == 0)
-                        progressBar.Step = 100;
-                    else
-                        progressBar.Step = 100 / queue.count();
+
                     Thread theQ = new Thread(startProc);
                     theQ.IsBackground = true;
                     theQ.Start();
@@ -233,17 +222,6 @@ namespace Handbrake
                 btn_stop.Visible = false;
                 btn_encode.Enabled = true;
 
-                if (cancel == true)
-                {
-                    lbl_progressValue.Text = "Encode Queue Cancelled!";
-                }
-                else
-                {
-                    lbl_progressValue.Text = "Encode Queue Completed!";
-                }
-
-                progressBar.Value = 0;
-
                 lbl_source.Text = "-";
                 lbl_dest.Text = "-";
                 lbl_vEnc.Text = "-";
@@ -280,9 +258,6 @@ namespace Handbrake
                 }
 
                 redrawQueue();
-
-                progressBar.PerformStep();
-                lbl_progressValue.Text = string.Format("{0} %", progressBar.Value);
                 lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
             catch (Exception exc)

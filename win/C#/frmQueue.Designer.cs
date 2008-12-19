@@ -67,9 +67,6 @@ namespace Handbrake
             this.Audio = new System.Windows.Forms.ColumnHeader();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.lbl_progressValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -316,7 +313,7 @@ namespace Handbrake
             this.list_queue.Location = new System.Drawing.Point(15, 0);
             this.list_queue.MultiSelect = false;
             this.list_queue.Name = "list_queue";
-            this.list_queue.Size = new System.Drawing.Size(749, 210);
+            this.list_queue.Size = new System.Drawing.Size(749, 219);
             this.list_queue.TabIndex = 72;
             this.list_queue.UseCompatibleStateImageBehavior = false;
             this.list_queue.View = System.Windows.Forms.View.Details;
@@ -355,13 +352,10 @@ namespace Handbrake
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lbl_encodesPending,
-            this.toolStripStatusLabel1,
-            this.progressBar,
-            this.lbl_progressValue});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 359);
+            this.lbl_encodesPending});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 368);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(779, 31);
+            this.statusStrip1.Size = new System.Drawing.Size(779, 22);
             this.statusStrip1.TabIndex = 73;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -370,27 +364,8 @@ namespace Handbrake
             this.lbl_encodesPending.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.lbl_encodesPending.Margin = new System.Windows.Forms.Padding(0, 3, 10, 2);
             this.lbl_encodesPending.Name = "lbl_encodesPending";
-            this.lbl_encodesPending.Size = new System.Drawing.Size(122, 26);
+            this.lbl_encodesPending.Size = new System.Drawing.Size(122, 17);
             this.lbl_encodesPending.Text = "0 encode(s) pending";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(57, 26);
-            this.toolStripStatusLabel1.Text = "Progress:";
-            // 
-            // progressBar
-            // 
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(500, 25);
-            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            // 
-            // lbl_progressValue
-            // 
-            this.lbl_progressValue.Name = "lbl_progressValue";
-            this.lbl_progressValue.Size = new System.Drawing.Size(34, 26);
-            this.lbl_progressValue.Text = " 0 %";
             // 
             // OpenFile
             // 
@@ -426,7 +401,7 @@ namespace Handbrake
             this.splitContainer1.Panel2.Controls.Add(this.panel3);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Size = new System.Drawing.Size(779, 320);
+            this.splitContainer1.Size = new System.Drawing.Size(779, 329);
             this.splitContainer1.SplitterDistance = 94;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 74;
@@ -434,7 +409,7 @@ namespace Handbrake
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(15, 210);
+            this.panel3.Location = new System.Drawing.Point(15, 219);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(749, 15);
             this.panel3.TabIndex = 77;
@@ -444,7 +419,7 @@ namespace Handbrake
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(764, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(15, 225);
+            this.panel2.Size = new System.Drawing.Size(15, 234);
             this.panel2.TabIndex = 76;
             // 
             // panel1
@@ -452,7 +427,7 @@ namespace Handbrake
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(15, 225);
+            this.panel1.Size = new System.Drawing.Size(15, 234);
             this.panel1.TabIndex = 75;
             // 
             // frmQueue
@@ -510,9 +485,6 @@ namespace Handbrake
         private System.Windows.Forms.ColumnHeader EncoderVideo;
         private System.Windows.Forms.ColumnHeader Audio;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripProgressBar progressBar;
-        private System.Windows.Forms.ToolStripStatusLabel lbl_progressValue;
         private System.Windows.Forms.ToolStripDropDownButton drop_button_queue;
         private System.Windows.Forms.ToolStripMenuItem mnu_batch;
         private System.Windows.Forms.ToolStripMenuItem mnu_import;

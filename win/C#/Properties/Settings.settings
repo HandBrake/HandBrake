@@ -72,7 +72,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="VLC_Path" Type="System.String" Scope="User">
-      <Value Profile="(Default)">T:\\Program Files\\VideoLAN\\vlc\\vlc.exe</Value>
+      <Value Profile="(Default)">T:\Program Files\VideoLAN\vlc\vlc.exe</Value>
     </Setting>
     <Setting Name="MainWindowMinimize" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>

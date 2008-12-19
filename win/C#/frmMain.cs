@@ -47,73 +47,80 @@ namespace Handbrake
 
         public frmMain()
         {
-            // Load the splash screen in this thread
-            Form splash = new frmSplashScreen();
-            splash.Show();
-
-            //Create a label that can be updated from the parent thread.
-            Label lblStatus = new Label();
-            lblStatus.Size = new Size(250, 20);
-            lblStatus.Location = new Point(10, 280);
-            splash.Controls.Add(lblStatus);
-            InitializeComponent();
-
-            // Update the users config file with the CLI version data.
-            lblStatus.Text = "Setting Version Data ...";
-            Application.DoEvents();
-            ArrayList x = hb_common_func.getCliVersionData();
-            Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
-            Properties.Settings.Default.hb_version = x[0].ToString();
-
-            // show the form, but leave disabled until preloading is complete then show the main form
-            this.Enabled = false;
-            this.Show();
-            Application.DoEvents(); // Forces frmMain to draw
-
-            // update the status
-            if (Properties.Settings.Default.updateStatus == "Checked")
+            try
             {
-                lblStatus.Text = "Checking for updates ...";
+                // Load the splash screen in this thread
+                Form splash = new frmSplashScreen();
+                splash.Show();
+
+                //Create a label that can be updated from the parent thread.
+                Label lblStatus = new Label();
+                lblStatus.Size = new Size(250, 20);
+                lblStatus.Location = new Point(10, 280);
+                splash.Controls.Add(lblStatus);
+                InitializeComponent();
+
+                // Update the users config file with the CLI version data.
+                lblStatus.Text = "Setting Version Data ...";
                 Application.DoEvents();
-                Thread updateCheckThread = new Thread(startupUpdateCheck);
-                updateCheckThread.Start();
+                ArrayList x = hb_common_func.getCliVersionData();
+                Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
+                Properties.Settings.Default.hb_version = x[0].ToString();
+
+                // show the form, but leave disabled until preloading is complete then show the main form
+                this.Enabled = false;
+                this.Show();
+                Application.DoEvents(); // Forces frmMain to draw
+
+                // update the status
+                if (Properties.Settings.Default.updateStatus == "Checked")
+                {
+                    lblStatus.Text = "Checking for updates ...";
+                    Application.DoEvents();
+                    Thread updateCheckThread = new Thread(startupUpdateCheck);
+                    updateCheckThread.Start();
+                }
+
+                // Setup the GUI components
+                lblStatus.Text = "Setting up the GUI ...";
+                Application.DoEvents();
+                x264PanelFunctions.reset2Defaults(this); // Initialize all the x264 widgets to their default values
+                loadPresetPanel();                       // Load the Preset Panel
+                treeView_presets.ExpandAll();
+                lbl_encode.Text = "";
+                queueWindow = new frmQueue(this);        // Prepare the Queue
+
+                // Load the user's default settings or Normal Preset
+                if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
+                {
+                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(Properties.Settings.Default.defaultUserSettings);
+                    presetLoader.presetLoader(this, presetQuery, "User Defaults ");
+                }
+                else
+                    loadNormalPreset();
+
+                // Enabled GUI tooltip's if Required
+                if (Properties.Settings.Default.tooltipEnable == "Checked")
+                    ToolTip.Active = true;
+
+                //Finished Loading
+                lblStatus.Text = "Loading Complete!";
+                Application.DoEvents();
+                splash.Close();
+                splash.Dispose();
+                this.Enabled = true;
+
+                // Event Handlers
+                if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+                    this.Resize += new EventHandler(frmMain_Resize);
+
+                // Queue Recovery
+                queueRecovery();
             }
-
-            // Setup the GUI components
-            lblStatus.Text = "Setting up the GUI ...";
-            Application.DoEvents();
-            x264PanelFunctions.reset2Defaults(this); // Initialize all the x264 widgets to their default values
-            loadPresetPanel();                       // Load the Preset Panel
-            treeView_presets.ExpandAll();
-            lbl_encode.Text = "";
-            queueWindow = new frmQueue(this);        // Prepare the Queue
-
-            // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
+            catch (Exception e)
             {
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(Properties.Settings.Default.defaultUserSettings);
-                presetLoader.presetLoader(this, presetQuery, "User Defaults ");
+                MessageBox.Show("Error at startup: \n\n" + e);
             }
-            else
-                loadNormalPreset();
-
-            // Enabled GUI tooltip's if Required
-            if (Properties.Settings.Default.tooltipEnable == "Checked")
-                ToolTip.Active = true;
-
-            //Finished Loading
-            lblStatus.Text = "Loading Complete!";
-            Application.DoEvents();
-            splash.Close();
-            splash.Dispose();
-            this.Enabled = true;
-
-            // Event Handlers
-            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
-                this.Resize += new EventHandler(frmMain_Resize);
-
-            // Queue Recovery
-            queueRecovery();
         }
 
         // Startup Functions
@@ -457,30 +464,47 @@ namespace Handbrake
         }
         private void btn_start_Click(object sender, EventArgs e)
         {
-            if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (btn_start.Text == "Stop")
+            {
+                DialogResult result = MessageBox.Show("Are you sure you wish to cancel the encode? Please note that this may break the encoded file. \nTo safely cancel your encode, press ctrl-c on your keyboard in the CLI window. This *may* allow you to preview your encoded content.", "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    queueWindow.frmMain_cancelEncode();
+                    if (!queueWindow.isEncoding())
+                        setEncodeStatus(0);
+                }
+            }
             else
             {
-                // Set the last action to encode. 
-                // This is used for tracking which file to load in the activity window
-                lastAction = "encode";
-
-                String query;
-                if (rtf_query.Text != "")
-                    query = rtf_query.Text;
-                else
-                    query = queryGen.GenerateTheQuery(this);
-
-                if (encodeQueue.count() == 0)
+                if (encodeQueue.count() != 0 || (text_source.Text != string.Empty && text_source.Text != "Click 'Source' to continue" && text_destination.Text != string.Empty))
                 {
-                    encodeQueue.add(query, text_source.Text, text_destination.Text);
-                    encodeQueue.write2disk("hb_queue_recovery.xml");
-                }
-                queueWindow.setQueue(encodeQueue);
-                queueWindow.Show();
-                queueWindow.frmMain_encode();
+                    // Set the last action to encode. 
+                    // This is used for tracking which file to load in the activity window
+                    lastAction = "encode";
 
-                setEncodeStatus(1); // Encode is running, so setup the GUI appropriately
+                    String query;
+                    if (rtf_query.Text != "")
+                        query = rtf_query.Text;
+                    else
+                        query = queryGen.GenerateTheQuery(this);
+
+                    if (encodeQueue.count() == 0)
+                    {
+                        encodeQueue.add(query, text_source.Text, text_destination.Text);
+                        encodeQueue.write2disk("hb_queue_recovery.xml");
+                    }
+                    queueWindow.setQueue(encodeQueue);
+                    if (encodeQueue.count() > 1)
+                        queueWindow.Show();
+
+                    queueWindow.frmMain_encode();
+
+                    setEncodeStatus(1); // Encode is running, so setup the GUI appropriately
+                }
+                else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
+                    MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
             }
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
@@ -1961,9 +1985,6 @@ namespace Handbrake
         }
 
         #endregion
-
-
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
