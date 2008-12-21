@@ -92,7 +92,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Integer Convertion Error On Download \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Integer Conversion Error On Download \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

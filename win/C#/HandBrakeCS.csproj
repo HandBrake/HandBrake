@@ -142,12 +142,6 @@
     <Compile Include="frmOptions.Designer.cs">
       <DependentUpon>frmOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Experimental\frmPreviewAX.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Experimental\frmPreviewAX.Designer.cs">
-      <DependentUpon>frmPreviewAX.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmQueue.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -204,9 +198,6 @@
     <EmbeddedResource Include="frmOptions.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Experimental\frmPreviewAX.resx">
-      <DependentUpon>frmPreviewAX.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmQueue.resx">
       <SubType>Designer</SubType>
@@ -316,24 +307,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="AxAXVLC">
-      <Guid>{DF2BBE39-40A8-433B-A279-073F48DA94B6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>aximp</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
-    <COMReference Include="stdole">
-      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

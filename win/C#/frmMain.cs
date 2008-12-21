@@ -47,80 +47,73 @@ namespace Handbrake
 
         public frmMain()
         {
-            try
+            // Load the splash screen in this thread
+            Form splash = new frmSplashScreen();
+            splash.Show();
+
+            //Create a label that can be updated from the parent thread.
+            Label lblStatus = new Label();
+            lblStatus.Size = new Size(250, 20);
+            lblStatus.Location = new Point(10, 280);
+            splash.Controls.Add(lblStatus);
+            InitializeComponent();
+
+            // Update the users config file with the CLI version data.
+            lblStatus.Text = "Setting Version Data ...";
+            Application.DoEvents();
+            ArrayList x = hb_common_func.getCliVersionData();
+            Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
+            Properties.Settings.Default.hb_version = x[0].ToString();
+
+            // show the form, but leave disabled until preloading is complete then show the main form
+            this.Enabled = false;
+            this.Show();
+            Application.DoEvents(); // Forces frmMain to draw
+
+            // update the status
+            if (Properties.Settings.Default.updateStatus == "Checked")
             {
-                // Load the splash screen in this thread
-                Form splash = new frmSplashScreen();
-                splash.Show();
-
-                //Create a label that can be updated from the parent thread.
-                Label lblStatus = new Label();
-                lblStatus.Size = new Size(250, 20);
-                lblStatus.Location = new Point(10, 280);
-                splash.Controls.Add(lblStatus);
-                InitializeComponent();
-
-                // Update the users config file with the CLI version data.
-                lblStatus.Text = "Setting Version Data ...";
+                lblStatus.Text = "Checking for updates ...";
                 Application.DoEvents();
-                ArrayList x = hb_common_func.getCliVersionData();
-                Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
-                Properties.Settings.Default.hb_version = x[0].ToString();
-
-                // show the form, but leave disabled until preloading is complete then show the main form
-                this.Enabled = false;
-                this.Show();
-                Application.DoEvents(); // Forces frmMain to draw
-
-                // update the status
-                if (Properties.Settings.Default.updateStatus == "Checked")
-                {
-                    lblStatus.Text = "Checking for updates ...";
-                    Application.DoEvents();
-                    Thread updateCheckThread = new Thread(startupUpdateCheck);
-                    updateCheckThread.Start();
-                }
-
-                // Setup the GUI components
-                lblStatus.Text = "Setting up the GUI ...";
-                Application.DoEvents();
-                x264PanelFunctions.reset2Defaults(this); // Initialize all the x264 widgets to their default values
-                loadPresetPanel();                       // Load the Preset Panel
-                treeView_presets.ExpandAll();
-                lbl_encode.Text = "";
-                queueWindow = new frmQueue(this);        // Prepare the Queue
-
-                // Load the user's default settings or Normal Preset
-                if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
-                {
-                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(Properties.Settings.Default.defaultUserSettings);
-                    presetLoader.presetLoader(this, presetQuery, "User Defaults ");
-                }
-                else
-                    loadNormalPreset();
-
-                // Enabled GUI tooltip's if Required
-                if (Properties.Settings.Default.tooltipEnable == "Checked")
-                    ToolTip.Active = true;
-
-                //Finished Loading
-                lblStatus.Text = "Loading Complete!";
-                Application.DoEvents();
-                splash.Close();
-                splash.Dispose();
-                this.Enabled = true;
-
-                // Event Handlers
-                if (Properties.Settings.Default.MainWindowMinimize == "Checked")
-                    this.Resize += new EventHandler(frmMain_Resize);
-
-                // Queue Recovery
-                queueRecovery();
+                Thread updateCheckThread = new Thread(startupUpdateCheck);
+                updateCheckThread.Start();
             }
-            catch (Exception e)
+
+            // Setup the GUI components
+            lblStatus.Text = "Setting up the GUI ...";
+            Application.DoEvents();
+            x264PanelFunctions.reset2Defaults(this); // Initialize all the x264 widgets to their default values
+            loadPresetPanel();                       // Load the Preset Panel
+            treeView_presets.ExpandAll();
+            lbl_encode.Text = "";
+            queueWindow = new frmQueue(this);        // Prepare the Queue
+
+            // Load the user's default settings or Normal Preset
+            if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
             {
-                MessageBox.Show("Error at startup: \n\n" + e);
+                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(Properties.Settings.Default.defaultUserSettings);
+                presetLoader.presetLoader(this, presetQuery, "User Defaults ");
             }
+            else
+                loadNormalPreset();
+
+            // Enabled GUI tooltip's if Required
+            if (Properties.Settings.Default.tooltipEnable == "Checked")
+                ToolTip.Active = true;
+
+            //Finished Loading
+            lblStatus.Text = "Loading Complete!";
+            Application.DoEvents();
+            splash.Close();
+            splash.Dispose();
+            this.Enabled = true;
+
+            // Event Handlers
+            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+                this.Resize += new EventHandler(frmMain_Resize);
+
+            // Queue Recovery
+            queueRecovery();
         }
 
         // Startup Functions
