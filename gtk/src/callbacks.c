@@ -1773,6 +1773,9 @@ ghb_backend_events(signal_user_data_t *ud)
 		}
 		gtk_progress_bar_set_fraction (progress, 1.0);
 		ghb_clear_queue_state(GHB_STATE_WORKDONE);
+		if (ud->job_activity_log)
+			g_io_channel_unref(ud->job_activity_log);
+		ud->job_activity_log = NULL;
 		if (!ud->cancel_encode)
 			ud->current_job = ghb_start_next_job(ud, FALSE);
 		else
@@ -1781,8 +1784,6 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_settings_set_int(js, "job_status", qstatus);
 		ghb_save_queue(ud->queue);
 		ud->cancel_encode = FALSE;
-		g_io_channel_unref(ud->job_activity_log);
-		ud->job_activity_log = NULL;
 	}
 	else if (status.queue.state & GHB_STATE_MUXING)
 	{
