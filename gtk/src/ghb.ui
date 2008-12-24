@@ -3105,13 +3105,11 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
           </object>
           <packing>
             <property name="position">1</property>
-            <property name="expand">False</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="position">2</property>
-        <property name="expand">False</property>
       </packing>
     </child>
 

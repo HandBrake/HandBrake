@@ -3110,13 +3110,11 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
-            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
           &lt;/packing&gt;
         &lt;/child&gt;
       &lt;/object&gt;
       &lt;packing&gt;
         &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
-        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
       &lt;/packing&gt;
     &lt;/child&gt;
 
