@@ -24,10 +24,11 @@ namespace Handbrake
         private delegate void ProgressUpdateHandler();
         private delegate void setEncoding();
         Functions.Encode cliObj = new Functions.Encode();
-        Boolean cancel = false;
+        Boolean paused = false;
         Process hbProc = null;
         Queue.Queue queue;
         frmMain mainWindow = null;
+        Thread theQ;
 
         public frmQueue(frmMain main)
         {
@@ -63,7 +64,7 @@ namespace Handbrake
         /// </summary>
         public void frmMain_encode()
         {
-            cancel = false;
+            paused = false;
             // Start the encode
             try
             {
@@ -140,26 +141,35 @@ namespace Handbrake
         {
             if (queue.count() != 0)
             {
-                btn_encode.Enabled = false;
-                mainWindow.setLastAction("encode");
-                mainWindow.setEncodeStatus(1);
-
-                cancel = false;
-
-                // Start the encode
-                try
+                if (paused == true)
                 {
-                    // Setup or reset some values
+                    paused = false;
                     btn_encode.Enabled = false;
                     btn_stop.Visible = true;
-
-                    Thread theQ = new Thread(startProc);
-                    theQ.IsBackground = true;
-                    theQ.Start();
+                    MessageBox.Show("Encoding will now continue!","Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-                catch (Exception exc)
+                else
                 {
-                    MessageBox.Show(exc.ToString());
+                    paused = false;
+                    btn_encode.Enabled = false;
+                    mainWindow.setLastAction("encode");
+                    mainWindow.setEncodeStatus(1);
+
+                    // Start the encode
+                    try
+                    {
+                        // Setup or reset some values
+                        btn_encode.Enabled = false;
+                        btn_stop.Visible = true;
+
+                        theQ = new Thread(startProc);
+                        theQ.IsBackground = true;
+                        theQ.Start();
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show(exc.ToString());
+                    }
                 }
             }
         }
@@ -190,9 +200,9 @@ namespace Handbrake
                     hbProc = null;
                     query = "";
 
-                    if (cancel == true)
+                    while (paused == true) // Need to find a better way of doing this.
                     {
-                        break;
+                        Thread.Sleep(10000);
                     }
                 }
 
@@ -240,7 +250,7 @@ namespace Handbrake
         // Stop's the queue from continuing. 
         private void btn_stop_Click(object sender, EventArgs e)
         {
-            cancel = true;
+            paused = true;
             btn_stop.Visible = false;
             btn_encode.Enabled = true;
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
