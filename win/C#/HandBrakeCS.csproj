@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -190,6 +190,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmGenPreview.resx">
       <DependentUpon>frmGenPreview.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>
@@ -205,6 +206,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdater.resx">
       <DependentUpon>frmUpdater.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

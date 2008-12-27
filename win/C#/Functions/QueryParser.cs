@@ -839,15 +839,15 @@ namespace Handbrake.Functions
             Match audioEncoder3 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
             Match audioEncoder4 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
 
-            Match audioBitrate1 = Regex.Match(input, @"-B ([0-9]*)");
-            Match audioBitrate2 = Regex.Match(input, @"-B ([0-9]*),([0-9]*)");
-            Match audioBitrate3 = Regex.Match(input, @"-B ([0-9]*),([0-9]*),([0-9]*)");
-            Match audioBitrate4 = Regex.Match(input, @"-B ([0-9]*),([0-9]*),([0-9]*),([0-9]*)");
+            Match audioBitrate1 = Regex.Match(input, @"-B ([0-9auto]*)");
+            Match audioBitrate2 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*)");
+            Match audioBitrate3 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*),([0-9auto]*)");
+            Match audioBitrate4 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*),([0-9auto]*),([0-9auto]*)");
 
-            Match audioSampleRate1 = Regex.Match(input, @"-R ([0-9.]*)");
-            Match audioSampleRate2 = Regex.Match(input, @"-R ([0-9.]*),([0-9.]*)");
-            Match audioSampleRate3 = Regex.Match(input, @"-R ([0-9.]*),([0-9.]*),([0-9.]*)");
-            Match audioSampleRate4 = Regex.Match(input, @"-R ([0-9.]*),([0-9.]*),([0-9.]*),([0-9.]*)");
+            Match audioSampleRate1 = Regex.Match(input, @"-R ([0-9Auto.]*)");
+            Match audioSampleRate2 = Regex.Match(input, @"-R ([0-9Auto.]*),([0-9Auto.]*)");
+            Match audioSampleRate3 = Regex.Match(input, @"-R ([0-9Auto.]*),([0-9Auto.]*),([0-9Auto.]*)");
+            Match audioSampleRate4 = Regex.Match(input, @"-R ([0-9Auto.]*),([0-9Auto.]*),([0-9Auto.]*),([0-9Auto.]*)");
 
             Match drc1 = Regex.Match(input, @"-D ([0-9.]*)");
             Match drc2 = Regex.Match(input, @"-D ([0-9.]*),([0-9.]*)");
@@ -1034,10 +1034,7 @@ namespace Handbrake.Functions
                 #region Audio Tab
 
                 // Tracks
-                if (audioTrack1.Success != false)
-                    thisQuery.q_audioTrack1 = audioTrack1.ToString().Replace("-a ", "");
-                else
-                    thisQuery.q_audioTrack1 = "Automatic";
+                thisQuery.q_audioTrack1 = "Automatic";
 
                 if (audioTrack2.Success != false)
                 {
@@ -1067,32 +1064,27 @@ namespace Handbrake.Functions
                 // Mixdowns
                 thisQuery.q_audioTrackMix1 = "Automatic";
                 if (audioTrack1Mix.Success != false)
-                {
                     thisQuery.q_audioTrackMix1 = getMixDown(audioTrack1Mix.ToString().Replace("-6 ", "").Replace(" ", ""));
-                }
 
                 thisQuery.q_audioTrackMix2 = "Automatic";
                 if (audioTrack2Mix.Success != false)
                 {
                     string[] audio2mix = audioTrack2Mix.ToString().Split(',');
-                    audio2mix[1] = audio2mix[1].Trim();
-                    thisQuery.q_audioTrackMix2 = getMixDown(audio2mix[1]);
+                    thisQuery.q_audioTrackMix2 = getMixDown(audio2mix[1].Trim());
                 }
 
                 thisQuery.q_audioTrackMix3 = "Automatic";
                 if (audioTrack3Mix.Success != false)
                 {
                     string[] audio3mix = audioTrack3Mix.ToString().Split(',');
-                    audio3mix[1] = audio3mix[2].Trim();
-                    thisQuery.q_audioTrackMix3 = getMixDown(audio3mix[1]);
+                    thisQuery.q_audioTrackMix3 = getMixDown(audio3mix[2].Trim());
                 }
 
                 thisQuery.q_audioTrackMix4 = "Automatic";
                 if (audioTrack4Mix.Success != false)
                 {
                     string[] audio4mix = audioTrack4Mix.ToString().Split(',');
-                    audio4mix[1] = audio4mix[3].Trim();
-                    thisQuery.q_audioTrackMix4 = getMixDown(audio4mix[1]);
+                    thisQuery.q_audioTrackMix4 = getMixDown(audio4mix[3].Trim());
                 }
                 
 
@@ -1120,115 +1112,103 @@ namespace Handbrake.Functions
 
 
                 // Audio Bitrate
+                thisQuery.q_audioBitrate1 = "";
                 if (audioBitrate1.Success != false)
+                {
                     thisQuery.q_audioBitrate1 = audioBitrate1.ToString().Replace("-B ", "").Trim();
-                else
-                    thisQuery.q_audioBitrate1 = "";
+                    if (audioBitrate1.ToString().Replace("-B ", "").Trim() == "0") thisQuery.q_audioBitrate1 = "Auto";
+                }
 
-                if (audioBitrate2.Success != false)
+                thisQuery.q_audioBitrate2 = "";
+                if (audioBitrate2.Success != false && audioTrack2.Success == true)
                 {
                     string[] audioBitrateSelect = audioBitrate2.ToString().Split(',');
-                    thisQuery.q_audioBitrate2 = audioBitrateSelect[1].Trim();
+                    if (audioBitrateSelect[1].Trim() == "0") audioBitrateSelect[1] = "Auto";
+                    thisQuery.q_audioBitrate2 = audioBitrateSelect[1].Trim();                      
                 }
-                else
-                    thisQuery.q_audioBitrate2 = "";
 
-                if (audioBitrate3.Success != false)
+                thisQuery.q_audioBitrate3 = "";
+                if (audioBitrate3.Success != false && audioTrack3.Success == true)
                 {
                     string[] audioBitrateSelect = audioBitrate3.ToString().Split(',');
+                    if (audioBitrateSelect[2].Trim() == "0") audioBitrateSelect[2] = "Auto";
                     thisQuery.q_audioBitrate3 = audioBitrateSelect[2].Trim();
                 }
-                else
-                    thisQuery.q_audioBitrate3 = "";
 
+                thisQuery.q_audioBitrate4 = "";
                 if (audioBitrate4.Success != false)
                 {
                     string[] audioBitrateSelect = audioBitrate4.ToString().Split(',');
+                    if (audioBitrateSelect[3].Trim() == "0") audioBitrateSelect[3] = "Auto";
                     thisQuery.q_audioBitrate4 = audioBitrateSelect[3].Trim();
                 }
-                else
-                    thisQuery.q_audioBitrate4 = "";
 
 
                 // Audio Sample Rate
                 // Make sure to change 0 to Auto
+                thisQuery.q_audioSamplerate1 = "Auto";
                 if (audioSampleRate1.Success != false)
                 {
                     thisQuery.q_audioSamplerate1 = audioSampleRate1.ToString().Replace("-R ", "").Trim();
-                    if (thisQuery.q_audioSamplerate1 == "0")
-                        thisQuery.q_audioSamplerate1 = "Auto";
+                    if (thisQuery.q_audioSamplerate1 == "0") thisQuery.q_audioSamplerate1 = "Auto";
                 }
-                else
-                    thisQuery.q_audioSamplerate1 = "Auto";
+                    
 
                 if (audioSampleRate2.Success != false)
                 {
                     string[] audioSRSelect = audioSampleRate2.ToString().Split(',');
-                    if (audioSRSelect[1] == "0")
-                        audioSRSelect[1] = "Auto";
+                    if (audioSRSelect[1] == "0") audioSRSelect[1] = "Auto";
                     thisQuery.q_audioSamplerate2 = audioSRSelect[1].Trim();
                 }
 
                 if (audioSampleRate3.Success != false)
                 {
                     string[] audioSRSelect = audioSampleRate3.ToString().Split(',');
-                    if (audioSRSelect[1] == "0")
-                        audioSRSelect[1] = "Auto";
+                    if (audioSRSelect[2] == "0") audioSRSelect[2] = "Auto";
                     thisQuery.q_audioSamplerate3 = audioSRSelect[2].Trim();
                 }
 
                 if (audioSampleRate4.Success != false)
                 {
                     string[] audioSRSelect = audioSampleRate4.ToString().Split(',');
-                    if (audioSRSelect[1] == "0")
-                        audioSRSelect[1] = "Auto";
+                    if (audioSRSelect[3] == "0") audioSRSelect[3] = "Auto";
                     thisQuery.q_audioSamplerate4 = audioSRSelect[3].Trim();
                 }
 
                 // DRC
+                float drcValue;
+
+                thisQuery.q_drc1 = 1;
                 if (drc1.Success != false)
                 {
                     string value = drc1.ToString().Replace("-D ", "");
-                    float drcValue = float.Parse(value);
-                    drcValue = drcValue * 10;
+                    float.TryParse(value, out drcValue);
                     thisQuery.q_drc1 = drcValue;
                 }
-                else
-                    thisQuery.q_drc1 = 10;
-
+               
+                thisQuery.q_drc2 = 1;   
                 if (drc2.Success != false)
                 {
                     string[] drcPoint = drc2.ToString().Split(',');
-                    string value = drcPoint[1];
-                    float drcValue = float.Parse(value);
-                    drcValue = drcValue * 10;
+                    float.TryParse(drcPoint[1], out drcValue);
                     thisQuery.q_drc2 = drcValue;
                 }
-                else
-                    thisQuery.q_drc2 = 10;
 
+                thisQuery.q_drc3 = 1;
                 if (drc3.Success != false)
                 {
                     string[] drcPoint = drc3.ToString().Split(',');
-                    string value = drcPoint[2];
-                    float drcValue = float.Parse(value);
-                    drcValue = drcValue * 10;
+                    float.TryParse(drcPoint[2], out drcValue);
                     thisQuery.q_drc3 = drcValue;
                 }
-                else
-                    thisQuery.q_drc3 = 10;
 
+                thisQuery.q_drc4 = 1;
                 if (drc4.Success != false)
                 {
                     string[] drcPoint = drc4.ToString().Split(',');
-                    string value = drcPoint[3];
-                    float drcValue = float.Parse(value);
-                    drcValue = drcValue * 10;
+                    float.TryParse(drcPoint[3], out drcValue);
                     thisQuery.q_drc4 = drcValue;
                 }
-                else
-                    thisQuery.q_drc4 = 10;
-
 
                 // Subtitle Stuff
                 if (subtitles.Success != false)

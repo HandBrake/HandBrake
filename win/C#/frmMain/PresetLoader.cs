@@ -201,150 +201,50 @@ namespace Handbrake
 
             // Audio Settings Tab
             #region Audio
+            // Clear the audio listing
+            mainWindow.lv_audioList.Items.Clear();
 
-            // Handle Track 1
-            mainWindow.drp_track1Audio.Text = "Automatic";
+            // Create a new row for the Audio list based on the currently selected items in the dropdown.
+            ListViewItem newTrack = new ListViewItem("Automatic");
+            newTrack.SubItems.Add(presetQuery.AudioEncoder1);
+            newTrack.SubItems.Add(presetQuery.AudioTrackMix1);
+            newTrack.SubItems.Add(presetQuery.AudioSamplerate1);
+            newTrack.SubItems.Add(presetQuery.AudioBitrate1);
+            newTrack.SubItems.Add(presetQuery.DRC1.ToString());
+            mainWindow.lv_audioList.Items.Add(newTrack);
 
-            // Handle Track 2
-            if (presetQuery.AudioEncoder2 != null)  // Fix for loading in built in presets. Where 2 encoders but no tracks in the preset.
+            if (presetQuery.AudioTrack2 != "None")
             {
-                mainWindow.drp_track2Audio.Enabled = true;
-                mainWindow.drp_audsr_2.Enabled = true;
-                mainWindow.drp_audmix_2.Enabled = true;
-                mainWindow.drp_audenc_2.Enabled = true;
-                mainWindow.drp_audbit_2.Enabled = true;
-                mainWindow.drp_audsr_2.Text = "48";
-                mainWindow.drp_track2Audio.Text = "Automatic";
-            }
-            else if (presetQuery.AudioTrack2 == "None")
-            {
-                mainWindow.drp_track2Audio.Text = "None";
-                mainWindow.drp_track2Audio.SelectedIndex = 0;
-                mainWindow.drp_audsr_2.Enabled = false;
-                mainWindow.drp_audmix_2.Enabled = false;
-                mainWindow.drp_audenc_2.Enabled = false;
-                mainWindow.drp_audbit_2.Enabled = false;
-            }
-            else
-            {
-                mainWindow.drp_track2Audio.Text = presetQuery.AudioTrack2;
-                mainWindow.drp_audsr_2.Enabled = true;
-                mainWindow.drp_audmix_2.Enabled = true;
-                mainWindow.drp_audenc_2.Enabled = true;
-                mainWindow.drp_audbit_2.Enabled = true;
+                newTrack = new ListViewItem("Automatic");
+                newTrack.SubItems.Add(presetQuery.AudioEncoder2);
+                newTrack.SubItems.Add(presetQuery.AudioTrackMix2);
+                newTrack.SubItems.Add(presetQuery.AudioSamplerate2);
+                newTrack.SubItems.Add(presetQuery.AudioBitrate2);
+                newTrack.SubItems.Add(presetQuery.DRC2.ToString());
+                mainWindow.lv_audioList.Items.Add(newTrack);
             }
 
-            // Handle Track 3
-            if (presetQuery.AudioTrack3 == "None")
+            if (presetQuery.AudioTrack3 != "None")
             {
-                mainWindow.drp_track3Audio.SelectedIndex = 0;
-                mainWindow.drp_audsr_3.Enabled = false;
-                mainWindow.drp_audmix_3.Enabled = false;
-                mainWindow.drp_audenc_3.Enabled = false;
-                mainWindow.drp_audbit_3.Enabled = false;
-                mainWindow.trackBar3.Enabled = false;
-
-                mainWindow.drp_track3Audio.Text = "None";
-                mainWindow.drp_audsr_3.Text = "";
-                mainWindow.drp_audmix_3.Text = "Automatic";
-                mainWindow.drp_audenc_3.Text = "";
-                mainWindow.drp_audbit_3.Text = "";
-                mainWindow.trackBar3.Value = 0;
-
-            }
-            else
-            {
-                mainWindow.drp_track3Audio.Text = presetQuery.AudioTrack3;
-                mainWindow.drp_audsr_3.Enabled = true;
-                mainWindow.drp_audmix_3.Enabled = true;
-                mainWindow.drp_audenc_3.Enabled = true;
-                mainWindow.drp_audbit_3.Enabled = true;
-                mainWindow.trackBar3.Enabled = true;
+                newTrack = new ListViewItem("Automatic");
+                newTrack.SubItems.Add(presetQuery.AudioEncoder3);
+                newTrack.SubItems.Add(presetQuery.AudioTrackMix3);
+                newTrack.SubItems.Add(presetQuery.AudioSamplerate3);
+                newTrack.SubItems.Add(presetQuery.AudioBitrate3);
+                newTrack.SubItems.Add(presetQuery.DRC3.ToString());
+                mainWindow.lv_audioList.Items.Add(newTrack);
             }
 
-            // Handle Track 4
-            if (presetQuery.AudioTrack4 == "None")
+            if (presetQuery.AudioTrack4 != "None")
             {
-                mainWindow.drp_track4Audio.SelectedIndex = 0;
-                mainWindow.drp_audsr_4.Enabled = false;
-                mainWindow.drp_audmix_4.Enabled = false;
-                mainWindow.drp_audenc_4.Enabled = false;
-                mainWindow.drp_audbit_4.Enabled = false;
-                mainWindow.trackBar4.Enabled = false;
-
-                mainWindow.drp_track4Audio.Text = "None";
-                mainWindow.drp_audsr_4.Text = "";
-                mainWindow.drp_audmix_4.Text = "Automatic";
-                mainWindow.drp_audenc_4.Text = "";
-                mainWindow.drp_audbit_4.Text = "";
-                mainWindow.trackBar4.Value = 0;
+                newTrack = new ListViewItem("Automatic");
+                newTrack.SubItems.Add(presetQuery.AudioEncoder4);
+                newTrack.SubItems.Add(presetQuery.AudioTrackMix4);
+                newTrack.SubItems.Add(presetQuery.AudioSamplerate4);
+                newTrack.SubItems.Add(presetQuery.AudioBitrate4);
+                newTrack.SubItems.Add(presetQuery.DRC4.ToString());
+                mainWindow.lv_audioList.Items.Add(newTrack);
             }
-            else
-            {
-                mainWindow.drp_track4Audio.Text = presetQuery.AudioTrack4;
-                mainWindow.drp_audsr_4.Enabled = true;
-                mainWindow.drp_audmix_4.Enabled = true;
-                mainWindow.drp_audenc_4.Enabled = true;
-                mainWindow.drp_audbit_4.Enabled = true;
-                mainWindow.trackBar4.Enabled = true;
-            }
-
-            // Now lets start setting stuff
-            if (presetQuery.AudioEncoder1 != null)
-                mainWindow.drp_audenc_1.Text = presetQuery.AudioEncoder1;
-            mainWindow.drp_audenc_2.Text = presetQuery.AudioEncoder2;
-            mainWindow.drp_audenc_3.Text = presetQuery.AudioEncoder3;
-            mainWindow.drp_audenc_4.Text = presetQuery.AudioEncoder4;
-
-            mainWindow.drp_audmix_1.Text = presetQuery.AudioTrackMix1;
-            mainWindow.drp_audmix_2.Text = presetQuery.AudioTrackMix2;
-            mainWindow.drp_audmix_3.Text = presetQuery.AudioTrackMix3;
-            mainWindow.drp_audmix_4.Text = presetQuery.AudioTrackMix4;
-
-            if (presetQuery.AudioBitrate1 != null)
-                mainWindow.drp_audbit_1.Text = presetQuery.AudioBitrate1;
-            mainWindow.drp_audbit_2.Text = presetQuery.AudioBitrate2;
-            mainWindow.drp_audbit_3.Text = presetQuery.AudioBitrate4;
-            mainWindow.drp_audbit_3.Text = presetQuery.AudioBitrate4;
-
-            if (presetQuery.AudioSamplerate1 != null)
-                mainWindow.drp_audsr_1.Text = presetQuery.AudioSamplerate1;
-            mainWindow.drp_audsr_2.Text = presetQuery.AudioSamplerate2;
-            mainWindow.drp_audsr_3.Text = presetQuery.AudioSamplerate3;
-            mainWindow.drp_audsr_4.Text = presetQuery.AudioSamplerate4;
-
-            // Dynamic Range Compression (Should be a float but we use double for ease)
-            double value = 0;
-            double actualValue = 0;
-
-            value = presetQuery.DRC1;
-            if (value > 0)
-                value = value - 10;
-            mainWindow.trackBar1.Value = int.Parse(value.ToString());
-            actualValue = presetQuery.DRC1 / 10;
-            mainWindow.lbl_drc1.Text = actualValue.ToString();
-
-            value = presetQuery.DRC2;
-            if (value > 0)
-                value = value - 10;
-            mainWindow.trackBar2.Value = int.Parse(value.ToString());
-            actualValue = presetQuery.DRC2 / 10;
-            mainWindow.lbl_drc2.Text = actualValue.ToString();
-
-            value = presetQuery.DRC3;
-            if (value > 0)
-                value = value - 10;
-            mainWindow.trackBar3.Value = int.Parse(value.ToString());
-            actualValue = presetQuery.DRC3 / 10;
-            mainWindow.lbl_drc3.Text = actualValue.ToString();
-
-            value = presetQuery.DRC4;
-            if (value > 0)
-                value = value - 10;
-            mainWindow.trackBar4.Value = int.Parse(value.ToString());
-            actualValue = presetQuery.DRC4 / 10;
-            mainWindow.lbl_drc4.Text = actualValue.ToString();
-
 
             // Subtitle Stuff
             mainWindow.drp_subtitle.Text = presetQuery.Subtitles;
@@ -356,7 +256,6 @@ namespace Handbrake
             }
             else
                 mainWindow.check_forced.CheckState = CheckState.Unchecked;
-
 
             #endregion
 

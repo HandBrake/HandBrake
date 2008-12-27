@@ -18,7 +18,6 @@ namespace Handbrake
         Functions.Encode process = new Functions.Encode();
         Process hbProc;
         frmMain mainWindow;
-        Boolean playing = false;
 
         public frmGenPreview(frmMain mw)
         {

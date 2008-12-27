@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Handbrake
 {
@@ -262,200 +263,130 @@ namespace Handbrake
 
             // Audio Settings Tab
             #region Audio Settings Tab
-            // Track 1
-            string track1 = mainWindow.drp_track1Audio.Text;
-            string aencoder1 = mainWindow.drp_audenc_1.Text;
-            string audioBitrate1 = mainWindow.drp_audbit_1.Text;
-            string audioSampleRate1 = mainWindow.drp_audsr_1.Text;
-            string Mixdown1 = mainWindow.drp_audmix_1.Text;
-            string drc1 = mainWindow.trackBar1.Value.ToString();
 
-            // Track 2
-            string track2 = mainWindow.drp_track2Audio.Text;
-            string aencoder2 = mainWindow.drp_audenc_2.Text;
-            string audioBitrate2 = mainWindow.drp_audbit_2.Text;
-            string audioSampleRate2 = mainWindow.drp_audsr_2.Text;
-            string Mixdown2 = mainWindow.drp_audmix_2.Text;
-            string drc2 = mainWindow.trackBar2.Value.ToString();
+            ListView audioTracks = mainWindow.lv_audioList;
+            List<string> tracks = new List<string>();
+            List<string> codecs = new List<string>();
+            List<string> mixdowns = new List<string>();
+            List<string> samplerates = new List<string>();
+            List<string> bitrates = new List<string>();
+            List<string> drcs = new List<string>();
 
-            // Track 3
-            string track3 = mainWindow.drp_track3Audio.Text;
-            string aencoder3 = mainWindow.drp_audenc_3.Text;
-            string audioBitrate3 = mainWindow.drp_audbit_3.Text;
-            string audioSampleRate3 = mainWindow.drp_audsr_3.Text;
-            string Mixdown3 = mainWindow.drp_audmix_3.Text;
-            string drc3 = mainWindow.trackBar3.Value.ToString();
-
-            // Track 4
-            string track4 = mainWindow.drp_track4Audio.Text;
-            string aencoder4 = mainWindow.drp_audenc_4.Text;
-            string audioBitrate4 = mainWindow.drp_audbit_4.Text;
-            string audioSampleRate4 = mainWindow.drp_audsr_4.Text;
-            string Mixdown4 = mainWindow.drp_audmix_4.Text;
-            string drc4 = mainWindow.trackBar4.Value.ToString();
-
-            //
-            // Audio Track Selections
-            //
-            if (track1 == "Automatic")
-                query += " -a 1";
-            else if (track1 != "None")
+            // Gather information about each audio track and store them in the declared lists.
+            foreach (ListViewItem row in audioTracks.Items)
             {
-                string[] tempSub = track1.Split(' ');
-                query += " -a " + tempSub[0];
-            }
-
-            if (track2 == "Automatic")
-                query += ",1";
-            else if (track2 != "None")
-            {
-                string[] tempSub;
-                tempSub = track2.Split(' ');
-
-                if (track1 == "None")
-                    query += " -a none," + tempSub[0];
-                else
-                    query += "," + tempSub[0];
-            }
-
-            if (track3 != "None")
-            {
-                string[] tempSub;
-                tempSub = track3.Split(' ');
-                query += "," + tempSub[0];
-            }
-
-            if (track4 != "None")
-            {
-                string[] tempSub;
-                tempSub = track4.Split(' ');
-                query += "," + tempSub[0];
-            }
-
-            //
-            // Audio Encoder
-            //
-            if (aencoder1 != "")
-                query += " -E " + getAudioEncoder(aencoder1);
-
-            if (aencoder2 != "")
-            {
-                if (aencoder1 == string.Empty)
-                    query += " -E faac," + getAudioEncoder(aencoder2);
-                else
-                    query += "," + getAudioEncoder(aencoder2);
-            }
-
-            if (aencoder3 != "")
-                query += "," + getAudioEncoder(aencoder3);
-
-            if (aencoder4 != "")
-                query += "," + getAudioEncoder(aencoder4);
-
-            //
-            // Audio Bitrate Selections
-            //
-            if (audioBitrate1 != "")
-                query += " -B " + audioBitrate1;
-
-            if (audioBitrate2 != "")
-            {
-                if (audioBitrate1 == string.Empty)
-                    query += " -B 160," + audioBitrate2;
-                else
-                    query += "," + audioBitrate2;
-            }
-
-            if (audioBitrate3 != "")
-                query += "," + audioBitrate3;
-
-            if (audioBitrate4 != "")
-                query += "," + audioBitrate4;
-
-
-            //Audio Sample Rate   - audioSampleRate
-            if (audioSampleRate1 != "")
-                query += " -R " + audioSampleRate1.Replace("Auto", "0");
-
-            if (audioSampleRate2 != "")
-            {
-                if (audioSampleRate1 == string.Empty)
-                    query += " -R 0," + audioSampleRate2.Replace("Auto", "0");
-                else
-                    query += "," + audioSampleRate2.Replace("Auto", "0");
-            }
-            else
-            {
-                // All this is a hack, because when AppleTV is selected, there is no sample rate selected. so just add a 48
-                // It should probably be setup later so the GUI widget has the value 48 in it.
-
-                if ((track2 != "") && (track2 != "None"))
+                // Audio Track (-a)
+                String track = String.Empty;
+                if (row.Text == "Automatic")
+                    tracks.Add("1");
+                else if (row.Text != "None")
                 {
-                    if (audioSampleRate1 == string.Empty)
-                        query += " -R 0,0";
-                    else
-                        query += ",0";
+                    string[] tempSub = row.Text.Split(' ');
+                    tracks.Add(tempSub[0]);
                 }
+
+                // Audio Codec (-E)
+                if (row.SubItems[1].Text != String.Empty)
+                    codecs.Add(getAudioEncoder(row.SubItems[1].Text));
+
+                // Audio Mixdown (-6)
+                if (row.SubItems[2].Text != String.Empty)
+                    mixdowns.Add(getMixDown(row.SubItems[2].Text));
+
+                // Sample Rate (-R)
+                if (row.SubItems[3].Text != String.Empty)
+                    samplerates.Add(row.SubItems[3].Text.Replace("Auto", "0"));
+
+                // Audio Bitrate (-B)
+                if (row.SubItems[4].Text != String.Empty)
+                    bitrates.Add(row.SubItems[4].Text.Replace("Auto", "0"));
+
+                // DRC (-D)
+                if (row.SubItems[5].Text != String.Empty)
+                    drcs.Add(row.SubItems[5].Text);
             }
 
-            if (audioSampleRate3 != "")
-                query += "," + audioSampleRate3.Replace("Auto", "0");
+            // Audio Track (-a)
+            String audioItems = "";
+            Boolean firstLoop = true;
 
-            if (audioSampleRate4 != "")
-                query += "," + audioSampleRate4.Replace("Auto", "0");
+            foreach (String item in tracks)
+            {
+                if (firstLoop == true)
+                {
+                    audioItems = item; firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            query += " -a " + audioItems;
+            firstLoop = true; audioItems = ""; // Reset for another pass.
 
-            //
-            // Audio Mixdown Selections
-            //
+            // Audio Codec (-E)
+            foreach (String item in codecs)
+            {
+                if (firstLoop == true)
+                {
+                    audioItems = item; firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            query += " -E " + audioItems;
+            firstLoop = true; audioItems = ""; // Reset for another pass.
 
-            if (Mixdown1 != "")
-                query += " -6 " + getMixDown(Mixdown1);
-            else
-                query += " -6 dpl2";
+            // Audio Mixdown (-6)
+            foreach (String item in mixdowns)
+            {
+                if (firstLoop == true)
+                {
+                    audioItems = item; firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            query += " -6 " + audioItems;
+            firstLoop = true; audioItems = ""; // Reset for another pass.
 
-            if (Mixdown2 != "" && track2 != "None")
-                query += "," + getMixDown(Mixdown2);
+            // Sample Rate (-R)
+            foreach (String item in samplerates)
+            {
+                if (firstLoop == true)
+                {
+                    audioItems = item; firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            query += " -R " + audioItems;
+            firstLoop = true; audioItems = ""; // Reset for another pass.
 
-            if (Mixdown3 != "" && track3 != "None" && track2 != "None")
-                query += "," + getMixDown(Mixdown3);
+            // Audio Bitrate (-B)
+            foreach (String item in bitrates)
+            {
+                if (firstLoop == true)
+                {
+                    audioItems = item; firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            query += " -B " + audioItems;
+            firstLoop = true; audioItems = ""; // Reset for another pass.
 
-            if (Mixdown4 != "" && track4 != "None" && track3 != "None")
-                query += "," + getMixDown(Mixdown4);
+            // DRC (-D)
+            foreach (String item in drcs)
+            {
+                if (firstLoop == true)
+                {
+                    audioItems = item; firstLoop = false;
+                }
+                else
+                    audioItems += "," + item;
+            }
+            query += " -D " + audioItems;
+            firstLoop = true; audioItems = ""; // Reset for another pass.
 
-
-            //
-            // DRC
-            //
-            double value = 0;
-
-            value = mainWindow.trackBar1.Value / 10.0;
-            value++;
-
-            if (value > 1.0)
-                query += " -D " + value;
-            else
-                query += " -D 1";
-
-            value = mainWindow.trackBar2.Value / 10.0;
-            value++;
-            if (track2 != "None" && drc2 != "0")
-                query += "," + value;
-            else if (track2 != "None" && drc2 == "0")
-                query += ",1";
-
-            value = mainWindow.trackBar3.Value / 10.0;
-            value++;
-            if (track3 != "None" && drc3 != "0")
-                query += "," + value;
-            else if (track3 != "None" && drc3 == "0")
-                query += ",1";
-
-            value = mainWindow.trackBar4.Value / 10.0;
-            value++;
-            if (track4 != "None" && drc4 != "0")
-                query += "," + value;
-            else if (track4 != "None" && drc4 == "0")
-                query += ",1";
 
             // Subtitles
             string subtitles = mainWindow.drp_subtitle.Text;
@@ -536,7 +467,7 @@ namespace Handbrake
             switch (selectedAudio)
             {
                 case "Automatic":
-                    return "dpl2";
+                    return "auto";
                 case "Mono":
                     return "mono";
                 case "Stereo":
@@ -548,7 +479,7 @@ namespace Handbrake
                 case "6 Channel Discrete":
                     return "6ch";
                 default:
-                    return "dpl2";
+                    return "auto";
             }
         }
 
