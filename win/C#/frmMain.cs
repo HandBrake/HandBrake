@@ -1198,6 +1198,7 @@ namespace Handbrake
                 lv_audioList.Select();
             }
         }
+
         private void btn_addAudioTrack_Click(object sender, EventArgs e)
         {
             // Create a new row for the Audio list based on the currently selected items in the dropdown.
@@ -1214,6 +1215,50 @@ namespace Handbrake
             lv_audioList.Select();
         }
         private void btn_RemoveAudioTrack_Click(object sender, EventArgs e)
+        {
+            removeAudioTrack();
+        }
+        private void audioList_moveup_Click(object sender, EventArgs e)
+        {
+            if (lv_audioList.SelectedIndices.Count != 0)
+            {
+                ListViewItem item = lv_audioList.SelectedItems[0];
+                int index = item.Index;
+                index--;
+
+                if (lv_audioList.Items.Count > index && index >= 0)
+                {
+                    lv_audioList.Items.Remove(item);
+                    lv_audioList.Items.Insert(index, item);
+                    item.Selected = true;
+                    lv_audioList.Focus();
+                }
+            }
+        }
+        private void audioList_movedown_Click(object sender, EventArgs e)
+        {
+            if (lv_audioList.SelectedIndices.Count != 0)
+            {
+                ListViewItem item = lv_audioList.SelectedItems[0];
+                int index = item.Index;
+                index++;
+
+                if (index < lv_audioList.Items.Count)
+                {
+                    lv_audioList.Items.Remove(item);
+                    lv_audioList.Items.Insert(index, item);
+                    item.Selected = true;
+                    lv_audioList.Focus();
+                }
+            }
+
+        }
+        
+        private void audioList_remove_Click(object sender, EventArgs e)
+        {
+            removeAudioTrack();
+        }
+        private void removeAudioTrack()
         {
             // Remove the Item and reselect the control if the following conditions are met.
             if (lv_audioList.SelectedItems.Count != 0)
@@ -1235,6 +1280,7 @@ namespace Handbrake
                 }
             }
         }
+
         private void lv_audioList_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Set the dropdown controls based on the selected item in the Audio List.
@@ -1252,6 +1298,7 @@ namespace Handbrake
                 tb_drc.Value = drcCalculated;
             }
         }
+
         private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitle.Text.Contains("None"))
@@ -1262,7 +1309,7 @@ namespace Handbrake
             else
                 check_forced.Enabled = true;
         }
-
+        
         // Chapter Marker Tab
         private void Check_ChapterMarkers_CheckedChanged(object sender, EventArgs e)
         {

@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -243,6 +243,12 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.audioList_movedown = new System.Windows.Forms.ToolStripMenuItem();
+            this.audioList_moveup = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.audioList_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -272,6 +278,7 @@ namespace Handbrake
             this.presets_menu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.StatusStrip.SuspendLayout();
+            this.audioMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -635,9 +642,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle6.Format = "N0";
+            dataGridViewCellStyle6.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle6;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1546,13 +1553,16 @@ namespace Handbrake
             this.col_samplerate,
             this.col_bitrate,
             this.col_drc});
+            this.lv_audioList.ContextMenuStrip = this.audioMenu;
             this.lv_audioList.FullRowSelect = true;
+            this.lv_audioList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lv_audioList.HideSelection = false;
             this.lv_audioList.LabelWrap = false;
             this.lv_audioList.Location = new System.Drawing.Point(16, 79);
             this.lv_audioList.MultiSelect = false;
             this.lv_audioList.Name = "lv_audioList";
             this.lv_audioList.Size = new System.Drawing.Size(668, 147);
+            this.lv_audioList.SmallImageList = this.AudioMenuRowHeightHack;
             this.lv_audioList.TabIndex = 48;
             this.lv_audioList.UseCompatibleStateImageBehavior = false;
             this.lv_audioList.View = System.Windows.Forms.View.Details;
@@ -2838,6 +2848,49 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
+            // audioMenu
+            // 
+            this.audioMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.audioList_moveup,
+            this.audioList_movedown,
+            this.toolStripSeparator2,
+            this.audioList_remove});
+            this.audioMenu.Name = "audioMenu";
+            this.audioMenu.Size = new System.Drawing.Size(142, 76);
+            // 
+            // audioList_movedown
+            // 
+            this.audioList_movedown.Name = "audioList_movedown";
+            this.audioList_movedown.Size = new System.Drawing.Size(141, 22);
+            this.audioList_movedown.Text = "Move Down";
+            this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.audioList_movedown.Click += new System.EventHandler(this.audioList_movedown_Click);
+            // 
+            // audioList_moveup
+            // 
+            this.audioList_moveup.Name = "audioList_moveup";
+            this.audioList_moveup.Size = new System.Drawing.Size(141, 22);
+            this.audioList_moveup.Text = "Move Up";
+            this.audioList_moveup.Click += new System.EventHandler(this.audioList_moveup_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            // 
+            // audioList_remove
+            // 
+            this.audioList_remove.Name = "audioList_remove";
+            this.audioList_remove.Size = new System.Drawing.Size(141, 22);
+            this.audioList_remove.Text = "Remove";
+            this.audioList_remove.Click += new System.EventHandler(this.audioList_remove_Click);
+            // 
+            // AudioMenuRowHeightHack
+            // 
+            this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.AudioMenuRowHeightHack.ImageSize = new System.Drawing.Size(1, 18);
+            this.AudioMenuRowHeightHack.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2896,6 +2949,7 @@ namespace Handbrake
             this.toolStrip1.PerformLayout();
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
+            this.audioMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -3107,6 +3161,12 @@ namespace Handbrake
         private System.Windows.Forms.ColumnHeader col_bitrate;
         private System.Windows.Forms.ColumnHeader col_drc;
         internal System.Windows.Forms.ListView lv_audioList;
+        private System.Windows.Forms.ContextMenuStrip audioMenu;
+        private System.Windows.Forms.ToolStripMenuItem audioList_movedown;
+        private System.Windows.Forms.ToolStripMenuItem audioList_moveup;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem audioList_remove;
+        private System.Windows.Forms.ImageList AudioMenuRowHeightHack;
 
     }
 }
