@@ -87,6 +87,8 @@ namespace Handbrake
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
             queueWindow = new frmQueue(this);        // Prepare the Queue
+            if (Properties.Settings.Default.QueryEditorTab != "Checked")
+                tabs_panel.TabPages.RemoveAt(5); // Remove the query editor tab if the user does not want it enabled.
 
             // Load the user's default settings or Normal Preset
             if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
@@ -284,12 +286,6 @@ namespace Handbrake
         {
             treeView_presets.CollapseAll();
         }
-        private void treeview_presets_mouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-                treeView_presets.SelectedNode = treeView_presets.GetNodeAt(e.Location);
-            treeView_presets.Select();
-        }
         private void pmnu_delete_click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
@@ -349,26 +345,42 @@ namespace Handbrake
             Properties.Settings.Default.Save();
             MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
+        private void treeview_presets_mouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+                treeView_presets.SelectedNode = treeView_presets.GetNodeAt(e.Location);
+            else if (e.Button == MouseButtons.Left)
+                selectPreset();
+
+            treeView_presets.Select();
+        }
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            // Ok, so, we've selected a preset. Now we want to load it.
-            string presetName = treeView_presets.SelectedNode.Text;
-            string query = presetHandler.getCliForPreset(presetName);
-
-            if (query != null)
+            selectPreset();
+        }
+        private void selectPreset()
+        {
+            if (treeView_presets.SelectedNode != null)
             {
-                //Ok, Reset all the H264 widgets before changing the preset
-                x264PanelFunctions.reset2Defaults(this);
+                // Ok, so, we've selected a preset. Now we want to load it.
+                string presetName = treeView_presets.SelectedNode.Text;
+                string query = presetHandler.getCliForPreset(presetName);
 
-                // Send the query from the file to the Query Parser class
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+                if (query != null)
+                {
+                    //Ok, Reset all the H264 widgets before changing the preset
+                    x264PanelFunctions.reset2Defaults(this);
 
-                // Now load the preset
-                presetLoader.presetLoader(this, presetQuery, presetName);
+                    // Send the query from the file to the Query Parser class
+                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
 
-                // The x264 widgets will need updated, so do this now:
-                x264PanelFunctions.X264_StandardizeOptString(this);
-                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                    // Now load the preset
+                    presetLoader.presetLoader(this, presetQuery, presetName);
+
+                    // The x264 widgets will need updated, so do this now:
+                    x264PanelFunctions.X264_StandardizeOptString(this);
+                    x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                }
             }
         }
         private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
@@ -1203,12 +1215,12 @@ namespace Handbrake
         }
         private void btn_RemoveAudioTrack_Click(object sender, EventArgs e)
         {
-            // Record the current selected index.
-            int currentPosition = lv_audioList.SelectedIndices[0];
-
             // Remove the Item and reselect the control if the following conditions are met.
             if (lv_audioList.SelectedItems.Count != 0)
             {
+                // Record the current selected index.
+                int currentPosition = lv_audioList.SelectedIndices[0];
+
                 lv_audioList.Items.RemoveAt(lv_audioList.SelectedIndices[0]);
 
                 // Now reslect the correct item and give focus to the audio list.

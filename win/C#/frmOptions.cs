@@ -114,6 +114,9 @@ namespace Handbrake
             if (Properties.Settings.Default.drive_detection == "Checked")
                 btn_drive_detect.CheckState = CheckState.Checked;
 
+            if (Properties.Settings.Default.QueryEditorTab == "Checked")
+                check_queryEditorTab.CheckState = CheckState.Checked;
+
             // Enable snapshot updating
             if (Properties.Settings.Default.MainWindowMinimize == "Checked")
                 check_mainMinimize.CheckState = CheckState.Checked;
@@ -249,6 +252,11 @@ namespace Handbrake
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.CheckState.ToString();
+        }
+
+        private void check_queryEditorTab_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.QueryEditorTab = check_queryEditorTab.CheckState.ToString();
         }
 
         private void check_snapshot_CheckedChanged(object sender, EventArgs e)

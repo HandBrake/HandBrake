@@ -192,7 +192,7 @@ namespace Handbrake
             this.Label51 = new System.Windows.Forms.Label();
             this.Label15 = new System.Windows.Forms.Label();
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
-            this.advancedOptions = new System.Windows.Forms.TabControl();
+            this.tabs_panel = new System.Windows.Forms.TabControl();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.h264Tab = new System.Windows.Forms.TabPage();
@@ -211,7 +211,7 @@ namespace Handbrake
             this.lbl_direct_prediction = new System.Windows.Forms.Label();
             this.label62 = new System.Windows.Forms.Label();
             this.label64 = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tab_query = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.label34 = new System.Windows.Forms.Label();
             this.btn_generate_Query = new System.Windows.Forms.Button();
@@ -260,10 +260,10 @@ namespace Handbrake
             ((System.ComponentModel.ISupportInitialize)(this.text_top)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_left)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_right)).BeginInit();
-            this.advancedOptions.SuspendLayout();
+            this.tabs_panel.SuspendLayout();
             this.tab_chapters.SuspendLayout();
             this.h264Tab.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.tab_query.SuspendLayout();
             this.groupBox_dest.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -2270,21 +2270,21 @@ namespace Handbrake
             this.Check_ChapterMarkers.UseVisualStyleBackColor = false;
             this.Check_ChapterMarkers.CheckedChanged += new System.EventHandler(this.Check_ChapterMarkers_CheckedChanged);
             // 
-            // advancedOptions
+            // tabs_panel
             // 
-            this.advancedOptions.Controls.Add(this.TabPage1);
-            this.advancedOptions.Controls.Add(this.TabPage3);
-            this.advancedOptions.Controls.Add(this.TabPage2);
-            this.advancedOptions.Controls.Add(this.tab_chapters);
-            this.advancedOptions.Controls.Add(this.h264Tab);
-            this.advancedOptions.Controls.Add(this.tabPage4);
-            this.advancedOptions.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.advancedOptions.Location = new System.Drawing.Point(9, 274);
-            this.advancedOptions.Name = "advancedOptions";
-            this.advancedOptions.SelectedIndex = 0;
-            this.advancedOptions.Size = new System.Drawing.Size(721, 342);
-            this.advancedOptions.TabIndex = 5;
-            this.advancedOptions.TabStop = false;
+            this.tabs_panel.Controls.Add(this.TabPage1);
+            this.tabs_panel.Controls.Add(this.TabPage3);
+            this.tabs_panel.Controls.Add(this.TabPage2);
+            this.tabs_panel.Controls.Add(this.tab_chapters);
+            this.tabs_panel.Controls.Add(this.h264Tab);
+            this.tabs_panel.Controls.Add(this.tab_query);
+            this.tabs_panel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabs_panel.Location = new System.Drawing.Point(9, 274);
+            this.tabs_panel.Name = "tabs_panel";
+            this.tabs_panel.SelectedIndex = 0;
+            this.tabs_panel.Size = new System.Drawing.Size(721, 342);
+            this.tabs_panel.TabIndex = 5;
+            this.tabs_panel.TabStop = false;
             // 
             // tab_chapters
             // 
@@ -2501,18 +2501,18 @@ namespace Handbrake
             this.label64.TabIndex = 1;
             this.label64.Text = "Reference Frames:";
             // 
-            // tabPage4
+            // tab_query
             // 
-            this.tabPage4.Controls.Add(this.btn_clear);
-            this.tabPage4.Controls.Add(this.label34);
-            this.tabPage4.Controls.Add(this.btn_generate_Query);
-            this.tabPage4.Controls.Add(this.label33);
-            this.tabPage4.Controls.Add(this.rtf_query);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(713, 316);
-            this.tabPage4.TabIndex = 7;
-            this.tabPage4.Text = "Query Editor";
+            this.tab_query.Controls.Add(this.btn_clear);
+            this.tab_query.Controls.Add(this.label34);
+            this.tab_query.Controls.Add(this.btn_generate_Query);
+            this.tab_query.Controls.Add(this.label33);
+            this.tab_query.Controls.Add(this.rtf_query);
+            this.tab_query.Location = new System.Drawing.Point(4, 22);
+            this.tab_query.Name = "tab_query";
+            this.tab_query.Size = new System.Drawing.Size(713, 316);
+            this.tab_query.TabIndex = 7;
+            this.tab_query.Text = "Query Editor";
             // 
             // btn_clear
             // 
@@ -2848,7 +2848,7 @@ namespace Handbrake
             this.Controls.Add(this.groupBox_output);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.advancedOptions);
+            this.Controls.Add(this.tabs_panel);
             this.Controls.Add(this.frmMainMenu);
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
@@ -2878,13 +2878,13 @@ namespace Handbrake
             ((System.ComponentModel.ISupportInitialize)(this.text_top)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_left)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_right)).EndInit();
-            this.advancedOptions.ResumeLayout(false);
+            this.tabs_panel.ResumeLayout(false);
             this.tab_chapters.ResumeLayout(false);
             this.tab_chapters.PerformLayout();
             this.h264Tab.ResumeLayout(false);
             this.h264Tab.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
+            this.tab_query.ResumeLayout(false);
+            this.tab_query.PerformLayout();
             this.groupBox_dest.ResumeLayout(false);
             this.groupBox_dest.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -2957,7 +2957,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label52;
         internal System.Windows.Forms.Label Label51;
         internal System.Windows.Forms.Label Label15;
-        internal System.Windows.Forms.TabControl advancedOptions;
+        internal System.Windows.Forms.TabControl tabs_panel;
         internal System.Windows.Forms.Label Label46;
         private System.Windows.Forms.GroupBox groupBox_dest;
         internal System.Windows.Forms.ComboBox drp_subtitle;
@@ -2995,7 +2995,7 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_optimiseMP4;
         internal System.Windows.Forms.CheckBox check_forced;
         internal System.Windows.Forms.DataGridView data_chpt;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage tab_query;
         private System.Windows.Forms.Label label34;
         internal System.Windows.Forms.Button btn_generate_Query;
         internal System.Windows.Forms.Label label33;

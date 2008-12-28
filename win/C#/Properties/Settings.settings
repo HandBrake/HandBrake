@@ -77,5 +77,8 @@
     <Setting Name="MainWindowMinimize" Type="System.String" Scope="User">
       <Value Profile="(Default)">Checked</Value>
     </Setting>
+    <Setting Name="QueryEditorTab" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

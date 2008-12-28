@@ -74,6 +74,8 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
+            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
             this.check_snapshot = new System.Windows.Forms.CheckBox();
             this.btn_drive_detect = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -110,8 +112,7 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
-            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
+            this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -594,6 +595,7 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.check_queryEditorTab);
             this.tab_advanced.Controls.Add(this.lbl_appcastUnstable);
             this.tab_advanced.Controls.Add(this.check_mainMinimize);
             this.tab_advanced.Controls.Add(this.check_snapshot);
@@ -607,12 +609,38 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // lbl_appcastUnstable
+            // 
+            this.lbl_appcastUnstable.AutoSize = true;
+            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 105);
+            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
+            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
+            this.lbl_appcastUnstable.TabIndex = 83;
+            this.lbl_appcastUnstable.Text = "Updates:";
+            // 
+            // check_mainMinimize
+            // 
+            this.check_mainMinimize.AutoSize = true;
+            this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
+            this.check_mainMinimize.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_mainMinimize.Location = new System.Drawing.Point(76, 41);
+            this.check_mainMinimize.Name = "check_mainMinimize";
+            this.check_mainMinimize.Size = new System.Drawing.Size(286, 17);
+            this.check_mainMinimize.TabIndex = 82;
+            this.check_mainMinimize.Text = "Minimize to System Tray rather than task bar";
+            this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
+                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
+                    "");
+            this.check_mainMinimize.UseVisualStyleBackColor = false;
+            this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
+            // 
             // check_snapshot
             // 
             this.check_snapshot.AutoSize = true;
             this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
             this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_snapshot.Location = new System.Drawing.Point(76, 81);
+            this.check_snapshot.Location = new System.Drawing.Point(76, 104);
             this.check_snapshot.Name = "check_snapshot";
             this.check_snapshot.Size = new System.Drawing.Size(273, 17);
             this.check_snapshot.TabIndex = 80;
@@ -1001,31 +1029,20 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // check_mainMinimize
+            // check_queryEditorTab
             // 
-            this.check_mainMinimize.AutoSize = true;
-            this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
-            this.check_mainMinimize.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_mainMinimize.Location = new System.Drawing.Point(76, 41);
-            this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(286, 17);
-            this.check_mainMinimize.TabIndex = 82;
-            this.check_mainMinimize.Text = "Minimize to System Tray rather than task bar";
-            this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
-                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
-                    "");
-            this.check_mainMinimize.UseVisualStyleBackColor = false;
-            this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
-            // 
-            // lbl_appcastUnstable
-            // 
-            this.lbl_appcastUnstable.AutoSize = true;
-            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 82);
-            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
-            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
-            this.lbl_appcastUnstable.TabIndex = 83;
-            this.lbl_appcastUnstable.Text = "Updates:";
+            this.check_queryEditorTab.AutoSize = true;
+            this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
+            this.check_queryEditorTab.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_queryEditorTab.Location = new System.Drawing.Point(76, 64);
+            this.check_queryEditorTab.Name = "check_queryEditorTab";
+            this.check_queryEditorTab.Size = new System.Drawing.Size(175, 17);
+            this.check_queryEditorTab.TabIndex = 84;
+            this.check_queryEditorTab.Text = "Enable \"Query Editor\" Tab";
+            this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
+                    " effect.");
+            this.check_queryEditorTab.UseVisualStyleBackColor = false;
+            this.check_queryEditorTab.CheckedChanged += new System.EventHandler(this.check_queryEditorTab_CheckedChanged);
             // 
             // frmOptions
             // 
@@ -1135,5 +1152,6 @@ namespace Handbrake
         private System.Windows.Forms.OpenFileDialog openFile_vlc;
         private System.Windows.Forms.Label lbl_appcastUnstable;
         internal System.Windows.Forms.CheckBox check_mainMinimize;
+        internal System.Windows.Forms.CheckBox check_queryEditorTab;
     }
 }
