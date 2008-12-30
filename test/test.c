@@ -9,6 +9,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+#include <inttypes.h>
 
 #include "hb.h"
 #include "parsecsv.h"
@@ -94,6 +95,8 @@ static int    ipod_atom     = 0;
 static int    color_matrix  = 0;
 static int    preview_count = 10;
 static int    store_previews = 0;
+static int    start_at_preview = 0;
+static int64_t stop_at_pts    = 0;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -465,7 +468,7 @@ static int HandleEvents( hb_handle_t * h )
 
             PrintTitleInfo( title );
 
-            if( chapter_start && chapter_end )
+            if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview )
             {
                 job->chapter_start = MAX( job->chapter_start,
                                           chapter_start );
@@ -1668,6 +1671,18 @@ static int HandleEvents( hb_handle_t * h )
                 job->subtitle_force = subtitle_force;
             }
 
+            if( start_at_preview )
+            {
+                job->start_at_preview = start_at_preview - 1;
+                job->seek_points = preview_count;
+            }
+            
+            if( stop_at_pts )
+            {
+                job->pts_to_stop = stop_at_pts;
+                subtitle_scan = 0;
+            }
+            
             if( subtitle_scan )
             {
                 char *x264opts_tmp;
@@ -1879,6 +1894,10 @@ static void ShowHelp()
     "        --previews <#:B>    Select how many preview images are generated (max 30),\n"
     "                            and whether or not they're stored to disk (0 or 1).\n"
     "                            (default: 10:0)\n"
+    "    --start-at-preview <#>  Start encoding at a given preview.\n"
+    "    --stop-at-duration <#>  Stop encoding after a given duration in seconds.\n"
+    "    --stop-at-pts      <#>  Stop encoding at a given timestamp (90,000Hz clock).\n"
+    "      (--stop-at-pts and --stop-at-duration are mutually exclusive options)\n"
     "\n"
 
     "### Destination Options------------------------------------------------------\n\n"
@@ -2081,6 +2100,9 @@ static int ParseOptions( int argc, char ** argv )
 {
     
     #define PREVIEWS 257
+    #define START_AT_PREVIEW 258
+    #define STOP_AT_PTS 259
+    #define STOP_AT_DURATION 260
     
     for( ;; )
     {
@@ -2142,6 +2164,9 @@ static int ParseOptions( int argc, char ** argv )
             { "aname",       required_argument, NULL,    'A' },
             { "color-matrix",required_argument, NULL,    'M' },
             { "previews",    required_argument, NULL,    PREVIEWS },
+            { "start-at-preview", required_argument, NULL, START_AT_PREVIEW },
+            { "stop-at-pts", required_argument, NULL,    STOP_AT_PTS },
+            { "stop-at-duration", required_argument, NULL, STOP_AT_DURATION },
 
             { 0, 0, 0, 0 }
           };
@@ -2489,6 +2514,16 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case PREVIEWS:
                 sscanf( optarg, "%i:%i", &preview_count, &store_previews );
+                break;
+            case START_AT_PREVIEW:
+                start_at_preview = atoi( optarg );
+                break;
+            case STOP_AT_PTS:
+                sscanf( optarg, "%"SCNd64, &stop_at_pts );
+                break;
+            case STOP_AT_DURATION:
+                sscanf( optarg, "%"SCNd64, &stop_at_pts );
+                stop_at_pts *= 90000LL;
                 break;
             case 'M':
                 if( atoi( optarg ) == 601 )
