@@ -50,7 +50,7 @@ namespace Handbrake
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <returns>Returns a CLI query String.</returns>
-        public string GeneratePreviewQuery(frmMain mainWindow, string duration)
+        public string GeneratePreviewQuery(frmMain mainWindow, string duration, string preview)
         {
             int seconds = 0;
             int.TryParse(duration, out seconds);
@@ -67,7 +67,8 @@ namespace Handbrake
                 query += " -t " + titleInfo[0];
             }
 
-            query += " -c 2";
+            query += " --start-at-preview " + preview;
+            query += " --stop-at-duration " + duration + " ";
 
             // Destination tab
             if (mainWindow.text_destination.Text != "")

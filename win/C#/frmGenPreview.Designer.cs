@@ -37,6 +37,8 @@
             this.lbl_status = new System.Windows.Forms.Label();
             this.cb_duration = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cb_preview = new System.Windows.Forms.ComboBox();
             this.toolBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,7 +52,7 @@
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
             this.toolBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolBar.Size = new System.Drawing.Size(340, 39);
+            this.toolBar.Size = new System.Drawing.Size(377, 39);
             this.toolBar.TabIndex = 38;
             this.toolBar.Text = "toolStrip1";
             // 
@@ -60,7 +62,7 @@
             this.btn_encode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_encode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_encode.Name = "btn_encode";
-            this.btn_encode.Size = new System.Drawing.Size(127, 36);
+            this.btn_encode.Size = new System.Drawing.Size(115, 36);
             this.btn_encode.Text = "Encode Sample";
             this.btn_encode.Click += new System.EventHandler(this.btn_encode_Click);
             // 
@@ -76,7 +78,7 @@
             this.btn_play.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_play.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_play.Name = "btn_play";
-            this.btn_play.Size = new System.Drawing.Size(64, 36);
+            this.btn_play.Size = new System.Drawing.Size(63, 36);
             this.btn_play.Text = "Play";
             this.btn_play.Visible = false;
             this.btn_play.Click += new System.EventHandler(this.btn_play_Click);
@@ -85,7 +87,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 77);
+            this.label1.Location = new System.Drawing.Point(12, 79);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(47, 13);
             this.label1.TabIndex = 39;
@@ -95,7 +97,7 @@
             // 
             this.lbl_status.AutoSize = true;
             this.lbl_status.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_status.Location = new System.Drawing.Point(133, 77);
+            this.lbl_status.Location = new System.Drawing.Point(117, 79);
             this.lbl_status.Name = "lbl_status";
             this.lbl_status.Size = new System.Drawing.Size(111, 13);
             this.lbl_status.TabIndex = 40;
@@ -119,7 +121,7 @@
             "50",
             "55",
             "60"});
-            this.cb_duration.Location = new System.Drawing.Point(136, 46);
+            this.cb_duration.Location = new System.Drawing.Point(304, 47);
             this.cb_duration.MaxLength = 2;
             this.cb_duration.Name = "cb_duration";
             this.cb_duration.Size = new System.Drawing.Size(46, 21);
@@ -129,18 +131,53 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 49);
+            this.label2.Location = new System.Drawing.Point(180, 50);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(118, 13);
             this.label2.TabIndex = 42;
             this.label2.Text = "Duration (seconds):";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(12, 50);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(102, 13);
+            this.label3.TabIndex = 44;
+            this.label3.Text = "Start at preview:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // cb_preview
+            // 
+            this.cb_preview.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_preview.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_preview.FormattingEnabled = true;
+            this.cb_preview.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"});
+            this.cb_preview.Location = new System.Drawing.Point(120, 47);
+            this.cb_preview.MaxLength = 2;
+            this.cb_preview.Name = "cb_preview";
+            this.cb_preview.Size = new System.Drawing.Size(46, 21);
+            this.cb_preview.TabIndex = 43;
+            // 
             // frmGenPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(340, 102);
+            this.ClientSize = new System.Drawing.Size(377, 104);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cb_preview);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cb_duration);
             this.Controls.Add(this.lbl_status);
@@ -166,5 +203,7 @@
         private System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cb_duration;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cb_preview;
     }
 }

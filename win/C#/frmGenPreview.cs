@@ -24,6 +24,7 @@ namespace Handbrake
             InitializeComponent();
             this.mainWindow = mw;
             cb_duration.SelectedIndex = 0;
+            cb_preview.SelectedIndex = 0;
         }
 
         private void btn_play_Click(object sender, EventArgs e)
@@ -54,7 +55,7 @@ namespace Handbrake
 
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            String query = queryGen.GeneratePreviewQuery(mainWindow, cb_duration.Text);
+            String query = queryGen.GeneratePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
             ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
         private void procMonitor(object state)

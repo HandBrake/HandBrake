@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -137,6 +137,12 @@ namespace Handbrake
             this.col_samplerate = new System.Windows.Forms.ColumnHeader();
             this.col_bitrate = new System.Windows.Forms.ColumnHeader();
             this.col_drc = new System.Windows.Forms.ColumnHeader();
+            this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.audioList_moveup = new System.Windows.Forms.ToolStripMenuItem();
+            this.audioList_movedown = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.audioList_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             this.btn_RemoveAudioTrack = new System.Windows.Forms.Button();
             this.btn_addAudioTrack = new System.Windows.Forms.Button();
             this.lbl_drc = new System.Windows.Forms.Label();
@@ -243,12 +249,6 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.audioList_movedown = new System.Windows.Forms.ToolStripMenuItem();
-            this.audioList_moveup = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.audioList_remove = new System.Windows.Forms.ToolStripMenuItem();
-            this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -258,6 +258,7 @@ namespace Handbrake
             this.GroupBox1.SuspendLayout();
             this.groupBox_output.SuspendLayout();
             this.TabPage2.SuspendLayout();
+            this.audioMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).BeginInit();
             this.TabPage3.SuspendLayout();
             this.TabPage1.SuspendLayout();
@@ -278,7 +279,6 @@ namespace Handbrake
             this.presets_menu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.StatusStrip.SuspendLayout();
-            this.audioMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // Label38
@@ -642,9 +642,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle6.Format = "N0";
-            dataGridViewCellStyle6.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1596,6 +1596,49 @@ namespace Handbrake
             // col_drc
             // 
             this.col_drc.Text = "DRC";
+            // 
+            // audioMenu
+            // 
+            this.audioMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.audioList_moveup,
+            this.audioList_movedown,
+            this.toolStripSeparator2,
+            this.audioList_remove});
+            this.audioMenu.Name = "audioMenu";
+            this.audioMenu.Size = new System.Drawing.Size(142, 76);
+            // 
+            // audioList_moveup
+            // 
+            this.audioList_moveup.Name = "audioList_moveup";
+            this.audioList_moveup.Size = new System.Drawing.Size(141, 22);
+            this.audioList_moveup.Text = "Move Up";
+            this.audioList_moveup.Click += new System.EventHandler(this.audioList_moveup_Click);
+            // 
+            // audioList_movedown
+            // 
+            this.audioList_movedown.Name = "audioList_movedown";
+            this.audioList_movedown.Size = new System.Drawing.Size(141, 22);
+            this.audioList_movedown.Text = "Move Down";
+            this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.audioList_movedown.Click += new System.EventHandler(this.audioList_movedown_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            // 
+            // audioList_remove
+            // 
+            this.audioList_remove.Name = "audioList_remove";
+            this.audioList_remove.Size = new System.Drawing.Size(141, 22);
+            this.audioList_remove.Text = "Remove";
+            this.audioList_remove.Click += new System.EventHandler(this.audioList_remove_Click);
+            // 
+            // AudioMenuRowHeightHack
+            // 
+            this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.AudioMenuRowHeightHack.ImageSize = new System.Drawing.Size(1, 18);
+            this.AudioMenuRowHeightHack.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // btn_RemoveAudioTrack
             // 
@@ -2848,53 +2891,11 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
-            // audioMenu
-            // 
-            this.audioMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.audioList_moveup,
-            this.audioList_movedown,
-            this.toolStripSeparator2,
-            this.audioList_remove});
-            this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(142, 76);
-            // 
-            // audioList_movedown
-            // 
-            this.audioList_movedown.Name = "audioList_movedown";
-            this.audioList_movedown.Size = new System.Drawing.Size(141, 22);
-            this.audioList_movedown.Text = "Move Down";
-            this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.audioList_movedown.Click += new System.EventHandler(this.audioList_movedown_Click);
-            // 
-            // audioList_moveup
-            // 
-            this.audioList_moveup.Name = "audioList_moveup";
-            this.audioList_moveup.Size = new System.Drawing.Size(141, 22);
-            this.audioList_moveup.Text = "Move Up";
-            this.audioList_moveup.Click += new System.EventHandler(this.audioList_moveup_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
-            // 
-            // audioList_remove
-            // 
-            this.audioList_remove.Name = "audioList_remove";
-            this.audioList_remove.Size = new System.Drawing.Size(141, 22);
-            this.audioList_remove.Text = "Remove";
-            this.audioList_remove.Click += new System.EventHandler(this.audioList_remove_Click);
-            // 
-            // AudioMenuRowHeightHack
-            // 
-            this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.AudioMenuRowHeightHack.ImageSize = new System.Drawing.Size(1, 18);
-            this.AudioMenuRowHeightHack.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(992, 649);
             this.Controls.Add(this.GroupBox1);
             this.Controls.Add(this.groupBox_dest);
@@ -2906,7 +2907,6 @@ namespace Handbrake
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1000, 668);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HandBrake";
@@ -2921,6 +2921,7 @@ namespace Handbrake
             this.groupBox_output.PerformLayout();
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
+            this.audioMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).EndInit();
             this.TabPage3.ResumeLayout(false);
             this.TabPage3.PerformLayout();
@@ -2949,7 +2950,6 @@ namespace Handbrake
             this.toolStrip1.PerformLayout();
             this.StatusStrip.ResumeLayout(false);
             this.StatusStrip.PerformLayout();
-            this.audioMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

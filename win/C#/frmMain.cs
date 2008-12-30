@@ -312,7 +312,7 @@ namespace Handbrake
             nodeStatus.Add(true);
 
             // Now add the new preset
-            Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.generateTabbedComponentsQuery(this), presetHandler);
             preset.ShowDialog();
 
             // Now reload the TreeView states
@@ -759,21 +759,6 @@ namespace Handbrake
                 drp_track1Audio.Items.Add("None");
                 drp_track1Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
                 drp_track1Audio.SelectedIndex = 0;
-
-                /*drp_track2Audio.Items.Clear();
-                drp_track2Audio.Items.Add("None");
-                drp_track2Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track2Audio.SelectedIndex = 0;
-
-                drp_track3Audio.Items.Clear();
-                drp_track3Audio.Items.Add("None");
-                drp_track3Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track3Audio.SelectedIndex = 0;
-
-                drp_track4Audio.Items.Clear();
-                drp_track4Audio.Items.Add("None");
-                drp_track4Audio.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-                drp_track4Audio.SelectedIndex = 0;*/
 
                 // Populate the Subtitles dropdown
                 drp_subtitle.Items.Clear();
