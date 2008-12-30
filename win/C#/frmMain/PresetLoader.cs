@@ -15,7 +15,7 @@ namespace Handbrake
         /// <param name="mainWindow"></param>
         /// <param name="presetQuery">The Parsed CLI Query</param>
         /// <param name="name">Name of the preset</param>
-        public void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name)
+        public void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name, Boolean pictureSettings)
         {
             // ---------------------------
             // Setup the GUI
@@ -80,7 +80,35 @@ namespace Handbrake
             if (presetQuery.CropBottom == "0" && presetQuery.CropTop == "0")
                 if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
                     mainWindow.check_customCrop.Checked = true;
-            
+
+            mainWindow.text_width.Text = "";
+            mainWindow.text_height.Text = "";
+
+            if (pictureSettings == true)
+            {
+                if (presetQuery.CropTop != null)
+                {
+                    int top, bottom, left, right;
+                    int.TryParse(presetQuery.CropTop, out top);
+                    int.TryParse(presetQuery.CropBottom, out bottom);
+                    int.TryParse(presetQuery.CropLeft, out left);
+                    int.TryParse(presetQuery.CropRight, out right);
+
+                    mainWindow.check_customCrop.Checked = true;
+                    mainWindow.text_top.Value = top;
+                    mainWindow.text_bottom.Value = bottom;
+                    mainWindow.text_left.Value = left;
+                    mainWindow.text_right.Value = right;
+                    
+                }
+
+                if (presetQuery.Width != 0)
+                    mainWindow.text_width.Text = presetQuery.Width.ToString();
+
+                if (presetQuery.Height != 0)
+                    mainWindow.text_height.Text = presetQuery.Height.ToString();
+            }
+
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
 
@@ -118,20 +146,6 @@ namespace Handbrake
                     mainWindow.drp_anamorphic.SelectedIndex = 0;
             }
 
-            if (presetQuery.Width != 0)
-                mainWindow.text_width.Text = presetQuery.Width.ToString();
-            else
-            {
-                mainWindow.text_width.Text = "";
-            }
-
-            if (presetQuery.Height != 0)
-                mainWindow.text_height.Text = presetQuery.Height.ToString();
-            else
-            {
-                mainWindow.text_height.Text = "";
-            }
-
             // Set the public max width and max height varibles in frmMain
             // These are used by the query generator to determine if it should use -X or -w  / -Y or -h
             if (presetQuery.MaxWidth != 0)
@@ -145,7 +159,7 @@ namespace Handbrake
                 mainWindow.text_height.Text = presetQuery.MaxHeight.ToString();
                 mainWindow.maxHeight = presetQuery.MaxHeight;
             }
-              
+
 
             #endregion
 

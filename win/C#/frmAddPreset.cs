@@ -31,7 +31,11 @@ namespace Handbrake
 
         private void btn_add_Click(object sender, EventArgs e)
         {
-            if (presetCode.addPreset(txt_preset_name.Text.Trim(), query) == true)
+            Boolean pictureSettings = false;
+            if (check_pictureSettings.Checked)
+                pictureSettings = true;
+
+            if (presetCode.addPreset(txt_preset_name.Text.Trim(), query, pictureSettings) == true)
             {
                 frmMainWindow.loadPresetPanel();
                 this.Close();

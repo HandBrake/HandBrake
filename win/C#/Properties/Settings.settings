@@ -23,7 +23,7 @@
     <Setting Name="CompletionOption" Type="System.String" Scope="User">
       <Value Profile="(Default)">Do Nothing</Value>
     </Setting>
-    <Setting Name="defaultUserSettings" Type="System.String" Scope="User">
+    <Setting Name="defaultPreset" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="hb_build" Type="System.Int32" Scope="User">

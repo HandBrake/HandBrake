@@ -34,11 +34,14 @@ namespace Handbrake
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAddPreset));
             this.lbl_name = new System.Windows.Forms.Label();
             this.txt_preset_name = new System.Windows.Forms.TextBox();
             this.btn_add = new System.Windows.Forms.Button();
             this.btn_cancel = new System.Windows.Forms.Button();
+            this.check_pictureSettings = new System.Windows.Forms.CheckBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // lbl_name
@@ -53,7 +56,6 @@ namespace Handbrake
             // 
             // txt_preset_name
             // 
-            this.txt_preset_name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txt_preset_name.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_preset_name.Location = new System.Drawing.Point(109, 17);
             this.txt_preset_name.Name = "txt_preset_name";
@@ -66,7 +68,7 @@ namespace Handbrake
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_add.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_add.Location = new System.Drawing.Point(284, 44);
+            this.btn_add.Location = new System.Drawing.Point(284, 67);
             this.btn_add.Name = "btn_add";
             this.btn_add.Size = new System.Drawing.Size(66, 22);
             this.btn_add.TabIndex = 0;
@@ -81,7 +83,7 @@ namespace Handbrake
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_cancel.Location = new System.Drawing.Point(212, 44);
+            this.btn_cancel.Location = new System.Drawing.Point(212, 67);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(66, 22);
             this.btn_cancel.TabIndex = 3;
@@ -90,11 +92,23 @@ namespace Handbrake
             this.btn_cancel.UseVisualStyleBackColor = false;
             this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
             // 
+            // check_pictureSettings
+            // 
+            this.check_pictureSettings.AutoSize = true;
+            this.check_pictureSettings.Location = new System.Drawing.Point(109, 44);
+            this.check_pictureSettings.Name = "check_pictureSettings";
+            this.check_pictureSettings.Size = new System.Drawing.Size(118, 17);
+            this.check_pictureSettings.TabIndex = 4;
+            this.check_pictureSettings.Text = "Use Picture Size";
+            this.toolTip.SetToolTip(this.check_pictureSettings, "Save Picture Width/Height and Crop Values");
+            this.check_pictureSettings.UseVisualStyleBackColor = true;
+            // 
             // frmAddPreset
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(362, 76);
+            this.ClientSize = new System.Drawing.Size(365, 100);
+            this.Controls.Add(this.check_pictureSettings);
             this.Controls.Add(this.btn_cancel);
             this.Controls.Add(this.btn_add);
             this.Controls.Add(this.txt_preset_name);
@@ -120,5 +134,7 @@ namespace Handbrake
         private System.Windows.Forms.TextBox txt_preset_name;
         internal System.Windows.Forms.Button btn_add;
         internal System.Windows.Forms.Button btn_cancel;
+        private System.Windows.Forms.CheckBox check_pictureSettings;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

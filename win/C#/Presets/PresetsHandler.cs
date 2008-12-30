@@ -20,13 +20,14 @@ namespace Handbrake.Presets
         /// </summary>
         /// <param name="presetName">String, The name of the new preset</param>
         /// <param name="query">String, the CLI query for the new preset</param>
-        public Boolean addPreset(string presetName, string query)
+        public Boolean addPreset(string presetName, string query, Boolean pictureSettings)
         {
             if (checkIfPresetExists(presetName) == false)
             {
                 Preset newPreset = new Preset();
                 newPreset.Name = presetName;
                 newPreset.Query = query;
+                newPreset.PictureSettings = pictureSettings;
                 user_presets.Add(newPreset);
                 updateUserPresetsFile();
                 return true;
@@ -107,20 +108,20 @@ namespace Handbrake.Presets
         /// </summary>
         /// <param name="name">String, The preset's name</param>
         /// <returns>String, the CLI query for the given preset name</returns>
-        public string getCliForPreset(string name)
+        public Preset getPreset(string name)
         {
             // Built In Presets
             foreach (Preset item in presets)
             {
                 if (item.Name == name)
-                    return item.Query;
+                    return item;
             }
 
             // User Presets
             foreach (Preset item in user_presets)
             {
                 if (item.Name == name)
-                    return item.Query;
+                    return item;
             }
 
             return null;

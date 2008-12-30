@@ -91,13 +91,30 @@ namespace Handbrake
                 tabs_panel.TabPages.RemoveAt(5); // Remove the query editor tab if the user does not want it enabled.
 
             // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultUserSettings != "")
+            if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultPreset != "")
             {
-                Functions.QueryParser presetQuery = Functions.QueryParser.Parse(Properties.Settings.Default.defaultUserSettings);
-                presetLoader.presetLoader(this, presetQuery, "User Defaults ");
-                // The x264 widgets will need updated, so do this now:
-                x264PanelFunctions.X264_StandardizeOptString(this);
-                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                // Ok, so, we've selected a preset. Now we want to load it.
+                if (presetHandler.getPreset(Properties.Settings.Default.defaultPreset) != null)
+                {
+                    string query = presetHandler.getPreset(Properties.Settings.Default.defaultPreset).Query;
+                    Boolean loadPictureSettings = presetHandler.getPreset(Properties.Settings.Default.defaultPreset).PictureSettings;
+
+                    if (query != null)
+                    {
+                        //Ok, Reset all the H264 widgets before changing the preset
+                        x264PanelFunctions.reset2Defaults(this);
+
+                        // Send the query from the file to the Query Parser class, then load the preset
+                        Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+                        presetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
+
+                        // The x264 widgets will need updated, so do this now:
+                        x264PanelFunctions.X264_StandardizeOptString(this);
+                        x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                    }
+                }
+                else
+                    loadNormalPreset();
             }
             else
                 loadNormalPreset();
@@ -339,11 +356,14 @@ namespace Handbrake
         }
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
-            String query = queryGen.GenerateTheQuery(this);
-            Properties.Settings.Default.defaultUserSettings = query;
-            // Save the new default Settings
-            Properties.Settings.Default.Save();
-            MessageBox.Show("New default settings saved.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            if (treeView_presets.SelectedNode != null)
+            {
+                Properties.Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
+                Properties.Settings.Default.Save();
+                MessageBox.Show("New default preset set.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+                MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
         private void treeview_presets_mouseUp(object sender, MouseEventArgs e)
         {
@@ -364,22 +384,26 @@ namespace Handbrake
             {
                 // Ok, so, we've selected a preset. Now we want to load it.
                 string presetName = treeView_presets.SelectedNode.Text;
-                string query = presetHandler.getCliForPreset(presetName);
-
-                if (query != null)
+                if (presetHandler.getPreset(presetName) != null)
                 {
-                    //Ok, Reset all the H264 widgets before changing the preset
-                    x264PanelFunctions.reset2Defaults(this);
+                    string query = presetHandler.getPreset(presetName).Query;
+                    Boolean loadPictureSettings = presetHandler.getPreset(presetName).PictureSettings;
 
-                    // Send the query from the file to the Query Parser class
-                    Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+                    if (query != null)
+                    {
+                        //Ok, Reset all the H264 widgets before changing the preset
+                        x264PanelFunctions.reset2Defaults(this);
 
-                    // Now load the preset
-                    presetLoader.presetLoader(this, presetQuery, presetName);
+                        // Send the query from the file to the Query Parser class
+                        Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
 
-                    // The x264 widgets will need updated, so do this now:
-                    x264PanelFunctions.X264_StandardizeOptString(this);
-                    x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                        // Now load the preset
+                        presetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
+
+                        // The x264 widgets will need updated, so do this now:
+                        x264PanelFunctions.X264_StandardizeOptString(this);
+                        x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                    }
                 }
             }
         }
@@ -984,6 +1008,9 @@ namespace Handbrake
         //Picture Tab
         private void text_width_TextChanged(object sender, EventArgs e)
         {
+            if (text_width.Text == "")
+                text_width.BackColor = Color.White;
+
             maxWidth = 0; maxHeight = 0;  // Reset max width so that it's not using the MaxWidth -X. Quick hack to allow -X for preset usage.
 
             int width;
@@ -1009,6 +1036,9 @@ namespace Handbrake
         }
         private void text_height_TextChanged(object sender, EventArgs e)
         {
+            if (text_height.Text == "")
+                text_height.BackColor = Color.White;
+
             maxHeight = 0;  // Reset max height so that it's not using the MaxHeight -Y. Quick hack to allow -Y for preset usage.
 
             int height;
@@ -1143,7 +1173,7 @@ namespace Handbrake
                 setBitrateSelections384(drp_audbit_1);
             else if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text != "6 Channel Discrete"))
                 setBitrateSelections160(drp_audbit_1); drp_audbit_1.Text = "160";
-            
+
             // Update an item in the Audio list if required.
             if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
             {
@@ -1238,7 +1268,7 @@ namespace Handbrake
             }
 
         }
-        
+
         private void audioList_remove_Click(object sender, EventArgs e)
         {
             removeAudioTrack();
@@ -1294,7 +1324,7 @@ namespace Handbrake
             else
                 check_forced.Enabled = true;
         }
-        
+
         // Chapter Marker Tab
         private void Check_ChapterMarkers_CheckedChanged(object sender, EventArgs e)
         {
@@ -1649,16 +1679,16 @@ namespace Handbrake
             else
             {
                 // Just make sure not to re-enable the following boxes if the track above is none
-               /* if (drp_track2Audio.Text != "None")
-                {
-                    audMix.Enabled = true;
-                    audbit.Enabled = true;
-                    audsr.Enabled = true;
+                /* if (drp_track2Audio.Text != "None")
+                 {
+                     audMix.Enabled = true;
+                     audbit.Enabled = true;
+                     audsr.Enabled = true;
 
-                    audMix.Text = "Automatic";
-                    audbit.Text = "160";
-                    audsr.Text = "Auto";
-                }*/
+                     audMix.Text = "Automatic";
+                     audbit.Text = "160";
+                     audsr.Text = "Auto";
+                 }*/
             }
         }
         #endregion

@@ -110,12 +110,12 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string defaultUserSettings {
+        public string defaultPreset {
             get {
-                return ((string)(this["defaultUserSettings"]));
+                return ((string)(this["defaultPreset"]));
             }
             set {
-                this["defaultUserSettings"] = value;
+                this["defaultPreset"] = value;
             }
         }
         

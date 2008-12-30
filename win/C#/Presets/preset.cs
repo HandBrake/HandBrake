@@ -15,6 +15,7 @@ namespace Handbrake.Presets
         private string category = null;
         private string name;
         private string query;
+        private Boolean pictureSettings;
 
         /// <summary>
         /// Get or Set the preset's level. This indicated if it is a root or child node
@@ -50,6 +51,15 @@ namespace Handbrake.Presets
         {
             get { return query; }
             set { this.query = value; }
+        }
+
+        /// <summary>
+        /// Get or set the usage of Picture Settings in presets.
+        /// </summary>
+        public Boolean PictureSettings
+        {
+            get { return pictureSettings; }
+            set { this.pictureSettings = value; }
         }
 
     }
