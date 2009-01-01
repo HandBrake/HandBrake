@@ -2287,6 +2287,7 @@ export_xlat_preset(GValue *dict)
 		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
 						ghb_int_value_new(2));
 	}
+	ghb_dict_remove(dict, "UsesMaxPictureSettings");
 	ghb_dict_remove(dict, "autoscale");
 	ghb_dict_remove(dict, "anamorphic");
 	ghb_dict_remove(dict, "vquality_type_target");
