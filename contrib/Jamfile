@@ -87,7 +87,11 @@ rule LibAvCodec
     else if $(OS) = SOLARIS
     {
         FFMPEG_PATCH += " && $(PATCH) -p1 < ../patch-ffmpeg-solaris.patch " ;
-    } 
+    }
+    else if $(OS) = MACOSX
+    {
+        FFMPEG_PATCH += " && $(PATCH) -p1 < ../patch-ffmpeg-h264dsp-crash.diff " ;
+    }
 
     if $(OS) = SOLARIS
     {

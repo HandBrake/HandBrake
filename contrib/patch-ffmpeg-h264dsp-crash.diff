@@ -1,0 +1,13 @@
+Index: ffmpeg/libavcodec/i386/dsputil_mmx.c
+===================================================================
+--- ffmpeg/libavcodec/i386/dsputil_mmx.c	(revision 14508)
++++ ffmpeg/libavcodec/i386/dsputil_mmx.c	(working copy)
+@@ -2626,6 +2626,8 @@
+             H264_QPEL_FUNCS(3, 2, sse2);
+             H264_QPEL_FUNCS(3, 3, sse2);
+         }
++#undef  H264_QPEL_FUNCS
++#define H264_QPEL_FUNCS(x, y, CPU) 
+ #ifdef HAVE_SSSE3
+         if(mm_flags & MM_SSSE3){
+             H264_QPEL_FUNCS(1, 0, ssse3);
