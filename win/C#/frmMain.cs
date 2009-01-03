@@ -22,8 +22,9 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects
+        private delegate void UpdateWindowHandler();
         Functions.Main hb_common_func = new Functions.Main();
-        Functions.Encode cliObj = new Functions.Encode();
+        Functions.Encode encodeHandler = new Functions.Encode();
         Queue.Queue encodeQueue = new Queue.Queue();
         Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
         Parsing.Title selectedTitle;
@@ -201,7 +202,7 @@ namespace Handbrake
             else
                 file = "hb_encode_log.dat";
 
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, this, queueWindow);
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeHandler);
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -504,7 +505,7 @@ namespace Handbrake
                 {
                     queueWindow.frmMain_cancelEncode();
                     if (!queueWindow.isEncoding())
-                        setEncodeStatus(0);
+                        setEncodeFinished();
                 }
             }
             else
@@ -532,7 +533,7 @@ namespace Handbrake
 
                     queueWindow.frmMain_encode();
 
-                    setEncodeStatus(1); // Encode is running, so setup the GUI appropriately
+                    setEncodeStarted(); // Encode is running, so setup the GUI appropriately
                 }
                 else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                     MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -589,7 +590,7 @@ namespace Handbrake
             else
                 file = "hb_encode_log.dat";
 
-            frmActivityWindow ActivityWindow = new frmActivityWindow(file, this, queueWindow);
+            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeHandler);
             ActivityWindow.Show();
         }
         #endregion
@@ -1701,10 +1702,16 @@ namespace Handbrake
         /// 0 = Encode Finished.
         /// </summary>
         /// <param name="i">Int</param>
-        public void setEncodeStatus(int i)
+        public void setEncodeFinished()
         {
-            if (i == 0)
+            try
             {
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new UpdateWindowHandler(setEncodeFinished));
+                    return;
+                }
+
                 lbl_encode.Text = "Encoding Finished";
                 btn_start.Text = "Start";
                 btn_start.ToolTipText = "Start the encoding process";
@@ -1716,14 +1723,32 @@ namespace Handbrake
                     notifyIcon.BalloonTipText = lbl_encode.Text;
                     notifyIcon.ShowBalloonTip(500);
                 }
+
             }
-            else
+            catch (Exception exc)
             {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+        public void setEncodeStarted()
+        {
+            try
+            {
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new UpdateWindowHandler(setEncodeStarted));
+                    return;
+                }
+
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Encoding in Progress";
                 btn_start.Text = "Stop";
                 btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
                 btn_start.Image = Properties.Resources.stop;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
             }
         }
 

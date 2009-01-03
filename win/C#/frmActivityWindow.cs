@@ -26,14 +26,13 @@ namespace Handbrake
         delegate void SetTextCallback(string text);
         String read_file;
         Thread monitor;
-        frmMain mainWindow;
-        frmQueue queueWindow;
+        Functions.Encode encodeHandler;
         int position = 0;  // Position in the arraylist reached by the current log output in the rtf box.
 
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
-        public frmActivityWindow(string file, frmMain fm, frmQueue fq)
+        public frmActivityWindow(string file, Functions.Encode eh)
         {
             InitializeComponent();
             this.rtf_actLog.Text = string.Empty;
@@ -41,8 +40,7 @@ namespace Handbrake
             // When the window closes, we want to abort the monitor thread.
             this.Disposed += new EventHandler(forceQuit);
 
-            mainWindow = fm;
-            queueWindow = fq;
+            encodeHandler = eh;
             read_file = file;
             position = 0;
 
@@ -162,7 +160,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if (queueWindow.isEncoding() == true)
+                    if (encodeHandler.isEncoding == true)
                         updateTextFromThread();
                     else
                     {

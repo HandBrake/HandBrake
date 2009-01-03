@@ -25,6 +25,7 @@ namespace Handbrake.Functions
 
         // Declarations
         Process hbProc = new Process();
+        Boolean encoding = false;
 
         // CLI output is based on en-US locale,
         static readonly private CultureInfo Culture = new CultureInfo("en-US", false);
@@ -47,6 +48,7 @@ namespace Handbrake.Functions
                 if (Properties.Settings.Default.cli_minimized == "Checked")
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
                 hbProc = Process.Start(cliStart);
+                encoding = true;
 
                 // Set the process Priority 
                 switch (Properties.Settings.Default.processPriority)
@@ -83,6 +85,7 @@ namespace Handbrake.Functions
         /// </summary>
         public void afterEncodeAction()
         {
+            encoding = false;
             // Do something whent he encode ends.
             switch (Properties.Settings.Default.CompletionOption)
             {
@@ -166,6 +169,14 @@ namespace Handbrake.Functions
                     File.Copy(logPath, useDefinedLogPath);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns whether HandBrake is currently encoding or not.
+        /// </summary>
+        public Boolean isEncoding
+        {
+            get { if (encoding == false) return false; else return true; }
         }
 
     }

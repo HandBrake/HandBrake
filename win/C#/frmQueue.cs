@@ -153,7 +153,7 @@ namespace Handbrake
                     paused = false;
                     btn_encode.Enabled = false;
                     mainWindow.setLastAction("encode");
-                    mainWindow.setEncodeStatus(1);
+                    mainWindow.setEncodeStarted();
 
                     // Start the encode
                     try
@@ -207,8 +207,7 @@ namespace Handbrake
                 }
 
                 resetQueue();
-                mainWindow.setEncodeStatus(0); // Tell the main window encodes have finished.
-
+                
                 // After the encode is done, we may want to shutdown, suspend etc.
                 cliObj.afterEncodeAction();
             }
@@ -227,7 +226,6 @@ namespace Handbrake
                 {
                     this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
                     return;
-
                 }
                 btn_stop.Visible = false;
                 btn_encode.Enabled = true;
@@ -240,6 +238,8 @@ namespace Handbrake
                 lbl_chapt.Text = "-";
 
                 lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
+
+                mainWindow.setEncodeFinished(); // Tell the main window encodes have finished.
             }
             catch (Exception exc)
             {
