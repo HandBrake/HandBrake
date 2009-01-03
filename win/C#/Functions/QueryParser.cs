@@ -9,11 +9,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Globalization;
 
 namespace Handbrake.Functions
 {
     class QueryParser
     {
+        static readonly private CultureInfo Culture = new CultureInfo("en-US", false);
 
         // All the Main Window GUI options
         #region Varibles
@@ -1022,7 +1024,7 @@ namespace Handbrake.Functions
                 double qConvert = 0;
                 if (videoQuality.Success != false)
                 {
-                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Functions.Encode.Culture) * 100;
+                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Culture) * 100;
                     qConvert = System.Math.Ceiling(qConvert);
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }

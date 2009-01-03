@@ -25,7 +25,7 @@ namespace Handbrake
         private delegate void UpdateWindowHandler();
         Functions.Main hb_common_func = new Functions.Main();
         Functions.Encode encodeHandler = new Functions.Encode();
-        Queue.Queue encodeQueue = new Queue.Queue();
+        Queue.QueueHandler encodeQueue = new Queue.QueueHandler();
         Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
         Parsing.Title selectedTitle;
         Parsing.DVD thisDVD;
@@ -503,7 +503,13 @@ namespace Handbrake
 
                 if (result == DialogResult.Yes)
                 {
-                    queueWindow.frmMain_cancelEncode();
+                    Process[] aProc = Process.GetProcessesByName("HandBrakeCLI");
+                    Process HandBrakeCLI;
+                    if (aProc.Length > 0)
+                    {
+                        HandBrakeCLI = aProc[0];
+                        HandBrakeCLI.Kill();
+                    }
                     if (!queueWindow.isEncoding())
                         setEncodeFinished();
                 }

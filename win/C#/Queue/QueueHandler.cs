@@ -5,10 +5,12 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Threading;
+using System.Diagnostics;
 
 namespace Handbrake.Queue
 {
-    public class Queue
+    public class QueueHandler
     {
         private static XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
         List<QueueItem> queue = new List<QueueItem>();
@@ -37,7 +39,7 @@ namespace Handbrake.Queue
         /// Get the last query that was returned by getNextItemForEncoding()
         /// </summary>
         /// <returns></returns>
-        public QueueItem getLastQuery()
+        public QueueItem getLastQueryItem()
         {
             return lastItem;
         }
@@ -201,5 +203,5 @@ namespace Handbrake.Queue
                 }
             }
         }
-    }
+   }
 }

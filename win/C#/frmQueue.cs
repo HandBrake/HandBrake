@@ -26,7 +26,7 @@ namespace Handbrake
         Functions.Encode cliObj = new Functions.Encode();
         Boolean paused = false;
         Process hbProc = null;
-        Queue.Queue queue;
+        Queue.QueueHandler queue;
         frmMain mainWindow = null;
         Thread theQ;
 
@@ -40,7 +40,7 @@ namespace Handbrake
         /// Initializes the Queue list with the Arraylist from the Queue class
         /// </summary>
         /// <param name="qw"></param>
-        public void setQueue(Queue.Queue qw)
+        public void setQueue(Queue.QueueHandler qw)
         {
             queue = qw;
             redrawQueue();
@@ -60,24 +60,96 @@ namespace Handbrake
         }
 
         /// <summary>
-        /// This disables encoding from the queue when a single encode from the main window is running.
+        /// Allows frmMain to start an encode.
+        /// Should probably find a cleaner way of doing this.
         /// </summary>
         public void frmMain_encode()
         {
-            paused = false;
-            // Start the encode
-            try
+            btn_encode_Click(this, null);
+        }
+
+        // Start and Stop Controls
+        private void btn_encode_Click(object sender, EventArgs e)
+        {
+            if (queue.count() != 0)
             {
-                if (queue.count() != 0)
+                if (paused == true)
                 {
-                    // Setup or reset some values
+                    paused = false;
                     btn_encode.Enabled = false;
                     btn_stop.Visible = true;
-
-                    Thread theQ = new Thread(startProc);
-                    theQ.IsBackground = true;
-                    theQ.Start();
                 }
+                else
+                {
+                    paused = false;
+                    btn_encode.Enabled = false;
+                    mainWindow.setLastAction("encode");
+                    mainWindow.setEncodeStarted();
+
+                    // Start the encode
+                    try
+                    {
+                        // Setup or reset some values
+                        btn_encode.Enabled = false;
+                        btn_stop.Visible = true;
+
+                        theQ = new Thread(startProc);
+                        theQ.IsBackground = true;
+                        theQ.Start();
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show(exc.ToString());
+                    }
+                }
+            }
+        }
+        private void btn_stop_Click(object sender, EventArgs e)
+        {
+            paused = true;
+            btn_stop.Visible = false;
+            btn_encode.Enabled = true;
+            mainWindow.setEncodeFinished();
+            resetQueue();
+            MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        // Starts the encoding process
+        private void startProc(object state)
+        {
+            try
+            {
+                // Run through each item on the queue
+                while (queue.count() != 0)
+                {
+                    string query = queue.getNextItemForEncoding();
+                    queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
+
+                    setCurrentEncodeInformation();
+                    if (this.Created)
+                        updateUIElements();
+
+                    hbProc = cliObj.runCli(this, query);
+
+                    hbProc.WaitForExit();
+                    cliObj.addCLIQueryToLog(query);
+                    cliObj.copyLog(query, queue.getLastQueryItem().Destination);
+
+                    hbProc.Close();
+                    hbProc.Dispose();
+                    hbProc = null;
+                    query = "";
+
+                    while (paused == true) // Need to find a better way of doing this.
+                    {
+                        Thread.Sleep(10000);
+                    }
+                }
+
+                resetQueue();
+                
+                // After the encode is done, we may want to shutdown, suspend etc.
+                cliObj.afterEncodeAction();
             }
             catch (Exception exc)
             {
@@ -85,19 +157,36 @@ namespace Handbrake
             }
         }
 
-        public void frmMain_cancelEncode()
+        // Window Display Management
+        private void resetQueue() 
         {
-            Process[] aProc = Process.GetProcessesByName("HandBrakeCLI");
-            Process HandBrakeCLI;
-            if (aProc.Length > 0)
+            try
             {
-                HandBrakeCLI = aProc[0];
-                HandBrakeCLI.Kill();
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
+                    return;
+                }
+                btn_stop.Visible = false;
+                btn_encode.Enabled = true;
+
+                lbl_source.Text = "-";
+                lbl_dest.Text = "-";
+                lbl_vEnc.Text = "-";
+                lbl_aEnc.Text = "-";
+                lbl_title.Text = "-";
+                lbl_chapt.Text = "-";
+
+                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
+
+                mainWindow.setEncodeFinished(); // Tell the main window encodes have finished.
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
             }
         }
-
-        // Redraw's the queue with the latest data from the Queue class
-        private void redrawQueue()
+        private void redrawQueue()  
         {
             list_queue.Items.Clear();
             List<Queue.QueueItem> theQueue = queue.getQueue();
@@ -135,129 +224,7 @@ namespace Handbrake
                 list_queue.Items.Add(item);
             }
         }
-
-        // Initializes the encode process
-        private void btn_encode_Click(object sender, EventArgs e)
-        {
-            if (queue.count() != 0)
-            {
-                if (paused == true)
-                {
-                    paused = false;
-                    btn_encode.Enabled = false;
-                    btn_stop.Visible = true;
-                    MessageBox.Show("Encoding will now continue!","Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    paused = false;
-                    btn_encode.Enabled = false;
-                    mainWindow.setLastAction("encode");
-                    mainWindow.setEncodeStarted();
-
-                    // Start the encode
-                    try
-                    {
-                        // Setup or reset some values
-                        btn_encode.Enabled = false;
-                        btn_stop.Visible = true;
-
-                        theQ = new Thread(startProc);
-                        theQ.IsBackground = true;
-                        theQ.Start();
-                    }
-                    catch (Exception exc)
-                    {
-                        MessageBox.Show(exc.ToString());
-                    }
-                }
-            }
-        }
-
-        // Starts the encoding process
-        private void startProc(object state)
-        {
-            try
-            {
-                // Run through each item on the queue
-                while (queue.count() != 0)
-                {
-                    string query = queue.getNextItemForEncoding();
-                    queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-
-                    setEncValue();
-                    if (this.Created)
-                        updateUIElements();
-
-                    hbProc = cliObj.runCli(this, query);
-
-                    hbProc.WaitForExit();
-                    cliObj.addCLIQueryToLog(query);
-                    cliObj.copyLog(query, queue.getLastQuery().Destination);
-
-                    hbProc.Close();
-                    hbProc.Dispose();
-                    hbProc = null;
-                    query = "";
-
-                    while (paused == true) // Need to find a better way of doing this.
-                    {
-                        Thread.Sleep(10000);
-                    }
-                }
-
-                resetQueue();
-                
-                // After the encode is done, we may want to shutdown, suspend etc.
-                cliObj.afterEncodeAction();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
-        }
-
-        // Reset's the window to the default state.
-        private void resetQueue()
-        {
-            try
-            {
-                if (this.InvokeRequired)
-                {
-                    this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
-                    return;
-                }
-                btn_stop.Visible = false;
-                btn_encode.Enabled = true;
-
-                lbl_source.Text = "-";
-                lbl_dest.Text = "-";
-                lbl_vEnc.Text = "-";
-                lbl_aEnc.Text = "-";
-                lbl_title.Text = "-";
-                lbl_chapt.Text = "-";
-
-                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
-
-                mainWindow.setEncodeFinished(); // Tell the main window encodes have finished.
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
-        }
-
-        // Stop's the queue from continuing. 
-        private void btn_stop_Click(object sender, EventArgs e)
-        {
-            paused = true;
-            btn_stop.Visible = false;
-            btn_encode.Enabled = true;
-            MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-        }
-
-        // Updates the progress bar and progress label for a new status.
-        private void updateUIElements()
+        private void updateUIElements() 
         {
             try
             {
@@ -275,21 +242,19 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
             }
         }
-
-        // Set's the information lables about the current encode.
-        private void setEncValue()
+        private void setCurrentEncodeInformation() 
         {
             try
             {
                 if (this.InvokeRequired)
                 {
-                    this.BeginInvoke(new setEncoding(setEncValue));
+                    this.BeginInvoke(new setEncoding(setCurrentEncodeInformation));
                 }
 
                 // found query is a global varible
-                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.getLastQuery().Query);
-                lbl_source.Text = queue.getLastQuery().Source;
-                lbl_dest.Text = queue.getLastQuery().Destination;
+                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.getLastQueryItem().Query);
+                lbl_source.Text = queue.getLastQueryItem().Source;
+                lbl_dest.Text = queue.getLastQueryItem().Destination;
 
 
                 if (parsed.DVDTitle == 0)
