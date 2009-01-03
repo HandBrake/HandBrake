@@ -17,13 +17,17 @@ namespace Handbrake.Functions
 {
     public class Encode
     {
-        /// <summary>
-        /// CLI output is based on en-US locale,
-        /// we use this CultureInfo as IFormatProvider to *.Parse() calls
-        /// </summary>
-        static readonly public CultureInfo Culture = new CultureInfo("en-US", false);
+        // DLL Imports
+        [DllImport("user32.dll")]
+        public static extern void LockWorkStation();
+        [DllImport("user32.dll")]
+        public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
+        // Declarations
         Process hbProc = new Process();
+
+        // CLI output is based on en-US locale,
+        static readonly private CultureInfo Culture = new CultureInfo("en-US", false);
 
         /// <summary>
         /// Execute a HandBrakeCLI process.
@@ -73,12 +77,10 @@ namespace Handbrake.Functions
             }
             return hbProc;
         }
-
-        [DllImport("user32.dll")]
-        public static extern void LockWorkStation();
-        [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason);
-
+        
+        /// <summary>
+        /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
+        /// </summary>
         public void afterEncodeAction()
         {
             // Do something whent he encode ends.
@@ -165,5 +167,6 @@ namespace Handbrake.Functions
                 }
             }
         }
+
     }
 }
