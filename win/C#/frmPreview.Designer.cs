@@ -1,6 +1,6 @@
 ﻿namespace Handbrake
 {
-    partial class frmPreviewAX
+    partial class frmPreview
     {
         /// <summary>
         /// Required designer variable.
@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreviewAX));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreview));
             this.toolBar = new System.Windows.Forms.ToolStrip();
             this.lbl_preview = new System.Windows.Forms.ToolStripLabel();
             this.cb_preview = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.cb_duration = new System.Windows.Forms.ToolStripComboBox();
             this.btn_encode = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btn_play = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.QTControl = new AxQTOControlLib.AxQTControl();
+            this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolBar.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QTControl)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,9 +51,7 @@
             this.cb_preview,
             this.toolStripLabel2,
             this.cb_duration,
-            this.btn_encode,
-            this.toolStripSeparator1,
-            this.btn_play});
+            this.btn_encode});
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
             this.toolBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -122,27 +120,14 @@
             this.btn_encode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_encode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_encode.Name = "btn_encode";
-            this.btn_encode.Size = new System.Drawing.Size(115, 36);
-            this.btn_encode.Text = "Encode Sample";
+            this.btn_encode.Size = new System.Drawing.Size(159, 36);
+            this.btn_encode.Text = "Encode and Play Sample";
             this.btn_encode.Click += new System.EventHandler(this.btn_encode_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
-            // 
-            // btn_play
-            // 
-            this.btn_play.Image = global::Handbrake.Properties.Resources.Play;
-            this.btn_play.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_play.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_play.Name = "btn_play";
-            this.btn_play.Size = new System.Drawing.Size(63, 36);
-            this.btn_play.Text = "Play";
-            this.btn_play.Click += new System.EventHandler(this.btn_play_Click);
             // 
             // statusStrip
             // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lbl_encode});
             this.statusStrip.Location = new System.Drawing.Point(0, 486);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(774, 22);
@@ -155,11 +140,19 @@
             this.QTControl.Location = new System.Drawing.Point(0, 42);
             this.QTControl.Name = "QTControl";
             this.QTControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("QTControl.OcxState")));
-            this.QTControl.Size = new System.Drawing.Size(1920, 1080);
+            this.QTControl.Size = new System.Drawing.Size(64, 64);
             this.QTControl.TabIndex = 39;
             this.QTControl.Visible = false;
             // 
-            // frmPreviewAX
+            // lbl_encode
+            // 
+            this.lbl_encode.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_encode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_encode.Name = "lbl_encode";
+            this.lbl_encode.Size = new System.Drawing.Size(31, 17);
+            this.lbl_encode.Text = "{0}";
+            // 
+            // frmPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -169,12 +162,14 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolBar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "frmPreviewAX";
+            this.Name = "frmPreview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Video Preview";
             this.TopMost = true;
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QTControl)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -185,13 +180,12 @@
 
         private System.Windows.Forms.ToolStrip toolBar;
         private System.Windows.Forms.ToolStripButton btn_encode;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton btn_play;
         private System.Windows.Forms.StatusStrip statusStrip;
         private AxQTOControlLib.AxQTControl QTControl;
         private System.Windows.Forms.ToolStripComboBox cb_preview;
         private System.Windows.Forms.ToolStripLabel lbl_preview;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripComboBox cb_duration;
+        private System.Windows.Forms.ToolStripStatusLabel lbl_encode;
     }
 }
