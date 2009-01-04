@@ -30,40 +30,91 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPreviewAX));
             this.toolBar = new System.Windows.Forms.ToolStrip();
+            this.lbl_preview = new System.Windows.Forms.ToolStripLabel();
+            this.cb_preview = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.cb_duration = new System.Windows.Forms.ToolStripComboBox();
             this.btn_encode = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_play = new System.Windows.Forms.ToolStripButton();
-            this.btn_stop = new System.Windows.Forms.ToolStripButton();
-            this.btn_step_fwd = new System.Windows.Forms.ToolStripButton();
-            this.btn_step_back = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btn_reset = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.txt_position = new System.Windows.Forms.ToolStripStatusLabel();
-            this.vlc_player = new AxAXVLC.AxVLCPlugin2();
+            this.QTControl = new AxQTOControlLib.AxQTControl();
             this.toolBar.SuspendLayout();
-            this.statusStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.vlc_player)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.QTControl)).BeginInit();
             this.SuspendLayout();
             // 
             // toolBar
             // 
             this.toolBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lbl_preview,
+            this.cb_preview,
+            this.toolStripLabel2,
+            this.cb_duration,
             this.btn_encode,
             this.toolStripSeparator1,
-            this.btn_play,
-            this.btn_stop,
-            this.btn_step_fwd,
-            this.btn_step_back,
-            this.toolStripSeparator2,
-            this.btn_reset});
+            this.btn_play});
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
             this.toolBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolBar.Size = new System.Drawing.Size(750, 39);
+            this.toolBar.Size = new System.Drawing.Size(774, 39);
             this.toolBar.TabIndex = 37;
             this.toolBar.Text = "toolStrip1";
+            // 
+            // lbl_preview
+            // 
+            this.lbl_preview.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_preview.Name = "lbl_preview";
+            this.lbl_preview.Size = new System.Drawing.Size(89, 36);
+            this.lbl_preview.Text = "Start at Preview:";
+            // 
+            // cb_preview
+            // 
+            this.cb_preview.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_preview.DropDownWidth = 75;
+            this.cb_preview.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.cb_preview.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10"});
+            this.cb_preview.Name = "cb_preview";
+            this.cb_preview.Size = new System.Drawing.Size(75, 39);
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.BackColor = System.Drawing.Color.Transparent;
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(98, 36);
+            this.toolStripLabel2.Text = "Duration (seconds)";
+            // 
+            // cb_duration
+            // 
+            this.cb_duration.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_duration.DropDownWidth = 75;
+            this.cb_duration.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.cb_duration.Items.AddRange(new object[] {
+            "5",
+            "10",
+            "15",
+            "20",
+            "25",
+            "30",
+            "35",
+            "40",
+            "45",
+            "50",
+            "55",
+            "60"});
+            this.cb_duration.Margin = new System.Windows.Forms.Padding(0);
+            this.cb_duration.Name = "cb_duration";
+            this.cb_duration.Size = new System.Drawing.Size(75, 39);
             // 
             // btn_encode
             // 
@@ -71,7 +122,7 @@
             this.btn_encode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_encode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_encode.Name = "btn_encode";
-            this.btn_encode.Size = new System.Drawing.Size(127, 36);
+            this.btn_encode.Size = new System.Drawing.Size(115, 36);
             this.btn_encode.Text = "Encode Sample";
             this.btn_encode.Click += new System.EventHandler(this.btn_encode_Click);
             // 
@@ -86,85 +137,35 @@
             this.btn_play.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_play.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_play.Name = "btn_play";
-            this.btn_play.Size = new System.Drawing.Size(64, 36);
+            this.btn_play.Size = new System.Drawing.Size(63, 36);
             this.btn_play.Text = "Play";
             this.btn_play.Click += new System.EventHandler(this.btn_play_Click);
             // 
-            // btn_stop
-            // 
-            this.btn_stop.Image = global::Handbrake.Properties.Resources.stop;
-            this.btn_stop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_stop.ImageTransparentColor = System.Drawing.Color.MediumAquamarine;
-            this.btn_stop.Name = "btn_stop";
-            this.btn_stop.Size = new System.Drawing.Size(69, 36);
-            this.btn_stop.Text = "Stop";
-            this.btn_stop.Click += new System.EventHandler(this.btn_stop_Click);
-            // 
-            // btn_step_fwd
-            // 
-            this.btn_step_fwd.Image = ((System.Drawing.Image)(resources.GetObject("btn_step_fwd.Image")));
-            this.btn_step_fwd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_step_fwd.Name = "btn_step_fwd";
-            this.btn_step_fwd.Size = new System.Drawing.Size(64, 36);
-            this.btn_step_fwd.Text = "Slower";
-            // 
-            // btn_step_back
-            // 
-            this.btn_step_back.Image = ((System.Drawing.Image)(resources.GetObject("btn_step_back.Image")));
-            this.btn_step_back.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_step_back.Name = "btn_step_back";
-            this.btn_step_back.Size = new System.Drawing.Size(60, 36);
-            this.btn_step_back.Text = "Faster";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
-            // 
-            // btn_reset
-            // 
-            this.btn_reset.Image = global::Handbrake.Properties.Resources.window;
-            this.btn_reset.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_reset.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_reset.Name = "btn_reset";
-            this.btn_reset.Size = new System.Drawing.Size(148, 36);
-            this.btn_reset.Text = "Reset Window Size";
-            this.btn_reset.Click += new System.EventHandler(this.btn_reset_Click);
-            // 
             // statusStrip
             // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.txt_position});
-            this.statusStrip.Location = new System.Drawing.Point(0, 438);
+            this.statusStrip.Location = new System.Drawing.Point(0, 486);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(750, 23);
+            this.statusStrip.Size = new System.Drawing.Size(774, 22);
             this.statusStrip.TabIndex = 38;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // txt_position
+            // QTControl
             // 
-            this.txt_position.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_position.Name = "txt_position";
-            this.txt_position.Size = new System.Drawing.Size(704, 18);
-            this.txt_position.Spring = true;
-            this.txt_position.Text = "DANGER! MAY CAUSE BLUESCREEN OF DEATH!!, SEE CODE FOR COMMENTS";
-            // 
-            // vlc_player
-            // 
-            this.vlc_player.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.vlc_player.Enabled = true;
-            this.vlc_player.Location = new System.Drawing.Point(0, 39);
-            this.vlc_player.Name = "vlc_player";
-            this.vlc_player.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("vlc_player.OcxState")));
-            this.vlc_player.Size = new System.Drawing.Size(750, 399);
-            this.vlc_player.TabIndex = 39;
+            this.QTControl.Enabled = true;
+            this.QTControl.Location = new System.Drawing.Point(0, 42);
+            this.QTControl.Name = "QTControl";
+            this.QTControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("QTControl.OcxState")));
+            this.QTControl.Size = new System.Drawing.Size(1920, 1080);
+            this.QTControl.TabIndex = 39;
+            this.QTControl.Visible = false;
             // 
             // frmPreviewAX
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 461);
-            this.Controls.Add(this.vlc_player);
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(774, 508);
+            this.Controls.Add(this.QTControl);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolBar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -174,9 +175,7 @@
             this.TopMost = true;
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.vlc_player)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.QTControl)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -188,13 +187,11 @@
         private System.Windows.Forms.ToolStripButton btn_encode;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton btn_play;
-        private System.Windows.Forms.ToolStripButton btn_step_fwd;
-        private System.Windows.Forms.ToolStripButton btn_step_back;
-        private System.Windows.Forms.ToolStripButton btn_stop;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripStatusLabel txt_position;
-        private System.Windows.Forms.ToolStripButton btn_reset;
-        private AxAXVLC.AxVLCPlugin2 vlc_player;
+        private AxQTOControlLib.AxQTControl QTControl;
+        private System.Windows.Forms.ToolStripComboBox cb_preview;
+        private System.Windows.Forms.ToolStripLabel lbl_preview;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStripComboBox cb_duration;
     }
 }
