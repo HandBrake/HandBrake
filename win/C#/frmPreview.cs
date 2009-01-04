@@ -23,6 +23,7 @@ namespace Handbrake
         String currently_playing = "";
         frmMain mainWindow;
         private Process hbProc;
+        private Thread player;
 
         public frmPreview(frmMain mw)
         {
@@ -32,17 +33,30 @@ namespace Handbrake
             cb_duration.SelectedIndex = 1;
         }
 
-        private void OpenMovie(string url)
+        private void play()
+        {
+            player = new Thread(OpenMovie);
+            player.IsBackground = true;
+            player.Start();
+        }
+
+        [STAThread]
+        private void OpenMovie()
         {
             try
             {
-                QTControl.URL = url;
+                if (this.InvokeRequired)
+                {
+                    this.BeginInvoke(new UpdateUIHandler(OpenMovie));
+                    return;
+                }
+                QTControl.URL = currently_playing;
                 QTControl.Width = QTControl.Movie.Width;
                 QTControl.Height = QTControl.Movie.Height;
                 // The initial control size is 64,64. If we do not reload the clip here
                 // it'll scale the video from 64,64. 
                 // Unsure why as it correctly resizes the control to the movies actual size.
-                QTControl.URL = url; 
+                QTControl.URL = currently_playing; 
                 QTControl.SetScale(0);
                 QTControl.Show();
 
@@ -59,7 +73,7 @@ namespace Handbrake
                 MessageBox.Show("Unable to open movie:\n\n" + ex.ToString());
             }
         }
-
+ 
         #region Encode Sample
         private void btn_encode_Click(object sender, EventArgs e)
         {
@@ -96,7 +110,7 @@ namespace Handbrake
                 if (mainWindow.text_destination.Text != "")
                     currently_playing = mainWindow.text_destination.Text.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm");
 
-                OpenMovie(currently_playing);
+                play();
                 lbl_encode.Text = "";
             }
             catch (Exception exc)

@@ -37,7 +37,8 @@ namespace Handbrake
 
         // Globals: Mainly used for tracking.
         private frmQueue queueWindow;
-        private frmGenPreview preview;
+        private frmGenPreview vlcpreview;
+        private frmPreview qtpreview;
         private string lastAction = null;
         public int maxWidth = 0;
         public int maxHeight = 0;
@@ -568,21 +569,41 @@ namespace Handbrake
             queueWindow.setQueue(encodeQueue);
             queueWindow.Show();
         }
-        private void btn_vidPreview_Click(object sender, EventArgs e)
+        private void mnu_vlcpreview_Click(object sender, EventArgs e)
         {
             if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                if (preview == null)
+                if (vlcpreview == null)
                 {
-                    preview = new frmGenPreview(this);
-                    preview.Show();
+                    vlcpreview = new frmGenPreview(this);
+                    vlcpreview.Show();
                 }
-                else if (preview.IsDisposed)
+                else if (vlcpreview.IsDisposed)
                 {
-                    preview = new frmGenPreview(this);
-                    preview.Show();
+                    vlcpreview = new frmGenPreview(this);
+                    vlcpreview.Show();
+                }
+                else
+                    MessageBox.Show("The preview window is already open!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+        private void mnu_qtpreview_Click(object sender, EventArgs e)
+        {
+            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
+                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            else
+            {
+                if (qtpreview == null)
+                {
+                    qtpreview = new frmPreview(this);
+                    qtpreview.Show();
+                }
+                else if (qtpreview.IsDisposed)
+                {
+                    qtpreview = new frmPreview(this);
+                    qtpreview.Show();
                 }
                 else
                     MessageBox.Show("The preview window is already open!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
