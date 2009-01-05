@@ -208,7 +208,7 @@ namespace Handbrake
         }
         private void mnu_options_Click(object sender, EventArgs e)
         {
-            Form Options = new frmOptions(this);
+            Form Options = new frmOptions();
             Options.ShowDialog();
         }
         #endregion

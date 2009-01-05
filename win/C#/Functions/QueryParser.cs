@@ -779,7 +779,6 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="input">A ClI Query</param>
         /// <returns>A Parsed Query</returns>
- 
         public static QueryParser Parse(String input)
         {
             QueryParser thisQuery = new QueryParser();

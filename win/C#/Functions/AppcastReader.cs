@@ -58,7 +58,6 @@ namespace Handbrake.Functions
                 unstable_file = nodeItem["windows"].InnerText;
             }
 
-
             // Set the global version information
             if (stable_build >= unstable_build)
             {

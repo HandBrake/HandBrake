@@ -554,7 +554,6 @@ namespace Handbrake
                             else
                                 thisOpt = "";
                         }
-
                     }
                 }
 
@@ -760,7 +759,6 @@ namespace Handbrake
                 mainWindow.check_weightedBFrames.Visible = true;
                 mainWindow.drop_directPrediction.Visible = true;
                 mainWindow.lbl_direct_prediction.Visible = true;
-                
             }
             else
             {
@@ -800,9 +798,7 @@ namespace Handbrake
                     mainWindow.check_mixedReferences.CheckState = CheckState.Unchecked;
             }
             else
-            {
                 mainWindow.check_mixedReferences.Visible = true;
-            }
         }
 
     }

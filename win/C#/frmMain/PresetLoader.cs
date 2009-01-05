@@ -99,7 +99,6 @@ namespace Handbrake
                     mainWindow.text_bottom.Value = bottom;
                     mainWindow.text_left.Value = left;
                     mainWindow.text_right.Value = right;
-                    
                 }
 
                 if (presetQuery.Width != 0)

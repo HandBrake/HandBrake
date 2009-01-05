@@ -16,14 +16,12 @@ namespace Handbrake
 {
     public partial class frmOptions : Form
     {
-        private frmMain mainWindow;
         /// <summary>
         /// When the form loads, Initialise all the setting components with their correct values
         /// </summary>
-        public frmOptions(frmMain window)
+        public frmOptions()
         {
             InitializeComponent();
-            mainWindow = window;
 
             // #############################
             // General
@@ -136,16 +134,6 @@ namespace Handbrake
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.tooltipEnable = check_tooltip.CheckState.ToString();
-            if (check_tooltip.Checked)
-            {
-                ToolTip.Active = true;
-                mainWindow.ToolTip.Active = true;
-            }
-            else
-            {
-                ToolTip.Active = false;
-                mainWindow.ToolTip.Active = false;
-            }
         }
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {

@@ -286,7 +286,7 @@ namespace Handbrake
             this.check_tooltip.Size = new System.Drawing.Size(135, 17);
             this.check_tooltip.TabIndex = 70;
             this.check_tooltip.Text = "Enable GUI tooltips";
-            this.ToolTip.SetToolTip(this.check_tooltip, "Enable the built in tooltips for gui controls.");
+            this.ToolTip.SetToolTip(this.check_tooltip, "Enable the built in tooltips for gui controls. (Requires Restart)");
             this.check_tooltip.UseVisualStyleBackColor = false;
             this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
             // 
