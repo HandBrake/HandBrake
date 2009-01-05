@@ -21,173 +21,113 @@ namespace Handbrake
 {
     public partial class frmQueue : Form
     {
-        private delegate void ProgressUpdateHandler();
-        private delegate void setEncoding();
-        Functions.Encode cliObj = new Functions.Encode();
-        Boolean paused = false;
-        Process hbProc = null;
+        private delegate void UpdateHandler();
         Queue.QueueHandler queue;
-        frmMain mainWindow = null;
-        Thread theQ;
 
-        public frmQueue(frmMain main)
+        public frmQueue(Queue.QueueHandler q)
         {
             InitializeComponent();
-            mainWindow = main;
+
+            this.queue = q;
+            queue.OnEncodeStart += new EventHandler(queue_OnEncodeStart);
+            queue.OnQueueFinished += new EventHandler(queue_OnQueueFinished);
+            queue.OnPaused += new EventHandler(queue_OnPaused);
+        }
+        void queue_OnPaused(object sender, EventArgs e)
+        {
+            setUIEncodeFinished();
+            updateUIElements();
+        }
+        void queue_OnQueueFinished(object sender, EventArgs e)
+        {
+            setUIEncodeFinished();
+            resetQueue(); // Reset the Queue Window
+        }
+        void queue_OnEncodeStart(object sender, EventArgs e)
+        {
+            setUIEncodeStarted(); // make sure the UI is set correctly
+            setCurrentEncodeInformation();
+            updateUIElements(); // Redraw the Queue, a new encode has started.
         }
 
         /// <summary>
         /// Initializes the Queue list with the Arraylist from the Queue class
         /// </summary>
         /// <param name="qw"></param>
-        public void setQueue(Queue.QueueHandler qw)
+        public void setQueue()
         {
-            queue = qw;
-            redrawQueue();
-            lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
-        }
-
-        /// <summary>
-        /// Returns if there is currently an item being encoded by the queue
-        /// </summary>
-        /// <returns>Boolean true if encoding</returns>
-        public Boolean isEncoding()
-        {
-            if (hbProc == null)
-                return false;
-            else
-                return true;
-        }
-
-        /// <summary>
-        /// Allows frmMain to start an encode.
-        /// Should probably find a cleaner way of doing this.
-        /// </summary>
-        public void frmMain_encode()
-        {
-            btn_encode_Click(this, null);
+            updateUIElements();
         }
 
         // Start and Stop Controls
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            if (queue.count() != 0)
+            if (queue.isPaused == true)
             {
-                if (paused == true)
-                {
-                    paused = false;
-                    btn_encode.Enabled = false;
-                    btn_stop.Visible = true;
-                }
-                else
-                {
-                    paused = false;
-                    btn_encode.Enabled = false;
-                    mainWindow.setLastAction("encode");
-                    mainWindow.setEncodeStarted();
-
-                    // Start the encode
-                    try
-                    {
-                        // Setup or reset some values
-                        btn_encode.Enabled = false;
-                        btn_stop.Visible = true;
-
-                        theQ = new Thread(startProc);
-                        theQ.IsBackground = true;
-                        theQ.Start();
-                    }
-                    catch (Exception exc)
-                    {
-                        MessageBox.Show(exc.ToString());
-                    }
-                }
+                setUIEncodeStarted();
+                MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+            if (!queue.isEncodeStarted)
+                queue.startEncode();
+
         }
-        private void btn_stop_Click(object sender, EventArgs e)
+        private void btn_pause_Click(object sender, EventArgs e)
         {
-            paused = true;
-            btn_stop.Visible = false;
-            btn_encode.Enabled = true;
-            mainWindow.setEncodeFinished();
+            queue.pauseEncode();
+            setUIEncodeFinished();
             resetQueue();
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode Video' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        // Starts the encoding process
-        private void startProc(object state)
-        {
-            try
-            {
-                // Run through each item on the queue
-                while (queue.count() != 0)
-                {
-                    string query = queue.getNextItemForEncoding();
-                    queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-
-                    setCurrentEncodeInformation();
-                    if (this.Created)
-                        updateUIElements();
-
-                    hbProc = cliObj.runCli(this, query);
-
-                    hbProc.WaitForExit();
-                    cliObj.addCLIQueryToLog(query);
-                    cliObj.copyLog(query, queue.getLastQueryItem().Destination);
-
-                    hbProc.Close();
-                    hbProc.Dispose();
-                    hbProc = null;
-                    query = "";
-
-                    while (paused == true) // Need to find a better way of doing this.
-                    {
-                        Thread.Sleep(10000);
-                    }
-                }
-
-                resetQueue();
-                
-                // After the encode is done, we may want to shutdown, suspend etc.
-                cliObj.afterEncodeAction();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
-        }
-
         // Window Display Management
-        private void resetQueue() 
+        private void setUIEncodeStarted()
         {
-            try
+            if (this.InvokeRequired)
             {
-                if (this.InvokeRequired)
-                {
-                    this.BeginInvoke(new ProgressUpdateHandler(resetQueue));
-                    return;
-                }
-                btn_stop.Visible = false;
-                btn_encode.Enabled = true;
-
-                lbl_source.Text = "-";
-                lbl_dest.Text = "-";
-                lbl_vEnc.Text = "-";
-                lbl_aEnc.Text = "-";
-                lbl_title.Text = "-";
-                lbl_chapt.Text = "-";
-
-                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
-
-                mainWindow.setEncodeFinished(); // Tell the main window encodes have finished.
+                this.BeginInvoke(new UpdateHandler(setUIEncodeStarted));
+                return;
             }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
+            btn_encode.Enabled = false;
+            btn_pause.Visible = true;
         }
-        private void redrawQueue()  
+        private void setUIEncodeFinished()
         {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateHandler(setUIEncodeFinished));
+                return;
+            }
+            btn_pause.Visible = false;
+            btn_encode.Enabled = true;
+        }
+        private void resetQueue()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateHandler(resetQueue));
+                return;
+            }
+            btn_pause.Visible = false;
+            btn_encode.Enabled = true;
+
+            lbl_source.Text = "-";
+            lbl_dest.Text = "-";
+            lbl_vEnc.Text = "-";
+            lbl_aEnc.Text = "-";
+            lbl_title.Text = "-";
+            lbl_chapt.Text = "-";
+
+            lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
+        }
+        private void redrawQueue()
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new UpdateHandler(redrawQueue));
+                return;
+            }
+
             list_queue.Items.Clear();
             List<Queue.QueueItem> theQueue = queue.getQueue();
             foreach (Queue.QueueItem queue_item in theQueue)
@@ -224,38 +164,30 @@ namespace Handbrake
                 list_queue.Items.Add(item);
             }
         }
-        private void updateUIElements() 
+        private void updateUIElements()
         {
-            try
+            if (this.InvokeRequired)
             {
-                if (this.InvokeRequired)
-                {
-                    this.BeginInvoke(new ProgressUpdateHandler(updateUIElements));
-                    return;
-                }
+                this.BeginInvoke(new UpdateHandler(updateUIElements));
+                return;
+            }
 
-                redrawQueue();
-                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
+            redrawQueue();
+            lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
-        private void setCurrentEncodeInformation() 
+        private void setCurrentEncodeInformation()
         {
             try
             {
                 if (this.InvokeRequired)
                 {
-                    this.BeginInvoke(new setEncoding(setCurrentEncodeInformation));
+                    this.BeginInvoke(new UpdateHandler(setCurrentEncodeInformation));
                 }
 
                 // found query is a global varible
                 Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.getLastQueryItem().Query);
                 lbl_source.Text = queue.getLastQueryItem().Source;
                 lbl_dest.Text = queue.getLastQueryItem().Destination;
-
 
                 if (parsed.DVDTitle == 0)
                     lbl_title.Text = "Auto";
@@ -293,7 +225,7 @@ namespace Handbrake
 
                 queue.moveUp(selected);
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                redrawQueue();
+                updateUIElements();
 
                 if (selected - 1 > 0)
                     list_queue.Items[selected - 1].Selected = true;
@@ -309,7 +241,7 @@ namespace Handbrake
 
                 queue.moveDown(list_queue.SelectedIndices[0]);
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                redrawQueue();
+                updateUIElements();
 
                 if (selected + 1 < list_queue.Items.Count)
                     list_queue.Items[selected + 1].Selected = true;
@@ -323,7 +255,7 @@ namespace Handbrake
             {
                 queue.remove(list_queue.SelectedIndices[0]);
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                redrawQueue();
+                updateUIElements();
                 lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
             }
         }
@@ -335,7 +267,7 @@ namespace Handbrake
                 {
                     queue.remove(list_queue.SelectedIndices[0]);
                     queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                    redrawQueue();
+                    updateUIElements();
                 }
             }
         }
@@ -363,7 +295,7 @@ namespace Handbrake
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
                 queue.recoverQueue(OpenFile.FileName);
-            redrawQueue();
+            updateUIElements();
         }
 
         // Hide's the window when the user tries to "x" out of the window instead of closing it.
@@ -373,6 +305,5 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
-
     }
 }

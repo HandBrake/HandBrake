@@ -17,9 +17,10 @@ namespace Handbrake.Queue
         int id = 0; // Unique identifer number for each job
         private QueueItem lastItem;
 
+        #region Queue Handling
         public List<QueueItem> getQueue()
         {
-             return queue;
+            return queue;
         }
 
         /// <summary>
@@ -199,9 +200,138 @@ namespace Handbrake.Queue
 
                         foreach (QueueItem item in list)
                             queue.Add(item);
+
+                        if (file != "hb_queue_recovery.xml")
+                            write2disk("hb_queue_recovery.xml");
                     }
                 }
             }
         }
-   }
+        #endregion
+
+        //------------------------------------------------------------------------
+        Functions.Encode encodeHandler = new Functions.Encode();
+        private Boolean started = false;
+        private Boolean paused = false;
+        private Boolean encoding = false;
+
+        #region Encoding
+
+        public Boolean isEncodeStarted
+        {
+            get { return started; }
+        }
+        public Boolean isPaused
+        {
+            get { return paused; }
+        }
+        public Boolean isEncoding
+        {
+            get { return encoding; }
+        }
+
+        public void startEncode()
+        {
+            Thread theQueue;
+            if (this.count() != 0)
+            {
+                if (paused == true)
+                    paused = false;
+                else
+                {
+                    paused = false;
+                    try
+                    {
+                        theQueue = new Thread(startProc);
+                        theQueue.IsBackground = true;
+                        theQueue.Start();
+                    }
+                    catch (Exception exc)
+                    {
+                        MessageBox.Show(exc.ToString());
+                    }
+                }
+            }
+        }
+        public void pauseEncode()
+        {
+            paused = true;
+            EncodePaused(null);
+        }
+
+        private void startProc(object state)
+        {
+            Process hbProc = new Process();
+            try
+            {
+                // Run through each item on the queue
+                while (this.count() != 0)
+                {
+                    string query = getNextItemForEncoding();
+                    write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
+
+                    EncodeStarted(null);
+                    hbProc = encodeHandler.runCli(this, query);
+                    hbProc.WaitForExit();
+
+                    encodeHandler.addCLIQueryToLog(query);
+                    encodeHandler.copyLog(query, getLastQueryItem().Destination);
+
+                    hbProc.Close();
+                    hbProc.Dispose();
+                    hbProc = null;
+                    query = "";
+                    EncodeFinished(null);
+
+                    while (paused == true) // Need to find a better way of doing this.
+                    {
+                        Thread.Sleep(10000);
+                    }
+                }
+                EncodeQueueFinished(null);
+
+                // After the encode is done, we may want to shutdown, suspend etc.
+                encodeHandler.afterEncodeAction();
+            }
+            catch (Exception exc)
+            {
+                throw new Exception(exc.ToString());
+            }
+        }
+        #endregion
+
+        #region Events
+        public event EventHandler OnEncodeStart;
+        public event EventHandler OnPaused;
+        public event EventHandler OnEncodeEnded;
+        public event EventHandler OnQueueFinished;
+
+        // Invoke the Changed event; called whenever encodestatus changes:
+        protected virtual void EncodeStarted(EventArgs e)
+        {
+            if (OnEncodeStart != null)
+                OnEncodeStart(this, e);
+
+            encoding = true;
+        }
+        protected virtual void EncodePaused(EventArgs e)
+        {
+            if (OnPaused != null)
+                OnPaused(this, e);
+        }
+        protected virtual void EncodeFinished(EventArgs e)
+        {
+            if (OnEncodeEnded != null)
+                OnEncodeEnded(this, e);
+
+            encoding = false;
+        }
+        protected virtual void EncodeQueueFinished(EventArgs e)
+        {
+            if (OnQueueFinished != null)
+                OnQueueFinished(this, e);
+        }
+        #endregion
+
+    }
 }

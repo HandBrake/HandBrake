@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -171,6 +171,7 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.lbl_test = new System.Windows.Forms.Label();
             this.slider_deblock = new System.Windows.Forms.TrackBar();
             this.label8 = new System.Windows.Forms.Label();
             this.lbl_deblockVal = new System.Windows.Forms.Label();
@@ -244,13 +245,13 @@ namespace Handbrake
             this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
             this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tb_preview = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnu_qtpreview = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_vlcpreview = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tb_preview = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnu_qtpreview = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_vlcpreview = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -644,9 +645,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1963,6 +1964,7 @@ namespace Handbrake
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.TabPage1.Controls.Add(this.lbl_test);
             this.TabPage1.Controls.Add(this.slider_deblock);
             this.TabPage1.Controls.Add(this.label8);
             this.TabPage1.Controls.Add(this.lbl_deblockVal);
@@ -2001,6 +2003,15 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(713, 316);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
+            // 
+            // lbl_test
+            // 
+            this.lbl_test.AutoSize = true;
+            this.lbl_test.Location = new System.Drawing.Point(83, 217);
+            this.lbl_test.Name = "lbl_test";
+            this.lbl_test.Size = new System.Drawing.Size(48, 13);
+            this.lbl_test.TabIndex = 39;
+            this.lbl_test.Text = "label12";
             // 
             // slider_deblock
             // 
@@ -2844,6 +2855,32 @@ namespace Handbrake
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
             // 
+            // tb_preview
+            // 
+            this.tb_preview.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_qtpreview,
+            this.mnu_vlcpreview});
+            this.tb_preview.Image = global::Handbrake.Properties.Resources.picture;
+            this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tb_preview.Name = "tb_preview";
+            this.tb_preview.Size = new System.Drawing.Size(90, 36);
+            this.tb_preview.Text = "Preview";
+            // 
+            // mnu_qtpreview
+            // 
+            this.mnu_qtpreview.Name = "mnu_qtpreview";
+            this.mnu_qtpreview.Size = new System.Drawing.Size(185, 22);
+            this.mnu_qtpreview.Text = "Preview in QuickTime";
+            this.mnu_qtpreview.Click += new System.EventHandler(this.mnu_qtpreview_Click);
+            // 
+            // mnu_vlcpreview
+            // 
+            this.mnu_vlcpreview.Name = "mnu_vlcpreview";
+            this.mnu_vlcpreview.Size = new System.Drawing.Size(185, 22);
+            this.mnu_vlcpreview.Text = "Preview in VLC";
+            this.mnu_vlcpreview.Click += new System.EventHandler(this.mnu_vlcpreview_Click);
+            // 
             // btn_ActivityWindow
             // 
             this.btn_ActivityWindow.Image = global::Handbrake.Properties.Resources.ActivityWindow;
@@ -2882,32 +2919,6 @@ namespace Handbrake
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
-            // 
-            // tb_preview
-            // 
-            this.tb_preview.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_qtpreview,
-            this.mnu_vlcpreview});
-            this.tb_preview.Image = global::Handbrake.Properties.Resources.picture;
-            this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tb_preview.Name = "tb_preview";
-            this.tb_preview.Size = new System.Drawing.Size(90, 36);
-            this.tb_preview.Text = "Preview";
-            // 
-            // mnu_qtpreview
-            // 
-            this.mnu_qtpreview.Name = "mnu_qtpreview";
-            this.mnu_qtpreview.Size = new System.Drawing.Size(185, 22);
-            this.mnu_qtpreview.Text = "Preview in QuickTime";
-            this.mnu_qtpreview.Click += new System.EventHandler(this.mnu_qtpreview_Click);
-            // 
-            // mnu_vlcpreview
-            // 
-            this.mnu_vlcpreview.Name = "mnu_vlcpreview";
-            this.mnu_vlcpreview.Size = new System.Drawing.Size(185, 22);
-            this.mnu_vlcpreview.Text = "Preview in VLC";
-            this.mnu_vlcpreview.Click += new System.EventHandler(this.mnu_vlcpreview_Click);
             // 
             // frmMain
             // 
@@ -3187,6 +3198,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripDropDownButton tb_preview;
         private System.Windows.Forms.ToolStripMenuItem mnu_qtpreview;
         private System.Windows.Forms.ToolStripMenuItem mnu_vlcpreview;
+        private System.Windows.Forms.Label lbl_test;
 
     }
 }

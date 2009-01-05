@@ -88,7 +88,7 @@ namespace Handbrake
             loadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
-            queueWindow = new frmQueue(this);        // Prepare the Queue
+            queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
             if (Properties.Settings.Default.QueryEditorTab != "Checked")
                 tabs_panel.TabPages.RemoveAt(5); // Remove the query editor tab if the user does not want it enabled.
 
@@ -133,11 +133,10 @@ namespace Handbrake
             this.Enabled = true;
 
             // Event Handlers
-            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
-                this.Resize += new EventHandler(frmMain_Resize);
+            events();
 
             // Queue Recovery
-            queueRecovery();
+            queueRecovery();    
         }
 
         // Startup Functions
@@ -180,6 +179,34 @@ namespace Handbrake
         }
         #endregion
 
+        #region Events
+        // Encoding Events for setting up the GUI
+        private void events()
+        {
+            // Handle Window Resize
+            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+                this.Resize += new EventHandler(frmMain_Resize);
+
+            // Handle Encode Start
+            encodeQueue.OnEncodeEnded += new EventHandler(encodeEnded);
+            encodeQueue.OnPaused += new EventHandler(encodePaused);
+            encodeQueue.OnEncodeStart += new EventHandler(encodeStarted);
+        }
+        private void encodeStarted(object sender, EventArgs e)
+        {
+            setLastAction("encode");
+            setEncodeStarted();
+        }
+        private void encodeEnded(object sender, EventArgs e)
+        {
+            setEncodeFinished();
+        }
+        private void encodePaused(object sender, EventArgs e)
+        {
+            setEncodeFinished();
+        }
+        #endregion
+
         // User Interface Menus / Tool Strips *********************************
 
         #region File Menu
@@ -192,7 +219,7 @@ namespace Handbrake
         #region Tools Menu
         private void mnu_encode_Click(object sender, EventArgs e)
         {
-            queueWindow.setQueue(encodeQueue);
+            queueWindow.setQueue();
             queueWindow.Show();
         }
         private void mnu_encodeLog_Click(object sender, EventArgs e)
@@ -504,6 +531,10 @@ namespace Handbrake
 
                 if (result == DialogResult.Yes)
                 {
+                    // Pause The Queue
+                    encodeQueue.pauseEncode();
+
+                    // Kill the current process.
                     Process[] aProc = Process.GetProcessesByName("HandBrakeCLI");
                     Process HandBrakeCLI;
                     if (aProc.Length > 0)
@@ -511,8 +542,9 @@ namespace Handbrake
                         HandBrakeCLI = aProc[0];
                         HandBrakeCLI.Kill();
                     }
-                    if (!queueWindow.isEncoding())
-                        setEncodeFinished();
+                    
+                    // Update the GUI
+                    setEncodeFinished();
                 }
             }
             else
@@ -534,13 +566,13 @@ namespace Handbrake
                         encodeQueue.add(query, text_source.Text, text_destination.Text);
                         encodeQueue.write2disk("hb_queue_recovery.xml");
                     }
-                    queueWindow.setQueue(encodeQueue);
+                    queueWindow.setQueue();
                     if (encodeQueue.count() > 1)
                         queueWindow.Show();
 
-                    queueWindow.frmMain_encode();
-
                     setEncodeStarted(); // Encode is running, so setup the GUI appropriately
+                    encodeQueue.startEncode(); // Start The Queue Encoding Process
+                    
                 }
                 else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                     MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -560,13 +592,13 @@ namespace Handbrake
                 encodeQueue.add(query, text_source.Text, text_destination.Text);
                 encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
 
-                queueWindow.setQueue(encodeQueue);
+                queueWindow.setQueue();
                 queueWindow.Show();
             }
         }
         private void btn_showQueue_Click(object sender, EventArgs e)
         {
-            queueWindow.setQueue(encodeQueue);
+            queueWindow.setQueue();
             queueWindow.Show();
         }
         private void mnu_vlcpreview_Click(object sender, EventArgs e)

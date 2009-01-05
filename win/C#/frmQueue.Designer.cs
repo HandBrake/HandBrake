@@ -51,7 +51,7 @@ namespace Handbrake
             this.label3 = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_encode = new System.Windows.Forms.ToolStripButton();
-            this.btn_stop = new System.Windows.Forms.ToolStripButton();
+            this.btn_pause = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.drop_button_queue = new System.Windows.Forms.ToolStripDropDownButton();
             this.mnu_batch = new System.Windows.Forms.ToolStripMenuItem();
@@ -218,7 +218,7 @@ namespace Handbrake
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_encode,
-            this.btn_stop,
+            this.btn_pause,
             this.toolStripSeparator1,
             this.drop_button_queue});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -234,21 +234,21 @@ namespace Handbrake
             this.btn_encode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_encode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_encode.Name = "btn_encode";
-            this.btn_encode.Size = new System.Drawing.Size(84, 36);
+            this.btn_encode.Size = new System.Drawing.Size(78, 36);
             this.btn_encode.Text = "Encode";
             this.btn_encode.Click += new System.EventHandler(this.btn_encode_Click);
             // 
-            // btn_stop
+            // btn_pause
             // 
-            this.btn_stop.Image = global::Handbrake.Properties.Resources.Pause;
-            this.btn_stop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_stop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_stop.Name = "btn_stop";
-            this.btn_stop.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.btn_stop.Size = new System.Drawing.Size(75, 36);
-            this.btn_stop.Text = "Pause";
-            this.btn_stop.Visible = false;
-            this.btn_stop.Click += new System.EventHandler(this.btn_stop_Click);
+            this.btn_pause.Image = global::Handbrake.Properties.Resources.Pause;
+            this.btn_pause.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_pause.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_pause.Name = "btn_pause";
+            this.btn_pause.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.btn_pause.Size = new System.Drawing.Size(72, 36);
+            this.btn_pause.Text = "Pause";
+            this.btn_pause.Visible = false;
+            this.btn_pause.Click += new System.EventHandler(this.btn_pause_Click);
             // 
             // toolStripSeparator1
             // 
@@ -265,14 +265,14 @@ namespace Handbrake
             this.drop_button_queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.drop_button_queue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.drop_button_queue.Name = "drop_button_queue";
-            this.drop_button_queue.Size = new System.Drawing.Size(89, 36);
+            this.drop_button_queue.Size = new System.Drawing.Size(84, 36);
             this.drop_button_queue.Text = "Queue";
             // 
             // mnu_batch
             // 
             this.mnu_batch.Image = global::Handbrake.Properties.Resources.Output_Small;
             this.mnu_batch.Name = "mnu_batch";
-            this.mnu_batch.Size = new System.Drawing.Size(207, 22);
+            this.mnu_batch.Size = new System.Drawing.Size(190, 22);
             this.mnu_batch.Text = "Generate Batch Script";
             this.mnu_batch.Click += new System.EventHandler(this.mnu_batch_Click);
             // 
@@ -280,7 +280,7 @@ namespace Handbrake
             // 
             this.mnu_import.Image = global::Handbrake.Properties.Resources.folder;
             this.mnu_import.Name = "mnu_import";
-            this.mnu_import.Size = new System.Drawing.Size(207, 22);
+            this.mnu_import.Size = new System.Drawing.Size(190, 22);
             this.mnu_import.Text = "Import Queue";
             this.mnu_import.Click += new System.EventHandler(this.mnu_import_Click);
             // 
@@ -288,7 +288,7 @@ namespace Handbrake
             // 
             this.mnu_export.Image = global::Handbrake.Properties.Resources.save;
             this.mnu_export.Name = "mnu_export";
-            this.mnu_export.Size = new System.Drawing.Size(207, 22);
+            this.mnu_export.Size = new System.Drawing.Size(190, 22);
             this.mnu_export.Text = "Export Queue";
             this.mnu_export.Click += new System.EventHandler(this.mnu_export_Click);
             // 
@@ -364,7 +364,7 @@ namespace Handbrake
             this.lbl_encodesPending.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.lbl_encodesPending.Margin = new System.Windows.Forms.Padding(0, 3, 10, 2);
             this.lbl_encodesPending.Name = "lbl_encodesPending";
-            this.lbl_encodesPending.Size = new System.Drawing.Size(122, 17);
+            this.lbl_encodesPending.Size = new System.Drawing.Size(105, 17);
             this.lbl_encodesPending.Text = "0 encode(s) pending";
             // 
             // OpenFile
@@ -475,7 +475,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton btn_encode;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton btn_stop;
+        private System.Windows.Forms.ToolStripButton btn_pause;
         private System.Windows.Forms.SaveFileDialog SaveFile;
         private System.Windows.Forms.ListView list_queue;
         private System.Windows.Forms.ColumnHeader Title;
