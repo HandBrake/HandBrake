@@ -1389,7 +1389,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
 
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
-        NSString *vlcPath = @"/Applications/VLC.app";
+        NSString *vlcPath = @"/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib";
         NSFileManager * fileManager = [NSFileManager defaultManager];
 	    if ([fileManager fileExistsAtPath:vlcPath] == 0) 
 	    {
@@ -1397,7 +1397,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             cancelScanDecrypt = 1;
             [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
             int status;
-            status = NSRunAlertPanel(@"HandBrake could not find VLC.",@"Please download and install VLC media player in your /Applications folder if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
+            status = NSRunAlertPanel(@"HandBrake could not find VLC or your VLC is out of date.",@"Please download and install VLC media player in your /Applications folder if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
             [NSApp requestUserAttention:NSCriticalRequest];
             
             if (status == NSAlertDefaultReturn)
