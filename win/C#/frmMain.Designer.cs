@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -171,7 +171,6 @@ namespace Handbrake
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
             this.TabPage1 = new System.Windows.Forms.TabPage();
-            this.lbl_test = new System.Windows.Forms.Label();
             this.slider_deblock = new System.Windows.Forms.TrackBar();
             this.label8 = new System.Windows.Forms.Label();
             this.lbl_deblockVal = new System.Windows.Forms.Label();
@@ -645,9 +644,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1964,7 +1963,6 @@ namespace Handbrake
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Transparent;
-            this.TabPage1.Controls.Add(this.lbl_test);
             this.TabPage1.Controls.Add(this.slider_deblock);
             this.TabPage1.Controls.Add(this.label8);
             this.TabPage1.Controls.Add(this.lbl_deblockVal);
@@ -2003,15 +2001,6 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(713, 316);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
-            // 
-            // lbl_test
-            // 
-            this.lbl_test.AutoSize = true;
-            this.lbl_test.Location = new System.Drawing.Point(83, 217);
-            this.lbl_test.Name = "lbl_test";
-            this.lbl_test.Size = new System.Drawing.Size(48, 13);
-            this.lbl_test.TabIndex = 39;
-            this.lbl_test.Text = "label12";
             // 
             // slider_deblock
             // 
@@ -3198,7 +3187,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripDropDownButton tb_preview;
         private System.Windows.Forms.ToolStripMenuItem mnu_qtpreview;
         private System.Windows.Forms.ToolStripMenuItem mnu_vlcpreview;
-        private System.Windows.Forms.Label lbl_test;
 
     }
 }
