@@ -35,21 +35,23 @@ namespace Handbrake
             currently_playing = "";
             if (mainWindow.text_destination.Text != "")
                 currently_playing = mainWindow.text_destination.Text.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm");
-            
+
             // Launch VLC and play video.
             if (currently_playing != "")
             {
-                if (File.Exists(Properties.Settings.Default.VLC_Path))
+                if (File.Exists(currently_playing))
                 {
-                    String args = "\"" + currently_playing + "\"";
-                    ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
-                    Process.Start(vlc);
-                    lbl_status.Text = "VLC will now launch.";
-                }
-                else
-                {
-                    MessageBox.Show("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in the program options is correct.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    if (File.Exists(Properties.Settings.Default.VLC_Path))
+                    {
+                        String args = "\"" + currently_playing + "\"";
+                        ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
+                        Process.Start(vlc);
+                        lbl_status.Text = "VLC will now launch.";
+                    }
+                    else
+                        MessageBox.Show("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in the program options is correct.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                } else
+                    MessageBox.Show("Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
