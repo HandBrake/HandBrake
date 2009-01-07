@@ -916,15 +916,15 @@ namespace Handbrake
             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
 
             // Show the dialog and set the main form file path
-            if (text_destination.Text.EndsWith(".mp4"))
+            if (drop_format.SelectedIndex.Equals(0))
                 DVD_Save.FilterIndex = 1;
-            else if (text_destination.Text.EndsWith(".m4v"))
+            else if (drop_format.SelectedIndex.Equals(1))
                 DVD_Save.FilterIndex = 2;
-            else if (text_destination.Text.EndsWith(".avi"))
+            else if (drop_format.SelectedIndex.Equals(2))
                 DVD_Save.FilterIndex = 3;
-            else if (text_destination.Text.EndsWith(".ogm"))
+            else if (drop_format.SelectedIndex.Equals(3))
                 DVD_Save.FilterIndex = 4;
-            else if (text_destination.Text.EndsWith(".mkv"))
+            else if (drop_format.SelectedIndex.Equals(4))
                 DVD_Save.FilterIndex = 5;
 
             if (DVD_Save.ShowDialog() == DialogResult.OK)
