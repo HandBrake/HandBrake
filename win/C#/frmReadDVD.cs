@@ -5,16 +5,10 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using System.Diagnostics;
-using System.Collections;
 
 
 namespace Handbrake
@@ -27,7 +21,6 @@ namespace Handbrake
         private delegate void UpdateUIHandler();
         Process hbproc;
         Functions.Main hb_common_func = new Functions.Main();
-        Functions.Encode process = new Functions.Encode();
 
         public frmReadDVD(string inputFile, frmMain parent)
         {

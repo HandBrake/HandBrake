@@ -7,10 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
-using System.Text.RegularExpressions;
 using System.Globalization;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Handbrake.Parsing
 {
@@ -19,91 +18,82 @@ namespace Handbrake.Parsing
     /// </summary>
     public class Title
     {
-        private List<Chapter> m_chapters;
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
+        private readonly List<AudioTrack> m_audioTracks;
+        private readonly List<Chapter> m_chapters;
+        private readonly List<Subtitle> m_subtitles;
+        private float m_aspectRatio;
+        private int[] m_autoCrop;
+        private TimeSpan m_duration;
+        private Size m_resolution;
+        private int m_titleNumber;
+
+        /// <summary>
+        /// The constructor for this object
+        /// </summary>
+        public Title()
+        {
+            m_audioTracks = new List<AudioTrack>();
+            m_chapters = new List<Chapter>();
+            m_subtitles = new List<Subtitle>();
+        }
+
         /// <summary>
         /// Collection of chapters in this Title
         /// </summary>
         public List<Chapter> Chapters
         {
-            get
-            {
-                return this.m_chapters;
-            }
+            get { return m_chapters; }
         }
 
-        private List<AudioTrack> m_audioTracks;
         /// <summary>
         /// Collection of audio tracks associated with this Title
         /// </summary>
         public List<AudioTrack> AudioTracks
         {
-            get
-            {
-                return this.m_audioTracks;
-            }
+            get { return m_audioTracks; }
         }
 
-        private List<Subtitle> m_subtitles;
         /// <summary>
         /// Collection of subtitles associated with this Title
         /// </summary>
         public List<Subtitle> Subtitles
         {
-            get
-            {
-                return this.m_subtitles;
-            }
+            get { return m_subtitles; }
         }
 
-        private int m_titleNumber;
         /// <summary>
         /// The track number of this Title
         /// </summary>
         public int TitleNumber
         {
-            get
-            {
-                return this.m_titleNumber;
-            }
+            get { return m_titleNumber; }
         }
 
-        private TimeSpan m_duration;
         /// <summary>
         /// The length in time of this Title
         /// </summary>
         public TimeSpan Duration
         {
-            get
-            {
-                return this.m_duration;
-            }
+            get { return m_duration; }
         }
 
-        private Size m_resolution;
         /// <summary>
         /// The resolution (width/height) of this Title
         /// </summary>
         public Size Resolution
         {
-            get
-            {
-                return this.m_resolution;
-            }
+            get { return m_resolution; }
         }
 
-        private float m_aspectRatio;
         /// <summary>
         /// The aspect ratio of this Title
         /// </summary>
         public float AspectRatio
         {
-            get
-            {
-                return this.m_aspectRatio;
-            }
+            get { return m_aspectRatio; }
         }
 
-        private int[] m_autoCrop;
         /// <summary>
         /// The automatically detected crop region for this Title.
         /// This is an int array with 4 items in it as so:
@@ -114,20 +104,7 @@ namespace Handbrake.Parsing
         /// </summary>
         public int[] AutoCropDimensions
         {
-            get
-            {
-                return this.m_autoCrop;
-            }
-        }
-
-        /// <summary>
-        /// The constructor for this object
-        /// </summary>
-        public Title()
-        {
-            this.m_audioTracks = new List<AudioTrack>();
-            this.m_chapters = new List<Chapter>();
-            this.m_subtitles = new List<Subtitle>();
+            get { return m_autoCrop; }
         }
 
         /// <summary>
@@ -136,20 +113,18 @@ namespace Handbrake.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.m_titleNumber, this.m_duration.Hours,
-             this.m_duration.Minutes, this.m_duration.Seconds);
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", m_titleNumber, m_duration.Hours,
+                                 m_duration.Minutes, m_duration.Seconds);
         }
-
-        static readonly private CultureInfo Culture = new CultureInfo("en-US", false);
 
         public static Title Parse(StringReader output)
         {
-            Title thisTitle = new Title();
+            var thisTitle = new Title();
 
             Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
             // Match track number for this title
             if (m.Success)
-                thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
+                thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim());
 
             String testData = output.ReadLine();
 
@@ -160,7 +135,8 @@ namespace Handbrake.Parsing
                 thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
 
             // Get resolution, aspect ratio and FPS for this title
-            m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
+            m = Regex.Match(output.ReadLine(),
+                            @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
             if (m.Success)
             {
                 thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
@@ -170,7 +146,11 @@ namespace Handbrake.Parsing
             // Get autocrop region for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
             if (m.Success)
-                thisTitle.m_autoCrop = new int[4] { int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value) };
+                thisTitle.m_autoCrop = new int[4]
+                                           {
+                                               int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value),
+                                               int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value)
+                                           };
 
             thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
 
@@ -183,8 +163,8 @@ namespace Handbrake.Parsing
 
         public static Title[] ParseList(string output)
         {
-            List<Title> titles = new List<Title>();
-            StringReader sr = new StringReader(output);
+            var titles = new List<Title>();
+            var sr = new StringReader(output);
 
             while (sr.Peek() == '+' || sr.Peek() == ' ')
             {
@@ -192,7 +172,7 @@ namespace Handbrake.Parsing
                 if (sr.Peek() == ' ') // If the character is a space, then chances are it's the combing detected line.
                     sr.ReadLine(); // Skip over it
                 else
-                    titles.Add(Title.Parse(sr));              
+                    titles.Add(Parse(sr));
             }
 
             return titles.ToArray();

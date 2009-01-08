@@ -5,8 +5,6 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;

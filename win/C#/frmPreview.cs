@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-
-using QTOControlLib;
 using QTOLibrary;
 
 namespace Handbrake
@@ -17,7 +10,7 @@ namespace Handbrake
     public partial class frmPreview : Form
     {
 
-        Handbrake.QueryGenerator hb_common_func = new Handbrake.QueryGenerator();
+        QueryGenerator hb_common_func = new QueryGenerator();
         Functions.Encode process = new Functions.Encode();
         private delegate void UpdateUIHandler();
         String currently_playing = "";

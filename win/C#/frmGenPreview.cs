@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
@@ -14,7 +9,7 @@ namespace Handbrake
     public partial class frmGenPreview : Form
     {
         private delegate void UpdateHandler();
-        Handbrake.QueryGenerator queryGen = new Handbrake.QueryGenerator();
+        QueryGenerator queryGen = new QueryGenerator();
         Functions.Encode process = new Functions.Encode();
         Process hbProc;
         frmMain mainWindow;

@@ -4,7 +4,6 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -16,28 +15,23 @@ namespace Handbrake.Parsing
     /// </summary>
     public class Subtitle
     {
+        private string m_language;
         private int m_trackNumber;
+
         /// <summary>
         /// The track number of this Subtitle
         /// </summary>
         public int TrackNumber
         {
-            get
-            {
-                return this.m_trackNumber;
-            }
+            get { return m_trackNumber; }
         }
 
-        private string m_language;
         /// <summary>
         /// The language (if detected) of this Subtitle
         /// </summary>
         public string Language
         {
-            get
-            {
-                return this.m_language;
-            }
+            get { return m_language; }
         }
 
         /// <summary>
@@ -46,7 +40,7 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1}", this.m_trackNumber, this.m_language);
+            return string.Format("{0} {1}", m_trackNumber, m_language);
         }
 
         public static Subtitle Parse(StringReader output)
@@ -56,8 +50,8 @@ namespace Handbrake.Parsing
             Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\)");
             if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
-                Subtitle thisSubtitle = new Subtitle();
-                thisSubtitle.m_trackNumber = int.Parse(m.Groups[1].Value.Trim().ToString());
+                var thisSubtitle = new Subtitle();
+                thisSubtitle.m_trackNumber = int.Parse(m.Groups[1].Value.Trim());
                 thisSubtitle.m_language = m.Groups[2].Value;
                 return thisSubtitle;
             }
@@ -67,10 +61,10 @@ namespace Handbrake.Parsing
 
         public static Subtitle[] ParseList(StringReader output)
         {
-            List<Subtitle> subtitles = new List<Subtitle>();
-            while ((char)output.Peek() != '+')
+            var subtitles = new List<Subtitle>();
+            while ((char) output.Peek() != '+')
             {
-                Subtitle thisSubtitle = Subtitle.Parse(output);
+                Subtitle thisSubtitle = Parse(output);
 
                 if (thisSubtitle != null)
                     subtitles.Add(thisSubtitle);

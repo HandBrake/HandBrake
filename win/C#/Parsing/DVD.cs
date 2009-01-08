@@ -4,47 +4,41 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.IO;
 
 namespace Handbrake.Parsing
 {
-
     /// <summary>
     /// An object representing a scanned DVD
     /// </summary>
     public class DVD
     {
-
-        private List<Title> m_titles;
-        /// <summary>
-        /// Collection of Titles associated with this DVD
-        /// </summary>
-        public List<Title> Titles
-        {
-            get
-            {
-                return this.m_titles;
-            }
-        }
+        private readonly List<Title> m_titles;
 
         /// <summary>
         /// Default constructor for this object
         /// </summary>
         public DVD()
         {
-            this.m_titles = new List<Title>();
+            m_titles = new List<Title>();
+        }
+
+        /// <summary>
+        /// Collection of Titles associated with this DVD
+        /// </summary>
+        public List<Title> Titles
+        {
+            get { return m_titles; }
         }
 
         public static DVD Parse(StreamReader output)
         {
-            DVD thisDVD = new DVD();
+            var thisDVD = new DVD();
 
             while (!output.EndOfStream)
             {
-                if ((char)output.Peek() == '+')
+                if ((char) output.Peek() == '+')
                     thisDVD.m_titles.AddRange(Title.ParseList(output.ReadToEnd()));
                 else
                     output.ReadLine();

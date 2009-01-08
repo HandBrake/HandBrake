@@ -5,773 +5,610 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Globalization;
 
 namespace Handbrake.Functions
 {
-    class QueryParser
+    internal class QueryParser
     {
-        static readonly private CultureInfo Culture = new CultureInfo("en-US", false);
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
-        // All the Main Window GUI options
         #region Varibles
 
         #region Source
+
+        private int q_chaptersFinish;
+        private int q_chaptersStart;
         private int q_dvdTitle;
+
         /// <summary>
         /// Returns an Integer
         /// DVD Title number.
         /// </summary>
         public int DVDTitle
         {
-            get
-            {
-                return this.q_dvdTitle;
-            }
+            get { return q_dvdTitle; }
         }
 
-        private int q_chaptersStart;
         /// <summary>
         /// Returns an Int
         /// DVD Chapter number or chapter range.
         /// </summary>
         public int DVDChapterStart
         {
-            get
-            {
-                return this.q_chaptersStart;
-            }
+            get { return q_chaptersStart; }
         }
 
-        private int q_chaptersFinish;
         /// <summary>
         /// Returns an Int
         /// DVD Chapter number or chapter range.
         /// </summary>
         public int DVDChapterFinish
         {
-            get
-            {
-                return this.q_chaptersFinish;
-            }
+            get { return q_chaptersFinish; }
         }
-#endregion
+
+        #endregion
 
         #region Destination
+
         private string q_format;
+        private string q_videoEncoder;
+
         /// <summary>
         /// Returns a String 
         /// Full path of the destination.
         /// </summary>
         public string Format
         {
-            get
-            {
-                return this.q_format;
-            }
+            get { return q_format; }
         }
 
-        private string q_videoEncoder;
         /// <summary>
         /// Returns an String
         /// The Video Encoder used.
         /// </summary>
         public string VideoEncoder
         {
-            get
-            {
-                return this.q_videoEncoder;
-            }
+            get { return q_videoEncoder; }
         }
+
         #endregion
 
         #region Picture Settings
+
+        private Boolean q_anamorphic;
+        private Boolean q_chapterMarkers;
+        private string q_cropbottom;
+        private string q_cropLeft;
+        private string q_cropRight;
+        private string q_croptop;
+        private string q_cropValues;
+        private int q_deBlock;
+        private Boolean q_decomb;
+        private string q_deinterlace;
+        private string q_denoise;
+        private Boolean q_detelecine;
+        private Boolean q_looseAnamorphic;
+        private int q_maxHeight;
+        private int q_maxWidth;
+        private int q_videoHeight;
         private int q_videoWidth;
+
         /// <summary>
         /// Returns an Int
         /// The selected Width for the encoding.
         /// </summary>
         public int Width
         {
-            get
-            {
-                return this.q_videoWidth;
-            }
+            get { return q_videoWidth; }
         }
 
-        private int q_videoHeight;
         /// <summary>
         /// Returns an Int
         /// The selected Height for the encoding.
         /// </summary>
         public int Height
         {
-            get
-            {
-                return this.q_videoHeight;
-            }
+            get { return q_videoHeight; }
         }
 
-        private int q_maxWidth;
         /// <summary>
         /// Returns an Int
         /// The selected Width for the encoding.
         /// </summary>
         public int MaxWidth
         {
-            get
-            {
-                return this.q_maxWidth;
-            }
+            get { return q_maxWidth; }
         }
 
-        private int q_maxHeight;
         /// <summary>
         /// Returns an Int
         /// The selected Height for the encoding.
         /// </summary>
         public int MaxHeight
         {
-            get
-            {
-                return this.q_maxHeight;
-            }
+            get { return q_maxHeight; }
         }
 
-        private string q_cropValues;
         /// <summary>
         /// Returns an String
         /// Cropping values.
         /// </summary>
         public string CropValues
         {
-            get
-            {
-                return this.q_cropValues;
-            }
+            get { return q_cropValues; }
         }
 
-        private string q_croptop;
         /// <summary>
         /// Returns an String
         /// Cropping values.
         /// </summary>
         public string CropTop
         {
-            get
-            {
-                return this.q_croptop;
-            }
+            get { return q_croptop; }
         }
 
-        private string q_cropbottom;
         /// <summary>
         /// Returns an String
         /// Cropping values.
         /// </summary>
         public string CropBottom
         {
-            get
-            {
-                return this.q_cropbottom;
-            }
+            get { return q_cropbottom; }
         }
 
-        private string q_cropLeft;
         /// <summary>
         /// Returns an String
         /// Cropping values.
         /// </summary>
         public string CropLeft
         {
-            get
-            {
-                return this.q_cropLeft;
-            }
+            get { return q_cropLeft; }
         }
 
-        private string q_cropRight;
         /// <summary>
         /// Returns an String
         /// Cropping values.
         /// </summary>
         public string CropRight
         {
-            get
-            {
-                return this.q_cropRight;
-            }
+            get { return q_cropRight; }
         }
 
-        private Boolean q_detelecine;
         /// <summary>
         /// Returns a boolean to indicate wither DeTelecine is on or off
         /// </summary>
         public Boolean DeTelecine
         {
-            get
-            {
-                return this.q_detelecine;
-            }
+            get { return q_detelecine; }
         }
 
-        private int q_deBlock;
         /// <summary>
         /// Returns a boolean to indicate wither DeBlock is on or off.
         /// </summary>
         public int DeBlock
         {
-            get
-            {
-                return this.q_deBlock;
-            }
+            get { return q_deBlock; }
         }
 
-        private string q_deinterlace;
         /// <summary>
         /// Returns a string with the De-Interlace option used.
         /// </summary>
         public string DeInterlace
         {
-            get
-            {
-                return this.q_deinterlace;
-            }
+            get { return q_deinterlace; }
         }
 
-        private string q_denoise;
         /// <summary>
         /// Returns a string with the DeNoise option used.
         /// </summary>
         public string DeNoise
         {
-            get
-            {
-                return this.q_denoise;
-            }
+            get { return q_denoise; }
         }
 
-        private Boolean q_decomb;
         /// <summary>
         /// Returns a string with the DeNoise option used.
         /// </summary>
         public Boolean Decomb
         {
-            get
-            {
-                return this.q_decomb;
-            }
+            get { return q_decomb; }
         }
 
-        private Boolean q_anamorphic;
         /// <summary>
         /// Returns a boolean to indicate wither Anamorphic is on or off.
         /// </summary>
         public Boolean Anamorphic
         {
-            get
-            {
-                return this.q_anamorphic;
-            }
+            get { return q_anamorphic; }
         }
 
-        private Boolean q_looseAnamorphic;
         /// <summary>
         /// Returns a boolean to indicate wither Anamorphic is on or off.
         /// </summary>
         public Boolean LooseAnamorphic
         {
-            get
-            {
-                return this.q_looseAnamorphic;
-            }
+            get { return q_looseAnamorphic; }
         }
 
-        private Boolean q_chapterMarkers;
         /// <summary>
         /// Returns a boolean to indicate wither Chapter Markers is on or off.
         /// </summary>
         public Boolean ChapterMarkers
         {
-            get
-            {
-                return this.q_chapterMarkers;
-            }
+            get { return q_chapterMarkers; }
         }
+
         #endregion
 
         #region Video Settings
+
+        private string q_avgBitrate;
         private Boolean q_grayscale;
+        private Boolean q_ipodAtom;
+        private Boolean q_largeMp4;
+        private Boolean q_optimizeMp4;
+        private Boolean q_turboFirst;
+
+        private Boolean q_twoPass;
+        private string q_videoFramerate;
+        private int q_videoQuality;
+        private string q_videoTargetSize;
+
         /// <summary>
         /// Returns a boolean to indicate wither Grayscale is on or off.
         /// </summary>
         public Boolean Grayscale
         {
-            get
-            {
-                return this.q_grayscale;
-            }
+            get { return q_grayscale; }
         }
 
-        private Boolean q_twoPass;
         /// <summary>
         /// Returns a boolean to indicate wither Two Pass Encoding is on or off.
         /// </summary>
         public Boolean TwoPass
         {
-            get
-            {
-                return this.q_twoPass;
-            }
+            get { return q_twoPass; }
         }
 
-        private Boolean q_turboFirst;
         /// <summary>
         /// Returns a boolean to indicate wither Chapter Markers is on or off.
         /// </summary>
         public Boolean TurboFirstPass
         {
-            get
-            {
-                return this.q_turboFirst;
-            }
+            get { return q_turboFirst; }
         }
 
-        private Boolean q_largeMp4;
         /// <summary>
         /// Returns a boolean to indicate wither Larger MP4 files is on or off.
         /// </summary>
         public Boolean LargeMP4
         {
-            get
-            {
-                return this.q_largeMp4;
-            }
+            get { return q_largeMp4; }
         }
 
-        private Boolean q_ipodAtom;
         /// <summary>
         /// Returns a boolean to indicate wither Larger MP4 files is on or off.
         /// </summary>
         public Boolean IpodAtom
         {
-            get
-            {
-                return this.q_ipodAtom;
-            }
+            get { return q_ipodAtom; }
         }
 
-        private Boolean q_optimizeMp4;
         /// <summary>
         /// Returns a boolean to indicate wither Larger MP4 files is on or off.
         /// </summary>
         public Boolean OptimizeMP4
         {
-            get
-            {
-                return this.q_optimizeMp4;
-            }
+            get { return q_optimizeMp4; }
         }
 
-        private string q_videoFramerate;
         /// <summary>
         /// Returns a string with the video Framerate
         /// </summary>
         public string VideoFramerate
         {
-            get
-            {
-                return this.q_videoFramerate;
-            }
+            get { return q_videoFramerate; }
         }
 
-        private string q_avgBitrate;
         /// <summary>
         /// Returns a string with the average video bitrate
         /// </summary>
         public string AverageVideoBitrate
         {
-            get
-            {
-                return this.q_avgBitrate;
-            }
+            get { return q_avgBitrate; }
         }
 
-        private string q_videoTargetSize;
         /// <summary>
         /// Returns a string with the video target size
         /// </summary>
         public string VideoTargetSize
         {
-            get
-            {
-                return this.q_videoTargetSize;
-            }
+            get { return q_videoTargetSize; }
         }
 
-        private int q_videoQuality;
         /// <summary>
         /// Returns a int with the video quality value
         /// </summary>
         public int VideoQuality
         {
-            get
-            {
-                return this.q_videoQuality;
-            }
+            get { return q_videoQuality; }
         }
 
         #endregion
 
         #region Audio Settings
+
+        private string q_audioBitrate1;
+        private string q_audioBitrate2;
+        private string q_audioBitrate3;
+        private string q_audioBitrate4;
+        private string q_audioEncoder1;
+        private string q_audioEncoder2;
+        private string q_audioEncoder3;
+        private string q_audioEncoder4;
+        private string q_audioSamplerate1;
+        private string q_audioSamplerate2;
+        private string q_audioSamplerate3;
+        private string q_audioSamplerate4;
         private string q_audioTrack1;
+        private string q_audioTrack2;
+        private string q_audioTrack3;
+        private string q_audioTrack4;
+        private string q_audioTrackMix1;
+        private string q_audioTrackMix2;
+        private string q_audioTrackMix3;
+        private string q_audioTrackMix4;
+        private double q_drc1;
+        private double q_drc2;
+        private double q_drc3;
+        private double q_drc4;
+        private Boolean q_forcedSubs;
+        private string q_subtitles;
+
         /// <summary>
         /// Returns a string with the selected Audio track
         /// </summary>
         public string AudioTrack1
         {
-            get
-            {
-                return this.q_audioTrack1;
-            }
+            get { return q_audioTrack1; }
         }
 
-        private string q_audioTrack2;
         /// <summary>
         /// Returns a string with the selected Audio track
         /// </summary>
         public string AudioTrack2
         {
-            get
-            {
-                return this.q_audioTrack2;
-            }
+            get { return q_audioTrack2; }
         }
 
-        private string q_audioTrack3;
         /// <summary>
         /// Returns a string with the selected Audio track
         /// </summary>
         public string AudioTrack3
         {
-            get
-            {
-                return this.q_audioTrack3;
-            }
+            get { return q_audioTrack3; }
         }
 
-        private string q_audioTrack4;
         /// <summary>
         /// Returns a string with the selected Audio track
         /// </summary>
         public string AudioTrack4
         {
-            get
-            {
-                return this.q_audioTrack4;
-            }
+            get { return q_audioTrack4; }
         }
 
-        private string q_audioTrackMix1;
         /// <summary>
         /// Returns a string with the First selected Audio track Mix
         /// </summary>
         public string AudioTrackMix1
         {
-            get
-            {
-                return this.q_audioTrackMix1;
-            }
+            get { return q_audioTrackMix1; }
         }
 
-        private string q_audioTrackMix2;
         /// <summary>
         /// Returns a string with the First selected Audio track Mix
         /// </summary>
         public string AudioTrackMix2
         {
-            get
-            {
-                return this.q_audioTrackMix2;
-            }
+            get { return q_audioTrackMix2; }
         }
 
-        private string q_audioTrackMix3;
         /// <summary>
         /// Returns a string with the First selected Audio track Mix
         /// </summary>
         public string AudioTrackMix3
         {
-            get
-            {
-                return this.q_audioTrackMix3;
-            }
+            get { return q_audioTrackMix3; }
         }
 
-        private string q_audioTrackMix4;
         /// <summary>
         /// Returns a string with the First selected Audio track Mix
         /// </summary>
         public string AudioTrackMix4
         {
-            get
-            {
-                return this.q_audioTrackMix4;
-            }
+            get { return q_audioTrackMix4; }
         }
 
-        private string q_audioEncoder1;
         /// <summary>
         /// Returns an String
         /// The Audio Encoder used.
         /// </summary>
         public string AudioEncoder1
         {
-            get
-            {
-                return this.q_audioEncoder1;
-            }
+            get { return q_audioEncoder1; }
         }
 
-        private string q_audioEncoder2;
         /// <summary>
         /// Returns an String
         /// The Audio Encoder used.
         /// </summary>
         public string AudioEncoder2
         {
-            get
-            {
-                return this.q_audioEncoder2;
-            }
+            get { return q_audioEncoder2; }
         }
 
-        private string q_audioEncoder3;
         /// <summary>
         /// Returns an String
         /// The Audio Encoder used.
         /// </summary>
         public string AudioEncoder3
         {
-            get
-            {
-                return this.q_audioEncoder3;
-            }
+            get { return q_audioEncoder3; }
         }
 
-        private string q_audioEncoder4;
         /// <summary>
         /// Returns an String
         /// The Audio Encoder used.
         /// </summary>
         public string AudioEncoder4
         {
-            get
-            {
-                return this.q_audioEncoder4;
-            }
+            get { return q_audioEncoder4; }
         }
 
-        private string q_audioBitrate1;
         /// <summary>
         /// Returns a string with the audio bitrate
         /// </summary>
         public string AudioBitrate1
         {
-            get
-            {
-                return this.q_audioBitrate1;
-            }
+            get { return q_audioBitrate1; }
         }
 
-        private string q_audioBitrate2;
         /// <summary>
         /// Returns a string with the audio bitrate
         /// </summary>
         public string AudioBitrate2
         {
-            get
-            {
-                return this.q_audioBitrate2;
-            }
+            get { return q_audioBitrate2; }
         }
 
-        private string q_audioBitrate3;
         /// <summary>
         /// Returns a string with the audio bitrate
         /// </summary>
         public string AudioBitrate3
         {
-            get
-            {
-                return this.q_audioBitrate3;
-            }
+            get { return q_audioBitrate3; }
         }
 
-        private string q_audioBitrate4;
         /// <summary>
         /// Returns a string with the audio bitrate
         /// </summary>
         public string AudioBitrate4
         {
-            get
-            {
-                return this.q_audioBitrate4;
-            }
+            get { return q_audioBitrate4; }
         }
 
-        private string q_audioSamplerate1;
         /// <summary>
         /// Returns a string with the audio sample rate
         /// </summary>
         public string AudioSamplerate1
         {
-            get
-            {
-                return this.q_audioSamplerate1;
-            }
+            get { return q_audioSamplerate1; }
         }
 
-        private string q_audioSamplerate2;
         /// <summary>
         /// Returns a string with the audio sample rate
         /// </summary>
         public string AudioSamplerate2
         {
-            get
-            {
-                return this.q_audioSamplerate2;
-            }
+            get { return q_audioSamplerate2; }
         }
 
-        private string q_audioSamplerate3;
         /// <summary>
         /// Returns a string with the audio sample rate
         /// </summary>
         public string AudioSamplerate3
         {
-            get
-            {
-                return this.q_audioSamplerate3;
-            }
+            get { return q_audioSamplerate3; }
         }
 
-        private string q_audioSamplerate4;
         /// <summary>
         /// Returns a string with the audio sample rate
         /// </summary>
         public string AudioSamplerate4
         {
-            get
-            {
-                return this.q_audioSamplerate4;
-            }
+            get { return q_audioSamplerate4; }
         }
 
-        private double q_drc1;
         /// <summary>
         /// Returns a string with the selected subtitle track
         /// </summary>
         public double DRC1
         {
-            get
-            {
-                return this.q_drc1;
-            }
+            get { return q_drc1; }
         }
 
-        private double q_drc2;
         /// <summary>
         /// Returns a string with the selected subtitle track
         /// </summary>
         public double DRC2
         {
-            get
-            {
-                return this.q_drc2;
-            }
+            get { return q_drc2; }
         }
 
-        private double q_drc3;
         /// <summary>
         /// Returns a string with the selected subtitle track
         /// </summary>
         public double DRC3
         {
-            get
-            {
-                return this.q_drc3;
-            }
+            get { return q_drc3; }
         }
 
-        private double q_drc4;
         /// <summary>
         /// Returns a string with the selected subtitle track
         /// </summary>
         public double DRC4
         {
-            get
-            {
-                return this.q_drc4;
-            }
+            get { return q_drc4; }
         }
 
-        private string q_subtitles;
         /// <summary>
         /// Returns a string with the selected subtitle track
         /// </summary>
         public string Subtitles
         {
-            get
-            {
-                return this.q_subtitles;
-            }
+            get { return q_subtitles; }
         }
 
-        private Boolean q_forcedSubs;
         /// <summary>
         /// Returns a string with the selected subtitle track
         /// </summary>
         public Boolean ForcedSubtitles
         {
-            get
-            {
-                return this.q_forcedSubs;
-            }
+            get { return q_forcedSubs; }
         }
 
         #endregion
 
         #region Other
+
         private string q_h264;
+        private Boolean q_verbose;
+
         /// <summary>
         /// Returns a string with the Advanced H264 query string
         /// </summary>
         public string H264Query
         {
-            get
-            {
-                return this.q_h264;
-            }
+            get { return q_h264; }
         }
-        private Boolean q_verbose;
+
         /// <summary>
         /// Returns a string with the Advanced H264 query string
         /// </summary>
         public Boolean Verbose
         {
-            get
-            {
-                return this.q_verbose;
-            }
+            get { return q_verbose; }
         }
+
         #endregion
 
         #endregion
+
+        // All the Main Window GUI options
 
         /// <summary>
         /// Takes in a query which can be in any order and parses it. 
@@ -781,9 +618,10 @@ namespace Handbrake.Functions
         /// <returns>A Parsed Query</returns>
         public static QueryParser Parse(String input)
         {
-            QueryParser thisQuery = new QueryParser();
+            var thisQuery = new QueryParser();
 
             #region Regular Expressions
+
             // Useful Destination Finder
             //Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9?';!^%&*()_\-:\\\s\.]+)(?:\"")");
             //Match source = r1.Match(input.Replace('"', '\"'));
@@ -830,15 +668,16 @@ namespace Handbrake.Functions
             Match audioTrack3 = Regex.Match(input, @"-a ([0-9]*),([0-9]*),([0-9]*)");
             Match audioTrack4 = Regex.Match(input, @"-a ([0-9]*),([0-9]*),([0-9]*),([0-9]*)");
 
-            Match audioTrack1Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");  
+            Match audioTrack1Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*)");
             Match audioTrack2Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*),([0-9a-z0-9]*)");
             Match audioTrack3Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*),([0-9a-z0-9]*),([0-9a-z0-9]*)");
-            Match audioTrack4Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*),([0-9a-z0-9]*),([0-9a-z0-9]*),([0-9a-z0-9]*)"); 
+            Match audioTrack4Mix = Regex.Match(input, @"-6 ([0-9a-z0-9]*),([0-9a-z0-9]*),([0-9a-z0-9]*),([0-9a-z0-9]*)");
 
             Match audioEncoder1 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*)");
             Match audioEncoder2 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
             Match audioEncoder3 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
-            Match audioEncoder4 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
+            Match audioEncoder4 = Regex.Match(input,
+                                              @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
 
             Match audioBitrate1 = Regex.Match(input, @"-B ([0-9auto]*)");
             Match audioBitrate2 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*)");
@@ -864,18 +703,21 @@ namespace Handbrake.Functions
 
             //Program Options
             Match verbose = Regex.Match(input, @" -v");
+
             #endregion
 
             #region Set Varibles
+
             try
             {
                 #region Source Tab
-                if (title.Success != false)
- 	                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
 
-                if (chapters.Success != false)
+                if (title.Success)
+                    thisQuery.q_dvdTitle = int.Parse(title.ToString().Replace("-t ", ""));
+
+                if (chapters.Success)
                 {
-                    string[] actTitles = new string[2];
+                    var actTitles = new string[2];
                     actTitles = chapters.ToString().Replace("-c ", "").Split('-');
                     thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
                     if (actTitles.Length > 1)
@@ -887,7 +729,7 @@ namespace Handbrake.Functions
                         thisQuery.q_chaptersFinish = thisQuery.q_chaptersStart;
                 }
 
-                if (format.Success != false)
+                if (format.Success)
                     thisQuery.q_format = format.ToString().Replace("-f ", "");
 
                 #endregion
@@ -919,22 +761,22 @@ namespace Handbrake.Functions
 
                 #region Picture Tab
 
-                if (width.Success != false)
+                if (width.Success)
                     thisQuery.q_videoWidth = int.Parse(width.ToString().Replace("-w ", ""));
 
-                if (height.Success != false)
+                if (height.Success)
                     thisQuery.q_videoHeight = int.Parse(height.ToString().Replace("-l ", ""));
 
-                if (maxWidth.Success != false)
+                if (maxWidth.Success)
                     thisQuery.q_maxWidth = int.Parse(maxWidth.ToString().Replace("-X ", ""));
 
-                if (maxHeight.Success != false)
+                if (maxHeight.Success)
                     thisQuery.q_maxHeight = int.Parse(maxHeight.ToString().Replace("-Y ", ""));
 
-                if (crop.Success != false)
+                if (crop.Success)
                 {
                     thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
-                    string[] actCropValues = new string[3];
+                    var actCropValues = new string[3];
                     actCropValues = thisQuery.q_cropValues.Split(':');
                     thisQuery.q_croptop = actCropValues[0];
                     thisQuery.q_cropbottom = actCropValues[1];
@@ -945,7 +787,7 @@ namespace Handbrake.Functions
                 // Deblock Slider
                 string deblockValue = "";
                 thisQuery.q_deBlock = 0;
-                if (deblock.Success != false)
+                if (deblock.Success)
                     deblockValue = deblock.ToString().Replace("--deblock=", "");
 
                 if (deblockValue != "")
@@ -955,9 +797,9 @@ namespace Handbrake.Functions
                 thisQuery.q_decomb = decomb.Success;
 
                 thisQuery.q_deinterlace = "None";
-                if (deinterlace.Success != false)
+                if (deinterlace.Success)
                 {
-                    switch (deinterlace.ToString().Replace("--deinterlace=", "").Replace("\"",""))
+                    switch (deinterlace.ToString().Replace("--deinterlace=", "").Replace("\"", ""))
                     {
                         case "fast":
                             thisQuery.q_deinterlace = "Fast";
@@ -978,7 +820,7 @@ namespace Handbrake.Functions
                 }
 
                 thisQuery.q_denoise = "None";
-                if (denoise.Success != false)
+                if (denoise.Success)
                 {
                     switch (denoise.ToString().Replace("--denoise=", "").Replace("\"", ""))
                     {
@@ -995,36 +837,36 @@ namespace Handbrake.Functions
                             thisQuery.q_denoise = "None";
                             break;
                     }
-
                 }
                 thisQuery.q_anamorphic = anamorphic.Success;
-                if (chapterMarkersFileMode.Success == true || chapterMarkers.Success == true)
+                if (chapterMarkersFileMode.Success || chapterMarkers.Success)
                     thisQuery.q_chapterMarkers = true;
-                
+
                 thisQuery.q_looseAnamorphic = lanamorphic.Success;
 
                 #endregion
-     
+
                 #region Video Settings Tab
+
                 thisQuery.q_grayscale = grayscale.Success;
                 thisQuery.q_twoPass = twoPass.Success;
                 thisQuery.q_turboFirst = turboFirstPass.Success;
                 thisQuery.q_largeMp4 = largerMp4.Success;
-                if (videoFramerate.Success != false)
+                if (videoFramerate.Success)
                     thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ", "");
                 else
                     thisQuery.q_videoFramerate = "Same as source";
 
-                if (videoBitrate.Success != false)
+                if (videoBitrate.Success)
                     thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ", "");
-                if (videoFilesize.Success != false)
+                if (videoFilesize.Success)
                     thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ", "");
 
                 double qConvert = 0;
-                if (videoQuality.Success != false)
+                if (videoQuality.Success)
                 {
-                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Culture) * 100;
-                    qConvert = System.Math.Ceiling(qConvert);
+                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Culture)*100;
+                    qConvert = Math.Ceiling(qConvert);
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }
                 thisQuery.q_ipodAtom = ipodAtom.Success;
@@ -1037,7 +879,7 @@ namespace Handbrake.Functions
                 // Tracks
                 thisQuery.q_audioTrack1 = "Automatic";
 
-                if (audioTrack2.Success != false)
+                if (audioTrack2.Success)
                 {
                     string[] audioChan = audioTrack2.ToString().Split(',');
                     thisQuery.q_audioTrack2 = audioChan[1];
@@ -1045,7 +887,7 @@ namespace Handbrake.Functions
                 else
                     thisQuery.q_audioTrack2 = "None";
 
-                if (audioTrack3.Success != false)
+                if (audioTrack3.Success)
                 {
                     string[] audioChan = audioTrack3.ToString().Split(',');
                     thisQuery.q_audioTrack3 = audioChan[2];
@@ -1053,7 +895,7 @@ namespace Handbrake.Functions
                 else
                     thisQuery.q_audioTrack3 = "None";
 
-                if (audioTrack4.Success != false)
+                if (audioTrack4.Success)
                 {
                     string[] audioChan = audioTrack4.ToString().Split(',');
                     thisQuery.q_audioTrack4 = audioChan[3];
@@ -1061,51 +903,52 @@ namespace Handbrake.Functions
                 else
                     thisQuery.q_audioTrack4 = "None";
 
-    
+
                 // Mixdowns
                 thisQuery.q_audioTrackMix1 = "Automatic";
-                if (audioTrack1Mix.Success != false)
-                    thisQuery.q_audioTrackMix1 = getMixDown(audioTrack1Mix.ToString().Replace("-6 ", "").Replace(" ", ""));
+                if (audioTrack1Mix.Success)
+                    thisQuery.q_audioTrackMix1 =
+                        getMixDown(audioTrack1Mix.ToString().Replace("-6 ", "").Replace(" ", ""));
 
                 thisQuery.q_audioTrackMix2 = "Automatic";
-                if (audioTrack2Mix.Success != false)
+                if (audioTrack2Mix.Success)
                 {
                     string[] audio2mix = audioTrack2Mix.ToString().Split(',');
                     thisQuery.q_audioTrackMix2 = getMixDown(audio2mix[1].Trim());
                 }
 
                 thisQuery.q_audioTrackMix3 = "Automatic";
-                if (audioTrack3Mix.Success != false)
+                if (audioTrack3Mix.Success)
                 {
                     string[] audio3mix = audioTrack3Mix.ToString().Split(',');
                     thisQuery.q_audioTrackMix3 = getMixDown(audio3mix[2].Trim());
                 }
 
                 thisQuery.q_audioTrackMix4 = "Automatic";
-                if (audioTrack4Mix.Success != false)
+                if (audioTrack4Mix.Success)
                 {
                     string[] audio4mix = audioTrack4Mix.ToString().Split(',');
                     thisQuery.q_audioTrackMix4 = getMixDown(audio4mix[3].Trim());
                 }
-                
+
 
                 // Audio Encoders
-                if (audioEncoder1.Success != false)
+                if (audioEncoder1.Success)
                     thisQuery.q_audioEncoder1 = getAudioEncoder(audioEncoder1.ToString().Replace("-E ", ""));
 
-                if (audioEncoder2.Success != false)
+                if (audioEncoder2.Success)
                 {
                     string[] audio2enc = audioEncoder2.ToString().Split(',');
                     thisQuery.q_audioEncoder2 = getAudioEncoder(audio2enc[1].Trim());
                 }
 
-                if (audioEncoder3.Success != false)
+                if (audioEncoder3.Success)
                 {
                     string[] audio3enc = audioEncoder3.ToString().Split(',');
                     thisQuery.q_audioEncoder3 = getAudioEncoder(audio3enc[2].Trim());
                 }
 
-                if (audioEncoder4.Success != false)
+                if (audioEncoder4.Success)
                 {
                     string[] audio4enc = audioEncoder4.ToString().Split(',');
                     thisQuery.q_audioEncoder4 = getAudioEncoder(audio4enc[3].Trim());
@@ -1114,22 +957,22 @@ namespace Handbrake.Functions
 
                 // Audio Bitrate
                 thisQuery.q_audioBitrate1 = "";
-                if (audioBitrate1.Success != false)
+                if (audioBitrate1.Success)
                 {
                     thisQuery.q_audioBitrate1 = audioBitrate1.ToString().Replace("-B ", "").Trim();
                     if (audioBitrate1.ToString().Replace("-B ", "").Trim() == "0") thisQuery.q_audioBitrate1 = "Auto";
                 }
 
                 thisQuery.q_audioBitrate2 = "";
-                if (audioBitrate2.Success != false && audioTrack2.Success == true)
+                if (audioBitrate2.Success && audioTrack2.Success)
                 {
                     string[] audioBitrateSelect = audioBitrate2.ToString().Split(',');
                     if (audioBitrateSelect[1].Trim() == "0") audioBitrateSelect[1] = "Auto";
-                    thisQuery.q_audioBitrate2 = audioBitrateSelect[1].Trim();                      
+                    thisQuery.q_audioBitrate2 = audioBitrateSelect[1].Trim();
                 }
 
                 thisQuery.q_audioBitrate3 = "";
-                if (audioBitrate3.Success != false && audioTrack3.Success == true)
+                if (audioBitrate3.Success && audioTrack3.Success)
                 {
                     string[] audioBitrateSelect = audioBitrate3.ToString().Split(',');
                     if (audioBitrateSelect[2].Trim() == "0") audioBitrateSelect[2] = "Auto";
@@ -1137,7 +980,7 @@ namespace Handbrake.Functions
                 }
 
                 thisQuery.q_audioBitrate4 = "";
-                if (audioBitrate4.Success != false)
+                if (audioBitrate4.Success)
                 {
                     string[] audioBitrateSelect = audioBitrate4.ToString().Split(',');
                     if (audioBitrateSelect[3].Trim() == "0") audioBitrateSelect[3] = "Auto";
@@ -1148,28 +991,28 @@ namespace Handbrake.Functions
                 // Audio Sample Rate
                 // Make sure to change 0 to Auto
                 thisQuery.q_audioSamplerate1 = "Auto";
-                if (audioSampleRate1.Success != false)
+                if (audioSampleRate1.Success)
                 {
                     thisQuery.q_audioSamplerate1 = audioSampleRate1.ToString().Replace("-R ", "").Trim();
                     if (thisQuery.q_audioSamplerate1 == "0") thisQuery.q_audioSamplerate1 = "Auto";
                 }
-                    
 
-                if (audioSampleRate2.Success != false)
+
+                if (audioSampleRate2.Success)
                 {
                     string[] audioSRSelect = audioSampleRate2.ToString().Split(',');
                     if (audioSRSelect[1] == "0") audioSRSelect[1] = "Auto";
                     thisQuery.q_audioSamplerate2 = audioSRSelect[1].Trim();
                 }
 
-                if (audioSampleRate3.Success != false)
+                if (audioSampleRate3.Success)
                 {
                     string[] audioSRSelect = audioSampleRate3.ToString().Split(',');
                     if (audioSRSelect[2] == "0") audioSRSelect[2] = "Auto";
                     thisQuery.q_audioSamplerate3 = audioSRSelect[2].Trim();
                 }
 
-                if (audioSampleRate4.Success != false)
+                if (audioSampleRate4.Success)
                 {
                     string[] audioSRSelect = audioSampleRate4.ToString().Split(',');
                     if (audioSRSelect[3] == "0") audioSRSelect[3] = "Auto";
@@ -1180,15 +1023,15 @@ namespace Handbrake.Functions
                 float drcValue;
 
                 thisQuery.q_drc1 = 1;
-                if (drc1.Success != false)
+                if (drc1.Success)
                 {
                     string value = drc1.ToString().Replace("-D ", "");
                     float.TryParse(value, out drcValue);
                     thisQuery.q_drc1 = drcValue;
                 }
-               
-                thisQuery.q_drc2 = 1;   
-                if (drc2.Success != false)
+
+                thisQuery.q_drc2 = 1;
+                if (drc2.Success)
                 {
                     string[] drcPoint = drc2.ToString().Split(',');
                     float.TryParse(drcPoint[1], out drcValue);
@@ -1196,7 +1039,7 @@ namespace Handbrake.Functions
                 }
 
                 thisQuery.q_drc3 = 1;
-                if (drc3.Success != false)
+                if (drc3.Success)
                 {
                     string[] drcPoint = drc3.ToString().Split(',');
                     float.TryParse(drcPoint[2], out drcValue);
@@ -1204,7 +1047,7 @@ namespace Handbrake.Functions
                 }
 
                 thisQuery.q_drc4 = 1;
-                if (drc4.Success != false)
+                if (drc4.Success)
                 {
                     string[] drcPoint = drc4.ToString().Split(',');
                     float.TryParse(drcPoint[3], out drcValue);
@@ -1212,7 +1055,7 @@ namespace Handbrake.Functions
                 }
 
                 // Subtitle Stuff
-                if (subtitles.Success != false)
+                if (subtitles.Success)
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
                 else
                 {
@@ -1227,22 +1070,27 @@ namespace Handbrake.Functions
                 #endregion
 
                 #region H.264 and other
+
                 //
                 //H264 Tab
                 //
-                if (x264.Success != false)
+                if (x264.Success)
                     thisQuery.q_h264 = x264.ToString().Replace("-x ", "");
 
                 //
                 //Progam Options
                 //
                 thisQuery.q_verbose = verbose.Success;
+
                 #endregion
             }
             catch (Exception exc)
             {
-                MessageBox.Show("An error has occured in the Query Parser. Please report this error on the forum in the 'Windows' support section. \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "An error has occured in the Query Parser. Please report this error on the forum in the 'Windows' support section. \n\n" +
+                    exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
             #endregion
 
             return thisQuery;
@@ -1266,6 +1114,7 @@ namespace Handbrake.Functions
                     return "Automatic";
             }
         }
+
         private static string getAudioEncoder(string audioEnc)
         {
             switch (audioEnc)
