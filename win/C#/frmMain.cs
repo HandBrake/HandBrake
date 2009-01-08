@@ -8,14 +8,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using System.Runtime.InteropServices;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace Handbrake
 {
@@ -136,7 +132,7 @@ namespace Handbrake
             events();
 
             // Queue Recovery
-            queueRecovery();    
+            queueRecovery();
         }
 
         // Startup Functions
@@ -332,6 +328,14 @@ namespace Handbrake
         {
             treeView_presets.CollapseAll();
         }
+        private void pmnu_saveChanges_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you wish to include picture settings when updating the preset: " + treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, queryGen.generateTabbedComponentsQuery(this), true);
+            else if (result == DialogResult.No)
+                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, queryGen.generateTabbedComponentsQuery(this), false);
+        }
         private void pmnu_delete_click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
@@ -346,6 +350,21 @@ namespace Handbrake
 
                 // Now reload the TreeView states
                 loadTreeViewStates(nodeStatus);
+            }
+            treeView_presets.Select();
+        }
+        private void presets_menu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Make sure that the save menu is always disabled by default
+            pmnu_saveChanges.Enabled = false;
+
+            // Now enable the save menu if the selected preset is a user preset
+            if (treeView_presets.SelectedNode != null)
+            {
+                if (presetHandler.checkIfUserPresetExists(treeView_presets.SelectedNode.Text))
+                {
+                    pmnu_saveChanges.Enabled = true;
+                }
             }
             treeView_presets.Select();
         }
@@ -542,7 +561,7 @@ namespace Handbrake
                         HandBrakeCLI = aProc[0];
                         HandBrakeCLI.Kill();
                     }
-                    
+
                     // Update the GUI
                     setEncodeFinished();
                 }
@@ -572,7 +591,7 @@ namespace Handbrake
 
                     setEncodeStarted(); // Encode is running, so setup the GUI appropriately
                     encodeQueue.startEncode(); // Start The Queue Encoding Process
-                    
+
                 }
                 else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                     MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1927,6 +1946,9 @@ namespace Handbrake
         }
 
         #endregion
+
+
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

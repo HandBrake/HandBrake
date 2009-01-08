@@ -20,6 +20,7 @@ namespace Handbrake.Presets
         /// </summary>
         /// <param name="presetName">String, The name of the new preset</param>
         /// <param name="query">String, the CLI query for the new preset</param>
+        /// <param name="pictureSettings"> Bool, store crop/picture sizes in the presets</param>
         public Boolean addPreset(string presetName, string query, Boolean pictureSettings)
         {
             if (checkIfPresetExists(presetName) == false)
@@ -68,13 +69,29 @@ namespace Handbrake.Presets
             }
             user_presets = newUserPresets;
 
-            // Now, Update the presets.xml and user_presets.xml file with the new items.
-            string userPresets = Application.StartupPath.ToString() + "\\user_presets.xml";
-            string presetsFile = Application.StartupPath.ToString() + "\\presets.xml";
-
             // Rebuild the user_presets.xml file
             updateUserPresetsFile();
             updatePresetsFile();
+        }
+
+        /// <summary>
+        /// Save changes to a given preset in the user preset list.
+        /// </summary>
+        /// <param name="presetName">String, The name of the new preset</param>
+        /// <param name="query">String, the CLI query for the new preset</param>
+        /// <param name="pictureSettings"> Bool, store crop/picture sizes in the preset</param>
+        public void updatePreset(string presetName, string query, Boolean pictureSettings)
+        {
+            // User Presets
+            foreach (Preset item in user_presets)
+            {
+                if (item.Name == presetName)
+                {
+                    item.Query = query;
+                    item.PictureSettings = pictureSettings;
+                    MessageBox.Show("Changes to \"" + presetName + "\" Saved", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
 
         /// <summary>
@@ -304,6 +321,26 @@ namespace Handbrake.Presets
                 if (item.Name == name)
                     return true;
             }
+
+            // User Presets
+            foreach (Preset item in user_presets)
+            {
+                if (item.Name == name)
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Check if the user preset "name" exists in user_presets list.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Boolean checkIfUserPresetExists(string name)
+        {
+            if (name == string.Empty)
+                return false;
 
             // User Presets
             foreach (Preset item in user_presets)

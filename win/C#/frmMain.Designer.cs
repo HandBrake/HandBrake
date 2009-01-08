@@ -232,6 +232,7 @@ namespace Handbrake
             this.pmnu_expandAll = new System.Windows.Forms.ToolStripMenuItem();
             this.pmnu_collapse = new System.Windows.Forms.ToolStripMenuItem();
             this.sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.pmnu_saveChanges = new System.Windows.Forms.ToolStripMenuItem();
             this.pmnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btn_source = new System.Windows.Forms.ToolStripDropDownButton();
@@ -2705,33 +2706,43 @@ namespace Handbrake
             this.pmnu_expandAll,
             this.pmnu_collapse,
             this.sep1,
+            this.pmnu_saveChanges,
             this.pmnu_delete});
             this.presets_menu.Name = "presets_menu";
-            this.presets_menu.Size = new System.Drawing.Size(140, 76);
+            this.presets_menu.Size = new System.Drawing.Size(155, 120);
+            this.presets_menu.Text = ";";
+            this.presets_menu.Opening += new System.ComponentModel.CancelEventHandler(this.presets_menu_Opening);
             // 
             // pmnu_expandAll
             // 
             this.pmnu_expandAll.Name = "pmnu_expandAll";
-            this.pmnu_expandAll.Size = new System.Drawing.Size(139, 22);
+            this.pmnu_expandAll.Size = new System.Drawing.Size(154, 22);
             this.pmnu_expandAll.Text = "Expand All";
             this.pmnu_expandAll.Click += new System.EventHandler(this.pmnu_expandAll_Click);
             // 
             // pmnu_collapse
             // 
             this.pmnu_collapse.Name = "pmnu_collapse";
-            this.pmnu_collapse.Size = new System.Drawing.Size(139, 22);
+            this.pmnu_collapse.Size = new System.Drawing.Size(154, 22);
             this.pmnu_collapse.Text = "Collapse All";
             this.pmnu_collapse.Click += new System.EventHandler(this.pmnu_collapse_Click);
             // 
             // sep1
             // 
             this.sep1.Name = "sep1";
-            this.sep1.Size = new System.Drawing.Size(136, 6);
+            this.sep1.Size = new System.Drawing.Size(151, 6);
+            // 
+            // pmnu_saveChanges
+            // 
+            this.pmnu_saveChanges.Name = "pmnu_saveChanges";
+            this.pmnu_saveChanges.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_saveChanges.Text = "Save Changes";
+            this.pmnu_saveChanges.Click += new System.EventHandler(this.pmnu_saveChanges_Click);
             // 
             // pmnu_delete
             // 
             this.pmnu_delete.Name = "pmnu_delete";
-            this.pmnu_delete.Size = new System.Drawing.Size(139, 22);
+            this.pmnu_delete.Size = new System.Drawing.Size(154, 22);
             this.pmnu_delete.Text = "Delete";
             this.pmnu_delete.Click += new System.EventHandler(this.pmnu_delete_click);
             // 
@@ -3187,6 +3198,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripDropDownButton tb_preview;
         private System.Windows.Forms.ToolStripMenuItem mnu_qtpreview;
         private System.Windows.Forms.ToolStripMenuItem mnu_vlcpreview;
+        private System.Windows.Forms.ToolStripMenuItem pmnu_saveChanges;
 
     }
 }
