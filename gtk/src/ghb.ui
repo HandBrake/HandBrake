@@ -293,7 +293,7 @@
             <property name="icon-name">hb-picture</property>
             <property name="name">show_preview_menu</property>
             <property name="label" translatable="yes">_Picture Settings</property>
-            <signal handler="preview_button_clicked_cb" name="activate"/>
+            <signal handler="preview_menu_clicked_cb" name="activate"/>
           </object>
         </child>
         <child>
@@ -301,7 +301,7 @@
             <property name="icon-name">hb-activity</property>
             <property name="name">show_activity_menu</property>
             <property name="label" translatable="yes">_Activity Window</property>
-            <signal handler="show_activity_clicked_cb" name="activate"/>
+            <signal handler="show_activity_menu_clicked_cb" name="activate"/>
           </object>
         </child>
         <child>
@@ -309,7 +309,7 @@
             <property name="icon-name">hb-queue</property>
             <property name="name">show_queue_menu</property>
             <property name="label" translatable="yes">Show _Queue</property>
-            <signal handler="show_queue_clicked_cb" name="activate"/>
+            <signal handler="show_queue_menu_clicked_cb" name="activate"/>
           </object>
         </child>
         <child>
@@ -446,39 +446,39 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="show_queue">
+              <object class="GtkToggleToolButton" id="show_queue">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Show Queue</property>
                 <property name="label" translatable="yes">Show Queue</property>
                 <property name="icon_name">hb-queue</property>
-                <signal handler="show_queue_clicked_cb" name="clicked"/>
+                <signal handler="show_queue_clicked_cb" name="toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="show_picture">
+              <object class="GtkToggleToolButton" id="show_picture">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
                 <property name="label" translatable="yes">Picture Settings</property>
                 <property name="icon_name">hb-picture</property>
-                <signal name="clicked" handler="preview_button_clicked_cb"/>
+                <signal name="toggled" handler="preview_button_clicked_cb"/>
               </object>
               <packing>
                 <property name="expand">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="show_activity">
+              <object class="GtkToggleToolButton" id="show_activity">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Show Activity Window</property>
                 <property name="label" translatable="yes">Activity Window</property>
                 <property name="icon_name">hb-activity</property>
-                <signal handler="show_activity_clicked_cb" name="clicked"/>
+                <signal handler="show_activity_clicked_cb" name="toggled"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -762,7 +762,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkTable" id="table1">
+                              <object class="GtkTable" id="container_box">
                                 <property name="visible">True</property>
                                 <property name="n_rows">2</property>
                                 <property name="n_columns">2</property>
@@ -3673,7 +3673,7 @@ location as the movie.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
+    <signal handler="activity_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox37">
         <property name="visible">True</property>
@@ -3728,7 +3728,7 @@ location as the movie.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
+    <signal handler="queue_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox34">
         <property name="visible">True</property>

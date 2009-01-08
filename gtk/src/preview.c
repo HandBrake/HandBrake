@@ -737,17 +737,34 @@ preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, si
 	ghb_set_preview_image(ud);
 }
 
+static void
+set_visible(GtkWidget *widget, gboolean visible)
+{
+	if (visible)
+	{
+		gtk_widget_show_now(widget);
+	}
+	else
+	{
+		gtk_widget_hide(widget);
+	}
+}
+
 void
 preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-	gint titleindex;
-
-	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	if (titleindex < 0) return;
-	g_debug("titleindex %d", titleindex);
-
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "preview_window");
-	gtk_widget_show (widget);
+	set_visible(widget, gtk_toggle_tool_button_get_active(
+						GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+}
+
+void
+preview_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "preview_window");
+	set_visible(widget, TRUE);
+	widget = GHB_WIDGET (ud->builder, "show_picture");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
 }
 
 void
@@ -770,6 +787,8 @@ preview_window_delete_cb(
 {
 	live_preview_stop(ud);
 	gtk_widget_hide(widget);
+	widget = GHB_WIDGET (ud->builder, "show_picture");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
 	return TRUE;
 }
 

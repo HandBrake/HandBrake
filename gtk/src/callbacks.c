@@ -1972,11 +1972,43 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 	return TRUE;
 }
 
+static void
+set_visible(GtkWidget *widget, gboolean visible)
+{
+	if (visible)
+	{
+		gtk_widget_show_now(widget);
+	}
+	else
+	{
+		gtk_widget_hide(widget);
+	}
+}
+
 void
 show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
-	gtk_widget_show (widget);
+	set_visible(widget, gtk_toggle_tool_button_get_active(
+						GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+}
+
+void
+show_activity_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
+	set_visible(widget, TRUE);
+	widget = GHB_WIDGET (ud->builder, "show_activity");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+}
+
+gboolean
+activity_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
+{
+	set_visible(xwidget, FALSE);
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "show_activity");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
+	return TRUE;
 }
 
 void
@@ -2050,7 +2082,26 @@ void
 show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
-	gtk_widget_show (widget);
+	set_visible(widget, gtk_toggle_tool_button_get_active(
+						GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+}
+
+void
+show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
+	set_visible(widget, TRUE);
+	widget = GHB_WIDGET (ud->builder, "show_queue");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+}
+
+gboolean
+queue_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
+{
+	set_visible(xwidget, FALSE);
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "show_queue");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
+	return TRUE;
 }
 
 void
@@ -2252,19 +2303,6 @@ debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, g
 	}
 }
 
-static void
-set_visible(GtkWidget *widget, gboolean visible)
-{
-	if (visible)
-	{
-		gtk_widget_show_now(widget);
-	}
-	else
-	{
-		gtk_widget_hide(widget);
-	}
-}
-
 void
 ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 {
@@ -2288,8 +2326,6 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 	widget = GHB_WIDGET(ud->builder, "presets_save");
 	set_visible(widget, !hbfd);
 	widget = GHB_WIDGET(ud->builder, "presets_remove");
-	set_visible(widget, !hbfd);
-	widget = GHB_WIDGET(ud->builder, "presets_default");
 	set_visible(widget, !hbfd);
 	widget = GHB_WIDGET (ud->builder, "hb_window");
 	gtk_window_resize(GTK_WINDOW(widget), 16, 16);
