@@ -102,10 +102,8 @@ struct hb_stream_s
     int     last_error_count;   /* # errors at last error message */
     int     packetsize;         /* Transport Stream packet size */
 
-    int8_t  need_keyframe;      // non-zero if want to start at a keyframe
-    int8_t  ts_no_RAP;          // non-zero if there are no random access points
-
-    int8_t  ts_found_pcr;       // non-zero if we've found at least one input pcr
+    uint8_t need_keyframe;      // non-zero if want to start at a keyframe
+    uint8_t ts_found_pcr;       // non-zero if we've found at least one input pcr
     int     ts_pcr_out;         // sequence number of most recent output pcr
     int     ts_pcr_in;          // sequence number of most recent input pcr
     int64_t ts_pcr;             // most recent input pcr
@@ -130,6 +128,11 @@ struct hb_stream_s
      */
     uint8_t ts_number_video_pids;
     uint8_t ts_number_audio_pids;
+    uint8_t ts_flags;           // stream characteristics:
+#define         TS_HAS_PCR  (1 << 0)    // at least one PCR seen
+#define         TS_HAS_RAP  (1 << 1)    // Random Access Point bit seen
+#define         TS_HAS_RSEI (1 << 2)    // "Restart point" SEI seen
+    uint8_t ts_IDRs;            // # IDRs found during duration scan
 
     int16_t ts_video_pids[kMaxNumberVideoPIDS];
     int16_t ts_audio_pids[kMaxNumberAudioPIDS];
@@ -704,6 +707,17 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
         aTitle->video_codec = st2codec[stream->ts_stream_type[0]].codec;
         aTitle->video_codec_param = st2codec[stream->ts_stream_type[0]].codec_param;
         aTitle->demuxer = HB_MPEG2_TS_DEMUXER;
+
+        if ( ( stream->ts_flags & TS_HAS_PCR ) == 0 )
+        {
+            hb_log( "transport stream missing PCRs - using video DTS instead" );
+        }
+
+        if ( stream->ts_IDRs < 1 )
+        {
+            hb_log( "transport stream doesn't seem to have video IDR frames" );
+            aTitle->flags |= HBTF_NO_IDR;
+        }
 	}
     else
     {
@@ -772,42 +786,87 @@ static void skip_to_next_pack( hb_stream_t *src_stream )
     }
 }
 
-/*
- * scan the next MB of 'stream' to try to find a random access point
- */
-static void hb_ts_stream_find_RAP( hb_stream_t *stream )
+static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
 {
-    off_t starting_point = ftello(stream->file_handle);
-    int npack = 300000; // max packets to read
+    // For mpeg2: look for a gop start or i-frame picture start
+    // for h.264: look for idr nal type or a slice header for an i-frame
+    // for vc1:   look for a Sequence header
+    int i;
+    uint32_t strid = 0;
 
-    while (--npack >= 0)
+
+    if ( stream->ts_stream_type[0] <= 2 )
     {
-        off_t cur = ftello(stream->file_handle);
-        const uint8_t *buf = next_packet( stream );
-        if ( buf == NULL )
+        // This section of the code handles MPEG-1 and MPEG-2 video streams
+        for (i = 13 + adapt_len; i < 188; i++)
         {
-            break;
-        }
-        switch (buf[3] & 0x30)
-        {
-            case 0x00: // illegal
-                continue;
-
-            case 0x20: // fill packet
-            case 0x30: // adaptation
-                if ( buf[5] & 0x40 )
+            strid = (strid << 8) | buf[i];
+            if ( ( strid >> 8 ) == 1 )
+            {
+                // we found a start code
+                uint8_t id = strid;
+                switch ( id )
                 {
-                    // found a random access point
-                    fseeko( stream->file_handle, cur, SEEK_SET );
-                    return;
+                    case 0xB8: // group_start_code (GOP header)
+                    case 0xB3: // sequence_header code
+                        return 1;
+
+                    case 0x00: // picture_start_code
+                        // picture_header, let's see if it's an I-frame
+                        if (i<185)
+                        {
+                            // check if picture_coding_type == 1
+                            if ((buf[i+2] & (0x7 << 3)) == (1 << 3))
+                            {
+                                // found an I-frame picture
+                                return 1;
+                            }
+                        }
+                        break;
                 }
-                continue;
+            }
         }
+        // didn't find an I-frame
+        return 0;
+    }
+    if ( stream->ts_stream_type[0] == 0x1b )
+    {
+        // we have an h.264 stream 
+        for (i = 13 + adapt_len; i < 188; i++)
+        {
+            strid = (strid << 8) | buf[i];
+            if ( ( strid >> 8 ) == 1 )
+            {
+                // we found a start code - remove the ref_idc from the nal type
+                uint8_t nal_type = strid & 0x1f;
+                if ( nal_type == 0x05 )
+                    // h.264 IDR picture start
+                    return 1;
+            }
+        }
+        // didn't find an I-frame
+        return 0;
+    }
+    if ( stream->ts_stream_type[0] == 0xea )
+    {
+        // we have an vc1 stream 
+        for (i = 13 + adapt_len; i < 188; i++)
+        {
+            strid = (strid << 8) | buf[i];
+            if ( strid == 0x10f )
+            {
+                // the ffmpeg vc1 decoder requires a seq hdr code in the first
+                // frame.
+                return 1;
+            }
+        }
+        // didn't find an I-frame
+        return 0;
     }
 
-    /* didn't find it */
-    fseeko( stream->file_handle, starting_point, SEEK_SET );
-    stream->ts_no_RAP = 1;
+    // we don't understand the stream type so just say "yes" otherwise
+    // we'll discard all the video.
+    return 1;
 }
 
 /*
@@ -827,12 +886,28 @@ static const uint8_t *hb_ts_stream_getPEStype(hb_stream_t *stream, uint32_t pid)
             return 0;
         }
 
+        // while we're reading the stream, check if it has valid PCRs
+        // and/or random access points.
+        uint32_t pack_pid = ( (buf[1] & 0x1f) << 8 ) | buf[2];
+        if ( pack_pid == stream->pmt_info.PCR_PID )
+        {
+            if ( ( buf[5] & 0x10 ) &&
+                 ( ( ( buf[3] & 0x30 ) == 0x20 ) ||
+                   ( ( buf[3] & 0x30 ) == 0x30 && buf[4] > 6 ) ) )
+            {
+                stream->ts_flags |= TS_HAS_PCR;
+            }
+        }
+        if ( buf[5] & 0x40 )
+        {
+            stream->ts_flags |= TS_HAS_RAP;
+        }
+
         /*
          * The PES header is only in TS packets with 'start' set so we check
          * that first then check for the right PID.
          */
-        if ((buf[1] & 0x40) == 0 || (buf[1] & 0x1f) != (pid >> 8) ||
-            buf[2] != (pid & 0xff))
+        if ((buf[1] & 0x40) == 0 || pack_pid != pid )
         {
             // not a start packet or not the pid we want
             continue;
@@ -934,7 +1009,7 @@ struct pts_pos {
     uint64_t pts;   /* PTS from video stream */
 };
 
-#define NDURSAMPLES 64
+#define NDURSAMPLES 128
 
 // get one (position, timestamp) sampple from a transport or program
 // stream.
@@ -963,6 +1038,14 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
                  ( ( (uint64_t)buf[11] >> 1 ) << 15 ) |
                  ( (uint64_t)buf[12] << 7 ) |
                  ( (uint64_t)buf[13] >> 1 );
+
+        if ( isIframe( stream, buf, -4 ) )
+        {
+            if (  stream->ts_IDRs < 255 )
+            {
+                ++stream->ts_IDRs;
+            }
+        }
     }
     else
     {
@@ -1221,12 +1304,11 @@ int hb_stream_seek( hb_stream_t * stream, float f )
         hb_ts_stream_reset(stream);
         if ( f > 0 )
         {
-            if ( !stream->ts_no_RAP )
+            if ( stream->ts_IDRs )
             {
-                // we're not at the beginning - try to find a random access point
-                hb_ts_stream_find_RAP( stream );
+                // the stream has IDRs so look for one.
+                stream->need_keyframe = 1;
             }
-            stream->need_keyframe = 1;
         }
         else
         {
@@ -2080,108 +2162,6 @@ static void generate_output_data(hb_stream_t *stream, int curstream)
     stream->ts_buf[curstream]->size = 0;
 }
 
-static int isIframe( hb_stream_t *stream, const uint8_t *buf, int adapt_len )
-{
-    // For mpeg2: look for a gop start or i-frame picture start
-    // for h.264: look for idr nal type or a slice header for an i-frame
-    // for vc1:   ???
-    int i;
-    uint32_t strid = 0;
-
-
-    if ( stream->ts_stream_type[0] <= 2 )
-    {
-        // This section of the code handles MPEG-1 and MPEG-2 video streams
-        for (i = 13 + adapt_len; i < 188; i++)
-        {
-            strid = (strid << 8) | buf[i];
-            if ( ( strid >> 8 ) == 1 )
-            {
-                // we found a start code
-                uint8_t id = strid;
-                switch ( id )
-                {
-                    case 0xB8: // group_start_code (GOP header)
-                    case 0xB3: // sequence_header code
-                        return 1;
-
-                    case 0x00: // picture_start_code
-                        // picture_header, let's see if it's an I-frame
-                        if (i<185)
-                        {
-                            // check if picture_coding_type == 1
-                            if ((buf[i+2] & (0x7 << 3)) == (1 << 3))
-                            {
-                                // found an I-frame picture
-                                return 1;
-                            }
-                        }
-                        break;
-                }
-            }
-        }
-        // didn't find an I-frame
-        return 0;
-    }
-    if ( stream->ts_stream_type[0] == 0x1b )
-    {
-        // we have an h.264 stream 
-        for (i = 13 + adapt_len; i < 188; i++)
-        {
-            strid = (strid << 8) | buf[i];
-            if ( ( strid >> 8 ) == 1 )
-            {
-                // we found a start code - remove the ref_idc from the nal type
-                uint8_t nal_type = strid & 0x1f;
-                if ( nal_type == 0x05 )
-                    // h.264 IDR picture start
-                    return 1;
-
-                if ( stream->packetsize == 192 )
-                {
-                    // m2ts files have idr frames so keep looking for one
-                    continue;
-                }
-
-                // h.264 in ts files (ATSC or DVB video) often seem to be
-                // missing IDR frames so look for at least an I
-                if ( nal_type == 0x01 )
-                {
-                    // h.264 slice: has to be start MB 0 & type I (2, 4, 7 or 9)
-                    uint8_t id = buf[i+1];
-                    if ( ( id >> 4 ) == 0x0b || ( id >> 2 ) == 0x25 ||
-                         id == 0x88 || id == 0x8a )
-                    {
-                        return 1;
-                    }
-                }
-            }
-        }
-        // didn't find an I-frame
-        return 0;
-    }
-    if ( stream->ts_stream_type[0] == 0xea )
-    {
-        // we have an vc1 stream 
-        for (i = 13 + adapt_len; i < 188; i++)
-        {
-            strid = (strid << 8) | buf[i];
-            if ( strid == 0x10f )
-            {
-                // the ffmpeg vc1 decoder requires a seq hdr code in the first
-                // frame.
-                return 1;
-            }
-        }
-        // didn't find an I-frame
-        return 0;
-    }
-
-    // we don't understand the stream type so just say "yes" otherwise
-    // we'll discard all the video.
-    return 1;
-}
-
 static void hb_ts_stream_append_pkt(hb_stream_t *stream, int idx, const uint8_t *buf, int len)
 {
     if (stream->ts_pos[idx] + len > stream->ts_buf[idx]->alloc)
@@ -2279,11 +2259,16 @@ static int hb_ts_stream_decode( hb_stream_t *stream, hb_buffer_t *obuf )
             }
         }
 
-        // If we don't have a pcr yet, the right thing to do here would
-        // be a 'continue' so we don't process anything until we have a
-        // clock reference. Unfortunately the HD Home Run appears to null
-        // out the pcr field of some streams so we keep going & substitute
-        // the video stream dts for the pcr when there's no pcr.
+        // If we don't have a PCR yet but the stream has PCRs just loop
+        // so we don't process anything until we have a clock reference.
+        // Unfortunately the HD Home Run appears to null out the PCR so if
+        // we didn't detect a PCR during scan keep going and we'll use
+        // the video stream DTS for the PCR.
+
+        if ( !stream->ts_found_pcr && ( stream->ts_flags & TS_HAS_PCR ) )
+        {
+            continue;
+        }
 
 		// Get continuity
         // Continuity only increments for adaption values of 0x3 or 0x01
@@ -2325,10 +2310,14 @@ static int hb_ts_stream_decode( hb_stream_t *stream, hb_buffer_t *obuf )
             {
                 // we're looking for the first video frame because we're
                 // doing random access during 'scan'
-                if (curstream != 0 || !isIframe( stream, buf, adapt_len ) )
+                if ( curstream != 0 || !isIframe( stream, buf, adapt_len ) )
                 {
                     // not the video stream or didn't find an I frame
-                    continue;
+                    // but we'll only wait 255 video frames for an I frame.
+                    if ( curstream != 0 || ++stream->need_keyframe )
+                    {
+                        continue;
+                    }
                 }
                 stream->need_keyframe = 0;
             }

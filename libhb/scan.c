@@ -439,6 +439,21 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         vid_decoder->codec_param = title->video_codec_param;
         vid_decoder->init( vid_decoder, NULL );
         hb_buffer_t * vid_buf = NULL;
+        int vidskip = 0;
+
+        if ( title->flags & HBTF_NO_IDR )
+        {
+            // title doesn't have IDR frames so we decode but drop one second's
+            // worth of frames to allow the decoder to converge.
+            if ( ! title->rate_base )
+            {
+                vidskip = 30;
+            }
+            else
+            {
+                vidskip = (double)title->rate / (double)title->rate_base + 0.5;
+            }
+        }
 
         for( j = 0; j < 10240 ; j++ )
         {
@@ -446,6 +461,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             {
               if( !hb_dvd_read( data->dvd, buf_ps ) )
               {
+                  if ( vid_buf )
+                  {
+                    break;
+                  }
                   hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
                   goto skip_preview;
               }
@@ -470,6 +489,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                 if( buf_es->id == title->video_id && vid_buf == NULL )
                 {
                     vid_decoder->work( vid_decoder, &buf_es, &vid_buf );
+                    if ( vid_buf && vidskip && --vidskip > 0 )
+                    {
+                        // we're dropping frames to get the video decoder in sync
+                        // when the video stream doesn't contain IDR frames
+                        hb_buffer_close( &vid_buf );
+                        vid_buf = NULL;
+                    }
                 }
                 else if( ! AllAudioOK( title ) )
                 {

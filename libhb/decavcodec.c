@@ -550,12 +550,21 @@ static void flushDelayQueue( hb_work_private_t *pv )
 
 static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
 {
-    int got_picture;
+    int got_picture, oldlevel = 0;
     AVFrame frame;
 
+    if ( global_verbosity_level <= 1 )
+    {
+        oldlevel = av_log_get_level();
+        av_log_set_level( AV_LOG_QUIET );
+    }
     if ( avcodec_decode_video( pv->context, &frame, &got_picture, data, size ) < 0 )
     {
         ++pv->decode_errors;     
+    }
+    if ( global_verbosity_level <= 1 )
+    {
+        av_log_set_level( oldlevel );
     }
     if( got_picture )
     {

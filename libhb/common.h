@@ -497,6 +497,10 @@ struct hb_title_s
 
     /* Job template for this title */
     hb_job_t  * job;
+
+    uint32_t    flags;
+                // set if video stream doesn't have IDR frames
+#define         HBTF_NO_IDR (1 << 0)
 };
 
 
