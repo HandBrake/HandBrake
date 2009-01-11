@@ -9,8 +9,6 @@
 
 #include "hb.h"
 
-void AddIPodUUID(MP4FileHandle, MP4TrackId);
-
 struct hb_mux_object_s
 {
     HB_MUX_COMMON;
@@ -57,7 +55,6 @@ static int MP4Init( hb_mux_object_t * m )
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
     int i;
-    uint16_t language_code;
 
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
@@ -203,13 +200,6 @@ static int MP4Init( hb_mux_object_t * m )
 	/* add the audio tracks */
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-    	static uint8_t reserved2[16] = {
-    		0x00, 0x00, 0x00, 0x00,
-    		0x00, 0x00, 0x00, 0x00,
-    		0x00, 0x02, 0x00, 0x10,
-    		0x00, 0x00, 0x00, 0x00,
-	    };
-
         audio = hb_list_item( title->list_audio, i );
         mux_data = malloc( sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
