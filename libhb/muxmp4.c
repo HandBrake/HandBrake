@@ -361,11 +361,7 @@ static int MP4Init( hb_mux_object_t * m )
         }
 
         /* Set the language for this track */
-        /* The language is stored as 5-bit text - 0x60 */
-        language_code = audio->config.lang.iso639_2[0] - 0x60;   language_code <<= 5;
-        language_code |= audio->config.lang.iso639_2[1] - 0x60;  language_code <<= 5;
-        language_code |= audio->config.lang.iso639_2[2] - 0x60;
-        MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.mdhd.language", language_code);
+        MP4SetTrackLanguage(m->file, mux_data->track, audio->config.lang.iso639_2);
 
         if( hb_list_count( title->list_audio ) > 1 )
         {
