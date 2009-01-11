@@ -302,7 +302,7 @@ static int MP4Init( hb_mux_object_t * m )
 
             mux_data->track = MP4AddAC3AudioTrack(
                 m->file,
-                m->samplerate, 
+                audio->config.out.samplerate, 
                 fscod,
                 bsid,
                 bsmod,
@@ -326,7 +326,7 @@ static int MP4Init( hb_mux_object_t * m )
         } else {
             mux_data->track = MP4AddAudioTrack(
                 m->file,
-                m->samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
+                audio->config.out.samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
             if (audio->config.out.name == NULL) {
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
