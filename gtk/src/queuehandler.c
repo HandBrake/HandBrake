@@ -74,6 +74,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gint source_width, source_height;
 	gboolean pass2, anamorphic, round_dim, keep_aspect, vqtype, turbo;
 	gboolean tweaks;
+	gchar *escape;
 	
 	g_debug("update_queue_list ()");
 	if (settings == NULL) return;
@@ -81,21 +82,24 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 		
 	tweaks = ghb_settings_get_boolean(settings, "allow_tweaks");
-	title = ghb_settings_combo_int(settings, "title");
+	title = ghb_settings_get_int(settings, "titlenum");
 	start_chapter = ghb_settings_get_int(settings, "start_chapter");
 	end_chapter = ghb_settings_get_int(settings, "end_chapter");
 	pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
 	vol_name = ghb_settings_get_string(settings, "volume_label");
 	dest = ghb_settings_get_string(settings, "destination");
 	basename = g_path_get_basename(dest);
+	escape = g_markup_escape_text(basename, -1);
 	info = g_strdup_printf 
 	(
 		"<big><b>%s</b></big> "
 		"<small>(Title %d, Chapters %d through %d, %d Video %s)"
 		" --> %s</small>",
-		 vol_name, title+1, start_chapter, end_chapter, 
-		 pass2 ? 2:1, pass2 ? "Passes":"Pass", basename
+		 vol_name, title, start_chapter, end_chapter, 
+		 pass2 ? 2:1, pass2 ? "Passes":"Pass", escape
 	);
+	g_free(basename);
+	g_free(escape);
 
 	if (piter)
 		iter = *piter;
@@ -176,8 +180,9 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 			g_string_append_printf(str, "</small>\n");
 		}
 	}
+	escape = g_markup_escape_text(dest, -1);
 	g_string_append_printf(str, 
-		"<b>Destination:</b> <small>%s</small>\n", dest);
+		"<b>Destination:</b> <small>%s</small>\n", escape);
 
 	width = ghb_settings_get_int(settings, "scale_width");
 	height = ghb_settings_get_int(settings, "scale_height");
