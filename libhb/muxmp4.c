@@ -492,7 +492,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                          buf->size,
                          duration,
                          offset,
-                         ((buf->frametype & HB_FRAME_KEY) != 0) ) )
+                         ( job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data ) ?
+                            ( buf->frametype == HB_FRAME_IDR ) : ( ( buf->frametype & HB_FRAME_KEY ) != 0 ) ) )
     {
         hb_error("Failed to write to output file, disk full?");
         *job->die = 1;
