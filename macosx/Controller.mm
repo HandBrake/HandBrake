@@ -9,6 +9,7 @@
 #import "HBPreferencesController.h"
 #import "HBDVDDetector.h"
 #import "HBPresets.h"
+#import "HBPreviewController.h"
 
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
@@ -61,6 +62,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] init];
+    //fPreviewController = [[PreviewController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     /* we init the HBPresets class which currently is only used
@@ -90,6 +92,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
     [fPictureController   setHBController: self];
+    /* fPreviewController */
+    //[fPreviewController SetHandle: fHandle];
+    //[fPreviewController   setHBController: self];
+    
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
 
@@ -198,7 +204,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
-    
+    [fPreviewController goWindowedScreen:nil];
     // Warn if encoding a movie
     hb_state_t s;
     hb_get_state( fQueueEncodeLibhb, &s );
@@ -241,6 +247,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [outputPanel release];
 	[fQueueController release];
     [fPictureController release];
+    
+    [fPreviewController release];
 	hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
 }
@@ -3599,9 +3607,9 @@ fWorkingCount = 0;
 	AutoCropLeft = job->crop[2];
 	AutoCropRight = job->crop[3];
 
-	/* Reset the new title in fPictureController */
+	/* Reset the new title in fPictureController &&  fPreviewController*/
     [fPictureController SetTitle:title];
-
+    //[fPreviewController SetTitle:title];
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
     [fSubPopUp removeAllItems];
@@ -5161,13 +5169,22 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) showPicturePanel: (id) sender
 {
-	/*
-    hb_list_t  * list  = hb_get_titles( fHandle );
-    hb_title_t * title = (hb_title_t *) hb_list_item( list,
-            [fSrcTitlePopUp indexOfSelectedItem] );
-            */
-    //[fPictureController showPreviewPanel:sender forTitle:title];
-    [fPictureController showPictureWindow:sender];
+	[fPictureController showPictureWindow:sender];
+}
+
+- (void) picturePanelFullScreen
+{
+	[fPictureController setToFullScreenMode];
+}
+
+- (void) picturePanelWindowed
+{
+	[fPictureController setToWindowedMode];
+}
+
+- (IBAction) showPreviewWindow: (id) sender
+{
+	[fPictureController showPreviewWindow:sender];
 }
 
 #pragma mark -
@@ -5758,8 +5775,9 @@ return YES;
                 if (fTitle->width < [[chosenPreset objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[chosenPreset objectForKey:@"PictureHeight"]  intValue])
                 {
                     /* if so, then we use the sources height and width to avoid scaling up */
-                    job->width = fTitle->width;
-                    job->height = fTitle->height;
+                    //job->width = fTitle->width;
+                    //job->height = fTitle->height;
+                    [self revertPictureSizeToMax:nil];
                 }
                 else // source width/height is >= the preset height/width
                 {

@@ -6,26 +6,26 @@
 
 #import <Cocoa/Cocoa.h>
 
-#include "hb.h"
-/* Needed for Quicktime movie previews */
-#import <QTKit/QTKit.h> 
+#include "hb.h" 
 
 @class HBController;
+@class PreviewController;
 
-#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
+
+//#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
 
 @interface PictureController : NSWindowController
 {
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
 
-    HBController             *fHBController;        // reference to HBController
+    HBController             *fHBController;
+    PreviewController        *fPreviewController;        // reference to HBController
     IBOutlet NSWindow        * fPictureWindow;
     NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
 
-    IBOutlet NSImageView     * fPictureView;
-    IBOutlet NSBox           * fPictureViewArea;
+
     IBOutlet NSBox           * fPictureSizeBox;
     IBOutlet NSBox           * fPictureCropBox;
     IBOutlet NSBox           * fPictureFilterBox;
@@ -54,12 +54,16 @@
     IBOutlet NSSlider        * fPictureSlider;
     IBOutlet NSTextField     * fInfoField;
 	
+    IBOutlet NSButton        * fPreviewOpenButton;
+        
     int     MaxOutputWidth;
     int     MaxOutputHeight;
     BOOL    autoCrop;
     BOOL    allowLooseAnamorphic;
+    
     int output_width, output_height, output_par_width, output_par_height;
     int display_width;
+    
     /* used to track the previous state of the keep aspect
     ratio checkbox when turning anamorphic on, so it can be
     returned to the previous state when anamorphic is turned
@@ -74,19 +78,7 @@
         int     deblock;
     } fPictureFilterSettings;
 
-    id delegate;
-    
-    /* Movie Previews */
-    IBOutlet NSButton               * fCreatePreviewMovieButton;
-    IBOutlet NSButton               * fShowPreviewMovieButton;
-    NSString                        * fPreviewMoviePath;
-    IBOutlet NSProgressIndicator    * fMovieCreationProgressIndicator;
-    hb_handle_t                     * fPreviewLibhb;           // private libhb for creating previews
-    NSTimer                         * fLibhbTimer;             // timer for retrieving state from libhb
-    IBOutlet NSTextField            * fPreviewMovieStatusField;
-    BOOL                              play_movie; // flag used to determine whether or not to automatically play the movie when done.   
-    IBOutlet QTMovieView            * fMovieView;
-    IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
+
 }
 - (id)init;
 
@@ -94,21 +86,14 @@
 - (void) SetTitle:  (hb_title_t *)  title;
 - (void)setHBController: (HBController *)controller;
 - (IBAction) showPictureWindow: (id)sender;
+- (IBAction) showPreviewWindow: (id)sender;
 
 - (void) setInitialPictureFilters;
-- (void) displayPreview;
+
 
 - (IBAction) SettingsChanged: (id) sender;
-- (IBAction) pictureSliderChanged: (id) sender;
 
-/* Movie Previews */
-- (void) startReceivingLibhbNotifications;
-- (void) stopReceivingLibhbNotifications;
 
-- (IBAction) createMoviePreview: (id) sender;
-- (void) libhbStateChanged: (hb_state_t &) state;
-- (IBAction) showMoviePreview: (NSString *) path;
-- (IBAction) previewDurationPopUpChanged: (id) sender;
 
 - (BOOL) autoCrop;
 - (void) setAutoCrop: (BOOL) setting;
@@ -129,11 +114,10 @@
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title;
 
-+ (NSImage *) makeImageForPicture: (int)pictureIndex
-                libhb:(hb_handle_t*)handle
-                title:(hb_title_t*)title
-                removeBorders:(BOOL)removeBorders;
-- (NSImage *) imageForPicture: (int) pictureIndex;
-- (void) purgeImageCache;
+
+- (void) setToFullScreenMode;
+- (void) setToWindowedMode;
+
+
 @end
 

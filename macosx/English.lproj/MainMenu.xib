@@ -2,13 +2,13 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">9F33</string>
+		<string key="IBDocument.SystemVersion">9G55</string>
 		<string key="IBDocument.InterfaceBuilderVersion">670</string>
-		<string key="IBDocument.AppKitVersion">949.34</string>
-		<string key="IBDocument.HIToolboxVersion">352.00</string>
+		<string key="IBDocument.AppKitVersion">949.43</string>
+		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1478"/>
+			<integer value="1192"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -40,7 +40,7 @@
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="168918359">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3219,7 +3219,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{760, 550}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMinSize">{213, 129}</string>
@@ -3832,6 +3831,14 @@
 									<string key="NSTitle">Picture Settings</string>
 									<string key="NSKeyEquiv">P</string>
 									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="447995298"/>
+									<reference key="NSMixedImage" ref="760317610"/>
+								</object>
+								<object class="NSMenuItem" id="157409278">
+									<reference key="NSMenu" ref="919178355"/>
+									<string key="NSTitle">Preview Window</string>
+									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="447995298"/>
 									<reference key="NSMixedImage" ref="760317610"/>
@@ -6526,6 +6533,14 @@
 					</object>
 					<int key="connectionID">5156</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showPreviewWindow:</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="157409278"/>
+					</object>
+					<int key="connectionID">5158</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -7664,6 +7679,7 @@
 							<reference ref="87484946"/>
 							<reference ref="849279674"/>
 							<reference ref="1034427275"/>
+							<reference ref="157409278"/>
 						</object>
 						<reference key="parent" ref="610133626"/>
 					</object>
@@ -9934,6 +9950,11 @@
 						<reference key="object" ref="977106207"/>
 						<reference key="parent" ref="786415813"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">5157</int>
+						<reference key="object" ref="157409278"/>
+						<reference key="parent" ref="919178355"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -9952,6 +9973,7 @@
 					<string>1190.ImportedFromIB2</string>
 					<string>1191.IBPluginDependency</string>
 					<string>1191.ImportedFromIB2</string>
+					<string>1192.IBEditorWindowLastContentRect</string>
 					<string>1192.IBPluginDependency</string>
 					<string>1192.ImportedFromIB2</string>
 					<string>1193.IBPluginDependency</string>
@@ -10232,6 +10254,7 @@
 					<string>1900.ImportedFromIB2</string>
 					<string>1948.IBPluginDependency</string>
 					<string>1948.ImportedFromIB2</string>
+					<string>1949.IBEditorWindowLastContentRect</string>
 					<string>1949.IBPluginDependency</string>
 					<string>1949.ImportedFromIB2</string>
 					<string>1950.IBPluginDependency</string>
@@ -10403,6 +10426,7 @@
 					<string>2839.ImportedFromIB2</string>
 					<string>2840.IBPluginDependency</string>
 					<string>2840.ImportedFromIB2</string>
+					<string>29.IBEditorWindowLastContentRect</string>
 					<string>29.IBPluginDependency</string>
 					<string>29.ImportedFromIB2</string>
 					<string>29.editorWindowContentRectSynchronizationRect</string>
@@ -10598,6 +10622,7 @@
 					<string>5135.IBPluginDependency</string>
 					<string>5153.IBPluginDependency</string>
 					<string>5153.ImportedFromIB2</string>
+					<string>5157.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
 					<string>57.IBPluginDependency</string>
@@ -10626,6 +10651,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
+					<string>{{262, 642}, {211, 183}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10913,6 +10939,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
+					<string>{{195, 732}, {236, 93}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11091,6 +11118,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
+					<string>{{0, 825}, {394, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{63, 836}, {394, 20}}</string>
@@ -11301,6 +11329,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -11335,7 +11364,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">5156</int>
+			<int key="maxID">5158</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -11389,6 +11418,7 @@
 							<string>showNewScan:</string>
 							<string>showPicturePanel:</string>
 							<string>showPreferencesWindow:</string>
+							<string>showPreviewWindow:</string>
 							<string>showQueueWindow:</string>
 							<string>showSourceTitleScanPanel:</string>
 							<string>subtitleSelectionChanged:</string>
@@ -11400,6 +11430,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -11746,13 +11777,6 @@
 					<string key="className">HBPresetsOutlineView</string>
 					<string key="superclassName">NSOutlineView</string>
 					<reference key="sourceIdentifier" ref="896678678"/>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">PictureController.h</string>
-					</object>
 				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">NSObject</string>

@@ -11,6 +11,7 @@
 
 #import "ChapterTitles.h"
 #import "PictureController.h"
+#import "HBPreviewController.h"
 #import "HBQueueController.h"
 #import "HBAdvancedController.h"
 #import "HBPreferencesController.h"
@@ -26,6 +27,7 @@ BOOL                        fIsDragging;
 
 }
 @end
+
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
 {
     IBOutlet NSWindow            * fWindow;
@@ -41,8 +43,10 @@ BOOL                        fIsDragging;
     IBOutlet NSButton             * fScanSrcTitleCancelButton;
     IBOutlet NSButton             * fScanSrcTitleOpenButton;
     
-    /* Picture panel */
+    /* Picture Settings */
     PictureController            * fPictureController;
+    /* Picture Preview */
+    PreviewController            * fPreviewController;
     
     /* Advanced options tab */
     HBAdvancedController         * fAdvancedOptions;
@@ -299,6 +303,10 @@ BOOL                        fIsDragging;
 - (IBAction) audioDRCSliderChanged: (id) sender;
 
 - (IBAction) showPicturePanel: (id) sender;
+- (void) picturePanelFullScreen;
+- (void) picturePanelWindowed;
+
+- (IBAction) showPreviewWindow: (id) sender;
 - (void)pictureSettingsDidChange;
 - (IBAction) calculatePictureSizing: (id) sender;
 - (IBAction) openMainWindow: (id) sender;
