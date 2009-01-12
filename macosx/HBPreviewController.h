@@ -37,12 +37,16 @@
     BOOL                     isEncoding;
 
 	
-    int     MaxOutputWidth;
-    int     MaxOutputHeight;
+    int                      MaxOutputWidth;
+    int                      MaxOutputHeight;
 
     int output_width, output_height, output_par_width, output_par_height;
     int display_width;
-
+    
+    /* Hud Control Overlay */
+    NSTimer                         * fHudTimer;
+    int                               hudTimerSeconds;
+    
     /* Full Screen Mode Toggle */
     IBOutlet NSButton               * fFullScreenToggleButton;
     IBOutlet NSButton               * fPictureSettingsToggleButton;
@@ -76,6 +80,10 @@
 - (IBAction)toggleScreenMode:(id)sender;
 - (IBAction)goFullScreen:(id)sender;
 - (IBAction)goWindowedScreen:(id)sender;
+
+/* HUD overlay */
+- (void) startHudTimer;
+- (void) stopHudTimer;
 
 /* Movie Previews */
 - (void) startReceivingLibhbNotifications;

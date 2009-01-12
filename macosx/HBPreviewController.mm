@@ -46,38 +46,111 @@
 - (void) mouseMoved:(NSEvent *)theEvent
 {
     [super mouseMoved:theEvent];
-	
-    [self showHideHudControls];
+    
+    if (isEncoding == NO)
+    {    
+        if (hudTimerSeconds == 0)
+        {
+            hudTimerSeconds ++;
+            [self startHudTimer];
+        }
+        
+        if (hudTimerSeconds > 20)
+        {
+            
+            
+            [self stopHudTimer];
+            [self showHideHudControls];
+        }
+        
+    }
 }
 
+- (void) startHudTimer
+{
+    if (!fHudTimer)
+    {
+        fHudTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hudTimerFired:) userInfo:nil repeats:YES];
+        [fHudTimer retain];
+    }
+}
+
+- (void) stopHudTimer
+{
+    if (fHudTimer)
+    {
+        [fHudTimer invalidate];
+        [fHudTimer release];
+        fHudTimer = nil;
+        hudTimerSeconds = 0;
+    }
+}
+
+- (void) hudTimerFired: (NSTimer*)theTimer
+{
+    hudTimerSeconds ++;
+    [self showHideHudControls];
+
+}
 
 - (void) showHideHudControls
 {
     /* Test for mouse location to show/hide hud controls */
     NSPoint    mouseLoc;
-    NSRect    targetFrame;
+    NSRect     targetFrame;
+    NSRect     controlBoxFrame;
+    targetFrame = [fPictureViewArea frame];
+    controlBoxFrame = [fPictureControlBox frame];
+    
     if (isFullScreen)
     {
-    mouseLoc = [fFullScreenWindow mouseLocationOutsideOfEventStream];
+        mouseLoc = [fFullScreenWindow mouseLocationOutsideOfEventStream];
     }
     else
     {
-    mouseLoc = [fPreviewWindow mouseLocationOutsideOfEventStream];
+        mouseLoc = [fPreviewWindow mouseLocationOutsideOfEventStream];
     }
-    targetFrame = [fPictureViewArea frame];
-    /* If we are not encoding a preview, we show/hide the hud controls */
-    if (isEncoding == NO)
+    
+    /* if the pointer is inside the picture view areas but not
+     * in the controlbox, check the hudTimerSeconds to see if
+     * its in the allowable time span
+     */
+    if ( hudTimerSeconds > 0 && hudTimerSeconds < 20)
     {
-        if (NSPointInRect (mouseLoc, targetFrame))
+        if (NSPointInRect (mouseLoc, controlBoxFrame))
+            {
+                /* Mouse is over the preview area so show hud controls so just
+                 * reset the timer to keep the control box visible
+                */
+                //[fPictureControlBox setHidden: NO];
+                hudTimerSeconds = 1;
+                return;
+            }
+        
+        /* Else, if we are not encoding a preview, we show/hide the hud controls */
+        if (isEncoding == NO)
         {
-            /* Mouse is over the preview area so show hud controls */
-            [[fPictureControlBox animator] setHidden: NO];
-       }
-        else
-        {
-            [[fPictureControlBox animator] setHidden: YES];
+            /* Re-verify we are within the target frame */
+            if (NSPointInRect (mouseLoc, targetFrame))
+            {
+                /* Mouse is over the preview area so show hud controls */
+                [[fPictureControlBox animator] setHidden: NO];
+                /* increment our timer by one */
+                hudTimerSeconds ++;
+            }
+            else
+            {
+                [[fPictureControlBox animator] setHidden: YES];
+                [self stopHudTimer];
+            }
         }
+        
     }
+    else
+    {
+        [[fPictureControlBox animator] setHidden: YES];
+    }
+    
 }
 
 
@@ -108,6 +181,7 @@
     [self startReceivingLibhbNotifications];
     
     isFullScreen = NO;
+    hudTimerSeconds = 0;
     
     /* Setup our layers for core animation */
     [fPictureViewArea setWantsLayer:YES];
@@ -115,7 +189,6 @@
     
     [fMovieView setWantsLayer:YES];
     
-    [fEncodingControlBox setWantsLayer:YES];
     [fCancelPreviewMovieButton setWantsLayer:YES];
     [fMovieCreationProgressIndicator setWantsLayer:YES];
     
@@ -124,6 +197,9 @@
     [fFullScreenToggleButton setWantsLayer:YES];
     [fPictureSettingsToggleButton setWantsLayer:YES];
     [fCreatePreviewMovieButton setWantsLayer:YES];
+    
+    [fEncodingControlBox setWantsLayer:YES];
+    
     [fShowPreviewMovieButton setWantsLayer:YES];
     
     
@@ -151,7 +227,7 @@ return YES;
     }
     
     isFullScreen = NO;
-    
+    hudTimerSeconds = 0;
 }
 
 - (BOOL)windowShouldClose:(id)fPictureWindow
@@ -170,6 +246,9 @@ return YES;
     
     [fLibhbTimer invalidate];
     [fLibhbTimer release];
+    
+    [fHudTimer invalidate];
+    [fHudTimer release];
     
     [fPicturePreviews release];
     [fFullScreenWindow release];
@@ -346,6 +425,7 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     [self SetTitle:title];
     [self showWindow:sender];
     isFullScreen = NO;
+    hudTimerSeconds = 0;
 
 }
 
