@@ -2127,12 +2127,6 @@ fWorkingCount = 0;
         //status = NSRunAlertPanel(@"HandBrake is now loading up a new queue item...",@"Would You Like to wait until you add another encode?", @"Cancel", @"Okay", nil);
         //[NSApp requestUserAttention:NSCriticalRequest];
 
-    // Notify ChapterTitles that there's no title
-    [fChapterTitlesDelegate resetWithTitle:nil];
-    [fChapterTable reloadData];
-
-    //[self enableUI: NO];
-
     if( [detector isVideoDVD] )
     {
         // The chosen path was actually on a DVD, so use the raw block
