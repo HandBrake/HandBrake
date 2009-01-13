@@ -35,11 +35,11 @@ void debug_log_handler(
 	const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
 void ghb_file_menu_add_dvd(signal_user_data_t *ud);
-void ghb_hal_init();
+void ghb_hal_init(void);
 gboolean ghb_message_dialog(
 	GtkMessageType type, const gchar *message, 
 	const gchar *no, const gchar *yes);
-void ghb_init_dep_map();
+void ghb_init_dep_map(void);
 gboolean ghb_reload_queue(signal_user_data_t *ud);
 gboolean ghb_cancel_encode(const gchar *extra_msg);
 GValue* ghb_start_next_job(signal_user_data_t *ud, gboolean find_first);
@@ -47,6 +47,8 @@ void ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget);
 void ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force);
 void ghb_log(gchar *log, ...);
 gpointer ghb_check_update(signal_user_data_t *ud);
+void ghb_uninhibit_gpm(void);
+void ghb_inhibit_gpm(void);
 
 #endif // _CALLBACKS_H_
 

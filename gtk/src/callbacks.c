@@ -26,6 +26,8 @@
 #include <gtkhtml/gtkhtml.h>
 #include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
 #include <gio/gio.h>
 
 #include "hb.h"
@@ -1499,11 +1501,13 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 			if (status == GHB_QUEUE_PENDING)
 			{
 				current = ii;
+				ghb_inhibit_gpm();
 				queue_scan(ud, js);
 				return js;
 			}
 		}
 		// Nothing pending
+		ghb_uninhibit_gpm();
 		return NULL;
 	}
 	// Find the next pending item after the current running item
@@ -1520,6 +1524,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 				if (status == GHB_QUEUE_PENDING)
 				{
 					current = jj;
+					ghb_inhibit_gpm();
 					queue_scan(ud, js);
 					return js;
 				}
@@ -1535,11 +1540,13 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 		if (status == GHB_QUEUE_PENDING)
 		{
 			current = ii;
+			ghb_inhibit_gpm();
 			queue_scan(ud, js);
 			return js;
 		}
 	}
 	// Nothing found
+	ghb_uninhibit_gpm();
 	return NULL;
 }
 
@@ -1777,9 +1784,14 @@ ghb_backend_events(signal_user_data_t *ud)
 			g_io_channel_unref(ud->job_activity_log);
 		ud->job_activity_log = NULL;
 		if (!ud->cancel_encode)
+		{
 			ud->current_job = ghb_start_next_job(ud, FALSE);
+		}
 		else
+		{
+			ghb_uninhibit_gpm();
 			ud->current_job = NULL;
+		}
 		if (js)
 			ghb_settings_set_int(js, "job_status", qstatus);
 		ghb_save_queue(ud->queue);
@@ -2476,8 +2488,6 @@ dvd_device_list()
 	return dvd_devices;
 }
 
-
-static DBusConnection *dbus_connection = NULL;
 static LibHalContext *hal_ctx;
 
 gboolean
@@ -2540,49 +2550,150 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 }
 
 
-static gboolean
+static void
 dbus_init (void)
 {
-	DBusError error;
+	dbus_g_thread_init();
+}
 
-	if (dbus_connection != NULL)
-		return TRUE;
+#define GPM_DBUS_SERVICE			"org.freedesktop.PowerManagement"
+#define GPM_DBUS_INHIBIT_PATH		"/org/freedesktop/PowerManagement/Inhibit"
+#define GPM_DBUS_INHIBIT_INTERFACE	"org.freedesktop.PowerManagement.Inhibit" 
+static gboolean gpm_inhibited = FALSE;
+static guint gpm_cookie = -1;
 
-	dbus_error_init (&error);
-	if (!(dbus_connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error))) {
-		g_debug ("could not get system bus: %s", error.message);
-		dbus_error_free (&error);
-		return FALSE;
+void
+ghb_inhibit_gpm()
+{
+	DBusGConnection *conn;
+	DBusGProxy	*proxy;
+	GError *error = NULL;
+	gboolean res;
+	
+
+	if (gpm_inhibited)
+	{
+		// Already inhibited
+		return;
 	}
+	g_debug("ghb_inhibit_gpm()");
+	conn = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+	if (error != NULL)
+	{
+		g_debug("DBUS cannot connect: %s", error->message);
+		g_error_free(error);
+		return;
+	}
+	proxy = dbus_g_proxy_new_for_name(conn, GPM_DBUS_SERVICE,
+							GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
+	if (proxy == NULL)
+	{
+		g_debug("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		dbus_g_connection_unref(conn);
+		return;
+	}
+	res = dbus_g_proxy_call(proxy, "Inhibit", &error,
+							G_TYPE_STRING, "ghb",
+							G_TYPE_STRING, "Encoding",
+							G_TYPE_INVALID,
+							G_TYPE_UINT, &gpm_cookie,
+							G_TYPE_INVALID);
+	if (!res)
+	{
+		g_warning("Inhibit method failed");
+		gpm_cookie = -1;
+	}
+	if (error != NULL)
+	{
+		g_warning("Inhibit problem: %s", error->message);
+		g_error_free(error);
+		gpm_cookie = -1;
+	}
+	gpm_inhibited = TRUE;
+	g_object_unref(G_OBJECT(proxy));
+	dbus_g_connection_unref(conn);
+}
 
-	//dbus_connection_setup_with_g_main (dbus_connection, NULL);
-	//dbus_connection_set_exit_on_disconnect (dbus_connection, FALSE);
-	//dbus_connection_add_filter (dbus_connection, gvm_dbus_filter_function, NULL, NULL);
+void
+ghb_uninhibit_gpm()
+{
+	DBusGConnection *conn;
+	DBusGProxy	*proxy;
+	GError *error = NULL;
+	gboolean res;
+	
+	g_debug("ghb_uninhibit_gpm() gpm_cookie %u", gpm_cookie);
 
-	return TRUE;
+	if (!gpm_inhibited)
+	{
+		// Not inhibited
+		return;
+	}
+	conn = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
+	if (error != NULL)
+	{
+		g_debug("DBUS cannot connect: %s", error->message);
+		g_error_free(error);
+		return;
+	}
+	proxy = dbus_g_proxy_new_for_name(conn, GPM_DBUS_SERVICE,
+							GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
+	if (proxy == NULL)
+	{
+		g_debug("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		dbus_g_connection_unref(conn);
+		return;
+	}
+	res = dbus_g_proxy_call(proxy, "UnInhibit", &error,
+							G_TYPE_UINT, gpm_cookie,
+							G_TYPE_INVALID,
+							G_TYPE_INVALID);
+	if (!res)
+	{
+		g_warning("UnInhibit method failed");
+	}
+	if (error != NULL)
+	{
+		g_warning("UnInhibit problem: %s", error->message);
+		g_error_free(error);
+	}
+	gpm_inhibited = FALSE;
+	dbus_g_connection_unref(conn);
+	g_object_unref(G_OBJECT(proxy));
 }
 
 void
 ghb_hal_init()
 {
+	DBusGConnection *gconn;
+	DBusConnection *conn;
+	GError *gerror = NULL;
 	DBusError error;
 	char **devices;
 	int nr;
 
-	if (!dbus_init ())
-		return;
+	dbus_init ();
 
 	if (!(hal_ctx = libhal_ctx_new ())) {
 		g_warning ("failed to create a HAL context!");
 		return;
 	}
 
-	libhal_ctx_set_dbus_connection (hal_ctx, dbus_connection);
+	gconn = dbus_g_bus_get(DBUS_BUS_SYSTEM, &gerror);
+	if (gerror != NULL)
+	{
+		g_warning("DBUS cannot connect: %s", gerror->message);
+		g_error_free(gerror);
+		return;
+	}
+	conn = dbus_g_connection_get_connection(gconn);
+	libhal_ctx_set_dbus_connection (hal_ctx, conn);
 	dbus_error_init (&error);
 	if (!libhal_ctx_init (hal_ctx, &error)) {
 		g_warning ("libhal_ctx_init failed: %s", error.message ? error.message : "unknown");
 		dbus_error_free (&error);
 		libhal_ctx_free (hal_ctx);
+		dbus_g_connection_unref(gconn);
 		return;
 	}
 
@@ -2598,12 +2709,12 @@ ghb_hal_init()
 
 		libhal_ctx_shutdown (hal_ctx, NULL);
 		libhal_ctx_free (hal_ctx);
+		dbus_g_connection_unref(gconn);
 		return;
 	}
 
 	libhal_free_string_array (devices);
-
-	//gvm_hal_claim_branch ("/org/freedesktop/Hal/devices/local");
+	dbus_g_connection_unref(gconn);
 }
 
 gboolean 
