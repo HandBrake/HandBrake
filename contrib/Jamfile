@@ -410,8 +410,7 @@ rule LibX264
     {
         LIBX264_PATCH += " $(PATCH) -p1 < ../patch-x264-solaris.patch && " ;
     }
-    LIBX264_PATCH += "$(PATCH) -p0 < ../patch-x264-idr.patch && " ;
-	Depends $(<) : $(>) ;
+    Depends $(<) : $(>) ;
     Depends lib  : $(<) ;
 }
 actions LibX264
