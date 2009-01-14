@@ -280,13 +280,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 	/* Show/Dont Show Presets drawer upon launch based
 		on user preference DefaultPresetsDrawerShow*/
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0)
+	if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0 )
 	{
+        [fPresetDrawer setDelegate:self];
+        NSSize drawerSize = NSSizeFromString( [[NSUserDefaults standardUserDefaults] 
+                                              stringForKey:@"Drawer Size"] );
+        if( drawerSize.width )
+            [fPresetDrawer setContentSize: drawerSize];
 		[fPresetDrawer open];
 	}
-	
-	
-    
+
     /* Destination box*/
     NSMenuItem *menuItem;
     [fDstFormatPopUp removeAllItems];
@@ -1598,6 +1601,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     return NO;
 }
 
+- (NSSize) drawerWillResizeContents:(NSDrawer *) drawer toSize:(NSSize) contentSize {
+	[[NSUserDefaults standardUserDefaults] setObject:NSStringFromSize( contentSize ) forKey:@"Drawer Size"];
+	return contentSize;
+}
 
 #pragma mark -
 #pragma mark Queue File

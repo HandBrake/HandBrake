@@ -55,8 +55,9 @@
         @"NO",              @"DisableDvdAutoDetect",
         @"Alert Window",    @"AlertWhenDone",
         @"1",               @"LoggingLevel",
-        @"NO",    @"EncodeLogLocation",
-        @"10",    @"PreviewsNumber",
+        @"NO",              @"EncodeLogLocation",
+        @"10",              @"PreviewsNumber",
+        @"",                @"Drawer Size",
         nil]];
 }
 
