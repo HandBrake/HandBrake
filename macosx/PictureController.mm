@@ -37,6 +37,14 @@
 - (IBAction) showPictureWindow: (id)sender
 {
     [self showWindow:sender];
+    if ([fPreviewController fullScreen] == YES)
+    {
+    [self setToFullScreenMode];
+    }
+    else
+    {
+    [self setToWindowedMode];
+    }
 }
 
 - (IBAction) showPreviewWindow: (id)sender
@@ -46,7 +54,6 @@
 
 - (void) setToFullScreenMode
 {
-    [self showWindow:nil];
     int32_t shieldLevel = CGShieldingWindowLevel(); 
     
     [fPictureWindow setLevel:shieldLevel]; 
@@ -57,9 +64,6 @@
 - (void) setToWindowedMode
 {
     /* Set the window back to regular level */
-    
-    [self showWindow:nil];
-    
     [[self window] setLevel:NSNormalWindowLevel];
 }
 

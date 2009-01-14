@@ -207,8 +207,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
-    [fPreviewController goWindowedScreen:nil];
-    // Warn if encoding a movie
+    if ([fPreviewController fullScreen] == YES)
+    {
+        [fPreviewController goWindowedScreen:nil];
+    }
+    
     hb_state_t s;
     hb_get_state( fQueueEncodeLibhb, &s );
     

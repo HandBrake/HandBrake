@@ -78,6 +78,7 @@
 - (IBAction)showPictureSettings:(id)sender;
 /* Full Screen */
 - (IBAction)toggleScreenMode:(id)sender;
+- (BOOL)fullScreen;
 - (IBAction)goFullScreen:(id)sender;
 - (IBAction)goWindowedScreen:(id)sender;
 

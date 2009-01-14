@@ -449,6 +449,11 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     }
 }
 
+- (BOOL)fullScreen
+{
+    return isFullScreen;
+}
+
 - (IBAction)goFullScreen:(id)sender 
 { 
     // Get the screen information. 
@@ -534,7 +539,7 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         [self pictureSliderChanged:nil];
         
         /* set the picture settings pallete above the shielding level */
-        [fHBController picturePanelFullScreen];
+        //[fHBController picturePanelFullScreen];
     } 
 } 
 
@@ -575,7 +580,7 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     [fFullScreenToggleButton setTitle: @"Full Screen"];
     
     /* set the picture settings pallete back to normal level */
-    [fHBController picturePanelFullScreen];
+    [fHBController picturePanelWindowed];
     
     /* Release the display now that the we are back in windowed mode */
     CGDisplayRelease(displayID);
