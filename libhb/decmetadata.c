@@ -129,7 +129,7 @@ static void decmp4metadata( hb_title_t *title )
         MP4GetChapters( input_file, &chapter_list, &chapter_count, 
                         MP4ChapterTypeQt );
 
-        if( chapter_list ) {
+        if( chapter_list && ( hb_list_count( title->list_chapter ) == 0 ) ) {
             uint i = 1;
             while( i <= chapter_count )
             {

@@ -2719,7 +2719,31 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
     title->container_name = strdup( ic->iformat->name );
     title->data_rate = ic->bit_rate;
 
-    hb_deep_log( 2, "Found ffmpeg %d chapters, container=%s", ic->nb_chapters, ic->iformat->name);
+    hb_deep_log( 2, "Found ffmpeg %d chapters, container=%s", ic->nb_chapters, ic->iformat->name );
+
+    if( ic->nb_chapters != 0 )
+    {
+        AVChapter *m;
+        uint64_t duration_sum = 0;
+        for( i = 0; i < ic->nb_chapters; i++ )
+            if( m = ic->chapters[i] )
+            {
+                hb_chapter_t * chapter;
+                chapter = calloc( sizeof( hb_chapter_t ), 1 );
+                chapter->index    = i+1;
+                chapter->duration = ( m->end / ( (double) m->time_base.num * m->time_base.den ) ) * 90000  - duration_sum;
+                duration_sum     += chapter->duration;
+                chapter->hours    = chapter->duration / 90000 / 3600;
+                chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
+                chapter->seconds  = ( chapter->duration / 90000 ) % 60;
+                strcpy( chapter->title, m->title );
+                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%llu, (%02i:%02i:%02i)",
+                            chapter->index, chapter->title,
+                            chapter->duration, chapter->hours,
+                            chapter->minutes, chapter->seconds );
+                hb_list_add( title->list_chapter, chapter );
+            }
+    }
 
     /*
      * Fill the metadata.
@@ -2903,15 +2927,16 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 
         if( chapter )
         {
-            if( stream->chapter != 0 )
-            {
-                buf->new_chap = stream->chapter + 2;
-            }
+            buf->new_chap = stream->chapter + 2;
 
             hb_deep_log( 2, "Starting chapter %i at %lld", buf->new_chap, buf->start);
-            stream->chapter_end += chapter->duration;
+            hb_chapter_t *nextChapter = NULL;
+            nextChapter = hb_list_item( stream->title->list_chapter,
+                                   stream->chapter + 1 );
+            if( nextChapter )
+                stream->chapter_end += nextChapter->duration;
             stream->chapter++;
-            hb_deep_log( 2, "Looking for chapter %i at %lld", stream->chapter+1, stream->chapter_end );
+            hb_deep_log( 2, "Looking for chapter %i at %lld", stream->chapter + 2, stream->chapter_end );
         } else {
             /*
              * Must have run out of chapters, stop looking.
