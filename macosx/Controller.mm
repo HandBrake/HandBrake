@@ -103,6 +103,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fChapterTable setDataSource:fChapterTitlesDelegate];
     [fChapterTable setDelegate:fChapterTitlesDelegate];
 
+    [fPresetsOutlineView setAutosaveName:@"Presets View"];
+    [fPresetsOutlineView setAutosaveExpandedItems:YES];
+
     /* Call UpdateUI every 1/2 sec */
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer
                                           scheduledTimerWithTimeInterval:0.5 target:self
@@ -5312,6 +5315,15 @@ return YES;
         //return @"";
         return nil;
     }
+}
+
+- (id)outlineView:(NSOutlineView *)outlineView itemForPersistentObject:(id)object
+{
+    return [NSKeyedUnarchiver unarchiveObjectWithData:object];
+}
+- (id)outlineView:(NSOutlineView *)outlineView persistentObjectForItem:(id)item
+{
+    return [NSKeyedArchiver archivedDataWithRootObject:item];
 }
 
 #pragma mark - Added Functionality (optional)
