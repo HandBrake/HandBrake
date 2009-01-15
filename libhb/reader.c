@@ -11,6 +11,7 @@ typedef struct
     double average; // average time between packets
     int64_t last;   // last timestamp seen on this stream
     int id;         // stream id
+    int is_audio;   // != 0 if this is an audio stream
 } stream_timing_t;
 
 typedef struct
@@ -27,8 +28,9 @@ typedef struct
     hb_psdemux_t   demux;
     int            scr_changes;
     uint           sequence;
-    int            saw_video;
-    int            st_slots;            // size (in slots) of stream_timing array
+    uint8_t        st_slots;        // size (in slots) of stream_timing array
+    uint8_t        saw_video;       // != 0 if we've seen video
+    uint8_t        saw_audio;       // != 0 if we've seen audio
 } hb_reader_t;
 
 /***********************************************************************
@@ -78,6 +80,21 @@ static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
     hb_fifo_push( fifo, buf );
 }
 
+static int is_audio( hb_reader_t *r, int id )
+{
+    int i;
+    hb_audio_t *audio;
+
+    for( i = 0; ( audio = hb_list_item( r->title->list_audio, i ) ); ++i )
+    {
+        if ( audio->id == id )
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 // The MPEG STD (Standard Target Decoder) essentially requires that we keep
 // per-stream timing so that when there's a timing discontinuity we can
 // seemlessly join packets on either side of the discontinuity. This join
@@ -125,7 +142,10 @@ static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
         st->id = buf->id;
         st->average = 30.*90.;
         st->last = buf->renderOffset - st->average;
-
+        if ( ( st->is_audio = is_audio( r, buf->id ) ) != 0 )
+        {
+            r->saw_audio = 1;
+        }
         st[1].id = -1;
     }
     return st;
@@ -349,10 +369,11 @@ static void ReaderFunc( void * _r )
 
                         if ( st )
                         {
-                            // if this isn't the video stream or we don't
-                            // have audio yet then generate a new scr
-                            if ( st != r->stream_timing ||
-                                 r->stream_timing[1].id == -1 )
+                            // if this is the video stream and we don't have
+                            // audio yet or this is an audio stream
+                            // generate a new scr
+                            if ( st->is_audio ||
+                                 ( st == r->stream_timing && !r->saw_audio ) )
                             {
                                 new_scr_offset( r, buf );
                             }
@@ -360,11 +381,21 @@ static void ReaderFunc( void * _r )
                             {
                                 // defer the scr change until we get some
                                 // audio since audio has a timestamp per
-                                // frame but video doesn't. Clear the timestamps
-                                // so the decoder will regenerate them from
-                                // the frame durations.
-                                buf->start = -1;
-                                buf->renderOffset = -1;
+                                // frame but video & subtitles don't. Clear
+                                // the timestamps so the decoder will generate
+                                // them from the frame durations.
+                                if ( st != r->stream_timing )
+                                {
+                                    // not a video stream so it's probably
+                                    // subtitles - the best we can do is to
+                                    // line it up with the last video packet.
+                                    buf->start = r->stream_timing->last;
+                                }
+                                else
+                                {
+                                    buf->start = -1;
+                                    buf->renderOffset = -1;
+                                }
                             }
                         }
                         else
