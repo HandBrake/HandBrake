@@ -2831,9 +2831,7 @@ fWorkingCount = 0;
     if ([fPictureController decomb] > 0)
     {
         /* Run old deinterlacer fd by default */
-        //fPicSettingDecomb
-        hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
-        //hb_filter_decomb.settings = "4:10:15:9:10:35:9"; // <-- jbrjakes recommended parameters as of 5/23/08
+        //hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
         hb_list_add( job->filters, &hb_filter_decomb );
     }
 
@@ -3170,7 +3168,7 @@ fWorkingCount = 0;
     if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
     {
         /* Run old deinterlacer fd by default */
-        hb_filter_decomb.settings = (char *) [[queueToApply objectForKey:@"JobPictureDecomb"] UTF8String];
+        //hb_filter_decomb.settings = (char *) [[queueToApply objectForKey:@"JobPictureDecomb"] UTF8String];
         hb_list_add( job->filters, &hb_filter_decomb );
     }
     
@@ -4183,7 +4181,7 @@ the user is using "Custom" settings by determining the sender*/
     /* Detelecine */
     if ([fPictureController detelecine]) 
     {
-        [fPicSettingDetelecine setStringValue: @"Yes"];
+        [fPicSettingDetelecine setStringValue: @"On"];
     }
     else 
     {
@@ -4193,7 +4191,8 @@ the user is using "Custom" settings by determining the sender*/
     /* Decomb */
 	if ([fPictureController decomb])
 	{
-		[fPicSettingDecomb setStringValue: @"1:2:6:9:80:16:16"];
+		//[fPicSettingDecomb setStringValue: @"1:2:6:9:80:16:16"];
+        [fPicSettingDecomb setStringValue: @"On"];
 	}
 	else
 	{
