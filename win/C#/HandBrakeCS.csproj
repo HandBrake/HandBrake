@@ -233,10 +233,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmReadDVD.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>frmReadDVD.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmSplashScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
@@ -255,12 +251,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="frmReadDVD.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmReadDVD.Designer.cs">
-      <DependentUpon>frmReadDVD.cs</DependentUpon>
     </Compile>
     <Compile Include="frmSplashScreen.cs">
       <SubType>Form</SubType>

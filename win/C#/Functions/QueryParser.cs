@@ -663,6 +663,7 @@ namespace Handbrake.Functions
             Match optimizeMP4 = Regex.Match(input, @" -O");
 
             //Audio Settings Tab
+            Match noAudio = Regex.Match(input, @"-a none");
             Match audioTrack1 = Regex.Match(input, @"-a ([0-9]*)");
             Match audioTrack2 = Regex.Match(input, @"-a ([0-9]*),([0-9]*)");
             Match audioTrack3 = Regex.Match(input, @"-a ([0-9]*),([0-9]*),([0-9]*)");
@@ -877,7 +878,10 @@ namespace Handbrake.Functions
                 #region Audio Tab
 
                 // Tracks
-                thisQuery.q_audioTrack1 = "Automatic";
+                if (noAudio.Success)
+                    thisQuery.q_audioTrack1 = "None";
+                else if (audioTrack1.Success)
+                    thisQuery.q_audioTrack1 = "Automatic";
 
                 if (audioTrack2.Success)
                 {

@@ -273,11 +273,14 @@ namespace Handbrake
             List<string> bitrates = new List<string>();
             List<string> drcs = new List<string>();
 
+            // No Audio
+            if (audioTracks.Items.Count == 0)
+                query += " -a none ";
+
             // Gather information about each audio track and store them in the declared lists.
             foreach (ListViewItem row in audioTracks.Items)
             {
                 // Audio Track (-a)
-                String track = String.Empty;
                 if (row.Text == "Automatic")
                     tracks.Add("1");
                 else if (row.Text != "None")
@@ -320,7 +323,8 @@ namespace Handbrake
                 else
                     audioItems += "," + item;
             }
-            query += " -a " + audioItems;
+            if (audioItems.Trim() != String.Empty)
+                query += " -a " + audioItems;
             firstLoop = true; audioItems = ""; // Reset for another pass.
 
             // Audio Codec (-E)

@@ -39,6 +39,9 @@ namespace Handbrake
         public int maxWidth = 0;
         public int maxHeight = 0;
 
+
+        Process hbproc;
+
         // Applicaiton Startup ************************************************
 
         #region Application Startup
@@ -206,6 +209,10 @@ namespace Handbrake
         // User Interface Menus / Tool Strips *********************************
 
         #region File Menu
+        private void mnu_killCLI_Click(object sender, EventArgs e)
+        {
+            killCLI();
+        }
         private void mnu_exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -418,7 +425,10 @@ namespace Handbrake
             if (e.Button == MouseButtons.Right)
                 treeView_presets.SelectedNode = treeView_presets.GetNodeAt(e.Location);
             else if (e.Button == MouseButtons.Left)
-                selectPreset();
+            {
+                if (groupBox_output.Text.Contains(treeView_presets.GetNodeAt(e.Location).Text))
+                    selectPreset();
+            }
 
             treeView_presets.Select();
         }
@@ -662,6 +672,8 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
+
+
             String file = String.Empty;
             if (lastAction == "scan")
                 file = "dvdinfo.dat";
@@ -729,19 +741,11 @@ namespace Handbrake
             {
                 if (filename != "")
                 {
-                    Form frmRD = new frmReadDVD(filename, this);
-                    text_source.Text = filename;
-                    lbl_encode.Text = "Scanning ...";
-                    frmRD.ShowDialog();
+                    setupGUIforScan(filename);
+                    startScan(filename);
                 }
                 else
                     text_source.Text = "Click 'Source' to continue";
-
-                // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
-                if (drp_dvdtitle.Items.Count == 0)
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-
-                lbl_encode.Text = "";
             }
         }
         private void btn_file_source_Click(object sender, EventArgs e)
@@ -762,29 +766,11 @@ namespace Handbrake
             {
                 if (filename != "")
                 {
-                    Form frmRD = new frmReadDVD(filename, this);
-                    text_source.Text = filename;
-                    lbl_encode.Text = "Scanning ...";
-                    frmRD.ShowDialog();
+                    setupGUIforScan(filename);
+                    startScan(filename);
                 }
                 else
                     text_source.Text = "Click 'Source' to continue";
-
-                // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
-                if (drp_dvdtitle.Items.Count == 0)
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-
-                lbl_encode.Text = "";
-
-                // Enable the creation of chapter markers if the file is an image of a dvd.
-                if (filename.ToLower().Contains(".iso"))
-                    Check_ChapterMarkers.Enabled = true;
-                else
-                {
-                    Check_ChapterMarkers.Enabled = false;
-                    Check_ChapterMarkers.Checked = false;
-                    data_chpt.Rows.Clear();
-                }
             }
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
@@ -801,10 +787,8 @@ namespace Handbrake
             {
                 string[] path = mnu_dvd_drive.Text.Split(' ');
                 filename = path[0];
-                lbl_encode.Text = "Scanning ...";
-                Form frmRD = new frmReadDVD(filename, this);
-                text_source.Text = filename;
-                frmRD.ShowDialog();
+                setupGUIforScan(filename);
+                startScan(filename);
             }
 
             // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
@@ -1445,14 +1429,6 @@ namespace Handbrake
         {
             x264PanelFunctions.on_x264_WidgetChange("weightb", this);
         }
-        private void check_bFrameDistortion_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("brdo", this);
-        }
-        private void check_BidirectionalRefinement_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("bime", this);
-        }
         private void check_pyrmidalBFrames_CheckedChanged(object sender, EventArgs e)
         {
             x264PanelFunctions.on_x264_WidgetChange("b-pyramid", this);
@@ -1536,6 +1512,164 @@ namespace Handbrake
         #endregion
 
         // MainWindow Components, Actions and Functions ***********************
+
+        #region Source Scan
+        private void setupGUIforScan(String filename)
+        {
+            text_source.Text = filename;
+
+            foreach (Control ctrl in Controls)
+            {
+                if (!(ctrl is StatusStrip || ctrl is MenuStrip || ctrl is ToolStrip))
+                    ctrl.Enabled = false;
+            }
+            lbl_encode.Visible = true;
+            lbl_encode.Text = "Scanning ...";
+            gb_source.Text = "Source: Scanning ...";
+            btn_source.Enabled = false;
+            btn_start.Enabled = false;
+            btn_showQueue.Enabled = false;
+            btn_add2Queue.Enabled = false;
+            tb_preview.Enabled = false;
+            mnu_killCLI.Visible = true;
+        }
+        private void startScan(String filename)
+        {
+            try
+            {
+                lbl_encode.Visible = true;
+                lbl_encode.Text = "Scanning...";
+                ThreadPool.QueueUserWorkItem(scanProcess, filename);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("frmMain.cs - startScan " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void scanProcess(object state)
+        {
+            try
+            {
+                string inputFile = (string)state;
+                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
+                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
+
+                // Make we don't pick up a stale hb_encode_log.dat (and that we have rights to the file)
+                if (File.Exists(dvdInfoPath))
+                    File.Delete(dvdInfoPath);
+
+                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
+
+                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine);
+                hbParseDvd.WindowStyle = ProcessWindowStyle.Hidden;
+
+                using (hbproc = Process.Start(hbParseDvd))
+                {
+                    hbproc.WaitForExit();
+                }
+
+                if (!File.Exists(dvdInfoPath))
+                {
+                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat is missing. \nExpected location of dvdinfo.dat: \n" + dvdInfoPath);
+                }
+
+                using (StreamReader sr = new StreamReader(dvdInfoPath))
+                {
+                    thisDVD = Parsing.DVD.Parse(sr);
+                    sr.Close();
+                    sr.Dispose();
+                }
+
+                updateUIafterScan();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("frmMain.cs - scanProcess() " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Recover From Error Here
+            }
+        }
+        private void updateUIafterScan()
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new UpdateWindowHandler(updateUIafterScan));
+                    return;
+                }
+
+                // Setup some GUI components
+                drp_dvdtitle.Items.Clear();
+                if (thisDVD.Titles.Count != 0)
+                    drp_dvdtitle.Items.AddRange(thisDVD.Titles.ToArray());
+                drp_dvdtitle.Text = "Automatic";
+                drop_chapterFinish.Text = "Auto";
+                drop_chapterStart.Text = "Auto";
+
+                // Now select the longest title
+                if (thisDVD.Titles.Count != 0)
+                    drp_dvdtitle.SelectedItem = hb_common_func.selectLongestTitle(drp_dvdtitle);
+
+                // Enable the creation of chapter markers if the file is an image of a dvd.
+                if (text_source.Text.ToLower().Contains(".iso") || text_source.Text.ToLower().Contains("VIDEO_TS"))
+                    Check_ChapterMarkers.Enabled = true;
+                else
+                {
+                    Check_ChapterMarkers.Enabled = false;
+                    Check_ChapterMarkers.Checked = false;
+                    data_chpt.Rows.Clear();
+                }
+
+                // If no titles were found, Display an error message
+                if (drp_dvdtitle.Items.Count == 0)
+                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+                // Enable the GUI components and enable any disabled components
+                lbl_encode.Text = "Scan Completed";
+                gb_source.Text = "Source";
+                foreach (Control ctrl in Controls)
+                    ctrl.Enabled = true;
+
+                btn_start.Enabled = true;
+                btn_showQueue.Enabled = true;
+                btn_add2Queue.Enabled = true;
+                tb_preview.Enabled = true;
+                btn_source.Enabled = true;
+                mnu_killCLI.Visible = false;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("frmMain.cs - updateUIafterScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void killCLI()
+        {
+            // This may seem like a long way of killing HandBrakeCLI, but for whatever reason,
+            // hbproc.kill/close just won't do the trick.
+            try
+            {
+                string AppName = "HandBrakeCLI";
+
+                AppName = AppName.ToUpper();
+
+                System.Diagnostics.Process[] prs = Process.GetProcesses();
+                foreach (System.Diagnostics.Process proces in prs)
+                {
+                    if (proces.ProcessName.ToUpper() == AppName)
+                    {
+                        proces.Refresh();
+                        if (!proces.HasExited)
+                            proces.Kill();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
 
         #region DVD Drive Detection
         // Source Button Drive Detection
@@ -1946,10 +2080,6 @@ namespace Handbrake
         }
 
         #endregion
-
-
-
-
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

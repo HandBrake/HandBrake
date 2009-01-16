@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -120,7 +120,7 @@ namespace Handbrake
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
-            this.GroupBox1 = new System.Windows.Forms.GroupBox();
+            this.gb_source = new System.Windows.Forms.GroupBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.Label17 = new System.Windows.Forms.Label();
             this.Label9 = new System.Windows.Forms.Label();
@@ -252,13 +252,14 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mnu_killCLI = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).BeginInit();
             this.frmMainMenu.SuspendLayout();
-            this.GroupBox1.SuspendLayout();
+            this.gb_source.SuspendLayout();
             this.groupBox_output.SuspendLayout();
             this.TabPage2.SuspendLayout();
             this.audioMenu.SuspendLayout();
@@ -645,9 +646,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1218,6 +1219,7 @@ namespace Handbrake
             // FileToolStripMenuItem
             // 
             this.FileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_killCLI,
             this.mnu_exit});
             this.FileToolStripMenuItem.Name = "FileToolStripMenuItem";
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
@@ -1226,7 +1228,7 @@ namespace Handbrake
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(106, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(156, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -1399,28 +1401,28 @@ namespace Handbrake
             this.frmMainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.frmMainMenu.Size = new System.Drawing.Size(992, 24);
             this.frmMainMenu.TabIndex = 0;
-            this.frmMainMenu.Text = "MenuStrip1";
+            this.frmMainMenu.Text = "MenuStrip";
             // 
-            // GroupBox1
+            // gb_source
             // 
-            this.GroupBox1.Controls.Add(this.lbl_duration);
-            this.GroupBox1.Controls.Add(this.label_duration);
-            this.GroupBox1.Controls.Add(this.Label13);
-            this.GroupBox1.Controls.Add(this.drop_chapterFinish);
-            this.GroupBox1.Controls.Add(this.drop_chapterStart);
-            this.GroupBox1.Controls.Add(this.drp_dvdtitle);
-            this.GroupBox1.Controls.Add(this.Label17);
-            this.GroupBox1.Controls.Add(this.text_source);
-            this.GroupBox1.Controls.Add(this.Label9);
-            this.GroupBox1.Controls.Add(this.Label10);
-            this.GroupBox1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GroupBox1.ForeColor = System.Drawing.Color.Black;
-            this.GroupBox1.Location = new System.Drawing.Point(9, 70);
-            this.GroupBox1.Name = "GroupBox1";
-            this.GroupBox1.Size = new System.Drawing.Size(721, 87);
-            this.GroupBox1.TabIndex = 2;
-            this.GroupBox1.TabStop = false;
-            this.GroupBox1.Text = "Source";
+            this.gb_source.Controls.Add(this.lbl_duration);
+            this.gb_source.Controls.Add(this.label_duration);
+            this.gb_source.Controls.Add(this.Label13);
+            this.gb_source.Controls.Add(this.drop_chapterFinish);
+            this.gb_source.Controls.Add(this.drop_chapterStart);
+            this.gb_source.Controls.Add(this.drp_dvdtitle);
+            this.gb_source.Controls.Add(this.Label17);
+            this.gb_source.Controls.Add(this.text_source);
+            this.gb_source.Controls.Add(this.Label9);
+            this.gb_source.Controls.Add(this.Label10);
+            this.gb_source.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gb_source.ForeColor = System.Drawing.Color.Black;
+            this.gb_source.Location = new System.Drawing.Point(9, 70);
+            this.gb_source.Name = "gb_source";
+            this.gb_source.Size = new System.Drawing.Size(721, 87);
+            this.gb_source.TabIndex = 2;
+            this.gb_source.TabStop = false;
+            this.gb_source.Text = "Source";
             // 
             // Label13
             // 
@@ -2709,7 +2711,7 @@ namespace Handbrake
             this.pmnu_saveChanges,
             this.pmnu_delete});
             this.presets_menu.Name = "presets_menu";
-            this.presets_menu.Size = new System.Drawing.Size(155, 120);
+            this.presets_menu.Size = new System.Drawing.Size(155, 98);
             this.presets_menu.Text = ";";
             this.presets_menu.Opening += new System.ComponentModel.CancelEventHandler(this.presets_menu_Opening);
             // 
@@ -2920,13 +2922,21 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
+            // mnu_killCLI
+            // 
+            this.mnu_killCLI.Name = "mnu_killCLI";
+            this.mnu_killCLI.Size = new System.Drawing.Size(156, 22);
+            this.mnu_killCLI.Text = "Cancel Scan";
+            this.mnu_killCLI.Visible = false;
+            this.mnu_killCLI.Click += new System.EventHandler(this.mnu_killCLI_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(992, 649);
-            this.Controls.Add(this.GroupBox1);
+            this.Controls.Add(this.gb_source);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);
             this.Controls.Add(this.groupBox2);
@@ -2944,8 +2954,8 @@ namespace Handbrake
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).EndInit();
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
-            this.GroupBox1.ResumeLayout(false);
-            this.GroupBox1.PerformLayout();
+            this.gb_source.ResumeLayout(false);
+            this.gb_source.PerformLayout();
             this.groupBox_output.ResumeLayout(false);
             this.groupBox_output.PerformLayout();
             this.TabPage2.ResumeLayout(false);
@@ -3001,7 +3011,7 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripSeparator ToolStripSeparator3;
         internal System.Windows.Forms.ToolStripMenuItem mnu_about;
         internal System.Windows.Forms.MenuStrip frmMainMenu;
-        internal System.Windows.Forms.GroupBox GroupBox1;
+        internal System.Windows.Forms.GroupBox gb_source;
         internal System.Windows.Forms.Label Label13;
         internal System.Windows.Forms.ComboBox drop_chapterFinish;
         internal System.Windows.Forms.ComboBox drop_chapterStart;
@@ -3199,6 +3209,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_qtpreview;
         private System.Windows.Forms.ToolStripMenuItem mnu_vlcpreview;
         private System.Windows.Forms.ToolStripMenuItem pmnu_saveChanges;
+        private System.Windows.Forms.ToolStripMenuItem mnu_killCLI;
 
     }
 }

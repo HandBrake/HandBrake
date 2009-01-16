@@ -216,13 +216,17 @@ namespace Handbrake
             mainWindow.lv_audioList.Items.Clear();
 
             // Create a new row for the Audio list based on the currently selected items in the dropdown.
-            ListViewItem newTrack = new ListViewItem("Automatic");
-            newTrack.SubItems.Add(presetQuery.AudioEncoder1);
-            newTrack.SubItems.Add(presetQuery.AudioTrackMix1);
-            newTrack.SubItems.Add(presetQuery.AudioSamplerate1);
-            newTrack.SubItems.Add(presetQuery.AudioBitrate1);
-            newTrack.SubItems.Add(presetQuery.DRC1.ToString());
-            mainWindow.lv_audioList.Items.Add(newTrack);
+            ListViewItem newTrack;
+            if (presetQuery.AudioTrack1 != "None")
+            {
+                newTrack = new ListViewItem("Automatic");
+                newTrack.SubItems.Add(presetQuery.AudioEncoder1);
+                newTrack.SubItems.Add(presetQuery.AudioTrackMix1);
+                newTrack.SubItems.Add(presetQuery.AudioSamplerate1);
+                newTrack.SubItems.Add(presetQuery.AudioBitrate1);
+                newTrack.SubItems.Add(presetQuery.DRC1.ToString());
+                mainWindow.lv_audioList.Items.Add(newTrack);
+            }
 
             if (presetQuery.AudioTrack2 != "None")
             {
