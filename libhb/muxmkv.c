@@ -363,6 +363,20 @@ static int MKVEnd( hb_mux_object_t * m )
         mk_createChapterSimple(m->file, mux_data->prev_chapter_tc, mux_data->prev_chapter_tc, string);
     }
 
+    if( title->metadata )
+    {
+        hb_metadata_t *md = title->metadata;
+
+        hb_deep_log( 2, "Writing Metadata to output file...");
+        mk_createTagSimple( m->file, MK_TAG_TITLE, md->name );
+        mk_createTagSimple( m->file, "ARTIST", md->artist );
+        mk_createTagSimple( m->file, "COMPOSER", md->composer );
+        mk_createTagSimple( m->file, MK_TAG_SYNOPSIS, md->comment );
+        mk_createTagSimple( m->file, "DATE_RELEASED", md->release_date );
+        // mk_createTagSimple( m->file, "", md->album );
+        mk_createTagSimple( m->file, MK_TAG_GENRE, md->genre );
+    }
+
     if( mk_close(m->file) < 0 )
     {
         hb_error( "Failed to flush the last frame and close the output file, Disk Full?" );
