@@ -6,7 +6,6 @@
 
 #import "HBPreviewController.h"
 #import "Controller.h"
-//#import "PictureController.h"
 
 @interface PreviewController (Private)
 
@@ -43,117 +42,6 @@
 }
 
 
-- (void) mouseMoved:(NSEvent *)theEvent
-{
-    [super mouseMoved:theEvent];
-    
-    if (isEncoding == NO)
-    {    
-        if (hudTimerSeconds == 0)
-        {
-            hudTimerSeconds ++;
-            [self startHudTimer];
-        }
-        
-        if (hudTimerSeconds > 20)
-        {
-            
-            
-            [self stopHudTimer];
-            [self showHideHudControls];
-        }
-        
-    }
-}
-
-- (void) startHudTimer
-{
-    if (!fHudTimer)
-    {
-        fHudTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hudTimerFired:) userInfo:nil repeats:YES];
-        [fHudTimer retain];
-    }
-}
-
-- (void) stopHudTimer
-{
-    if (fHudTimer)
-    {
-        [fHudTimer invalidate];
-        [fHudTimer release];
-        fHudTimer = nil;
-        hudTimerSeconds = 0;
-    }
-}
-
-- (void) hudTimerFired: (NSTimer*)theTimer
-{
-    hudTimerSeconds ++;
-    [self showHideHudControls];
-
-}
-
-- (void) showHideHudControls
-{
-    /* Test for mouse location to show/hide hud controls */
-    NSPoint    mouseLoc;
-    NSRect     targetFrame;
-    NSRect     controlBoxFrame;
-    targetFrame = [fPictureViewArea frame];
-    controlBoxFrame = [fPictureControlBox frame];
-    
-    if (isFullScreen)
-    {
-        mouseLoc = [fFullScreenWindow mouseLocationOutsideOfEventStream];
-    }
-    else
-    {
-        mouseLoc = [fPreviewWindow mouseLocationOutsideOfEventStream];
-    }
-    
-    /* if the pointer is inside the picture view areas but not
-     * in the controlbox, check the hudTimerSeconds to see if
-     * its in the allowable time span
-     */
-    if ( hudTimerSeconds > 0 && hudTimerSeconds < 20)
-    {
-        if (NSPointInRect (mouseLoc, controlBoxFrame))
-            {
-                /* Mouse is over the preview area so show hud controls so just
-                 * reset the timer to keep the control box visible
-                */
-                //[fPictureControlBox setHidden: NO];
-                hudTimerSeconds = 1;
-                return;
-            }
-        
-        /* Else, if we are not encoding a preview, we show/hide the hud controls */
-        if (isEncoding == NO)
-        {
-            /* Re-verify we are within the target frame */
-            if (NSPointInRect (mouseLoc, targetFrame))
-            {
-                /* Mouse is over the preview area so show hud controls */
-                [[fPictureControlBox animator] setHidden: NO];
-                /* increment our timer by one */
-                hudTimerSeconds ++;
-            }
-            else
-            {
-                [[fPictureControlBox animator] setHidden: YES];
-                [self stopHudTimer];
-            }
-        }
-        
-    }
-    else
-    {
-        [[fPictureControlBox animator] setHidden: YES];
-    }
-    
-}
-
-
 
 //------------------------------------------------------------------------------------
 // Displays and brings the picture window to the front
@@ -163,6 +51,7 @@
     [self showWindow:sender];
     /* lets set the preview window to accept mouse moved events */
     [fPreviewWindow setAcceptsMouseMovedEvents:YES];
+    hudTimerSeconds = 0;
     [self pictureSliderChanged:nil];
     [self startReceivingLibhbNotifications];
 }
@@ -196,6 +85,7 @@
     [fPictureSlider setWantsLayer:YES];
     [fFullScreenToggleButton setWantsLayer:YES];
     [fPictureSettingsToggleButton setWantsLayer:YES];
+    [fScaleToScreenToggleButton setWantsLayer:YES];
     [fCreatePreviewMovieButton setWantsLayer:YES];
     
     [fEncodingControlBox setWantsLayer:YES];
@@ -323,8 +213,10 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     [fPictureView setHidden:NO];
 
     [fPictureView setImage: [self imageForPicture: fPicture]];
+    
     	
-	NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
+	
+    NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
     /* Set the picture size display fields below the Preview Picture*/
     if( fTitle->job->pixel_ratio == 1 ) // Original PAR Implementation
     {
@@ -354,7 +246,8 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     }
 
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-    if( [self viewNeedsToResizeToSize:viewSize] )
+    /* we also need to take into account scaling to full screen to activate switching the view size */
+    if( [self viewNeedsToResizeToSize:viewSize])
     {
         /* In the case of loose anamorphic, do not resize the window when scaling down */
         // FIX ME: we need a new way to do this as we do not havefWidthField anymore
@@ -365,7 +258,8 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
             [self setViewSize:viewSize];
         }
     }
-
+    
+    
     // Show the scaled text (use the height to check since the width can vary
     // with anamorphic video).
     if( ( ( int )viewSize.height ) != fTitle->height )
@@ -375,22 +269,24 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
                                  NSLocalizedString( @" (Preview scaled to %.0f%% actual size)",
                                                    @"String shown when a preview is scaled" ),
                                  scale * 100.0];
-        [fInfoField setStringValue: [[fInfoField stringValue] stringByAppendingString:scaleString]];
+        [fscaleInfoField setStringValue: [NSString stringWithFormat:
+                                          @"%@", scaleString]];
+        
+    }
+    else
+    {
+        [fscaleInfoField setStringValue: @""];
     }
 
 }
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
 {
-
-[[NSUserDefaults standardUserDefaults] setObject:[fPreviewMovieLengthPopUp titleOfSelectedItem] forKey:@"PreviewLength"];
-
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[fPreviewMovieLengthPopUp titleOfSelectedItem] forKey:@"PreviewLength"];
+    
 }    
     
-    
-
-
-
 - (IBAction) SettingsChanged: (id) sender
 {
          // Purge the existing picture previews so they get recreated the next time
@@ -424,18 +320,133 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
 {
     [self SetTitle:title];
     [self showWindow:sender];
+    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
     isFullScreen = NO;
+    scaleToScreen = NO;
     hudTimerSeconds = 0;
+    [self startHudTimer];
 
 }
 
 - (IBAction)showPictureSettings:(id)sender
 {
-[fHBController showPicturePanel:self];
+    [fHBController showPicturePanel:self];
+}
+
+#pragma mark Hud Control Overlay
+- (void) mouseMoved:(NSEvent *)theEvent
+{
+    [super mouseMoved:theEvent];
+    
+    if (isEncoding == NO)
+    {    
+        if (hudTimerSeconds == 0)
+        {
+            hudTimerSeconds ++;
+            [self startHudTimer];
+        }
+        
+        if (hudTimerSeconds > 20)
+        {
+            
+            
+            [self stopHudTimer];
+            [self showHideHudControls];
+        }
+        
+    }
+}
+
+- (void) startHudTimer
+{
+    if (!fHudTimer)
+    {
+        fHudTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hudTimerFired:) userInfo:nil repeats:YES];
+        [fHudTimer retain];
+    }
+}
+
+- (void) stopHudTimer
+{
+    if (fHudTimer)
+    {
+        [fHudTimer invalidate];
+        [fHudTimer release];
+        fHudTimer = nil;
+        hudTimerSeconds = 0;
+    }
+}
+
+- (void) hudTimerFired: (NSTimer*)theTimer
+{
+    hudTimerSeconds ++;
+    [self showHideHudControls];
+
+}
+
+- (void) showHideHudControls
+{
+    /* Test for mouse location to show/hide hud controls */
+    NSPoint    mouseLoc;
+    NSRect     targetFrame;
+    NSRect     controlBoxFrame;
+    targetFrame = [fPictureViewArea frame];
+    controlBoxFrame = [fPictureControlBox frame];
+    
+    if (isFullScreen)
+    {
+        mouseLoc = [fFullScreenWindow mouseLocationOutsideOfEventStream];
+        [fScaleToScreenToggleButton setHidden:NO];
+    }
+    else
+    {
+        mouseLoc = [fPreviewWindow mouseLocationOutsideOfEventStream];
+        [fScaleToScreenToggleButton setHidden:YES];
+    }
+    
+    /* if the pointer is inside the picture view areas but not
+     * in the controlbox, check the hudTimerSeconds to see if
+     * its in the allowable time span
+     */
+    if ( hudTimerSeconds > 0 && hudTimerSeconds < 20)
+    {
+        
+        if (isEncoding == NO)
+        {
+            if (NSPointInRect (mouseLoc, controlBoxFrame))
+            {
+                /* Mouse is over the preview area so show hud controls so just
+                 * reset the timer to keep the control box visible
+                */
+                [fPictureControlBox setHidden: NO];
+                hudTimerSeconds = 1;
+                return;
+            }
+            /* Re-verify we are within the target frame */
+            if (NSPointInRect (mouseLoc, targetFrame))
+            {
+                /* Mouse is over the preview area so show hud controls */
+                [[fPictureControlBox animator] setHidden: NO];
+                /* increment our timer by one */
+                hudTimerSeconds ++;
+            }
+            else
+            {
+                [[fPictureControlBox animator] setHidden: YES];
+                [self stopHudTimer];
+            }
+        }
+        
+    }
+    else
+    {
+        [[fPictureControlBox animator] setHidden: YES];
+    }
+    
 }
 
 
-#pragma mark Cocoa For Fullscreen Mode
+#pragma mark Fullscreen Mode
 
 - (IBAction)toggleScreenMode:(id)sender
 {
@@ -447,6 +458,32 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     {
         [self goWindowedScreen:nil];
     }
+}
+
+- (IBAction)toggleScaleToScreen:(id)sender
+{
+    if (scaleToScreen == YES)
+    {
+        scaleToScreen = NO;
+        /* make sure we are set to a still preview */
+        [self pictureSliderChanged:nil];
+        [fScaleToScreenToggleButton setTitle:@"<->"];
+    }
+    else
+    {
+        scaleToScreen = YES;
+        /* make sure we are set to a still preview */
+        [self pictureSliderChanged:nil];
+        [fScaleToScreenToggleButton setTitle:@">-<"];
+    }
+    
+    /* Actually perform the scaling */
+    /*
+    NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
+    NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+    [self resizeSheetForViewSize:viewSize];
+    [self setViewSize:viewSize];
+    */
 }
 
 - (BOOL)fullScreen
@@ -467,8 +504,15 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     if (err == CGDisplayNoErr) 
     { 
         
+        /* make sure we are set to a still preview and not scaled to screen */
+        scaleToScreen = NO;
+        [self pictureSliderChanged:nil];
+        
         // Create the full-screen window. 
-        NSRect winRect = [fPreviewWindow frame]; 
+        //NSRect winRect = [mainScreen frame];
+        //fPictureViewArea
+        NSRect winRect = [fPictureViewArea frame];
+          
         fFullScreenWindow = [[NSWindow alloc] initWithContentRect:winRect 
                                                         styleMask:NSBorderlessWindowMask 
                                                           backing:NSBackingStoreBuffered 
@@ -502,11 +546,7 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         
         [fFullScreenWindow setFrameOrigin:windowOrigin];
         
-        /* Using the simple center method for NSWindow
-         * though note this will cause the window to be slightly
-         * higher than center
-         */
-        //[fFullScreenWindow center];
+        
         
         /* lets kill the timer for now */
         [self stopReceivingLibhbNotifications];
@@ -524,9 +564,6 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         // Show the window. 
         [fFullScreenWindow makeKeyAndOrderFront:self];
         
-        [fPreviewWindow setAcceptsMouseMovedEvents:NO];
-        [fFullScreenWindow setAcceptsMouseMovedEvents:YES];
-        
         /* Change the name of fFullScreenToggleButton appropriately */
         [fFullScreenToggleButton setTitle: @"Windowed"];
         
@@ -534,12 +571,17 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         [self startReceivingLibhbNotifications];
         
         isFullScreen = YES;
+        [fScaleToScreenToggleButton setHidden:NO];
         
         /* make sure we are set to a still preview */
         [self pictureSliderChanged:nil];
         
-        /* set the picture settings pallete above the shielding level */
-        //[fHBController picturePanelFullScreen];
+        //[fPreviewWindow setAcceptsMouseMovedEvents:NO];
+        [fFullScreenWindow setAcceptsMouseMovedEvents:YES];
+        
+        
+        hudTimerSeconds = 0;
+        [self startHudTimer];
     } 
 } 
 
@@ -548,13 +590,16 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     
     /* Get the screen info to release the display but don't actually do
      * it until the windowed screen is setup.
-     */ 
+     */
+    scaleToScreen = NO;
+    [self pictureSliderChanged:nil];
+    [fScaleToScreenToggleButton setTitle:@"<->"];
+        
     NSScreen* mainScreen = [NSScreen mainScreen]; 
     NSDictionary* screenInfo = [mainScreen deviceDescription]; 
     NSNumber* screenID = [screenInfo objectForKey:@"NSScreenNumber"];
     CGDirectDisplayID displayID = (CGDirectDisplayID)[screenID longValue]; 
     
-    [fFullScreenWindow setAcceptsMouseMovedEvents:NO];
     [fFullScreenWindow dealloc];
     [fFullScreenWindow release];
     
@@ -569,21 +614,27 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     /* Set the window back to regular level */
     [fPreviewWindow setLevel:NSNormalWindowLevel];
     
-    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-    
-    
     /* Set the isFullScreen flag back to NO */
     isFullScreen = NO;
+    scaleToScreen = NO;
+    /* make sure we are set to a still preview */
+    [self pictureSliderChanged:nil];
     [self showPreviewWindow:nil];
     
     /* Change the name of fFullScreenToggleButton appropriately */
     [fFullScreenToggleButton setTitle: @"Full Screen"];
-    
+    // [fScaleToScreenToggleButton setHidden:YES];
     /* set the picture settings pallete back to normal level */
     [fHBController picturePanelWindowed];
     
     /* Release the display now that the we are back in windowed mode */
     CGDisplayRelease(displayID);
+    
+    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
+    //[fFullScreenWindow setAcceptsMouseMovedEvents:NO];
+    
+    hudTimerSeconds = 0;
+    [self startHudTimer];
     
 }
 
@@ -1016,14 +1067,13 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         /* We need to find out if the preview movie needs to be scaled down so
          * that it doesn't overflow our available viewing container (just like for image
          * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
-        if( ((int)movieBounds.size.height) > [fPictureView frame].size.height )
+        if( ((int)movieBounds.size.height) > [fPictureView frame].size.height || scaleToScreen == YES)
         {
             /* The preview movie would be larger than the available viewing area
              * in the preview movie, so we go ahead and scale it down to the same size
              * as the still preview  or we readjust our window to allow for the added height if need be
              */
             NSSize displaySize = NSMakeSize( (float)movieBounds.size.width, (float)movieBounds.size.height );
-            //NSSize displaySize = NSMakeSize( (float)fTitle->width, (float)fTitle->height );
             NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
             if( [self viewNeedsToResizeToSize:viewSize] )
             {
@@ -1033,6 +1083,7 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
                 
             }
             
+            [fMovieView setPreservesAspectRatio:YES];
             [fMovieView setFrameSize:viewSize];
         }
         else
@@ -1040,8 +1091,12 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
             /* Since the preview movie is smaller than the available viewing area
              * we can go ahead and use the preview movies native size */
             [fMovieView setFrameSize:movieBounds.size];
+
         }
         
+
+        
+
         // lets reposition the movie if need be
         
         NSPoint origin = [fPictureViewArea frame].origin;
@@ -1141,13 +1196,40 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         resultSize.height = maxHeight;
     }
     
-    return resultSize;
+    if (scaleToScreen == YES)
+    {
+        //CGFloat scaleToScreenWidth;
+        //CGFloat scaleToScreenHeight;
+        CGFloat screenAspect;
+        CGFloat viewAreaAspect; 
+        //note, a mbp 15" at 1440 x 900 is a 1.6 ar
+        screenAspect = screenSize.width / screenSize.height;
+        
+        // Note, a standard dvd will use 720 x 480 which is a 1.5
+        viewAreaAspect = viewAreaSize.width / viewAreaSize.height;
+        
+        if (screenAspect < viewAreaAspect)
+        {
+            resultSize.width = screenSize.width;
+            resultSize.height = (screenSize.width / viewAreaAspect);
+        }
+        else
+        {
+            resultSize.height = screenSize.height;
+            resultSize.width = resultSize.height * viewAreaAspect;
+        }
+        
+    }
+
+      return resultSize;
+
+    
 }
 
 //
 // -[PictureController(Private) resizePanelForViewSize:animate:]
 //
-// Resizes the entire sheet to accomodate a view of a particular size.
+// Resizes the entire window to accomodate a view of a particular size.
 //
 - (void)resizeSheetForViewSize: (NSSize)viewSize
 {
@@ -1155,7 +1237,7 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     NSSize currentSize = [fPictureViewArea frame].size;
     CGFloat deltaX = viewSize.width - currentSize.width;
     CGFloat deltaY = viewSize.height - currentSize.height;
-
+    
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
     NSSize maxSize = [[self window] maxSize];
@@ -1172,24 +1254,31 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
         frame.size.height = minSize.height;
     }
     
-
+    
     // But now the sheet is off-center, so also shift the origin to center it and
     // keep the top aligned.
     if( frame.size.width != [[self window] frame].size.width )
         frame.origin.x -= (deltaX / 2.0);
-
+    
     if (isFullScreen)
     {
-    if( frame.size.height != [[self window] frame].size.height )
-        frame.origin.y -= (deltaY / 2.0);
+        if( frame.size.height != [[self window] frame].size.height )
+        {
+            frame.origin.y -= (deltaY / 2.0);
+        }
+        else
+        {
+            if( frame.size.height != [[self window] frame].size.height )
+                frame.origin.y -= deltaY;
+        }
+        
+        [[self window] setFrame:frame display:YES animate:NO];
     }
     else
     {
-    if( frame.size.height != [[self window] frame].size.height )
-        frame.origin.y -= deltaY;
+        [[self window] setFrame:frame display:YES animate:YES];
     }
-
-    [[self window] setFrame:frame display:YES animate:YES];
+    
 }
 
 //

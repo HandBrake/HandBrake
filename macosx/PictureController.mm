@@ -56,7 +56,7 @@
 {
     int32_t shieldLevel = CGShieldingWindowLevel(); 
     
-    [fPictureWindow setLevel:shieldLevel]; 
+    [fPictureWindow setLevel:shieldLevel + 1]; 
     // Show the window. 
     [fPictureWindow makeKeyAndOrderFront:self];
 }
@@ -181,8 +181,6 @@
     fPicture = 0;
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
-    
-    //[fPreviewController SetTitle:fTitle];
     
     [self SettingsChanged: nil];
 }

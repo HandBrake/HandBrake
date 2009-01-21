@@ -23,7 +23,7 @@
     
     IBOutlet NSWindow        * fPreviewWindow;
     NSWindow                 * fFullScreenWindow; // Full Screen window
-    NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
+    NSMutableDictionary      * fPicturePreviews;  // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
 
     IBOutlet NSImageView     * fPictureView;
@@ -33,6 +33,7 @@
 
     IBOutlet NSSlider        * fPictureSlider;
     IBOutlet NSTextField     * fInfoField;
+    IBOutlet NSTextField     * fscaleInfoField;
     
     BOOL                     isEncoding;
 
@@ -49,8 +50,10 @@
     
     /* Full Screen Mode Toggle */
     IBOutlet NSButton               * fFullScreenToggleButton;
+    IBOutlet NSButton               * fScaleToScreenToggleButton;
     IBOutlet NSButton               * fPictureSettingsToggleButton;
     BOOL                              isFullScreen;
+    BOOL                              scaleToScreen;
     /* Movie Previews */
     IBOutlet NSButton               * fCreatePreviewMovieButton;
     IBOutlet NSButton               * fCancelPreviewMovieButton;
@@ -78,6 +81,7 @@
 - (IBAction)showPictureSettings:(id)sender;
 /* Full Screen */
 - (IBAction)toggleScreenMode:(id)sender;
+- (IBAction)toggleScaleToScreen:(id)sender;
 - (BOOL)fullScreen;
 - (IBAction)goFullScreen:(id)sender;
 - (IBAction)goWindowedScreen:(id)sender;
