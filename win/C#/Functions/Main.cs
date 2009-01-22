@@ -106,7 +106,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
         /// </summary>
-        public Handbrake.Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
+        public Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
         {
             int current_largest = 0;
             Handbrake.Parsing.Title title2Select;
@@ -157,27 +157,23 @@ namespace Handbrake.Functions
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
         /// <param name="mainWindow"></param>
-        public DataGridView chapterNaming(DataGridView data_chpt, string chapter_start, string chapter_end)
+        public DataGridView chapterNaming(DataGridView data_chpt, string chapter_end)
         {
-            int i = 0, rowCount = 0, start = 0, finish = 0;
+            int i = 0, finish = 0;
 
             if (chapter_end != "Auto")
                 int.TryParse(chapter_end, out finish);
 
-            if (chapter_start != "Auto")
-                int.TryParse(chapter_start, out start);
-
-            rowCount = finish - (start - 1);
-
-            while (i < rowCount)
+            while (i < finish)
             {
-                DataGridViewRow row = new DataGridViewRow();
-
-                data_chpt.Rows.Insert(i, row);
-                data_chpt.Rows[i].Cells[0].Value = (i + 1);
-                data_chpt.Rows[i].Cells[1].Value = "Chapter " + (i + 1);
+                int n = data_chpt.Rows.Add();
+                data_chpt.Rows[n].Cells[0].Value = (i + 1);
+                data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
+                data_chpt.Rows[n].Cells[0].ValueType = typeof(int);
+                data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
                 i++;
             }
+    
             return data_chpt;
         }
 

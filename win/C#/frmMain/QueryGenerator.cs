@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
@@ -414,10 +413,10 @@ namespace Handbrake
 
             // Attach Source name and dvd title to the start of the chapters.csv filename.
             // This is for the queue. It allows different chapter name files for each title.
-            string source_name = mainWindow.text_source.Text;
-            string[] sourceName = source_name.Split('\\');
-            source_name = sourceName[sourceName.Length - 1];
-            source_name = source_name.Replace("\"", "");
+            string[] destName =  mainWindow.text_destination.Text.Split('\\');
+            string dest_name = destName[destName.Length - 1];
+            dest_name = dest_name.Replace("\"", "");
+            dest_name = dest_name.Replace(".mp4", "").Replace(".m4v", "").Replace(".avi", "").Replace(".mkv", "").Replace(".ogm", "");
 
             string source_title = mainWindow.drp_dvdtitle.Text;
             string[] titlesplit = source_title.Split(' ');
@@ -425,13 +424,13 @@ namespace Handbrake
 
             if (mainWindow.Check_ChapterMarkers.Checked)
             {
-                if ((source_name.Trim() != "Click 'Source' to continue") && (source_name.Trim() != ""))
+                if (dest_name.Trim() != String.Empty)
                 {
-                    string path = "";
+                    string path;
                     if (source_title != "Automatic")
-                        path = Path.Combine(Path.GetTempPath(), source_name + "-" + source_title + "-chapters.csv");
+                        path = Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv");
                     else
-                        path = Path.Combine(Path.GetTempPath(), source_name + "-chapters.csv");
+                        path = Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
 
                     if (chapterCSVSave(mainWindow, path) == false)
                         query += " -m ";
@@ -540,7 +539,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
         }

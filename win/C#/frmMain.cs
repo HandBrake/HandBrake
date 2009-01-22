@@ -862,9 +862,13 @@ namespace Handbrake
                 text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
             data_chpt.Rows.Clear();
-            DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterStart.Text, drop_chapterFinish.Text);
+            DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterFinish.Text);
             if (chapterGridView != null)
                 data_chpt = chapterGridView;
+
+            // Hack to force the redraw of the scrollbars which don't resize properly when the control is disabled.
+            data_chpt.Columns[0].Width = 166;
+            data_chpt.Columns[0].Width = 165;
         }
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -887,6 +891,7 @@ namespace Handbrake
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming == "Checked")
                 text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -909,6 +914,25 @@ namespace Handbrake
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming == "Checked")
                 text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+        
+            // Add more rows to the Chapter menu if needed.
+            if (Check_ChapterMarkers.Checked)
+            {
+                int i = data_chpt.Rows.Count, finish = 0;
+
+                if (drop_chapterFinish.Text != "Auto")
+                    int.TryParse(drop_chapterFinish.Text, out finish);
+
+                while (i < finish)
+                {
+                    int n = data_chpt.Rows.Add();
+                    data_chpt.Rows[n].Cells[0].Value = (i + 1);
+                    data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
+                    data_chpt.Rows[n].Cells[0].ValueType = typeof (int);
+                    data_chpt.Rows[n].Cells[1].ValueType = typeof (string);
+                    i++;
+                }
+            }
         }
 
         //Destination
@@ -1396,7 +1420,7 @@ namespace Handbrake
                 text_destination.Text = text_destination.Text.Replace(".m4v", ".mp4");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
-                DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterStart.Text, drop_chapterFinish.Text);
+                DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterFinish.Text);
                 if (chapterGridView != null)
                     data_chpt = chapterGridView;
             }
@@ -1533,6 +1557,7 @@ namespace Handbrake
             tb_preview.Enabled = false;
             mnu_killCLI.Visible = true;
         }
+
         private void startScan(String filename)
         {
             try
@@ -1585,8 +1610,7 @@ namespace Handbrake
             catch (Exception exc)
             {
                 MessageBox.Show("frmMain.cs - scanProcess() " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                // Recover From Error Here
+                enableGUI();
             }
         }
         private void updateUIafterScan()
@@ -1626,11 +1650,27 @@ namespace Handbrake
                     MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 // Enable the GUI components and enable any disabled components
+                enableGUI();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("frmMain.cs - updateUIafterScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                enableGUI();
+            }
+        }
+
+        private void enableGUI()
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new UpdateWindowHandler(updateUIafterScan));
+                }
                 lbl_encode.Text = "Scan Completed";
                 gb_source.Text = "Source";
                 foreach (Control ctrl in Controls)
                     ctrl.Enabled = true;
-
                 btn_start.Enabled = true;
                 btn_showQueue.Enabled = true;
                 btn_add2Queue.Enabled = true;
@@ -1640,10 +1680,11 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - updateUIafterScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmMain.cs - enableGUI " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void killCLI()
+
+        private static void killCLI()
         {
             // This may seem like a long way of killing HandBrakeCLI, but for whatever reason,
             // hbproc.kill/close just won't do the trick.
@@ -2080,6 +2121,7 @@ namespace Handbrake
         }
 
         #endregion
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

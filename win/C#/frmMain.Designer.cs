@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -65,8 +65,6 @@ namespace Handbrake
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.data_chpt = new System.Windows.Forms.DataGridView();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_addPreset = new System.Windows.Forms.Button();
             this.btn_removePreset = new System.Windows.Forms.Button();
             this.drp_audenc_1 = new System.Windows.Forms.ComboBox();
@@ -98,6 +96,7 @@ namespace Handbrake
             this.File_Open = new System.Windows.Forms.OpenFileDialog();
             this.ISO_Open = new System.Windows.Forms.OpenFileDialog();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_killCLI = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_open3 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -252,7 +251,8 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mnu_killCLI = new System.Windows.Forms.ToolStripMenuItem();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -302,12 +302,12 @@ namespace Handbrake
             this.btn_restore});
             notifyIconMenu.Name = "notifyIconMenu";
             notifyIconMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            notifyIconMenu.Size = new System.Drawing.Size(124, 26);
+            notifyIconMenu.Size = new System.Drawing.Size(129, 26);
             // 
             // btn_restore
             // 
             this.btn_restore.Name = "btn_restore";
-            this.btn_restore.Size = new System.Drawing.Size(123, 22);
+            this.btn_restore.Size = new System.Drawing.Size(128, 22);
             this.btn_restore.Text = "Restore";
             this.btn_restore.Click += new System.EventHandler(this.btn_restore_Click);
             // 
@@ -639,26 +639,12 @@ namespace Handbrake
             this.number,
             this.name});
             this.data_chpt.Location = new System.Drawing.Point(16, 55);
+            this.data_chpt.MultiSelect = false;
             this.data_chpt.Name = "data_chpt";
+            this.data_chpt.RowHeadersVisible = false;
             this.data_chpt.Size = new System.Drawing.Size(661, 234);
             this.data_chpt.TabIndex = 3;
             this.ToolTip.SetToolTip(this.data_chpt, resources.GetString("data_chpt.ToolTip"));
-            // 
-            // number
-            // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
-            this.number.HeaderText = "Chapter Number";
-            this.number.MaxInputLength = 3;
-            this.number.Name = "number";
-            this.number.Width = 135;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Chapter Name";
-            this.name.Name = "name";
-            this.name.Width = 460;
             // 
             // btn_addPreset
             // 
@@ -1225,6 +1211,14 @@ namespace Handbrake
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.FileToolStripMenuItem.Text = "&File";
             // 
+            // mnu_killCLI
+            // 
+            this.mnu_killCLI.Name = "mnu_killCLI";
+            this.mnu_killCLI.Size = new System.Drawing.Size(156, 22);
+            this.mnu_killCLI.Text = "Cancel Scan";
+            this.mnu_killCLI.Visible = false;
+            this.mnu_killCLI.Click += new System.EventHandler(this.mnu_killCLI_Click);
+            // 
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
@@ -1610,19 +1604,19 @@ namespace Handbrake
             this.toolStripSeparator2,
             this.audioList_remove});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(142, 76);
+            this.audioMenu.Size = new System.Drawing.Size(152, 76);
             // 
             // audioList_moveup
             // 
             this.audioList_moveup.Name = "audioList_moveup";
-            this.audioList_moveup.Size = new System.Drawing.Size(141, 22);
+            this.audioList_moveup.Size = new System.Drawing.Size(151, 22);
             this.audioList_moveup.Text = "Move Up";
             this.audioList_moveup.Click += new System.EventHandler(this.audioList_moveup_Click);
             // 
             // audioList_movedown
             // 
             this.audioList_movedown.Name = "audioList_movedown";
-            this.audioList_movedown.Size = new System.Drawing.Size(141, 22);
+            this.audioList_movedown.Size = new System.Drawing.Size(151, 22);
             this.audioList_movedown.Text = "Move Down";
             this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.audioList_movedown.Click += new System.EventHandler(this.audioList_movedown_Click);
@@ -1630,12 +1624,12 @@ namespace Handbrake
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(148, 6);
             // 
             // audioList_remove
             // 
             this.audioList_remove.Name = "audioList_remove";
-            this.audioList_remove.Size = new System.Drawing.Size(141, 22);
+            this.audioList_remove.Size = new System.Drawing.Size(151, 22);
             this.audioList_remove.Text = "Remove";
             this.audioList_remove.Click += new System.EventHandler(this.audioList_remove_Click);
             // 
@@ -2711,40 +2705,40 @@ namespace Handbrake
             this.pmnu_saveChanges,
             this.pmnu_delete});
             this.presets_menu.Name = "presets_menu";
-            this.presets_menu.Size = new System.Drawing.Size(155, 98);
+            this.presets_menu.Size = new System.Drawing.Size(163, 98);
             this.presets_menu.Text = ";";
             this.presets_menu.Opening += new System.ComponentModel.CancelEventHandler(this.presets_menu_Opening);
             // 
             // pmnu_expandAll
             // 
             this.pmnu_expandAll.Name = "pmnu_expandAll";
-            this.pmnu_expandAll.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_expandAll.Size = new System.Drawing.Size(162, 22);
             this.pmnu_expandAll.Text = "Expand All";
             this.pmnu_expandAll.Click += new System.EventHandler(this.pmnu_expandAll_Click);
             // 
             // pmnu_collapse
             // 
             this.pmnu_collapse.Name = "pmnu_collapse";
-            this.pmnu_collapse.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_collapse.Size = new System.Drawing.Size(162, 22);
             this.pmnu_collapse.Text = "Collapse All";
             this.pmnu_collapse.Click += new System.EventHandler(this.pmnu_collapse_Click);
             // 
             // sep1
             // 
             this.sep1.Name = "sep1";
-            this.sep1.Size = new System.Drawing.Size(151, 6);
+            this.sep1.Size = new System.Drawing.Size(159, 6);
             // 
             // pmnu_saveChanges
             // 
             this.pmnu_saveChanges.Name = "pmnu_saveChanges";
-            this.pmnu_saveChanges.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_saveChanges.Size = new System.Drawing.Size(162, 22);
             this.pmnu_saveChanges.Text = "Save Changes";
             this.pmnu_saveChanges.Click += new System.EventHandler(this.pmnu_saveChanges_Click);
             // 
             // pmnu_delete
             // 
             this.pmnu_delete.Name = "pmnu_delete";
-            this.pmnu_delete.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_delete.Size = new System.Drawing.Size(162, 22);
             this.pmnu_delete.Text = "Delete";
             this.pmnu_delete.Click += new System.EventHandler(this.pmnu_delete_click);
             // 
@@ -2778,7 +2772,7 @@ namespace Handbrake
             this.btn_source.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_source.Name = "btn_source";
-            this.btn_source.Size = new System.Drawing.Size(85, 36);
+            this.btn_source.Size = new System.Drawing.Size(90, 36);
             this.btn_source.Text = "Source";
             this.btn_source.ToolTipText = "Open a new source file or folder.";
             this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
@@ -2787,7 +2781,7 @@ namespace Handbrake
             // 
             this.btn_file_source.Image = global::Handbrake.Properties.Resources.Movies_Small;
             this.btn_file_source.Name = "btn_file_source";
-            this.btn_file_source.Size = new System.Drawing.Size(194, 22);
+            this.btn_file_source.Size = new System.Drawing.Size(214, 22);
             this.btn_file_source.Text = "Video File";
             this.btn_file_source.Click += new System.EventHandler(this.btn_file_source_Click);
             // 
@@ -2796,20 +2790,20 @@ namespace Handbrake
             this.btn_dvd_source.Image = ((System.Drawing.Image)(resources.GetObject("btn_dvd_source.Image")));
             this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_dvd_source.Name = "btn_dvd_source";
-            this.btn_dvd_source.Size = new System.Drawing.Size(194, 22);
+            this.btn_dvd_source.Size = new System.Drawing.Size(214, 22);
             this.btn_dvd_source.Text = "DVD/ VIDEO_TS Folder";
             this.btn_dvd_source.Click += new System.EventHandler(this.btn_dvd_source_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(191, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(211, 6);
             // 
             // mnu_dvd_drive
             // 
             this.mnu_dvd_drive.Image = global::Handbrake.Properties.Resources.disc_small;
             this.mnu_dvd_drive.Name = "mnu_dvd_drive";
-            this.mnu_dvd_drive.Size = new System.Drawing.Size(194, 22);
+            this.mnu_dvd_drive.Size = new System.Drawing.Size(214, 22);
             this.mnu_dvd_drive.Text = "[No DVD Drive Ready]";
             this.mnu_dvd_drive.Visible = false;
             this.mnu_dvd_drive.Click += new System.EventHandler(this.mnu_dvd_drive_Click);
@@ -2825,7 +2819,7 @@ namespace Handbrake
             this.btn_start.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_start.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(67, 36);
+            this.btn_start.Size = new System.Drawing.Size(70, 36);
             this.btn_start.Text = "Start";
             this.btn_start.ToolTipText = "Start the encoding process";
             this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
@@ -2836,7 +2830,7 @@ namespace Handbrake
             this.btn_add2Queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_add2Queue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_add2Queue.Name = "btn_add2Queue";
-            this.btn_add2Queue.Size = new System.Drawing.Size(110, 36);
+            this.btn_add2Queue.Size = new System.Drawing.Size(122, 36);
             this.btn_add2Queue.Text = "Add to Queue";
             this.btn_add2Queue.ToolTipText = "Add a new item to the Queue";
             this.btn_add2Queue.Click += new System.EventHandler(this.btn_add2Queue_Click);
@@ -2847,7 +2841,7 @@ namespace Handbrake
             this.btn_showQueue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_showQueue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_showQueue.Name = "btn_showQueue";
-            this.btn_showQueue.Size = new System.Drawing.Size(104, 36);
+            this.btn_showQueue.Size = new System.Drawing.Size(115, 36);
             this.btn_showQueue.Tag = "";
             this.btn_showQueue.Text = "Show Queue";
             this.btn_showQueue.Click += new System.EventHandler(this.btn_showQueue_Click);
@@ -2866,20 +2860,20 @@ namespace Handbrake
             this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tb_preview.Name = "tb_preview";
-            this.tb_preview.Size = new System.Drawing.Size(90, 36);
+            this.tb_preview.Size = new System.Drawing.Size(95, 36);
             this.tb_preview.Text = "Preview";
             // 
             // mnu_qtpreview
             // 
             this.mnu_qtpreview.Name = "mnu_qtpreview";
-            this.mnu_qtpreview.Size = new System.Drawing.Size(185, 22);
+            this.mnu_qtpreview.Size = new System.Drawing.Size(203, 22);
             this.mnu_qtpreview.Text = "Preview in QuickTime";
             this.mnu_qtpreview.Click += new System.EventHandler(this.mnu_qtpreview_Click);
             // 
             // mnu_vlcpreview
             // 
             this.mnu_vlcpreview.Name = "mnu_vlcpreview";
-            this.mnu_vlcpreview.Size = new System.Drawing.Size(185, 22);
+            this.mnu_vlcpreview.Size = new System.Drawing.Size(203, 22);
             this.mnu_vlcpreview.Text = "Preview in VLC";
             this.mnu_vlcpreview.Click += new System.EventHandler(this.mnu_vlcpreview_Click);
             // 
@@ -2889,7 +2883,7 @@ namespace Handbrake
             this.btn_ActivityWindow.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_ActivityWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_ActivityWindow.Name = "btn_ActivityWindow";
-            this.btn_ActivityWindow.Size = new System.Drawing.Size(120, 36);
+            this.btn_ActivityWindow.Size = new System.Drawing.Size(132, 36);
             this.btn_ActivityWindow.Text = "Activity Window";
             this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
                 "ently running encode.";
@@ -2922,13 +2916,21 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
-            // mnu_killCLI
+            // number
             // 
-            this.mnu_killCLI.Name = "mnu_killCLI";
-            this.mnu_killCLI.Size = new System.Drawing.Size(156, 22);
-            this.mnu_killCLI.Text = "Cancel Scan";
-            this.mnu_killCLI.Visible = false;
-            this.mnu_killCLI.Click += new System.EventHandler(this.mnu_killCLI_Click);
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            this.number.HeaderText = "Chapter Number";
+            this.number.MaxInputLength = 3;
+            this.number.Name = "number";
+            this.number.Width = 165;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Chapter Name";
+            this.name.Name = "name";
+            this.name.Width = 460;
             // 
             // frmMain
             // 
@@ -3144,8 +3146,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label label66;
         internal System.Windows.Forms.Label label67;
         internal System.Windows.Forms.Label label68;
-        private System.Windows.Forms.DataGridViewTextBoxColumn number;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btn_destBrowse;
@@ -3210,6 +3210,8 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_vlcpreview;
         private System.Windows.Forms.ToolStripMenuItem pmnu_saveChanges;
         private System.Windows.Forms.ToolStripMenuItem mnu_killCLI;
+        private System.Windows.Forms.DataGridViewTextBoxColumn number;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
 
     }
 }
