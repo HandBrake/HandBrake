@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Handbrake
@@ -41,8 +39,8 @@ namespace Handbrake
         {
             /* Set widgets depending on the opt string in field */
             String thisOpt; // The separated option such as "bframes=3"
-            String optName = ""; // The option name such as "bframes"
-            String optValue = "";// The option value such as "3"
+            String optName; // The option name such as "bframes"
+            String optValue;// The option value such as "3"
             String[] currentOptsArray;
 
             //Set currentOptString to the contents of the text box.
@@ -146,12 +144,9 @@ namespace Handbrake
                         /*Deblocking NSPopUpButtons*/
                         else if (optName.Equals("deblock"))
                         {
-                            string alphaDeblock = "";
-                            string betaDeblock = "";
-
                             string[] splitDeblock = optValue.Split(',');
-                            alphaDeblock = splitDeblock[0];
-                            betaDeblock = splitDeblock[1];
+                            string alphaDeblock = splitDeblock[0];
+                            string betaDeblock = splitDeblock[1];
 
                             if (alphaDeblock.Equals("0") && betaDeblock.Replace("\n", "").Equals("0"))
                             {
@@ -201,8 +196,8 @@ namespace Handbrake
         {
             /* Set widgets depending on the opt string in field */
             String thisOpt; // The separated option such as "bframes=3"
-            String optName = ""; // The option name such as "bframes"
-            String optValue = "";// The option value such as "3"
+            String optName; // The option name such as "bframes"
+            String optValue;// The option value such as "3"
             String changedOptString = "";
             String[] currentOptsArray;
 
@@ -345,8 +340,7 @@ namespace Handbrake
         private void hasOptions(string currentOptString, string optNameToChange, frmMain mainWindow)
         {
             String thisOpt;             // The separated option such as "bframes=3"
-            String optName = "";        // The option name such as "bframes"
-            String optValue = "";       // The option value such as "3"
+            String optName;        // The option name such as "bframes"
             String[] currentOptsArray;
 
             /* Create new empty opt string*/
@@ -365,7 +359,6 @@ namespace Handbrake
                     string[] splitOptRange = thisOpt.Split('=');
 
                     optName = splitOptRange[0];     // e.g bframes
-                    optValue = splitOptRange[1];    // e.g 2
 
                     /* 
                      * Run through the available widgets for x264 opts and set them, as you add widgets,
@@ -519,14 +512,14 @@ namespace Handbrake
                         else if (optNameToChange.Equals("merange"))
                         {
                             if (!mainWindow.drop_MotionEstimationRange.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "merange=" + mainWindow.drop_MotionEstimationRange.SelectedItem.ToString();
+                                thisOpt = "merange=" + mainWindow.drop_MotionEstimationRange.SelectedItem;
                             else
                                 thisOpt = "";
                         }
                         else if (optNameToChange.Equals("ref"))
                         {
                             if (!mainWindow.drop_refFrames.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "ref=" + mainWindow.drop_refFrames.SelectedItem.ToString();
+                                thisOpt = "ref=" + mainWindow.drop_refFrames.SelectedItem;
                             else
                                 thisOpt = "";
                         }
@@ -572,12 +565,11 @@ namespace Handbrake
         }
         private void hasNoOptions(string optNameToChange, frmMain mainWindow)
         {
-            string query = "";
             string colon = "";
             if (mainWindow.rtf_x264Query.Text != "")
                 colon = ":";
 
-            query = mainWindow.rtf_x264Query.Text;
+            string query = mainWindow.rtf_x264Query.Text;
             if (optNameToChange.Equals("me"))
             {
                 switch (mainWindow.drop_MotionEstimationMethod.SelectedIndex)
@@ -645,12 +637,12 @@ namespace Handbrake
             else if (optNameToChange.Equals("merange"))
             {
                 int value = mainWindow.drop_MotionEstimationRange.SelectedIndex + 3;
-                query = query + colon + "merange=" + value.ToString();
+                query = query + colon + "merange=" + value;
             }
             else if (optNameToChange.Equals("deblock"))
             {
                 String da = mainWindow.drop_deblockAlpha.SelectedItem.ToString();
-                String db = mainWindow.drop_deblockBeta.Text.ToString();
+                String db = mainWindow.drop_deblockBeta.Text;
 
                 if (((da.Contains("Default")) && (db.Contains("Default"))) || ((da.Contains("0")) && (db.Contains("0"))))
                 {
@@ -706,7 +698,7 @@ namespace Handbrake
             else if (optNameToChange.Equals("ref"))
             {
                 if (!mainWindow.drop_refFrames.SelectedItem.ToString().Contains("Default"))
-                    query = query + colon + "ref=" + mainWindow.drop_refFrames.SelectedItem.ToString();
+                    query = query + colon + "ref=" + mainWindow.drop_refFrames.SelectedItem;
             }
             else if (optNameToChange.Equals("bframes"))
             {
@@ -723,7 +715,7 @@ namespace Handbrake
             else if (optNameToChange.Equals("trellis"))
             {
                 if (!mainWindow.drop_trellis.SelectedItem.ToString().Contains("Default"))
-                    query = query + colon + "trellis=" + mainWindow.drop_trellis.SelectedItem.ToString();
+                    query = query + colon + "trellis=" + mainWindow.drop_trellis.SelectedItem;
             }
 
             mainWindow.rtf_x264Query.Text = query;

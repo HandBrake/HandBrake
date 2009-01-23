@@ -13,6 +13,7 @@ namespace Handbrake
         /// <param name="mainWindow"></param>
         /// <param name="presetQuery">The Parsed CLI Query</param>
         /// <param name="name">Name of the preset</param>
+        /// <param name="pictureSettings">Save picture settings in the preset</param>
         public void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name, Boolean pictureSettings)
         {
             // ---------------------------
@@ -56,16 +57,16 @@ namespace Handbrake
                 else if (presetQuery.Format == "ogm")
                     mainWindow.drop_format.SelectedIndex = 4;
 
-                if (presetQuery.ChapterMarkers == true && presetQuery.Format == "mp4")
+                if (presetQuery.ChapterMarkers && presetQuery.Format == "mp4")
                     mainWindow.drop_format.SelectedIndex = 1;
             }
 
-            if (presetQuery.IpodAtom == true)
+            if (presetQuery.IpodAtom)
                 mainWindow.check_iPodAtom.CheckState = CheckState.Checked;
             else
                 mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.OptimizeMP4 == true)
+            if (presetQuery.OptimizeMP4)
                 mainWindow.check_optimiseMP4.CheckState = CheckState.Checked;
             else
                 mainWindow.check_optimiseMP4.CheckState = CheckState.Unchecked;
@@ -82,7 +83,7 @@ namespace Handbrake
             mainWindow.text_width.Text = "";
             mainWindow.text_height.Text = "";
 
-            if (pictureSettings == true)
+            if (pictureSettings)
             {
                 if (presetQuery.CropTop != null)
                 {
@@ -109,12 +110,12 @@ namespace Handbrake
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
 
-            if (presetQuery.Decomb == true)
+            if (presetQuery.Decomb)
                 mainWindow.check_decomb.CheckState = CheckState.Checked;
             else
                 mainWindow.check_decomb.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.DeTelecine == true)
+            if (presetQuery.DeTelecine)
                 mainWindow.check_detelecine.CheckState = CheckState.Checked;
             else
                 mainWindow.check_detelecine.CheckState = CheckState.Unchecked;
@@ -130,12 +131,12 @@ namespace Handbrake
                 mainWindow.lbl_deblockVal.Text = "Off";
             }
 
-            if (presetQuery.Anamorphic == true)
+            if (presetQuery.Anamorphic)
                 mainWindow.drp_anamorphic.SelectedIndex = 1;
             else
                 mainWindow.drp_anamorphic.SelectedIndex = 0;
 
-            if (presetQuery.LooseAnamorphic == true)
+            if (presetQuery.LooseAnamorphic)
                 mainWindow.drp_anamorphic.SelectedIndex = 2;
             else
             {
@@ -168,27 +169,27 @@ namespace Handbrake
             if (mainWindow.slider_videoQuality.Value != 0)
             {
                 int ql = presetQuery.VideoQuality;
-                mainWindow.SliderValue.Text = ql.ToString() + "%";
+                mainWindow.SliderValue.Text = ql + "%";
             }
 
-            if (presetQuery.TwoPass == true)
+            if (presetQuery.TwoPass)
                 mainWindow.check_2PassEncode.CheckState = CheckState.Checked;
             else
                 mainWindow.check_2PassEncode.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.Grayscale == true)
+            if (presetQuery.Grayscale)
                 mainWindow.check_grayscale.CheckState = CheckState.Checked;
             else
                 mainWindow.check_grayscale.CheckState = CheckState.Unchecked;
 
             mainWindow.drp_videoFramerate.Text = presetQuery.VideoFramerate;
 
-            if (presetQuery.TurboFirstPass == true)
+            if (presetQuery.TurboFirstPass)
                 mainWindow.check_turbo.CheckState = CheckState.Checked;
             else
                 mainWindow.check_turbo.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.LargeMP4 == true)
+            if (presetQuery.LargeMP4)
                 mainWindow.check_largeFile.CheckState = CheckState.Checked;
             else
             {
@@ -200,7 +201,7 @@ namespace Handbrake
             // Chapter Markers Tab
             #region Chapter Markers
 
-            if (presetQuery.ChapterMarkers == true)
+            if (presetQuery.ChapterMarkers)
             {
                 mainWindow.Check_ChapterMarkers.CheckState = CheckState.Checked;
                 mainWindow.Check_ChapterMarkers.Enabled = true;
@@ -264,7 +265,7 @@ namespace Handbrake
             // Subtitle Stuff
             mainWindow.drp_subtitle.Text = presetQuery.Subtitles;
 
-            if (presetQuery.ForcedSubtitles == true)
+            if (presetQuery.ForcedSubtitles)
             {
                 mainWindow.check_forced.CheckState = CheckState.Checked;
                 mainWindow.check_forced.Enabled = true;

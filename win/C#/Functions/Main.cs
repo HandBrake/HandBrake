@@ -173,7 +173,7 @@ namespace Handbrake.Functions
                 data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
                 i++;
             }
-    
+
             return data_chpt;
         }
 
@@ -324,7 +324,7 @@ namespace Handbrake.Functions
                     if (line == null) line = "";
                     Match m = Regex.Match(line, @"HandBrake ([0-9\.]*)*(svn[0-9]*[M]*)* \([0-9]*\)");
 
-                    if (m.Success != false)
+                    if (m.Success)
                     {
                         string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
                         string[] arr = data.Split(' ');
@@ -332,6 +332,9 @@ namespace Handbrake.Functions
                         cliVersionData.Add(arr[1]);
                         return cliVersionData;
                     }
+                    if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
+                        killCLI();
+
                 }
             }
             catch (Exception e)
@@ -342,6 +345,22 @@ namespace Handbrake.Functions
             cliVersionData.Add(0);
             cliVersionData.Add("0");
             return cliVersionData;
+        }
+        private void killCLI()
+        {
+            string AppName = "HandBrakeCLI";
+            AppName = AppName.ToUpper();
+
+            System.Diagnostics.Process[] prs = Process.GetProcesses();
+            foreach (System.Diagnostics.Process proces in prs)
+            {
+                if (proces.ProcessName.ToUpper() == AppName)
+                {
+                    proces.Refresh();
+                    if (!proces.HasExited)
+                        proces.Kill();
+                }
+            }
         }
 
         /// <summary>

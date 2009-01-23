@@ -136,6 +136,7 @@ namespace Handbrake.Functions
         /// if this feature is enabled in options.
         /// </summary>
         /// <param name="query"></param>
+        /// <param name="destination"></param>
         public void copyLog(string query, string destination)
         {
             // The user may wish to do something with the log.

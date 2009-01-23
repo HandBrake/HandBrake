@@ -48,10 +48,12 @@ namespace Handbrake
         /// This basically forces a shortened version of the encdode.
         /// </summary>
         /// <param name="mainWindow"></param>
+        /// <param name="duration">Duration</param>
+        /// <param name="preview">Start at preview</param>
         /// <returns>Returns a CLI query String.</returns>
         public string GeneratePreviewQuery(frmMain mainWindow, string duration, string preview)
         {
-            int seconds = 0;
+            int seconds;
             int.TryParse(duration, out seconds);
 
             // Source tab
@@ -81,7 +83,6 @@ namespace Handbrake
         /// Generates part of the CLI query, for the tabbed components only.
         /// </summary>
         /// <param name="mainWindow"></param>
-        /// <param name="source"></param>
         /// <returns></returns>
         public string generateTabbedComponentsQuery(frmMain mainWindow)
         {
@@ -315,7 +316,7 @@ namespace Handbrake
 
             foreach (String item in tracks)
             {
-                if (firstLoop == true)
+                if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
                 }
@@ -329,7 +330,7 @@ namespace Handbrake
             // Audio Codec (-E)
             foreach (String item in codecs)
             {
-                if (firstLoop == true)
+                if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
                 }
@@ -342,7 +343,7 @@ namespace Handbrake
             // Audio Mixdown (-6)
             foreach (String item in mixdowns)
             {
-                if (firstLoop == true)
+                if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
                 }
@@ -355,7 +356,7 @@ namespace Handbrake
             // Sample Rate (-R)
             foreach (String item in samplerates)
             {
-                if (firstLoop == true)
+                if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
                 }
@@ -368,7 +369,7 @@ namespace Handbrake
             // Audio Bitrate (-B)
             foreach (String item in bitrates)
             {
-                if (firstLoop == true)
+                if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
                 }
@@ -381,7 +382,7 @@ namespace Handbrake
             // DRC (-D)
             foreach (String item in drcs)
             {
-                if (firstLoop == true)
+                if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
                 }
@@ -389,8 +390,6 @@ namespace Handbrake
                     audioItems += "," + item;
             }
             query += " -D " + audioItems;
-            firstLoop = true; audioItems = ""; // Reset for another pass.
-
 
             // Subtitles
             string subtitles = mainWindow.drp_subtitle.Text;

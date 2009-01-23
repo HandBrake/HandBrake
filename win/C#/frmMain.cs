@@ -35,7 +35,7 @@ namespace Handbrake
         private frmQueue queueWindow;
         private frmGenPreview vlcpreview;
         private frmPreview qtpreview;
-        private string lastAction = null;
+        private string lastAction;
         public int maxWidth = 0;
         public int maxHeight = 0;
 
@@ -1557,7 +1557,6 @@ namespace Handbrake
             tb_preview.Enabled = false;
             mnu_killCLI.Visible = true;
         }
-
         private void startScan(String filename)
         {
             try
