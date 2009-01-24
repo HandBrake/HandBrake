@@ -74,6 +74,7 @@
 	<key>use_source_name</key>
 	<array>
 		<string>chapters_in_destination</string>
+		<string>title_no_in_destination</string>
 	</array>
 	<key>vquality_type_bitrate</key>
 	<array>

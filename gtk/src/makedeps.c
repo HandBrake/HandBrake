@@ -63,6 +63,7 @@ static dependency_t dep_map[] =
 	{"x264_cabac", "x264_trellis", "TRUE", FALSE},
 	{"ChapterMarkers", "chapters_list", "TRUE", FALSE},
 	{"use_source_name", "chapters_in_destination", "TRUE", FALSE},
+	{"use_source_name", "title_no_in_destination", "TRUE", FALSE},
 };
 
 int

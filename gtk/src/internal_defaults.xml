@@ -94,6 +94,8 @@
 		<false />
 		<key>allow_tweaks</key>
 		<false />
+		<key>title_no_in_destination</key>
+		<false />
 		<key>chapters_in_destination</key>
 		<false />
 		<key>default_source</key>

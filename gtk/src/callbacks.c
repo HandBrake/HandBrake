@@ -245,33 +245,45 @@ set_destination(signal_user_data_t *ud)
 	g_debug("set_destination");
 	if (ghb_settings_get_boolean(ud->settings, "use_source_name"))
 	{
+		GString *str = g_string_new("");
 		gchar *vol_name, *filename, *extension;
 		gchar *new_name;
+		gint title;
 		
 		filename = ghb_settings_get_string(ud->settings, "dest_file");
 		extension = ghb_settings_get_string(ud->settings, "FileFormat");
 		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
-		if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+		g_string_append_printf(str, "%s", vol_name);
+		title = ghb_settings_combo_int(ud->settings, "title");
+		if (title >= 0)
 		{
-			gint start, end;
+			if (ghb_settings_get_boolean(
+					ud->settings, "title_no_in_destination"))
+			{
 
-			start = ghb_settings_get_int(ud->settings, "start_chapter");
-			end = ghb_settings_get_int(ud->settings, "end_chapter");
-			if (start == end)
-			{
-				new_name = g_strdup_printf("%s-%d.%s", 
-					vol_name, start, extension);
+				title = ghb_settings_combo_int(ud->settings, "title");
+				g_string_append_printf(str, " - %d", title+1);
 			}
-			else
+			if (ghb_settings_get_boolean(
+					ud->settings, "chapters_in_destination"))
 			{
-				new_name = g_strdup_printf("%s-%d-%d.%s", 
-					vol_name, start, end, extension);
+				gint start, end;
+
+				if (!ghb_settings_get_boolean(
+						ud->settings, "title_no_in_destination"))
+				{
+					g_string_append_printf(str, " -");
+				}
+				start = ghb_settings_get_int(ud->settings, "start_chapter");
+				end = ghb_settings_get_int(ud->settings, "end_chapter");
+				if (start == end)
+					g_string_append_printf(str, " Ch %d", start);
+				else
+					g_string_append_printf(str, " Ch %d-%d", start, end);
 			}
 		}
-		else
-		{
-			new_name = g_strdup_printf("%s.%s", vol_name, extension);
-		}
+		g_string_append_printf(str, ".%s", extension);
+		new_name = g_string_free(str, FALSE);
 		ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
 		g_free(filename);
 		g_free(extension);
@@ -1041,6 +1053,10 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_ui_update(ud, "preview_frame", ghb_int64_value(2));
 
 	ghb_set_preview_image (ud);
+	if (ghb_settings_get_boolean(ud->settings, "title_no_in_destination"))
+	{
+		set_destination(ud);
+	}
 }
 
 void

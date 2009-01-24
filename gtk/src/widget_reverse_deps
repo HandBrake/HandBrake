@@ -310,6 +310,14 @@
 			<true />
 		</array>
 	</array>
+	<key>title_no_in_destination</key>
+	<array>
+		<array>
+			<string>use_source_name</string>
+			<string>TRUE</string>
+			<false />
+		</array>
+	</array>
 	<key>tweak_PictureDeinterlace</key>
 	<array>
 		<array>
