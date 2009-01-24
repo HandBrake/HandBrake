@@ -1708,6 +1708,7 @@ ghb_backend_events(signal_user_data_t *ud)
 	else if (status.queue.state & GHB_STATE_SCANDONE)
 	{
 		ghb_clear_queue_state(GHB_STATE_SCANDONE);
+		usleep(2000000);
 		submit_job(ud->current_job);
 	}
 	else if (status.queue.state & GHB_STATE_PAUSED)

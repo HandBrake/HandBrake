@@ -7191,7 +7191,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<array>
 				<string>AudioEncoder</string>
-				<string>ac3</string>
+				<string>ac3|dts</string>
 				<true />
 			</array>
 		</array>
@@ -7199,7 +7199,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<array>
 				<string>AudioEncoder</string>
-				<string>ac3</string>
+				<string>ac3|dts</string>
 				<true />
 			</array>
 		</array>
@@ -7207,7 +7207,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<array>
 				<string>AudioEncoder</string>
-				<string>ac3</string>
+				<string>ac3|dts</string>
 				<true />
 			</array>
 		</array>
@@ -7215,7 +7215,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<array>
 			<array>
 				<string>AudioEncoder</string>
-				<string>ac3</string>
+				<string>ac3|dts</string>
 				<true />
 			</array>
 		</array>

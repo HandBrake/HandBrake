@@ -135,6 +135,7 @@ static options_map_t d_acodec_opts[] =
 	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, "lame"},
 	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, "vorbis"},
 	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, "ac3"},
+//	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA, "dts"},
 };
 combo_opts_t acodec_opts =
 {
@@ -990,14 +991,20 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	if (allow_ac3)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, FALSE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, FALSE);
 	}
 	else
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, TRUE);
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, TRUE);
 	}
 	if (audio && audio->in.codec != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, TRUE);
+	}
+	if (audio && audio->in.codec != HB_ACODEC_DCA)
+	{
+		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, TRUE);
 	}
 	grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, FALSE);
 
@@ -1598,7 +1605,11 @@ ghb_longest_title()
 }
 
 gint
-ghb_find_audio_track(gint titleindex, const gchar *lang, gint index)
+ghb_find_audio_track(
+	gint titleindex, 
+	const gchar *lang, 
+	gint acodec,
+	gint index)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -1609,16 +1620,35 @@ ghb_find_audio_track(gint titleindex, const gchar *lang, gint index)
 	gint match = 0;
 	
 	g_debug("find_audio_track ()\n");
-	if (h_scan != NULL)
+	if (h_scan == NULL) return -1;
+	list = hb_get_titles( h_scan );
+    title = (hb_title_t*)hb_list_item( list, titleindex );
+	if (title != NULL)
 	{
-		list = hb_get_titles( h_scan );
-	    title = (hb_title_t*)hb_list_item( list, titleindex );
-		if (title != NULL)
-		{
-			count = hb_list_count( title->list_audio );
-		}
+		count = hb_list_count( title->list_audio );
 	}
 	if (count > 10) count = 10;
+	if (acodec == HB_ACODEC_AC3 || acodec == HB_ACODEC_DCA)
+	{
+		for (ii = 0; ii < count; ii++)
+		{
+        	audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+			if ((audio->in.codec == acodec) &&
+				((strcmp(lang, audio->lang.iso639_2) == 0) ||
+				(strcmp(lang, "und") == 0)))
+			{
+				if (index == match)
+				{
+					track = ii;
+					break;
+				}
+				match++;
+			}
+		}
+	}
+	if (track > -1) return track;
+	match = 0;
 	for (ii = 0; ii < count; ii++)
 	{
         audio = (hb_audio_config_t*)hb_list_audio_config_item( title->list_audio, ii );
@@ -1633,7 +1663,7 @@ ghb_find_audio_track(gint titleindex, const gchar *lang, gint index)
 			match++;
 		}
 	}
-	if (match) return track;
+	if (track > -1) return track;
 	if (index < count)
 		track = index;
 	return track;
@@ -2288,8 +2318,7 @@ gboolean
 ghb_audio_is_passthru(gint acodec)
 {
 	g_debug("ghb_audio_is_passthru () \n");
-	g_debug("acodec %d\n", acodec);
-	return (acodec == HB_ACODEC_AC3);
+	return (acodec == HB_ACODEC_AC3) || (acodec == HB_ACODEC_DCA);
 }
 
 gint
@@ -2740,13 +2769,16 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gint codec = ghb_settings_combo_int(asettings, "AudioEncoder");
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 											title->list_audio, track );
-		if ((taudio->in.codec != HB_ACODEC_AC3) && (codec == HB_ACODEC_AC3))
+		if ((taudio->in.codec != HB_ACODEC_AC3 && codec == HB_ACODEC_AC3) ||
+		    (taudio->in.codec != HB_ACODEC_DCA && codec == HB_ACODEC_DCA))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
+			char *str;
+			str = (codec == HB_ACODEC_AC3) ? "AC-3" : "DTS";
 			message = g_strdup_printf(
-						"The source does not support AC3 Pass-Thru.\n\n"
+						"The source does not support %s Pass-Thru.\n\n"
 						"You should choose a different audio codec.\n"
-						"If you continue, one will be chosen for you.");
+						"If you continue, one will be chosen for you.", str);
 			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
 			{
 				g_free(message);
@@ -2808,6 +2840,11 @@ ghb_validate_audio(signal_user_data_t *ud)
 			if (codec == HB_ACODEC_AC3)
 			{
 				a_unsup = "AC-3";
+				codec = HB_ACODEC_VORBIS;
+			}
+			if (codec == HB_ACODEC_DCA)
+			{
+				a_unsup = "DTS";
 				codec = HB_ACODEC_VORBIS;
 			}
 		}
@@ -3226,7 +3263,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		audio.out.codec = ghb_settings_combo_int(asettings, "AudioEncoder");
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
-		if ((taudio->in.codec != HB_ACODEC_AC3) && (audio.out.codec == HB_ACODEC_AC3))
+		if ((taudio->in.codec != HB_ACODEC_AC3 && 
+             audio.out.codec == HB_ACODEC_AC3) ||
+		    (taudio->in.codec != HB_ACODEC_DCA && 
+			 audio.out.codec == HB_ACODEC_DCA))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
 			if (job->mux == HB_MUX_AVI)
@@ -3255,7 +3295,8 @@ printf("switching to faac\n");
 		}
 		if ((job->mux == HB_MUX_OGM) && 
 			((audio.out.codec == HB_ACODEC_FAAC) ||
-			(audio.out.codec == HB_ACODEC_AC3)))
+			(audio.out.codec == HB_ACODEC_AC3) ||
+			(audio.out.codec == HB_ACODEC_DCA)))
 		{
 			// ogm/faac|ac3 combination is not supported.
 			audio.out.codec = HB_ACODEC_VORBIS;

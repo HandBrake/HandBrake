@@ -6,7 +6,7 @@
 	<array>
 		<array>
 			<string>AudioEncoder</string>
-			<string>ac3</string>
+			<string>ac3|dts</string>
 			<true />
 		</array>
 	</array>
@@ -14,7 +14,7 @@
 	<array>
 		<array>
 			<string>AudioEncoder</string>
-			<string>ac3</string>
+			<string>ac3|dts</string>
 			<true />
 		</array>
 	</array>
@@ -22,7 +22,7 @@
 	<array>
 		<array>
 			<string>AudioEncoder</string>
-			<string>ac3</string>
+			<string>ac3|dts</string>
 			<true />
 		</array>
 	</array>
@@ -30,7 +30,7 @@
 	<array>
 		<array>
 			<string>AudioEncoder</string>
-			<string>ac3</string>
+			<string>ac3|dts</string>
 			<true />
 		</array>
 	</array>

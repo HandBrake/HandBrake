@@ -127,7 +127,8 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		else
 			index = *(gint*)iptr;
 
-		track = ghb_find_audio_track(titleindex, source_lang, index);
+		track = ghb_find_audio_track(titleindex, source_lang, 
+									acodec_code, index);
 		// Check to see if:
 		// 1. pref codec is ac3
 		// 2. source codec is not ac3
@@ -135,7 +136,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		if (ghb_get_audio_info (&ainfo, titleindex, track) && 
 			ghb_audio_is_passthru (acodec_code))
 		{
-			if (!ghb_audio_is_passthru(ainfo.codec))
+			if (ainfo.codec != acodec_code)
 			{
 				acodec_code = ghb_get_default_acodec();
 				// If there's more audio to process, or we've already
@@ -511,15 +512,11 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(drc));
 		widget = GHB_WIDGET (ud->builder, "audio_remove");
 		gtk_widget_set_sensitive(widget, TRUE);
-		//widget = GHB_WIDGET (ud->builder, "audio_update");
-		//gtk_widget_set_sensitive(widget, TRUE);
 	}
 	else
 	{
 		widget = GHB_WIDGET (ud->builder, "audio_remove");
 		gtk_widget_set_sensitive(widget, FALSE);
-		//widget = GHB_WIDGET (ud->builder, "audio_update");
-		//gtk_widget_set_sensitive(widget, FALSE);
 	}
 }
 
