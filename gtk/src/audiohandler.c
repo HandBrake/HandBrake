@@ -83,22 +83,27 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 }
 
 void
+free_audio_index_list(gpointer data)
+{
+	g_free(data);
+}
+
+void
 ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 {
 	gint acodec_code, mix_code, track;
 	gchar *source_lang;
 	GtkWidget *button;
 	ghb_audio_info_t ainfo;
-	gint index;
-	GHashTable *track_indicies;
-	gint *iptr;
+	GHashTable *track_indices;
 
 	const GValue *pref_audio;
 	const GValue *audio, *acodec, *bitrate, *rate, *mix, *drc;
 	gint count, ii, list_count;
 	
 	g_debug("set_pref_audio");
-	track_indicies = g_hash_table_new(g_int_hash, g_int_equal);
+	track_indices = g_hash_table_new_full(g_int_hash, g_int_equal, 
+											NULL, free_audio_index_list);
 	// Clear the audio list
 	ghb_clear_audio_list(ud);
 	// Find "best" audio based on audio preferences
@@ -119,16 +124,10 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		drc = ghb_settings_get_value(audio, "AudioTrackDRCSlider");
 		acodec_code = ghb_lookup_combo_int("AudioEncoder", acodec);
 		// If there are multiple audios using the same codec, then
-		// select sequential tracks for each.  This hash keeps track 
-		// of the last used track for each codec.
-		iptr = g_hash_table_lookup(track_indicies, &acodec_code);
-		if (iptr == NULL)
-			index = 0;
-		else
-			index = *(gint*)iptr;
-
+		// select sequential tracks for each.  The hash keeps track 
+		// of the tracks used for each codec.
 		track = ghb_find_audio_track(titleindex, source_lang, 
-									acodec_code, index);
+									acodec_code, track_indices);
 		// Check to see if:
 		// 1. pref codec is ac3
 		// 2. source codec is not ac3
@@ -168,12 +167,10 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
 			}
 			ghb_ui_update(ud, "AudioTrackDRCSlider", drc);
-			index++;
-			g_hash_table_insert(track_indicies, &acodec_code, &index);
 		}
 	}
 	g_free(source_lang);
-	g_hash_table_destroy(track_indicies);
+	g_hash_table_destroy(track_indices);
 }
 
 static GValue*

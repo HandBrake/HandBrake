@@ -131,7 +131,8 @@ void ghb_grey_combo_options(GtkBuilder *builder);
 void ghb_update_ui_combo_box(
 	GtkBuilder *builder, const gchar *name, gint user_data, gboolean all);
 gint ghb_find_audio_track(
-	gint titleindex, const gchar *lang, gint acodec, gint index);
+	gint titleindex, const gchar *lang, 
+	gint acodec, GHashTable *track_indices);
 gint ghb_longest_title(void);
 gchar* ghb_build_x264opts_string(GValue *settings);
 GdkPixbuf* ghb_get_preview_image(

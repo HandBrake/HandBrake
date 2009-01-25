@@ -1609,7 +1609,7 @@ ghb_find_audio_track(
 	gint titleindex, 
 	const gchar *lang, 
 	gint acodec,
-	gint index)
+	GHashTable *track_indices)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -1617,7 +1617,8 @@ ghb_find_audio_track(
 	gint ii;
 	gint count = 0;
 	gint track = -1;
-	gint match = 0;
+	gint max_chan = 0;
+	gboolean *used;
 	
 	g_debug("find_audio_track ()\n");
 	if (h_scan == NULL) return -1;
@@ -1628,44 +1629,135 @@ ghb_find_audio_track(
 		count = hb_list_count( title->list_audio );
 	}
 	if (count > 10) count = 10;
+	used = g_hash_table_lookup(track_indices, &acodec);
+	if (used == NULL)
+	{
+		used = g_malloc0(count * sizeof(gboolean));
+		g_hash_table_insert(track_indices, &acodec, used);
+	}
+	// Try to fine an item that matches the preferred language and
+	// the passthru codec type
 	if (acodec == HB_ACODEC_AC3 || acodec == HB_ACODEC_DCA)
 	{
 		for (ii = 0; ii < count; ii++)
 		{
+			gint channels;
+
+			if (used[ii])
+				continue;
+
         	audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
+			channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+													audio->in.channel_layout);
+			// Find a track that is not visually impaired or dirctor's
+			// commentary, and has the highest channel count.
 			if ((audio->in.codec == acodec) &&
+				(audio->lang.type < 2) &&
 				((strcmp(lang, audio->lang.iso639_2) == 0) ||
 				(strcmp(lang, "und") == 0)))
 			{
-				if (index == match)
+				if (channels > max_chan)
 				{
 					track = ii;
-					break;
+					max_chan = channels;
 				}
-				match++;
 			}
 		}
 	}
-	if (track > -1) return track;
-	match = 0;
+	if (track > -1)
+	{
+		used[track] = TRUE;
+		return track;
+	}
+	// Try to fine an item that matches the preferred language
 	for (ii = 0; ii < count; ii++)
 	{
-        audio = (hb_audio_config_t*)hb_list_audio_config_item( title->list_audio, ii );
-		if ((strcmp(lang, audio->lang.iso639_2) == 0) ||
-			(strcmp(lang, "und") == 0))
+		if (used[ii])
+			continue;
+        audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+		// Find a track that is not visually impaired or dirctor's commentary
+		if ((audio->lang.type < 2) &&
+			((strcmp(lang, audio->lang.iso639_2) == 0) ||
+			(strcmp(lang, "und") == 0)))
 		{
-			if (index == match)
-			{
-				track = ii;
-				break;
-			}
-			match++;
+			track = ii;
+			break;
 		}
 	}
-	if (track > -1) return track;
-	if (index < count)
-		track = index;
+	if (track > -1)
+	{
+		used[track] = TRUE;
+		return track;
+	}
+	// Try to fine an item that does not match the preferred language and
+	// matches the passthru codec type
+	if (acodec == HB_ACODEC_AC3 || acodec == HB_ACODEC_DCA)
+	{
+		for (ii = 0; ii < count; ii++)
+		{
+			gint channels;
+
+			if (used[ii])
+				continue;
+
+        	audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+			channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+													audio->in.channel_layout);
+			// Find a track that is not visually impaired or dirctor's
+			// commentary, and has the highest channel count.
+			if ((audio->in.codec == acodec) &&
+				(audio->lang.type < 2))
+			{
+				if (channels > max_chan)
+				{
+					track = ii;
+					max_chan = channels;
+				}
+			}
+		}
+	}
+	if (track > -1)
+	{
+		used[track] = TRUE;
+		return track;
+	}
+	// Try to fine an item that does not match the preferred language
+	for (ii = 0; ii < count; ii++)
+	{
+		if (used[ii])
+			continue;
+        audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+		// Find a track that is not visually impaired or dirctor's commentary
+		if (audio->lang.type < 2)
+		{
+			track = ii;
+			break;
+		}
+	}
+	if (track > -1)
+	{
+		used[track] = TRUE;
+		return track;
+	}
+	// Last ditch, anything goes
+	for (ii = 0; ii < count; ii++)
+	{
+        audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+		if (!used[ii])
+		{
+			track = ii;
+			break;
+		}
+	}
+	if (track > -1)
+	{
+		used[track] = TRUE;
+	}
 	return track;
 }
 
