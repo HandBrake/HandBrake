@@ -183,14 +183,14 @@ static int MP4Init( hb_mux_object_t * m )
         MP4AddColr(m->file, mux_data->track, 6, 1, 6);
     }
 
-    if( job->pixel_ratio )
+    if( job->anamorphic.mode )
     {
         /* PASP atom for anamorphic video */
         float width, height;
 
-        width = job->pixel_aspect_width;
+        width  = job->anamorphic.par_width;
 
-        height = job->pixel_aspect_height;
+        height = job->anamorphic.par_height;
 
         MP4AddPixelAspectRatio(m->file, mux_data->track, (uint32_t)width, (uint32_t)height);
 

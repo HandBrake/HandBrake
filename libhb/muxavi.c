@@ -394,7 +394,7 @@ static int AVIInit( hb_mux_object_t * m )
 
 #define g mux_data->vprp_header
     /* Vprp video stream header */	
-    AVRational sample_aspect_ratio = ( AVRational ){ job->pixel_aspect_width, job->pixel_aspect_height };
+    AVRational sample_aspect_ratio = ( AVRational ){ job->anamorphic.par_width, job->anamorphic.par_height };
     AVRational dar = av_mul_q( sample_aspect_ratio, ( AVRational ){ job->width, job->height } );
     int num, den;
     av_reduce(&num, &den, dar.num, dar.den, 0xFFFF);
@@ -490,7 +490,7 @@ static int AVIInit( hb_mux_object_t * m )
         /* video strf */
 		sizeof( hb_bitmap_info_t ) +
         /* video vprp */
-        ( job->pixel_ratio ? sizeof( hb_avi_vprp_info_t ) : 0 ) +
+        ( job->anamorphic.mode ? sizeof( hb_avi_vprp_info_t ) : 0 ) +
         /* audios strf */
         audio_count * ( sizeof( hb_wave_formatex_t ) +
                         ( is_ac3 ? 0 : sizeof( hb_wave_mp3_t ) ) );
@@ -513,11 +513,11 @@ static int AVIInit( hb_mux_object_t * m )
     WriteInt32( m->file, FOURCC( "LIST" ) );
     WriteInt32( m->file, 4 + sizeof( hb_avi_stream_header_t ) +
                 sizeof( hb_bitmap_info_t )  +
-                ( job->pixel_ratio ? sizeof( hb_avi_vprp_info_t ) : 0 ) );
+                ( job->anamorphic.mode ? sizeof( hb_avi_vprp_info_t ) : 0 ) );
     WriteInt32( m->file, FOURCC( "strl" ) );
     WriteStreamHeader( m->file, &mux_data->header );
     WriteBitmapInfo( m->file, &mux_data->format.v );
-    if( job->pixel_ratio )
+    if( job->anamorphic.mode )
     {
         WriteVprpInfo( m->file, &mux_data->vprp_header );
     }

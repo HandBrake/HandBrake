@@ -173,11 +173,11 @@ int encxvidWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     frame.vol_flags = 0;
     frame.vop_flags = XVID_VOP_HALFPEL | XVID_VOP_INTER4V |
                       XVID_VOP_TRELLISQUANT | XVID_VOP_HQACPRED;
-    if( job->pixel_ratio )
+    if( job->anamorphic.mode )
     {
         frame.par = XVID_PAR_EXT;
-        frame.par_width = job->pixel_aspect_width;
-        frame.par_height = job->pixel_aspect_height;
+        frame.par_width  = job->anamorphic.par_width;
+        frame.par_height = job->anamorphic.par_height;
     }
 
     if( job->grayscale )

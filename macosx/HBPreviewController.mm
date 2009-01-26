@@ -218,17 +218,17 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
 	
     NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
     /* Set the picture size display fields below the Preview Picture*/
-    if( fTitle->job->pixel_ratio == 1 ) // Original PAR Implementation
+    if( fTitle->job->anamorphic.mode == 1 ) // Original PAR Implementation
     {
         output_width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
         output_height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-        display_width = output_width * fTitle->job->pixel_aspect_width / fTitle->job->pixel_aspect_height;
+        display_width = output_width * fTitle->job->anamorphic.par_width / fTitle->job->anamorphic.par_height;
         [fInfoField setStringValue:[NSString stringWithFormat:
                                     @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
                                     fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
-        displaySize.width *= ( ( CGFloat )fTitle->job->pixel_aspect_width ) / ( ( CGFloat )fTitle->job->pixel_aspect_height );   
+        displaySize.width *= ( ( CGFloat )fTitle->job->anamorphic.par_width ) / ( ( CGFloat )fTitle->job->anamorphic.par_height );   
     }
-    else if (fTitle->job->pixel_ratio == 2) // Loose Anamorphic
+    else if (fTitle->job->anamorphic.mode == 2) // Loose Anamorphic
     {
     hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
         display_width = output_width * output_par_width / output_par_height;
@@ -251,8 +251,8 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     {
         /* In the case of loose anamorphic, do not resize the window when scaling down */
         // FIX ME: we need a new way to do this as we do not havefWidthField anymore
-        //if (fTitle->job->pixel_ratio != 2 || [fWidthField intValue] == fTitle->width)
-        if (fTitle->job->pixel_ratio != 2 || (fTitle->job->pixel_ratio == 2 && output_width == fTitle->width))
+        //if (fTitle->job->anamorphic.mode != 2 || [fWidthField intValue] == fTitle->width)
+        if (fTitle->job->anamorphic.mode != 2 || (fTitle->job->anamorphic.mode == 2 && output_width == fTitle->width))
         {
             [self resizeSheetForViewSize:viewSize];
             [self setViewSize:viewSize];

@@ -1137,21 +1137,21 @@ static int HandleEvents( hb_handle_t * h )
             job->grayscale   = grayscale;
             if (loosePixelratio)
             {
-                job->pixel_ratio = 2;
+                job->anamorphic.mode = 2;
                 if (modulus)
                 {
-                    job->modulus = modulus;
+                    job->anamorphic.modulus = modulus;
                 }
                 if( par_width && par_height )
                 {
-                    job->pixel_ratio = 3;
-                    job->pixel_aspect_width = par_width;
-                    job->pixel_aspect_height = par_height;
+                    job->anamorphic.mode = 3;
+                    job->anamorphic.par_width = par_width;
+                    job->anamorphic.par_height = par_height;
                 }
             }
             else
             {
-                job->pixel_ratio = pixelratio;
+                job->anamorphic.mode = pixelratio;
             }
 
             /* Add selected filters */

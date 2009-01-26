@@ -147,10 +147,18 @@ struct hb_job_s
     int             height;
     int             keep_ratio;
     int             grayscale;
-    int             pixel_ratio;
-    int             pixel_aspect_width;
-    int             pixel_aspect_height;
-    int             modulus;
+
+    struct
+    {
+        int             mode;
+        int             modulus;
+        int             itu_par;
+        int             par_width;
+        int             par_height;
+        int             dar_width;
+        int             dar_height;
+    } anamorphic;
+    
     int             maxWidth;
     int             maxHeight;
 

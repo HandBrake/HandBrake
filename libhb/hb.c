@@ -583,60 +583,20 @@ void hb_set_anamorphic_size( hb_job_t * job,
         int *output_width, int *output_height,
         int *output_par_width, int *output_par_height )
 {
-    /* "Loose" anamorphic.
-        - Uses mod16-compliant dimensions,
-        - Allows users to set the width
-        - Handles ITU pixel aspects
-    */
-
     /* Set up some variables to make the math easier to follow. */
     hb_title_t * title = job->title;
     int cropped_width = title->width - job->crop[2] - job->crop[3] ;
     int cropped_height = title->height - job->crop[0] - job->crop[1] ;
     double storage_aspect = (double)cropped_width / (double)cropped_height;
-    int width = job->width;
-    int height; // Gets set later, ignore user job->height value
-    int mod = job->modulus;
+    int mod = job->anamorphic.modulus ? job->anamorphic.modulus : 16;
     double aspect = title->aspect;
-
-    /* Gotta handle bounding dimensions differently
-       than for non-anamorphic encodes:
-       If the width is too big, just reset it with no rescaling.
-       Instead of using the aspect-scaled job height,
-       we need to see if the job width divided by the storage aspect
-       is bigger than the max. If so, set it to the max (this is sloppy).
-       If not, set job height to job width divided by storage aspect.
-    */
-
-    if ( job->maxWidth && (job->maxWidth < job->width) )
-        width = job->maxWidth;
-
-    height = ((double)width / storage_aspect) + 0.5;
-    if ( job->maxHeight && (job->maxHeight < height) )
-        height = job->maxHeight;
-
-    /* In case the user specified a modulus, use it */
-    if (job->modulus)
-        mod = job->modulus;
-    else
-        mod = 16;
-
-    /* Time to get picture dimensions that divide cleanly.*/
-    width  = MULTIPLE_MOD( width, mod);
-    height = MULTIPLE_MOD( height, mod);
-
-    /* Verify these new dimensions don't violate max height and width settings */
-    if ( job->maxWidth && (job->maxWidth < job->width) )
-        width = job->maxWidth;
-    if ( job->maxHeight && (job->maxHeight < height) )
-        height = job->maxHeight;
     
-    int pixel_aspect_width = job->pixel_aspect_width;
-    int pixel_aspect_height = job->pixel_aspect_height;
-    
-    /* If a source was really 704*480 and hard matted with cropping
-       to 720*480, replace the PAR values with the ITU broadcast ones. */
-    if (title->width == 720 && cropped_width <= 706)
+    int pixel_aspect_width  = job->anamorphic.par_width;
+    int pixel_aspect_height = job->anamorphic.par_height;
+
+    /* If a source was really NTSC or PAL and the user specified ITU PAR
+       values, replace the standard PAR values with the ITU broadcast ones. */
+    if( title->width == 720 && job->anamorphic.itu_par )
     {
         // convert aspect to a scaled integer so we can test for 16:9 & 4:3
         // aspect ratios ignoring insignificant differences in the LSBs of
@@ -678,20 +638,122 @@ void hb_set_anamorphic_size( hb_job_t * job,
         }
     }
 
-    /* Figure out what dimensions the source would display at. */
+    /* Figure out what width the source would display at. */
     int source_display_width = cropped_width * (double)pixel_aspect_width /
                                (double)pixel_aspect_height ;
+    
+    /*
+       3 different ways of deciding output dimensions:
+        - 1: Strict anamorphic, preserve source dimensions
+        - 2: Loose anamorphic, round to mod16 and preserve storage aspect ratio
+        - 3: Power user anamorphic, specify everything
+    */
+    int width, height;
+    switch( job->anamorphic.mode )
+    {
+        case 1:
+            /* Strict anamorphic */
+            *output_width = cropped_width;
+            *output_height = cropped_height;
+            *output_par_width = title->pixel_aspect_width;
+            *output_par_height = title->pixel_aspect_height;
+        break;
 
-    /* The film AR is the source's display width / cropped source height.
-       The output display width is the output height * film AR.
-       The output PAR is the output display width / output storage width. */
-    pixel_aspect_width = height * source_display_width / cropped_height;
-    pixel_aspect_height = width;
+        case 2:
+            /* "Loose" anamorphic.
+                - Uses mod16-compliant dimensions,
+                - Allows users to set the width
+            */
+            width = job->width;
+            height; // Gets set later, ignore user job->height value
 
-    /* Pass the results back to the caller */
-    *output_width = width;
-    *output_height = height;
+            /* Gotta handle bounding dimensions.
+               If the width is too big, just reset it with no rescaling.
+               Instead of using the aspect-scaled job height,
+               we need to see if the job width divided by the storage aspect
+               is bigger than the max. If so, set it to the max (this is sloppy).
+               If not, set job height to job width divided by storage aspect.
+            */
 
+            if ( job->maxWidth && (job->maxWidth < job->width) )
+                width = job->maxWidth;
+            height = ((double)width / storage_aspect) + 0.5;
+            
+            if ( job->maxHeight && (job->maxHeight < height) )
+                height = job->maxHeight;
+
+            /* Time to get picture dimensions that divide cleanly.*/
+            width  = MULTIPLE_MOD( width, mod);
+            height = MULTIPLE_MOD( height, mod);
+
+            /* Verify these new dimensions don't violate max height and width settings */
+            if ( job->maxWidth && (job->maxWidth < job->width) )
+                width = job->maxWidth;
+            if ( job->maxHeight && (job->maxHeight < height) )
+                height = job->maxHeight;
+
+            /* The film AR is the source's display width / cropped source height.
+               The output display width is the output height * film AR.
+               The output PAR is the output display width / output storage width. */
+            pixel_aspect_width = height * source_display_width / cropped_height;
+            pixel_aspect_height = width;
+
+            /* Pass the results back to the caller */
+            *output_width = width;
+            *output_height = height;
+        break;
+            
+        case 3:
+            /* Anamorphic 3: Power User Jamboree
+               - Set everything based on specified values */
+            
+            /* Use specified storage dimensions */
+            width = job->width;
+            height = job->height;
+            
+            /* Bind to max dimensions */
+            if( job->maxWidth && width > job->maxWidth )
+                width = job->maxWidth;
+            if( job->maxHeight && height > job->maxHeight )
+                height = job->maxHeight;
+            
+            /* Time to get picture dimensions that divide cleanly.*/
+            width  = MULTIPLE_MOD( width, mod);
+            height = MULTIPLE_MOD( height, mod);
+            
+            /* Verify we're still within max dimensions */
+            if( job->maxWidth && width > job->maxWidth )
+                width = job->maxWidth - (mod/2);
+            if( job->maxHeight && height > job->maxHeight )
+                height = job->maxHeight - (mod/2);
+                
+            /* Re-ensure we have picture dimensions that divide cleanly. */
+            width  = MULTIPLE_MOD( width, mod );
+            height = MULTIPLE_MOD( height, mod );
+            
+            /* That finishes the storage dimensions. On to display. */            
+            if( job->anamorphic.dar_width && job->anamorphic.dar_height )
+            {
+                /* We need to adjust the PAR to produce this aspect. */
+                pixel_aspect_width = height * job->anamorphic.dar_width / job->anamorphic.dar_height;
+                pixel_aspect_height = width;
+            }
+            else
+            {
+                /* We first need the display ar.
+                   That's the source display width divided by the source height after cropping.
+                   Then we multiple the output height by that to get the pixel aspect width,
+                   and the pixel aspect height is the storage width.*/
+                pixel_aspect_width = height * source_display_width / cropped_height;
+                pixel_aspect_height = width;
+            }
+            
+            /* Back to caller */
+            *output_width = width;
+            *output_height = height;
+        break;
+    }
+    
     /* While x264 is smart enough to reduce fractions on its own, libavcodec
        needs some help with the math, so lose superfluous factors.            */
     hb_reduce( output_par_width, output_par_height,

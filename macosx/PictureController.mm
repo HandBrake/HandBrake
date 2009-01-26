@@ -149,7 +149,7 @@
     {
     [fAnamorphicPopUp addItemWithTitle: @"Loose"];
     }
-    [fAnamorphicPopUp selectItemAtIndex: job->pixel_ratio];
+    [fAnamorphicPopUp selectItemAtIndex: job->anamorphic.mode];
     
     /* We initially set the previous state of keep ar to on */
     keepAspectRatioPreviousState = 1;
@@ -253,7 +253,7 @@ are maintained across different sources */
 	{
         if ([fAnamorphicPopUp indexOfSelectedItem] == 2) // Loose anamorphic
         {
-            job->pixel_ratio = 2;
+            job->anamorphic.mode = 2;
             [fWidthStepper setEnabled: YES];
             [fWidthField setEnabled: YES];
             /* We set job->width and call hb_set_anamorphic_size in libhb to do a "dry run" to get
@@ -286,7 +286,7 @@ are maintained across different sources */
             job->width       = [fWidthStepper  intValue];
             job->height      = [fHeightStepper intValue];
             
-            job->pixel_ratio = 1;
+            job->anamorphic.mode = 1;
             [fWidthStepper setEnabled: NO];
             [fWidthField setEnabled: NO];
         }
@@ -309,7 +309,7 @@ are maintained across different sources */
 	{
         job->width       = [fWidthStepper  intValue];
         job->height      = [fHeightStepper intValue];
-        job->pixel_ratio = 0;
+        job->anamorphic.mode = 0;
         [fWidthStepper setEnabled: YES];
         [fWidthField setEnabled: YES];
         [fHeightStepper setEnabled: YES];

@@ -1901,7 +1901,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
     NSString * pictureSummary;
     pictureSummary = [NSString stringWithFormat:@"Source: %@ Output: %@ Anamorphic: %@", 
                      [fPicSettingsSrc stringValue], 
@@ -1996,7 +1996,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
     
     /* Set crop settings here */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
@@ -2410,7 +2410,7 @@ fWorkingCount = 0;
             hb_fix_aspect( job, HB_KEEP_HEIGHT );
         }
     }
-    job->pixel_ratio = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
+    job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
     
     
     /* If Cropping is set to custom, then recall all four crop values from
@@ -3012,7 +3012,7 @@ fWorkingCount = 0;
     job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
     
     job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
-    job->pixel_ratio = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
+    job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
     
     
     /* Here we use the crop values saved at the time the preset was saved */
@@ -3890,9 +3890,9 @@ the user is using "Custom" settings by determining the sender*/
     to use the index itself but this is easier */
     if (videoEncoder == HB_VCODEC_FFMPEG)
     {
-        if (job->pixel_ratio == 2)
+        if (job->anamorphic.mode == 2)
         {
-            job->pixel_ratio = 0;
+            job->anamorphic.mode = 0;
         }
         [fPictureController setAllowLooseAnamorphic:NO];
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
@@ -4139,18 +4139,18 @@ the user is using "Custom" settings by determining the sender*/
 {
 	[fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", fTitle->job->width, fTitle->job->height]];
 	
-    if (fTitle->job->pixel_ratio == 1)
+    if (fTitle->job->anamorphic.mode == 1)
 	{
         int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
-        int arpwidth = fTitle->job->pixel_aspect_width;
-        int arpheight = fTitle->job->pixel_aspect_height;
+        int arpwidth = fTitle->job->anamorphic.par_width;
+        int arpheight = fTitle->job->anamorphic.par_height;
         int displayparwidth = titlewidth * arpwidth / arpheight;
         int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
         [fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", titlewidth, displayparheight]];
         [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"%d x %d Strict", displayparwidth, displayparheight]];
         fTitle->job->keep_ratio = 0;
 	}
-    else if (fTitle->job->pixel_ratio == 2)
+    else if (fTitle->job->anamorphic.mode == 2)
     {
         hb_job_t * job = fTitle->job;
         int output_width, output_height, output_par_width, output_par_height;
@@ -4249,7 +4249,7 @@ the user is using "Custom" settings by determining the sender*/
         [fPicSettingDeblock setStringValue: [NSString stringWithFormat:@"%d",[fPictureController deblock]]];
     }
 	
-	if (fTitle->job->pixel_ratio > 0)
+	if (fTitle->job->anamorphic.mode > 0)
 	{
 		[fPicSettingPAR setStringValue: @""];
 	}
@@ -5782,7 +5782,7 @@ return YES;
                         hb_fix_aspect( job, HB_KEEP_HEIGHT );
                     }
                 }
-                job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+                job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
             }
             else // /* If not 0 or 2 we assume objectForKey:@"UsesPictureSettings is 1 which is "Use picture sizing from when the preset was set" */
             {
@@ -5810,7 +5810,7 @@ return YES;
                         hb_fix_aspect( job, HB_KEEP_HEIGHT );
                     }
                 }
-                job->pixel_ratio = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
+                job->anamorphic.mode = [[chosenPreset objectForKey:@"PicturePAR"]  intValue];
                 
             }
             
@@ -6063,7 +6063,7 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PictureWidth"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
-        [preset setObject:[NSNumber numberWithInt:fTitle->job->pixel_ratio] forKey:@"PicturePAR"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
         
         /* Set crop settings here */
         [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];

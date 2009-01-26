@@ -202,15 +202,15 @@ void hb_display_job_info( hb_job_t * job )
             (float) title->rate / (float) title->rate_base, (float) job->vrate / (float) job->vrate_base );
     }
 
-    if( job->pixel_ratio )
+    if( job->anamorphic.mode )
     {
-        hb_log( "   + %s anamorphic", job->pixel_ratio == 1 ? "strict" : "loose" );
+        hb_log( "   + %s anamorphic", job->anamorphic.mode == 1 ? "strict" : "loose" );
         hb_log( "     + storage dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d",
                     title->width, title->height, job->width, job->height,
                     job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
-        hb_log( "     + pixel aspect ratio: %i / %i", job->pixel_aspect_width, job->pixel_aspect_height );
+        hb_log( "     + pixel aspect ratio: %i / %i", job->anamorphic.par_width, job->anamorphic.par_height );
         hb_log( "     + display dimensions: %.0f * %i",
-            (float)( job->width * job->pixel_aspect_width / job->pixel_aspect_height ), job->height );
+            (float)( job->width * job->anamorphic.par_width / job->anamorphic.par_height ), job->height );
     }
     else
     {
@@ -365,45 +365,36 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     hb_log( "starting job" );
 
-    if ( job->pixel_ratio == 1 )
+    if( job->anamorphic.mode )
     {
-    	/* Correct the geometry of the output movie when using PixelRatio */
-    	job->height=title->height-job->crop[0]-job->crop[1];
-    	job->width=title->width-job->crop[2]-job->crop[3];
-    }
-    else if ( job->pixel_ratio == 2 )
-    {
+        hb_set_anamorphic_size(job, &job->width, &job->height, &job->anamorphic.par_width, &job->anamorphic.par_height);
 
-        /* While keeping the DVD storage aspect, resize the job width and height
-           so they fit into the user's specified dimensions. */
-        hb_set_anamorphic_size(job, &job->width, &job->height, &job->pixel_aspect_width, &job->pixel_aspect_height);
-    }
-
-    if( job->pixel_ratio && job->vcodec == HB_VCODEC_FFMPEG)
-    {
-        /* Just to make working with ffmpeg even more fun,
-           lavc's MPEG-4 encoder can't handle PAR values >= 255,
-           even though AVRational does. Adjusting downwards
-           distorts the display aspect slightly, but such is life. */
-        while ((job->pixel_aspect_width & ~0xFF) ||
-               (job->pixel_aspect_height & ~0xFF))
+        if( job->vcodec == HB_VCODEC_FFMPEG )
         {
-            job->pixel_aspect_width >>= 1;
-            job->pixel_aspect_height >>= 1;
+            /* Just to make working with ffmpeg even more fun,
+               lavc's MPEG-4 encoder can't handle PAR values >= 255,
+               even though AVRational does. Adjusting downwards
+               distorts the display aspect slightly, but such is life. */
+            while ((job->anamorphic.par_width & ~0xFF) ||
+                   (job->anamorphic.par_height & ~0xFF))
+            {
+                job->anamorphic.par_width >>= 1;
+                job->anamorphic.par_height >>= 1;
+            }
         }
     }
-
+    
     /* Keep width and height within these boundaries,
        but ignore for anamorphic. For "loose" anamorphic encodes,
        this stuff is covered in the pixel_ratio section above.    */
-    if ( job->maxHeight && ( job->height > job->maxHeight ) && ( !job->pixel_ratio ) )
+    if ( job->maxHeight && ( job->height > job->maxHeight ) && ( !job->anamorphic.mode ) )
     {
         job->height = job->maxHeight;
         hb_fix_aspect( job, HB_KEEP_HEIGHT );
         hb_log( "Height out of bounds, scaling down to %i", job->maxHeight );
         hb_log( "New dimensions %i * %i", job->width, job->height );
     }
-    if ( job->maxWidth && ( job->width > job->maxWidth ) && ( !job->pixel_ratio ) )
+    if ( job->maxWidth && ( job->width > job->maxWidth ) && ( !job->anamorphic.mode ) )
     {
         job->width = job->maxWidth;
         hb_fix_aspect( job, HB_KEEP_WIDTH );

@@ -192,14 +192,14 @@ static void ScanFunc( void * _data )
         /* Preserve a source's pixel aspect, if it's available. */
         if( title->pixel_aspect_width && title->pixel_aspect_height )
         {
-            job->pixel_aspect_width  = title->pixel_aspect_width;
-            job->pixel_aspect_height = title->pixel_aspect_height;
+            job->anamorphic.par_width  = title->pixel_aspect_width;
+            job->anamorphic.par_height = title->pixel_aspect_height;
         }
 
         if( title->aspect != 0 && title->aspect != 1. &&
-            !job->pixel_aspect_width && !job->pixel_aspect_height)
+            !job->anamorphic.par_width && !job->anamorphic.par_height)
         {
-            hb_reduce( &job->pixel_aspect_width, &job->pixel_aspect_height,
+            hb_reduce( &job->anamorphic.par_width, &job->anamorphic.par_height,
                        (int)(title->aspect * title->height + 0.5), title->width );
         }
 

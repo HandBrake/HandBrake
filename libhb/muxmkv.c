@@ -138,9 +138,9 @@ static int MKVInit( hb_mux_object_t * m )
     track->extra.video.pixelWidth = job->width;
     track->extra.video.pixelHeight = job->height;
     track->extra.video.displayHeight = job->height;
-    if(job->pixel_ratio)
+    if( job->anamorphic.mode )
     {
-        track->extra.video.displayWidth = job->width * ((double)job->pixel_aspect_width / (double)job->pixel_aspect_height);
+        track->extra.video.displayWidth = job->width * ((double)job->anamorphic.par_width / (double)job->anamorphic.par_height);
     }
     else
     {

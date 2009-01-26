@@ -42,10 +42,10 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     ti.offset_x = ti.offset_y = 0;
     ti.fps_numerator = job->vrate;
     ti.fps_denominator = job->vrate_base;
-    if (job->pixel_ratio)
+    if( job->anamorphic.mode )
     {
-        ti.aspect_numerator = job->pixel_aspect_width;
-        ti.aspect_denominator = job->pixel_aspect_height;
+        ti.aspect_numerator = job->anamorphic.par_width;
+        ti.aspect_denominator = job->anamorphic.par_height;
     }
     else
     {

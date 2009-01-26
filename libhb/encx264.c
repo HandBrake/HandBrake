@@ -224,10 +224,10 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         param.vui.i_colmatrix = 6;
     }
 
-    if( job->pixel_ratio )
+    if( job->anamorphic.mode )
     {
-        param.vui.i_sar_width = job->pixel_aspect_width;
-        param.vui.i_sar_height = job->pixel_aspect_height;
+        param.vui.i_sar_width  = job->anamorphic.par_width;
+        param.vui.i_sar_height = job->anamorphic.par_height;
 
         hb_log( "encx264: encoding with stored aspect %d/%d",
                 param.vui.i_sar_width, param.vui.i_sar_height );
