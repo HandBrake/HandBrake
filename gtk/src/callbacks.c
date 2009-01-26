@@ -88,6 +88,8 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 		widget = GHB_WIDGET(ud->builder, widget_name);
 		dep_object = gtk_builder_get_object(ud->builder, name);
 		g_free(widget_name);
+		if (!GTK_WIDGET_SENSITIVE(widget))
+			continue;
 		if (dep_object == NULL)
 		{
 			g_message("Failed to find widget");

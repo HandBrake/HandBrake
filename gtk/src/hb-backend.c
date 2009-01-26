@@ -2475,7 +2475,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		keep_width = FALSE;
 		keep_height = FALSE;
 	}
-	if (anamorphic || keep_aspect)
+	if (keep_aspect)
 	{
 		keep_height = FALSE;
 	}
@@ -2564,17 +2564,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 
 	if (anamorphic)
 	{
-		if (round_dims)
-		{
-			job->modulus = 0;
-		}
-		else
-		{
-			// The scaler crashes if the dimensions are not divisible by 2
-			// Align mod 2.  And so does something in x264_encoder_headers()
-			job->modulus = 2;
-		}
+		job->anamorphic.mode = autoscale ? 2 : 3;
+		// The scaler crashes if the dimensions are not divisible by 2
+		// Align mod 2.  And so does something in x264_encoder_headers()
+		job->anamorphic.modulus = round_dims ? 16 : 2;
 		job->width = width;
+		job->height = height;
 		if (max_height) 
 			job->maxHeight = max_height;
 		job->crop[0] = crop[0];	job->crop[1] = crop[1];
@@ -2584,6 +2579,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	}
 	else 
 	{
+		job->anamorphic.mode = 0;
 		if (keep_aspect)
 		{
 			gdouble par;
@@ -2643,23 +2639,19 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	job->crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
 	job->crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
 
-	gboolean anamorphic, round_dimensions;
+	gboolean anamorphic, round_dimensions, autoscale;
+	autoscale = ghb_settings_get_boolean(settings, "autoscale");
 	anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
 	round_dimensions = ghb_settings_get_boolean(settings, "ModDimensions");
-	if (round_dimensions && anamorphic)
+	if (anamorphic)
 	{
-		job->modulus = 16;
-		job->pixel_ratio = 2;
-	}
-	else if (anamorphic)
-	{
-		job->modulus = 2;
-		job->pixel_ratio = 2;
+		job->anamorphic.modulus = round_dimensions ? 16 : 2;
+		job->anamorphic.mode = autoscale ? 2 : 3;
 	}
 	else
 	{
-		job->modulus = 2;
-		job->pixel_ratio = 0;
+		job->anamorphic.modulus = 2;
+		job->anamorphic.mode = 0;
 	}
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
@@ -3191,26 +3183,19 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
 
+	gboolean autoscale = ghb_settings_get_boolean(js, "autoscale");
 	gboolean anamorphic = ghb_settings_get_boolean(js, "anamorphic");
 	gboolean round_dimensions = ghb_settings_get_boolean(js, "ModDimensions");
-	if (round_dimensions && anamorphic)
+	if (anamorphic)
 	{
-		job->pixel_ratio = 2;
-		job->modulus = 16;
-	}
-	else if (anamorphic)
-	{
-		// Huh! I thought I wanted to use pixel_ratio 1 for this case, but
-		// when its 1, libhb discards the width and height and uses original
-		// title dims - crop.  Thats not what I want.
-		// Also, x264 requires things to divisible by 2.
-		job->pixel_ratio = 2;
-		job->modulus = 2;
+		job->anamorphic.mode = autoscale ? 2 : 3;
+		// Also, x264 requires things to be divisible by 2.
+		job->anamorphic.modulus = round_dimensions ? 16 : 2;
 	}
 	else
 	{
-		job->pixel_ratio = 0;
-		job->modulus = 2;
+		job->anamorphic.mode = 0;
+		job->anamorphic.modulus = 2;
 	}
 	/* Add selected filters */
 	job->filters = hb_list_init();

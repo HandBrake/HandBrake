@@ -261,8 +261,8 @@
 		</array>
 		<array>
 			<string>anamorphic</string>
-			<string>FALSE</string>
-			<false />
+			<string>CHECK</string>
+			<true />
 		</array>
 		<array>
 			<string>PictureKeepRatio</string>

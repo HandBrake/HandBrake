@@ -46,7 +46,9 @@ static dependency_t dep_map[] =
 	{"autoscale", "scale_width", "FALSE", FALSE},
 	{"autoscale", "scale_height", "FALSE", FALSE},
 	{"anamorphic", "PictureKeepRatio", "FALSE", FALSE},
-	{"anamorphic", "scale_height", "FALSE", FALSE},
+	// "CHECK" is a dummy value that forces scale_height deps to
+	// be re-evaluated whenever anamorphic changes
+	{"anamorphic", "scale_height", "CHECK", TRUE},
 	{"PictureKeepRatio", "scale_height", "FALSE", FALSE},
 	{"VideoEncoder", "x264_tab", "x264", FALSE},
 	{"VideoEncoder", "x264_tab_label", "x264", FALSE},
