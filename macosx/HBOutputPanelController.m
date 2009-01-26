@@ -91,10 +91,17 @@
  */
 - (IBAction)showOutputPanel:(id)sender
 {
+    if ([[self window] isVisible])
+    {
+        [[self window] close];
+    }
+    else
+    {
     [textView scrollRangeToVisible:NSMakeRange([outputTextStorage length], 0)];
     [self showWindow:sender];
 
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OutputPanelIsOpen"];
+    }
 }
 
 - (void) startEncodeLog:(NSString *) logPath

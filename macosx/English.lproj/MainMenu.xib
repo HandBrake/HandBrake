@@ -3835,6 +3835,14 @@
 									<reference key="NSOnImage" ref="447995298"/>
 									<reference key="NSMixedImage" ref="760317610"/>
 								</object>
+								<object class="NSMenuItem" id="74583158">
+									<reference key="NSMenu" ref="919178355"/>
+									<string key="NSTitle">Picture Filters</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="447995298"/>
+									<reference key="NSMixedImage" ref="760317610"/>
+								</object>
 								<object class="NSMenuItem" id="157409278">
 									<reference key="NSMenu" ref="919178355"/>
 									<string key="NSTitle">Preview Window</string>
@@ -6541,6 +6549,14 @@
 					</object>
 					<int key="connectionID">5158</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showFiltersPanel:</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="74583158"/>
+					</object>
+					<int key="connectionID">5160</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -7680,6 +7696,7 @@
 							<reference ref="849279674"/>
 							<reference ref="1034427275"/>
 							<reference ref="157409278"/>
+							<reference ref="74583158"/>
 						</object>
 						<reference key="parent" ref="610133626"/>
 					</object>
@@ -9955,6 +9972,11 @@
 						<reference key="object" ref="157409278"/>
 						<reference key="parent" ref="919178355"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">5159</int>
+						<reference key="object" ref="74583158"/>
+						<reference key="parent" ref="919178355"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -10623,6 +10645,7 @@
 					<string>5153.IBPluginDependency</string>
 					<string>5153.ImportedFromIB2</string>
 					<string>5157.IBPluginDependency</string>
+					<string>5159.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
 					<string>57.IBPluginDependency</string>
@@ -10651,7 +10674,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{262, 642}, {211, 183}}</string>
+					<string>{{262, 622}, {211, 203}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -11330,6 +11353,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -11364,7 +11388,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">5158</int>
+			<int key="maxID">5160</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -11415,6 +11439,7 @@
 							<string>setEnabledStateOfAudioMixdownControls:</string>
 							<string>showAddPresetPanel:</string>
 							<string>showDebugOutputPanel:</string>
+							<string>showFiltersPanel:</string>
 							<string>showNewScan:</string>
 							<string>showPicturePanel:</string>
 							<string>showPreferencesWindow:</string>
@@ -11430,6 +11455,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

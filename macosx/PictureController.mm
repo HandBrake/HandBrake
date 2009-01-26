@@ -7,7 +7,7 @@
 #import "PictureController.h"
 #import "Controller.h"
 #import "HBPreviewController.h"
-
+#import "HBFilterController.h"
 
 
 @implementation PictureController
@@ -27,6 +27,7 @@
         [self window];
         
 	fPreviewController = [[PreviewController alloc] init];
+    //fPictureFilterController = [[PictureFilterController alloc] init];
     }
 	return self;
 }
@@ -36,14 +37,21 @@
 //------------------------------------------------------------------------------------
 - (IBAction) showPictureWindow: (id)sender
 {
-    [self showWindow:sender];
-    if ([fPreviewController fullScreen] == YES)
+    if ([[self window] isVisible])
     {
-    [self setToFullScreenMode];
+        [[self window] close];
     }
     else
     {
-    [self setToWindowedMode];
+        [self showWindow:sender];
+        if ([fPreviewController fullScreen] == YES)
+        {
+            [self setToFullScreenMode];
+        }
+        else
+        {
+            [self setToWindowedMode];
+        }
     }
 }
 
@@ -51,6 +59,12 @@
 {
     [fPreviewController showWindow:sender];
 }
+
+- (IBAction) showFilterWindow: (id)sender
+{
+    [fHBController showFiltersPanel:sender];
+}
+
 
 - (void) setToFullScreenMode
 {
@@ -70,6 +84,7 @@
 - (void)setHBController: (HBController *)controller
 {
     fHBController = controller;
+    //[fPictureFilterController   setHBController: controller];
     [fPreviewController   setHBController: controller];
     
 }
@@ -92,6 +107,7 @@
 
 - (void) dealloc
 {
+    [fPictureFilterController release];
     [fPreviewController release];
     [super dealloc];
 }
@@ -117,6 +133,7 @@
     [fCropRightStepper  setMinValue:  0];
     
     [fPreviewController SetHandle: fHandle];
+    [fPictureFilterController SetHandle: fHandle];
     
 
 }
@@ -172,11 +189,14 @@
 	}
 	
 	/* Set filters widgets according to the filters struct */
+    /* this has now been movied to the filters controller */
+    /*
 	[fDetelecineCheck setState:fPictureFilterSettings.detelecine];
     [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
     [fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     [fDeblockCheck setState: fPictureFilterSettings.deblock];
     [fDecombCheck setState: fPictureFilterSettings.decomb];
+    */
     
     fPicture = 0;
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
@@ -185,47 +205,7 @@
     [self SettingsChanged: nil];
 }
 
-/* we use this to setup the initial picture filters upon first launch, after that their states
-are maintained across different sources */
-- (void) setInitialPictureFilters
-{
-	/* we use a popup to show the deinterlace settings */
-	[fDeinterlacePopUp removeAllItems];
-    [fDeinterlacePopUp addItemWithTitle: @"None"];
-    [fDeinterlacePopUp addItemWithTitle: @"Fast"];
-    [fDeinterlacePopUp addItemWithTitle: @"Slow"];
-	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
     
-	/* Set deinterlaces level according to the integer in the main window */
-	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
-
-	/* we use a popup to show the denoise settings */
-	[fDenoisePopUp removeAllItems];
-    [fDenoisePopUp addItemWithTitle: @"None"];
-    [fDenoisePopUp addItemWithTitle: @"Weak"];
-	[fDenoisePopUp addItemWithTitle: @"Medium"];
-    [fDenoisePopUp addItemWithTitle: @"Strong"];
-	/* Set denoises level according to the integer in the main window */
-	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
-    
-
-}
-
-    
-    
-
-- (IBAction) deblockSliderChanged: (id) sender
-{
-    if ([fDeblockSlider floatValue] == 4.0)
-    {
-    [fDeblockField setStringValue: [NSString stringWithFormat: @"Off"]];
-    }
-    else
-    {
-    [fDeblockField setStringValue: [NSString stringWithFormat: @"%.0f", [fDeblockSlider floatValue]]];
-    }
-	[self SettingsChanged: sender];
-}
 
 - (IBAction) SettingsChanged: (id) sender
 {
@@ -325,33 +305,6 @@ are maintained across different sources */
 	}
 	
     job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
-    
-	fPictureFilterSettings.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
-    /* if the gui deinterlace settings are fast through slowest, the job->deinterlace
-     value needs to be set to one, for the job as well as the previews showing deinterlacing
-     otherwise set job->deinterlace to 0 or "off" */
-    if (fPictureFilterSettings.deinterlace > 0)
-    {
-        job->deinterlace  = 1;
-    }
-    else
-    {
-        job->deinterlace  = 0;
-    }
-    fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
-    
-    fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
-    
-    if ([fDeblockField stringValue] == @"Off")
-    {
-    fPictureFilterSettings.deblock  = 0;
-    }
-    else
-    {
-    fPictureFilterSettings.deblock  = [fDeblockField intValue];
-    }
-    
-    fPictureFilterSettings.decomb = [fDecombCheck state];
 
     if( job->keep_ratio )
     {
@@ -414,7 +367,9 @@ are maintained across different sources */
          * our picture preview slider in sync with the previews being shown
          */
 
-    [fPreviewController pictureSliderChanged:nil];
+    //[fPreviewController pictureSliderChanged:nil];
+    [self reloadStillPreview];
+    
 
     }
 
@@ -425,6 +380,29 @@ are maintained across different sources */
     
 }
 
+- (void)reloadStillPreview
+{ 
+   hb_job_t * job = fTitle->job; 
+   
+   [fPreviewController SetTitle:fTitle];
+    /* Sanity Check Here for < 16 px preview to avoid
+     crashing hb_get_preview. In fact, just for kicks
+     lets getting previews at a min limit of 32, since
+     no human can see any meaningful detail below that */
+    if (job->width >= 64 && job->height >= 64)
+    {
+       
+         // Purge the existing picture previews so they get recreated the next time
+        // they are needed.
+        [fPreviewController purgeImageCache];
+        /* We actually call displayPreview now from pictureSliderChanged which keeps
+         * our picture preview slider in sync with the previews being shown
+         */
+
+    [fPreviewController pictureSliderChanged:nil];
+    }
+    
+}
 
 
 #pragma mark -
@@ -446,52 +424,6 @@ are maintained across different sources */
 - (void) setAllowLooseAnamorphic: (BOOL) setting
 {
     allowLooseAnamorphic = setting;
-}
-
-- (int) detelecine
-{
-    return fPictureFilterSettings.detelecine;
-}
-
-- (void) setDetelecine: (int) setting
-{
-    fPictureFilterSettings.detelecine = setting;
-}
-
-- (int) deinterlace
-{
-    return fPictureFilterSettings.deinterlace;
-}
-
-- (void) setDeinterlace: (int) setting {
-    fPictureFilterSettings.deinterlace = setting;
-}
-- (int) decomb
-{
-    return fPictureFilterSettings.decomb;
-}
-
-- (void) setDecomb: (int) setting {
-    fPictureFilterSettings.decomb = setting;
-}
-- (int) denoise
-{
-    return fPictureFilterSettings.denoise;
-}
-
-- (void) setDenoise: (int) setting
-{
-    fPictureFilterSettings.denoise = setting;
-}
-
-- (int) deblock
-{
-    return fPictureFilterSettings.deblock;
-}
-
-- (void) setDeblock: (int) setting
-{
-    fPictureFilterSettings.deblock = setting;
 }
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title

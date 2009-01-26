@@ -10,47 +10,34 @@
 
 @class HBController;
 @class PreviewController;
-@class PictureFilterController;
 
 
 //#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
 
-@interface PictureController : NSWindowController
+@interface PictureFilterController : NSWindowController
 {
     hb_handle_t              * fHandle;
     hb_title_t               * fTitle;
 
     HBController             *fHBController;
     PreviewController        *fPreviewController;        // reference to HBController
-    PictureFilterController  *fPictureFilterController;
-    
-    IBOutlet NSWindow        * fPictureWindow;
-    NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
-    int                        fPicture;
+    IBOutlet NSWindow        * fFilterWindow;
 
+    IBOutlet NSBox           * fPictureFilterBox;
 
-    IBOutlet NSBox           * fPictureSizeBox;
-    IBOutlet NSBox           * fPictureCropBox;
-    IBOutlet NSTextField     * fWidthField;
-    IBOutlet NSStepper       * fWidthStepper;
-    IBOutlet NSTextField     * fHeightField;
-    IBOutlet NSStepper       * fHeightStepper;
-    IBOutlet NSButton        * fRatioCheck;
-    IBOutlet NSMatrix        * fCropMatrix;
-    IBOutlet NSTextField     * fCropTopField;
-    IBOutlet NSStepper       * fCropTopStepper;
-    IBOutlet NSTextField     * fCropBottomField;
-    IBOutlet NSStepper       * fCropBottomStepper;
-    IBOutlet NSTextField     * fCropLeftField;
-    IBOutlet NSStepper       * fCropLeftStepper;
-    IBOutlet NSTextField     * fCropRightField;
-    IBOutlet NSStepper       * fCropRightStepper;
-
+    IBOutlet NSPopUpButton   * fDeinterlacePopUp;
+    IBOutlet NSButton        * fDecombCheck;
+	IBOutlet NSButton        * fDetelecineCheck;
+    IBOutlet NSButton        * fDeblockCheck;
+    IBOutlet NSTextField     * fDeblockField;
+    IBOutlet NSSlider        * fDeblockSlider;
+	IBOutlet NSPopUpButton   * fDenoisePopUp;
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
+    IBOutlet NSSlider        * fPictureSlider;
     IBOutlet NSTextField     * fInfoField;
 	
     IBOutlet NSButton        * fPreviewOpenButton;
-    IBOutlet NSButton        * fPictureFiltersOpenButton;
+    IBOutlet NSButton        * fPictureSizeOpenButton;
         
     int     MaxOutputWidth;
     int     MaxOutputHeight;
@@ -81,24 +68,35 @@
 - (void) SetHandle: (hb_handle_t *) handle;
 - (void) SetTitle:  (hb_title_t *)  title;
 - (void)setHBController: (HBController *)controller;
-- (IBAction) showPictureWindow: (id)sender;
-- (IBAction) showPreviewWindow: (id)sender;
 - (IBAction) showFilterWindow: (id)sender;
+- (IBAction) showPreviewWindow: (id)sender;
+
+- (void) setInitialPictureFilters;
 
 
+- (IBAction) FilterSettingsChanged: (id) sender;
 
-- (IBAction) SettingsChanged: (id) sender;
 
-- (void)reloadStillPreview;
 
 - (BOOL) autoCrop;
 - (void) setAutoCrop: (BOOL) setting;
 
 - (BOOL) allowLooseAnamorphic;
 - (void) setAllowLooseAnamorphic: (BOOL) setting;
+- (IBAction) deblockSliderChanged: (id) sender;
+- (int) detelecine;
+- (void) setDetelecine: (int) setting;
+- (int) deinterlace;
+- (void) setDeinterlace: (int) setting;
+- (int) decomb;
+- (void) setDecomb: (int) setting;
+- (int) denoise;
+- (void) setDenoise: (int) setting;
+- (int) deblock;
+- (void) setDeblock: (int) setting;
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title;
-
+- (IBAction) showPictureSettingsWindow: (id)sender;
 
 - (void) setToFullScreenMode;
 - (void) setToWindowedMode;

@@ -10,6 +10,7 @@
 #import "HBDVDDetector.h"
 #import "HBPresets.h"
 #import "HBPreviewController.h"
+#import "HBFilterController.h"
 
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
@@ -62,7 +63,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] init];
-    //fPreviewController = [[PreviewController alloc] init];
+    fPictureFilterController = [[PictureFilterController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     /* we init the HBPresets class which currently is only used
@@ -92,9 +93,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
     [fPictureController   setHBController: self];
-    /* fPreviewController */
-    //[fPreviewController SetHandle: fHandle];
-    //[fPreviewController   setHBController: self];
+    /* fPictureController */
+    [fPictureFilterController SetHandle: fHandle];
+    [fPictureFilterController   setHBController: self];
     
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
@@ -253,6 +254,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [outputPanel release];
 	[fQueueController release];
     [fPictureController release];
+    [fPictureFilterController release];
     
     [fPreviewController release];
 	hb_close(&fHandle);
@@ -1547,7 +1549,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     /* lets set Denoise to index 0 or "None" since this is the first scan */
                     //[fPictureController setDenoise:0];
                     
-                    [fPictureController setInitialPictureFilters];
+                    [fPictureFilterController setInitialPictureFilters];
                 }
 
             
@@ -1916,11 +1918,11 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
     
     /* Picture Filters */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
-	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
-    [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"]; 
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController deinterlace]] forKey:@"PictureDeinterlace"];
+	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController detelecine]] forKey:@"PictureDetelecine"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController denoise]] forKey:@"PictureDenoise"];
+    [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureFilterController deblock]] forKey:@"PictureDeblock"]; 
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController decomb]] forKey:@"PictureDecomb"];
     
     /*Audio*/
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
@@ -2439,16 +2441,16 @@ fWorkingCount = 0;
     
     /* Filters */
     /* Deinterlace */
-    [fPictureController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
+    [fPictureFilterController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
     
     /* Detelecine */
-    [fPictureController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
+    [fPictureFilterController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
     /* Denoise */
-    [fPictureController setDenoise:[[queueToApply objectForKey:@"PictureDenoise"] intValue]];
+    [fPictureFilterController setDenoise:[[queueToApply objectForKey:@"PictureDenoise"] intValue]];
     /* Deblock */
-    [fPictureController setDeblock:[[queueToApply objectForKey:@"PictureDeblock"] intValue]];
+    [fPictureFilterController setDeblock:[[queueToApply objectForKey:@"PictureDeblock"] intValue]];
     /* Decomb */
-    [fPictureController setDecomb:[[queueToApply objectForKey:@"PictureDecomb"] intValue]];
+    [fPictureFilterController setDecomb:[[queueToApply objectForKey:@"PictureDecomb"] intValue]];
     
     [self calculatePictureSizing:nil];
     
@@ -2706,7 +2708,7 @@ fWorkingCount = 0;
         /* If we are same as source and we have detelecine on, we need to turn on
          * job->vfr
          */
-        if ([fPictureController detelecine] == 1)
+        if ([fPictureFilterController detelecine] == 1)
         {
             job->vfr = 1;
         }
@@ -2822,13 +2824,13 @@ fWorkingCount = 0;
     */
     
 	/* Detelecine */
-    if ([fPictureController detelecine])
+    if ([fPictureFilterController detelecine])
     {
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
     
     /* Decomb */
-    if ([fPictureController decomb] > 0)
+    if ([fPictureFilterController decomb] > 0)
     {
         /* Run old deinterlacer fd by default */
         //hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
@@ -2837,19 +2839,19 @@ fWorkingCount = 0;
 
     
     /* Deinterlace */
-    if ([fPictureController deinterlace] == 1)
+    if ([fPictureFilterController deinterlace] == 1)
     {
         /* Run old deinterlacer fd by default */
         hb_filter_deinterlace.settings = "-1"; 
         hb_list_add( job->filters, &hb_filter_deinterlace );
     }
-    else if ([fPictureController deinterlace] == 2)
+    else if ([fPictureFilterController deinterlace] == 2)
     {
         /* Yadif mode 0 (without spatial deinterlacing.) */
         hb_filter_deinterlace.settings = "2"; 
         hb_list_add( job->filters, &hb_filter_deinterlace );            
     }
-    else if ([fPictureController deinterlace] == 3)
+    else if ([fPictureFilterController deinterlace] == 3)
     {
         /* Yadif (with spatial deinterlacing) */
         hb_filter_deinterlace.settings = "0"; 
@@ -2857,17 +2859,17 @@ fWorkingCount = 0;
     }
 	
     /* Denoise */
-	if ([fPictureController denoise] == 1) // Weak in popup
+	if ([fPictureFilterController denoise] == 1) // Weak in popup
 	{
 		hb_filter_denoise.settings = "2:1:2:3"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-	else if ([fPictureController denoise] == 2) // Medium in popup
+	else if ([fPictureFilterController denoise] == 2) // Medium in popup
 	{
 		hb_filter_denoise.settings = "3:2:2:3"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-	else if ([fPictureController denoise] == 3) // Strong in popup
+	else if ([fPictureFilterController denoise] == 3) // Strong in popup
 	{
 		hb_filter_denoise.settings = "7:7:5:5"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
@@ -2878,9 +2880,9 @@ fWorkingCount = 0;
      * the macgui's purposes a value of 0 actually means to not even use the filter
      * current hb_filter_deblock.settings valid ranges are from 5 - 15 
      */
-    if ([fPictureController deblock] != 0)
+    if ([fPictureFilterController deblock] != 0)
     {
-        NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureController deblock]];
+        NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureFilterController deblock]];
         hb_filter_deblock.settings = (char *) [deblockStringValue UTF8String];
         hb_list_add( job->filters, &hb_filter_deblock );
     }
@@ -3614,7 +3616,7 @@ fWorkingCount = 0;
 
 	/* Reset the new title in fPictureController &&  fPreviewController*/
     [fPictureController SetTitle:title];
-    //[fPreviewController SetTitle:title];
+    //[fPictureFilterController SetTitle:title];
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
     [fSubPopUp removeAllItems];
@@ -4177,9 +4179,35 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingARkeep setStringValue: @"Off"];
 	}	
+
+	if (fTitle->job->anamorphic.mode > 0)
+	{
+		[fPicSettingPAR setStringValue: @""];
+	}
+	else
+	{
+		[fPicSettingPAR setStringValue: @"Off"];
+	}
+	
+    /* Set the display field for crop as per boolean */
+	if (![fPictureController autoCrop])
+	{
+	    [fPicSettingAutoCrop setStringValue: @"Custom"];
+	}
+	else
+	{
+		[fPicSettingAutoCrop setStringValue: @"Auto"];
+	}
+
     
     /* Detelecine */
-    if ([fPictureController detelecine]) 
+    
+        /*On Screen Notification*/
+    //int status;
+    //status = NSRunAlertPanel(@"Method Reached...",@"Click to Continue!", @"OK", nil, nil);
+    //[NSApp requestUserAttention:NSCriticalRequest];
+    
+    if ([fPictureFilterController detelecine]) 
     {
         [fPicSettingDetelecine setStringValue: @"On"];
     }
@@ -4189,7 +4217,7 @@ the user is using "Custom" settings by determining the sender*/
     }
     
     /* Decomb */
-	if ([fPictureController decomb])
+	if ([fPictureFilterController decomb])
 	{
 		//[fPicSettingDecomb setStringValue: @"1:2:6:9:80:16:16"];
         [fPicSettingDecomb setStringValue: @"On"];
@@ -4200,53 +4228,60 @@ the user is using "Custom" settings by determining the sender*/
 	}
     
 
-    /* VFR (Variable Frame Rate) */
+    /* Deinterlace */
+    if ([fPictureFilterController deinterlace] > 0)
+    {
+        fTitle->job->deinterlace  = 1;
+    }
+    else
+    {
+        fTitle->job->deinterlace  = 0;
+    }
     
     
-	/* Deinterlace */
-	if ([fPictureController deinterlace] == 0)
+	if ([fPictureFilterController deinterlace] == 0)
 	{
 		[fPicSettingDeinterlace setStringValue: @"Off"];
 	}
-	else if ([fPictureController deinterlace] == 1)
+	else if ([fPictureFilterController deinterlace] == 1)
 	{
 		[fPicSettingDeinterlace setStringValue: @"Fast"];
 	}
-	else if ([fPictureController deinterlace] == 2)
+	else if ([fPictureFilterController deinterlace] == 2)
 	{
 		[fPicSettingDeinterlace setStringValue: @"Slow"];
 	}
-	else if ([fPictureController deinterlace] == 3)
+	else if ([fPictureFilterController deinterlace] == 3)
 	{
 		[fPicSettingDeinterlace setStringValue: @"Slower"];
 	}
 		
     /* Denoise */
-	if ([fPictureController denoise] == 0)
+	if ([fPictureFilterController denoise] == 0)
 	{
 		[fPicSettingDenoise setStringValue: @"Off"];
 	}
-	else if ([fPictureController denoise] == 1)
+	else if ([fPictureFilterController denoise] == 1)
 	{
 		[fPicSettingDenoise setStringValue: @"Weak"];
 	}
-	else if ([fPictureController denoise] == 2)
+	else if ([fPictureFilterController denoise] == 2)
 	{
 		[fPicSettingDenoise setStringValue: @"Medium"];
 	}
-	else if ([fPictureController denoise] == 3)
+	else if ([fPictureFilterController denoise] == 3)
 	{
 		[fPicSettingDenoise setStringValue: @"Strong"];
 	}
     
     /* Deblock */
-    if ([fPictureController deblock] == 0) 
+    if ([fPictureFilterController deblock] == 0) 
     {
         [fPicSettingDeblock setStringValue: @"Off"];
     }
     else 
     {
-        [fPicSettingDeblock setStringValue: [NSString stringWithFormat:@"%d",[fPictureController deblock]]];
+        [fPicSettingDeblock setStringValue: [NSString stringWithFormat:@"%d",[fPictureFilterController deblock]]];
     }
 	
 	if (fTitle->job->anamorphic.mode > 0)
@@ -4267,7 +4302,8 @@ the user is using "Custom" settings by determining the sender*/
 	{
 		[fPicSettingAutoCrop setStringValue: @"Auto"];
 	}		
-   
+  
+  [fPictureController reloadStillPreview]; 
 }
 
 
@@ -5188,6 +5224,11 @@ the user is using "Custom" settings by determining the sender*/
 	[fPictureController setToWindowedMode];
 }
 
+- (IBAction) showFiltersPanel: (id) sender
+{
+	[fPictureFilterController showFilterWindow:sender];
+}
+
 - (IBAction) showPreviewWindow: (id) sender
 {
 	[fPictureController showPreviewWindow:sender];
@@ -5827,59 +5868,60 @@ return YES;
                  * since we no longer have a fourth "Slowest" deinterlacing due to the mcdeint bug */
                 if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
                 {
-                    [fPictureController setDeinterlace:3];
+                    [fPictureFilterController setDeinterlace:3];
                 }
                 else
                 {
-                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                    [fPictureFilterController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
                 }
             }
             else
             {
-                [fPictureController setDeinterlace:0];
+                [fPictureFilterController setDeinterlace:0];
             }
             
             /* Detelecine */
             if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
             {
-                [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                [fPictureFilterController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
             }
             else
             {
-                [fPictureController setDetelecine:0];
+                [fPictureFilterController setDetelecine:0];
             }
             /* Denoise */
             if ([chosenPreset objectForKey:@"PictureDenoise"])
             {
-                [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                [fPictureFilterController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
             }
             else
             {
-                [fPictureController setDenoise:0];
+                [fPictureFilterController setDenoise:0];
             }   
             /* Deblock */
             if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
             {
                 /* if its a one, then its the old on/off deblock, set on to 5*/
-                [fPictureController setDeblock:5];
+                [fPictureFilterController setDeblock:5];
             }
             else
             {
                 /* use the settings intValue */
-                [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                [fPictureFilterController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
             }
             /* Decomb */
             if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 1)
             {
-                [fPictureController setDecomb:1];
+                [fPictureFilterController setDecomb:1];
             }
             else
             {
-                [fPictureController setDecomb:0];
+                [fPictureFilterController setDecomb:0];
             }
         }
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
         [fPictureController SetTitle:fTitle];
+        //[fPictureFilterController FilterSettingsChanged:nil];
         [self calculatePictureSizing:nil];
     }
 }
@@ -6073,12 +6115,12 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
         
         /* Picture Filters */
-        [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
-        //[preset setObject:[NSNumber numberWithInt:[fPictureController vfr]] forKey:@"VFR"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
-        [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController deinterlace]] forKey:@"PictureDeinterlace"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController detelecine]] forKey:@"PictureDetelecine"];
+        //[preset setObject:[NSNumber numberWithInt:[fPictureFilterController vfr]] forKey:@"VFR"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController denoise]] forKey:@"PictureDenoise"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController deblock]] forKey:@"PictureDeblock"]; 
+        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController decomb]] forKey:@"PictureDecomb"];
         
         
         /*Audio*/

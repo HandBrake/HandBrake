@@ -319,13 +319,23 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title
 {
     [self SetTitle:title];
-    [self showWindow:sender];
-    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-    isFullScreen = NO;
-    scaleToScreen = NO;
-    hudTimerSeconds = 0;
-    [self startHudTimer];
-
+    
+    if ([fPreviewWindow isVisible])
+    {
+        
+        [fPreviewWindow close];
+        
+    }
+    else
+    {
+        [self showWindow:sender];
+        [fPreviewWindow setAcceptsMouseMovedEvents:YES];
+        isFullScreen = NO;
+        scaleToScreen = NO;
+        hudTimerSeconds = 0;
+        [self startHudTimer];
+    }
+    
 }
 
 - (IBAction)showPictureSettings:(id)sender

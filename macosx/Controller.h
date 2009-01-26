@@ -11,6 +11,7 @@
 
 #import "ChapterTitles.h"
 #import "PictureController.h"
+#import "HBFilterController.h"
 #import "HBPreviewController.h"
 #import "HBQueueController.h"
 #import "HBAdvancedController.h"
@@ -18,6 +19,7 @@
 #import "HBPresets.h"
 
 @class HBOutputPanelController;
+@class PictureFilterController;
 
 /* We subclass NSView so that our drags show both the icon as well as PresetName columns */
 @interface HBPresetsOutlineView : NSOutlineView
@@ -45,6 +47,8 @@ BOOL                        fIsDragging;
     
     /* Picture Settings */
     PictureController            * fPictureController;
+    /* Picture Filters */
+    PictureFilterController      * fPictureFilterController;
     /* Picture Preview */
     PreviewController            * fPreviewController;
     
@@ -305,7 +309,7 @@ BOOL                        fIsDragging;
 - (IBAction) showPicturePanel: (id) sender;
 - (void) picturePanelFullScreen;
 - (void) picturePanelWindowed;
-
+- (IBAction) showFiltersPanel: (id) sender;
 - (IBAction) showPreviewWindow: (id) sender;
 - (void)pictureSettingsDidChange;
 - (IBAction) calculatePictureSizing: (id) sender;
