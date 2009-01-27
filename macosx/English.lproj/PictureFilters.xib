@@ -28,7 +28,7 @@
 			<object class="NSWindowTemplate" id="616825745">
 				<int key="NSWindowStyleMask">8215</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{1211, 475}, {345, 400}}</string>
+				<string key="NSWindowRect">{{1211, 502}, {266, 373}}</string>
 				<int key="NSWTFlags">1886913536</int>
 				<string key="NSWindowTitle">Picture Filters</string>
 				<string key="NSWindowClass">NSPanel</string>
@@ -39,7 +39,7 @@
 				<string key="NSWindowContentMinSize">{230, 250}</string>
 				<object class="NSView" key="NSWindowView" id="49161063">
 					<reference key="NSNextResponder"/>
-					<int key="NSvFlags">256</int>
+					<int key="NSvFlags">274</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSBox" id="309105014">
@@ -458,7 +458,7 @@
 									<reference key="NSSuperview" ref="309105014"/>
 								</object>
 							</object>
-							<string key="NSFrame">{{62, 48}, {232, 303}}</string>
+							<string key="NSFrame">{{17, 22}, {232, 303}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<string key="NSOffsets">{0, 0}</string>
 							<object class="NSTextFieldCell" key="NSTitleCell">
@@ -489,7 +489,7 @@
 						<object class="NSButton" id="892118626">
 							<reference key="NSNextResponder" ref="49161063"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{119, 372}, {57, 16}}</string>
+							<string key="NSFrame">{{19, 345}, {57, 16}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<bool key="NSViewIsLayerTreeHost">YES</bool>
 							<object class="NSArray" key="NSViewContentFilters">
@@ -523,7 +523,7 @@
 						<object class="NSButton" id="565292660">
 							<reference key="NSNextResponder" ref="49161063"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{229, 372}, {88, 16}}</string>
+							<string key="NSFrame">{{159, 345}, {88, 16}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<bool key="NSViewIsLayerTreeHost">YES</bool>
 							<object class="NSArray" key="NSViewContentFilters">
@@ -535,7 +535,7 @@
 										<float key="blue">7.019608e-01</float>
 										<float key="alpha">1.000000e+00</float>
 									</object>
-									<real value="1.000000e+00" key="CI_inputIntensity"/>
+									<reference key="CI_inputIntensity" ref="559925184"/>
 									<bool key="CIEnabled">YES</bool>
 								</object>
 							</object>
@@ -555,7 +555,7 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{345, 400}</string>
+					<string key="NSFrameSize">{266, 373}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
@@ -755,9 +755,9 @@
 						<reference key="object" ref="49161063"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="892118626"/>
 							<reference ref="309105014"/>
 							<reference ref="565292660"/>
-							<reference ref="892118626"/>
 						</object>
 						<reference key="parent" ref="616825745"/>
 					</object>
@@ -1150,10 +1150,10 @@
 					<reference ref="559925184"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="559925184"/>
-					<string>{{654, 453}, {345, 400}}</string>
+					<string>{{654, 483}, {266, 373}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="559925184"/>
-					<string>{{654, 453}, {345, 400}}</string>
+					<string>{{654, 483}, {266, 373}}</string>
 					<reference ref="559925184"/>
 					<string>{{221, 276}, {533, 580}}</string>
 					<reference ref="8"/>

@@ -49,6 +49,8 @@
 - (IBAction) showPreviewWindow: (id)sender
 {
     [self showWindow:sender];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
+    
     /* lets set the preview window to accept mouse moved events */
     [fPreviewWindow setAcceptsMouseMovedEvents:YES];
     hudTimerSeconds = 0;
@@ -64,6 +66,11 @@
 - (void)awakeFromNib
 {
     [fPreviewWindow setDelegate:self];
+    if( ![[self window] setFrameUsingName:@"Preview"] )
+        [[self window] center];
+    [self setWindowFrameAutosaveName:@"Preview"];
+    [[self window] setExcludedFromWindowsMenu:YES];
+    
     /* lets set the preview window to accept mouse moved events */
     [fPreviewWindow setAcceptsMouseMovedEvents:YES];
     //[self pictureSliderChanged:nil];
@@ -118,6 +125,7 @@ return YES;
     
     isFullScreen = NO;
     hudTimerSeconds = 0;
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
 }
 
 - (BOOL)windowShouldClose:(id)fPictureWindow
@@ -187,10 +195,10 @@ return YES;
 - (void) SetTitle: (hb_title_t *) title
 {
     hb_job_t * job = title->job;
-
+    
     fTitle = title;
-fPicture = 0;
-MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
+    fPicture = 0;
+    MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
     [self SettingsChanged: nil];
 }
@@ -329,11 +337,13 @@ MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     else
     {
         [self showWindow:sender];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
         [fPreviewWindow setAcceptsMouseMovedEvents:YES];
         isFullScreen = NO;
         scaleToScreen = NO;
         hudTimerSeconds = 0;
         [self startHudTimer];
+        
     }
     
 }

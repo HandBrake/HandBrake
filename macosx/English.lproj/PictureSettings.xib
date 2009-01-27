@@ -873,7 +873,7 @@ AAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSBDb21wdXRlciwgSW5jLiwgMjAwNQAAAAA</bytes>
 						<object class="NSButton" id="892118626">
 							<reference key="NSNextResponder" ref="49161063"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{156, 490}, {57, 16}}</string>
+							<string key="NSFrame">{{19, 491}, {57, 16}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<bool key="NSViewIsLayerTreeHost">YES</bool>
 							<object class="NSArray" key="NSViewContentFilters">
@@ -907,7 +907,7 @@ AAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSBDb21wdXRlciwgSW5jLiwgMjAwNQAAAAA</bytes>
 						<object class="NSButton" id="91459209">
 							<reference key="NSNextResponder" ref="49161063"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{18, 490}, {84, 16}}</string>
+							<string key="NSFrame">{{118, 491}, {84, 16}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<bool key="NSViewIsLayerTreeHost">YES</bool>
 							<object class="NSArray" key="NSViewContentFilters">
@@ -919,7 +919,7 @@ AAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSBDb21wdXRlciwgSW5jLiwgMjAwNQAAAAA</bytes>
 										<float key="blue">7.019608e-01</float>
 										<float key="alpha">1.000000e+00</float>
 									</object>
-									<real value="1.000000e+00" key="CI_inputIntensity"/>
+									<reference key="CI_inputIntensity" ref="559925184"/>
 									<bool key="CIEnabled">YES</bool>
 								</object>
 							</object>
@@ -1846,10 +1846,10 @@ AAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSBDb21wdXRlciwgSW5jLiwgMjAwNQAAAAA</bytes>
 					<reference ref="559925184"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="559925184"/>
-					<string>{{563, 338}, {229, 518}}</string>
+					<string>{{423, 339}, {229, 518}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="559925184"/>
-					<string>{{563, 338}, {229, 518}}</string>
+					<string>{{423, 339}, {229, 518}}</string>
 					<reference ref="559925184"/>
 					<string>{{221, 276}, {533, 580}}</string>
 					<reference ref="8"/>

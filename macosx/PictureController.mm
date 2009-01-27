@@ -44,6 +44,7 @@
     else
     {
         [self showWindow:sender];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
         if ([fPreviewController fullScreen] == YES)
         {
             [self setToFullScreenMode];
@@ -92,12 +93,16 @@
 - (void)awakeFromNib
 {
     [fPictureWindow setDelegate:self];
+    if( ![[self window] setFrameUsingName:@"PictureSizing"] )
+        [[self window] center];
+    [self setWindowFrameAutosaveName:@"PictureSizing"];
+    [[self window] setExcludedFromWindowsMenu:YES];
 }
 
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
-
+[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PictureSizeWindowIsOpen"];
 }
 
 - (BOOL)windowShouldClose:(id)fPictureWindow

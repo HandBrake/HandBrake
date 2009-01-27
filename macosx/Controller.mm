@@ -1539,18 +1539,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             SuccessfulScan = YES;
             [self enableUI: YES];
 
-                /* if its the initial successful scan after awakeFromNib */
-                if (currentSuccessfulScanCount == 1)
-                {
-                    [self selectDefaultPreset:nil];
-                    /* initially set deinterlace to 0, will be overridden reset by the default preset anyway */
-                    //[fPictureController setDeinterlace:0];
-                    
-                    /* lets set Denoise to index 0 or "None" since this is the first scan */
-                    //[fPictureController setDenoise:0];
-                    
-                    [fPictureFilterController setInitialPictureFilters];
-                }
+            /* if its the initial successful scan after awakeFromNib */
+            if (currentSuccessfulScanCount == 1)
+            {
+                [self selectDefaultPreset:nil];
+                
+                [fPictureFilterController setInitialPictureFilters];
+                
+                // Open preview window now if it was visible when HB was closed
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
+                    [self showPreviewWindow:nil];
+                
+                // Open picture sizing window now if it was visible when HB was closed
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
+                    [self showPicturePanel:nil];
+                
+                // Open filters window now if it was visible when HB was closed
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureFiltersWindowIsOpen"])
+                    [self showFiltersPanel:nil];
+            }
 
             
         }

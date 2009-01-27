@@ -45,6 +45,7 @@
     else
     {
         [self showWindow:sender];
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureFiltersWindowIsOpen"];
         if ([fPreviewController fullScreen] == YES)
         {
             [self setToFullScreenMode];
@@ -83,21 +84,27 @@
 
 - (void)setHBController: (HBController *)controller
 {
+    
     fHBController = controller;
-    //[fPreviewController   setHBController: controller];
     
 }
 
 - (void)awakeFromNib
 {
     [fFilterWindow setDelegate:self];
+    
+    if( ![[self window] setFrameUsingName:@"PictureFilters"] )
+        [[self window] center];
+    [self setWindowFrameAutosaveName:@"PictureFilters"];
+    [[self window] setExcludedFromWindowsMenu:YES];
+    
     [self setInitialPictureFilters];
 }
 
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
-
+[[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PictureFiltersWindowIsOpen"];
 }
 
 - (BOOL)windowShouldClose:(id)fPictureWindow
