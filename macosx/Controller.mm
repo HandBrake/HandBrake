@@ -5928,7 +5928,7 @@ return YES;
         }
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
         [fPictureController SetTitle:fTitle];
-        //[fPictureFilterController FilterSettingsChanged:nil];
+        [fPictureFilterController SetTitle:fTitle];
         [self calculatePictureSizing:nil];
     }
 }

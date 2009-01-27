@@ -161,11 +161,10 @@ are maintained across different sources */
 	[fDetelecineCheck setState:fPictureFilterSettings.detelecine];
     [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
     [fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
-    [fDeblockCheck setState: fPictureFilterSettings.deblock];
-
-
+    [fDeblockSlider setFloatValue:fPictureFilterSettings.deblock];
+    [fDecombCheck setState:fPictureFilterSettings.decomb];
     
-    [self FilterSettingsChanged: nil];
+    [self deblockSliderChanged: nil];
 }
 
 - (IBAction) deblockSliderChanged: (id) sender
