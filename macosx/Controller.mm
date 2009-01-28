@@ -2623,56 +2623,10 @@ fWorkingCount = 0;
     job->mux = [[fDstFormatPopUp selectedItem] tag];
     job->vcodec = [[fVidEncoderPopUp selectedItem] tag];
 
-
-    /* If mpeg-4, then set mpeg-4 specific options like chapters and > 4gb file sizes */
-	if( [fDstFormatPopUp indexOfSelectedItem] == 0 )
-	{
-        /* We set the largeFileSize (64 bit formatting) variable here to allow for > 4gb files based on the format being
-		mpeg4 and the checkbox being checked 
-		*Note: this will break compatibility with some target devices like iPod, etc.!!!!*/
-		if( [fDstMp4LargeFileCheck state] == NSOnState )
-		{
-			job->largeFileSize = 1;
-		}
-		else
-		{
-			job->largeFileSize = 0;
-		}
-        /* We set http optimized mp4 here */
-        if( [fDstMp4HttpOptFileCheck state] == NSOnState && [fDstMp4HttpOptFileCheck isEnabled] )
-		{
-        job->mp4_optimize = 1;
-        }
-        else
-        {
-        job->mp4_optimize = 0;
-        }
-    }
-	if( [fDstFormatPopUp indexOfSelectedItem] == 0 || [fDstFormatPopUp indexOfSelectedItem] == 1 )
-	{
-	  /* We set the chapter marker extraction here based on the format being
-		mpeg4 or mkv and the checkbox being checked */
-		if ([fCreateChapterMarkers state] == NSOnState)
-		{
-			job->chapter_markers = 1;
-		}
-		else
-		{
-			job->chapter_markers = 0;
-		}
-	}
-	
-    if( job->vcodec & HB_VCODEC_X264 )
+    job->chapter_markers = 0;
+    
+	if( job->vcodec & HB_VCODEC_X264 )
     {
-		if ([fDstMp4iPodFileCheck state] == NSOnState)
-	    {
-            job->ipod_atom = 1;
-		}
-        else
-        {
-        job->ipod_atom = 0;
-        }
-		
 		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
          Currently only used with Constant Quality setting*/
 		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)

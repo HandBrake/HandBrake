@@ -342,6 +342,7 @@ return YES;
         isFullScreen = NO;
         scaleToScreen = NO;
         hudTimerSeconds = 0;
+        [self pictureSliderChanged:nil];
         [self startHudTimer];
         
     }
