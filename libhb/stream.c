@@ -2081,16 +2081,17 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 
 static void fwrite64( hb_stream_t *stream, void *buf, int len )
 {
-    int pos;
-
-    pos = stream->fwrite_buf->size;
-    if ( pos + len > stream->fwrite_buf->alloc )
+    if ( len > 0 )
     {
-        int size = MAX(stream->fwrite_buf->alloc * 2, pos + len);
-        hb_buffer_realloc(stream->fwrite_buf, size);
+        int pos = stream->fwrite_buf->size;
+        if ( pos + len > stream->fwrite_buf->alloc )
+        {
+            int size = MAX(stream->fwrite_buf->alloc * 2, pos + len);
+            hb_buffer_realloc(stream->fwrite_buf, size);
+        }
+        memcpy( &(stream->fwrite_buf->data[pos]), buf, len );
+        stream->fwrite_buf->size += len;
     }
-    memcpy( &(stream->fwrite_buf->data[pos]), buf, len );
-    stream->fwrite_buf->size += len;
 }
 
 // convert a PES PTS or DTS to an int64
