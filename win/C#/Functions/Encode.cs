@@ -7,7 +7,6 @@
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -23,10 +22,7 @@ namespace Handbrake.Functions
 
         // Declarations
         Process hbProc = new Process();
-        Boolean encoding = false;
-
-        // CLI output is based on en-US locale,
-        static readonly private CultureInfo Culture = new CultureInfo("en-US", false);
+        Boolean encoding;
 
         /// <summary>
         /// Execute a HandBrakeCLI process.
@@ -88,7 +84,7 @@ namespace Handbrake.Functions
             switch (Properties.Settings.Default.CompletionOption)
             {
                 case "Shutdown":
-                    System.Diagnostics.Process.Start("Shutdown", "-s -t 60");
+                    Process.Start("Shutdown", "-s -t 60");
                     break;
                 case "Log Off":
                     ExitWindowsEx(0, 0);
@@ -143,7 +139,6 @@ namespace Handbrake.Functions
             if (Properties.Settings.Default.saveLog == "Checked")
             {
                 string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
-                Functions.QueryParser parsed = Functions.QueryParser.Parse(query);
 
                 if (Properties.Settings.Default.saveLogWithVideo == "Checked")
                 {
@@ -175,7 +170,7 @@ namespace Handbrake.Functions
         /// </summary>
         public Boolean isEncoding
         {
-            get { if (encoding == false) return false; else return true; }
+            get { return encoding; }
         }
 
     }

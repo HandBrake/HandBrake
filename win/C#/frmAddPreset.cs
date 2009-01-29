@@ -29,7 +29,7 @@ namespace Handbrake
             if (check_pictureSettings.Checked)
                 pictureSettings = true;
 
-            if (presetCode.addPreset(txt_preset_name.Text.Trim(), query, pictureSettings) == true)
+            if (presetCode.addPreset(txt_preset_name.Text.Trim(), query, pictureSettings))
             {
                 frmMainWindow.loadPresetPanel();
                 this.Close();

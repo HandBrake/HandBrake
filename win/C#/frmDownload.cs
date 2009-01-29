@@ -15,7 +15,7 @@ namespace Handbrake
 {
     public partial class frmDownload : Form
     {
-        private Thread downloadThread;
+        private readonly Thread downloadThread;
         private Stream responceStream;
         private Stream loacalStream;
         private HttpWebRequest webRequest;
@@ -55,7 +55,7 @@ namespace Handbrake
                 responceStream = wcDownload.OpenRead(hbUpdate);
                 loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
-                int bytesSize = 0;
+                int bytesSize;
                 byte[] downBuffer = new byte[2048];
 
                 long flength = 0;
@@ -63,16 +63,16 @@ namespace Handbrake
                 {
                     loacalStream.Write(downBuffer, 0, bytesSize);
                     flength = loacalStream.Length;
-                    this.Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { loacalStream.Length, fileSize });
+                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { loacalStream.Length, fileSize });
                 }
 
                 responceStream.Close();
                 loacalStream.Close();
 
                 if (flength != fileSize)
-                    this.Invoke(new DownloadFailedCallback(this.downloadFailed));
+                    Invoke(new DownloadFailedCallback(this.downloadFailed));
                 else
-                    this.Invoke(new DownloadCompleteCallback(this.downloadComplete));
+                    Invoke(new DownloadCompleteCallback(this.downloadComplete));
             }
             catch (Exception)
             {
@@ -91,7 +91,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Integer Conversion Error On Download \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Integer Conversion Error On Download \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -101,8 +101,7 @@ namespace Handbrake
             btn_cancel.Text = "Close";
 
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-
-            Process startInstall = Process.Start(tempPath);
+            Process.Start(tempPath);
             this.Close();
             Application.Exit();
         }

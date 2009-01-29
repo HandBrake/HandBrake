@@ -718,8 +718,7 @@ namespace Handbrake.Functions
 
                 if (chapters.Success)
                 {
-                    var actTitles = new string[2];
-                    actTitles = chapters.ToString().Replace("-c ", "").Split('-');
+                    string[] actTitles = chapters.ToString().Replace("-c ", "").Split('-');
                     thisQuery.q_chaptersStart = int.Parse(actTitles[0]);
                     if (actTitles.Length > 1)
                     {
@@ -777,8 +776,7 @@ namespace Handbrake.Functions
                 if (crop.Success)
                 {
                     thisQuery.q_cropValues = crop.ToString().Replace("--crop ", "");
-                    var actCropValues = new string[3];
-                    actCropValues = thisQuery.q_cropValues.Split(':');
+                    string[] actCropValues = thisQuery.q_cropValues.Split(':');
                     thisQuery.q_croptop = actCropValues[0];
                     thisQuery.q_cropbottom = actCropValues[1];
                     thisQuery.q_cropLeft = actCropValues[2];
@@ -853,17 +851,14 @@ namespace Handbrake.Functions
                 thisQuery.q_twoPass = twoPass.Success;
                 thisQuery.q_turboFirst = turboFirstPass.Success;
                 thisQuery.q_largeMp4 = largerMp4.Success;
-                if (videoFramerate.Success)
-                    thisQuery.q_videoFramerate = videoFramerate.ToString().Replace("-r ", "");
-                else
-                    thisQuery.q_videoFramerate = "Same as source";
+                thisQuery.q_videoFramerate = videoFramerate.Success ? videoFramerate.ToString().Replace("-r ", "") : "Same as source";
 
                 if (videoBitrate.Success)
                     thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ", "");
                 if (videoFilesize.Success)
                     thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ", "");
 
-                double qConvert = 0;
+                double qConvert;
                 if (videoQuality.Success)
                 {
                     qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Culture)*100;

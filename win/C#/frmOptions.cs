@@ -205,7 +205,7 @@ namespace Handbrake
         private void check_saveLogWithVideo_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.CheckState.ToString();
-            if (check_saveLogWithVideo.Checked == true)
+            if (check_saveLogWithVideo.Checked)
                 text_logPath.Text = "";
         }
 

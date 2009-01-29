@@ -28,8 +28,7 @@ namespace Handbrake
 
         private void play()
         {
-            player = new Thread(OpenMovie);
-            player.IsBackground = true;
+            player = new Thread(OpenMovie) {IsBackground = true};
             player.Start();
         }
 
@@ -38,9 +37,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateUIHandler(OpenMovie));
+                    BeginInvoke(new UpdateUIHandler(OpenMovie));
                     return;
                 }
                 QTControl.URL = currently_playing;
@@ -59,11 +58,11 @@ namespace Handbrake
             catch (COMException ex)
             {
                 QTUtils qtu = new QTUtils();
-                MessageBox.Show("Unable to open movie:\n\nError Code: " + ex.ErrorCode.ToString("X") + "\nQT Error code : " + qtu.QTErrorFromErrorCode(ex.ErrorCode).ToString());
+                MessageBox.Show("Unable to open movie:\n\nError Code: " + ex.ErrorCode.ToString("X") + "\nQT Error code : " + qtu.QTErrorFromErrorCode(ex.ErrorCode));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to open movie:\n\n" + ex.ToString());
+                MessageBox.Show("Unable to open movie:\n\n" + ex);
             }
         }
  
@@ -92,9 +91,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateUIHandler(encodeCompleted));
+                    BeginInvoke(new UpdateUIHandler(encodeCompleted));
                     return;
                 }
                 btn_encode.Enabled = true;
@@ -108,7 +107,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmPreview.cs encodeCompleted " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmPreview.cs encodeCompleted " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion

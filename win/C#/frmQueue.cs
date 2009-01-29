@@ -45,7 +45,6 @@ namespace Handbrake
         /// <summary>
         /// Initializes the Queue list with the Arraylist from the Queue class
         /// </summary>
-        /// <param name="qw"></param>
         public void setQueue()
         {
             updateUIElements();
@@ -54,7 +53,7 @@ namespace Handbrake
         // Start and Stop Controls
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            if (queue.isPaused == true)
+            if (queue.isPaused)
             {
                 setUIEncodeStarted();
                 MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -75,9 +74,9 @@ namespace Handbrake
         // Window Display Management
         private void setUIEncodeStarted()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.BeginInvoke(new UpdateHandler(setUIEncodeStarted));
+                BeginInvoke(new UpdateHandler(setUIEncodeStarted));
                 return;
             }
             btn_encode.Enabled = false;
@@ -85,9 +84,9 @@ namespace Handbrake
         }
         private void setUIEncodeFinished()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.BeginInvoke(new UpdateHandler(setUIEncodeFinished));
+                BeginInvoke(new UpdateHandler(setUIEncodeFinished));
                 return;
             }
             btn_pause.Visible = false;
@@ -95,9 +94,9 @@ namespace Handbrake
         }
         private void resetQueue()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.BeginInvoke(new UpdateHandler(resetQueue));
+                BeginInvoke(new UpdateHandler(resetQueue));
                 return;
             }
             btn_pause.Visible = false;
@@ -114,9 +113,9 @@ namespace Handbrake
         }
         private void redrawQueue()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.BeginInvoke(new UpdateHandler(redrawQueue));
+                BeginInvoke(new UpdateHandler(redrawQueue));
                 return;
             }
 
@@ -128,14 +127,10 @@ namespace Handbrake
                 Functions.QueryParser parsed = Functions.QueryParser.Parse(q_item);
 
                 // Get the DVD Title
-                string title = "";
-                if (parsed.DVDTitle == 0)
-                    title = "Auto";
-                else
-                    title = parsed.DVDTitle.ToString();
+                 string title = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
 
                 // Get the DVD Chapters
-                string chapters = "";
+                string chapters;
                 if (parsed.DVDChapterStart == 0)
                     chapters = "Auto";
                 else
@@ -158,9 +153,9 @@ namespace Handbrake
         }
         private void updateUIElements()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.BeginInvoke(new UpdateHandler(updateUIElements));
+                BeginInvoke(new UpdateHandler(updateUIElements));
                 return;
             }
 
@@ -171,9 +166,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateHandler(setCurrentEncodeInformation));
+                    BeginInvoke(new UpdateHandler(setCurrentEncodeInformation));
                 }
 
                 // found query is a global varible
@@ -181,19 +176,13 @@ namespace Handbrake
                 lbl_source.Text = queue.getLastQueryItem().Source;
                 lbl_dest.Text = queue.getLastQueryItem().Destination;
 
-                if (parsed.DVDTitle == 0)
-                    lbl_title.Text = "Auto";
-                else
-                    lbl_title.Text = parsed.DVDTitle.ToString();
+                lbl_title.Text = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
 
-                string chapters = "";
-                if (parsed.DVDChapterStart == 0)
-                {
-                    lbl_chapt.Text = "Auto";
-                }
+                if (Equals(parsed.DVDChapterStart, 0))
+                  lbl_chapt.Text = "Auto";
                 else
                 {
-                    chapters = parsed.DVDChapterStart.ToString();
+                    string chapters = parsed.DVDChapterStart.ToString();
                     if (parsed.DVDChapterFinish != 0)
                         chapters = chapters + " - " + parsed.DVDChapterFinish;
                     lbl_chapt.Text = chapters;

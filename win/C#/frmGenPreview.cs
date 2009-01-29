@@ -24,10 +24,8 @@ namespace Handbrake
 
         private void btn_play_Click(object sender, EventArgs e)
         {
-            String currently_playing;
-
             // Get the Destination of the sample video.
-            currently_playing = "";
+             String currently_playing = "";
             if (mainWindow.text_destination.Text != "")
                 currently_playing = mainWindow.text_destination.Text.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm");
 
@@ -74,9 +72,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateHandler(encodingMessage));
+                    BeginInvoke(new UpdateHandler(encodingMessage));
                     return;
                 }
                 lbl_status.Text = "Encoding, Please wait ...";
@@ -92,9 +90,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateHandler(updateUIElements));
+                    BeginInvoke(new UpdateHandler(updateUIElements));
                     return;
                 }
 

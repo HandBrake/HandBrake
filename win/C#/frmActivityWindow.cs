@@ -21,7 +21,7 @@ namespace Handbrake
         String read_file;
         Thread monitor;
         Functions.Encode encodeHandler;
-        int position = 0;  // Position in the arraylist reached by the current log output in the rtf box.
+        int position;  // Position in the arraylist reached by the current log output in the rtf box.
 
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
@@ -29,7 +29,7 @@ namespace Handbrake
         public frmActivityWindow(string file, Functions.Encode eh)
         {
             InitializeComponent();
-            this.rtf_actLog.Text = string.Empty;
+            rtf_actLog.Text = string.Empty;
 
             // When the window closes, we want to abort the monitor thread.
             this.Disposed += new EventHandler(forceQuit);
@@ -57,7 +57,7 @@ namespace Handbrake
         {
             // Add a header to the log file indicating that it's from the Windows GUI and display the windows version
             rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
-            rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion.ToString()));
+            rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
             rtf_actLog.AppendText(String.Format("### CPU: {0} \n", getCpuCount()));
             rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", TotalPhysicalMemory()));
             rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", screenBounds().Bounds.Width, screenBounds().Bounds.Height));
@@ -154,7 +154,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if (encodeHandler.isEncoding == true)
+                    if (encodeHandler.isEncoding)
                         updateTextFromThread();
                     else
                     {
@@ -186,14 +186,14 @@ namespace Handbrake
         {
             try
             {
-                string text = "";
+                string text;
                 List<string> data = readFile();
                 int count = data.Count;
 
                 while (position < count)
                 {
-                    text = data[position].ToString();
-                    if (data[position].ToString().Contains("has exited"))
+                    text = data[position];
+                    if (data[position].Contains("has exited"))
                         text = "\n ############ End of Log ############## \n";
                     position++;
 
@@ -217,15 +217,15 @@ namespace Handbrake
                 // InvokeRequired required compares the thread ID of the
                 // calling thread to the thread ID of the creating thread.
                 // If these threads are different, it returns true.
-                if (this.IsHandleCreated) // Make sure the windows has a handle before doing anything
+                if (IsHandleCreated) // Make sure the windows has a handle before doing anything
                 {
-                    if (this.rtf_actLog.InvokeRequired)
+                    if (rtf_actLog.InvokeRequired)
                     {
                         SetTextCallback d = new SetTextCallback(SetText);
-                        this.Invoke(d, new object[] { text });
+                        Invoke(d, new object[] { text });
                     }
                     else
-                        this.rtf_actLog.AppendText(text);
+                        rtf_actLog.AppendText(text);
                 }
             }
             catch (Exception exc)
@@ -264,7 +264,7 @@ namespace Handbrake
                 while (line != null)
                 {
                     if (line.Trim() != "")
-                        logData.Add(line + System.Environment.NewLine);
+                        logData.Add(line + Environment.NewLine);
 
                     line = sr.ReadLine();
                 }
@@ -275,7 +275,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Error in readFile() \n Unable to read the log file.\n You may have to restart HandBrake.\n  Error Information: \n\n" + exc.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Error in readFile() \n Unable to read the log file.\n You may have to restart HandBrake.\n  Error Information: \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             return null;
         }
@@ -312,14 +312,7 @@ namespace Handbrake
         #region System Information
         private struct MEMORYSTATUS
         {
-            public UInt32 dwLength;
-            public UInt32 dwMemoryLoad;
             public UInt32 dwTotalPhys; // Used
-            public UInt32 dwAvailPhys;
-            public UInt32 dwTotalPageFile;
-            public UInt32 dwAvailPageFile;
-            public UInt32 dwTotalVirtual;
-            public UInt32 dwAvailVirtual;
         }
 
         [DllImport("kernel32.dll")]
@@ -358,9 +351,9 @@ namespace Handbrake
         /// Get the System screen size information.
         /// </summary>
         /// <returns>System.Windows.Forms.Scree</returns>
-        public System.Windows.Forms.Screen screenBounds()
+        public Screen screenBounds()
         {
-            return System.Windows.Forms.Screen.PrimaryScreen;
+            return Screen.PrimaryScreen;
         }
 
         #endregion

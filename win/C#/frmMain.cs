@@ -36,8 +36,8 @@ namespace Handbrake
         private frmGenPreview vlcpreview;
         private frmPreview qtpreview;
         private string lastAction;
-        public int maxWidth = 0;
-        public int maxHeight = 0;
+        public int maxWidth;
+        public int maxHeight;
 
 
         Process hbproc;
@@ -144,14 +144,14 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new updateStatusChanger(startupUpdateCheck));
+                    BeginInvoke(new updateStatusChanger(startupUpdateCheck));
                     return;
                 }
 
                 Boolean update = hb_common_func.updateCheck(false);
-                if (update == true)
+                if (update)
                 {
                     frmUpdater updateWindow = new frmUpdater();
                     updateWindow.Show();
@@ -161,7 +161,7 @@ namespace Handbrake
         }
         private void queueRecovery()
         {
-            if (hb_common_func.check_queue_recovery() == true)
+            if (hb_common_func.check_queue_recovery())
             {
                 DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -227,7 +227,7 @@ namespace Handbrake
         }
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            String file = String.Empty;
+            String file;
             if (lastAction == "scan")
                 file = "dvdinfo.dat";
             else
@@ -258,7 +258,7 @@ namespace Handbrake
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
             // Empty the preset file
-            string presetsFile = Application.StartupPath.ToString() + "\\presets.xml";
+            string presetsFile = Application.StartupPath + "\\presets.xml";
             if (File.Exists(presetsFile))
                 File.Delete(presetsFile);
 
@@ -270,7 +270,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("An error has occured during the preset removal process.\n If you are using Windows Vista, you may need to run under Administrator Mode to complete this task. \n" + exc.ToString());
+                MessageBox.Show("An error has occured during the preset removal process.\n If you are using Windows Vista, you may need to run under Administrator Mode to complete this task. \n" + exc);
             }
 
             // Reload the preset panel
@@ -487,7 +487,7 @@ namespace Handbrake
                     int i = 0;
                     foreach (TreeNode node in treeView_presets.Nodes)
                     {
-                        if (nodeStatus[i] == true)
+                        if (nodeStatus[i])
                             node.Expand();
 
                         i++;
@@ -513,12 +513,12 @@ namespace Handbrake
             int i = 0;
             foreach (TreeNode node in treeView_presets.Nodes)
             {
-                if (nodeStatus[i] == true)
+                if (nodeStatus[i])
                     node.Expand();
 
                 foreach (TreeNode subNode in node.Nodes)
                 {
-                    if (nodeStatus[i] == true)
+                    if (nodeStatus[i])
                         subNode.Expand();
                 }
 
@@ -533,7 +533,7 @@ namespace Handbrake
             {
                 foreach (TreeNode node in treenode.Nodes)
                 {
-                    if (node.Text.ToString().Equals("Normal"))
+                    if (node.Text.Equals("Normal"))
                         treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
                 }
             }
@@ -584,11 +584,7 @@ namespace Handbrake
                     // This is used for tracking which file to load in the activity window
                     lastAction = "encode";
 
-                    String query;
-                    if (rtf_query.Text != "")
-                        query = rtf_query.Text;
-                    else
-                        query = queryGen.GenerateTheQuery(this);
+                    String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.GenerateTheQuery(this);
 
                     if (encodeQueue.count() == 0)
                     {
@@ -672,13 +668,7 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-
-
-            String file = String.Empty;
-            if (lastAction == "scan")
-                file = "dvdinfo.dat";
-            else
-                file = "hb_encode_log.dat";
+            String file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
 
             frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeHandler);
             ActivityWindow.Show();
@@ -691,10 +681,7 @@ namespace Handbrake
             if (FormWindowState.Minimized == this.WindowState)
             {
                 notifyIcon.Visible = true;
-                if (lbl_encode.Text != "")
-                    notifyIcon.BalloonTipText = lbl_encode.Text;
-                else
-                    notifyIcon.BalloonTipText = "Not Encoding";
+                notifyIcon.BalloonTipText = lbl_encode.Text != "" ? lbl_encode.Text : "Not Encoding";
                 notifyIcon.ShowBalloonTip(500);
                 this.Hide();
             }
@@ -729,7 +716,7 @@ namespace Handbrake
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
 
-            String filename = "";
+            String filename;
             text_source.Text = "";
 
             DVD_Open.ShowDialog();
@@ -754,7 +741,7 @@ namespace Handbrake
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
 
-            String filename = "";
+            String filename;
             text_source.Text = "";
 
             ISO_Open.ShowDialog();
@@ -782,11 +769,10 @@ namespace Handbrake
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
 
-            String filename = "";
             if (mnu_dvd_drive.Text.Contains("VIDEO_TS"))
             {
                 string[] path = mnu_dvd_drive.Text.Split(' ');
-                filename = path[0];
+                String filename = path[0];
                 setupGUIforScan(filename);
                 startScan(filename);
             }
@@ -872,7 +858,7 @@ namespace Handbrake
         }
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int c_start, c_end = 1;
+            int c_start, c_end;
 
             if (drop_chapterFinish.Text == "Auto" && drop_chapterFinish.Items.Count != 0)
                 drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count - 1;
@@ -895,7 +881,7 @@ namespace Handbrake
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int c_start, c_end = 1;
+            int c_start, c_end;
 
             if (drop_chapterStart.Text == "Auto" && drop_chapterStart.Items.Count >= 1)
                 drop_chapterStart.SelectedIndex = 1;
@@ -914,7 +900,7 @@ namespace Handbrake
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming == "Checked")
                 text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
-        
+
             // Add more rows to the Chapter menu if needed.
             if (Check_ChapterMarkers.Checked)
             {
@@ -928,8 +914,8 @@ namespace Handbrake
                     int n = data_chpt.Rows.Add();
                     data_chpt.Rows[n].Cells[0].Value = (i + 1);
                     data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
-                    data_chpt.Rows[n].Cells[0].ValueType = typeof (int);
-                    data_chpt.Rows[n].Cells[1].ValueType = typeof (string);
+                    data_chpt.Rows[n].Cells[0].ValueType = typeof(int);
+                    data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
                     i++;
                 }
             }
@@ -1072,7 +1058,7 @@ namespace Handbrake
         }
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
-            SliderValue.Text = slider_videoQuality.Value.ToString() + "%";
+            SliderValue.Text = slider_videoQuality.Value + "%";
             text_bitrate.Text = "";
             text_filesize.Text = "";
             check_2PassEncode.Enabled = false;
@@ -1102,13 +1088,9 @@ namespace Handbrake
 
             int width;
             Boolean parsed = int.TryParse(text_width.Text, out width);
-            if (parsed != false)
+            if (parsed)
             {
-                if ((width % 16) != 0)
-                    text_width.BackColor = Color.LightCoral;
-                else
-                    text_width.BackColor = Color.LightGreen;
-
+                text_width.BackColor = (width % 16) != 0 ? Color.LightCoral : Color.LightGreen;
 
                 if (lbl_Aspect.Text != "Select a Title" && maxWidth == 0 && maxHeight == 0)
                 {
@@ -1130,13 +1112,8 @@ namespace Handbrake
 
             int height;
             Boolean parsed = int.TryParse(text_height.Text, out height);
-            if (parsed != false)
-            {
-                if ((height % 16) != 0)
-                    text_height.BackColor = Color.LightCoral;
-                else
-                    text_height.BackColor = Color.LightGreen;
-            }
+            if (parsed)
+                text_height.BackColor = (height % 16) != 0 ? Color.LightCoral : Color.LightGreen;
         }
         private void check_customCrop_CheckedChanged(object sender, EventArgs e)
         {
@@ -1198,10 +1175,7 @@ namespace Handbrake
         }
         private void slider_deblock_Scroll(object sender, EventArgs e)
         {
-            if (slider_deblock.Value == 4)
-                lbl_deblockVal.Text = "Off";
-            else
-                lbl_deblockVal.Text = slider_deblock.Value.ToString();
+            lbl_deblockVal.Text = slider_deblock.Value == 4 ? "Off" : slider_deblock.Value.ToString();
         }
 
         //Audio Tab
@@ -1393,7 +1367,7 @@ namespace Handbrake
                 drp_audmix_1.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text;
                 drp_audsr_1.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text;
                 drp_audbit_1.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text;
-                double drcValue = 0; int drcCalculated = 0;
+                double drcValue; int drcCalculated;
                 double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text, out drcValue);
                 drcValue = (drcValue * 10) - 10;
                 int.TryParse(drcValue.ToString(), out drcCalculated);
@@ -1567,7 +1541,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - startScan " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmMain.cs - startScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void scanProcess(object state)
@@ -1608,7 +1582,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - scanProcess() " + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmMain.cs - scanProcess() " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 enableGUI();
             }
         }
@@ -1718,9 +1692,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new ProgressUpdateHandler(getDriveInfoThread));
+                    BeginInvoke(new ProgressUpdateHandler(getDriveInfoThread));
                     return;
                 }
 
@@ -1732,8 +1706,8 @@ namespace Handbrake
                     {
                         if (curDrive.IsReady)
                         {
-                            if (File.Exists(curDrive.RootDirectory.ToString() + "VIDEO_TS\\VIDEO_TS.IFO"))
-                                mnu_dvd_drive.Text = curDrive.RootDirectory.ToString() + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
+                            if (File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
+                                mnu_dvd_drive.Text = curDrive.RootDirectory + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
                             else
                                 mnu_dvd_drive.Text = "[No DVD Drive Ready]";
 
@@ -1756,7 +1730,7 @@ namespace Handbrake
         #region Audio Panel Code Helpers
         private void setAudioByContainer(String path)
         {
-            string oldval = "";
+            string oldval;
 
             if ((path.EndsWith(".mp4")) || (path.EndsWith(".m4v")))
             {
@@ -1798,7 +1772,7 @@ namespace Handbrake
         }
         private void setVideoByContainer(String path)
         {
-            string oldval = "";
+            string oldval;
 
             if ((path.EndsWith(".mp4")) || (path.EndsWith(".m4v")))
             {
@@ -1917,33 +1891,6 @@ namespace Handbrake
             dropdown.Items.Add("Dolby Surround");
             dropdown.Items.Add("Dolby Pro Logic II");
         }
-        private void audioEncoderChange(ComboBox audenc, ComboBox audMix, ComboBox audbit, ComboBox audsr)
-        {
-            if (audenc.Text == "AC3")
-            {
-                audMix.Enabled = false;
-                audbit.Enabled = false;
-                audsr.Enabled = false;
-
-                audMix.Text = "Automatic";
-                audbit.Text = "160";
-                audsr.Text = "Auto";
-            }
-            else
-            {
-                // Just make sure not to re-enable the following boxes if the track above is none
-                /* if (drp_track2Audio.Text != "None")
-                 {
-                     audMix.Enabled = true;
-                     audbit.Enabled = true;
-                     audsr.Enabled = true;
-
-                     audMix.Text = "Automatic";
-                     audbit.Text = "160";
-                     audsr.Text = "Auto";
-                 }*/
-            }
-        }
         #endregion
 
         #region Public Methods
@@ -1953,14 +1900,13 @@ namespace Handbrake
         /// 1 = Encode Running
         /// 0 = Encode Finished.
         /// </summary>
-        /// <param name="i">Int</param>
         public void setEncodeFinished()
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateWindowHandler(setEncodeFinished));
+                    BeginInvoke(new UpdateWindowHandler(setEncodeFinished));
                     return;
                 }
 
@@ -1975,7 +1921,6 @@ namespace Handbrake
                     notifyIcon.BalloonTipText = lbl_encode.Text;
                     notifyIcon.ShowBalloonTip(500);
                 }
-
             }
             catch (Exception exc)
             {
@@ -1986,9 +1931,9 @@ namespace Handbrake
         {
             try
             {
-                if (this.InvokeRequired)
+                if (InvokeRequired)
                 {
-                    this.BeginInvoke(new UpdateWindowHandler(setEncodeStarted));
+                    BeginInvoke(new UpdateWindowHandler(setEncodeStarted));
                     return;
                 }
 
@@ -2033,13 +1978,13 @@ namespace Handbrake
 
             treeView_presets.Nodes.Clear();
 
-            List<Presets.Preset> presetNameList = new List<Presets.Preset>();
-            List<string> presetNames = new List<string>();
-            TreeNode preset_treeview = new TreeNode();
+            List<Presets.Preset> presetNameList;
+            List<string> presetNames;
+            TreeNode preset_treeview;
 
             TreeNode rootNode = new TreeNode();
             TreeNode rootNodeTwo = new TreeNode();
-            TreeNode childNode = new TreeNode();
+            TreeNode childNode;
             int workingLevel = 0;
             string previousCategory = String.Empty;
             string currentCategory = String.Empty;
