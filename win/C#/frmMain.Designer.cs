@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -65,6 +65,8 @@ namespace Handbrake
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.data_chpt = new System.Windows.Forms.DataGridView();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btn_addPreset = new System.Windows.Forms.Button();
             this.btn_removePreset = new System.Windows.Forms.Button();
             this.drp_audenc_1 = new System.Windows.Forms.ComboBox();
@@ -251,8 +253,6 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -645,6 +645,22 @@ namespace Handbrake
             this.data_chpt.Size = new System.Drawing.Size(661, 234);
             this.data_chpt.TabIndex = 3;
             this.ToolTip.SetToolTip(this.data_chpt, resources.GetString("data_chpt.ToolTip"));
+            // 
+            // number
+            // 
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            this.number.HeaderText = "Chapter Number";
+            this.number.MaxInputLength = 3;
+            this.number.Name = "number";
+            this.number.Width = 165;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Chapter Name";
+            this.name.Name = "name";
+            this.name.Width = 460;
             // 
             // btn_addPreset
             // 
@@ -2915,22 +2931,6 @@ namespace Handbrake
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
-            // 
-            // number
-            // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
-            this.number.HeaderText = "Chapter Number";
-            this.number.MaxInputLength = 3;
-            this.number.Name = "number";
-            this.number.Width = 165;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Chapter Name";
-            this.name.Name = "name";
-            this.name.Width = 460;
             // 
             // frmMain
             // 
