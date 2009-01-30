@@ -668,16 +668,10 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            try
-            {
-                String file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
+            String file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
 
-                frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeHandler);
-                ActivityWindow.Show();
-            } catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeHandler);
+            ActivityWindow.Show();
         }
         #endregion
 
