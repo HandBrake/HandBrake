@@ -29,7 +29,7 @@ namespace Handbrake
         public frmActivityWindow(string file, Functions.Encode eh)
         {
             InitializeComponent();
-            rtf_actLog.Text = string.Empty;
+            this.rtf_actLog.Text = string.Empty;
 
             // When the window closes, we want to abort the monitor thread.
             this.Disposed += new EventHandler(forceQuit);
@@ -310,9 +310,16 @@ namespace Handbrake
         }
 
         #region System Information
-        private struct MEMORYSTATUS
+        private struct MEMORYSTATUS // Unused var's are requred here.
         {
+            public UInt32 dwLength;
+            public UInt32 dwMemoryLoad;
             public UInt32 dwTotalPhys; // Used
+            public UInt32 dwAvailPhys;
+            public UInt32 dwTotalPageFile;
+            public UInt32 dwAvailPageFile;
+            public UInt32 dwTotalVirtual;
+            public UInt32 dwAvailVirtual;
         }
 
         [DllImport("kernel32.dll")]
