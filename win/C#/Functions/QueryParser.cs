@@ -8,6 +8,7 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Handbrake.Functions
 {
@@ -87,10 +88,10 @@ namespace Handbrake.Functions
         private string q_croptop;
         private string q_cropValues;
         private int q_deBlock;
-        private Boolean q_decomb;
+        private string q_decomb;
         private string q_deinterlace;
         private string q_denoise;
-        private Boolean q_detelecine;
+        private string q_detelecine;
         private Boolean q_looseAnamorphic;
         private int q_maxHeight;
         private int q_maxWidth;
@@ -181,7 +182,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Returns a boolean to indicate wither DeTelecine is on or off
         /// </summary>
-        public Boolean DeTelecine
+        public string DeTelecine
         {
             get { return q_detelecine; }
         }
@@ -213,7 +214,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Returns a string with the DeNoise option used.
         /// </summary>
-        public Boolean Decomb
+        public string Decomb
         {
             get { return q_decomb; }
         }
@@ -609,7 +610,6 @@ namespace Handbrake.Functions
         #endregion
 
         // All the Main Window GUI options
-
         /// <summary>
         /// Takes in a query which can be in any order and parses it. 
         /// All varibles are then set so they can be used elsewhere.
@@ -629,37 +629,39 @@ namespace Handbrake.Functions
             //Source
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
+           
+            //Output Settings
             Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
-
-            //Destination
-            Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
+            Match grayscale = Regex.Match(input, @" -g");
+            Match largerMp4 = Regex.Match(input, @" -4");
+            Match ipodAtom = Regex.Match(input, @" -I");
 
             //Picture Settings Tab
             Match width = Regex.Match(input, @"-w ([0-9]*)");
             Match height = Regex.Match(input, @"-l ([0-9]*)");
             Match maxWidth = Regex.Match(input, @"-X ([0-9]*)");
             Match maxHeight = Regex.Match(input, @"-Y ([0-9]*)");
-            Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z]*)\""");
-            Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z]*)\""");
-            Match deblock = Regex.Match(input, @"--deblock=([0-9]*)");
-            Match detelecine = Regex.Match(input, @"--detelecine");
-            Match anamorphic = Regex.Match(input, @" -p ");
-            Match chapterMarkers = Regex.Match(input, @" -m");
-            Match chapterMarkersFileMode = Regex.Match(input, @"--markers");
             Match crop = Regex.Match(input, @"--crop ([0-9]*):([0-9]*):([0-9]*):([0-9]*)");
             Match lanamorphic = Regex.Match(input, @" -P");
+            Match anamorphic = Regex.Match(input, @" -p ");
+
+            // Picture Settings - Filters
             Match decomb = Regex.Match(input, @" --decomb");
+            Match decombValue = Regex.Match(input, @" --decomb=\""([a-zA-Z0-9.:]*)\""");
+            Match deinterlace = Regex.Match(input, @"--deinterlace=\""([a-zA-Z0-9.:]*)\""");
+            Match denoise = Regex.Match(input, @"--denoise=\""([a-zA-Z0-9.:]*)\""");
+            Match deblock = Regex.Match(input, @"--deblock=([0-9:]*)");
+            Match detelecine = Regex.Match(input, @"--detelecine");
+            Match detelecineValue = Regex.Match(input, @" --detelecine=\""([a-zA-Z0-9.:]*)\""");
 
             //Video Settings Tab
+            Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
             Match videoFramerate = Regex.Match(input, @"-r ([0-9]*)");
             Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
             Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
             Match videoFilesize = Regex.Match(input, @"-S ([0-9.]*)");
             Match twoPass = Regex.Match(input, @" -2");
             Match turboFirstPass = Regex.Match(input, @" -T");
-            Match grayscale = Regex.Match(input, @" -g");
-            Match largerMp4 = Regex.Match(input, @" -4");
-            Match ipodAtom = Regex.Match(input, @" -I");
             Match optimizeMP4 = Regex.Match(input, @" -O");
 
             //Audio Settings Tab
@@ -677,8 +679,7 @@ namespace Handbrake.Functions
             Match audioEncoder1 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*)");
             Match audioEncoder2 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
             Match audioEncoder3 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
-            Match audioEncoder4 = Regex.Match(input,
-                                              @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
+            Match audioEncoder4 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
 
             Match audioBitrate1 = Regex.Match(input, @"-B ([0-9auto]*)");
             Match audioBitrate2 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*)");
@@ -698,6 +699,10 @@ namespace Handbrake.Functions
             Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
             Match subScan = Regex.Match(input, @" -U");
             Match forcedSubtitles = Regex.Match(input, @" -F");
+
+            // Chapters Tab
+            Match chapterMarkers = Regex.Match(input, @" -m");
+            Match chapterMarkersFileMode = Regex.Match(input, @"--markers");
 
             //H264 Tab
             Match x264 = Regex.Match(input, @"-x ([.,/a-zA-Z0-9=:-]*)");
@@ -728,34 +733,15 @@ namespace Handbrake.Functions
                     if ((thisQuery.q_chaptersStart == 1) && (thisQuery.q_chaptersFinish == 0))
                         thisQuery.q_chaptersFinish = thisQuery.q_chaptersStart;
                 }
+                #endregion
+
+                #region Output Settings
 
                 if (format.Success)
                     thisQuery.q_format = format.ToString().Replace("-f ", "");
-
-                #endregion
-
-                #region Destination
-
-                string videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
-                switch (videoEncoderConvertion)
-                {
-                    case "ffmpeg":
-                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
-                        break;
-                    case "xvid":
-                        videoEncoderConvertion = "MPEG-4 (XviD)";
-                        break;
-                    case "x264":
-                        videoEncoderConvertion = "H.264 (x264)";
-                        break;
-                    case "theora":
-                        videoEncoderConvertion = "VP3 (Theora)";
-                        break;
-                    default:
-                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
-                        break;
-                }
-                thisQuery.q_videoEncoder = videoEncoderConvertion;
+                thisQuery.q_largeMp4 = largerMp4.Success;
+                thisQuery.q_ipodAtom = ipodAtom.Success;
+                thisQuery.q_optimizeMp4 = optimizeMP4.Success;
 
                 #endregion
 
@@ -782,77 +768,81 @@ namespace Handbrake.Functions
                     thisQuery.q_cropLeft = actCropValues[2];
                     thisQuery.q_cropRight = actCropValues[3];
                 }
+                
+                thisQuery.q_anamorphic = anamorphic.Success;
+                thisQuery.q_looseAnamorphic = lanamorphic.Success;
 
-                // Deblock Slider
-                string deblockValue = "";
-                thisQuery.q_deBlock = 0;
-                if (deblock.Success)
-                    deblockValue = deblock.ToString().Replace("--deblock=", "");
+                #endregion
 
-                if (deblockValue != "")
-                    int.TryParse(deblockValue, out thisQuery.q_deBlock);
+                #region Picture Tab - Filters
 
-                thisQuery.q_detelecine = detelecine.Success;
-                thisQuery.q_decomb = decomb.Success;
+                if (decomb.Success)
+                {
+                    thisQuery.q_decomb = "True";
+                    if (decombValue.Success)
+                        thisQuery.q_decomb = decombValue.ToString().Replace("--decomb=", "").Replace("\"", "");
+                } else
+                    thisQuery.q_decomb = "False";
 
                 thisQuery.q_deinterlace = "None";
                 if (deinterlace.Success)
                 {
-                    switch (deinterlace.ToString().Replace("--deinterlace=", "").Replace("\"", ""))
-                    {
-                        case "fast":
-                            thisQuery.q_deinterlace = "Fast";
-                            break;
-                        case "slow":
-                            thisQuery.q_deinterlace = "Slow";
-                            break;
-                        case "slower":
-                            thisQuery.q_deinterlace = "Slower";
-                            break;
-                        case "slowest":
-                            thisQuery.q_deinterlace = "Slowest";
-                            break;
-                        default:
-                            thisQuery.q_deinterlace = "None";
-                            break;
-                    }
+                    thisQuery.q_deinterlace = deinterlace.ToString().Replace("--deinterlace=", "").Replace("\"", "");
+                    thisQuery.q_deinterlace = thisQuery.q_deinterlace.Replace("fast", "Fast").Replace("slow", "Slow").Replace("slower", "Slower");
+                    thisQuery.q_deinterlace = thisQuery.q_deinterlace.Replace("slowest", "Slowest");
                 }
 
                 thisQuery.q_denoise = "None";
                 if (denoise.Success)
                 {
-                    switch (denoise.ToString().Replace("--denoise=", "").Replace("\"", ""))
-                    {
-                        case "weak":
-                            thisQuery.q_denoise = "Weak";
-                            break;
-                        case "medium":
-                            thisQuery.q_denoise = "Medium";
-                            break;
-                        case "strong":
-                            thisQuery.q_denoise = "Strong";
-                            break;
-                        default:
-                            thisQuery.q_denoise = "None";
-                            break;
-                    }
+                    thisQuery.q_denoise = denoise.ToString().Replace("--denoise=", "").Replace("\"", "");
+                    thisQuery.q_denoise = thisQuery.q_denoise.Replace("weak", "Weak").Replace("medium", "Medium").Replace("strong", "Strong");
                 }
-                thisQuery.q_anamorphic = anamorphic.Success;
-                if (chapterMarkersFileMode.Success || chapterMarkers.Success)
-                    thisQuery.q_chapterMarkers = true;
 
-                thisQuery.q_looseAnamorphic = lanamorphic.Success;
+                string deblockValue = "";
+                thisQuery.q_deBlock = 0;
+                if (deblock.Success)
+                    deblockValue = deblock.ToString().Replace("--deblock=", "");
+                if (deblockValue != "")
+                    int.TryParse(deblockValue, out thisQuery.q_deBlock);
 
+                if (detelecine.Success)
+                {
+                    thisQuery.q_detelecine = "True";
+                    if (detelecineValue.Success)
+                        thisQuery.q_detelecine = detelecineValue.ToString().Replace("--detelecine=", "").Replace("\"", "");
+                }
+                else
+                    thisQuery.q_detelecine = "False";
                 #endregion
 
                 #region Video Settings Tab
 
+                string videoEncoderConvertion = videoEncoder.ToString().Replace("-e ", "");
+                switch (videoEncoderConvertion)
+                {
+                    case "ffmpeg":
+                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
+                        break;
+                    case "xvid":
+                        videoEncoderConvertion = "MPEG-4 (XviD)";
+                        break;
+                    case "x264":
+                        videoEncoderConvertion = "H.264 (x264)";
+                        break;
+                    case "theora":
+                        videoEncoderConvertion = "VP3 (Theora)";
+                        break;
+                    default:
+                        videoEncoderConvertion = "MPEG-4 (FFmpeg)";
+                        break;
+                }
+                thisQuery.q_videoEncoder = videoEncoderConvertion;
+                thisQuery.q_videoFramerate = videoFramerate.Success ? videoFramerate.ToString().Replace("-r ", "") : "Same as source";
                 thisQuery.q_grayscale = grayscale.Success;
                 thisQuery.q_twoPass = twoPass.Success;
                 thisQuery.q_turboFirst = turboFirstPass.Success;
-                thisQuery.q_largeMp4 = largerMp4.Success;
-                thisQuery.q_videoFramerate = videoFramerate.Success ? videoFramerate.ToString().Replace("-r ", "") : "Same as source";
-
+                
                 if (videoBitrate.Success)
                     thisQuery.q_avgBitrate = videoBitrate.ToString().Replace("-b ", "");
                 if (videoFilesize.Success)
@@ -865,9 +855,6 @@ namespace Handbrake.Functions
                     qConvert = Math.Ceiling(qConvert);
                     thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
                 }
-                thisQuery.q_ipodAtom = ipodAtom.Success;
-                thisQuery.q_optimizeMp4 = optimizeMP4.Success;
-
                 #endregion
 
                 #region Audio Tab
@@ -1066,6 +1053,11 @@ namespace Handbrake.Functions
 
                 thisQuery.q_forcedSubs = forcedSubtitles.Success;
 
+                #endregion
+
+                #region Chapters Tab
+                if (chapterMarkersFileMode.Success || chapterMarkers.Success)
+                    thisQuery.q_chapterMarkers = true;
                 #endregion
 
                 #region H.264 and other

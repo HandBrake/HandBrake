@@ -38,7 +38,7 @@ namespace Handbrake
             System.Windows.Forms.Label Label38;
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -253,6 +253,8 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_qptest = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -648,9 +650,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -1405,7 +1407,8 @@ namespace Handbrake
             this.FileToolStripMenuItem,
             this.ToolsToolStripMenuItem,
             this.PresetsToolStripMenuItem,
-            this.HelpToolStripMenuItem});
+            this.HelpToolStripMenuItem,
+            this.debugToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
             this.frmMainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -2932,6 +2935,21 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_qptest});
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // mnu_qptest
+            // 
+            this.mnu_qptest.Name = "mnu_qptest";
+            this.mnu_qptest.Size = new System.Drawing.Size(201, 22);
+            this.mnu_qptest.Text = "Query Parser Tester";
+            this.mnu_qptest.Click += new System.EventHandler(this.mnu_qptest_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3212,6 +3230,8 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripMenuItem mnu_killCLI;
         private System.Windows.Forms.DataGridViewTextBoxColumn number;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnu_qptest;
 
     }
 }

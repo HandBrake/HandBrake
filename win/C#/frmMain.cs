@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using Handbrake.Functions;
 
 namespace Handbrake
 {
@@ -426,8 +427,11 @@ namespace Handbrake
                 treeView_presets.SelectedNode = treeView_presets.GetNodeAt(e.Location);
             else if (e.Button == MouseButtons.Left)
             {
-                if (groupBox_output.Text.Contains(treeView_presets.GetNodeAt(e.Location).Text))
-                    selectPreset();
+                if (treeView_presets.GetNodeAt(e.Location) != null)
+                {
+                    if (groupBox_output.Text.Contains(treeView_presets.GetNodeAt(e.Location).Text))
+                        selectPreset();
+                }
             }
 
             treeView_presets.Select();
@@ -783,7 +787,6 @@ namespace Handbrake
 
             lbl_encode.Text = "";
         }
-
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
             if ((drp_dvdtitle.Items.Count == 1) && (drp_dvdtitle.Items[0].ToString() == "Automatic"))
@@ -1656,7 +1659,6 @@ namespace Handbrake
                 MessageBox.Show("frmMain.cs - enableGUI " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private static void killCLI()
         {
             // This may seem like a long way of killing HandBrakeCLI, but for whatever reason,
@@ -2065,6 +2067,13 @@ namespace Handbrake
         }
 
         #endregion
+
+        private void mnu_qptest_Click(object sender, EventArgs e)
+        {
+            QueryParserTester qptest = new QueryParserTester();
+            qptest.Show();
+
+        }
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

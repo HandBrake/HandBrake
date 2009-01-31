@@ -110,12 +110,12 @@ namespace Handbrake
             mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
             mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
 
-            if (presetQuery.Decomb)
+            if (presetQuery.Decomb != "False")
                 mainWindow.check_decomb.CheckState = CheckState.Checked;
             else
                 mainWindow.check_decomb.CheckState = CheckState.Unchecked;
 
-            if (presetQuery.DeTelecine)
+            if (presetQuery.DeTelecine != "False")
                 mainWindow.check_detelecine.CheckState = CheckState.Checked;
             else
                 mainWindow.check_detelecine.CheckState = CheckState.Unchecked;
