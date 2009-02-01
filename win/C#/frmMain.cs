@@ -1029,8 +1029,6 @@ namespace Handbrake
                     check_iPodAtom.Enabled = true;
                 else
                     check_iPodAtom.Enabled = false;
-                if (!drp_anamorphic.Items.Contains("Loose"))
-                    drp_anamorphic.Items.Add("Loose");
             }
             else
             {
@@ -1040,8 +1038,6 @@ namespace Handbrake
                 rtf_x264Query.Text = "";
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
-                if (drp_anamorphic.Items.Count == 3)
-                    drp_anamorphic.Items.RemoveAt(2);
             }
 
         }
@@ -1770,6 +1766,13 @@ namespace Handbrake
                 drp_audenc_1.Items.Add("Vorbis");
                 if (drp_audenc_1.Text == string.Empty)
                     drp_audenc_1.SelectedIndex = 0;
+            }
+
+            // Make sure the table is updated with new audio codecs
+            foreach (ListViewItem row in lv_audioList.Items)
+            {
+                if (!drp_audenc_1.Items.Contains(row.SubItems[1].Text))
+                    row.SubItems[1].Text = drp_audenc_1.Items[0].ToString();
             }
         }
         private void setVideoByContainer(String path)
