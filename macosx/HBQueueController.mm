@@ -1044,34 +1044,53 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
             pictureFiltersPresent = YES;
             pictureFilters = [pictureFilters stringByAppendingString:@" - VFR"];
         }
+        
         if( [[item objectForKey:@"PictureDetelecine"] intValue] == 1 )
         {
             pictureFiltersPresent = YES;
             pictureFilters = [pictureFilters stringByAppendingString:@" - Detelecine"];
         }
         
-        if( [[item objectForKey:@"PictureDecomb"] intValue] == 1)
+        if( [[item objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
         {
-            pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb "];
+            if ([[item objectForKey:@"PictureDecomb"] intValue] != 0)
+            {
+                pictureFiltersPresent = YES;
+                if( [[item objectForKey:@"PictureDecomb"] intValue] == 1)
+                {
+                    pictureFiltersPresent = YES;
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb Default "];
+                }
+                if( [[item objectForKey:@"PictureDecomb"] intValue] == 2)
+                {
+                    pictureFiltersPresent = YES;
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb Custom "];
+                }
+            }
         }
-        
-        if ([[item objectForKey:@"PictureDeinterlace"] intValue] != 0)
+        else
         {
-            pictureFiltersPresent = YES;
-            if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 1)
+            if ([[item objectForKey:@"PictureDeinterlace"] intValue] != 0)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Fast "];
+                pictureFiltersPresent = YES;
+                if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 1)
+                {
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Fast "];
+                }
+                else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 2)
+                {
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Slow "];           
+                }
+                else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 3)
+                {
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Slower "];            
+                }
+                else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 4)
+                {
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Custom "];            
+                }
+                
             }
-            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 2)
-            {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Slow "];           
-            }
-            else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 3)
-            {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace: Slower "];            
-            }
-            
         }
         if ([[item objectForKey:@"PictureDenoise"] intValue] != 0)
         {
@@ -1087,6 +1106,10 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
             else if ([[item objectForKey:@"PictureDenoise"] intValue] == 3)
             {
                 pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise: Strong "];            
+            }
+            else if ([[item objectForKey:@"PictureDenoise"] intValue] == 4)
+            {
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise: Custom "];            
             }
             
         }

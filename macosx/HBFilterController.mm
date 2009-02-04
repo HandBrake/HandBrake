@@ -99,6 +99,7 @@
     [[self window] setExcludedFromWindowsMenu:YES];
     
     [self setInitialPictureFilters];
+
 }
 
 
@@ -133,12 +134,28 @@
 are maintained across different sources */
 - (void) setInitialPictureFilters
 {
-	/* we use a popup to show the deinterlace settings */
+	/* we use a popup to show the detelecine settings */
+	[fDetelecinePopUp removeAllItems];
+    [fDetelecinePopUp addItemWithTitle: @"Off"];
+    [fDetelecinePopUp addItemWithTitle: @"Default"];
+    [fDetelecinePopUp addItemWithTitle: @"Custom"];
+    [fDetelecinePopUp selectItemAtIndex: fPictureFilterSettings.detelecine];
+    
+    [self modeDecombDeinterlaceSliderChanged:nil];
+    /* we use a popup to show the decomb settings */
+	[fDecombPopUp removeAllItems];
+    [fDecombPopUp addItemWithTitle: @"Off"];
+    [fDecombPopUp addItemWithTitle: @"Default"];
+    [fDecombPopUp addItemWithTitle: @"Custom"];
+    [fDecombPopUp selectItemAtIndex: fPictureFilterSettings.decomb];
+    
+    /* we use a popup to show the deinterlace settings */
 	[fDeinterlacePopUp removeAllItems];
     [fDeinterlacePopUp addItemWithTitle: @"None"];
     [fDeinterlacePopUp addItemWithTitle: @"Fast"];
     [fDeinterlacePopUp addItemWithTitle: @"Slow"];
 	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
+    [fDeinterlacePopUp addItemWithTitle: @"Custom"];
     
 	/* Set deinterlaces level according to the integer in the main window */
 	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
@@ -149,6 +166,7 @@ are maintained across different sources */
     [fDenoisePopUp addItemWithTitle: @"Weak"];
 	[fDenoisePopUp addItemWithTitle: @"Medium"];
     [fDenoisePopUp addItemWithTitle: @"Strong"];
+    [fDenoisePopUp addItemWithTitle: @"Custom"];
 	/* Set denoises level according to the integer in the main window */
 	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     
@@ -158,11 +176,12 @@ are maintained across different sources */
 - (void) SetTitle: (hb_title_t *) title
 {
     /* Set filters widgets according to the filters struct */
-	[fDetelecineCheck setState:fPictureFilterSettings.detelecine];
+    [fDetelecinePopUp selectItemAtIndex:fPictureFilterSettings.detelecine];
+    [fDecombPopUp selectItemAtIndex:fPictureFilterSettings.decomb];
     [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
     [fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     [fDeblockSlider setFloatValue:fPictureFilterSettings.deblock];
-    [fDecombCheck setState:fPictureFilterSettings.decomb];
+    [fGrayscaleCheck setState:fPictureFilterSettings.grayscale];
     
     [self deblockSliderChanged: nil];
 }
@@ -180,13 +199,45 @@ are maintained across different sources */
 	[self FilterSettingsChanged: sender];
 }
 
+
+- (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender
+{
+    /* Decomb selected*/
+    if ([fDecombDeinterlaceSlider floatValue] == 0.0)
+    {
+    [fDecombBox setHidden:NO];
+    [fDeinterlaceBox setHidden:YES];
+    fPictureFilterSettings.decomb = [fDecombPopUp indexOfSelectedItem];
+    fPictureFilterSettings.usedecomb = 1;
+    fPictureFilterSettings.deinterlace = 0;
+    [self adjustFilterDisplay:fDecombPopUp];
+    [fDecombPopUp selectItemAtIndex:fPictureFilterSettings.decomb];
+    }
+    else
+    {
+    [fDecombBox setHidden:YES];
+    [fDeinterlaceBox setHidden:NO];
+    fPictureFilterSettings.usedecomb = 0;
+    fPictureFilterSettings.decomb = 0;
+    [self adjustFilterDisplay:fDeinterlacePopUp];
+    [fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
+    }
+	[self FilterSettingsChanged: sender];
+}
+
 - (IBAction) FilterSettingsChanged: (id) sender
 {
+    fPictureFilterSettings.detelecine  = [fDetelecinePopUp indexOfSelectedItem];
+    [self adjustFilterDisplay:fDetelecinePopUp];
+    
+    fPictureFilterSettings.decomb = [fDecombPopUp indexOfSelectedItem];
+    [self adjustFilterDisplay:fDecombPopUp];
+    
     fPictureFilterSettings.deinterlace = [fDeinterlacePopUp indexOfSelectedItem];
+    [self adjustFilterDisplay:fDeinterlacePopUp];
     
-    fPictureFilterSettings.denoise     = [fDenoisePopUp indexOfSelectedItem];
-    
-    fPictureFilterSettings.detelecine  = [fDetelecineCheck state];
+    fPictureFilterSettings.denoise = [fDenoisePopUp indexOfSelectedItem];
+    [self adjustFilterDisplay:fDenoisePopUp];
     
     if ([fDeblockField stringValue] == @"Off")
     {
@@ -197,7 +248,7 @@ are maintained across different sources */
         fPictureFilterSettings.deblock  = [fDeblockField intValue];
     }
     
-    fPictureFilterSettings.decomb = [fDecombCheck state];
+    fPictureFilterSettings.grayscale = [fGrayscaleCheck state];
     
     if (sender != nil)
     {
@@ -207,32 +258,75 @@ are maintained across different sources */
 
 }
 
-
+- (void) adjustFilterDisplay: (id) sender
+{
+    
+    NSBox * filterBox;
+    NSTextField * filterField;
+    if (sender == fDetelecinePopUp)
+    {
+        filterBox = fDetelecineBox;
+        filterField = fDetelecineField;
+    }
+    if (sender == fDecombPopUp)
+    {
+        filterBox = fDecombBox;
+        filterField = fDecombField;
+    }
+    if (sender == fDeinterlacePopUp)
+    {
+        filterBox = fDeinterlaceBox;
+        filterField = fDeinterlaceField;
+    }
+    
+    if (sender == fDenoisePopUp)
+    {
+        filterBox = fDenoiseBox;
+        filterField = fDenoiseField;
+    }
+    
+    NSSize currentSize = [filterBox frame].size;
+    if ([sender titleOfSelectedItem] == @"Custom")
+    {
+        currentSize.height = 60;
+    }
+    else
+    {
+        currentSize.height = 30;
+    }
+    /* Check to see if we have changed the size from current */
+    if (currentSize.height != [filterBox frame].size.height)
+    {
+        /* We are changing the size of the box, so recalc the origin */
+        NSPoint origin = [filterBox frame].origin;
+        /* See if we are expanding the box downwards */
+        if (currentSize.height > [filterBox frame].size.height)
+        {
+            origin.y = origin.y - currentSize.height / 2;
+        }
+        else
+        {
+            origin.y = origin.y + currentSize.height;
+        }
+        /* go ahead and resize the box */
+        [filterBox setFrameSize:currentSize];
+        [filterBox setFrameOrigin:origin];
+    }
+    
+}
 
 #pragma mark -
 
-- (BOOL) autoCrop
-{
-    return autoCrop;
-}
-- (void) setAutoCrop: (BOOL) setting
-{
-    autoCrop = setting;
-}
 
-- (BOOL) allowLooseAnamorphic
-{
-    return allowLooseAnamorphic;
-}
-
-- (void) setAllowLooseAnamorphic: (BOOL) setting
-{
-    allowLooseAnamorphic = setting;
-}
 
 - (int) detelecine
 {
     return fPictureFilterSettings.detelecine;
+}
+
+- (NSString*) detelecineCustomString
+{
+    return [fDetelecineField stringValue];
 }
 
 - (void) setDetelecine: (int) setting
@@ -244,13 +338,32 @@ are maintained across different sources */
 {
     return fPictureFilterSettings.deinterlace;
 }
-
-- (void) setDeinterlace: (int) setting {
+- (NSString*) deinterlaceCustomString
+{
+    return [fDeinterlaceField stringValue];
+}
+- (void) setDeinterlace: (int) setting 
+{
     fPictureFilterSettings.deinterlace = setting;
 }
 - (int) decomb
 {
     return fPictureFilterSettings.decomb;
+}
+
+- (NSString*) decombCustomString
+{
+    return [fDecombField stringValue];
+}
+
+- (int) useDecomb
+{
+    return fPictureFilterSettings.usedecomb;
+}
+
+- (void) setUseDecomb: (int) setting
+{
+    fPictureFilterSettings.usedecomb = setting;
 }
 
 - (void) setDecomb: (int) setting {
@@ -259,6 +372,11 @@ are maintained across different sources */
 - (int) denoise
 {
     return fPictureFilterSettings.denoise;
+}
+
+- (NSString*) denoiseCustomString
+{
+    return [fDenoiseField stringValue];
 }
 
 - (void) setDenoise: (int) setting
@@ -274,6 +392,16 @@ are maintained across different sources */
 - (void) setDeblock: (int) setting
 {
     fPictureFilterSettings.deblock = setting;
+}
+
+- (int) grayscale
+{
+    return fPictureFilterSettings.grayscale;
+}
+
+- (void) setGrayscale: (int) setting
+{
+    fPictureFilterSettings.grayscale = setting;
 }
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title

@@ -25,15 +25,31 @@
 
     IBOutlet NSBox           * fPictureFilterBox;
 
+    IBOutlet NSBox           * fDetelecineBox;
+    IBOutlet NSPopUpButton   * fDetelecinePopUp;
+    IBOutlet NSTextField     * fDetelecineField;
+    
+    IBOutlet NSBox           * fDecombDeinterlaceBox;
+    IBOutlet NSSlider        * fDecombDeinterlaceSlider;
+    
+    IBOutlet NSBox           * fDecombBox;
+    IBOutlet NSPopUpButton   * fDecombPopUp;
+    IBOutlet NSTextField     * fDecombField;
+    
+    IBOutlet NSBox           * fDeinterlaceBox;
     IBOutlet NSPopUpButton   * fDeinterlacePopUp;
-    IBOutlet NSButton        * fDecombCheck;
-	IBOutlet NSButton        * fDetelecineCheck;
+    IBOutlet NSTextField     * fDeinterlaceField;
+
+    IBOutlet NSBox           * fDenoiseBox;
+    IBOutlet NSPopUpButton   * fDenoisePopUp;
+    IBOutlet NSTextField     * fDenoiseField;
+	
     IBOutlet NSButton        * fDeblockCheck;
     IBOutlet NSTextField     * fDeblockField;
     IBOutlet NSSlider        * fDeblockSlider;
-	IBOutlet NSPopUpButton   * fDenoisePopUp;
-	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
-    IBOutlet NSSlider        * fPictureSlider;
+    
+    IBOutlet NSButton        * fGrayscaleCheck;
+
     IBOutlet NSTextField     * fInfoField;
 	
     IBOutlet NSButton        * fPreviewOpenButton;
@@ -41,24 +57,20 @@
         
     int     MaxOutputWidth;
     int     MaxOutputHeight;
-    BOOL    autoCrop;
-    BOOL    allowLooseAnamorphic;
     
     int output_width, output_height, output_par_width, output_par_height;
     int display_width;
     
-    /* used to track the previous state of the keep aspect
-    ratio checkbox when turning anamorphic on, so it can be
-    returned to the previous state when anamorphic is turned
-    off */
-    BOOL    keepAspectRatioPreviousState; 
+ 
     
     struct {
         int     detelecine;
         int     deinterlace;
         int     decomb;
+        int     usedecomb;
         int     denoise;
         int     deblock;
+        int     grayscale;
     } fPictureFilterSettings;
 
 
@@ -72,28 +84,32 @@
 - (IBAction) showPreviewWindow: (id)sender;
 
 - (void) setInitialPictureFilters;
-
+- (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender;
 
 - (IBAction) FilterSettingsChanged: (id) sender;
+- (void) adjustFilterDisplay: (id) sender;
 
 
-
-- (BOOL) autoCrop;
-- (void) setAutoCrop: (BOOL) setting;
-
-- (BOOL) allowLooseAnamorphic;
-- (void) setAllowLooseAnamorphic: (BOOL) setting;
 - (IBAction) deblockSliderChanged: (id) sender;
 - (int) detelecine;
+- (NSString*) detelecineCustomString;
 - (void) setDetelecine: (int) setting;
+- (int) useDecomb;
+- (void) setUseDecomb: (int) setting;
 - (int) deinterlace;
+- (NSString*) deinterlaceCustomString;
 - (void) setDeinterlace: (int) setting;
 - (int) decomb;
+- (NSString*) decombCustomString;
 - (void) setDecomb: (int) setting;
 - (int) denoise;
+- (NSString*) denoiseCustomString;
 - (void) setDenoise: (int) setting;
 - (int) deblock;
 - (void) setDeblock: (int) setting;
+
+- (int) grayscale;
+- (void) setGrayscale: (int) setting;
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title;
 - (IBAction) showPictureSettingsWindow: (id)sender;

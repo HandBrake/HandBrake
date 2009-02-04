@@ -106,7 +106,6 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fVidBitrateField;
     IBOutlet NSButtonCell        * fVidConstantCell;
     IBOutlet NSSlider            * fVidQualitySlider;
-    IBOutlet NSButton            * fVidGrayscaleCheck;
     IBOutlet NSButton            * fVidTwoPassCheck;
     IBOutlet NSButton            * fVidTurboPassCheck;
 	
@@ -134,6 +133,8 @@ BOOL                        fIsDragging;
 	IBOutlet NSTextField         * fPicSettingDetelecine;
 	IBOutlet NSTextField         * fPicSettingDenoise;
     IBOutlet NSTextField         * fPicSettingDeblock;
+    IBOutlet NSTextField         * fPicLabelGrayscale;
+    IBOutlet NSTextField         * fPicSettingGrayscale;
 	
 	/* Picture variables */
 	int                        PicOrigOutputWidth;
