@@ -25,8 +25,6 @@
 #define BTB_PROG 64
 #define TB_PROG 128
 #define TBT_PROG 256
-static int cadence[12];
-static int flag = 0;
 
 /**********************************************************************
  * hb_libmpeg2_t
@@ -45,6 +43,8 @@ typedef struct hb_libmpeg2_s
     int                  look_for_break;    /* need gop start to add chap break */
     uint32_t             nframes;           /* number of frames we've decoded */
     int64_t              last_pts;
+    int cadence[12];
+    int flag;
 } hb_libmpeg2_t;
 
 /**********************************************************************
@@ -249,23 +249,23 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 }
                 ++m->nframes;
 
-                flag = m->info->display_picture->flags;
+                m->flag = m->info->display_picture->flags;
 
 /*  Uncomment this block to see frame-by-frame picture flags, as the video encodes.
                hb_log("***** MPEG 2 Picture Info for PTS %lld *****", buf->start);
-                if( flag & TOP_FIRST )
+                if( m->flag & TOP_FIRST )
                     hb_log("MPEG2 Flag: Top field first");
-                if( flag & PROGRESSIVE )
+                if( m->flag & PROGRESSIVE )
                     hb_log("MPEG2 Flag: Progressive");
-                if( flag & COMPOSITE )
+                if( m->flag & COMPOSITE )
                     hb_log("MPEG2 Flag: Composite");
-                if( flag & SKIP )
+                if( m->flag & SKIP )
                     hb_log("MPEG2 Flag: Skip!");
-                if( flag & TAGS )
+                if( m->flag & TAGS )
                     hb_log("MPEG2 Flag: TAGS");
-                if(flag & REPEAT_FIRST )
+                if(fm->lag & REPEAT_FIRST )
                     hb_log("MPEG2 Flag: Repeat first field");
-                if( flag & COMPOSITE_MASK )
+                if( m->flag & COMPOSITE_MASK )
                     hb_log("MPEG2 Flag: Composite mask");
                 hb_log("fields: %d", m->info->display_picture->nb_fields);
 */
@@ -273,66 +273,66 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 int i = 0;
                 for(i=11; i > 0; i--)
                 {
-                    cadence[i] = cadence[i-1];
+                    m->cadence[i] = m->cadence[i-1];
                 }
 
-                if ( !(flag & PROGRESSIVE) && !(flag & TOP_FIRST) )
+                if ( !(m->flag & PROGRESSIVE) && !(m->flag & TOP_FIRST) )
                 {
                     /* Not progressive, not top first...
                        That means it's probably bottom
                        first, 2 fields displayed.
                     */
                     //hb_log("MPEG2 Flag: Bottom field first, 2 fields displayed.");
-                    cadence[0] = BT;
+                    m->cadence[0] = BT;
                 }
-                else if ( !(flag & PROGRESSIVE) && (flag & TOP_FIRST) )
+                else if ( !(m->flag & PROGRESSIVE) && (m->flag & TOP_FIRST) )
                 {
                     /* Not progressive, top is first,
                        Two fields displayed.
                     */
                     //hb_log("MPEG2 Flag: Top field first, 2 fields displayed.");
-                    cadence[0] = TB;
+                    m->cadence[0] = TB;
                 }
-                else if ( (flag & PROGRESSIVE) && !(flag & TOP_FIRST) && !( flag & REPEAT_FIRST )  )
+                else if ( (m->flag & PROGRESSIVE) && !(m->flag & TOP_FIRST) && !( m->flag & REPEAT_FIRST )  )
                 {
                     /* Progressive, but noting else.
                        That means Bottom first,
                        2 fields displayed.
                     */
                     //hb_log("MPEG2 Flag: Progressive. Bottom field first, 2 fields displayed.");
-                    cadence[0] = BT_PROG;
+                    m->cadence[0] = BT_PROG;
                 }
-                else if ( (flag & PROGRESSIVE) && !(flag & TOP_FIRST) && ( flag & REPEAT_FIRST )  )
+                else if ( (m->flag & PROGRESSIVE) && !(m->flag & TOP_FIRST) && ( m->flag & REPEAT_FIRST )  )
                 {
                     /* Progressive, and repeat. .
                        That means Bottom first,
                        3 fields displayed.
                     */
                     //hb_log("MPEG2 Flag: Progressive repeat. Bottom field first, 3 fields displayed.");
-                    cadence[0] = BTB_PROG;
+                    m->cadence[0] = BTB_PROG;
                 }
-                else if ( (flag & PROGRESSIVE) && (flag & TOP_FIRST) && !( flag & REPEAT_FIRST )  )
+                else if ( (m->flag & PROGRESSIVE) && (m->flag & TOP_FIRST) && !( m->flag & REPEAT_FIRST )  )
                 {
                     /* Progressive, top first.
                        That means top first,
                        2 fields displayed.
                     */
                     //hb_log("MPEG2 Flag: Progressive. Top field first, 2 fields displayed.");
-                    cadence[0] = TB_PROG;
+                    m->cadence[0] = TB_PROG;
                 }
-                else if ( (flag & PROGRESSIVE) && (flag & TOP_FIRST) && ( flag & REPEAT_FIRST )  )
+                else if ( (m->flag & PROGRESSIVE) && (m->flag & TOP_FIRST) && ( m->flag & REPEAT_FIRST )  )
                 {
                     /* Progressive, top, repeat.
                        That means top first,
                        3 fields displayed.
                     */
                     //hb_log("MPEG2 Flag: Progressive repeat. Top field first, 3 fields displayed.");
-                    cadence[0] = TBT_PROG;
+                    m->cadence[0] = TBT_PROG;
                 }
 
-                if ( (cadence[2] <= TB) && (cadence[1] <= TB) && (cadence[0] > TB) && (cadence[11]) )
+                if ( (m->cadence[2] <= TB) && (m->cadence[1] <= TB) && (m->cadence[0] > TB) && (m->cadence[11]) )
                     hb_log("%fs: Video -> Film", (float)buf->start / 90000);
-                if ( (cadence[2] > TB) && (cadence[1] <= TB) && (cadence[0] <= TB) && (cadence[11]) )
+                if ( (m->cadence[2] > TB) && (m->cadence[1] <= TB) && (m->cadence[0] <= TB) && (m->cadence[11]) )
                     hb_log("%fs: Film -> Video", (float)buf->start / 90000);
 
                 /* Store picture flags for later use by filters */
