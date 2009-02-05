@@ -77,10 +77,6 @@
 		<key>audio_list</key>
 		<array>
 		</array>
-		<key>tweak_PictureDecomb</key>
-		<string></string>
-		<key>tweak_PictureDetelecine</key>
-		<string></string>
 		<key>vquality_type_bitrate</key>
 		<false />
 		<key>vquality_type_constant</key>
@@ -155,7 +151,9 @@
 		<key>PictureDeblock</key>
 		<integer>0</integer>
 		<key>PictureDecomb</key>
-		<false />
+		<string>none</string>
+		<key>PictureDecombCustom</key>
+		<string></string>
 		<key>Default</key>
 		<false />
 		<key>PictureBottomCrop</key>
@@ -168,10 +166,16 @@
 		<integer>0</integer>
 		<key>PictureDeinterlace</key>
 		<string>none</string>
+		<key>PictureDeinterlaceCustom</key>
+		<string></string>
 		<key>PictureDenoise</key>
 		<string>none</string>
+		<key>PictureDenoiseCustom</key>
+		<string></string>
 		<key>PictureDetelecine</key>
-		<true />
+		<string>none</string>
+		<key>PictureDetelecineCustom</key>
+		<string></string>
 		<key>directqp</key>
 		<false />
 		<key>SubtitlesForced</key>

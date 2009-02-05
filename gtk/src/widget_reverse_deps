@@ -8,6 +8,7 @@
 			<string>AudioEncoder</string>
 			<string>ac3|dts</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>AudioMixdown</key>
@@ -16,6 +17,7 @@
 			<string>AudioEncoder</string>
 			<string>ac3|dts</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>AudioSamplerate</key>
@@ -24,6 +26,7 @@
 			<string>AudioEncoder</string>
 			<string>ac3|dts</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>AudioTrackDRCSlider</key>
@@ -32,6 +35,7 @@
 			<string>AudioEncoder</string>
 			<string>ac3|dts</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>Mp4HttpOptimize</key>
@@ -40,6 +44,7 @@
 			<string>FileFormat</string>
 			<string>mp4|m4v</string>
 			<false />
+			<true />
 		</array>
 	</array>
 	<key>Mp4LargeFile</key>
@@ -48,6 +53,7 @@
 			<string>FileFormat</string>
 			<string>mp4|m4v</string>
 			<false />
+			<true />
 		</array>
 	</array>
 	<key>Mp4iPodCompatible</key>
@@ -56,10 +62,12 @@
 			<string>FileFormat</string>
 			<string>mp4|m4v</string>
 			<false />
+			<true />
 		</array>
 		<array>
 			<string>VideoEncoder</string>
 			<string>x264</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -69,13 +77,57 @@
 			<string>PictureAutoCrop</string>
 			<string>FALSE</string>
 			<false />
+			<false />
+		</array>
+	</array>
+	<key>PictureDecombCustom</key>
+	<array>
+		<array>
+			<string>PictureDecomb</string>
+			<string>custom</string>
+			<false />
+			<true />
 		</array>
 	</array>
 	<key>PictureDeinterlace</key>
 	<array>
 		<array>
 			<string>PictureDecomb</string>
-			<string>TRUE</string>
+			<string>none</string>
+			<false />
+			<false />
+		</array>
+	</array>
+	<key>PictureDeinterlaceCustom</key>
+	<array>
+		<array>
+			<string>PictureDecomb</string>
+			<string>none</string>
+			<false />
+			<true />
+		</array>
+		<array>
+			<string>PictureDeinterlace</string>
+			<string>custom</string>
+			<false />
+			<true />
+		</array>
+	</array>
+	<key>PictureDenoiseCustom</key>
+	<array>
+		<array>
+			<string>PictureDenoise</string>
+			<string>custom</string>
+			<false />
+			<true />
+		</array>
+	</array>
+	<key>PictureDetelecineCustom</key>
+	<array>
+		<array>
+			<string>PictureDetelecine</string>
+			<string>custom</string>
+			<false />
 			<true />
 		</array>
 	</array>
@@ -85,6 +137,7 @@
 			<string>anamorphic</string>
 			<string>FALSE</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>PictureLeftCrop</key>
@@ -92,6 +145,7 @@
 		<array>
 			<string>PictureAutoCrop</string>
 			<string>FALSE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -101,6 +155,7 @@
 			<string>PictureAutoCrop</string>
 			<string>FALSE</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>PictureTopCrop</key>
@@ -108,6 +163,7 @@
 		<array>
 			<string>PictureAutoCrop</string>
 			<string>FALSE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -117,6 +173,7 @@
 			<string>vquality_type_bitrate</string>
 			<string>TRUE</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>VideoQualitySlider</key>
@@ -124,6 +181,7 @@
 		<array>
 			<string>vquality_type_constant</string>
 			<string>TRUE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -133,6 +191,7 @@
 			<string>vquality_type_target</string>
 			<string>TRUE</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>VideoTurboTwoPass</key>
@@ -141,10 +200,12 @@
 			<string>vquality_type_constant</string>
 			<string>TRUE</string>
 			<true />
+			<false />
 		</array>
 		<array>
 			<string>VideoTwoPass</string>
 			<string>TRUE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -154,6 +215,7 @@
 			<string>vquality_type_constant</string>
 			<string>TRUE</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>chapters_in_destination</key>
@@ -161,6 +223,7 @@
 		<array>
 			<string>use_source_name</string>
 			<string>TRUE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -170,6 +233,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>chapters_list</key>
@@ -177,6 +241,7 @@
 		<array>
 			<string>ChapterMarkers</string>
 			<string>TRUE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -186,6 +251,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>constant_rate_factor</key>
@@ -193,6 +259,7 @@
 		<array>
 			<string>vquality_type_constant</string>
 			<string>TRUE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -202,6 +269,7 @@
 			<string>VideoEncoder</string>
 			<string>x264|ffmpeg</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>end_chapter</key>
@@ -210,6 +278,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>picture_label</key>
@@ -218,6 +287,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>picture_tab</key>
@@ -226,6 +296,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>preview_frame</key>
@@ -234,6 +305,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>queue_add</key>
@@ -242,6 +314,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>queue_add_menu</key>
@@ -250,6 +323,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>scale_height</key>
@@ -258,15 +332,18 @@
 			<string>autoscale</string>
 			<string>FALSE</string>
 			<false />
+			<false />
 		</array>
 		<array>
 			<string>anamorphic</string>
 			<string>CHECK</string>
 			<true />
+			<false />
 		</array>
 		<array>
 			<string>PictureKeepRatio</string>
 			<string>FALSE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -276,6 +353,7 @@
 			<string>autoscale</string>
 			<string>FALSE</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>show_picture</key>
@@ -284,6 +362,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>show_preview_menu</key>
@@ -292,6 +371,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>start_chapter</key>
@@ -300,6 +380,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>title</key>
@@ -308,6 +389,7 @@
 			<string>title</string>
 			<string>none</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>title_no_in_destination</key>
@@ -316,14 +398,7 @@
 			<string>use_source_name</string>
 			<string>TRUE</string>
 			<false />
-		</array>
-	</array>
-	<key>tweak_PictureDeinterlace</key>
-	<array>
-		<array>
-			<string>PictureDecomb</string>
-			<string>TRUE</string>
-			<true />
+			<false />
 		</array>
 	</array>
 	<key>x264_bpyramid</key>
@@ -332,6 +407,7 @@
 			<string>x264_bframes</string>
 			<string>&lt;2</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>x264_direct</key>
@@ -340,6 +416,7 @@
 			<string>x264_bframes</string>
 			<string>0</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>x264_mixed_refs</key>
@@ -348,6 +425,7 @@
 			<string>x264_refs</string>
 			<string>&lt;2</string>
 			<true />
+			<false />
 		</array>
 	</array>
 	<key>x264_tab</key>
@@ -355,6 +433,7 @@
 		<array>
 			<string>VideoEncoder</string>
 			<string>x264</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -364,6 +443,7 @@
 			<string>VideoEncoder</string>
 			<string>x264</string>
 			<false />
+			<false />
 		</array>
 	</array>
 	<key>x264_trellis</key>
@@ -371,6 +451,7 @@
 		<array>
 			<string>x264_cabac</string>
 			<string>TRUE</string>
+			<false />
 			<false />
 		</array>
 	</array>
@@ -380,6 +461,7 @@
 			<string>x264_bframes</string>
 			<string>0</string>
 			<true />
+			<false />
 		</array>
 	</array>
 </dict>

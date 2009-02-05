@@ -258,7 +258,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	if (strcmp("source", fps) == 0)
 	{
 		g_free(fps);
-		if (ghb_settings_get_boolean(settings, "PictureDetelecine"))
+		if (ghb_settings_combo_int(settings, "PictureDetelecine"))
 			fps = g_strdup("Same As Source (vfr detelecine)");
 		else
 			fps = g_strdup("Same As Source (variable)");
@@ -281,9 +281,9 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gboolean decomb;
 	gboolean filters = FALSE;
 
-	decomb = ghb_settings_get_boolean(settings, "PictureDecomb");
+	decomb = ghb_settings_combo_int(settings, "PictureDecomb");
 	g_string_append_printf(str, "<b>Filters:</b><small>");
-	if (ghb_settings_get_boolean(settings, "PictureDetelecine"))
+	if (ghb_settings_combo_int(settings, "PictureDetelecine"))
 	{
 		g_string_append_printf(str, " - Detelecine");
 		filters = TRUE;
@@ -295,22 +295,20 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	}
 	else
 	{
-		gint deint = ghb_settings_combo_int(settings, 
-					tweaks ? "tweak_PictureDeinterlace":"PictureDeinterlace");
+		gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
 		if (deint)
 		{
 			const gchar *opt = ghb_settings_combo_option(settings,
-					tweaks ? "tweak_PictureDeinterlace":"PictureDeinterlace");
+													"PictureDeinterlace");
 			g_string_append_printf(str, " - Deinterlace: %s", opt);
 			filters = TRUE;
 		}
 	}
-	gint denoise = ghb_settings_combo_int(settings, 
-				tweaks ? "tweak_PictureDenoise":"PictureDenoise");
+	gint denoise = ghb_settings_combo_int(settings, "PictureDenoise");
 	if (denoise)
 	{
 		const gchar *opt = ghb_settings_combo_option(settings,
-				tweaks ? "tweak_PictureDenoise":"PictureDenoise");
+													"PictureDenoise");
 		g_string_append_printf(str, " - Denoise: %s", opt);
 		filters = TRUE;
 	}

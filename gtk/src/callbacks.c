@@ -67,7 +67,7 @@ ghb_init_dep_map()
 }
 
 static gboolean
-dep_check(signal_user_data_t *ud, const gchar *name)
+dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
 {
 	GtkWidget *widget;
 	GObject *dep_object;
@@ -81,6 +81,7 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 
 	array = ghb_dict_lookup(rev_map, name);
 	count = ghb_array_len(array);
+	*out_hide = FALSE;
 	for (ii = 0; ii < count; ii++)
 	{
 		data = ghb_array_get_nth(array, ii);
@@ -100,9 +101,10 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 			gint jj = 0;
 			gchar **values;
 			gboolean sensitive = FALSE;
-			gboolean die;
+			gboolean die, hide;
 
 			die = ghb_value_boolean(ghb_array_get_nth(data, 2));
+			hide = ghb_value_boolean(ghb_array_get_nth(data, 3));
 			value = ghb_value_string(ghb_array_get_nth(data, 1));
 			values = g_strsplit(value, "|", 10);
 			g_free(value);
@@ -141,7 +143,11 @@ dep_check(signal_user_data_t *ud, const gchar *name)
 				jj++;
 			}
 			sensitive = die ^ sensitive;
-			if (!sensitive) result = FALSE;
+			if (!sensitive)
+			{
+				result = FALSE;
+				*out_hide |= hide;
+			}
 			g_strfreev (values);
 			g_free(value);
 		}
@@ -171,6 +177,7 @@ ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget)
 	for (ii = 0; ii < count; ii++)
 	{
 		gboolean sensitive;
+		gboolean hide;
 
 		data = ghb_array_get_nth(array, ii);
 		dep_name = ghb_value_string(data);
@@ -181,12 +188,25 @@ ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget)
 			g_free(dep_name);
 			continue;
 		}
-		sensitive = dep_check(ud, dep_name);
+		sensitive = dep_check(ud, dep_name, &hide);
 		g_free(dep_name);
 		if (GTK_IS_ACTION(dep_object))
+		{
 			gtk_action_set_sensitive(GTK_ACTION(dep_object), sensitive);
+			gtk_action_set_visible(GTK_ACTION(dep_object), sensitive || !hide);
+		}
 		else
+		{
 			gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+			if (!sensitive && hide)
+			{
+				gtk_widget_hide(GTK_WIDGET(dep_object));
+			}
+			else
+			{
+				gtk_widget_show_now(GTK_WIDGET(dep_object));
+			}
+		}
 	}
 }
 
@@ -206,17 +226,32 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 			&iter, (gpointer*)(void*)&dep_name, (gpointer*)(void*)&value))
 	{
 		gboolean sensitive;
+		gboolean hide;
+
 		dep_object = gtk_builder_get_object (ud->builder, dep_name);
 		if (dep_object == NULL)
 		{
 			g_message("Failed to find dependent widget %s", dep_name);
 			continue;
 		}
-		sensitive = dep_check(ud, dep_name);
+		sensitive = dep_check(ud, dep_name, &hide);
 		if (GTK_IS_ACTION(dep_object))
+		{
 			gtk_action_set_sensitive(GTK_ACTION(dep_object), sensitive);
+			gtk_action_set_visible(GTK_ACTION(dep_object), sensitive || !hide);
+		}
 		else
+		{
 			gtk_widget_set_sensitive(GTK_WIDGET(dep_object), sensitive);
+			if (!sensitive && hide)
+			{
+				gtk_widget_hide(GTK_WIDGET(dep_object));
+			}
+			else
+			{
+				gtk_widget_show_now(GTK_WIDGET(dep_object));
+			}
+		}
 	}
 }
 
@@ -1068,59 +1103,6 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-}
-
-static void
-validate_filter_widget(signal_user_data_t *ud, const gchar *name)
-{
-	GtkTreeModel *store;
-	GtkTreeIter iter;
-	const gchar *str;
-	gboolean foundit = FALSE;
-	GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
-	if (gtk_combo_box_get_active(combo) < 0)
-	{ // Validate user input
-		gchar *val = ghb_settings_get_string(ud->settings, name);
-		store = gtk_combo_box_get_model(combo);
-		// Check to see if user manually entered one of the combo options
-		if (gtk_tree_model_get_iter_first(store, &iter))
-		{
-			do
-			{
-				gtk_tree_model_get(store, &iter, 0, &str, -1);
-				if (strcasecmp(val, str) == 0)
-				{
-					gtk_combo_box_set_active_iter(combo, &iter);
-					foundit = TRUE;
-					break;
-				}
-			} while (gtk_tree_model_iter_next(store, &iter));
-		}
-		if (!foundit)
-		{ // validate format of filter string
-			if (!ghb_validate_filter_string(val, -1))
-				gtk_combo_box_set_active(combo, 0);
-		}
-		g_free(val);
-	}
-}
-
-gboolean
-deint_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-	signal_user_data_t *ud)
-{
-	g_debug("deint_tweak_focus_out_cb ()");
-	validate_filter_widget(ud, "tweak_PictureDeinterlace");
-	return FALSE;
-}
-
-gboolean
-denoise_tweak_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
-	signal_user_data_t *ud)
-{
-	g_debug("denoise_tweak_focus_out_cb ()");
-	validate_filter_widget(ud, "tweak_PictureDenoise");
-	return FALSE;
 }
 
 void
@@ -2390,33 +2372,6 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting (ud->settings, widget);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
-
-	gboolean tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
-	widget = GHB_WIDGET(ud->builder, "PictureDeinterlace");
-	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_PictureDeinterlace");
-	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-
-	widget = GHB_WIDGET(ud->builder, "PictureDenoise");
-	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_PictureDenoise");
-	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	if (tweaks)
-	{
-		const GValue *value;
-		value = ghb_settings_get_value(ud->settings, "PictureDeinterlace");
-		ghb_ui_update(ud, "tweak_PictureDeinterlace", value);
-		value = ghb_settings_get_value(ud->settings, "PictureDenoise");
-		ghb_ui_update(ud, "tweak_PictureDenoise", value);
-	}
-	else
-	{
-		const GValue *value;
-		value = ghb_settings_get_value(ud->settings, "tweak_PictureDeinterlace");
-		ghb_ui_update(ud, "PictureDeinterlace", value);
-		value = ghb_settings_get_value(ud->settings, "tweak_PictureDenoise");
-		ghb_ui_update(ud, "PictureDenoise", value);
-	}
 }
 
 void

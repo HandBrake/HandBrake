@@ -62,7 +62,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -147,7 +147,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -234,7 +234,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -339,7 +339,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -422,7 +422,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -528,7 +528,7 @@
 						<key>PictureDenoise</key>
 						<string>0</string>
 						<key>PictureDetelecine</key>
-						<false />
+						<string>0</string>
 						<key>PictureHeight</key>
 						<integer>0</integer>
 						<key>PictureKeepRatio</key>
@@ -615,7 +615,7 @@
 						<key>PictureDenoise</key>
 						<string>0</string>
 						<key>PictureDetelecine</key>
-						<false />
+						<string>0</string>
 						<key>PictureHeight</key>
 						<integer>0</integer>
 						<key>PictureKeepRatio</key>
@@ -702,7 +702,7 @@
 						<key>PictureDenoise</key>
 						<string>0</string>
 						<key>PictureDetelecine</key>
-						<false />
+						<string>0</string>
 						<key>PictureHeight</key>
 						<integer>0</integer>
 						<key>PictureKeepRatio</key>
@@ -806,7 +806,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -893,7 +893,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -985,13 +985,13 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDecomb</key>
-				<true />
+				<string>2</string>
 				<key>PictureDeinterlace</key>
 				<string>0</string>
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<true />
+				<string>2</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1078,7 +1078,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1165,7 +1165,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1248,13 +1248,13 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDecomb</key>
-				<true />
+				<string>2</string>
 				<key>PictureDeinterlace</key>
 				<string>0</string>
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<true />
+				<string>2</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1352,7 +1352,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>208</integer>
 				<key>PictureKeepRatio</key>
@@ -1437,7 +1437,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1520,7 +1520,7 @@
 				<key>PictureDenoise</key>
 				<string>0</string>
 				<key>PictureDetelecine</key>
-				<false />
+				<string>0</string>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>

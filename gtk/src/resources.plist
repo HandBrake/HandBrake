@@ -799,6 +799,7 @@
                                   &lt;/object&gt;
                                   &lt;packing&gt;
                                     &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
+                                    &lt;property name=&quot;y_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -4615,94 +4616,131 @@ location as the movie.&lt;/property&gt;
                               &lt;/packing&gt;
                             &lt;/child&gt;
                             &lt;child&gt;
-                              &lt;object class=&quot;GtkCheckButton&quot; id=&quot;PictureDetelecine&quot;&gt;
-                                &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Detelecine&lt;/property&gt;
+                              &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment2&quot;&gt;
                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;receives_default&quot;&gt;False&lt;/property&gt;
-                                &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
-                                &lt;signal name=&quot;button_press_event&quot; handler=&quot;tweak_setting_cb&quot;/&gt;
-                                &lt;signal name=&quot;toggled&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
-                              &lt;/object&gt;
-                              &lt;packing&gt;
-                                &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
-                              &lt;/packing&gt;
-                            &lt;/child&gt;
+                                &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
+                                &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
+
                             &lt;child&gt;
-                              &lt;object class=&quot;GtkCheckButton&quot; id=&quot;PictureDecomb&quot;&gt;
-                                &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;De-Comb&lt;/property&gt;
+                              &lt;object class=&quot;GtkTable&quot; id=&quot;table90&quot;&gt;
                                 &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;receives_default&quot;&gt;False&lt;/property&gt;
-                                &lt;property name=&quot;active&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;draw_indicator&quot;&gt;True&lt;/property&gt;
-                                &lt;signal name=&quot;button_press_event&quot; handler=&quot;tweak_setting_cb&quot;/&gt;
-                                &lt;signal name=&quot;toggled&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
-                              &lt;/object&gt;
-                              &lt;packing&gt;
-                                &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
-                              &lt;/packing&gt;
-                            &lt;/child&gt;
-                            &lt;child&gt;
-                              &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox21&quot;&gt;
-                                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                &lt;property name=&quot;n_rows&quot;&gt;2&lt;/property&gt;
+                                &lt;property name=&quot;n_columns&quot;&gt;2&lt;/property&gt;
+                                &lt;property name=&quot;column_spacing&quot;&gt;5&lt;/property&gt;
+
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkLabel&quot; id=&quot;label56&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Deblock:&lt;/property&gt;
-                                    &lt;property name=&quot;width_chars&quot;&gt;10&lt;/property&gt;
+                                  &lt;/object&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkHScale&quot; id=&quot;PictureDeblock&quot;&gt;
+                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;adjustment&quot;&gt;adjustment20&lt;/property&gt;
+                                    &lt;property name=&quot;digits&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;value_pos&quot;&gt;right&lt;/property&gt;
+                                    &lt;signal name=&quot;value_changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
+                                    &lt;signal name=&quot;format_value&quot; handler=&quot;format_deblock_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment14&quot;&gt;
+                                  &lt;object class=&quot;GtkLabel&quot; id=&quot;label56&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
-                                    &lt;property name=&quot;xscale&quot;&gt;0.55000001192092896&lt;/property&gt;
-                                    &lt;child&gt;
-                                      &lt;object class=&quot;GtkHScale&quot; id=&quot;PictureDeblock&quot;&gt;
-                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;adjustment&quot;&gt;adjustment20&lt;/property&gt;
-                                        &lt;property name=&quot;digits&quot;&gt;0&lt;/property&gt;
-                                        &lt;property name=&quot;value_pos&quot;&gt;right&lt;/property&gt;
-                                        &lt;signal name=&quot;value_changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
-                                        &lt;signal name=&quot;format_value&quot; handler=&quot;format_deblock_cb&quot;/&gt;
-                                      &lt;/object&gt;
-                                    &lt;/child&gt;
+                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Detelecine:&lt;/property&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
-                              &lt;/object&gt;
-                              &lt;packing&gt;
-                                &lt;property name=&quot;position&quot;&gt;3&lt;/property&gt;
-                              &lt;/packing&gt;
-                            &lt;/child&gt;
-                            &lt;child&gt;
-                              &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox22&quot;&gt;
-                                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkComboBox&quot; id=&quot;PictureDetelecine&quot;&gt;
+                                    &lt;property name=&quot;width_request&quot;&gt;100&lt;/property&gt;
+                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                    &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;placeholder/&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDetelecineCustom&quot;&gt;
+                                    &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
+                                    &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;3&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkLabel&quot; id=&quot;label56&quot;&gt;
+                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Decomb:&lt;/property&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;3&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;4&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkComboBox&quot; id=&quot;PictureDecomb&quot;&gt;
+                                    &lt;property name=&quot;width_request&quot;&gt;100&lt;/property&gt;
+                                    &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                    &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                    &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;3&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;4&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;placeholder/&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDecombCustom&quot;&gt;
+                                    &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
+                                    &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
+                                  &lt;/object&gt;
+                                  &lt;packing&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;4&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;5&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                  &lt;/packing&gt;
+                                &lt;/child&gt;
+
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkLabel&quot; id=&quot;label31&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Deinterlace:&lt;/property&gt;
-                                    &lt;property name=&quot;width_chars&quot;&gt;10&lt;/property&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;5&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;6&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -4711,45 +4749,38 @@ location as the movie.&lt;/property&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
-                                    &lt;signal name=&quot;button_press_event&quot; handler=&quot;tweak_setting_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;5&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;6&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkComboBoxEntry&quot; id=&quot;tweak_PictureDeinterlace&quot;&gt;
+                                  &lt;placeholder/&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDeinterlaceCustom&quot;&gt;
+                                    &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;6&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;7&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
-                              &lt;/object&gt;
-                              &lt;packing&gt;
-                                &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                &lt;property name=&quot;padding&quot;&gt;2&lt;/property&gt;
-                                &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
-                              &lt;/packing&gt;
-                            &lt;/child&gt;
-                            &lt;child&gt;
-                              &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox23&quot;&gt;
-                                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkLabel&quot; id=&quot;label32&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
                                     &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Denoise:&lt;/property&gt;
-                                    &lt;property name=&quot;selectable&quot;&gt;True&lt;/property&gt;
-                                    &lt;property name=&quot;width_chars&quot;&gt;10&lt;/property&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;7&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;8&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
@@ -4758,27 +4789,36 @@ location as the movie.&lt;/property&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
-                                    &lt;signal name=&quot;button_press_event&quot; handler=&quot;tweak_setting_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;7&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;8&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                                 &lt;child&gt;
-                                  &lt;object class=&quot;GtkComboBoxEntry&quot; id=&quot;tweak_PictureDenoise&quot;&gt;
+                                  &lt;placeholder/&gt;
+                                &lt;/child&gt;
+                                &lt;child&gt;
+                                  &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDenoiseCustom&quot;&gt;
+                                    &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
-                                    &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                    &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+                                    &lt;property name=&quot;top_attach&quot;&gt;8&lt;/property&gt;
+                                    &lt;property name=&quot;bottom_attach&quot;&gt;9&lt;/property&gt;
+                                    &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                    &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                   &lt;/packing&gt;
                                 &lt;/child&gt;
                               &lt;/object&gt;
+                            &lt;/child&gt;
+
+                              &lt;/object&gt;
                               &lt;packing&gt;
                                 &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                &lt;property name=&quot;padding&quot;&gt;2&lt;/property&gt;
-                                &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
+                                &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
                               &lt;/packing&gt;
                             &lt;/child&gt;
                           &lt;/object&gt;
@@ -5358,10 +5398,6 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<integer>-1</integer>
 			<key>title</key>
 			<string>none</string>
-			<key>tweak_PictureDecomb</key>
-			<string></string>
-			<key>tweak_PictureDetelecine</key>
-			<string></string>
 			<key>volume_label</key>
 			<string>New Video</string>
 			<key>vquality_type_bitrate</key>
@@ -5488,13 +5524,21 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<key>PictureDeblock</key>
 			<integer>0</integer>
 			<key>PictureDecomb</key>
-			<false />
+			<string>none</string>
+			<key>PictureDecombCustom</key>
+			<string></string>
 			<key>PictureDeinterlace</key>
 			<string>none</string>
+			<key>PictureDeinterlaceCustom</key>
+			<string></string>
 			<key>PictureDenoise</key>
 			<string>none</string>
+			<key>PictureDenoiseCustom</key>
+			<string></string>
 			<key>PictureDetelecine</key>
-			<true />
+			<string>none</string>
+			<key>PictureDetelecineCustom</key>
+			<string></string>
 			<key>PictureHeight</key>
 			<integer>0</integer>
 			<key>PictureKeepRatio</key>
@@ -5628,7 +5672,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -5713,7 +5757,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -5800,7 +5844,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -5905,7 +5949,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -5988,7 +6032,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6094,7 +6138,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 							<key>PictureDenoise</key>
 							<string>0</string>
 							<key>PictureDetelecine</key>
-							<false />
+							<string>0</string>
 							<key>PictureHeight</key>
 							<integer>0</integer>
 							<key>PictureKeepRatio</key>
@@ -6181,7 +6225,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 							<key>PictureDenoise</key>
 							<string>0</string>
 							<key>PictureDetelecine</key>
-							<false />
+							<string>0</string>
 							<key>PictureHeight</key>
 							<integer>0</integer>
 							<key>PictureKeepRatio</key>
@@ -6268,7 +6312,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 							<key>PictureDenoise</key>
 							<string>0</string>
 							<key>PictureDetelecine</key>
-							<false />
+							<string>0</string>
 							<key>PictureHeight</key>
 							<integer>0</integer>
 							<key>PictureKeepRatio</key>
@@ -6372,7 +6416,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6459,7 +6503,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6551,13 +6595,13 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDeblock</key>
 					<integer>0</integer>
 					<key>PictureDecomb</key>
-					<true />
+					<string>2</string>
 					<key>PictureDeinterlace</key>
 					<string>0</string>
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<true />
+					<string>2</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6644,7 +6688,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6731,7 +6775,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6814,13 +6858,13 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDeblock</key>
 					<integer>0</integer>
 					<key>PictureDecomb</key>
-					<true />
+					<string>2</string>
 					<key>PictureDeinterlace</key>
 					<string>0</string>
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<true />
+					<string>2</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -6918,7 +6962,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>208</integer>
 					<key>PictureKeepRatio</key>
@@ -7003,7 +7047,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -7086,7 +7130,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 					<key>PictureDenoise</key>
 					<string>0</string>
 					<key>PictureDetelecine</key>
-					<false />
+					<string>0</string>
 					<key>PictureHeight</key>
 					<integer>0</integer>
 					<key>PictureKeepRatio</key>
@@ -7172,7 +7216,20 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>PictureDecomb</key>
 		<array>
 			<string>PictureDeinterlace</string>
-			<string>tweak_PictureDeinterlace</string>
+			<string>PictureDeinterlaceCustom</string>
+			<string>PictureDecombCustom</string>
+		</array>
+		<key>PictureDeinterlace</key>
+		<array>
+			<string>PictureDeinterlaceCustom</string>
+		</array>
+		<key>PictureDenoise</key>
+		<array>
+			<string>PictureDenoiseCustom</string>
+		</array>
+		<key>PictureDetelecine</key>
+		<array>
+			<string>PictureDetelecineCustom</string>
 		</array>
 		<key>PictureKeepRatio</key>
 		<array>
@@ -7257,6 +7314,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>AudioEncoder</string>
 				<string>ac3|dts</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>AudioMixdown</key>
@@ -7265,6 +7323,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>AudioEncoder</string>
 				<string>ac3|dts</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>AudioSamplerate</key>
@@ -7273,6 +7332,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>AudioEncoder</string>
 				<string>ac3|dts</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>AudioTrackDRCSlider</key>
@@ -7281,6 +7341,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>AudioEncoder</string>
 				<string>ac3|dts</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>Mp4HttpOptimize</key>
@@ -7289,6 +7350,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>FileFormat</string>
 				<string>mp4|m4v</string>
 				<false />
+				<true />
 			</array>
 		</array>
 		<key>Mp4LargeFile</key>
@@ -7297,6 +7359,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>FileFormat</string>
 				<string>mp4|m4v</string>
 				<false />
+				<true />
 			</array>
 		</array>
 		<key>Mp4iPodCompatible</key>
@@ -7305,10 +7368,12 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>FileFormat</string>
 				<string>mp4|m4v</string>
 				<false />
+				<true />
 			</array>
 			<array>
 				<string>VideoEncoder</string>
 				<string>x264</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7318,13 +7383,57 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>PictureAutoCrop</string>
 				<string>FALSE</string>
 				<false />
+				<false />
+			</array>
+		</array>
+		<key>PictureDecombCustom</key>
+		<array>
+			<array>
+				<string>PictureDecomb</string>
+				<string>custom</string>
+				<false />
+				<true />
 			</array>
 		</array>
 		<key>PictureDeinterlace</key>
 		<array>
 			<array>
 				<string>PictureDecomb</string>
-				<string>TRUE</string>
+				<string>none</string>
+				<false />
+				<false />
+			</array>
+		</array>
+		<key>PictureDeinterlaceCustom</key>
+		<array>
+			<array>
+				<string>PictureDecomb</string>
+				<string>none</string>
+				<false />
+				<true />
+			</array>
+			<array>
+				<string>PictureDeinterlace</string>
+				<string>custom</string>
+				<false />
+				<true />
+			</array>
+		</array>
+		<key>PictureDenoiseCustom</key>
+		<array>
+			<array>
+				<string>PictureDenoise</string>
+				<string>custom</string>
+				<false />
+				<true />
+			</array>
+		</array>
+		<key>PictureDetelecineCustom</key>
+		<array>
+			<array>
+				<string>PictureDetelecine</string>
+				<string>custom</string>
+				<false />
 				<true />
 			</array>
 		</array>
@@ -7334,6 +7443,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>anamorphic</string>
 				<string>FALSE</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>PictureLeftCrop</key>
@@ -7341,6 +7451,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>PictureAutoCrop</string>
 				<string>FALSE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7350,6 +7461,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>PictureAutoCrop</string>
 				<string>FALSE</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>PictureTopCrop</key>
@@ -7357,6 +7469,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>PictureAutoCrop</string>
 				<string>FALSE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7366,6 +7479,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>vquality_type_bitrate</string>
 				<string>TRUE</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>VideoQualitySlider</key>
@@ -7373,6 +7487,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>vquality_type_constant</string>
 				<string>TRUE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7382,6 +7497,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>vquality_type_target</string>
 				<string>TRUE</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>VideoTurboTwoPass</key>
@@ -7390,10 +7506,12 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>vquality_type_constant</string>
 				<string>TRUE</string>
 				<true />
+				<false />
 			</array>
 			<array>
 				<string>VideoTwoPass</string>
 				<string>TRUE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7403,6 +7521,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>vquality_type_constant</string>
 				<string>TRUE</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>chapters_in_destination</key>
@@ -7410,6 +7529,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>use_source_name</string>
 				<string>TRUE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7419,6 +7539,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>chapters_list</key>
@@ -7426,6 +7547,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>ChapterMarkers</string>
 				<string>TRUE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7435,6 +7557,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>constant_rate_factor</key>
@@ -7442,6 +7565,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>vquality_type_constant</string>
 				<string>TRUE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7451,6 +7575,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>VideoEncoder</string>
 				<string>x264|ffmpeg</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>end_chapter</key>
@@ -7459,6 +7584,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>picture_label</key>
@@ -7467,6 +7593,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>picture_tab</key>
@@ -7475,6 +7602,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>preview_frame</key>
@@ -7483,6 +7611,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>queue_add</key>
@@ -7491,6 +7620,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>queue_add_menu</key>
@@ -7499,6 +7629,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>scale_height</key>
@@ -7507,15 +7638,18 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>autoscale</string>
 				<string>FALSE</string>
 				<false />
+				<false />
 			</array>
 			<array>
 				<string>anamorphic</string>
 				<string>CHECK</string>
 				<true />
+				<false />
 			</array>
 			<array>
 				<string>PictureKeepRatio</string>
 				<string>FALSE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7525,6 +7659,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>autoscale</string>
 				<string>FALSE</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>show_picture</key>
@@ -7533,6 +7668,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>show_preview_menu</key>
@@ -7541,6 +7677,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>start_chapter</key>
@@ -7549,6 +7686,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>title</key>
@@ -7557,6 +7695,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>title</string>
 				<string>none</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>title_no_in_destination</key>
@@ -7565,14 +7704,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>use_source_name</string>
 				<string>TRUE</string>
 				<false />
-			</array>
-		</array>
-		<key>tweak_PictureDeinterlace</key>
-		<array>
-			<array>
-				<string>PictureDecomb</string>
-				<string>TRUE</string>
-				<true />
+				<false />
 			</array>
 		</array>
 		<key>x264_bpyramid</key>
@@ -7581,6 +7713,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>x264_bframes</string>
 				<string>&lt;2</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>x264_direct</key>
@@ -7589,6 +7722,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>x264_bframes</string>
 				<string>0</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>x264_mixed_refs</key>
@@ -7597,6 +7731,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>x264_refs</string>
 				<string>&lt;2</string>
 				<true />
+				<false />
 			</array>
 		</array>
 		<key>x264_tab</key>
@@ -7604,6 +7739,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>VideoEncoder</string>
 				<string>x264</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7613,6 +7749,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>VideoEncoder</string>
 				<string>x264</string>
 				<false />
+				<false />
 			</array>
 		</array>
 		<key>x264_trellis</key>
@@ -7620,6 +7757,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>x264_cabac</string>
 				<string>TRUE</string>
+				<false />
 				<false />
 			</array>
 		</array>
@@ -7629,6 +7767,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>x264_bframes</string>
 				<string>0</string>
 				<true />
+				<false />
 			</array>
 		</array>
 	</dict>

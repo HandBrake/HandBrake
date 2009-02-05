@@ -494,7 +494,6 @@ main (int argc, char *argv[])
 	GValue *preset;
 	GError *error = NULL;
 	GOptionContext *context;
-	GtkWidget *widget;
 
 	mm_flags = mm_support();
 #ifdef ENABLE_NLS
@@ -578,17 +577,6 @@ main (int argc, char *argv[])
 	{
 		ghb_hbfd(ud, TRUE);
 	}
-	gboolean tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
-	widget = GHB_WIDGET(ud->builder, "PictureDeinterlace");
-	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_PictureDeinterlace");
-	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-
-	widget = GHB_WIDGET(ud->builder, "PictureDenoise");
-	tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-	widget = GHB_WIDGET(ud->builder, "tweak_PictureDenoise");
-	!tweaks ? gtk_widget_hide(widget) : gtk_widget_show(widget);
-
 	gchar *source = ghb_settings_get_string(ud->settings, "default_source");
 	ghb_dvd_set_current(source, ud);
 	g_free(source);

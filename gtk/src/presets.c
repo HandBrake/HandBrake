@@ -861,21 +861,6 @@ preset_to_ui(signal_user_data_t *ud, GValue *dict)
 	init_settings_from_dict(ud->settings, hidden, dict);
 	init_ui_from_dict(ud, internal, dict);
 	init_ui_from_dict(ud, hidden, dict);
-
-	if (ghb_settings_get_boolean(ud->settings, "allow_tweaks"))
-	{
-		const GValue *gval;
-		gval = preset_dict_get_value(dict, "PictureDeinterlace");
-		if (gval)
-		{
-			ghb_ui_update(ud, "tweak_PictureDeinterlace", gval);
-		}
-		gval = preset_dict_get_value(dict, "PictureDenoise");
-		if (gval)
-		{
-			ghb_ui_update(ud, "tweak_PictureDenoise", gval);
-		}
-	}
 }
 
 void
@@ -1721,18 +1706,36 @@ value_map_t mix_xlat[] =
 value_map_t deint_xlat[] =
 {
 	{"0", "none"},
-	{"1", "fast"},
-	{"2", "slow"},
-	{"3", "slower"},
+	{"1", "custom"},
+	{"2", "fast"},
+	{"3", "slow"},
+	{"4", "slower"},
 	{NULL, NULL}
 };
 
 value_map_t denoise_xlat[] =
 {
 	{"0", "none"},
-	{"1", "weak"},
-	{"2", "medium"},
-	{"3", "strong"},
+	{"1", "custom"},
+	{"2", "weak"},
+	{"3", "medium"},
+	{"4", "strong"},
+	{NULL, NULL}
+};
+
+value_map_t detel_xlat[] =
+{
+	{"0", "none"},
+	{"1", "custom"},
+	{"2", "default"},
+	{NULL, NULL}
+};
+
+value_map_t decomb_xlat[] =
+{
+	{"0", "none"},
+	{"1", "custom"},
+	{"2", "default"},
 	{NULL, NULL}
 };
 
@@ -1933,6 +1936,20 @@ export_value_xlat(GValue *dict)
 	gval = export_value_xlat2(framerate_xlat, lin_val, G_TYPE_STRING);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "PictureDetelecine";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(detel_xlat, lin_val, G_TYPE_INT);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	else
+		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
+	key = "PictureDecomb";
+	lin_val = ghb_dict_lookup(dict, key);
+	gval = export_value_xlat2(decomb_xlat, lin_val, G_TYPE_INT);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	else
+		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
 	key = "PictureDeinterlace";
 	lin_val = ghb_dict_lookup(dict, key);
 	gval = export_value_xlat2(deint_xlat, lin_val, G_TYPE_INT);
@@ -2053,6 +2070,16 @@ import_value_xlat(GValue *dict)
 	key = "VideoFramerate";
 	mac_val = ghb_dict_lookup(dict, key);
 	gval = import_value_xlat2(defaults, framerate_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "PictureDetelecine";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, detel_xlat, key, mac_val);
+	if (gval)
+		ghb_dict_insert(dict, g_strdup(key), gval);
+	key = "PictureDecomb";
+	mac_val = ghb_dict_lookup(dict, key);
+	gval = import_value_xlat2(defaults, decomb_xlat, key, mac_val);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
 	key = "PictureDeinterlace";
@@ -2464,22 +2491,6 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 		}
 	}
 	current_preset = dict;
-	if (ghb_settings_get_boolean(ud->settings, "allow_tweaks"))
-	{
-		gchar *str;
-		str = ghb_settings_get_string(ud->settings, "tweak_PictureDeinterlace");
-		if (str)
-		{
-			ghb_settings_set_string(ud->settings, "PictureDeinterlace", str);
-			g_free(str);
-		}
-		str = ghb_settings_get_string(ud->settings, "tweak_PictureDenoise");
-		if (str)
-		{
-			ghb_settings_set_string(ud->settings, "PictureDenoise", str);
-			g_free(str);
-		}
-	}
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
 	ghb_settings_set_int64(ud->settings, "Type", PRESETS_CUSTOM);
 

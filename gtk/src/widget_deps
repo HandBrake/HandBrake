@@ -29,7 +29,20 @@
 	<key>PictureDecomb</key>
 	<array>
 		<string>PictureDeinterlace</string>
-		<string>tweak_PictureDeinterlace</string>
+		<string>PictureDeinterlaceCustom</string>
+		<string>PictureDecombCustom</string>
+	</array>
+	<key>PictureDeinterlace</key>
+	<array>
+		<string>PictureDeinterlaceCustom</string>
+	</array>
+	<key>PictureDenoise</key>
+	<array>
+		<string>PictureDenoiseCustom</string>
+	</array>
+	<key>PictureDetelecine</key>
+	<array>
+		<string>PictureDetelecineCustom</string>
 	</array>
 	<key>PictureKeepRatio</key>
 	<array>

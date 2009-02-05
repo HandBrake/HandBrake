@@ -90,12 +90,37 @@ combo_opts_t container_opts =
 	d_container_opts
 };
 
+static options_map_t d_detel_opts[] =
+{
+	{"None",   "none",   0, ""},
+	{"Custom", "custom", 1, ""},
+	{"Default","default",2, NULL},
+};
+combo_opts_t detel_opts =
+{
+	sizeof(d_detel_opts)/sizeof(options_map_t),
+	d_detel_opts
+};
+
+static options_map_t d_decomb_opts[] =
+{
+	{"None",   "none",   0, ""},
+	{"Custom", "custom", 1, ""},
+	{"Default","default",2, NULL},
+};
+combo_opts_t decomb_opts =
+{
+	sizeof(d_decomb_opts)/sizeof(options_map_t),
+	d_decomb_opts
+};
+
 static options_map_t d_deint_opts[] =
 {
 	{"None",   "none",   0, ""},
-	{"Fast",   "fast",   1, "-1:-1:-1:0:1"},
-	{"Slow",   "slow",   2, "2:-1:-1:0:1"},
-	{"Slower", "slower", 3, "0:-1:-1:0:1"},
+	{"Custom", "custom", 1, ""},
+	{"Fast",   "fast",   2, "-1:-1:-1:0:1"},
+	{"Slow",   "slow",   3, "2:-1:-1:0:1"},
+	{"Slower", "slower", 4, "0:-1:-1:0:1"},
 };
 combo_opts_t deint_opts =
 {
@@ -106,9 +131,10 @@ combo_opts_t deint_opts =
 static options_map_t d_denoise_opts[] =
 {
 	{"None",   "none",   0, ""},
-	{"Weak",   "weak",   1, "2:1:2:3"},
-	{"Medium", "medium", 2, "3:2:2:3"},
-	{"Strong", "strong", 3, "7:7:5:5"},
+	{"Custom", "custom", 1, ""},
+	{"Weak",   "weak",   2, "2:1:2:3"},
+	{"Medium", "medium", 3, "3:2:2:3"},
+	{"Strong", "strong", 4, "7:7:5:5"},
 };
 combo_opts_t denoise_opts =
 {
@@ -242,9 +268,9 @@ combo_name_map_t combo_name_map[] =
 	{"LoggingLevel", &logging_opts},
 	{"FileFormat", &container_opts},
 	{"PictureDeinterlace", &deint_opts},
-	{"tweak_PictureDeinterlace", &deint_opts},
+	{"PictureDecomb", &decomb_opts},
+	{"PictureDetelecine", &detel_opts},
 	{"PictureDenoise", &denoise_opts},
-	{"tweak_PictureDenoise", &denoise_opts},
 	{"VideoEncoder", &vcodec_opts},
 	{"AudioEncoder", &acodec_opts},
 	{"x264_direct", &direct_opts},
@@ -1882,9 +1908,9 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		generic_opts_set(builder, "LoggingLevel", &logging_opts);
 		generic_opts_set(builder, "FileFormat", &container_opts);
 		generic_opts_set(builder, "PictureDeinterlace", &deint_opts);
-		generic_opts_set(builder, "tweak_PictureDeinterlace", &deint_opts);
+		generic_opts_set(builder, "PictureDetelecine", &detel_opts);
+		generic_opts_set(builder, "PictureDecomb", &decomb_opts);
 		generic_opts_set(builder, "PictureDenoise", &denoise_opts);
-		generic_opts_set(builder, "tweak_PictureDenoise", &denoise_opts);
 		generic_opts_set(builder, "VideoEncoder", &vcodec_opts);
 		generic_opts_set(builder, "AudioEncoder", &acodec_opts);
 		generic_opts_set(builder, "x264_direct", &direct_opts);
@@ -2656,7 +2682,7 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
 	gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
-	gboolean decomb = ghb_settings_get_boolean(settings, "PictureDecomb");
+	gint decomb = ghb_settings_combo_int(settings, "PictureDecomb");
 	job->deinterlace = (!decomb && deint == 0) ? 0 : 1;
 }
 
@@ -2709,36 +2735,70 @@ ghb_validate_filter_string(const gchar *str, gint max_fields)
 gboolean
 ghb_validate_filters(signal_user_data_t *ud)
 {
-	gboolean tweaks;
 	gchar *str;
 	gint index;
 	gchar *message;
-	gboolean enabled;
 
-	tweaks = ghb_settings_get_boolean(ud->settings, "allow_tweaks");
-	if (tweaks)
+	// deinte 4
+	index = ghb_settings_combo_int(ud->settings, "PictureDeinterlace");
+	if (index == 1)
 	{
-		// detele 6
-		str = ghb_settings_get_string(ud->settings, "tweak_PictureDetelecine");
-		enabled = ghb_settings_get_boolean(ud->settings, "PictureDetelecine");
-		if (enabled && !ghb_validate_filter_string(str, 6))
+		str = ghb_settings_get_string(ud->settings, "PictureDeinterlaceCustom");
+		if (!ghb_validate_filter_string(str, 4))
+		{
+			message = g_strdup_printf(
+						"Invalid Deinterlace Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			g_free(str);
+			return FALSE;
+		}
+		g_free(str);
+	}
+	// detel
+	index = ghb_settings_combo_int(ud->settings, "PictureDetelecine");
+	if (index == 1)
+	{
+		str = ghb_settings_get_string(ud->settings, "PictureDetelecineCustom");
+		if (!ghb_validate_filter_string(str, 6))
 		{
 			message = g_strdup_printf(
 						"Invalid Detelecine Settings:\n\n%s\n",
 						str);
 			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
-			g_free(str);
 			g_free(message);
+			g_free(str);
 			return FALSE;
 		}
 		g_free(str);
-		// decomb 7
-		str = ghb_settings_get_string(ud->settings, "tweak_PictureDecomb");
-		enabled = ghb_settings_get_boolean(ud->settings, "PictureDecomb");
-		if (enabled && !ghb_validate_filter_string(str, 7))
+	}
+	// decomb 4
+	index = ghb_settings_combo_int(ud->settings, "PictureDecomb");
+	if (index == 1)
+	{
+		str = ghb_settings_get_string(ud->settings, "PictureDecombCustom");
+		if (!ghb_validate_filter_string(str, 7))
 		{
 			message = g_strdup_printf(
 						"Invalid Decomb Settings:\n\n%s\n",
+						str);
+			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
+			g_free(message);
+			g_free(str);
+			return FALSE;
+		}
+		g_free(str);
+	}
+	// denois 4
+	index = ghb_settings_combo_int(ud->settings, "PictureDenoise");
+	if (index == 1)
+	{
+		str = ghb_settings_get_string(ud->settings, "PictureDenoiseCustom");
+		if (!ghb_validate_filter_string(str, 4))
+		{
+			message = g_strdup_printf(
+						"Invalid Denoise Settings:\n\n%s\n",
 						str);
 			ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
 			g_free(str);
@@ -2746,42 +2806,6 @@ ghb_validate_filters(signal_user_data_t *ud)
 			return FALSE;
 		}
 		g_free(str);
-		// deinte 4
-		index = ghb_lookup_combo_int("tweak_PictureDeinterlace", 
-			ghb_settings_get_value(ud->settings, "tweak_PictureDeinterlace"));
-		if (index < 0)
-		{
-			str = ghb_settings_get_string(ud->settings, "tweak_PictureDeinterlace");
-			if (!ghb_validate_filter_string(str, 4))
-			{
-				message = g_strdup_printf(
-							"Invalid Deinterlace Settings:\n\n%s\n",
-							str);
-				ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
-				g_free(message);
-				g_free(str);
-				return FALSE;
-			}
-			g_free(str);
-		}
-		// denois 4
-		index = ghb_lookup_combo_int("tweak_PictureDenoise", 
-				ghb_settings_get_value(ud->settings, "tweak_PictureDenoise"));
-		if (index < 0)
-		{
-			str = ghb_settings_get_string(ud->settings, "tweak_PictureDenoise");
-			if (!ghb_validate_filter_string(str, 4))
-			{
-				message = g_strdup_printf(
-							"Invalid Denoise Settings:\n\n%s\n",
-							str);
-				ghb_message_dialog(GTK_MESSAGE_ERROR, message, "Cancel", NULL);
-				g_free(str);
-				g_free(message);
-				return FALSE;
-			}
-			g_free(str);
-		}
 	}
 	return TRUE;
 }
@@ -3174,9 +3198,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	job->crop[3] = ghb_settings_get_int(js, "PictureRightCrop");
 
 	
-	gboolean decomb = ghb_settings_get_boolean(js, "PictureDecomb");
-	gint deint = ghb_settings_combo_int(js, 
-					tweaks ? "tweak_PictureDeinterlace":"PictureDeinterlace");
+	gint decomb = ghb_settings_combo_int(js, "PictureDecomb");
+	gint deint = ghb_settings_combo_int(js, "PictureDeinterlace");
 	if (!decomb)
 		job->deinterlace = (deint != 0) ? 1 : 0;
 	else
@@ -3200,45 +3223,45 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	/* Add selected filters */
 	job->filters = hb_list_init();
 	gint vrate = ghb_settings_combo_int(js, "VideoFramerate");
-	if( vrate == 0 && ghb_settings_get_boolean(js, "PictureDetelecine" ) )
+	if( vrate == 0 && ghb_settings_combo_int(js, "PictureDetelecine" ) )
 		job->vfr = 1;
 	else
 		job->vfr = 0;
 
-	if( ghb_settings_get_boolean(js, "PictureDetelecine" ) )
+	gint detel = ghb_settings_combo_int(js, "PictureDetelecine");
+	if ( detel )
 	{
-		hb_filter_detelecine.settings = NULL;
-		if (tweaks)
+		if (detel != 1)
 		{
-			detel_str = ghb_settings_get_string(js, "tweak_PictureDetelecine");
-			if (detel_str && detel_str[0])
-			{
-				hb_filter_detelecine.settings = detel_str;
-			}
+			if (detel_opts.map[detel].svalue != NULL)
+				detel_str = g_strdup(detel_opts.map[detel].svalue);
 		}
+		else
+			detel_str = ghb_settings_get_string(js, "PictureDetelecineCustom");
+		hb_filter_detelecine.settings = detel_str;
 		hb_list_add( job->filters, &hb_filter_detelecine );
 	}
-	if( decomb )
+	if ( decomb )
 	{
-		// Use default settings
-		hb_filter_decomb.settings = NULL;
-		if (tweaks)
+		if (decomb != 1)
 		{
-			decomb_str = ghb_settings_get_string(js, "tweak_PictureDecomb");
-			if (decomb_str && decomb_str[0])
-			{
-				hb_filter_decomb.settings = (gchar*)decomb_str;
-			}
+			if (decomb_opts.map[decomb].svalue != NULL)
+				decomb_str = g_strdup(decomb_opts.map[decomb].svalue);
 		}
+		else
+			decomb_str = ghb_settings_get_string(js, "PictureDecombCustom");
+		hb_filter_decomb.settings = decomb_str;
 		hb_list_add( job->filters, &hb_filter_decomb );
 	}
 	if( job->deinterlace )
 	{
-		if (deint > 0)
-			deint_str = g_strdup(deint_opts.map[deint].svalue);
+		if (deint != 1)
+		{
+			if (deint_opts.map[deint].svalue != NULL)
+				deint_str = g_strdup(deint_opts.map[deint].svalue);
+		}
 		else
-			deint_str = ghb_settings_get_string(js, 
-					tweaks ? "tweak_PictureDeinterlace" : "PictureDeinterlace");
+			deint_str = ghb_settings_get_string(js, "PictureDeinterlaceCustom");
 		hb_filter_deinterlace.settings = deint_str;
 		hb_list_add( job->filters, &hb_filter_deinterlace );
 	}
@@ -3249,15 +3272,16 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		hb_filter_deblock.settings = deblock_str;
 		hb_list_add( job->filters, &hb_filter_deblock );
 	}
-	gint denoise = ghb_settings_combo_int(js, 
-					tweaks ? "tweak_PictureDenoise" : "PictureDenoise");
-	if( denoise != 0 )
+	gint denoise = ghb_settings_combo_int(js, "PictureDenoise");
+	if( denoise )
 	{
-		if (denoise > 0)
-			denoise_str = g_strdup(denoise_opts.map[denoise].svalue);
+		if (denoise != 1)
+		{
+			if (denoise_opts.map[denoise].svalue != NULL)
+				denoise_str = g_strdup(denoise_opts.map[denoise].svalue);
+		}
 		else
-			denoise_str = (gchar*)ghb_settings_get_string(
-				js, tweaks ? "tweak_PictureDenoise" : "PictureDenoise");
+			denoise_str = ghb_settings_get_string(js, "PictureDenoiseCustom");
 		hb_filter_denoise.settings = denoise_str;
 		hb_list_add( job->filters, &hb_filter_denoise );
 	}

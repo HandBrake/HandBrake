@@ -525,6 +525,11 @@ gval_write(FILE *file, GValue *gval)
 		gint val = g_value_get_int64(gval);
 		indent_fprintf(file, indent, "<integer>%d</integer>\n", val);
 	}
+	else if (gtype == G_TYPE_INT)
+	{
+		gint val = g_value_get_int(gval);
+		indent_fprintf(file, indent, "<integer>%d</integer>\n", val);
+	}
 	else if (gtype == G_TYPE_STRING)
 	{
 		const gchar *str = g_value_get_string(gval);
