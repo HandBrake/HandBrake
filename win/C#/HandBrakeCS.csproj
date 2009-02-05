@@ -100,6 +100,30 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Denoise.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Denoise.Designer.cs">
+      <DependentUpon>Denoise.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Decomb.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Decomb.Designer.cs">
+      <DependentUpon>Decomb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Detelecine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Detelecine.Designer.cs">
+      <DependentUpon>Detelecine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Deinterlace.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Deinterlace.Designer.cs">
+      <DependentUpon>Deinterlace.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +208,22 @@
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\Denoise.resx">
+      <DependentUpon>Denoise.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Decomb.resx">
+      <DependentUpon>Decomb.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Detelecine.resx">
+      <DependentUpon>Detelecine.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Deinterlace.resx">
+      <DependentUpon>Deinterlace.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPreview.resx">
       <DependentUpon>frmPreview.cs</DependentUpon>
       <SubType>Designer</SubType>

@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*  QueryGenerator.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.fr/>.
+ 	   It may be used under the terms of the GNU General Public License. */
+
+using System;
 using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
@@ -88,7 +94,6 @@ namespace Handbrake
         {
             string query = "";
 
-            // The Output Settings box above the tabbed section.
             #region Output Settings Box
             query += " -f " + mainWindow.drop_format.Text.ToLower().Replace(" file", "");
 
@@ -103,7 +108,6 @@ namespace Handbrake
                 query += " -O ";
             #endregion
 
-            // Picture Settings Tab
             #region Picture Settings Tab
 
             // Use MaxWidth for built-in presets and width for user settings.
@@ -150,37 +154,6 @@ namespace Handbrake
                 query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
             }
 
-            switch (mainWindow.drp_deInterlace_option.Text)
-            {
-                case "None":
-                    query += "";
-                    break;
-                case "Fast":
-                    query += " --deinterlace=\"fast\"";
-                    break;
-                case "Slow":
-                    query += " --deinterlace=\"slow\"";
-                    break;
-                case "Slower":
-                    query += " --deinterlace=\"slower\"";
-                    break;
-                case "Slowest":
-                    query += " --deinterlace=\"slowest\"";
-                    break;
-                default:
-                    query += "";
-                    break;
-            }
-
-            if (mainWindow.check_decomb.Checked)
-            {
-                string decombValue = Properties.Settings.Default.decomb;
-                if (decombValue != "" && decombValue != Properties.Settings.Default.default_decomb)
-                    query += " --decomb=\"" + decombValue + "\"";
-                else
-                    query += " --decomb ";
-            }
-
             if (mainWindow.drp_anamorphic.SelectedIndex == 1)
                 query += " -p ";
             else if (mainWindow.drp_anamorphic.SelectedIndex == 2)
@@ -189,11 +162,16 @@ namespace Handbrake
             if (mainWindow.slider_deblock.Value != 4)
                 query += " --deblock=" + mainWindow.slider_deblock.Value;
 
-            if (mainWindow.check_detelecine.Checked)
-                query += " --detelecine";
+            
             #endregion
 
-            // Video Settings Tab
+            #region Filters
+            query += mainWindow.ctl_detelecine.getCLIQuery;
+            query += mainWindow.ctl_decomb.getCLIQuery;
+            query += mainWindow.ctl_deinterlace.getCLIQuery;
+            query += mainWindow.ctl_denoise.getCLIQuery;
+            #endregion
+
             #region Video Settings Tab
 
             switch (mainWindow.drp_videoEncoder.Text)
@@ -241,28 +219,8 @@ namespace Handbrake
 
             if (mainWindow.drp_videoFramerate.Text != "Same as source")
                 query += " -r " + mainWindow.drp_videoFramerate.Text;
-
-            switch (mainWindow.drp_deNoise.Text)
-            {
-                case "None":
-                    query += "";
-                    break;
-                case "Weak":
-                    query += " --denoise=\"weak\"";
-                    break;
-                case "Medium":
-                    query += " --denoise=\"medium\"";
-                    break;
-                case "Strong":
-                    query += " --denoise=\"strong\"";
-                    break;
-                default:
-                    query += "";
-                    break;
-            }
             #endregion
 
-            // Audio Settings Tab
             #region Audio Settings Tab
 
             ListView audioTracks = mainWindow.lv_audioList;
@@ -407,7 +365,6 @@ namespace Handbrake
 
             #endregion
 
-            // Chapter Markers Tab
             #region Chapter Markers
 
             // Attach Source name and dvd title to the start of the chapters.csv filename.
@@ -441,13 +398,11 @@ namespace Handbrake
             }
             #endregion
 
-            // H264 Tab
             #region  H264 Tab
             if (mainWindow.rtf_x264Query.Text != "")
                 query += " -x " + mainWindow.rtf_x264Query.Text;
             #endregion
 
-            // Other
             #region Processors / Other
             string processors = Properties.Settings.Default.Processors;
             if (processors != "Automatic")

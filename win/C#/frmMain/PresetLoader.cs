@@ -107,30 +107,6 @@ namespace Handbrake
                     mainWindow.text_height.Text = presetQuery.Height.ToString();
             }
 
-            mainWindow.drp_deInterlace_option.Text = presetQuery.DeInterlace;
-            mainWindow.drp_deNoise.Text = presetQuery.DeNoise;
-
-            if (presetQuery.Decomb != "False")
-                mainWindow.check_decomb.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_decomb.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.DeTelecine != "False")
-                mainWindow.check_detelecine.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_detelecine.CheckState = CheckState.Unchecked;
-
-            if (presetQuery.DeBlock != 0)
-            {
-                mainWindow.slider_deblock.Value = presetQuery.DeBlock;
-                mainWindow.lbl_deblockVal.Text = presetQuery.DeBlock.ToString();
-            }
-            else
-            {
-                mainWindow.slider_deblock.Value = 4;
-                mainWindow.lbl_deblockVal.Text = "Off";
-            }
-
             if (presetQuery.Anamorphic)
                 mainWindow.drp_anamorphic.SelectedIndex = 1;
             else
@@ -159,6 +135,31 @@ namespace Handbrake
             }
 
 
+            #endregion
+
+            // Filters Tab
+            #region Filters
+
+            mainWindow.ctl_decomb.setOption(presetQuery.Decomb);
+
+            if (mainWindow.ctl_decomb.getDropValue == "Off")
+                mainWindow.ctl_deinterlace.setOption(presetQuery.DeInterlace);
+            else 
+                mainWindow.ctl_deinterlace.setOption("None"); // Don't want decomb and deinterlace on at the same time
+
+            mainWindow.ctl_denoise.setOption(presetQuery.DeNoise);
+            mainWindow.ctl_detelecine.setOption(presetQuery.DeTelecine);
+            
+            if (presetQuery.DeBlock != 0)
+            {
+                mainWindow.slider_deblock.Value = presetQuery.DeBlock;
+                mainWindow.lbl_deblockVal.Text = presetQuery.DeBlock.ToString();
+            }
+            else
+            {
+                mainWindow.slider_deblock.Value = 4;
+                mainWindow.lbl_deblockVal.Text = "Off";
+            }
             #endregion
 
             // Video Settings Tab

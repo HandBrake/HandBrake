@@ -774,15 +774,15 @@ namespace Handbrake.Functions
 
                 #endregion
 
-                #region Picture Tab - Filters
+                #region Filters
 
+                thisQuery.q_decomb = "Off";
                 if (decomb.Success)
                 {
-                    thisQuery.q_decomb = "True";
+                    thisQuery.q_decomb = "Default";
                     if (decombValue.Success)
                         thisQuery.q_decomb = decombValue.ToString().Replace("--decomb=", "").Replace("\"", "");
-                } else
-                    thisQuery.q_decomb = "False";
+                }
 
                 thisQuery.q_deinterlace = "None";
                 if (deinterlace.Success)
@@ -806,14 +806,14 @@ namespace Handbrake.Functions
                 if (deblockValue != "")
                     int.TryParse(deblockValue, out thisQuery.q_deBlock);
 
+                thisQuery.q_detelecine = "Off";
                 if (detelecine.Success)
                 {
-                    thisQuery.q_detelecine = "True";
+                    thisQuery.q_detelecine = "Default";
                     if (detelecineValue.Success)
                         thisQuery.q_detelecine = detelecineValue.ToString().Replace("--detelecine=", "").Replace("\"", "");
                 }
-                else
-                    thisQuery.q_detelecine = "False";
+
                 #endregion
 
                 #region Video Settings Tab

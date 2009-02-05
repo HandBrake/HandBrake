@@ -121,6 +121,8 @@ namespace Handbrake
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_qptest = new System.Windows.Forms.ToolStripMenuItem();
             this.gb_source = new System.Windows.Forms.GroupBox();
             this.Label13 = new System.Windows.Forms.Label();
             this.Label17 = new System.Windows.Forms.Label();
@@ -163,7 +165,6 @@ namespace Handbrake
             this.drp_track1Audio = new System.Windows.Forms.ComboBox();
             this.TabPage3 = new System.Windows.Forms.TabPage();
             this.label25 = new System.Windows.Forms.Label();
-            this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.Label22 = new System.Windows.Forms.Label();
             this.check_2PassEncode = new System.Windows.Forms.CheckBox();
             this.Label2 = new System.Windows.Forms.Label();
@@ -171,11 +172,8 @@ namespace Handbrake
             this.SliderValue = new System.Windows.Forms.Label();
             this.Label46 = new System.Windows.Forms.Label();
             this.Label40 = new System.Windows.Forms.Label();
+            this.check_grayscale = new System.Windows.Forms.CheckBox();
             this.TabPage1 = new System.Windows.Forms.TabPage();
-            this.slider_deblock = new System.Windows.Forms.TrackBar();
-            this.label8 = new System.Windows.Forms.Label();
-            this.lbl_deblockVal = new System.Windows.Forms.Label();
-            this.check_decomb = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.drp_anamorphic = new System.Windows.Forms.ComboBox();
             this.text_bottom = new System.Windows.Forms.NumericUpDown();
@@ -187,19 +185,22 @@ namespace Handbrake
             this.lbl_Aspect = new System.Windows.Forms.Label();
             this.Label91 = new System.Windows.Forms.Label();
             this.Label55 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.drp_deNoise = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.check_detelecine = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.drp_deInterlace_option = new System.Windows.Forms.ComboBox();
             this.Label1 = new System.Windows.Forms.Label();
             this.Label53 = new System.Windows.Forms.Label();
             this.Label52 = new System.Windows.Forms.Label();
             this.Label51 = new System.Windows.Forms.Label();
             this.Label15 = new System.Windows.Forms.Label();
+            this.slider_deblock = new System.Windows.Forms.TrackBar();
+            this.label8 = new System.Windows.Forms.Label();
+            this.lbl_deblockVal = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.tabs_panel = new System.Windows.Forms.TabControl();
+            this.tab_Filters = new System.Windows.Forms.TabPage();
+            this.ctl_deinterlace = new Handbrake.Deinterlace();
+            this.ctl_denoise = new Handbrake.Denoise();
+            this.ctl_decomb = new Handbrake.Decomb();
+            this.ctl_detelecine = new Handbrake.Detelecine();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.h264Tab = new System.Windows.Forms.TabPage();
@@ -253,8 +254,6 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_qptest = new System.Windows.Forms.ToolStripMenuItem();
             Label38 = new System.Windows.Forms.Label();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
@@ -268,12 +267,13 @@ namespace Handbrake
             ((System.ComponentModel.ISupportInitialize)(this.tb_drc)).BeginInit();
             this.TabPage3.SuspendLayout();
             this.TabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.slider_deblock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_bottom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_top)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_left)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_right)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slider_deblock)).BeginInit();
             this.tabs_panel.SuspendLayout();
+            this.tab_Filters.SuspendLayout();
             this.tab_chapters.SuspendLayout();
             this.h264Tab.SuspendLayout();
             this.tab_query.SuspendLayout();
@@ -470,7 +470,7 @@ namespace Handbrake
             this.check_turbo.BackColor = System.Drawing.Color.Transparent;
             this.check_turbo.Enabled = false;
             this.check_turbo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_turbo.Location = new System.Drawing.Point(37, 184);
+            this.check_turbo.Location = new System.Drawing.Point(37, 168);
             this.check_turbo.Name = "check_turbo";
             this.check_turbo.Size = new System.Drawing.Size(115, 17);
             this.check_turbo.TabIndex = 7;
@@ -1412,9 +1412,24 @@ namespace Handbrake
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
             this.frmMainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.frmMainMenu.Size = new System.Drawing.Size(992, 24);
+            this.frmMainMenu.Size = new System.Drawing.Size(995, 24);
             this.frmMainMenu.TabIndex = 0;
             this.frmMainMenu.Text = "MenuStrip";
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_qptest});
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // mnu_qptest
+            // 
+            this.mnu_qptest.Name = "mnu_qptest";
+            this.mnu_qptest.Size = new System.Drawing.Size(201, 22);
+            this.mnu_qptest.Text = "Query Parser Tester";
+            this.mnu_qptest.Click += new System.EventHandler(this.mnu_qptest_Click);
             // 
             // gb_source
             // 
@@ -1561,6 +1576,7 @@ namespace Handbrake
             this.TabPage2.Size = new System.Drawing.Size(713, 316);
             this.TabPage2.TabIndex = 3;
             this.TabPage2.Text = "Audio && Subtitles";
+            this.TabPage2.UseVisualStyleBackColor = true;
             // 
             // lv_audioList
             // 
@@ -1853,7 +1869,6 @@ namespace Handbrake
             this.TabPage3.Controls.Add(this.drp_videoEncoder);
             this.TabPage3.Controls.Add(this.Label47);
             this.TabPage3.Controls.Add(this.label25);
-            this.TabPage3.Controls.Add(this.check_grayscale);
             this.TabPage3.Controls.Add(this.check_turbo);
             this.TabPage3.Controls.Add(this.Label22);
             this.TabPage3.Controls.Add(this.check_2PassEncode);
@@ -1873,6 +1888,7 @@ namespace Handbrake
             this.TabPage3.Size = new System.Drawing.Size(713, 316);
             this.TabPage3.TabIndex = 2;
             this.TabPage3.Text = "Video";
+            this.TabPage3.UseVisualStyleBackColor = true;
             // 
             // label25
             // 
@@ -1884,18 +1900,6 @@ namespace Handbrake
             this.label25.Size = new System.Drawing.Size(43, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Video";
-            // 
-            // check_grayscale
-            // 
-            this.check_grayscale.AutoSize = true;
-            this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
-            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_grayscale.Location = new System.Drawing.Point(16, 138);
-            this.check_grayscale.Name = "check_grayscale";
-            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
-            this.check_grayscale.TabIndex = 5;
-            this.check_grayscale.Text = "Grayscale Encoding";
-            this.check_grayscale.UseVisualStyleBackColor = false;
             // 
             // Label22
             // 
@@ -1913,7 +1917,7 @@ namespace Handbrake
             this.check_2PassEncode.AutoSize = true;
             this.check_2PassEncode.BackColor = System.Drawing.Color.Transparent;
             this.check_2PassEncode.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_2PassEncode.Location = new System.Drawing.Point(16, 161);
+            this.check_2PassEncode.Location = new System.Drawing.Point(16, 145);
             this.check_2PassEncode.Name = "check_2PassEncode";
             this.check_2PassEncode.Size = new System.Drawing.Size(119, 17);
             this.check_2PassEncode.TabIndex = 6;
@@ -1976,15 +1980,23 @@ namespace Handbrake
             this.Label40.TabIndex = 13;
             this.Label40.Text = "Constant Quality:";
             // 
+            // check_grayscale
+            // 
+            this.check_grayscale.AutoSize = true;
+            this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
+            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_grayscale.Location = new System.Drawing.Point(25, 210);
+            this.check_grayscale.Name = "check_grayscale";
+            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
+            this.check_grayscale.TabIndex = 5;
+            this.check_grayscale.Text = "Grayscale Encoding";
+            this.check_grayscale.UseVisualStyleBackColor = false;
+            // 
             // TabPage1
             // 
             this.TabPage1.BackColor = System.Drawing.Color.Transparent;
-            this.TabPage1.Controls.Add(this.slider_deblock);
-            this.TabPage1.Controls.Add(this.label8);
-            this.TabPage1.Controls.Add(this.lbl_deblockVal);
             this.TabPage1.Controls.Add(this.check_customCrop);
             this.TabPage1.Controls.Add(this.check_autoCrop);
-            this.TabPage1.Controls.Add(this.check_decomb);
             this.TabPage1.Controls.Add(this.lbl_src_res);
             this.TabPage1.Controls.Add(this.label7);
             this.TabPage1.Controls.Add(this.label6);
@@ -2000,12 +2012,6 @@ namespace Handbrake
             this.TabPage1.Controls.Add(this.text_height);
             this.TabPage1.Controls.Add(this.Label55);
             this.TabPage1.Controls.Add(this.text_width);
-            this.TabPage1.Controls.Add(this.label24);
-            this.TabPage1.Controls.Add(this.drp_deNoise);
-            this.TabPage1.Controls.Add(this.label11);
-            this.TabPage1.Controls.Add(this.check_detelecine);
-            this.TabPage1.Controls.Add(this.label4);
-            this.TabPage1.Controls.Add(this.drp_deInterlace_option);
             this.TabPage1.Controls.Add(this.Label1);
             this.TabPage1.Controls.Add(this.Label53);
             this.TabPage1.Controls.Add(this.Label52);
@@ -2017,51 +2023,7 @@ namespace Handbrake
             this.TabPage1.Size = new System.Drawing.Size(713, 316);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Picture Settings";
-            // 
-            // slider_deblock
-            // 
-            this.slider_deblock.Location = new System.Drawing.Point(407, 264);
-            this.slider_deblock.Maximum = 15;
-            this.slider_deblock.Minimum = 4;
-            this.slider_deblock.Name = "slider_deblock";
-            this.slider_deblock.Size = new System.Drawing.Size(174, 42);
-            this.slider_deblock.TabIndex = 35;
-            this.slider_deblock.Value = 4;
-            this.slider_deblock.Scroll += new System.EventHandler(this.slider_deblock_Scroll);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(311, 269);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(58, 13);
-            this.label8.TabIndex = 37;
-            this.label8.Text = "Deblock:";
-            // 
-            // lbl_deblockVal
-            // 
-            this.lbl_deblockVal.AutoSize = true;
-            this.lbl_deblockVal.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_deblockVal.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_deblockVal.Location = new System.Drawing.Point(585, 269);
-            this.lbl_deblockVal.Name = "lbl_deblockVal";
-            this.lbl_deblockVal.Size = new System.Drawing.Size(24, 13);
-            this.lbl_deblockVal.TabIndex = 36;
-            this.lbl_deblockVal.Text = "Off";
-            // 
-            // check_decomb
-            // 
-            this.check_decomb.AutoSize = true;
-            this.check_decomb.BackColor = System.Drawing.Color.Transparent;
-            this.check_decomb.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_decomb.Location = new System.Drawing.Point(314, 188);
-            this.check_decomb.Name = "check_decomb";
-            this.check_decomb.Size = new System.Drawing.Size(73, 17);
-            this.check_decomb.TabIndex = 32;
-            this.check_decomb.Text = "Decomb";
-            this.check_decomb.UseVisualStyleBackColor = false;
+            this.TabPage1.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -2198,81 +2160,6 @@ namespace Handbrake
             this.Label55.TabIndex = 16;
             this.Label55.Text = "Width/Height:";
             // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.BackColor = System.Drawing.Color.Transparent;
-            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label24.Location = new System.Drawing.Point(311, 142);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(49, 13);
-            this.label24.TabIndex = 22;
-            this.label24.Text = "Filters";
-            // 
-            // drp_deNoise
-            // 
-            this.drp_deNoise.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_deNoise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_deNoise.FormattingEnabled = true;
-            this.drp_deNoise.Items.AddRange(new object[] {
-            "None",
-            "Weak",
-            "Medium",
-            "Strong"});
-            this.drp_deNoise.Location = new System.Drawing.Point(413, 237);
-            this.drp_deNoise.Name = "drp_deNoise";
-            this.drp_deNoise.Size = new System.Drawing.Size(161, 21);
-            this.drp_deNoise.TabIndex = 29;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.Color.Transparent;
-            this.label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(311, 240);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(58, 13);
-            this.label11.TabIndex = 28;
-            this.label11.Text = "Denoise:";
-            // 
-            // check_detelecine
-            // 
-            this.check_detelecine.AutoSize = true;
-            this.check_detelecine.BackColor = System.Drawing.Color.Transparent;
-            this.check_detelecine.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_detelecine.Location = new System.Drawing.Point(314, 165);
-            this.check_detelecine.Name = "check_detelecine";
-            this.check_detelecine.Size = new System.Drawing.Size(86, 17);
-            this.check_detelecine.TabIndex = 23;
-            this.check_detelecine.Text = "Detelecine";
-            this.check_detelecine.UseVisualStyleBackColor = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(311, 212);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 13);
-            this.label4.TabIndex = 26;
-            this.label4.Text = "Deinterlace:";
-            // 
-            // drp_deInterlace_option
-            // 
-            this.drp_deInterlace_option.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_deInterlace_option.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_deInterlace_option.FormattingEnabled = true;
-            this.drp_deInterlace_option.Items.AddRange(new object[] {
-            "None",
-            "Fast",
-            "Slow",
-            "Slower"});
-            this.drp_deInterlace_option.Location = new System.Drawing.Point(413, 209);
-            this.drp_deInterlace_option.Name = "drp_deInterlace_option";
-            this.drp_deInterlace_option.Size = new System.Drawing.Size(161, 21);
-            this.drp_deInterlace_option.TabIndex = 27;
-            // 
             // Label1
             // 
             this.Label1.AutoSize = true;
@@ -2328,6 +2215,50 @@ namespace Handbrake
             this.Label15.TabIndex = 3;
             this.Label15.Text = "Left";
             // 
+            // slider_deblock
+            // 
+            this.slider_deblock.Location = new System.Drawing.Point(118, 162);
+            this.slider_deblock.Maximum = 15;
+            this.slider_deblock.Minimum = 4;
+            this.slider_deblock.Name = "slider_deblock";
+            this.slider_deblock.Size = new System.Drawing.Size(174, 42);
+            this.slider_deblock.TabIndex = 35;
+            this.slider_deblock.Value = 4;
+            this.slider_deblock.Scroll += new System.EventHandler(this.slider_deblock_Scroll);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(22, 167);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(58, 13);
+            this.label8.TabIndex = 37;
+            this.label8.Text = "Deblock:";
+            // 
+            // lbl_deblockVal
+            // 
+            this.lbl_deblockVal.AutoSize = true;
+            this.lbl_deblockVal.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_deblockVal.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_deblockVal.Location = new System.Drawing.Point(296, 167);
+            this.lbl_deblockVal.Name = "lbl_deblockVal";
+            this.lbl_deblockVal.Size = new System.Drawing.Size(24, 13);
+            this.lbl_deblockVal.TabIndex = 36;
+            this.lbl_deblockVal.Text = "Off";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.BackColor = System.Drawing.Color.Transparent;
+            this.label24.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(16, 11);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(49, 13);
+            this.label24.TabIndex = 22;
+            this.label24.Text = "Filters";
+            // 
             // Check_ChapterMarkers
             // 
             this.Check_ChapterMarkers.AutoSize = true;
@@ -2344,6 +2275,7 @@ namespace Handbrake
             // tabs_panel
             // 
             this.tabs_panel.Controls.Add(this.TabPage1);
+            this.tabs_panel.Controls.Add(this.tab_Filters);
             this.tabs_panel.Controls.Add(this.TabPage3);
             this.tabs_panel.Controls.Add(this.TabPage2);
             this.tabs_panel.Controls.Add(this.tab_chapters);
@@ -2357,6 +2289,66 @@ namespace Handbrake
             this.tabs_panel.TabIndex = 5;
             this.tabs_panel.TabStop = false;
             // 
+            // tab_Filters
+            // 
+            this.tab_Filters.Controls.Add(this.ctl_deinterlace);
+            this.tab_Filters.Controls.Add(this.ctl_denoise);
+            this.tab_Filters.Controls.Add(this.ctl_decomb);
+            this.tab_Filters.Controls.Add(this.ctl_detelecine);
+            this.tab_Filters.Controls.Add(this.slider_deblock);
+            this.tab_Filters.Controls.Add(this.label24);
+            this.tab_Filters.Controls.Add(this.check_grayscale);
+            this.tab_Filters.Controls.Add(this.label8);
+            this.tab_Filters.Controls.Add(this.lbl_deblockVal);
+            this.tab_Filters.Location = new System.Drawing.Point(4, 22);
+            this.tab_Filters.Name = "tab_Filters";
+            this.tab_Filters.Size = new System.Drawing.Size(713, 316);
+            this.tab_Filters.TabIndex = 9;
+            this.tab_Filters.Text = "Picture Filters";
+            this.tab_Filters.UseVisualStyleBackColor = true;
+            // 
+            // ctl_deinterlace
+            // 
+            this.ctl_deinterlace.AutoSize = true;
+            this.ctl_deinterlace.Location = new System.Drawing.Point(19, 95);
+            this.ctl_deinterlace.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_deinterlace.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_deinterlace.Name = "ctl_deinterlace";
+            this.ctl_deinterlace.Size = new System.Drawing.Size(275, 28);
+            this.ctl_deinterlace.TabIndex = 41;
+            this.ctl_deinterlace.onChange += new System.EventHandler(this.ctl_deinterlace_changed);
+            // 
+            // ctl_denoise
+            // 
+            this.ctl_denoise.AutoSize = true;
+            this.ctl_denoise.Location = new System.Drawing.Point(19, 123);
+            this.ctl_denoise.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_denoise.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_denoise.Name = "ctl_denoise";
+            this.ctl_denoise.Size = new System.Drawing.Size(275, 28);
+            this.ctl_denoise.TabIndex = 40;
+            // 
+            // ctl_decomb
+            // 
+            this.ctl_decomb.AutoSize = true;
+            this.ctl_decomb.Location = new System.Drawing.Point(19, 66);
+            this.ctl_decomb.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_decomb.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_decomb.Name = "ctl_decomb";
+            this.ctl_decomb.Size = new System.Drawing.Size(275, 28);
+            this.ctl_decomb.TabIndex = 39;
+            this.ctl_decomb.onChange += new System.EventHandler(this.ctl_decomb_changed);
+            // 
+            // ctl_detelecine
+            // 
+            this.ctl_detelecine.AutoSize = true;
+            this.ctl_detelecine.Location = new System.Drawing.Point(19, 38);
+            this.ctl_detelecine.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_detelecine.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_detelecine.Name = "ctl_detelecine";
+            this.ctl_detelecine.Size = new System.Drawing.Size(275, 28);
+            this.ctl_detelecine.TabIndex = 38;
+            // 
             // tab_chapters
             // 
             this.tab_chapters.BackColor = System.Drawing.Color.Transparent;
@@ -2368,6 +2360,7 @@ namespace Handbrake
             this.tab_chapters.Size = new System.Drawing.Size(713, 316);
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
+            this.tab_chapters.UseVisualStyleBackColor = true;
             // 
             // label31
             // 
@@ -2422,6 +2415,7 @@ namespace Handbrake
             this.h264Tab.Size = new System.Drawing.Size(713, 316);
             this.h264Tab.TabIndex = 8;
             this.h264Tab.Text = "Advanced";
+            this.h264Tab.UseVisualStyleBackColor = true;
             // 
             // label43
             // 
@@ -2584,6 +2578,7 @@ namespace Handbrake
             this.tab_query.Size = new System.Drawing.Size(713, 316);
             this.tab_query.TabIndex = 7;
             this.tab_query.Text = "Query Editor";
+            this.tab_query.UseVisualStyleBackColor = true;
             // 
             // btn_clear
             // 
@@ -2776,7 +2771,7 @@ namespace Handbrake
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.toolStrip1.Size = new System.Drawing.Size(992, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(995, 39);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -2924,7 +2919,7 @@ namespace Handbrake
             this.lbl_encode});
             this.StatusStrip.Location = new System.Drawing.Point(0, 627);
             this.StatusStrip.Name = "StatusStrip";
-            this.StatusStrip.Size = new System.Drawing.Size(992, 22);
+            this.StatusStrip.Size = new System.Drawing.Size(995, 22);
             this.StatusStrip.TabIndex = 7;
             this.StatusStrip.Text = "statusStrip1";
             // 
@@ -2935,27 +2930,12 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_qptest});
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.debugToolStripMenuItem.Text = "Debug";
-            // 
-            // mnu_qptest
-            // 
-            this.mnu_qptest.Name = "mnu_qptest";
-            this.mnu_qptest.Size = new System.Drawing.Size(201, 22);
-            this.mnu_qptest.Text = "Query Parser Tester";
-            this.mnu_qptest.Click += new System.EventHandler(this.mnu_qptest_Click);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(992, 649);
+            this.ClientSize = new System.Drawing.Size(995, 649);
             this.Controls.Add(this.gb_source);
             this.Controls.Add(this.groupBox_dest);
             this.Controls.Add(this.groupBox_output);
@@ -2986,12 +2966,14 @@ namespace Handbrake
             this.TabPage3.PerformLayout();
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.slider_deblock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_bottom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_top)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_left)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_right)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slider_deblock)).EndInit();
             this.tabs_panel.ResumeLayout(false);
+            this.tab_Filters.ResumeLayout(false);
+            this.tab_Filters.PerformLayout();
             this.tab_chapters.ResumeLayout(false);
             this.tab_chapters.PerformLayout();
             this.h264Tab.ResumeLayout(false);
@@ -3078,10 +3060,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label20;
         internal System.Windows.Forms.CheckBox check_grayscale;
         internal System.Windows.Forms.Label label24;
-        internal System.Windows.Forms.Label label11;
-        internal System.Windows.Forms.CheckBox check_detelecine;
-        internal System.Windows.Forms.Label label4;
-        internal System.Windows.Forms.ComboBox drp_deInterlace_option;
         private System.Windows.Forms.GroupBox groupBox2;
         internal System.Windows.Forms.Button btn_setDefault;
         private System.Windows.Forms.ToolStripMenuItem mnu_SelectDefault;
@@ -3192,12 +3170,10 @@ namespace Handbrake
         internal System.Windows.Forms.ToolStripMenuItem mnu_encodeLog;
         private System.Windows.Forms.StatusStrip StatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel lbl_encode;
-        internal System.Windows.Forms.CheckBox check_decomb;
         internal System.Windows.Forms.RadioButton check_customCrop;
         internal System.Windows.Forms.RadioButton check_autoCrop;
         internal System.Windows.Forms.Label lbl_deblockVal;
         internal System.Windows.Forms.TrackBar slider_deblock;
-        internal System.Windows.Forms.ComboBox drp_deNoise;
         internal System.Windows.Forms.Label label8;
         internal System.Windows.Forms.OpenFileDialog ISO_Open;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
@@ -3232,6 +3208,11 @@ namespace Handbrake
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnu_qptest;
+        private System.Windows.Forms.TabPage tab_Filters;
+        internal Deinterlace ctl_deinterlace;
+        internal Denoise ctl_denoise;
+        internal Decomb ctl_decomb;
+        internal Detelecine ctl_detelecine;
 
     }
 }

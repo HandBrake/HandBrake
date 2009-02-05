@@ -20,8 +20,8 @@ namespace Handbrake
     {
         // Objects which may be used by one or more other objects
         private delegate void UpdateWindowHandler();
-        Functions.Main hb_common_func = new Functions.Main();
-        Functions.Encode encodeHandler = new Functions.Encode();
+        Main hb_common_func = new Main();
+        Encode encodeHandler = new Encode();
         Queue.QueueHandler encodeQueue = new Queue.QueueHandler();
         Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
         Parsing.Title selectedTitle;
@@ -39,8 +39,6 @@ namespace Handbrake
         private string lastAction;
         public int maxWidth;
         public int maxHeight;
-
-
         Process hbproc;
 
         // Applicaiton Startup ************************************************
@@ -323,6 +321,14 @@ namespace Handbrake
         {
             Form About = new frmAbout();
             About.ShowDialog();
+        }
+        #endregion
+
+        #region Debug Menu
+        private void mnu_qptest_Click(object sender, EventArgs e)
+        {
+            QueryParserTester qptest = new QueryParserTester();
+            qptest.Show();
         }
         #endregion
 
@@ -1171,6 +1177,20 @@ namespace Handbrake
                 text_height.Enabled = true;
                 text_width.Enabled = true;
             }
+        }
+        
+        // Filter Tab
+        private void ctl_decomb_changed(object sender, EventArgs e)
+        {
+            if (ctl_decomb.getDropValue != "Off")
+                if (ctl_deinterlace.getDropValue != "None")
+                    ctl_deinterlace.setOption("None");
+        }
+        private void ctl_deinterlace_changed(object sender, EventArgs e)
+        {
+            if (ctl_detelecine.getDropValue != "None")
+                if (ctl_decomb.getDropValue != "Off")
+                    ctl_decomb.setOption("Off");
         }
         private void slider_deblock_Scroll(object sender, EventArgs e)
         {
@@ -2070,13 +2090,6 @@ namespace Handbrake
         }
 
         #endregion
-
-        private void mnu_qptest_Click(object sender, EventArgs e)
-        {
-            QueryParserTester qptest = new QueryParserTester();
-            qptest.Show();
-
-        }
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
