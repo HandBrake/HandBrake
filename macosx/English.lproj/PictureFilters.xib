@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="319"/>
+			<integer value="5"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -39,7 +39,7 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{1211, 508}, {267, 380}}</string>
 				<int key="NSWTFlags">1886913536</int>
-				<string key="NSWindowTitle">Picture Filters</string>
+				<string key="NSWindowTitle">Video Filters</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<object class="NSMutableString" key="NSViewClass">
 					<characters key="NS.bytes">View</characters>
@@ -2179,9 +2179,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<real value="1.000000e+00"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{710, 445}, {267, 380}}</string>
+					<string>{{467, 445}, {267, 380}}</string>
 					<reference ref="559925184"/>
-					<string>{{710, 445}, {267, 380}}</string>
+					<string>{{467, 445}, {267, 380}}</string>
 					<reference ref="559925184"/>
 					<string>{{221, 276}, {533, 580}}</string>
 					<reference ref="8"/>

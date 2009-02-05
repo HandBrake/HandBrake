@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="6"/>
+			<integer value="5"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -936,7 +936,7 @@ AAB0ZXh0AAAAAENvcHlyaWdodCBBcHBsZSBDb21wdXRlciwgSW5jLiwgMjAwNQAAAAA</bytes>
 							<object class="NSButtonCell" key="NSCell" id="709813005">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134479872</int>
-								<string key="NSContents">Picture Filters</string>
+								<string key="NSContents">Video Filters</string>
 								<reference key="NSSupport" ref="22"/>
 								<reference key="NSControlView" ref="91459209"/>
 								<int key="NSButtonFlags">-2038284033</int>
