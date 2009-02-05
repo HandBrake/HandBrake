@@ -273,9 +273,16 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Feed liba52 */
     a52_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
 
-    if ( pv->dynamic_range_compression > 1.0 )
+    /* If a user specifies strong dynamic range compression (>1), adjust it.
+       If a user specifies default dynamic range compression (1), leave it alone.
+       If a user specifies no dynamic range compression (0), call a null function. */
+    if( pv->dynamic_range_compression > 1.0 )
     {
-        a52_dynrng( pv->state, dynrng_call, &pv->dynamic_range_compression);
+        a52_dynrng( pv->state, dynrng_call, &pv->dynamic_range_compression );
+    }
+    else if( !pv->dynamic_range_compression )
+    {
+        a52_dynrng( pv->state, NULL, NULL );
     }
 
     /* 6 blocks per frame, 256 samples per block, channelsused channels */

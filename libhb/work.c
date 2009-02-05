@@ -312,7 +312,7 @@ void hb_display_job_info( hb_job_t * job )
                 }
             }
 
-            if ( audio->config.out.dynamic_range_compression > 1 && (audio->config.out.codec != HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_DCA))
+            if ( audio->config.out.dynamic_range_compression && (audio->config.out.codec != HB_ACODEC_AC3) && (audio->config.out.codec != HB_ACODEC_DCA))
             {
                 hb_log("   + dynamic range compression: %f", audio->config.out.dynamic_range_compression);
             }
