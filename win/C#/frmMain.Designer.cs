@@ -2304,7 +2304,7 @@ namespace Handbrake
             this.tab_Filters.Name = "tab_Filters";
             this.tab_Filters.Size = new System.Drawing.Size(713, 316);
             this.tab_Filters.TabIndex = 9;
-            this.tab_Filters.Text = "Picture Filters";
+            this.tab_Filters.Text = "Video Filters";
             this.tab_Filters.UseVisualStyleBackColor = true;
             // 
             // ctl_deinterlace
