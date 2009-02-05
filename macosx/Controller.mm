@@ -5933,53 +5933,76 @@ return YES;
         {
             /* Filters */
             
-            /* lets determine what to set the use decomb / deinterlace filter at */
-            if ([chosenPreset objectForKey:@"PictureDecombDeinterlace"])
-            {
-            [fPictureFilterController setUseDecomb:[[chosenPreset objectForKey:@"PictureDecombDeinterlace"] intValue]];
-            }
-            else if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 1)
-            {
+            /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key.
+             * also, older presets may not have this key, in which case we also check to see if that preset had  PictureDecomb
+             * specified, in which case we use decomb and ignore any possible Deinterlace settings as using both was less than
+             * sane.
+             */
+            [fPictureFilterController setDecomb:0];
+            [fPictureFilterController setDeinterlace:0];
             [fPictureFilterController setUseDecomb:1];
-            }
-            
-            /* Deinterlace */
-            if ([chosenPreset objectForKey:@"PictureDeinterlace"])
+            if ([[chosenPreset objectForKey:@"PictureDecombDeinterlace"] intValue] == 1 || [[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
             {
-                /* We check to see if the preset used the past fourth "Slowest" deinterlaceing and set that to "Slower
-                 * since we no longer have a fourth "Slowest" deinterlacing due to the mcdeint bug */
-                if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
+                /* we are using decomb */
+                /* Decomb */
+                if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
                 {
-                    [fPictureFilterController setDeinterlace:3];
+                    [fPictureFilterController setDecomb:[[chosenPreset objectForKey:@"PictureDecomb"] intValue]];
+                    
+                    /* if we are using "Custom" in the decomb setting, also set the custom string*/
+                    if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 2)
+                    {
+                        [fPictureFilterController setDecombCustomString:[chosenPreset objectForKey:@"PictureDecombCustom"]];    
+                    }
                 }
-                else
-                {
-                    [fPictureFilterController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
-                }
-            }
+             }
             else
             {
-                [fPictureFilterController setDeinterlace:0];
+                /* We are using Deinterlace */
+                /* Deinterlace */
+                if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] > 0)
+                {
+                    [fPictureFilterController setUseDecomb:0];
+                    [fPictureFilterController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                    /* if we are using "Custom" in the deinterlace setting, also set the custom string*/
+                    if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
+                    {
+                        [fPictureFilterController setDeinterlaceCustomString:[chosenPreset objectForKey:@"PictureDeinterlaceCustom"]];    
+                    }
+                }
             }
             
+            
             /* Detelecine */
-            if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
+            if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] > 0)
             {
                 [fPictureFilterController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                /* if we are using "Custom" in the detelecine setting, also set the custom string*/
+                if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 2)
+                {
+                    [fPictureFilterController setDetelecineCustomString:[chosenPreset objectForKey:@"PictureDetelecineCustom"]];    
+                }
             }
             else
             {
                 [fPictureFilterController setDetelecine:0];
             }
+            
             /* Denoise */
-            if ([chosenPreset objectForKey:@"PictureDenoise"])
+            if ([[chosenPreset objectForKey:@"PictureDenoise"] intValue] > 0)
             {
                 [fPictureFilterController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                /* if we are using "Custom" in the denoise setting, also set the custom string*/
+                if ([[chosenPreset objectForKey:@"PictureDenoise"] intValue] == 4)
+                {
+                    [fPictureFilterController setDenoiseCustomString:[chosenPreset objectForKey:@"PictureDenoiseCustom"]];    
+                }
             }
             else
             {
                 [fPictureFilterController setDenoise:0];
             }   
+            
             /* Deblock */
             if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
             {
@@ -5990,15 +6013,6 @@ return YES;
             {
                 /* use the settings intValue */
                 [fPictureFilterController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
-            }
-            /* Decomb */
-            if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 1)
-            {
-                [fPictureFilterController setDecomb:1];
-            }
-            else
-            {
-                [fPictureFilterController setDecomb:0];
             }
             
             if ([[chosenPreset objectForKey:@"VideoGrayScale"] intValue] == 1)
@@ -6207,10 +6221,14 @@ return YES;
         /* Picture Filters */
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController useDecomb]] forKey:@"PictureDecombDeinterlace"];
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController deinterlace]] forKey:@"PictureDeinterlace"];
+        [preset setObject:[fPictureFilterController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController detelecine]] forKey:@"PictureDetelecine"];
+        [preset setObject:[fPictureFilterController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController denoise]] forKey:@"PictureDenoise"];
+        [preset setObject:[fPictureFilterController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController deblock]] forKey:@"PictureDeblock"]; 
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController decomb]] forKey:@"PictureDecomb"];
+        [preset setObject:[fPictureFilterController decombCustomString] forKey:@"PictureDecombCustom"];
         [preset setObject:[NSNumber numberWithInt:[fPictureFilterController grayscale]] forKey:@"VideoGrayScale"];
         
         

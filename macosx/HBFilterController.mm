@@ -227,6 +227,7 @@ are maintained across different sources */
 
 - (IBAction) FilterSettingsChanged: (id) sender
 {
+
     fPictureFilterSettings.detelecine  = [fDetelecinePopUp indexOfSelectedItem];
     [self adjustFilterDisplay:fDetelecinePopUp];
     
@@ -334,6 +335,11 @@ are maintained across different sources */
     fPictureFilterSettings.detelecine = setting;
 }
 
+- (void) setDetelecineCustomString: (NSString*) string 
+{
+    [fDetelecineField setStringValue:string];
+}
+
 - (int) deinterlace
 {
     return fPictureFilterSettings.deinterlace;
@@ -342,6 +348,12 @@ are maintained across different sources */
 {
     return [fDeinterlaceField stringValue];
 }
+
+- (void) setDeinterlaceCustomString: (NSString*) string 
+{
+    [fDeinterlaceField setStringValue:string];
+}
+
 - (void) setDeinterlace: (int) setting 
 {
     fPictureFilterSettings.deinterlace = setting;
@@ -364,11 +376,26 @@ are maintained across different sources */
 - (void) setUseDecomb: (int) setting
 {
     fPictureFilterSettings.usedecomb = setting;
+    if (fPictureFilterSettings.usedecomb == 1)
+    {
+        [fDecombDeinterlaceSlider setFloatValue:0.0];
+    }
+    else
+    {
+        [fDecombDeinterlaceSlider setFloatValue:1.0];
+    }
+    [self modeDecombDeinterlaceSliderChanged:nil];
 }
 
 - (void) setDecomb: (int) setting {
     fPictureFilterSettings.decomb = setting;
 }
+
+- (void) setDecombCustomString: (NSString*) string 
+{
+    [fDecombField setStringValue:string];
+}
+
 - (int) denoise
 {
     return fPictureFilterSettings.denoise;
@@ -377,6 +404,11 @@ are maintained across different sources */
 - (NSString*) denoiseCustomString
 {
     return [fDenoiseField stringValue];
+}
+
+- (void) setDenoiseCustomString: (NSString*) string 
+{
+    [fDenoiseField setStringValue:string];
 }
 
 - (void) setDenoise: (int) setting

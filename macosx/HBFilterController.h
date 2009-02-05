@@ -91,20 +91,30 @@
 
 
 - (IBAction) deblockSliderChanged: (id) sender;
+
 - (int) detelecine;
 - (NSString*) detelecineCustomString;
 - (void) setDetelecine: (int) setting;
+- (void) setDetelecineCustomString: (NSString*) string;
+
 - (int) useDecomb;
 - (void) setUseDecomb: (int) setting;
-- (int) deinterlace;
-- (NSString*) deinterlaceCustomString;
-- (void) setDeinterlace: (int) setting;
+
 - (int) decomb;
 - (NSString*) decombCustomString;
 - (void) setDecomb: (int) setting;
+- (void) setDecombCustomString: (NSString*) string;
+
+- (int) deinterlace;
+- (NSString*) deinterlaceCustomString;
+- (void) setDeinterlace: (int) setting;
+- (void) setDeinterlaceCustomString: (NSString*) string; 
+
 - (int) denoise;
 - (NSString*) denoiseCustomString;
 - (void) setDenoise: (int) setting;
+- (void) setDenoiseCustomString: (NSString*) string;
+
 - (int) deblock;
 - (void) setDeblock: (int) setting;
 
