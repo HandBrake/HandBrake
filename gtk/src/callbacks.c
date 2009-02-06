@@ -2793,6 +2793,19 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 }
 
 gchar*
+format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+	if (val <= 0.0)
+	{
+		return g_strdup_printf("Off");
+	}
+	else
+	{
+		return g_strdup_printf("%.1f", val);
+	}
+}
+
+gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
 	if (ghb_settings_get_boolean(ud->settings, "directqp"))

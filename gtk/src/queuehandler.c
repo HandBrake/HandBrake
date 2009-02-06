@@ -419,7 +419,6 @@ audio_list_refresh(signal_user_data_t *ud)
 			br = ghb_settings_combo_option(asettings, "AudioBitrate");
 			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 			mix = ghb_settings_combo_option(asettings, "AudioMixdown");
-			drc = ghb_settings_get_string(asettings, "AudioTrackDRCSlider");
 
 			s_track = ghb_settings_get_string(asettings, "AudioTrack");
 			s_codec = ghb_settings_get_string(asettings, "AudioEncoder");
@@ -427,6 +426,10 @@ audio_list_refresh(signal_user_data_t *ud)
 			s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
 			s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
 			s_drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+			if (s_drc < 0.1)
+				drc = g_strdup("Off");
+			else
+				drc = g_strdup_printf("%.1f", s_drc);
 
 			gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 				// These are displayed in list
@@ -435,8 +438,8 @@ audio_list_refresh(signal_user_data_t *ud)
 				2, br,
 				3, sr,
 				4, mix,
-				// These are used to set combo values when an item is selected
 				5, drc,
+				// These are used to set combo values when an item is selected
 				6, s_track,
 				7, s_codec,
 				8, s_br,

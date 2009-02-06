@@ -244,7 +244,6 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 		br = ghb_settings_combo_option(asettings, "AudioBitrate");
 		sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 		mix = ghb_settings_combo_option(asettings, "AudioMixdown");
-		drc = ghb_settings_get_string(asettings, "AudioTrackDRCSlider");
 
 		s_track = ghb_settings_get_string(asettings, "AudioTrack");
 		s_codec = ghb_settings_get_string(asettings, "AudioEncoder");
@@ -252,6 +251,10 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 		s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
 		s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
 		s_drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+		if (s_drc < 0.1)
+			drc = g_strdup("Off");
+		else
+			drc = g_strdup_printf("%.1f", s_drc);
 
 		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 			// These are displayed in list
@@ -260,8 +263,8 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 			2, br,
 			3, sr,
 			4, mix,
-			// These are used to set combo values when a list item is selected
 			5, drc,
+			// These are used to set combo values when a list item is selected
 			6, s_track,
 			7, s_codec,
 			8, s_br,
@@ -445,7 +448,6 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	br = ghb_settings_combo_option(settings, "AudioBitrate");
 	sr = ghb_settings_combo_option(settings, "AudioSamplerate");
 	mix = ghb_settings_combo_option(settings, "AudioMixdown");
-	drc = ghb_settings_get_string(settings, "AudioTrackDRCSlider");
 
 	s_track = ghb_settings_get_string(settings, "AudioTrack");
 	s_codec = ghb_settings_get_string(settings, "AudioEncoder");
@@ -453,6 +455,10 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	s_sr = ghb_settings_get_string(settings, "AudioSamplerate");
 	s_mix = ghb_settings_get_string(settings, "AudioMixdown");
 	s_drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
+	if (s_drc < 0.1)
+		drc = g_strdup("Off");
+	else
+		drc = g_strdup_printf("%.1f", s_drc);
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
@@ -462,8 +468,8 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 		2, br,
 		3, sr,
 		4, mix,
-		// These are used to set combo box values when a list item is selected
 		5, drc,
+		// These are used to set combo box values when a list item is selected
 		6, s_track,
 		7, s_codec,
 		8, s_br,

@@ -128,7 +128,7 @@
   &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment6&quot;&gt;
     &lt;property name=&quot;upper&quot;&gt;4&lt;/property&gt;
-    &lt;property name=&quot;lower&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
     &lt;property name=&quot;page_increment&quot;&gt;1&lt;/property&gt;
     &lt;property name=&quot;step_increment&quot;&gt;0.2&lt;/property&gt;
     &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
@@ -1830,6 +1830,7 @@
                                                 &lt;property name=&quot;fill_level&quot;&gt;3823.35009765625&lt;/property&gt;
                                                 &lt;property name=&quot;value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;
                                                 &lt;signal handler=&quot;audio_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
+                                                &lt;signal name=&quot;format_value&quot; handler=&quot;format_drc_cb&quot;/&gt;
                                               &lt;/object&gt;
                                               &lt;packing&gt;
                                                 &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;

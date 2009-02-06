@@ -123,7 +123,7 @@
   </object>
   <object class="GtkAdjustment" id="adjustment6">
     <property name="upper">4</property>
-    <property name="lower">1</property>
+    <property name="lower">0</property>
     <property name="page_increment">1</property>
     <property name="step_increment">0.2</property>
     <property name="page_size">0</property>
@@ -1825,6 +1825,7 @@
                                                 <property name="fill_level">3823.35009765625</property>
                                                 <property name="value_pos">GTK_POS_RIGHT</property>
                                                 <signal handler="audio_widget_changed_cb" name="value_changed"/>
+                                                <signal name="format_value" handler="format_drc_cb"/>
                                               </object>
                                               <packing>
                                                 <property name="position">1</property>
