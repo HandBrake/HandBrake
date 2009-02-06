@@ -2899,7 +2899,7 @@
 "                                                &lt;property name=&quot"
 ";value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;\n"
 "                                                &lt;signal handler=&quo"
-"t;audio_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;\n"
+"t;drc_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;\n"
 "                                                &lt;signal name=&quot;f"
 "ormat_value&quot; handler=&quot;format_drc_cb&quot;/&gt;\n"
 "                                              &lt;/object&gt;\n"

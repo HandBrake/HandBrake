@@ -1829,7 +1829,7 @@
                                                 &lt;property name=&quot;restrict_to_fill_level&quot;&gt;False&lt;/property&gt;
                                                 &lt;property name=&quot;fill_level&quot;&gt;3823.35009765625&lt;/property&gt;
                                                 &lt;property name=&quot;value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;
-                                                &lt;signal handler=&quot;audio_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
+                                                &lt;signal handler=&quot;drc_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
                                                 &lt;signal name=&quot;format_value&quot; handler=&quot;format_drc_cb&quot;/&gt;
                                               &lt;/object&gt;
                                               &lt;packing&gt;

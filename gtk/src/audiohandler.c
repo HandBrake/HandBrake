@@ -364,7 +364,7 @@ audio_mix_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
 
-	g_debug("audio_widget_changed_cb ()");
+	g_debug("audio_mix_changed_cb ()");
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_check_dependency(ud, widget);
 	asettings = get_selected_asettings(ud);
@@ -382,6 +382,28 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings;
 
 	g_debug("audio_widget_changed_cb ()");
+	ghb_check_dependency(ud, widget);
+	asettings = get_selected_asettings(ud);
+	if (asettings != NULL)
+	{
+		ghb_widget_to_setting(asettings, widget);
+		audio_list_refresh_selected(ud);
+	}
+	ghb_live_reset(ud);
+}
+
+void
+drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	GValue *asettings;
+	gdouble val;
+
+	g_debug("drc_widget_changed_cb ()");
+	val = gtk_range_get_value(GTK_RANGE(widget));
+	if (val < 0.5)
+		gtk_range_set_value(GTK_RANGE(widget), 0.0);
+	else if (val < 1.0)
+		gtk_range_set_value(GTK_RANGE(widget), 1.0);
 	ghb_check_dependency(ud, widget);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
