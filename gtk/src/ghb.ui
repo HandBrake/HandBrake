@@ -4677,6 +4677,8 @@ location as the movie.</property>
                                 <child>
                                   <object class="GtkEntry" id="PictureDetelecineCustom">
                                     <property name="width_chars">8</property>
+                                    <property name="tooltip-text" translatable="yes">Custom detelecine filter string format
+	JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -4718,6 +4720,8 @@ location as the movie.</property>
                                 <child>
                                   <object class="GtkEntry" id="PictureDecombCustom">
                                     <property name="width_chars">8</property>
+                                    <property name="tooltip-text" translatable="yes">Custom decomb filter string format
+	Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -4759,6 +4763,8 @@ location as the movie.</property>
                                 <child>
                                   <object class="GtkEntry" id="PictureDeinterlaceCustom">
                                     <property name="width_chars">8</property>
+                                    <property name="tooltip-text" translatable="yes">Custom deinterlace filter string format
+	YadifMode:YadifParity:McdintMode:McdeintOp</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -4799,6 +4805,8 @@ location as the movie.</property>
                                 <child>
                                   <object class="GtkEntry" id="PictureDenoiseCustom">
                                     <property name="width_chars">8</property>
+                                    <property name="tooltip-text" translatable="yes">Custom denoise filter string format
+	SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>

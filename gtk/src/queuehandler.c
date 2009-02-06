@@ -278,19 +278,34 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		"<b>Picture:</b> Source: <small>%d x %d, Output %d x %d %s</small>\n",
 		 source_width, source_height, width, height, aspect_desc);
 
-	gboolean decomb;
+	gint decomb, detel;
 	gboolean filters = FALSE;
 
 	decomb = ghb_settings_combo_int(settings, "PictureDecomb");
 	g_string_append_printf(str, "<b>Filters:</b><small>");
-	if (ghb_settings_combo_int(settings, "PictureDetelecine"))
+	detel = ghb_settings_combo_int(settings, "PictureDetelecine");
+	if (detel)
 	{
 		g_string_append_printf(str, " - Detelecine");
+		if (detel == 1)
+		{
+			gchar *cust;
+			cust = ghb_settings_get_string(settings, "PictureDetelecineCustom");
+			g_string_append_printf(str, ": %s", cust);
+			g_free(cust);
+		}
 		filters = TRUE;
 	}
 	if (decomb)
 	{
 		g_string_append_printf(str, " - Decomb");
+		if (decomb == 1)
+		{
+			gchar *cust;
+			cust = ghb_settings_get_string(settings, "PictureDecombCustom");
+			g_string_append_printf(str, ": %s", cust);
+			g_free(cust);
+		}
 		filters = TRUE;
 	}
 	else
@@ -298,18 +313,38 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
 		if (deint)
 		{
-			const gchar *opt = ghb_settings_combo_option(settings,
+			if (deint == 1)
+			{
+				gchar *cust = ghb_settings_get_string(settings,
+												"PictureDeinterlaceCustom");
+				g_string_append_printf(str, " - Deinterlace: %s", cust);
+				g_free(cust);
+			}
+			else
+			{
+				const gchar *opt = ghb_settings_combo_option(settings,
 													"PictureDeinterlace");
-			g_string_append_printf(str, " - Deinterlace: %s", opt);
+				g_string_append_printf(str, " - Deinterlace: %s", opt);
+			}
 			filters = TRUE;
 		}
 	}
 	gint denoise = ghb_settings_combo_int(settings, "PictureDenoise");
 	if (denoise)
 	{
-		const gchar *opt = ghb_settings_combo_option(settings,
+		if (denoise == 1)
+		{
+			gchar *cust = ghb_settings_get_string(settings,
+													"PictureDenoiseCustom");
+			g_string_append_printf(str, " - Denoise: %s", cust);
+			g_free(cust);
+		}
+		else
+		{
+			const gchar *opt = ghb_settings_combo_option(settings,
 													"PictureDenoise");
-		g_string_append_printf(str, " - Denoise: %s", opt);
+			g_string_append_printf(str, " - Denoise: %s", opt);
+		}
 		filters = TRUE;
 	}
 	gint deblock = ghb_settings_get_int(settings, "PictureDeblock");

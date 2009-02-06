@@ -4682,6 +4682,8 @@ location as the movie.&lt;/property&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDetelecineCustom&quot;&gt;
                                     &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
+                                    &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Custom detelecine filter string format
+	JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
@@ -4723,6 +4725,8 @@ location as the movie.&lt;/property&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDecombCustom&quot;&gt;
                                     &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
+                                    &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Custom decomb filter string format
+	Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
@@ -4764,6 +4768,8 @@ location as the movie.&lt;/property&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDeinterlaceCustom&quot;&gt;
                                     &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
+                                    &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Custom deinterlace filter string format
+	YadifMode:YadifParity:McdintMode:McdeintOp&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
@@ -4804,6 +4810,8 @@ location as the movie.&lt;/property&gt;
                                 &lt;child&gt;
                                   &lt;object class=&quot;GtkEntry&quot; id=&quot;PictureDenoiseCustom&quot;&gt;
                                     &lt;property name=&quot;width_chars&quot;&gt;8&lt;/property&gt;
+                                    &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;Custom denoise filter string format
+	SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma&lt;/property&gt;
                                     &lt;signal name=&quot;changed&quot; handler=&quot;setting_widget_changed_cb&quot;/&gt;
                                   &lt;/object&gt;
                                   &lt;packing&gt;
