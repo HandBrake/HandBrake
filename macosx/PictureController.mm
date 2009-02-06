@@ -374,15 +374,21 @@
 
     //[fPreviewController pictureSliderChanged:nil];
     [self reloadStillPreview];
-    
-
     }
+
+    /* we get the sizing info to display from fPreviewController */
+    [fSizeInfoField setStringValue: [fPreviewController pictureSizeInfoString]];
 
     if (sender != nil)
     {
         [fHBController pictureSettingsDidChange];
     }   
     
+}
+
+- (NSString*) getPictureSizeInfoString
+{
+    return [fSizeInfoField stringValue];
 }
 
 - (void)reloadStillPreview

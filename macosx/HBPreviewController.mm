@@ -219,11 +219,8 @@ return YES;
     [fMovieCreationProgressIndicator setHidden: YES];
     
     [fPictureView setHidden:NO];
-
     [fPictureView setImage: [self imageForPicture: fPicture]];
     
-    	
-	
     NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
     /* Set the picture size display fields below the Preview Picture*/
     if( fTitle->job->anamorphic.mode == 1 ) // Original PAR Implementation
@@ -232,7 +229,7 @@ return YES;
         output_height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
         display_width = output_width * fTitle->job->anamorphic.par_width / fTitle->job->anamorphic.par_height;
         [fInfoField setStringValue:[NSString stringWithFormat:
-                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
+                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
                                     fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
         displaySize.width *= ( ( CGFloat )fTitle->job->anamorphic.par_width ) / ( ( CGFloat )fTitle->job->anamorphic.par_height );   
     }
@@ -241,7 +238,7 @@ return YES;
     hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
         display_width = output_width * output_par_width / output_par_height;
         [fInfoField setStringValue:[NSString stringWithFormat:
-                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d",
+                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
                                     fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
         
         displaySize.width = display_width;
@@ -252,7 +249,8 @@ return YES;
                                      @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
                                      fTitle->job->width, fTitle->job->height]];
     }
-
+    
+    
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     /* we also need to take into account scaling to full screen to activate switching the view size */
     if( [self viewNeedsToResizeToSize:viewSize])
@@ -347,6 +345,11 @@ return YES;
         
     }
     
+}
+
+- (NSString*) pictureSizeInfoString
+{
+    return [fInfoField stringValue];
 }
 
 - (IBAction)showPictureSettings:(id)sender

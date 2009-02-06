@@ -109,32 +109,12 @@ BOOL                        fIsDragging;
     IBOutlet NSButton            * fVidTwoPassCheck;
     IBOutlet NSButton            * fVidTurboPassCheck;
 	
-	/* Picture Settings box */
-    IBOutlet NSTextField         * fPicLabelSettings;
-	IBOutlet NSTextField         * fPicLabelSrc;
-    IBOutlet NSTextField         * fPicSettingsSrc;
-	IBOutlet NSTextField         * fPicLabelOutp;
-    IBOutlet NSTextField         * fPicSettingsOutp;
-    IBOutlet NSTextField         * fPicLabelAnamorphic;
-    IBOutlet NSTextField         * fPicSettingsAnamorphic;
-    
-    IBOutlet NSTextField         * fPicLabelAr;
-	IBOutlet NSTextField         * fPicLabelAutoCrop;
-    IBOutlet NSTextField         * fPicLabelDetelecine;
-	IBOutlet NSTextField         * fPicLabelDeinterlace;
-    IBOutlet NSTextField         * fPicLabelDecomb;
-    IBOutlet NSTextField         * fPicLabelDenoise;
-    IBOutlet NSTextField         * fPicLabelDeblock;
-	IBOutlet NSTextField         * fPicSettingDeinterlace;
-    IBOutlet NSTextField         * fPicSettingDecomb;
-	IBOutlet NSTextField         * fPicSettingARkeep;
-	IBOutlet NSTextField         * fPicSettingPAR;
-	IBOutlet NSTextField         * fPicSettingAutoCrop;
-	IBOutlet NSTextField         * fPicSettingDetelecine;
-	IBOutlet NSTextField         * fPicSettingDenoise;
-    IBOutlet NSTextField         * fPicSettingDeblock;
-    IBOutlet NSTextField         * fPicLabelGrayscale;
-    IBOutlet NSTextField         * fPicSettingGrayscale;
+	/* Status read out fileds for picture sizing */
+    IBOutlet NSTextField         * fPictureSizeField;
+    IBOutlet NSTextField         * fPictureCroppingField;
+	
+    /* Status read out fileds for video filters */
+    IBOutlet NSTextField         * fVideoFiltersField;
 	
 	/* Picture variables */
 	int                        PicOrigOutputWidth;
@@ -240,7 +220,8 @@ BOOL                        fIsDragging;
     NSMutableDictionary          *presetUserDefaultParentParent;
     int                        presetCurrentBuiltInCount; // keeps track of the current number of built in presets
     IBOutlet NSPanel             * fAddPresetPanel;
-	/* new NSOutline View for the presets */
+	
+    /* NSOutline View for the presets */
     NSArray                      *fDraggedNodes;
     IBOutlet HBPresetsOutlineView * fPresetsOutlineView;
     IBOutlet NSButton            * fPresetsAdd;
@@ -249,6 +230,7 @@ BOOL                        fIsDragging;
 
     hb_handle_t                  * fHandle;
     
+    /* Queue variables */
     hb_handle_t              * fQueueEncodeLibhb;           // libhb for HB Encoding
 	hb_title_t                   * fTitle;
     hb_title_t                   * fQueueEncodeTitle;
@@ -269,6 +251,7 @@ BOOL                        fIsDragging;
 	NSString                      * currentSource;
     NSString                     * browsedSourceDisplayName;
 }
+
 - (void) writeToActivityLog:(char *) format, ...;
 - (IBAction) browseSources: (id) sender;
 - (void) browseSourcesDone: (NSOpenPanel *) sheet

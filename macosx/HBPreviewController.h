@@ -75,10 +75,13 @@
 - (IBAction) showPreviewWindow: (id)sender;
 - (BOOL)acceptsMouseMovedEvents;
 - (void) displayPreview;
+
 - (void) showHideHudControls;
 - (IBAction) SettingsChanged: (id) sender;
 - (IBAction) pictureSliderChanged: (id) sender;
 - (IBAction)showPictureSettings:(id)sender;
+- (NSString*) pictureSizeInfoString;
+
 /* Full Screen */
 - (IBAction)toggleScreenMode:(id)sender;
 - (IBAction)toggleScaleToScreen:(id)sender;

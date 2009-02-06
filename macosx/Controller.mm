@@ -416,13 +416,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) enableUI: (bool) b
 {
     NSControl * controls[] =
-      { fSrcTitleField, fSrcTitlePopUp,
+    { fSrcTitleField, fSrcTitlePopUp,
         fSrcChapterField, fSrcChapterStartPopUp, fSrcChapterToField,
         fSrcChapterEndPopUp, fSrcDuration1Field, fSrcDuration2Field,
         fDstFormatField, fDstFormatPopUp, fDstFile1Field, fDstFile2Field,
-        fDstBrowseButton, fVidRateField, fVidRatePopUp,
-        fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
-        fVidQualityMatrix, fSubField, fSubPopUp,
+        fDstBrowseButton, fVidRateField, fVidRatePopUp,fVidEncoderField, fVidEncoderPopUp, fVidQualityField,
+        fPictureSizeField,fPictureCroppingField, fVideoFiltersField,fVidQualityMatrix, fSubField, fSubPopUp,
         fAudSourceLabel, fAudCodecLabel, fAudMixdownLabel, fAudSamplerateLabel, fAudBitrateLabel,
         fAudTrack1Label, fAudTrack2Label, fAudTrack3Label, fAudTrack4Label,
         fAudLang1PopUp, fAudLang2PopUp, fAudLang3PopUp, fAudLang4PopUp,
@@ -432,16 +431,12 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudTrack1BitratePopUp, fAudTrack2BitratePopUp, fAudTrack3BitratePopUp, fAudTrack4BitratePopUp,
         fAudDrcLabel, fAudTrack1DrcSlider, fAudTrack1DrcField, fAudTrack2DrcSlider,
         fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
-        fQueueStatus,fPicSettingARkeep, fPicSettingDeinterlace,fPicLabelSettings,fPicLabelSrc,
-        fPicLabelOutp,fPicSettingsSrc,fPicSettingsOutp,fPicSettingsAnamorphic,
-		fPicLabelAr,fPicLabelDeinterlace,fPicSettingPAR,fPicLabelAnamorphic,fPresetsAdd,fPresetsDelete,
-		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fPicLabelAutoCrop,
-		fPicSettingAutoCrop,fPicSettingDetelecine,fPicLabelDetelecine,fPicLabelDenoise,fPicSettingDenoise,
-        fSubForcedCheck,fPicSettingDeblock,fPicLabelDeblock,fPicLabelDecomb,fPicSettingDecomb,fPresetsOutlineView,
-        fPicLabelGrayscale,fPicSettingGrayscale,fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck};
-
+        fQueueStatus,fPresetsAdd,fPresetsDelete,
+		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
+    fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck};
+    
     for( unsigned i = 0;
-         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
+        i < sizeof( controls ) / sizeof( NSControl * ); i++ )
     {
         if( [[controls[i] className] isEqualToString: @"NSTextField"] )
         {
@@ -449,28 +444,28 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if( ![tf isBezeled] )
             {
                 [tf setTextColor: b ? [NSColor controlTextColor] :
-                    [NSColor disabledControlTextColor]];
+                 [NSColor disabledControlTextColor]];
                 continue;
             }
         }
         [controls[i] setEnabled: b];
-
+        
     }
-
+    
 	if (b) {
-
+        
         /* if we're enabling the interface, check if the audio mixdown controls need to be enabled or not */
         /* these will have been enabled by the mass control enablement above anyway, so we're sense-checking it here */
         [self setEnabledStateOfAudioMixdownControls:nil];
         /* we also call calculatePictureSizing here to sense check if we already have vfr selected */
         [self calculatePictureSizing:nil];
-
+        
 	} else {
-
+        
 		[fPresetsOutlineView setEnabled: NO];
-
+        
 	}
-
+    
     [self videoMatrixChanged:nil];
     [fAdvancedOptions enableUI:b];
 }
@@ -1910,10 +1905,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
     NSString * pictureSummary;
-    pictureSummary = [NSString stringWithFormat:@"Source: %@ Output: %@ Anamorphic: %@", 
-                     [fPicSettingsSrc stringValue], 
-                     [fPicSettingsOutp stringValue], 
-                     [fPicSettingsAnamorphic stringValue]];
+    pictureSummary = [fPictureSizeField stringValue];
     [queueFileJob setObject:pictureSummary forKey:@"PictureSizingSummary"];                 
     /* Set crop settings here */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];
@@ -2024,7 +2016,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
     
     /* Picture Filters */
-    [queueFileJob setObject:[fPicSettingDecomb stringValue] forKey:@"JobPictureDecomb"];
+    //[queueFileJob setObject:[fPicSettingDecomb stringValue] forKey:@"JobPictureDecomb"];
     
     /*Audio*/
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
@@ -3643,10 +3635,7 @@ fWorkingCount = 0;
 	hb_job_t * job = title->job;
 	fTitle = title;
     
-    /*Set Source Size Field Here */
-    [fPicSettingsSrc setStringValue: [NSString stringWithFormat: @"%d x %d", fTitle->width, fTitle->height]];
-	
-	/* Set Auto Crop to on upon selecting a new title  */
+    /* Set Auto Crop to on upon selecting a new title  */
     [fPictureController setAutoCrop:YES];
     
 	/* We get the originial output picture width and height and put them
@@ -4183,104 +4172,54 @@ the user is using "Custom" settings by determining the sender*/
 /* Get and Display Current Pic Settings in main window */
 - (IBAction) calculatePictureSizing: (id) sender
 {
-	[fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", fTitle->job->width, fTitle->job->height]];
-	
-    if (fTitle->job->anamorphic.mode == 1)
-	{
-        int titlewidth = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
-        int arpwidth = fTitle->job->anamorphic.par_width;
-        int arpheight = fTitle->job->anamorphic.par_height;
-        int displayparwidth = titlewidth * arpwidth / arpheight;
-        int displayparheight = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
-        [fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", titlewidth, displayparheight]];
-        [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"%d x %d Strict", displayparwidth, displayparheight]];
-        fTitle->job->keep_ratio = 0;
-	}
-    else if (fTitle->job->anamorphic.mode == 2)
-    {
-        hb_job_t * job = fTitle->job;
-        int output_width, output_height, output_par_width, output_par_height;
-        hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
-        int display_width;
-        display_width = output_width * output_par_width / output_par_height;
-
-        [fPicSettingsOutp setStringValue: [NSString stringWithFormat:@"%d x %d", output_width, output_height]];
-        [fPicSettingsAnamorphic setStringValue: [NSString stringWithFormat:@"%d x %d Loose", display_width, output_height]];
-
-        fTitle->job->keep_ratio = 0;
-    }
-	else
-	{
-        [fPicSettingsAnamorphic setStringValue:@"Off"];
-	}
-
-	/* Set ON/Off values for the deinterlace/keep aspect ratio according to boolean */
-	if (fTitle->job->keep_ratio > 0)
-	{
-		[fPicSettingARkeep setStringValue: @"On"];
-	}
-	else
-	{
-		[fPicSettingARkeep setStringValue: @"Off"];
-	}	
-
 	if (fTitle->job->anamorphic.mode > 0)
 	{
-		[fPicSettingPAR setStringValue: @""];
+        fTitle->job->keep_ratio = 0;
 	}
-	else
-	{
-		[fPicSettingPAR setStringValue: @"Off"];
-	}
-	
+    
+    [fPictureSizeField setStringValue: [NSString stringWithFormat:@"Picture Size: %@", [fPictureController getPictureSizeInfoString]]];
+    
+    NSString *picCropping;
     /* Set the display field for crop as per boolean */
 	if (![fPictureController autoCrop])
 	{
-	    [fPicSettingAutoCrop setStringValue: @"Custom"];
+        picCropping =  @"Custom";
 	}
 	else
 	{
-		[fPicSettingAutoCrop setStringValue: @"Auto"];
+		picCropping =  @"Auto";
 	}
-
+    picCropping = [picCropping stringByAppendingString:[NSString stringWithFormat:@" %d/%d/%d/%d",fTitle->job->crop[0],fTitle->job->crop[1],fTitle->job->crop[2],fTitle->job->crop[3]]];
     
+    [fPictureCroppingField setStringValue: [NSString stringWithFormat:@"Picture Cropping: %@",picCropping]];
+    
+    NSString *videoFilters;
+    videoFilters = @"";
     /* Detelecine */
-    if ([fPictureFilterController detelecine] == 0) 
+    if ([fPictureFilterController detelecine] == 1) 
     {
-        [fPicSettingDetelecine setStringValue: @"Off"];
-    }
-    else if ([fPictureFilterController detelecine] == 1) 
-    {
-        [fPicSettingDetelecine setStringValue: @"Default"];
+        videoFilters = [videoFilters stringByAppendingString:@" - Detelecine (Default)"];
     }
     else if ([fPictureFilterController detelecine] == 2) 
     {
-        [fPicSettingDetelecine setStringValue: @"Custom"];
+        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[fPictureFilterController detelecineCustomString]]];
     }
     
     
     if ([fPictureFilterController useDecomb] == 1)
     {
-        [fPicSettingDeinterlace setStringValue: @"Off"];
         /* Decomb */
-        if ([fPictureFilterController decomb] == 0)
+        if ([fPictureFilterController decomb] == 1)
         {
-            //[fPicSettingDecomb setStringValue: @"1:2:6:9:80:16:16"];
-            [fPicSettingDecomb setStringValue: @"Off"];
-        }
-        else if ([fPictureFilterController decomb] == 1)
-        {
-            [fPicSettingDecomb setStringValue: @"Default"];
+            videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Default)"];
         }
         else if ([fPictureFilterController decomb] == 2)
         {
-            [fPicSettingDecomb setStringValue: @"Custom"];
+            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[fPictureFilterController decombCustomString]]];
         }
     }
     else
     {
-        
-        [fPicSettingDecomb setStringValue: @"Off"];
         /* Deinterlace */
         if ([fPictureFilterController deinterlace] > 0)
         {
@@ -4291,92 +4230,57 @@ the user is using "Custom" settings by determining the sender*/
             fTitle->job->deinterlace  = 0;
         }
         
-        
-        if ([fPictureFilterController deinterlace] == 0)
+        if ([fPictureFilterController deinterlace] == 1)
         {
-            [fPicSettingDeinterlace setStringValue: @"Off"];
-        }
-        else if ([fPictureFilterController deinterlace] == 1)
-        {
-            [fPicSettingDeinterlace setStringValue: @"Fast"];
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Fast)"];
         }
         else if ([fPictureFilterController deinterlace] == 2)
         {
-            [fPicSettingDeinterlace setStringValue: @"Slow"];
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slow)"];
         }
         else if ([fPictureFilterController deinterlace] == 3)
         {
-            [fPicSettingDeinterlace setStringValue: @"Slower"];
+            videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slower)"];
         }
         else if ([fPictureFilterController deinterlace] == 4)
         {
-            [fPicSettingDeinterlace setStringValue: @"Custom"];
+            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureFilterController deinterlaceCustomString]]];
         }
 	}
     
-        	
+    
     /* Denoise */
-	if ([fPictureFilterController denoise] == 0)
+	if ([fPictureFilterController denoise] == 1)
 	{
-		[fPicSettingDenoise setStringValue: @"Off"];
-	}
-	else if ([fPictureFilterController denoise] == 1)
-	{
-		[fPicSettingDenoise setStringValue: @"Weak"];
-	}
+		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Weak)"];
+    }
 	else if ([fPictureFilterController denoise] == 2)
 	{
-		[fPicSettingDenoise setStringValue: @"Medium"];
-	}
+		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Medium)"];
+    }
 	else if ([fPictureFilterController denoise] == 3)
 	{
-		[fPicSettingDenoise setStringValue: @"Strong"];
+		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Strong)"];
 	}
     else if ([fPictureFilterController denoise] == 4)
 	{
-		[fPicSettingDenoise setStringValue: @"Custom"];
+		videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[fPictureFilterController denoiseCustomString]]];
 	}
     
     /* Deblock */
-    if ([fPictureFilterController deblock] == 0) 
+    if ([fPictureFilterController deblock] > 0) 
     {
-        [fPicSettingDeblock setStringValue: @"Off"];
-    }
-    else 
-    {
-        [fPicSettingDeblock setStringValue: [NSString stringWithFormat:@"%d",[fPictureFilterController deblock]]];
+        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deblock (%d)",[fPictureFilterController deblock]]];
     }
 	
-        /* Grayscale */
+    /* Grayscale */
     if ([fPictureFilterController grayscale]) 
     {
-        [fPicSettingGrayscale setStringValue: @"On"];
+        videoFilters = [videoFilters stringByAppendingString:@" - Grayscale"];
     }
-    else 
-    {
-        [fPicSettingGrayscale setStringValue: @"Off"];
-    }
-	
-    if (fTitle->job->anamorphic.mode > 0)
-	{
-		[fPicSettingPAR setStringValue: @""];
-	}
-	else
-	{
-		[fPicSettingPAR setStringValue: @"Off"];
-	}
-	
-    /* Set the display field for crop as per boolean */
-	if (![fPictureController autoCrop])
-	{
-	    [fPicSettingAutoCrop setStringValue: @"Custom"];
-	}
-	else
-	{
-		[fPicSettingAutoCrop setStringValue: @"Auto"];
-	}		
-  
-  [fPictureController reloadStillPreview]; 
+    [fVideoFiltersField setStringValue: [NSString stringWithFormat:@"Video Filters: %@", videoFilters]];
+    
+    [fPictureController reloadStillPreview]; 
 }
 
 
@@ -5938,9 +5842,9 @@ return YES;
              * specified, in which case we use decomb and ignore any possible Deinterlace settings as using both was less than
              * sane.
              */
+            [fPictureFilterController setUseDecomb:1];
             [fPictureFilterController setDecomb:0];
             [fPictureFilterController setDeinterlace:0];
-            [fPictureFilterController setUseDecomb:1];
             if ([[chosenPreset objectForKey:@"PictureDecombDeinterlace"] intValue] == 1 || [[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
             {
                 /* we are using decomb */

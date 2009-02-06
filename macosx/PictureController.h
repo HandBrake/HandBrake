@@ -47,7 +47,7 @@
     IBOutlet NSStepper       * fCropRightStepper;
 
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
-    IBOutlet NSTextField     * fInfoField;
+    IBOutlet NSTextField     * fSizeInfoField;
 	
     IBOutlet NSButton        * fPreviewOpenButton;
     IBOutlet NSButton        * fPictureFiltersOpenButton;
@@ -64,17 +64,7 @@
     ratio checkbox when turning anamorphic on, so it can be
     returned to the previous state when anamorphic is turned
     off */
-    BOOL    keepAspectRatioPreviousState; 
-    
-    struct {
-        int     detelecine;
-        int     deinterlace;
-        int     decomb;
-        int     denoise;
-        int     deblock;
-    } fPictureFilterSettings;
-
-
+    BOOL    keepAspectRatioPreviousState;
 }
 - (id)init;
 
@@ -89,6 +79,7 @@
 
 - (IBAction) SettingsChanged: (id) sender;
 
+- (NSString*) getPictureSizeInfoString;
 - (void)reloadStillPreview;
 
 - (BOOL) autoCrop;
