@@ -5105,6 +5105,14 @@ the user is using "Custom" settings by determining the sender*/
         drcSlider = fAudTrack4DrcSlider;
         drcField = fAudTrack4DrcField;
     }
+    
+    /* If we are between 0.0 and 1.0 on the slider, snap it to 1.0 */
+    if ([drcSlider floatValue] > 0.0 && [drcSlider floatValue] < 1.0)
+    {
+        [drcSlider setFloatValue:1.0];
+    }
+    
+    
     [drcField setStringValue: [NSString stringWithFormat: @"%.2f", [drcSlider floatValue]]];
     /* For now, do not call this until we have an intelligent way to determine audio track selections
     * compared to presets

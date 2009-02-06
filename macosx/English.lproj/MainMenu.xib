@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1478"/>
+			<integer value="1476"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -108,7 +108,7 @@
 								<object class="NSTabViewItem" id="107038816">
 									<string key="NSIdentifier">1</string>
 									<object class="NSView" key="NSView" id="1053078401">
-										<reference key="NSNextResponder" ref="712502892"/>
+										<nil key="NSNextResponder"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -517,7 +517,6 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {714, 305}}</string>
-										<reference key="NSSuperview" ref="712502892"/>
 									</object>
 									<string key="NSLabel">Video</string>
 									<reference key="NSColor" ref="242973447"/>
@@ -526,7 +525,7 @@
 								<object class="NSTabViewItem" id="157300012">
 									<string key="NSIdentifier">2</string>
 									<object class="NSView" key="NSView" id="738554558">
-										<nil key="NSNextResponder"/>
+										<reference key="NSNextResponder" ref="712502892"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1849,10 +1848,10 @@
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSControlView" ref="861218370"/>
 													<double key="NSMaxValue">4.000000e+00</double>
-													<double key="NSMinValue">1.000000e+00</double>
-													<double key="NSValue">1.000000e+00</double>
+													<double key="NSMinValue">0.000000e+00</double>
+													<double key="NSValue">0.000000e+00</double>
 													<double key="NSAltIncValue">0.000000e+00</double>
-													<int key="NSNumberOfTickMarks">12</int>
+													<int key="NSNumberOfTickMarks">16</int>
 													<int key="NSTickMarkPosition">0</int>
 													<bool key="NSAllowsTickMarkValuesOnly">YES</bool>
 													<bool key="NSVertical">NO</bool>
@@ -1876,10 +1875,10 @@
 													</object>
 													<reference key="NSControlView" ref="695663835"/>
 													<double key="NSMaxValue">4.000000e+00</double>
-													<double key="NSMinValue">1.000000e+00</double>
-													<double key="NSValue">1.000000e+00</double>
+													<double key="NSMinValue">0.000000e+00</double>
+													<double key="NSValue">0.000000e+00</double>
 													<double key="NSAltIncValue">0.000000e+00</double>
-													<int key="NSNumberOfTickMarks">12</int>
+													<int key="NSNumberOfTickMarks">16</int>
 													<int key="NSTickMarkPosition">0</int>
 													<bool key="NSAllowsTickMarkValuesOnly">YES</bool>
 													<bool key="NSVertical">NO</bool>
@@ -1899,10 +1898,10 @@
 													<reference key="NSSupport" ref="478239882"/>
 													<reference key="NSControlView" ref="229696812"/>
 													<double key="NSMaxValue">4.000000e+00</double>
-													<double key="NSMinValue">1.000000e+00</double>
-													<double key="NSValue">1.000000e+00</double>
+													<double key="NSMinValue">0.000000e+00</double>
+													<double key="NSValue">0.000000e+00</double>
 													<double key="NSAltIncValue">0.000000e+00</double>
-													<int key="NSNumberOfTickMarks">12</int>
+													<int key="NSNumberOfTickMarks">16</int>
 													<int key="NSTickMarkPosition">0</int>
 													<bool key="NSAllowsTickMarkValuesOnly">YES</bool>
 													<bool key="NSVertical">NO</bool>
@@ -1922,10 +1921,10 @@
 													<reference key="NSSupport" ref="478239882"/>
 													<reference key="NSControlView" ref="927860050"/>
 													<double key="NSMaxValue">4.000000e+00</double>
-													<double key="NSMinValue">1.000000e+00</double>
-													<double key="NSValue">1.000000e+00</double>
+													<double key="NSMinValue">0.000000e+00</double>
+													<double key="NSValue">0.000000e+00</double>
 													<double key="NSAltIncValue">0.000000e+00</double>
-													<int key="NSNumberOfTickMarks">12</int>
+													<int key="NSNumberOfTickMarks">16</int>
 													<int key="NSTickMarkPosition">0</int>
 													<bool key="NSAllowsTickMarkValuesOnly">YES</bool>
 													<bool key="NSVertical">NO</bool>
@@ -2014,6 +2013,7 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {714, 305}}</string>
+										<reference key="NSSuperview" ref="712502892"/>
 										<reference key="NSNextKeyView" ref="198352083"/>
 									</object>
 									<string type="base64-UTF8" key="NSLabel">QXVkaW8gJiBTdWJ0aXRsZXM</string>
@@ -2280,14 +2280,14 @@
 									<reference key="NSTabView" ref="712502892"/>
 								</object>
 							</object>
-							<reference key="NSSelectedTabViewItem" ref="107038816"/>
+							<reference key="NSSelectedTabViewItem" ref="157300012"/>
 							<reference key="NSFont" ref="26"/>
 							<int key="NSTvFlags">134217728</int>
 							<bool key="NSAllowTruncatedLabels">YES</bool>
 							<bool key="NSDrawsBackground">YES</bool>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
-								<reference ref="1053078401"/>
+								<reference ref="738554558"/>
 							</object>
 						</object>
 						<object class="NSTextField" id="586321835">
