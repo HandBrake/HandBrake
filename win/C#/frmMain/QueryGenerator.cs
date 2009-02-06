@@ -295,7 +295,8 @@ namespace Handbrake
                 else
                     audioItems += "," + item;
             }
-            query += " -E " + audioItems;
+            if (audioItems.Trim() != String.Empty)
+                query += " -E " + audioItems;
             firstLoop = true; audioItems = ""; // Reset for another pass.
 
             // Audio Mixdown (-6)
@@ -308,7 +309,8 @@ namespace Handbrake
                 else
                     audioItems += "," + item;
             }
-            query += " -6 " + audioItems;
+            if (audioItems.Trim() != String.Empty)
+                query += " -6 " + audioItems;
             firstLoop = true; audioItems = ""; // Reset for another pass.
 
             // Sample Rate (-R)
@@ -321,7 +323,8 @@ namespace Handbrake
                 else
                     audioItems += "," + item;
             }
-            query += " -R " + audioItems;
+            if (audioItems.Trim() != String.Empty)
+                query += " -R " + audioItems;
             firstLoop = true; audioItems = ""; // Reset for another pass.
 
             // Audio Bitrate (-B)
@@ -334,7 +337,8 @@ namespace Handbrake
                 else
                     audioItems += "," + item;
             }
-            query += " -B " + audioItems;
+            if (audioItems.Trim() != String.Empty)
+                query += " -B " + audioItems;
             firstLoop = true; audioItems = ""; // Reset for another pass.
 
             // DRC (-D)
@@ -347,7 +351,8 @@ namespace Handbrake
                 else
                     audioItems += "," + item;
             }
-            query += " -D " + audioItems;
+            if (audioItems.Trim() != String.Empty)
+                query += " -D " + audioItems;
 
             // Subtitles
             string subtitles = mainWindow.drp_subtitle.Text;

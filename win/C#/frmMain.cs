@@ -1283,7 +1283,11 @@ namespace Handbrake
         }
         private void tb_drc_Scroll(object sender, EventArgs e)
         {
-            double value = (tb_drc.Value / 10.0) + 1;
+            double value;
+            if (tb_drc.Value == 0) value = 0;
+            else
+                value = ((tb_drc.Value-1) / 10.0) + 1;
+            
             lbl_drc.Text = value.ToString();
 
             // Update an item in the Audio list if required.
@@ -1388,7 +1392,9 @@ namespace Handbrake
                 drp_audbit_1.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text;
                 double drcValue; int drcCalculated;
                 double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text, out drcValue);
-                drcValue = (drcValue * 10) - 10;
+                if (drcValue == 0) drcCalculated = 0;
+                else
+                    drcValue = ((drcValue * 10)+1) -10;
                 int.TryParse(drcValue.ToString(), out drcCalculated);
                 tb_drc.Value = drcCalculated;
             }
@@ -2090,6 +2096,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

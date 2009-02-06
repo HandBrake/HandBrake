@@ -1709,7 +1709,7 @@ namespace Handbrake
             this.lbl_drc.Name = "lbl_drc";
             this.lbl_drc.Size = new System.Drawing.Size(14, 13);
             this.lbl_drc.TabIndex = 15;
-            this.lbl_drc.Text = "1";
+            this.lbl_drc.Text = "0";
             // 
             // label16
             // 
@@ -1727,7 +1727,7 @@ namespace Handbrake
             this.tb_drc.LargeChange = 0;
             this.tb_drc.Location = new System.Drawing.Point(599, 47);
             this.tb_drc.Margin = new System.Windows.Forms.Padding(0);
-            this.tb_drc.Maximum = 30;
+            this.tb_drc.Maximum = 31;
             this.tb_drc.Name = "tb_drc";
             this.tb_drc.Size = new System.Drawing.Size(50, 42);
             this.tb_drc.TabIndex = 13;
