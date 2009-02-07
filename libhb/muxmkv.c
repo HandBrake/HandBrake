@@ -213,6 +213,10 @@ static int MKVInit( hb_mux_object_t * m )
             track->flagDefault = 1;
             default_track_flag = 0;
         }
+        else
+        {
+            track->flagDefault = 0;
+        }
         track->flagEnabled = 1;
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->config.lang.iso639_2;
