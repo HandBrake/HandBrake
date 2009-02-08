@@ -1456,7 +1456,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 			count = hb_list_count( title->list_audio );
 		}
 	}
-	if (count > 10) count = 10;
+	if (count > 100) count = 100;
 	if (audio_track_opts.map) g_free(audio_track_opts.map);
 	if (count > 0)
 	{
@@ -1527,7 +1527,7 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 			count = hb_list_count( title->list_subtitle );
 		}
 	}
-	if (count > 10) count = 10;
+	if (count > 100) count = 100;
 	if (subtitle_opts.map) g_free(subtitle_opts.map);
 	if (count > 0)
 	{
@@ -1564,7 +1564,7 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	subtitle_opts.map[0].shortOpt = "auto";
 	subtitle_opts.map[0].ivalue = -1;
 	subtitle_opts.map[0].svalue = "auto";
-	if (count >0)
+	if (count > 0)
 	{
 		for (ii = 0; ii < count; ii++)
 		{
