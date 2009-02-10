@@ -63,7 +63,7 @@ int encxvidInit( hb_work_object_t * w, hb_job_t * job )
         case 0:
             memset( &single, 0, sizeof( single ) );
             single.version   = XVID_VERSION;
-            if( job->vquality < 0.0 || job->vquality > 1.0 )
+            if( job->vquality < 0.0 )
             {
                 /* Rate control */
                 single.bitrate = 1000 * job->vbitrate;
@@ -71,8 +71,16 @@ int encxvidInit( hb_work_object_t * w, hb_job_t * job )
             }
             else
             {
-                /* Constant quantizer */
-                pv->quant = 31 - job->vquality * 30;
+                if( job->vquality > 0 && job->vquality < 1 )
+                {
+                    /* Constant quantizer */
+                    pv->quant = 31 - job->vquality * 30;
+                }
+                else
+                {
+                    pv->quant = job->vquality;
+                }
+                
                 hb_log( "encxvid: encoding at constant quantizer %d",
                         pv->quant );
             }
