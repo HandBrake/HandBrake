@@ -155,6 +155,7 @@
     [fX264optMotionEstPopUp addItemWithTitle:@"Hexagon"];
     [fX264optMotionEstPopUp addItemWithTitle:@"Uneven Multi-Hexagon"];
     [fX264optMotionEstPopUp addItemWithTitle:@"Exhaustive"];
+    [fX264optMotionEstPopUp addItemWithTitle:@"Transformed Exhaustive"];
     
     /*Motion Estimation range fX264optMERangePopUp*/
     [fX264optMERangePopUp removeAllItems];
@@ -554,7 +555,9 @@
                     else if ([optValue isEqualToString:@"umh"])
                         [fX264optMotionEstPopUp selectItemAtIndex:3];
                     else if ([optValue isEqualToString:@"esa"])
-                        [fX264optMotionEstPopUp selectItemAtIndex:4];                        
+                        [fX264optMotionEstPopUp selectItemAtIndex:4];
+                    else if ([optValue isEqualToString:@"tesa"])
+                        [fX264optMotionEstPopUp selectItemAtIndex:5];
                 }
                 /*ME Range NSPopUpButton*/
                 if ([optName isEqualToString:@"merange"])
@@ -879,7 +882,10 @@
                             case 4:
                                 thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"esa"];
                                 break;
-                                
+                            
+                            case 5:
+                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"tesa"];
+                            
                             default:
                                 break;
                         }
@@ -1003,7 +1009,12 @@
                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
                         break;
-                        
+                    
+                    case 5:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"tesa"]]];
+                        break;
+                    
                     default:
                         break;
                 }
@@ -1145,6 +1156,12 @@
                         [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
                             [NSString stringWithFormat:[fDisplayX264Options stringValue]],
                             [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
+                        break;
+
+                    case 5:
+                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
+                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
+                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"tesa"]]];
                         break;
                         
                     default:
