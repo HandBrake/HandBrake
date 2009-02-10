@@ -1166,7 +1166,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         }
         else // CRF
         {
-            videoInfo = [NSString stringWithFormat:@"%@ Constant Quality: %.0f %%", videoInfo ,[[item objectForKey:@"VideoQualitySlider"] floatValue] * 100];
+            videoInfo = [NSString stringWithFormat:@"%@ Constant Quality: %.2f", videoInfo ,[[item objectForKey:@"VideoQualitySlider"] floatValue]];
         }
         
         [finalString appendString: @"Video: " withAttributes:detailBoldAttr];

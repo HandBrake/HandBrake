@@ -433,7 +433,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
         fQueueStatus,fPresetsAdd,fPresetsDelete,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
-    fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck};
+    fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel};
     
     for( unsigned i = 0;
         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -1888,7 +1888,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
 	[queueFileJob setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
 	[queueFileJob setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
-	[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+	[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
     /* Framerate */
     [queueFileJob setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
     
@@ -2686,7 +2686,7 @@ fWorkingCount = 0;
             job->vbitrate = [fVidBitrateField intValue];
             break;
         case 2:
-            job->vquality = [fVidQualitySlider floatValue];
+            job->vquality = [fVidQualityRFField floatValue];
             job->vbitrate = 0;
             break;
     }
@@ -3942,7 +3942,7 @@ the user is using "Custom" settings by determining the sender*/
         [fPictureController setAllowLooseAnamorphic:YES];
         [fDstMp4iPodFileCheck setEnabled: YES];
     }
-    
+    [self setupQualitySlider];
 	[self calculatePictureSizing: sender];
 	[self twoPassCheckboxChanged: sender];
 }
@@ -4009,6 +4009,8 @@ the user is using "Custom" settings by determining the sender*/
     [fVidTargetSizeField  setEnabled: target];
     [fVidBitrateField     setEnabled: bitrate];
     [fVidQualitySlider    setEnabled: quality];
+    [fVidQualityRFField   setEnabled: quality];
+    [fVidQualityRFLabel    setEnabled: quality];
     [fVidTwoPassCheck     setEnabled: !quality &&
         [fVidQualityMatrix isEnabled]];
     if( quality )
@@ -4023,11 +4025,77 @@ the user is using "Custom" settings by determining the sender*/
 	[self customSettingUsed: sender];
 }
 
+/* Use this method to setup the quality slider for cq/rf values depending on
+ * the video encoder selected.
+ */
+- (void) setupQualitySlider
+{
+    /* Get the current slider maxValue to check for a change in slider scale later
+     * so that we can choose a new similar value on the new slider scale */
+    float previousMaxValue = [fVidQualitySlider maxValue];
+    float previousPercentOfSliderScale = [fVidQualitySlider floatValue] / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1);
+    NSString * qpRFLabelString = @"QP:";
+    /* x264 0-51 */
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
+    {
+        [fVidQualitySlider setMinValue:0.0];
+        [fVidQualitySlider setMaxValue:51.0];
+        /* As x264 allows for qp/rf values that are fractional, we get the value from the preferences */
+        int fractionalGranularity = 1 / [[NSUserDefaults standardUserDefaults] floatForKey:@"x264CqSliderFractional"];
+        [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0)
+        {
+            qpRFLabelString = @"RF:";
+        }
+    }
+    /* ffmpeg and xvid 1-31 */
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_FFMPEG || [[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_XVID)
+    {
+        [fVidQualitySlider setMinValue:1.0];
+        [fVidQualitySlider setMaxValue:31.0];
+        [fVidQualitySlider setNumberOfTickMarks:31];
+    }
+    /* Theora 0-63 */
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+    {
+        [fVidQualitySlider setMinValue:0.0];
+        [fVidQualitySlider setMaxValue:63.0];
+        [fVidQualitySlider setNumberOfTickMarks:64];
+    }
+    [fVidQualityRFLabel setStringValue:qpRFLabelString];
+    
+    /* check to see if we have changed slider scales */
+    if (previousMaxValue != [fVidQualitySlider maxValue])
+    {
+        /* if so, convert the old setting to the new scale as close as possible based on percentages */
+        float rf =  ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1) * previousPercentOfSliderScale;
+        [fVidQualitySlider setFloatValue:rf];
+    }
+    
+    [self qualitySliderChanged:nil];
+}
+
 - (IBAction) qualitySliderChanged: (id) sender
 {
-    [fVidConstantCell setTitle: [NSString stringWithFormat:
-        NSLocalizedString( @"Constant quality: %.0f %%", @"" ), 100.0 *
-        [fVidQualitySlider floatValue]]];
+        /* Our constant quality slider is in a range based
+         * on each encoders qp/rf values. The range depends
+         * on the encoder. Also, the range is inverse of quality
+         * (ie. as the "quality" goes up, the cq or rf value
+         * actually goes down). Since the IB sliders always set
+         * their max value at the right end of the slider, we
+         * will calculate the inverse, so as the slider floatValue
+         * goes up, we will show the inverse in the rf field
+         * so, the floatValue at the right for x264 would be 51
+         * and our rf field needs to show 0 and vice versa.
+         */
+        
+        float sliderRfInverse = ([fVidQualitySlider maxValue] - [fVidQualitySlider floatValue]) + [fVidQualitySlider minValue];
+        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", sliderRfInverse]];
+        
+        float sliderRfToPercent = ( [fVidQualitySlider maxValue] - sliderRfInverse ) / [fVidQualitySlider maxValue];
+        [fVidConstantCell setTitle: [NSString stringWithFormat:
+        NSLocalizedString( @"Constant quality: %.2f %%", @"" ), 100 * sliderRfToPercent]];
+        
 		[self customSettingUsed: sender];
 }
 
@@ -5603,7 +5671,23 @@ return YES;
         
         [fVidTargetSizeField setStringValue:[chosenPreset objectForKey:@"VideoTargetSize"]];
         [fVidBitrateField setStringValue:[chosenPreset objectForKey:@"VideoAvgBitrate"]];
-        [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+        
+        /* Since we are now using RF Values for the slider, we detect if the preset uses an old quality float.
+         * So, check to see if the quality value is less than 1.0 which should indicate the old ".062" type
+         * quality preset. Caveat: in the case of x264, where the RF scale starts at 0, it would misinterpret
+         * a preset that uses 0.0 - 0.99 for RF as an old style preset. Not sure how to get around that one yet,
+         * though it should be a corner case since it would pretty much be a preset for lossless encoding. */
+        if ([[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue] < 1.0)
+        {
+            /* For the quality slider we need to convert the old percent's to the new rf scales */
+            float rf =  (([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]);
+            [fVidQualitySlider setFloatValue:rf];
+            
+        }
+        else
+        {
+            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+        }
         
         [self videoMatrixChanged:nil];
         
@@ -6097,7 +6181,7 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:[fVidQualityMatrix selectedRow]] forKey:@"VideoQualityType"];
         [preset setObject:[fVidTargetSizeField stringValue] forKey:@"VideoTargetSize"];
         [preset setObject:[fVidBitrateField stringValue] forKey:@"VideoAvgBitrate"];
-        [preset setObject:[NSNumber numberWithFloat:[fVidQualitySlider floatValue]] forKey:@"VideoQualitySlider"];
+        [preset setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
         
         /* Video framerate */
         if ([fVidRatePopUp indexOfSelectedItem] == 0) // Same as source is selected

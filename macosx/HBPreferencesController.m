@@ -58,6 +58,7 @@
         @"NO",              @"EncodeLogLocation",
         @"10",              @"PreviewsNumber",
         @"",                @"Drawer Size",
+        @"0.25",              @"x264CqSliderFractional",
         nil]];
 }
 

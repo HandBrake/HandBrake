@@ -99,6 +99,8 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fVidEncoderField;
     IBOutlet NSPopUpButton       * fVidEncoderPopUp;
     IBOutlet NSTextField         * fVidQualityField;
+    IBOutlet NSTextField         * fVidQualityRFLabel;
+    IBOutlet NSTextField         * fVidQualityRFField;
     IBOutlet NSMatrix            * fVidQualityMatrix;
     IBOutlet NSButtonCell        * fVidTargetCell;
     IBOutlet NSTextField         * fVidTargetSizeField;
@@ -288,6 +290,8 @@ BOOL                        fIsDragging;
 
 - (IBAction) videoMatrixChanged: (id) sender;
 - (IBAction) qualitySliderChanged: (id) sender;
+- (void) setupQualitySlider;
+
 - (IBAction) audioDRCSliderChanged: (id) sender;
 
 - (IBAction) showPicturePanel: (id) sender;
