@@ -468,6 +468,24 @@
         [[fX264optMixedRefsSwitch animator] setHidden:NO];
         [[fX264optMixedRefsLabel animator] setHidden:NO];
     }
+    
+    if ( [fX264optMotionEstPopUp indexOfSelectedItem] < 3 )
+    {
+        /* ME-range can only be above 16 if me >= umh
+          and changing it to < 16 is idiotic so hide it . */
+        [[fX264optMERangePopUp animator] setHidden:YES];
+        [[fX264optMERangeLabel animator] setHidden:YES];
+        if (sender != fX264optMERangePopUp && [fX264optMERangePopUp indexOfSelectedItem] > 0 )
+        {
+            [fX264optMERangePopUp selectItemAtIndex:0];
+            [[fX264optMERangePopUp cell] performClick:self];
+        }
+    }
+    else
+    {
+        [[fX264optMERangePopUp animator] setHidden:NO];
+        [[fX264optMERangeLabel animator] setHidden:NO];
+    }
 }
 
 /**
