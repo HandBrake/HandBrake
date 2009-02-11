@@ -71,7 +71,7 @@
         fX264optWeightBLabel,fX264optWeightBSwitch, fX264optBPyramidLabel,fX264optBPyramidSwitch,
         fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
         fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
-        fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp, fX264optPsyRDSlider, fX264optPsyRDLabel, fX264optPsyTrellisSlider, fX264optPsyTrellisLabel };
+        fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp, fX264optPsyRDSlider, fX264optPsyRDLabel, fX264optPsyTrellisSlider, fX264optPsyTrellisLabel, fX264optBAdaptPopUp, fX264optBAdaptLabel };
 
     for( i = 0; i < sizeof( controls ) / sizeof( NSControl * ); i++ )
     {
@@ -181,6 +181,14 @@
     [fX264optDirectPredPopUp addItemWithTitle:@"Temporal"];
     [fX264optDirectPredPopUp addItemWithTitle:@"Automatic"];
     [fX264optDirectPredPopUp setWantsLayer:YES];
+    
+    /* Adaptive B-Frames Mode fX264optBAdaptPopUp */
+    [fX264optBAdaptPopUp removeAllItems];
+    [fX264optBAdaptPopUp addItemWithTitle:@"Default (1)"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"0"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"1"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"2"];
+    [fX264optBAdaptPopUp setWantsLayer:YES];
     
     /*Alpha Deblock*/
     [fX264optAlphaDeblockPopUp removeAllItems];
@@ -400,21 +408,29 @@
            that can only be used when b-frames are enabled.        */
         [[fX264optWeightBSwitch animator] setHidden:YES];
         [[fX264optWeightBLabel animator] setHidden:YES];
-        if ( [fX264optWeightBSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optWeightBSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
             [fX264optWeightBSwitch performClick:self];
         
         [[fX264optBPyramidSwitch animator] setHidden:YES];
         [[fX264optBPyramidLabel animator] setHidden:YES];
-        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
             [fX264optBPyramidSwitch performClick:self];
 
         [[fX264optDirectPredPopUp animator] setHidden:YES];
         [[fX264optDirectPredLabel animator] setHidden:YES];
-        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp)
+        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
         {
             [fX264optDirectPredPopUp selectItemAtIndex: 0];
             [[fX264optDirectPredPopUp cell] performClick:self];
             
+        }
+
+        [[fX264optBAdaptPopUp animator] setHidden:YES];
+        [[fX264optBAdaptLabel animator] setHidden:YES];
+        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
+        {
+            [fX264optBAdaptPopUp selectItemAtIndex: 0];
+            [[fX264optBAdaptPopUp cell] performClick:self];
         }
     }
     else if ( [fX264optBframesPopUp indexOfSelectedItem ] == 2)
@@ -430,6 +446,9 @@
 
         [[fX264optDirectPredPopUp animator] setHidden:NO];
         [[fX264optDirectPredLabel animator] setHidden:NO];
+        
+        [[fX264optBAdaptPopUp animator] setHidden:NO];
+        [[fX264optBAdaptLabel animator] setHidden:NO];
     }
     else
     {
@@ -441,6 +460,9 @@
 
         [[fX264optDirectPredPopUp animator] setHidden:NO];
         [[fX264optDirectPredLabel animator] setHidden:NO];
+
+        [[fX264optBAdaptPopUp animator] setHidden:NO];
+        [[fX264optBAdaptLabel animator] setHidden:NO];
     }
     
     if ( [fX264optCabacSwitch state] == false)
@@ -667,6 +689,11 @@
                 {
                     [fX264optMERangePopUp selectItemAtIndex:[optValue intValue]-3];
                 }
+                /* Adaptive B-Frames NSPopUpButton*/
+                if ([optName isEqualToString:@"b-adapt"])
+                {
+                    [fX264optBAdaptPopUp selectItemAtIndex:[optValue intValue]+1];
+                }
                 /*Weighted B-Frames NSButton*/
                 if ([optName isEqualToString:@"weightb"])
                 {
@@ -820,6 +847,10 @@
     if (sender == fX264optMERangePopUp)
     {
         optNameToChange = @"merange";
+    }
+    if (sender == fX264optBAdaptPopUp)
+    {
+        optNameToChange = @"b-adapt";
     }
     if (sender == fX264optWeightBSwitch)
     {
@@ -1079,6 +1110,11 @@
                            because merange can't go below 4. So it has to be handled separately.  */
                         thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
                     }
+                    else if ([optNameToChange isEqualToString:@"b-adapt"])
+                    {
+                        /* B-adapt starts at index 0 with default then goes 0, 1, 2)*/
+                        thisOpt = [NSString stringWithFormat:@"%@=%d", optName, [sender indexOfSelectedItem]-1];
+                    }
                     else // we have a valid value to change, so change it
                     {
                         if ( [sender indexOfSelectedItem] != 0 )
@@ -1208,7 +1244,6 @@
                         break;
                 }
             }
-            
             else if ([optNameToChange isEqualToString:@"merange"])
             {
                 /* Special case for motion estimation range, which uses
@@ -1216,6 +1251,12 @@
                    first valid value after default is four, not zero.   */
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
                     [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
+            }
+            else if ([optNameToChange isEqualToString:@"b-adapt"])
+            {
+                /* 0 is default, index 1 is 0*/
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];                
             }
             else if ([optNameToChange isEqualToString:@"deblock"])
             {
@@ -1383,6 +1424,12 @@
                    0: default, 1: 4, because the first valid value is 4, not 1.     */
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
                     [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
+            }
+            else if ([optNameToChange isEqualToString:@"b-adapt"])
+            {
+                /* 0 is default, index 1 is 0*/
+                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
+                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];                
             }
             else if ([optNameToChange isEqualToString:@"deblock"])
             {

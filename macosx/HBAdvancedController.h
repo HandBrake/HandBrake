@@ -53,6 +53,8 @@
     IBOutlet NSTextField        * fX264optPsyRDLabel;
     IBOutlet NSSlider           * fX264optPsyTrellisSlider;
     IBOutlet NSTextField        * fX264optPsyTrellisLabel;
+    IBOutlet NSPopUpButton      * fX264optBAdaptPopUp;
+    IBOutlet NSTextField        * fX264optBAdaptLabel;
 }
 
 // x264 Advanced Panel Methods
