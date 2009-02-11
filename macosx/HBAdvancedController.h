@@ -49,6 +49,10 @@
     IBOutlet NSButton           * fX264opt8x8dctSwitch;
     IBOutlet NSTextField        * fX264optCabacLabel;
     IBOutlet NSButton           * fX264optCabacSwitch;
+    IBOutlet NSSlider           * fX264optPsyRDSlider;
+    IBOutlet NSTextField        * fX264optPsyRDLabel;
+    IBOutlet NSSlider           * fX264optPsyTrellisSlider;
+    IBOutlet NSTextField        * fX264optPsyTrellisLabel;
 }
 
 // x264 Advanced Panel Methods

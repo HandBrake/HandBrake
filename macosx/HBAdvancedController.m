@@ -71,7 +71,7 @@
         fX264optWeightBLabel,fX264optWeightBSwitch, fX264optBPyramidLabel,fX264optBPyramidSwitch,
         fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
         fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
-        fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp};
+        fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp, fX264optPsyRDSlider, fX264optPsyRDLabel, fX264optPsyTrellisSlider, fX264optPsyTrellisLabel };
 
     for( i = 0; i < sizeof( controls ) / sizeof( NSControl * ); i++ )
     {
@@ -210,6 +210,22 @@
 
     /* CABAC fX264opCabacSwitch */
     [fX264optCabacSwitch setState:1];
+    
+    /* PsyRDO fX264optPsyRDSlider */
+    [fX264optPsyRDSlider setMinValue:0.0];
+    [fX264optPsyRDSlider setMaxValue:1.0];
+    [fX264optPsyRDSlider setTickMarkPosition:NSTickMarkBelow];
+    [fX264optPsyRDSlider setNumberOfTickMarks:10];
+    [fX264optPsyRDSlider setAllowsTickMarkValuesOnly:YES];
+    [fX264optPsyRDSlider setFloatValue:1.0];
+
+    /* PsyTrellis fX264optPsyRDSlider */
+    [fX264optPsyTrellisSlider setMinValue:0.0];
+    [fX264optPsyTrellisSlider setMaxValue:1.0];
+    [fX264optPsyTrellisSlider setTickMarkPosition:NSTickMarkBelow];
+    [fX264optPsyTrellisSlider setNumberOfTickMarks:10];
+    [fX264optPsyTrellisSlider setAllowsTickMarkValuesOnly:YES];
+    [fX264optPsyTrellisSlider setFloatValue:0.0];
 
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString:nil];
@@ -373,6 +389,8 @@
        - CABAC (when 0 turn off trellis)
        - analysis (if none, turn off 8x8dct)
        - refs (under 2, disable mixed-refs)
+       - subme (if under 6, turn off psy-rd and psy-trel)
+       - trellis (if 0, turn off psy-trel)
     */
     
     if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
@@ -428,11 +446,10 @@
     if ( [fX264optCabacSwitch state] == false)
     {
         /* Without CABAC entropy coding, trellis doesn't run. */
-        
         [[fX264optTrellisPopUp animator] setHidden:YES];
         [[fX264optTrellisLabel animator] setHidden:YES];
         [fX264optTrellisPopUp selectItemAtIndex:0];
-        if (sender != fX264optTrellisPopUp)
+        if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
             [[fX264optTrellisPopUp cell] performClick:self];
     }
     else
@@ -485,6 +502,52 @@
     {
         [[fX264optMERangePopUp animator] setHidden:NO];
         [[fX264optMERangeLabel animator] setHidden:NO];
+    }
+    
+    if( [fX264optSubmePopUp indexOfSelectedItem] != 0 && [fX264optSubmePopUp indexOfSelectedItem] < 7 )
+    {
+        /* No Psy-RDO or Psy=trel if subme < 6. */
+        [[fX264optPsyRDSlider animator] setHidden:YES];
+        [[fX264optPsyRDLabel animator] setHidden:YES];
+        [[fX264optPsyRDSlider animator] setFloatValue:1];
+        if ( (sender != fX264optPsyRDSlider) && (sender != fX264optPsyTrellisSlider) )
+            [[fX264optPsyRDSlider cell] performClick:self];
+        
+        [[fX264optPsyTrellisSlider animator] setHidden:YES];
+        [[fX264optPsyTrellisLabel animator] setHidden:YES];
+        [[fX264optPsyTrellisSlider animator] setFloatValue:0];
+        if ( (sender != fX264optPsyTrellisSlider) && (sender != fX264optPsyRDSlider) && (sender != fX264optTrellisPopUp) )
+            [[fX264optPsyTrellisSlider cell] performClick:self];
+        
+    }
+    else
+    {
+        [[fX264optPsyRDSlider animator] setHidden:NO];
+        [[fX264optPsyRDLabel animator] setHidden:NO];
+        
+        if( [fX264optTrellisPopUp indexOfSelectedItem] >= 2 )
+        {
+            [[fX264optPsyTrellisSlider animator] setHidden:NO];
+            [[fX264optPsyTrellisLabel animator] setHidden:NO];
+        }
+    }
+    
+    if( [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
+    {
+        /* No Psy-trellis without trellis. */
+        [[fX264optPsyTrellisSlider animator] setHidden:YES];
+        [[fX264optPsyTrellisLabel animator] setHidden:YES];
+        [[fX264optPsyTrellisSlider animator] setFloatValue:0];
+        if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
+            [[fX264optPsyTrellisSlider cell] performClick:self];
+    }
+    else
+    {
+        if( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 )
+        {
+            [[fX264optPsyTrellisSlider animator] setHidden:NO];
+            [[fX264optPsyTrellisLabel animator] setHidden:NO];
+        }
     }
 }
 
@@ -673,7 +736,20 @@
                 if ([optName isEqualToString:@"cabac"])
                 {
                     [fX264optCabacSwitch setState:[optValue intValue]];
-                }                                                                 
+                }
+                /* Psy-RD and Psy-Trellis NSSliders */
+                if ([optName isEqualToString:@"psy-rd"])
+                {
+                    NSString * rdOpt = @"";
+                    NSString * trellisOpt = @"";
+                    
+                    NSRange splitRD = [optValue rangeOfString:@","];
+                    rdOpt = [optValue substringToIndex:splitRD.location];
+                    trellisOpt = [optValue substringFromIndex:splitRD.location + 1];
+                    
+                    [fX264optPsyRDSlider setFloatValue:[rdOpt floatValue]];
+                    [fX264optPsyTrellisSlider setFloatValue:[trellisOpt floatValue]];
+                }                                                              
             }
         }
     }
@@ -755,6 +831,15 @@
     {
         optNameToChange = @"cabac";
     }
+    if( sender == fX264optPsyRDSlider)
+    {
+        optNameToChange = @"psy-rd";
+    }
+    if( sender == fX264optPsyTrellisSlider)
+    {
+        optNameToChange = @"psy-rd";
+    }
+    
     
     /* Set widgets depending on the opt string in field */
     NSString * thisOpt; // The separated option such as "bframes=3"
@@ -838,6 +923,20 @@
                             /* Otherwise the format is deblock=a,b, where a and b both have an array
                                offset of 7 because deblocking values start at -6 instead of at zero. */
                             thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
+                        }
+                    }
+                    if ([optNameToChange isEqualToString:@"psy-rd"])
+                    {
+                        if( [fX264optPsyRDSlider floatValue] == 1.0 && [fX264optPsyTrellisSlider floatValue] == 0.0 ) 
+                        {
+                            /* When  PsyRD is 1 and PsyTrel is 0 they're default values and can be ignored. */
+                            thisOpt = @"";                                
+                        }
+                        else
+                        {
+                            /* Otherwise the format is deblock=a,b, where a and b both have an array
+                               offset of 7 because deblocking values start at -6 instead of at zero. */
+                            thisOpt = [NSString stringWithFormat:@"%@=%0.1f,%0.1f", optName, [fX264optPsyRDSlider floatValue], [fX264optPsyTrellisSlider floatValue] ];
                         }
                     }
                     else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] ||  [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
@@ -1107,6 +1206,19 @@
                    If only one filter is at 0, both need to be overtly specified.    */
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
             }
+            else if ([optNameToChange isEqualToString:@"psy-rd"])
+            {
+                /* Special case for psy-rd and psy-trellis. */
+                if( [fX264optPsyRDSlider floatValue] == 1 && [fX264optPsyTrellisSlider floatValue] == 0 )
+                {
+                    /* Defaults, use null string. */
+                    [fDisplayX264Options setStringValue:@""];
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%0.1f,%0.1f", [NSString stringWithFormat:optNameToChange], [fX264optPsyRDSlider floatValue],  [fX264optPsyTrellisSlider floatValue]]];
+                }
+            }
             else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
             {
                 /* This covers all the boolean options that need to be specified only when true. */
@@ -1256,6 +1368,20 @@
                    still need to be specified directly. with the default one at zero. To make deblock
                    just a little more fun, values start at -6 instead of at zero.                       */
                 [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
+            }
+            else if ([optNameToChange isEqualToString:@"psy-rd"])
+            {
+                /* Special case for psy-rd and psy-trel */
+                if( [fX264optPsyRDSlider floatValue] == 1 && [fX264optPsyTrellisSlider floatValue] == 0 )
+                {
+                    /* Defaults, don't change string. */
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:[fDisplayX264Options stringValue]]];
+                }
+                else
+                {
+                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%0.1f,%0.1f", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [fX264optPsyRDSlider floatValue],  [fX264optPsyTrellisSlider floatValue]]];
+                }
+                
             }
             else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
             {
