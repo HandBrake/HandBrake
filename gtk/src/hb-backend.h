@@ -91,7 +91,8 @@ void ghb_vquality_range(
 	gdouble *max,
 	gdouble *step,
 	gdouble *page,
-	gint *digits);
+	gint *digits,
+	gboolean *inverted);
 //const gchar* ghb_get_rate_string(gint rate, gint type);
 void ghb_combo_init(GtkBuilder *builder);
 void ghb_backend_init(gint debug);

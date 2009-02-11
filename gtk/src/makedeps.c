@@ -58,7 +58,6 @@ static dependency_t dep_map[] =
 	{"VideoEncoder", "x264_tab", "x264", FALSE, FALSE},
 	{"VideoEncoder", "x264_tab_label", "x264", FALSE, FALSE},
 	{"VideoEncoder", "Mp4iPodCompatible", "x264", FALSE, FALSE},
-	{"VideoEncoder", "directqp", "x264|ffmpeg", FALSE, FALSE},
 	{"AudioEncoder", "AudioBitrate", "ac3|dts", TRUE, FALSE},
 	{"AudioEncoder", "AudioSamplerate", "ac3|dts", TRUE, FALSE},
 	{"AudioEncoder", "AudioMixdown", "ac3|dts", TRUE, FALSE},

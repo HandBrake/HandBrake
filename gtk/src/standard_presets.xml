@@ -58,11 +58,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -143,11 +143,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -230,11 +230,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -335,11 +335,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -418,11 +418,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -524,11 +524,11 @@
 						<key>PictureDeblock</key>
 						<integer>0</integer>
 						<key>PictureDeinterlace</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureDenoise</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureDetelecine</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureHeight</key>
 						<integer>0</integer>
 						<key>PictureKeepRatio</key>
@@ -611,11 +611,11 @@
 						<key>PictureDeblock</key>
 						<integer>0</integer>
 						<key>PictureDeinterlace</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureDenoise</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureDetelecine</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureHeight</key>
 						<integer>0</integer>
 						<key>PictureKeepRatio</key>
@@ -698,11 +698,11 @@
 						<key>PictureDeblock</key>
 						<integer>0</integer>
 						<key>PictureDeinterlace</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureDenoise</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureDetelecine</key>
-						<string>0</string>
+						<integer>0</integer>
 						<key>PictureHeight</key>
 						<integer>0</integer>
 						<key>PictureKeepRatio</key>
@@ -802,11 +802,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -889,11 +889,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -985,13 +985,13 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDecomb</key>
-				<string>2</string>
+				<integer>2</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>2</string>
+				<integer>2</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1248,13 +1248,13 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDecomb</key>
-				<string>2</string>
+				<integer>2</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>2</string>
+				<integer>2</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1348,11 +1348,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>208</integer>
 				<key>PictureKeepRatio</key>
@@ -1433,11 +1433,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -1516,11 +1516,11 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDeinterlace</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDenoise</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<string>0</string>
+				<integer>0</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>

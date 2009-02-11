@@ -1649,6 +1649,7 @@
                                         </child>
                                         <child>
                                           <object class="GtkHScale" id="VideoQualitySlider">
+                                            <property name="width_request">200</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3270,26 +3271,6 @@ the required multiple.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="directqp">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text">HandBrake allows entry of QP/CRF values for x264 
-and FFMPEG instead of the percentage metric.
-This preference is associated with the current
-preset only.
-
-You *MUST* save the current preset to preserve
-this setting.</property>
-                            <property name="label" translatable="yes">Allow direct QP/CRF</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="vcodec_changed_cb"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkCheckButton" id="EncodeLogLocation">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -3303,7 +3284,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">5</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
 
@@ -3346,7 +3327,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">6</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
 
@@ -3384,7 +3365,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">7</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
 
@@ -3397,7 +3378,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">8</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
                         <child>
@@ -3409,7 +3390,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">9</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
                       </object>

@@ -1120,6 +1120,7 @@ void
 vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gdouble vqmin, vqmax, step, page;
+	gboolean inverted;
 	gint digits;
 	gint vcodec;
 
@@ -1127,16 +1128,13 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits);
+	ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
 	GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
 	gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
 	gtk_range_set_increments (GTK_RANGE(qp), step, page);
 	gtk_scale_set_digits(GTK_SCALE(qp), digits);
+	gtk_range_set_inverted (GTK_RANGE(qp), inverted);
 	vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
-	if (vcodec != HB_VCODEC_X264 && vcodec != HB_VCODEC_FFMPEG)
-	{
-		ghb_ui_update(ud, "directqp", ghb_boolean_value(FALSE));
-	}
 }
 
 void
@@ -2808,22 +2806,41 @@ format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
-	if (ghb_settings_get_boolean(ud->settings, "directqp"))
+	gdouble percent;
+
+	gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+	switch (vcodec)
 	{
-		gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
-		// Only x264 and ffmpeg currently support direct qp/crf entry
-		if (vcodec != HB_VCODEC_X264 && vcodec != HB_VCODEC_FFMPEG)
+		case HB_VCODEC_X264:
 		{
-			val *= 100;
-			return g_strdup_printf("%.1f", val);
-		}
-		return g_strdup_printf("%d", (gint)val);
+			gboolean crf;
+			crf = ghb_settings_get_boolean(ud->settings, "constant_rate_factor");
+			percent = 100. * (51 - val) / 51.;
+			if (crf)
+				return g_strdup_printf("RF: %.1f / %.1f%%", val, percent);
+			else
+				return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
+		} break;
+
+		case HB_VCODEC_XVID:
+		case HB_VCODEC_FFMPEG:
+		{
+			percent = 100. * (30 - (val - 1)) / 30.;
+			return g_strdup_printf("QP: %d / %.1f%%", (int)val, percent);
+		} break;
+
+		case HB_VCODEC_THEORA:
+		{
+			percent = 100. * val / 63.;
+			return g_strdup_printf("QP: %d / %.1f%%", (int)val, percent);
+		} break;
+
+		default:
+		{
+			percent = 0;
+		} break;
 	}
-	else
-	{
-		val *= 100;
-		return g_strdup_printf("%.1f", val);
-	}
+	return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
 }
 
 static void

@@ -243,16 +243,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		// Constant quality
 		vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
 		vq_desc = "Constant Quality:";
-		if (ghb_settings_get_boolean(settings, "directqp"))
-		{
-			vqstr = g_strdup_printf("%d", (gint)vqvalue);
-			vq_units = "(crf)";
-		}
-		else
-		{
-			vqstr = g_strdup_printf("%.1f", 100*vqvalue);
-			vq_units = "%";
-		}
+		vqstr = g_strdup_printf("%d", (gint)vqvalue);
+		vq_units = "(crf)";
 	}
 	fps = ghb_settings_get_string(settings, "VideoFramerate");
 	if (strcmp("source", fps) == 0)

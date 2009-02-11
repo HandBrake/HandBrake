@@ -263,15 +263,6 @@
 			<false />
 		</array>
 	</array>
-	<key>directqp</key>
-	<array>
-		<array>
-			<string>VideoEncoder</string>
-			<string>x264|ffmpeg</string>
-			<false />
-			<false />
-		</array>
-	</array>
 	<key>end_chapter</key>
 	<array>
 		<array>

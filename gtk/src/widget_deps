@@ -53,7 +53,6 @@
 		<string>x264_tab</string>
 		<string>x264_tab_label</string>
 		<string>Mp4iPodCompatible</string>
-		<string>directqp</string>
 	</array>
 	<key>VideoTwoPass</key>
 	<array>

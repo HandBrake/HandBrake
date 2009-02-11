@@ -176,8 +176,6 @@
 		<string>none</string>
 		<key>PictureDetelecineCustom</key>
 		<string></string>
-		<key>directqp</key>
-		<false />
 		<key>SubtitlesForced</key>
 		<true />
 		<key>VideoFramerate</key>

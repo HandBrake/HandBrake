@@ -16,6 +16,7 @@
 #include <glib/gstdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include "hb.h"
 #include "settings.h"
 #include "callbacks.h"
 #include "audiohandler.h"
@@ -2192,6 +2193,43 @@ import_xlat_preset(GValue *dict)
 	} break;
 	}
 	import_value_xlat(dict);
+
+	gdouble vquality;
+	const GValue *gval;
+
+	vquality = ghb_value_double(preset_dict_get_value(dict, "VideoQualitySlider"));
+	if (vquality < 1.0)
+	{
+		gint vcodec;
+
+		gval = preset_dict_get_value(dict, "VideoEncoder");
+		vcodec = ghb_lookup_combo_int("VideoEncoder", gval);
+		switch (vcodec)
+		{
+			case HB_VCODEC_X264:
+			{
+				vquality = 51. - vquality * 51.;
+			} break;
+
+			case HB_VCODEC_XVID:
+			case HB_VCODEC_FFMPEG:
+			{
+				vquality = 31. - vquality * 30.;
+			} break;
+
+			case HB_VCODEC_THEORA:
+			{
+				vquality = vquality * 63.;
+			} break;
+
+			default:
+			{
+				vquality = 0.;
+			} break;
+		}
+		ghb_dict_insert(dict, g_strdup("VideoQualitySlider"), 
+						ghb_double_value_new(vquality));
+	}
 }
 
 static void
@@ -3184,10 +3222,14 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 
 			gdouble vqmin, vqmax, step, page;
 			gint digits;
-			ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits);
+			gboolean inverted;
+
+			ghb_vquality_range(ud, &vqmin, &vqmax, &step, 
+								&page, &digits, &inverted);
 			gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
 			gtk_range_set_increments (GTK_RANGE(qp), step, page);
 			gtk_scale_set_digits(GTK_SCALE(qp), digits);
+			gtk_range_set_inverted (GTK_RANGE(qp), inverted);
 
 			gchar *text;
 			gint crop[4];

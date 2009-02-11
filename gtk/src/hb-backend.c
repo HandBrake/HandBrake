@@ -529,41 +529,46 @@ ghb_vquality_range(
 	gdouble *max,
 	gdouble *step,
 	gdouble *page,
-	gint *digits)
+	gint *digits,
+	gboolean *inverted)
 {
-	if (ghb_settings_get_boolean(ud->settings, "directqp"))
+	gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+	*step = 1;
+	*page = 10;
+	*digits = 0;
+	switch (vcodec)
 	{
-		gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
-		// Only x264 and ffmpeg currently support direct qp/crf entry
-		*step = 1;
-		*page = 10;
-		*digits = 0;
-		if (vcodec == HB_VCODEC_X264)
+		case HB_VCODEC_X264:
 		{
 			*min = 0;
 			*max = 51;
-		}
-		else if (vcodec == HB_VCODEC_FFMPEG)
-		{
-			*min = 0;
-			*max = 31;
-		}
-		else
-		{
-			*min = 0;
-			*max = 1.0;
-			*step = 0.001;
-			*page = 0.1;
+			*step = 0.1;
 			*digits = 3;
-		}
-	}
-	else
-	{
-		*min = 0;
-		*max = 1.0;
-		*step = 0.001;
-		*page = 0.1;
-		*digits = 3;
+			*inverted = TRUE;
+		} break;
+
+		case HB_VCODEC_XVID:
+		case HB_VCODEC_FFMPEG:
+		{
+			*min = 1;
+			*max = 31;
+			*inverted = TRUE;
+		} break;
+
+		case HB_VCODEC_THEORA:
+		{
+			*min = 0;
+			*max = 63;
+			*inverted = FALSE;
+		} break;
+
+		default:
+		{
+			*min = 0;
+			*max = 100;
+			*digits = 3;
+			*inverted = FALSE;
+		} break;
 	}
 }
 
@@ -3048,38 +3053,32 @@ ghb_validate_vquality(GValue *settings)
 	vquality = ghb_settings_get_double(settings, "VideoQualitySlider");
 	if (ghb_settings_get_boolean(settings, "vquality_type_constant"))
 	{
-		if (!ghb_settings_get_boolean(settings, "directqp"))
+		switch (vcodec)
 		{
-			vquality *= 100.0;
-			if (vcodec != HB_VCODEC_X264)
-			{
-				min = 68;
-				max = 97;
-			}
-			else
-			{
-				min = 40;
-				max = 70;
-			}
-		}
-		else
-		{
-			if (vcodec == HB_VCODEC_X264)
+			case HB_VCODEC_X264:
 			{
 				min = 16;
 				max = 30;
-			}
-			else if (vcodec == HB_VCODEC_FFMPEG)
+			} break;
+
+			case HB_VCODEC_XVID:
+			case HB_VCODEC_FFMPEG:
 			{
 				min = 1;
 				max = 8;
-			}
-			else
+			} break;
+
+			case HB_VCODEC_THEORA:
 			{
-				min = 68;
-				max = 97;
-				vquality *= 100.0;
-			}
+				min = 0;
+				max = 63;
+			} break;
+
+			default:
+			{
+				min = 48;
+				max = 62;
+			} break;
 		}
 		if (vquality < min || vquality > max)
 		{
@@ -3303,11 +3302,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	{
 		gdouble vquality;
 		vquality = ghb_settings_get_double(js, "VideoQualitySlider");
-		if (!ghb_settings_get_boolean(js, "directqp"))
-		{
-			if (vquality == 0.0) vquality = 0.01;
-			if (vquality == 1.0) vquality = 0.0;
-		}
 		job->vquality =  vquality;
 		job->vbitrate = 0;
 	}
