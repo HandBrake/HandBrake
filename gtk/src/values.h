@@ -71,5 +71,7 @@ GValue* ghb_dict_lookup(const GValue *gval, const gchar *key);
 gboolean ghb_dict_remove(GValue *gval, const gchar *key);
 void ghb_register_transforms(void);
 
+void debug_show_value(GValue *gval);
+void debug_show_type(GType tp);
 
 #endif // _GHB_VALUES_H_

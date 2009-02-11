@@ -77,7 +77,43 @@ debug_show_type(GType tp)
 	{
 		str ="dict";
 	}
-	g_debug("%s", str);
+	g_debug("Type %s", str);
+}
+
+void
+debug_show_value(GValue *gval)
+{
+	GType tp;
+
+	tp = G_VALUE_TYPE(gval);
+	if (tp == G_TYPE_STRING)
+	{
+		g_message("Type %s value %s", "string", g_value_get_string(gval));
+	}
+	else if (tp == G_TYPE_INT)
+	{
+		g_message("Type %s value %d", "int", g_value_get_int(gval));
+	}
+	else if (tp == G_TYPE_INT64)
+	{
+		g_message("Type %s value %ld", "int64", g_value_get_int64(gval));
+	}
+	else if (tp == G_TYPE_DOUBLE)
+	{
+		g_message("Type %s value %f", "double", g_value_get_double(gval));
+	}
+	else if (tp == G_TYPE_BOOLEAN)
+	{
+		g_message("Type %s value %d", "boolean", g_value_get_boolean(gval));
+	}
+	else if (tp == ghb_array_get_type())
+	{
+		g_message("Type %s", "boolean");
+	}
+	else if (tp == ghb_dict_get_type())
+	{
+		g_message("Type %s", "dict");
+	}
 }
 
 gint

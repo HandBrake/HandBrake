@@ -139,37 +139,6 @@ ghb_preset_path_string(const GValue *path)
 	return str;
 }
 
-static void
-debug_show_type(GType tp)
-{
-	const gchar *str = "unknown";
-	if (tp == G_TYPE_STRING)
-	{
-		str ="string";
-	}
-	else if (tp == G_TYPE_INT)
-	{
-		str ="int";
-	}
-	else if (tp == G_TYPE_INT64)
-	{
-		str ="int64";
-	}
-	else if (tp == G_TYPE_BOOLEAN)
-	{
-		str ="bool";
-	}
-	else if (tp == ghb_array_get_type())
-	{
-		str ="array";
-	}
-	else if (tp == ghb_dict_get_type())
-	{
-		str ="dict";
-	}
-	g_message("Type: %s", str);
-}
-
 void
 dump_preset_path(const gchar *msg, const GValue *path)
 {
@@ -1941,29 +1910,21 @@ export_value_xlat(GValue *dict)
 	gval = export_value_xlat2(detel_xlat, lin_val, G_TYPE_INT);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
-	else
-		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
 	key = "PictureDecomb";
 	lin_val = ghb_dict_lookup(dict, key);
 	gval = export_value_xlat2(decomb_xlat, lin_val, G_TYPE_INT);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
-	else
-		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
 	key = "PictureDeinterlace";
 	lin_val = ghb_dict_lookup(dict, key);
 	gval = export_value_xlat2(deint_xlat, lin_val, G_TYPE_INT);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
-	else
-		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
 	key = "PictureDenoise";
 	lin_val = ghb_dict_lookup(dict, key);
 	gval = export_value_xlat2(denoise_xlat, lin_val, G_TYPE_INT);
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
-	else
-		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(lin_val));
 	key = "Subtitles";
 	lin_val = ghb_dict_lookup(dict, key);
 	gval = export_subtitle_xlat2(lin_val);
