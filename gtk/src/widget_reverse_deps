@@ -419,6 +419,36 @@
 			<false />
 		</array>
 	</array>
+	<key>x264_psy_rd</key>
+	<array>
+		<array>
+			<string>x264_subme</string>
+			<string>&lt;6</string>
+			<true />
+			<false />
+		</array>
+	</array>
+	<key>x264_psy_trell</key>
+	<array>
+		<array>
+			<string>x264_subme</string>
+			<string>&lt;6</string>
+			<true />
+			<false />
+		</array>
+		<array>
+			<string>x264_cabac</string>
+			<string>TRUE</string>
+			<false />
+			<false />
+		</array>
+		<array>
+			<string>x264_trellis</string>
+			<string>0</string>
+			<true />
+			<false />
+		</array>
+	</array>
 	<key>x264_tab</key>
 	<array>
 		<array>

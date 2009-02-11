@@ -112,10 +112,20 @@
 	<key>x264_cabac</key>
 	<array>
 		<string>x264_trellis</string>
+		<string>x264_psy_trell</string>
 	</array>
 	<key>x264_refs</key>
 	<array>
 		<string>x264_mixed_refs</string>
+	</array>
+	<key>x264_subme</key>
+	<array>
+		<string>x264_psy_rd</string>
+		<string>x264_psy_trell</string>
+	</array>
+	<key>x264_trellis</key>
+	<array>
+		<string>x264_psy_trell</string>
 	</array>
 </dict>
 </plist>

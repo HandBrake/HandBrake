@@ -174,6 +174,22 @@
     &lt;property name=&quot;page_increment&quot;&gt;10&lt;/property&gt;
     &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
   &lt;/object&gt;
+  &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment22&quot;&gt;
+    &lt;property name=&quot;upper&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
+    &lt;property name=&quot;page_increment&quot;&gt;0.5&lt;/property&gt;
+    &lt;property name=&quot;step_increment&quot;&gt;0.1&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
+    &lt;property name=&quot;value&quot;&gt;1&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&quot;GtkAdjustment&quot; id=&quot;adjustment23&quot;&gt;
+    &lt;property name=&quot;upper&quot;&gt;1&lt;/property&gt;
+    &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
+    &lt;property name=&quot;page_increment&quot;&gt;0.5&lt;/property&gt;
+    &lt;property name=&quot;step_increment&quot;&gt;0.1&lt;/property&gt;
+    &lt;property name=&quot;page_size&quot;&gt;0&lt;/property&gt;
+    &lt;property name=&quot;value&quot;&gt;0&lt;/property&gt;
+  &lt;/object&gt;
   &lt;object class=&quot;GtkAdjustment&quot; id=&quot;preview_progress_adj&quot;&gt;
     &lt;property name=&quot;upper&quot;&gt;100&lt;/property&gt;
     &lt;property name=&quot;lower&quot;&gt;0&lt;/property&gt;
@@ -2415,9 +2431,9 @@ You can edit these and add additional options.
 
 Default values will not be shown. The defaults are:
 ref=1:mixed-refs=0:bframes=0:direct=spatial:b-pyramid=0:
-weightb=0:me=hex:merange=16:subme=5:
-analyse=some:8x8dct=0:deblock=0,0:trellis=0:
-no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
+weightb=0:me=hex:merange=16:subme=6:analyse=some:8x8dct=0:
+deblock=0,0:trellis=0:psy-rd=1,0:no-fast-pskip=0:
+no-dct-decimate=0:cabac=1&lt;/property&gt;
                                     &lt;property name=&quot;wrap_mode&quot;&gt;GTK_WRAP_CHAR&lt;/property&gt;
                                     &lt;property name=&quot;accepts_tab&quot;&gt;False&lt;/property&gt;
                                     &lt;signal handler=&quot;x264_focus_out_cb&quot; name=&quot;focus_out_event&quot;/&gt;
@@ -2819,6 +2835,74 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1&lt;/property&gt;
                                       &lt;/object&gt;
                                       &lt;packing&gt;
                                         &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+                                      &lt;/packing&gt;
+                                    &lt;/child&gt;
+                                    &lt;child&gt;
+                                      &lt;object class=&quot;GtkTable&quot; id=&quot;table9&quot;&gt;
+                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                        &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                        &lt;property name=&quot;n_rows&quot;&gt;2&lt;/property&gt;
+                                        &lt;property name=&quot;n_columns&quot;&gt;2&lt;/property&gt;
+                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                        &lt;child&gt;
+                                          &lt;object class=&quot;GtkLabel&quot; id=&quot;label82&quot;&gt;
+                                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                            &lt;property name=&quot;xalign&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Psychovisual Rate Distortion: &lt;/property&gt;
+                                          &lt;/object&gt;
+                                          &lt;packing&gt;
+                                            &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
+                                          &lt;/packing&gt;
+                                        &lt;/child&gt;
+                                        &lt;child&gt;
+                                          &lt;object class=&quot;GtkHScale&quot; id=&quot;x264_psy_rd&quot;&gt;
+                                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                            &lt;property name=&quot;adjustment&quot;&gt;adjustment22&lt;/property&gt;
+                                            &lt;property name=&quot;restrict_to_fill_level&quot;&gt;False&lt;/property&gt;
+                                            &lt;property name=&quot;value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;
+                                            &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
+                                          &lt;/object&gt;
+                                          &lt;packing&gt;
+                                            &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                          &lt;/packing&gt;
+                                        &lt;/child&gt;
+                                        &lt;child&gt;
+                                          &lt;object class=&quot;GtkLabel&quot; id=&quot;label83&quot;&gt;
+                                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                            &lt;property name=&quot;xalign&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Psychovisual Trellis: &lt;/property&gt;
+                                          &lt;/object&gt;
+                                          &lt;packing&gt;
+                                            &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                            &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
+                                          &lt;/packing&gt;
+                                        &lt;/child&gt;
+                                        &lt;child&gt;
+                                          &lt;object class=&quot;GtkHScale&quot; id=&quot;x264_psy_trell&quot;&gt;
+                                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;can_focus&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                            &lt;property name=&quot;adjustment&quot;&gt;adjustment23&lt;/property&gt;
+                                            &lt;property name=&quot;restrict_to_fill_level&quot;&gt;False&lt;/property&gt;
+                                            &lt;property name=&quot;value_pos&quot;&gt;GTK_POS_RIGHT&lt;/property&gt;
+                                            &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;value_changed&quot;/&gt;
+                                          &lt;/object&gt;
+                                          &lt;packing&gt;
+                                            &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                            &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                          &lt;/packing&gt;
+                                        &lt;/child&gt;
+                                      &lt;/object&gt;
+                                      &lt;packing&gt;
+                                        &lt;property name=&quot;position&quot;&gt;5&lt;/property&gt;
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
                                   &lt;/object&gt;
@@ -7287,10 +7371,20 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 		<key>x264_cabac</key>
 		<array>
 			<string>x264_trellis</string>
+			<string>x264_psy_trell</string>
 		</array>
 		<key>x264_refs</key>
 		<array>
 			<string>x264_mixed_refs</string>
+		</array>
+		<key>x264_subme</key>
+		<array>
+			<string>x264_psy_rd</string>
+			<string>x264_psy_trell</string>
+		</array>
+		<key>x264_trellis</key>
+		<array>
+			<string>x264_psy_trell</string>
 		</array>
 	</dict>
 	<key>widget-reverse-deps</key>
@@ -7708,6 +7802,36 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<array>
 				<string>x264_refs</string>
 				<string>&lt;2</string>
+				<true />
+				<false />
+			</array>
+		</array>
+		<key>x264_psy_rd</key>
+		<array>
+			<array>
+				<string>x264_subme</string>
+				<string>&lt;6</string>
+				<true />
+				<false />
+			</array>
+		</array>
+		<key>x264_psy_trell</key>
+		<array>
+			<array>
+				<string>x264_subme</string>
+				<string>&lt;6</string>
+				<true />
+				<false />
+			</array>
+			<array>
+				<string>x264_cabac</string>
+				<string>TRUE</string>
+				<false />
+				<false />
+			</array>
+			<array>
+				<string>x264_trellis</string>
+				<string>0</string>
 				<true />
 				<false />
 			</array>

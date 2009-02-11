@@ -229,8 +229,8 @@ combo_opts_t analyse_opts =
 
 static options_map_t d_trellis_opts[] =
 {
-	{"Disabled",          "0",    0, "0"},
-	{"Final Macro Block", "1",    1, "1"},
+	{"Disabled",          "0", 0, "0"},
+	{"Final Macro Block", "1", 1, "1"},
 	{"Always",            "2", 2, "2"},
 };
 combo_opts_t trellis_opts =

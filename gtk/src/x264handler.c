@@ -122,6 +122,7 @@ x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 enum
 {
 	X264_OPT_DEBLOCK,
+	X264_OPT_PSY,
 	X264_OPT_INT,
 	X264_OPT_COMBO,
 	X264_OPT_BOOL,
@@ -151,6 +152,7 @@ static gchar *x264_8x8dct_syns[] = {"8x8dct", NULL};
 static gchar *x264_deblock_syns[] = {"deblock", "filter", NULL};
 static gchar *x264_trellis_syns[] = {"trellis", NULL};
 static gchar *x264_pskip_syns[] = {"no-fast-pskip", "no_fast_pskip", NULL};
+static gchar *x264_psy_syns[] = {"psy-rd", NULL};
 static gchar *x264_decimate_syns[] = 
 	{"no-dct-decimate", "no_dct_decimate", NULL};
 static gchar *x264_cabac_syns[] = {"cabac", NULL};
@@ -186,6 +188,8 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_pskip_syns, "x264_no_fast_pskip", "0", X264_OPT_BOOL},
 	{x264_decimate_syns, "x264_no_dct_decimate", "0", X264_OPT_BOOL},
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
+	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
+	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
 };
 #define X264_OPT_MAP_SIZE (sizeof(x264_opt_map)/sizeof(struct x264_opt_map_s))
 
@@ -329,6 +333,36 @@ x264_update_deblock(signal_user_data_t *ud, const gchar *xval)
 	ghb_ui_update(ud, "x264_deblock_beta", ghb_int64_value(bvalue));
 }
 
+static void
+x264_update_psy(signal_user_data_t *ud, const gchar *xval)
+{
+	gdouble rd_value, trell_value;
+	gchar *end;
+	gchar *val;
+	gchar *trell_val = NULL;
+
+	if (xval == NULL) return;
+	val = g_strdup(xval);
+	rd_value = trell_value = 0;
+	if (val != NULL) 
+	{
+		gchar *pos = strchr(val, ',');
+		if (pos != NULL)
+		{
+			trell_val = pos + 1;
+			*pos = 0;
+		}
+		rd_value = g_strtod (val, &end);
+		if (trell_val != NULL)
+		{
+			trell_value = g_strtod (trell_val, &end);
+		}
+	}
+	g_free(val);
+	ghb_ui_update(ud, "x264_psy_rd", ghb_double_value(rd_value));
+	ghb_ui_update(ud, "x264_psy_trell", ghb_double_value(trell_value));
+}
+
 void
 ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 {
@@ -371,6 +405,11 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 					x264_opt_map[jj+1].found = TRUE;
 					x264_update_deblock(ud, val);
 					break;
+				case X264_OPT_PSY:
+					// dirty little hack.  mark psy_trell found as well
+					x264_opt_map[jj+1].found = TRUE;
+					x264_update_psy(ud, val);
+					break;
 				}
 				break;
 			}
@@ -397,6 +436,9 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 			case X264_OPT_DEBLOCK:
 				x264_update_deblock(ud, val);
 				break;
+			case X264_OPT_PSY:
+				x264_update_psy(ud, val);
+				break;
 			}
 			x264_opt_map[jj].found = TRUE;
 			g_free(val);
@@ -415,6 +457,17 @@ get_deblock_val(signal_user_data_t *ud)
 	result = g_strdup_printf("%s,%s", alpha, beta);
 	g_free(alpha);
 	g_free(beta);
+	return result;
+}
+
+gchar*
+get_psy_val(signal_user_data_t *ud)
+{
+	gdouble rd, trell;
+	gchar *result;
+	rd = ghb_settings_get_double(ud->settings, "x264_psy_rd");
+	trell = ghb_settings_get_double(ud->settings, "x264_psy_trell");
+	result = g_strdup_printf("%g,%g", rd, trell);
 	return result;
 }
 
@@ -469,6 +522,8 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 				foundit = TRUE;
 				if (type == X264_OPT_DEBLOCK)
 					val = get_deblock_val(ud);
+				else if (type == X264_OPT_PSY)
+					val = get_psy_val(ud);
 				else
 				{
 					GValue *gval;
@@ -504,6 +559,8 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 			gchar *val;
 			if (type == X264_OPT_DEBLOCK)
 				val = get_deblock_val(ud);
+			else if (type == X264_OPT_PSY)
+				val = get_psy_val(ud);
 			else
 			{
 				GValue *gval;
