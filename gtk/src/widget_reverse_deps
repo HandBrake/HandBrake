@@ -392,6 +392,15 @@
 			<false />
 		</array>
 	</array>
+	<key>x264_b_adapt</key>
+	<array>
+		<array>
+			<string>x264_bframes</string>
+			<string>0</string>
+			<true />
+			<false />
+		</array>
+	</array>
 	<key>x264_bpyramid</key>
 	<array>
 		<array>

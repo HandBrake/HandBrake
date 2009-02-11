@@ -65,6 +65,7 @@ static dependency_t dep_map[] =
 	{"x264_bframes", "x264_weighted_bframes", "0", TRUE, FALSE},
 	{"x264_bframes", "x264_bpyramid", "<2", TRUE, FALSE},
 	{"x264_bframes", "x264_direct", "0", TRUE, FALSE},
+	{"x264_bframes", "x264_b_adapt", "0", TRUE, FALSE},
 	{"x264_refs", "x264_mixed_refs", "<2", TRUE, FALSE},
 	{"x264_cabac", "x264_trellis", "TRUE", FALSE, FALSE},
 	{"x264_subme", "x264_psy_rd", "<6", TRUE, FALSE},

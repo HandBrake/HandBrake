@@ -108,6 +108,7 @@
 		<string>x264_weighted_bframes</string>
 		<string>x264_bpyramid</string>
 		<string>x264_direct</string>
+		<string>x264_b_adapt</string>
 	</array>
 	<key>x264_cabac</key>
 	<array>

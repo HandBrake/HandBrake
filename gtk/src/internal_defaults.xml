@@ -56,6 +56,8 @@
 		<integer>0</integer>
 		<key>x264_direct</key>
 		<string>spatial</string>
+		<key>x264_b_adapt</key>
+		<string>1</string>
 		<key>x264_me</key>
 		<string>hex</string>
 		<key>x264_merange</key>

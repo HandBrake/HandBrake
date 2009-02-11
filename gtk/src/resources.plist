@@ -2185,11 +2185,12 @@
                                       &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox31&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                        &lt;property name=&quot;spacing&quot;&gt;4&lt;/property&gt;
                                         &lt;child&gt;
                                           &lt;object class=&quot;GtkLabel&quot; id=&quot;label49&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Number:  &lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Number:&lt;/property&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
                                             &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
@@ -2263,25 +2264,26 @@
                                   &lt;object class=&quot;GtkVBox&quot; id=&quot;vbox24&quot;&gt;
                                     &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                     &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
-                                    &lt;property name=&quot;spacing&quot;&gt;2&lt;/property&gt;
                                     &lt;child&gt;
-                                      &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox32&quot;&gt;
+                                      &lt;object class=&quot;GtkTable&quot; id=&quot;table4&quot;&gt;
                                         &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                         &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                        &lt;property name=&quot;n_rows&quot;&gt;3&lt;/property&gt;
+                                        &lt;property name=&quot;n_columns&quot;&gt;2&lt;/property&gt;
+                                        &lt;property name=&quot;column-spacing&quot;&gt;4&lt;/property&gt;
                                         &lt;child&gt;
                                           &lt;object class=&quot;GtkLabel&quot; id=&quot;label51&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
-                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Number:  &lt;/property&gt;
-                                            &lt;property name=&quot;width_chars&quot;&gt;14&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Number:&lt;/property&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
-                                            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+                                            &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment27&quot;&gt;
+                                          &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment38&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
@@ -2298,32 +2300,25 @@
                                             &lt;/child&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
-                                            &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
-                                      &lt;/object&gt;
-                                      &lt;packing&gt;
-                                        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                      &lt;/packing&gt;
-                                    &lt;/child&gt;
-                                    &lt;child&gt;
-                                      &lt;object class=&quot;GtkHBox&quot; id=&quot;hbox33&quot;&gt;
-                                        &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
-                                        &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                         &lt;child&gt;
                                           &lt;object class=&quot;GtkLabel&quot; id=&quot;label52&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
-                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Direct Prediction:  &lt;/property&gt;
-                                            &lt;property name=&quot;width_chars&quot;&gt;14&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Direct Prediction:&lt;/property&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
-                                            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+                                            &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                            &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                         &lt;child&gt;
-                                          &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment28&quot;&gt;
+                                          &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment39&quot;&gt;
                                             &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
                                             &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
                                             &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
@@ -2338,13 +2333,50 @@
                                             &lt;/child&gt;
                                           &lt;/object&gt;
                                           &lt;packing&gt;
-                                            &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;top_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;bottom_attach&quot;&gt;2&lt;/property&gt;
+                                            &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
+                                          &lt;/packing&gt;
+                                        &lt;/child&gt;
+                                        &lt;child&gt;
+                                          &lt;object class=&quot;GtkLabel&quot; id=&quot;label84&quot;&gt;
+                                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                            &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
+                                            &lt;property name=&quot;label&quot; translatable=&quot;yes&quot;&gt;Adaptive B-Frames:&lt;/property&gt;
+                                          &lt;/object&gt;
+                                          &lt;packing&gt;
+                                            &lt;property name=&quot;top_attach&quot;&gt;2&lt;/property&gt;
+                                            &lt;property name=&quot;bottom_attach&quot;&gt;3&lt;/property&gt;
+                                            &lt;property name=&quot;x_options&quot;&gt;GTK_FILL&lt;/property&gt;
+                                          &lt;/packing&gt;
+                                        &lt;/child&gt;
+                                        &lt;child&gt;
+                                          &lt;object class=&quot;GtkAlignment&quot; id=&quot;alignment40&quot;&gt;
+                                            &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                            &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                            &lt;property name=&quot;xalign&quot;&gt;0&lt;/property&gt;
+                                            &lt;property name=&quot;xscale&quot;&gt;0&lt;/property&gt;
+                                            &lt;child&gt;
+                                              &lt;object class=&quot;GtkComboBox&quot; id=&quot;x264_b_adapt&quot;&gt;
+                                                &lt;property name=&quot;visible&quot;&gt;True&lt;/property&gt;
+                                                &lt;property name=&quot;events&quot;&gt;GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK&lt;/property&gt;
+                                                &lt;property name=&quot;tooltip-text&quot; translatable=&quot;yes&quot;&gt;This option can improve compression efficiency. &lt;/property&gt;
+                                                &lt;signal handler=&quot;x264_widget_changed_cb&quot; name=&quot;changed&quot;/&gt;
+                                              &lt;/object&gt;
+                                            &lt;/child&gt;
+                                          &lt;/object&gt;
+                                          &lt;packing&gt;
+                                            &lt;property name=&quot;top_attach&quot;&gt;2&lt;/property&gt;
+                                            &lt;property name=&quot;bottom_attach&quot;&gt;3&lt;/property&gt;
+                                            &lt;property name=&quot;left_attach&quot;&gt;1&lt;/property&gt;
+                                            &lt;property name=&quot;right_attach&quot;&gt;2&lt;/property&gt;
                                           &lt;/packing&gt;
                                         &lt;/child&gt;
                                       &lt;/object&gt;
                                       &lt;packing&gt;
-                                        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-                                        &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
+                                        &lt;property name=&quot;position&quot;&gt;0&lt;/property&gt;
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
 
@@ -2386,7 +2418,7 @@
 
                                       &lt;/object&gt;
                                       &lt;packing&gt;
-                                        &lt;property name=&quot;position&quot;&gt;2&lt;/property&gt;
+                                        &lt;property name=&quot;position&quot;&gt;1&lt;/property&gt;
                                       &lt;/packing&gt;
                                     &lt;/child&gt;
 
@@ -5484,6 +5516,8 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<false />
 			<key>x264_analyse</key>
 			<string>some</string>
+			<key>x264_b_adapt</key>
+			<string>1</string>
 			<key>x264_bframes</key>
 			<integer>0</integer>
 			<key>x264_bpyramid</key>
@@ -7367,6 +7401,7 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 			<string>x264_weighted_bframes</string>
 			<string>x264_bpyramid</string>
 			<string>x264_direct</string>
+			<string>x264_b_adapt</string>
 		</array>
 		<key>x264_cabac</key>
 		<array>
@@ -7776,6 +7811,15 @@ R2RrUAAABBgBAQACAAAAQAAAABAAAAAQ////AP///wD///8A////AP///wD///8A////AP///wD///8A
 				<string>use_source_name</string>
 				<string>TRUE</string>
 				<false />
+				<false />
+			</array>
+		</array>
+		<key>x264_b_adapt</key>
+		<array>
+			<array>
+				<string>x264_bframes</string>
+				<string>0</string>
+				<true />
 				<false />
 			</array>
 		</array>

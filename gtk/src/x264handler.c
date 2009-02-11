@@ -140,6 +140,7 @@ struct x264_opt_map_s
 static gchar *x264_ref_syns[] = {"ref", "frameref", NULL};
 static gchar *x264_mixed_syns[] = {"mixed-refs", "mixed_refs", NULL};
 static gchar *x264_bframes_syns[] = {"bframes", NULL};
+static gchar *x264_badapt_syns[] = {"b-adapt", "b_adapt", NULL};
 static gchar *x264_direct_syns[] = 
 	{"direct", "direct-pred", "direct_pred", NULL};
 static gchar *x264_weightb_syns[] = {"weightb", "weight-b", "weight_b", NULL};
@@ -152,7 +153,7 @@ static gchar *x264_8x8dct_syns[] = {"8x8dct", NULL};
 static gchar *x264_deblock_syns[] = {"deblock", "filter", NULL};
 static gchar *x264_trellis_syns[] = {"trellis", NULL};
 static gchar *x264_pskip_syns[] = {"no-fast-pskip", "no_fast_pskip", NULL};
-static gchar *x264_psy_syns[] = {"psy-rd", NULL};
+static gchar *x264_psy_syns[] = {"psy-rd", "psy_rd", NULL};
 static gchar *x264_decimate_syns[] = 
 	{"no-dct-decimate", "no_dct_decimate", NULL};
 static gchar *x264_cabac_syns[] = {"cabac", NULL};
@@ -175,6 +176,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_mixed_syns, "x264_mixed_refs", "0", X264_OPT_BOOL},
 	{x264_bframes_syns, "x264_bframes", "0", X264_OPT_INT},
 	{x264_direct_syns, "x264_direct", "spatial", X264_OPT_COMBO},
+	{x264_badapt_syns, "x264_b_adapt", "1", X264_OPT_COMBO},
 	{x264_weightb_syns, "x264_weighted_bframes", "0", X264_OPT_BOOL},
 	{x264_bpyramid_syns, "x264_bpyramid", "0", X264_OPT_BOOL},
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
@@ -664,6 +666,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_weightb_syns);
 		x264_remove_opt(split, x264_direct_syns);
+		x264_remove_opt(split, x264_badapt_syns);
 	}
 	if (bframes <= 1)
 	{

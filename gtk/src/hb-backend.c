@@ -182,6 +182,18 @@ combo_opts_t direct_opts =
 	d_direct_opts
 };
 
+static options_map_t d_badapt_opts[] =
+{
+	{"Off",             "0", 0, "0"},
+	{"Faster",          "1", 1, "1"},
+	{"More Effecient",  "2", 2, "2"},
+};
+combo_opts_t badapt_opts =
+{
+	sizeof(d_badapt_opts)/sizeof(options_map_t),
+	d_badapt_opts
+};
+
 static options_map_t d_me_opts[] =
 {
 	{"Diamond",              "dia",  0, "dia"},
@@ -274,6 +286,7 @@ combo_name_map_t combo_name_map[] =
 	{"VideoEncoder", &vcodec_opts},
 	{"AudioEncoder", &acodec_opts},
 	{"x264_direct", &direct_opts},
+	{"x264_b_adapt", &badapt_opts},
 	{"x264_me", &me_opts},
 	{"x264_subme", &subme_opts},
 	{"x264_analyse", &analyse_opts},
@@ -1919,6 +1932,7 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		generic_opts_set(builder, "VideoEncoder", &vcodec_opts);
 		generic_opts_set(builder, "AudioEncoder", &acodec_opts);
 		generic_opts_set(builder, "x264_direct", &direct_opts);
+		generic_opts_set(builder, "x264_b_adapt", &badapt_opts);
 		generic_opts_set(builder, "x264_me", &me_opts);
 		generic_opts_set(builder, "x264_subme", &subme_opts);
 		generic_opts_set(builder, "x264_analyse", &analyse_opts);
