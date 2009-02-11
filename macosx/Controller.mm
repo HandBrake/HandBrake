@@ -4077,26 +4077,35 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction) qualitySliderChanged: (id) sender
 {
-        /* Our constant quality slider is in a range based
-         * on each encoders qp/rf values. The range depends
-         * on the encoder. Also, the range is inverse of quality
-         * (ie. as the "quality" goes up, the cq or rf value
-         * actually goes down). Since the IB sliders always set
-         * their max value at the right end of the slider, we
-         * will calculate the inverse, so as the slider floatValue
-         * goes up, we will show the inverse in the rf field
-         * so, the floatValue at the right for x264 would be 51
-         * and our rf field needs to show 0 and vice versa.
-         */
-        
-        float sliderRfInverse = ([fVidQualitySlider maxValue] - [fVidQualitySlider floatValue]) + [fVidQualitySlider minValue];
+    /* Our constant quality slider is in a range based
+     * on each encoders qp/rf values. The range depends
+     * on the encoder. Also, the range is inverse of quality
+     * for all of the encoders *except* for theora
+     * (ie. as the "quality" goes up, the cq or rf value
+     * actually goes down). Since the IB sliders always set
+     * their max value at the right end of the slider, we
+     * will calculate the inverse, so as the slider floatValue
+     * goes up, we will show the inverse in the rf field
+     * so, the floatValue at the right for x264 would be 51
+     * and our rf field needs to show 0 and vice versa.
+     */
+    
+    float sliderRfInverse = ([fVidQualitySlider maxValue] - [fVidQualitySlider floatValue]) + [fVidQualitySlider minValue];
+    /* If the encoder is theora, use the float, otherwise use the inverse float*/
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+    {
+        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", [fVidQualitySlider floatValue]]];   
+    }
+    else
+    {
         [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", sliderRfInverse]];
-        
-        float sliderRfToPercent = ( [fVidQualitySlider maxValue] - sliderRfInverse ) / [fVidQualitySlider maxValue];
-        [fVidConstantCell setTitle: [NSString stringWithFormat:
-        NSLocalizedString( @"Constant quality: %.2f %%", @"" ), 100 * sliderRfToPercent]];
-        
-		[self customSettingUsed: sender];
+    }
+    
+    float sliderRfToPercent = ( [fVidQualitySlider maxValue] - sliderRfInverse ) / [fVidQualitySlider maxValue];
+    [fVidConstantCell setTitle: [NSString stringWithFormat:
+                                 NSLocalizedString( @"Constant quality: %.2f %%", @"" ), 100 * sliderRfToPercent]];
+    
+    [self customSettingUsed: sender];
 }
 
 - (void) controlTextDidChange: (NSNotification *) notification
