@@ -445,14 +445,19 @@
     
     if ( [fX264optCabacSwitch state] == false)
     {
-        /* Without CABAC entropy coding, trellis doesn't run. */
-        [[fX264optTrellisPopUp animator] setHidden:YES];
-        [[fX264optTrellisLabel animator] setHidden:YES];
-        [fX264optTrellisPopUp selectItemAtIndex:0];
-        if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
-            [[fX264optTrellisPopUp cell] performClick:self];
+        if( [fX264optTrellisPopUp isHidden] == false )
+        {
+            /* Without CABAC entropy coding, trellis doesn't run. */
+            [[fX264optTrellisPopUp animator] setHidden:YES];
+            [[fX264optTrellisLabel animator] setHidden:YES];
+            [fX264optTrellisPopUp selectItemAtIndex:0];
+            if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
+            {
+                [[fX264optTrellisPopUp cell] performClick:self];
+            }
+        }
     }
-    else
+    else if( [fX264optTrellisPopUp isHidden] == true)
     {
         [[fX264optTrellisPopUp animator] setHidden:NO];
         [[fX264optTrellisLabel animator] setHidden:NO];
@@ -507,25 +512,37 @@
     if( [fX264optSubmePopUp indexOfSelectedItem] != 0 && [fX264optSubmePopUp indexOfSelectedItem] < 7 )
     {
         /* No Psy-RDO or Psy=trel if subme < 6. */
-        [[fX264optPsyRDSlider animator] setHidden:YES];
-        [[fX264optPsyRDLabel animator] setHidden:YES];
-        [[fX264optPsyRDSlider animator] setFloatValue:1];
-        if ( (sender != fX264optPsyRDSlider) && (sender != fX264optPsyTrellisSlider) )
-            [[fX264optPsyRDSlider cell] performClick:self];
+        if( [fX264optPsyRDSlider isHidden] == false )
+        {
+            [[fX264optPsyRDSlider animator] setHidden:YES];
+            [[fX264optPsyRDLabel animator] setHidden:YES];
+            [[fX264optPsyRDSlider animator] setFloatValue:1];
+            if ( (sender != fX264optPsyRDSlider) && (sender != fX264optPsyTrellisSlider) )
+            {
+                [[fX264optPsyRDSlider cell] performClick:self];            
+            }
+        }
         
-        [[fX264optPsyTrellisSlider animator] setHidden:YES];
-        [[fX264optPsyTrellisLabel animator] setHidden:YES];
-        [[fX264optPsyTrellisSlider animator] setFloatValue:0];
-        if ( (sender != fX264optPsyTrellisSlider) && (sender != fX264optPsyRDSlider) && (sender != fX264optTrellisPopUp) )
-            [[fX264optPsyTrellisSlider cell] performClick:self];
-        
+        if( [fX264optPsyTrellisSlider isHidden] == false)
+        {
+            [[fX264optPsyTrellisSlider animator] setHidden:YES];
+            [[fX264optPsyTrellisLabel animator] setHidden:YES];
+            [[fX264optPsyTrellisSlider animator] setFloatValue:0];
+            if ( (sender != fX264optPsyTrellisSlider) && (sender != fX264optPsyRDSlider) )
+            {
+                [[fX264optPsyTrellisSlider cell] performClick:self];
+            }
+        }
     }
     else
     {
-        [[fX264optPsyRDSlider animator] setHidden:NO];
-        [[fX264optPsyRDLabel animator] setHidden:NO];
+        if( [fX264optPsyRDSlider isHidden] == true )
+        {
+            [[fX264optPsyRDSlider animator] setHidden:NO];
+            [[fX264optPsyRDLabel animator] setHidden:NO];
+        }
         
-        if( [fX264optTrellisPopUp indexOfSelectedItem] >= 2 )
+        if( [fX264optTrellisPopUp indexOfSelectedItem] >= 2 && [fX264optCabacSwitch state] == true && [fX264optPsyTrellisSlider isHidden] == true )
         {
             [[fX264optPsyTrellisSlider animator] setHidden:NO];
             [[fX264optPsyTrellisLabel animator] setHidden:NO];
@@ -534,16 +551,21 @@
     
     if( [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
     {
-        /* No Psy-trellis without trellis. */
-        [[fX264optPsyTrellisSlider animator] setHidden:YES];
-        [[fX264optPsyTrellisLabel animator] setHidden:YES];
-        [[fX264optPsyTrellisSlider animator] setFloatValue:0];
-        if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
-            [[fX264optPsyTrellisSlider cell] performClick:self];
+        if( [fX264optPsyTrellisSlider isHidden] == false )
+        {
+            /* No Psy-trellis without trellis. */
+            [[fX264optPsyTrellisSlider animator] setHidden:YES];
+            [[fX264optPsyTrellisLabel animator] setHidden:YES];
+            [[fX264optPsyTrellisSlider animator] setFloatValue:0];
+            if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
+            {
+                [[fX264optPsyTrellisSlider cell] performClick:self];            
+            }
+        }
     }
     else
     {
-        if( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 )
+        if( ( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 ) && [fX264optCabacSwitch state] == true  && [fX264optPsyTrellisSlider isHidden] == true )
         {
             [[fX264optPsyTrellisSlider animator] setHidden:NO];
             [[fX264optPsyTrellisLabel animator] setHidden:NO];
