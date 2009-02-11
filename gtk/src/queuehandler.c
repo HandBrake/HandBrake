@@ -1031,13 +1031,6 @@ ghb_reload_queue(signal_user_data_t *ud)
 
 	g_debug("ghb_reload_queue");
 
-	// I really shouldn't have to do this, but at startup the
-	// initial window size is larger than it should be.  This
-	// make it adjust to the proper size.
-	GtkWindow *hb_window;
-	hb_window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
-	gtk_window_resize(hb_window, 16, 16);
-
 	queue = ghb_load_queue();
 	// Look for unfinished entries
 	count = ghb_array_len(queue);
