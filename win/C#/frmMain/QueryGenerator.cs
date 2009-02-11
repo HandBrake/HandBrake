@@ -197,19 +197,38 @@ namespace Handbrake
                 query += " -g ";
 
             // Video Settings
-            if (mainWindow.text_bitrate.Text != "")
+            if (mainWindow.radio_avgBitrate.Checked)
                 query += " -b " + mainWindow.text_bitrate.Text;
 
-            if (mainWindow.text_filesize.Text != "")
+            if (mainWindow.radio_targetFilesize.Checked)
                 query += " -S " + mainWindow.text_filesize.Text;
 
             // Video Quality Setting
-            double videoQuality = mainWindow.slider_videoQuality.Value;
-            if (videoQuality != 0)
+            if (mainWindow.radio_cq.Checked)
             {
-                videoQuality = videoQuality / 100;
-                query += " -q " + videoQuality.ToString(new CultureInfo("en-US"));
-            }
+                float value;
+                switch (mainWindow.drp_videoEncoder.Text)
+                {
+                    case "MPEG-4 (FFmpeg)":
+                        value = 31 - (mainWindow.slider_videoQuality.Value -1);
+                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        break;
+                    case "MPEG-4 (XviD)":
+                        value = 31 - (mainWindow.slider_videoQuality.Value - 1);
+                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        break;
+                    case "H.264 (x264)":
+                        float divided;
+                        float.TryParse(Properties.Settings.Default.x264cqstep, out divided);
+                        value = 51 - mainWindow.slider_videoQuality.Value * divided;
+                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        break;
+                    case "VP3 (Theora)":
+                        value = mainWindow.slider_videoQuality.Value;
+                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        break;
+                } 
+            }     
 
             if (mainWindow.check_2PassEncode.Checked)
                 query += " -2 ";

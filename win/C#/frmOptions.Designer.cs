@@ -113,6 +113,9 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
+            this.label28 = new System.Windows.Forms.Label();
+            this.drop_x264step = new System.Windows.Forms.ComboBox();
+            this.label30 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -595,6 +598,9 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.label30);
+            this.tab_advanced.Controls.Add(this.drop_x264step);
+            this.tab_advanced.Controls.Add(this.label28);
             this.tab_advanced.Controls.Add(this.check_queryEditorTab);
             this.tab_advanced.Controls.Add(this.lbl_appcastUnstable);
             this.tab_advanced.Controls.Add(this.check_mainMinimize);
@@ -1044,6 +1050,44 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(27, 142);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(43, 13);
+            this.label28.TabIndex = 85;
+            this.label28.Text = "x264:";
+            // 
+            // drop_x264step
+            // 
+            this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_x264step.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drop_x264step.FormattingEnabled = true;
+            this.drop_x264step.Items.AddRange(new object[] {
+            "1.0",
+            "0.50",
+            "0.33",
+            "0.25",
+            "0.20"});
+            this.drop_x264step.Location = new System.Drawing.Point(312, 139);
+            this.drop_x264step.Name = "drop_x264step";
+            this.drop_x264step.Size = new System.Drawing.Size(111, 21);
+            this.drop_x264step.TabIndex = 86;
+            this.ToolTip.SetToolTip(this.drop_x264step, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
+                    "n Automatic.");
+            this.drop_x264step.SelectedIndexChanged += new System.EventHandler(this.x264step_SelectedIndexChanged);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(76, 142);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(230, 13);
+            this.label30.TabIndex = 87;
+            this.label30.Text = "Constant Quality fractional granularity:\r\n";
+            // 
             // frmOptions
             // 
             this.ClientSize = new System.Drawing.Size(514, 375);
@@ -1153,5 +1197,8 @@ namespace Handbrake
         private System.Windows.Forms.Label lbl_appcastUnstable;
         internal System.Windows.Forms.CheckBox check_mainMinimize;
         internal System.Windows.Forms.CheckBox check_queryEditorTab;
+        private System.Windows.Forms.Label label30;
+        internal System.Windows.Forms.ComboBox drop_x264step;
+        private System.Windows.Forms.Label label28;
     }
 }

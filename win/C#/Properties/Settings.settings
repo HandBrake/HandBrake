@@ -80,5 +80,8 @@
     <Setting Name="QueryEditorTab" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="x264cqstep" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0.25</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -966,8 +966,6 @@ namespace Handbrake
         }
         private void text_destination_TextChanged(object sender, EventArgs e)
         {
-            setAudioByContainer(text_destination.Text);
-            setVideoByContainer(text_destination.Text);
             string path = text_destination.Text;
             if (path.EndsWith(".mp4"))
                 drop_format.SelectedIndex = 0;
@@ -995,6 +993,9 @@ namespace Handbrake
                 setExtension(".avi");
             else if (drop_format.SelectedIndex == 4)
                 setExtension(".ogm");
+
+            setAudioByContainer(drop_format.Text);
+            setVideoByContainer(drop_format.Text);
         }
         private void setExtension(string newExtension)
         {
@@ -1045,27 +1046,99 @@ namespace Handbrake
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
             }
+            
+            // Setup the CQ Slider
+            switch (drp_videoEncoder.Text)
+            {    
+                case "MPEG-4 (FFmpeg)":
+                    slider_videoQuality.Minimum = 1;
+                    slider_videoQuality.Maximum = 31;
+                    slider_videoQuality.Value = 1;
+                    SliderValue.Text = "0% QP: 31.00";
+                    break;
+                case "MPEG-4 (XviD)":
+                    slider_videoQuality.Minimum = 1;
+                    slider_videoQuality.Maximum = 31;
+                    slider_videoQuality.Value = 1;
+                    SliderValue.Text = "0% QP: 31.00";
+                    break;
+                case "H.264 (x264)":
+                    slider_videoQuality.Minimum = 0;
+                    double tickFreq;
+                    double.TryParse(Properties.Settings.Default.x264cqstep, out tickFreq);
+                    tickFreq = 1/tickFreq;
+                    int freq;
+                    int.TryParse(Math.Round(tickFreq).ToString(), out freq);
+                    slider_videoQuality.Maximum = (51 * freq);
+                    slider_videoQuality.TickFrequency = 1;
+                    slider_videoQuality.Value = 0;
+                    SliderValue.Text = "0% RF: 51.00";
+                    break;
+                case "VP3 (Theora)":
+                    slider_videoQuality.Minimum = 0;
+                    slider_videoQuality.Maximum = 63;
+                    slider_videoQuality.Value = 0;
+                    SliderValue.Text = "0% QP: 0.00";
+                    break;
+            }
+        }
 
-        }
-        private void text_bitrate_TextChanged(object sender, EventArgs e)
-        {
-            text_filesize.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            check_2PassEncode.Enabled = true;
-        }
-        private void text_filesize_TextChanged(object sender, EventArgs e)
-        {
-            text_bitrate.Text = "";
-            slider_videoQuality.Value = 0;
-            SliderValue.Text = "0%";
-            check_2PassEncode.Enabled = true;
-        }
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
-            SliderValue.Text = slider_videoQuality.Value + "%";
-            text_bitrate.Text = "";
-            text_filesize.Text = "";
+            switch (drp_videoEncoder.Text)
+            {
+                case "MPEG-4 (FFmpeg)":
+                    float rfValue = 31 - (slider_videoQuality.Value -1);
+                    float max = slider_videoQuality.Maximum;
+                    float min = slider_videoQuality.Minimum;
+                    float val = ((max - min) - (rfValue - min)) / (max - min);
+                    SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
+                    break;
+                case "MPEG-4 (XviD)":
+                    rfValue = 31 - (slider_videoQuality.Value - 1);
+                    max = slider_videoQuality.Maximum;
+                    min = slider_videoQuality.Minimum;
+                    val = ((max - min) - (rfValue - min)) / (max - min);
+                    SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
+                    break;
+                case "H.264 (x264)":
+                    float divided;
+                    float.TryParse(Properties.Settings.Default.x264cqstep, out divided);
+                    rfValue = 51 - slider_videoQuality.Value*divided;
+                    max = slider_videoQuality.Maximum * divided;
+                    min = slider_videoQuality.Minimum;
+                    val = ((max - min) - (rfValue - min)) / (max - min);
+                    SliderValue.Text = Math.Round((val * 100), 2) + "% RF:" + (51 - slider_videoQuality.Value * divided); 
+                    break;
+                case "VP3 (Theora)":
+                    rfValue = slider_videoQuality.Value;
+                    float value = rfValue/63;
+                    SliderValue.Text = Math.Round((value * 100), 2) + "% QP:" + slider_videoQuality.Value;
+                    break;
+            }
+        }
+        private void radio_targetFilesize_CheckedChanged(object sender, EventArgs e)
+        {
+            text_bitrate.Enabled = false;
+            text_filesize.Enabled = true;
+            slider_videoQuality.Enabled = false;
+
+            check_2PassEncode.Enabled = true;
+        }
+        private void radio_avgBitrate_CheckedChanged(object sender, EventArgs e)
+        {
+            text_bitrate.Enabled = true;
+            text_filesize.Enabled = false;
+            slider_videoQuality.Enabled = false;
+
+            check_2PassEncode.Enabled = true;
+        }
+        private void radio_cq_CheckedChanged(object sender, EventArgs e)
+        {
+            text_bitrate.Enabled = false;
+            text_filesize.Enabled = false;
+            slider_videoQuality.Enabled = true;
+
             check_2PassEncode.Enabled = false;
             check_2PassEncode.CheckState = CheckState.Unchecked;
         }
@@ -1756,7 +1829,7 @@ namespace Handbrake
         {
             string oldval;
 
-            if ((path.EndsWith(".mp4")) || (path.EndsWith(".m4v")))
+            if ((path.Contains("MP4")) || (path.Contains("M4V")))
             {
                 oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
@@ -1766,7 +1839,7 @@ namespace Handbrake
                     drp_audenc_1.SelectedIndex = 0;
 
             }
-            else if (path.EndsWith(".avi"))
+            else if (path.Contains("AVI"))
             {
                 oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
@@ -1776,14 +1849,14 @@ namespace Handbrake
                     drp_audenc_1.SelectedIndex = 0;
 
             }
-            else if (path.EndsWith(".ogm"))
+            else if (path.Contains("OGM"))
             {
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("Vorbis");
                 drp_audenc_1.SelectedIndex = 0;
 
             }
-            else if (path.EndsWith(".mkv"))
+            else if (path.Contains("MKV"))
             {
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("AAC");
@@ -1805,7 +1878,7 @@ namespace Handbrake
         {
             string oldval;
 
-            if ((path.EndsWith(".mp4")) || (path.EndsWith(".m4v")))
+            if ((path.Contains("MP3")) || (path.Contains("M4V")))
             {
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
@@ -1818,7 +1891,7 @@ namespace Handbrake
                     drp_videoEncoder.Text = oldval;
 
             }
-            else if (path.EndsWith(".avi"))
+            else if (path.Contains("AVI"))
             {
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
@@ -1830,7 +1903,7 @@ namespace Handbrake
                 else
                     drp_videoEncoder.Text = oldval;
             }
-            else if (path.EndsWith(".ogm"))
+            else if (path.Contains("OGM"))
             {
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
@@ -1842,7 +1915,7 @@ namespace Handbrake
                 else
                     drp_videoEncoder.Text = oldval;
             }
-            else if (path.EndsWith(".mkv"))
+            else if (path.Contains("MKV"))
             {
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
@@ -2097,6 +2170,7 @@ namespace Handbrake
 
         #endregion
 
+        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

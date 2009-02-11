@@ -256,7 +256,7 @@ namespace Handbrake.Functions
 
         private Boolean q_twoPass;
         private string q_videoFramerate;
-        private int q_videoQuality;
+        private float q_videoQuality;
         private string q_videoTargetSize;
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Returns a int with the video quality value
         /// </summary>
-        public int VideoQuality
+        public float VideoQuality
         {
             get { return q_videoQuality; }
         }
@@ -848,12 +848,11 @@ namespace Handbrake.Functions
                 if (videoFilesize.Success)
                     thisQuery.q_videoTargetSize = videoFilesize.ToString().Replace("-S ", "");
 
-                double qConvert;
                 if (videoQuality.Success)
                 {
-                    qConvert = double.Parse(videoQuality.ToString().Replace("-q ", ""), Culture)*100;
-                    qConvert = Math.Ceiling(qConvert);
-                    thisQuery.q_videoQuality = int.Parse(qConvert.ToString());
+                   float qConvert = float.Parse(videoQuality.ToString().Replace("-q ", ""), Culture);
+                    //qConvert = Math.Ceiling(qConvert);
+                    thisQuery.q_videoQuality = qConvert;
                 }
                 #endregion
 

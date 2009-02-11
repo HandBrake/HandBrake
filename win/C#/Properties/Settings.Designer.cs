@@ -334,5 +334,17 @@ namespace Handbrake.Properties {
                 this["QueryEditorTab"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
+        public string x264cqstep {
+            get {
+                return ((string)(this["x264cqstep"]));
+            }
+            set {
+                this["x264cqstep"] = value;
+            }
+        }
     }
 }

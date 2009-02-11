@@ -144,12 +144,12 @@ namespace Handbrake
 
             if (mainWindow.ctl_decomb.getDropValue == "Off")
                 mainWindow.ctl_deinterlace.setOption(presetQuery.DeInterlace);
-            else 
+            else
                 mainWindow.ctl_deinterlace.setOption("None"); // Don't want decomb and deinterlace on at the same time
 
             mainWindow.ctl_denoise.setOption(presetQuery.DeNoise);
             mainWindow.ctl_detelecine.setOption(presetQuery.DeTelecine);
-            
+
             if (presetQuery.DeBlock != 0)
             {
                 mainWindow.slider_deblock.Value = presetQuery.DeBlock;
@@ -164,13 +164,45 @@ namespace Handbrake
 
             // Video Settings Tab
             #region video
-            mainWindow.text_bitrate.Text = presetQuery.AverageVideoBitrate;
-            mainWindow.text_filesize.Text = presetQuery.VideoTargetSize;
-            mainWindow.slider_videoQuality.Value = presetQuery.VideoQuality;
-            if (mainWindow.slider_videoQuality.Value != 0)
+            if (presetQuery.AverageVideoBitrate != null)
             {
-                int ql = presetQuery.VideoQuality;
-                mainWindow.SliderValue.Text = ql + "%";
+                mainWindow.radio_avgBitrate.Checked = true;
+                mainWindow.text_bitrate.Text = presetQuery.AverageVideoBitrate;
+            }
+            if (presetQuery.VideoTargetSize != null)
+            {
+                mainWindow.radio_targetFilesize.Checked = true;
+                mainWindow.text_filesize.Text = presetQuery.VideoTargetSize;
+            }
+
+            // Quality
+            if (presetQuery.VideoQuality != 0)
+            {
+                mainWindow.radio_cq.Checked = true;
+                if (presetQuery.VideoEncoder == "H.264 (x264)")
+                {
+                    int value;
+                    float presetValue, calculated, x264step;
+                    float.TryParse(presetQuery.VideoQuality.ToString(), out presetValue);
+                    float.TryParse(Properties.Settings.Default.x264cqstep, out x264step);
+
+                    float x = 51 / x264step;
+
+                    calculated = presetValue / x264step;
+                    calculated = x - calculated;
+
+                    //TODO: Handle cases where it can't parse a value due to the float being too lage.
+                    // when used with .33 and .2 and 1.0 for example.
+                    int.TryParse(calculated.ToString(), out value);
+
+                    mainWindow.slider_videoQuality.Value = value;
+                }
+                else
+                {
+                    int presetVal;
+                    int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
+                    mainWindow.slider_videoQuality.Value = presetVal;
+                }
             }
 
             if (presetQuery.TwoPass)
