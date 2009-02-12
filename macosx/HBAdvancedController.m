@@ -579,7 +579,7 @@
             [[fX264optPsyTrellisSlider animator] setHidden:YES];
             [[fX264optPsyTrellisLabel animator] setHidden:YES];
             [[fX264optPsyTrellisSlider animator] setFloatValue:0];
-            if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
+            if (sender != fX264optPsyTrellisSlider )
             {
                 [[fX264optPsyTrellisSlider cell] performClick:self];            
             }
