@@ -582,14 +582,20 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (IBAction)togglePauseResume: (id)sender
 {
     if (!fQueueEncodeLibhb) return;
-
+    
     hb_state_t s;
     hb_get_state2 (fQueueEncodeLibhb, &s);
-
+    
     if (s.state == HB_STATE_PAUSED)
+    {
         hb_resume (fQueueEncodeLibhb);
+        [self startAnimatingCurrentWorkingEncodeInQueue];
+    }
     else if ((s.state == HB_STATE_WORKING) || (s.state == HB_STATE_MUXING))
+    {
         hb_pause (fQueueEncodeLibhb);
+        [self stopAnimatingCurrentJobGroupInQueue];
+    }
 }
 
 #pragma mark -
