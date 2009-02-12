@@ -427,7 +427,7 @@
 
         [[fX264optBAdaptPopUp animator] setHidden:YES];
         [[fX264optBAdaptLabel animator] setHidden:YES];
-        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
+        if ( [fX264optBAdaptPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
         {
             [fX264optBAdaptPopUp selectItemAtIndex: 0];
             [[fX264optBAdaptPopUp cell] performClick:self];
