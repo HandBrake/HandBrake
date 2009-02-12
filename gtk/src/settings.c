@@ -158,6 +158,12 @@ ghb_settings_combo_int(const GValue *settings, const gchar *key)
 	return ghb_lookup_combo_int(key, ghb_settings_get_value(settings, key));
 }
 
+gdouble
+ghb_settings_combo_double(const GValue *settings, const gchar *key)
+{
+	return ghb_lookup_combo_double(key, ghb_settings_get_value(settings, key));
+}
+
 const gchar*
 ghb_settings_combo_option(const GValue *settings, const gchar *key)
 {
@@ -465,7 +471,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 		GtkTreeModel *store;
 		GtkTreeIter iter;
 		gchar *shortOpt;
-		gint ivalue;
+		gdouble ivalue;
 		gboolean foundit = FALSE;
 
 		g_debug("combo (%s)", str);
@@ -491,7 +497,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 			do
 			{
 				gtk_tree_model_get(store, &iter, 3, &ivalue, -1);
-				if (ivalue == ival)
+				if ((gint)ivalue == ival || ivalue == dval)
 				{
 					gtk_combo_box_set_active_iter (
 						GTK_COMBO_BOX(widget), &iter);
@@ -510,7 +516,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 		GtkTreeModel *store;
 		GtkTreeIter iter;
 		gchar *shortOpt;
-		gint ivalue;
+		gdouble ivalue;
 		gboolean foundit = FALSE;
 
 		g_debug("GTK_COMBO_BOX_ENTRY");
@@ -536,7 +542,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 			do
 			{
 				gtk_tree_model_get(store, &iter, 3, &ivalue, -1);
-				if (ivalue == ival)
+				if ((gint)ivalue == ival || ivalue == dval)
 				{
 					gtk_combo_box_set_active_iter (
 						GTK_COMBO_BOX(widget), &iter);

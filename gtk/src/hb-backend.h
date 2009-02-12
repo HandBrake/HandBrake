@@ -150,6 +150,7 @@ gboolean ghb_validate_filters(signal_user_data_t *ud);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
 gint ghb_lookup_combo_int(const gchar *name, const GValue *acodec);
+gdouble ghb_lookup_combo_double(const gchar *name, const GValue *acodec);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *acodec);
 gchar* ghb_get_tmp_dir();
 

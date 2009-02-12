@@ -1106,6 +1106,30 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 void
+vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
+
+	gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
+	gdouble step;
+	if (vcodec == HB_VCODEC_X264)
+	{
+		step = ghb_settings_combo_double(ud->settings, 
+											"VideoQualityGranularity");
+	}
+	else
+	{
+		step = 1;
+	}
+	gdouble val = gtk_range_get_value(GTK_RANGE(widget));
+	val = ((int)((val + step / 2) / step)) * step;
+	gtk_range_set_value(GTK_RANGE(widget), val);
+}
+
+void
 http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1122,7 +1146,6 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gdouble vqmin, vqmax, step, page;
 	gboolean inverted;
 	gint digits;
-	gint vcodec;
 
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
@@ -1134,14 +1157,13 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_range_set_increments (GTK_RANGE(qp), step, page);
 	gtk_scale_set_digits(GTK_SCALE(qp), digits);
 	gtk_range_set_inverted (GTK_RANGE(qp), inverted);
-	vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
 }
 
 void
 target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	const gchar *name = gtk_widget_get_name(widget);
-	g_debug("setting_widget_changed_cb () %s", name);
+	g_debug("target_size_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
@@ -2364,6 +2386,25 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 void
+vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("vqual_granularity_changed_cb");
+	ghb_widget_to_setting (ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
+
+	gdouble vqmin, vqmax, step, page;
+	gboolean inverted;
+	gint digits;
+
+	ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
+	GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
+	gtk_range_set_increments (GTK_RANGE(qp), step, page);
+}
+
+void
 tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("tweaks_changed_cb");
@@ -2817,22 +2858,22 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 			crf = ghb_settings_get_boolean(ud->settings, "constant_rate_factor");
 			percent = 100. * (51 - val) / 51.;
 			if (crf)
-				return g_strdup_printf("RF: %.1f / %.1f%%", val, percent);
+				return g_strdup_printf("RF: %.4g (%.0f%%)", val, percent);
 			else
-				return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
+				return g_strdup_printf("QP: %.4g (%.0f%%)", val, percent);
 		} break;
 
 		case HB_VCODEC_XVID:
 		case HB_VCODEC_FFMPEG:
 		{
 			percent = 100. * (30 - (val - 1)) / 30.;
-			return g_strdup_printf("QP: %d / %.1f%%", (int)val, percent);
+			return g_strdup_printf("QP: %d (%.0f%%)", (int)val, percent);
 		} break;
 
 		case HB_VCODEC_THEORA:
 		{
 			percent = 100. * val / 63.;
-			return g_strdup_printf("QP: %d / %.1f%%", (int)val, percent);
+			return g_strdup_printf("QP: %d (%.0f%%)", (int)val, percent);
 		} break;
 
 		default:

@@ -122,6 +122,8 @@
 		<true />
 		<key>update_skip_version</key>
 		<integer>0</integer>
+		<key>VideoQualityGranularity</key>
+		<string>0.2</string>
 		<key>version</key>
 		<string>0.1</string>
 	</dict>

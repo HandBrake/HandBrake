@@ -39,7 +39,7 @@ typedef struct
 {
 	const gchar *option;
 	const gchar *shortOpt;
-	gint ivalue;
+	gdouble ivalue;
 	const gchar *svalue;
 } options_map_t;
 
@@ -74,6 +74,19 @@ combo_opts_t logging_opts =
 {
 	sizeof(d_logging_opts)/sizeof(options_map_t),
 	d_logging_opts
+};
+
+static options_map_t d_vqual_granularity_opts[] =
+{
+	{"0.2",  "0.2",  0.2,  "0.2"},
+	{"0.25", "0.25", 0.25, "0.25"},
+	{"0.5",  "0.5",  0.5,  "0.5"},
+	{"1",    "1",    1,    "1"},
+};
+combo_opts_t vqual_granularity_opts =
+{
+	sizeof(d_vqual_granularity_opts)/sizeof(options_map_t),
+	d_vqual_granularity_opts
 };
 
 static options_map_t d_container_opts[] =
@@ -278,6 +291,7 @@ typedef struct
 combo_name_map_t combo_name_map[] =
 {
 	{"LoggingLevel", &logging_opts},
+	{"VideoQualityGranularity", &vqual_granularity_opts},
 	{"FileFormat", &container_opts},
 	{"PictureDeinterlace", &deint_opts},
 	{"PictureDecomb", &decomb_opts},
@@ -546,7 +560,6 @@ ghb_vquality_range(
 	gboolean *inverted)
 {
 	gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
-	*step = 1;
 	*page = 10;
 	*digits = 0;
 	switch (vcodec)
@@ -555,8 +568,12 @@ ghb_vquality_range(
 		{
 			*min = 0;
 			*max = 51;
-			*step = 0.1;
-			*digits = 3;
+			*step = ghb_settings_combo_double(ud->settings, 
+											"VideoQualityGranularity");
+			if (*step == 0.2 || *step == 0.5)
+				*digits = 1;
+			else if (*step == 0.25)
+				*digits = 2;
 			*inverted = TRUE;
 		} break;
 
@@ -565,6 +582,7 @@ ghb_vquality_range(
 		{
 			*min = 1;
 			*max = 31;
+			*step = 1;
 			*inverted = TRUE;
 		} break;
 
@@ -572,6 +590,7 @@ ghb_vquality_range(
 		{
 			*min = 0;
 			*max = 63;
+			*step = 1;
 			*inverted = FALSE;
 		} break;
 
@@ -579,7 +598,7 @@ ghb_vquality_range(
 		{
 			*min = 0;
 			*max = 100;
-			*digits = 3;
+			*step = 1;
 			*inverted = FALSE;
 		} break;
 	}
@@ -591,6 +610,26 @@ lookup_generic_int(combo_opts_t *opts, const GValue *gval)
 	gint ii;
 	gchar *str;
 	gint result = -1;
+
+	str = ghb_value_string(gval);
+	for (ii = 0; ii < opts->count; ii++)
+	{
+		if (strcmp(opts->map[ii].shortOpt, str) == 0)
+		{
+			result = opts->map[ii].ivalue;
+			break;
+		}
+	}
+	g_free(str);
+	return result;
+}
+
+static gdouble
+lookup_generic_double(combo_opts_t *opts, const GValue *gval)
+{
+	gint ii;
+	gchar *str;
+	gdouble result = -1;
 
 	str = ghb_value_string(gval);
 	for (ii = 0; ii < opts->count; ii++)
@@ -849,7 +888,7 @@ get_acodec_value(gint val)
 
 	for (ii = 0; ii < acodec_opts.count; ii++)
 	{
-		if (acodec_opts.map[ii].ivalue == val)
+		if ((int)acodec_opts.map[ii].ivalue == val)
 		{
 			value = ghb_string_value_new(acodec_opts.map[ii].shortOpt);
 			break;
@@ -1199,7 +1238,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 	// 4 - Int value determined by backend
 	// 5 - String value determined by backend
 	store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, 
-							   G_TYPE_STRING, G_TYPE_INT, G_TYPE_STRING);
+							   G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
 	gtk_combo_box_set_model(combo, GTK_TREE_MODEL(store));
 
 	if (GTK_WIDGET_TYPE(combo) == GTK_TYPE_COMBO_BOX)
@@ -1232,7 +1271,7 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rat
 					   0, "Same as source", 
 					   1, TRUE, 
 					   2, "source", 
-					   3, 0, 
+					   3, 0.0, 
 					   4, "source", 
 					   -1);
 	for (ii = 0; ii < count; ii++)
@@ -1242,7 +1281,7 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rat
 						   0, rates[ii].string, 
 						   1, TRUE, 
 						   2, rates[ii].string, 
-						   3, rates[ii].rate, 
+						   3, (gdouble)rates[ii].rate, 
 						   4, rates[ii].string, 
 						   -1);
 	}
@@ -1264,7 +1303,7 @@ video_rate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gi
 					   0, "Same as source", 
 					   1, TRUE, 
 					   2, "source", 
-					   3, 0, 
+					   3, 0.0, 
 					   4, "source", 
 					   -1);
 	for (ii = 0; ii < count; ii++)
@@ -1289,7 +1328,7 @@ video_rate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rates, gi
 						   0, option, 
 						   1, TRUE, 
 						   2, rates[ii].string, 
-						   3, rates[ii].rate, 
+						   3, (gdouble)rates[ii].rate, 
 						   4, rates[ii].string, 
 						   -1);
 		g_free(option);
@@ -1311,7 +1350,7 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 					   0, "None", 
 					   1, TRUE, 
 					   2, "none", 
-					   3, 0, 
+					   3, 0.0, 
 					   4, "none", 
 					   -1);
 	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
@@ -1321,7 +1360,7 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 						   0, hb_audio_mixdowns[ii].human_readable_name, 
 						   1, TRUE, 
 						   2, hb_audio_mixdowns[ii].short_name, 
-						   3, hb_audio_mixdowns[ii].amixdown, 
+						   3, (gdouble)hb_audio_mixdowns[ii].amixdown, 
 						   4, hb_audio_mixdowns[ii].internal_name, 
 						   -1);
 	}
@@ -1344,7 +1383,7 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
 						   0, ghb_language_table[ii].eng_name, 
 						   1, TRUE, 
 						   2, ghb_language_table[ii].iso639_2, 
-						   3, ii, 
+						   3, (gdouble)ii, 
 						   4, ghb_language_table[ii].iso639_1, 
 						   -1);
 	}
@@ -1393,7 +1432,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 						   0, "No Titles", 
 						   1, TRUE, 
 						   2, "none", 
-						   3, -1, 
+						   3, -1.0, 
 						   4, "none", 
 						   -1);
 		title_opts.map[0].option = "No Titles";
@@ -1419,7 +1458,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 						   0, titles[ii], 
 						   1, TRUE, 
 						   2, titles[ii], 
-						   3, ii, 
+						   3, (gdouble)ii, 
 						   4, titles[ii], 
 						   -1);
 		title_opts.map[ii].option = titles[ii];
@@ -1433,7 +1472,7 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 static gboolean
 find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 {
-	gint ivalue;
+	gdouble ivalue;
 	gboolean foundit = FALSE;
 	
 	if (gtk_tree_model_get_iter_first (store, iter))
@@ -1441,7 +1480,7 @@ find_combo_item_by_int(GtkTreeModel *store, gint value, GtkTreeIter *iter)
 		do
 		{
 			gtk_tree_model_get(store, iter, 3, &ivalue, -1);
-			if (value == ivalue)
+			if (value == (int)ivalue)
 			{
 				foundit = TRUE;
 				break;
@@ -1494,7 +1533,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 						   0, "No Audio", 
 						   1, TRUE, 
 						   2, "none", 
-						   3, -1, 
+						   3, -1.0, 
 						   4, "none", 
 						   -1);
 		audio_track_opts.map[0].option = "No Audio";
@@ -1511,7 +1550,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 						   0, audio->lang.description, 
 						   1, TRUE, 
 						   2, index_str[ii], 
-						   3, ii, 
+						   3, (gdouble)ii, 
 						   4, index_str[ii], 
 						   -1);
 		audio_track_opts.map[ii].option = audio->lang.description,
@@ -1563,7 +1602,7 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 					   0, "None", 
 					   1, TRUE, 
 					   2, "none", 
-					   3, -2, 
+					   3, -2.0, 
 					   4, "none", 
 					   -1);
 	subtitle_opts.map[0].option = "None";
@@ -1575,7 +1614,7 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 					   0, "Autoselect", 
 					   1, TRUE, 
 					   2, "auto", 
-					   3, -1, 
+					   3, -1.0, 
 					   4, "auto", 
 					   -1);
 	subtitle_opts.map[0].option = "Same as audio";
@@ -1592,7 +1631,7 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 					   	0, subtitle->lang, 
 					   	1, TRUE, 
 					   	2, subtitle->iso639_2, 
-					   	3, ii, 
+					   	3, (gdouble)ii, 
 					   	4, subtitle->iso639_2, 
 					   	-1);
 			subtitle_opts.map[ii+2].option = subtitle->lang;
@@ -1610,7 +1649,7 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 				0, ghb_language_table[ii].eng_name, 
 				1, TRUE, 
 				2, ghb_language_table[ii].iso639_2, 
-				3, ii, 
+				3, (gdouble)ii, 
 				4, ghb_language_table[ii].iso639_2, 
 				-1);
 			subtitle_opts.map[ii+2].option = ghb_language_table[ii].eng_name;
@@ -1865,6 +1904,27 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
 	return 0;
 }
 
+gdouble
+ghb_lookup_combo_double(const gchar *name, const GValue *gval)
+{
+	if (strcmp(name, "AudioBitrate") == 0)
+		return lookup_audio_bitrate_int(gval);
+	else if (strcmp(name, "AudioSamplerate") == 0)
+		return lookup_audio_rate_int(gval);
+	else if (strcmp(name, "VideoFramerate") == 0)
+		return lookup_video_rate_int(gval);
+	else if (strcmp(name, "AudioMixdown") == 0)
+		return lookup_mix_int(gval);
+	else if (strcmp(name, "SourceAudioLang") == 0)
+		return lookup_audio_lang_int(gval);
+	else
+	{
+		return lookup_generic_double(find_combo_table(name), gval);
+	}
+	g_warning("ghb_lookup_combo_double() couldn't find %s", name);
+	return 0;
+}
+
 const gchar*
 ghb_lookup_combo_option(const gchar *name, const GValue *gval)
 {
@@ -1923,6 +1983,7 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		subtitle_opts_set(builder, "Subtitles", user_data);
 		title_opts_set(builder, "title");
 		audio_track_opts_set(builder, "AudioTrack", user_data);
+		generic_opts_set(builder, "VideoQualityGranularity", &vqual_granularity_opts);
 		generic_opts_set(builder, "LoggingLevel", &logging_opts);
 		generic_opts_set(builder, "FileFormat", &container_opts);
 		generic_opts_set(builder, "PictureDeinterlace", &deint_opts);
@@ -2077,7 +2138,7 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 						   0, str, 
 						   1, TRUE, 
 						   2, str, 
-						   3, rate, 
+						   3, (gdouble)rate, 
 						   4, str, 
 						   -1);
 		g_free(str);
@@ -2089,7 +2150,7 @@ audio_bitrate_opts_clean(GtkBuilder *builder, const gchar *name, gint last_rate)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
-	gint ivalue;
+	gdouble ivalue;
 	gboolean done = FALSE;
 	gint ii = 0;
 	guint last = (guint)last_rate;
@@ -2139,7 +2200,7 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 						   0, hb_audio_bitrates[ii].string, 
 						   1, TRUE, 
 						   2, hb_audio_bitrates[ii].string, 
-						   3, hb_audio_bitrates[ii].rate, 
+						   3, (gdouble)hb_audio_bitrates[ii].rate, 
 						   4, hb_audio_bitrates[ii].string, 
 						   -1);
 	}
@@ -3384,7 +3445,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			}
 			else
 			{
-printf("switching to faac\n");
 				audio.out.codec = HB_ACODEC_FAAC;
 			}
 		}

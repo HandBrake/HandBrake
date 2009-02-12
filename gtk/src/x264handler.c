@@ -254,7 +254,7 @@ x264_update_combo(signal_user_data_t *ud, const gchar *name, const gchar *val)
 	GtkTreeModel *store;
 	GtkTreeIter iter;
 	gchar *shortOpt;
-	gint ivalue;
+	gdouble ivalue;
 	gboolean foundit = FALSE;
 	GtkWidget *widget;
 

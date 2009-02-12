@@ -114,12 +114,12 @@
     <property name="value">0</property>
   </object>
   <object class="GtkAdjustment" id="adjustment5">
-    <property name="upper">1</property>
+    <property name="upper">51</property>
     <property name="lower">0</property>
-    <property name="page_increment">1</property>
-    <property name="step_increment">0.1</property>
+    <property name="page_increment">5</property>
+    <property name="step_increment">0.25</property>
     <property name="page_size">0</property>
-    <property name="value">0.63</property>
+    <property name="value">20.25</property>
   </object>
   <object class="GtkAdjustment" id="adjustment6">
     <property name="upper">4</property>
@@ -1665,14 +1665,13 @@
                                         </child>
                                         <child>
                                           <object class="GtkHScale" id="VideoQualitySlider">
-                                            <property name="width_request">200</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="adjustment">adjustment5</property>
                                             <property name="digits">3</property>
-                                            <property name="value_pos">GTK_POS_RIGHT</property>
-                                            <signal handler="setting_widget_changed_cb" name="value_changed"/>
+                                            <property name="value_pos">GTK_POS_BOTTOM</property>
+                                            <signal handler="vquality_changed_cb" name="value_changed"/>
                                             <signal handler="format_vquality_cb" name="format-value"/>
                                           </object>
                                           <packing>
@@ -3387,24 +3386,6 @@ the required multiple.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="EncodeLogLocation">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text"> HandBrake produces 2 activity logs.  
-One for the session and one for each encoding.
-Store the individual encode logs in the same
-location as the movie.</property>
-                            <property name="label" translatable="yes">Store logs in destination video directory</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">4</property>
-                          </packing>
-                        </child>
-
-                        <child>
                           <object class="GtkAlignment" id="alignment50">
                             <property name="visible">True</property>
                             <property name="left_padding">4</property>
@@ -3443,7 +3424,62 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+
+                        <child>
+                          <object class="GtkAlignment" id="alignment59">
+                            <property name="visible">True</property>
+                            <property name="left_padding">4</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox6">
+                                <property name="visible">True</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkComboBox" id="VideoQualityGranularity">
+                                    <property name="visible">True</property>
+                                    <property name="width_request">55</property>
+                                    <signal name="changed" handler="vqual_granularity_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label85">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Video Qaulity Granularity</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
                             <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="EncodeLogLocation">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text"> HandBrake produces 2 activity logs.  
+One for the session and one for each encoding.
+Store the individual encode logs in the same
+location as the movie.</property>
+                            <property name="label" translatable="yes">Store logs in destination video directory</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
 
@@ -3481,7 +3517,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
 
@@ -3494,7 +3530,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
                         <child>
@@ -3506,7 +3542,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">8</property>
+                            <property name="position">9</property>
                           </packing>
                         </child>
                       </object>
