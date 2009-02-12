@@ -1064,15 +1064,31 @@ namespace Handbrake
                     break;
                 case "H.264 (x264)":
                     slider_videoQuality.Minimum = 0;
-                    double tickFreq;
-                    double.TryParse(Properties.Settings.Default.x264cqstep, out tickFreq);
-                    tickFreq = 1/tickFreq;
-                    int freq;
-                    int.TryParse(Math.Round(tickFreq).ToString(), out freq);
-                    slider_videoQuality.Maximum = (51 * freq);
-                    slider_videoQuality.TickFrequency = 1;
                     slider_videoQuality.Value = 0;
+                    slider_videoQuality.TickFrequency = 1;
                     SliderValue.Text = "0% RF: 51.00";
+                    String step = Properties.Settings.Default.x264cqstep;
+                    switch (step)
+                    {
+                        case "0.20":
+                            slider_videoQuality.Maximum = 255;
+                            break;
+                        case "0.25":
+                            slider_videoQuality.Maximum = 204;
+                            break;
+                        case "0.33":
+                            slider_videoQuality.Maximum = 155;
+                            break;
+                        case "0.50":
+                            slider_videoQuality.Maximum = 102;
+                            break;
+                        case "1.0":
+                            slider_videoQuality.Maximum = 51;
+                            break;
+                        default:
+                            slider_videoQuality.Maximum = 51;
+                            break;  
+                    }                   
                     break;
                 case "VP3 (Theora)":
                     slider_videoQuality.Minimum = 0;
@@ -1082,16 +1098,15 @@ namespace Handbrake
                     break;
             }
         }
-
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
-                    float rfValue = 31 - (slider_videoQuality.Value -1);
-                    float max = slider_videoQuality.Maximum;
-                    float min = slider_videoQuality.Minimum;
-                    float val = ((max - min) - (rfValue - min)) / (max - min);
+                    double rfValue = 31 - (slider_videoQuality.Value - 1);
+                    double max = slider_videoQuality.Maximum;
+                    double min = slider_videoQuality.Minimum;
+                    double val = ((max - min) - (rfValue - min)) / (max - min);
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "MPEG-4 (XviD)":
@@ -1102,17 +1117,18 @@ namespace Handbrake
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
-                    float divided;
-                    float.TryParse(Properties.Settings.Default.x264cqstep, out divided);
-                    rfValue = 51 - slider_videoQuality.Value*divided;
+                    double divided;
+                    double.TryParse(Properties.Settings.Default.x264cqstep, out divided);
+                    rfValue = 51.0 - slider_videoQuality.Value*divided;
                     max = slider_videoQuality.Maximum * divided;
                     min = slider_videoQuality.Minimum;
                     val = ((max - min) - (rfValue - min)) / (max - min);
-                    SliderValue.Text = Math.Round((val * 100), 2) + "% RF:" + (51 - slider_videoQuality.Value * divided); 
+                    rfValue = Math.Round(rfValue, 2);
+                    SliderValue.Text = Math.Round((val * 100), 2) + "% RF:" + rfValue; 
                     break;
                 case "VP3 (Theora)":
                     rfValue = slider_videoQuality.Value;
-                    float value = rfValue/63;
+                    double value = rfValue / 63;
                     SliderValue.Text = Math.Round((value * 100), 2) + "% QP:" + slider_videoQuality.Value;
                     break;
             }

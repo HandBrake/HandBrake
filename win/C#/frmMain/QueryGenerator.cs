@@ -206,7 +206,7 @@ namespace Handbrake
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {
-                float value;
+                double value;
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
                     case "MPEG-4 (FFmpeg)":
@@ -218,9 +218,10 @@ namespace Handbrake
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;
                     case "H.264 (x264)":
-                        float divided;
-                        float.TryParse(Properties.Settings.Default.x264cqstep, out divided);
+                        double divided;
+                        double.TryParse(Properties.Settings.Default.x264cqstep, out divided);
                         value = 51 - mainWindow.slider_videoQuality.Value * divided;
+                        value = Math.Round(value, 2);
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;
                     case "VP3 (Theora)":

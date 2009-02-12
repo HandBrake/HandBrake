@@ -74,6 +74,9 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.label30 = new System.Windows.Forms.Label();
+            this.drop_x264step = new System.Windows.Forms.ComboBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
             this.lbl_appcastUnstable = new System.Windows.Forms.Label();
             this.check_mainMinimize = new System.Windows.Forms.CheckBox();
@@ -113,9 +116,6 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.label28 = new System.Windows.Forms.Label();
-            this.drop_x264step = new System.Windows.Forms.ComboBox();
-            this.label30 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -615,6 +615,43 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(76, 142);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(230, 13);
+            this.label30.TabIndex = 87;
+            this.label30.Text = "Constant Quality fractional granularity:\r\n";
+            // 
+            // drop_x264step
+            // 
+            this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_x264step.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drop_x264step.FormattingEnabled = true;
+            this.drop_x264step.Items.AddRange(new object[] {
+            "1.0",
+            "0.50",
+            "0.25",
+            "0.20"});
+            this.drop_x264step.Location = new System.Drawing.Point(312, 139);
+            this.drop_x264step.Name = "drop_x264step";
+            this.drop_x264step.Size = new System.Drawing.Size(111, 21);
+            this.drop_x264step.TabIndex = 86;
+            this.ToolTip.SetToolTip(this.drop_x264step, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
+                    "n Automatic.");
+            this.drop_x264step.SelectedIndexChanged += new System.EventHandler(this.x264step_SelectedIndexChanged);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(27, 142);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(43, 13);
+            this.label28.TabIndex = 85;
+            this.label28.Text = "x264:";
+            // 
             // check_queryEditorTab
             // 
             this.check_queryEditorTab.AutoSize = true;
@@ -1049,44 +1086,6 @@ namespace Handbrake
             // 
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(27, 142);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(43, 13);
-            this.label28.TabIndex = 85;
-            this.label28.Text = "x264:";
-            // 
-            // drop_x264step
-            // 
-            this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_x264step.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drop_x264step.FormattingEnabled = true;
-            this.drop_x264step.Items.AddRange(new object[] {
-            "1.0",
-            "0.50",
-            "0.33",
-            "0.25",
-            "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(312, 139);
-            this.drop_x264step.Name = "drop_x264step";
-            this.drop_x264step.Size = new System.Drawing.Size(111, 21);
-            this.drop_x264step.TabIndex = 86;
-            this.ToolTip.SetToolTip(this.drop_x264step, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-                    "n Automatic.");
-            this.drop_x264step.SelectedIndexChanged += new System.EventHandler(this.x264step_SelectedIndexChanged);
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(76, 142);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(230, 13);
-            this.label30.TabIndex = 87;
-            this.label30.Text = "Constant Quality fractional granularity:\r\n";
             // 
             // frmOptions
             // 

@@ -195,6 +195,12 @@ namespace Handbrake
                     // when used with .33 and .2 and 1.0 for example.
                     int.TryParse(calculated.ToString(), out value);
 
+                    if (value == 0)
+                    {
+                        double val =  Math.Round(calculated, 0);
+                        int.TryParse(val.ToString(), out value);
+                    }
+
                     mainWindow.slider_videoQuality.Value = value;
                 }
                 else
