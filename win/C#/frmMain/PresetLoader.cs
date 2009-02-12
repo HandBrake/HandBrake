@@ -191,10 +191,10 @@ namespace Handbrake
                     calculated = presetValue / x264step;
                     calculated = x - calculated;
 
-                    //TODO: Handle cases where it can't parse a value due to the float being too lage.
-                    // when used with .33 and .2 and 1.0 for example.
                     int.TryParse(calculated.ToString(), out value);
 
+                    // This will sometimes occur when the preset was generated 
+                    // with a different granularity, so, round and try again.
                     if (value == 0)
                     {
                         double val =  Math.Round(calculated, 0);

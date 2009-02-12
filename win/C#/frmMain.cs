@@ -1590,8 +1590,19 @@ namespace Handbrake
         }
         private void check_Cabac_CheckedChanged(object sender, EventArgs e)
         {
-
             x264PanelFunctions.on_x264_WidgetChange("cabac", this);
+        }
+        private void slider_psyrd_Scroll(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("psy-rd", this);
+        }
+        private void slider_psytrellis_Scroll(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("psy-rd", this);
+        }
+        private void drop_adaptBFrames_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            x264PanelFunctions.on_x264_WidgetChange("b-adapt", this);
         }
 
         private void rtf_x264Query_TextChanged(object sender, EventArgs e)
@@ -2186,7 +2197,6 @@ namespace Handbrake
 
         #endregion
 
-        
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

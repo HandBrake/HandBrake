@@ -5,7 +5,6 @@ namespace Handbrake
 {
     class x264Panel
     {
-
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
         /// </summary>
@@ -28,6 +27,9 @@ namespace Handbrake
             mainWindow.drop_refFrames.SelectedIndex = 0;
             mainWindow.drop_subpixelMotionEstimation.SelectedIndex = 0;
             mainWindow.drop_trellis.SelectedIndex = 0;
+            mainWindow.slider_psyrd.Value = 0;
+            mainWindow.slider_psytrellis.Value = 0;
+            mainWindow.drop_adaptBFrames.SelectedIndex = 0;
 
             mainWindow.rtf_x264Query.Text = "";
         }
@@ -111,11 +113,16 @@ namespace Handbrake
                                 mainWindow.drop_MotionEstimationMethod.SelectedItem = "Uneven Multi-Hexagon";
                             else if (optValue.Equals("esa"))
                                 mainWindow.drop_MotionEstimationMethod.SelectedItem = "Exhaustive";
+                            else if (optValue.Equals("tesa"))
+                                mainWindow.drop_MotionEstimationMethod.SelectedItem = "Transformed Exhaustive";
 
                         }
                         /*ME Range NSPopUpButton*/
                         else if (optName.Equals("merange"))
                             mainWindow.drop_MotionEstimationRange.SelectedItem = optValue;
+
+                        else if (optName.Equals("b-adapt"))
+                            mainWindow.drop_adaptBFrames.SelectedItem = optValue; 
 
                         /*Weighted B-Frames NSPopUpButton*/
                         else if (optName.Equals("weightb"))
@@ -184,6 +191,26 @@ namespace Handbrake
                         /* CABAC NSButton */
                         else if (optName.Equals("cabac"))
                             mainWindow.check_Cabac.CheckState = CheckState.Unchecked;
+
+                        /* Psy-RD and Psy-Trellis NSSliders */
+                        else if (optName.Equals("psy-rd"))
+                        {
+                            string[] x = optValue.Split(',');
+
+                            double psyrd = 0, psytrellis = 0;
+                            int val, val2;
+                            double.TryParse(x[0], out psyrd);
+                            double.TryParse(x[1], out psytrellis);
+
+                            psyrd = psyrd * 10;
+                            psytrellis = psytrellis * 10;
+
+                            int.TryParse(psyrd.ToString(), out val);
+                            int.TryParse(psytrellis.ToString(), out val2);
+
+                            mainWindow.slider_psyrd.Value = val;
+                            mainWindow.slider_psytrellis.Value = val2;
+                        }
                     }
                 }
             }
@@ -392,7 +419,28 @@ namespace Handbrake
                             else if ((!da.Contains("Default")) && (!db.Contains("Default")))
                                 thisOpt = "deblock=" + da + "," + db;
                         }
+                        else if (optNameToChange.Equals("psy-rd"))
+                        {
+                            if (mainWindow.slider_psyrd.Value == 10 && mainWindow.slider_psytrellis.Value == 0)
+                                thisOpt = "";
+                            else
+                            {
+                                double psyrd = mainWindow.slider_psyrd.Value * 0.1;
+                                double psytre = mainWindow.slider_psytrellis.Value * 0.1;
+                                string rd, rt;
+                                if (psyrd == 1)
+                                    rd = "1.0";
+                                else
+                                    rd = psyrd.ToString();
 
+                                if (psytre == 1)
+                                    rt = "1.0";
+                                else
+                                    rt = psytre.ToString();
+
+                                thisOpt = "psy-rd=" + rd + "," + rt;
+                            }
+                        }
                         else if (optNameToChange.Equals("mixed-refs"))
                         {
                             if (mainWindow.check_mixedReferences.CheckState == CheckState.Checked)
@@ -462,6 +510,10 @@ namespace Handbrake
                                     thisOpt = "me=esa";
                                     break;
 
+                                case 5:
+                                    thisOpt = "me=tesa";
+                                    break;
+
                                 default:
                                     thisOpt = "";
                                     break;
@@ -513,6 +565,13 @@ namespace Handbrake
                         {
                             if (!mainWindow.drop_MotionEstimationRange.SelectedItem.ToString().Contains("Default"))
                                 thisOpt = "merange=" + mainWindow.drop_MotionEstimationRange.SelectedItem;
+                            else
+                                thisOpt = "";
+                        }
+                        else if (optNameToChange.Equals("b-adapt"))
+                        {
+                            if (!mainWindow.drop_adaptBFrames.SelectedItem.ToString().Contains("Default"))
+                                thisOpt = "b-adapt=" + (mainWindow.drop_adaptBFrames.SelectedIndex - 1);
                             else
                                 thisOpt = "";
                         }
@@ -590,6 +649,10 @@ namespace Handbrake
                         query = query + colon + "me=esa";
                         break;
 
+                    case 5:
+                        query = query + colon + "me=tesa";
+                        break;
+
                     default:
                         break;
                 }
@@ -639,6 +702,12 @@ namespace Handbrake
                 int value = mainWindow.drop_MotionEstimationRange.SelectedIndex + 3;
                 query = query + colon + "merange=" + value;
             }
+            else if (optNameToChange.Equals("b-adapt"))
+            {
+                int value = mainWindow.drop_adaptBFrames.SelectedIndex -1;
+                query = query + colon + "b-adapt=" + value;
+            }
+
             else if (optNameToChange.Equals("deblock"))
             {
                 String da = mainWindow.drop_deblockAlpha.SelectedItem.ToString();
@@ -658,6 +727,28 @@ namespace Handbrake
                         da = "0";
 
                     query = query + colon + "deblock=" + da + "," + db;
+                }
+            }
+            else if (optNameToChange.Equals("psy-rd"))
+            {
+                if (mainWindow.slider_psyrd.Value == 10 && mainWindow.slider_psytrellis.Value == 0)
+                    query += "";
+                else
+                {
+                    double psyrd = mainWindow.slider_psyrd.Value * 0.1;
+                    double psytre = mainWindow.slider_psytrellis.Value * 0.1;
+                    string rd, rt;
+                    if (psyrd == 1)
+                        rd = "1.0";
+                    else
+                        rd = psyrd.ToString();
+
+                    if (psytre == 1)
+                        rt = "1.0";
+                    else
+                        rt = psytre.ToString();
+
+                    query += colon + "psy-rd=" + rd + "," + rt;
                 }
             }
             else if (optNameToChange.Equals("mixed-refs"))
@@ -741,6 +832,10 @@ namespace Handbrake
                 mainWindow.check_weightedBFrames.CheckState = CheckState.Unchecked;
                 mainWindow.check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
                 mainWindow.drop_directPrediction.SelectedIndex = 0;
+
+                mainWindow.drop_adaptBFrames.Visible = false;
+                mainWindow.lbl_adaptBFrames.Visible = false;
+                mainWindow.drop_adaptBFrames.SelectedIndex = 0;
             }
             else if (mainWindow.drop_bFrames.SelectedIndex == 2)
             {
@@ -751,6 +846,9 @@ namespace Handbrake
                 mainWindow.check_weightedBFrames.Visible = true;
                 mainWindow.drop_directPrediction.Visible = true;
                 mainWindow.lbl_direct_prediction.Visible = true;
+
+                mainWindow.drop_adaptBFrames.Visible = true;
+                mainWindow.lbl_adaptBFrames.Visible = true;
             }
             else
             {
@@ -758,6 +856,9 @@ namespace Handbrake
                 mainWindow.check_pyrmidalBFrames.Visible = true;
                 mainWindow.drop_directPrediction.Visible = true;
                 mainWindow.lbl_direct_prediction.Visible = true;
+
+                mainWindow.drop_adaptBFrames.Visible = true;
+                mainWindow.lbl_adaptBFrames.Visible = true;
             }
 
             if (mainWindow.check_Cabac.Checked == false)
@@ -791,6 +892,57 @@ namespace Handbrake
             }
             else
                 mainWindow.check_mixedReferences.Visible = true;
+
+            if (mainWindow.drop_MotionEstimationMethod.SelectedIndex < 3)
+            {
+                mainWindow.drop_MotionEstimationRange.Visible = false;
+                mainWindow.lbl_merange.Visible = false;
+                mainWindow.drop_MotionEstimationRange.SelectedIndex = 0;
+            }
+            else
+            {
+                mainWindow.drop_MotionEstimationRange.Visible = true;
+                mainWindow.lbl_merange.Visible = true;
+            }
+
+            if (mainWindow.drop_subpixelMotionEstimation.SelectedIndex != 0 && mainWindow.drop_subpixelMotionEstimation.SelectedIndex < 7)
+            {
+                mainWindow.slider_psyrd.Visible = false;
+                mainWindow.slider_psyrd.Value = 10;
+                mainWindow.lbl_psyrd.Visible = false;
+
+
+                mainWindow.slider_psytrellis.Visible = false;
+                mainWindow.slider_psytrellis.Value = 0;
+                mainWindow.lbl_psytrellis.Visible = false;
+            }
+            else
+            {
+                mainWindow.slider_psyrd.Visible = true;
+                mainWindow.lbl_psyrd.Visible = true;
+
+                if (mainWindow.drop_trellis.SelectedIndex >= 2 && mainWindow.check_Cabac.Checked && mainWindow.slider_psytrellis.Visible == false)
+                {
+                    mainWindow.slider_psytrellis.Visible = true;
+                    mainWindow.lbl_psytrellis.Visible = true;
+                }
+            }
+
+            if (mainWindow.drop_trellis.SelectedIndex < 2)
+            {
+                mainWindow.slider_psytrellis.Visible = false;
+                mainWindow.slider_psytrellis.Value = 0;
+                mainWindow.lbl_psytrellis.Visible = false;
+            }
+            else
+            {
+                if ((mainWindow.drop_subpixelMotionEstimation.SelectedIndex == 0 || mainWindow.drop_subpixelMotionEstimation.SelectedIndex >= 7) && mainWindow.check_Cabac.Checked && mainWindow.slider_psytrellis.Visible == false)
+                {
+                    mainWindow.slider_psytrellis.Visible = true;
+                    mainWindow.lbl_psytrellis.Visible = true;
+                }
+            }
+
         }
 
     }
