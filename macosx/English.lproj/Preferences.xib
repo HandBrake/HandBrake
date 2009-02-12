@@ -9,7 +9,6 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="5"/>
-			<integer value="236"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -795,7 +794,7 @@
 				<string key="NSExtension">NSResponder</string>
 			</object>
 			<object class="NSCustomView" id="23728330">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">256</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1065,17 +1064,6 @@
 										<string key="NSAction">_popUpItemAction:</string>
 										<reference key="NSTarget" ref="434430620"/>
 									</object>
-									<object class="NSMenuItem" id="722882615">
-										<reference key="NSMenu" ref="841477386"/>
-										<string key="NSTitle">0.33</string>
-										<string key="NSKeyEquiv"/>
-										<int key="NSKeyEquivModMask">1048576</int>
-										<int key="NSMnemonicLoc">2147483647</int>
-										<reference key="NSOnImage" ref="201515479"/>
-										<reference key="NSMixedImage" ref="944085027"/>
-										<string key="NSAction">_popUpItemAction:</string>
-										<reference key="NSTarget" ref="434430620"/>
-									</object>
 									<reference ref="731921194"/>
 									<object class="NSMenuItem" id="226776327">
 										<reference key="NSMenu" ref="841477386"/>
@@ -1089,7 +1077,7 @@
 									</object>
 								</object>
 							</object>
-							<int key="NSSelectedIndex">3</int>
+							<int key="NSSelectedIndex">2</int>
 							<int key="NSPreferredEdge">1</int>
 							<bool key="NSUsesItemFromMenu">YES</bool>
 							<bool key="NSAltersState">YES</bool>
@@ -1164,7 +1152,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{481, 194}</string>
-				<reference key="NSSuperview"/>
 				<object class="NSMutableString" key="NSClassName">
 					<characters key="NS.bytes">NSView</characters>
 				</object>
@@ -2055,7 +2042,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="226776327"/>
 							<reference ref="731921194"/>
-							<reference ref="722882615"/>
 							<reference ref="642215596"/>
 							<reference ref="835010135"/>
 						</object>
@@ -2069,11 +2055,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">391</int>
 						<reference key="object" ref="731921194"/>
-						<reference key="parent" ref="841477386"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">392</int>
-						<reference key="object" ref="722882615"/>
 						<reference key="parent" ref="841477386"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -2232,7 +2213,6 @@
 					<string>389.IBPluginDependency</string>
 					<string>390.IBPluginDependency</string>
 					<string>391.IBPluginDependency</string>
-					<string>392.IBPluginDependency</string>
 					<string>393.IBPluginDependency</string>
 					<string>394.IBPluginDependency</string>
 					<string>395.IBPluginDependency</string>
@@ -2374,8 +2354,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{779, 642}, {88, 88}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{779, 659}, {88, 71}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
