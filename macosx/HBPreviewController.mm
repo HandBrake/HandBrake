@@ -517,7 +517,7 @@ return YES;
 - (IBAction)goFullScreen:(id)sender 
 { 
     // Get the screen information. 
-    NSScreen* mainScreen = [NSScreen mainScreen];
+    NSScreen* mainScreen = [fPreviewWindow screen];
     NSDictionary* screenInfo = [mainScreen deviceDescription]; 
     NSNumber* screenID = [screenInfo objectForKey:@"NSScreenNumber"]; 
     // Capture the screen. 
@@ -540,7 +540,7 @@ return YES;
                                                         styleMask:NSBorderlessWindowMask 
                                                           backing:NSBackingStoreBuffered 
                                                             defer:NO 
-                                                           screen:[NSScreen mainScreen]]; 
+                                                           screen:mainScreen]; 
         
         // Establish the window attributes. 
         [fFullScreenWindow setReleasedWhenClosed:NO]; 
@@ -551,25 +551,26 @@ return YES;
         [fFullScreenWindow setContentView:fPictureViewArea]; 
         [fPictureViewArea setNeedsDisplay:YES];
         
-        // Center the window 
-        
         /* Better to center the window using the screen's frame
          * and the windows origin. Note that we should take into
          * account the auto sizing and alignment that occurs in 
          * setViewSize each time the preview changes.
+         * Note: by using [fFullScreenWindow screen] (instead of
+         * [NSScreen mainScreen]) in referencing the screen
+         * coordinates, the full screen window will show up on
+         * whichever display was being used in windowed mode
+         * on multi-display systems
          */
         
-        NSSize screenSize = [[NSScreen mainScreen] frame].size;
+        NSSize screenSize = [[fFullScreenWindow screen] frame].size;
         NSSize windowSize = [fFullScreenWindow frame].size;
         NSPoint windowOrigin = [fFullScreenWindow frame].origin;
         
         /* Adjust our origin y (vertical) based on the screen height */
-        windowOrigin.y = (screenSize.height - windowSize.height) / 2.0;
-        windowOrigin.x = (screenSize.width - windowSize.width) / 2.0;
+        windowOrigin.y += (screenSize.height - windowSize.height) / 2.0;
+        windowOrigin.x += (screenSize.width - windowSize.width) / 2.0;
         
         [fFullScreenWindow setFrameOrigin:windowOrigin];
-        
-        
         
         /* lets kill the timer for now */
         [self stopReceivingLibhbNotifications];
@@ -586,6 +587,7 @@ return YES;
         
         // Show the window. 
         [fFullScreenWindow makeKeyAndOrderFront:self];
+        
         
         /* Change the name of fFullScreenToggleButton appropriately */
         [fFullScreenToggleButton setTitle: @"Windowed"];
@@ -607,6 +609,20 @@ return YES;
         [self startHudTimer];
     } 
 } 
+
+// Title-less windows normally don't receive key presses, override this
+- (BOOL)canBecomeKeyWindow
+{
+    return YES;
+}
+
+// Title-less windows normally can't become main which means that another
+// non-fullscreen window will have the "active" titlebar in expose. Bad, fix it.
+- (BOOL)canBecomeMainWindow
+{
+    return YES;
+}
+
 
 - (IBAction)goWindowedScreen:(id)sender
 {
