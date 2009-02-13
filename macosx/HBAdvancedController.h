@@ -69,6 +69,9 @@
 - (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender;
 - (IBAction) X264AdvancedOptionsSetCurrentSettings: (id) sender;
 - (NSString *)  X264AdvancedOptionsStandardizeOptNames:(NSString *) cleanOptNameString;
+- (NSString *)  X264AdvancedOptionsOptIDToString: (id) sender;
+- (NSString *)  X264AdvancedOptionsWidgetToString: (NSString *) optName withID: (id) sender;
+- (BOOL) X264AdvancedOptionsIsOpt: (NSString *) optNameToChange inString: (NSString *) currentOptString;
 - (IBAction) X264AdvancedOptionsChanged: (id) sender;
 
 @end

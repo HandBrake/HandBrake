@@ -403,11 +403,6 @@
     
     if( sender == fX264optBframesPopUp || sender == nil || sender == fDisplayX264Options )
     {
-        if( sender == nil )
-            fprintf(stderr, "Bframes sender is nil!\n");
-        else if( sender == fDisplayX264Options )
-            fprintf(stderr, "Bframes sender is text box!\n");
-            
         if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
         {
             /* If the b-frame widget is at 0 or 1, the user has chosen
@@ -880,116 +875,279 @@
     }
 }
 
-/**
- * Resets the option string to mirror the GUI widgets.
- */
-- (IBAction) X264AdvancedOptionsChanged: (id) sender
+- (NSString *) X264AdvancedOptionsOptIDToString: (id) widget
 {
     /*Determine which outlet is being used and set optName to process accordingly */
     NSString * optNameToChange = @""; // The option name such as "bframes"
     
-    if (sender == fX264optBframesPopUp)
+    if (widget == fX264optBframesPopUp)
     {
         optNameToChange = @"bframes";
     }
-    if (sender == fX264optRefPopUp)
+    if (widget == fX264optRefPopUp)
     {
         optNameToChange = @"ref";
     }
-    if (sender == fX264optNfpskipSwitch)
+    if (widget == fX264optNfpskipSwitch)
     {
         optNameToChange = @"no-fast-pskip";
     }
-    if (sender == fX264optNodctdcmtSwitch)
+    if (widget == fX264optNodctdcmtSwitch)
     {
         optNameToChange = @"no-dct-decimate";
     }
-    if (sender == fX264optSubmePopUp)
+    if (widget == fX264optSubmePopUp)
     {
         optNameToChange = @"subq";
     }
-    if (sender == fX264optTrellisPopUp)
+    if (widget == fX264optTrellisPopUp)
     {
         optNameToChange = @"trellis";
     }
-    if (sender == fX264optMixedRefsSwitch)
+    if (widget == fX264optMixedRefsSwitch)
     {
         optNameToChange = @"mixed-refs";
     }
-    if (sender == fX264optMotionEstPopUp)
+    if (widget == fX264optMotionEstPopUp)
     {
         optNameToChange = @"me";
     }
-    if (sender == fX264optMERangePopUp)
+    if (widget == fX264optMERangePopUp)
     {
         optNameToChange = @"merange";
     }
-    if (sender == fX264optBAdaptPopUp)
+    if (widget == fX264optBAdaptPopUp)
     {
         optNameToChange = @"b-adapt";
     }
-    if (sender == fX264optWeightBSwitch)
+    if (widget == fX264optWeightBSwitch)
     {
         optNameToChange = @"weightb";
     }
-    if (sender == fX264optBPyramidSwitch)
+    if (widget == fX264optBPyramidSwitch)
     {
         optNameToChange = @"b-pyramid";
     }
-    if (sender == fX264optDirectPredPopUp)
+    if (widget == fX264optDirectPredPopUp)
     {
         optNameToChange = @"direct";
     }
-    if (sender == fX264optAlphaDeblockPopUp)
+    if (widget == fX264optAlphaDeblockPopUp)
     {
         optNameToChange = @"deblock";
     }
-    if (sender == fX264optBetaDeblockPopUp)
+    if (widget == fX264optBetaDeblockPopUp)
     {
         optNameToChange = @"deblock";
     }        
-    if (sender == fX264optAnalysePopUp)
+    if (widget == fX264optAnalysePopUp)
     {
         optNameToChange = @"analyse";
     }
-    if (sender == fX264opt8x8dctSwitch)
+    if (widget == fX264opt8x8dctSwitch)
     {
         optNameToChange = @"8x8dct";
     }
-    if (sender == fX264optCabacSwitch)
+    if (widget == fX264optCabacSwitch)
     {
         optNameToChange = @"cabac";
     }
-    if( sender == fX264optPsyRDSlider)
+    if( widget == fX264optPsyRDSlider)
     {
         optNameToChange = @"psy-rd";
     }
-    if( sender == fX264optPsyTrellisSlider)
+    if( widget == fX264optPsyTrellisSlider)
     {
         optNameToChange = @"psy-rd";
     }
     
+    return optNameToChange;
+}
+
+- (NSString *) X264AdvancedOptionsWidgetToString: (NSString *) optName withID: (id) sender
+{
+    NSString * thisOpt = @""; // The option=value string the method will return
     
-    /* Set widgets depending on the opt string in field */
-    NSString * thisOpt; // The separated option such as "bframes=3"
-    NSString * optName = @""; // The option name such as "bframes"
-    NSString * optValue = @"";// The option value such as "3"
-    NSArray *currentOptsArray;
+    if ([optName isEqualToString:@"deblock"])
+    {
+        if ((([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 7)) && (([fX264optBetaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optBetaDeblockPopUp indexOfSelectedItem] == 7)))
+        {
+            /* When both deblock widgets are 0 or default or a mix of the two,
+               use a blank string, since deblocking defaults to 0,0.           */
+            thisOpt = @"";                                
+        }
+        else
+        {
+            /* Otherwise the format is deblock=a,b, where a and b both have an array
+               offset of 7 because deblocking values start at -6 instead of at zero. */
+            thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
+        }
+    }
     
-    /*First, we get an opt string to process */
-    NSString *currentOptString = [fDisplayX264Options stringValue];
+    else if ([optName isEqualToString:@"psy-rd"])
+    {
+        if( [fX264optPsyRDSlider floatValue] == 1.0 && [fX264optPsyTrellisSlider floatValue] == 0.0 ) 
+        {
+            /* When  PsyRD is 1 and PsyTrel is 0 they're default values and can be ignored. */
+            thisOpt = @"";                                
+        }
+        else
+        {
+            /* Otherwise the format is deblock=a,b, where a and b both have an array
+               offset of 7 because deblocking values start at -6 instead of at zero. */
+            thisOpt = [NSString stringWithFormat:@"%@=%0.1f,%0.1f", optName, [fX264optPsyRDSlider floatValue], [fX264optPsyTrellisSlider floatValue] ];
+        }
+    }
     
-    /* There are going to be a few possibilities.
-       - The option might start off the string.
-       - The option might be in the middle of the string.
-       - The option might not be in the string at all yet.
-       - The string itself might not yet exist.
-       
-       Because each of these possibilities means constructing a different kind of string,
-       they're all handled separately in a sea of messy, somewhat redundant code. =(     */
-       
-    /* If the option is in the string but not the beginning of it, it will be in the form of ":optName=value"
-       so we really want to be looking for ":optNameToChange=" rather than "optNameToChange".                 */
+    else if /*Boolean Switches*/ ([optName isEqualToString:@"mixed-refs"] || [optName isEqualToString:@"weightb"] ||  [optName isEqualToString:@"b-pyramid"] || [optName isEqualToString:@"no-fast-pskip"] || [optName isEqualToString:@"no-dct-decimate"] || [optName isEqualToString:@"8x8dct"] )
+    {
+        /* Here is where we take care of the boolean options that work overtly:
+           no-dct-decimate being on means no-dct-decimate=1, etc. Some options
+           require the inverse, but those will be handled a couple lines down. */
+        if ([sender state] == 0)
+        {
+            /* When these options are false, don't include them. They all default
+               to being set off, so they don't need to be mentioned at all.       */
+            thisOpt = @"";
+        }
+        else
+        {
+            /* Otherwise, include them as optioname=1 */
+            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
+        }
+    }
+    
+    else if ([optName isEqualToString:@"cabac"])
+    {
+        /* CABAC is odd, in that it defaults to being on. That means
+           it only needs to be included in the string when turned off. */
+        if ([sender state] == 1)
+        {
+            /* It's true so don't include it. */
+            thisOpt = @"";
+        }
+        else
+        {
+            /* Otherwise, include cabac=0 in the string to enable CAVLC. */
+            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,0];
+        }
+    }
+                                            
+    else if (([sender indexOfSelectedItem] == 0) && (sender != fX264optAlphaDeblockPopUp) && (sender != fX264optBetaDeblockPopUp) ) // means that "unspecified" is chosen, lets then remove it from the string
+    {
+        /* When a widget is at index 0, it's default. Default means don't add to the string.
+           The exception for deblocking is because for those, *both* need to at index 0
+           for it to default, so it's handled separately, above this section.                */
+        thisOpt = @"";
+    }
+    
+    else if ([optName isEqualToString:@"me"])
+    {
+        /* Motion estimation uses string values, so this switch
+           pairs the widget index with the right value string.  */
+        switch ([sender indexOfSelectedItem])
+        {   
+            case 1:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"dia"];
+                break;
+                
+            case 2:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"hex"];
+                break;
+                
+            case 3:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"umh"];
+                break;
+                
+            case 4:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"esa"];
+                break;
+            
+            case 5:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"tesa"];
+            
+            default:
+                break;
+        }
+    }
+    
+    else if ([optName isEqualToString:@"direct"])
+    {
+        /* Direct prediction uses string values, so this switch
+           pairs the right string value with the right widget index. */
+        switch ([sender indexOfSelectedItem])
+        {   
+            case 1:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
+                break;
+                
+            case 2:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"spatial"];
+                break;
+                
+            case 3:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"temporal"];
+                break;
+                
+            case 4:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"auto"];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    else if ([optName isEqualToString:@"analyse"])
+    {
+        /* Analysis uses string values as well. */
+        switch ([sender indexOfSelectedItem])
+        {   
+            case 1:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
+                break;
+                
+            case 2:
+                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"all"];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    else if ([optName isEqualToString:@"merange"])
+    {
+        /* Motion estimation range uses an odd array offset because in addition
+           to starting with index 0 as default, index 1 starts at 4 instead of 1,
+           because merange can't go below 4. So it has to be handled separately.  */
+        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
+    }
+    
+    else if ([optName isEqualToString:@"b-adapt"])
+    {
+        /* B-adapt starts at index 0 with default then goes 0, 1, 2)*/
+        thisOpt = [NSString stringWithFormat:@"%@=%d", optName, [sender indexOfSelectedItem]-1];
+    }
+    
+    else // we have a valid value to change, so change it
+    {
+        if ( [sender indexOfSelectedItem] != 0 )
+        /* Here's our general case, that catches things like ref frames and b-frames.
+           Basically, any options that are PopUp menus with index 0 as default and
+           index 1 as 1, with numerical values, are all handled right here. All of
+           the above stuff is for the exceptions to the general case.              */
+            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
+    }
+    
+    return thisOpt;
+}
+
+- (BOOL) X264AdvancedOptionsIsOpt: (NSString *) optNameToChange inString: (NSString *) currentOptString
+{
+    /* If the option is in the string but not the beginning of it,
+       it will be in the form of ":optName=value" so we really want
+       to be looking for ":optNameToChange=" rather than "optNameToChange". */
     NSString *checkOptNameToChange = [NSString stringWithFormat:@":%@=",optNameToChange];
     
     /* Now we store the part of the string up through the option name in currentOptRange. */
@@ -1003,8 +1161,36 @@
         If the range is 0, it's the first option listed in the string.       */        
     NSString *checkOptNameToChangeBeginning = [NSString stringWithFormat:@"%@=",optNameToChange];
     NSRange currentOptRangeBeginning = [currentOptString rangeOfString:checkOptNameToChangeBeginning];
-    
+
     if (currentOptRange.location != NSNotFound || currentOptRangeBeginning.location == 0)
+        return true;
+    else
+        return false;
+} 
+
+/**
+ * Resets the option string to mirror the GUI widgets.
+ */
+- (IBAction) X264AdvancedOptionsChanged: (id) sender
+{
+    /* Look up the equivalent string option name of the calling widget. */
+    NSString * optNameToChange = [self X264AdvancedOptionsOptIDToString: sender];
+    
+    NSString * thisOpt = @"";  // The separated option such as "bframes=3"
+    NSString * optName = @"";  // The option name such as "bframes"
+    NSString * optValue = @""; // The option value such as "3"
+    NSArray *currentOptsArray;
+    
+    /* Get the current opt string being displayed. */
+    NSString *currentOptString = [fDisplayX264Options stringValue];
+    
+    /* There are going to be a few possibilities.
+       - The option might start off the string.
+       - The option might be in the middle of the string.
+       - The option might not be in the string at all yet.
+       - The string itself might not yet exist.             */
+    
+    if( [self X264AdvancedOptionsIsOpt: optNameToChange inString: currentOptString] )
     {
         /* If the option is in the string wth a semicolon, or starts the string, it's time to edit.
            This means parsing the whole string into an array of options and values. From there,
@@ -1013,10 +1199,11 @@
         /* Create new empty opt string*/
         NSString *changedOptString = @"";
         
-        /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
+        /* Put individual options into an array based on the ":"
+           separator for processing, result is "<opt>=<value>"   */
         currentOptsArray = [currentOptString componentsSeparatedByString:@":"];
         
-        /*iterate through the array and get <opts> and <values*/
+        /* Iterate through the array and get <opts> and <values*/
         int loopcounter;
         int currentOptsArrayCount = [currentOptsArray count];
         for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
@@ -1031,175 +1218,12 @@
                    
                 optName = [thisOpt substringToIndex:splitOptRange.location];
                 optValue = [thisOpt substringFromIndex:splitOptRange.location + 1];
-                
-                /*Run through the available widgets for x264 opts and set them, as you add widgets, 
-                    they need to be added here. This should be moved to its own method probably*/
-                
+
                 /*If the optNameToChange is found, appropriately change the value or delete it if
                     "Unspecified" is set.*/
                 if ([optName isEqualToString:optNameToChange])
                 {
-                    if ([optNameToChange isEqualToString:@"deblock"])
-                    {
-                        if ((([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optAlphaDeblockPopUp indexOfSelectedItem] == 7)) && (([fX264optBetaDeblockPopUp indexOfSelectedItem] == 0) || ([fX264optBetaDeblockPopUp indexOfSelectedItem] == 7)))
-                        {
-                            /* When both deblock widgets are 0 or default or a mix of the two,
-                               use a blank string, since deblocking defaults to 0,0.           */
-                            thisOpt = @"";                                
-                        }
-                        else
-                        {
-                            /* Otherwise the format is deblock=a,b, where a and b both have an array
-                               offset of 7 because deblocking values start at -6 instead of at zero. */
-                            thisOpt = [NSString stringWithFormat:@"%@=%d,%d",optName, ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0,([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0];
-                        }
-                    }
-                    if ([optNameToChange isEqualToString:@"psy-rd"])
-                    {
-                        if( [fX264optPsyRDSlider floatValue] == 1.0 && [fX264optPsyTrellisSlider floatValue] == 0.0 ) 
-                        {
-                            /* When  PsyRD is 1 and PsyTrel is 0 they're default values and can be ignored. */
-                            thisOpt = @"";                                
-                        }
-                        else
-                        {
-                            /* Otherwise the format is deblock=a,b, where a and b both have an array
-                               offset of 7 because deblocking values start at -6 instead of at zero. */
-                            thisOpt = [NSString stringWithFormat:@"%@=%0.1f,%0.1f", optName, [fX264optPsyRDSlider floatValue], [fX264optPsyTrellisSlider floatValue] ];
-                        }
-                    }
-                    else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] ||  [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
-                    {
-                        /* Here is where we take care of the boolean options that work overtly:
-                           no-dct-decimate being on means no-dct-decimate=1, etc. Some options
-                           require the inverse, but those will be handled a couple lines down. */
-                        if ([sender state] == 0)
-                        {
-                            /* When these options are false, don't include them. They all default
-                               to being set off, so they don't need to be mentioned at all.       */
-                            thisOpt = @"";
-                        }
-                        else
-                        {
-                            /* Otherwise, include them as optioname=1 */
-                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,1];
-                        }
-                    }
-                    else if ([optNameToChange isEqualToString:@"cabac"])
-                    {
-                        /* CABAC is odd, in that it defaults to being on. That means
-                           it only needs to be included in the string when turned off. */
-                        if ([sender state] == 1)
-                        {
-                            /* It's true so don't include it. */
-                            thisOpt = @"";
-                        }
-                        else
-                        {
-                            /* Otherwise, include cabac=0 in the string to enable CAVLC. */
-                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,0];
-                        }
-                    }                                        
-                    else if (([sender indexOfSelectedItem] == 0) && (sender != fX264optAlphaDeblockPopUp) && (sender != fX264optBetaDeblockPopUp) ) // means that "unspecified" is chosen, lets then remove it from the string
-                    {
-                        /* When a widget is at index 0, it's default. Default means don't add to the string.
-                           The exception for deblocking is because for those, *both* need to at index 0
-                           for it to default, so it's handled separately, above this section.                */
-                        thisOpt = @"";
-                    }
-                    else if ([optNameToChange isEqualToString:@"me"])
-                    {
-                        /* Motion estimation uses string values, so this switch
-                           pairs the widget index with the right value string.  */
-                        switch ([sender indexOfSelectedItem])
-                        {   
-                            case 1:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"dia"];
-                                break;
-                                
-                            case 2:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"hex"];
-                                break;
-                                
-                            case 3:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"umh"];
-                                break;
-                                
-                            case 4:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"esa"];
-                                break;
-                            
-                            case 5:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"tesa"];
-                            
-                            default:
-                                break;
-                        }
-                    }
-                    else if ([optNameToChange isEqualToString:@"direct"])
-                    {
-                        /* Direct prediction uses string values, so this switch
-                           pairs the right string value with the right widget index. */
-                        switch ([sender indexOfSelectedItem])
-                        {   
-                            case 1:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
-                                break;
-                                
-                            case 2:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"spatial"];
-                                break;
-                                
-                            case 3:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"temporal"];
-                                break;
-                                
-                            case 4:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"auto"];
-                                break;
-                                
-                            default:
-                                break;
-                        }
-                    }
-                    else if ([optNameToChange isEqualToString:@"analyse"])
-                    {
-                        /* Analysis uses string values as well. */
-                        switch ([sender indexOfSelectedItem])
-                        {   
-                            case 1:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"none"];
-                                break;
-                                
-                            case 2:
-                                thisOpt = [NSString stringWithFormat:@"%@=%@",optName,@"all"];
-                                break;
-                                
-                            default:
-                                break;
-                        }
-                    }
-                    else if ([optNameToChange isEqualToString:@"merange"])
-                    {
-                        /* Motion estimation range uses an odd array offset because in addition
-                           to starting with index 0 as default, index 1 starts at 4 instead of 1,
-                           because merange can't go below 4. So it has to be handled separately.  */
-                        thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]+3];
-                    }
-                    else if ([optNameToChange isEqualToString:@"b-adapt"])
-                    {
-                        /* B-adapt starts at index 0 with default then goes 0, 1, 2)*/
-                        thisOpt = [NSString stringWithFormat:@"%@=%d", optName, [sender indexOfSelectedItem]-1];
-                    }
-                    else // we have a valid value to change, so change it
-                    {
-                        if ( [sender indexOfSelectedItem] != 0 )
-                        /* Here's our general case, that catches things like ref frames and b-frames.
-                           Basically, any options that are PopUp menus with index 0 as default and
-                           index 1 as 1, with numerical values, are all handled right here. All of
-                           the above stuff is for the exceptions to the general case.              */
-                            thisOpt = [NSString stringWithFormat:@"%@=%d",optName,[sender indexOfSelectedItem]-1];
-                    }
+                    thisOpt = [self X264AdvancedOptionsWidgetToString: optName withID: sender];
                 }
             }
             
@@ -1233,333 +1257,21 @@
         /* This is where options that aren't already in the string are handled. */
         if ([[fDisplayX264Options stringValue] isEqualToString: @""])
         {
-            /* The option might not be in the string because the
-               string is empty. Handle this possibility first.   */
-            if ([optNameToChange isEqualToString:@"me"])
-            {
-                /* Special case for motion estimation, which uses string values
-                   that need to be paired up with the equivalent widget index.  */
-                switch ([sender indexOfSelectedItem])
-                {   
-                    case 1:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
-                        break;
-                        
-                    case 2:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
-                        break;
-                        
-                    case 3:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
-                        break;
-                        
-                    case 4:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
-                        break;
-                    
-                    case 5:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"tesa"]]];
-                        break;
-                    
-                    default:
-                        break;
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"direct"])
-            {
-                /* Special case for direct prediction, which uses string values
-                   that need to be paired up with the equivalent widget index.  */
-                switch ([sender indexOfSelectedItem])
-                {   
-                    case 1:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                        break;
-                        
-                    case 2:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
-                        break;
-                        
-                    case 3:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
-                        break;
-                        
-                    case 4:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"analyse"])
-            {
-                /* Special case for partition analysis, which uses string values
-                   that need to be paired up with the equivalent widget index.  */
-                switch ([sender indexOfSelectedItem])
-                {   
-                    case 1:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                        break;
-                        
-                    case 2:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"merange"])
-            {
-                /* Special case for motion estimation range, which uses
-                   a widget index offset of 3. This is because the
-                   first valid value after default is four, not zero.   */
-                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
-            }
-            else if ([optNameToChange isEqualToString:@"b-adapt"])
-            {
-                /* 0 is default, index 1 is 0*/
-                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];                
-            }
-            else if ([optNameToChange isEqualToString:@"deblock"])
-            {
-                /* Very special case for deblock. Uses a weird widget index offset
-                   of 7, because the first value after default is -6, rather than 0.
-                   As well, deblock only goes to default when *both* alpha and beta
-                   are zero. If only one is zero, you can't mark it down as default.
-                   Instead, mark that one down as literally 0. This is because when
-                   widgets are at default values, they aren't included in the string.
-                   If only one filter is at 0, both need to be overtly specified.    */
-                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
-            }
-            else if ([optNameToChange isEqualToString:@"psy-rd"])
-            {
-                /* Special case for psy-rd and psy-trellis. */
-                if( [fX264optPsyRDSlider floatValue] == 1 && [fX264optPsyTrellisSlider floatValue] == 0 )
-                {
-                    /* Defaults, use null string. */
-                    [fDisplayX264Options setStringValue:@""];
-                }
-                else
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%0.1f,%0.1f", [NSString stringWithFormat:optNameToChange], [fX264optPsyRDSlider floatValue],  [fX264optPsyTrellisSlider floatValue]]];
-                }
-            }
-            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
-            {
-                /* This covers all the boolean options that need to be specified only when true. */
-                if ([sender state] == 0)
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                    
-                }
-                else
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"cabac"])
-            {
-                /* CABAC is weird in that you need the inverse. Only include in the string
-                   when cabac=0, because cabac=1 is the default. Turning it off means CAVLC. */
-                if ([sender state] == 1)
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@""]];                                        
-                }
-                else
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                    
-                }
-            }            
-            else
-            {
-                if ( [sender indexOfSelectedItem] != 0 )
-                /* General case to cover all the normal PopUp widgets, like ref and b-frames. */
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@=%@", 
-                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
-            }
+            
+            [fDisplayX264Options setStringValue:
+                [self X264AdvancedOptionsWidgetToString: optNameToChange withID: sender]];
         }
         else
         {
-            /* The string isn't empty, and the option isn't already in it,
-               so it will need to be appended to the string with a colon.  */
-            if ([optNameToChange isEqualToString:@"me"])
+            /* The string isn't empty, and the option isn't already in it, so
+               it will need to be appended to the current string with a colon,
+               as long as the string to be appended isn't just blank (default). */
+            if( [[self X264AdvancedOptionsWidgetToString: optNameToChange withID: sender] isEqualToString: @""] == false )
             {
-                /* Special case for motion estimation, which uses string values
-                   that need to be paired up with the equivalent widget index.  */
-                switch ([sender indexOfSelectedItem])
-                {   
-                    case 1:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"dia"]]];
-                        break;
-                        
-                    case 2:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"hex"]]];
-                        break;
-                        
-                    case 3:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"umh"]]];
-                        break;
-                        
-                    case 4:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"esa"]]];
-                        break;
-
-                    case 5:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"tesa"]]];
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"direct"])
-            {
-                /* Special case for direct prediction, which uses string values
-                   that need to be paired up with the equivalent widget index.  */
-                switch ([sender indexOfSelectedItem])
-                {   
-                    case 1:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                        break;
-                        
-                    case 2:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"spatial"]]];
-                        break;
-                        
-                    case 3:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"temporal"]]];
-                        break;
-                        
-                    case 4:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"auto"]]];
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"analyse"])
-            {
-                /* Special case for partition analysis, which uses string values
-                   that need to be paired up with the equivalent widget index.  */
-                switch ([sender indexOfSelectedItem])
-                {   
-                    case 1:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"none"]]];
-                        break;
-                        
-                    case 2:
-                        [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", 
-                            [NSString stringWithFormat:[fDisplayX264Options stringValue]],
-                            [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"all"]]];
-                        break;
-                        
-                    default:
-                        break;
-                }
-            }
-            
-            else if ([optNameToChange isEqualToString:@"merange"])
-            {
-                /* Motion estimation range uses a weird offset since its index goes
-                   0: default, 1: 4, because the first valid value is 4, not 1.     */
-                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]+3]]];
-            }
-            else if ([optNameToChange isEqualToString:@"b-adapt"])
-            {
-                /* 0 is default, index 1 is 0*/
-                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];                
-            }
-            else if ([optNameToChange isEqualToString:@"deblock"])
-            {
-                /* Deblock is really weird because it has two values, and if only one is default, both
-                   still need to be specified directly. with the default one at zero. To make deblock
-                   just a little more fun, values start at -6 instead of at zero.                       */
-                [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [NSString stringWithFormat:@"%d,%d", ([fX264optAlphaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optAlphaDeblockPopUp indexOfSelectedItem]-7 : 0, ([fX264optBetaDeblockPopUp indexOfSelectedItem] != 0) ? [fX264optBetaDeblockPopUp indexOfSelectedItem]-7 : 0]]];                
-            }
-            else if ([optNameToChange isEqualToString:@"psy-rd"])
-            {
-                /* Special case for psy-rd and psy-trel */
-                if( [fX264optPsyRDSlider floatValue] == 1 && [fX264optPsyTrellisSlider floatValue] == 0 )
-                {
-                    /* Defaults, don't change string. */
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:[fDisplayX264Options stringValue]]];
-                }
-                else
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%0.1f,%0.1f", [NSString stringWithFormat:[fDisplayX264Options stringValue]], [NSString stringWithFormat:optNameToChange], [fX264optPsyRDSlider floatValue],  [fX264optPsyTrellisSlider floatValue]]];
-                }
-                
-            }
-            else if /*Boolean Switches*/ ([optNameToChange isEqualToString:@"mixed-refs"] || [optNameToChange isEqualToString:@"weightb"] || [optNameToChange isEqualToString:@"b-pyramid"] || [optNameToChange isEqualToString:@"no-fast-pskip"] || [optNameToChange isEqualToString:@"no-dct-decimate"] || [optNameToChange isEqualToString:@"8x8dct"] )
-            {
-                /* Covers all the normal booleans, that only need to be included in the string when they're true. */
-                if ([sender state] == 0)
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
-                }
-                else
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];                
-                }
-            }
-            else if ([optNameToChange isEqualToString:@"cabac"])
-            {
-                /* CABAC is weird, in that it's an inverse. Only include it in the string when it's false. */
-                if ([sender state] == 1)
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]]]];                    
-                }
-                else
-                {
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                        [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender state]]]];
-                }
-            }
-            else
-            {
-                /* General case to handle the normal PopUp widgets like ref and b-frames. */
-                if ( [sender indexOfSelectedItem] != 0 )
-                    [fDisplayX264Options setStringValue:[NSString stringWithFormat:@"%@:%@=%@",[NSString stringWithFormat:[fDisplayX264Options stringValue]], 
-                    [NSString stringWithFormat:optNameToChange],[NSString stringWithFormat:@"%d",[sender indexOfSelectedItem]-1]]];
+                [fDisplayX264Options setStringValue:
+                    [NSString stringWithFormat:@"%@:%@",
+                        currentOptString,
+                        [self X264AdvancedOptionsWidgetToString: optNameToChange withID: sender] ]];                
             }
         }
     }
