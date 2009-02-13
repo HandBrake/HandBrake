@@ -401,196 +401,267 @@
        - trellis (if 0, turn off psy-trel)
     */
     
-    if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
+    if( sender == fX264optBframesPopUp )
     {
-        /* If the b-frame widget is at 0 or 1, the user has chosen
-           not to use b-frames at all. So disable the options
-           that can only be used when b-frames are enabled.        */
-        [[fX264optWeightBSwitch animator] setHidden:YES];
-        [[fX264optWeightBLabel animator] setHidden:YES];
-        if ( [fX264optWeightBSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
-            [fX264optWeightBSwitch performClick:self];
-        
-        [[fX264optBPyramidSwitch animator] setHidden:YES];
-        [[fX264optBPyramidLabel animator] setHidden:YES];
-        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
-            [fX264optBPyramidSwitch performClick:self];
-
-        [[fX264optDirectPredPopUp animator] setHidden:YES];
-        [[fX264optDirectPredLabel animator] setHidden:YES];
-        if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
+        if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
         {
-            [fX264optDirectPredPopUp selectItemAtIndex: 0];
-            [[fX264optDirectPredPopUp cell] performClick:self];
+            /* If the b-frame widget is at 0 or 1, the user has chosen
+               not to use b-frames at all. So disable the options
+               that can only be used when b-frames are enabled.        */
             
-        }
+            if( [fX264optWeightBSwitch isHidden] == false)
+            {
+                [[fX264optWeightBSwitch animator] setHidden:YES];
+                [[fX264optWeightBLabel animator] setHidden:YES];
+                if ( [fX264optWeightBSwitch state] == 1 )
+                    [fX264optWeightBSwitch performClick:self];
+            }
 
-        [[fX264optBAdaptPopUp animator] setHidden:YES];
-        [[fX264optBAdaptLabel animator] setHidden:YES];
-        if ( [fX264optBAdaptPopUp indexOfSelectedItem] > 0 && sender != fX264optWeightBSwitch && sender != fX264optBPyramidSwitch && sender != fX264optDirectPredPopUp && sender != fX264optBAdaptPopUp )
+            if( [fX264optBPyramidSwitch isHidden] == false )
+            {
+                [[fX264optBPyramidSwitch animator] setHidden:YES];
+                [[fX264optBPyramidLabel animator] setHidden:YES];
+                if ( [fX264optBPyramidSwitch state] == 1 )
+                    [fX264optBPyramidSwitch performClick:self];
+            }
+
+            if( [fX264optDirectPredPopUp isHidden] == false )
+            {
+                [[fX264optDirectPredPopUp animator] setHidden:YES];
+                [[fX264optDirectPredLabel animator] setHidden:YES];
+                if ( [fX264optDirectPredPopUp indexOfSelectedItem] > 0 )
+                {
+                    [fX264optDirectPredPopUp selectItemAtIndex: 0];
+                    [[fX264optDirectPredPopUp cell] performClick:self];
+                }
+            }
+
+            if( [fX264optBAdaptPopUp isHidden] == false )
+            {
+                [[fX264optBAdaptPopUp animator] setHidden:YES];
+                [[fX264optBAdaptLabel animator] setHidden:YES];
+                if ( [fX264optBAdaptPopUp indexOfSelectedItem] > 0 )
+                {
+                    [fX264optBAdaptPopUp selectItemAtIndex: 0];
+                    [[fX264optBAdaptPopUp cell] performClick:self];
+                }
+            }
+        }
+        else if ( [fX264optBframesPopUp indexOfSelectedItem ] == 2)
         {
-            [fX264optBAdaptPopUp selectItemAtIndex: 0];
-            [[fX264optBAdaptPopUp cell] performClick:self];
+            /* Only 1 b-frame? Disable b-pyramid. */
+            if( [fX264optBPyramidSwitch isHidden] == false )
+            {
+                [[fX264optBPyramidSwitch animator] setHidden:YES];
+                [[fX264optBPyramidLabel animator] setHidden:YES];
+                if ( [fX264optBPyramidSwitch state] == 1 )
+                    [fX264optBPyramidSwitch performClick:self];
+            }
+
+            if( [fX264optWeightBSwitch isHidden] == true )
+            {
+                [[fX264optWeightBSwitch animator] setHidden:NO];
+                [[fX264optWeightBLabel animator] setHidden:NO];
+            }
+            
+            if( [fX264optDirectPredPopUp isHidden] == true )
+            {
+                [[fX264optDirectPredPopUp animator] setHidden:NO];
+                [[fX264optDirectPredLabel animator] setHidden:NO];
+            }
+            
+            if( [fX264optBAdaptPopUp isHidden] == true )
+            {
+                [[fX264optBAdaptPopUp animator] setHidden:NO];
+                [[fX264optBAdaptLabel animator] setHidden:NO];
+            }
         }
-    }
-    else if ( [fX264optBframesPopUp indexOfSelectedItem ] == 2)
-    {
-        /* Only 1 b-frame? Disable b-pyramid. */
-        [[fX264optBPyramidSwitch animator] setHidden:YES];
-        [[fX264optBPyramidLabel animator] setHidden:YES];
-        if ( [fX264optBPyramidSwitch state] == 1 && sender != fX264optBPyramidSwitch)
-            [fX264optBPyramidSwitch performClick:self];
+        else
+        {
+            if( [fX264optBPyramidSwitch isHidden] == true )
+            {
+                [[fX264optBPyramidSwitch animator] setHidden:NO];
+                [[fX264optBPyramidLabel animator] setHidden:NO];
+            }
 
-        [[fX264optWeightBSwitch animator] setHidden:NO];
-        [[fX264optWeightBLabel animator] setHidden:NO];
-
-        [[fX264optDirectPredPopUp animator] setHidden:NO];
-        [[fX264optDirectPredLabel animator] setHidden:NO];
-        
-        [[fX264optBAdaptPopUp animator] setHidden:NO];
-        [[fX264optBAdaptLabel animator] setHidden:NO];
-    }
-    else
-    {
-        [[fX264optWeightBSwitch animator] setHidden:NO];
-        [[fX264optWeightBLabel animator] setHidden:NO];
-
-        [[fX264optBPyramidSwitch animator] setHidden:NO];
-        [[fX264optBPyramidLabel animator] setHidden:NO];
-
-        [[fX264optDirectPredPopUp animator] setHidden:NO];
-        [[fX264optDirectPredLabel animator] setHidden:NO];
-
-        [[fX264optBAdaptPopUp animator] setHidden:NO];
-        [[fX264optBAdaptLabel animator] setHidden:NO];
+            if( [fX264optWeightBSwitch isHidden] == true )
+            {
+                [[fX264optWeightBSwitch animator] setHidden:NO];
+                [[fX264optWeightBLabel animator] setHidden:NO];
+            }
+            
+            if( [fX264optDirectPredPopUp isHidden] == true )
+            {
+                [[fX264optDirectPredPopUp animator] setHidden:NO];
+                [[fX264optDirectPredLabel animator] setHidden:NO];
+            }
+            
+            if( [fX264optBAdaptPopUp isHidden] == true )
+            {
+                [[fX264optBAdaptPopUp animator] setHidden:NO];
+                [[fX264optBAdaptLabel animator] setHidden:NO];
+            }
+        }
     }
     
-    if ( [fX264optCabacSwitch state] == false)
+    if( sender == fX264optCabacSwitch )
     {
-        if( [fX264optTrellisPopUp isHidden] == false )
+        if ( [fX264optCabacSwitch state] == false)
         {
-            /* Without CABAC entropy coding, trellis doesn't run. */
-            [[fX264optTrellisPopUp animator] setHidden:YES];
-            [[fX264optTrellisLabel animator] setHidden:YES];
-            [fX264optTrellisPopUp selectItemAtIndex:0];
-            if ( (sender != fX264optTrellisPopUp) && (sender != fX264optPsyTrellisSlider) )
+            if( [fX264optTrellisPopUp isHidden] == false )
             {
+                /* Without CABAC entropy coding, trellis doesn't run. */
+                [[fX264optTrellisPopUp animator] setHidden:YES];
+                [[fX264optTrellisLabel animator] setHidden:YES];
+                [fX264optTrellisPopUp selectItemAtIndex:0];
                 [[fX264optTrellisPopUp cell] performClick:self];
             }
         }
-    }
-    else if( [fX264optTrellisPopUp isHidden] == true)
-    {
-        [[fX264optTrellisPopUp animator] setHidden:NO];
-        [[fX264optTrellisLabel animator] setHidden:NO];
-    }
-    
-    if ( [fX264optAnalysePopUp indexOfSelectedItem] == 1)
-    {
-        /* No analysis? Disable 8x8dct */
-        [[fX264opt8x8dctSwitch animator] setHidden:YES];
-        [[fX264opt8x8dctLabel animator] setHidden:YES];
-        if ( [fX264opt8x8dctSwitch state] == 1 && sender != fX264opt8x8dctSwitch )
-            [fX264opt8x8dctSwitch performClick:self];
-    }
-    else
-    {
-        [[fX264opt8x8dctSwitch animator] setHidden:NO];
-        [[fX264opt8x8dctLabel animator] setHidden:NO];
-    }
-    
-    if ( [fX264optRefPopUp indexOfSelectedItem] < 3)
-    {
-        /* Only do mixed-refs when there are at least 2 refs to mix. */
-        [[fX264optMixedRefsSwitch animator] setHidden:YES];
-        [[fX264optMixedRefsLabel animator] setHidden:YES];
-        if ( [fX264optMixedRefsSwitch state] == 1 && sender != fX264optMixedRefsSwitch )
-            [fX264optMixedRefsSwitch performClick:self];
-    }
-    else
-    {
-        [[fX264optMixedRefsSwitch animator] setHidden:NO];
-        [[fX264optMixedRefsLabel animator] setHidden:NO];
-    }
-    
-    if ( [fX264optMotionEstPopUp indexOfSelectedItem] < 3 )
-    {
-        /* ME-range can only be above 16 if me >= umh
-          and changing it to < 16 is idiotic so hide it . */
-        [[fX264optMERangePopUp animator] setHidden:YES];
-        [[fX264optMERangeLabel animator] setHidden:YES];
-        if (sender != fX264optMERangePopUp && [fX264optMERangePopUp indexOfSelectedItem] > 0 )
+        else if( [fX264optTrellisPopUp isHidden] == true)
         {
-            [fX264optMERangePopUp selectItemAtIndex:0];
-            [[fX264optMERangePopUp cell] performClick:self];
+            [[fX264optTrellisPopUp animator] setHidden:NO];
+            [[fX264optTrellisLabel animator] setHidden:NO];
         }
     }
-    else
-    {
-        [[fX264optMERangePopUp animator] setHidden:NO];
-        [[fX264optMERangeLabel animator] setHidden:NO];
-    }
     
-    if( [fX264optSubmePopUp indexOfSelectedItem] != 0 && [fX264optSubmePopUp indexOfSelectedItem] < 7 )
+    if( sender == fX264optAnalysePopUp )
     {
-        /* No Psy-RDO or Psy=trel if subme < 6. */
-        if( [fX264optPsyRDSlider isHidden] == false )
+        if ( [fX264optAnalysePopUp indexOfSelectedItem] == 1)
         {
-            [[fX264optPsyRDSlider animator] setHidden:YES];
-            [[fX264optPsyRDLabel animator] setHidden:YES];
-            [[fX264optPsyRDSlider animator] setFloatValue:1];
-            if ( (sender != fX264optPsyRDSlider) && (sender != fX264optPsyTrellisSlider) )
+            /* No analysis? Disable 8x8dct */
+            if( [fX264opt8x8dctSwitch isHidden] == false )
             {
-                [[fX264optPsyRDSlider cell] performClick:self];            
+                [[fX264opt8x8dctSwitch animator] setHidden:YES];
+                [[fX264opt8x8dctLabel animator] setHidden:YES];
+                if ( [fX264opt8x8dctSwitch state] == 1 )
+                    [fX264opt8x8dctSwitch performClick:self];
             }
         }
-        
-        if( [fX264optPsyTrellisSlider isHidden] == false)
+        else
         {
-            [[fX264optPsyTrellisSlider animator] setHidden:YES];
-            [[fX264optPsyTrellisLabel animator] setHidden:YES];
-            [[fX264optPsyTrellisSlider animator] setFloatValue:0];
-            if ( (sender != fX264optPsyTrellisSlider) && (sender != fX264optPsyRDSlider) )
+            if( [fX264opt8x8dctSwitch isHidden] == true )
             {
+                [[fX264opt8x8dctSwitch animator] setHidden:NO];
+                [[fX264opt8x8dctLabel animator] setHidden:NO];
+            }
+        }
+    }
+    
+    if( sender == fX264optRefPopUp )
+    {
+        if ( [fX264optRefPopUp indexOfSelectedItem] < 3)
+        {
+            if( [fX264optMixedRefsSwitch isHidden] == false )
+            {
+                /* Only do mixed-refs when there are at least 2 refs to mix. */
+                [[fX264optMixedRefsSwitch animator] setHidden:YES];
+                [[fX264optMixedRefsLabel animator] setHidden:YES];
+                if( [fX264optMixedRefsSwitch state] == 1 )
+                    [fX264optMixedRefsSwitch performClick:self];
+            }
+        }
+        else
+        {
+            if( [fX264optMixedRefsSwitch isHidden] == true )
+            {
+                [[fX264optMixedRefsSwitch animator] setHidden:NO];
+                [[fX264optMixedRefsLabel animator] setHidden:NO];
+            }
+        }
+    }
+    
+    if( sender == fX264optMotionEstPopUp )
+    {
+        if ( [fX264optMotionEstPopUp indexOfSelectedItem] < 3 )
+        {
+            /* ME-range can only be above 16 if me >= umh
+              and changing it to < 16 is idiotic so hide it . */
+            if( [fX264optMERangePopUp isHidden] == false )
+            {
+                [[fX264optMERangePopUp animator] setHidden:YES];
+                [[fX264optMERangeLabel animator] setHidden:YES];
+                if ( [fX264optMERangePopUp indexOfSelectedItem] > 0 )
+                {
+                    [fX264optMERangePopUp selectItemAtIndex:0];
+                    [[fX264optMERangePopUp cell] performClick:self];
+                }
+            }
+        }
+        else
+        {
+            if( [fX264optMERangePopUp isHidden] == false )
+            {
+                [[fX264optMERangePopUp animator] setHidden:NO];
+                [[fX264optMERangeLabel animator] setHidden:NO];
+            }
+        }
+    }
+    
+    if( sender == fX264optSubmePopUp )
+    {
+        if( [fX264optSubmePopUp indexOfSelectedItem] != 0 && [fX264optSubmePopUp indexOfSelectedItem] < 7 )
+        {
+            /* No Psy-RDO or Psy=trel if subme < 6. */
+            if( [fX264optPsyRDSlider isHidden] == false )
+            {
+                [[fX264optPsyRDSlider animator] setHidden:YES];
+                [[fX264optPsyRDLabel animator] setHidden:YES];
+                [[fX264optPsyRDSlider animator] setFloatValue:1];
+                if ( [fX264optPsyRDSlider floatValue] < 1.0 )
+                {
+                    [fX264optPsyRDSlider setFloatValue:1.0];
+                    [[fX264optPsyRDSlider cell] performClick:self];            
+                }
+            }
+
+            if( [fX264optPsyTrellisSlider isHidden] == false)
+            {
+                [[fX264optPsyTrellisSlider animator] setHidden:YES];
+                [[fX264optPsyTrellisLabel animator] setHidden:YES];
+                [[fX264optPsyTrellisSlider animator] setFloatValue:0];
+                if ( [fX264optPsyTrellisSlider floatValue] > 0.0 )
+                {
+                    [fX264optPsyTrellisSlider setFloatValue:0.0];
+                    [[fX264optPsyTrellisSlider cell] performClick:self];
+                }
+            }
+        }
+        else
+        {
+            if( [fX264optPsyRDSlider isHidden] == true )
+            {
+                [[fX264optPsyRDSlider animator] setHidden:NO];
+                [[fX264optPsyRDLabel animator] setHidden:NO];
+            }
+
+            if( [fX264optTrellisPopUp indexOfSelectedItem] >= 2 && [fX264optCabacSwitch state] == true && [fX264optPsyTrellisSlider isHidden] == true )
+            {
+                [[fX264optPsyTrellisSlider animator] setHidden:NO];
+                [[fX264optPsyTrellisLabel animator] setHidden:NO];
+            }
+        }
+    }
+    
+    if( sender == fX264optTrellisPopUp )
+    {
+        if( [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
+        {
+            if( [fX264optPsyTrellisSlider isHidden] == false )
+            {
+                /* No Psy-trellis without trellis. */
+                [[fX264optPsyTrellisSlider animator] setHidden:YES];
+                [[fX264optPsyTrellisLabel animator] setHidden:YES];
+                [[fX264optPsyTrellisSlider animator] setFloatValue:0.0];
                 [[fX264optPsyTrellisSlider cell] performClick:self];
             }
         }
-    }
-    else
-    {
-        if( [fX264optPsyRDSlider isHidden] == true )
+        else
         {
-            [[fX264optPsyRDSlider animator] setHidden:NO];
-            [[fX264optPsyRDLabel animator] setHidden:NO];
-        }
-        
-        if( [fX264optTrellisPopUp indexOfSelectedItem] >= 2 && [fX264optCabacSwitch state] == true && [fX264optPsyTrellisSlider isHidden] == true )
-        {
-            [[fX264optPsyTrellisSlider animator] setHidden:NO];
-            [[fX264optPsyTrellisLabel animator] setHidden:NO];
-        }
-    }
-    
-    if( [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
-    {
-        if( [fX264optPsyTrellisSlider isHidden] == false )
-        {
-            /* No Psy-trellis without trellis. */
-            [[fX264optPsyTrellisSlider animator] setHidden:YES];
-            [[fX264optPsyTrellisLabel animator] setHidden:YES];
-            [[fX264optPsyTrellisSlider animator] setFloatValue:0];
-            if (sender != fX264optPsyTrellisSlider )
+            if( ( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 ) && [fX264optCabacSwitch state] == true  && [fX264optPsyTrellisSlider isHidden] == true )
             {
-                [[fX264optPsyTrellisSlider cell] performClick:self];            
+                [[fX264optPsyTrellisSlider animator] setHidden:NO];
+                [[fX264optPsyTrellisLabel animator] setHidden:NO];
             }
-        }
-    }
-    else
-    {
-        if( ( [fX264optSubmePopUp indexOfSelectedItem] == 0 || [fX264optSubmePopUp indexOfSelectedItem] >= 7 ) && [fX264optCabacSwitch state] == true  && [fX264optPsyTrellisSlider isHidden] == true )
-        {
-            [[fX264optPsyTrellisSlider animator] setHidden:NO];
-            [[fX264optPsyTrellisLabel animator] setHidden:NO];
         }
     }
 }
