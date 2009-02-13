@@ -239,7 +239,7 @@
     [self X264AdvancedOptionsStandardizeOptString:nil];
 
     /* Set Current GUI Settings based on newly standardized string */
-    [self X264AdvancedOptionsSetCurrentSettings:nil];
+    [self X264AdvancedOptionsSetCurrentSettings:sender];
 
     /* Fade out options that don't apply */
     [self X264AdvancedOptionsAnimate: sender];
@@ -401,8 +401,13 @@
        - trellis (if 0, turn off psy-trel)
     */
     
-    if( sender == fX264optBframesPopUp )
+    if( sender == fX264optBframesPopUp || sender == nil || sender == fDisplayX264Options )
     {
+        if( sender == nil )
+            fprintf(stderr, "Bframes sender is nil!\n");
+        else if( sender == fDisplayX264Options )
+            fprintf(stderr, "Bframes sender is text box!\n");
+            
         if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
         {
             /* If the b-frame widget is at 0 or 1, the user has chosen
@@ -504,7 +509,7 @@
         }
     }
     
-    if( sender == fX264optCabacSwitch )
+    if( sender == fX264optCabacSwitch || sender == nil || sender == fDisplayX264Options )
     {
         if ( [fX264optCabacSwitch state] == false)
         {
@@ -524,7 +529,7 @@
         }
     }
     
-    if( sender == fX264optAnalysePopUp )
+    if( sender == fX264optAnalysePopUp || sender == nil || sender == fDisplayX264Options )
     {
         if ( [fX264optAnalysePopUp indexOfSelectedItem] == 1)
         {
@@ -547,7 +552,7 @@
         }
     }
     
-    if( sender == fX264optRefPopUp )
+    if( sender == fX264optRefPopUp || sender == nil || sender == fDisplayX264Options )
     {
         if ( [fX264optRefPopUp indexOfSelectedItem] < 3)
         {
@@ -570,7 +575,7 @@
         }
     }
     
-    if( sender == fX264optMotionEstPopUp )
+    if( sender == fX264optMotionEstPopUp || sender == nil || sender == fDisplayX264Options )
     {
         if ( [fX264optMotionEstPopUp indexOfSelectedItem] < 3 )
         {
@@ -589,7 +594,7 @@
         }
         else
         {
-            if( [fX264optMERangePopUp isHidden] == false )
+            if( [fX264optMERangePopUp isHidden] == true )
             {
                 [[fX264optMERangePopUp animator] setHidden:NO];
                 [[fX264optMERangeLabel animator] setHidden:NO];
@@ -597,7 +602,7 @@
         }
     }
     
-    if( sender == fX264optSubmePopUp )
+    if( sender == fX264optSubmePopUp || sender == nil || sender == fDisplayX264Options )
     {
         if( [fX264optSubmePopUp indexOfSelectedItem] != 0 && [fX264optSubmePopUp indexOfSelectedItem] < 7 )
         {
@@ -642,7 +647,7 @@
         }
     }
     
-    if( sender == fX264optTrellisPopUp )
+    if( sender == fX264optTrellisPopUp || sender == nil || sender == fDisplayX264Options )
     {
         if( [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
         {
