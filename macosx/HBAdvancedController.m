@@ -184,10 +184,10 @@
     
     /* Adaptive B-Frames Mode fX264optBAdaptPopUp */
     [fX264optBAdaptPopUp removeAllItems];
-    [fX264optBAdaptPopUp addItemWithTitle:@"Default (1)"];
-    [fX264optBAdaptPopUp addItemWithTitle:@"0"];
-    [fX264optBAdaptPopUp addItemWithTitle:@"1"];
-    [fX264optBAdaptPopUp addItemWithTitle:@"2"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"Default (Fast)"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"Off"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"Fast"];
+    [fX264optBAdaptPopUp addItemWithTitle:@"Optimal"];
     [fX264optBAdaptPopUp setWantsLayer:YES];
     
     /*Alpha Deblock*/
