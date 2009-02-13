@@ -73,6 +73,8 @@
 - (void)setHBController: (HBController *)controller;
 - (IBAction) showPictureWindow: (id)sender;
 - (IBAction) showPreviewWindow: (id)sender;
+- (BOOL) previewFullScreenMode;
+- (IBAction) previewGoWindowed: (id)sender;
 - (IBAction) showFilterWindow: (id)sender;
 
 

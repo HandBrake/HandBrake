@@ -56,6 +56,16 @@
     }
 }
 
+- (BOOL) previewFullScreenMode
+{
+    return [fPreviewController fullScreen];
+}
+
+- (IBAction) previewGoWindowed: (id)sender
+{
+    [fPreviewController goWindowedScreen:self];
+}
+
 - (IBAction) showPreviewWindow: (id)sender
 {
     [fPreviewController showWindow:sender];

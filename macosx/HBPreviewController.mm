@@ -108,6 +108,8 @@ return YES;
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
+    
+    
     /* Upon Closing the picture window, we make sure we clean up any
      * preview movie that might be playing
      */
@@ -118,10 +120,6 @@ return YES;
     [fPictureView setHidden:NO];
     [fMovieView pause:nil];
     [fMovieView setHidden:YES];
-    if (isFullScreen)
-    {
-        [self goWindowedScreen:nil];
-    }
     
     isFullScreen = NO;
     hudTimerSeconds = 0;
@@ -130,7 +128,8 @@ return YES;
 
 - (BOOL)windowShouldClose:(id)fPictureWindow
 {
-    return YES;
+     
+     return YES;
 }
 
 - (void) dealloc
