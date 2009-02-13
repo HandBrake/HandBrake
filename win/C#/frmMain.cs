@@ -725,50 +725,56 @@ namespace Handbrake
             // Set the last action to scan. 
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
-
-            String filename;
             text_source.Text = "";
 
-            DVD_Open.ShowDialog();
-            filename = DVD_Open.SelectedPath;
-
-            if (filename.StartsWith("\\"))
-                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
+            if (DVD_Open.ShowDialog() == DialogResult.OK)
             {
-                if (filename != "")
-                {
-                    setupGUIforScan(filename);
-                    startScan(filename);
-                }
+                String filename = DVD_Open.SelectedPath;
+
+                if (filename.StartsWith("\\"))
+                    MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
-                    text_source.Text = "Click 'Source' to continue";
+                {
+
+                    if (filename != "")
+                    {
+                        setupGUIforScan(filename);
+                        startScan(filename);
+                    }
+                    else
+                        text_source.Text = "Click 'Source' to continue";
+                }
             }
+            else
+                text_source.Text = "Click 'Source' to continue";
         }
         private void btn_file_source_Click(object sender, EventArgs e)
         {
             // Set the last action to scan. 
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
-
-            String filename;
             text_source.Text = "";
 
-            ISO_Open.ShowDialog();
-            filename = ISO_Open.FileName;
-
-            if (filename.StartsWith("\\"))
-                MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
+            if (ISO_Open.ShowDialog() == DialogResult.OK)
             {
-                if (filename != "")
-                {
-                    setupGUIforScan(filename);
-                    startScan(filename);
-                }
+                String filename = ISO_Open.FileName;
+                if (filename.StartsWith("\\"))
+                    MessageBox.Show(
+                        "Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
-                    text_source.Text = "Click 'Source' to continue";
+                {
+                    if (filename != "")
+                    {
+                        setupGUIforScan(filename);
+                        startScan(filename);
+                    }
+                    else
+                        text_source.Text = "Click 'Source' to continue";
+                }
             }
+            else
+                text_source.Text = "Click 'Source' to continue";
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
@@ -1046,10 +1052,10 @@ namespace Handbrake
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
             }
-            
+
             // Setup the CQ Slider
             switch (drp_videoEncoder.Text)
-            {    
+            {
                 case "MPEG-4 (FFmpeg)":
                     slider_videoQuality.Minimum = 1;
                     slider_videoQuality.Maximum = 31;
@@ -1087,8 +1093,8 @@ namespace Handbrake
                             break;
                         default:
                             slider_videoQuality.Maximum = 51;
-                            break;  
-                    }                   
+                            break;
+                    }
                     break;
                 case "VP3 (Theora)":
                     slider_videoQuality.Minimum = 0;
@@ -1119,12 +1125,12 @@ namespace Handbrake
                 case "H.264 (x264)":
                     double divided;
                     double.TryParse(Properties.Settings.Default.x264cqstep, out divided);
-                    rfValue = 51.0 - slider_videoQuality.Value*divided;
+                    rfValue = 51.0 - slider_videoQuality.Value * divided;
                     max = slider_videoQuality.Maximum * divided;
                     min = slider_videoQuality.Minimum;
                     val = ((max - min) - (rfValue - min)) / (max - min);
                     rfValue = Math.Round(rfValue, 2);
-                    SliderValue.Text = Math.Round((val * 100), 2) + "% RF:" + rfValue; 
+                    SliderValue.Text = Math.Round((val * 100), 2) + "% RF:" + rfValue;
                     break;
                 case "VP3 (Theora)":
                     rfValue = slider_videoQuality.Value;
@@ -1267,7 +1273,7 @@ namespace Handbrake
                 text_width.Enabled = true;
             }
         }
-        
+
         // Filter Tab
         private void ctl_decomb_changed(object sender, EventArgs e)
         {
@@ -1375,8 +1381,8 @@ namespace Handbrake
             double value;
             if (tb_drc.Value == 0) value = 0;
             else
-                value = ((tb_drc.Value-1) / 10.0) + 1;
-            
+                value = ((tb_drc.Value - 1) / 10.0) + 1;
+
             lbl_drc.Text = value.ToString();
 
             // Update an item in the Audio list if required.
@@ -1483,7 +1489,7 @@ namespace Handbrake
                 double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text, out drcValue);
                 if (drcValue == 0) drcCalculated = 0;
                 else
-                    drcValue = ((drcValue * 10)+1) -10;
+                    drcValue = ((drcValue * 10) + 1) - 10;
                 int.TryParse(drcValue.ToString(), out drcCalculated);
                 tb_drc.Value = drcCalculated;
             }
