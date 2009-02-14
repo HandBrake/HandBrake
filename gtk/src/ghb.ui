@@ -185,6 +185,14 @@
     <property name="page_size">0</property>
     <property name="value">0</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment24">
+    <property name="upper">100</property>
+    <property name="lower">1</property>
+    <property name="page_increment">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_size">0</property>
+    <property name="value">1</property>
+  </object>
   <object class="GtkAdjustment" id="preview_progress_adj">
     <property name="upper">100</property>
     <property name="lower">0</property>
@@ -215,6 +223,14 @@
             <property name="name">source1</property>
             <property name="label">_Source</property>
             <signal handler="source_button_clicked_cb" name="activate"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="source_single">
+            <property name="icon-name">gtk-open</property>
+            <property name="name">source_single</property>
+            <property name="label">Single _Title</property>
+            <signal handler="single_title_source_cb" name="activate"/>
           </object>
         </child>
         <child>
@@ -354,6 +370,7 @@
       <menubar name="menubar1">
         <menu action="menuitem1">
           <menuitem action="source1"/>
+          <menuitem action="source_single"/>
           <menuitem action="destination1"/>
           <separator/>
           <menuitem action="preferences"/>
@@ -379,6 +396,12 @@
         </menu>
       </menubar>
     </ui>
+  </object>
+  <object class="GtkListStore" id="device_list">
+    <columns>
+      <!-- column-name device -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkWindow" id="hb_window">
     <property name="visible">True</property>
@@ -5383,6 +5406,168 @@ libxvidcore authors:
     <action-widgets>
       <action-widget response="-5">update_skip</action-widget>
       <action-widget response="0">update_remind</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkFileChooserDialog" id="source_dialog">
+    <property name="border_width">5</property>
+    <property name="modal">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <property name="has_separator">False</property>
+    <signal handler="chooser_file_selected_cb" name="selection-changed"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox6">
+        <property name="visible">True</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkVBox" id="source_extra">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkHBox" id="single_title_box">
+                <property name="visible">True</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkLabel" id="label89">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Title Number:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="alignment1">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="xscale">0</property>
+                    <child>
+                      <object class="GtkSpinButton" id="single_title">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="adjustment">adjustment24</property>
+                        <signal name="value_changed" handler="setting_widget_changed_cb"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="source_folder_flag">
+                <property name="label" translatable="yes">Open VIDEO_TS folder</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+                <signal handler="source_type_changed_cb" name="toggled"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox74">
+                <property name="visible">True</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkLabel" id="label90">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Detected DVD devices:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkAlignment" id="alignment2">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="xscale">0</property>
+                    <child>
+                      <object class="GtkComboBox" id="source_device">
+                        <property name="visible">True</property>
+                        <property name="model">device_list</property>
+                        <signal handler="dvd_device_changed_cb" name="changed"/>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area6">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="source_cancel">
+                <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="source_ok">
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">source_cancel</action-widget>
+      <action-widget response="-3">source_ok</action-widget>
     </action-widgets>
   </object>
 </interface>

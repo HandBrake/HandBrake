@@ -524,6 +524,8 @@ main (int argc, char *argv[])
 	ud = g_malloc0(sizeof(signal_user_data_t));
 	ud->debug = ghb_debug;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
+	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
+	//g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
 	ud->settings = ghb_settings_new();
 	// Enable events that alert us to media change events
 	watch_volumes (ud);

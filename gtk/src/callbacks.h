@@ -31,6 +31,8 @@
 void ghb_check_all_depencencies(signal_user_data_t *ud);
 gboolean ghb_timer_cb(gpointer data);
 gboolean ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data);
+void warn_log_handler(
+	const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
 void debug_log_handler(
 	const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer ud);
 void ghb_hbfd(signal_user_data_t *ud, gboolean hbfd);
@@ -44,7 +46,8 @@ gboolean ghb_reload_queue(signal_user_data_t *ud);
 gboolean ghb_cancel_encode(const gchar *extra_msg);
 GValue* ghb_start_next_job(signal_user_data_t *ud, gboolean find_first);
 void ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget);
-void ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force);
+void ghb_do_scan( signal_user_data_t *ud, const gchar *filename, 
+	gint titlenum, gboolean force);
 void ghb_log(gchar *log, ...);
 gpointer ghb_check_update(signal_user_data_t *ud);
 void ghb_uninhibit_gpm(void);

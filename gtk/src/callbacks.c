@@ -467,18 +467,18 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
 	return TRUE;
 }
 
-static GtkWidget *dvd_device_combo = NULL;
-
 void
-chooser_file_selected_cb(GtkFileChooser *dialog, GtkComboBox *combo)
+chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 {
 	const gchar *name = gtk_file_chooser_get_filename (dialog);
 	GtkTreeModel *store;
 	GtkTreeIter iter;
 	const gchar *device;
 	gboolean foundit = FALSE;
+	GtkComboBox *combo;
 	
 	if (name == NULL) return;
+	combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, "source_device"));
 	store = gtk_combo_box_get_model(combo);
 	if (gtk_tree_model_get_iter_first(store, &iter))
 	{
@@ -499,28 +499,39 @@ chooser_file_selected_cb(GtkFileChooser *dialog, GtkComboBox *combo)
 }
 
 void
-dvd_device_changed_cb(GtkComboBox *combo, GtkWidget *dialog)
+dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
 {
-	gint ii = gtk_combo_box_get_active (combo);
-	if (ii != 0)
+	GtkWidget *dialog;
+	gint ii;
+
+	ii = gtk_combo_box_get_active (combo);
+	if (ii > 0)
 	{
-		const gchar *device = gtk_combo_box_get_active_text (combo);
-		const gchar *name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
+		const gchar *device, *name;
+
+		dialog = GHB_WIDGET(ud->builder, "source_dialog");
+		device = gtk_combo_box_get_active_text (combo);
+		name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
 		if (name == NULL || strcmp(name, device) != 0)
 			gtk_file_chooser_select_filename (GTK_FILE_CHOOSER(dialog), device);
 	}
 }
 
 void
-source_type_changed_cb(GtkToggleButton *toggle, GtkFileChooser *chooser)
+source_type_changed_cb(GtkToggleButton *toggle, signal_user_data_t *ud)
 {
 	gchar *folder;
+	GtkFileChooser *chooser;
+	GtkWidget *dvd_device_combo;
 	
 	g_debug("source_type_changed_cb ()");
+	chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "source_dialog"));
+	dvd_device_combo = GHB_WIDGET(ud->builder, "source_device");
 	folder = gtk_file_chooser_get_current_folder (chooser);
 	if (gtk_toggle_button_get_active (toggle))
 	{
-		gtk_file_chooser_set_action (chooser, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+		gtk_file_chooser_set_action (chooser, 
+									GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 		gtk_widget_set_sensitive (dvd_device_combo, FALSE);
 		gtk_combo_box_set_active (GTK_COMBO_BOX(dvd_device_combo), 0);
 	}
@@ -536,61 +547,44 @@ source_type_changed_cb(GtkToggleButton *toggle, GtkFileChooser *chooser)
 	}
 }
 
-static GtkWidget*
-source_dialog_extra_widgets(GtkWidget *dialog, gboolean checkbutton_active)
+static void
+source_dialog_extra_widgets(
+	signal_user_data_t *ud,
+	GtkWidget *dialog, 
+	gboolean checkbutton_active)
 {
-	GtkBox *vbox;
-	GtkWidget *checkbutton;
-	
-	vbox = GTK_BOX(gtk_vbox_new (FALSE, 2));
-	checkbutton = gtk_check_button_new_with_label ("Open VIDEO_TS folder");
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(checkbutton), checkbutton_active);
-	gtk_box_pack_start (vbox, checkbutton, FALSE, FALSE, 1);
-	gtk_widget_show(checkbutton);
-
-	GtkWidget *combo;
-	GtkBox *hbox;
+	GtkToggleButton *checkbutton;
+	GtkComboBox *combo;
 	GList *drives, *link;
-	GtkWidget *label, *blank;
+	
+	checkbutton = GTK_TOGGLE_BUTTON(
+		GHB_WIDGET(ud->builder, "source_folder_flag"));
+	gtk_toggle_button_set_active(checkbutton, checkbutton_active);
+	combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, "source_device"));
+	gtk_list_store_clear(GTK_LIST_STORE(
+						gtk_combo_box_get_model(combo)));
 
-	hbox = GTK_BOX(gtk_hbox_new (FALSE, 2));
-	combo = gtk_combo_box_new_text();
-	label = gtk_label_new("Detected DVD devices:");
-	blank = gtk_label_new("");
 	link = drives = dvd_device_list();
-	gtk_combo_box_append_text (GTK_COMBO_BOX(combo), "Not Selected");
+	gtk_combo_box_append_text (combo, "Not Selected");
 	while (link != NULL)
 	{
 		gchar *name = (gchar*)link->data;
-		gtk_combo_box_append_text (GTK_COMBO_BOX(combo), name);
+		gtk_combo_box_append_text(combo, name);
 		g_free(name);
 		link = link->next;
 	}
 	g_list_free(drives);
-	gtk_combo_box_set_active (GTK_COMBO_BOX(combo), 0);
-	gtk_box_pack_start (vbox, GTK_WIDGET(hbox), FALSE, FALSE, 1);
-	gtk_widget_show(GTK_WIDGET(hbox));
-	gtk_box_pack_start (hbox, label, FALSE, FALSE, 1);
-	gtk_widget_show(label);
-	gtk_box_pack_start (hbox, combo, FALSE, FALSE, 2);
-	gtk_widget_show(combo);
-	gtk_box_pack_start (hbox, blank, TRUE, TRUE, 1);
-	gtk_widget_show(blank);
- 
-	// Ugly hackish global alert
-	dvd_device_combo = combo;
-	g_signal_connect(combo, "changed", (GCallback)dvd_device_changed_cb, dialog);
-	g_signal_connect(dialog, "selection-changed", (GCallback)chooser_file_selected_cb, combo);
-
-	g_signal_connect(checkbutton, "toggled", (GCallback)source_type_changed_cb, dialog);
-	return GTK_WIDGET(vbox);
 }
 
 extern GValue *ghb_queue_edit_settings;
 static gchar *last_scan_file = NULL;
 
 void
-ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force)
+ghb_do_scan(
+	signal_user_data_t *ud, 
+	const gchar *filename, 
+	gint titlenum, 
+	gboolean force)
 {
 	if (!force && last_scan_file != NULL &&
 		strcmp(last_scan_file, filename) == 0)
@@ -629,7 +623,7 @@ ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force)
 			prune_logs(ud);
 			gint preview_count;
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-			ghb_backend_scan(path, 0, preview_count);
+			ghb_backend_scan(path, titlenum, preview_count);
 			g_free(path);
 		}
 		else
@@ -639,11 +633,24 @@ ghb_do_scan(signal_user_data_t *ud, const gchar *filename, gboolean force)
 	}
 }
 
-void
-source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
+static gboolean 
+update_source_name(gpointer data)
+{
+	signal_user_data_t *ud = (signal_user_data_t*)data;
+	GtkWidget *dialog;
+	gchar *sourcename;
+
+	sourcename = ghb_settings_get_string(ud->settings, "source");
+	dialog = GHB_WIDGET(ud->builder, "source_dialog");
+	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
+	g_free(sourcename);
+	return FALSE;
+}
+
+static void
+do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
-	GtkWidget *widget;
 	gchar *sourcename;
 	gint	response;
 	GtkFileChooserAction action;
@@ -661,15 +668,20 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 	{
 		action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	}
-	dialog = gtk_file_chooser_dialog_new ("Select Source",
-								NULL,
-								action,
-								GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-								GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-								NULL);
-	widget = source_dialog_extra_widgets(dialog, checkbutton_active);
-	gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER(dialog), widget);
-	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
+	GtkWidget *widget;
+	widget = GHB_WIDGET(ud->builder, "single_title_box");
+	if (single)
+		gtk_widget_show(widget);
+	else
+		gtk_widget_hide(widget);
+	dialog = GHB_WIDGET(ud->builder, "source_dialog");
+	source_dialog_extra_widgets(ud, dialog, checkbutton_active);
+	gtk_file_chooser_set_action(GTK_FILE_CHOOSER(dialog), action);
+	// Updating the filename in the file chooser dialog doesn't seem
+	// to work unless the dialog is running for some reason.
+	// So handle it in an "idle" event.
+	//gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
+	g_idle_add((GSourceFunc)update_source_name, ud);
 	response = gtk_dialog_run(GTK_DIALOG (dialog));
 	gtk_widget_hide(dialog);
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -679,10 +691,17 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (filename != NULL)
 		{
-			ghb_do_scan(ud, filename, TRUE);
+			gint titlenum;
+
+			if (single)
+				titlenum = ghb_settings_get_int(ud->settings, "single_title");
+			else
+				titlenum = 0;
+			ghb_do_scan(ud, filename, titlenum, TRUE);
 			if (strcmp(sourcename, filename) != 0)
 			{
-				ghb_settings_set_string (ud->settings, "default_source", filename);
+				ghb_settings_set_string (ud->settings, 
+										"default_source", filename);
 				ghb_pref_save (ud->settings, "default_source");
 				ghb_dvd_set_current (filename, ud);
 			}
@@ -690,7 +709,18 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 		}
 	}
 	g_free(sourcename);
-	gtk_widget_destroy(dialog);
+}
+
+void
+source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
+{
+	do_source_dialog(button, FALSE, ud);
+}
+
+void
+single_title_source_cb(GtkButton *button, signal_user_data_t *ud)
+{
+	do_source_dialog(button, TRUE, ud);
 }
 
 void
@@ -701,7 +731,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 
 	sourcename = ghb_settings_get_string(ud->settings, "source");
 	filename = gtk_action_get_name(action);
-	ghb_do_scan(ud, filename, TRUE);
+	ghb_do_scan(ud, filename, 0, TRUE);
 	if (strcmp(sourcename, filename) != 0)
 	{
 		ghb_settings_set_string (ud->settings, "default_source", filename);
@@ -2334,6 +2364,13 @@ debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, g
 	{
 		printf("%s: %s\n", domain, msg);
 	}
+}
+
+void
+warn_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer data)
+{
+	printf("mywarning\n");
+	printf("%s: %s\n", domain, msg);
 }
 
 void

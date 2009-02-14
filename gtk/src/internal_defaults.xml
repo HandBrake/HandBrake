@@ -32,6 +32,8 @@
 		<integer>0</integer>
 		<key>scale_width</key>
 		<integer>0</integer>
+		<key>single_title</key>
+		<integer>1</integer>
 		<key>start_chapter</key>
 		<integer>1</integer>
 		<key>start_frame</key>
@@ -123,7 +125,7 @@
 		<key>update_skip_version</key>
 		<integer>0</integer>
 		<key>VideoQualityGranularity</key>
-		<string>0.2</string>
+		<string>1</string>
 		<key>version</key>
 		<string>0.1</string>
 	</dict>

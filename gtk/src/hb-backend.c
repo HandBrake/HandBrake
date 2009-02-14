@@ -198,8 +198,8 @@ combo_opts_t direct_opts =
 static options_map_t d_badapt_opts[] =
 {
 	{"Off",             "0", 0, "0"},
-	{"Faster",          "1", 1, "1"},
-	{"More Effecient",  "2", 2, "2"},
+	{"Fast",            "1", 1, "1"},
+	{"Optimal",         "2", 2, "2"},
 };
 combo_opts_t badapt_opts =
 {

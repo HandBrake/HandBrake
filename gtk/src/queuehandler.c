@@ -1193,7 +1193,7 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		}
 		gchar *source;
 		source = ghb_settings_get_string(ghb_queue_edit_settings, "source");
-		ghb_do_scan(ud, source, FALSE);
+		ghb_do_scan(ud, source, 0, FALSE);
 		g_free(source);
 	}
 }
