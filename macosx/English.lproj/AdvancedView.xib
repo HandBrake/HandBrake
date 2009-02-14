@@ -162,18 +162,18 @@
 							<reference key="NSTextColor" ref="555417541"/>
 						</object>
 					</object>
-					<object class="NSTextField" id="64195956">
+					<object class="NSTextField" id="965170034">
 						<reference key="NSNextResponder" ref="738514360"/>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrame">{{48, 179}, {100, 26}}</string>
 						<reference key="NSSuperview" ref="738514360"/>
 						<bool key="NSEnabled">YES</bool>
-						<object class="NSTextFieldCell" key="NSCell" id="1033712504">
+						<object class="NSTextFieldCell" key="NSCell" id="517356884">
 							<int key="NSCellFlags">67239424</int>
 							<int key="NSCellFlags2">71303168</int>
 							<string key="NSContents">Adaptive B-Frames:</string>
 							<reference key="NSSupport" ref="826935898"/>
-							<reference key="NSControlView" ref="64195956"/>
+							<reference key="NSControlView" ref="965170034"/>
 							<reference key="NSBackgroundColor" ref="1006136775"/>
 							<reference key="NSTextColor" ref="555417541"/>
 						</object>
@@ -248,17 +248,17 @@
 							<int key="NSArrowPosition">1</int>
 						</object>
 					</object>
-					<object class="NSPopUpButton" id="868055016">
+					<object class="NSPopUpButton" id="646401135">
 						<reference key="NSNextResponder" ref="738514360"/>
 						<int key="NSvFlags">256</int>
 						<string key="NSFrame">{{150, 191}, {84, 15}}</string>
 						<reference key="NSSuperview" ref="738514360"/>
 						<bool key="NSEnabled">YES</bool>
-						<object class="NSPopUpButtonCell" key="NSCell" id="587955425">
+						<object class="NSPopUpButtonCell" key="NSCell" id="468935027">
 							<int key="NSCellFlags">-2076049856</int>
 							<int key="NSCellFlags2">264704</int>
 							<reference key="NSSupport" ref="22"/>
-							<reference key="NSControlView" ref="868055016"/>
+							<reference key="NSControlView" ref="646401135"/>
 							<int key="NSButtonFlags">109199615</int>
 							<int key="NSButtonFlags2">1</int>
 							<reference key="NSAlternateImage" ref="22"/>
@@ -268,8 +268,8 @@
 							</object>
 							<int key="NSPeriodicDelay">400</int>
 							<int key="NSPeriodicInterval">75</int>
-							<object class="NSMenuItem" key="NSMenuItem" id="44515545">
-								<reference key="NSMenu" ref="646499245"/>
+							<object class="NSMenuItem" key="NSMenuItem" id="84181884">
+								<reference key="NSMenu" ref="884041487"/>
 								<string key="NSTitle">Item1</string>
 								<string key="NSKeyEquiv"/>
 								<int key="NSKeyEquivModMask">1048576</int>
@@ -278,18 +278,18 @@
 								<reference key="NSOnImage" ref="98535564"/>
 								<reference key="NSMixedImage" ref="993852628"/>
 								<string key="NSAction">_popUpItemAction:</string>
-								<reference key="NSTarget" ref="587955425"/>
+								<reference key="NSTarget" ref="468935027"/>
 							</object>
 							<bool key="NSMenuItemRespectAlignment">YES</bool>
-							<object class="NSMenu" key="NSMenu" id="646499245">
+							<object class="NSMenu" key="NSMenu" id="884041487">
 								<object class="NSMutableString" key="NSTitle">
 									<characters key="NS.bytes">OtherViews</characters>
 								</object>
 								<object class="NSMutableArray" key="NSMenuItems">
 									<bool key="EncodedWithXMLCoder">YES</bool>
-									<reference ref="44515545"/>
-									<object class="NSMenuItem" id="700256741">
-										<reference key="NSMenu" ref="646499245"/>
+									<reference ref="84181884"/>
+									<object class="NSMenuItem" id="148376841">
+										<reference key="NSMenu" ref="884041487"/>
 										<string key="NSTitle">Item2</string>
 										<string key="NSKeyEquiv"/>
 										<int key="NSKeyEquivModMask">1048576</int>
@@ -297,10 +297,10 @@
 										<reference key="NSOnImage" ref="98535564"/>
 										<reference key="NSMixedImage" ref="993852628"/>
 										<string key="NSAction">_popUpItemAction:</string>
-										<reference key="NSTarget" ref="587955425"/>
+										<reference key="NSTarget" ref="468935027"/>
 									</object>
-									<object class="NSMenuItem" id="403870641">
-										<reference key="NSMenu" ref="646499245"/>
+									<object class="NSMenuItem" id="425106023">
+										<reference key="NSMenu" ref="884041487"/>
 										<string key="NSTitle">Item3</string>
 										<string key="NSKeyEquiv"/>
 										<int key="NSKeyEquivModMask">1048576</int>
@@ -308,7 +308,7 @@
 										<reference key="NSOnImage" ref="98535564"/>
 										<reference key="NSMixedImage" ref="993852628"/>
 										<string key="NSAction">_popUpItemAction:</string>
-										<reference key="NSTarget" ref="587955425"/>
+										<reference key="NSTarget" ref="468935027"/>
 									</object>
 								</object>
 							</object>
@@ -1985,7 +1985,7 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fX264optBAdaptLabel</string>
 						<reference key="source" ref="674763238"/>
-						<reference key="destination" ref="64195956"/>
+						<reference key="destination" ref="965170034"/>
 					</object>
 					<int key="connectionID">404</int>
 				</object>
@@ -1993,7 +1993,7 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">fX264optBAdaptPopUp</string>
 						<reference key="source" ref="674763238"/>
-						<reference key="destination" ref="868055016"/>
+						<reference key="destination" ref="646401135"/>
 					</object>
 					<int key="connectionID">405</int>
 				</object>
@@ -2001,7 +2001,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">X264AdvancedOptionsChanged:</string>
 						<reference key="source" ref="674763238"/>
-						<reference key="destination" ref="868055016"/>
+						<reference key="destination" ref="646401135"/>
 					</object>
 					<int key="connectionID">406</int>
 				</object>
@@ -2082,8 +2082,8 @@
 							<reference ref="734910001"/>
 							<reference ref="149148764"/>
 							<reference ref="747005200"/>
-							<reference ref="64195956"/>
-							<reference ref="868055016"/>
+							<reference ref="965170034"/>
+							<reference ref="646401135"/>
 						</object>
 						<reference key="parent" ref="181588572"/>
 						<string key="objectName">x264</string>
@@ -3014,61 +3014,61 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">396</int>
-						<reference key="object" ref="64195956"/>
+						<reference key="object" ref="965170034"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="1033712504"/>
+							<reference ref="517356884"/>
 						</object>
 						<reference key="parent" ref="738514360"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">397</int>
-						<reference key="object" ref="1033712504"/>
-						<reference key="parent" ref="64195956"/>
+						<reference key="object" ref="517356884"/>
+						<reference key="parent" ref="965170034"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">398</int>
-						<reference key="object" ref="868055016"/>
+						<reference key="object" ref="646401135"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="587955425"/>
+							<reference ref="468935027"/>
 						</object>
 						<reference key="parent" ref="738514360"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">399</int>
-						<reference key="object" ref="587955425"/>
+						<reference key="object" ref="468935027"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="646499245"/>
+							<reference ref="884041487"/>
 						</object>
-						<reference key="parent" ref="868055016"/>
+						<reference key="parent" ref="646401135"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">400</int>
-						<reference key="object" ref="646499245"/>
+						<reference key="object" ref="884041487"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="700256741"/>
-							<reference ref="403870641"/>
-							<reference ref="44515545"/>
+							<reference ref="148376841"/>
+							<reference ref="425106023"/>
+							<reference ref="84181884"/>
 						</object>
-						<reference key="parent" ref="587955425"/>
+						<reference key="parent" ref="468935027"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">401</int>
-						<reference key="object" ref="700256741"/>
-						<reference key="parent" ref="646499245"/>
+						<reference key="object" ref="148376841"/>
+						<reference key="parent" ref="884041487"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">402</int>
-						<reference key="object" ref="403870641"/>
-						<reference key="parent" ref="646499245"/>
+						<reference key="object" ref="425106023"/>
+						<reference key="parent" ref="884041487"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">403</int>
-						<reference key="object" ref="44515545"/>
-						<reference key="parent" ref="646499245"/>
+						<reference key="object" ref="84181884"/>
+						<reference key="parent" ref="884041487"/>
 					</object>
 				</object>
 			</object>
@@ -3318,57 +3318,34 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="496835891"/>
-							<string type="base64-UTF8" key="toolTip">U2FuZSB2YWx1ZXMgYXJlIDEtNi4gVGhlIG1vcmUgeW91IGFkZCwgdGhlIGhpZ2hlciB0aGUgcXVhbGl0
-eSDigJQgYnV0IHRoZSBzbG93ZXIgdGhlIGVuY29kZS4gQmUgY2FyZWZ1bC4uLnRvbyBtYW55IGFuZCBR
-dWlja1RpbWUgc3RydWdnbGUgdG8gcGxheSB0aGUgdmlkZW8gYmFjay4</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="444018704"/>
-							<string key="toolTip">Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material: 9-16.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="463613064"/>
-							<string key="toolTip">Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material: 9-16.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
-					</object>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<reference ref="9"/>
-					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="1012635724"/>
-							<string type="base64-UTF8" key="toolTip">VGhpcyBzZXR0aW5nIGlzIGZpbmVyLWdyYWluZWQgdGhhbiB0aGUgbW90aW9uIGVzdGltYXRpb24gc2V0
-dGluZ3MgYWJvdmUuIEluc3RlYWQgb2YgZGVhbGluZyB3aXRoIHdob2xlIHBpeGVscywgaXQgZGVhbHMg
-d2l0aCBmcmFjdGlvbmFsIHBpeGVscy4gNCwgSGFuZEJyYWtlJ3MgZGVmYXVsdCwgbWVhbnMgbG9va2lu
-ZyBhdCBxdWFydGVyIHBpeGVscyAocXBlbCkuIEhpZ2hlciBsZXZlbHMgaW5jcmVhc2UgcXVhbGl0eSBi
-eSBkaXZpZGluZyB0aGUgcGl4ZWwgbW9yZSwgYnV0IHRha2UgbG9uZ2VyIHRvIGVuY29kZS4gVXNpbmcg
-NiBvciA3IHR1cm5zIHVubG9ja3MgdGhlIGFiaWxpdHkgdG8gdHVybiBvbiBtb3JlIGFkdmFuY2VkIGZl
-YXR1cmVzIGxpa2UgQi1GcmFtZSByYXRlIGRpc3RvcnRpb24uA</string>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3382,31 +3359,53 @@ YXR1cmVzIGxpa2UgQi1GcmFtZSByYXRlIGRpc3RvcnRpb24uA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="34095372"/>
-							<string key="toolTip">Trellis fine-tunes how bitrate is doled out, so it can reduce file size/bitrate or increase quality. A value of 2 forces it to be used more often than a value of 1.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+					</object>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<reference ref="9"/>
+					<object class="NSMutableDictionary">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="677509567"/>
-							<string key="toolTip">Only use this with constant quality encoding. It increases quality but also bitrate/file size.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="570675882"/>
-							<string key="toolTip">This can help with blocking on solid colors like blue skies, but it also slows down the encode.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3427,23 +3426,23 @@ YXR1cmVzIGxpa2UgQi1GcmFtZSByYXRlIGRpc3RvcnRpb24uA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="286114143"/>
-							<string type="base64-UTF8" key="toolTip">V2l0aCB0aGlzIG9uLCBkaWZmZXJlbnQgcGFydHMgb2YgYSBmcmFtZSB3aWxsIHJlZmVyIGJhY2sgdG8g
-ZGlmZmVyZW50IHByaW9yIGZyYW1lcywgZGVwZW5kaW5nIG9uIHdoYXQncyBiZXN0IGZvciB0aGF0IHBh
-cnQgb2YgdGhlIGltYWdlLg</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="463632258"/>
-							<string key="toolTip">This sets the shape of the area x264 searches when estimating motion. Your choices are a diamond, a hexagon, a more complex hexagonal shape, or searching the entire frame. You are best off using Uneven Multi-Hexagonal searching.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3457,21 +3456,23 @@ cnQgb2YgdGhlIGltYWdlLg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="501486901"/>
-							<string key="toolTip">This sets the shape of the area x264 searches when estimating motion. Your choices are a diamond, a hexagon, a more complex hexagonal shape, or searching the entire frame. You are best off using Uneven Multi-Hexagonal searching.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="9309938"/>
-							<string key="toolTip">This range is the radius, in pixels, x264 should use for motion estimation searches. It only has an effect when you use Uneven Multi-Hexagonal or Exhaustive searching. 24, 32, and 64 are good values.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3502,11 +3503,12 @@ cnQgb2YgdGhlIGltYWdlLg</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="108597901"/>
-							<string key="toolTip">This range is the radius, in pixels, x264 should use for motion estimation searches. It only has an effect when you use Uneven Multi-Hexagonal or Exhaustive searching. 24, 32, and 64 are good values.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3551,89 +3553,60 @@ cnQgb2YgdGhlIGltYWdlLg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="335373847"/>
-							<string type="base64-UTF8" key="toolTip">VGhpcyBzZXR0aW5nIGlzIGZpbmVyLWdyYWluZWQgdGhhbiB0aGUgbW90aW9uIGVzdGltYXRpb24gc2V0
-dGluZ3MgYWJvdmUuIEluc3RlYWQgb2YgZGVhbGluZyB3aXRoIHdob2xlIHBpeGVscywgaXQgZGVhbHMg
-d2l0aCBmcmFjdGlvbmFsIHBpeGVscy4gNCwgSGFuZEJyYWtlJ3MgZGVmYXVsdCwgbWVhbnMgbG9va2lu
-ZyBhdCBxdWFydGVyIHBpeGVscyAocXBlbCkuIEhpZ2hlciBsZXZlbHMgaW5jcmVhc2UgcXVhbGl0eSBi
-eSBkaXZpZGluZyB0aGUgcGl4ZWwgbW9yZSwgYnV0IHRha2UgbG9uZ2VyIHRvIGVuY29kZS4gVXNpbmcg
-NiBvciA3IHR1cm5zIHVubG9ja3MgdGhlIGFiaWxpdHkgdG8gdHVybiBvbiBtb3JlIGFkdmFuY2VkIGZl
-YXR1cmVzIGxpa2UgQi1GcmFtZSByYXRlIGRpc3RvcnRpb24uA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="677007332"/>
-							<string type="base64-UTF8" key="toolTip">V2l0aCB3ZWlnaHRlZCBCLWZyYW1lIHByZWRpY3Rpb24gZW5hYmxlZCwgeDI2NCB3aWxsIGNvbnNpZGVy
-IGhvdyBmYXIgYXdheSB0aGUgcHJldmlvdXMgYW5kIG5leHQgUC1mcmFtZXMgYXJlLCBiZWZvcmUgZGVj
-aWRpbmcgdG8gbWFrZSBhIGZyYW1lIGEgQi1mcmFtZS4gVGhlIGVmZmVjdCBpcyB0aGF0IHgyNjQgd2ls
-bCB1c2UgZmV3ZXIgQi1mcmFtZXMgd2hlbiB0aGV5J2QgbG9vayBiYWQg4oCUIHdoZW4gaXQgY2FuJ3Qg
-YWNjdXJhdGVseSBwcmVkaWN0IG1vdGlvbi4gT2J2aW91c2x5LCB0aGlzIG9ubHkgd29ya3Mgd2hlbiB5
-b3UgdGVsbCB4MjY0IHRvIHVzZSBtb3JlIHRoYW4gMSBCLWZyYW1lLiA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="34260806"/>
-							<string type="base64-UTF8" key="toolTip">Qi1mcmFtZSBweXJhbWlkcyBhcmUgYSBIaWdoIFByb2ZpbGUgZmVhdHVyZS4gVGhpcyBtZWFucyB0aGF0
-IGlmIHlvdSBlbmFibGUgaXQsIFlPVVIgVklERU8gV0lMTCBOT1QgUExBWSBJTiBRVUlDS1RJTUUuIFB5
-cmFtaWRhbCBCLWZyYW1lcyBtZWFuIHRoYXQgQi1mcmFtZXMgZG9uJ3QganVzdCByZWZlcmVuY2Ugc3Vy
-cm91bmRpbmcgcmVmZXJlbmNlIGZyYW1lcyDigJQgaW5zdGVhZCwgaXQgYWxzbyB0cmVhdHMgYSBwcmV2
-aW91cyBCLWZyYW1lIGFzIGEgcmVmZXJlbmNlLCBpbXByb3ZpbmcgcXVhbGl0eS9sb3dlcmluZyBiaXRy
-YXRlIGF0IHRoZSBleHBlbnNlIG9mIGNvbXBsZXhpdHkuIExvZ2ljYWxseSwgdG8gcmVmZXJlbmNlIGFu
-IGVhcmxpZXIgQi1mcmFtZSwgeW91IG11c3QgdGVsbCB4MjY0IHRvIHVzZSBhdCBsZWFzdCAyIEItZnJh
-bWVzLg</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="751714853"/>
-							<string type="base64-UTF8" key="toolTip">RGlyZWN0IHByZWRpY3Rpb24gdGVsbHMgeDI2NCB3aGF0IG1ldGhvZCB0byB1c2Ugd2hlbiBndWVzc2lu
-ZyBtb3Rpb24gZm9yIGNlcnRhaW4gcGFydHMgb2YgYSBCLWZyYW1lLiBJdCBjYW4gZWl0aGVyIGxvb2sg
-YXQgb3RoZXIgcGFydHMgb2YgdGhlIGN1cnJlbnQgZnJhbWUgKHNwYXRpYWwpIG9yIGNvbXBhcmUgYWdh
-aW5zdCB0aGUgcHJlY2VkaW5nIGZyYW1lICh0ZW1wb3JhbCkuIFlvdSdyZSBiZXN0IG9mZiBzZXR0aW5n
-IHRoaXMgdG8gYXV0b21hdGljLCBzbyB4MjY0IGRlY2lkZXMgd2hpY2ggbWV0aG9kIGlzIGJlc3Qgb24g
-aXRzIG93bi4gRG9uJ3Qgc2VsZWN0IG5vbmUgYXNzdW1pbmcgaXQgd2lsbCBiZSBmYXN0ZXI7IGluc3Rl
-YWQgaXQgd2lsbCB0YWtlIGxvbmdlciBhbmQgbG9vayB3b3JzZS4gSWYgeW91J3JlIGdvaW5nIHRvIGNo
-b29zZSBiZXR3ZWVuIHNwYXRpYWwgYW5kIHRlbXBvcmFsLCBzcGF0aWFsIGlzIHVzdWFsbHkgYmV0dGVy
-Lg</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{388, 201}, {700, 290}}</string>
+					<string>{{776, 165}, {700, 290}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{692, 501}, {700, 290}}</string>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="1028233887"/>
-							<string type="base64-UTF8" key="toolTip">RGlyZWN0IHByZWRpY3Rpb24gdGVsbHMgeDI2NCB3aGF0IG1ldGhvZCB0byB1c2Ugd2hlbiBndWVzc2lu
-ZyBtb3Rpb24gZm9yIGNlcnRhaW4gcGFydHMgb2YgYSBCLWZyYW1lLiBJdCBjYW4gZWl0aGVyIGxvb2sg
-YXQgb3RoZXIgcGFydHMgb2YgdGhlIGN1cnJlbnQgZnJhbWUgKHNwYXRpYWwpIG9yIGNvbXBhcmUgYWdh
-aW5zdCB0aGUgcHJlY2VkaW5nIGZyYW1lICh0ZW1wb3JhbCkuIFlvdSdyZSBiZXN0IG9mZiBzZXR0aW5n
-IHRoaXMgdG8gYXV0b21hdGljLCBzbyB4MjY0IGRlY2lkZXMgd2hpY2ggbWV0aG9kIGlzIGJlc3Qgb24g
-aXRzIG93bi4gRG9uJ3Qgc2VsZWN0IG5vbmUgYXNzdW1pbmcgaXQgd2lsbCBiZSBmYXN0ZXI7IGluc3Rl
-YWQgaXQgd2lsbCB0YWtlIGxvbmdlciBhbmQgbG9vayB3b3JzZS4gSWYgeW91J3JlIGdvaW5nIHRvIGNo
-b29zZSBiZXR3ZWVuIHNwYXRpYWwgYW5kIHRlbXBvcmFsLCBzcGF0aWFsIGlzIHVzdWFsbHkgYmV0dGVy
-Lg</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3649,31 +3622,12 @@ Lg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="130462646"/>
-							<string type="base64-UTF8" key="toolTip">eDI2NCBpbmNsdWRlcyBhbiBpbi1sb29wIGRlYmxvY2tpbmcgZmlsdGVyLiBXaGF0IHRoaXMgbWVhbnMg
-aXMgdGhhdCBibG9ja3kgY29tcHJlc3Npb24gYXJ0aWZhY3RzIGFyZSBzbW9vdGhlZCBhd2F5IHdoZW4g
-eW91IHBsYXkgYmFjayB0aGUgdmlkZW8uIEl0IGhhcyB0d28gc2V0dGluZ3M6IHN0cmVuZ3RoIGFuZCB0
-aHJlc2hvbGQsIGp1c3QgbGlrZSBhIHNpbXBsZSBmaWx0ZXIgaW4gUGhvdG9zaG9wLiBTdHJlbmd0aCBj
-b250cm9scyB0aGUgYW1vdW50IG9mIGRlYmxvY2tpbmcgYXBwbGllZCB0byB0aGUgd2hvbGUgZnJhbWUu
-IElmIHlvdSBkcm9wIGRvd24gYmVsb3cgMCwgeW91IHJlZHVjZSB0aGUgYW1vdW50IG9mIGJsdXJyaW5n
-LiBHbyB0b28gbmVnYXRpdmUsIGFuZCB5b3UnbGwgZ2V0IGFuIGVmZmVjdCBzb21ld2hhdCBsaWtlIG92
-ZXJzaGFycGVuaW5nIGFuIGltYWdlLiBHbyBpbnRvIHBvc2l0aXZlIHZhbHVlcywgYW5kIHRoZSBpbWFn
-ZSBtYXkgYmVjb21lIHRvbyBzb2Z0LiBUaHJlc2hvbGQgY29udHJvbHMgaG93IHNlbnNpdGl2ZSB0aGUg
-ZmlsdGVyIGlzIHRvIHdoZXRoZXIgc29tZXRoaW5nIGluIGEgYmxvY2sgaXMgZGV0YWlsIHRoYXQgbmVl
-ZHMgdG8gYmUgcHJlc2VydmVkOiBsb3dlciBudW1iZXJzIGJsdXIgZGV0YWlscyBsZXNzLiBUaGUgZGVm
-YXVsdCBkZWJsb2NraW5nIHZhbHVlcyBhcmUgMCBhbmQgMC4gVGhpcyBkb2VzIG5vdCBtZWFuIHplcm8g
-ZGVibG9ja2luZy4gSXQgbWVhbnMgeDI2NCB3aWxsIGFwcGx5IHRoZSByZWd1bGFyIGRlYmxvY2tpbmcg
-c3RyZW5ndGggYW5kIHRocmVzaG9sZHMgdGhlIGNvZGVjIGF1dGhvcnMgaGF2ZSBzZWxlY3RlZCBhcyB3
-b3JraW5nIHRoZSBiZXN0IGluIG1vc3QgY2FzZXMuIFdoaWxlIG1hbnksIG1hbnkgcGVvcGxlIHN0aWNr
-IHdpdGggdGhlIGRlZmF1bHQgZGVibG9ja2luZyB2YWx1ZXMgb2YgMCwwLCBvdGhlciBwZW9wbGUgZGlz
-YWdyZWUuIFNvbWUgcHJlZmVyIGEgc2xpZ2h0bHkgbGVzcyBibHVycmVkIGltYWdlIGZvciBsaXZlIGFj
-dGlvbiBtYXRlcmlhbCwgYW5kIHVzZSB2YWx1ZXMgbGlrZSAtMiwtMSBvciAtMiwtMi4gT3RoZXJzIHdp
-bGwgcmFpc2UgaXQgdG8gMSwxIG9yIGV2ZW4gMywzIGZvciBhbmltYXRpb24uIFdoaWxlIHRoZSB2YWx1
-ZXMgZm9yIGVhY2ggc2V0dGluZyBleHRlbmQgZnJvbSAtNiB0byA2LCB0aGUgY29uc2Vuc3VzIGlzIHRo
-YXQgZ29pbmcgYmVsb3cgLTMgb3IgYWJvdmUgMyBpcyB3b3J0aGxlc3MuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3685,12 +3639,12 @@ YXQgZ29pbmcgYmVsb3cgLTMgb3IgYWJvdmUgMyBpcyB3b3J0aGxlc3MuA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="502806021"/>
-							<string type="base64-UTF8" key="toolTip">U2FuZSB2YWx1ZXMgYXJlIDEtNi4gVGhlIG1vcmUgeW91IGFkZCwgdGhlIGhpZ2hlciB0aGUgcXVhbGl0
-eSDigJQgYnV0IHRoZSBzbG93ZXIgdGhlIGVuY29kZS4</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3698,31 +3652,12 @@ eSDigJQgYnV0IHRoZSBzbG93ZXIgdGhlIGVuY29kZS4</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="497968468"/>
-							<string type="base64-UTF8" key="toolTip">eDI2NCBpbmNsdWRlcyBhbiBpbi1sb29wIGRlYmxvY2tpbmcgZmlsdGVyLiBXaGF0IHRoaXMgbWVhbnMg
-aXMgdGhhdCBibG9ja3kgY29tcHJlc3Npb24gYXJ0aWZhY3RzIGFyZSBzbW9vdGhlZCBhd2F5IHdoZW4g
-eW91IHBsYXkgYmFjayB0aGUgdmlkZW8uIEl0IGhhcyB0d28gc2V0dGluZ3M6IHN0cmVuZ3RoIGFuZCB0
-aHJlc2hvbGQsIGp1c3QgbGlrZSBhIHNpbXBsZSBmaWx0ZXIgaW4gUGhvdG9zaG9wLiBTdHJlbmd0aCBj
-b250cm9scyB0aGUgYW1vdW50IG9mIGRlYmxvY2tpbmcgYXBwbGllZCB0byB0aGUgd2hvbGUgZnJhbWUu
-IElmIHlvdSBkcm9wIGRvd24gYmVsb3cgMCwgeW91IHJlZHVjZSB0aGUgYW1vdW50IG9mIGJsdXJyaW5n
-LiBHbyB0b28gbmVnYXRpdmUsIGFuZCB5b3UnbGwgZ2V0IGFuIGVmZmVjdCBzb21ld2hhdCBsaWtlIG92
-ZXJzaGFycGVuaW5nIGFuIGltYWdlLiBHbyBpbnRvIHBvc2l0aXZlIHZhbHVlcywgYW5kIHRoZSBpbWFn
-ZSBtYXkgYmVjb21lIHRvbyBzb2Z0LiBUaHJlc2hvbGQgY29udHJvbHMgaG93IHNlbnNpdGl2ZSB0aGUg
-ZmlsdGVyIGlzIHRvIHdoZXRoZXIgc29tZXRoaW5nIGluIGEgYmxvY2sgaXMgZGV0YWlsIHRoYXQgbmVl
-ZHMgdG8gYmUgcHJlc2VydmVkOiBsb3dlciBudW1iZXJzIGJsdXIgZGV0YWlscyBsZXNzLiBUaGUgZGVm
-YXVsdCBkZWJsb2NraW5nIHZhbHVlcyBhcmUgMCBhbmQgMC4gVGhpcyBkb2VzIG5vdCBtZWFuIHplcm8g
-ZGVibG9ja2luZy4gSXQgbWVhbnMgeDI2NCB3aWxsIGFwcGx5IHRoZSByZWd1bGFyIGRlYmxvY2tpbmcg
-c3RyZW5ndGggYW5kIHRocmVzaG9sZHMgdGhlIGNvZGVjIGF1dGhvcnMgaGF2ZSBzZWxlY3RlZCBhcyB3
-b3JraW5nIHRoZSBiZXN0IGluIG1vc3QgY2FzZXMuIFdoaWxlIG1hbnksIG1hbnkgcGVvcGxlIHN0aWNr
-IHdpdGggdGhlIGRlZmF1bHQgZGVibG9ja2luZyB2YWx1ZXMgb2YgMCwwLCBvdGhlciBwZW9wbGUgZGlz
-YWdyZWUuIFNvbWUgcHJlZmVyIGEgc2xpZ2h0bHkgbGVzcyBibHVycmVkIGltYWdlIGZvciBsaXZlIGFj
-dGlvbiBtYXRlcmlhbCwgYW5kIHVzZSB2YWx1ZXMgbGlrZSAtMiwtMSBvciAtMiwtMi4gT3RoZXJzIHdp
-bGwgcmFpc2UgaXQgdG8gMSwxIG9yIGV2ZW4gMywzIGZvciBhbmltYXRpb24uIFdoaWxlIHRoZSB2YWx1
-ZXMgZm9yIGVhY2ggc2V0dGluZyBleHRlbmQgZnJvbSAtNiB0byA2LCB0aGUgY29uc2Vuc3VzIGlzIHRo
-YXQgZ29pbmcgYmVsb3cgLTMgb3IgYWJvdmUgMyBpcyB3b3J0aGxlc3MuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3736,58 +3671,34 @@ YXQgZ29pbmcgYmVsb3cgLTMgb3IgYWJvdmUgMyBpcyB3b3J0aGxlc3MuA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="529644976"/>
-							<string type="base64-UTF8" key="toolTip">eDI2NCBpbmNsdWRlcyBhbiBpbi1sb29wIGRlYmxvY2tpbmcgZmlsdGVyLiBXaGF0IHRoaXMgbWVhbnMg
-aXMgdGhhdCBibG9ja3kgY29tcHJlc3Npb24gYXJ0aWZhY3RzIGFyZSBzbW9vdGhlZCBhd2F5IHdoZW4g
-eW91IHBsYXkgYmFjayB0aGUgdmlkZW8uIEl0IGhhcyB0d28gc2V0dGluZ3M6IHN0cmVuZ3RoIGFuZCB0
-aHJlc2hvbGQsIGp1c3QgbGlrZSBhIHNpbXBsZSBmaWx0ZXIgaW4gUGhvdG9zaG9wLiBTdHJlbmd0aCBj
-b250cm9scyB0aGUgYW1vdW50IG9mIGRlYmxvY2tpbmcgYXBwbGllZCB0byB0aGUgd2hvbGUgZnJhbWUu
-IElmIHlvdSBkcm9wIGRvd24gYmVsb3cgMCwgeW91IHJlZHVjZSB0aGUgYW1vdW50IG9mIGJsdXJyaW5n
-LiBHbyB0b28gbmVnYXRpdmUsIGFuZCB5b3UnbGwgZ2V0IGFuIGVmZmVjdCBzb21ld2hhdCBsaWtlIG92
-ZXJzaGFycGVuaW5nIGFuIGltYWdlLiBHbyBpbnRvIHBvc2l0aXZlIHZhbHVlcywgYW5kIHRoZSBpbWFn
-ZSBtYXkgYmVjb21lIHRvbyBzb2Z0LiBUaHJlc2hvbGQgY29udHJvbHMgaG93IHNlbnNpdGl2ZSB0aGUg
-ZmlsdGVyIGlzIHRvIHdoZXRoZXIgc29tZXRoaW5nIGluIGEgYmxvY2sgaXMgZGV0YWlsIHRoYXQgbmVl
-ZHMgdG8gYmUgcHJlc2VydmVkOiBsb3dlciBudW1iZXJzIGJsdXIgZGV0YWlscyBsZXNzLiBUaGUgZGVm
-YXVsdCBkZWJsb2NraW5nIHZhbHVlcyBhcmUgMCBhbmQgMC4gVGhpcyBkb2VzIG5vdCBtZWFuIHplcm8g
-ZGVibG9ja2luZy4gSXQgbWVhbnMgeDI2NCB3aWxsIGFwcGx5IHRoZSByZWd1bGFyIGRlYmxvY2tpbmcg
-c3RyZW5ndGggYW5kIHRocmVzaG9sZHMgdGhlIGNvZGVjIGF1dGhvcnMgaGF2ZSBzZWxlY3RlZCBhcyB3
-b3JraW5nIHRoZSBiZXN0IGluIG1vc3QgY2FzZXMuIFdoaWxlIG1hbnksIG1hbnkgcGVvcGxlIHN0aWNr
-IHdpdGggdGhlIGRlZmF1bHQgZGVibG9ja2luZyB2YWx1ZXMgb2YgMCwwLCBvdGhlciBwZW9wbGUgZGlz
-YWdyZWUuIFNvbWUgcHJlZmVyIGEgc2xpZ2h0bHkgbGVzcyBibHVycmVkIGltYWdlIGZvciBsaXZlIGFj
-dGlvbiBtYXRlcmlhbCwgYW5kIHVzZSB2YWx1ZXMgbGlrZSAtMiwtMSBvciAtMiwtMi4gT3RoZXJzIHdp
-bGwgcmFpc2UgaXQgdG8gMSwxIG9yIGV2ZW4gMywzIGZvciBhbmltYXRpb24uIFdoaWxlIHRoZSB2YWx1
-ZXMgZm9yIGVhY2ggc2V0dGluZyBleHRlbmQgZnJvbSAtNiB0byA2LCB0aGUgY29uc2Vuc3VzIGlzIHRo
-YXQgZ29pbmcgYmVsb3cgLTMgb3IgYWJvdmUgMyBpcyB3b3J0aGxlc3MuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="977241029"/>
-							<string type="base64-UTF8" key="toolTip">V2l0aCB0aGlzIG9uLCBkaWZmZXJlbnQgcGFydHMgb2YgYSBmcmFtZSB3aWxsIHJlZmVyIGJhY2sgdG8g
-ZGlmZmVyZW50IHByaW9yIGZyYW1lcywgZGVwZW5kaW5nIG9uIHdoYXQncyBiZXN0IGZvciB0aGF0IHBh
-cnQgb2YgdGhlIGltYWdlLg</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="749948454"/>
-							<string type="base64-UTF8" key="toolTip">V2l0aCB3ZWlnaHRlZCBCLWZyYW1lIHByZWRpY3Rpb24gZW5hYmxlZCwgeDI2NCB3aWxsIGNvbnNpZGVy
-IGhvdyBmYXIgYXdheSB0aGUgcHJldmlvdXMgYW5kIG5leHQgUC1mcmFtZXMgYXJlLCBiZWZvcmUgZGVj
-aWRpbmcgdG8gbWFrZSBhIGZyYW1lIGEgQi1mcmFtZS4gVGhlIGVmZmVjdCBpcyB0aGF0IHgyNjQgd2ls
-bCB1c2UgZmV3ZXIgQi1mcmFtZXMgd2hlbiB0aGV5J2QgbG9vayBiYWQg4oCUIHdoZW4gaXQgY2FuJ3Qg
-YWNjdXJhdGVseSBwcmVkaWN0IG1vdGlvbi4gT2J2aW91c2x5LCB0aGlzIG9ubHkgd29ya3Mgd2hlbiB5
-b3UgdGVsbCB4MjY0IHRvIHVzZSBtb3JlIHRoYW4gMSBCLWZyYW1lLiA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3812,31 +3723,34 @@ bWVzLg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="928128304"/>
-							<string key="toolTip">This can help with blocking on solid colors like blue skies, but it also slows down the encode.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="140207359"/>
-							<string key="toolTip">Only use this with constant quality encoding. It increases quality but also bitrate/file size.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="907540673"/>
-							<string key="toolTip">Trellis fine-tunes how bitrate is doled out, so it can reduce file size/bitrate or increase quality. A value of 2 forces it to be used more often than a value of 1.</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3856,19 +3770,12 @@ bWVzLg</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="473093704"/>
-							<string type="base64-UTF8" key="toolTip">QW5hbHlzaXMgY29udHJvbHMgaG93IGZpbmVseSB4MjY0IGRpdmlkZXMgdXAgYSBmcmFtZSB0byBjYXB0
-dXJlIGRldGFpbC4gRnVsbCBtYWNyb2Jsb2NrcyBhcmUgMTZ4MTYgcGl4ZWxzLCBidXQgeDI2NCBjYW4g
-Z28gZG93biBhbGwgdGhlIHdheSB0byA0eDQgYmxvY2tzIGlmIGl0IGp1ZGdlcyBpdCBuZWNlc3Nhcnku
-IEJ5IGRlZmF1bHQgaXQgb25seSBicmVha3MgdXAga2V5IGZyYW1lcyB0aGF0IG11Y2guIFRvIGdpdmUg
-eDI2NCB0aGUgZnJlZWRvbSB0byBtYWtlIHRoZSBiZXN0IGRlY2lzaW9ucyBmb3IgYWxsIGZyYW1lcywg
-dXNlICJhbGwiIGFuYWx5c2lzLiBJZiB5b3Ugd2FudCB0byBjcmVhdGUgYSBoaWdoIHByb2ZpbGUgSC4y
-NjQgdmlkZW8gKHdoaWNoIGlzIGxlc3MgY29tcGF0aWJsZSB3aXRoIHRoZSB3b3JsZCBhdCBsYXJnZSB0
-aGFuIG1haW4gcHJvZmlsZSksIGFsc28gY2hlY2sgdGhlICI4eDggRENUIGJsb2NrcyIgYm94IHRvIGFk
-ZCB5ZXQgYW5vdGhlciBibG9jayBzaXplIGZvciBhbmFseXNpcy4</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3882,69 +3789,45 @@ ZCB5ZXQgYW5vdGhlciBibG9jayBzaXplIGZvciBhbmFseXNpcy4</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="516451639"/>
-							<string type="base64-UTF8" key="toolTip">QW5hbHlzaXMgY29udHJvbHMgaG93IGZpbmVseSB4MjY0IGRpdmlkZXMgdXAgYSBmcmFtZSB0byBjYXB0
-dXJlIGRldGFpbC4gRnVsbCBtYWNyb2Jsb2NrcyBhcmUgMTZ4MTYgcGl4ZWxzLCBidXQgeDI2NCBjYW4g
-Z28gZG93biBhbGwgdGhlIHdheSB0byA0eDQgYmxvY2tzIGlmIGl0IGp1ZGdlcyBpdCBuZWNlc3Nhcnku
-IEJ5IGRlZmF1bHQgaXQgb25seSBicmVha3MgdXAga2V5IGZyYW1lcyB0aGF0IG11Y2guIFRvIGdpdmUg
-eDI2NCB0aGUgZnJlZWRvbSB0byBtYWtlIHRoZSBiZXN0IGRlY2lzaW9ucyBmb3IgYWxsIGZyYW1lcywg
-dXNlICJhbGwiIGFuYWx5c2lzLiBJZiB5b3Ugd2FudCB0byBjcmVhdGUgYSBoaWdoIHByb2ZpbGUgSC4y
-NjQgdmlkZW8gKHdoaWNoIGlzIGxlc3MgY29tcGF0aWJsZSB3aXRoIHRoZSB3b3JsZCBhdCBsYXJnZSB0
-aGFuIG1haW4gcHJvZmlsZSksIGFsc28gY2hlY2sgdGhlICI4eDggRENUIGJsb2NrcyIgYm94IHRvIGFk
-ZCB5ZXQgYW5vdGhlciBibG9jayBzaXplIGZvciBhbmFseXNpcy4</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="526934709"/>
-							<string type="base64-UTF8" key="toolTip">V2hlbiBBbmFseXNpcyBpcyBzZXQgdG8gImFsbCwiIGNoZWNraW5nIHRoaXMgYm94IGxldHMgeDI2NCBi
-cmVhayBrZXkgZnJhbWVzIGRvd24gaW50byA4eDggYmxvY2tzIG9mIHBpeGVscyBmb3IgYW5hbHlzaXMu
-IFRoaXMgaXMgYSBoaWdoIHByb2ZpbGUgZmVhdHVyZSBvZiBILjI2NCwgd2hpY2ggbWFrZXMgaXQgbGVz
-cyBjb21wYXRpYmxlLiBJdCBzaG91bGQgc2xpZ2h0bHkgZGVjcmVhc2UgYml0cmF0ZSBvciBpbXByb3Zl
-IHF1YWxpdHkuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="180296347"/>
-							<string type="base64-UTF8" key="toolTip">V2hlbiBBbmFseXNpcyBpcyBzZXQgdG8gImFsbCwiIGNoZWNraW5nIHRoaXMgYm94IGxldHMgeDI2NCBi
-cmVhayBrZXkgZnJhbWVzIGRvd24gaW50byA4eDggYmxvY2tzIG9mIHBpeGVscyBmb3IgYW5hbHlzaXMu
-IFRoaXMgaXMgYSBoaWdoIHByb2ZpbGUgZmVhdHVyZSBvZiBILjI2NCwgd2hpY2ggbWFrZXMgaXQgbGVz
-cyBjb21wYXRpYmxlLiBJdCBzaG91bGQgc2xpZ2h0bHkgZGVjcmVhc2UgYml0cmF0ZSBvciBpbXByb3Zl
-IHF1YWxpdHkuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="612818913"/>
-							<string type="base64-UTF8" key="toolTip">Q0FCQUMsIG9yIGNvbnRleHQgYWRhcHRpdmUgYmluYXJ5IGFyaXRobWV0aWMgY29kaW5nLCBpcyB1c2Vk
-IGJ5IHgyNjQgdG8gcmVkdWNlIHRoZSBiaXRyYXRlIG5lZWRlZCBmb3IgYSBnaXZlbiBxdWFsaXR5IGJ5
-IDE1JS4gVGhpcyBtYWtlcyBpdCB2ZXJ5IGNvb2wgYW5kIHZlcnkgdXNlZnVsLCBhbmQgaXQgc2hvdWxk
-IGJlIGxlZnQgb24gd2hlbmV2ZXIgcG9zc2libGUuIEhvd2V2ZXIsIGl0IGlzIGluY29tcGF0aWJsZSB3
-aXRoIHRoZSBpUG9kIDUuNUcsIGFuZCBtYWtlcyB0aGUgQXBwbGVUViBzdHJ1Z2dsZS4gU28gdHVybiBp
-dCBvZmYgZm9yIHRob3NlLiBDQUJBQyBpcyBhIGtpbmQgb2YgZW50cm9weSBjb2RpbmcsIHdoaWNoIG1l
-YW5zIHRoYXQgaXQgY29tcHJlc3NlcyBkYXRhIGJ5IG1ha2luZyBzaG9ydGhhbmQgc3ltYm9scyB0byBy
-ZXByZXNlbnQgbG9uZyBzdHJlYW1zIG9mIGRhdGEuIFRoZSAiZW50cm9weSIgcGFydCBtZWFucyB0aGF0
-IHRoZSBzeW1ib2xzIGl0IHVzZXMgdGhlIG1vc3Qgb2Z0ZW4gYXJlIHRoZSBzbWFsbGVzdC4gV2hlbiB5
-b3UgZGlzYWJsZSBDQUJBQywgYW5vdGhlciBlbnRyb3B5IGNvZGluZyBzY2hlbWUgZ2V0cyBlbmFibGVk
-LCBjYWxsZWQgQ0FWTEMgKGNvbnRleHQgYWRhcHRpdmUgdmFyaWFibGUtbGVuZ3RoIGNvZGluZykuIENB
-VkxDIGlzIGEgbG90IGxlc3MgZWZmaWNpZW50LCB3aGljaCBpcyB3aHkgaXQgbmVlZHMgMTUlIG1vcmUg
-Yml0cmF0ZSB0byBhY2hpZXZlIHRoZSBzYW1lIHF1YWxpdHkgYXMgQ0FCQUMuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -3952,23 +3835,12 @@ Yml0cmF0ZSB0byBhY2hpZXZlIHRoZSBzYW1lIHF1YWxpdHkgYXMgQ0FCQUMuA</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<object class="NSMutableDictionary">
-						<string key="NS.key.0">ToolTip</string>
-						<object class="IBToolTipAttribute" key="NS.object.0">
-							<string key="name">ToolTip</string>
-							<reference key="object" ref="5114506"/>
-							<string type="base64-UTF8" key="toolTip">Q0FCQUMsIG9yIGNvbnRleHQgYWRhcHRpdmUgYmluYXJ5IGFyaXRobWV0aWMgY29kaW5nLCBpcyB1c2Vk
-IGJ5IHgyNjQgdG8gcmVkdWNlIHRoZSBiaXRyYXRlIG5lZWRlZCBmb3IgYSBnaXZlbiBxdWFsaXR5IGJ5
-IDE1JS4gVGhpcyBtYWtlcyBpdCB2ZXJ5IGNvb2wgYW5kIHZlcnkgdXNlZnVsLCBhbmQgaXQgc2hvdWxk
-IGJlIGxlZnQgb24gd2hlbmV2ZXIgcG9zc2libGUuIEhvd2V2ZXIsIGl0IGlzIGluY29tcGF0aWJsZSB3
-aXRoIHRoZSBpUG9kIDUuNUcsIGFuZCBtYWtlcyB0aGUgQXBwbGVUViBzdHJ1Z2dsZS4gU28gdHVybiBp
-dCBvZmYgZm9yIHRob3NlLiBDQUJBQyBpcyBhIGtpbmQgb2YgZW50cm9weSBjb2RpbmcsIHdoaWNoIG1l
-YW5zIHRoYXQgaXQgY29tcHJlc3NlcyBkYXRhIGJ5IG1ha2luZyBzaG9ydGhhbmQgc3ltYm9scyB0byBy
-ZXByZXNlbnQgbG9uZyBzdHJlYW1zIG9mIGRhdGEuIFRoZSAiZW50cm9weSIgcGFydCBtZWFucyB0aGF0
-IHRoZSBzeW1ib2xzIGl0IHVzZXMgdGhlIG1vc3Qgb2Z0ZW4gYXJlIHRoZSBzbWFsbGVzdC4gV2hlbiB5
-b3UgZGlzYWJsZSBDQUJBQywgYW5vdGhlciBlbnRyb3B5IGNvZGluZyBzY2hlbWUgZ2V0cyBlbmFibGVk
-LCBjYWxsZWQgQ0FWTEMgKGNvbnRleHQgYWRhcHRpdmUgdmFyaWFibGUtbGVuZ3RoIGNvZGluZykuIENB
-VkxDIGlzIGEgbG90IGxlc3MgZWZmaWNpZW50LCB3aGljaCBpcyB3aHkgaXQgbmVlZHMgMTUlIG1vcmUg
-Yml0cmF0ZSB0byBhY2hpZXZlIHRoZSBzYW1lIHF1YWxpdHkgYXMgQ0FCQUMuA</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

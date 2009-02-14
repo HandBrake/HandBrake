@@ -104,6 +104,8 @@
 {
     /*Set opt widget values here*/
     
+    NSString * toolTip = @"";
+    
     /*B-Frames fX264optBframesPopUp*/
     int i;
     [fX264optBframesPopUp removeAllItems];
@@ -112,6 +114,10 @@
     {
         [fX264optBframesPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    toolTip =
+        @"Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material: 9-16.";
+    [fX264optBframesPopUp setToolTip: toolTip];
+    [fX264optBframesLabel setToolTip: toolTip];
     
     /*Reference Frames fX264optRefPopUp*/
     [fX264optRefPopUp removeAllItems];
@@ -120,12 +126,24 @@
     {
         [fX264optRefPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    toolTip =
+        @"Sane values are 1-6. The more you add, the higher the quality — but the slower the encode. Be careful...too many and QuickTime struggle to play the video back.";
+    [fX264optRefPopUp setToolTip: toolTip];
+    [fX264optRefLabel setToolTip: toolTip];
     
     /*No Fast P-Skip fX264optNfpskipSwitch BOOLEAN*/
     [fX264optNfpskipSwitch setState:0];
+    toolTip =
+        @"This can help with blocking on solid colors like blue skies, but it also slows down the encode.";
+    [fX264optNfpskipSwitch setToolTip: toolTip];
+    [fX264optNfpskipLabel setToolTip: toolTip];
     
     /*No Dict Decimate fX264optNodctdcmtSwitch BOOLEAN*/
     [fX264optNodctdcmtSwitch setState:0];    
+    toolTip =
+        @"To save space, x264 will \"zero out\" blocks when it thinks they won't be perceptible by the viewer. This negligibly reduces quality, but in rare cases it can mess up and produce visible artifacts. This situation can be alleviated by telling x264 not to decimate DCT blocks.\n\nIt increases quality but also bitrate/file size, so if you use it when you've specified a target bitrate you will end up with a worse picture than without it. However, when used with constant quality encoding, or if you boost the average bitrate to compensate, you might get a better result.";
+    [fX264optNodctdcmtSwitch setToolTip: toolTip];
+    [fX264optNodctdcmtLabel setToolTip: toolTip];
     
     /*Sub Me fX264optSubmePopUp*/
     [fX264optSubmePopUp removeAllItems];
@@ -134,6 +152,10 @@
     {
         [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    toolTip =
+        @"This setting is finer-grained than the motion estimation settings above. Instead of dealing with whole pixels, it deals with 4 fractional pixels, or quarter pixels (qpel). Higher levels increase quality by further refining the motion prediction for these quarter pixels, but take longer to encode.\n\nThe default, 6, turns on a feature called rate distortion optimization, including psychovisual enhancements. 7 enables that rate distortion for B-frames. 8 refines those decisions for I and P frames, and 9 adds on refinement for B-frames as well.";
+    [fX264optSubmePopUp setToolTip: toolTip];
+    [fX264optSubmeLabel setToolTip: toolTip];
     
     /*Trellis fX264optTrellisPopUp*/
     [fX264optTrellisPopUp removeAllItems];
@@ -143,10 +165,18 @@
         [fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
     [fX264optTrellisPopUp setWantsLayer:YES];
+    toolTip =
+        @"Trellis fine-tunes how bitrate is doled out, so it can reduce file size/bitrate or increase quality. A value of 1 means it only fine-tunes the final encode of a block of pixels, while 2 means it is considered during earlier phases of the decision-making process as well.";
+    [fX264optTrellisPopUp setToolTip: toolTip];
+    [fX264optTrellisLabel setToolTip: toolTip];
     
     /*Mixed-references fX264optMixedRefsSwitch BOOLEAN*/
     [fX264optMixedRefsSwitch setState:0];
     [fX264optMixedRefsSwitch setWantsLayer:YES];
+    toolTip =
+        @"With this on, different references can be used for different parts of each 16x16 pixel macroblock, increasing quality.";
+    [fX264optMixedRefsSwitch setToolTip: toolTip];
+    [fX264optMixedRefsLabel setToolTip: toolTip];
     
     /*Motion Estimation fX264optMotionEstPopUp*/
     [fX264optMotionEstPopUp removeAllItems];
@@ -156,6 +186,10 @@
     [fX264optMotionEstPopUp addItemWithTitle:@"Uneven Multi-Hexagon"];
     [fX264optMotionEstPopUp addItemWithTitle:@"Exhaustive"];
     [fX264optMotionEstPopUp addItemWithTitle:@"Transformed Exhaustive"];
+    toolTip =
+        @"Controls the motion estimation method. Motion estimation is how the encoder decides how each block of pixels in a frame has moved, compared to most similar blocks in the other frames it references. There are many ways of finding the most similar blocks, with varying speeds and accuracy.\n\nAt the most basic setting, dia, x264 will only consider a diamond-shaped region around each pixel.\n\nThe default setting, hex, is similar to dia but uses a hexagon shape.\n\nUneven multi-hexagon, umh, searches a number of different patterns across a wider area and thus is slower than hex and dia but further increases compression efficiency and quality.\n\nesa, an exhaustive search of a square around each pixel (whose size is controlled by the me-range parameter), is much slower and offers only minimal quality gains.\n\ntesa, transformed exhaustive search, which performs just as thorough a search, is slower still but offers further slight improvements to quality.";
+    [fX264optMotionEstPopUp setToolTip: toolTip];
+    [fX264optMotionEstLabel setToolTip: toolTip];
     
     /*Motion Estimation range fX264optMERangePopUp*/
     [fX264optMERangePopUp removeAllItems];
@@ -164,14 +198,26 @@
     {
         [fX264optMERangePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    toolTip =
+        @"This range is the radius, in pixels, x264 should use for motion estimation searches. It only has an effect when you use Uneven Multi-Hexagonal, Exhaustive, or Transformed Exhaustive searching. 24, 32, and 64 are good values, with each being progressively smaller for progressively less improvement to picture quality.";
+    [fX264optMERangePopUp setToolTip: toolTip];
+    [fX264optMERangeLabel setToolTip: toolTip];
     
     /*Weighted B-Frame Prediction fX264optWeightBSwitch BOOLEAN*/
     [fX264optWeightBSwitch setState:0];
     [fX264optWeightBSwitch setWantsLayer:YES];
+    toolTip =
+        @"Sometimes x264 will base a B-frame's motion compensation on frames both before and after. With weighted B-frames, the amount of influence each frame has is related to its distance from the frame being encoded, instead of both having equal influence.";
+    [fX264optWeightBSwitch setToolTip: toolTip];
+    [fX264optWeightBLabel setToolTip: toolTip];
     
     /*B-frame Pyramids fX264optBPyramidSwitch BOOLEAN*/
     [fX264optBPyramidSwitch setState:0];
     [fX264optBPyramidSwitch setWantsLayer:YES];
+    toolTip =
+        @"B-frame pyramids are a High Profile feature. Pyramidal B-frames mean that B-frames don't just reference surrounding reference frames — instead, it also treats a previous B-frame as a reference, improving quality/lowering bitrate at the expense of complexity. Logically, to reference an earlier B-frame, you must tell x264 to use at least 2 B-frames.";
+    [fX264optBPyramidSwitch setToolTip: toolTip];
+    [fX264optBPyramidLabel setToolTip: toolTip];
     
     /*Direct B-Frame Prediction Mode fX264optDirectPredPopUp*/
     [fX264optDirectPredPopUp removeAllItems];
@@ -181,6 +227,10 @@
     [fX264optDirectPredPopUp addItemWithTitle:@"Temporal"];
     [fX264optDirectPredPopUp addItemWithTitle:@"Automatic"];
     [fX264optDirectPredPopUp setWantsLayer:YES];
+    toolTip =
+        @"Direct prediction tells x264 what method to use when guessing motion for certain parts of a B-frame. It can either look at other parts of the current frame (spatial) or compare against the following P-frameframe (temporal). You're best off setting this to automatic, so x264 decides which method is best on its own. Don't select none assuming it will be faster; instead it will take longer and look worse. If you're going to choose between spatial and temporal, spatial is usually better.";
+    [fX264optDirectPredPopUp setToolTip: toolTip];
+    [fX264optDirectPredLabel setToolTip: toolTip];
     
     /* Adaptive B-Frames Mode fX264optBAdaptPopUp */
     [fX264optBAdaptPopUp removeAllItems];
@@ -189,6 +239,10 @@
     [fX264optBAdaptPopUp addItemWithTitle:@"Fast"];
     [fX264optBAdaptPopUp addItemWithTitle:@"Optimal"];
     [fX264optBAdaptPopUp setWantsLayer:YES];
+    toolTip =
+        @"When adaptive B-Frames are disabled, the number of B-Frames you specify is the constant length of every B-Frame sequence. When one of the adaptive modes is enabled, the number of B-Frames is treated as a maximum, with the length of each sequence varying, but never exceeding the max.\n\nFast mode takes the same amount of time no matter how many B-frames you specify. However, it doesn't always make the best decisions on how many B-Frames to use in a sequence.\n\nOptimal mode gets slower as the maximum number of B-Frames increases, but does a much better job at deciding sequence length, which can mean smaller file sizes and better quality.";
+    [fX264optBAdaptPopUp setToolTip: toolTip];
+    [fX264optBAdaptLabel setToolTip: toolTip];
     
     /*Alpha Deblock*/
     [fX264optAlphaDeblockPopUp removeAllItems];
@@ -197,6 +251,10 @@
     {
         [fX264optAlphaDeblockPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    toolTip =
+        @"x264 includes an in-loop deblocking filter. What this means is that blocky compression artifacts are smoothed away when you play back the video. It has two settings: strength and threshold, just like a simple filter in Photoshop.\n\nStrength controls the amount of deblocking applied to the whole frame. If you drop down below 0, you reduce the amount of blurring. Go too negative, and you'll get an effect somewhat like oversharpening an image. Go into positive values, and the image may become too soft.\n\nThreshold controls how sensitive the filter is to whether something in a block is detail that needs to be preserved: lower numbers blur details less.\n\nThe default deblocking values are 0 and 0. This does not mean zero deblocking. It means x264 will apply the regular deblocking strength and thresholds the codec authors have selected as working the best in most cases.\n\nWhile many, many people stick with the default deblocking values of 0,0, and you should never change the deblocking without disabling adaptive quantization, other people disagree. Some prefer a slightly less blurred image for live action material, and use values like -2,-1 or -2,-2. Others will raise it to 1,1 or even 3,3 for animation. While the values for each setting extend from -6 to 6, the consensus is that going below -3 or above 3 is worthless.";
+    [fX264optAlphaDeblockPopUp setToolTip: toolTip];
+    [fX264optDeblockLabel setToolTip: toolTip];
 
     /*Beta Deblock*/
     [fX264optBetaDeblockPopUp removeAllItems];
@@ -205,19 +263,33 @@
     {
         [fX264optBetaDeblockPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
+    [fX264optBetaDeblockPopUp setToolTip: toolTip];
+    [fX264optDeblockLabel setToolTip: toolTip];
 
     /* Analysis fX264optAnalysePopUp */
     [fX264optAnalysePopUp removeAllItems];
     [fX264optAnalysePopUp addItemWithTitle:@"Default (some)"]; /* 0=default */
     [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"None"]]; /* 1=none */
     [fX264optAnalysePopUp addItemWithTitle:[NSString stringWithFormat:@"All"]]; /* 2=all */
+    toolTip =
+        @"Analysis controls how finely x264 divides up a frame to capture detail. Full macroblocks are 16x16 pixels, but x264 can go down all the way to 4x4 blocks if it judges it necessary. By default it only breaks up key frames that much. To give x264 the freedom to make the best decisions for all frames, use \"all\" analysis. If you want to create a high profile H.264 video (which is less compatible with the world at large than main profile), also check the \"8x8 DCT blocks\" box to add yet another block size for analysis.";
+    [fX264optAnalysePopUp setToolTip: toolTip];
+    [fX264optAnalyseLabel setToolTip: toolTip];
 
     /* 8x8 DCT fX264op8x8dctSwitch */
     [fX264opt8x8dctSwitch setState:0];
     [fX264opt8x8dctSwitch setWantsLayer:YES];
+    toolTip =
+        @"Checking this box lets x264 break key frames down into 8x8 blocks of pixels for analysis. This is a high profile feature of H.264, which makes it less compatible. It should slightly decrease bitrate or improve quality. Turn it on whenever possible.";
+    [fX264opt8x8dctSwitch setToolTip: toolTip];
+    [fX264opt8x8dctLabel setToolTip: toolTip];
 
     /* CABAC fX264opCabacSwitch */
     [fX264optCabacSwitch setState:1];
+    toolTip =
+        @"CABAC, or context adaptive binary arithmetic coding, is used by x264 to reduce the bitrate needed for a given quality by 15\%. This makes it very cool and very useful, and it should be left on whenever possible. However, it is incompatible with the iPod, and makes the AppleTV struggle. So turn it off for those.\n\nCABAC is a kind of entropy coding, which means that it compresses data by making shorthand symbols to represent long streams of data. The \"entropy\" part means that the symbols it uses the most often are the smallest. When you disable CABAC, another entropy coding scheme gets enabled, called CAVLC (context adaptive variable-length coding). CAVLC is a lot less efficient, which is why it needs 15\% more bitrate to achieve the same quality as CABAC.";
+    [fX264optCabacSwitch setToolTip: toolTip];
+    [fX264optCabacLabel setToolTip: toolTip];
     
     /* PsyRDO fX264optPsyRDSlider */
     [fX264optPsyRDSlider setMinValue:0.0];
@@ -226,6 +298,10 @@
     [fX264optPsyRDSlider setNumberOfTickMarks:10];
     [fX264optPsyRDSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optPsyRDSlider setFloatValue:1.0];
+    toolTip =
+        @"Psychovisual Rate Distortion Optimization sure is a mouthful, isn't it? Basically, it means x264 tries to retain detail, for better quality to the human eye, as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise.";
+    [fX264optPsyRDSlider setToolTip: toolTip];
+    [fX264optPsyRDLabel setToolTip: toolTip];
 
     /* PsyTrellis fX264optPsyRDSlider */
     [fX264optPsyTrellisSlider setMinValue:0.0];
@@ -234,6 +310,10 @@
     [fX264optPsyTrellisSlider setNumberOfTickMarks:10];
     [fX264optPsyTrellisSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optPsyTrellisSlider setFloatValue:0.0];
+    toolTip =
+        @"Psychovisual Trellis tries to retain more sharpness and detail, but can cause artifacting. It is considered experimental, which is why it's off by default. Good values are 0.1 to 0.2.";
+    [fX264optPsyTrellisSlider setToolTip: toolTip];
+    [fX264optPsyTrellisLabel setToolTip: toolTip];
 
     /* Standardize the option string */
     [self X264AdvancedOptionsStandardizeOptString:nil];
