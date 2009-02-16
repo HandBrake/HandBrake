@@ -316,7 +316,7 @@ namespace Handbrake
 
             // H264 Tab & Preset Name
             #region other
-            mainWindow.rtf_x264Query.Text = presetQuery.H264Query;
+            mainWindow.x264Panel.x264Query = presetQuery.H264Query;
 
             // Set the preset name
             mainWindow.groupBox_output.Text = "Output Settings (Preset: " + name + ")";

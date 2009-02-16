@@ -424,8 +424,8 @@ namespace Handbrake
             #endregion
 
             #region  H264 Tab
-            if (mainWindow.rtf_x264Query.Text != "")
-                query += " -x " + mainWindow.rtf_x264Query.Text;
+            if (mainWindow.x264Panel.x264Query != "")
+                query += " -x " + mainWindow.x264Panel.x264Query;
             #endregion
 
             #region Processors / Other

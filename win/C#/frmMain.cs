@@ -29,7 +29,6 @@ namespace Handbrake
 
         // Objects belonging to this window only
         PresetLoader presetLoader = new PresetLoader();
-        x264Panel x264PanelFunctions = new x264Panel();
         QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking.
@@ -82,7 +81,7 @@ namespace Handbrake
             // Setup the GUI components
             lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
-            x264PanelFunctions.reset2Defaults(this); // Initialize all the x264 widgets to their default values
+            x264Panel.reset2Defaults(); // Initialize all the x264 widgets to their default values
             loadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
@@ -102,15 +101,15 @@ namespace Handbrake
                     if (query != null)
                     {
                         //Ok, Reset all the H264 widgets before changing the preset
-                        x264PanelFunctions.reset2Defaults(this);
+                        x264Panel.reset2Defaults();
 
                         // Send the query from the file to the Query Parser class, then load the preset
                         Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
                         presetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
-                        x264PanelFunctions.X264_StandardizeOptString(this);
-                        x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                        x264Panel.X264_StandardizeOptString();
+                        x264Panel.X264_SetCurrentSettingsInPanel();
                     }
                 }
                 else
@@ -460,7 +459,7 @@ namespace Handbrake
                     if (query != null)
                     {
                         //Ok, Reset all the H264 widgets before changing the preset
-                        x264PanelFunctions.reset2Defaults(this);
+                        x264Panel.reset2Defaults();
 
                         // Send the query from the file to the Query Parser class
                         Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
@@ -469,8 +468,8 @@ namespace Handbrake
                         presetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
-                        x264PanelFunctions.X264_StandardizeOptString(this);
-                        x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
+                        x264Panel.X264_StandardizeOptString();
+                        x264Panel.X264_SetCurrentSettingsInPanel();
                     }
                 }
             }
@@ -1048,7 +1047,7 @@ namespace Handbrake
                 check_turbo.CheckState = CheckState.Unchecked;
                 check_turbo.Enabled = false;
                 h264Tab.Enabled = false;
-                rtf_x264Query.Text = "";
+                x264Panel.x264Query = "";
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
             }
@@ -1524,109 +1523,6 @@ namespace Handbrake
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
             }
-        }
-
-        // Advanced Tab
-        private void drop_refFrames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("ref", this);
-        }
-        private void check_mixedReferences_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("mixed-refs", this);
-        }
-        private void drop_bFrames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("bframes", this);
-        }
-        private void drop_directPrediction_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("direct", this);
-        }
-        private void check_weightedBFrames_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("weightb", this);
-        }
-        private void check_pyrmidalBFrames_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("b-pyramid", this);
-        }
-        private void drop_MotionEstimationMethod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("me", this);
-        }
-        private void drop_MotionEstimationRange_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("merange", this);
-        }
-        private void drop_subpixelMotionEstimation_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("subq", this);
-        }
-        private void drop_analysis_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("analyse", this);
-        }
-        private void check_8x8DCT_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("8x8dct", this);
-        }
-        private void drop_deblockAlpha_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("deblock", this);
-
-        }
-        private void drop_deblockBeta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("deblock", this);
-
-        }
-        private void drop_trellis_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("trellis", this);
-        }
-        private void check_noFastPSkip_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("no-fast-pskip", this);
-        }
-        private void check_noDCTDecimate_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("no-dct-decimate", this);
-
-        }
-        private void check_Cabac_CheckedChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("cabac", this);
-        }
-        private void slider_psyrd_Scroll(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("psy-rd", this);
-        }
-        private void slider_psytrellis_Scroll(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("psy-rd", this);
-        }
-        private void drop_adaptBFrames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            x264PanelFunctions.on_x264_WidgetChange("b-adapt", this);
-        }
-
-        private void rtf_x264Query_TextChanged(object sender, EventArgs e)
-        {
-            if (rtf_x264Query.Text.EndsWith("\n"))
-            {
-                rtf_x264Query.Text = rtf_x264Query.Text.Replace("\n", "");
-                x264PanelFunctions.X264_StandardizeOptString(this);
-                x264PanelFunctions.X264_SetCurrentSettingsInPanel(this);
-
-                if (rtf_x264Query.Text == string.Empty)
-                    x264PanelFunctions.reset2Defaults(this);
-            }
-        }
-        private void btn_reset_Click(object sender, EventArgs e)
-        {
-            rtf_x264Query.Text = "";
-            x264PanelFunctions.reset2Defaults(this);
         }
 
         // Query Editor Tab
@@ -2202,7 +2098,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         // This is the END of the road ------------------------------------------------------------------------------
     }

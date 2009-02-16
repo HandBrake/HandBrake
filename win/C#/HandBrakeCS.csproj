@@ -124,6 +124,12 @@
     <Compile Include="Controls\Deinterlace.Designer.cs">
       <DependentUpon>Deinterlace.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\x264Panel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\x264Panel.Designer.cs">
+      <DependentUpon>x264Panel.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -199,7 +205,6 @@
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
-    <Compile Include="frmMain\x264Panel.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
     <Compile Include="Parsing\DVD.cs" />
@@ -222,6 +227,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Deinterlace.resx">
       <DependentUpon>Deinterlace.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\x264Panel.resx">
+      <DependentUpon>x264Panel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPreview.resx">
