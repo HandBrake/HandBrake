@@ -160,12 +160,6 @@
     <Compile Include="frmDownload.Designer.cs">
       <DependentUpon>frmDownload.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmGenPreview.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmGenPreview.Designer.cs">
-      <DependentUpon>frmGenPreview.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,10 +246,6 @@
     <EmbeddedResource Include="frmDownload.resx">
       <SubType>Designer</SubType>
       <DependentUpon>frmDownload.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmGenPreview.resx">
-      <DependentUpon>frmGenPreview.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <SubType>Designer</SubType>

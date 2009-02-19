@@ -33,7 +33,6 @@ namespace Handbrake
 
         // Globals: Mainly used for tracking.
         private frmQueue queueWindow;
-        private frmGenPreview vlcpreview;
         private frmPreview qtpreview;
         private string lastAction;
         public int maxWidth;
@@ -120,7 +119,10 @@ namespace Handbrake
 
             // Enabled GUI tooltip's if Required
             if (Properties.Settings.Default.tooltipEnable == "Checked")
+            {
+                x264Panel.setToolTipActive(true);
                 ToolTip.Active = true;
+            }
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -635,27 +637,7 @@ namespace Handbrake
             queueWindow.setQueue();
             queueWindow.Show();
         }
-        private void mnu_vlcpreview_Click(object sender, EventArgs e)
-        {
-            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
-                MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            else
-            {
-                if (vlcpreview == null)
-                {
-                    vlcpreview = new frmGenPreview(this);
-                    vlcpreview.Show();
-                }
-                else if (vlcpreview.IsDisposed)
-                {
-                    vlcpreview = new frmGenPreview(this);
-                    vlcpreview.Show();
-                }
-                else
-                    MessageBox.Show("The preview window is already open!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-        private void mnu_qtpreview_Click(object sender, EventArgs e)
+        private void tb_preview_Click(object sender, EventArgs e)
         {
             if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1446,7 +1428,6 @@ namespace Handbrake
             }
 
         }
-
         private void audioList_remove_Click(object sender, EventArgs e)
         {
             removeAudioTrack();
@@ -1473,7 +1454,6 @@ namespace Handbrake
                 }
             }
         }
-
         private void lv_audioList_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Set the dropdown controls based on the selected item in the Audio List.

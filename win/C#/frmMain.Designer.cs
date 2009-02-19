@@ -37,7 +37,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -215,13 +215,11 @@ namespace Handbrake
             this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
             this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tb_preview = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnu_qtpreview = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_vlcpreview = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tb_preview = new System.Windows.Forms.ToolStripButton();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -606,9 +604,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
             this.number.Name = "number";
@@ -2244,32 +2242,6 @@ namespace Handbrake
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
             // 
-            // tb_preview
-            // 
-            this.tb_preview.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_qtpreview,
-            this.mnu_vlcpreview});
-            this.tb_preview.Image = global::Handbrake.Properties.Resources.picture;
-            this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tb_preview.Name = "tb_preview";
-            this.tb_preview.Size = new System.Drawing.Size(95, 36);
-            this.tb_preview.Text = "Preview";
-            // 
-            // mnu_qtpreview
-            // 
-            this.mnu_qtpreview.Name = "mnu_qtpreview";
-            this.mnu_qtpreview.Size = new System.Drawing.Size(203, 22);
-            this.mnu_qtpreview.Text = "Preview in QuickTime";
-            this.mnu_qtpreview.Click += new System.EventHandler(this.mnu_qtpreview_Click);
-            // 
-            // mnu_vlcpreview
-            // 
-            this.mnu_vlcpreview.Name = "mnu_vlcpreview";
-            this.mnu_vlcpreview.Size = new System.Drawing.Size(203, 22);
-            this.mnu_vlcpreview.Text = "Preview in VLC";
-            this.mnu_vlcpreview.Click += new System.EventHandler(this.mnu_vlcpreview_Click);
-            // 
             // btn_ActivityWindow
             // 
             this.btn_ActivityWindow.Image = global::Handbrake.Properties.Resources.ActivityWindow;
@@ -2308,6 +2280,16 @@ namespace Handbrake
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
+            // 
+            // tb_preview
+            // 
+            this.tb_preview.Image = global::Handbrake.Properties.Resources.picture;
+            this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tb_preview.Name = "tb_preview";
+            this.tb_preview.Size = new System.Drawing.Size(86, 36);
+            this.tb_preview.Text = "Preview";
+            this.tb_preview.Click += new System.EventHandler(this.tb_preview_Click);
             // 
             // frmMain
             // 
@@ -2542,9 +2524,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem audioList_remove;
         private System.Windows.Forms.ImageList AudioMenuRowHeightHack;
-        private System.Windows.Forms.ToolStripDropDownButton tb_preview;
-        private System.Windows.Forms.ToolStripMenuItem mnu_qtpreview;
-        private System.Windows.Forms.ToolStripMenuItem mnu_vlcpreview;
         private System.Windows.Forms.ToolStripMenuItem pmnu_saveChanges;
         private System.Windows.Forms.ToolStripMenuItem mnu_killCLI;
         private System.Windows.Forms.DataGridViewTextBoxColumn number;
@@ -2560,6 +2539,7 @@ namespace Handbrake
         internal System.Windows.Forms.RadioButton radio_avgBitrate;
         internal System.Windows.Forms.RadioButton radio_targetFilesize;
         internal Handbrake.Controls.x264Panel x264Panel;
+        private System.Windows.Forms.ToolStripButton tb_preview;
 
     }
 }
