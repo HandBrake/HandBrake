@@ -421,9 +421,13 @@ namespace Handbrake
         {
             if (treeView_presets.SelectedNode != null)
             {
-                Properties.Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
-                Properties.Settings.Default.Save();
-                MessageBox.Show("New default preset set.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult result = MessageBox.Show("Are you sure you wish to set this preset as the default?", "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    Properties.Settings.Default.defaultPreset = treeView_presets.SelectedNode.Text;
+                    Properties.Settings.Default.Save();
+                    MessageBox.Show("New default preset set.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             else
                 MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -464,7 +468,7 @@ namespace Handbrake
                         x264Panel.reset2Defaults();
 
                         // Send the query from the file to the Query Parser class
-                        Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+                        Functions.QueryParser presetQuery = QueryParser.Parse(query);
 
                         // Now load the preset
                         presetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
@@ -472,6 +476,13 @@ namespace Handbrake
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
+
+                        if (maxWidth != 0 && maxHeight != 0)
+                            lbl_max.Text = "Max Width / Height";
+                        else if (maxWidth != 0)
+                            lbl_max.Text = "Max Width";
+                        else
+                            lbl_max.Text = "";
                     }
                 }
             }
@@ -1166,6 +1177,7 @@ namespace Handbrake
                 text_width.BackColor = Color.White;
 
             maxWidth = 0; maxHeight = 0;  // Reset max width so that it's not using the MaxWidth -X. Quick hack to allow -X for preset usage.
+            lbl_max.Text = "";
 
             int width;
             Boolean parsed = int.TryParse(text_width.Text, out width);
@@ -1190,6 +1202,10 @@ namespace Handbrake
                 text_height.BackColor = Color.White;
 
             maxHeight = 0;  // Reset max height so that it's not using the MaxHeight -Y. Quick hack to allow -Y for preset usage.
+            if (maxWidth != 0)
+                lbl_max.Text = "Max Width";
+            else
+                lbl_max.Text = "";
 
             int height;
             Boolean parsed = int.TryParse(text_height.Text, out height);
