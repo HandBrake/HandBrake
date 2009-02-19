@@ -89,6 +89,7 @@ namespace Handbrake.Presets
                     item.Query = query;
                     item.PictureSettings = pictureSettings;
                     MessageBox.Show("Changes to \"" + presetName + "\" Saved", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    updateUserPresetsFile();
                 }
             }
         }
@@ -225,10 +226,8 @@ namespace Handbrake.Presets
             presets.Clear();
             user_presets.Clear();
 
-            string filePath = string.Empty;
-
             // Load in the users presets from user_presets.xml
-            filePath = Application.StartupPath.ToString() + "\\presets.xml";
+            string filePath = Application.StartupPath + "\\presets.xml";
             if (File.Exists(filePath))
             {
                 using (FileStream strm = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -244,7 +243,7 @@ namespace Handbrake.Presets
             }
 
             // Load in the users presets from user_presets.xml
-            filePath = Application.StartupPath.ToString() + "\\user_presets.xml";
+            filePath = Application.StartupPath + "\\user_presets.xml";
             if (File.Exists(filePath))
             {
                 using (FileStream strm = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -266,7 +265,7 @@ namespace Handbrake.Presets
         /// </summary>
         private void updatePresetsFile()
         {
-            string userPresets = Application.StartupPath.ToString() + "\\presets.xml";
+            string userPresets = Application.StartupPath + "\\presets.xml";
             try
             {
                 using (FileStream strm = new FileStream(userPresets, FileMode.Create, FileAccess.Write))
@@ -278,7 +277,7 @@ namespace Handbrake.Presets
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
         }
 
@@ -288,7 +287,7 @@ namespace Handbrake.Presets
         /// </summary>
         private void updateUserPresetsFile()
         {
-            string userPresets = Application.StartupPath.ToString() + "\\user_presets.xml";
+            string userPresets = Application.StartupPath + "\\user_presets.xml";
             try
             {
                 using (FileStream strm = new FileStream(userPresets, FileMode.Create, FileAccess.Write))
@@ -300,7 +299,7 @@ namespace Handbrake.Presets
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
         }
 
