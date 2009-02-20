@@ -99,16 +99,19 @@ endif
 #
 ifeq ($(findstring CYGWIN_NT,$(SYSTEM)),CYGWIN_NT)
 
-snapshot: unstable-libhb/hbversion.h all
-	(rm -rf HandBrake HandBrake*.zip ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; cp /bin/cygwin1.dll HandBrake ; zip -r HandBrake-$(SNAP_HB_VERSION)-Win_CLI.zip HandBrake ; rm -rf HandBrake )
+snapshot: clean unstable-libhb/hbversion.h all
+official: clean force-hbversion all
 
-official: force-hbversion all
+snapshot-release: snapshot
+	(rm -rf HandBrake HandBrake*.zip ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; cp /bin/cygwin1.dll HandBrake ; zip -r HandBrake-$(SNAP_HB_VERSION)-Win_CLI.zip HandBrake ; rm -rf HandBrake )
+    
+official-release: official
 	(rm -rf HandBrake HandBrake*.zip ; mkdir -p HandBrake/api HandBrake/doc; cp test/BUILDSHARED AUTHORS BUILD COPYING CREDITS NEWS THANKS TRANSLATIONS HandBrake/doc ;  cp -rp libhb/hb.h libhb/common.h libhb/ports.h HandBrake/api ; cp -rp HandBrakeCLI HandBrake ; cp /bin/cygwin1.dll HandBrake ;  zip -r HandBrake-$(HB_VERSION)-Win_GUI.zip HandBrake ; rm -rf HandBrake )
 
 force-hbversion:
 	rm -f libhb/hbversion.h
     
-all:    contrib/.contrib HandBrakeCLI
+all: contrib/.contrib HandBrakeCLI
 
 contrib/.contrib:
 	@$(MAKE) --no-print-directory -C contrib all
@@ -122,7 +125,7 @@ HandBrakeCLI: libhb/libhb.a
 clean:
 	@$(MAKE) --no-print-directory -C libhb clean
 	@$(MAKE) --no-print-directory -C test clean
-	@rm libhb/hbversion.h
+	@rm -f libhb/hbversion.h
 	@rm -f contrib/config.cache
 	@rm -f HandBrake HandBrake*.zip
 
