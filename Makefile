@@ -128,6 +128,7 @@ clean:
 	@rm -f libhb/hbversion.h
 	@rm -f contrib/config.cache
 	@rm -f HandBrake HandBrake*.zip
+	@rm -f contrib/.contrib
 
 mrproper: clean
 	@$(MAKE) --no-print-directory -C contrib mrproper
