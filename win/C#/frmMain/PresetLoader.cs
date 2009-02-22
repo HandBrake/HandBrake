@@ -182,11 +182,19 @@ namespace Handbrake
                 if (presetQuery.VideoEncoder == "H.264 (x264)")
                 {
                     int value;
-                    float presetValue, calculated, x264step;
-                    float.TryParse(presetQuery.VideoQuality.ToString(), out presetValue);
-                    float.TryParse(Properties.Settings.Default.x264cqstep, out x264step);
+                    System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-                    float x = 51 / x264step;
+                    double presetValue, calculated, x264step;
+                    double.TryParse(presetQuery.VideoQuality.ToString(),
+                                    System.Globalization.NumberStyles.Number,
+                                    culture,
+                                    out presetValue);
+                    double.TryParse(Properties.Settings.Default.x264cqstep,
+                                    System.Globalization.NumberStyles.Number,
+                                    culture,
+                                    out x264step);
+
+                    double x = 51 / x264step;
 
                     calculated = presetValue / x264step;
                     calculated = x - calculated;

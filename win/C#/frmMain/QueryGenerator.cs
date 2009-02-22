@@ -219,7 +219,11 @@ namespace Handbrake
                         break;
                     case "H.264 (x264)":
                         double divided;
-                        double.TryParse(Properties.Settings.Default.x264cqstep, out divided);
+                        System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+                        double.TryParse(Properties.Settings.Default.x264cqstep,
+                                        System.Globalization.NumberStyles.Number,
+                                        culture,
+                                        out divided);
                         value = 51 - mainWindow.slider_videoQuality.Value * divided;
                         value = Math.Round(value, 2);
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
