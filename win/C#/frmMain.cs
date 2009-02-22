@@ -1116,7 +1116,11 @@ namespace Handbrake
                     break;
                 case "H.264 (x264)":
                     double divided;
-                    double.TryParse(Properties.Settings.Default.x264cqstep, out divided);
+                    System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+                    double.TryParse(Properties.Settings.Default.x264cqstep,
+                                    System.Globalization.NumberStyles.Number,
+                                    culture,
+                                    out divided);
                     rfValue = 51.0 - slider_videoQuality.Value * divided;
                     max = slider_videoQuality.Maximum * divided;
                     min = slider_videoQuality.Minimum;
@@ -2094,6 +2098,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
         // This is the END of the road ------------------------------------------------------------------------------
     }
