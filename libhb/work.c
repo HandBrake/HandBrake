@@ -265,7 +265,7 @@ void hb_display_job_info( hb_job_t * job )
         }
         else if( job->vquality > 1 )
         {
-            hb_log( "     + quality: %.0f %s", job->vquality, job->crf && job->vcodec == HB_VCODEC_X264 ? "(RF)" : "(QP)" ); 
+            hb_log( "     + quality: %.2f %s", job->vquality, job->crf && job->vcodec == HB_VCODEC_X264 ? "(RF)" : "(QP)" ); 
         }
         else
         {
