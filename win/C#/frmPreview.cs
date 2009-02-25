@@ -18,10 +18,20 @@ namespace Handbrake
         readonly frmMain mainWindow;
         private Process hbProc;
         private Thread player;
+        private Boolean noQT;
 
         public frmPreview(frmMain mw)
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("It would appear QuickTime 7 is not installed. QuickTime preview functionality will be disabled! \n\n Debug Info:\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btn_playQT.Enabled = false;
+                noQT = true;
+            }
             this.mainWindow = mw;
             cb_preview.SelectedIndex = 0;
             cb_duration.SelectedIndex = 1;
@@ -66,7 +76,8 @@ namespace Handbrake
                     BeginInvoke(new UpdateUIHandler(encodeCompleted));
                     return;
                 }
-                btn_playQT.Enabled = true;
+                if (!noQT)
+                    btn_playQT.Enabled = true;
                 btn_playVLC.Enabled = true;
 
                 // Decide which player to use.
