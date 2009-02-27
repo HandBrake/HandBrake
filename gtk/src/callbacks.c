@@ -1517,7 +1517,7 @@ queue_scan(signal_user_data_t *ud, GValue *js)
 		gchar *ver_str;
 
 		ver_str = g_strdup_printf("Handbrake Version: %s (%d)\n", 
-									HB_VERSION, HB_BUILD);
+									hb_get_version(NULL), hb_get_build(NULL));
 		g_io_channel_write_chars (ud->job_activity_log, ver_str, 
 									-1, NULL, NULL);
 		g_free(ver_str);
@@ -2940,7 +2940,7 @@ process_appcast(signal_user_data_t *ud)
 	if (ud->appcast == NULL || ud->appcast_len < 15 || 
 		strncmp(&(ud->appcast[9]), "200 OK", 6))
 	{
-		if (!stable_update_lock && HB_BUILD % 100)
+		if (!stable_update_lock && hb_get_build(NULL) % 100)
 			g_idle_add((GSourceFunc)check_stable_update, ud);
 		goto done;
 	}
@@ -2949,14 +2949,14 @@ process_appcast(signal_user_data_t *ud)
 		ibuild = g_strtod(build, NULL);
 	skip = ghb_settings_get_int(ud->settings, "update_skip_version");
 	if (description == NULL || build == NULL || version == NULL 
-		|| ibuild <= HB_BUILD || skip == ibuild)
+		|| ibuild <= hb_get_build(NULL) || skip == ibuild)
 	{
-		if (!stable_update_lock && HB_BUILD % 100)
+		if (!stable_update_lock && hb_get_build(NULL) % 100)
 			g_thread_create((GThreadFunc)check_stable_update, ud, FALSE, NULL);
 		goto done;
 	}
 	msg = g_strdup_printf("HandBrake %s/%s is now available (you have %s/%d).",
-			version, build, HB_VERSION, HB_BUILD);
+			version, build, hb_get_version(NULL), hb_get_build(NULL));
 	label = GHB_WIDGET(ud->builder, "update_message");
 	gtk_label_set_text(GTK_LABEL(label), msg);
 	html = gtk_html_new_from_string(description, -1);
@@ -3079,7 +3079,7 @@ ghb_check_update(signal_user_data_t *ud)
 	GError *gerror = NULL;
 
 	g_debug("ghb_check_update");
-	if (HB_BUILD % 100)
+	if (hb_get_build(NULL) % 100)
 	{
     	query = 
 		"GET /appcast_unstable.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";

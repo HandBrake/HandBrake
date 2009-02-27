@@ -25,7 +25,6 @@
 #include <limits.h>
 #include <math.h>
 #include "hb.h"
-#include "hbversion.h"
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include "hb-backend.h"
@@ -546,7 +545,7 @@ del_tree(const gchar *name, gboolean del_top)
 const gchar*
 ghb_version()
 {
-	return HB_VERSION;
+	return hb_get_version(NULL);
 }
 
 void
