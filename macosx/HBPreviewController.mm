@@ -1087,22 +1087,21 @@ return YES;
         [fMovieView setMovie:nil];
         
         aMovie = [QTMovie movieWithFile:path error:nil];
-        
+
         /* we get some size information from the preview movie */
-        Rect movieBox;
-        GetMovieBox ([aMovie quickTimeMovie], &movieBox);
+        NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
         movieBounds = [fMovieView movieBounds];
-        movieBounds.size.height = movieBox.bottom - movieBox.top;
-        
+        movieBounds.size.height = movieSize.height;
+
         if ([fMovieView isControllerVisible])
             movieBounds.size.height += [fMovieView controllerBarHeight];
         /* since for whatever the reason I cannot seem to get the [fMovieView controllerBarHeight]
          * For now just use 15 for additional height as it seems to line up well
          */
         movieBounds.size.height += 15;
-        
-        movieBounds.size.width = movieBox.right - movieBox.left;
-        
+
+        movieBounds.size.width = movieSize.width;
+
         /* We need to find out if the preview movie needs to be scaled down so
          * that it doesn't overflow our available viewing container (just like for image
          * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
