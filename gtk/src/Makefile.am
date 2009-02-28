@@ -69,12 +69,8 @@ AM_CFLAGS =\
 	 -g
 
 bin_PROGRAMS = ghb 
-noinst_PROGRAMS = makewidgetdeps quotestring create_resources preset_xlat
-
-BUILT_SOURCES = HandBrakeCLI
-
-HandBrakeCLI: $(HB_DIR)/HandBrakeCLI
-	/bin/cp $< $@
+noinst_PROGRAMS = makewidgetdeps quotestring create_resources preset_xlat \
+	resource_data.h resources.plist widget.deps widget_reverse.deps
 
 # Dummy file, not built.  Forces g++ linking
 nodist_EXTRA_ghb_SOURCES = dummy.cpp
@@ -157,16 +153,17 @@ quotestring_SOURCES = quotestring.c
 
 dumbell: preset_xlat
 
-resources.c: resource_data.h
+resources.o: resource_data.h
 
 resource_data.h: quotestring resources.plist
 	./quotestring resources.plist resource_data.h
 
-widget_deps: makewidgetdeps
+widget_reverse.deps: makewidgetdeps
+widget.deps: makewidgetdeps
 	./makewidgetdeps
 
-resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget_deps widget_reverse_deps
-	./create_resources resources.list resources.plist
+resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget.deps widget_reverse.deps
+	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist
 
 ghbcellrenderertext.c: marshalers.h
 
@@ -175,8 +172,6 @@ marshalers.h: marshalers.list
 
 marshalers.c: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal marshalers.list --body > marshalers.c
-
-EXTRA_DIST = HandBrakeCLI
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/hicolor
 
@@ -200,9 +195,6 @@ uninstall-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
-
-install-exec-local:
-	$(INSTALL_PROGRAM) $(srcdir)/HandBrakeCLI $(DESTDIR)/$(bindir)/HandBrakeCLI
 
 install-data-local:
 	for icon in $(icons); do \

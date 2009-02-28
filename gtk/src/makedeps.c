@@ -106,7 +106,7 @@ main(gint argc, gchar *argv[])
 		}
 		ghb_dict_insert(top, g_strdup(name), array);
 	}
-	ghb_plist_write_file("widget_deps", top);
+	ghb_plist_write_file("widget.deps", top);
 
 	// reverse map
 	top = ghb_dict_value_new();
@@ -138,7 +138,7 @@ main(gint argc, gchar *argv[])
 		}
 		ghb_dict_insert(top, g_strdup(name), array);
 	}
-	ghb_plist_write_file("widget_reverse_deps", top);
+	ghb_plist_write_file("widget_reverse.deps", top);
 	return 0;
 }
 

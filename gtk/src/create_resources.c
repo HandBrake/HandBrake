@@ -1,4 +1,6 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -41,6 +43,34 @@ typedef struct
 	GQueue *tag_stack;
 	gboolean closed_top;
 } parse_data_t;
+
+GList *inc_list = NULL;
+
+static gchar*
+find_file(GList *list, const gchar *name)
+{
+	gchar *str;
+	GList *link = list;
+
+	while (link != NULL)
+	{
+		gchar *inc;
+
+		inc = (gchar*)link->data;
+		str = g_strdup_printf("%s/%s", inc, name);
+		if (g_file_test(str, G_FILE_TEST_IS_REGULAR))
+		{
+			return str;
+		}
+		g_free(str);
+		link = g_list_next(link);
+	}
+	if (g_file_test(name, G_FILE_TEST_IS_REGULAR))
+	{
+		return g_strdup(name);
+	}
+	return NULL;
+}
 
 static const gchar*
 lookup_attr_value(
@@ -138,9 +168,11 @@ start_element(
 		} break;
 		case R_ICON:
 		{
-			const gchar *filename, *name;
+			gchar *filename;
+			const gchar *name;
 
-			filename = lookup_attr_value("file", attr_names, attr_values);
+			name = lookup_attr_value("file", attr_names, attr_values);
+			filename = find_file(inc_list, name);
 			name = lookup_attr_value("name", attr_names, attr_values);
 			if (filename && name)
 			{
@@ -153,44 +185,54 @@ start_element(
 				gval = ghb_rawdata_value_new(rd);
 				if (pd->key) g_free(pd->key);
 				pd->key = g_strdup(name);
+				g_free(filename);
 			}
 			else
 			{
 				g_warning("%s:missing a requried attribute", name);
+    			exit(EXIT_FAILURE);
 			}
 		} break;
 		case R_PLIST:
 		{
-			const gchar *filename, *name;
+			gchar *filename;
+			const gchar *name;
 
-			filename = lookup_attr_value("file", attr_names, attr_values);
+			name = lookup_attr_value("file", attr_names, attr_values);
+			filename = find_file(inc_list, name);
 			name = lookup_attr_value("name", attr_names, attr_values);
 			if (filename && name)
 			{
 				gval = ghb_plist_parse_file(filename);
 				if (pd->key) g_free(pd->key);
 				pd->key = g_strdup(name);
+				g_free(filename);
 			}
 			else
 			{
 				g_warning("%s:missing a requried attribute", name);
+    			exit(EXIT_FAILURE);
 			}
 		} break;
 		case R_STRING:
 		{
-			const gchar *filename, *name;
+			gchar *filename;
+			const gchar *name;
 
-			filename = lookup_attr_value("file", attr_names, attr_values);
+			name = lookup_attr_value("file", attr_names, attr_values);
+			filename = find_file(inc_list, name);
 			name = lookup_attr_value("name", attr_names, attr_values);
 			if (filename && name)
 			{
 				gval = read_string_from_file(filename);
 				if (pd->key) g_free(pd->key);
 				pd->key = g_strdup(name);
+				g_free(filename);
 			}
 			else
 			{
 				g_warning("%s:missing a requried attribute", name);
+    			exit(EXIT_FAILURE);
 			}
 		} break;
 	}
@@ -400,25 +442,63 @@ ghb_resource_parse_file(FILE *fd)
 	return gval;
 }
 
+static void
+usage(char *cmd)
+{
+    fprintf(stderr,
+"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
+"Summary:\n"
+"    Creates a resource plist from a resource list\n"
+"Options:\n"
+"    I - Include path to search for files\n"
+"    <in resource list>    Input resources file\n"
+"    <out resource plist>  Output resources plist file\n"
+, cmd);
+
+    exit(EXIT_FAILURE);
+}
+
+#define OPTS "I:"
 
 gint
 main(gint argc, gchar *argv[])
 {
 	FILE *file;
 	GValue *gval;
+    int opt;
+	const gchar *src, *dst;
 
-	if (argc < 3)
+    do
+    {
+        opt = getopt(argc, argv, OPTS);
+        switch (opt)
+        {
+        case -1: break;
+
+        case 'I':
+			inc_list = g_list_prepend(inc_list, g_strdup(optarg));
+            break;
+        }
+    } while (opt != -1);
+
+	if (optind != argc - 2)
 	{
-		fprintf(stderr, "Usage: <in resource list> <out resource plist>\n");
-		return 1;
+		usage(argv[0]);
+		return EXIT_FAILURE;
 	}
+    src = argv[optind++];
+    dst = argv[optind++];
+
 	g_type_init();
-	file = g_fopen(argv[1], "r");
+	file = g_fopen(src, "r");
 	if (file == NULL)
-		return 1;
+	{
+		fprintf(stderr, "Error: failed to open %s\n", src);
+		return EXIT_FAILURE;
+	}
 
 	gval = ghb_resource_parse_file(file);
-	ghb_plist_write_file(argv[2], gval);
+	ghb_plist_write_file(dst, gval);
 	return 0;
 }
 

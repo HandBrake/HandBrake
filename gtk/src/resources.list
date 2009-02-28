@@ -29,7 +29,7 @@
 	</section>
 	<plist name="internal-defaults" file="internal_defaults.xml" />
 	<plist name="standard-presets" file="standard_presets.xml" />
-	<plist name="widget-deps" file="widget_deps" />
-	<plist name="widget-reverse-deps" file="widget_reverse_deps" />
+	<plist name="widget-deps" file="widget.deps" />
+	<plist name="widget-reverse-deps" file="widget_reverse.deps" />
 	<string name="ghb-ui" file="ghb.ui" />
 </resources>
