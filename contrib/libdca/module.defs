@@ -1,0 +1,5 @@
+$(eval $(call import.MODULE.defs,LIBDCA,libdca))
+$(eval $(call import.CONTRIB.defs,LIBDCA))
+
+LIBDCA.FETCH.url = http://download.m0k.org/handbrake/contrib/libdca-r81-strapped.tar.gz
+LIBDCA.EXTRACT.tarbase = libdca

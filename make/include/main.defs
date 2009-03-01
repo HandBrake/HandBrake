@@ -1,0 +1,75 @@
+.DELETE_ON_ERROR:
+.SUFFIXES:
+
+.PHONY: build
+build:
+
+###############################################################################
+
+include $(PROJECT/)make/include/base.defs
+include $(PROJECT/)make/include/contrib.defs
+include $(PROJECT/)make/include/function.defs
+include $(PROJECT/)make/include/gcc.defs
+include $(PROJECT/)make/include/select.defs
+include $(PROJECT/)make/include/target.defs
+include $(PROJECT/)make/include/tool.defs
+
+###############################################################################
+
+MODULES += contrib/a52dec
+
+ifneq (,$(filter $(BUILD.system),cygwin))
+    MODULES += contrib/bzip2
+endif
+
+MODULES += contrib/faac
+MODULES += contrib/faad2
+MODULES += contrib/ffmpeg
+MODULES += contrib/lame
+MODULES += contrib/libdca
+MODULES += contrib/libdvdread
+MODULES += contrib/libmkv
+MODULES += contrib/libmp4v2
+MODULES += contrib/libogg
+MODULES += contrib/libsamplerate
+MODULES += contrib/libtheora
+MODULES += contrib/libvorbis
+MODULES += contrib/mpeg2dec
+MODULES += contrib/x264
+MODULES += contrib/xvidcore
+
+ifneq (,$(filter $(BUILD.system),cygwin))
+    MODULES += contrib/zlib
+endif
+
+## these must come after contrib since some contrib modules are optional
+MODULES += libhb
+
+###############################################################################
+
+## test module is replaced with macosx when Darwin+Xcode
+ifneq (,$(filter $(BUILD.system),darwin))
+    ifeq (1,$(FEATURE.xcode))
+        MODULES += macosx
+    else
+        MODULES += test
+    endif
+else
+    MODULES += test
+endif
+
+ifneq (,$(filter $(BUILD.system),linux))
+    ifeq (1,$(FEATURE.gtk))
+        MODULES += gtk
+    endif
+endif
+
+###############################################################################
+
+MODULES += doc
+
+###############################################################################
+
+include $(MODULES:%=$(PROJECT/)%/module.defs)
+include $(PROJECT/)make/variant/$(HOST.system).defs
+-include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.proc).defs

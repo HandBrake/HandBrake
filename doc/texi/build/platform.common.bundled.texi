@@ -1,0 +1,3 @@
+@quotation Note
+It is recommended to use the platform distribution's bundled compiler for maximum C++ compatibility. If you build with a custom compiler it will likely introduce non-standard runtime requirements. There are of course many valid reasons to build with unbundled compilers, but be aware it is generally unsupported and left as an exercise to the reader.
+@end quotation

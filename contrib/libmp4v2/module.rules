@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,LIBMP4V2))
+$(eval $(call import.CONTRIB.rules,LIBMP4V2))

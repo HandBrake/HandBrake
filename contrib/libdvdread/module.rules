@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,LIBDVDREAD))
+$(eval $(call import.CONTRIB.rules,LIBDVDREAD))

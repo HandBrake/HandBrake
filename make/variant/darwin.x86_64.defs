@@ -1,0 +1,3 @@
+## can enable asm if we replace .rept pseudo op with standard pre-processor macros
+## since darwin's as doesn't support them. for now just disable.
+LIBTHEORA.CONFIGURE.extra += --disable-asm

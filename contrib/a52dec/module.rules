@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,A52DEC))
+$(eval $(call import.CONTRIB.rules,A52DEC))

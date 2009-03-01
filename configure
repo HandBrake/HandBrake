@@ -1,151 +1,25 @@
 #! /bin/sh
+#
 
-CC="gcc"
-CXX="g++"
-CCFLAGS="$CCFLAGS -Wall -g"
-OPTIM="$OPTIM -O3 -funroll-loops"
-LINKLIBS="-lz -lbz2"
-MAKE=make
-
-# System-specific flags
-SYSTEM=`uname -s`
-case $SYSTEM in
-  BeOS)
-    CCFLAGS="$CCFLAGS -Wno-multichar"
-    DEFINES="$DEFINES SYS_BEOS"
-    LINKLIBS="$LINKLIBS -lbe -ltracker"
-
-    RELEASE=`uname -r`
-    case $RELEASE in
-      6.0|5.0.4) # Zeta or R5 / BONE beta 7
-        SYSTEM="$SYSTEM / BONE"
-        LINKLIBS="$LINKLIBS -lbind -lsocket"
-        ;;
-      5.0*)      # R5 / net_server
-        SYSTEM="$SYSTEM / net_server"
-        DEFINES="$DEFINES BEOS_NETSERVER"
-        LINKLIBS="$LINKLIBS -lnet"
-        ;;
-      *)
-        echo "Unsupported BeOS version"
-        exit 1 ;;
-    esac
-    ;;
-
-  Darwin)
-    DEFINES="$DEFINES SYS_DARWIN USE_PTHREAD"
-    LINKLIBS="$LINKLIBS -lpthread"
-    ;;
-
-  FreeBSD)
-    DEFINES="$DEFINES SYS_FREEBSD USE_PTHREAD"
-    LINKLIBS="$LINKLIBS -pthread"
-    ;;
-
-  NetBSD)
-    DEFINES="$DEFINES SYS_NETBSD USE_PTHREAD"
-    LINKLIBS="$LINKLIBS -lpthread"
-    ;;
-
-  Linux)
-    DEFINES="$DEFINES SYS_LINUX USE_PTHREAD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64"
-    LINKLIBS="$LINKLIBS -lpthread -ldl"
-    ;;
-
-  CYGWIN*)
-    DEFINES="$DEFINES SYS_CYGWIN USE_PTHREAD"
-    LINKLIBS="$LINKLIBS -lpthread"
-    ;;
-  SunOS)
-    DEFINES="$DEFINES SYS_SunOS USE_PTHREAD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64"
-    LINKLIBS="$LINKLIBS -lpthread -lsocket -lnsl"
-    ;;
-
-  *)
-    echo "Unsupported operating system"
-    exit 1 ;;
-esac
-echo
-echo "System: $SYSTEM"
-
-# Check for endianness (we need to define WORDS_BIGENDIAN for libdvdread)
-cat > testconf.c << EOF
-int main()
+inpath()
 {
-    int i = 1;
-    return *( (char *) &i );
+    IFS=:
+    for d in $PATH
+    do
+        if [ -x $d/$1 ]; then
+            return 0
+        fi
+    done
+    return 1
 }
-EOF
-if ( $CC -o testconf testconf.c && ./testconf ) > /dev/null 2>&1
-then
-  echo "Endian: big"
-  DEFINES="$DEFINES WORDS_BIGENDIAN"
-else
-  echo "Endian: little"
-fi
-rm -f testconf.c testconf
 
-#
-# Use Gnu make when available over the built in make
-#
-if ( make --version | grep GNU ) > /dev/null 2>&1
-then
-MAKE=make
-elif ( gmake --version | grep GNU ) > /dev/null 2>&1
-then
-MAKE=gmake
-else
-MAKE=make
-fi
+for p in python2.6 python2.5 python2.4
+do
+    if ( inpath $p ); then
+        exec $p `dirname $0`/make/configure.py "$@"
+        exit 0
+    fi
+done
 
-# Unless the user wants a release build, configure for SVN snapshots
-if test "$1" = "--release" || test "$2" = "--release"; then
-    SNAPSHOT=0
-else
-    SNAPSHOT=1
-fi
-
-# We fought the law and the law won
-if test "$1" = "--libdvdcss" || test "$2" = "--libdvdcss"; then
-    CSS=1
-else
-    CSS=0
-fi
-
-# Generating the HB_BUILD and HB_VERSION for snapshots requires
-# the build date, working path, and current SVN revision. 
-BUILD_DATE=`date +%Y%m%d`
-FULL_PATH=`pwd`
-SVN_REV=`svnversion`
-
-# Generate config.jam
-rm -f config.jam
-cat << EOF > config.jam
-CC       = $CC ;
-C++      = $CXX ;
-LINK     = $CXX ;
-CCFLAGS  = $CCFLAGS ;
-C++FLAGS = $CCFLAGS ;
-OPTIM    = $OPTIM ;
-DEFINES  = $DEFINES ;
-LINKLIBS = $LINKLIBS ;
-MAKE     = $MAKE ;
-SNAPSHOT = $SNAPSHOT ;
-BUILD_DATE = $BUILD_DATE ;
-FULL_PATH = $FULL_PATH ;
-SVN_REV = $SVN_REV ;
-CSS      = $CSS ;
-EOF
-
-echo
-echo "Don't run configure by hand, make runs it automatically."
-echo
-echo "No, really. That's it. Just type 'make' and hit return."
-echo
-echo "You're supposed to be building with make, not jam."
-echo "If you were going to use jam--which you shouldn't--you'd run:"
-echo " './jam' on a Mac, or"
-echo " 'jam' on Linux or Windows"
-echo
-echo "To make jam, boil fruit with sugar and an acid until pectins are released."
-echo
+echo "ERROR: no suitable version of python found."
+exit 1

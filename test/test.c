@@ -2217,20 +2217,19 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'i':
                 input = strdup( optarg );
-                #ifdef __APPLE_CC__
-                char *devName = bsd_name_for_path( input );
-                if( devName == NULL )
+#ifdef __APPLE_CC__
+                char *devName = bsd_name_for_path( input ); // alloc
+                if( devName )
                 {
-                    break;
+                    if( device_is_dvd( devName ))
+                    {
+                        free( input );
+                        input = malloc( strlen( "/dev/" ) + strlen( devName ) + 1 );
+                        sprintf( input, "/dev/%s", devName );
+                    }
+                    free( devName );
                 }
-                if( device_is_dvd( devName ) )
-                {
-                    char *newInput = malloc( strlen("/dev/") + strlen( devName ) + 1);
-                    sprintf( newInput, "/dev/%s", devName );
-                    free(input);
-                    input = newInput;
-                }
-                #endif
+#endif
                 break;
             case 'o':
                 output = strdup( optarg );
@@ -2711,10 +2710,20 @@ static char* bsd_name_for_path(char *path)
         return NULL;
     }
 
-    // A version 4 GetVolParmsInfoBuffer contains the BSD node name in the
-    // vMDeviceID field. It is actually a char * value. This is mentioned in the
-    // header CoreServices/CarbonCore/Files.h.
-    return volumeParms.vMDeviceID;
+    // A version 4 GetVolParmsInfoBuffer contains the BSD node name in the vMDeviceID field.
+    // It is actually a char * value. This is mentioned in the header CoreServices/CarbonCore/Files.h.
+    if( volumeParms.vMVersion < 4 )
+    {
+        return NULL;
+    }
+
+    // vMDeviceID might be zero as is reported with experimental ZFS (zfs-119) support in Leopard.
+    if( !volumeParms.vMDeviceID )
+    {
+        return NULL;
+    }
+
+    return strdup( volumeParms.vMDeviceID );
 }
 
 /****************************************************************************

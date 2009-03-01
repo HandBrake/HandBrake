@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "hbversion.h"
+#include "project.h"
 #include "common.h"
 
 /* hb_init()

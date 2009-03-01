@@ -1,0 +1,32 @@
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,FAAD2))
+$(eval $(call import.CONTRIB.defs,FFMPEG))
+
+FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg-r15974.tar.gz
+FFMPEG.EXTRACT.tarbase = ffmpeg
+
+FFMPEG.CONFIGURE.deps =
+FFMPEG.CONFIGURE.env  =
+FFMPEG.CONFIGURE.host =
+
+FFMPEG.CONFIGURE.extra = \
+    --disable-bsfs \
+    --disable-encoders \
+    --disable-ffmpeg \
+    --disable-ffserver \
+    --disable-muxers \
+    --disable-vhook \
+    --enable-encoder=ac3 \
+    --enable-encoder=mpeg4 \
+    --enable-encoder=snow \
+    --enable-gpl \
+    --enable-libfaad \
+    --enable-muxer=ipod \
+    --enable-pthreads \
+    --enable-swscale \
+    --cc="$(GCC.gcc)" \
+    --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
+    --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
+
+ifeq ($(BUILD.cross),1)
+    FFMPEG.CONFIGURE.extra += --enable-cross-compile --arch=$(FFMPEG.GCC.archs)
+endif

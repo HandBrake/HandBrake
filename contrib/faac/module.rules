@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,FAAC))
+$(eval $(call import.CONTRIB.rules,FAAC))

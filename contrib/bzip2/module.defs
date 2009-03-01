@@ -1,0 +1,24 @@
+$(eval $(call import.MODULE.defs,BZIP2,bzip2))
+$(eval $(call import.CONTRIB.defs,BZIP2))
+
+BZIP2.FETCH.url = http://download.m0k.org/handbrake/contrib/bzip2-1.0.5.tar.gz
+BZIP2.EXTRACT.tarbase = bzip2
+BZIP2.CONFIGURE =
+
+BZIP2.BUILD.extra = \
+    CC=$(BZIP2.GCC.gcc) \
+    CFLAGS="$(call fn.ARGS,BZIP2.GCC,*archs)" \
+    PREFIX=$(call fn.ABSOLUTE,$(CONTRIB.build/))
+
+BZIP2.BUILD.ntargets = libbz2.a
+
+define BZIP2.INSTALL
+    mkdir -p $(CONTRIB.build/)lib/ $(CONTRIB.build/)include/
+    cp $(BZIP2.EXTRACT.target/)libbz2.a $(CONTRIB.build/)lib/
+    cp $(BZIP2.EXTRACT.target/)bzlib.h $(CONTRIB.build/)include/
+endef
+
+define BZIP2.UNINSTALL
+    rm $(CONTRIB.build/)lib/libbz2.a
+    rm $(CONTRIB.build/)include/bzlib.h
+endef

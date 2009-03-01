@@ -390,7 +390,7 @@ static int MP4Init( hb_mux_object_t * m )
     /* Add encoded-by metadata listing version and build date */
     char *tool_string;
     tool_string = (char *)malloc(80);
-    snprintf( tool_string, 80, "HandBrake %s %i", HB_VERSION, HB_BUILD);
+    snprintf( tool_string, 80, "HandBrake %s %i", HB_PROJECT_VERSION, HB_PROJECT_BUILD);
     MP4SetMetadataTool(m->file, tool_string);
     free(tool_string);
 

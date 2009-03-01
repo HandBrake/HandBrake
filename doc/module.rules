@@ -1,0 +1,20 @@
+$(eval $(call import.MODULE.rules,DOC))
+
+doc: doc.articles
+
+doc.articles: $(DOC.texi2txt.out)
+
+doc.clean:
+	$(RM.exe) -fr $(DOC.out/)
+
+$(DOC.texi2txt.out): | $(DOC.m4.out)
+$(DOC.texi2txt.out): | $(dir $(DOC.texi2txt.out))
+$(DOC.texi2txt.out): $(DOC.texi.includes)
+$(DOC.texi2txt.out): $(DOC.out.articles/)txt/%.txt: $(DOC.in/)texi/%.texi
+	$(call MAKEINFO,txt,$<,$@)
+	@echo $^
+
+$(DOC.m4.out): | $(dir $(DOC.m4.out))
+$(DOC.m4.out): $(DOC.M4.deps)
+$(DOC.m4.out): $(DOC.out/)%: $(DOC.in/)%.m4
+	$(call DOC.M4,$@,$<)

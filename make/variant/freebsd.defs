@@ -1,0 +1,4 @@
+TARGET.dylib.ext = .so
+
+GCC.args.dylib = -shared
+GCC.args.pic   = 1

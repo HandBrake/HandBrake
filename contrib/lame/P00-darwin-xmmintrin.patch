@@ -1,0 +1,28 @@
+diff -Naur lame.orig/configure lame/configure
+--- lame.orig/configure	2008-06-29 17:40:05.000000000 -0400
++++ lame/configure	2008-10-14 05:01:29.000000000 -0400
+@@ -21031,7 +21031,14 @@
+ 
+ 
+ 
+-
++case $host_cpu in
++powerpc*)
++    check_xmmintrin=
++    ;;
++*)
++    check_xmmintrin="xmmintrin.h"
++    ;;
++esac
+ 
+ for ac_header in \
+ 		 errno.h \
+@@ -21042,7 +21049,7 @@
+ 		 sys/soundcard.h \
+ 		 sys/time.h \
+ 		 unistd.h \
+-		 xmmintrin.h \
++		 $check_xmmintrin \
+ 		 linux/soundcard.h
+ do
+ as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`

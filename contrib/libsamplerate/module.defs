@@ -1,0 +1,5 @@
+$(eval $(call import.MODULE.defs,LIBSAMPLERATE,libsamplerate))
+$(eval $(call import.CONTRIB.defs,LIBSAMPLERATE))
+
+LIBSAMPLERATE.FETCH.url = http://download.m0k.org/handbrake/contrib/libsamplerate-0.1.4.tar.gz
+LIBSAMPLERATE.EXTRACT.tarbase = libsamplerate

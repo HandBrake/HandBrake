@@ -1,0 +1,20 @@
+$(eval $(call import.MODULE.rules,MACOSX))
+
+build: macosx.build
+clean: macosx.clean
+
+.PHONY: macosx.build macosx.clean
+
+macosx.build: $(MACOSX.m4.out)
+	+$(call MACOSX.XCODE,build)
+
+macosx.clean:
+	$(call MACOSX.XCODE,clean)
+
+$(MACOSX.m4.out): $(BUILD/)project/handbrake.m4
+$(MACOSX.m4.out): | $(dir $(MACOSX.m4.out))
+$(MACOSX.m4.out): $(MACOSX.build/)%: $(MACOSX.src/)%.m4
+	$(M4.exe) -Iproject $< > $@
+
+## target used by Xcode when launching as external build
+macosx.fromxcode: $(MACOSX.m4.out) $(LIBHB.a)

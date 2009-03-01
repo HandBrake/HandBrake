@@ -3,7 +3,7 @@
 //  Growl
 //
 //  Created by Evan Schoenberg on Wed Jun 16 2004.
-//  Copyright 2004-2005 The Growl Project. All rights reserved.
+//  Copyright 2004-2006 The Growl Project. All rights reserved.
 //
 
 /*!
@@ -17,22 +17,11 @@
 #define __GrowlApplicationBridge_h__
 
 #import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #import "GrowlDefines.h"
 
 //Forward declarations
 @protocol GrowlApplicationBridgeDelegate;
-
-/*!
- *	@defined    GROWL_PREFPANE_BUNDLE_IDENTIFIER
- *	@discussion The bundle identifier for the Growl prefpane.
- */
-#define GROWL_PREFPANE_BUNDLE_IDENTIFIER	@"com.growl.prefpanel"
-
-/*!
- *	@defined    GROWL_PREFPANE_NAME
- *	@discussion The file name of the Growl prefpane.
- */
-#define GROWL_PREFPANE_NAME					@"Growl.prefPane"
 
 //Internal notification when the user chooses not to install (to avoid continuing to cache notifications awaiting installation)
 #define GROWL_USER_CHOSE_NOT_TO_INSTALL_NOTIFICATION @"User chose not to install"
@@ -141,6 +130,40 @@
 				priority:(signed int)priority
 				isSticky:(BOOL)isSticky
 			clickContext:(id)clickContext;
+
+/*!
+ *	@method notifyWithTitle:description:notificationName:iconData:priority:isSticky:clickContext:identifier:
+ *	@abstract Send a Growl notification.
+ *	@discussion This is the preferred means for sending a Growl notification.
+ *	 The notification name and at least one of the title and description are
+ *	 required (all three are preferred).  All other parameters may be
+ *	 <code>nil</code> (or 0 or NO as appropriate) to accept default values.
+ *
+ *	 If using the Growl-WithInstaller framework, if Growl is not installed the
+ *	 user will be prompted to install Growl. If the user cancels, this method
+ *	 will have no effect until the next application session, at which time when
+ *	 it is called the user will be prompted again. The user is also given the
+ *	 option to not be prompted again.  If the user does choose to install Growl,
+ *	 the requested notification will be displayed once Growl is installed and
+ *	 running.
+ *
+ *	@param title		The title of the notification displayed to the user.
+ *	@param description	The full description of the notification displayed to the user.
+ *	@param notifName	The internal name of the notification. Should be human-readable, as it will be displayed in the Growl preference pane.
+ *	@param iconData		<code>NSData</code> object to show with the notification as its icon. If <code>nil</code>, the application's icon will be used instead.
+ *	@param priority		The priority of the notification. The default value is 0; positive values are higher priority and negative values are lower priority. Not all Growl displays support priority.
+ *	@param isSticky		If YES, the notification will remain on screen until clicked. Not all Growl displays support sticky notifications.
+ *	@param clickContext	A context passed back to the Growl delegate if it implements -(void)growlNotificationWasClicked: and the notification is clicked. Not all display plugins support clicking. The clickContext must be plist-encodable (completely of <code>NSString</code>, <code>NSArray</code>, <code>NSNumber</code>, <code>NSDictionary</code>, and <code>NSData</code> types).
+ *	@param identifier	An identifier for this notification. Notifications with equal identifiers are coalesced.
+ */
++ (void) notifyWithTitle:(NSString *)title
+			 description:(NSString *)description
+		notificationName:(NSString *)notifName
+				iconData:(NSData *)iconData
+				priority:(signed int)priority
+				isSticky:(BOOL)isSticky
+			clickContext:(id)clickContext
+			  identifier:(NSString *)identifier;
 
 /*!
  *	@method notifyWithTitle:description:notificationName:iconData:priority:isSticky:clickContext:identifier:
@@ -371,6 +394,21 @@
  */
 + (NSDictionary *) registrationDictionaryByFillingInDictionary:(NSDictionary *)regDict restrictToKeys:(NSSet *)keys;
 
+/*!	@brief	Tries to fill in missing keys in a notification dictionary.
+ *	@param	notifDict	The dictionary to fill in.
+ *	@return	The dictionary with the keys filled in. This will be a separate instance from \a notifDict.
+ *	@discussion	This function examines the \a notifDict for missing keys, and 
+ *	 tries to get them from the last known registration dictionary. As of 1.1, 
+ *	 the keys that it will look for are:
+ *
+ *	 \li <code>GROWL_APP_NAME</code>
+ *	 \li <code>GROWL_APP_ICON</code>
+ *
+ *	@since Growl.framework 1.1
+ */
++ (NSDictionary *) notificationDictionaryByFillingInDictionary:(NSDictionary *)regDict;
+
++ (NSDictionary *) frameworkInfoDictionary;
 @end
 
 //------------------------------------------------------------------------------
@@ -417,9 +455,12 @@
  *	 <code>+[GrowlApplicationBridge
  *	 notifyWithTitle:description:notificationName:iconData:priority:isSticky:clickContext:]</code> calls.
  *
- *	 The dictionary should have 2 key object pairs:
+ *	 The dictionary should have the required key object pairs:
  *	 key: GROWL_NOTIFICATIONS_ALL		object: <code>NSArray</code> of <code>NSString</code> objects
  *	 key: GROWL_NOTIFICATIONS_DEFAULT	object: <code>NSArray</code> of <code>NSString</code> objects
+ *
+ *   The dictionary may have the following key object pairs:
+ *   key: GROWL_NOTIFICATIONS_HUMAN_READABLE_NAMES	object: <code>NSDictionary</code> of key: notification name		object: human-readable notification name
  *
  *	 You do not need to implement this method if you have an auto-discoverable
  *	 plist file in your app bundle. (XXX refer to more information on that)
@@ -448,12 +489,25 @@
 - (NSString *) applicationNameForGrowl;
 
 /*!
+ *	@method applicationIconForGrowl
+ *	@abstract Return the <code>NSImage</code> to treat as the application icon.
+ *	@discussion The delegate may optionally return an <code>NSImage</code>
+ *	 object to use as the application icon. If this method is not implemented,
+ *	 {{{-applicationIconDataForGrowl}}} is tried. If that method is not
+ *	 implemented, the application's own icon is used. Neither method is
+ *	 generally needed.
+ *	@result The <code>NSImage</code> to treat as the application icon.
+ */
+- (NSImage *) applicationIconForGrowl;
+
+/*!
  *	@method applicationIconDataForGrowl
  *	@abstract Return the <code>NSData</code> to treat as the application icon.
  *	@discussion The delegate may optionally return an <code>NSData</code>
  *	 object to use as the application icon; if this is not implemented, the
  *	 application's own icon is used.  This is not generally needed.
  *	@result The <code>NSData</code> to treat as the application icon.
+ *	@deprecated In version 1.1, in favor of {{{-applicationIconForGrowl}}}.
  */
 - (NSData *) applicationIconDataForGrowl;
 
@@ -461,9 +515,8 @@
  *	@method growlIsReady
  *	@abstract Informs the delegate that Growl has launched.
  *	@discussion Informs the delegate that Growl (specifically, the
- *	 GrowlHelperApp) was launched successfully or was already running.  The
- *	 application can take actions with the knowledge that Growl is installed and
- *	 functional.
+ *	 GrowlHelperApp) was launched successfully. The application can take actions
+ *   with the knowledge that Growl is installed and functional.
  */
 - (void) growlIsReady;
 

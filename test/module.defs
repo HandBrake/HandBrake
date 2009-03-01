@@ -1,0 +1,41 @@
+$(eval $(call import.MODULE.defs,TEST,test,LIBHB))
+$(eval $(call import.GCC,TEST))
+
+TEST.src/   = $(PROJECT/)test/
+TEST.build/ = $(BUILD/)test/
+
+TEST.c   = $(wildcard $(TEST.src/)*.c)
+TEST.c.o = $(patsubst $(PROJECT/)%.c,$(BUILD/)%.o,$(TEST.c))
+
+TEST.exe = $(BUILD/)$(call TARGET.exe,$(HB.name)CLI)
+
+TEST.libs = $(LIBHB.a) $(foreach n, \
+        a52 avcodec avformat avutil dca dvdread faac faad mkv mpeg2 mp3lame mp4v2 \
+        ogg samplerate swscale theora vorbis vorbisenc x264 xvidcore, \
+        $(CONTRIB.build/)lib/lib$(n).a )
+
+## add libs from optional modules
+ifeq (1,$(BZIP2.enabled))
+    TEST.libs += $(CONTRIB.build/)lib/libbz2.a
+endif
+ifeq (1,$(ZLIB.enabled))
+    TEST.libs += $(CONTRIB.build/)lib/libz.a
+endif
+
+###############################################################################
+
+TEST.out += $(TEST.c.o)
+TEST.out += $(TEST.exe)
+
+BUILD.out += $(TEST.out)
+
+###############################################################################
+
+TEST.GCC.I += $(LIBHB.GCC.I)
+
+ifeq ($(BUILD.system),darwin)
+    TEST.GCC.f += IOKit CoreServices
+    TEST.GCC.l += bz2 z
+else ifeq ($(BUILD.system),linux)
+    TEST.GCC.l += bz2 z pthread dl m
+endif

@@ -1,0 +1,146 @@
+GCC.gcc = gcc
+GCC.gxx = $(dir $(GCC.gcc))$(subst gcc,g++,$(notdir $(GCC.gcc)))
+
+GCC.strip   = $$(if $$(filter none,$$(GCC.g)),1)
+GCC.dylib   = 1
+GCC.pipe    = 1
+GCC.ML      = 1
+GCC.H       = 0
+GCC.W       = all
+GCC.archs   =
+GCC.vis     = 0
+GCC.pic     = 0
+GCC.g       = none
+GCC.O       = none
+GCC.D       =
+GCC.I       =
+GCC.muldefs = 0
+GCC.start   = 0
+GCC.a       =
+GCC.F       =
+GCC.f       =
+GCC.L       =
+GCC.l       =
+GCC.end     = 0
+
+GCC.args.pipe      = -pipe
+GCC.args.strip     = -Wl,-S
+GCC.args.dylib     = -dynamiclib
+GCC.args.ML        = -fmessage-length=0
+GCC.args.H         = -H
+GCC.args.W         = -W$(1)
+GCC.args.archs     = -arch $(1)
+GCC.args.vis       = -fvisibility=hidden
+GCC.args.pic       = -fPIC
+GCC.args.g.none    = -g0
+GCC.args.g.min     = -gdwarf-2 -g1
+GCC.args.g.std     = -gdwarf-2
+GCC.args.g.max     = -gdwarf-2 -g3
+GCC.args.O.none    = -O0
+GCC.args.O.size    = -Os
+GCC.args.O.speed   = -O3
+GCC.args.D         = -D$(1)
+GCC.args.I         = -I$(1)
+GCC.args.muldefs   = -Wl,--allow-multiple-definition
+GCC.args.start     = -Wl,--start-group
+GCC.args.F         = -F$(1)
+GCC.args.f         = -framework $(1)
+GCC.args.L         = -L$(1)
+GCC.args.l         = -l$(1)
+GCC.args.end       = -Wl,--end-group
+
+###############################################################################
+
+define import.GCC
+    $(1).GCC.gcc = $$(GCC.gcc)
+    $(1).GCC.gxx = $$(dir $$($(1).GCC.gcc))$$(subst gcc,g++,$$(notdir $$($(1).GCC.gcc)))
+
+    $(1).GCC.pipe    = $$(GCC.pipe)
+    $(1).GCC.strip   = $$(if $$(filter none,$$($(1).GCC.g)),1)
+    $(1).GCC.dylib   = $$(GCC.dylib)
+    $(1).GCC.ML      = $$(GCC.ML) 
+    $(1).GCC.H       = $$(GCC.H) 
+    $(1).GCC.W       = $$(GCC.W)
+    $(1).GCC.archs   = $$(GCC.archs)
+    $(1).GCC.vis     = $$(GCC.vis)
+    $(1).GCC.pic     = $$(GCC.pic)
+    $(1).GCC.g       = $$(GCC.g)
+    $(1).GCC.O       = $$(GCC.O)
+    $(1).GCC.D       = $$(GCC.D)
+    $(1).GCC.I       = $$(GCC.I)
+    $(1).GCC.muldefs = $$(GCC.muldefs)
+    $(1).GCC.start   = $$(GCC.start)
+    $(1).GCC.a       = $$(GCC.a)
+    $(1).GCC.F       = $$(GCC.F)
+    $(1).GCC.f       = $$(GCC.f)
+    $(1).GCC.L       = $$(GCC.L)
+    $(1).GCC.l       = $$(GCC.l)
+    $(1).GCC.end     = $$(GCC.end)
+
+    $(1).GCC.args.pipe      = $$(GCC.args.pipe)
+    $(1).GCC.args.strip     = $$(GCC.args.strip)
+    $(1).GCC.args.dylib     = $$(GCC.args.dylib)
+    $(1).GCC.args.ML        = $$(GCC.args.ML)
+    $(1).GCC.args.H         = $$(GCC.args.H)
+    $(1).GCC.args.W         = $$(GCC.args.W)
+    $(1).GCC.args.archs     = $$(GCC.args.archs)
+    $(1).GCC.args.vis       = $$(GCC.args.vis)
+    $(1).GCC.args.pic       = $$(GCC.args.pic)
+    $(1).GCC.args.g.none    = $$(GCC.args.g.none)
+    $(1).GCC.args.g.min     = $$(GCC.args.g.min)
+    $(1).GCC.args.g.std     = $$(GCC.args.g.std)
+    $(1).GCC.args.g.max     = $$(GCC.args.g.max  )
+    $(1).GCC.args.O.none    = $$(GCC.args.O.none)
+    $(1).GCC.args.O.size    = $$(GCC.args.O.size)
+    $(1).GCC.args.O.speed   = $$(GCC.args.O.speed)
+    $(1).GCC.args.D         = $$(GCC.args.D)
+    $(1).GCC.args.I         = $$(GCC.args.I)
+    $(1).GCC.args.muldefs   = $$(GCC.args.muldefs)
+    $(1).GCC.args.start     = $$(GCC.args.start)
+    $(1).GCC.args.F         = $$(GCC.args.F)
+    $(1).GCC.args.f         = $$(GCC.args.f)
+    $(1).GCC.args.L         = $$(GCC.args.L)
+    $(1).GCC.args.l         = $$(GCC.args.l)
+    $(1).GCC.args.end       = $$(GCC.args.end)
+
+    ###########################################################################
+
+    $(1).GCC.c = -c $$(4)
+    $(1).GCC.o = -o $$(3)
+
+    # FUNCTION: C precompiled headers
+    $(1).GCC.H_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O *D *I !c !o
+    $(1).GCC.H_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.H_O.args),$$(1),$$(2))
+
+    # FUNCTION: C compile source
+    $(1).GCC.C_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O *D *I !c !o
+    $(1).GCC.C_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1),$$(2))
+
+    # FUNCTION: C++ precompile headers
+    $(1).GCC.HPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O *D *I !c !o
+    $(1).GCC.HPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.HPP_O.args),$$(1),$$(2))
+
+    # FUNCTION: C++ compile source
+    $(1).GCC.CPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O *D *I !c !o
+    $(1).GCC.CPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.CPP_O.args),$$(1),$$(2))
+
+    ###########################################################################
+
+    $(1).GCC.i = $$(4)
+
+    # FUNCTION: C link dynamic-lib
+    $(1).GCC.DYLIB.args = !gcc ?pipe ?strip ?dylib ?ML *W *archs ?vis ?pic .g .O *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB.args),$$(1),$$(2))
+
+    # FUNCTION: C link executable
+    $(1).GCC.EXE.args = !gcc ?pipe ?strip ?ML *W *archs ?vis ?pic .g .O *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
+
+    # FUNCTION: C++ link dynamic-lib
+    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?ML *W *archs ?vis ?pic .g .O *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB++.args),$$(1),$$(2))
+
+    # FUNCTION: C++ link executable
+    $(1).GCC.EXE++.args = !gxx ?pipe ?strip ?ML *W *archs ?vis ?pic .g .O *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE++.args),$$(1),$$(2))
+endef

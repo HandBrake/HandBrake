@@ -1,0 +1,7 @@
+@set OS.cygwin   Cygwin
+@set OS.freebsd  FreeBSD
+@set OS.linux    Linux
+@set OS.osx      Mac OS X
+@set OS.solaris  Solaris
+@set OS.unix     unix
+@set OS.windows  Windows

@@ -1,0 +1,375 @@
+HandBrake 0.9.3 Build User Guide
+********************************
+
+Table of Contents
+*****************
+
+1 Introduction
+2 Quickstart
+3 Build Process
+  3.1 Checkout Sources
+  3.2 Configure
+  3.3 Build
+  3.4 Clean
+  3.5 Extra Clean
+4 Make Targets
+  4.1 Global
+  4.2 General Modules
+  4.3 Contrib Modules
+  4.4 Contrib Aggregate
+5 Platform Requirements and Notes
+  5.1 Mac OS X
+  5.2 Cygwin
+  5.3 Linux
+
+
+1 Introduction
+**************
+
+This guide documents the recommended process to build HandBrake from
+the official source-code repository. Building from any other source is
+not unsupported.
+
+2 Quickstart
+************
+
+This chapter is for the impatient or those just looking for a quick
+summary of the commands used to launch a typical build with the fewest
+commands possible. For more control over the build process please skip
+this section and jump to *Note Build Process:: for full details.
+
+     svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
+     cd hb-trunk
+     ./configure --launch
+
+The above is an special streamlined invocation of `configure' which
+performs the following steps automatically:
+
+   * assert scratch directory `build/' does not exist
+
+   * create scratch directory `build/'
+
+   * change to directory `build/'
+
+   * launch `make'
+
+   * capture build output to `build/log.txt'
+
+   * echo build output
+
+3 Build Process
+***************
+
+3.1 Checkout Sources
+====================
+
+Checkout HandBrake from the official source-code repository.
+
+     svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
+     cd hb-trunk
+
+Sources are checked out from the `trunk' branch. This document was
+generated from that very branch, and for example purposes, we will use
+exactly the same branch.
+
+If you have write-access to the repository, then you may add the
+appropriate login/password information as needed. It is recommended to
+use Subversion 1.5.0 or higher. Lower versions should also work.
+
+3.2 Configure
+=============
+
+Configure the build system.
+
+     rm -fr build/
+     mkdir build/
+     cd build/
+     ../configure
+
+Create a scratch directory which will contain all files created during
+the build process. The directory name is arbitrary but we recommend
+something simple and descriptive. One directory is required for each
+distinctly configured build. We name our directory `build' for example
+purposes.
+
+The `configure' utility accepts many options. It is recommended that
+you specify `--help' for the complete list of options. The following
+options are detailed:
+
+`--help'
+     List available options.
+
+`--debug=MODE'
+     Select debug mode. Must be one of `none', `min', `std', `max'.
+     This generally maps to gcc options `-g0', `-g1', `-g2', `-g3'.
+
+`--optimize=MODE'
+     Select optimize mode. Must be one of `none', `speed', `size'.
+     This generally maps to gcc options `-g0', `-O0', `-O3', `-Os'.
+
+`--arch=MODE'
+     Select build architecture. The available architectures vary by
+     platform. Most platforms support exactly one architecture except
+     Mac OS X which has support for various universal binary
+     architectures. The available choices are hard-coded per platform
+     and no sanity checks for the required tools are performed.
+
+`--gcc=EXE'
+     Specify the `gcc' executable to use where EXE is the executable
+     name which is either absolute or environment `PATH' is searched
+     accordingly.
+
+Clean-room procedures dictate that when certain factors change, old
+builds should be scrapped and new builds configured. This is the main
+reason for requiring a scratch directory; to promote consistent,
+reliable and clean software builds. The following is a short list of
+some of the reasons why someone may choose to scrap an existing build:
+
+   * configure with different options
+
+   * subversion working dir is updated and you want configure to
+     re-evaluate working dir metadata.
+
+   * build corruption is suspected
+
+There are generally two methods for scrapping a build. The `build'
+directory can be recusrively removed which has the effect of loosing
+your existing configuration but does guarantee no residuals are left
+behind. The other method is to use ask the build system to perform an
+`xclean'. This is known to work well but will leave empty directories
+behind. However, the configuration is left intact. See *Note Extra
+Clean:: for further details.
+
+3.3 Build
+=========
+
+Build main product. All necessary dependencies are also built if
+required.
+
+     make
+
+Parallel builds may optionally be enabled. Be aware that while a
+parallel build may save time on systems with additional cores, the
+output is often mixed, overlapped and sometimes even corrupted with
+binary characters. Thus if you experience a build issue, you should
+clean and redo the build in default serial mode to produce a readable
+log. The following command allows for up to 4 concurrent jobs via make:
+
+     make -j4
+
+3.4 Clean
+=========
+
+Clean all build output excluding contrib modules. Configuration is
+retained.
+
+     make clean
+
+3.5 Extra Clean
+===============
+
+Clean all build output including contrib modules. Configuration is
+retained.
+
+     make xclean
+
+4 Make Targets
+**************
+
+The build system supports passing many kinds of targets some of which
+become very useful in normal development cycles. The targets by
+convention are lower-case words passed to `make'. Global targets are
+one-word targets. Scoped targets are usually two-words seperated by a
+period.
+
+4.1 Global
+==========
+
+`make'
+     Alias for `make build'.
+
+`make build'
+     Build main product. All necessary dependencies are also built if
+     required.
+
+`make clean'
+     Clean all build output excluding contrib modules. Configuration is
+     retained.
+
+`make xclean'
+     Clean all build output including contrib modules. Configuration is
+     retained.
+
+4.2 General Modules
+===================
+
+General modules such as `libhb' and `test' have the following scoped
+targets:
+
+`make MODULE.build'
+     Build MODULE.
+
+`make MODULE.clean'
+     Clean build output for MODULE.
+
+4.3 Contrib Modules
+===================
+
+Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
+`lame', `libdca', `libdvdread', `libmkv', `libmp4v2', `libogg',
+`libsamplerate', `libtheora', `libvorbis', `mpeg2dec', `x264',
+`xvidcore' and `zlib' have the following scoped targets:
+
+`make MODULE.fetch'
+     Download source tarball from the Internet and save to
+     `TOP/downloads' directory. No checksumming is performed.
+
+`make MODULE.extract'
+     Extract source tarball into `build' tree.
+
+`make MODULE.patch'
+     Apply appropriate patches (if any) to module sources.
+
+`make MODULE.configure'
+     Configure module sources.  This usually invokes autotool configure.
+
+`make MODULE.build'
+     Build module.  This usually invokes autotool build.
+
+`make MODULE.install'
+     Install module products such as headers and libraries into `build'
+     tree.  This usually invokes autotool install.
+
+`make MODULE.uninstall'
+     Uninstall module products; generally the reverse of install.  This
+     usually invokes autotool uninstall.
+
+`make MODULE.clean'
+     Clean module; generally the reverse of build.  This usually
+     invokes autotool clean.
+
+`make MODULE.xclean'
+     Extra clean module; first invokes uninstall then recursively
+     removes the module build directory.
+
+4.4 Contrib Aggregate
+=====================
+
+For convenience, the following targets aggregate the all contrib
+modules' respective targets together:
+
+   * make contrib.fetch
+
+   * make contrib.extract
+
+   * make contrib.patch
+
+   * make contrib.configure
+
+   * make contrib.build
+
+   * make contrib.install
+
+   * make contrib.uninstall
+
+   * make contrib.clean
+
+   * make contrib.xclean
+
+5 Platform Requirements and Notes
+*********************************
+
+The build system supports various platforms of interest to the project.
+However this does not mean it supports all plaforms. If the platform is
+not listed in this chapter, then it is not supported.
+
+The following tools are used on various platforms and it is recommended
+you use these versions or newer:
+
+   * python - Python 2.4.6
+
+   * curl - curl 7.19.3 (or wget)
+
+   * m4 - GNU M4 1.4.6
+
+   * make - GNU Make 3.81
+
+   * patch - Patch 2.5.8
+
+   * tar - GNU tar 1.15.1
+
+   * wget - GNU Wget 1.11.4 (or curl)
+
+5.1 Mac OS X
+============
+
+Building on Mac OS X is well supported. It is the reference platform
+for HandBrake. The following are the recommended specifications for
+this platform; but is not necessarily the only configuration that is
+possible:
+
+   * Mac Intel hardware
+
+   * Mac OS X 10.5.6
+
+   * Xcode-3.1.2
+
+   * gcc 4.0.1 (Apple Inc. build 5490)
+
+   * yasm 0.7.2.2153 (for i386 or x86_64 architectures)
+
+     Note: It is recommended to use the platform distribution's bundled
+     compiler for maximum C++ compatibility. If you build with a custom
+     compiler it will likely introduce non-standard runtime
+     requirements. There are of course many valid reasons to build with
+     unbundled compilers, but be aware it is generally unsupported and
+     left as an exercise to the reader.
+
+5.2 Cygwin
+==========
+
+Building on Cygwin is supported. The following are the recommended
+specifications for this platform; but is not necessarily the only
+configuration that is possible:
+
+   * Intel 32-bit or 64-bit hardware
+
+   * Cygwin, gcc 4.3.2
+
+   * yasm 0.7.1.2093 (for i386 or x86_64 architectures)
+
+     Note: As of this writing, Cygwin has available to it several
+     versions of gcc; only one of which may be found and used in the
+     path as `gcc' and `g++'. Configure will thus find what is probably
+     the older version of gcc in a typical Cygwin environment. If you
+     desire to build with the newer gcc, it is found in the path as
+     `gcc-4' and `g++-4' respectively and you must indicate to
+     configure the desired versions. The following syntax should do the
+     trick:
+
+     ../configure --gcc=gcc-4
+
+5.3 Linux
+=========
+
+Building on Linux is supported. The following are the recommended
+specifications for this platform; but is not necessarily the only
+configuration that is possible:
+
+   * Intel 32-bit or 64-bit hardware
+
+   * Fedora 8, gcc 4.1.2, yasm 0.6.2.1985
+
+   * Fedora 9, gcc 4.3.0, yasm 0.6.2.1985
+
+   * Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
+
+   * gcc 4.0.0 or higher is reported to work
+
+     Note: It is recommended to use the platform distribution's bundled
+     compiler for maximum C++ compatibility. If you build with a custom
+     compiler it will likely introduce non-standard runtime
+     requirements. There are of course many valid reasons to build with
+     unbundled compilers, but be aware it is generally unsupported and
+     left as an exercise to the reader.
+

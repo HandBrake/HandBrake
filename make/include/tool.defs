@@ -1,0 +1,10 @@
+AR.exe    = ar
+CP.exe    = cp
+CURL.exe  = curl
+M4.exe    = m4
+MKDIR.exe = mkdir
+PATCH.exe = patch
+RM.exe    = rm
+TAR.exe   = tar
+TOUCH.exe = touch
+WGET.exe  = wget

@@ -1,0 +1,7 @@
+$(eval $(call import.MODULE.defs,MPEG2DEC,mpeg2dec))
+$(eval $(call import.CONTRIB.defs,MPEG2DEC))
+
+MPEG2DEC.FETCH.url = http://download.m0k.org/handbrake/contrib/mpeg2dec-0.5.1.tar.gz
+MPEG2DEC.EXTRACT.tarbase = mpeg2dec
+
+MPEG2DEC.CONFIGURE.extra = --disable-sdl --without-x

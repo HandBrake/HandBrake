@@ -1,0 +1,12 @@
+diff -Naur libdvdread.orig/dvdread/dvd_input.c libdvdread/dvdread/dvd_input.c
+--- libdvdread.orig/dvdread/dvd_input.c	2005-09-19 09:43:08.000000000 -0400
++++ libdvdread/dvdread/dvd_input.c	2009-02-21 10:22:42.000000000 -0500
+@@ -332,7 +332,7 @@
+ 
+ #else
+ 
+-  dvdcss_library = dlopen("libdvdcss.so.2", RTLD_LAZY);
++  dvdcss_library = dlopen("/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib", RTLD_LAZY);
+ 
+   if(dvdcss_library != NULL) {
+ #if defined(__OpenBSD__) && !defined(__ELF__)

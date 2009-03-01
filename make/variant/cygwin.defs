@@ -1,0 +1,8 @@
+GCC.muldefs = 1
+GCC.start   = 1
+GCC.end     = 1
+
+GCC.args.g.none    = -g0
+GCC.args.g.min     = -g1
+GCC.args.g.default = -g2
+GCC.args.g.max     = -g3

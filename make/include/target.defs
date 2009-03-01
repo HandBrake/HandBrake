@@ -1,0 +1,14 @@
+TARGET.dylib.prefix = lib
+TARGET.dylib.suffix =
+TARGET.dylib.ext    = .dylib
+TARGET.dylib        = $(TARGET.dylib.prefix)$(1)$(TARGET.dylib.suffix)$(TARGET.dylib.ext)
+
+TARGET.archive.prefix = lib
+TARGET.archive.suffix =
+TARGET.archive.ext    = .a
+TARGET.archive        = $(TARGET.archive.prefix)$(1)$(TARGET.archive.suffix)$(TARGET.archive.ext)
+
+TARGET.exe.prefix =
+TARGET.exe.suffix =
+TARGET.exe.ext    =
+TARGET.exe        = $(TARGET.exe.prefix)$(1)$(TARGET.exe.suffix)$(TARGET.exe.ext)

@@ -3,67 +3,37 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		27C7D1020F58AEC400974730 /* configure */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 27C7D1050F58AEE300974730 /* Build configuration list for PBXAggregateTarget "configure" */;
+			buildPhases = (
+				27C7D1010F58AEC400974730 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = configure;
+			productName = configure;
+		};
+		27C7D1160F58B0AF00974730 /* make.libhb */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 27C7D1180F58B0AF00974730 /* Build configuration list for PBXAggregateTarget "make.libhb" */;
+			buildPhases = (
+				27C7D1170F58B0AF00974730 /* ShellScript */,
+			);
+			dependencies = (
+				27ED6AB70F58CA0A00C905EE /* PBXTargetDependency */,
+			);
+			name = make.libhb;
+			productName = configure;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
-		0D096E010B707D3400A845D4 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
-		0D096E020B707D3400A845D4 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
-		0D096E030B707D3400A845D4 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
-		0D096EA30B70884A00A845D4 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
-		0DF377980B7BF99A00115CB0 /* fakexcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0DF377970B7BF99A00115CB0 /* fakexcode.cpp */; };
 		0DFA5C7B0B8DD1E90020BC09 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */; };
-		0DFA5CC00B8DD3FE0020BC09 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */; };
-		0DFA5CC10B8DD3FE0020BC09 /* decmpeg2.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C7F0B8DD3B60020BC09 /* decmpeg2.c */; };
-		0DFA5CC20B8DD3FE0020BC09 /* decsub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C800B8DD3B60020BC09 /* decsub.c */; };
-		0DFA5CC30B8DD3FE0020BC09 /* demuxmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C810B8DD3B60020BC09 /* demuxmpeg.c */; };
-		0DFA5CC40B8DD3FE0020BC09 /* dvd.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C820B8DD3B60020BC09 /* dvd.c */; };
-		0DFA5CC50B8DD3FE0020BC09 /* encavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C830B8DD3B60020BC09 /* encavcodec.c */; };
-		0DFA5CC60B8DD3FE0020BC09 /* encfaac.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C840B8DD3B60020BC09 /* encfaac.c */; };
-		0DFA5CC70B8DD3FE0020BC09 /* enclame.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C850B8DD3B60020BC09 /* enclame.c */; };
-		0DFA5CC80B8DD3FE0020BC09 /* encvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C860B8DD3B60020BC09 /* encvorbis.c */; };
-		0DFA5CC90B8DD3FE0020BC09 /* encx264.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C870B8DD3B60020BC09 /* encx264.c */; };
-		0DFA5CCA0B8DD3FE0020BC09 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C880B8DD3B60020BC09 /* encxvid.c */; };
-		0DFA5CCB0B8DD3FE0020BC09 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C890B8DD3B60020BC09 /* fifo.c */; };
-		0DFA5CCC0B8DD3FE0020BC09 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C8A0B8DD3B60020BC09 /* hb.c */; };
-		0DFA5CCE0B8DD3FE0020BC09 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C910B8DD3B60020BC09 /* muxavi.c */; };
-		0DFA5CCF0B8DD3FE0020BC09 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C920B8DD3B60020BC09 /* muxcommon.c */; };
-		0DFA5CD00B8DD3FE0020BC09 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C930B8DD3B60020BC09 /* muxmp4.c */; };
-		0DFA5CD10B8DD3FE0020BC09 /* muxogm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C940B8DD3B60020BC09 /* muxogm.c */; };
-		0DFA5CD20B8DD3FE0020BC09 /* ports.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C950B8DD3B60020BC09 /* ports.c */; };
-		0DFA5CD30B8DD3FE0020BC09 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C970B8DD3B60020BC09 /* reader.c */; };
-		0DFA5CD40B8DD3FE0020BC09 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C980B8DD3B60020BC09 /* render.c */; };
-		0DFA5CD50B8DD3FE0020BC09 /* scan.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C990B8DD3B60020BC09 /* scan.c */; };
-		0DFA5CD60B8DD3FE0020BC09 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9A0B8DD3B60020BC09 /* sync.c */; };
-		0DFA5CD70B8DD3FE0020BC09 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9B0B8DD3B60020BC09 /* update.c */; };
-		0DFA5CD80B8DD3FE0020BC09 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9C0B8DD3B60020BC09 /* work.c */; };
-		0DFA5CD90B8DD4210020BC09 /* declpcm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */; };
-		0DFA5CDA0B8DD4210020BC09 /* decmpeg2.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C7F0B8DD3B60020BC09 /* decmpeg2.c */; };
-		0DFA5CDB0B8DD4210020BC09 /* decsub.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C800B8DD3B60020BC09 /* decsub.c */; };
-		0DFA5CDC0B8DD4210020BC09 /* demuxmpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C810B8DD3B60020BC09 /* demuxmpeg.c */; };
-		0DFA5CDD0B8DD4210020BC09 /* dvd.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C820B8DD3B60020BC09 /* dvd.c */; };
-		0DFA5CDE0B8DD4210020BC09 /* encavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C830B8DD3B60020BC09 /* encavcodec.c */; };
-		0DFA5CDF0B8DD4210020BC09 /* encfaac.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C840B8DD3B60020BC09 /* encfaac.c */; };
-		0DFA5CE00B8DD4210020BC09 /* enclame.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C850B8DD3B60020BC09 /* enclame.c */; };
-		0DFA5CE10B8DD4210020BC09 /* encvorbis.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C860B8DD3B60020BC09 /* encvorbis.c */; };
-		0DFA5CE20B8DD4210020BC09 /* encx264.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C870B8DD3B60020BC09 /* encx264.c */; };
-		0DFA5CE30B8DD4210020BC09 /* encxvid.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C880B8DD3B60020BC09 /* encxvid.c */; };
-		0DFA5CE40B8DD4210020BC09 /* fifo.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C890B8DD3B60020BC09 /* fifo.c */; };
-		0DFA5CE50B8DD4210020BC09 /* hb.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C8A0B8DD3B60020BC09 /* hb.c */; };
-		0DFA5CE70B8DD4210020BC09 /* muxavi.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C910B8DD3B60020BC09 /* muxavi.c */; };
-		0DFA5CE80B8DD4210020BC09 /* muxcommon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C920B8DD3B60020BC09 /* muxcommon.c */; };
-		0DFA5CE90B8DD4210020BC09 /* muxmp4.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C930B8DD3B60020BC09 /* muxmp4.c */; };
-		0DFA5CEA0B8DD4210020BC09 /* muxogm.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C940B8DD3B60020BC09 /* muxogm.c */; };
-		0DFA5CEB0B8DD4210020BC09 /* ports.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C950B8DD3B60020BC09 /* ports.c */; };
-		0DFA5CEC0B8DD4210020BC09 /* reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C970B8DD3B60020BC09 /* reader.c */; };
-		0DFA5CED0B8DD4210020BC09 /* render.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C980B8DD3B60020BC09 /* render.c */; };
-		0DFA5CEE0B8DD4210020BC09 /* scan.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C990B8DD3B60020BC09 /* scan.c */; };
-		0DFA5CEF0B8DD4210020BC09 /* sync.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9A0B8DD3B60020BC09 /* sync.c */; };
-		0DFA5CF00B8DD4210020BC09 /* update.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9B0B8DD3B60020BC09 /* update.c */; };
-		0DFA5CF10B8DD4210020BC09 /* work.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DFA5C9C0B8DD3B60020BC09 /* work.c */; };
-		0DFF0B770B6BC72A00549488 /* common.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9B0B4CAB100064E04C /* common.c */; };
-		0DFF0B790B6BC72A00549488 /* deca52.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9D0B4CAB100064E04C /* deca52.c */; };
-		0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC9E0B4CAB100064E04C /* decavcodec.c */; };
 		0DFF0C100B6BCEE800549488 /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 526FBC760B4CA8F40064E04C /* test.c */; };
 		253886010BFE0A5B0064E995 /* HBOutputRedirect.h in Headers */ = {isa = PBXBuildFile; fileRef = 253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */; };
 		253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886000BFE0A5B0064E995 /* HBOutputRedirect.m */; };
@@ -71,6 +41,7 @@
 		253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886160BFE0C160064E995 /* HBOutputPanelController.m */; };
 		25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */; };
 		25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */; };
+		27AC71850F5A0AF600053B83 /* fakexcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AC71840F5A0AF600053B83 /* fakexcode.cpp */; };
 		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F92082036E8008E1322 /* HBPreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* HBPreviewController.h */; };
@@ -81,27 +52,16 @@
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
-		5558B5690BE3BADF00E15E27 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = 5558B5680BE3BADF00E15E27 /* decdca.c */; };
-		5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */ = {isa = PBXBuildFile; fileRef = 5558B5680BE3BADF00E15E27 /* decdca.c */; };
-		593034EB0BBA39A100172349 /* ChapterTitles.h in Headers */ = {isa = PBXBuildFile; fileRef = 593034E90BBA39A100172349 /* ChapterTitles.h */; };
-		593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
 		59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 59CBD2360BBB44DA004A3BE3 /* parsecsv.c */; };
 		59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */ = {isa = PBXBuildFile; fileRef = 593034EA0BBA39A100172349 /* ChapterTitles.m */; };
-		7497010F0DC281BB009200D8 /* decomb.c in Sources */ = {isa = PBXBuildFile; fileRef = 7497010E0DC281BB009200D8 /* decomb.c */; };
-		749701100DC281BB009200D8 /* decomb.c in Sources */ = {isa = PBXBuildFile; fileRef = 7497010E0DC281BB009200D8 /* decomb.c */; };
-		A20F46DC0EBB5E7A005B861B /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20F46DB0EBB5E7A005B861B /* QuickTime.framework */; };
 		A20F47010EBB5EC2005B861B /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20F47000EBB5EC2005B861B /* QTKit.framework */; };
 		A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */ = {isa = PBXBuildFile; fileRef = A22C85EA0D05D35000C10E36 /* HBPresets.h */; };
 		A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C85EB0D05D35000C10E36 /* HBPresets.m */; };
-		A25289E60D87A27D00461D5B /* enctheora.c in Sources */ = {isa = PBXBuildFile; fileRef = A25289E50D87A27D00461D5B /* enctheora.c */; };
-		A25289E70D87A2CB00461D5B /* enctheora.c in Sources */ = {isa = PBXBuildFile; fileRef = A25289E50D87A27D00461D5B /* enctheora.c */; };
 		A25962E10F15077500B3BF4E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25962E00F15077500B3BF4E /* Quartz.framework */; };
 		A266019A0F2A1DC0007EA355 /* PictureFilters.xib in Resources */ = {isa = PBXBuildFile; fileRef = A26601980F2A1DC0007EA355 /* PictureFilters.xib */; };
 		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
 		A273E0520C57B39A00493A45 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04B0C57B39A00493A45 /* Play.tiff */; };
 		A273E0530C57B39A00493A45 /* Stop.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04C0C57B39A00493A45 /* Stop.tiff */; };
-		A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
-		A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */ = {isa = PBXBuildFile; fileRef = A273E0950C57C19500493A45 /* muxmkv.c */; };
 		A27BB4EA0EFAB9310027CDF9 /* PicturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = A27BB4E80EFAB9310027CDF9 /* PicturePreview.xib */; };
 		A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
 		A29E058B0BE12889000533F5 /* Growl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A29E057F0BE1283E000533F5 /* Growl.framework */; };
@@ -122,12 +82,8 @@
 		A2D7AD6F0C998AD30082CA33 /* Source.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD660C998AD30082CA33 /* Source.tiff */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
-		B453420A0EE3619C005D6F26 /* decmetadata.c in Sources */ = {isa = PBXBuildFile; fileRef = B45342080EE3619C005D6F26 /* decmetadata.c */; };
-		B453420B0EE3619C005D6F26 /* decmetadata.c in Sources */ = {isa = PBXBuildFile; fileRef = B45342080EE3619C005D6F26 /* decmetadata.c */; };
-		B48359A80C82960500E04440 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D289A9F20DBBE7AC00CE614B /* CoreServices.framework */; };
 		D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
-		D4D49FED0C83355600F01215 /* lang.c in Sources */ = {isa = PBXBuildFile; fileRef = B48359A70C82960500E04440 /* lang.c */; };
 		E3003C7F0C88505D0072F2A8 /* DeleteHighlightPressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003C7E0C88505D0072F2A8 /* DeleteHighlightPressed.png */; };
 		E3003CB50C8852B70072F2A8 /* DeletePressed.png in Resources */ = {isa = PBXBuildFile; fileRef = E3003CB40C8852B70072F2A8 /* DeletePressed.png */; };
 		E37167890C92F6180072B384 /* JobPassSecondSmall.png in Resources */ = {isa = PBXBuildFile; fileRef = E37167830C92F6180072B384 /* JobPassSecondSmall.png */; };
@@ -160,32 +116,29 @@
 		E3C844F90CA6B3F90013B683 /* Reveal.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C844F50CA6B3F90013B683 /* Reveal.png */; };
 		E3C845870CA6E9080013B683 /* EncodeComplete.png in Resources */ = {isa = PBXBuildFile; fileRef = E3C845860CA6E9080013B683 /* EncodeComplete.png */; };
 		E3FC10910D1611EC00470E7B /* EncodeCanceled.png in Resources */ = {isa = PBXBuildFile; fileRef = E3FC10900D1611EC00470E7B /* EncodeCanceled.png */; };
-		EAA526930C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
-		EAA526940C3B25D200944FF2 /* stream.c in Sources */ = {isa = PBXBuildFile; fileRef = EAA526920C3B25D200944FF2 /* stream.c */; };
-		FC8519500C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
-		FC8519510C59A02C0073812C /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194D0C59A02C0073812C /* deinterlace.c */; };
-		FC8519520C59A02C0073812C /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194E0C59A02C0073812C /* deblock.c */; };
-		FC8519530C59A02C0073812C /* detelecine.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194F0C59A02C0073812C /* detelecine.c */; };
-		FC8519540C59A02C0073812C /* denoise.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194C0C59A02C0073812C /* denoise.c */; };
-		FC8519550C59A02C0073812C /* deinterlace.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194D0C59A02C0073812C /* deinterlace.c */; };
-		FC8519560C59A02C0073812C /* deblock.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194E0C59A02C0073812C /* deblock.c */; };
-		FC8519570C59A02C0073812C /* detelecine.c in Sources */ = {isa = PBXBuildFile; fileRef = FC85194F0C59A02C0073812C /* detelecine.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		0D6E35900B6BD5FA005AABB3 /* PBXContainerItemProxy */ = {
+		27ED6A910F58BEE900C905EE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
-			remoteInfo = libmediafork;
+			remoteGlobalIDString = 27C7D1160F58B0AF00974730;
+			remoteInfo = make;
 		};
-		0DFF0BF30B6BCCB900549488 /* PBXContainerItemProxy */ = {
+		27ED6AB60F58CA0A00C905EE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0DFF0B710B6BC6E600549488;
-			remoteInfo = libmediafork;
+			remoteGlobalIDString = 27C7D1020F58AEC400974730;
+			remoteInfo = configure;
+		};
+		27ED6AC60F58CE8400C905EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27C7D1160F58B0AF00974730;
+			remoteInfo = make;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -205,9 +158,7 @@
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0D096DFF0B707D1200A845D4 /* libhb.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libhb.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D6E35760B6BD4F0005AABB3 /* HandBrake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandBrake.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		0DF377970B7BF99A00115CB0 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
 		0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		0DFA5C7E0B8DD3B60020BC09 /* declpcm.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = declpcm.c; path = ../libhb/declpcm.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C7F0B8DD3B60020BC09 /* decmpeg2.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = decmpeg2.c; path = ../libhb/decmpeg2.c; sourceTree = SOURCE_ROOT; };
@@ -233,8 +184,6 @@
 		0DFA5C9A0B8DD3B60020BC09 /* sync.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = sync.c; path = ../libhb/sync.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C9B0B8DD3B60020BC09 /* update.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = update.c; path = ../libhb/update.c; sourceTree = SOURCE_ROOT; };
 		0DFA5C9C0B8DD3B60020BC09 /* work.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = work.c; path = ../libhb/work.c; sourceTree = SOURCE_ROOT; };
-		0DFA5D060B8DD9040020BC09 /* HandBrake.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = HandBrake.plist; sourceTree = "<group>"; };
-		0DFF0B720B6BC6E600549488 /* libhb.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DFF0C0A0B6BCEC200549488 /* HandBrakeCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HandBrakeCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		253885FF0BFE0A5B0064E995 /* HBOutputRedirect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBOutputRedirect.h; sourceTree = "<group>"; };
@@ -243,6 +192,7 @@
 		253886160BFE0C160064E995 /* HBOutputPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputPanelController.m; sourceTree = "<group>"; };
 		25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreferencesController.h; sourceTree = "<group>"; };
 		25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesController.m; sourceTree = "<group>"; };
+		27AC71840F5A0AF600053B83 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -334,21 +284,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0D096DFD0B707D1200A845D4 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0D096EA30B70884A00A845D4 /* libz.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0DFF0B700B6BC6E600549488 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0DFF0C080B6BCEC200549488 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -368,7 +303,6 @@
 				4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */,
 				A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */,
 				A2D0A0AB0D3E5929002D57CB /* Sparkle.framework in Frameworks */,
-				A20F46DC0EBB5E7A005B861B /* QuickTime.framework in Frameworks */,
 				A20F47010EBB5EC2005B861B /* QTKit.framework in Frameworks */,
 				A25962E10F15077500B3BF4E /* Quartz.framework in Frameworks */,
 			);
@@ -380,10 +314,8 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0DFF0B720B6BC6E600549488 /* libhb.a */,
 				0DFF0C0A0B6BCEC200549488 /* HandBrakeCLI */,
 				0D6E35760B6BD4F0005AABB3 /* HandBrake.app */,
-				0D096DFF0B707D1200A845D4 /* libhb.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -495,7 +427,7 @@
 		526FBC920B4CAA120064E04C /* HandBrakeCLI Sources */ = {
 			isa = PBXGroup;
 			children = (
-				0DF377970B7BF99A00115CB0 /* fakexcode.cpp */,
+				27AC71840F5A0AF600053B83 /* fakexcode.cpp */,
 				526FBC760B4CA8F40064E04C /* test.c */,
 				59CBD2360BBB44DA004A3BE3 /* parsecsv.c */,
 			);
@@ -512,7 +444,6 @@
 				A2BEA5FA0F2A1ED1001CE7A1 /* PictureController.mm */,
 				A22C85EA0D05D35000C10E36 /* HBPresets.h */,
 				A22C85EB0D05D35000C10E36 /* HBPresets.m */,
-				0DFA5D060B8DD9040020BC09 /* HandBrake.plist */,
 				4D1FD381073D19CE00E46515 /* HBPreviewController.h */,
 				4D1FD382073D19CE00E46515 /* HBPreviewController.mm */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
@@ -578,21 +509,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		0D096DFB0B707D1200A845D4 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0DFF0B6E0B6BC6E600549488 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				593034EB0BBA39A100172349 /* ChapterTitles.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4DD93F8E082036E8008E1322 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -615,40 +531,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0D096DFE0B707D1200A845D4 /* libhb dlib */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0D096E650B707D5800A845D4 /* Build configuration list for PBXNativeTarget "libhb dlib" */;
-			buildPhases = (
-				0D096DFB0B707D1200A845D4 /* Headers */,
-				0D096DFC0B707D1200A845D4 /* Sources */,
-				0D096DFD0B707D1200A845D4 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "libhb dlib";
-			productName = "libmediafork dlib";
-			productReference = 0D096DFF0B707D1200A845D4 /* libhb.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
-		0DFF0B710B6BC6E600549488 /* libhb */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */;
-			buildPhases = (
-				0DFF0B6E0B6BC6E600549488 /* Headers */,
-				0DFF0B6F0B6BC6E600549488 /* Sources */,
-				0DFF0B700B6BC6E600549488 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = libhb;
-			productName = libmediafork;
-			productReference = 0DFF0B720B6BC6E600549488 /* libhb.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		0DFF0C090B6BCEC200549488 /* HandBrakeCLI */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0DFF0C0C0B6BCEE000549488 /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */;
@@ -659,7 +541,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				0D6E35910B6BD5FA005AABB3 /* PBXTargetDependency */,
+				27ED6A920F58BEE900C905EE /* PBXTargetDependency */,
 			);
 			name = HandBrakeCLI;
 			productName = HandBrakeCLI;
@@ -679,7 +561,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				0DFF0BF40B6BCCB900549488 /* PBXTargetDependency */,
+				27ED6AC70F58CE8400C905EE /* PBXTargetDependency */,
 			);
 			name = HandBrake;
 			productName = HandBrake;
@@ -692,16 +574,16 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* HandBrake */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
-				0DFF0B710B6BC6E600549488 /* libhb */,
 				0DFF0C090B6BCEC200549488 /* HandBrakeCLI */,
-				0D096DFE0B707D1200A845D4 /* libhb dlib */,
+				27C7D1160F58B0AF00974730 /* make.libhb */,
+				27C7D1020F58AEC400974730 /* configure */,
 			);
 		};
 /* End PBXProject section */
@@ -758,105 +640,46 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		27C7D1010F58AEC400974730 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+				"$(EXTERNAL_BUILD)/GNUmakefile",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nmkdir -p $EXTERNAL_BUILD\ncd $EXTERNAL_BUILD\n\ncase \"$CONFIGURATION\" in\n    *.i386)\n        args=\"--arch=i386\"\n        ;;\n    *.x86_64)\n        args=\"--arch=x86_64\"\n        ;;\n    *.ppc)\n        args=\"--arch=ppc\"\n        ;;\n    *.ppc64)\n        args=\"--arch=ppc64\"\n        ;;\n    *)\n        args=\"\"\n        ;;\nesac\n\nif [ -z \"$args\" ]; then\n    exec $EXTERNAL_PROJECT/configure\nelse\n    exec $EXTERNAL_PROJECT/configure \"$args\"\nfi";
+			showEnvVarsInLog = 0;
+		};
+		27C7D1170F58B0AF00974730 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C $EXTERNAL_BUILD macosx.fromxcode";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
-		0D096DFC0B707D1200A845D4 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A25289E70D87A2CB00461D5B /* enctheora.c in Sources */,
-				D4D49FED0C83355600F01215 /* lang.c in Sources */,
-				0DFA5CD90B8DD4210020BC09 /* declpcm.c in Sources */,
-				0DFA5CDA0B8DD4210020BC09 /* decmpeg2.c in Sources */,
-				0DFA5CDB0B8DD4210020BC09 /* decsub.c in Sources */,
-				0DFA5CDC0B8DD4210020BC09 /* demuxmpeg.c in Sources */,
-				0DFA5CDD0B8DD4210020BC09 /* dvd.c in Sources */,
-				0DFA5CDE0B8DD4210020BC09 /* encavcodec.c in Sources */,
-				0DFA5CDF0B8DD4210020BC09 /* encfaac.c in Sources */,
-				0DFA5CE00B8DD4210020BC09 /* enclame.c in Sources */,
-				0DFA5CE10B8DD4210020BC09 /* encvorbis.c in Sources */,
-				0DFA5CE20B8DD4210020BC09 /* encx264.c in Sources */,
-				0DFA5CE30B8DD4210020BC09 /* encxvid.c in Sources */,
-				0DFA5CE40B8DD4210020BC09 /* fifo.c in Sources */,
-				0DFA5CE50B8DD4210020BC09 /* hb.c in Sources */,
-				0DFA5CE70B8DD4210020BC09 /* muxavi.c in Sources */,
-				0DFA5CE80B8DD4210020BC09 /* muxcommon.c in Sources */,
-				0DFA5CE90B8DD4210020BC09 /* muxmp4.c in Sources */,
-				0DFA5CEA0B8DD4210020BC09 /* muxogm.c in Sources */,
-				0DFA5CEB0B8DD4210020BC09 /* ports.c in Sources */,
-				0DFA5CEC0B8DD4210020BC09 /* reader.c in Sources */,
-				0DFA5CED0B8DD4210020BC09 /* render.c in Sources */,
-				0DFA5CEE0B8DD4210020BC09 /* scan.c in Sources */,
-				0DFA5CEF0B8DD4210020BC09 /* sync.c in Sources */,
-				0DFA5CF00B8DD4210020BC09 /* update.c in Sources */,
-				0DFA5CF10B8DD4210020BC09 /* work.c in Sources */,
-				0D096E010B707D3400A845D4 /* common.c in Sources */,
-				0D096E020B707D3400A845D4 /* deca52.c in Sources */,
-				0D096E030B707D3400A845D4 /* decavcodec.c in Sources */,
-				5558B56A0BE3BADF00E15E27 /* decdca.c in Sources */,
-				EAA526940C3B25D200944FF2 /* stream.c in Sources */,
-				A273E09B0C57C1CD00493A45 /* muxmkv.c in Sources */,
-				FC8519540C59A02C0073812C /* denoise.c in Sources */,
-				FC8519550C59A02C0073812C /* deinterlace.c in Sources */,
-				FC8519560C59A02C0073812C /* deblock.c in Sources */,
-				FC8519570C59A02C0073812C /* detelecine.c in Sources */,
-				749701100DC281BB009200D8 /* decomb.c in Sources */,
-				B453420B0EE3619C005D6F26 /* decmetadata.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0DFF0B6F0B6BC6E600549488 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0DFA5CC00B8DD3FE0020BC09 /* declpcm.c in Sources */,
-				0DFA5CC10B8DD3FE0020BC09 /* decmpeg2.c in Sources */,
-				0DFA5CC20B8DD3FE0020BC09 /* decsub.c in Sources */,
-				0DFA5CC30B8DD3FE0020BC09 /* demuxmpeg.c in Sources */,
-				0DFA5CC40B8DD3FE0020BC09 /* dvd.c in Sources */,
-				0DFA5CC50B8DD3FE0020BC09 /* encavcodec.c in Sources */,
-				0DFA5CC60B8DD3FE0020BC09 /* encfaac.c in Sources */,
-				0DFA5CC70B8DD3FE0020BC09 /* enclame.c in Sources */,
-				0DFA5CC80B8DD3FE0020BC09 /* encvorbis.c in Sources */,
-				0DFA5CC90B8DD3FE0020BC09 /* encx264.c in Sources */,
-				0DFA5CCA0B8DD3FE0020BC09 /* encxvid.c in Sources */,
-				0DFA5CCB0B8DD3FE0020BC09 /* fifo.c in Sources */,
-				0DFA5CCC0B8DD3FE0020BC09 /* hb.c in Sources */,
-				0DFA5CCE0B8DD3FE0020BC09 /* muxavi.c in Sources */,
-				0DFA5CCF0B8DD3FE0020BC09 /* muxcommon.c in Sources */,
-				0DFA5CD00B8DD3FE0020BC09 /* muxmp4.c in Sources */,
-				0DFA5CD10B8DD3FE0020BC09 /* muxogm.c in Sources */,
-				0DFA5CD20B8DD3FE0020BC09 /* ports.c in Sources */,
-				0DFA5CD30B8DD3FE0020BC09 /* reader.c in Sources */,
-				0DFA5CD40B8DD3FE0020BC09 /* render.c in Sources */,
-				0DFA5CD50B8DD3FE0020BC09 /* scan.c in Sources */,
-				0DFA5CD60B8DD3FE0020BC09 /* sync.c in Sources */,
-				0DFA5CD70B8DD3FE0020BC09 /* update.c in Sources */,
-				0DFA5CD80B8DD3FE0020BC09 /* work.c in Sources */,
-				0DFF0B770B6BC72A00549488 /* common.c in Sources */,
-				0DFF0B790B6BC72A00549488 /* deca52.c in Sources */,
-				0DFF0B7A0B6BC72A00549488 /* decavcodec.c in Sources */,
-				593034EC0BBA39A100172349 /* ChapterTitles.m in Sources */,
-				5558B5690BE3BADF00E15E27 /* decdca.c in Sources */,
-				EAA526930C3B25D200944FF2 /* stream.c in Sources */,
-				A273E09A0C57C1CC00493A45 /* muxmkv.c in Sources */,
-				FC8519500C59A02C0073812C /* denoise.c in Sources */,
-				FC8519510C59A02C0073812C /* deinterlace.c in Sources */,
-				FC8519520C59A02C0073812C /* deblock.c in Sources */,
-				FC8519530C59A02C0073812C /* detelecine.c in Sources */,
-				B48359A80C82960500E04440 /* lang.c in Sources */,
-				A25289E60D87A27D00461D5B /* enctheora.c in Sources */,
-				7497010F0DC281BB009200D8 /* decomb.c in Sources */,
-				B453420A0EE3619C005D6F26 /* decmetadata.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0DFF0C070B6BCEC200549488 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0DFF0C100B6BCEE800549488 /* test.c in Sources */,
-				0DF377980B7BF99A00115CB0 /* fakexcode.cpp in Sources */,
 				59CBD2370BBB44DA004A3BE3 /* parsecsv.c in Sources */,
+				27AC71850F5A0AF600053B83 /* fakexcode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -884,15 +707,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		0D6E35910B6BD5FA005AABB3 /* PBXTargetDependency */ = {
+		27ED6A920F58BEE900C905EE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0DFF0B710B6BC6E600549488 /* libhb */;
-			targetProxy = 0D6E35900B6BD5FA005AABB3 /* PBXContainerItemProxy */;
+			target = 27C7D1160F58B0AF00974730 /* make.libhb */;
+			targetProxy = 27ED6A910F58BEE900C905EE /* PBXContainerItemProxy */;
 		};
-		0DFF0BF40B6BCCB900549488 /* PBXTargetDependency */ = {
+		27ED6AB70F58CA0A00C905EE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0DFF0B710B6BC6E600549488 /* libhb */;
-			targetProxy = 0DFF0BF30B6BCCB900549488 /* PBXContainerItemProxy */;
+			target = 27C7D1020F58AEC400974730 /* configure */;
+			targetProxy = 27ED6AB60F58CA0A00C905EE /* PBXContainerItemProxy */;
+		};
+		27ED6AC70F58CE8400C905EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27C7D1160F58B0AF00974730 /* make.libhb */;
+			targetProxy = 27ED6AC60F58CE8400C905EE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -972,220 +800,193 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		0D096E660B707D5800A845D4 /* Development */ = {
+		0DFF0C0D0B6BCEE000549488 /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrakeCLI;
+			};
+			name = debug;
+		};
+		0DFF0C0E0B6BCEE000549488 /* standard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrakeCLI;
+			};
+			name = standard;
+		};
+		27C7D1030F58AEC500974730 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libfaad.a,
-					"-lbz2",
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = configure;
 			};
-			name = Development;
+			name = debug;
 		};
-		0D096E670B707D5800A845D4 /* Deployment */ = {
+		27C7D1040F58AEC500974730 /* standard */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
 				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard;
+		};
+		27C7D1190F58B0AF00974730 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = configure;
+			};
+			name = debug;
+		};
+		27C7D11A0F58B0AF00974730 /* standard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard;
+		};
+		27ED6ADB0F58D7F100C905EE /* standard.i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = i386;
+				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
+				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
+				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_PROJECT = ..;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libfaad.a,
-					"-lbz2",
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
+				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
-				ZERO_LINK = NO;
+				SDKROOT = macosx10.5;
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
+				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
 			};
-			name = Deployment;
+			name = standard.i386;
 		};
-		0D096E690B707D5800A845D4 /* UB */ = {
+		27ED6ADC0F58D7F100C905EE /* standard.i386 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
-				OTHER_LDFLAGS = (
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libfaad.a,
-					"-lbz2",
-					"-ldl",
-					"-flat_namespace",
-					"-read_only_relocs",
-					suppress,
-				);
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SEPARATE_STRIP = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
 				ZERO_LINK = NO;
 			};
-			name = UB;
+			name = standard.i386;
 		};
-		0D88F56B0B6CDCD400F81F26 /* UB */ = {
+		27ED6ADD0F58D7F100C905EE /* standard.i386 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_LDFLAGS = "";
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
 				ZERO_LINK = NO;
 			};
-			name = UB;
+			name = standard.i386;
 		};
-		0D88F56C0B6CDCD400F81F26 /* UB */ = {
+		27ED6ADE0F58D7F100C905EE /* standard.i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrakeCLI;
+			};
+			name = standard.i386;
+		};
+		27ED6ADF0F58D7F100C905EE /* standard.i386 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPCAST_URL = "";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
-				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1193,45 +994,38 @@
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = (
-					../libhb,
-					../contrib/include,
-				);
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
-				INFOPLIST_FILE = HandBrake.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
+				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libfaad.a,
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"-lbz2",
+					"-lz",
 				);
 				PRODUCT_NAME = HandBrake;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
@@ -1239,222 +1033,393 @@
 				);
 				WRAPPER_EXTENSION = app;
 			};
-			name = UB;
+			name = standard.i386;
 		};
-		0D88F56E0B6CDCD400F81F26 /* UB */ = {
+		27ED6AE30F58D8F200C905EE /* standard.ppc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					"-lz",
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libfaad.a,
-					"-lbz2",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
-			};
-			name = UB;
-		};
-		0D88F56F0B6CDCD400F81F26 /* UB */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
-				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				IBC_NOTICES = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-			};
-			name = UB;
-		};
-		0DFF0B740B6BC70400549488 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_LDFLAGS = "";
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
-			};
-			name = Development;
-		};
-		0DFF0B750B6BC70400549488 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/../libhb";
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../contrib/include";
-				INSTALL_PATH = /usr/local/lib;
-				MACOSX_DEPLOYMENT_TARGET = 10.3;
-				OTHER_CFLAGS = (
-					"-D__LIBHB__",
-					"-DSYS_DARWIN",
-					"-DUSE_PTHREAD",
-				);
-				OTHER_LDFLAGS = "";
-				PER_ARCH_CFLAGS_ppc = "-DWORDS_BIGENDIAN";
-				PREBINDING = NO;
-				PRODUCT_NAME = hb;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		0DFF0C0D0B6BCEE000549488 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					"-lz",
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libfaad.a,
-					"-lbz2",
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
-			};
-			name = Development;
-		};
-		0DFF0C0E0B6BCEE000549488 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CONFIGURATION_BUILD_DIR = ..;
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ARCHS = ppc;
+				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
+				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
+				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_PROJECT = ..;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = ../libhb;
-				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					"-lz",
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libfaad.a,
-					"-lbz2",
-				);
+				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
-				PRODUCT_NAME = HandBrakeCLI;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				SDKROOT = macosx10.5;
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
+				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
+			};
+			name = standard.ppc;
+		};
+		27ED6AE40F58D8F200C905EE /* standard.ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = standard.ppc;
 		};
-		4D4E7BC1087804870051572B /* Development */ = {
+		27ED6AE50F58D8F200C905EE /* standard.ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard.ppc;
+		};
+		27ED6AE60F58D8F200C905EE /* standard.ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrakeCLI;
+			};
+			name = standard.ppc;
+		};
+		27ED6AE70F58D8F200C905EE /* standard.ppc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPCAST_URL = "";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
+				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
+				INFOPLIST_PREPROCESS = YES;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrake;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = standard.ppc;
+		};
+		27ED6AFF0F58DE7400C905EE /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = x86_64;
+				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
+				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
+				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_PROJECT = ..;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
+				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
+			};
+			name = standard.x86_64;
+		};
+		27ED6B000F58DE7400C905EE /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard.x86_64;
+		};
+		27ED6B010F58DE7400C905EE /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard.x86_64;
+		};
+		27ED6B020F58DE7400C905EE /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrakeCLI;
+			};
+			name = standard.x86_64;
+		};
+		27ED6B030F58DE7400C905EE /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPCAST_URL = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
+				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
+				INFOPLIST_PREPROCESS = YES;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrake;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = standard.x86_64;
+		};
+		27ED6B040F58DE7600C905EE /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = ppc64;
+				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
+				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
+				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_PROJECT = ..;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
+				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
+			};
+			name = standard.ppc64;
+		};
+		27ED6B050F58DE7600C905EE /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard.ppc64;
+		};
+		27ED6B060F58DE7600C905EE /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = configure;
+				ZERO_LINK = NO;
+			};
+			name = standard.ppc64;
+		};
+		27ED6B070F58DE7600C905EE /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INSTALL_PATH = /usr/local/bin;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrakeCLI;
+			};
+			name = standard.ppc64;
+		};
+		27ED6B080F58DE7600C905EE /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPCAST_URL = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
+				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
+				INFOPLIST_PREPROCESS = YES;
+				OTHER_LDFLAGS = (
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
+					"-lbz2",
+					"-lz",
+				);
+				PRODUCT_NAME = HandBrake;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = standard.ppc64;
+		};
+		4D4E7BC1087804870051572B /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPCAST_URL = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1463,65 +1428,51 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)\"";
-				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = (
-					../libhb,
-					../contrib/include,
-				);
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
-				INFOPLIST_FILE = HandBrake.plist;
-				INFOPLIST_PREPROCESS = NO;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
+				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libfaad.a,
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"-lbz2",
+					"-lz",
 				);
 				PRODUCT_NAME = HandBrake;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
 					"-Wno-unknown-pragmas",
 				);
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
 			};
-			name = Development;
+			name = debug;
 		};
-		4D4E7BC2087804870051572B /* Deployment */ = {
+		4D4E7BC2087804870051572B /* standard */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPCAST_URL = "";
-				CONFIGURATION_BUILD_DIR = "$(PROJECT_DIR)/..";
-				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -1529,138 +1480,155 @@
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				HEADER_SEARCH_PATHS = (
-					../libhb,
-					../contrib/include,
-				);
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
-				INFOPLIST_FILE = HandBrake.plist;
-				LIBRARY_SEARCH_PATHS = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
+				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					../libhb/libhb.a,
-					../contrib/lib/libmp4v2.a,
-					../contrib/lib/liba52.a,
-					../contrib/lib/libavformat.a,
-					../contrib/lib/libavcodec.a,
-					../contrib/lib/libavutil.a,
-					../contrib/lib/libdvdread.a,
-					../contrib/lib/libfaac.a,
-					../contrib/lib/libmp3lame.a,
-					../contrib/lib/libmpeg2.a,
-					../contrib/lib/libvorbis.a,
-					../contrib/lib/libvorbisenc.a,
-					../contrib/lib/libogg.a,
-					../contrib/lib/libsamplerate.a,
-					../contrib/lib/libx264.a,
-					../contrib/lib/libxvidcore.a,
-					../contrib/lib/libdca.a,
-					../contrib/lib/libmkv.a,
-					../contrib/lib/libswscale.a,
-					../contrib/lib/libtheora.a,
-					../contrib/lib/libfaad.a,
+					"$(EXTERNAL_BUILD)/libhb/libhb.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"-lbz2",
+					"-lz",
 				);
 				PRODUCT_NAME = HandBrake;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
 					"-Wno-four-char-constants",
 					"-Wno-unknown-pragmas",
 				);
 				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = standard;
 		};
-		4D4E7BC5087804870051572B /* Development */ = {
+		4D4E7BC5087804870051572B /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
+				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
+				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_DEBUGGING_SYMBOLS = default;
+				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_PROJECT = ..;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				IBC_NOTICES = NO;
-				IBC_WARNINGS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
+				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				ZERO_LINK = NO;
+				SDKROOT = macosx10.5;
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
 			};
-			name = Development;
+			name = debug;
 		};
-		4D4E7BC6087804870051572B /* Deployment */ = {
+		4D4E7BC6087804870051572B /* standard */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
+				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
+				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_PROJECT = ..;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
-				GCC_PREPROCESSOR_DEFINITIONS = "JOB_GROUPS=1";
-				IBC_NOTICES = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OTHER_CFLAGS = "";
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
+				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
+				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
+				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
 			};
-			name = Deployment;
+			name = standard;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0D096E650B707D5800A845D4 /* Build configuration list for PBXNativeTarget "libhb dlib" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0D096E660B707D5800A845D4 /* Development */,
-				0D096E670B707D5800A845D4 /* Deployment */,
-				0D096E690B707D5800A845D4 /* UB */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
-		};
-		0DFF0B730B6BC70400549488 /* Build configuration list for PBXNativeTarget "libhb" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0DFF0B740B6BC70400549488 /* Development */,
-				0DFF0B750B6BC70400549488 /* Deployment */,
-				0D88F56B0B6CDCD400F81F26 /* UB */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
-		};
 		0DFF0C0C0B6BCEE000549488 /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				0DFF0C0D0B6BCEE000549488 /* Development */,
-				0DFF0C0E0B6BCEE000549488 /* Deployment */,
-				0D88F56E0B6CDCD400F81F26 /* UB */,
+				0DFF0C0E0B6BCEE000549488 /* standard */,
+				0DFF0C0D0B6BCEE000549488 /* debug */,
+				27ED6ADE0F58D7F100C905EE /* standard.i386 */,
+				27ED6B020F58DE7400C905EE /* standard.x86_64 */,
+				27ED6AE60F58D8F200C905EE /* standard.ppc */,
+				27ED6B070F58DE7600C905EE /* standard.ppc64 */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = standard;
+		};
+		27C7D1050F58AEE300974730 /* Build configuration list for PBXAggregateTarget "configure" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27C7D1040F58AEC500974730 /* standard */,
+				27C7D1030F58AEC500974730 /* debug */,
+				27ED6ADC0F58D7F100C905EE /* standard.i386 */,
+				27ED6B000F58DE7400C905EE /* standard.x86_64 */,
+				27ED6AE40F58D8F200C905EE /* standard.ppc */,
+				27ED6B050F58DE7600C905EE /* standard.ppc64 */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = standard;
+		};
+		27C7D1180F58B0AF00974730 /* Build configuration list for PBXAggregateTarget "make.libhb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27C7D11A0F58B0AF00974730 /* standard */,
+				27C7D1190F58B0AF00974730 /* debug */,
+				27ED6ADD0F58D7F100C905EE /* standard.i386 */,
+				27ED6B010F58DE7400C905EE /* standard.x86_64 */,
+				27ED6AE50F58D8F200C905EE /* standard.ppc */,
+				27ED6B060F58DE7600C905EE /* standard.ppc64 */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = standard;
 		};
 		4D4E7BC0087804870051572B /* Build configuration list for PBXNativeTarget "HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4D4E7BC1087804870051572B /* Development */,
-				4D4E7BC2087804870051572B /* Deployment */,
-				0D88F56C0B6CDCD400F81F26 /* UB */,
+				4D4E7BC2087804870051572B /* standard */,
+				4D4E7BC1087804870051572B /* debug */,
+				27ED6ADF0F58D7F100C905EE /* standard.i386 */,
+				27ED6B030F58DE7400C905EE /* standard.x86_64 */,
+				27ED6AE70F58D8F200C905EE /* standard.ppc */,
+				27ED6B080F58DE7600C905EE /* standard.ppc64 */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = standard;
 		};
 		4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4D4E7BC5087804870051572B /* Development */,
-				4D4E7BC6087804870051572B /* Deployment */,
-				0D88F56F0B6CDCD400F81F26 /* UB */,
+				4D4E7BC6087804870051572B /* standard */,
+				4D4E7BC5087804870051572B /* debug */,
+				27ED6ADB0F58D7F100C905EE /* standard.i386 */,
+				27ED6AFF0F58DE7400C905EE /* standard.x86_64 */,
+				27ED6AE30F58D8F200C905EE /* standard.ppc */,
+				27ED6B040F58DE7600C905EE /* standard.ppc64 */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Deployment;
+			defaultConfigurationName = standard;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,0 +1,19 @@
+fn.ERROR1 = ERROR: $(1)
+fn.ERROR2 = ERROR: $(1): $(2)
+
+fn.HEADER = @echo "$(1): $(2)"
+fn.DIVIDER = @echo "======================================================================"
+
+fn.ABSOLUTE = $(if $(filter /%,$(1)),$(1),$(subst /./,/,$(CURDIR)/$(1)))
+
+fn.ARGS = $(strip $(foreach a,$(2), \
+    $($(1).$(patsubst !%,%,$(filter !%,$(a)))) \
+    $(foreach x,$(patsubst ?%,%,$(filter ?%,$(a))),$(if $(filter 1,$($(1).$(x))),$($(1).args.$(x)))) \
+    $(foreach x,$(patsubst .%,%,$(filter .%,$(a))),$($(1).args.$(x).$($(1).$(x)))) \
+    $(foreach x,$(patsubst @%,%,$(filter @%,$(a))),$(if $($(1).$(x)),$(call $(1).args.$(x),$($(1).$(x))))) \
+    $(foreach x,$(patsubst *%,%,$(filter *%,$(a))),$(foreach i,$($(1).$(x)),$(call $(1).args.$(x),$(i)))) \
+    ))
+
+fn.VARS = $(foreach v,$($(1).vars),$(v)="$($(1).vars.$(v))")
+
+fn.TARGET = $(TARGET.$(2).prefix)$(1)$(TARGET.$(2).suffix)$(TARGET.$(2).ext)

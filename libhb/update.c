@@ -42,7 +42,7 @@ static void UpdateFunc( void * _data )
     int        i;
 	
     /* Setup hb_query and hb_query_two with the correct appcast file */
-    if( HB_BUILD % 100 )
+    if( HB_PROJECT_BUILD % 100 )
     {	
         hb_log("Using http://handbrake.fr/appcast_unstable.xml (primary)");
         hb_log("Using http://handbrake.fr/appcast.xml (secondary)");
@@ -148,7 +148,7 @@ static void UpdateFunc( void * _data )
         goto error;
     }
 	
-	/* Stable HB_BUILD */
+	/* Stable HB_PROJECT_BUILD */
     stable = strtol( cur, &cur, 10 );
 		
     if( cur >= end )
@@ -280,7 +280,7 @@ static void UpdateFunc( void * _data )
         goto error;
     }
 	
-	/* UnStable HB_BUILD */
+	/* UnStable HB_PROJECT_BUILD */
     unstable = strtol( cur, &cur, 10 );
 		
     if( cur >= end )
@@ -323,10 +323,10 @@ static void UpdateFunc( void * _data )
 	hb_log( "latest unstable: %s, build %d", unstable_str, unstable );
 	
     /* Return the build information */
-	if( HB_BUILD % 100 )
+	if( HB_PROJECT_BUILD % 100 )
     {
         /* We are runnning an unstable build */
-        if( unstable > HB_BUILD )
+        if( unstable > HB_PROJECT_BUILD )
         {
             memcpy( data->version, unstable_str, sizeof( unstable_str ) );
             *(data->build) = unstable;
@@ -335,7 +335,7 @@ static void UpdateFunc( void * _data )
     else
     {
         /* We are runnning an stable build */
-        if( stable > HB_BUILD )
+        if( stable > HB_PROJECT_BUILD )
         {
             memcpy( data->version, stable_str, sizeof( stable_str ) );
             *(data->build) = stable;

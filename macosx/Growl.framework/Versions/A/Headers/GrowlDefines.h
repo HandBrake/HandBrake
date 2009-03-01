@@ -7,10 +7,10 @@
 
 #ifdef __OBJC__
 #define XSTR(x) (@x)
-#define STRING NSString *
+#define STRING_TYPE NSString *
 #else
 #define XSTR CFSTR
-#define STRING CFStringRef
+#define STRING_TYPE CFStringRef
 #endif
 
 /*!	@header GrowlDefines.h
@@ -48,6 +48,14 @@
  *	 "SurfWriter Lite" are not.
  */
 #define GROWL_APP_NAME					XSTR("ApplicationName")
+/*!	@defined GROWL_APP_ID
+ *	@abstract The bundle identifier of your application.
+ *	@discussion The bundle identifier of your application. This key should
+ *   be unique for your application while there may be several applications
+ *   with the same GROWL_APP_NAME.
+ *   This key is optional.
+ */
+#define GROWL_APP_ID					XSTR("ApplicationId")
 /*!	@defined GROWL_APP_ICON
  *	@abstract The image data for your application's icon.
  *	@discussion Image data representing your application's icon. This may be
@@ -74,6 +82,26 @@
  *	 notification names.
  */
 #define GROWL_NOTIFICATIONS_ALL			XSTR("AllNotifications")
+/*! @defined GROWL_NOTIFICATIONS_HUMAN_READABLE_DESCRIPTIONS
+ *  @abstract A dictionary of human-readable names for your notifications.
+ *  @discussion By default, the Growl UI will display notifications by the names given in GROWL_NOTIFICATIONS_ALL
+ *  which correspond to the GROWL_NOTIFICATION_NAME. This dictionary specifies the human-readable name to display.
+ *  The keys of the dictionary are GROWL_NOTIFICATION_NAME strings; the objects are the human-readable versions.
+ *  For any GROWL_NOTIFICATION_NAME not specific in this dictionary, the GROWL_NOTIFICATION_NAME will be displayed.
+ *
+ *  This key is optional.
+ */
+#define GROWL_NOTIFICATIONS_HUMAN_READABLE_NAMES		XSTR("HumanReadableNames")
+/*! @defined GROWL_NOTIFICATIONS_DESCRIPTIONS
+*  @abstract A dictionary of descriptions of _when_ each notification occurs
+*  @discussion This is an NSDictionary whose keys are GROWL_NOTIFICATION_NAME strings and whose objects are
+*  descriptions of _when_ each notification occurs, such as "You received a new mail message" or
+*  "A file finished downloading".
+*
+*  This key is optional.
+*/
+#define GROWL_NOTIFICATIONS_DESCRIPTIONS		XSTR("NotificationDescriptions")
+
 /*!	@defined	GROWL_TICKET_VERSION
  *	@abstract	The version of your registration ticket.
  *	@discussion	Include this key in a ticket plist file that you put in your
@@ -97,9 +125,10 @@
 
 /*!	@defined GROWL_NOTIFICATION_NAME
  *	@abstract The name of the notification.
- *	@discussion The name of the notification. This should be human-readable, as
- *	 it's shown in the prefpane, in the list of notifications your application
- *	 supports. */
+ *	@discussion The name of the notification. Note that if you do not define
+ *  GROWL_NOTIFICATIONS_HUMAN_READABLE_NAMES when registering your ticket originally this name
+ *  will the one displayed within the Growl preference pane and should be human-readable.
+ */
 #define GROWL_NOTIFICATION_NAME			XSTR("NotificationName")
 /*!	@defined GROWL_NOTIFICATION_TITLE
  *	@abstract The title to display in the notification.
@@ -185,6 +214,15 @@
  *	 Optional.
  */
 #define GROWL_APP_PID					XSTR("ApplicationPID")
+
+/*!	@defined GROWL_NOTIFICATION_PROGRESS
+*	@abstract If this key is set, it should contain a double value wrapped
+*     in a NSNumber which describes some sort of progress (from 0.0 to 100.0).
+*     If this is key is not set, no progress bar is shown.
+*
+*	 Optional. Not supported by all display plugins.
+*/
+#define GROWL_NOTIFICATION_PROGRESS		XSTR("NotificationProgress")
 
 // Notifications
 #pragma mark Notifications
@@ -303,5 +341,8 @@
  *	 notifications.
  */
 #define GROWL_REG_DICT_EXTENSION		XSTR("growlRegDict")
+
+
+#define GROWL_POSITION_PREFERENCE_KEY			@"GrowlSelectedPosition"
 
 #endif //ndef _GROWLDEFINES_H

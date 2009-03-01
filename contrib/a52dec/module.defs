@@ -1,0 +1,6 @@
+$(eval $(call import.MODULE.defs,A52DEC,a52dec))
+$(eval $(call import.CONTRIB.defs,A52DEC))
+
+A52DEC.FETCH.url = http://download.m0k.org/handbrake/contrib/a52dec-0.7.4.tar.gz
+A52DEC.EXTRACT.tarbase = a52dec
+A52DEC.INSTALL.strip = liba52.a

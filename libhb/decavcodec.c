@@ -61,9 +61,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
-
-//#include "libavcodec/audioconvert.h"
-#include "../contrib/ffmpeg/libavcodec/audioconvert.h"
+#include "libavcodec/audioconvert.h"
 
 static int  decavcodecInit( hb_work_object_t *, hb_job_t * );
 static int  decavcodecWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );

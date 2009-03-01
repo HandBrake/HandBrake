@@ -257,7 +257,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
  */
 char * hb_get_version( hb_handle_t * h )
 {
-    return HB_VERSION;
+    return HB_PROJECT_VERSION;
 }
 
 /**
@@ -267,7 +267,7 @@ char * hb_get_version( hb_handle_t * h )
  */
 int hb_get_build( hb_handle_t * h )
 {
-    return HB_BUILD;
+    return HB_PROJECT_BUILD;
 }
 
 /**

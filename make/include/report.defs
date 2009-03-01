@@ -1,0 +1,53 @@
+## function: print a var's name, definition and expanded value
+##
+## $(1) = name of variable
+##
+define fn.PRINTVAR
+
+$(1)
+    ORIGIN     = $(origin $(1))
+    FLAVOR     = $(flavor $(1))
+    DEFINITION = $(value $(1)) 
+    EXPANDED   = $($(1))
+endef
+
+## report: module
+##
+## REPORT.module = module name (uppercase)
+##
+ifeq (module,$(REPORT))
+$(info ###############################################################################)
+$(info ##)
+$(info ## MODULE: $(REPORT.module))
+$(info ##)
+$(info ###############################################################################)
+$(info $(foreach v,$(sort $(filter $(REPORT.module).%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info )
+endif
+
+## report: main
+##
+ifeq (main,$(REPORT))
+$(info ###############################################################################)
+$(info ##)
+$(info ## MAIN)
+$(info ##)
+$(info ###############################################################################)
+$(info $(foreach v,$(sort $(filter HB.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info $(foreach v,$(sort $(filter HOST.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info $(foreach v,$(sort $(filter BUILD.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info $(foreach v,$(sort $(filter CONTRIB.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info )
+endif
+
+## report: gcc
+##
+ifeq (gcc,$(REPORT))
+$(info ###############################################################################)
+$(info ##)
+$(info ## GCC)
+$(info ##)
+$(info ###############################################################################)
+$(info $(foreach v,$(sort $(filter GCC.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info )
+endif

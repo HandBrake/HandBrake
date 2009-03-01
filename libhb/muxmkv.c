@@ -228,7 +228,7 @@ static int MKVInit( hb_mux_object_t * m )
           free(track->codecPrivate);
     }
 
-    if( mk_writeHeader( m->file, "HandBrake " HB_VERSION) < 0 )
+    if( mk_writeHeader( m->file, "HandBrake " HB_PROJECT_VERSION) < 0 )
     {
         hb_error( "Failed to write to output file, disk full?");
         *job->die = 1;

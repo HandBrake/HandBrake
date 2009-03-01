@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,FFMPEG))
+$(eval $(call import.CONTRIB.rules,FFMPEG))

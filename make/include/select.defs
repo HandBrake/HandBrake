@@ -1,0 +1,12 @@
+##
+## fetch a file from the web via well-known anonymous protocols such as HTTP.
+##
+## $(1) = output filename
+## $(2) = URL
+##
+FETCH = $(FETCH.$(FETCH.select))
+
+FETCH.select  = MISSING
+FETCH.MISSING = $(error one of the following tools is required: wget, curl)
+FETCH.curl    = $(CURL.exe) -q -L -o $(1) $(2)
+FETCH.wget    = $(WGET.exe) -O $(1) $(2)

@@ -1,0 +1,41 @@
+$(eval $(call import.MODULE.defs,DOC,doc))
+
+DOC.in/  = $(PROJECT/)doc/
+DOC.out/ = $(BUILD/)doc/
+
+DOC.out.api/      = $(DOC.out/)api/
+DOC.out.articles/ = $(DOC.out/)articles/
+
+###############################################################################
+
+DOC.m4.srcs = \
+    texi/base/handbrake.texi.m4
+
+DOC.m4.in   = $(foreach n,$(DOC.m4.srcs),$(DOC.in/)$n)
+DOC.m4.out  = $(patsubst $(DOC.in/)%.m4,$(DOC.out/)%,$(DOC.m4.in))
+
+DOC.texi.includes = $(wildcard $(DOC.in/)texi/*/*.texi)
+DOC.texi.articles = $(wildcard $(DOC.in/)texi/*.texi)
+
+DOC.texi2html.out = $(patsubst $(DOC.in/)texi/%.texi,$(DOC.out.articles/)html/%.html,$(DOC.texi.articles))
+DOC.texi2txt.out  = $(patsubst $(DOC.in/)texi/%.texi,$(DOC.out.articles/)txt/%.txt,$(DOC.texi.articles))
+DOC.texi2xml.out  = $(patsubst $(DOC.in/)texi/%.texi,$(DOC.out.articles/)xml/%.xml,$(DOC.texi.articles))
+
+BUILD.out += $(DOC.m4.out)
+BUILD.out += $(DOC.texi2html.out)
+BUILD.out += $(DOC.texi2txt.out)
+BUILD.out += $(DOC.texi2xml.out)
+
+###############################################################################
+
+DOC.M4.exe   = $(M4.exe)
+DOC.M4.flags = -I$(BUILD/)project
+DOC.M4.deps  = $(BUILD/)project/handbrake.m4
+DOC.M4       = $(DOC.M4.exe) $(DOC.M4.flags) $(2) > $(1)
+
+MAKEINFO.exe        = makeinfo
+MAKEINFO.flags      = -I$(DOC.out/)texi -I$(DOC.in/)texi
+MAKEINFO.flags.html = --html --no-headers --no-split
+MAKEINFO.flags.txt  = --plaintext --no-headers
+MAKEINFO.flags.xml  = --xml --output-indent=4
+MAKEINFO            = $(MAKEINFO.exe) $(MAKEINFO.flags) $(MAKEINFO.flags.$(1)) $(2) -o $(3)

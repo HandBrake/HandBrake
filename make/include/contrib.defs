@@ -1,0 +1,276 @@
+CONTRIB.build/    = $(BUILD/)contrib/
+CONTRIB.download/ = $(PROJECT/)download/
+CONTRIB.host      = $(if $(filter 1,$(BUILD.cross)),$(BUILD.spec))
+
+###############################################################################
+
+##
+## $(1) = module name (uppercase)
+##
+define import.CONTRIB.defs
+    ##
+    ## import gcc/g++ support mainly so we can force contrib choice of
+    ## gcc executable, and debug/optimization flags.
+    ##
+    $$(eval $$(call import.GCC,$(1)))
+
+    ##
+    ## common values useful across targets
+    ##
+    $(1).src/   = $$(PROJECT/)contrib/$($(1).name)/
+    $(1).build/ = $$(CONTRIB.build/)$($(1).name)/
+    $(1).deps   = $$(foreach n,$($(1).prerequisites),$$($$n.INSTALL.target))
+
+    ##
+    ## target: fetch
+    ##
+    $(1).FETCH.tar    = $$(CONTRIB.download/)$$(notdir $$($(1).FETCH.url))
+    $(1).FETCH.url    = FETCH_IS_UNDEFINED
+    $(1).FETCH.target = $$($(1).FETCH.tar)
+    define $(1).FETCH
+        $$(call FETCH,$$@,$$($(1).FETCH.url))
+    endef
+
+    ##
+    ## target: extract
+    ##
+    $(1).EXTRACT.tarbase = $$(patsubst %.tar.gz,%,$$(notdir $$($(1).FETCH.url)))
+    $(1).EXTRACT.target/ = $$($(1).build/)$$($(1).EXTRACT.tarbase)/
+    define $(1).EXTRACT
+        $$(TAR.exe) xfC $$($(1).FETCH.tar) $$($(1).build/)
+    endef
+
+    ##
+    ## target: patch
+    ##
+    $(1).PATCH.srcs = $$(wildcard \
+        $$($(1).src/)A??-*.patch \
+        $$($(1).src/)P??-$$(BUILD.system)*.patch )
+
+    # extra line feed is required
+    define $(1).PATCH.item
+        $$(PATCH.exe) -t -p1 -d $$(1) < $$(2)
+
+    endef
+
+    $(1).PATCH.target = $$($(1).build/).stamp.patch
+    define $(1).PATCH
+        $$(foreach p,$$($(1).PATCH.srcs),$$(call $(1).PATCH.item,$$($(1).EXTRACT.target/),$$(p)))
+    endef
+
+    ##
+    ## target: configure
+    ##
+    $(1).CONFIGURE.sete       = set -e;
+    $(1).CONFIGURE.dir        = $$($(1).EXTRACT.target/)
+    $(1).CONFIGURE.bootstrap  =
+    $(1).CONFIGURE.exe        = ./configure
+    $(1).CONFIGURE.host       = $$(CONTRIB.host)
+    $(1).CONFIGURE.prefix     = $$(call fn.ABSOLUTE,$$(CONTRIB.build/))
+    $(1).CONFIGURE.deps       = --disable-dependency-tracking
+    $(1).CONFIGURE.shared     = --disable-shared
+    $(1).CONFIGURE.static     = --enable-static
+    $(1).CONFIGURE.extra      =
+
+    $(1).CONFIGURE.args.dir    = cd $$(1);
+    $(1).CONFIGURE.args.host   = --host=$$(1)
+    $(1).CONFIGURE.args.prefix = --prefix=$$(1)
+
+    $(1).CONFIGURE.args = !sete @dir !bootstrap !env !exe @host @prefix !deps !shared !static !extra
+
+    $(1).CONFIGURE.env.CC       = CC=$$($(1).GCC.gcc)
+    $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs)"
+    $(1).CONFIGURE.env.CXX      = CXX=$$($(1).GCC.gxx)
+    $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs)"
+    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs)"
+    $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs)"
+
+    $(1).CONFIGURE.env.args = !CC !CFLAGS !CXX !CXXFLAGS !CPPFLAGS !LDFLAGS
+    $(1).CONFIGURE.env = $$(call fn.ARGS,$(1).CONFIGURE.env,$$($(1).CONFIGURE.env.args))
+
+    $(1).CONFIGURE.target = $$($(1).build/).stamp.configure
+    define $(1).CONFIGURE
+        $$(call fn.ARGS,$(1).CONFIGURE,$$($(1).CONFIGURE.args))
+    endef
+
+    ##
+    ## target: build
+    ##
+    $(1).BUILD.make     = $$(MAKE)
+    $(1).BUILD.dir      = $$($(1).EXTRACT.target/)
+    $(1).BUILD.extra    =
+    $(1).BUILD.ntargets =
+
+    $(1).BUILD.args = !make @dir !extra !ntargets
+    $(1).BUILD.args.dir = -C $$(1)
+
+    $(1).BUILD.target = $$($(1).build/).stamp.build
+    define $(1).BUILD
+        $$(call fn.ARGS,$(1).BUILD,$$($(1).BUILD.args))
+    endef
+
+    ##
+    ## target: install
+    ##
+
+    $(1).INSTALL.make     = $$(MAKE)
+    $(1).INSTALL.dir      = $$($(1).EXTRACT.target/)
+    $(1).INSTALL.extra    =
+    $(1).INSTALL.ntargets =
+
+    $(1).INSTALL.args = !make @dir !extra !ntargets
+    $(1).INSTALL.args.dir = -C $$(1) install
+
+    $(1).INSTALL.target = $$($(1).build/).stamp.install
+    define $(1).INSTALL
+        $$(call fn.ARGS,$(1).INSTALL,$$($(1).INSTALL.args))
+    endef
+
+    ##
+    ## target: uninstall
+    ##
+    $(1).UNINSTALL.make     = $$(MAKE)
+    $(1).UNINSTALL.dir      = $$($(1).EXTRACT.target/)
+    $(1).UNINSTALL.extra    =
+    $(1).UNINSTALL.ntargets = uninstall
+
+    $(1).UNINSTALL.args = !make @dir !extra !ntargets
+    $(1).UNINSTALL.args.dir = -C $$(1)
+
+    define $(1).UNINSTALL
+        $$(call fn.ARGS,$(1).UNINSTALL,$$($(1).UNINSTALL.args))
+    endef
+
+    ##
+    ## target: clean
+    ##
+    $(1).CLEAN.make     = $$(MAKE)
+    $(1).CLEAN.dir      = $$($(1).EXTRACT.target/)
+    $(1).CLEAN.extra    =
+    $(1).CLEAN.ntargets = clean
+
+    $(1).CLEAN.args = !make @dir !extra !ntargets
+    $(1).CLEAN.args.dir = -C $$(1)
+
+    define $(1).CLEAN
+        $$(call fn.ARGS,$(1).CLEAN,$$($(1).CLEAN.args))
+    endef
+
+    ## other values used to aid prerequisite dirs and cleanup
+    ##
+    $(1).out += $$($(1).build/)
+    $(1).out += $$($(1).FETCH.target)
+    $(1).out += $$($(1).PATCH.target)
+    $(1).out += $$($(1).CONFIGURE.target)
+    $(1).out += $$($(1).ALL.target)
+    $(1).out += $$($(1).INSTALL.target)
+
+    BUILD.out += $$($(1).out)
+endef
+
+###############################################################################
+
+##
+## $(1) = module name
+##
+define import.CONTRIB.rules
+
+##
+## target: fetch
+##
+$($(1).name).fetch: $$($(1).FETCH.target)
+
+$$($(1).FETCH.target): | $$(dir $$($(1).FETCH.target))
+	$$($(1).FETCH)
+
+##
+## target: extract
+## must touch dir after extraction because old timestamp is restored via tar.
+##
+$($(1).name).extract: | $$($(1).EXTRACT.target/)
+
+$$($(1).EXTRACT.target/): | $$(dir $$($(1).build/))
+$$($(1).EXTRACT.target/): $$($(1).FETCH.target)
+	$$($(1).EXTRACT)
+	$$(TOUCH.exe) $$@
+
+##
+## target: patch
+##
+$($(1).name).patch: $$($(1).PATCH.target)
+
+$$($(1).PATCH.target): | $$(dir $$($(1).PATCH.target))
+$$($(1).PATCH.target): | $$($(1).EXTRACT.target/)
+	$$($(1).PATCH)
+	$$(TOUCH.exe) $$@
+
+##
+## target: configure
+##
+$($(1).name).configure: $$($(1).CONFIGURE.target)
+
+$$($(1).CONFIGURE.target): | $$(dir $$($(1).CONFIGURE.target))
+$$($(1).CONFIGURE.target): $$($(1).deps)
+$$($(1).CONFIGURE.target): $$($(1).PATCH.target)
+	$$($(1).CONFIGURE)
+	$$(TOUCH.exe) $$@
+
+##
+## target: build
+##
+$($(1).name).build: $$($(1).BUILD.target)
+
+$$($(1).BUILD.target): | $$(dir $$($(1).BUILD.target))
+$$($(1).BUILD.target): $$($(1).CONFIGURE.target)
+	+$$($(1).BUILD)
+	$$(TOUCH.exe) $$@
+
+##
+## target: install
+##
+$($(1).name).install: $$($(1).INSTALL.target)
+
+$$($(1).INSTALL.target): | $$(dir $$($(1).INSTALL.target))
+$$($(1).INSTALL.target): $$($(1).BUILD.target)
+	$$($(1).INSTALL)
+	$$(TOUCH.exe) $$@
+
+##
+## target: uninstall
+##
+$($(1).name).uninstall:
+	-$$($(1).UNINSTALL)
+	$$(RM.exe) -f $$($(1).INSTALL.target)
+
+##
+## target: clean
+##
+$($(1).name).clean:
+	-$$($(1).CLEAN)
+	$$(RM.exe) -f $$($(1).BUILD.target)
+
+##
+## target: xclean
+##
+$($(1).name).xclean: $($(1).name).uninstall
+	$$(RM.exe) -fr $$($(1).build/)
+
+##
+## alias: module name is same as build
+##
+$($(1).name): $($(1).name).build
+
+##
+## participate with global convenience targets
+##
+contrib.fetch: $($(1).name).fetch
+contrib.extract: $($(1).name).extract
+contrib.patch: $($(1).name).patch
+contrib.configure: $($(1).name).configure
+contrib.build: $($(1).name).build
+contrib.install: $($(1).name).install
+contrib.uninstall: $($(1).name).uninstall
+contrib.clean: $($(1).name).clean
+contrib.xclean: $($(1).name).xclean
+
+endef

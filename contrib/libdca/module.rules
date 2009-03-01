@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,LIBDCA))
+$(eval $(call import.CONTRIB.rules,LIBDCA))

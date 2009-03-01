@@ -1,0 +1,5 @@
+$(eval $(call import.MODULE.defs,LIBMKV,libmkv))
+$(eval $(call import.CONTRIB.defs,LIBMKV))
+
+LIBMKV.FETCH.url = http://download.m0k.org/handbrake/contrib/libmkv-0.6.3.1.tar.gz
+LIBMKV.EXTRACT.tarbase = libmkv

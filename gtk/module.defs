@@ -1,0 +1,14 @@
+$(eval $(call import.MODULE.defs,GTK,gtk,LIBHB))
+
+GTK.src/   = $(PROJECT/)gtk/
+GTK.build/ = $(BUILD/)gtk/
+
+GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure
+GTK.BUILD.stamp     = $(GTK.build/).stamp.build
+
+###############################################################################
+
+GTK.out += $(GTK.CONFIGURE.stamp)
+GTK.out += $(GTK.BUILD.stamp)
+
+BUILD.out += $(GTK.out)

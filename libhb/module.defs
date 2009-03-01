@@ -1,0 +1,47 @@
+$(eval $(call import.MODULE.defs,LIBHB,libhb,A52DEC BZIP2 FAAC FAAD2 FFMPEG LAME LIBDCA LIBDVDREAD LIBMKV LIBMP4V2 LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS MPEG2DEC X264 XVIDCORE ZLIB LIBHB TEST DOC))
+$(eval $(call import.GCC,LIBHB))
+
+LIBHB.src/   = $(PROJECT/)libhb/
+LIBHB.build/ = $(BUILD/)libhb/
+
+LIBHB.m4.in  = $(wildcard $(LIBHB.src/)*.m4)
+LIBHB.m4.out = $(patsubst $(LIBHB.src/)%.m4,$(LIBHB.build/)%,$(LIBHB.m4.in))
+
+LIBHB.c   = $(wildcard $(LIBHB.src/)*.c)
+LIBHB.c.o = $(patsubst $(PROJECT/)%.c,$(BUILD/)%.o,$(LIBHB.c))
+LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
+    $(foreach n, \
+    A52DEC BZIP2 FAAC FAAD2 FFMPEG LAME LIBDCA LIBDVDREAD LIBMKV LIBMP4V2 LIBOGG \
+    LIBSAMPLERATE LIBTHEORA LIBVORBIS MPEG2DEC X264 XVIDCORE ZLIB, \
+    $($n.INSTALL.target) )
+
+LIBHB.h.in  = $(wildcard $(LIBHB.src/)*.h)
+LIBHB.h.out = $(patsubst $(PROJECT/)%,$(BUILD/)%,$(LIBHB.h.in))
+
+###############################################################################
+
+LIBHB.a = $(LIBHB.build/)$(call TARGET.archive,hb)
+
+###############################################################################
+
+LIBHB.out += $(LIBHB.m4.out)
+LIBHB.out += $(LIBHB.c.o)
+LIBHB.out += $(LIBHB.h.out)
+LIBHB.out += $(LIBHB.a)
+
+BUILD.out += $(LIBHB.out)
+
+###############################################################################
+
+LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
+LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
+
+ifeq ($(BUILD.system),cygwin)
+    LIBHB.GCC.D += SYS_CYGWIN
+else ifeq ($(BUILD.system),darwin)
+    LIBHB.GCC.D += SYS_DARWIN
+else ifeq ($(BUILD.system),linux)
+    LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else
+    LIBHB.platform.D = SYS_UNKNOWN
+endif

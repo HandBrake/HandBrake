@@ -1,0 +1,39 @@
+## only included using special report targets
+ifneq (,$(REPORT))
+    include $(PROJECT/)make/include/report.defs
+endif
+
+###############################################################################
+
+.PHONY: clean xclean doc report
+
+clean:
+xclean: contrib.xclean clean
+doc:
+report:: report.main report.modules
+
+## legacy
+mrproper: xclean
+
+###############################################################################
+
+include $(MODULES:%=$(PROJECT/)%/module.rules)
+include $(PROJECT/)make/variant/$(HOST.system).rules
+-include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.proc).rules
+
+###############################################################################
+
+## target which causes re-configure if project-root is svn update'd
+$(BUILD/)GNUmakefile: $(wildcard $(PROJECT/).svn/entries)
+	$(PROJECT/)configure $(CONF.args)
+
+## target useful to force reconfigure; only helpful for build-system development
+.PHONY: reconfigure
+reconfigure:
+	$(PROJECT/)configure $(CONF.args)
+
+###############################################################################
+
+## target to build all dependency dirs
+$(sort $(dir $(BUILD.out))):
+	$(MKDIR.exe) -p $@

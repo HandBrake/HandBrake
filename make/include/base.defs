@@ -1,0 +1,50 @@
+## Define module metadata.
+## It is mandatory for every module to use this template.
+##
+## $(1) module name (uppercase)
+## $(2) module name (lowercase)
+## $(3) list of prerequisite modules (uppercase)
+##
+define import.MODULE.defs
+    ## indicates module is defined; useful for conditionals
+    $(1).enabled = 1
+
+    ## module name (lowercase)
+    $(1).name = $(2)
+
+    ## list of prerequisite modules (uppercase)
+    $(1).prerequisites = $(3)
+
+    ## add to global list of modules
+    MODULES.NAMES += $(1)
+    MODULES.names += $(2)
+endef
+
+##
+## $(1) module name (uppercase)
+##
+define import.MODULE.rules
+$($(1).name).report:
+	@$(MAKE) report.true REPORT=module REPORT.module=$(1)
+
+## aggregate
+report.modules:: $($(1).name).report
+
+endef
+
+.PHONY: report.main report.gcc report.modules
+
+report.modules::
+
+.PHONY: report.main
+report.main:
+	@$(MAKE) report.true REPORT=main
+
+.PHONY: report.gcc
+report.gcc:
+	@$(MAKE) report.true REPORT=gcc
+
+## needed for nested make (which drives each report)
+.PHONY: report.true
+report.true:
+	@true
