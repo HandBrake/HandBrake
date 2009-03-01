@@ -61,7 +61,7 @@
 - (void)tableView:(NSTableView *)aTableView
         setObjectValue:(id)anObject
         forTableColumn:(NSTableColumn *)aTableColumn
-        row:(int)rowIndex
+        row:(NSInteger)rowIndex
 {
     if(aTableColumn != nil && [[aTableColumn identifier] intValue] == 2)
     {
@@ -80,7 +80,7 @@
 
 - (id)tableView:(NSTableView *)aTableView
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
-      row:(int)rowIndex
+      row:(NSInteger)rowIndex
 {
     NSString *cellEntry =  @"__DATA ERROR__";
 
@@ -111,11 +111,11 @@ a timer to avoid interfering with the chain of events that handles the edit. */
     NSTableView *chapterTable = [notification object];
     NSInteger column = [chapterTable editedColumn];
     NSInteger row = [chapterTable editedRow];
-    int textMovement;
+    NSInteger textMovement;
 
     // Edit the cell in the next row, same column
     row++;
-    textMovement = [[[notification userInfo] objectForKey:@"NSTextMovement"] intValue];
+    textMovement = [[[notification userInfo] objectForKey:@"NSTextMovement"] integerValue];
     if( textMovement == NSReturnTextMovement && row < [chapterTable numberOfRows] )
     {
         NSArray *info = [NSArray arrayWithObjects:chapterTable,

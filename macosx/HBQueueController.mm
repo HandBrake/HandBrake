@@ -491,7 +491,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
        [fHBController Pause:NULL];
          NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
         // Which window to attach the sheet to?
-        NSWindow * docWindow;
+        NSWindow * docWindow = nil;
         if ([sender respondsToSelector: @selector(window)])
             docWindow = [sender window];
         

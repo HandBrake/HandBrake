@@ -314,7 +314,7 @@ BOOL                        fIsDragging;
 - (IBAction)applyQueueSettings:(id)sender;
 - (void) removeQueueFileItem:(int) queueItemToRemove;
 - (void) clearQueueAllItems;
-- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
+- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 - (void)getQueueStats;
 - (void)setQueueEncodingItemsAsPending;
 - (IBAction) addToQueue: (id) sender;
@@ -395,6 +395,6 @@ BOOL                        fIsDragging;
 - (void) prepareJobForPreview;
 - (void) remindUserOfSleepOrShutdown;
 
-- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex;
+- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 @end
 

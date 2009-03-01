@@ -2069,33 +2069,32 @@ fWorkingCount = 0;
 }
 
 /* this is actually called from the queue controller to modify the queue array and return it back to the queue controller */
-- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex
+- (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex
 {
-    unsigned index = [indexSet lastIndex];
-    unsigned aboveInsertIndexCount = 0;
+    NSUInteger index = [indexSet lastIndex];
+    NSUInteger aboveInsertIndexCount = 0;
     
-    while (index != NSNotFound)
+    
+    NSUInteger removeIndex;
+        
+    if (index >= insertIndex)
     {
-        unsigned removeIndex;
-        
-        if (index >= insertIndex)
-        {
-            removeIndex = index + aboveInsertIndexCount;
-            aboveInsertIndexCount++;
-        }
-        else
-        {
-            removeIndex = index;
-            insertIndex--;
-        }
-        
-        id object = [[QueueFileArray objectAtIndex:removeIndex] retain];
-        [QueueFileArray removeObjectAtIndex:removeIndex];
-        [QueueFileArray insertObject:object atIndex:insertIndex];
-        [object release];
-        
-        index = [indexSet indexLessThanIndex:index];
+        removeIndex = index + aboveInsertIndexCount;
+        aboveInsertIndexCount++;
     }
+    else
+    {
+        removeIndex = index;
+        insertIndex--;
+    }
+
+    id object = [[QueueFileArray objectAtIndex:removeIndex] retain];
+    [QueueFileArray removeObjectAtIndex:removeIndex];
+    [QueueFileArray insertObject:object atIndex:insertIndex];
+    [object release];
+        
+    index = [indexSet indexLessThanIndex:index];
+
    /* We save all of the Queue data here 
     * and it also gets sent back to the queue controller*/
     [self saveQueueFileItem]; 
@@ -5334,7 +5333,7 @@ the user is using "Custom" settings by determining the sender*/
 }
 
 /* We use this to deterimine children of an item */
-- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(int)index ofItem:(id)item
+- (id)outlineView:(NSOutlineView *)fPresetsOutlineView child:(NSInteger)index ofItem:(id)item
 {
     
     /* we need to return the count of the array in ChildrenArray for this folder */
@@ -5350,7 +5349,7 @@ the user is using "Custom" settings by determining the sender*/
             children = [item objectForKey:@"ChildrenArray"];
         }
     }   
-    if ((children == nil) || ([children count] <= index))
+    if ((children == nil) || ( [children count] <= (NSUInteger) index))
     {
         return nil;
     }
@@ -5610,33 +5609,30 @@ return YES;
     return YES;
 }
 
-- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(unsigned)insertIndex
+- (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex
 {
-    unsigned index = [indexSet lastIndex];
-    unsigned aboveInsertIndexCount = 0;
+    NSUInteger index = [indexSet lastIndex];
+    NSUInteger aboveInsertIndexCount = 0;
     
-    while (index != NSNotFound)
+    NSUInteger removeIndex;
+
+    if (index >= insertIndex)
     {
-        unsigned removeIndex;
-        
-        if (index >= insertIndex)
-        {
-            removeIndex = index + aboveInsertIndexCount;
-            aboveInsertIndexCount++;
-        }
-        else
-        {
-            removeIndex = index;
-            insertIndex--;
-        }
-        
-        id object = [[array objectAtIndex:removeIndex] retain];
-        [array removeObjectAtIndex:removeIndex];
-        [array insertObject:object atIndex:insertIndex];
-        [object release];
-        
-        index = [indexSet indexLessThanIndex:index];
+        removeIndex = index + aboveInsertIndexCount;
+        aboveInsertIndexCount++;
     }
+    else
+    {
+        removeIndex = index;
+        insertIndex--;
+    }
+
+    id object = [[array objectAtIndex:removeIndex] retain];
+    [array removeObjectAtIndex:removeIndex];
+    [array insertObject:object atIndex:insertIndex];
+    [object release];
+
+    index = [indexSet indexLessThanIndex:index];
 }
 
 

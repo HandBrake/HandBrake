@@ -19,10 +19,10 @@
 
 - (id)tableView:(NSTableView *)aTableView
       objectValueForTableColumn:(NSTableColumn *)aTableColumn
-      row:(int)rowIndex;
+      row:(NSInteger)rowIndex;
       
 - (void)tableView:(NSTableView *)aTableView
         setObjectValue:(id)anObject
         forTableColumn:(NSTableColumn *)aTableColumn
-        row:(int)rowIndex;
+        row:(NSInteger)rowIndex;
 @end

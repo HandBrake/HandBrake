@@ -262,7 +262,7 @@ are maintained across different sources */
 - (void) adjustFilterDisplay: (id) sender
 {
     
-    NSBox * filterBox;
+    NSBox * filterBox = nil;
     NSTextField * filterField;
     if (sender == fDetelecinePopUp)
     {
