@@ -6,8 +6,6 @@ xclean: gtk.xclean
 
 gtk.configure: $(GTK.CONFIGURE.stamp)
 
-gtk.build: $(GTK.BUILD.stamp)
-
 $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 	set -e; cd $(GTK.src/); NOCONFIGURE=1 ./autogen.sh
 	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
@@ -17,11 +15,9 @@ $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 	    --with-hb=$(call fn.ABSOLUTE,$(BUILD/))
 	$(TOUCH.exe) $@
 
-$(GTK.BUILD.stamp): $(LIBHB.a)
-$(GTK.BUILD.stamp): | $(dir $(GTK.BUILD.stamp))
-$(GTK.BUILD.stamp): $(GTK.CONFIGURE.stamp)
+gtk.build: | $(GTK.build/)
+gtk.build: $(GTK.CONFIGURE.stamp)
 	+$(MAKE) -C $(GTK.build/)
-	$(TOUCH.exe) $@
 
 gtk.install:
 	$(MAKE) -C $(GTK.build/) install-strip

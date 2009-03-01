@@ -5033,7 +5033,7 @@ location as the movie.</property>
     <property name="program_name">HandBrake</property>
     <property name="version">0.9.2</property>
     <property name="copyright" translatable="yes">Copyright &#xA9; 2008 John Stebbins
-Copyright &#xA9; Copyright © 2004 - 2008, HandBrake Devs</property>
+Copyright &#xA9; 2004 - 2008, HandBrake Devs</property>
     <property name="comments" translatable="yes">HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder.</property>
     <property name="website">http://handbrake.fr</property>
     <property name="website_label" translatable="yes">http://handbrake.fr</property>
