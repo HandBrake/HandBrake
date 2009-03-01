@@ -17,7 +17,7 @@ AC_HEADER_STDC
 AC_ARG_WITH(hb,
 	AC_HELP_STRING(
 	    [--with-hb=prefix],
-	    [try this for the bh-library prefix install directory]
+	    [try this for the hb-library prefix install directory]
 	  ),
 	  hb_PATHSET=1,
 	  hb_PATHSET=0
