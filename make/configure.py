@@ -290,8 +290,18 @@ elif guessHost.match( 'powerpc-*-darwin9.*' ):
 else:
     archMode = OptionMode( 0, guessHost.proc )
 
+if guessHost.match( '*-*-darwin*' ):
+    d_prefix = '/Applications'
+else: 
+    d_prefix = '/usr/local'
+
 ## create parser
 parser = OptionParser( 'Usage: %prog' )
+
+group = OptionGroup( parser, 'Installation Options' )
+group.add_option( '', '--prefix', default=d_prefix, action='store',
+    help='install destination for final products (%s)' % (d_prefix) )
+parser.add_option_group( group )
 
 group = OptionGroup( parser, 'Feature Options' )
 group.add_option( '', '--disable-xcode', default=False, action='store_true',
@@ -626,6 +636,10 @@ config.add( 'BUILD.arch',    archMode.mode )
 config.addBlank()
 config.add( 'BUILD/',   os.curdir + os.sep )
 config.add( 'PROJECT/', project_dir + os.sep )
+
+config.addBlank()
+config.add( 'INSTALL.prefix', options.prefix )
+config.add( 'INSTALL.prefix/', '$(INSTALL.prefix)/' )
 
 config.addBlank()
 config.add( 'FEATURE.xcode', 0 if options.disable_xcode else 1 )

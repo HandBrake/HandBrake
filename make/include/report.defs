@@ -36,6 +36,8 @@ $(info #########################################################################
 $(info $(foreach v,$(sort $(filter HB.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
 $(info $(foreach v,$(sort $(filter HOST.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
 $(info $(foreach v,$(sort $(filter BUILD.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info $(foreach v,$(sort $(filter INSTALL.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
+$(info $(foreach v,$(sort $(filter FEATURE.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
 $(info $(foreach v,$(sort $(filter CONTRIB.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
 $(info )
 endif

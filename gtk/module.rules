@@ -12,8 +12,9 @@ $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 	set -e; cd $(GTK.src/); NOCONFIGURE=1 ./autogen.sh
 	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
 	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O)" \
-		LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O)" \
-		--with-hb=$(call fn.ABSOLUTE,$(BUILD/))
+	    LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O)" \
+	    --prefix=$(INSTALL.prefix) \
+	    --with-hb=$(call fn.ABSOLUTE,$(BUILD/))
 	$(TOUCH.exe) $@
 
 $(GTK.BUILD.stamp): $(LIBHB.a)
