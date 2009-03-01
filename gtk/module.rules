@@ -16,7 +16,7 @@ $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 	$(TOUCH.exe) $@
 
 gtk.build: | $(GTK.build/)
-gtk.build: $(GTK.CONFIGURE.stamp)
+gtk.build: $(GTK.CONFIGURE.stamp) $(LIBHB.a)
 	+$(MAKE) -C $(GTK.build/)
 
 gtk.install:

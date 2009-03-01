@@ -590,7 +590,7 @@ validate_settings(signal_user_data_t *ud)
 	{
 		message = g_strdup_printf(
 					"Destination: %s\n\n"
-					"File already exhists.\n"
+					"File already exists.\n"
 					"Do you want to overwrite?",
 					dest);
 		if (!ghb_message_dialog(GTK_MESSAGE_QUESTION, message, "Cancel", "Overwrite"))
