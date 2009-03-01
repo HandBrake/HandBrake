@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.rules,GTK))
 
 build: gtk.build
 clean: gtk.clean
+xclean: gtk.xclean
 
 gtk.configure: $(GTK.CONFIGURE.stamp)
 
@@ -10,7 +11,9 @@ gtk.build: $(GTK.BUILD.stamp)
 $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 	set -e; cd $(GTK.src/); NOCONFIGURE=1 ./autogen.sh
 	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
-	    --with-hb=$(call fn.ABSOLUTE,$(BUILD/))
+	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O)" \
+		LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O)" \
+		--with-hb=$(call fn.ABSOLUTE,$(BUILD/))
 	$(TOUCH.exe) $@
 
 $(GTK.BUILD.stamp): $(LIBHB.a)
@@ -30,5 +33,6 @@ gtk.clean:
 	$(RM.exe) $(GTK.BUILD.stamp)
 
 gtk.xclean:
+	$(MAKE) -C $(GTK.build/) distclean
 	$(RM.exe) -f $(GTK.out)
 	$(RM.exe) -fr $(GTK.build/)
