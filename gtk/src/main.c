@@ -533,7 +533,8 @@ main (int argc, char *argv[])
 	// Redirect stderr to the activity window
 	ghb_preview_init(ud);
 	IoRedirect(ud);
-	ghb_log("Handbrake Version: %s (%d)", hb_get_version(NULL), hb_get_build(NULL));
+    ghb_log( "%s - %s - %s",
+             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
 	ghb_init_dep_map();
 
 	// Need to connect x264_options textview buffer to the changed signal

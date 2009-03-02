@@ -2091,14 +2091,6 @@ ghb_log(gchar *log, ...)
 	va_end(args);
 }
 
-void
-about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	GtkWidget *widget = GHB_WIDGET (ud->builder, "hb_about");
-	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(widget), ghb_version());
-	gtk_widget_show (widget);
-}
-
 static void
 browse_url(const gchar *url)
 {
@@ -2127,6 +2119,29 @@ browse_url(const gchar *url)
 	argv[2] = NULL;
 	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
 				NULL, NULL, NULL);
+}
+
+void
+about_web_hook(GtkAboutDialog *about, const gchar *link, gpointer data)
+{
+	browse_url(link);
+}
+
+void
+about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "hb_about");
+	gchar *ver;
+
+	ver = g_strdup_printf("%s (%s)", HB_PROJECT_VERSION, HB_PROJECT_BUILD_ARCH);
+	gtk_about_dialog_set_url_hook(about_web_hook, NULL, NULL);
+	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(widget), ver);
+	g_free(ver);
+	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(widget), 
+								HB_PROJECT_URL_WEBSITE);
+	gtk_about_dialog_set_website_label(GTK_ABOUT_DIALOG(widget), 
+										HB_PROJECT_URL_WEBSITE);
+	gtk_widget_show (widget);
 }
 
 void
