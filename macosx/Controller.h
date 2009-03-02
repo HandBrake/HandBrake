@@ -252,6 +252,8 @@ BOOL                        fIsDragging;
     BOOL                           applyQueueToScan;
 	NSString                      * currentSource;
     NSString                     * browsedSourceDisplayName;
+    
+    double                         dockIconProgress;
 }
 
 - (void) writeToActivityLog:(char *) format, ...;

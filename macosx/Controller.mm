@@ -106,6 +106,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
     [fPresetsOutlineView setAutosaveName:@"Presets View"];
     [fPresetsOutlineView setAutosaveExpandedItems:YES];
+    
+    dockIconProgress = 0;
 
     /* Call UpdateUI every 1/2 sec */
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer
@@ -711,10 +713,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Set the status string in fQueueController as well */
             [fQueueController setQueueStatusString: string];
             /* Update slider */
-            double progress_total;
-			progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
+            double progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue: 100.0 * progress_total];
+            [fRipIndicator setDoubleValue: (double) 100.0 * progress_total];
             //[fRipIndicator setDoubleValue: 100.0 * p.progress];
             
             // If progress bar hasn't been revealed at the bottom of the window, do
@@ -732,10 +733,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 fRipIndicatorShown = YES;
                 
             }
-            
+
             /* Update dock icon */
-            [self UpdateDockIcon: progress_total];
-            
+            if( dockIconProgress < 100.0 * progress_total )
+            {
+                [self UpdateDockIcon: progress_total];
+                dockIconProgress += 5;
+            }
+
             break;
         }
 #undef p
@@ -775,11 +780,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Set the status string in fQueueController as well */
             [fQueueController setQueueStatusString: NSLocalizedString( @"Encode Finished.", @"" )];
             [fRipIndicator setIndeterminate: NO];
+            [fRipIndicator stopAnimation: nil];
             [fRipIndicator setDoubleValue: 0.0];
             [[fWindow toolbar] validateVisibleItems];
             
             /* Restore dock icon */
             [self UpdateDockIcon: -1.0];
+            dockIconProgress = 0;
             
             if( fRipIndicatorShown )
             {
