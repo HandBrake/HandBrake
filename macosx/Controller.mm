@@ -674,9 +674,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [fQueueController setQueueStatusString: [NSString stringWithFormat:
                                                      NSLocalizedString( @"Queue Scanning title %d of %d...", @"" ),
                                                      p.title_cur, p.title_count]];
-            
-            [fRipIndicator setHidden: NO];
-            [fRipIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) / p.title_count];
             break;
 		}
 #undef p
@@ -684,9 +681,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.scandone
         case HB_STATE_SCANDONE:
         {
-            [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue: 0.0];
-            
 			[self writeToActivityLog:"ScanDone state received from fQueueEncodeLibhb"];
             [self processNewQueueEncode];
             [[fWindow toolbar] validateVisibleItems];
@@ -715,8 +709,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Update slider */
             double progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
-            [fRipIndicator setDoubleValue: (double) 100.0 * progress_total];
-            //[fRipIndicator setDoubleValue: 100.0 * p.progress];
+            [fRipIndicator setDoubleValue:100.0 * progress_total];
             
             // If progress bar hasn't been revealed at the bottom of the window, do
             // that now. This code used to be in doRip. I moved it to here to handle
