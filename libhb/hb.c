@@ -350,10 +350,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     int                  rgb_width = ((job->width + 7) >> 3) << 3;
     int                  preview_size;
 
-    swsflags = SWS_LANCZOS;
-#ifndef __x86_64__
-    swsflags |= SWS_ACCURATE_RND;
-#endif  /* __x86_64__ */
+    swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
     buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
     buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );

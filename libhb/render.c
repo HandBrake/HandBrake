@@ -531,10 +531,7 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
     uint32_t    swsflags;
 
-    swsflags = SWS_LANCZOS;
-#ifndef __x86_64__
-    swsflags |= SWS_ACCURATE_RND;
-#endif  /* __x86_64__ */
+    swsflags = SWS_LANCZOS | SWS_ACCURATE_RND;
 
     /* Get title and title size */
     hb_title_t * title = job->title;
