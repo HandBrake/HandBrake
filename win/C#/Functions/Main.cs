@@ -187,11 +187,8 @@ namespace Handbrake.Functions
             string AutoNamePath = string.Empty;
             if (drp_dvdtitle.Text != "Automatic")
             {
-                // Get the Source Name - THIS NEEDS FIXED
-                string[] sourceName = source.Split('\\');
-                source = sourceName[sourceName.Length - 1].Replace(".iso", "").Replace(".mpg", "").Replace(".ts", "").Replace(".ps", "");
-                source.Replace(".wmv", "").Replace(".mp4", "").Replace(".m4v", "").Replace(".avi", "").Replace(".ogm", "").Replace(".tivo", "").Replace(".img", "");
-                source.Replace(".mov", "").Replace(".rm", "");
+                // Get the Source Name 
+                string sourceName = Path.GetFileNameWithoutExtension(source);
 
                 // Get the Selected Title Number
                 string[] titlesplit = drp_dvdtitle.Text.Split(' ');
@@ -209,51 +206,43 @@ namespace Handbrake.Functions
                 if (Properties.Settings.Default.autoNameFormat != "")
                 {
                     destination_filename = Properties.Settings.Default.autoNameFormat;
-                    destination_filename = destination_filename.Replace("{source}", source).Replace("{title}", dvdTitle).Replace("{chapters}", combinedChapterTag);
+                    destination_filename = destination_filename.Replace("{source}", sourceName).Replace("{title}", dvdTitle).Replace("{chapters}", combinedChapterTag);
                 }
                 else
-                    destination_filename = source + "_T" + dvdTitle + "_C" + combinedChapterTag;
+                    destination_filename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
+
+                // Add the appropriate file extension
+                if (format == 0)
+                    destination_filename += ".mp4";
+                else if (format == 1)
+                    destination_filename += ".m4v";
+                else if (format == 2)
+                    destination_filename += ".mkv";
+                else if (format == 3)
+                    destination_filename += ".avi";
+                else if (format == 4)
+                    destination_filename += ".ogm";
 
                 // Now work out the path where the file will be stored.
                 // First case: If the destination box doesn't already contain a path, make one.
-                if (!dest.Contains("\\"))
+                if (!dest.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
-                    string filePath = "";
-                    if (Properties.Settings.Default.autoNamePath.Trim() != "")
+                    // If there is an auto name path, use it...
+                    if (Properties.Settings.Default.autoNamePath.Trim() != "" && 
+                        Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location") 
                     {
-                        if (Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
-                            filePath = Properties.Settings.Default.autoNamePath + "\\";
+                        AutoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destination_filename);
                     }
-
-                    if (format == 0)
-                        AutoNamePath = filePath + destination_filename + ".mp4";
-                    else if (format == 1)
-                        AutoNamePath = filePath + destination_filename + ".m4v";
-                    else if (format == 2)
-                        AutoNamePath = filePath + destination_filename + ".mkv";
-                    else if (format == 3)
-                        AutoNamePath = filePath + destination_filename + ".avi";
-                    else if (format == 4)
-                        AutoNamePath = filePath + destination_filename + ".ogm";
+                    else // ...otherwise, output to the source directory
+                    {
+                        AutoNamePath = null;
+                    }
                 }
                 else // Otherwise, use the path that is already there.
                 {
-                    string destination = AutoNamePath;
-                    string[] destName = dest.Split('\\');
-                    string[] extension = dest.Split('.');
-                    string ext = extension[extension.Length - 1];
-
-                    destName[destName.Length - 1] = destination_filename + "." + ext;
-
-                    string fullDest = "";
-                    foreach (string part in destName)
-                    {
-                        if (fullDest != "")
-                            fullDest = fullDest + "\\" + part;
-                        else
-                            fullDest = fullDest + part;
-                    }
-                    return fullDest;
+                    // Use the path and change the file extension to match the previous destination
+                    AutoNamePath = Path.Combine(Path.GetDirectoryName(dest), destination_filename);
+                    AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(dest));
                 }
             }
 

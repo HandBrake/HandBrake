@@ -647,6 +647,7 @@ namespace Handbrake
         {
             queueWindow.setQueue();
             queueWindow.Show();
+            queueWindow.Activate();
         }
         private void tb_preview_Click(object sender, EventArgs e)
         {
@@ -852,7 +853,13 @@ namespace Handbrake
 
             // Run the autoName & chapterNaming functions
             if (Properties.Settings.Default.autoNaming == "Checked")
-                text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+            {
+                string autoPath = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                if (autoPath != null)
+                    text_destination.Text = autoPath;
+                else
+                    MessageBox.Show("You currently have automatic file naming enabled for the destination box, but you do not have a default direcotry set. You should set this in the program options (see Tools Menu)","Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
 
             data_chpt.Rows.Clear();
             DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterFinish.Text);
