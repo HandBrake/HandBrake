@@ -595,7 +595,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                             NSLocalizedString( @"Scanning title %d of %d...", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
-            [fScanIndicator setDoubleValue: 100.0 * ( p.title_cur - 1 ) / p.title_count];
+            [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
             break;
 		}
 #undef p
@@ -696,7 +696,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 #define p s.param.working
         case HB_STATE_WORKING:
         {
-            float progress_total;
             NSMutableString * string;
 			/* Update text field */
 			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: pass %d of %d, %.2f %%", @"" ), p.job_cur, p.job_count, 100.0 * p.progress];
@@ -712,9 +711,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Set the status string in fQueueController as well */
             [fQueueController setQueueStatusString: string];
             /* Update slider */
+            double progress_total;
 			progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue: 100.0 * progress_total];
+            //[fRipIndicator setDoubleValue: 100.0 * p.progress];
             
             // If progress bar hasn't been revealed at the bottom of the window, do
             // that now. This code used to be in doRip. I moved it to here to handle
