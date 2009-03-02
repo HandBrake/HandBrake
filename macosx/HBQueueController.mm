@@ -142,9 +142,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
      */
     
 	int i = 0;
-    NSEnumerator *enumerator = [fJobGroups objectEnumerator];
-	id tempObject;
-	while (tempObject = [enumerator nextObject])
+	for(id tempObject in fJobGroups)
 	{
 		NSDictionary *thisQueueDict = tempObject;
 		if ([[thisQueueDict objectForKey:@"Status"] intValue] == 0) // Completed
@@ -478,12 +476,14 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
 - (IBAction)removeSelectedQueueItem: (id)sender
 {
     NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
-    int row = [selectedRows firstIndex];
+    NSUInteger row = [selectedRows firstIndex];
+    if( row == NSNotFound )
+        return;
     /* if this is a currently encoding job, we need to be sure to alert the user,
      * to let them decide to cancel it first, then if they do, we can come back and
      * remove it */
     
-    if ([[[fJobGroups objectAtIndex:row] objectForKey:@"Status"] intValue] == 1)
+    if ([[[fJobGroups objectAtIndex:row] objectForKey:@"Status"] integerValue] == 1)
     {
        /* We pause the encode here so that it doesn't finish right after and then
         * screw up the sync while the window is open
@@ -1293,7 +1293,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 - (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
 {
     // Dragging is only allowed of the pending items.
-    if ([[[fJobGroups objectAtIndex:[outlineView selectedRow]] objectForKey:@"Status"] intValue] != 2) // 2 is pending
+    if ([[[items objectAtIndex:0] objectForKey:@"Status"] integerValue] != 2) // 2 is pending
     {
         return NO;
     }
@@ -1343,18 +1343,13 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
     return NSDragOperationGeneric;
 }
 
-
-
 - (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
-        NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
-    
-    id obj;
-    NSEnumerator *enumerator = [fDraggedNodes objectEnumerator];
-    while (obj = [enumerator nextObject])
-    {
+    NSMutableIndexSet *moveItems = [NSMutableIndexSet indexSet];
+
+    for( id obj in fDraggedNodes )
         [moveItems addIndex:[fJobGroups indexOfObject:obj]];
-    }
+
     // Successful drop, we use moveObjectsInQueueArray:... in fHBController
     // to properly rearrange the queue array, save it to plist and then send it back here.
     // since Controller.mm is handling all queue array manipulation.

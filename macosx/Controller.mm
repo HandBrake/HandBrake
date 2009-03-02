@@ -863,7 +863,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 }
 
 /* We use this to write messages to stderr from the macgui which show up in the activity window and log*/
-- (void) writeToActivityLog:(char *) format, ...
+- (void) writeToActivityLog:(const char *) format, ...
 {
     va_list args;
     va_start(args, format);
@@ -5553,7 +5553,7 @@ return YES;
     return YES;
 }
 
-- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index
+- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
 	
 	// Don't allow dropping ONTO an item since they can't really contain any children.
@@ -5582,7 +5582,7 @@ return YES;
 
 
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index
+- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
     /* first, lets see if we are dropping into a folder */
     if ([[fPresetsOutlineView itemAtRow:index] objectForKey:@"Folder"] && [[[fPresetsOutlineView itemAtRow:index] objectForKey:@"Folder"] intValue] == 1) // if its a folder

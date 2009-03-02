@@ -9,25 +9,25 @@
 #import "HBImageAndTextCell.h"
 
 
-static inline float
+static inline CGFloat
 xLeftInRect(NSSize innerSize, NSRect outerRect)
 {
   return NSMinX(outerRect);
 }
 
-static inline float
+static inline CGFloat
 xCenterInRect(NSSize innerSize, NSRect outerRect)
 {
   return MAX(NSMidX(outerRect) - (innerSize.width/2.0), 0.0);
 }
 
-static inline float
+static inline CGFloat
 xRightInRect(NSSize innerSize, NSRect outerRect)
 {
   return MAX(NSMaxX(outerRect) - innerSize.width, 0.0);
 }
 
-static inline float
+static inline CGFloat
 yTopInRect(NSSize innerSize, NSRect outerRect, BOOL flipped)
 {
   if (flipped)
@@ -36,13 +36,13 @@ yTopInRect(NSSize innerSize, NSRect outerRect, BOOL flipped)
     return MAX(NSMaxY(outerRect) - innerSize.height, 0.0);
 }
 
-static inline float
+static inline CGFloat
 yCenterInRect(NSSize innerSize, NSRect outerRect, BOOL flipped)
 {
   return MAX(NSMidY(outerRect) - innerSize.height/2.0, 0.0);
 }
 
-static inline float
+static inline CGFloat
 yBottomInRect(NSSize innerSize, NSRect outerRect, BOOL flipped)
 {
   if (flipped)
@@ -54,7 +54,7 @@ yBottomInRect(NSSize innerSize, NSRect outerRect, BOOL flipped)
 static inline NSSize
 scaleProportionally(NSSize imageSize, NSRect canvasRect)
 {
-  float ratio;
+  CGFloat ratio;
 
   // get the smaller ratio and scale the image size by it
   ratio = MIN(NSWidth(canvasRect) / imageSize.width,
@@ -145,7 +145,7 @@ scaleProportionally(NSSize imageSize, NSRect canvasRect)
     [super editWithFrame: textFrame inView: controlView editor:textObj delegate:anObject event: theEvent];
 }
 
-- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(int)selStart length:(int)selLength
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView *)controlView editor:(NSText *)textObj delegate:(id)anObject start:(NSInteger)selStart length:(NSInteger)selLength
 {
     NSRect textFrame, imageFrame;
     NSDivideRect (aRect, &imageFrame, &textFrame, (imageSpacing.width * 2) + [image size].width, NSMinXEdge);
