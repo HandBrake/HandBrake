@@ -119,43 +119,49 @@ if len( project_dir ) == 0:
 ##
 class Guess:
     def __init__( self ):
-        self.proc    = 'unknown'
+        self.machine = 'unknown'
         self.vendor  = 'unknown'
         self.system  = 'unknown'
+        self.systemc = 'Unknown'
         self.release = '0.0.0'
         self.extra   = ''
 
         p_system    = platform.system().lower()
+        p_systemc   = platform.system()
         p_release   = platform.release().lower()
         p_processor = platform.processor().lower()
         p_machine   = platform.machine().lower()
 
         if re.match( 'cygwin', p_system ):
-            self.proc    = p_machine
+            self.machine = p_machine
             self.vendor  = 'pc'
             self.system  = 'cygwin'
+            self.systemc = 'Cygwin'
             self.release = ''
             self.extra   = ''
         elif re.match( 'darwin', p_system ):
-            self.proc    = p_machine
+            self.machine = p_machine
             self.vendor  = 'apple'
             self.system  = p_system
+            self.systemc = p_systemc
             self.release = p_release
             self.extra   = ''
         elif re.match( 'linux', p_system ):
-            self.proc    = p_machine
+            self.machine = p_machine
             self.vendor  = 'unknown'
             self.system  = p_system
+            self.systemc = p_systemc
             self.release = ''
             self.extra   = 'gnu'
+            self.title   = 'Linux %s' % (p_machine)
         else:
             errf( 'unrecognized host system: %s', p_system )
 
     def __str__( self ):
         if len(self.extra):
-            return '%s-%s-%s%s-%s' % (self.proc,self.vendor,self.system,self.release,self.extra)
+            return '%s-%s-%s%s-%s' % (self.machine,self.vendor,self.system,self.release,self.extra)
         else:
-            return '%s-%s-%s%s' % (self.proc,self.vendor,self.system,self.release)
+            return '%s-%s-%s%s' % (self.machine,self.vendor,self.system,self.release)
 
     def match( self, spec ):
         return fnmatch.fnmatch( str(self), spec )
@@ -288,7 +294,7 @@ elif guessHost.match( 'i386-*-darwin9.*' ):
 elif guessHost.match( 'powerpc-*-darwin9.*' ):
     archMode = OptionMode( 2, 'i386', 'x86_64', 'ppc', 'ppc64' )
 else:
-    archMode = OptionMode( 0, guessHost.proc )
+    archMode = OptionMode( 0, guessHost.machine )
 
 if guessHost.match( '*-*-darwin*' ):
     d_prefix = '/Applications'
@@ -300,7 +306,7 @@ parser = OptionParser( 'Usage: %prog' )
 
 group = OptionGroup( parser, 'Installation Options' )
 group.add_option( '', '--prefix', default=d_prefix, action='store',
-    help='install destination for final products (%s)' % (d_prefix) )
+    help='specify destination for final products (%s)' % (d_prefix) )
 parser.add_option_group( group )
 
 group = OptionGroup( parser, 'Feature Options' )
@@ -371,15 +377,15 @@ archMode.setFromOption( 'architecture', options.arch )
 ## update guessBuild as per architecture mode
 if guessHost.match( '*-*-darwin*' ):
     if archMode.mode == 'i386':
-        guessBuild.proc = 'i386'
+        guessBuild.machine = 'i386'
     elif archMode.mode == 'x86_64':
-        guessBuild.proc = 'x86_64'
+        guessBuild.machine = 'x86_64'
     elif archMode.mode == 'ppc':
-        guessBuild.proc = 'powerpc'
+        guessBuild.machine = 'powerpc'
     elif archMode.mode == 'ppc64':
-        guessBuild.proc = 'powerpc64'
+        guessBuild.machine = 'powerpc64'
 else:
-    guessBuild.proc = archMode.mode
+    guessBuild.machine = archMode.mode
 guessBuild.cross = 0 if archMode.default == archMode.mode else 1
 
 # locate tools
@@ -471,34 +477,46 @@ class Repository:
 ##
 class Project:
     def __init__( self ):
-        self.name          = 'HandBrake'
-        self.name_lower    = self.name.lower()
-        self.name_upper    = self.name.upper()
-        self.acro_lower    = 'hb'
-        self.acro_upper    = 'HB'
-        self.url_website   = 'http://handbrake.fr'
-        self.url_community = 'http://forum.handbrake.fr'
-        self.url_irc       = 'irc://irc.freenode.net/handbrake'
+        if repo.type == 'unofficial':
+            self.name          = 'NoNameBrand'
+            self.acro_lower    = 'nnb'
+            self.acro_upper    = 'NNB'
+            self.url_website   = 'http://nonamebrand.com'
+            self.url_community = 'http://forum.nonamebrand.com'
+            self.url_irc       = 'irc://irc.freenode.net/nonamebrand'
+        else:
+            self.name          = 'HandBrake'
+            self.acro_lower    = 'hb'
+            self.acro_upper    = 'HB'
+            self.url_website   = 'http://handbrake.fr'
+            self.url_community = 'http://forum.handbrake.fr'
+            self.url_irc       = 'irc://irc.freenode.net/handbrake'
+
+        self.name_lower = self.name.lower()
+        self.name_upper = self.name.upper()
 
         self.vmajor = 0
         self.vminor = 9
-        self.vpoint = 3
+        self.vpoint = 4
 
-        self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
         appcastfmt = 'http://handbrake.fr/appcast%s.xml'
 
         if repo.type == 'release':
-            self.version_formal = '%s Release' % (self.version)
+            self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
             self.url_appcast = appcastfmt % ('')
+            self.build = time.strftime('%Y%m%d') + '00'
+            self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         elif repo.type == 'developer':
-            self.version_formal = '%s Developer ' % (self.version)
+            self.version = 'svn%d' % (repo.rev)
             self.url_appcast = appcastfmt % ('_unstable')
+            self.build = time.strftime('%Y%m%d') + '01'
+            self.title = '%s svn%d (%s)' % (self.name,repo.rev,self.build)
         else:
-            self.version_formal = '%s Unnofficial ' % (self.version)
+            self.version = 'svn%d' % (repo.rev)
+            self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
             self.url_appcast = appcastfmt % ('_unofficial')
-
-        self.title = '%s %s' % (self.name,self.version)
-        self.build = time.strftime('%Y%m%d') + '01'
+            self.build = time.strftime('%Y%m%d') + '99'
+            self.title = 'Unofficial svn%d (%s)' % (repo.rev,self.build)
 
 ###############################################################################
 
@@ -599,7 +617,6 @@ config.add( 'HB.version.major',  project.vmajor )
 config.add( 'HB.version.minor',  project.vminor )
 config.add( 'HB.version.point',  project.vpoint )
 config.add( 'HB.version',        project.version )
-config.add( 'HB.version.formal', project.version_formal )
 config.add( 'HB.version.hex',    '%04x%02x%02x%02x%06x' % (project.vmajor,project.vminor,project.vpoint,0,repo.rev) )
 
 config.add( 'HB.build', project.build )
@@ -616,18 +633,22 @@ config.add( 'HB.repo.type',      repo.type )
 
 config.addBlank()
 config.add( 'HOST.spec',    guessHost )
-config.add( 'HOST.proc',    guessHost.proc )
+config.add( 'HOST.machine', guessHost.machine )
 config.add( 'HOST.vendor',  guessHost.vendor )
 config.add( 'HOST.system',  guessHost.system )
+config.add( 'HOST.systemc', guessHost.systemc )
 config.add( 'HOST.release', guessHost.release )
+config.add( 'HOST.title',   '%s %s' % (guessHost.systemc,archMode.default) )
 config.add( 'HOST.extra',   guessHost.extra )
 
 config.addBlank()
 config.add( 'BUILD.spec',    guessBuild )
-config.add( 'BUILD.proc',    guessBuild.proc )
+config.add( 'BUILD.machine', guessBuild.machine )
 config.add( 'BUILD.vendor',  guessBuild.vendor )
 config.add( 'BUILD.system',  guessBuild.system )
+config.add( 'BUILD.systemc', guessBuild.systemc )
 config.add( 'BUILD.release', guessBuild.release )
+config.add( 'BUILD.title',   '%s %s' % (guessBuild.systemc,archMode.mode) )
 config.add( 'BUILD.extra',   guessBuild.extra )
 config.add( 'BUILD.cross',   guessBuild.cross )
 config.add( 'BUILD.date',    time.strftime('%c') )

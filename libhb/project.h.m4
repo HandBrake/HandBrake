@@ -18,7 +18,6 @@ dnl
 <<#>>define HB_PROJECT_VERSION_MINOR   __HB_version_minor
 <<#>>define HB_PROJECT_VERSION_POINT   __HB_version_point
 <<#>>define HB_PROJECT_VERSION         "__HB_version"
-<<#>>define HB_PROJECT_VERSION_FORMAL  "__HB_version_formal"
 <<#>>define HB_PROJECT_VERSION_HEX     0x<<>>__HB_version_hex<<>>LL
 <<#>>define HB_PROJECT_BUILD           __HB_build
 <<#>>define HB_PROJECT_REPO_URL        "__HB_repo_url"
@@ -29,6 +28,14 @@ dnl
 <<#>>define HB_PROJECT_REPO_WCVERSION  "__HB_repo_wcversion"
 <<#>>define HB_PROJECT_REPO_OFFICIAL   __HB_repo_official
 <<#>>define HB_PROJECT_REPO_TYPE       "__HB_repo_type"
+
+<<#>>define HB_PROJECT_BUILD_SPEC      "__BUILD_spec"
+<<#>>define HB_PROJECT_BUILD_MACHINE   "__BUILD_machine"
+<<#>>define HB_PROJECT_BUILD_VENDOR    "__BUILD_vendor"
+<<#>>define HB_PROJECT_BUILD_SYSTEM    "__BUILD_system"
+<<#>>define HB_PROJECT_BUILD_SYSTEMC   "__BUILD_systemc"
+<<#>>define HB_PROJECT_BUILD_RELEASE   "__BUILD_release"
+<<#>>define HB_PROJECT_BUILD_TITLE     "__BUILD_title"
 <<#>>define HB_PROJECT_BUILD_ARCH      "__BUILD_arch"
 
 #endif /* HB_PROJECT_PROJECT_H */

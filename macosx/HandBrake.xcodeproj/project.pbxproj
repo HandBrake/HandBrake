@@ -997,7 +997,7 @@
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional -undef";
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
@@ -1124,7 +1124,7 @@
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional -undef";
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
@@ -1251,7 +1251,7 @@
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional -undef";
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
@@ -1378,7 +1378,7 @@
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional -undef";
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
@@ -1431,7 +1431,7 @@
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional -undef";
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
@@ -1483,7 +1483,7 @@
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
+				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional -undef";
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (

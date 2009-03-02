@@ -72,4 +72,4 @@ MODULES += doc
 
 include $(MODULES:%=$(PROJECT/)%/module.defs)
 include $(PROJECT/)make/variant/$(HOST.system).defs
--include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.proc).defs
+-include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.machine).defs

@@ -19,7 +19,7 @@ mrproper: xclean
 
 include $(MODULES:%=$(PROJECT/)%/module.rules)
 -include $(PROJECT/)make/variant/$(HOST.system).rules
--include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.proc).rules
+-include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.machine).rules
 
 ###############################################################################
 

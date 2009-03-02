@@ -158,8 +158,8 @@ int main( int argc, char ** argv )
     h = hb_init( debug, update );
 
     /* Show version */
-    fprintf( stderr, "HandBrake %s (%d) - http://handbrake.fr/\n",
-             hb_get_version( h ), hb_get_build( h ) );
+    fprintf( stderr, "%s - %s - %s\n",
+             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
 
     /* Check for update */
     if( update )
