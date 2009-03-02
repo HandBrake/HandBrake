@@ -1,49 +1,118 @@
-HandBrake 0.9.3 Build User Guide
-********************************
+Guide to Building HandBrake svn2194 (2009030201) on Linux
+*********************************************************
 
 Table of Contents
 *****************
 
 1 Introduction
-2 Quickstart
-3 Build Process
-  3.1 Checkout Sources
-  3.2 Configure
-  3.3 Build
-  3.4 Clean
-  3.5 Extra Clean
-4 Make Targets
-  4.1 Global
-  4.2 General Modules
-  4.3 Contrib Modules
-  4.4 Contrib Aggregate
-5 Platform Requirements and Notes
-  5.1 Mac OS X
-  5.2 Cygwin
-  5.3 Linux
+2 Prerequisites
+3 QuickStart
+4 Overview
+5 Building via Terminal
+  5.1 Checkout Sources
+  5.2 Configure
+  5.3 Build
+  5.4 Make Targets
+    5.4.1 Global
+    5.4.2 General Modules
+    5.4.3 Contrib Modules
+    5.4.4 Contrib Aggregates
 
 
 1 Introduction
 **************
 
-This guide documents the recommended process to build HandBrake from
-the official source-code repository. Building from any other source is
-not unsupported.
+This guide documents the recommended process to build HandBrake on
+Linux hosts from the official source-code repository. Building from any
+other source is not supported.
 
-2 Quickstart
+2 Prerequisites
+***************
+
+The following are the recommended specifications for building on
+Linux; but is not necessarily the only configuration that is possible:
+
+   * Intel 32-bit or 64-bit kernel
+
+   * Fedora 8, gcc 4.1.2, yasm 0.6.2.1985
+
+   * Fedora 9, gcc 4.3.0, yasm 0.6.2.1985
+
+   * Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
+
+   * gcc 4.0.0 or higher is reported to work
+
+     Note: It is recommended to use the platform distribution's bundled
+     compiler for maximum C++ compatibility. If you build with a custom
+     compiler it will likely introduce non-standard runtime
+     requirements. There are of course many valid reasons to build with
+     unbundled compilers, but be aware it is generally unsupported and
+     left as an exercise to the reader.
+
+The GTK UI introduces some significant extra build requirements. If you
+intend to disable building the GUI with `configure --disable-gtk' you
+may not need any of these packages installed:
+
+   * build-essential
+
+   * autoconf
+
+   * intltool
+
+   * libtool
+
+   * zlib1g-dev
+
+   * libbz2-dev
+
+   * libglib2.0-dev
+
+   * libdbus-glib-1-dev
+
+   * libgtk2.0-dev
+
+   * libhal-dev
+
+   * libhal-storage-dev
+
+   * libgtkhtml3.14-dev
+
+   * libgstreamer0.10-dev
+
+   * libgstreamer-plugins-base0.10-dev
+
+The following general tools are used on various platforms and it is
+recommended you use these versions or similar:
+
+   * subversion - 1.5.5
+
+   * python - Python 2.4.6
+
+   * curl - curl 7.19.3 (or wget)
+
+   * m4 - GNU M4 1.4.6
+
+   * make - GNU Make 3.81
+
+   * patch - Patch 2.5.8
+
+   * tar - GNU tar 1.15.1
+
+   * wget - GNU Wget 1.11.4 (or curl)
+
+3 QuickStart
 ************
 
-This chapter is for the impatient or those just looking for a quick
-summary of the commands used to launch a typical build with the fewest
-commands possible. For more control over the build process please skip
-this section and jump to *Note Build Process:: for full details.
+This chapter is for building from a terminal/shell environment in as
+few commands as possible. If more flexibility is required you should
+skip this chapter and jump to *Note overview::.
 
      svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
      cd hb-trunk
      ./configure --launch
 
-The above is an special streamlined invocation of `configure' which
-performs the following steps automatically:
+The special option `--launch' selected launch mode and performs the
+following steps:
 
    * assert scratch directory `build/' does not exist
 
@@ -57,10 +126,16 @@ performs the following steps automatically:
 
    * echo build output
 
-3 Build Process
-***************
+4 Overview
+**********
 
-3.1 Checkout Sources
+Linux builds are performed from a terminal. There is no support for
+building from any IDEs.
+
+5 Building via Terminal
+***********************
+
+5.1 Checkout Sources
 ====================
 
 Checkout HandBrake from the official source-code repository.
@@ -76,7 +151,7 @@ If you have write-access to the repository, then you may add the
 appropriate login/password information as needed. It is recommended to
 use Subversion 1.5.0 or higher. Lower versions should also work.
 
-3.2 Configure
+5.2 Configure
 =============
 
 Configure the build system.
@@ -94,10 +169,23 @@ purposes.
 
 The `configure' utility accepts many options. It is recommended that
 you specify `--help' for the complete list of options. The following
-options are detailed:
+options are also documented here:
 
 `--help'
      List available options.
+
+`--prefix=PREFIX'
+     Specify destination directory for final product install.  This
+     defaults to a reasonable platform-specific value.
+
+`--disable-xcode'
+     Disable driving the build through Xcode. If this option is
+     disabled only `HandBrakeCLI' will be produced and Xcode will not
+     be invoked. Mac OS X only.
+
+`--disable-gtk'
+     Disable building the GTK GUI on applicable platforms such as
+     Linux.
 
 `--debug=MODE'
      Select debug mode. Must be one of `none', `min', `std', `max'.
@@ -135,12 +223,11 @@ some of the reasons why someone may choose to scrap an existing build:
 There are generally two methods for scrapping a build. The `build'
 directory can be recusrively removed which has the effect of loosing
 your existing configuration but does guarantee no residuals are left
-behind. The other method is to use ask the build system to perform an
-`xclean'. This is known to work well but will leave empty directories
-behind. However, the configuration is left intact. See *Note Extra
-Clean:: for further details.
+behind. The other method is to ask the build system to perform an `make
+xclean'. This is known to work well but will leave empty directories
+behind. However, the configuration is left intact.
 
-3.3 Build
+5.3 Build
 =========
 
 Build main product. All necessary dependencies are also built if
@@ -157,24 +244,8 @@ log. The following command allows for up to 4 concurrent jobs via make:
 
      make -j4
 
-3.4 Clean
-=========
-
-Clean all build output excluding contrib modules. Configuration is
-retained.
-
-     make clean
-
-3.5 Extra Clean
-===============
-
-Clean all build output including contrib modules. Configuration is
-retained.
-
-     make xclean
-
-4 Make Targets
-**************
+5.4 Make Targets
+================
 
 The build system supports passing many kinds of targets some of which
 become very useful in normal development cycles. The targets by
@@ -182,8 +253,8 @@ convention are lower-case words passed to `make'. Global targets are
 one-word targets. Scoped targets are usually two-words seperated by a
 period.
 
-4.1 Global
-==========
+5.4.1 Global
+------------
 
 `make'
      Alias for `make build'.
@@ -200,11 +271,15 @@ period.
      Clean all build output including contrib modules. Configuration is
      retained.
 
-4.2 General Modules
-===================
+`make doc'
+     Build auto-generated project documentation. Various articles are
+     produced and may be found in `build/doc/articles'.
 
-General modules such as `libhb' and `test' have the following scoped
-targets:
+5.4.2 General Modules
+---------------------
+
+General modules such as `libhb', `test' and `gtk' have the following
+scoped targets:
 
 `make MODULE.build'
      Build MODULE.
@@ -212,8 +287,8 @@ targets:
 `make MODULE.clean'
      Clean build output for MODULE.
 
-4.3 Contrib Modules
-===================
+5.4.3 Contrib Modules
+---------------------
 
 Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
 `lame', `libdca', `libdvdread', `libmkv', `libmp4v2', `libogg',
@@ -252,8 +327,8 @@ Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
      Extra clean module; first invokes uninstall then recursively
      removes the module build directory.
 
-4.4 Contrib Aggregate
-=====================
+5.4.4 Contrib Aggregates
+------------------------
 
 For convenience, the following targets aggregate the all contrib
 modules' respective targets together:
@@ -275,101 +350,4 @@ modules' respective targets together:
    * make contrib.clean
 
    * make contrib.xclean
-
-5 Platform Requirements and Notes
-*********************************
-
-The build system supports various platforms of interest to the project.
-However this does not mean it supports all plaforms. If the platform is
-not listed in this chapter, then it is not supported.
-
-The following tools are used on various platforms and it is recommended
-you use these versions or newer:
-
-   * python - Python 2.4.6
-
-   * curl - curl 7.19.3 (or wget)
-
-   * m4 - GNU M4 1.4.6
-
-   * make - GNU Make 3.81
-
-   * patch - Patch 2.5.8
-
-   * tar - GNU tar 1.15.1
-
-   * wget - GNU Wget 1.11.4 (or curl)
-
-5.1 Mac OS X
-============
-
-Building on Mac OS X is well supported. It is the reference platform
-for HandBrake. The following are the recommended specifications for
-this platform; but is not necessarily the only configuration that is
-possible:
-
-   * Mac Intel hardware
-
-   * Mac OS X 10.5.6
-
-   * Xcode-3.1.2
-
-   * gcc 4.0.1 (Apple Inc. build 5490)
-
-   * yasm 0.7.2.2153 (for i386 or x86_64 architectures)
-
-     Note: It is recommended to use the platform distribution's bundled
-     compiler for maximum C++ compatibility. If you build with a custom
-     compiler it will likely introduce non-standard runtime
-     requirements. There are of course many valid reasons to build with
-     unbundled compilers, but be aware it is generally unsupported and
-     left as an exercise to the reader.
-
-5.2 Cygwin
-==========
-
-Building on Cygwin is supported. The following are the recommended
-specifications for this platform; but is not necessarily the only
-configuration that is possible:
-
-   * Intel 32-bit or 64-bit hardware
-
-   * Cygwin, gcc 4.3.2
-
-   * yasm 0.7.1.2093 (for i386 or x86_64 architectures)
-
-     Note: As of this writing, Cygwin has available to it several
-     versions of gcc; only one of which may be found and used in the
-     path as `gcc' and `g++'. Configure will thus find what is probably
-     the older version of gcc in a typical Cygwin environment. If you
-     desire to build with the newer gcc, it is found in the path as
-     `gcc-4' and `g++-4' respectively and you must indicate to
-     configure the desired versions. The following syntax should do the
-     trick:
-
-     ../configure --gcc=gcc-4
-
-5.3 Linux
-=========
-
-Building on Linux is supported. The following are the recommended
-specifications for this platform; but is not necessarily the only
-configuration that is possible:
-
-   * Intel 32-bit or 64-bit hardware
-
-   * Fedora 8, gcc 4.1.2, yasm 0.6.2.1985
-
-   * Fedora 9, gcc 4.3.0, yasm 0.6.2.1985
-
-   * Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
-
-   * gcc 4.0.0 or higher is reported to work
-
-     Note: It is recommended to use the platform distribution's bundled
-     compiler for maximum C++ compatibility. If you build with a custom
-     compiler it will likely introduce non-standard runtime
-     requirements. There are of course many valid reasons to build with
-     unbundled compilers, but be aware it is generally unsupported and
-     left as an exercise to the reader.
 

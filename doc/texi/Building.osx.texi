@@ -1,0 +1,45 @@
+@input texinfo @c -*- Texinfo -*-
+@c %**start of header
+@setfilename Building.osx.info
+@include base/article.texi
+@include building/command.texi
+@paragraphindent none
+
+@set BG.platform osx
+@c %**end of header
+
+@majorheading Guide to Building @value{HB.title} on @value{OS.@value{BG.platform}}
+
+@quotation Warning
+Parallel builds on @value{OS.osx} are currently broken when building in a @b{terminal} with Xcode. You @b{must not use} the @command{make -jN} jobs option. A workaround is available if you do not need to build HandBrake.app (MacGUI): use @command{configure --disable-xcode} to disable Xcode.
+@end quotation
+
+@contents
+@include building/chapter.introduction.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{prerequisites}
+@chapter Prerequisites
+Building on @value{OS.osx} is well supported. It is the reference platform for @value{HB.name}. The following are the recommended specifications for this platform; but is not necessarily the only configuration that is possible:
+
+@itemize @bullet
+@item Mac Intel hardware
+@item @value{OS.osx} 10.5.6
+@item Xcode-3.1.2
+@item gcc 4.0.1 (Apple Inc. build 5490)
+@item yasm 0.7.2.2153 (for i386 and x86_64 architectures)
+@end itemize
+
+@include building/prerequisites.bundled.texi
+@include building/prerequisites.common.texi
+
+@c %**-------------------------------------------------------------------------
+@include building/chapter.quickstart.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{overview}
+@chapter Overview
+The two general methods to build on @value{OS.osx} are building from @b{terminal} or @b{Xcode}. The preferred method for automated and repeatable builds is to use the terminal. Otherwise the choice is generally up to the individual. In essence, the terminal actually invokes @command{xcodebuild} to build the very same targets contained in the Xcode project.
+
+@include building/chapter.via.terminal.texi
+@include building/chapter.via.xcode.texi

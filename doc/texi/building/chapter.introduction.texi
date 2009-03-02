@@ -1,0 +1,3 @@
+@anchor{introduction}
+@chapter Introduction
+This guide documents the recommended process to build @value{HB.name} on @value{OS.@value{BG.platform}} hosts from the official source-code repository. @b{Building from any other source is not supported}.

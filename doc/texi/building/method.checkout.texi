@@ -1,0 +1,9 @@
+Checkout @value{HB.name} from the official source-code repository.
+
+@example
+@COMMAND.checkout{}
+@end example
+
+Sources are checked out from the @samp{@value{HB.repo.branch}} branch. This document was generated from that very branch, and for example purposes, we will use exactly the same branch.
+
+If you have write-access to the repository, then you may add the appropriate login/password information as needed. It is recommended to use Subversion 1.5.0 or higher. Lower versions should also work.

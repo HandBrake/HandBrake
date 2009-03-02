@@ -1,0 +1,49 @@
+@anchor{xcode}
+@chapter Building via Xcode
+
+@c %**-------------------------------------------------------------------------
+@anchor{xcode.checkout}
+@section Checkout Sources
+@include building/method.checkout.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{xcode.build}
+@section Build
+In Xcode perform the following steps to build the default configuration:
+
+@itemize
+@item open @file{macosx/HandBrake.xcodeproj}
+@item select active configuration @b{standard}
+@item select active target @b{HandBrake}
+@item click @b{Build} or @b{Build and Go}
+@end itemize
+
+The first time it builds will take a bit of time. You may use the Build Results window to watch it progress. A large partof the build is invoking the external build system which poduces quite a lot of log output. Much of that output are warnings and errors that are part of the normal build process for 3rd-party contributed modules so in general you need not do anything. However, if Xcode itself reports the build failed, then you must take corrective action.
+
+Unfortunately, due to limitations of Xcode we do not have hooks in place to offer finer-grained control over per-module make actions for the (external) build system. Thus, you will have to use @b{terminal} to accomplish those tasks. Just @command{cd} into the build directory which is associated with your active configuration and perform any necessary @command{make} commands. @b{Be careful not to issue commands from the terminal simultaneously with Xcode tasks} as that will confuse both Xcode and make and likely corrupt your build directory.
+
+When you click @b{clean} in Xcode it will not perform an external build clean. Basically @b{HandBrakeCLI} and @b{HandBrake.app} are the only products which have full Xcode iterative development flexibility.
+
+Each configuration uses a different @file{build} directory. This makes it possible to build each configuration and switch between them without losing their respective build state. The description of each configuration and the name convention for build directories are as follows:
+
+@table @samp
+@item standard
+This configuration will build to the host native architecture. Build directory is @file{build.standard} .
+The standard variant produces optimized code without debug information.
+
+@item debug
+This configuration will build to the host native architecture. Build directory is @file{build.standard} .
+The debug variant produces unoptimized code with debug information.
+
+@item standard.i386
+This configuration is used to build for the i386 architecture. Build directory is @file{build.standard.i386} .
+
+@item standard.x86_64
+This configuration is used to build for the x86_64 architecture. Build directory is @file{build.standard.x86_64} .
+
+@item standard.ppc
+This configuration is used to build for the ppc architecture. Build directory is @file{build.standard.ppc} .
+
+@item standard.ppc64
+This configuration is used to build for the ppc64 architecture. Build directory is @file{build.standard.ppc64} .
+@end table

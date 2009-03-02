@@ -1,0 +1,58 @@
+@input texinfo @c -*- Texinfo -*-
+@c %**start of header
+@setfilename Building.linux.info
+@include base/article.texi
+@include building/command.texi
+@paragraphindent none
+
+@set BG.platform linux
+@c %**end of header
+
+@majorheading Guide to Building @value{HB.title} on @value{OS.@value{BG.platform}}
+@contents
+@include building/chapter.introduction.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{prerequisites}
+@chapter Prerequisites
+The following are the recommended specifications for building on @value{OS.linux}; but is not necessarily the only configuration that is possible:
+
+@itemize @bullet
+@item Intel 32-bit or 64-bit kernel
+@item Fedora 8, gcc 4.1.2, yasm 0.6.2.1985
+@item Fedora 9, gcc 4.3.0, yasm 0.6.2.1985
+@item Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
+@item gcc 4.0.0 or higher is reported to work
+@end itemize
+
+@include building/prerequisites.bundled.texi
+
+The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you may not need any of these packages installed:
+
+@itemize @bullet
+@item build-essential
+@item autoconf
+@item intltool
+@item libtool
+@item zlib1g-dev
+@item libbz2-dev
+@item libglib2.0-dev
+@item libdbus-glib-1-dev
+@item libgtk2.0-dev
+@item libhal-dev
+@item libhal-storage-dev
+@item libgtkhtml3.14-dev
+@item libgstreamer0.10-dev
+@item libgstreamer-plugins-base0.10-dev
+@end itemize
+
+@include building/prerequisites.common.texi
+
+@c %**-------------------------------------------------------------------------
+@include building/chapter.quickstart.texi
+
+@anchor{overview}
+@chapter Overview
+@value{OS.linux} builds are performed from a @b{terminal}. There is no support for building from any IDEs.
+
+@include building/chapter.via.terminal.texi

@@ -1,0 +1,172 @@
+@anchor{terminal}
+@chapter Building via Terminal
+
+@c %**-------------------------------------------------------------------------
+@anchor{terminal.checkout}
+@section Checkout Sources
+@include building/method.checkout.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{terminal.configure}
+@section Configure
+Configure the build system.
+
+@example
+rm -fr build/
+mkdir build/
+cd build/
+../configure
+@end example
+
+Create a scratch directory which will contain all files created during the build process. The directory name is arbitrary but we recommend something simple and descriptive. One directory is required for each distinctly configured build. We name our directory @file{build} for example purposes.
+
+The @command{configure} utility accepts many options. It is recommended that you specify @command{--help} for the complete list of options. The following options are also documented here:
+
+@table @samp
+@item --help
+List available options.
+
+@item --prefix=PREFIX
+Specify destination directory for final product install.
+This defaults to a reasonable platform-specific value.
+
+@item --disable-xcode
+Disable driving the build through Xcode. If this option is disabled only @command{HandBrakeCLI} will be produced and Xcode will not be invoked. @value{OS.osx} only.
+
+@item --disable-gtk
+Disable building the GTK GUI on applicable platforms such as @value{OS.linux}.
+
+@item --debug=MODE
+Select debug mode. Must be one of @samp{none}, @samp{min}, @samp{std}, @samp{max}.
+This generally maps to gcc options @samp{-g0}, @samp{-g1}, @samp{-g2}, @samp{-g3}.
+
+@item --optimize=MODE
+Select optimize mode. Must be one of @samp{none}, @samp{speed}, @samp{size}.
+This generally maps to gcc options @samp{-g0}, @samp{-O0}, @samp{-O3}, @samp{-Os}.
+
+@item --arch=MODE
+Select build architecture. The available architectures vary by platform. Most platforms support exactly one architecture except @value{OS.osx} which has support for various universal binary architectures. The available choices are hard-coded per platform and no sanity checks for the required tools are performed.
+
+@item --gcc=EXE
+Specify the @command{gcc} executable to use where @b{EXE} is the executable name which is either absolute or environment @samp{PATH} is searched accordingly.
+@end table
+
+Clean-room procedures dictate that when certain factors change, old builds should be scrapped and new builds configured. This is the main reason for requiring a scratch directory; to promote consistent, reliable and clean software builds. The following is a short list of some of the reasons why someone may choose to scrap an existing build:
+
+@itemize
+@item configure with different options
+@item subversion working dir is updated and you want configure to re-evaluate working dir metadata.
+@item build corruption is suspected
+@end itemize
+
+There are generally two methods for scrapping a build. The @file{build} directory can be recusrively removed which has the effect of loosing your existing configuration but does guarantee no residuals are left behind. The other method is to ask the build system to perform an @command{make xclean}. This is known to work well but will leave empty directories behind. However, the configuration is left intact.
+
+@c %**-------------------------------------------------------------------------
+@anchor{terminal.build}
+@section Build
+Build main product. All necessary dependencies are also built if required.
+
+@example
+make
+@end example
+
+Parallel builds may optionally be enabled. Be aware that while a parallel build may save time on systems with additional cores, the output is often mixed, overlapped and sometimes even corrupted with binary characters. Thus if you experience a build issue, you should clean and redo the build in default serial mode to produce a readable log. The following command allows for up to 4 concurrent jobs via make:
+
+@example
+make -j4
+@end example
+
+@c %**-------------------------------------------------------------------------
+@anchor{terminal.targets}
+@section Make Targets
+
+The build system supports passing many kinds of targets some of which become very useful in normal development cycles. The targets by convention are lower-case words passed to @command{make}. Global targets are one-word targets. Scoped targets are usually two-words seperated by a period.
+
+@anchor{terminal.targets.global}
+@subsection Global
+
+@table @samp
+@item make
+Alias for @samp{make build}.
+
+@item make build
+Build main product. All necessary dependencies are also built if required.
+
+@item make clean
+Clean all build output excluding contrib modules. Configuration is retained.
+
+@item make xclean
+Clean all build output including contrib modules. Configuration is retained.
+
+@item make doc
+Build auto-generated project documentation. Various articles are produced and may be found in @file{build/doc/articles}.
+@end table
+
+@anchor{terminal.targets.general}
+@subsection General Modules
+
+General modules such as @samp{libhb}, @samp{test} and @samp{gtk} have the following scoped targets:
+
+@table @samp
+@item make @i{MODULE}.build
+Build @i{MODULE}.
+
+@item make @i{MODULE}.clean
+Clean build output for @i{MODULE}.
+@end table
+
+@anchor{terminal.targets.contrib}
+@subsection Contrib Modules
+
+Contrib modules such as @samp{a52dec}, @samp{bzip2}, @samp{faac}, @samp{faad2}, @samp{ffmpeg}, @samp{lame}, @samp{libdca}, @samp{libdvdread}, @samp{libmkv}, @samp{libmp4v2}, @samp{libogg}, @samp{libsamplerate}, @samp{libtheora}, @samp{libvorbis}, @samp{mpeg2dec}, @samp{x264}, @samp{xvidcore} and @samp{zlib} have the following scoped targets:
+
+@table @samp
+@item make @i{MODULE}.fetch
+Download source tarball from the Internet and save to @file{TOP/downloads} directory. No checksumming is performed.
+
+@item make @i{MODULE}.extract
+Extract source tarball into @file{build} tree.
+
+@item make @i{MODULE}.patch
+Apply appropriate patches (if any) to module sources.
+
+@item make @i{MODULE}.configure
+Configure module sources.
+This usually invokes autotool configure.
+
+@item make @i{MODULE}.build
+Build module.
+This usually invokes autotool build.
+
+@item make @i{MODULE}.install
+Install module products such as headers and libraries into @file{build} tree.
+This usually invokes autotool install.
+
+@item make @i{MODULE}.uninstall
+Uninstall module products; generally the reverse of install.
+This usually invokes autotool uninstall.
+
+@item make @i{MODULE}.clean
+Clean module; generally the reverse of build.
+This usually invokes autotool clean.
+
+@item make @i{MODULE}.xclean
+Extra clean module; first invokes uninstall then recursively removes the module build directory.
+@end table
+
+@anchor{terminal.targets.contrib.aggregate}
+@subsection Contrib Aggregates
+
+For convenience, the following targets aggregate the all contrib modules' respective targets together:
+
+@itemize
+@item make contrib.fetch
+@item make contrib.extract
+@item make contrib.patch
+@item make contrib.configure
+@item make contrib.build
+@item make contrib.install
+@item make contrib.uninstall
+@item make contrib.clean
+@item make contrib.xclean
+@end itemize

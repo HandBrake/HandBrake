@@ -1,0 +1,45 @@
+@input texinfo @c -*- Texinfo -*-
+@c %**start of header
+@setfilename Building.cygwin.info
+@include base/article.texi
+@include building/command.texi
+@paragraphindent none
+
+@set BG.platform cygwin
+@c %**end of header
+
+@majorheading Guide to Building @value{HB.title} on @value{OS.@value{BG.platform}}
+@contents
+@include building/chapter.introduction.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{prerequisites}
+@chapter Prerequisites
+The following are the recommended specifications for building on @value{OS.cygwin}; but is not necessarily the only configuration that is possible:
+
+@itemize @bullet
+@item Intel 32-bit or 64-bit hardware (only 32-bit product binaries are supported)
+@item @value{OS.cygwin}, gcc 4.2.4
+@item yasm 0.7.2.2153 (for i386 or x86_64 architectures)
+@end itemize
+
+@include building/prerequisites.bundled.texi
+
+@quotation Note
+As of this writing, @value{OS.cygwin} has available to it several versions of gcc; only one of which may be found and used in the path as @code{gcc} and @code{g++}. Configure will thus find what is probably the older version of gcc in a typical @value{OS.cygwin} environment. If you desire to build with the newer gcc, it is found in the path as @command{gcc-4} and @command{g++-4} respectively and you must indicate to configure the desired versions. The following syntax should do the trick:
+@end quotation
+
+@example
+../configure --gcc=gcc-4
+@end example
+
+@include building/prerequisites.common.texi
+
+@c %**-------------------------------------------------------------------------
+@include building/chapter.quickstart.texi
+
+@anchor{overview}
+@chapter Overview
+@value{OS.cygwin} builds are performed from a @b{terminal}. There is no support for building from any IDEs.
+
+@include building/chapter.via.terminal.texi
