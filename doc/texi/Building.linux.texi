@@ -19,34 +19,77 @@ The following are the recommended specifications for building on @value{OS.linux
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
-@item Fedora 8, gcc 4.1.2, yasm 0.6.2.1985
-@item Fedora 9, gcc 4.3.0, yasm 0.6.2.1985
+@item Ubuntu 8.0.4, gcc 4.3.0, yasm 0.7.1.2093
+@item Ubuntu 8.10, gcc 4.3.2, yasm 0.7.1.2093
+@item Fedora 9, gcc 4.3.0, yasm 0.7.1.2093
 @item Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
 @item gcc 4.0.0 or higher is reported to work
 @end itemize
 
 @include building/prerequisites.bundled.texi
 
-The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you may not need any of these packages installed:
+@include building/prerequisites.common.texi
 
+The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
+
+Ubuntu 8.10 packages:
 @itemize @bullet
 @item build-essential
-@item autoconf
-@item intltool
-@item libtool
-@item zlib1g-dev
+@item autoconf (gui)
+@item intltool (gui)
+@item libtool (gui)
+@item zlib1g-dev (gui)
 @item libbz2-dev
-@item libglib2.0-dev
-@item libdbus-glib-1-dev
-@item libgtk2.0-dev
-@item libhal-dev
-@item libhal-storage-dev
-@item libgtkhtml3.14-dev
-@item libgstreamer0.10-dev
-@item libgstreamer-plugins-base0.10-dev
+@item libglib2.0-dev (gui)
+@item libdbus-glib-1-dev (gui)
+@item libgtk2.0-dev (gui)
+@item libhal-dev (gui)
+@item libhal-storage-dev (gui)
+@item libgtkhtml3.14-dev (gui)
+@item libgstreamer0.10-dev (gui)
+@item libgstreamer-plugins-base0.10-dev (gui)
 @end itemize
 
-@include building/prerequisites.common.texi
+To install these packages:
+@example
+sudo apt-get install subversion yasm build-essential \
+autoconf intltool libtool zlib1g-dev libbz2-dev libglib2.0-dev \
+libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
+libgtkhtml3.14-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+@end example
+
+Fedora 10 package groups:
+@itemize @bullet
+@item Development Tools
+@item Development Libraries
+@item X Software Development (gui)
+@item GNOME Software Development (gui)
+@end itemize
+
+To install these package groups:
+@example
+sudo yum groupinstall "Development Tools" "Development Libraries" \
+"X Software Development" "GNOME Software Development"
+@end example
+
+Additional Fedora 10 packages:
+@itemize @bullet
+@item zlib-devel (gui)
+@item bzip2-devel
+@item dbus-glib-devel (gui)
+@item hal-devel (gui)
+@item gtkhtml3-devel (gui)
+@item gstreamer-devel (gui)
+@item gstreamer-plugins-base-devel (gui)
+@end itemize
+
+To install these packages:
+@example
+sudo yum install yasm zlib-devel bzip2-devel \
+dbus-glib-devel hal-devel gtkhtml3-devel \
+gstreamer-devel gstreamer-plugins-base-devel
+@end example
+
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.quickstart.texi
