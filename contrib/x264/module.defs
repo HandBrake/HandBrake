@@ -8,4 +8,4 @@ X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 X264.CONFIGURE.static =
 
-X264.CONFIGURE.extra = --enable-pthread
+X264.CONFIGURE.extra = --disable-mp4-output --enable-pthread
