@@ -29,5 +29,6 @@ dnl
 <<#>>define HB_PROJECT_REPO_WCVERSION  "__HB_repo_wcversion"
 <<#>>define HB_PROJECT_REPO_OFFICIAL   __HB_repo_official
 <<#>>define HB_PROJECT_REPO_TYPE       "__HB_repo_type"
+<<#>>define HB_PROJECT_BUILD_ARCH      "__BUILD_arch"
 
 #endif /* HB_PROJECT_PROJECT_H */
