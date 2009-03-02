@@ -27,7 +27,6 @@ gtk.uninstall:
 
 gtk.clean:
 	$(MAKE) -C $(GTK.build/) clean
-	$(RM.exe) $(GTK.BUILD.stamp)
 
 gtk.xclean:
 	$(MAKE) -C $(GTK.build/) distclean
