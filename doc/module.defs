@@ -44,5 +44,5 @@ MAKEINFO.flags.xml  = --xml --output-indent=4
 MAKEINFO            = $(MAKEINFO.exe) $(MAKEINFO.flags) $(MAKEINFO.flags.$(1)) $(2) -o $(3)
 
 XML2WIKI.exe   = python3.0 $(DOC.in/)xml2wiki.py
-XML2WIKI.flags = --date --toc
+XML2WIKI.flags = --toc
 XML2WIKI       = $(XML2WIKI.exe) $(XML2WIKI.flags) $(1) > $(2)

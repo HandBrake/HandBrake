@@ -3,6 +3,7 @@ $(eval $(call import.MODULE.rules,DOC))
 doc: doc.txt
 
 doc.txt: $(DOC.texi2txt.out)
+doc.xml: $(DOC.texi2xml.out)
 doc.wiki: $(DOC.xml2wiki.out)
 
 doc.clean:
@@ -30,8 +31,3 @@ $(DOC.m4.out): | $(dir $(DOC.m4.out))
 $(DOC.m4.out): $(DOC.M4.deps)
 $(DOC.m4.out): $(DOC.out/)%: $(DOC.in/)%.m4
 	$(call DOC.M4,$@,$<)
-
-mike:
-	@echo $(DOC.texi2xml.out)
-	@echo $(DOC.xml2wiki.out)
-	@echo ok

@@ -10,10 +10,6 @@
 
 @majorheading Guide to Building @value{HB.title} on @value{OS.@value{BG.platform}}
 
-@quotation Warning
-Parallel builds on @value{OS.osx} are currently broken when building in a @b{terminal} with Xcode. You @b{must not use} the @command{make -jN} jobs option. A workaround is available if you do not need to build HandBrake.app (MacGUI): use @command{configure --disable-xcode} to disable Xcode.
-@end quotation
-
 @contents
 @include building/chapter.introduction.texi
 

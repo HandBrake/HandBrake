@@ -24,6 +24,8 @@ endef
 ## $(1) module name (uppercase)
 ##
 define import.MODULE.rules
+.PHONY: $($(1).name).build $($(1).name).clean 
+
 $($(1).name).report:
 	@$(MAKE) report.true REPORT=module REPORT.module=$(1)
 
@@ -31,20 +33,3 @@ $($(1).name).report:
 report.modules:: $($(1).name).report
 
 endef
-
-.PHONY: report.main report.gcc report.modules
-
-report.modules::
-
-.PHONY: report.main
-report.main:
-	@$(MAKE) report.true REPORT=main
-
-.PHONY: report.gcc
-report.gcc:
-	@$(MAKE) report.true REPORT=gcc
-
-## needed for nested make (which drives each report)
-.PHONY: report.true
-report.true:
-	@true

@@ -1,3 +1,13 @@
+.DELETE_ON_ERROR:
+.SUFFIXES:
+
+###############################################################################
+
+## file-wide conditional to use xcode rules if xcode=1 method=terminal
+ifeq ($(FEATURE.xcode):$(BUILD.method),1:terminal)
+    include $(PROJECT/)macosx/module.xcode
+else
+
 ## only included using special report targets
 ifneq (,$(REPORT))
     include $(PROJECT/)make/include/report.defs
@@ -5,8 +15,10 @@ endif
 
 ###############################################################################
 
-.PHONY: clean xclean doc report
+.PHONY: build install clean xclean doc report
 
+build:
+install:
 clean:
 xclean: contrib.xclean clean
 doc:
@@ -37,3 +49,5 @@ reconfigure:
 ## target to build all dependency dirs
 $(sort $(dir $(BUILD.out))):
 	$(MKDIR.exe) -p $@
+
+endif ## xcode=1 method=terminal

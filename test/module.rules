@@ -18,3 +18,15 @@ test.clean:
 
 build: test.build
 clean: test.clean
+
+###############################################################################
+
+## avoid installing CLI on darwin
+ifneq ($(BUILD.system),darwin)
+
+install: test.install
+
+test.install: | $(dir $(TEST.install.exe))
+	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+
+endif

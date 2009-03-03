@@ -55,7 +55,7 @@ def findExecutable( name ):
 
 ###############################################################################
 
-def computeDefaultMakeJobs():
+def computeNumCPU():
     ## good for darwin9.6.0 and linux
     try:
         n = os.sysconf( 'SC_NPROCESSORS_ONLN' )
@@ -103,6 +103,7 @@ for i in range( 2 ):
     project_dir = os.path.dirname( project_dir )
 if len( project_dir ) == 0:
     project_dir = os.curdir
+initial_project_dir = project_dir
 
 ###############################################################################
 
@@ -304,6 +305,10 @@ else:
 ## create parser
 parser = OptionParser( 'Usage: %prog' )
 
+## add hidden options
+parser.add_option( '', '--conf-method', default='terminal', action='store', help=optparse.SUPPRESS_HELP )
+
+## add install options
 group = OptionGroup( parser, 'Installation Options' )
 group.add_option( '', '--prefix', default=d_prefix, action='store',
     help='specify destination for final products (%s)' % (d_prefix) )
@@ -348,7 +353,13 @@ for tool in tools.items:
     tool.addToGroup( group )
 parser.add_option_group( group )
 
-(options, args) = parser.parse_args()
+(options,args) = parser.parse_args()
+
+exports = []
+for arg in args:
+    m = re.match( '([^=]+)=(.*)', arg )
+    if m:
+        exports.append( m.groups() )
 
 ## recompute values when launch mode
 if options.launch:
@@ -359,7 +370,7 @@ if options.launch:
     else:
         project_dir = os.path.normpath( relpath( project_dir, build_dir ))
     if options.launch_jobs == 0:
-        options.launch_jobs = computeDefaultMakeJobs()
+        options.launch_jobs = computeNumCPU()
     if options.launch_jobs < 1:
         options.launch_jobs = 1
     elif options.launch_jobs > 8:
@@ -420,7 +431,7 @@ class Repository:
         self.type      = 'unofficial'
 
         # parse output: svnversion PROJECT_DIR
-        cmd = 'svnversion ' + project_dir
+        cmd = 'svnversion ' + initial_project_dir
         print 'running: %s' % (cmd)
         try:
             p = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
@@ -431,7 +442,7 @@ class Repository:
             pass
 
         # parse output: svn info PROJECT_DIR
-        cmd = 'svn info ' + project_dir
+        cmd = 'svn info ' + initial_project_dir
         print 'running: %s' % (cmd)
         try:
             p = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
@@ -584,11 +595,9 @@ class Config:
 ## create configure line, stripping arg --launch, quoting others
 configure = []
 for arg in sys.argv[1:]:
-    #if arg.find( '--launch' ) == 0:
-    #    continue
     if arg == '--launch':
         continue
-    configure.append( '"%s"' % (arg.replace('"', '\\"')) )
+    configure.append( "'%s'" % (arg.replace("'", '%c%c%c%c%c' % (0x27,0x22,0x27,0x22,0x27))) )
 
 ## create singletones
 repo = Repository()
@@ -640,6 +649,7 @@ config.add( 'HOST.systemc', guessHost.systemc )
 config.add( 'HOST.release', guessHost.release )
 config.add( 'HOST.title',   '%s %s' % (guessHost.systemc,archMode.default) )
 config.add( 'HOST.extra',   guessHost.extra )
+config.add( 'HOST.ncpu',    computeNumCPU() )
 
 config.addBlank()
 config.add( 'BUILD.spec',    guessBuild )
@@ -650,9 +660,14 @@ config.add( 'BUILD.systemc', guessBuild.systemc )
 config.add( 'BUILD.release', guessBuild.release )
 config.add( 'BUILD.title',   '%s %s' % (guessBuild.systemc,archMode.mode) )
 config.add( 'BUILD.extra',   guessBuild.extra )
+config.add( 'BUILD.method',  'terminal' )
 config.add( 'BUILD.cross',   guessBuild.cross )
 config.add( 'BUILD.date',    time.strftime('%c') )
 config.add( 'BUILD.arch',    archMode.mode )
+config.add( 'BUILD.jobs',    computeNumCPU() )
+
+config.addBlank()
+config.add( 'CONF.method', options.conf_method )
 
 config.addBlank()
 config.add( 'BUILD/',   os.curdir + os.sep )
@@ -678,6 +693,11 @@ config.addBlank()
 config.add( 'GCC.archs', archMode.mode if guessBuild.cross else '' )
 config.add( 'GCC.g', options.debug )
 config.add( 'GCC.O', options.optimize )
+
+if len(exports):
+    config.addBlank()
+    for nv in exports:
+        config.add( nv[0], nv[1] )
 
 config.addMake( '' )
 config.addMake( '## include (optional) customization file' )

@@ -14,6 +14,8 @@ TEST.libs = $(LIBHB.a) $(foreach n, \
         ogg samplerate swscale theora vorbis vorbisenc x264 xvidcore, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
+TEST.install.exe = $(INSTALL.prefix/)bin/$(notdir $(TEST.exe))
+
 ## add libs from optional modules
 ifeq (1,$(BZIP2.enabled))
     TEST.libs += $(CONTRIB.build/)lib/libbz2.a
@@ -26,6 +28,7 @@ endif
 
 TEST.out += $(TEST.c.o)
 TEST.out += $(TEST.exe)
+TEST.out += $(TEST.install.exe)
 
 BUILD.out += $(TEST.out)
 

@@ -1,6 +1,7 @@
 $(eval $(call import.MODULE.rules,GTK))
 
 build: gtk.build
+install: gtk.install
 clean: gtk.clean
 xclean: gtk.xclean
 

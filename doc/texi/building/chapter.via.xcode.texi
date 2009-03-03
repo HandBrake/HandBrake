@@ -18,7 +18,7 @@ In Xcode perform the following steps to build the default configuration:
 @item click @b{Build} or @b{Build and Go}
 @end itemize
 
-The first time it builds will take a bit of time. You may use the Build Results window to watch it progress. A large partof the build is invoking the external build system which poduces quite a lot of log output. Much of that output are warnings and errors that are part of the normal build process for 3rd-party contributed modules so in general you need not do anything. However, if Xcode itself reports the build failed, then you must take corrective action.
+The first build (on an empty @file{build} directory) will take a bit of time. You may use the Build Results window to observe progress. The most time-consuming part of the build is when the external build system (essentially the @b{terminal} method) is triggered by Xcode and a substantial amount of log transcript ensues. Much of that transcript are warnings and errors that are part of the normal build process for 3rd-party contributed modules so in general you need not do anything. However, if Xcode itself reports the build failed, then you must take corrective action.
 
 Unfortunately, due to limitations of Xcode we do not have hooks in place to offer finer-grained control over per-module make actions for the (external) build system. Thus, you will have to use @b{terminal} to accomplish those tasks. Just @command{cd} into the build directory which is associated with your active configuration and perform any necessary @command{make} commands. @b{Be careful not to issue commands from the terminal simultaneously with Xcode tasks} as that will confuse both Xcode and make and likely corrupt your build directory.
 
@@ -46,4 +46,26 @@ This configuration is used to build for the ppc architecture. Build directory is
 
 @item standard.ppc64
 This configuration is used to build for the ppc64 architecture. Build directory is @file{build.standard.ppc64} .
+@end table
+
+@c %**-------------------------------------------------------------------------
+@anchor{xcode.userdefined}
+@section User-Defined Settings
+The following user defined settings are used in Xcode project for the external build system:
+
+@table @samp
+@item EXTERNAL_BUILD
+Specifies the build location for each configuration.
+It is highly recommended the locations always evaluate to a unique pathname when factoring the configuration name.
+
+@item EXTERNAL_JOBS
+Specifies the concurrency factor for the external build system when builds are launched from within Xcode.
+This variable is meant to be customized by the developer for faster builds if the host supports it.
+
+@item EXTERNAL_METHOD
+This variable is used for internal/external build coordination and must always be @samp{xcode}.
+
+@item EXTERNAL_PROJECT
+Specifies the directory which is top of @value{HB.name} source tree.
+
 @end table

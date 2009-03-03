@@ -1,11 +1,3 @@
-.DELETE_ON_ERROR:
-.SUFFIXES:
-
-.PHONY: build
-build:
-
-###############################################################################
-
 include $(PROJECT/)make/include/base.defs
 include $(PROJECT/)make/include/contrib.defs
 include $(PROJECT/)make/include/function.defs

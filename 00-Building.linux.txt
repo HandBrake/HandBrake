@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2194 (2009030201) on Linux
+Guide to Building HandBrake svn2204 (2009030201) on Linux
 *********************************************************
 
 Table of Contents
@@ -17,6 +17,7 @@ Table of Contents
     5.4.2 General Modules
     5.4.3 Contrib Modules
     5.4.4 Contrib Aggregates
+  5.5 Customizing Make
 
 
 1 Introduction
@@ -34,9 +35,11 @@ Linux; but is not necessarily the only configuration that is possible:
 
    * Intel 32-bit or 64-bit kernel
 
-   * Fedora 8, gcc 4.1.2, yasm 0.6.2.1985
+   * Ubuntu 8.0.4, gcc 4.3.0, yasm 0.7.1.2093
 
-   * Fedora 9, gcc 4.3.0, yasm 0.6.2.1985
+   * Ubuntu 8.10, gcc 4.3.2, yasm 0.7.1.2093
+
+   * Fedora 9, gcc 4.3.0, yasm 0.7.1.2093
 
    * Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
 
@@ -48,38 +51,6 @@ Linux; but is not necessarily the only configuration that is possible:
      requirements. There are of course many valid reasons to build with
      unbundled compilers, but be aware it is generally unsupported and
      left as an exercise to the reader.
-
-The GTK UI introduces some significant extra build requirements. If you
-intend to disable building the GUI with `configure --disable-gtk' you
-may not need any of these packages installed:
-
-   * build-essential
-
-   * autoconf
-
-   * intltool
-
-   * libtool
-
-   * zlib1g-dev
-
-   * libbz2-dev
-
-   * libglib2.0-dev
-
-   * libdbus-glib-1-dev
-
-   * libgtk2.0-dev
-
-   * libhal-dev
-
-   * libhal-storage-dev
-
-   * libgtkhtml3.14-dev
-
-   * libgstreamer0.10-dev
-
-   * libgstreamer-plugins-base0.10-dev
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
@@ -99,6 +70,78 @@ recommended you use these versions or similar:
    * tar - GNU tar 1.15.1
 
    * wget - GNU Wget 1.11.4 (or curl)
+
+The GTK UI introduces some significant extra build requirements. If you
+intend to disable building the GUI with `configure --disable-gtk' you
+will not need many of these packages installed:
+
+Ubuntu 8.10 packages:
+   * build-essential
+
+   * autoconf (gui)
+
+   * intltool (gui)
+
+   * libtool (gui)
+
+   * zlib1g-dev (gui)
+
+   * libbz2-dev
+
+   * libglib2.0-dev (gui)
+
+   * libdbus-glib-1-dev (gui)
+
+   * libgtk2.0-dev (gui)
+
+   * libhal-dev (gui)
+
+   * libhal-storage-dev (gui)
+
+   * libgtkhtml3.14-dev (gui)
+
+   * libgstreamer0.10-dev (gui)
+
+   * libgstreamer-plugins-base0.10-dev (gui)
+
+To install these packages:
+     sudo apt-get install subversion yasm build-essential \
+     autoconf intltool libtool zlib1g-dev libbz2-dev libglib2.0-dev \
+     libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
+     libgtkhtml3.14-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+
+Fedora 10 package groups:
+   * Development Tools
+
+   * Development Libraries
+
+   * X Software Development (gui)
+
+   * GNOME Software Development (gui)
+
+To install these package groups:
+     sudo yum groupinstall "Development Tools" "Development Libraries" \
+     "X Software Development" "GNOME Software Development"
+
+Additional Fedora 10 packages:
+   * zlib-devel (gui)
+
+   * bzip2-devel
+
+   * dbus-glib-devel (gui)
+
+   * hal-devel (gui)
+
+   * gtkhtml3-devel (gui)
+
+   * gstreamer-devel (gui)
+
+   * gstreamer-plugins-base-devel (gui)
+
+To install these packages:
+     sudo yum install yasm zlib-devel bzip2-devel \
+     dbus-glib-devel hal-devel gtkhtml3-devel \
+     gstreamer-devel gstreamer-plugins-base-devel
 
 3 QuickStart
 ************
@@ -263,6 +306,11 @@ period.
      Build main product. All necessary dependencies are also built if
      required.
 
+`make install'
+     Perform final product(s) install.  This will install build
+     products to a standard directory or one specified via `configure
+     --prefix' option.
+
 `make clean'
      Clean all build output excluding contrib modules. Configuration is
      retained.
@@ -350,4 +398,24 @@ modules' respective targets together:
    * make contrib.clean
 
    * make contrib.xclean
+
+5.5 Customizing Make
+====================
+
+If the need arises to override settings in the build system
+(essentially gnu-make variables) the recommended method is to
+create/edit the optional include file `build/GNUmakefile.custom' which
+sits adjacent to the top-level makefile. Do not check this file into
+the respository. The sole purpose is to allow a place to store local
+build settings for testing, tweaking, and experimenting with build
+configuration without losing your settings if `configure' is invoked;
+ie: `configure' would overwrite `GNUmakefile' and any customizations
+contained therein would be lost. Here is a short example of what the
+contents of `build/GNUmakefile.custom' might contain:
+
+     ## bump to gcc-4.2 in current path
+     GCC.gcc = gcc-4.2
+
+     ## replace optimize for 'speed' with more agressive settings
+     GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
 

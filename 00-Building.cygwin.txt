@@ -1,11 +1,5 @@
-Guide to Building HandBrake svn2194 (2009030201) on Mac OS X
-************************************************************
-
-     Warning: Parallel builds on Mac OS X are currently broken when
-     building in a terminal with Xcode. You must not use the `make -jN'
-     jobs option. A workaround is available if you do not need to build
-     HandBrake.app (MacGUI): use `configure --disable-xcode' to disable
-     Xcode.
+Guide to Building HandBrake svn2204 (2009030201) on Cygwin
+**********************************************************
 
 Table of Contents
 *****************
@@ -23,35 +17,28 @@ Table of Contents
     5.4.2 General Modules
     5.4.3 Contrib Modules
     5.4.4 Contrib Aggregates
-6 Building via Xcode
-  6.1 Checkout Sources
-  6.2 Build
+  5.5 Customizing Make
 
 
 1 Introduction
 **************
 
 This guide documents the recommended process to build HandBrake on
-Mac OS X hosts from the official source-code repository. Building from
+Cygwin hosts from the official source-code repository. Building from
 any other source is not supported.
 
 2 Prerequisites
 ***************
 
-Building on Mac OS X is well supported. It is the reference platform
-for HandBrake. The following are the recommended specifications for
-this platform; but is not necessarily the only configuration that is
-possible:
+The following are the recommended specifications for building on
+Cygwin; but is not necessarily the only configuration that is possible:
 
-   * Mac Intel hardware
+   * Intel 32-bit or 64-bit hardware (only 32-bit product binaries are
+     supported)
 
-   * Mac OS X 10.5.6
+   * Cygwin, gcc 4.2.4
 
-   * Xcode-3.1.2
-
-   * gcc 4.0.1 (Apple Inc. build 5490)
-
-   * yasm 0.7.2.2153 (for i386 and x86_64 architectures)
+   * yasm 0.7.2.2153 (for i386 or x86_64 architectures)
 
      Note: It is recommended to use the platform distribution's bundled
      compiler for maximum C++ compatibility. If you build with a custom
@@ -59,6 +46,17 @@ possible:
      requirements. There are of course many valid reasons to build with
      unbundled compilers, but be aware it is generally unsupported and
      left as an exercise to the reader.
+
+     Note: As of this writing, Cygwin has available to it several
+     versions of gcc; only one of which may be found and used in the
+     path as `gcc' and `g++'. Configure will thus find what is probably
+     the older version of gcc in a typical Cygwin environment. If you
+     desire to build with the newer gcc, it is found in the path as
+     `gcc-4' and `g++-4' respectively and you must indicate to
+     configure the desired versions. The following syntax should do the
+     trick:
+
+     ../configure --gcc=gcc-4
 
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
@@ -108,11 +106,8 @@ following steps:
 4 Overview
 **********
 
-The two general methods to build on Mac OS X are building from terminal
-or Xcode. The preferred method for automated and repeatable builds is
-to use the terminal. Otherwise the choice is generally up to the
-individual. In essence, the terminal actually invokes `xcodebuild' to
-build the very same targets contained in the Xcode project.
+Cygwin builds are performed from a terminal. There is no support for
+building from any IDEs.
 
 5 Building via Terminal
 ***********************
@@ -245,6 +240,11 @@ period.
      Build main product. All necessary dependencies are also built if
      required.
 
+`make install'
+     Perform final product(s) install.  This will install build
+     products to a standard directory or one specified via `configure
+     --prefix' option.
+
 `make clean'
      Clean all build output excluding contrib modules. Configuration is
      retained.
@@ -333,88 +333,23 @@ modules' respective targets together:
 
    * make contrib.xclean
 
-6 Building via Xcode
-********************
-
-6.1 Checkout Sources
+5.5 Customizing Make
 ====================
 
-Checkout HandBrake from the official source-code repository.
+If the need arises to override settings in the build system
+(essentially gnu-make variables) the recommended method is to
+create/edit the optional include file `build/GNUmakefile.custom' which
+sits adjacent to the top-level makefile. Do not check this file into
+the respository. The sole purpose is to allow a place to store local
+build settings for testing, tweaking, and experimenting with build
+configuration without losing your settings if `configure' is invoked;
+ie: `configure' would overwrite `GNUmakefile' and any customizations
+contained therein would be lost. Here is a short example of what the
+contents of `build/GNUmakefile.custom' might contain:
 
-     svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
-     cd hb-trunk
+     ## bump to gcc-4.2 in current path
+     GCC.gcc = gcc-4.2
 
-Sources are checked out from the `trunk' branch. This document was
-generated from that very branch, and for example purposes, we will use
-exactly the same branch.
-
-If you have write-access to the repository, then you may add the
-appropriate login/password information as needed. It is recommended to
-use Subversion 1.5.0 or higher. Lower versions should also work.
-
-6.2 Build
-=========
-
-In Xcode perform the following steps to build the default configuration:
-
-   * open `macosx/HandBrake.xcodeproj'
-
-   * select active configuration standard
-
-   * select active target HandBrake
-
-   * click Build or Build and Go
-
-The first time it builds will take a bit of time. You may use the Build
-Results window to watch it progress. A large partof the build is
-invoking the external build system which poduces quite a lot of log
-output. Much of that output are warnings and errors that are part of
-the normal build process for 3rd-party contributed modules so in
-general you need not do anything. However, if Xcode itself reports the
-build failed, then you must take corrective action.
-
-Unfortunately, due to limitations of Xcode we do not have hooks in
-place to offer finer-grained control over per-module make actions for
-the (external) build system. Thus, you will have to use terminal to
-accomplish those tasks. Just `cd' into the build directory which is
-associated with your active configuration and perform any necessary
-`make' commands. Be careful not to issue commands from the terminal
-simultaneously with Xcode tasks as that will confuse both Xcode and
-make and likely corrupt your build directory.
-
-When you click clean in Xcode it will not perform an external build
-clean. Basically HandBrakeCLI and HandBrake.app are the only products
-which have full Xcode iterative development flexibility.
-
-Each configuration uses a different `build' directory. This makes it
-possible to build each configuration and switch between them without
-losing their respective build state. The description of each
-configuration and the name convention for build directories are as
-follows:
-
-`standard'
-     This configuration will build to the host native architecture.
-     Build directory is `build.standard' .  The standard variant
-     produces optimized code without debug information.
-
-`debug'
-     This configuration will build to the host native architecture.
-     Build directory is `build.standard' .  The debug variant produces
-     unoptimized code with debug information.
-
-`standard.i386'
-     This configuration is used to build for the i386 architecture.
-     Build directory is `build.standard.i386' .
-
-`standard.x86_64'
-     This configuration is used to build for the x86_64 architecture.
-     Build directory is `build.standard.x86_64' .
-
-`standard.ppc'
-     This configuration is used to build for the ppc architecture.
-     Build directory is `build.standard.ppc' .
-
-`standard.ppc64'
-     This configuration is used to build for the ppc64 architecture.
-     Build directory is `build.standard.ppc64' .
+     ## replace optimize for 'speed' with more agressive settings
+     GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
 

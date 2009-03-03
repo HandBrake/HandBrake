@@ -92,6 +92,10 @@ Alias for @samp{make build}.
 @item make build
 Build main product. All necessary dependencies are also built if required.
 
+@item make install
+Perform final product(s) install.
+This will install build products to a standard directory or one specified via @command{configure --prefix} option.
+
 @item make clean
 Clean all build output excluding contrib modules. Configuration is retained.
 
@@ -170,3 +174,16 @@ For convenience, the following targets aggregate the all contrib modules' respec
 @item make contrib.clean
 @item make contrib.xclean
 @end itemize
+
+@c %**-------------------------------------------------------------------------
+@anchor{terminal.customizing}
+@section Customizing Make
+If the need arises to override settings in the build system (essentially gnu-make variables) the recommended method is to create/edit the optional include file @file{build/GNUmakefile.custom} which sits adjacent to the top-level makefile. @b{Do not check this file into the respository}. The sole purpose is to allow a place to store local build settings for testing, tweaking, and experimenting with build configuration without losing your settings if @command{configure} is invoked; ie: @command{configure} would overwrite @file{GNUmakefile} and any customizations contained therein would be lost. Here is a short example of what the contents of @file{build/GNUmakefile.custom} might contain:
+
+@example
+## bump to gcc-4.2 in current path
+GCC.gcc = gcc-4.2
+
+## replace optimize for 'speed' with more agressive settings
+GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
+@end example

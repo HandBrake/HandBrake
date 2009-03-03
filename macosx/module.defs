@@ -20,10 +20,25 @@ MACOSX.XCODE.project = HandBrake.xcodeproj
 
 MACOSX.XCODE = $(strip \
     cd $(MACOSX.src/) && \
-    $(MACOSX.XCODE.exe) \
-            -project $(MACOSX.XCODE.project) \
-            -configuration $(MACOSX.conf) \
-            $(foreach t,$(MACOSX.targs),-target $t) \
-            EXTERNAL_BUILD=$(CURDIR) \
-            EXTERNAL_PROJECT=$(PROJECT/) \
-            $(1) )
+	$(MACOSX.XCODE.exe) \
+        -project $(MACOSX.XCODE.project) \
+        -configuration $(MACOSX.conf) \
+        $(foreach t,$(MACOSX.targs),-target $t) \
+        EXTERNAL_BUILD='$(CURDIR)' \
+        EXTERNAL_JOBS='$(BUILD.jobs)' \
+        EXTERNAL_METHOD='$(CONF.method)' \
+        EXTERNAL_PROJECT='$(PROJECT/)' \
+        $(1) )
+
+MACOSX.XCODE.PASSTHRU = $(strip \
+    cd $(MACOSX.src/) && \
+	$(MACOSX.XCODE.exe) \
+        -project $(MACOSX.XCODE.project) \
+        -configuration $(MACOSX.conf) \
+        -target libhb \
+        EXTERNAL_BUILD='$(CURDIR)' \
+        EXTERNAL_JOBS='$(BUILD.jobs)' \
+        EXTERNAL_METHOD='$(CONF.method)' \
+        EXTERNAL_PROJECT='$(PROJECT/)' \
+        EXTERNAL_GOALS='$(1)' \
+        build )

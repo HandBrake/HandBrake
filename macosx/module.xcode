@@ -1,0 +1,15 @@
+## This rules file is processed only when xcode=1 method=terminal
+## which hands-off the build to Xcode which in turn may callback this
+## build system.
+
+build:
+	$(call MACOSX.XCODE,build)
+
+clean:
+	$(call MACOSX.XCODE,clean)
+
+$(MAKECMDGOALS): __goals__
+	@true
+
+__goals__:
+	$(call MACOSX.XCODE.PASSTHRU,$(MAKECMDGOALS))
