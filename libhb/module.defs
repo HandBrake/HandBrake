@@ -45,3 +45,8 @@ else ifeq ($(BUILD.system),linux)
 else
     LIBHB.platform.D = SYS_UNKNOWN
 endif
+
+## required for <libdvdread/*.h>
+ifneq (,$(filter $(BUILD.arch),ppc ppc64))
+	LIBHB.GCC.D += WORDS_BIGENDIAN
+endif
