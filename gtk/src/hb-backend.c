@@ -2539,8 +2539,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gboolean keep_height = (mode == GHB_SCALE_KEEP_HEIGHT);
 	gint step;
 	GtkWidget *widget;
-	gint modshift;
-	gint modround;
+	gint mod;
 	gint max_width = 0;
 	gint max_height = 0;
 	
@@ -2573,8 +2572,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	// Align dimensions to either 16 or 2 pixels
 	// The scaler crashes if the dimensions are not divisible by 2
 	// x264 also will not accept dims that are not multiple of 2
-	modshift = round_dims ? 4 : 1;
-	modround = round_dims ? 8 : 1;
+	mod = round_dims ? 16 : 2;
 	if (autoscale)
 	{
 		keep_width = FALSE;
@@ -2607,8 +2605,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 				// Adjust the cropping to accomplish the desired width and height
 				crop_width = tinfo.width - crop[2] - crop[3];
 				crop_height = tinfo.height - crop[0] - crop[1];
-				width = (crop_width >> modshift) << modshift;
-				height = (crop_height >> modshift) << modshift;
+				width = MULTIPLE_MOD(crop_width, mod);
+				height = MULTIPLE_MOD(crop_height, mod);
+
 				need1 = (crop_height - height) / 2;
 				need2 = crop_height - height - need1;
 				crop[0] += need1;
@@ -2646,9 +2645,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		height = ghb_settings_get_int(ud->settings, "scale_height");
 		max_width = ghb_settings_get_int(ud->settings, "PictureWidth");
 		max_height = ghb_settings_get_int(ud->settings, "PictureHeight");
-		// Align max dims 
-		max_width = (max_width >> modshift) << modshift;
-		max_height = (max_height >> modshift) << modshift;
 		// Adjust dims according to max values
 		if (!max_height)
 		{
@@ -2658,14 +2654,23 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		{
 			max_width = crop_width;
 		}
-		height = MIN(height, max_height);
-		width = MIN(width, max_width);
+		// Align max dims 
+		max_width = MULTIPLE_MOD(max_width, mod);
+		max_height = MULTIPLE_MOD(max_height, mod);
 		g_debug("max_width %d, max_height %d\n", max_width, max_height);
 	}
+
 	if (width < 16)
 		width = title->width - crop[2] - crop[3];
 	if (height < 16)
 		height = title->height - crop[0] - crop[1];
+
+	width = MULTIPLE_MOD(width, mod);
+	height = MULTIPLE_MOD(height, mod);
+	if (max_height)
+		height = MIN(height, max_height);
+	if (max_width)
+		width = MIN(width, max_width);
 
 	if (anamorphic)
 	{
@@ -2729,8 +2734,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			}
 			g_debug("new w %d h %d\n", width, height);
 		}
-		width = ((width + modround) >> modshift) << modshift;
-		height = ((height + modround) >> modshift) << modshift;
+		width = MULTIPLE_MOD(width, mod);
+		height = MULTIPLE_MOD(height, mod);
 	}
 	ghb_ui_update(ud, "scale_width", ghb_int64_value(width));
 	ghb_ui_update(ud, "scale_height", ghb_int64_value(height));
@@ -3774,6 +3779,16 @@ ghb_get_preview_image(
 	
 	if (title->job->height > title->height)
 		title->job->height = title->height;
+
+	// hb_get_preview doesn't compensate for anamorphic, so lets
+	// calculate scale factors
+	gint width, height, par_width = 1, par_height = 1;
+	gboolean anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
+	if (anamorphic)
+	{
+		hb_set_anamorphic_size( title->job, &width, &height, &par_width, &par_height );
+	}
+
 	// And also creates artifacts if the width is not a multiple of 8
 	//title->job->width = ((title->job->width + 4) >> 3) << 3;
 	// And the height must be a multiple of 2
@@ -3870,19 +3885,7 @@ ghb_get_preview_image(
 		dst += stride;
 		src += (srcWidth - dstWidth);   // skip to next row in src
 	}
-	// Got it, but hb_get_preview doesn't compensate for anamorphic, so lets
-	// scale
-	gint width, height, par_width, par_height;
-	gboolean anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
-	if (anamorphic)
-	{
-		hb_set_anamorphic_size( title->job, &width, &height, &par_width, &par_height );
-		ghb_par_scale(ud, &dstWidth, &dstHeight, par_width, par_height);
-	}
-	else
-	{
-		ghb_par_scale(ud, &dstWidth, &dstHeight, 1, 1);
-	}
+	ghb_par_scale(ud, &dstWidth, &dstHeight, par_width, par_height);
 	*out_width = dstWidth;
 	*out_height = dstHeight;
 	if (ghb_settings_get_boolean(settings, "reduce_hd_preview"))
