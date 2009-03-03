@@ -298,8 +298,10 @@ else:
     archMode = OptionMode( 0, guessHost.machine )
 
 if guessHost.match( '*-*-darwin*' ):
+    d_xcode = True
     d_prefix = '/Applications'
 else: 
+    d_xcode = False
     d_prefix = '/usr/local'
 
 ## create parser
@@ -315,8 +317,9 @@ group.add_option( '', '--prefix', default=d_prefix, action='store',
 parser.add_option_group( group )
 
 group = OptionGroup( parser, 'Feature Options' )
-group.add_option( '', '--disable-xcode', default=False, action='store_true',
-    help='disable Xcode (Darwin only)' )
+if d_xcode:
+    group.add_option( '', '--disable-xcode', default=False, action='store_true',
+        help='disable Xcode (Darwin only)' )
 group.add_option( '', '--disable-gtk', default=False, action='store_true',
     help='disable GTK GUI (Linux only)' )
 parser.add_option_group( group )
@@ -678,7 +681,7 @@ config.add( 'INSTALL.prefix', options.prefix )
 config.add( 'INSTALL.prefix/', '$(INSTALL.prefix)/' )
 
 config.addBlank()
-config.add( 'FEATURE.xcode', 0 if options.disable_xcode else 1 )
+config.add( 'FEATURE.xcode', 0 if not hasattr(options, 'disable_xcode') or options.disable_xcode else 1 )
 config.add( 'FEATURE.gtk',   0 if options.disable_gtk   else 1 )
 
 config.addMake( '' )
