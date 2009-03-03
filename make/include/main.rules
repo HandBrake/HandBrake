@@ -15,11 +15,12 @@ endif
 
 ###############################################################################
 
-.PHONY: build install clean xclean doc report
+.PHONY: build clean install uninstall xclean doc report
 
 build:
-install:
 clean:
+install:
+uninstall:
 xclean: contrib.xclean clean
 doc:
 report:: report.main report.modules

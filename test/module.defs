@@ -28,9 +28,9 @@ endif
 
 TEST.out += $(TEST.c.o)
 TEST.out += $(TEST.exe)
-TEST.out += $(TEST.install.exe)
 
 BUILD.out += $(TEST.out)
+BUILD.out += $(TEST.install.exe)
 
 ###############################################################################
 

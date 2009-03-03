@@ -92,12 +92,16 @@ Alias for @samp{make build}.
 @item make build
 Build main product. All necessary dependencies are also built if required.
 
+@item make clean
+Clean all build output excluding contrib modules. Configuration is retained.
+
 @item make install
 Perform final product(s) install.
 This will install build products to a standard directory or one specified via @command{configure --prefix} option.
 
-@item make clean
-Clean all build output excluding contrib modules. Configuration is retained.
+@item make uninstall
+Perform final product(s) uninstall.
+This will uninstall any products which may have been previously installed.
 
 @item make xclean
 Clean all build output including contrib modules. Configuration is retained.

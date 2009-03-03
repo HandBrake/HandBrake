@@ -21,12 +21,16 @@ clean: test.clean
 
 ###############################################################################
 
-## avoid installing CLI on darwin
+## skip install/uninstall on darwin
 ifneq ($(BUILD.system),darwin)
-
-install: test.install
 
 test.install: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+
+test.uninstall:
+	$(RM.exe) -f $(TEST.install.exe)
+
+install: test.install
+uninstall: test.uninstall
 
 endif
