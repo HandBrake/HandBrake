@@ -4,4 +4,4 @@ $(eval $(call import.CONTRIB.defs,LIBVORBIS))
 LIBVORBIS.FETCH.url = http://download.m0k.org/handbrake/contrib/libvorbis-aotuv_b5.tar.gz
 LIBVORBIS.EXTRACT.tarbase = libvorbis
 
-LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/))
+LIBVORBIS.CONFIGURE.extra = --with-ogg=$(call fn.ABSOLUTE,$(CONTRIB.build/)) HAVE_PKG_CONFIG="no"
