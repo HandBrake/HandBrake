@@ -8,6 +8,8 @@ build:
 clean:
 	$(call MACOSX.XCODE,clean)
 
+xclean: clean
+
 $(MAKECMDGOALS): __goals__
 	@true
 
