@@ -73,7 +73,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     fPresetsBuiltin = [[HBPresets alloc] init];
     fPreferencesController = [[HBPreferencesController alloc] init];
     /* Lets report the HandBrake version number here to the activity log and text log file */
-    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleGetInfoString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     [self writeToActivityLog: "%s", [versionStringFull UTF8String]];    
     
     return self;

@@ -145,7 +145,7 @@
     [fileManager createFileAtPath:outputLogFileForEncode contents:nil attributes:nil];
     
     /* Similar to the regular activity log, we print a header containing the date and time of the encode as well as what directory it was encoded to */
-    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleGetInfoString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     NSString *startOutputLogString = [NSString stringWithFormat: @"HandBrake Activity Log for %@: %@\n%@",outputFileForEncode, [[NSDate  date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil],versionStringFull];
     [startOutputLogString writeToFile:outputLogFileForEncode atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 
