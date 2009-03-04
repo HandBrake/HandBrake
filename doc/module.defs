@@ -46,3 +46,21 @@ MAKEINFO            = $(MAKEINFO.exe) $(MAKEINFO.flags) $(MAKEINFO.flags.$(1)) $
 XML2WIKI.exe   = python3.0 $(DOC.in/)xml2wiki.py
 XML2WIKI.flags = --toc
 XML2WIKI       = $(XML2WIKI.exe) $(XML2WIKI.flags) $(1) > $(2)
+
+###############################################################################
+
+## This section is for generating wiki docs and posting them to:
+##
+##      [REPOSITORY]/wiki/[VERSION]
+##
+## which in turn is hosted by trac export webserver:
+##
+##      http://[TRACSERVER]/HEAD/wiki/[VERSION]
+##
+
+WIKI.out/         = $(BUILD/)wiki/
+WIKI.out.version/ = $(WIKI.out/)$(HB.repo.branch)/
+
+WIKI.repo.url = $(HB.repo.root)/wiki
+
+BUILD.out += $(WIKI.out.version/)

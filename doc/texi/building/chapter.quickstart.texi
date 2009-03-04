@@ -1,13 +1,14 @@
 @anchor{quickstart}
 @chapter QuickStart
-This chapter is for building from a terminal/shell environment in as few commands as possible. If more flexibility is required you should skip this chapter and jump to @ref{overview}.
+This chapter is for building from a terminal/shell environment in as few commands as possible. Upon completion of the following commands you should have a fresh build of @value{HB.name}. Further instructions are available beginning with @ref{overview} which describes procedures suitable for repeating builds. This chapter should be skipped by those seeking more than a minimalist build.
 
 @example
 @COMMAND.checkout{}
 ./configure --launch
+cd build/
 @end example
 
-The special option @command{--launch} selected launch mode and performs the following steps:
+The special option @command{--launch} selects launch mode and performs the following steps:
 
 @itemize
 @item assert scratch directory @file{build/} does not exist

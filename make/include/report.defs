@@ -57,6 +57,6 @@ endif
 ## report: var
 ##
 ifeq (var,$(REPORT))
-$(info $(call fn.PRINTVAR,$(NAME)))
+$(info $(call fn.PRINTVAR,$(name)))
 $(info )
 endif

@@ -14,3 +14,23 @@ report.var:
 ## needed for nested make (which drives each report)
 report.true:
 	@true
+
+## linefeed is important
+define REPORT.help.item.global
+	@echo 'report.$(1)' | awk '{ printf("  %-21s  $(REPORT.help.$(1))\n", $$0) }'
+
+endef
+define REPORT.help.item.module
+	@echo '$($(1).name).report' | awk '{ printf("  %-21s  $(1)-scoped vars\n", $$0) }'
+
+endef
+
+REPORT.help.main = global general vars
+REPORT.help.gcc  = global gcc vars (inherited by module GCC)
+REPORT.help.var  = usage: make report.var name=VARNAME
+
+report.help:
+	@echo "  AVAILABLE MAKEFILE VARS REPORTS"
+	@echo "  ----------------------------------------------------------------"
+	$(foreach n,main gcc var,$(call REPORT.help.item.global,$n))
+	$(foreach n,$(MODULES.NAMES),$(call REPORT.help.item.module,$n))

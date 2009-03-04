@@ -108,6 +108,15 @@ Clean all build output including contrib modules. Configuration is retained.
 
 @item make doc
 Build auto-generated project documentation. Various articles are produced and may be found in @file{build/doc/articles}.
+
+@item make report.help
+Print list of available makefile vars report targets.
+These reports detail var definitions and expanded values used by the build system.
+@b{For experts only}.
+
+@item make report.all
+Convenience target which aggregates all reports.
+@b{For experts only}.
 @end table
 
 @anchor{terminal.targets.general}
@@ -191,3 +200,5 @@ GCC.gcc = gcc-4.2
 ## replace optimize for 'speed' with more agressive settings
 GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
 @end example
+
+See also @command{make report.help} which displays a set of reports used to dump makefile vars.

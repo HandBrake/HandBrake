@@ -31,3 +31,40 @@ $(DOC.m4.out): | $(dir $(DOC.m4.out))
 $(DOC.m4.out): $(DOC.M4.deps)
 $(DOC.m4.out): $(DOC.out/)%: $(DOC.in/)%.m4
 	$(call DOC.M4,$@,$<)
+
+###############################################################################
+
+#.PHONY: wiki.post wiki.sync wiki.rm wiki.add wiki.propset wiki.clean
+
+## main target
+wiki.post: $(WIKI.out/) wiki.sync wiki.rm wiki.add wiki.propset
+
+$(WIKI.out/):
+	svn co --depth immediates $(WIKI.repo.url) $@
+	svn update --set-depth infinity $(WIKI.out.version/)
+
+## cleanup after post
+wiki.clean:
+	$(RM.exe) -fr $(WIKI.out/)
+
+wiki.sync: | $(WIKI.out.version/)
+wiki.sync: $(DOC.xml2wiki.out)
+	rsync -vrptPL --delete $^ $(WIKI.out.version/)
+
+wiki.rm:
+	@files=`svn status $(WIKI.out.version/) | grep '^!' | awk '{ print $$2 }'`; \
+	if [ -n "$$files" ]; then \
+	    svn rm $$files; \
+	fi
+
+wiki.add:
+	@files=`svn status $(WIKI.out.version/) | grep '^?' | awk '{ print $$2 }'`; \
+	if [ -n "$$files" ]; then \
+	    svn add $$files; \
+	fi
+
+wiki.propset:
+	find $(WIKI.out.version/) -type f -a -name "*.wiki" -print0 \
+	    | xargs -0 svn propset svn:eol-style native
+	find $(WIKI.out.version/) -type f -a -name "*.wiki" -print0 \
+	    | xargs -0 svn propset svn:mime-type "text/html"
