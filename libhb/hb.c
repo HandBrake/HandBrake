@@ -476,7 +476,8 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
  */
 int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold )
 {
-    int j, k, n, off, cc_1, cc_2, cc[3], flag[3] ;
+    int j, k, n, off, cc_1, cc_2, cc[3];
+	// int flag[3] ; // debugging flag
     uint16_t s1, s2, s3, s4;
     cc_1 = 0; cc_2 = 0;
 
@@ -662,7 +663,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
                 - Allows users to set the width
             */
             width = job->width;
-            height; // Gets set later, ignore user job->height value
+            // height: Gets set later, ignore user job->height value
 
             /* Gotta handle bounding dimensions.
                If the width is too big, just reset it with no rescaling.
@@ -674,18 +675,23 @@ void hb_set_anamorphic_size( hb_job_t * job,
 
             if ( job->maxWidth && (job->maxWidth < job->width) )
                 width = job->maxWidth;
+
+            /* Time to get picture width that divide cleanly.*/
+            width  = MULTIPLE_MOD( width, mod);
+
+            /* Verify these new dimensions don't violate max height and width settings */
+            if ( job->maxWidth && (job->maxWidth < job->width) )
+                width = job->maxWidth;
+
             height = ((double)width / storage_aspect) + 0.5;
             
             if ( job->maxHeight && (job->maxHeight < height) )
                 height = job->maxHeight;
 
-            /* Time to get picture dimensions that divide cleanly.*/
-            width  = MULTIPLE_MOD( width, mod);
+            /* Time to get picture height that divide cleanly.*/
             height = MULTIPLE_MOD( height, mod);
 
             /* Verify these new dimensions don't violate max height and width settings */
-            if ( job->maxWidth && (job->maxWidth < job->width) )
-                width = job->maxWidth;
             if ( job->maxHeight && (job->maxHeight < height) )
                 height = job->maxHeight;
 
