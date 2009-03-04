@@ -120,6 +120,7 @@ void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
+void ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);

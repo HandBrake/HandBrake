@@ -2232,17 +2232,22 @@ update_chapter_list(signal_user_data_t *ud)
 
 			if (ii < count)
 			{
-				gchar *chapter;
+				gchar *chapter, *duration;
+				gint hh, mm, ss;
 
 				// Update row with settings data
 				g_debug("Updating row");
 				chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
+				ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+				duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
 				gtk_list_store_set(store, &iter, 
 					0, ii+1,
-					1, chapter,
-					2, TRUE,
+					1, duration,
+					2, chapter,
+					3, TRUE,
 					-1);
 				g_free(chapter);
+				g_free(duration);
 				ii++;
 				done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
 			}
@@ -2256,18 +2261,23 @@ update_chapter_list(signal_user_data_t *ud)
 	}
 	while (ii < count)
 	{
-		gchar *chapter;
+		gchar *chapter, *duration;
+		gint hh, mm, ss;
 
 		// Additional settings, add row
 		g_debug("Adding row");
 		chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
+		ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+		duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
 			0, ii+1,
-			1, chapter,
-			2, TRUE,
+			1, duration,
+			2, chapter,
+			3, TRUE,
 			-1);
 		g_free(chapter);
+		g_free(duration);
 		ii++;
 	}
 }
@@ -2309,8 +2319,8 @@ chapter_edited_cb(
 	row = pi[0];
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
 	gtk_list_store_set(store, &iter, 
-		1, text,
-		2, TRUE,
+		2, text,
+		3, TRUE,
 		-1);
 	gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 0, &index, -1);
 
@@ -2350,14 +2360,14 @@ chapter_edited_cb(
 		// I got industrious and made my own CellTextRendererText that
 		// passes on the key-press-event. So now I have much better
 		// control of this.
-		column = gtk_tree_view_get_column(treeview, 1);
+		column = gtk_tree_view_get_column(treeview, 2);
 		gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
 	}
 	else if (chapter_edit_key == GDK_Up && row > 0)
 	{
 		GtkTreeViewColumn *column;
 		gtk_tree_path_prev(treepath);
-		column = gtk_tree_view_get_column(treeview, 1);
+		column = gtk_tree_view_get_column(treeview, 2);
 		gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
 	}
 	gtk_tree_path_free (treepath);

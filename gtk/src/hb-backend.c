@@ -2066,6 +2066,29 @@ ghb_build_x264opts_string(GValue *settings)
 	return result;
 }
 
+void
+ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+    hb_chapter_t * chapter;
+	gint count;
+	
+	g_debug("ghb_get_chapter_duration (title = %d)\n", ti);
+	*hh = *mm = *ss = 0;
+	if (h_scan == NULL) return;
+	list = hb_get_titles( h_scan );
+    title = (hb_title_t*)hb_list_item( list, ti );
+	if (title == NULL) return;
+	count = hb_list_count( title->list_chapter );
+	if (ii >= count) return;
+	chapter = hb_list_item(title->list_chapter, ii);
+	if (chapter == NULL) return;
+	*hh = chapter->hours;
+	*mm = chapter->minutes;
+	*ss = chapter->seconds;
+}
+
 GValue*
 ghb_get_chapters(gint titleindex)
 {
