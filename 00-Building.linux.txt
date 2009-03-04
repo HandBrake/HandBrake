@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2204 (2009030201) on Linux
+Guide to Building HandBrake svn2213 (2009030301) on Linux
 *********************************************************
 
 Table of Contents
@@ -306,14 +306,18 @@ period.
      Build main product. All necessary dependencies are also built if
      required.
 
+`make clean'
+     Clean all build output excluding contrib modules. Configuration is
+     retained.
+
 `make install'
      Perform final product(s) install.  This will install build
      products to a standard directory or one specified via `configure
      --prefix' option.
 
-`make clean'
-     Clean all build output excluding contrib modules. Configuration is
-     retained.
+`make uninstall'
+     Perform final product(s) uninstall.  This will uninstall any
+     products which may have been previously installed.
 
 `make xclean'
      Clean all build output including contrib modules. Configuration is

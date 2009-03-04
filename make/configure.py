@@ -141,7 +141,7 @@ class Guess:
             self.release = ''
             self.extra   = ''
         elif re.match( 'darwin', p_system ):
-            self.machine = p_machine
+            self.machine = p_processor
             self.vendor  = 'apple'
             self.system  = p_system
             self.systemc = p_systemc
@@ -263,7 +263,13 @@ class OptionMode( list ):
         self.mode = self.default
 
     def __str__( self ):
-        return ' '.join( self ).replace( self.mode, '*'+self.mode )
+        s = ''
+        for a in self:
+            if a == self.mode:
+                s += ' *' + a
+            else:
+                s += ' ' + a
+        return s[1:]
 
     def addToGroup( self, group, option, name ):
         group.add_option( '', option, help='select %s mode: %s' % (name,self), default=self.mode, metavar='MODE' )
@@ -435,38 +441,40 @@ class Repository:
 
         # parse output: svnversion PROJECT_DIR
         cmd = 'svnversion ' + initial_project_dir
-        print 'running: %s' % (cmd)
+        print 'attempting to probe subversion: %s' % (cmd)
         try:
-            p = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+            p = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE )
             p.wait();
-            if p.returncode == 0:
-                self.wcversion = p.stdout.readline().rstrip()
+            if p.returncode:
+                sys.exit( 1 )
+            self.wcversion = p.stdout.readline().rstrip()
         except:
             pass
 
         # parse output: svn info PROJECT_DIR
         cmd = 'svn info ' + initial_project_dir
-        print 'running: %s' % (cmd)
+        print 'attempting to probe subversion: %s' % (cmd)
         try:
-            p = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE )
+            p = subprocess.Popen( cmd, shell=True, stdout=subprocess.PIPE )
             p.wait();
-            if p.returncode == 0:
-                for line in p.stdout:
-                    (name,value) = re.match( '([^:]+):\\s+(.+)', line.rstrip() ).groups()
-                    if name == 'URL':
-                        self.url = value
-                    elif name == 'Repository Root':
-                        self.root = value
-                    elif name == 'Repository UUID':
-                        self.uuid = value
-                    elif name == 'Revision':
-                        self.rev = int( value )
-                    elif name == 'Last Changed Date':
-                        # strip chars in parens
-                        if value.find( ' (' ):
-                            self.date = value[0:value.find(' (')]
-                        else:
-                            self.date = value
+            if p.returncode:
+                sys.exit( 1 )
+            for line in p.stdout:
+                (name,value) = re.match( '([^:]+):\\s+(.+)', line.rstrip() ).groups()
+                if name == 'URL':
+                    self.url = value
+                elif name == 'Repository Root':
+                    self.root = value
+                elif name == 'Repository UUID':
+                    self.uuid = value
+                elif name == 'Revision':
+                    self.rev = int( value )
+                elif name == 'Last Changed Date':
+                    # strip chars in parens
+                    if value.find( ' (' ):
+                        self.date = value[0:value.find(' (')]
+                    else:
+                        self.date = value
         except:
             pass
 
@@ -629,7 +637,7 @@ config.add( 'HB.version.major',  project.vmajor )
 config.add( 'HB.version.minor',  project.vminor )
 config.add( 'HB.version.point',  project.vpoint )
 config.add( 'HB.version',        project.version )
-config.add( 'HB.version.hex',    '%04x%02x%02x%02x%06x' % (project.vmajor,project.vminor,project.vpoint,0,repo.rev) )
+config.add( 'HB.version.hex',    '%04x%02x%02x%08x' % (project.vmajor,project.vminor,project.vpoint,repo.rev) )
 
 config.add( 'HB.build', project.build )
 

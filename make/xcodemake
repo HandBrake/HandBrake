@@ -1,5 +1,7 @@
-#!/bin/sh -ex
+#!/bin/sh
 #
+
+set -e
 
 ## This script is invoked by Xcode external targets.
 ##
@@ -8,6 +10,7 @@
 ## it is allowed to run an infinite number of jobs.
 ##
 MAKEFLAGS=
+MFLAGS=
 
 cd $EXTERNAL_BUILD
 
@@ -43,33 +46,40 @@ else
     jobs=--jobs=$EXTERNAL_JOBS
 fi
 
-## compute target
-case "$1:$2" in
-contrib:clean)
-    target=contrib.xclean
-    ;;
-contrib:*)
-    target=contrib.install
-    ;;
-*:clean)
-    target=clean
-    ;;
-libhb:'')
-    if [ -z "$EXTERNAL_GOALS" ]; then
-        target=build
-    else
-        target="$EXTERNAL_GOALS"
-    fi
-    ;;
-*:'')
-    target=build
-    ;;
-*)
-    echo "usage: $0 PRODUCT ACTION"
-    exit 1
-    ;;
+spec="$TARGET_NAME:$ACTION"
+echo "env specification: $spec"
+
+## compute goals
+case "$spec" in
+    contrib:clean)
+        goals=contrib.xclean
+        ;;
+    contrib:*)
+        goals=contrib.install
+        ;;
+    external:clean)
+        goals=clean
+        ;;
+    external:*)
+        if [ -z "$EXTERNAL_GOALS" ]; then
+            goals=build
+        else
+            goals="$EXTERNAL_GOALS"
+        fi
+        vars="$EXTERNAL_VARS"
+        ;;
+    libhb:clean)
+        goals=libhb.clean
+        ;;
+    libhb:*)
+        goals=libhb.build
+        ;;
+    *)
+        echo "ERROR: invalid env specification: $spec"
+        exit 1
+        ;;
 esac
 
 ## handoff
 set -x
-exec make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $target
+make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $goals $vars

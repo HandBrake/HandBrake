@@ -2,16 +2,28 @@
 ## which hands-off the build to Xcode which in turn may callback this
 ## build system.
 
-build:
-	$(call MACOSX.XCODE,build)
+.PHONY: macosx.build macosx.clean macosx.install
 
-clean:
-	$(call MACOSX.XCODE,clean)
+macosx.build:
+	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,build)
 
+macosx.clean:
+	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,clean)
+
+macosx.install:
+	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,install)
+
+build: macosx.build
+clean: macosx.clean
+install: macosx.install
 xclean: clean
 
-$(MAKECMDGOALS): __goals__
+###############################################################################
+
+MACOSX.goals = $(filter-out build clean install xclean,$(MAKECMDGOALS))
+
+$(MACOSX.goals): __goals__
 	@true
 
 __goals__:
-	$(call MACOSX.XCODE.PASSTHRU,$(MAKECMDGOALS))
+	$(call MACOSX.XCODE,external,build,$(MACOSX.goals))

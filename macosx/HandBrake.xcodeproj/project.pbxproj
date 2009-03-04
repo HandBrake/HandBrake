@@ -94,19 +94,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		27774C2A0F5CB1D600897477 /* PBXContainerItemProxy */ = {
+		277C2E530F5DFF400067D708 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 278071070F5C9C2C00699207;
-			remoteInfo = libhb;
+			remoteGlobalIDString = 27F143770F5DF34F00A684FF;
+			remoteInfo = external;
 		};
-		27774C2C0F5CB1DD00897477 /* PBXContainerItemProxy */ = {
+		277C2E550F5DFF450067D708 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 278071070F5C9C2C00699207;
-			remoteInfo = libhb;
+			remoteGlobalIDString = 27F143770F5DF34F00A684FF;
+			remoteInfo = external;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -408,35 +408,44 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXLegacyTarget section */
-		278070E10F5C7F9E00699207 /* contrib */ = {
+		27F143770F5DF34F00A684FF /* external */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$EXTERNAL_PROJECT/make/xcodemake.sh $(PRODUCT_NAME) $(ACTION)";
-			buildConfigurationList = 278070E20F5C7F9E00699207 /* Build configuration list for PBXLegacyTarget "contrib" */;
+			buildArgumentsString = "\"$EXTERNAL_PROJECT/make/xcodemake";
+			buildConfigurationList = 27F1438E0F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "external" */;
 			buildPhases = (
 			);
 			buildToolPath = /bin/sh;
-			buildWorkingDirectory = "";
-			comments = "This target represents tie-in to the make-based build system for HandBrake.\nFrom Xcode's perspective we term it the 'external' build system.\n\n- building this target maps to --> make contrib.install\n- cleaning this target maps to --> make contrib.clean";
+			dependencies = (
+			);
+			name = external;
+			passBuildSettingsInEnvironment = 1;
+			productName = external;
+		};
+		27F1437E0F5DF36000A684FF /* contrib */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "\"$EXTERNAL_PROJECT/make/xcodemake";
+			buildConfigurationList = 27F1438F0F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "contrib" */;
+			buildPhases = (
+			);
+			buildToolPath = /bin/sh;
 			dependencies = (
 			);
 			name = contrib;
 			passBuildSettingsInEnvironment = 1;
-			productName = external.invoke;
+			productName = contrib;
 		};
-		278071070F5C9C2C00699207 /* libhb */ = {
+		27F143850F5DF37600A684FF /* libhb */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "$EXTERNAL_PROJECT/make/xcodemake.sh $(PRODUCT_NAME) $(ACTION)";
-			buildConfigurationList = 278071080F5C9C2C00699207 /* Build configuration list for PBXLegacyTarget "libhb" */;
+			buildArgumentsString = "\"$EXTERNAL_PROJECT/make/xcodemake";
+			buildConfigurationList = 27F143900F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "libhb" */;
 			buildPhases = (
 			);
 			buildToolPath = /bin/sh;
-			buildWorkingDirectory = "";
-			comments = "This target represents tie-in to the make-based build system for HandBrake.\nFrom Xcode's perspective we term it the 'external' build system.\n\n- building this target maps to --> make libhb.build\n- cleaning this target maps to --> make libhb.clean";
 			dependencies = (
 			);
 			name = libhb;
 			passBuildSettingsInEnvironment = 1;
-			productName = external.invoke;
+			productName = libhb;
 		};
 /* End PBXLegacyTarget section */
 
@@ -451,7 +460,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				27774C2B0F5CB1D600897477 /* PBXTargetDependency */,
+				277C2E560F5DFF450067D708 /* PBXTargetDependency */,
 			);
 			name = HandBrakeCLI;
 			productName = HandBrakeCLI;
@@ -471,7 +480,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				27774C2D0F5CB1DD00897477 /* PBXTargetDependency */,
+				277C2E540F5DFF400067D708 /* PBXTargetDependency */,
 			);
 			name = HandBrake;
 			productName = HandBrake;
@@ -492,8 +501,9 @@
 			targets = (
 				4DD93F8D082036E8008E1322 /* HandBrake */,
 				0DFF0C090B6BCEC200549488 /* HandBrakeCLI */,
-				278071070F5C9C2C00699207 /* libhb */,
-				278070E10F5C7F9E00699207 /* contrib */,
+				27F143770F5DF34F00A684FF /* external */,
+				27F143850F5DF37600A684FF /* libhb */,
+				27F1437E0F5DF36000A684FF /* contrib */,
 			);
 		};
 /* End PBXProject section */
@@ -585,15 +595,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		27774C2B0F5CB1D600897477 /* PBXTargetDependency */ = {
+		277C2E540F5DFF400067D708 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 278071070F5C9C2C00699207 /* libhb */;
-			targetProxy = 27774C2A0F5CB1D600897477 /* PBXContainerItemProxy */;
+			target = 27F143770F5DF34F00A684FF /* external */;
+			targetProxy = 277C2E530F5DFF400067D708 /* PBXContainerItemProxy */;
 		};
-		27774C2D0F5CB1DD00897477 /* PBXTargetDependency */ = {
+		277C2E560F5DFF450067D708 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 278071070F5C9C2C00699207 /* libhb */;
-			targetProxy = 27774C2C0F5CB1DD00897477 /* PBXContainerItemProxy */;
+			target = 27F143770F5DF34F00A684FF /* external */;
+			targetProxy = 277C2E550F5DFF450067D708 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -739,90 +749,6 @@
 			};
 			name = standard;
 		};
-		278070E30F5C7F9E00699207 /* standard */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = contrib;
-			};
-			name = standard;
-		};
-		278070E40F5C7F9E00699207 /* debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = debug;
-		};
-		278070E50F5C7F9E00699207 /* standard.i386 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.i386;
-		};
-		278070E60F5C7F9E00699207 /* standard.x86_64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.x86_64;
-		};
-		278070E70F5C7F9E00699207 /* standard.ppc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.ppc;
-		};
-		278070E80F5C7F9E00699207 /* standard.ppc64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.ppc64;
-		};
-		278071090F5C9C2C00699207 /* standard */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = libhb;
-			};
-			name = standard;
-		};
-		2780710A0F5C9C2C00699207 /* debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = debug;
-		};
-		2780710B0F5C9C2C00699207 /* standard.i386 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.i386;
-		};
-		2780710C0F5C9C2C00699207 /* standard.x86_64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.x86_64;
-		};
-		2780710D0F5C9C2C00699207 /* standard.ppc */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.ppc;
-		};
-		2780710E0F5C9C2C00699207 /* standard.ppc64 */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = external.invoke;
-			};
-			name = standard.ppc64;
-		};
 		27ED6ADB0F58D7F100C905EE /* standard.i386 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -830,7 +756,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 1;
+				EXTERNAL_JOBS = 8;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_PROJECT = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -939,7 +865,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 1;
+				EXTERNAL_JOBS = 8;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_PROJECT = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -1048,7 +974,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 1;
+				EXTERNAL_JOBS = 8;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_PROJECT = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -1157,7 +1083,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 1;
+				EXTERNAL_JOBS = 8;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_PROJECT = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -1256,6 +1182,132 @@
 					"-Wno-unknown-pragmas",
 				);
 				WRAPPER_EXTENSION = app;
+			};
+			name = standard.ppc64;
+		};
+		27F143780F5DF34F00A684FF /* standard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = external;
+			};
+			name = standard;
+		};
+		27F143790F5DF34F00A684FF /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = external;
+			};
+			name = debug;
+		};
+		27F1437A0F5DF34F00A684FF /* standard.i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = external;
+			};
+			name = standard.i386;
+		};
+		27F1437B0F5DF34F00A684FF /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = external;
+			};
+			name = standard.x86_64;
+		};
+		27F1437C0F5DF34F00A684FF /* standard.ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = external;
+			};
+			name = standard.ppc;
+		};
+		27F1437D0F5DF34F00A684FF /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = external;
+			};
+			name = standard.ppc64;
+		};
+		27F1437F0F5DF36000A684FF /* standard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = contrib;
+			};
+			name = standard;
+		};
+		27F143800F5DF36000A684FF /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = contrib;
+			};
+			name = debug;
+		};
+		27F143810F5DF36000A684FF /* standard.i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = contrib;
+			};
+			name = standard.i386;
+		};
+		27F143820F5DF36000A684FF /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = contrib;
+			};
+			name = standard.x86_64;
+		};
+		27F143830F5DF36000A684FF /* standard.ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = contrib;
+			};
+			name = standard.ppc;
+		};
+		27F143840F5DF36000A684FF /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = contrib;
+			};
+			name = standard.ppc64;
+		};
+		27F143860F5DF37600A684FF /* standard */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libhb;
+			};
+			name = standard;
+		};
+		27F143870F5DF37600A684FF /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libhb;
+			};
+			name = debug;
+		};
+		27F143880F5DF37600A684FF /* standard.i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libhb;
+			};
+			name = standard.i386;
+		};
+		27F143890F5DF37600A684FF /* standard.x86_64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libhb;
+			};
+			name = standard.x86_64;
+		};
+		27F1438A0F5DF37600A684FF /* standard.ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libhb;
+			};
+			name = standard.ppc;
+		};
+		27F1438B0F5DF37600A684FF /* standard.ppc64 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = libhb;
 			};
 			name = standard.ppc64;
 		};
@@ -1372,7 +1424,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 1;
+				EXTERNAL_JOBS = 8;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_PROJECT = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -1396,7 +1448,7 @@
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 1;
+				EXTERNAL_JOBS = 8;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_PROJECT = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
@@ -1429,28 +1481,41 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = standard;
 		};
-		278070E20F5C7F9E00699207 /* Build configuration list for PBXLegacyTarget "contrib" */ = {
+		27F1438E0F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "external" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				278070E30F5C7F9E00699207 /* standard */,
-				278070E40F5C7F9E00699207 /* debug */,
-				278070E50F5C7F9E00699207 /* standard.i386 */,
-				278070E60F5C7F9E00699207 /* standard.x86_64 */,
-				278070E70F5C7F9E00699207 /* standard.ppc */,
-				278070E80F5C7F9E00699207 /* standard.ppc64 */,
+				27F143780F5DF34F00A684FF /* standard */,
+				27F143790F5DF34F00A684FF /* debug */,
+				27F1437A0F5DF34F00A684FF /* standard.i386 */,
+				27F1437B0F5DF34F00A684FF /* standard.x86_64 */,
+				27F1437C0F5DF34F00A684FF /* standard.ppc */,
+				27F1437D0F5DF34F00A684FF /* standard.ppc64 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = standard;
 		};
-		278071080F5C9C2C00699207 /* Build configuration list for PBXLegacyTarget "libhb" */ = {
+		27F1438F0F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "contrib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				278071090F5C9C2C00699207 /* standard */,
-				2780710A0F5C9C2C00699207 /* debug */,
-				2780710B0F5C9C2C00699207 /* standard.i386 */,
-				2780710C0F5C9C2C00699207 /* standard.x86_64 */,
-				2780710D0F5C9C2C00699207 /* standard.ppc */,
-				2780710E0F5C9C2C00699207 /* standard.ppc64 */,
+				27F1437F0F5DF36000A684FF /* standard */,
+				27F143800F5DF36000A684FF /* debug */,
+				27F143810F5DF36000A684FF /* standard.i386 */,
+				27F143820F5DF36000A684FF /* standard.x86_64 */,
+				27F143830F5DF36000A684FF /* standard.ppc */,
+				27F143840F5DF36000A684FF /* standard.ppc64 */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = standard;
+		};
+		27F143900F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "libhb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				27F143860F5DF37600A684FF /* standard */,
+				27F143870F5DF37600A684FF /* debug */,
+				27F143880F5DF37600A684FF /* standard.i386 */,
+				27F143890F5DF37600A684FF /* standard.x86_64 */,
+				27F1438A0F5DF37600A684FF /* standard.ppc */,
+				27F1438B0F5DF37600A684FF /* standard.ppc64 */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = standard;

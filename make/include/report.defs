@@ -53,3 +53,10 @@ $(info #########################################################################
 $(info $(foreach v,$(sort $(filter GCC.%,$(.VARIABLES))),$(call fn.PRINTVAR,$v)))
 $(info )
 endif
+
+## report: var
+##
+ifeq (var,$(REPORT))
+$(info $(call fn.PRINTVAR,$(NAME)))
+$(info )
+endif

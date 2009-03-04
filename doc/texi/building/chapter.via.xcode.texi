@@ -49,6 +49,23 @@ This configuration is used to build for the ppc64 architecture. Build directory 
 @end table
 
 @c %**-------------------------------------------------------------------------
+@anchor{xcode.extenal}
+@section External Targets
+The following external targets appear in the Xcode project and perform @b{build} and @b{clean} actions.
+
+@table @samp
+@item external
+Target maps to @command{make build} and @command{make clean} for everything Xcode products depend upon from the external build system.
+
+@item libhb
+Target maps to @command{make libhb.build} and @command{make libhb.clean}.
+
+@item contrib
+Target maps to @command{make contrib.build} and @command{make contrib.xclean}.
+
+@end table
+
+@c %**-------------------------------------------------------------------------
 @anchor{xcode.userdefined}
 @section User-Defined Settings
 The following user defined settings are used in Xcode project for the external build system:

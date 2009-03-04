@@ -1,16 +1,16 @@
-.PHONY: report.main report.gcc report.modules
+.PHONY: report.main report.gcc report.modules report.var report.true
 
 report.modules::
 
-.PHONY: report.main
 report.main:
 	@$(MAKE) report.true REPORT=main
 
-.PHONY: report.gcc
 report.gcc:
 	@$(MAKE) report.true REPORT=gcc
 
+report.var:
+	@$(MAKE) report.true REPORT=var
+
 ## needed for nested make (which drives each report)
-.PHONY: report.true
 report.true:
 	@true

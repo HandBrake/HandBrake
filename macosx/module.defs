@@ -18,27 +18,22 @@ BUILD.out += $(MACOSX.m4.out)
 MACOSX.XCODE.exe     = xcodebuild
 MACOSX.XCODE.project = HandBrake.xcodeproj
 
+## launch a build thru xcode; which in turn will do a nested make against
+## this build system with normal build rules enabled.
+##
+## $(1) = list of targets
+## $(2) = list of goals to shunt thru xcodebuild->make
+##
 MACOSX.XCODE = $(strip \
     cd $(MACOSX.src/) && \
 	$(MACOSX.XCODE.exe) \
         -project $(MACOSX.XCODE.project) \
         -configuration $(MACOSX.conf) \
-        $(foreach t,$(MACOSX.targs),-target $t) \
+        $(foreach t,$(1),-target $t) \
         EXTERNAL_BUILD='$(CURDIR)' \
         EXTERNAL_JOBS='$(BUILD.jobs)' \
         EXTERNAL_METHOD='$(CONF.method)' \
         EXTERNAL_PROJECT='$(PROJECT/)' \
-        $(1) )
-
-MACOSX.XCODE.PASSTHRU = $(strip \
-    cd $(MACOSX.src/) && \
-	$(MACOSX.XCODE.exe) \
-        -project $(MACOSX.XCODE.project) \
-        -configuration $(MACOSX.conf) \
-        -target libhb \
-        EXTERNAL_BUILD='$(CURDIR)' \
-        EXTERNAL_JOBS='$(BUILD.jobs)' \
-        EXTERNAL_METHOD='$(CONF.method)' \
-        EXTERNAL_PROJECT='$(PROJECT/)' \
-        EXTERNAL_GOALS='$(1)' \
-        build )
+        EXTERNAL_GOALS='$(3)' \
+        EXTERNAL_VARS='$(-*-command-variables-*-)' \
+        $(2) )

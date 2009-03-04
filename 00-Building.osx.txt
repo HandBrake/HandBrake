@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2204 (2009030201) on Mac OS X
+Guide to Building HandBrake svn2213 (2009030301) on Mac OS X
 ************************************************************
 
 Table of Contents
@@ -21,7 +21,8 @@ Table of Contents
 6 Building via Xcode
   6.1 Checkout Sources
   6.2 Build
-  6.3 User-Defined Settings
+  6.3 External Targets
+  6.4 User-Defined Settings
 
 
 1 Introduction
@@ -241,14 +242,18 @@ period.
      Build main product. All necessary dependencies are also built if
      required.
 
+`make clean'
+     Clean all build output excluding contrib modules. Configuration is
+     retained.
+
 `make install'
      Perform final product(s) install.  This will install build
      products to a standard directory or one specified via `configure
      --prefix' option.
 
-`make clean'
-     Clean all build output excluding contrib modules. Configuration is
-     retained.
+`make uninstall'
+     Perform final product(s) uninstall.  This will uninstall any
+     products which may have been previously installed.
 
 `make xclean'
      Clean all build output including contrib modules. Configuration is
@@ -441,7 +446,24 @@ follows:
      This configuration is used to build for the ppc64 architecture.
      Build directory is `build.standard.ppc64' .
 
-6.3 User-Defined Settings
+6.3 External Targets
+====================
+
+The following external targets appear in the Xcode project and perform
+build and clean actions.
+
+`external'
+     Target maps to `make build' and `make clean' for everything Xcode
+     products depend upon from the external build system.
+
+`libhb'
+     Target maps to `make libhb.build' and `make libhb.clean'.
+
+`contrib'
+     Target maps to `make contrib.build' and `make contrib.xclean'.
+
+
+6.4 User-Defined Settings
 =========================
 
 The following user defined settings are used in Xcode project for the
