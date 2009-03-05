@@ -35,9 +35,12 @@ define import.CONTRIB.defs
     ## target: extract
     ##
     $(1).EXTRACT.tarbase = $$(patsubst %.tar.gz,%,$$(notdir $$($(1).FETCH.url)))
-    $(1).EXTRACT.target/ = $$($(1).build/)$$($(1).EXTRACT.tarbase)/
+    $(1).EXTRACT.dir/    = $$($(1).build/)$$($(1).EXTRACT.tarbase)/
+    $(1).EXTRACT.target  = $$($(1).build/).stamp.extract
     define $(1).EXTRACT
+        $$(RM.exe) -fr $$($(1).EXTRACT.dir/)
         $$(TAR.exe) xfC $$($(1).FETCH.tar) $$($(1).build/)
+        $$(TOUCH.exe) $$@
     endef
 
     ##
@@ -55,14 +58,15 @@ define import.CONTRIB.defs
 
     $(1).PATCH.target = $$($(1).build/).stamp.patch
     define $(1).PATCH
-        $$(foreach p,$$($(1).PATCH.srcs),$$(call $(1).PATCH.item,$$($(1).EXTRACT.target/),$$(p)))
+        $$(foreach p,$$($(1).PATCH.srcs),$$(call $(1).PATCH.item,$$($(1).EXTRACT.dir/),$$(p)))
+        $$(TOUCH.exe) $$@
     endef
 
     ##
     ## target: configure
     ##
     $(1).CONFIGURE.sete       = set -e;
-    $(1).CONFIGURE.dir        = $$($(1).EXTRACT.target/)
+    $(1).CONFIGURE.dir        = $$($(1).EXTRACT.dir/)
     $(1).CONFIGURE.bootstrap  =
     $(1).CONFIGURE.exe        = ./configure
     $(1).CONFIGURE.host       = $$(CONTRIB.host)
@@ -91,13 +95,14 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.target = $$($(1).build/).stamp.configure
     define $(1).CONFIGURE
         $$(call fn.ARGS,$(1).CONFIGURE,$$($(1).CONFIGURE.args))
+        $$(TOUCH.exe) $$@
     endef
 
     ##
     ## target: build
     ##
     $(1).BUILD.make     = $$(MAKE)
-    $(1).BUILD.dir      = $$($(1).EXTRACT.target/)
+    $(1).BUILD.dir      = $$($(1).EXTRACT.dir/)
     $(1).BUILD.extra    =
     $(1).BUILD.ntargets =
 
@@ -107,14 +112,14 @@ define import.CONTRIB.defs
     $(1).BUILD.target = $$($(1).build/).stamp.build
     define $(1).BUILD
         $$(call fn.ARGS,$(1).BUILD,$$($(1).BUILD.args))
+        $$(TOUCH.exe) $$@
     endef
 
     ##
     ## target: install
     ##
-
     $(1).INSTALL.make     = $$(MAKE)
-    $(1).INSTALL.dir      = $$($(1).EXTRACT.target/)
+    $(1).INSTALL.dir      = $$($(1).EXTRACT.dir/)
     $(1).INSTALL.extra    =
     $(1).INSTALL.ntargets =
 
@@ -124,13 +129,14 @@ define import.CONTRIB.defs
     $(1).INSTALL.target = $$($(1).build/).stamp.install
     define $(1).INSTALL
         $$(call fn.ARGS,$(1).INSTALL,$$($(1).INSTALL.args))
+        $$(TOUCH.exe) $$@
     endef
 
     ##
     ## target: uninstall
     ##
     $(1).UNINSTALL.make     = $$(MAKE)
-    $(1).UNINSTALL.dir      = $$($(1).EXTRACT.target/)
+    $(1).UNINSTALL.dir      = $$($(1).EXTRACT.dir/)
     $(1).UNINSTALL.extra    =
     $(1).UNINSTALL.ntargets = uninstall
 
@@ -139,13 +145,14 @@ define import.CONTRIB.defs
 
     define $(1).UNINSTALL
         $$(call fn.ARGS,$(1).UNINSTALL,$$($(1).UNINSTALL.args))
+        $$(RM.exe) -f $$($(1).INSTALL.target)
     endef
 
     ##
     ## target: clean
     ##
     $(1).CLEAN.make     = $$(MAKE)
-    $(1).CLEAN.dir      = $$($(1).EXTRACT.target/)
+    $(1).CLEAN.dir      = $$($(1).EXTRACT.dir/)
     $(1).CLEAN.extra    =
     $(1).CLEAN.ntargets = clean
 
@@ -154,15 +161,18 @@ define import.CONTRIB.defs
 
     define $(1).CLEAN
         $$(call fn.ARGS,$(1).CLEAN,$$($(1).CLEAN.args))
+        $$(RM.exe) -f $$($(1).BUILD.target)
     endef
 
+    ##
     ## other values used to aid prerequisite dirs and cleanup
     ##
     $(1).out += $$($(1).build/)
     $(1).out += $$($(1).FETCH.target)
+    $(1).out += $$($(1).EXTRACT.target)
     $(1).out += $$($(1).PATCH.target)
     $(1).out += $$($(1).CONFIGURE.target)
-    $(1).out += $$($(1).ALL.target)
+    $(1).out += $$($(1).BUILD.target)
     $(1).out += $$($(1).INSTALL.target)
 
     BUILD.out += $$($(1).out)
@@ -187,12 +197,18 @@ $$($(1).FETCH.target): | $$(dir $$($(1).FETCH.target))
 ## target: extract
 ## must touch dir after extraction because old timestamp is restored via tar.
 ##
-$($(1).name).extract: | $$($(1).EXTRACT.target/)
+$($(1).name).extract: $$($(1).EXTRACT.target)
 
-$$($(1).EXTRACT.target/): | $$(dir $$($(1).build/))
-$$($(1).EXTRACT.target/): $$($(1).FETCH.target)
+$$($(1).EXTRACT.target): | $$(dir $$($(1).EXTRACT.target))
+$$($(1).EXTRACT.target): $$($(1).deps)
+$$($(1).EXTRACT.target): $$($(1).FETCH.target)
 	$$($(1).EXTRACT)
-	$$(TOUCH.exe) $$@
+
+$($(1).name).extract.touch:
+	$$(TOUCH.exe) $$($(1).EXTRACT.target)
+
+$($(1).name).extract.untouch:
+	$$(RM.exe) $$($(1).EXTRACT.target)
 
 ##
 ## target: patch
@@ -200,9 +216,14 @@ $$($(1).EXTRACT.target/): $$($(1).FETCH.target)
 $($(1).name).patch: $$($(1).PATCH.target)
 
 $$($(1).PATCH.target): | $$(dir $$($(1).PATCH.target))
-$$($(1).PATCH.target): | $$($(1).EXTRACT.target/)
+$$($(1).PATCH.target): $$($(1).EXTRACT.target)
 	$$($(1).PATCH)
-	$$(TOUCH.exe) $$@
+
+$($(1).name).patch.touch:
+	$$(TOUCH.exe) $$($(1).PATCH.target)
+
+$($(1).name).patch.untouch:
+	$$(RM.exe) $$($(1).PATCH.target)
 
 ##
 ## target: configure
@@ -210,10 +231,14 @@ $$($(1).PATCH.target): | $$($(1).EXTRACT.target/)
 $($(1).name).configure: $$($(1).CONFIGURE.target)
 
 $$($(1).CONFIGURE.target): | $$(dir $$($(1).CONFIGURE.target))
-$$($(1).CONFIGURE.target): $$($(1).deps)
 $$($(1).CONFIGURE.target): $$($(1).PATCH.target)
 	$$($(1).CONFIGURE)
-	$$(TOUCH.exe) $$@
+
+$($(1).name).configure.touch:
+	$$(TOUCH.exe) $$($(1).CONFIGURE.target)
+
+$($(1).name).configure.untouch:
+	$$(RM.exe) $$($(1).CONFIGURE.target)
 
 ##
 ## target: build
@@ -222,8 +247,14 @@ $($(1).name).build: $$($(1).BUILD.target)
 
 $$($(1).BUILD.target): | $$(dir $$($(1).BUILD.target))
 $$($(1).BUILD.target): $$($(1).CONFIGURE.target)
+	-$$($(1).CLEAN)
 	+$$($(1).BUILD)
-	$$(TOUCH.exe) $$@
+
+$($(1).name).build.touch:
+	$$(TOUCH.exe) $$($(1).BUILD.target)
+
+$($(1).name).build.untouch:
+	$$(RM.exe) $$($(1).BUILD.target)
 
 ##
 ## target: install
@@ -233,21 +264,24 @@ $($(1).name).install: $$($(1).INSTALL.target)
 $$($(1).INSTALL.target): | $$(dir $$($(1).INSTALL.target))
 $$($(1).INSTALL.target): $$($(1).BUILD.target)
 	$$($(1).INSTALL)
-	$$(TOUCH.exe) $$@
+
+$($(1).name).install.touch:
+	$$(TOUCH.exe) $$($(1).INSTALL.target)
+
+$($(1).name).install.untouch:
+	$$(RM.exe) $$($(1).INSTALL.target)
 
 ##
 ## target: uninstall
 ##
 $($(1).name).uninstall:
 	-$$($(1).UNINSTALL)
-	$$(RM.exe) -f $$($(1).INSTALL.target)
 
 ##
 ## target: clean
 ##
 $($(1).name).clean:
 	-$$($(1).CLEAN)
-	$$(RM.exe) -f $$($(1).BUILD.target)
 
 ##
 ## target: xclean

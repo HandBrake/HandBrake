@@ -89,7 +89,7 @@ define import.GCC
     $(1).GCC.args.g.none    = $$(GCC.args.g.none)
     $(1).GCC.args.g.min     = $$(GCC.args.g.min)
     $(1).GCC.args.g.std     = $$(GCC.args.g.std)
-    $(1).GCC.args.g.max     = $$(GCC.args.g.max  )
+    $(1).GCC.args.g.max     = $$(GCC.args.g.max)
     $(1).GCC.args.O.none    = $$(GCC.args.O.none)
     $(1).GCC.args.O.size    = $$(GCC.args.O.size)
     $(1).GCC.args.O.speed   = $$(GCC.args.O.speed)

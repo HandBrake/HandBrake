@@ -499,20 +499,12 @@ class Repository:
 ##
 class Project:
     def __init__( self ):
-        if repo.type == 'unofficial':
-            self.name          = 'NoNameBrand'
-            self.acro_lower    = 'nnb'
-            self.acro_upper    = 'NNB'
-            self.url_website   = 'http://nonamebrand.com'
-            self.url_community = 'http://forum.nonamebrand.com'
-            self.url_irc       = 'irc://irc.freenode.net/nonamebrand'
-        else:
-            self.name          = 'HandBrake'
-            self.acro_lower    = 'hb'
-            self.acro_upper    = 'HB'
-            self.url_website   = 'http://handbrake.fr'
-            self.url_community = 'http://forum.handbrake.fr'
-            self.url_irc       = 'irc://irc.freenode.net/handbrake'
+        self.name          = 'HandBrake'
+        self.acro_lower    = 'hb'
+        self.acro_upper    = 'HB'
+        self.url_website   = 'http://handbrake.fr'
+        self.url_community = 'http://forum.handbrake.fr'
+        self.url_irc       = 'irc://irc.freenode.net/handbrake'
 
         self.name_lower = self.name.lower()
         self.name_upper = self.name.upper()

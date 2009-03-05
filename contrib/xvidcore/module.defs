@@ -4,17 +4,19 @@ $(eval $(call import.CONTRIB.defs,XVIDCORE))
 XVIDCORE.FETCH.url = http://download.m0k.org/handbrake/contrib/xvidcore-1.1.3.tar.gz
 XVIDCORE.EXTRACT.tarbase = xvidcore
 
-XVIDCORE.CONFIGURE.dir = $(XVIDCORE.EXTRACT.target/)build/generic/
+XVIDCORE.CONFIGURE.dir = $(XVIDCORE.EXTRACT.dir/)build/generic/
 
-XVIDCORE.BUILD.dir      = $(XVIDCORE.EXTRACT.target/)build/generic/
+XVIDCORE.BUILD.dir      = $(XVIDCORE.EXTRACT.dir/)build/generic/
 XVIDCORE.BUILD.ntargets = libxvidcore.a
 
 define XVIDCORE.INSTALL
-    cp $(XVIDCORE.EXTRACT.target/)build/generic/=build/libxvidcore.a $(CONTRIB.build/)lib/
-    cp $(XVIDCORE.EXTRACT.target/)src/xvid.h $(CONTRIB.build/)include/
+    cp $(XVIDCORE.EXTRACT.dir/)build/generic/=build/libxvidcore.a $(CONTRIB.build/)lib/
+    cp $(XVIDCORE.EXTRACT.dir/)src/xvid.h $(CONTRIB.build/)include/
+    $(TOUCH.exe) $@
 endef
 
 define XVIDCORE.UNINSTALL
     rm $(CONTRIB.build/)lib/libxvidcore.a
     rm $(CONTRIB.build/)include/xvid.h
+    $(RM.exe) -f $(XVIDCORE.INSTALL.target)
 endef

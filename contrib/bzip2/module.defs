@@ -14,11 +14,13 @@ BZIP2.BUILD.ntargets = libbz2.a
 
 define BZIP2.INSTALL
     mkdir -p $(CONTRIB.build/)lib/ $(CONTRIB.build/)include/
-    cp $(BZIP2.EXTRACT.target/)libbz2.a $(CONTRIB.build/)lib/
-    cp $(BZIP2.EXTRACT.target/)bzlib.h $(CONTRIB.build/)include/
+    cp $(BZIP2.EXTRACT.dir/)libbz2.a $(CONTRIB.build/)lib/
+    cp $(BZIP2.EXTRACT.dir/)bzlib.h $(CONTRIB.build/)include/
+    $(TOUCH.exe) $@
 endef
 
 define BZIP2.UNINSTALL
     rm $(CONTRIB.build/)lib/libbz2.a
     rm $(CONTRIB.build/)include/bzlib.h
+    $(RM.exe) -f $(BZIP2.INSTALL.target)
 endef

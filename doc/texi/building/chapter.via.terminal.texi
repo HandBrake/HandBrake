@@ -171,9 +171,25 @@ This usually invokes autotool clean.
 Extra clean module; first invokes uninstall then recursively removes the module build directory.
 @end table
 
+@anchor{terminal.targets.contrib.touch}
+@subsection Contrib Touch and Untouch
+Also available are some very granular targets which help force builds from specific cycle points. The following targets are available to touch and untouch the respective module target; this will force the build system to treat the target as satisfied after a touch or unsatisfied after an untouch:
+
+@itemize
+@item make @i{MODULE}.extract.touch
+@item make @i{MODULE}.extract.untouch
+@item make @i{MODULE}.patch.touch
+@item make @i{MODULE}.patch.untouch
+@item make @i{MODULE}.configure.touch
+@item make @i{MODULE}.configure.untouch
+@item make @i{MODULE}.build.touch
+@item make @i{MODULE}.build.untouch
+@item make @i{MODULE}.install.touch
+@item make @i{MODULE}.install.untouch
+@end itemize
+
 @anchor{terminal.targets.contrib.aggregate}
 @subsection Contrib Aggregates
-
 For convenience, the following targets aggregate the all contrib modules' respective targets together:
 
 @itemize
