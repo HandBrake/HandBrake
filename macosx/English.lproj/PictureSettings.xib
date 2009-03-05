@@ -146,7 +146,6 @@
 							<int key="NSvFlags">12</int>
 							<string key="NSFrame">{{15, 40}, {283, 373}}</string>
 							<reference key="NSSuperview" ref="49161063"/>
-							<bool key="NSViewIsLayerTreeHost">YES</bool>
 							<object class="NSArray" key="NSViewContentFilters">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="CIColorMonochrome">

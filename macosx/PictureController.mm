@@ -104,6 +104,9 @@
     [[self window] setExcludedFromWindowsMenu:YES];
     
     [self setInitialPictureFilters];
+    
+    /* Setup our layers for core animation */
+    [fSizeFilterView setWantsLayer:YES];
 }
 
 
