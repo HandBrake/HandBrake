@@ -36,20 +36,22 @@
 //------------------------------------------------------------------------------------
 - (IBAction) showPictureWindow: (id)sender
 {
-    if ([[self window] isVisible])
-    {
-        [[self window] close];
-    }
-    else
+    if ([fPreviewController fullScreen] == YES)
     {
         [self showWindow:sender];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
-        if ([fPreviewController fullScreen] == YES)
+        [self setToFullScreenMode];
+    }
+    else
+    {
+        if ([[self window] isVisible])
         {
-            [self setToFullScreenMode];
+            [[self window] close];
         }
         else
         {
+            [self showWindow:sender];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
             [self setToWindowedMode];
         }
     }
