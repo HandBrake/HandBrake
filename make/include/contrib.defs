@@ -126,6 +126,7 @@ define import.CONTRIB.defs
     $(1).INSTALL.args = !make @dir !extra !ntargets
     $(1).INSTALL.args.dir = -C $$(1) install
 
+    $(1).INSTALL.mkdirs = $$(CONTRIB.build/)lib/ $$(CONTRIB.build/)include/
     $(1).INSTALL.target = $$($(1).build/).stamp.install
     define $(1).INSTALL
         $$(call fn.ARGS,$(1).INSTALL,$$($(1).INSTALL.args))
@@ -173,6 +174,7 @@ define import.CONTRIB.defs
     $(1).out += $$($(1).PATCH.target)
     $(1).out += $$($(1).CONFIGURE.target)
     $(1).out += $$($(1).BUILD.target)
+    $(1).out += $$($(1).INSTALL.mkdirs)
     $(1).out += $$($(1).INSTALL.target)
 
     BUILD.out += $$($(1).out)
@@ -261,7 +263,7 @@ $($(1).name).build.untouch:
 ##
 $($(1).name).install: $$($(1).INSTALL.target)
 
-$$($(1).INSTALL.target): | $$(dir $$($(1).INSTALL.target))
+$$($(1).INSTALL.target): | $$(dir $$($(1).INSTALL.target)) $$($(1).INSTALL.mkdirs)
 $$($(1).INSTALL.target): $$($(1).BUILD.target)
 	$$($(1).INSTALL)
 
