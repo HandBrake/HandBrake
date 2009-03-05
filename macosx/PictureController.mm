@@ -84,8 +84,13 @@
 
 - (void) setToWindowedMode
 {
-    /* Set the window back to regular level */
-    [[self window] setLevel:NSNormalWindowLevel];
+    /* Set the window back to Floating Window mode 
+     * This will put the window always on top, but
+     * since we have Hide on Deactivate set in our
+     * xib, if other apps are put in focus we will
+     * hide properly to stay out of the way
+     */
+    [[self window] setLevel:NSFloatingWindowLevel];
 }
 
 - (void)setHBController: (HBController *)controller
