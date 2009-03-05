@@ -202,7 +202,6 @@ $$($(1).FETCH.target): | $$(dir $$($(1).FETCH.target))
 $($(1).name).extract: $$($(1).EXTRACT.target)
 
 $$($(1).EXTRACT.target): | $$(dir $$($(1).EXTRACT.target))
-$$($(1).EXTRACT.target): $$($(1).deps)
 $$($(1).EXTRACT.target): $$($(1).FETCH.target)
 	$$($(1).EXTRACT)
 
@@ -233,6 +232,7 @@ $($(1).name).patch.untouch:
 $($(1).name).configure: $$($(1).CONFIGURE.target)
 
 $$($(1).CONFIGURE.target): | $$(dir $$($(1).CONFIGURE.target))
+$$($(1).CONFIGURE.target): $$($(1).deps)
 $$($(1).CONFIGURE.target): $$($(1).PATCH.target)
 	$$($(1).CONFIGURE)
 
