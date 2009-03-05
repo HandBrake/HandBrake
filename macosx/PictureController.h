@@ -10,7 +10,7 @@
 
 @class HBController;
 @class PreviewController;
-@class PictureFilterController;
+
 
 
 //#define HB_NUM_HBLIB_PICTURES      20   // # of preview pictures libhb should generate
@@ -22,9 +22,13 @@
 
     HBController             *fHBController;
     PreviewController        *fPreviewController;        // reference to HBController
-    PictureFilterController  *fPictureFilterController;
     
     IBOutlet NSWindow        * fPictureWindow;
+    
+    IBOutlet NSTabView       * fSizeFilterView;
+    
+    /* Picture Sizing */
+    
     NSMutableDictionary      * fPicturePreviews;        // NSImages, one for each preview libhb creates, created lazily
     int                        fPicture;
 
@@ -65,6 +69,51 @@
     returned to the previous state when anamorphic is turned
     off */
     BOOL    keepAspectRatioPreviousState;
+    
+    
+    /* Video Filters */
+    
+    IBOutlet NSBox           * fPictureFilterBox;
+
+    IBOutlet NSBox           * fDetelecineBox;
+    IBOutlet NSPopUpButton   * fDetelecinePopUp;
+    IBOutlet NSTextField     * fDetelecineField;
+    
+    IBOutlet NSBox           * fDecombDeinterlaceBox;
+    IBOutlet NSSlider        * fDecombDeinterlaceSlider;
+    
+    IBOutlet NSBox           * fDecombBox;
+    IBOutlet NSPopUpButton   * fDecombPopUp;
+    IBOutlet NSTextField     * fDecombField;
+    
+    IBOutlet NSBox           * fDeinterlaceBox;
+    IBOutlet NSPopUpButton   * fDeinterlacePopUp;
+    IBOutlet NSTextField     * fDeinterlaceField;
+
+    IBOutlet NSBox           * fDenoiseBox;
+    IBOutlet NSPopUpButton   * fDenoisePopUp;
+    IBOutlet NSTextField     * fDenoiseField;
+	
+    IBOutlet NSButton        * fDeblockCheck;
+    IBOutlet NSTextField     * fDeblockField;
+    IBOutlet NSSlider        * fDeblockSlider;
+    
+    IBOutlet NSButton        * fGrayscaleCheck;
+
+    IBOutlet NSTextField     * fInfoField;
+	
+
+    
+        struct {
+        int     detelecine;
+        int     deinterlace;
+        int     decomb;
+        int     usedecomb;
+        int     denoise;
+        int     deblock;
+        int     grayscale;
+    } fPictureFilterSettings;
+    
 }
 - (id)init;
 
@@ -75,7 +124,7 @@
 - (IBAction) showPreviewWindow: (id)sender;
 - (BOOL) previewFullScreenMode;
 - (IBAction) previewGoWindowed: (id)sender;
-- (IBAction) showFilterWindow: (id)sender;
+
 
 
 
@@ -95,6 +144,43 @@
 
 - (void) setToFullScreenMode;
 - (void) setToWindowedMode;
+
+/* Filter Actions */
+- (void) setInitialPictureFilters;
+- (IBAction) FilterSettingsChanged: (id) sender;
+- (void) adjustFilterDisplay: (id) sender;
+- (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender;
+- (IBAction) deblockSliderChanged: (id) sender;
+
+- (int) detelecine;
+- (NSString*) detelecineCustomString;
+- (void) setDetelecine: (int) setting;
+- (void) setDetelecineCustomString: (NSString*) string;
+
+- (int) useDecomb;
+- (void) setUseDecomb: (int) setting;
+
+- (int) decomb;
+- (NSString*) decombCustomString;
+- (void) setDecomb: (int) setting;
+- (void) setDecombCustomString: (NSString*) string;
+
+- (int) deinterlace;
+- (NSString*) deinterlaceCustomString;
+- (void) setDeinterlace: (int) setting;
+- (void) setDeinterlaceCustomString: (NSString*) string; 
+
+- (int) denoise;
+- (NSString*) denoiseCustomString;
+- (void) setDenoise: (int) setting;
+- (void) setDenoiseCustomString: (NSString*) string;
+
+- (int) deblock;
+- (void) setDeblock: (int) setting;
+
+- (int) grayscale;
+- (void) setGrayscale: (int) setting;
+
 
 
 @end

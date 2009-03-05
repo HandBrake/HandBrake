@@ -10,7 +10,6 @@
 #import "HBDVDDetector.h"
 #import "HBPresets.h"
 #import "HBPreviewController.h"
-#import "HBFilterController.h"
 
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
@@ -63,7 +62,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }                                                            
     outputPanel = [[HBOutputPanelController alloc] init];
     fPictureController = [[PictureController alloc] init];
-    fPictureFilterController = [[PictureFilterController alloc] init];
     fQueueController = [[HBQueueController alloc] init];
     fAdvancedOptions = [[HBAdvancedController alloc] init];
     /* we init the HBPresets class which currently is only used
@@ -93,9 +91,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Init others controllers */
     [fPictureController SetHandle: fHandle];
     [fPictureController   setHBController: self];
-    /* fPictureController */
-    [fPictureFilterController SetHandle: fHandle];
-    [fPictureFilterController   setHBController: self];
     
     [fQueueController   setHandle: fQueueEncodeLibhb];
     [fQueueController   setHBController: self];
@@ -263,7 +258,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[fQueueController release];
     [fPreviewController release];
     [fPictureController release];
-    [fPictureFilterController release];
     
 	hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
@@ -1546,8 +1540,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             {
                 [self selectDefaultPreset:nil];
                 
-                [fPictureFilterController setInitialPictureFilters];
-                
                 // Open preview window now if it was visible when HB was closed
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PreviewWindowIsOpen"])
                     [self showPreviewWindow:nil];
@@ -1556,9 +1548,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
                     [self showPicturePanel:nil];
                 
-                // Open filters window now if it was visible when HB was closed
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureFiltersWindowIsOpen"])
-                    [self showFiltersPanel:nil];
             }
 
             
@@ -1922,22 +1911,22 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
     
     /* Picture Filters */
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController detelecine]] forKey:@"PictureDetelecine"];
-    [queueFileJob setObject:[fPictureFilterController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+    [queueFileJob setObject:[fPictureController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController useDecomb]] forKey:@"PictureDecombDeinterlace"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController decomb]] forKey:@"PictureDecomb"];
-    [queueFileJob setObject:[fPictureFilterController decombCustomString] forKey:@"PictureDecombCustom"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+    [queueFileJob setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController deinterlace]] forKey:@"PictureDeinterlace"];
-    [queueFileJob setObject:[fPictureFilterController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+    [queueFileJob setObject:[fPictureController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController denoise]] forKey:@"PictureDenoise"];
-    [queueFileJob setObject:[fPictureFilterController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+    [queueFileJob setObject:[fPictureController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
     
-    [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureFilterController deblock]] forKey:@"PictureDeblock"];
+    [queueFileJob setObject:[NSString stringWithFormat:@"%d",[fPictureController deblock]] forKey:@"PictureDeblock"];
     
-    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureFilterController grayscale]] forKey:@"VideoGrayScale"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
     
     /*Audio*/
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
@@ -2452,18 +2441,18 @@ fWorkingCount = 0;
     
     /* Filters */
     /* Deinterlace */
-    [fPictureFilterController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
+    [fPictureController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
     
     /* Detelecine */
-    [fPictureFilterController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
+    [fPictureController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
     /* Denoise */
-    [fPictureFilterController setDenoise:[[queueToApply objectForKey:@"PictureDenoise"] intValue]];
+    [fPictureController setDenoise:[[queueToApply objectForKey:@"PictureDenoise"] intValue]];
     /* Deblock */
-    [fPictureFilterController setDeblock:[[queueToApply objectForKey:@"PictureDeblock"] intValue]];
+    [fPictureController setDeblock:[[queueToApply objectForKey:@"PictureDeblock"] intValue]];
     /* Decomb */
-    [fPictureFilterController setDecomb:[[queueToApply objectForKey:@"PictureDecomb"] intValue]];
+    [fPictureController setDecomb:[[queueToApply objectForKey:@"PictureDecomb"] intValue]];
     /* Grayscale */
-    [fPictureFilterController setGrayscale:[[queueToApply objectForKey:@"VideoGrayScale"] intValue]];
+    [fPictureController setGrayscale:[[queueToApply objectForKey:@"VideoGrayScale"] intValue]];
     
     [self calculatePictureSizing:nil];
     
@@ -2675,7 +2664,7 @@ fWorkingCount = 0;
         /* If we are same as source and we have detelecine on, we need to turn on
          * job->vfr
          */
-        if ([fPictureFilterController detelecine] == 1)
+        if ([fPictureController detelecine] == 1)
         {
             job->vfr = 1;
         }
@@ -2787,7 +2776,7 @@ fWorkingCount = 0;
      * we put it here since its in the filters panel
      */
      
-    if ([fPictureFilterController grayscale])
+    if ([fPictureController grayscale])
     {
         job->grayscale = 1;
     }
@@ -2804,30 +2793,30 @@ fWorkingCount = 0;
     */
     
 	/* Detelecine */
-    if ([fPictureFilterController detelecine] == 1)
+    if ([fPictureController detelecine] == 1)
     {
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
-    if ([fPictureFilterController detelecine] == 2)
+    if ([fPictureController detelecine] == 2)
     {
         /* use a custom detelecine string */
-        hb_filter_detelecine.settings = (char *) [[fPictureFilterController detelecineCustomString] UTF8String];
+        hb_filter_detelecine.settings = (char *) [[fPictureController detelecineCustomString] UTF8String];
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
-    if ([fPictureFilterController useDecomb] == 1)
+    if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        if ([fPictureFilterController decomb] == 1)
+        if ([fPictureController decomb] == 1)
         {
             /* Run old deinterlacer fd by default */
             //hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         /* we add the custom string if present */
-        if ([fPictureFilterController decomb] == 2)
+        if ([fPictureController decomb] == 2)
         {
             /* use a custom decomb string */
-            hb_filter_decomb.settings = (char *) [[fPictureFilterController decombCustomString] UTF8String];
+            hb_filter_decomb.settings = (char *) [[fPictureController decombCustomString] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
     }
@@ -2835,52 +2824,52 @@ fWorkingCount = 0;
     {
         
         /* Deinterlace */
-        if ([fPictureFilterController deinterlace] == 1)
+        if ([fPictureController deinterlace] == 1)
         {
             /* Run old deinterlacer fd by default */
             hb_filter_deinterlace.settings = "-1"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );
         }
-        else if ([fPictureFilterController deinterlace] == 2)
+        else if ([fPictureController deinterlace] == 2)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
             hb_filter_deinterlace.settings = "2"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
-        else if ([fPictureFilterController deinterlace] == 3)
+        else if ([fPictureController deinterlace] == 3)
         {
             /* Yadif (with spatial deinterlacing) */
             hb_filter_deinterlace.settings = "0"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
-        else if ([fPictureFilterController deinterlace] == 4)
+        else if ([fPictureController deinterlace] == 4)
         {
             /* we add the custom string if present */
-            hb_filter_deinterlace.settings = (char *) [[fPictureFilterController deinterlaceCustomString] UTF8String];
+            hb_filter_deinterlace.settings = (char *) [[fPictureController deinterlaceCustomString] UTF8String];
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
 	}
     
     /* Denoise */
-	if ([fPictureFilterController denoise] == 1) // Weak in popup
+	if ([fPictureController denoise] == 1) // Weak in popup
 	{
 		hb_filter_denoise.settings = "2:1:2:3"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-	else if ([fPictureFilterController denoise] == 2) // Medium in popup
+	else if ([fPictureController denoise] == 2) // Medium in popup
 	{
 		hb_filter_denoise.settings = "3:2:2:3"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-	else if ([fPictureFilterController denoise] == 3) // Strong in popup
+	else if ([fPictureController denoise] == 3) // Strong in popup
 	{
 		hb_filter_denoise.settings = "7:7:5:5"; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
-    else if ([fPictureFilterController denoise] == 4) // custom in popup
+    else if ([fPictureController denoise] == 4) // custom in popup
 	{
 		/* we add the custom string if present */
-        hb_filter_denoise.settings = (char *) [[fPictureFilterController denoiseCustomString] UTF8String]; 
+        hb_filter_denoise.settings = (char *) [[fPictureController denoiseCustomString] UTF8String]; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
     
@@ -2889,9 +2878,9 @@ fWorkingCount = 0;
      * the macgui's purposes a value of 0 actually means to not even use the filter
      * current hb_filter_deblock.settings valid ranges are from 5 - 15 
      */
-    if ([fPictureFilterController deblock] != 0)
+    if ([fPictureController deblock] != 0)
     {
-        NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureFilterController deblock]];
+        NSString *deblockStringValue = [NSString stringWithFormat: @"%d",[fPictureController deblock]];
         hb_filter_deblock.settings = (char *) [deblockStringValue UTF8String];
         hb_list_add( job->filters, &hb_filter_deblock );
     }
@@ -3655,7 +3644,7 @@ fWorkingCount = 0;
 
 	/* Reset the new title in fPictureController &&  fPreviewController*/
     [fPictureController SetTitle:title];
-    //[fPictureFilterController SetTitle:title];
+    //[fPictureController SetTitle:title];
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
     [fSubPopUp removeAllItems];
@@ -4280,32 +4269,32 @@ the user is using "Custom" settings by determining the sender*/
     NSString *videoFilters;
     videoFilters = @"";
     /* Detelecine */
-    if ([fPictureFilterController detelecine] == 1) 
+    if ([fPictureController detelecine] == 1) 
     {
         videoFilters = [videoFilters stringByAppendingString:@" - Detelecine (Default)"];
     }
-    else if ([fPictureFilterController detelecine] == 2) 
+    else if ([fPictureController detelecine] == 2) 
     {
-        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[fPictureFilterController detelecineCustomString]]];
+        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[fPictureController detelecineCustomString]]];
     }
     
     
-    if ([fPictureFilterController useDecomb] == 1)
+    if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        if ([fPictureFilterController decomb] == 1)
+        if ([fPictureController decomb] == 1)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Default)"];
         }
-        else if ([fPictureFilterController decomb] == 2)
+        else if ([fPictureController decomb] == 2)
         {
-            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[fPictureFilterController decombCustomString]]];
+            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[fPictureController decombCustomString]]];
         }
     }
     else
     {
         /* Deinterlace */
-        if ([fPictureFilterController deinterlace] > 0)
+        if ([fPictureController deinterlace] > 0)
         {
             fTitle->job->deinterlace  = 1;
         }
@@ -4314,51 +4303,51 @@ the user is using "Custom" settings by determining the sender*/
             fTitle->job->deinterlace  = 0;
         }
         
-        if ([fPictureFilterController deinterlace] == 1)
+        if ([fPictureController deinterlace] == 1)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Fast)"];
         }
-        else if ([fPictureFilterController deinterlace] == 2)
+        else if ([fPictureController deinterlace] == 2)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slow)"];
         }
-        else if ([fPictureFilterController deinterlace] == 3)
+        else if ([fPictureController deinterlace] == 3)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slower)"];
         }
-        else if ([fPictureFilterController deinterlace] == 4)
+        else if ([fPictureController deinterlace] == 4)
         {
-            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureFilterController deinterlaceCustomString]]];
+            videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureController deinterlaceCustomString]]];
         }
 	}
     
     
     /* Denoise */
-	if ([fPictureFilterController denoise] == 1)
+	if ([fPictureController denoise] == 1)
 	{
 		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Weak)"];
     }
-	else if ([fPictureFilterController denoise] == 2)
+	else if ([fPictureController denoise] == 2)
 	{
 		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Medium)"];
     }
-	else if ([fPictureFilterController denoise] == 3)
+	else if ([fPictureController denoise] == 3)
 	{
 		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Strong)"];
 	}
-    else if ([fPictureFilterController denoise] == 4)
+    else if ([fPictureController denoise] == 4)
 	{
-		videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[fPictureFilterController denoiseCustomString]]];
+		videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[fPictureController denoiseCustomString]]];
 	}
     
     /* Deblock */
-    if ([fPictureFilterController deblock] > 0) 
+    if ([fPictureController deblock] > 0) 
     {
-        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deblock (%d)",[fPictureFilterController deblock]]];
+        videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deblock (%d)",[fPictureController deblock]]];
     }
 	
     /* Grayscale */
-    if ([fPictureFilterController grayscale]) 
+    if ([fPictureController grayscale]) 
     {
         videoFilters = [videoFilters stringByAppendingString:@" - Grayscale"];
     }
@@ -5293,11 +5282,6 @@ the user is using "Custom" settings by determining the sender*/
 	[fPictureController setToWindowedMode];
 }
 
-- (IBAction) showFiltersPanel: (id) sender
-{
-	[fPictureFilterController showFilterWindow:sender];
-}
-
 - (IBAction) showPreviewWindow: (id) sender
 {
 	[fPictureController showPreviewWindow:sender];
@@ -5947,21 +5931,21 @@ return YES;
              * specified, in which case we use decomb and ignore any possible Deinterlace settings as using both was less than
              * sane.
              */
-            [fPictureFilterController setUseDecomb:1];
-            [fPictureFilterController setDecomb:0];
-            [fPictureFilterController setDeinterlace:0];
+            [fPictureController setUseDecomb:1];
+            [fPictureController setDecomb:0];
+            [fPictureController setDeinterlace:0];
             if ([[chosenPreset objectForKey:@"PictureDecombDeinterlace"] intValue] == 1 || [[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
             {
                 /* we are using decomb */
                 /* Decomb */
                 if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] > 0)
                 {
-                    [fPictureFilterController setDecomb:[[chosenPreset objectForKey:@"PictureDecomb"] intValue]];
+                    [fPictureController setDecomb:[[chosenPreset objectForKey:@"PictureDecomb"] intValue]];
                     
                     /* if we are using "Custom" in the decomb setting, also set the custom string*/
                     if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 2)
                     {
-                        [fPictureFilterController setDecombCustomString:[chosenPreset objectForKey:@"PictureDecombCustom"]];    
+                        [fPictureController setDecombCustomString:[chosenPreset objectForKey:@"PictureDecombCustom"]];    
                     }
                 }
              }
@@ -5971,12 +5955,12 @@ return YES;
                 /* Deinterlace */
                 if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] > 0)
                 {
-                    [fPictureFilterController setUseDecomb:0];
-                    [fPictureFilterController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
+                    [fPictureController setUseDecomb:0];
+                    [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
                     /* if we are using "Custom" in the deinterlace setting, also set the custom string*/
                     if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
                     {
-                        [fPictureFilterController setDeinterlaceCustomString:[chosenPreset objectForKey:@"PictureDeinterlaceCustom"]];    
+                        [fPictureController setDeinterlaceCustomString:[chosenPreset objectForKey:@"PictureDeinterlaceCustom"]];    
                     }
                 }
             }
@@ -5985,57 +5969,57 @@ return YES;
             /* Detelecine */
             if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] > 0)
             {
-                [fPictureFilterController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
+                [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
                 /* if we are using "Custom" in the detelecine setting, also set the custom string*/
                 if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 2)
                 {
-                    [fPictureFilterController setDetelecineCustomString:[chosenPreset objectForKey:@"PictureDetelecineCustom"]];    
+                    [fPictureController setDetelecineCustomString:[chosenPreset objectForKey:@"PictureDetelecineCustom"]];    
                 }
             }
             else
             {
-                [fPictureFilterController setDetelecine:0];
+                [fPictureController setDetelecine:0];
             }
             
             /* Denoise */
             if ([[chosenPreset objectForKey:@"PictureDenoise"] intValue] > 0)
             {
-                [fPictureFilterController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
+                [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
                 /* if we are using "Custom" in the denoise setting, also set the custom string*/
                 if ([[chosenPreset objectForKey:@"PictureDenoise"] intValue] == 4)
                 {
-                    [fPictureFilterController setDenoiseCustomString:[chosenPreset objectForKey:@"PictureDenoiseCustom"]];    
+                    [fPictureController setDenoiseCustomString:[chosenPreset objectForKey:@"PictureDenoiseCustom"]];    
                 }
             }
             else
             {
-                [fPictureFilterController setDenoise:0];
+                [fPictureController setDenoise:0];
             }   
             
             /* Deblock */
             if ([[chosenPreset objectForKey:@"PictureDeblock"] intValue] == 1)
             {
                 /* if its a one, then its the old on/off deblock, set on to 5*/
-                [fPictureFilterController setDeblock:5];
+                [fPictureController setDeblock:5];
             }
             else
             {
                 /* use the settings intValue */
-                [fPictureFilterController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
+                [fPictureController setDeblock:[[chosenPreset objectForKey:@"PictureDeblock"] intValue]];
             }
             
             if ([[chosenPreset objectForKey:@"VideoGrayScale"] intValue] == 1)
             {
-                [fPictureFilterController setGrayscale:1];
+                [fPictureController setGrayscale:1];
             }
             else
             {
-                [fPictureFilterController setGrayscale:0];
+                [fPictureController setGrayscale:0];
             }
         }
         /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
         [fPictureController SetTitle:fTitle];
-        [fPictureFilterController SetTitle:fTitle];
+        [fPictureController SetTitle:fTitle];
         [self calculatePictureSizing:nil];
     }
 }
@@ -6228,17 +6212,17 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
         
         /* Picture Filters */
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController useDecomb]] forKey:@"PictureDecombDeinterlace"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController deinterlace]] forKey:@"PictureDeinterlace"];
-        [preset setObject:[fPictureFilterController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController detelecine]] forKey:@"PictureDetelecine"];
-        [preset setObject:[fPictureFilterController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController denoise]] forKey:@"PictureDenoise"];
-        [preset setObject:[fPictureFilterController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController deblock]] forKey:@"PictureDeblock"]; 
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController decomb]] forKey:@"PictureDecomb"];
-        [preset setObject:[fPictureFilterController decombCustomString] forKey:@"PictureDecombCustom"];
-        [preset setObject:[NSNumber numberWithInt:[fPictureFilterController grayscale]] forKey:@"VideoGrayScale"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController useDecomb]] forKey:@"PictureDecombDeinterlace"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController deinterlace]] forKey:@"PictureDeinterlace"];
+        [preset setObject:[fPictureController deinterlaceCustomString] forKey:@"PictureDeinterlaceCustom"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController detelecine]] forKey:@"PictureDetelecine"];
+        [preset setObject:[fPictureController detelecineCustomString] forKey:@"PictureDetelecineCustom"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController denoise]] forKey:@"PictureDenoise"];
+        [preset setObject:[fPictureController denoiseCustomString] forKey:@"PictureDenoiseCustom"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController deblock]] forKey:@"PictureDeblock"]; 
+        [preset setObject:[NSNumber numberWithInt:[fPictureController decomb]] forKey:@"PictureDecomb"];
+        [preset setObject:[fPictureController decombCustomString] forKey:@"PictureDecombCustom"];
+        [preset setObject:[NSNumber numberWithInt:[fPictureController grayscale]] forKey:@"VideoGrayScale"];
         
         
         /*Audio*/
