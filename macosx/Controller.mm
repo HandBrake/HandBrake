@@ -591,6 +591,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                             NSLocalizedString( @"Scanning title %d of %d...", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
+            double scanProgress = ( p.title_cur - 1 ) / p.title_count;
+            //[fScanIndicator setDoubleValue: 100.0 * scanProgress];
             [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
             break;
 		}
@@ -701,7 +703,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* Set the status string in fQueueController as well */
             [fQueueController setQueueStatusString: string];
             /* Update slider */
-            double progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
+            CGFloat progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
             [fRipIndicator setIndeterminate: NO];
             [fRipIndicator setDoubleValue:100.0 * progress_total];
             
@@ -1389,20 +1391,30 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     BOOL cancelScanDecrypt = 0;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-
+    
     // Notify ChapterTitles that there's no title
     [fChapterTitlesDelegate resetWithTitle:nil];
     [fChapterTable reloadData];
-
+    
     [self enableUI: NO];
-
+    
     if( [detector isVideoDVD] )
     {
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
-
+        
+#ifdef __LP64__
+        /* If we are 64 bit, we cannot read encrypted dvd's as vlc is 32 bit only */
+        cancelScanDecrypt = 1;
+        [self writeToActivityLog: "64 bit mode cannot read dvd's, scan cancelled"];
+        /*On Screen Notification*/
+        int status;
+        NSBeep();
+        status = NSRunAlertPanel(@"64-bit HandBrake cannot read encrypted dvds!",@"This scan will be cancelled!", @"OK", nil, nil);
+        [NSApp requestUserAttention:NSCriticalRequest];
+#else
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
         NSString *vlcPath = @"/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib";
         NSFileManager * fileManager = [NSFileManager defaultManager];
@@ -1422,24 +1434,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             else if (status == NSAlertAlternateReturn)
             {
-            /* User chose to cancel the scan */
-            [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
+                /* User chose to cancel the scan */
+                [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
             }
             else
             {
-            /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
-            cancelScanDecrypt = 0;
-            [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
+                /* User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails */
+                cancelScanDecrypt = 0;
+                [self writeToActivityLog: "user overrode vlc warning -trying to open physical dvd without decryption"];
             }
-
+            
         }
         else
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
         }
+#endif 
     }
-
+    
     if (cancelScanDecrypt == 0)
     {
         /* we actually pass the scan off to libhb here */
