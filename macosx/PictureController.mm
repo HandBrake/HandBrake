@@ -69,6 +69,7 @@
 
 - (IBAction) showPreviewWindow: (id)sender
 {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
     [fPreviewController showWindow:sender];
 }
 
