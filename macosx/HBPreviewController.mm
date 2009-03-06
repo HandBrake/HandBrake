@@ -1314,6 +1314,26 @@ return YES;
     }
     else
     {
+        /* Since upon launch we can open up the preview window if it was open
+         * the last time we quit (and at the size it was) we want to make
+         * sure that upon resize we do not have the window off the screen
+         * So check the origin against the screen origin and adjust if
+         * necessary.
+         */
+        NSSize screenSize = [[[self window] screen] frame].size;
+        NSPoint screenOrigin = [[[self window] screen] frame].origin;
+        /* our origin is off the screen to the left*/
+        if (frame.origin.x < screenOrigin.x)
+        {
+            /* so shift our origin to the right */
+            frame.origin.x = screenOrigin.x;
+        }
+        else if ((frame.origin.x + frame.size.width) > (screenOrigin.x + screenSize.width))
+        {
+            /* the right side of the preview is off the screen, so shift to the left */
+            frame.origin.x = (screenOrigin.x + screenSize.width) - frame.size.width;
+        }
+        
         [[self window] setFrame:frame display:YES animate:YES];
     }
     
