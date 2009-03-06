@@ -50,6 +50,25 @@ namespace Handbrake
             updateUIElements();
         }
 
+        /// <summary>
+        /// Initializes the Queue list, then shows and activates the window
+        /// </summary>
+        public new void Show()
+        {
+            Show(true);
+        }
+
+        /// <summary>
+        /// Initializes the Queue list only if doSetQueue is true, then shows and activates the window
+        /// </summary>
+        /// <param name="doSetQueue">Indicates whether to call setQueue() before showing the window</param>
+        public void Show(bool doSetQueue)
+        {
+            if (doSetQueue) setQueue();
+            base.Show();
+            Activate();
+        }
+
         // Start and Stop Controls
         private void btn_encode_Click(object sender, EventArgs e)
         {

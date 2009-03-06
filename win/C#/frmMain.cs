@@ -615,7 +615,7 @@ namespace Handbrake
                     }
                     queueWindow.setQueue();
                     if (encodeQueue.count() > 1)
-                        queueWindow.Show();
+                        queueWindow.Show(false);
 
                     setEncodeStarted(); // Encode is running, so setup the GUI appropriately
                     encodeQueue.startEncode(); // Start The Queue Encoding Process
@@ -639,13 +639,11 @@ namespace Handbrake
                 encodeQueue.add(query, text_source.Text, text_destination.Text);
                 encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
 
-                queueWindow.setQueue();
                 queueWindow.Show();
             }
         }
         private void btn_showQueue_Click(object sender, EventArgs e)
         {
-            queueWindow.setQueue();
             queueWindow.Show();
             queueWindow.Activate();
         }
@@ -666,7 +664,7 @@ namespace Handbrake
                     qtpreview.Show();
                 }
                 else
-                    MessageBox.Show("The preview window is already open!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(qtpreview, "The preview window is already open!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
@@ -1740,11 +1738,11 @@ namespace Handbrake
                         if (curDrive.IsReady)
                         {
                             if (File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
+                            {
                                 mnu_dvd_drive.Text = curDrive.RootDirectory + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
-                            else
-                                mnu_dvd_drive.Text = "[No DVD Drive Ready]";
-
-                            foundDrive = true;
+                                foundDrive = true;
+                                break;
+                            }
 
                         }
                     }

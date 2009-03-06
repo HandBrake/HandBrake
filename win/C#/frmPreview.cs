@@ -28,7 +28,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("It would appear QuickTime 7 is not installed. QuickTime preview functionality will be disabled! \n\n Debug Info:\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(mw, "It would appear QuickTime 7 is not installed. QuickTime preview functionality will be disabled! \n\n Debug Info:\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 btn_playQT.Enabled = false;
                 noQT = true;
             }
@@ -58,7 +58,7 @@ namespace Handbrake
         {
             // Make sure we are not already encoding and if we are then display an error.
             if (hbProc != null)
-                MessageBox.Show("Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
                 hbProc = process.runCli(this, (string)state);
@@ -99,7 +99,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmPreview.cs encodeCompleted " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "frmPreview.cs encodeCompleted " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -133,10 +133,10 @@ namespace Handbrake
                         lbl_status.Text = "VLC will now launch.";
                     }
                     else
-                        MessageBox.Show("Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in the program options is correct.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(this, "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in the program options is correct.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
-                    MessageBox.Show("Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(this, "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -169,11 +169,11 @@ namespace Handbrake
             catch (COMException ex)
             {
                 QTUtils qtu = new QTUtils();
-                MessageBox.Show("Unable to open movie:\n\nError Code: " + ex.ErrorCode.ToString("X") + "\nQT Error code : " + qtu.QTErrorFromErrorCode(ex.ErrorCode));
+                MessageBox.Show(this, "Unable to open movie:\n\nError Code: " + ex.ErrorCode.ToString("X") + "\nQT Error code : " + qtu.QTErrorFromErrorCode(ex.ErrorCode), "QT", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to open movie:\n\n" + ex);
+                MessageBox.Show(this, "Unable to open movie:\n\n" + ex, "QT", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         #endregion
