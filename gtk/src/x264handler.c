@@ -43,7 +43,6 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 void
 x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	const GValue *gval;
 	gint me;
 
 	ghb_widget_to_setting(ud->settings, widget);
@@ -56,8 +55,7 @@ x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
 	widget = GHB_WIDGET(ud->builder, "x264_merange");
-	gval = ghb_settings_get_value(ud->settings, "x264_me");
-	me = ghb_lookup_combo_int("x264_me", gval);
+	me = ghb_settings_combo_int(ud->settings, "x264_me");
 	if (me < 2)
 	{	// me < umh
 		// me_range 4 - 16
@@ -336,31 +334,37 @@ x264_update_deblock(signal_user_data_t *ud, const gchar *xval)
 }
 
 static void
+x264_parse_psy(const gchar *psy, gdouble *psy_rd, gdouble *psy_trell)
+{
+	gchar *val;
+	gchar *trell_val = NULL;
+	gchar *end;
+
+	*psy_rd = 0.;
+	*psy_trell = 0.;
+	if (psy == NULL) return;
+	val = g_strdup(psy);
+	gchar *pos = strchr(val, ',');
+	if (pos != NULL)
+	{
+		trell_val = pos + 1;
+		*pos = 0;
+	}
+	*psy_rd = g_strtod (val, &end);
+	if (trell_val != NULL)
+	{
+		*psy_trell = g_strtod (trell_val, &end);
+	}
+	g_free(val);
+}
+
+static void
 x264_update_psy(signal_user_data_t *ud, const gchar *xval)
 {
 	gdouble rd_value, trell_value;
-	gchar *end;
-	gchar *val;
-	gchar *trell_val = NULL;
 
 	if (xval == NULL) return;
-	val = g_strdup(xval);
-	rd_value = trell_value = 0;
-	if (val != NULL) 
-	{
-		gchar *pos = strchr(val, ',');
-		if (pos != NULL)
-		{
-			trell_val = pos + 1;
-			*pos = 0;
-		}
-		rd_value = g_strtod (val, &end);
-		if (trell_val != NULL)
-		{
-			trell_value = g_strtod (trell_val, &end);
-		}
-	}
-	g_free(val);
+	x264_parse_psy(xval, &rd_value, &trell_value);
 	ghb_ui_update(ud, "x264_psy_rd", ghb_double_value(rd_value));
 	ghb_ui_update(ud, "x264_psy_trell", ghb_double_value(trell_value));
 }
@@ -602,6 +606,29 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 	}
 }
 
+static gint
+x264_find_opt(gchar **opts, gchar **opt_syns)
+{
+	gint ii;
+	for (ii = 0; opts[ii] != NULL; ii++)
+	{
+		gchar *opt;
+		opt = g_strdup(opts[ii]);
+		gchar *pos = strchr(opt, '=');
+		if (pos != NULL)
+		{
+			*pos = 0;
+		}
+		if (find_syn_match(opt, opt_syns) >= 0)
+		{
+			g_free(opt);
+			return ii;
+		}
+		g_free(opt);
+	}
+	return -1;
+}
+
 static void
 x264_remove_opt(gchar **opts, gchar **opt_syns)
 {
@@ -631,9 +658,53 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 {
 	GString *x264opts = g_string_new("");
 	gchar **split = g_strsplit(options, ":", -1);
-
-	// Remove entries that match the defaults
 	gint ii;
+
+	// Fix up option dependencies
+	gint subme = ghb_settings_combo_int(ud->settings, "x264_subme");
+	if (subme < 6)
+	{
+		x264_remove_opt(split, x264_psy_syns);
+	}
+	gint trell = ghb_settings_combo_int(ud->settings, "x264_trellis");
+	if (trell < 1)
+	{
+		gint psy;
+		gdouble psy_rd = 0., psy_trell;
+
+		psy = x264_find_opt(split, x264_psy_syns);
+		if (psy >= 0)
+		{
+			gchar *pos = strchr(split[psy], '=');
+			if (pos != NULL)
+			{
+				x264_parse_psy(pos+1, &psy_rd, &psy_trell);
+			}
+			g_free(split[psy]);
+			split[psy] = g_strdup_printf("psy-rd=%g,0", psy_rd);
+		}
+	}
+	gint refs = ghb_settings_get_int(ud->settings, "x264_refs");
+	if (refs <= 1)
+	{
+		x264_remove_opt(split, x264_mixed_syns);
+	}
+	gint bframes = ghb_settings_get_int(ud->settings, "x264_bframes");
+	if (bframes == 0)
+	{
+		x264_remove_opt(split, x264_weightb_syns);
+		x264_remove_opt(split, x264_direct_syns);
+		x264_remove_opt(split, x264_badapt_syns);
+	}
+	if (bframes <= 1)
+	{
+		x264_remove_opt(split, x264_bpyramid_syns);
+	}
+	if (!ghb_settings_get_boolean(ud->settings, "x264_cabac"))
+	{
+		x264_remove_opt(split, x264_trellis_syns);
+	}
+	// Remove entries that match the defaults
 	for (ii = 0; split[ii] != NULL; ii++)
 	{
 		gchar *val = NULL;
@@ -655,26 +726,6 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 			split[ii][0] = 0;
 		}
 		g_free(opt);
-	}
-	gint refs = ghb_settings_get_int(ud->settings, "x264_refs");
-	if (refs <= 1)
-	{
-		x264_remove_opt(split, x264_mixed_syns);
-	}
-	gint bframes = ghb_settings_get_int(ud->settings, "x264_bframes");
-	if (bframes == 0)
-	{
-		x264_remove_opt(split, x264_weightb_syns);
-		x264_remove_opt(split, x264_direct_syns);
-		x264_remove_opt(split, x264_badapt_syns);
-	}
-	if (bframes <= 1)
-	{
-		x264_remove_opt(split, x264_bpyramid_syns);
-	}
-	if (!ghb_settings_get_boolean(ud->settings, "x264_cabac"))
-	{
-		x264_remove_opt(split, x264_trellis_syns);
 	}
 	for (ii = 0; split[ii] != NULL; ii++)
 	{
