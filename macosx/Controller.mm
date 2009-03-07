@@ -108,7 +108,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer
                                           scheduledTimerWithTimeInterval:0.5 target:self
                                           selector:@selector(updateUI:) userInfo:nil repeats:YES]
-                                 forMode:NSEventTrackingRunLoopMode];
+                                 forMode:NSDefaultRunLoopMode];
 
     // Open debug output window now if it was visible when HB was closed
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
