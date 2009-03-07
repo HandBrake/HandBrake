@@ -215,61 +215,108 @@ namespace Handbrake
                 // Do Nothing
             }
         }
-
-        // Queue Management
-        private void btn_up_Click(object sender, EventArgs e)
+        private void deleteSelectedItems()
         {
-            if (list_queue.SelectedIndices.Count != 0)
+            // If there are selected items
+            if (list_queue.SelectedIndices.Count > 0)
             {
-                int selected = list_queue.SelectedIndices[0];
+                // Save the selected indices to select them after the move
+                List<int> selectedIndices = new List<int>(list_queue.SelectedIndices.Count);
+                foreach (int selectedIndex in list_queue.SelectedIndices)
+                    selectedIndices.Add(selectedIndex);
 
-                queue.moveUp(selected);
+                int firstSelectedIndex = selectedIndices[0];
+
+                // Reverse the list to delete the items from last to first (preserves indices)
+                selectedIndices.Reverse();
+                
+                // Remove each selected item
+                foreach (int selectedIndex in selectedIndices)
+                    queue.remove(selectedIndex);
+
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
 
-                if (selected - 1 > 0)
-                    list_queue.Items[selected - 1].Selected = true;
-
-                list_queue.Select();
+                // Select the item where the first deleted item was previously
+                if (firstSelectedIndex < list_queue.Items.Count) 
+                    list_queue.Items[firstSelectedIndex].Selected = true;
             }
+
+            list_queue.Select(); // Activate the control to show the selected items
+        }
+
+        // Queue Management
+        private void btn_re_add_Click(object sender, EventArgs e)
+        {
+            if (queue.getLastQueryItem() != null)
+            {
+                queue.add(queue.getLastQueryItem().Query, queue.getLastQueryItem().Source, queue.getLastQueryItem().Destination);
+                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
+                updateUIElements();
+            }
+        }
+        private void btn_up_Click(object sender, EventArgs e)
+        {
+            // If there are selected items and the first item is not selected
+            if (list_queue.SelectedIndices.Count > 0 && ! list_queue.SelectedIndices.Contains(0))
+            {
+                // Copy the selected indices to preserve them during the movement
+                List<int> selectedIndices = new List<int>(list_queue.SelectedIndices.Count);
+                foreach (int selectedIndex in list_queue.SelectedIndices)
+                    selectedIndices.Add(selectedIndex);
+
+                // Move up each selected item
+                foreach (int selectedIndex in selectedIndices)
+                    queue.moveUp(selectedIndex);
+
+                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
+                updateUIElements();
+
+                // Keep the selected item(s) selected, now moved up one index
+                foreach (int selectedIndex in selectedIndices)
+                    if (selectedIndex - 1 > -1) // Defensive programming: ensure index is good
+                        list_queue.Items[selectedIndex - 1].Selected = true;
+            }
+
+            list_queue.Select(); // Activate the control to show the selected items
         }
         private void btn_down_Click(object sender, EventArgs e)
         {
-            if (list_queue.SelectedIndices.Count != 0)
+            // If there are selected items and the last item is not selected
+            if (list_queue.SelectedIndices.Count > 0 && 
+                ! list_queue.SelectedIndices.Contains(list_queue.Items[list_queue.Items.Count-1].Index))
             {
-                int selected = list_queue.SelectedIndices[0];
+                // Copy the selected indices to preserve them during the movement
+                List<int> selectedIndices = new List<int>(list_queue.SelectedIndices.Count);
+                foreach (int selectedIndex in list_queue.SelectedIndices)
+                    selectedIndices.Add(selectedIndex);
 
-                queue.moveDown(list_queue.SelectedIndices[0]);
+                // Reverse the indices to move the items down from last to first (preserves indices)
+                selectedIndices.Reverse();
+
+                // Move down each selected item
+                foreach (int selectedIndex in selectedIndices)
+                    queue.moveDown(selectedIndex);
+                
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
 
-                if (selected + 1 < list_queue.Items.Count)
-                    list_queue.Items[selected + 1].Selected = true;
-
-                list_queue.Select();
+                // Keep the selected item(s) selected, now moved down one index
+                foreach (int selectedIndex in selectedIndices)
+                    if (selectedIndex + 1 < list_queue.Items.Count) // Defensive programming: ensure index is good
+                        list_queue.Items[selectedIndex + 1].Selected = true; 
             }
+
+            list_queue.Select(); // Activate the control to show the selected items
         }
         private void btn_delete_Click(object sender, EventArgs e)
         {
-            if (list_queue.SelectedIndices.Count != 0)
-            {
-                queue.remove(list_queue.SelectedIndices[0]);
-                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                updateUIElements();
-                lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
-            }
+            deleteSelectedItems();
         }
         private void list_queue_deleteKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
-            {
-                if (list_queue.SelectedIndices.Count != 0)
-                {
-                    queue.remove(list_queue.SelectedIndices[0]);
-                    queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                    updateUIElements();
-                }
-            }
+                deleteSelectedItems();
         }
 
         // Queue Import/Export Features
@@ -305,5 +352,7 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
+
+        
     }
 }

@@ -92,12 +92,12 @@ namespace Handbrake.Queue
         /// <param name="index">Int</param>
         public void moveUp(int index)
         {
-            if (index != 0)
+            if (index > 0)
             {
                 QueueItem item = (QueueItem)queue[index];
 
+                queue.RemoveAt(index);
                 queue.Insert((index - 1), item);
-                queue.RemoveAt((index + 1));
             }
         }
 
@@ -107,12 +107,12 @@ namespace Handbrake.Queue
         /// <param name="index">Int</param>
         public void moveDown(int index)
         {
-            if (index != queue.Count - 1)
+            if (index < queue.Count - 1)
             {
                 QueueItem item = (QueueItem)queue[index];
 
-                queue.Insert((index + 2), item);
-                queue.RemoveAt((index));
+                queue.RemoveAt(index);
+                queue.Insert((index + 1), item);
             }
         }
 

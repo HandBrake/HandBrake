@@ -57,8 +57,6 @@ namespace Handbrake
             this.btn_vlcPath = new System.Windows.Forms.Button();
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
-            this.txt_decomb = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
             this.label15 = new System.Windows.Forms.Label();
             this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
@@ -348,8 +346,6 @@ namespace Handbrake
             this.tab_picture.Controls.Add(this.btn_vlcPath);
             this.tab_picture.Controls.Add(this.txt_vlcPath);
             this.tab_picture.Controls.Add(this.label29);
-            this.tab_picture.Controls.Add(this.txt_decomb);
-            this.tab_picture.Controls.Add(this.label3);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
             this.tab_picture.Size = new System.Drawing.Size(482, 259);
@@ -362,7 +358,7 @@ namespace Handbrake
             this.btn_vlcPath.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_vlcPath.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_vlcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_vlcPath.Location = new System.Drawing.Point(398, 56);
+            this.btn_vlcPath.Location = new System.Drawing.Point(398, 15);
             this.btn_vlcPath.Name = "btn_vlcPath";
             this.btn_vlcPath.Size = new System.Drawing.Size(68, 22);
             this.btn_vlcPath.TabIndex = 83;
@@ -372,7 +368,7 @@ namespace Handbrake
             // 
             // txt_vlcPath
             // 
-            this.txt_vlcPath.Location = new System.Drawing.Point(98, 56);
+            this.txt_vlcPath.Location = new System.Drawing.Point(98, 15);
             this.txt_vlcPath.Name = "txt_vlcPath";
             this.txt_vlcPath.Size = new System.Drawing.Size(294, 21);
             this.txt_vlcPath.TabIndex = 81;
@@ -383,30 +379,11 @@ namespace Handbrake
             // 
             this.label29.AutoSize = true;
             this.label29.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(17, 61);
+            this.label29.Location = new System.Drawing.Point(17, 20);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(67, 13);
             this.label29.TabIndex = 79;
             this.label29.Text = "VLC Path:";
-            // 
-            // txt_decomb
-            // 
-            this.txt_decomb.Location = new System.Drawing.Point(98, 16);
-            this.txt_decomb.Name = "txt_decomb";
-            this.txt_decomb.Size = new System.Drawing.Size(181, 21);
-            this.txt_decomb.TabIndex = 78;
-            this.ToolTip.SetToolTip(this.txt_decomb, "Default: 4:10:15:9:10:35:9");
-            this.txt_decomb.TextChanged += new System.EventHandler(this.txt_decomb_TextChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(21, 19);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(63, 13);
-            this.label3.TabIndex = 77;
-            this.label3.Text = "Decomb:";
             // 
             // tab_cli
             // 
@@ -1149,8 +1126,6 @@ namespace Handbrake
         internal System.Windows.Forms.ToolTip ToolTip;
         internal System.Windows.Forms.CheckBox check_snapshot;
         private System.Windows.Forms.TabPage tab_picture;
-        private System.Windows.Forms.TextBox txt_decomb;
-        private System.Windows.Forms.Label label3;
         internal System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txt_autoNameFormat;
         private System.Windows.Forms.Label label7;

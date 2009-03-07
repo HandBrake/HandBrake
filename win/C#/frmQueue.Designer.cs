@@ -40,6 +40,7 @@ namespace Handbrake
             this.btn_up = new System.Windows.Forms.Button();
             this.btn_delete = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btn_re_add = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.lbl_chapt = new System.Windows.Forms.Label();
             this.lbl_title = new System.Windows.Forms.Label();
@@ -126,6 +127,22 @@ namespace Handbrake
             this.toolTip1.SetToolTip(this.btn_delete, "Remove the selected item from the queue");
             this.btn_delete.UseVisualStyleBackColor = true;
             this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
+            // 
+            // btn_re_add
+            // 
+            this.btn_re_add.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_re_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_re_add.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_re_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_re_add.Location = new System.Drawing.Point(607, 39);
+            this.btn_re_add.Name = "btn_re_add";
+            this.btn_re_add.Size = new System.Drawing.Size(157, 22);
+            this.btn_re_add.TabIndex = 71;
+            this.btn_re_add.TabStop = false;
+            this.btn_re_add.Text = "Re-Add Current";
+            this.toolTip1.SetToolTip(this.btn_re_add, "Re-add the current or last job to the queue");
+            this.btn_re_add.UseVisualStyleBackColor = true;
+            this.btn_re_add.Click += new System.EventHandler(this.btn_re_add_Click);
             // 
             // label4
             // 
@@ -311,7 +328,6 @@ namespace Handbrake
             this.list_queue.GridLines = true;
             this.list_queue.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.list_queue.Location = new System.Drawing.Point(15, 0);
-            this.list_queue.MultiSelect = false;
             this.list_queue.Name = "list_queue";
             this.list_queue.Size = new System.Drawing.Size(749, 219);
             this.list_queue.TabIndex = 72;
@@ -382,6 +398,7 @@ namespace Handbrake
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btn_re_add);
             this.splitContainer1.Panel1.Controls.Add(this.label3);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.btn_down);
@@ -495,5 +512,6 @@ namespace Handbrake
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel3;
+        internal System.Windows.Forms.Button btn_re_add;
     }
 }

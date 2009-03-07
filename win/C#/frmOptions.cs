@@ -56,9 +56,6 @@ namespace Handbrake
             // Picture Tab
             // #############################
 
-            // Store decomb value string
-            txt_decomb.Text = Properties.Settings.Default.decomb;
-
             // VLC Path
             txt_vlcPath.Text = Properties.Settings.Default.VLC_Path;
 
@@ -166,11 +163,6 @@ namespace Handbrake
         #endregion
 
         #region Picture
-        private void txt_decomb_TextChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.decomb = txt_decomb.Text;
-        }
-
         private void btn_vlcPath_Click(object sender, EventArgs e)
         {
             openFile_vlc.ShowDialog();

@@ -229,30 +229,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4:10:15:9:10:35:9")]
-        public string decomb {
-            get {
-                return ((string)(this["decomb"]));
-            }
-            set {
-                this["decomb"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4:10:15:9:10:35:9")]
-        public string default_decomb {
-            get {
-                return ((string)(this["default_decomb"]));
-            }
-            set {
-                this["default_decomb"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("{source}-{title}-{chapters}")]
         public string autoNameFormat {
             get {
