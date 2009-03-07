@@ -1,4 +1,5 @@
-.PHONY: report.main report.gcc report.modules report.var report.true
+.PHONY: report.main report.gcc report.modules report.var report.true report.help
+.PHONY: shell.run
 
 report.modules::
 
@@ -34,3 +35,7 @@ report.help:
 	@echo "  ----------------------------------------------------------------"
 	$(foreach n,main gcc var,$(call REPORT.help.item.global,$n))
 	$(foreach n,$(MODULES.NAMES),$(call REPORT.help.item.module,$n))
+
+## diagnostic aid when troubleshooting build issues
+shell.run:
+	$(command)
