@@ -1,10 +1,10 @@
-include $(PROJECT/)make/include/base.defs
-include $(PROJECT/)make/include/contrib.defs
-include $(PROJECT/)make/include/function.defs
-include $(PROJECT/)make/include/gcc.defs
-include $(PROJECT/)make/include/select.defs
-include $(PROJECT/)make/include/target.defs
-include $(PROJECT/)make/include/tool.defs
+include $(SRC/)make/include/base.defs
+include $(SRC/)make/include/contrib.defs
+include $(SRC/)make/include/function.defs
+include $(SRC/)make/include/gcc.defs
+include $(SRC/)make/include/select.defs
+include $(SRC/)make/include/target.defs
+include $(SRC/)make/include/tool.defs
 
 ###############################################################################
 
@@ -62,6 +62,6 @@ MODULES += doc
 
 ###############################################################################
 
-include $(MODULES:%=$(PROJECT/)%/module.defs)
-include $(PROJECT/)make/variant/$(HOST.system).defs
--include $(PROJECT/)make/variant/$(HOST.system).$(BUILD.machine).defs
+include $(MODULES:%=$(SRC/)%/module.defs)
+include $(SRC/)make/variant/$(HOST.system).defs
+-include $(SRC/)make/variant/$(HOST.system).$(BUILD.machine).defs

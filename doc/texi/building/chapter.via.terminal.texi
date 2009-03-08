@@ -12,13 +12,10 @@
 Configure the build system.
 
 @example
-rm -fr build/
-mkdir build/
-cd build/
-../configure
+./configure
 @end example
 
-Create a scratch directory which will contain all files created during the build process. The directory name is arbitrary but we recommend something simple and descriptive. One directory is required for each distinctly configured build. We name our directory @file{build} for example purposes.
+Configure will automatically create a scratch build directory @file{build} unless you use GNU-style build procedures and first @command{cd} to a directory other than top-level source. Additionally you may specify use @command{--build} to specify the directory. The name of the directory is arbitrary but it is recommended to use something which indicates transient files which are @b{not} checked into the repository.
 
 The @command{configure} utility accepts many options. It is recommended that you specify @command{--help} for the complete list of options. The following options are also documented here:
 
@@ -26,12 +23,22 @@ The @command{configure} utility accepts many options. It is recommended that you
 @item --help
 List available options.
 
-@item --prefix=PREFIX
+@item --src=DIR
+Specify top-level source directory for @value{HB.name} sources.
+
+@item --build=DIR
+Specify destination directory for final product install. The default is to use either @file{build} if in the top-level source directory, otherwise @file{.} 
+
+@item --prefix=DIR
 Specify destination directory for final product install.
 This defaults to a reasonable platform-specific value.
 
+@item --launch
+All-in-one option which launches the build and logs output automatically.
+Useful for novices and quickstart procedures.
+
 @item --disable-xcode
-Disable driving the build through Xcode. If this option is disabled only @command{HandBrakeCLI} will be produced and Xcode will not be invoked. @value{OS.osx} only.
+Disable shunting the build through Xcode. If this option is applied, @command{HandBrakeCLI} will be produced in a similare fashion as it is on other platforms; sans Xcode. @value{OS.osx} only.
 
 @item --disable-gtk
 Disable building the GTK GUI on applicable platforms such as @value{OS.linux}.
@@ -47,8 +54,6 @@ This generally maps to gcc options @samp{-g0}, @samp{-O0}, @samp{-O3}, @samp{-Os
 @item --arch=MODE
 Select build architecture. The available architectures vary by platform. Most platforms support exactly one architecture except @value{OS.osx} which has support for various universal binary architectures. The available choices are hard-coded per platform and no sanity checks for the required tools are performed.
 
-@item --gcc=EXE
-Specify the @command{gcc} executable to use where @b{EXE} is the executable name which is either absolute or environment @samp{PATH} is searched accordingly.
 @end table
 
 Clean-room procedures dictate that when certain factors change, old builds should be scrapped and new builds configured. This is the main reason for requiring a scratch directory; to promote consistent, reliable and clean software builds. The following is a short list of some of the reasons why someone may choose to scrap an existing build:
@@ -207,7 +212,24 @@ For convenience, the following targets aggregate the all contrib modules' respec
 @c %**-------------------------------------------------------------------------
 @anchor{terminal.customizing}
 @section Customizing Make
-If the need arises to override settings in the build system (essentially gnu-make variables) the recommended method is to create/edit the optional include file @file{build/GNUmakefile.custom} which sits adjacent to the top-level makefile. @b{Do not check this file into the respository}. The sole purpose is to allow a place to store local build settings for testing, tweaking, and experimenting with build configuration without losing your settings if @command{configure} is invoked; ie: @command{configure} would overwrite @file{GNUmakefile} and any customizations contained therein would be lost. Here is a short example of what the contents of @file{build/GNUmakefile.custom} might contain:
+If the need arises to override settings in the build system (essentially gnu-make variables) the recommended method is to create optional include files which are automatically included if present and follow this naming convention; @b{Do not check these files into the respository}:
+
+@table @file
+@item _SRC_/custom.defs
+Custom makevar definitions @i{outside} @file{build}. Suitable for settings which apply across all builds for a particular checkout; or which survives manual removal of @file{build}.
+
+@item _SRC_/custom.rules
+Custom make rules @i{outside} @file{build}. Suitable for settings which apply across all builds for a particular checkout; or which survives manual removal of @file{build}.
+
+@item _BUILD_/GNUmakefile.custom.defs
+Custom makevar definitions specific to a @file{build} directory.
+
+@item _BUILD_/GNUmakefile.custom.rules
+Custom makevar rules specific to a @file{build} directory.
+
+@end table
+
+The purpose is to allow a place to store local build settings for testing, tweaking, and experimenting with build configuration without losing your settings if @command{configure} is invoked; ie: @command{configure} would overwrite @file{GNUmakefile} and any customizations contained therein would be lost. Here is a short example of what the contents of @file{_SRC_/custom.defs} might contain:
 
 @example
 ## bump to gcc-4.2 in current path

@@ -1,5 +1,5 @@
 CONTRIB.build/    = $(BUILD/)contrib/
-CONTRIB.download/ = $(PROJECT/)download/
+CONTRIB.download/ = $(SRC/)download/
 CONTRIB.host      = $(if $(filter 1,$(BUILD.cross)),$(BUILD.spec))
 
 ###############################################################################
@@ -17,7 +17,7 @@ define import.CONTRIB.defs
     ##
     ## common values useful across targets
     ##
-    $(1).src/   = $$(PROJECT/)contrib/$($(1).name)/
+    $(1).src/   = $$(SRC/)contrib/$($(1).name)/
     $(1).build/ = $$(CONTRIB.build/)$($(1).name)/
     $(1).deps   = $$(foreach n,$($(1).prerequisites),$$($$n.INSTALL.target))
 
@@ -209,7 +209,7 @@ $($(1).name).extract.touch:
 	$$(TOUCH.exe) $$($(1).EXTRACT.target)
 
 $($(1).name).extract.untouch:
-	$$(RM.exe) $$($(1).EXTRACT.target)
+	$$(RM.exe) -f $$($(1).EXTRACT.target)
 
 ##
 ## target: patch
@@ -224,7 +224,7 @@ $($(1).name).patch.touch:
 	$$(TOUCH.exe) $$($(1).PATCH.target)
 
 $($(1).name).patch.untouch:
-	$$(RM.exe) $$($(1).PATCH.target)
+	$$(RM.exe) -f $$($(1).PATCH.target)
 
 ##
 ## target: configure
@@ -240,7 +240,7 @@ $($(1).name).configure.touch:
 	$$(TOUCH.exe) $$($(1).CONFIGURE.target)
 
 $($(1).name).configure.untouch:
-	$$(RM.exe) $$($(1).CONFIGURE.target)
+	$$(RM.exe) -f $$($(1).CONFIGURE.target)
 
 ##
 ## target: build
@@ -256,7 +256,7 @@ $($(1).name).build.touch:
 	$$(TOUCH.exe) $$($(1).BUILD.target)
 
 $($(1).name).build.untouch:
-	$$(RM.exe) $$($(1).BUILD.target)
+	$$(RM.exe) -f $$($(1).BUILD.target)
 
 ##
 ## target: install
@@ -271,7 +271,7 @@ $($(1).name).install.touch:
 	$$(TOUCH.exe) $$($(1).INSTALL.target)
 
 $($(1).name).install.untouch:
-	$$(RM.exe) $$($(1).INSTALL.target)
+	$$(RM.exe) -f $$($(1).INSTALL.target)
 
 ##
 ## target: uninstall

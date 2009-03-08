@@ -1,40 +1,9 @@
-## UB build support
-##
-## PROCEDURE:
-##
-##  1. Perform a build (let us call it arch-X).
-##  2. cd into arch-X's build/ driectory.
-##  3. Launch builds of the remaining architectures.
-##     We compute $(UB.archs.other) to be the remaining archs to build.
-##     The entire list is defined $(UB.archs) .
-##  4. Combine other architectures into arch-X's binaries.
-##
-## EXAMPLE: serial method, archs: i386,x86_64,ppc,ppc64
-##
-##  ./configure --launch
-##  cd build/
-##  make ub.build.serial
-##  make ub.combine
-##
-## EXAMPLE: parallel method, archs: i386,x86_64,ppc,ppc64
-##
-##  ./configure --launch
-##  cd build/
-##  make ub.build.parallel
-##  make ub.combine
-##
-## EXAMPLE: serial, archs: i386,x86_64 (assuming i386 is native)
-##
-##  ./configure --launch
-##  cd build/
-##  make ub.build.parallel UB.archs="i386 x86_64"
-##  make ub.combine UB.archs="i386 x86_64"
-##
-UB.archs       = i386 x86_64 ppc ppc64
-UB.archs.other = $(filter-out $(BUILD.arch),$(UB.archs))
-UB.builds      = $(wildcard $(foreach n,$(UB.archs.other),$(PROJECT/)build.$n))
+UB.archs  = i386 x86_64 ppc ppc64
+UB.builds = $(wildcard $(foreach n,$(UB.archs),$(SRC/)build.$n))
+UB.first  = $(word 1,$(UB.archs))
+UB.other  = $(wordlist 2,999,$(UB.archs))
 
-UB.BUILD = $(PROJECT/)configure --launch --launch-dir=ub.$(1) --arch=$(1)
+UB.BUILD = $(SRC/)configure --build=ub.$(1) --arch=$(1) --launch --launch-quiet
 
 ## linefeed is important
 define UB.BUILD.item
@@ -43,19 +12,21 @@ define UB.BUILD.item
 endef
 
 define UB.BUILD.SERIAL
-	$(foreach n,$(UB.archs.other),$(call UB.BUILD.item,$n))
+	$(foreach n,$(UB.archs),$(call UB.BUILD.item,$n))
 endef
 
 define UB.BUILD.PARALLEL
-	$(call UB.BUILD,$(1)) 2>&1 > ub.$(1).log
+	$(call UB.BUILD,$(1)) >/dev/null 2>&1
 endef
 
 define UB.COMBINE
 	$(RM.exe) -fr ub.combine
 	$(MKDIR.exe) -p ub.combine
-	$(CP.exe) -R HandBrake.app ub.combine/.
-	lipo $(1) $(foreach n,$(UB.archs.other),ub.$n/$(1)) -create -output ub.combine/$(1)
+	$(CP.exe) -R ub.$(UB.first)/HandBrake.app ub.combine/.
+	$(LIPO.exe) $(foreach n,$(UB.archs),ub.$n/$(1)) -create -output ub.combine/$(1)
+	@lipo -info ub.combine/$(1)
+	@sync
 	@echo ""
-	@sync; lipo -info ub.combine/$(1)
-	@du -sh ub.combine/$(1)
+	@echo "$@: { $(UB.archs) } combined -> ub.combine/HandBrake.app"
+	@echo "$@: UB executable size: `du -sh ub.combine/$(1) | awk '{ print $$1 }'`"
 endef

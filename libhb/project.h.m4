@@ -25,7 +25,6 @@ dnl
 <<#>>define HB_PROJECT_REPO_UUID       "__HB_repo_uuid"
 <<#>>define HB_PROJECT_REPO_REV        __HB_repo_rev
 <<#>>define HB_PROJECT_REPO_DATE       "__HB_repo_date"
-<<#>>define HB_PROJECT_REPO_WCVERSION  "__HB_repo_wcversion"
 <<#>>define HB_PROJECT_REPO_OFFICIAL   __HB_repo_official
 <<#>>define HB_PROJECT_REPO_TYPE       "__HB_repo_type"
 

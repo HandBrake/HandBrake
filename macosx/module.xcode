@@ -20,7 +20,7 @@ xclean: clean
 
 ###############################################################################
 
-MACOSX.goals = $(filter-out build clean install xclean,$(MAKECMDGOALS))
+MACOSX.goals = $(filter-out build clean install,$(MAKECMDGOALS))
 
 $(MACOSX.goals): __goals__
 	@true

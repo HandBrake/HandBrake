@@ -400,7 +400,7 @@
 /* Begin PBXLegacyTarget section */
 		27F143770F5DF34F00A684FF /* external */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "\"$EXTERNAL_PROJECT/make/xcodemake";
+			buildArgumentsString = "\"$EXTERNAL_SRC/make/xcodemake";
 			buildConfigurationList = 27F1438E0F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "external" */;
 			buildPhases = (
 			);
@@ -413,7 +413,7 @@
 		};
 		27F1437E0F5DF36000A684FF /* contrib */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "\"$EXTERNAL_PROJECT/make/xcodemake";
+			buildArgumentsString = "\"$EXTERNAL_SRC/make/xcodemake";
 			buildConfigurationList = 27F1438F0F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "contrib" */;
 			buildPhases = (
 			);
@@ -426,7 +426,7 @@
 		};
 		27F143850F5DF37600A684FF /* libhb */ = {
 			isa = PBXLegacyTarget;
-			buildArgumentsString = "\"$EXTERNAL_PROJECT/make/xcodemake";
+			buildArgumentsString = "\"$EXTERNAL_SRC/make/xcodemake";
 			buildConfigurationList = 27F143900F5DF3EA00A684FF /* Build configuration list for PBXLegacyTarget "libhb" */;
 			buildPhases = (
 			);
@@ -482,6 +482,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = 4D4E7BC4087804870051572B /* Build configuration list for PBXProject "HandBrake" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
@@ -735,10 +738,10 @@
 				ARCHS = i386;
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
-				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 8;
+				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
-				EXTERNAL_PROJECT = ..;
+				EXTERNAL_SRC = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -844,10 +847,10 @@
 				ARCHS = ppc;
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
-				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 8;
+				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
-				EXTERNAL_PROJECT = ..;
+				EXTERNAL_SRC = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -953,10 +956,10 @@
 				ARCHS = x86_64;
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
-				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 8;
+				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
-				EXTERNAL_PROJECT = ..;
+				EXTERNAL_SRC = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1062,10 +1065,10 @@
 				ARCHS = ppc64;
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
-				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 8;
+				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
-				EXTERNAL_PROJECT = ..;
+				EXTERNAL_SRC = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1403,10 +1406,10 @@
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
-				EXTERNAL_JOBS = 8;
+				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
+				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
-				EXTERNAL_PROJECT = ..;
+				EXTERNAL_SRC = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1427,10 +1430,10 @@
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(EXTERNAL_BUILD)";
 				CONFIGURATION_TEMP_DIR = "$(SYMROOT)";
-				EXTERNAL_BUILD = "$(EXTERNAL_PROJECT)/build.$(CONFIGURATION)";
+				EXTERNAL_BUILD = "$(EXTERNAL_SRC)/build.$(CONFIGURATION)";
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
-				EXTERNAL_PROJECT = ..;
+				EXTERNAL_SRC = ..;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;

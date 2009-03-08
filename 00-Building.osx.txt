@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2213 (2009030301) on Mac OS X
+Guide to Building HandBrake svn2241 (2009030801) on Mac OS X
 ************************************************************
 
 Table of Contents
@@ -16,8 +16,10 @@ Table of Contents
     5.4.1 Global
     5.4.2 General Modules
     5.4.3 Contrib Modules
-    5.4.4 Contrib Aggregates
+    5.4.4 Contrib Touch and Untouch
+    5.4.5 Contrib Aggregates
   5.5 Customizing Make
+  5.6 Universal Binaries
 6 Building via Xcode
   6.1 Checkout Sources
   6.2 Build
@@ -80,14 +82,17 @@ recommended you use these versions or similar:
 ************
 
 This chapter is for building from a terminal/shell environment in as
-few commands as possible. If more flexibility is required you should
-skip this chapter and jump to *Note overview::.
+few commands as possible. Upon completion of the following commands you
+should have a fresh build of HandBrake. Further instructions are
+available beginning with *Note overview:: which describes procedures
+suitable for repeating builds. This chapter should be skipped by those
+seeking more than a minimalist build.
 
      svn checkout svn://svn.handbrake.fr/HandBrake/trunk hb-trunk
      cd hb-trunk
      ./configure --launch
 
-The special option `--launch' selected launch mode and performs the
+The special option `--launch' selects launch mode and performs the
 following steps:
 
    * assert scratch directory `build/' does not exist
@@ -98,9 +103,13 @@ following steps:
 
    * launch `make'
 
-   * capture build output to `build/log.txt'
+   * capture build output to `build/log/build.txt'
 
    * echo build output
+
+   * print elapsed time
+
+   * indicate if build ultimately succeeded or failed
 
 4 Overview
 **********
@@ -135,16 +144,14 @@ use Subversion 1.5.0 or higher. Lower versions should also work.
 
 Configure the build system.
 
-     rm -fr build/
-     mkdir build/
-     cd build/
-     ../configure
+     ./configure
 
-Create a scratch directory which will contain all files created during
-the build process. The directory name is arbitrary but we recommend
-something simple and descriptive. One directory is required for each
-distinctly configured build. We name our directory `build' for example
-purposes.
+Configure will automatically create a scratch build directory `build'
+unless you use GNU-style build procedures and first `cd' to a directory
+other than top-level source. Additionally you may specify use `--build'
+to specify the directory. The name of the directory is arbitrary but it
+is recommended to use something which indicates transient files which
+are not checked into the repository.
 
 The `configure' utility accepts many options. It is recommended that
 you specify `--help' for the complete list of options. The following
@@ -153,14 +160,26 @@ options are also documented here:
 `--help'
      List available options.
 
-`--prefix=PREFIX'
+`--src=DIR'
+     Specify top-level source directory for HandBrake sources.
+
+`--build=DIR'
+     Specify destination directory for final product install. The
+     default is to use either `build' if in the top-level source
+     directory, otherwise `.'
+
+`--prefix=DIR'
      Specify destination directory for final product install.  This
      defaults to a reasonable platform-specific value.
 
+`--launch'
+     All-in-one option which launches the build and logs output
+     automatically.  Useful for novices and quickstart procedures.
+
 `--disable-xcode'
-     Disable driving the build through Xcode. If this option is
-     disabled only `HandBrakeCLI' will be produced and Xcode will not
-     be invoked. Mac OS X only.
+     Disable shunting the build through Xcode. If this option is
+     applied, `HandBrakeCLI' will be produced in a similare fashion as
+     it is on other platforms; sans Xcode. Mac OS X only.
 
 `--disable-gtk'
      Disable building the GTK GUI on applicable platforms such as
@@ -181,10 +200,6 @@ options are also documented here:
      architectures. The available choices are hard-coded per platform
      and no sanity checks for the required tools are performed.
 
-`--gcc=EXE'
-     Specify the `gcc' executable to use where EXE is the executable
-     name which is either absolute or environment `PATH' is searched
-     accordingly.
 
 Clean-room procedures dictate that when certain factors change, old
 builds should be scrapped and new builds configured. This is the main
@@ -263,6 +278,14 @@ period.
      Build auto-generated project documentation. Various articles are
      produced and may be found in `build/doc/articles'.
 
+`make report.help'
+     Print list of available makefile vars report targets.  These
+     reports detail var definitions and expanded values used by the
+     build system.  For experts only.
+
+`make report.all'
+     Convenience target which aggregates all reports.  For experts only.
+
 5.4.2 General Modules
 ---------------------
 
@@ -315,7 +338,36 @@ Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
      Extra clean module; first invokes uninstall then recursively
      removes the module build directory.
 
-5.4.4 Contrib Aggregates
+5.4.4 Contrib Touch and Untouch
+-------------------------------
+
+Also available are some very granular targets which help force builds
+from specific cycle points. The following targets are available to
+touch and untouch the respective module target; this will force the
+build system to treat the target as satisfied after a touch or
+unsatisfied after an untouch:
+
+   * make MODULE.extract.touch
+
+   * make MODULE.extract.untouch
+
+   * make MODULE.patch.touch
+
+   * make MODULE.patch.untouch
+
+   * make MODULE.configure.touch
+
+   * make MODULE.configure.untouch
+
+   * make MODULE.build.touch
+
+   * make MODULE.build.untouch
+
+   * make MODULE.install.touch
+
+   * make MODULE.install.untouch
+
+5.4.5 Contrib Aggregates
 ------------------------
 
 For convenience, the following targets aggregate the all contrib
@@ -343,21 +395,70 @@ modules' respective targets together:
 ====================
 
 If the need arises to override settings in the build system
-(essentially gnu-make variables) the recommended method is to
-create/edit the optional include file `build/GNUmakefile.custom' which
-sits adjacent to the top-level makefile. Do not check this file into
-the respository. The sole purpose is to allow a place to store local
-build settings for testing, tweaking, and experimenting with build
-configuration without losing your settings if `configure' is invoked;
-ie: `configure' would overwrite `GNUmakefile' and any customizations
-contained therein would be lost. Here is a short example of what the
-contents of `build/GNUmakefile.custom' might contain:
+(essentially gnu-make variables) the recommended method is to create
+optional include files which are automatically included if present and
+follow this naming convention; Do not check these files into the
+respository:
+
+`_SRC_/custom.defs'
+     Custom makevar definitions outside `build'. Suitable for settings
+     which apply across all builds for a particular checkout; or which
+     survives manual removal of `build'.
+
+`_SRC_/custom.rules'
+     Custom make rules outside `build'. Suitable for settings which
+     apply across all builds for a particular checkout; or which
+     survives manual removal of `build'.
+
+`_BUILD_/GNUmakefile.custom.defs'
+     Custom makevar definitions specific to a `build' directory.
+
+`_BUILD_/GNUmakefile.custom.rules'
+     Custom makevar rules specific to a `build' directory.
+
+
+The purpose is to allow a place to store local build settings for
+testing, tweaking, and experimenting with build configuration without
+losing your settings if `configure' is invoked; ie: `configure' would
+overwrite `GNUmakefile' and any customizations contained therein would
+be lost. Here is a short example of what the contents of
+`_SRC_/custom.defs' might contain:
 
      ## bump to gcc-4.2 in current path
      GCC.gcc = gcc-4.2
 
      ## replace optimize for 'speed' with more agressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
+
+See also `make report.help' which displays a set of reports used to
+dump makefile vars.
+
+5.6 Universal Binaries
+======================
+
+This section outlines convenience procedures for creating Universal
+Binaries for all the architectures.
+
+     Note: The dummy (container) build configuration uses
+     `--disable-xcode'; but the nested architecture builds will all
+     make full use of Xcode.
+
+Create a dummy (container) build configuration and use it to launch a
+nested-build for each architecture serially; optionally you may
+substitute `make ub.build.serial' for `make ub.build.parallel' if your
+machine has the horsepower:
+
+     ./configure --disable-xcode
+     cd build/
+     make ub.build.serial
+     make ub.combine
+
+To specify a subset of architectures to be built first create/edit
+`_SRC_/custom.defs' with the following override to build UB for `i386'
+and `x86_64' before invoking `make':
+
+     ## prefer i386 (order is important)
+     UB.archs = i386 x86_64
 
 6 Building via Xcode
 ********************
@@ -470,21 +571,21 @@ The following user defined settings are used in Xcode project for the
 external build system:
 
 `EXTERNAL_BUILD'
-     Specifies the build location for each configuration.  It is highly
-     recommended the locations always evaluate to a unique pathname
-     when factoring the configuration name.
+     Specifies the build (scratch) directory for each configuration.
 
 `EXTERNAL_JOBS'
      Specifies the concurrency factor for the external build system
-     when builds are launched from within Xcode.  This variable is
-     meant to be customized by the developer for faster builds if the
-     host supports it.
+     when builds are launched from within Xcode.  Modify for faster
+     external builds if your system has the horsepower and resources.
+     Specifying a value greater than the number of CPU cores (or
+     virtual cores) in your system is unlikely to produce gains and
+     will needlessly consume extra resources.
 
 `EXTERNAL_METHOD'
-     This variable is used for internal/external build coordination and
+     Do not modify; Used for internal/external build coordination and
      must always be `xcode'.
 
-`EXTERNAL_PROJECT'
-     Specifies the directory which is top of HandBrake source tree.
+`EXTERNAL_SRC'
+     Specifies the top-level source directory for HandBrake.
 
 

@@ -32,6 +32,8 @@ $(DOC.m4.out): $(DOC.M4.deps)
 $(DOC.m4.out): $(DOC.out/)%: $(DOC.in/)%.m4
 	$(call DOC.M4,$@,$<)
 
+clean: doc.clean
+
 ###############################################################################
 
 #.PHONY: wiki.post wiki.sync wiki.rm wiki.add wiki.propset wiki.clean

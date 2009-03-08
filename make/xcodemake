@@ -12,8 +12,6 @@ set -e
 MAKEFLAGS=
 MFLAGS=
 
-cd $EXTERNAL_BUILD
-
 ## re/configure if not configured by Xcode or if missing top-makefile
 if [ $EXTERNAL_METHOD != 'xcode' -o ! -f $EXTERNAL_BUILD/GNUmakefile ]; then
     ## compute --arch value based on Xcode configuration naming convention
@@ -36,7 +34,7 @@ if [ $EXTERNAL_METHOD != 'xcode' -o ! -f $EXTERNAL_BUILD/GNUmakefile ]; then
     esac
 
     ## invoke configure with (hidden) option which indicates conf performed by xcode
-    $EXTERNAL_PROJECT/configure PATH=$PATH --conf-method=xcode $args
+    $EXTERNAL_SRC/configure --force --build=$EXTERNAL_BUILD --conf-method=xcode PATH=$PATH $args
 fi
 
 ## safeguard against passing blank value which would result in unlimited jobs

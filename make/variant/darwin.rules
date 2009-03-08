@@ -5,7 +5,7 @@ ub.build.serial:
 
 ub.build.parallel:
 	@set -e; \
-	for arch in $(UB.archs.other); do \
+	for arch in $(UB.archs); do \
 	    $(call UB.BUILD.PARALLEL,$$arch) & \
 	    children="$$children $$!"; \
 	    echo "pid $$!: $(call UB.BUILD.PARALLEL,$$arch)"; \

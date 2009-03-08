@@ -19,7 +19,7 @@ define BZIP2.INSTALL
 endef
 
 define BZIP2.UNINSTALL
-    $(RM.exe) $(CONTRIB.build/)lib/libbz2.a
-    $(RM.exe) $(CONTRIB.build/)include/bzlib.h
+    $(RM.exe) -f $(CONTRIB.build/)lib/libbz2.a
+    $(RM.exe) -f $(CONTRIB.build/)include/bzlib.h
     $(RM.exe) -f $(BZIP2.INSTALL.target)
 endef

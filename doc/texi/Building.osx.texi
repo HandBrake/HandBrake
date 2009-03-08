@@ -37,5 +37,33 @@ Building on @value{OS.osx} is well supported. It is the reference platform for @
 @chapter Overview
 The two general methods to build on @value{OS.osx} are building from @b{terminal} or @b{Xcode}. The preferred method for automated and repeatable builds is to use the terminal. Otherwise the choice is generally up to the individual. In essence, the terminal actually invokes @command{xcodebuild} to build the very same targets contained in the Xcode project.
 
+@c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
+
+@c %**-------------------------------------------------------------------------
+@anchor{terminal.ub}
+@section Universal Binaries
+This section outlines convenience procedures for creating Universal Binaries for all the architectures.
+
+@quotation Note
+The dummy (container) build configuration uses @command{--disable-xcode}; but the nested architecture builds will all make full use of Xcode.
+@end quotation
+
+Create a dummy (container) build configuration and use it to launch a nested-build for each architecture @i{serially}; optionally you may substitute @command{make ub.build.serial} for @command{make ub.build.parallel} if your machine has the horsepower:
+
+@example
+./configure --disable-xcode
+cd build/
+make ub.build.serial
+make ub.combine
+@end example
+
+To specify a subset of architectures to be built first create/edit @file{_SRC_/custom.defs} with the following override to build UB for @samp{i386} and @samp{x86_64} before invoking @command{make}:
+
+@example
+## prefer i386 (order is important)
+UB.archs = i386 x86_64
+@end example
+
+@c %**-------------------------------------------------------------------------
 @include building/chapter.via.xcode.texi

@@ -25,6 +25,5 @@ dnl
 @set HB.repo.uuid       __HB_repo_uuid
 @set HB.repo.rev        __HB_repo_rev
 @set HB.repo.date       __HB_repo_date
-@set HB.repo.wcversion  __HB_repo_wcversion
 @set HB.repo.official   __HB_repo_official
 @set HB.repo.type       __HB_repo_type

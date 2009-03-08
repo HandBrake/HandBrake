@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,GTK,gtk,LIBHB))
 $(eval $(call import.GCC,GTK))
 
-GTK.src/   = $(PROJECT/)gtk/
+GTK.src/   = $(SRC/)gtk/
 GTK.build/ = $(BUILD/)gtk/
 
 GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure

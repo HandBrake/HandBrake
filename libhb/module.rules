@@ -8,7 +8,7 @@ $(LIBHB.a): $(LIBHB.c.o)
 
 $(LIBHB.c.o): $(LIBHB.d)
 $(LIBHB.c.o): | $(dir $(LIBHB.c.o))
-$(LIBHB.c.o): $(BUILD/)%.o: $(PROJECT/)%.c
+$(LIBHB.c.o): $(BUILD/)%.o: $(SRC/)%.c
 	$(call LIBHB.GCC.C_O,$@,$<)
 
 $(LIBHB.m4.out): $(BUILD/)project/handbrake.m4
@@ -17,7 +17,7 @@ $(LIBHB.m4.out): $(LIBHB.build/)%: $(LIBHB.src/)%.m4
 	$(M4.exe) -Iproject $< > $@
 
 $(LIBHB.h.out): | $(dir $(LIBHB.h.out))
-$(LIBHB.h.out): $(BUILD/)%: $(PROJECT/)%
+$(LIBHB.h.out): $(BUILD/)%: $(SRC/)%
 	$(CP.exe) $< $@
 
 libhb.clean:

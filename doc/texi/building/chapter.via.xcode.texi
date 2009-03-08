@@ -72,17 +72,16 @@ The following user defined settings are used in Xcode project for the external b
 
 @table @samp
 @item EXTERNAL_BUILD
-Specifies the build location for each configuration.
-It is highly recommended the locations always evaluate to a unique pathname when factoring the configuration name.
+Specifies the build (scratch) directory for each configuration.
 
 @item EXTERNAL_JOBS
 Specifies the concurrency factor for the external build system when builds are launched from within Xcode.
-This variable is meant to be customized by the developer for faster builds if the host supports it.
+Modify for faster external builds if your system has the horsepower and resources. Specifying a value greater than the number of CPU cores (or virtual cores) in your system is unlikely to produce gains and will needlessly consume extra resources.
 
 @item EXTERNAL_METHOD
-This variable is used for internal/external build coordination and must always be @samp{xcode}.
+Do not modify; Used for internal/external build coordination and must always be @samp{xcode}.
 
-@item EXTERNAL_PROJECT
-Specifies the directory which is top of @value{HB.name} source tree.
+@item EXTERNAL_SRC
+Specifies the top-level source directory for @value{HB.name}.
 
 @end table

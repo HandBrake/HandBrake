@@ -1,11 +1,11 @@
 $(eval $(call import.MODULE.defs,TEST,test,LIBHB))
 $(eval $(call import.GCC,TEST))
 
-TEST.src/   = $(PROJECT/)test/
+TEST.src/   = $(SRC/)test/
 TEST.build/ = $(BUILD/)test/
 
 TEST.c   = $(wildcard $(TEST.src/)*.c)
-TEST.c.o = $(patsubst $(PROJECT/)%.c,$(BUILD/)%.o,$(TEST.c))
+TEST.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(TEST.c))
 
 TEST.exe = $(BUILD/)$(call TARGET.exe,$(HB.name)CLI)
 
@@ -14,7 +14,7 @@ TEST.libs = $(LIBHB.a) $(foreach n, \
         ogg samplerate swscale theora vorbis vorbisenc x264 xvidcore, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
-TEST.install.exe = $(INSTALL.prefix/)bin/$(notdir $(TEST.exe))
+TEST.install.exe = $(PREFIX/)bin/$(notdir $(TEST.exe))
 
 ## add libs from optional modules
 ifeq (1,$(BZIP2.enabled))

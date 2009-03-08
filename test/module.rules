@@ -8,7 +8,7 @@ $(TEST.exe): $(TEST.c.o)
 
 $(TEST.c.o): $(LIBHB.a)
 $(TEST.c.o): | $(dir $(TEST.c.o))
-$(TEST.c.o): $(BUILD/)%.o: $(PROJECT/)%.c
+$(TEST.c.o): $(BUILD/)%.o: $(SRC/)%.c
 	$(call TEST.GCC.C_O,$@,$<)
 
 test.clean:

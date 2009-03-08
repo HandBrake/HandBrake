@@ -1,10 +1,13 @@
 $(eval $(call import.MODULE.defs,MACOSX,macosx))
 
-MACOSX.src/   = $(PROJECT/)macosx/
+MACOSX.src/   = $(SRC/)macosx/
 MACOSX.build/ = $(BUILD/)macosx/
 
 MACOSX.m4.in  = $(wildcard $(MACOSX.src/)*.m4)
-MACOSX.m4.out = $(patsubst $(MACOSX.src/)%.m4,$(MACOSX.build/)%,$(MACOSX.m4.in))
+MACOSX.m4.out = $(MACOSX.m4.in:$(MACOSX.src/)%.m4=$(MACOSX.build/)%)
+
+## optional special command to run post macro processing
+MACOSX.m4.post.Info.h = $(RM.exe) -f $(MACOSX.build/)HandBrake.build/Preprocessed-Info.plist
 
 MACOSX.targs = HandBrakeCLI HandBrake
 MACOSX.conf  = standard$(if $(filter 1,$(BUILD.cross)),.$(BUILD.arch))
@@ -12,6 +15,7 @@ MACOSX.conf  = standard$(if $(filter 1,$(BUILD.cross)),.$(BUILD.arch))
 ###############################################################################
 
 BUILD.out += $(MACOSX.m4.out)
+BUILD.out += $(MACOSX.m4.wc.out)
 
 ###############################################################################
 
@@ -30,10 +34,11 @@ MACOSX.XCODE = $(strip \
         -project $(MACOSX.XCODE.project) \
         -configuration $(MACOSX.conf) \
         $(foreach t,$(1),-target $t) \
-        EXTERNAL_BUILD='$(CURDIR)' \
+        EXTERNAL_SRC='$(XCODE.external.src)' \
+        EXTERNAL_BUILD='$(XCODE.external.build)' \
+        EXTERNAL_PREFIX='$(XCODE.external.prefix)' \
         EXTERNAL_JOBS='$(BUILD.jobs)' \
         EXTERNAL_METHOD='$(CONF.method)' \
-        EXTERNAL_PROJECT='$(PROJECT/)' \
         EXTERNAL_GOALS='$(3)' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         $(2) )

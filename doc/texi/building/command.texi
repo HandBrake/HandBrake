@@ -1,4 +1,4 @@
 @macro COMMAND.checkout{}
-svn checkout @value{HB.repo.url} @value{HB.acro.lower}@value{HB.repo.branch}
-cd @value{HB.acro.lower}@value{HB.repo.branch}
+svn checkout @value{HB.repo.url} @value{HB.acro.lower}-@value{HB.repo.branch}
+cd @value{HB.acro.lower}-@value{HB.repo.branch}
 @end macro

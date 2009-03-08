@@ -1,6 +1,6 @@
 $(eval $(call import.MODULE.defs,DOC,doc))
 
-DOC.in/  = $(PROJECT/)doc/
+DOC.in/  = $(SRC/)doc/
 DOC.out/ = $(BUILD/)doc/
 
 DOC.out.api/      = $(DOC.out/)api/

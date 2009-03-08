@@ -9,6 +9,8 @@ XVIDCORE.CONFIGURE.dir = $(XVIDCORE.EXTRACT.dir/)build/generic/
 XVIDCORE.BUILD.dir      = $(XVIDCORE.EXTRACT.dir/)build/generic/
 XVIDCORE.BUILD.ntargets = libxvidcore.a
 
+XVIDCORE.CLEAN.dir      = $(XVIDCORE.EXTRACT.dir/)build/generic/
+
 define XVIDCORE.INSTALL
     $(CP.exe) $(XVIDCORE.EXTRACT.dir/)build/generic/=build/libxvidcore.a $(CONTRIB.build/)lib/
     $(CP.exe) $(XVIDCORE.EXTRACT.dir/)src/xvid.h $(CONTRIB.build/)include/
@@ -16,7 +18,7 @@ define XVIDCORE.INSTALL
 endef
 
 define XVIDCORE.UNINSTALL
-    $(RM.exe) $(CONTRIB.build/)lib/libxvidcore.a
-    $(RM.exe) $(CONTRIB.build/)include/xvid.h
+    $(RM.exe) -f $(CONTRIB.build/)lib/libxvidcore.a
+    $(RM.exe) -f $(CONTRIB.build/)include/xvid.h
     $(RM.exe) -f $(XVIDCORE.INSTALL.target)
 endef

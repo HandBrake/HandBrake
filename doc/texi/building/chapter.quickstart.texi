@@ -5,7 +5,6 @@ This chapter is for building from a terminal/shell environment in as few command
 @example
 @COMMAND.checkout{}
 ./configure --launch
-cd build/
 @end example
 
 The special option @command{--launch} selects launch mode and performs the following steps:
@@ -15,6 +14,8 @@ The special option @command{--launch} selects launch mode and performs the follo
 @item create scratch directory @file{build/}
 @item change to directory @file{build/}
 @item launch @command{make}
-@item capture build output to @file{build/log.txt}
+@item capture build output to @file{build/log/build.txt}
 @item echo build output
+@item print elapsed time
+@item indicate if build ultimately succeeded or failed
 @end itemize

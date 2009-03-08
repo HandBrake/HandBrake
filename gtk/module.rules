@@ -14,7 +14,7 @@ $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 		PKG_CONFIG_DIR=$(BUILD/)contrib/lib/pkgconfig \
 	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O)" \
 	    LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O)" \
-	    --prefix=$(INSTALL.prefix) \
+	    --prefix=$(PREFIX) \
 	    --with-hb=$(call fn.ABSOLUTE,$(BUILD/))
 	$(TOUCH.exe) $@
 
