@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+
+## This is a script used to launch a wide variaet of builds for darwin.
+## It is unsupported and is meant for use only with build-system testing.
+
+if [ -z "$1" ]; then
+    echo "usage: $0 BUILDPREFIX"
+    exit 1
+fi
+
+set -e
+buildprefix=$1
+
+term_make() {
+    eval $1="make"
+    eval $2="'--disable-xcode'"
+}
+
+term_xcode() {
+    eval $1="make"
+    eval $2=""
+}
+
+launch_make() {
+    eval $1="launch"
+    eval $2="'--launch --launch-jobs=0 --launch-quiet --disable-xcode'"
+}
+
+launch_xcode() {
+    eval $1="launch"
+    eval $2="'--launch --launch-jobs=0 --launch-quiet'"
+}
+
+for arch in i386 ppc ppc64 x86_64; do
+    for method in launch_make launch_xcode term_make term_xcode; do
+        dir=$buildprefix.$arch.$method
+        if [ -d $dir ]; then
+            echo "skipping $dir"
+            continue
+        fi
+
+        $method mode args
+
+        cmd="./configure --arch=$arch --build=$dir $args"
+        echo $cmd | awk '{ \
+            trail = ""; \
+            for( i = 4; i <= NF; i++ ) \
+                trail = trail " " $i; \
+            printf("%-11s %-13s %-30s%s\n", $1, $2, $3, trail) }'
+
+        $cmd
+        if [ "$mode" = "make" ]; then
+            (set -x; cd $dir && make -j8 >& log.txt)
+        fi
+    done
+done
