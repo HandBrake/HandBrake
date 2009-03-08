@@ -1,7 +1,7 @@
 $(eval $(call import.MODULE.defs,X264,x264))
 $(eval $(call import.CONTRIB.defs,X264))
 
-X264.FETCH.url = http://download.m0k.org/handbrake/contrib/x264-r1123-3d78062.tar.gz
+X264.FETCH.url = http://download.m0k.org/handbrake/contrib/x264-r1125-10d6ef0.tar.gz
 X264.EXTRACT.tarbase = x264
 
 X264.CONFIGURE.deps   =
