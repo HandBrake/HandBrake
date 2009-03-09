@@ -645,7 +645,6 @@ namespace Handbrake
         private void btn_showQueue_Click(object sender, EventArgs e)
         {
             queueWindow.Show();
-            queueWindow.Activate();
         }
         private void tb_preview_Click(object sender, EventArgs e)
         {

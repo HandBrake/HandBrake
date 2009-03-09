@@ -165,7 +165,19 @@ namespace Handbrake
                 item.SubItems.Add(queue_item.Source); // Source
                 item.SubItems.Add(queue_item.Destination); // Destination
                 item.SubItems.Add(parsed.VideoEncoder); // Video
-                item.SubItems.Add(parsed.AudioEncoder1); // Audio
+
+                // Display the first 4 audio tracks.
+                String audio = parsed.AudioEncoder1;
+                if (parsed.AudioEncoder2 != null)
+                    audio += ", " + parsed.AudioEncoder2;
+
+                if (parsed.AudioEncoder3 != null)
+                    audio += ", " + parsed.AudioEncoder3;
+
+                if (parsed.AudioEncoder4 != null)
+                    audio += ", " + parsed.AudioEncoder4;
+
+                item.SubItems.Add(audio); // Audio
 
                 list_queue.Items.Add(item);
             }
@@ -208,7 +220,17 @@ namespace Handbrake
                 }
 
                 lbl_vEnc.Text = parsed.VideoEncoder;
-                lbl_aEnc.Text = parsed.AudioEncoder1;
+                String audio = parsed.AudioEncoder1;
+                if (parsed.AudioEncoder2 != null)
+                    audio += ", " + parsed.AudioEncoder2;
+
+                if (parsed.AudioEncoder3 != null)
+                    audio += ", " + parsed.AudioEncoder3;
+
+                if (parsed.AudioEncoder4 != null)
+                    audio += ", " + parsed.AudioEncoder4;
+
+                lbl_aEnc.Text = audio;
             }
             catch (Exception)
             {
@@ -246,15 +268,6 @@ namespace Handbrake
         }
 
         // Queue Management
-        private void btn_re_add_Click(object sender, EventArgs e)
-        {
-            if (queue.getLastQueryItem() != null)
-            {
-                queue.add(queue.getLastQueryItem().Query, queue.getLastQueryItem().Source, queue.getLastQueryItem().Destination);
-                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
-                updateUIElements();
-            }
-        }
         private void btn_up_Click(object sender, EventArgs e)
         {
             // If there are selected items and the first item is not selected
@@ -344,6 +357,15 @@ namespace Handbrake
                 queue.recoverQueue(OpenFile.FileName);
             updateUIElements();
         }
+        private void mnu_readd_Click(object sender, EventArgs e)
+        {
+            if (queue.getLastQueryItem() != null)
+            {
+                queue.add(queue.getLastQueryItem().Query, queue.getLastQueryItem().Source, queue.getLastQueryItem().Destination);
+                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
+                updateUIElements();
+            }
+        }
 
         // Hide's the window when the user tries to "x" out of the window instead of closing it.
         protected override void OnClosing(CancelEventArgs e)
@@ -354,5 +376,6 @@ namespace Handbrake
         }
 
         
+       
     }
 }
