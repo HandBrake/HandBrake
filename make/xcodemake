@@ -17,24 +17,34 @@ if [ $EXTERNAL_METHOD != 'xcode' -o ! -f $EXTERNAL_BUILD/GNUmakefile ]; then
     ## compute --arch value based on Xcode configuration naming convention
     case "$CONFIGURATION" in
     *.i386)
-        args="--arch=i386"
+        arch="--arch=i386"
         ;;
     *.x86_64)
-        args="--arch=x86_64"
+        arch="--arch=x86_64"
         ;;
     *.ppc)
-        args="--arch=ppc"
+        arch="--arch=ppc"
         ;;
     *.ppc64)
-        args="--arch=ppc64"
+        arch="--arch=ppc64"
         ;;
     *)
-        args=
+        arch=
+        ;;
+    esac
+
+    case "$CONFIGURATION" in
+    debug*)
+        debug="--debug=max"
+        ;;
+    *)
+        debug=
         ;;
     esac
 
     ## invoke configure with (hidden) option which indicates conf performed by xcode
-    $EXTERNAL_SRC/configure --force --build=$EXTERNAL_BUILD --conf-method=xcode PATH=$PATH $args
+    $EXTERNAL_SRC/configure --force --build=$EXTERNAL_BUILD $arch $debug \
+        --conf-method=xcode PATH=$PATH $EXTERNAL_CONFARGS
 fi
 
 ## safeguard against passing blank value which would result in unlimited jobs
@@ -64,7 +74,6 @@ case "$spec" in
         else
             goals="$EXTERNAL_GOALS"
         fi
-        vars="$EXTERNAL_VARS"
         ;;
     libhb:clean)
         goals=libhb.clean
@@ -80,4 +89,4 @@ esac
 
 ## handoff
 set -x
-make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $goals $vars
+make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $goals $EXTERNAL_VARS

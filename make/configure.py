@@ -1091,7 +1091,7 @@ try:
     for arg in sys.argv[1:]:
         if arg == '--launch':
             continue
-        args.append( "'%s'" % (arg.replace("'", '%c%c%c%c%c' % (0x27,0x22,0x27,0x22,0x27))) )
+        args.append( arg )
     doc.add( 'CONF.args', ' '.join( args ))
 
     doc.addBlank()

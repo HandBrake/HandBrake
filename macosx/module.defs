@@ -39,6 +39,7 @@ MACOSX.XCODE = $(strip \
         EXTERNAL_PREFIX='$(XCODE.external.prefix)' \
         EXTERNAL_JOBS='$(BUILD.jobs)' \
         EXTERNAL_METHOD='$(CONF.method)' \
+        EXTERNAL_CONFARGS='$(CONF.args)' \
         EXTERNAL_GOALS='$(3)' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         $(2) )
