@@ -5,8 +5,8 @@ diff -Naur ffmpeg.orig/libavcodec/Makefile ffmpeg/libavcodec/Makefile
  NAME = avcodec
  FFLIBS = avutil
  
--HEADERS = avcodec.h opt.h
-+HEADERS = avcodec.h opt.h audioconvert.h
+-HEADERS = avcodec.h opt.h vdpau.h xvmc.h
++HEADERS = avcodec.h opt.h vdpau.h xvmc.h audioconvert.h
  
  OBJS = allcodecs.o                                                      \
         audioconvert.o                                                   \

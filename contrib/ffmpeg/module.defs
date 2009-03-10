@@ -1,8 +1,8 @@
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,FAAD2))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg-r15974.tar.gz
-FFMPEG.EXTRACT.tarbase = ffmpeg
+FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg_0.5.tar.gz
+FFMPEG.EXTRACT.tarbase = ffmpeg-0.5
 
 FFMPEG.CONFIGURE.deps =
 FFMPEG.CONFIGURE.env  =
