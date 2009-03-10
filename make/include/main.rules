@@ -45,7 +45,7 @@ $(BUILD/)GNUmakefile: $(wildcard $(SRC/).svn/entries)
 ## target useful to force reconfigure; only helpful for build-system development
 .PHONY: reconfigure
 reconfigure:
-	$(SRC/)configure $(CONF.args)
+	$(SRC/)configure --force $(CONF.args)
 
 ###############################################################################
 

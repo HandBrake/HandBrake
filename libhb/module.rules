@@ -3,7 +3,7 @@ $(eval $(call import.MODULE.rules,LIBHB))
 libhb.build: $(LIBHB.a)
 
 $(LIBHB.a): | $(dir $(LIBHB.a))
-$(LIBHB.a): $(LIBHB.c.o)
+$(LIBHB.a): $(LIBHB.c.o) $(LIBHB.yasm.o)
 	$(AR.exe) rsu $@ $^
 
 $(LIBHB.c.o): $(LIBHB.d)
@@ -25,5 +25,20 @@ libhb.clean:
 
 ###############################################################################
 
+ifneq (disabled,$(FEATURE.asm))
+
+$(LIBHB.yasm.o): $(LIBHB.yasm.d)
+$(LIBHB.yasm.o): | $(dir $(LIBHB.yasm.o))
+$(LIBHB.yasm.o): $(LIBHB.yasm.build/)%.o: $(LIBHB.yasm.src/)%.asm
+	$(call LIBHB.YASM.ASM_O,$@,$<)
+
+endif
+
+###############################################################################
+
 clean: libhb.clean
 build: libhb.build
+
+xmike:
+	@echo $(LIBHB.yasm.asm)
+	@echo $(LIBHB.yasm.o)

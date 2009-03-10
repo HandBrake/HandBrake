@@ -352,8 +352,11 @@ class HostTupleProbe( ShellProbe, list ):
             self.systemf = self[2][0].upper() + self[2][1:]
             
     ## glob-match against spec
-    def match( self, spec ):
-        return fnmatch.fnmatch( self.spec, spec )
+    def match( self, *specs ):
+        for spec in specs:
+            if fnmatch.fnmatch( self.spec, spec ):
+                return True
+        return False
 
 ###############################################################################
 
@@ -385,26 +388,34 @@ class BuildAction( Action, list ):
 
         self.fail = False
 
+    ## glob-match against spec
+    def match( self, *specs ):
+        for spec in specs:
+            if fnmatch.fnmatch( self.spec, spec ):
+                return True
+        return False
+
 ###############################################################################
 ##
-## platform conditional string; if specs do not match host:
+## value wrapper; value is accepted only if one of host specs matcheds
+## otherwise it is None (or a keyword-supplied val)
 ##
-## - str value is blank
-## - evaluates to False
+## result is attribute 'value'
 ##
 class IfHost( object ):
-    def __init__( self, value, *specs ):
-        self.value = ''
+    def __init__( self, value, *specs, **kwargs ):
+        self.value = kwargs.get('none',None)
         for spec in specs:
             if host.match( spec ):
                 self.value = value
                 break
 
     def __nonzero__( self ):
-        return len(self.value) != 0
+        return self.value != None
         
     def __str__( self ):
         return self.value
+
 
 ###############################################################################
 ##
@@ -770,16 +781,19 @@ class ConfigDocument:
     def __init__( self ):
         self._elements = []
 
-    def _outputMake( self, file, namelen, name, value ):
-        file.write( '%-*s = %s\n' % (namelen, name, value ))
+    def _outputMake( self, file, namelen, name, value, append ):
+        if append:
+            file.write( '%-*s += %s\n' % (namelen, name, value ))
+        else:
+            file.write( '%-*s  = %s\n' % (namelen, name, value ))
 
     def _outputM4( self, file, namelen, name, value ):
         namelen += 7
         name = '<<__%s>>,' % name.replace( '.', '_' )
         file.write( 'define(%-*s  <<%s>>)dnl\n' % (namelen, name, value ))
 
-    def add( self, name, value ):
-        self._elements.append( (name,value) )
+    def add( self, name, value, append=False ):
+        self._elements.append( [name,value,append] )
 
     def addBlank( self ):
         self._elements.append( None )
@@ -816,7 +830,16 @@ class ConfigDocument:
             if type == 'm4':
                 self._outputM4( file, namelen, item[0], item[1] )
             else:
-                self._outputMake( file, namelen, item[0], item[1] )
+                self._outputMake( file, namelen, item[0], item[1], item[2] )
+
+    def update( self, name, value ):
+        for item in self._elements:
+            if item == None:
+                continue
+            if item[0] == name:
+                item[1] = value
+                return
+        raise ValueError( 'element not found: %s' % (name) )
 
     def write( self, type ):
         if type == 'make':
@@ -875,10 +898,16 @@ def createCLI():
 
     ## add feature options
     grp = OptionGroup( cli, 'Feature Options' )
-    h = ForHost( optparse.SUPPRESS_HELP, ['disable Xcode (Darwin only)','*-*-darwin*'] ).value
-    grp.add_option( '', '--disable-xcode', default=False, action='store_true', help=h )
-    h = ForHost( optparse.SUPPRESS_HELP, ['disable GTK GUI (Linux only)','*-*-linux*'] ).value
+
+    h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '', '--enable-asm', default=False, action='store_true', help=h )
+
+    h = IfHost( 'disable GTK GUI', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '', '--disable-gtk', default=False, action='store_true', help=h )
+
+    h = IfHost( 'disable Xcode', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '', '--disable-xcode', default=False, action='store_true', help=h )
+
     cli.add_option_group( grp )
 
     ## add launch options
@@ -890,7 +919,7 @@ def createCLI():
     grp.add_option( '', '--launch-args', default=None, action='store', metavar='ARGS',
         help='specify additional ARGS for launch command' )
     grp.add_option( '', '--launch-quiet', default=False, action='store_true',
-        help='do not echo build output' )
+        help='do not echo build output while waiting' )
     cli.add_option_group( grp )
 
     ## add compile options
@@ -1038,7 +1067,7 @@ try:
         ar    = ToolProbe( 'AR.exe',    'ar' )
         cp    = ToolProbe( 'CP.exe',    'cp' )
         curl  = ToolProbe( 'CURL.exe',  'curl', abort=False )
-        gcc   = ToolProbe( 'GCC.gcc',   'gcc', IfHost('gcc-4','*-*-cygwin*') )
+        gcc   = ToolProbe( 'GCC.gcc',   'gcc', IfHost( 'gcc-4', '*-*-cygwin*' ))
 
         if host.match( '*-*-darwin*' ):
             gmake = ToolProbe( 'GMAKE.exe', 'make', 'gmake' )
@@ -1051,6 +1080,7 @@ try:
         rm    = ToolProbe( 'RM.exe',    'rm' )
         tar   = ToolProbe( 'TAR.exe',   'gtar', 'tar' )
         wget  = ToolProbe( 'WGET.exe',  'wget', abort=False )
+        yasm  = ToolProbe( 'YASM.exe',  'yasm', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
@@ -1174,8 +1204,9 @@ try:
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
     
     doc.addBlank()
-    doc.add( 'FEATURE.xcode', int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
+    doc.add( 'FEATURE.asm',   'disabled' )
     doc.add( 'FEATURE.gtk',   int( not options.disable_gtk ))
+    doc.add( 'FEATURE.xcode', int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:
         doc.addBlank()
@@ -1202,6 +1233,29 @@ try:
         doc.add( 'GCC.archs', '' )
     doc.add( 'GCC.g', debugMode.mode )
     doc.add( 'GCC.O', optimizeMode.mode )
+
+    if options.enable_asm and not Tools.yasm.fail:
+        asm = ''
+        if build.match( 'i?86-*' ):
+            asm = 'x86'
+            doc.add( 'LIBHB.GCC.D', 'HAVE_MMX', append=True )
+            doc.add( 'LIBHB.YASM.D', 'ARCH_X86', append=True )
+            if build.match( '*-*-darwin*' ):
+                doc.add( 'LIBHB.YASM.f', 'macho32' )
+            else:
+                doc.add( 'LIBHB.YASM.f', 'elf32' )
+            doc.add( 'LIBHB.YASM.m', 'x86' )
+        elif build.match( 'x86_64-*' ):
+            asm = 'x86'
+            doc.add( 'LIBHB.GCC.D', 'HAVE_MMX ARCH_X86_64', append=True )
+            if build.match( '*-*-darwin*' ):
+                doc.add( 'LIBHB.YASM.D', 'ARCH_X86_64 PIC', append=True )
+                doc.add( 'LIBHB.YASM.f', 'macho64' )
+            else:
+                doc.add( 'LIBHB.YASM.D', 'ARCH_X86_64', append=True )
+                doc.add( 'LIBHB.YASM.f', 'elf64' )
+            doc.add( 'LIBHB.YASM.m', 'amd64' )
+        doc.update( 'FEATURE.asm', asm )
 
     ## add exports to make
     if len(exports):

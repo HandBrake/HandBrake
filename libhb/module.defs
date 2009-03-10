@@ -29,8 +29,6 @@ LIBHB.out += $(LIBHB.c.o)
 LIBHB.out += $(LIBHB.h.out)
 LIBHB.out += $(LIBHB.a)
 
-BUILD.out += $(LIBHB.out)
-
 ###############################################################################
 
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
@@ -50,3 +48,30 @@ endif
 ifneq (,$(filter $(BUILD.arch),ppc ppc64))
 	LIBHB.GCC.D += WORDS_BIGENDIAN
 endif
+
+###############################################################################
+
+## when defined this gives us the subdir name, or flavor of asm implementation
+ifneq (disabled,$(FEATURE.asm))
+
+LIBHB.yasm.src/   = $(LIBHB.src/)$(FEATURE.asm)/
+LIBHB.yasm.build/ = $(LIBHB.build/)$(FEATURE.asm)/
+LIBHB.yasm.asm    = $(LIBHB.yasm.src/)deinterlace-a.asm
+LIBHB.yasm.o      = $(LIBHB.yasm.asm:$(LIBHB.yasm.src/)%.asm=$(LIBHB.yasm.build/)%.o)
+LIBHB.yasm.d      = $(wildcard $(LIBHB.yasmsrc/)*.h)
+
+LIBHB.YASM.I     = $(LIBHB.yasm.src/)
+LIBHB.YASM.ASM_O = $(strip $(YASM.exe) \
+    -f $(LIBHB.YASM.f) \
+    -m $(LIBHB.YASM.m) \
+    $(LIBHB.YASM.D:%=-D%) \
+    $(LIBHB.YASM.I:%=-I%) \
+    -o $(1) $(2))
+
+LIBHB.out += $(LIBHB.yasm.o)
+
+endif
+
+###############################################################################
+
+BUILD.out += $(LIBHB.out)
