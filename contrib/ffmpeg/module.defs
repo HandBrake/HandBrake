@@ -24,9 +24,14 @@ FFMPEG.CONFIGURE.extra = \
     --enable-pthreads \
     --enable-swscale \
     --cc="$(GCC.gcc)" \
-    --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
-    --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
+    --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
+    --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
 ifeq ($(BUILD.cross),1)
     FFMPEG.CONFIGURE.extra += --enable-cross-compile --arch=$(BUILD.machine)
+endif
+
+ifeq (cygwin,$(BUILD.system))
+    FFMPEG.CONFIGURE.extra += --enable-memalign-hack
+    FFMPEG.GCC.args.extra = -fno-common
 endif
