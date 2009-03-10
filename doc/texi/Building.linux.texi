@@ -98,4 +98,6 @@ gstreamer-devel gstreamer-plugins-base-devel
 @chapter Overview
 @value{OS.linux} builds are performed from a @b{terminal}. There is no support for building from any IDEs.
 
+@c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
+@include building/appendix.repo.texi

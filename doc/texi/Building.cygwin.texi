@@ -42,4 +42,6 @@ As of this writing, @value{OS.cygwin} has available to it several versions of gc
 @chapter Overview
 @value{OS.cygwin} builds are performed from a @b{terminal}. There is no support for building from any IDEs.
 
+@c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
+@include building/appendix.repo.texi
