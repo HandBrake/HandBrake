@@ -1,0 +1,10 @@
+@appendix Project Repository Details
+@example
+url:    @value{HB.repo.url}
+root:   @value{HB.repo.root}
+branch: @value{HB.repo.branch}
+uuid:   @value{HB.repo.uuid}
+rev:    @value{HB.repo.rev}
+date:   @value{HB.repo.date}
+type:   @value{HB.repo.type}
+@end example

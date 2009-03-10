@@ -67,6 +67,6 @@ wiki.add:
 
 wiki.propset:
 	find $(WIKI.out.version/) -type f -a -name "*.wiki" -print0 \
-	    | xargs -0 svn propset svn:eol-style native
+	    | xargs -0 svn propset svn:eol-style LF
 	find $(WIKI.out.version/) -type f -a -name "*.wiki" -print0 \
-	    | xargs -0 svn propset svn:mime-type "text/html"
+	    | xargs -0 svn propset svn:mime-type "text/x-trac-wiki"

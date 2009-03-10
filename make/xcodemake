@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 
 set -e
@@ -12,52 +12,51 @@ set -e
 MAKEFLAGS=
 MFLAGS=
 
-## re/configure if not configured by Xcode or if missing top-makefile
-if [ $EXTERNAL_METHOD != 'xcode' -o ! -f $EXTERNAL_BUILD/GNUmakefile ]; then
-    ## compute --arch value based on Xcode configuration naming convention
-    case "$CONFIGURATION" in
-    *.i386)
-        arch="--arch=i386"
-        ;;
-    *.x86_64)
-        arch="--arch=x86_64"
-        ;;
-    *.ppc)
-        arch="--arch=ppc"
-        ;;
-    *.ppc64)
-        arch="--arch=ppc64"
-        ;;
-    *)
-        arch=
-        ;;
-    esac
+## sanity check - the build system only supports 1 arch at a time
+archcount=`echo $ARCHS | awk '{ print NF }'`
+if [ "$archcount" -ne 1 ]; then
+    echo "*********************************************************************"
+    echo "***"
+    echo "*** ERROR: invalid number of architectures: $ARCHS"
+    echo "*** This build system builds one (1) archtecture at a time."
+    echo "***"
+    echo "*********************************************************************"
+    exit 1
+fi
+
+## compute if re/configure necessary
+if [ $EXTERNAL_METHOD != 'xcode' ]; then
+    reconfigure="terminal -> Xcode"
+elif [ ! -f $EXTERNAL_BUILD/GNUmakefile ]; then
+    reconfigure="no configuration present"
+elif [ $EXTERNAL_SRC/make/configure.py -nt $EXTERNAL_BUILD/GNUmakefile ]; then
+    reconfigure="configure script was updated"
+else
+    reconfigure=
+fi
+
+## perform re/configure
+if [ -n "$reconfigure" ]; then
+    echo "reconfiguring ($reconfigure)"
 
     case "$CONFIGURATION" in
     debug*)
-        debug="--debug=max"
+        debug="--debug=max --optimize=none"
         ;;
-    *)
+    standard*|*)
         debug=
         ;;
     esac
 
     ## invoke configure with (hidden) option which indicates conf performed by xcode
-    $EXTERNAL_SRC/configure --force --build=$EXTERNAL_BUILD $arch $debug \
-        --conf-method=xcode PATH=$PATH $EXTERNAL_CONFARGS
+    (set -x; $EXTERNAL_SRC/configure --force --build=$EXTERNAL_BUILD \
+        $EXTERNAL_CONFARGS \
+        --arch=$ARCHS $debug --conf-method=xcode PATH=$PATH )
 fi
 
-## safeguard against passing blank value which would result in unlimited jobs
-if [ -z "$EXTERNAL_JOBS" ]; then
-    jobs=
-else
-    jobs=--jobs=$EXTERNAL_JOBS
-fi
-
+## compute goals; these correlate with TARGET_NAME and ACTION from Xcode
 spec="$TARGET_NAME:$ACTION"
 echo "env specification: $spec"
-
-## compute goals
 case "$spec" in
     contrib:clean)
         goals=contrib.xclean
@@ -87,6 +86,13 @@ case "$spec" in
         ;;
 esac
 
-## handoff
+## safeguard against passing blank value which would result in unlimited jobs
+if [ -z "$EXTERNAL_JOBS" ]; then
+    jobs=
+else
+    jobs=--jobs=$EXTERNAL_JOBS
+fi
+
+## pull the trigger
 set -x
-make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $goals $EXTERNAL_VARS
+exec make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $goals $EXTERNAL_VARS

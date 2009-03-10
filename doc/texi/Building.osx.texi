@@ -8,7 +8,7 @@
 @set BG.platform osx
 @c %**end of header
 
-@majorheading Guide to Building @value{HB.title} on @value{OS.@value{BG.platform}}
+@majorheading Build Guide for @value{HB.name} @value{HB.version} on @value{OS.@value{BG.platform}}
 
 @contents
 @include building/chapter.introduction.texi
@@ -67,3 +67,4 @@ UB.archs = i386 x86_64
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.xcode.texi
+@include building/appendix.repo.texi

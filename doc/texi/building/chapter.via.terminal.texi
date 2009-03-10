@@ -219,7 +219,7 @@ If the need arises to override settings in the build system (essentially gnu-mak
 Custom makevar definitions @i{outside} @file{build}. Suitable for settings which apply across all builds for a particular checkout; or which survives manual removal of @file{build}.
 
 @item _SRC_/custom.rules
-Custom make rules @i{outside} @file{build}. Suitable for settings which apply across all builds for a particular checkout; or which survives manual removal of @file{build}.
+Custom make rules @i{outside} @file{build}. Suitable for rules which apply across all builds for a particular checkout; or which survives manual removal of @file{build}.
 
 @item _BUILD_/GNUmakefile.custom.defs
 Custom makevar definitions specific to a @file{build} directory.

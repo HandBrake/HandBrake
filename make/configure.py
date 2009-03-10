@@ -441,6 +441,16 @@ class ArchAction( Action ):
             self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host.release)
             self.mode['ppc']    = 'powerpc-apple-darwin%s'   % (host.release)
             self.mode['ppc64']  = 'powerpc64-apple-darwin%s' % (host.release)
+
+            ## special cases in that powerpc does not match gcc -arch value
+            ## which we like to use; so it has to be removed.
+            ## note: we don't know if apple will release Ssnow Leopad/ppc64 yet; just a guess.
+            if 'powerpc' in self.mode:
+                del self.mode['powerpc']
+                self.mode.mode = 'ppc'
+            elif 'powerpc64' in self.mode:
+                del self.mode['powerpc64']
+                self.mode.mode = 'ppc64'
         elif host.match( '*-*-linux*' ):
             pass
         else:

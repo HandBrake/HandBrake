@@ -1,4 +1,5 @@
 $(eval $(call import.MODULE.defs,MACOSX,macosx))
+$(eval $(call import.GCC,MACOSX))
 
 MACOSX.src/   = $(SRC/)macosx/
 MACOSX.build/ = $(BUILD/)macosx/
@@ -10,7 +11,17 @@ MACOSX.m4.out = $(MACOSX.m4.in:$(MACOSX.src/)%.m4=$(MACOSX.build/)%)
 MACOSX.m4.post.Info.h = $(RM.exe) -f $(MACOSX.build/)HandBrake.build/Preprocessed-Info.plist
 
 MACOSX.targs = HandBrakeCLI HandBrake
-MACOSX.conf  = standard$(if $(filter 1,$(BUILD.cross)),.$(BUILD.arch))
+
+## configuration pattern: (standard|debug)[.ARCH]
+## eg. for native build, no debug --> standard
+## eg. for x86_64 build with debug of any level --> debug.x86_64
+MACOSX.conf  = $(MACOSX.map.g.$(MACOSX.GCC.g))$(if $(filter 1,$(BUILD.cross)),.$(BUILD.arch))
+
+## this is a mapping to determine which basename config to use in xcodeproj
+MACOSX.map.g.none = standard
+MACOSX.map.g.min  = debug
+MACOSX.map.g.std  = debug
+MACOSX.map.g.max  = debug
 
 ###############################################################################
 

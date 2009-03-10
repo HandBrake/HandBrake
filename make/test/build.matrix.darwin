@@ -32,9 +32,10 @@ launch_xcode() {
     eval $2="'--launch --launch-jobs=0 --launch-quiet'"
 }
 
+for debug in none max; do
 for arch in i386 ppc ppc64 x86_64; do
     for method in launch_make launch_xcode term_make term_xcode; do
-        dir=$buildprefix.$arch.$method
+        dir=$buildprefix.$arch.$debug.$method
         if [ -d $dir ]; then
             echo "skipping $dir"
             continue
@@ -42,7 +43,7 @@ for arch in i386 ppc ppc64 x86_64; do
 
         $method mode args
 
-        cmd="./configure --arch=$arch --build=$dir $args"
+        cmd="./configure --arch=$arch --debug=$debug --build=$dir $args"
         echo $cmd | awk '{ \
             trail = ""; \
             for( i = 4; i <= NF; i++ ) \
@@ -51,7 +52,8 @@ for arch in i386 ppc ppc64 x86_64; do
 
         $cmd
         if [ "$mode" = "make" ]; then
-            (set -x; cd $dir && make -j8 >& log.txt)
+            (set -x; cd $dir && make -j8 >& log/build.txt)
         fi
     done
+done
 done

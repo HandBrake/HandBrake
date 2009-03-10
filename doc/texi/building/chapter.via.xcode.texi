@@ -28,24 +28,40 @@ Each configuration uses a different @file{build} directory. This makes it possib
 
 @table @samp
 @item standard
-This configuration will build to the host native architecture. Build directory is @file{build.standard} .
+This configuration will build @b{host native} architecture. Build directory is @file{build.standard} .
 The standard variant produces optimized code without debug information.
 
-@item debug
-This configuration will build to the host native architecture. Build directory is @file{build.standard} .
-The debug variant produces unoptimized code with debug information.
-
 @item standard.i386
-This configuration is used to build for the i386 architecture. Build directory is @file{build.standard.i386} .
+This configuration will build @b{i386} architecture. Build directory is @file{build.standard.i386} .
 
 @item standard.x86_64
-This configuration is used to build for the x86_64 architecture. Build directory is @file{build.standard.x86_64} .
+This configuration will build @b{x86_64} architecture. Build directory is @file{build.standard.x86_64} .
 
 @item standard.ppc
-This configuration is used to build for the ppc architecture. Build directory is @file{build.standard.ppc} .
+This configuration will build @b{ppc} architecture. Build directory is @file{build.standard.ppc} .
 
 @item standard.ppc64
-This configuration is used to build for the ppc64 architecture. Build directory is @file{build.standard.ppc64} .
+This configuration will build @b{ppc64} architecture. Build directory is @file{build.standard.ppc64} .
+
+@item debug
+This configuration will build @b{host native architecture}. Build directory is @file{build.debug} .
+The debug variant produces unoptimized code with debug information.
+
+@item debug.i386
+This configuration will build @b{i386} architecture. Build directory is @file{build.debug.i386} .
+The debug variant produces unoptimized code with debug information.
+
+@item debug.x86_64
+This configuration will build @b{x86_64} architecture. Build directory is @file{build.debug.x86_64} .
+The debug variant produces unoptimized code with debug information.
+
+@item debug.ppc
+This configuration will build @b{ppc} architecture. Build directory is @file{build.debug.ppc} .
+The debug variant produces unoptimized code with debug information.
+
+@item debug.ppc64
+This configuration will build @b{ppc64} architecture. Build directory is @file{build.debug.ppc64} .
+The debug variant produces unoptimized code with debug information.
 @end table
 
 @c %**-------------------------------------------------------------------------
