@@ -235,6 +235,37 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
         goto fail;
     }
 
+    /* ignore titles with bogus cell addresses so we don't abort later
+     * in libdvdread. */
+    for ( i = 0; i < vts->vts_c_adt->nr_of_vobs; ++i)
+    {
+        if( (vts->vts_c_adt->cell_adr_table[i].start_sector & 0xffffff ) ==
+            0xffffff )
+        {
+            hb_error( "scan: cell_adr_table[%d].start_sector invalid (0x%x) "
+                      "- skipping title", i,
+                      vts->vts_c_adt->cell_adr_table[i].start_sector );
+            goto fail;
+        }
+        if( (vts->vts_c_adt->cell_adr_table[i].last_sector & 0xffffff ) ==
+            0xffffff )
+        {
+            hb_error( "scan: cell_adr_table[%d].last_sector invalid (0x%x) "
+                      "- skipping title", i,
+                      vts->vts_c_adt->cell_adr_table[i].last_sector );
+            goto fail;
+        }
+        if( vts->vts_c_adt->cell_adr_table[i].start_sector >=
+            vts->vts_c_adt->cell_adr_table[i].last_sector )
+        {
+            hb_error( "scan: cell_adr_table[%d].start_sector (0x%x) "
+                      "is not before last_sector (0x%x) - skipping title", i,
+                      vts->vts_c_adt->cell_adr_table[i].start_sector,
+                      vts->vts_c_adt->cell_adr_table[i].last_sector );
+            goto fail;
+        }
+    }
+
     /* Detect languages */
     for( i = 0; i < vts->vtsi_mat->nr_of_vts_audio_streams; i++ )
     {
