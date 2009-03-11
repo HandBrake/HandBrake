@@ -138,7 +138,7 @@ int hb_get_cpu_count()
     cpu_count = info.cpu_count;
 
 #elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_OPENBSD)
-    size_t length = sizeof( numberOfCPUs );
+    size_t length = sizeof( cpu_count );
 #ifdef SYS_OPENBSD
     int mib[2] = { CTL_HW, HW_NCPU };
     if( sysctl(mib, 2, &cpu_count, &length, NULL, 0) )
