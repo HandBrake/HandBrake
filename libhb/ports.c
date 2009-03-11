@@ -4,21 +4,40 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
-#include <time.h>
-#include <sys/time.h>
+#ifdef USE_PTHREAD
+#ifdef SYS_LINUX
+#define _GNU_SOURCE
+#include <sched.h>
+#endif
+#include <pthread.h>
+#endif
 
-#if defined( SYS_BEOS )
-#include <OS.h>
-#include <signal.h>
-#elif defined( SYS_CYGWIN )
+#ifdef SYS_BEOS
+#include <kernel/OS.h>
+#endif
+
+#if defined(SYS_DARWIN) || defined(SYS_FREEBSD)
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#endif
+
+#ifdef SYS_OPENBSD
+#include <sys/param.h>
+#include <sys/sysctl.h>
+#include <machine/cpu.h>
+#endif
+
+#ifdef SYS_CYGWIN
 #include <windows.h>
-#elif defined( SYS_SunOS )
+#endif
+
+#ifdef SYS_SunOS
 #include <sys/processor.h>
 #endif
 
-#if USE_PTHREAD
-#include <pthread.h>
-#endif
+#include <time.h>
+#include <sys/time.h>
+
 
 //#ifdef SYS_CYGWIN
 //#include <winsock2.h>
@@ -100,54 +119,36 @@ int hb_get_cpu_count()
     }
     cpu_count = 1;
 
-#if defined( SYS_BEOS )
-    {
-        system_info info;
-        get_system_info( &info );
-        cpu_count = info.cpu_count;
-    }
-
-#elif defined( SYS_DARWIN ) || defined( SYS_FREEBSD )
-    FILE * info;
-    char   buffer[16];
-
-    if( ( info = popen( "/usr/sbin/sysctl hw.ncpu", "r" ) ) )
-    {
-        memset( buffer, 0, 16 );
-        if( fgets( buffer, 15, info ) )
-        {
-            if( sscanf( buffer, "hw.ncpu: %d", &cpu_count ) != 1 )
-            {
-                cpu_count = 1;
-            }
-        }
-        fclose( info );
-    }
-
-#elif defined( SYS_LINUX )
-    {
-        FILE * info;
-        char   buffer[8];
-
-        if( ( info = popen( "grep -c '^processor' /proc/cpuinfo",
-                            "r" ) ) )
-        {
-            memset( buffer, 0, 8 );
-            if( fgets( buffer, 7, info ) )
-            {
-                if( sscanf( buffer, "%d", &cpu_count ) != 1 )
-                {
-                    cpu_count = 1;
-                }
-            }
-            fclose( info );
-        }
-    }
-
-#elif defined( SYS_CYGWIN )
+#if defined(SYS_CYGWIN)
     SYSTEM_INFO cpuinfo;
     GetSystemInfo( &cpuinfo );
     cpu_count = cpuinfo.dwNumberOfProcessors;
+
+#elif defined(SYS_LINUX)
+    unsigned int bit;
+    cpu_set_t p_aff;
+    memset( &p_aff, 0, sizeof(p_aff) );
+    sched_getaffinity( 0, sizeof(p_aff), &p_aff );
+    for( cpu_count = 0, bit = 0; bit < sizeof(p_aff); bit++ )
+         cpu_count += (((uint8_t *)&p_aff)[bit / 8] >> (bit % 8)) & 1;
+
+#elif defined(SYS_BEOS)
+    system_info info;
+    get_system_info( &info );
+    cpu_count = info.cpu_count;
+
+#elif defined(SYS_DARWIN) || defined(SYS_FREEBSD) || defined(SYS_OPENBSD)
+    size_t length = sizeof( numberOfCPUs );
+#ifdef SYS_OPENBSD
+    int mib[2] = { CTL_HW, HW_NCPU };
+    if( sysctl(mib, 2, &cpu_count, &length, NULL, 0) )
+#else
+    if( sysctlbyname("hw.ncpu", &cpu_count, &length, NULL, 0) )
+#endif
+    {
+        cpu_count = 1;
+    }
+
 #elif defined( SYS_SunOS )
     {
         processorid_t cpumax;
