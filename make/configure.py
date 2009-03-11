@@ -528,7 +528,7 @@ class SelectMode( dict ):
         self.mode     = self.default
 
     def cli_add_option( self, parser, option ):
-        parser.add_option( '', option, default=self.mode, metavar='MODE',
+        parser.add_option( option, default=self.mode, metavar='MODE',
             help='select %s mode: %s' % (self.descr,self.toString()),
             action='callback', callback=self.cli_callback, type='str' )
 
@@ -696,7 +696,7 @@ class ToolProbe( Action ):
             self.msg_end = 'not found'
 
     def cli_add_option( self, parser ):
-        parser.add_option( '', '--'+self.name, metavar='PROG',
+        parser.add_option( '--'+self.name, metavar='PROG',
             help='[%s]' % (self.pathname),
             action='callback', callback=self.cli_callback, type='str' )
 
@@ -736,7 +736,7 @@ class SelectTool( Action ):
             self.msg_end = 'not found'
 
     def cli_add_option( self, parser ):
-        parser.add_option( '', '--'+self.name, metavar='MODE',
+        parser.add_option( '--'+self.name, metavar='MODE',
             help='select %s mode: %s' % (self.name,self.toString()),
             action='callback', callback=self.cli_callback, type='str' )
 
@@ -875,24 +875,50 @@ class ConfigDocument:
 ##
 ## create cli parser
 ##
+
+## class to hook options and create CONF.args list
+class Option( optparse.Option ):
+    conf_args = []
+
+    def _conf_record( self, opt, value ):
+        ## skip conf,force,launch
+        if re.match( '^--(conf|force|launch).*$', opt ):
+            return
+
+        ## remove duplicates (last duplicate wins)
+        for i,arg in enumerate( Option.conf_args ):
+            if opt == arg[0]:
+                del Option.conf_args[i]
+                break
+
+        if value:
+            Option.conf_args.append( [opt,'%s=%s' % (opt,value)] )
+        else:
+            Option.conf_args.append( [opt,'%s' % (opt)] )
+
+    def take_action( self, action, dest, opt, value, values, parser ):
+        self._conf_record( opt, value )
+        return optparse.Option.take_action( self, action, dest, opt, value, values, parser )
+
 def createCLI():
     cli = OptionParser( 'usage: %prog [OPTIONS...] [TARGETS...]' )
+    cli.option_class = Option
 
     cli.description = ''
     cli.description += 'Configure %s build system.' % (project.name)
 
     ## add hidden options
-    cli.add_option( '', '--conf-method', default='terminal', action='store', help=optparse.SUPPRESS_HELP )
-    cli.add_option( '', '--force', default=False, action='store_true', help='overwrite existing build config' )
-    cli.add_option( '', '--verbose', default=False, action='store_true', help='increase verbosity' )
+    cli.add_option( '--conf-method', default='terminal', action='store', help=optparse.SUPPRESS_HELP )
+    cli.add_option( '--force', default=False, action='store_true', help='overwrite existing build config' )
+    cli.add_option( '--verbose', default=False, action='store_true', help='increase verbosity' )
 
     ## add install options
     grp = OptionGroup( cli, 'Directory Locations' )
-    grp.add_option( '', '--src', default=cfg.src_dir, action='store', metavar='DIR',
+    grp.add_option( '--src', default=cfg.src_dir, action='store', metavar='DIR',
         help='specify top-level source dir [%s]' % (cfg.src_dir) )
-    grp.add_option( '', '--build', default=cfg.build_dir, action='store', metavar='DIR',
+    grp.add_option( '--build', default=cfg.build_dir, action='store', metavar='DIR',
         help='specify build scratch/output dir [%s]' % (cfg.build_dir) )
-    grp.add_option( '', '--prefix', default=cfg.prefix_dir, action='store', metavar='DIR',
+    grp.add_option( '--prefix', default=cfg.prefix_dir, action='store', metavar='DIR',
         help='specify install dir for products [%s]' % (cfg.prefix_dir) )
     cli.add_option_group( grp )
 
@@ -900,25 +926,25 @@ def createCLI():
     grp = OptionGroup( cli, 'Feature Options' )
 
     h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '', '--enable-asm', default=False, action='store_true', help=h )
+    grp.add_option( '--enable-asm', default=False, action='store_true', help=h )
 
     h = IfHost( 'disable GTK GUI', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '', '--disable-gtk', default=False, action='store_true', help=h )
+    grp.add_option( '--disable-gtk', default=False, action='store_true', help=h )
 
     h = IfHost( 'disable Xcode', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '', '--disable-xcode', default=False, action='store_true', help=h )
+    grp.add_option( '--disable-xcode', default=False, action='store_true', help=h )
 
     cli.add_option_group( grp )
 
     ## add launch options
     grp = OptionGroup( cli, 'Launch Options' )
-    grp.add_option( '', '--launch', default=False, action='store_true',
+    grp.add_option( '--launch', default=False, action='store_true',
         help='launch build, capture log and wait for completion' )
-    grp.add_option( '', '--launch-jobs', default=1, action='store', metavar='N', type='int',
+    grp.add_option( '--launch-jobs', default=1, action='store', metavar='N', type='int',
         help='allow N jobs at once; 0 to match CPU count [1]' )
-    grp.add_option( '', '--launch-args', default=None, action='store', metavar='ARGS',
+    grp.add_option( '--launch-args', default=None, action='store', metavar='ARGS',
         help='specify additional ARGS for launch command' )
-    grp.add_option( '', '--launch-quiet', default=False, action='store_true',
+    grp.add_option( '--launch-quiet', default=False, action='store_true',
         help='do not echo build output while waiting' )
     cli.add_option_group( grp )
 
@@ -1128,10 +1154,8 @@ try:
     ## add configure line for reconfigure purposes
     doc.addBlank()
     args = []
-    for arg in sys.argv[1:]:
-        if arg == '--launch':
-            continue
-        args.append( arg )
+    for arg in Option.conf_args:
+        args.append( arg[1] )
     doc.add( 'CONF.args', ' '.join( args ))
 
     doc.addBlank()

@@ -49,9 +49,8 @@ if [ -n "$reconfigure" ]; then
     esac
 
     ## invoke configure with (hidden) option which indicates conf performed by xcode
-    (set -x; $EXTERNAL_SRC/configure --force --build=$EXTERNAL_BUILD \
-        $EXTERNAL_CONFARGS \
-        --arch=$ARCHS $debug --conf-method=xcode PATH=$PATH )
+    (set -x; $EXTERNAL_SRC/configure --force $EXTERNAL_CONFARGS \
+        --build=$EXTERNAL_BUILD --arch=$ARCHS $debug --conf-method=xcode PATH=$PATH )
 fi
 
 ## compute goals; these correlate with TARGET_NAME and ACTION from Xcode

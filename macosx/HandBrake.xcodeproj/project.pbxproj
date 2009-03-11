@@ -15,9 +15,14 @@
 		253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 253886160BFE0C160064E995 /* HBOutputPanelController.m */; };
 		25DE1FB60C169A0C00F01FC8 /* HBPreferencesController.h in Headers */ = {isa = PBXBuildFile; fileRef = 25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */; };
 		25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */; };
+		2713E6300F676510002E0A01 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713E50C0F675F32002E0A01 /* libhb.a */; };
+		2713E6420F676526002E0A01 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713E50C0F675F32002E0A01 /* libhb.a */; };
+		2774BE900F66F47100B65FC6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE8F0F66F47100B65FC6 /* libbz2.dylib */; };
+		2774BE920F66F48200B65FC6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE910F66F48200B65FC6 /* libz.dylib */; };
+		2774BEC70F66F61A00B65FC6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE8F0F66F47100B65FC6 /* libbz2.dylib */; };
+		2774BEC80F66F61A00B65FC6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE910F66F48200B65FC6 /* libz.dylib */; };
 		278070240F5C261300699207 /* ChapterTitles.h in Headers */ = {isa = PBXBuildFile; fileRef = 593034E90BBA39A100172349 /* ChapterTitles.h */; };
 		27AC71850F5A0AF600053B83 /* fakexcode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27AC71840F5A0AF600053B83 /* fakexcode.cpp */; };
-		4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D1125D709D72FD200E0657B /* libz.dylib */; };
 		4DD93F8F082036E8008E1322 /* Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DF3C8CB052889CD00A80101 /* Controller.h */; };
 		4DD93F92082036E8008E1322 /* HBPreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* HBPreviewController.h */; };
 		4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -133,11 +138,13 @@
 		253886160BFE0C160064E995 /* HBOutputPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputPanelController.m; sourceTree = "<group>"; };
 		25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreferencesController.h; sourceTree = "<group>"; };
 		25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesController.m; sourceTree = "<group>"; };
+		2713E50C0F675F32002E0A01 /* libhb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhb.a; path = libhb/libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2774BE8F0F66F47100B65FC6 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		2774BE910F66F48200B65FC6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		27AC71840F5A0AF600053B83 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
 		29B97316FDCFA39411CA2CEA /* main.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		4D1125D709D72FD200E0657B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = /usr/lib/libz.dylib; sourceTree = "<absolute>"; };
 		4D1FD381073D19CE00E46515 /* HBPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBPreviewController.h; sourceTree = "<group>"; };
 		4D1FD382073D19CE00E46515 /* HBPreviewController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = HBPreviewController.mm; sourceTree = "<group>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
@@ -214,6 +221,9 @@
 			files = (
 				D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */,
 				D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */,
+				2713E6300F676510002E0A01 /* libhb.a in Frameworks */,
+				2774BE900F66F47100B65FC6 /* libbz2.dylib in Frameworks */,
+				2774BE920F66F48200B65FC6 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,9 +236,11 @@
 				A20F47010EBB5EC2005B861B /* QTKit.framework in Frameworks */,
 				4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */,
 				4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */,
-				4D1125D809D72FD200E0657B /* libz.dylib in Frameworks */,
 				A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */,
 				A2D0A0AB0D3E5929002D57CB /* Sparkle.framework in Frameworks */,
+				2713E6420F676526002E0A01 /* libhb.a in Frameworks */,
+				2774BEC70F66F61A00B65FC6 /* libbz2.dylib in Frameworks */,
+				2774BEC80F66F61A00B65FC6 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,12 +294,14 @@
 				D289A9F20DBBE7AC00CE614B /* CoreServices.framework */,
 				A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */,
 				A29E057F0BE1283E000533F5 /* Growl.framework */,
-				4D1125D709D72FD200E0657B /* libz.dylib */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				4DEB2024052B055F00C39CA9 /* IOKit.framework */,
 				4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				2713E50C0F675F32002E0A01 /* libhb.a */,
+				2774BE8F0F66F47100B65FC6 /* libbz2.dylib */,
+				2774BE910F66F48200B65FC6 /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -671,29 +685,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -704,29 +715,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -742,14 +750,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -759,7 +774,6 @@
 		27B4DEB30F65BAB600098046 /* standard.i386 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -767,29 +781,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -806,29 +817,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -865,14 +873,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -882,7 +897,6 @@
 		27B4DEB90F65BAB700098046 /* standard.x86_64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -890,29 +904,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -929,29 +940,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -988,14 +996,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -1005,7 +1020,6 @@
 		27B4DEBF0F65BAB800098046 /* standard.ppc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1013,29 +1027,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1052,29 +1063,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1111,14 +1119,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";
@@ -1128,7 +1143,6 @@
 		27B4DEC50F65BAB900098046 /* standard.ppc64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1136,29 +1150,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1175,29 +1186,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1236,14 +1244,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1254,7 +1269,6 @@
 		27B4DECB0F65BABC00098046 /* debug.i386 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1262,29 +1276,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1301,29 +1312,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1362,14 +1370,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1380,7 +1395,6 @@
 		27B4DED10F65BABD00098046 /* debug.x86_64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1388,29 +1402,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1427,29 +1438,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1488,14 +1496,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1506,7 +1521,6 @@
 		27B4DED70F65BABD00098046 /* debug.ppc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1514,29 +1528,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1553,29 +1564,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1614,14 +1622,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1632,7 +1647,6 @@
 		27B4DEDD0F65BABD00098046 /* debug.ppc64 */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1640,29 +1654,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1679,29 +1690,26 @@
 			buildSettings = {
 				INSTALL_PATH = /usr/local/bin;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1773,7 +1781,6 @@
 		4D4E7BC1087804870051572B /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1781,29 +1788,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1818,7 +1822,6 @@
 		4D4E7BC2087804870051572B /* standard */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				IBC_PLUGINS = /System/Library/Frameworks/QTKit.framework/Resources/QTKitIBPlugin.ibplugin;
 				IBC_PLUGIN_SEARCH_PATHS = /System/Library/Frameworks/QTKit.framework/Resources;
 				INFOPLIST_FILE = Info.plist;
@@ -1826,29 +1829,26 @@
 				INFOPLIST_PREFIX_HEADER = "$(EXTERNAL_BUILD)/macosx/Info.h";
 				INFOPLIST_PREPROCESS = YES;
 				OTHER_LDFLAGS = (
-					"$(EXTERNAL_BUILD)/libhb/libhb.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/liba52.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavcodec.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libavformat.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libavutil.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libdvdread.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libfaac.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libdca.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libmkv.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp3lame.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmp4v2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libogg.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libmpeg2.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libsamplerate.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libswscale.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libtheora.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libfaad.a",
-					"-lbz2",
-					"-lz",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
+					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1871,14 +1871,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -1895,14 +1902,21 @@
 				EXTERNAL_JOBS = 1;
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
+				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
 				HEADER_SEARCH_PATHS = "$(EXTERNAL_BUILD)/libhb";
 				IBC_NOTICES = NO;
 				IBC_WARNINGS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(EXTERNAL_BUILD)/libhb",
+					"$(EXTERNAL_BUILD)/contrib/lib",
+				);
 				OBJROOT = "$(EXTERNAL_BUILD)/macosx";
 				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx10.5;
 				SHARED_PRECOMPS_DIR = "$(SYMROOT)/cache";
 				SYMROOT = "$(EXTERNAL_BUILD)/macosx";

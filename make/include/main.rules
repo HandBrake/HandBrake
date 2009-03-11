@@ -40,7 +40,7 @@ include $(MODULES:%=$(SRC/)%/module.rules)
 
 ## target which causes re-configure if project-root is svn update'd
 $(BUILD/)GNUmakefile: $(wildcard $(SRC/).svn/entries)
-	$(SRC/)configure $(CONF.args)
+	$(SRC/)configure --force $(CONF.args)
 
 ## target useful to force reconfigure; only helpful for build-system development
 .PHONY: reconfigure

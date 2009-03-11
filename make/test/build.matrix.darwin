@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 
-## This is a script used to launch a wide variaet of builds for darwin.
+## This script is used to launch a wide variety of builds for darwin.
 ## It is unsupported and is meant for use only with build-system testing.
 
 if [ -z "$1" ]; then
