@@ -269,17 +269,17 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fWindow center];
     [fWindow setExcludedFromWindowsMenu:YES];
     [fAdvancedOptions setView:fAdvancedView];
-
+    
     /* lets setup our presets drawer for drag and drop here */
     [fPresetsOutlineView registerForDraggedTypes: [NSArray arrayWithObject:DragDropSimplePboardType] ];
     [fPresetsOutlineView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
     [fPresetsOutlineView setVerticalMotionCanBeginDrag: YES];
-
+    
     /* Initialize currentScanCount so HB can use it to
-		evaluate successive scans */
+     evaluate successive scans */
 	currentScanCount = 0;
-
-
+    
+    
     /* Init UserPresets .plist */
 	[self loadPresets];
     
@@ -287,19 +287,33 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [self loadQueueFile];
 	
     fRipIndicatorShown = NO;  // initially out of view in the nib
-
+    
+    /* For 64 bit builds, the threaded animation in the progress
+     * indicators conflicts with the animation in the advanced tab
+     * for reasons not completely clear. jbrjake found a note in the
+     * 10.5 dev notes regarding this possiblility. It was also noted
+     * that unless specified, setUsesThreadedAnimation defaults to true.
+     * So, at least for now we set the indicator animation to NO for
+     * both the scan and regular progress indicators.
+     */
+#ifdef __LP64__
+    [fScanIndicator setUsesThreadedAnimation:NO];
+    [fRipIndicator setUsesThreadedAnimation:NO];
+#endif  
+    
+    
 	/* Show/Dont Show Presets drawer upon launch based
-		on user preference DefaultPresetsDrawerShow*/
+     on user preference DefaultPresetsDrawerShow*/
 	if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultPresetsDrawerShow"] > 0 )
 	{
         [fPresetDrawer setDelegate:self];
         NSSize drawerSize = NSSizeFromString( [[NSUserDefaults standardUserDefaults] 
-                                              stringForKey:@"Drawer Size"] );
+                                               stringForKey:@"Drawer Size"] );
         if( drawerSize.width )
             [fPresetDrawer setContentSize: drawerSize];
 		[fPresetDrawer open];
 	}
-
+    
     /* Destination box*/
     NSMenuItem *menuItem;
     [fDstFormatPopUp removeAllItems];
@@ -316,36 +330,36 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"OGM file" action: NULL keyEquivalent: @""];
     [menuItem setTag: HB_MUX_OGM];
     [fDstFormatPopUp selectItemAtIndex: 0];
-
+    
     [self formatPopUpChanged:nil];
-
+    
 	/* We enable the create chapters checkbox here since we are .mp4 */
 	[fCreateChapterMarkers setEnabled: YES];
 	if ([fDstFormatPopUp indexOfSelectedItem] == 0 && [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultChapterMarkers"] > 0)
 	{
 		[fCreateChapterMarkers setState: NSOnState];
 	}
-
-
-
-
+    
+    
+    
+    
     [fDstFile2Field setStringValue: [NSString stringWithFormat:
-        @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
-
+                                     @"%@/Desktop/Movie.mp4", NSHomeDirectory()]];
+    
     /* Video encoder */
     [fVidEncoderPopUp removeAllItems];
     [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
     [fVidEncoderPopUp addItemWithTitle: @"XviD"];
-
-
-
+    
+    
+    
     /* Video quality */
     [fVidTargetSizeField setIntValue: 700];
 	[fVidBitrateField    setIntValue: 1000];
-
+    
     [fVidQualityMatrix   selectCell: fVidBitrateCell];
     [self videoMatrixChanged:nil];
-
+    
     /* Video framerate */
     [fVidRatePopUp removeAllItems];
 	[fVidRatePopUp addItemWithTitle: NSLocalizedString( @"Same as source", @"" )];
@@ -354,22 +368,22 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
 		{
 			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Film)"]];
+                                             [NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Film)"]];
 		}
 		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
 		{
 			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-				[NSString stringWithCString: hb_video_rates[i].string], @" (PAL Film/Video)"]];
+                                             [NSString stringWithCString: hb_video_rates[i].string], @" (PAL Film/Video)"]];
 		}
 		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
 		{
 			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-				[NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Video)"]];
+                                             [NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Video)"]];
 		}
 		else
 		{
 			[fVidRatePopUp addItemWithTitle:
-				[NSString stringWithCString: hb_video_rates[i].string]];
+             [NSString stringWithCString: hb_video_rates[i].string]];
 		}
     }
     [fVidRatePopUp selectItemAtIndex: 0];
@@ -382,8 +396,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     for( int i = 0; i < hb_audio_bitrates_count; i++ )
     {
         [fAudTrack1BitratePopUp addItemWithTitle:
-				[NSString stringWithCString: hb_audio_bitrates[i].string]];
-
+         [NSString stringWithCString: hb_audio_bitrates[i].string]];
+        
     }
     [fAudTrack1BitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
 	
@@ -392,27 +406,27 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     for( int i = 0; i < hb_audio_rates_count; i++ )
     {
         [fAudTrack1RatePopUp addItemWithTitle:
-            [NSString stringWithCString: hb_audio_rates[i].string]];
+         [NSString stringWithCString: hb_audio_rates[i].string]];
     }
     [fAudTrack1RatePopUp selectItemAtIndex: hb_audio_rates_default];
 	
     /* Bottom */
     [fStatusField setStringValue: @""];
-
+    
     [self enableUI: NO];
 	[self setupToolbar];
-
+    
 	/* We disable the Turbo 1st pass checkbox since we are not x264 */
 	[fVidTurboPassCheck setEnabled: NO];
 	[fVidTurboPassCheck setState: NSOffState];
-
-
+    
+    
 	/* lets get our default prefs here */
 	[self getDefaultPresets:nil];
 	/* lets initialize the current successful scancount here to 0 */
 	currentSuccessfulScanCount = 0;
-
-
+    
+    
 }
 
 - (void) enableUI: (bool) b
