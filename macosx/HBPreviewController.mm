@@ -78,6 +78,10 @@
     
     isFullScreen = NO;
     hudTimerSeconds = 0;
+    /* we set the progress indicator to not use threaded animation
+     * as it causes a conflict with the qtmovieview's controllerbar
+    */
+    [fMovieCreationProgressIndicator setUsesThreadedAnimation:NO];
     
     /* Setup our layers for core animation */
     [fPictureViewArea setWantsLayer:YES];

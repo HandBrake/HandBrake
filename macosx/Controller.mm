@@ -294,12 +294,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * 10.5 dev notes regarding this possiblility. It was also noted
      * that unless specified, setUsesThreadedAnimation defaults to true.
      * So, at least for now we set the indicator animation to NO for
-     * both the scan and regular progress indicators.
+     * both the scan and regular progress indicators for both 32 and 64 bit
+     * as it test out fine on both and there is no reason our progress indicators
+     * should require their own thread.
      */
-#ifdef __LP64__
+
     [fScanIndicator setUsesThreadedAnimation:NO];
     [fRipIndicator setUsesThreadedAnimation:NO];
-#endif  
+  
     
     
 	/* Show/Dont Show Presets drawer upon launch based
