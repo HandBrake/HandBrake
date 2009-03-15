@@ -60,7 +60,7 @@ namespace Handbrake
             this.txt_preset_name.Location = new System.Drawing.Point(109, 17);
             this.txt_preset_name.Name = "txt_preset_name";
             this.txt_preset_name.Size = new System.Drawing.Size(241, 21);
-            this.txt_preset_name.TabIndex = 2;
+            this.txt_preset_name.TabIndex = 0;
             // 
             // btn_add
             // 
@@ -68,11 +68,10 @@ namespace Handbrake
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_add.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_add.Location = new System.Drawing.Point(284, 67);
+            this.btn_add.Location = new System.Drawing.Point(212, 72);
             this.btn_add.Name = "btn_add";
             this.btn_add.Size = new System.Drawing.Size(66, 22);
-            this.btn_add.TabIndex = 0;
-            this.btn_add.TabStop = false;
+            this.btn_add.TabIndex = 2;
             this.btn_add.Text = "Add";
             this.btn_add.UseVisualStyleBackColor = false;
             this.btn_add.Click += new System.EventHandler(this.btn_add_Click);
@@ -83,11 +82,10 @@ namespace Handbrake
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_cancel.Location = new System.Drawing.Point(212, 67);
+            this.btn_cancel.Location = new System.Drawing.Point(284, 72);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(66, 22);
             this.btn_cancel.TabIndex = 3;
-            this.btn_cancel.TabStop = false;
             this.btn_cancel.Text = "Cancel";
             this.btn_cancel.UseVisualStyleBackColor = false;
             this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
@@ -98,7 +96,7 @@ namespace Handbrake
             this.check_pictureSettings.Location = new System.Drawing.Point(109, 44);
             this.check_pictureSettings.Name = "check_pictureSettings";
             this.check_pictureSettings.Size = new System.Drawing.Size(118, 17);
-            this.check_pictureSettings.TabIndex = 4;
+            this.check_pictureSettings.TabIndex = 1;
             this.check_pictureSettings.Text = "Use Picture Size";
             this.toolTip.SetToolTip(this.check_pictureSettings, "Save Picture Width/Height and Crop Values");
             this.check_pictureSettings.UseVisualStyleBackColor = true;

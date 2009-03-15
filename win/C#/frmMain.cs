@@ -222,7 +222,6 @@ namespace Handbrake
         #region Tools Menu
         private void mnu_encode_Click(object sender, EventArgs e)
         {
-            queueWindow.setQueue();
             queueWindow.Show();
         }
         private void mnu_encodeLog_Click(object sender, EventArgs e)
@@ -937,7 +936,8 @@ namespace Handbrake
         {
             // This removes the file extension from the filename box on the save file dialog.
             // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
-            DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "").Replace(".ogm", "").Replace(".avi", "");
+            DVD_Save.FileName = Path.Combine(Path.GetDirectoryName(text_destination.Text), Path.GetFileNameWithoutExtension(text_destination.Text));
+
 
             // Show the dialog and set the main form file path
             if (drop_format.SelectedIndex.Equals(0))
@@ -2103,7 +2103,24 @@ namespace Handbrake
 
         #endregion
 
-
+        #region overrides
+        /// <summary>
+        /// If the queue is being processed, prompt the user to confirm application close.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
+            if ((encodeQueue.isEncoding) && (! encodeQueue.isPaused) && (encodeQueue.count() > 0))
+            {
+                DialogResult result = MessageBox.Show("HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
+                    "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.No)
+                    e.Cancel = true;
+            }
+            base.OnFormClosing(e);
+        }
+        #endregion
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

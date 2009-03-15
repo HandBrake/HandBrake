@@ -306,6 +306,7 @@
     <None Include="Resources\ActivityWindow.png" />
     <None Include="Resources\AddToQueue.png" />
     <Content Include="Resources\ActivityWindow_small.png" />
+    <None Include="Resources\AddToQueue_small.png" />
     <Content Include="Resources\copy.png" />
     <Content Include="Resources\disc_small.png" />
     <None Include="Resources\hb32.png" />

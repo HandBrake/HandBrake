@@ -8,7 +8,6 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Collections;
 
 namespace Handbrake.Functions
 {

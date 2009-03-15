@@ -219,9 +219,9 @@ namespace Handbrake
                         break;
                     case "H.264 (x264)":
                         double divided;
-                        System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
+                        System.Globalization.CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                         double.TryParse(Properties.Settings.Default.x264cqstep,
-                                        System.Globalization.NumberStyles.Number,
+                                        NumberStyles.Number,
                                         culture,
                                         out divided);
                         value = 51 - mainWindow.slider_videoQuality.Value * divided;
@@ -384,8 +384,7 @@ namespace Handbrake
                 query += " -U ";
             else if (subtitles != "" && subtitles != "None")
             {
-                string[] tempSub;
-                tempSub = subtitles.Split(' ');
+                string[] tempSub = subtitles.Split(' ');
                 query += " -s " + tempSub[0];
             }
 

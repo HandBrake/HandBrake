@@ -30,7 +30,7 @@ namespace Handbrake.Functions
             // Get the durations between the 2 chapter points and add them together.
             if (chapter_start != "Auto" && chapter_end != "Auto")
             {
-                int start_chapter, end_chapter = 0;
+                int start_chapter, end_chapter;
                 int.TryParse(chapter_start, out start_chapter);
                 int.TryParse(chapter_end, out end_chapter);
 
@@ -56,6 +56,11 @@ namespace Handbrake.Functions
         /// Calculate the non-anamorphic resoltuion of the source
         /// </summary>
         /// <param name="width"></param>
+        /// <param name="top"></param>
+        /// <param name="bottom"></param>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <param name="selectedTitle"></param>
         /// <returns></returns>
         public int cacluateNonAnamorphicHeight(int width, decimal top, decimal bottom, decimal left, decimal right, Parsing.Title selectedTitle)
         {
@@ -109,18 +114,18 @@ namespace Handbrake.Functions
         public Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
         {
             int current_largest = 0;
-            Handbrake.Parsing.Title title2Select;
+            Parsing.Title title2Select;
 
             // Check if there are titles in the DVD title dropdown menu and make sure, it's not just "Automatic"
             if (drp_dvdtitle.Items[0].ToString() != "Automatic")
-                title2Select = (Handbrake.Parsing.Title)drp_dvdtitle.Items[0];
+                title2Select = (Parsing.Title)drp_dvdtitle.Items[0];
             else
                 title2Select = null;
 
             // So, If there are titles in the DVD Title dropdown menu, lets select the longest.
             if (title2Select != null)
             {
-                foreach (Handbrake.Parsing.Title x in drp_dvdtitle.Items)
+                foreach (Parsing.Title x in drp_dvdtitle.Items)
                 {
                     string title = x.ToString();
                     if (title != "Automatic")
@@ -156,7 +161,6 @@ namespace Handbrake.Functions
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
-        /// <param name="mainWindow"></param>
         public DataGridView chapterNaming(DataGridView data_chpt, string chapter_end)
         {
             int i = 0, finish = 0;
@@ -181,7 +185,6 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        /// <param name="mainWindow"></param>
         public string autoName(ComboBox drp_dvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
         {
             string AutoNamePath = string.Empty;
@@ -202,7 +205,7 @@ namespace Handbrake.Functions
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
 
                 // Get the destination filename.
-                string destination_filename = "";
+                string destination_filename;
                 if (Properties.Settings.Default.autoNameFormat != "")
                 {
                     destination_filename = Properties.Settings.Default.autoNameFormat;
@@ -228,15 +231,10 @@ namespace Handbrake.Functions
                 if (!dest.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // If there is an auto name path, use it...
-                    if (Properties.Settings.Default.autoNamePath.Trim() != "" && 
-                        Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location") 
-                    {
+                    if (Properties.Settings.Default.autoNamePath.Trim() != "" && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location") 
                         AutoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destination_filename);
-                    }
                     else // ...otherwise, output to the source directory
-                    {
                         AutoNamePath = null;
-                    }
                 }
                 else // Otherwise, use the path that is already there.
                 {
@@ -258,7 +256,7 @@ namespace Handbrake.Functions
         {
             try
             {
-                Functions.AppcastReader rssRead = new Functions.AppcastReader();
+                Functions.AppcastReader rssRead = new AppcastReader();
                 rssRead.getInfo(); // Initializes the class.
                 string build = rssRead.build();
 
@@ -268,16 +266,14 @@ namespace Handbrake.Functions
 
                 if (latest == skip)
                     return false;
-                else
-                {
-                    Boolean update = (latest > current);
-                    return update;
-                }
+                
+                Boolean update = (latest > current);
+                return update;
             }
             catch (Exception exc)
             {
-                if (debug == true)
-                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (debug)
+                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

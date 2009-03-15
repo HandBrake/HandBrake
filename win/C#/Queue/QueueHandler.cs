@@ -18,7 +18,7 @@ namespace Handbrake.Queue
     {
         private static XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
         List<QueueItem> queue = new List<QueueItem>();
-        int id = 0; // Unique identifer number for each job
+        int id; // Unique identifer number for each job
         private QueueItem lastItem;
 
         #region Queue Handling
@@ -53,6 +53,8 @@ namespace Handbrake.Queue
         /// Add's a new item to the queue
         /// </summary>
         /// <param name="query">String</param>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
         public void add(string query, string source, string destination)
         {
             QueueItem newJob = new QueueItem();
@@ -94,7 +96,7 @@ namespace Handbrake.Queue
         {
             if (index > 0)
             {
-                QueueItem item = (QueueItem)queue[index];
+                QueueItem item = queue[index];
 
                 queue.RemoveAt(index);
                 queue.Insert((index - 1), item);
@@ -109,7 +111,7 @@ namespace Handbrake.Queue
         {
             if (index < queue.Count - 1)
             {
-                QueueItem item = (QueueItem)queue[index];
+                QueueItem item = queue[index];
 
                 queue.RemoveAt(index);
                 queue.Insert((index + 1), item);
@@ -122,7 +124,7 @@ namespace Handbrake.Queue
         /// </summary>
         public void write2disk(string file)
         {
-            string tempPath = "";
+            string tempPath;
             if (file == "hb_queue_recovery.xml")
                 tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
             else
@@ -154,7 +156,7 @@ namespace Handbrake.Queue
             foreach (QueueItem queue_item in queue)
             {
                 string q_item = queue_item.Query;
-                string fullQuery = '"' + Application.StartupPath.ToString() + "\\HandBrakeCLI.exe" + '"' + q_item;
+                string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + q_item;
 
                 if (queries == string.Empty)
                     queries = queries + fullQuery;
@@ -188,7 +190,7 @@ namespace Handbrake.Queue
         /// </summary>
         public void recoverQueue(string file)
         {
-            string tempPath = "";
+            string tempPath;
             if (file == "hb_queue_recovery.xml")
                 tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
             else
@@ -216,8 +218,8 @@ namespace Handbrake.Queue
         //------------------------------------------------------------------------
         Functions.Encode encodeHandler = new Functions.Encode();
         private Boolean started = false;
-        private Boolean paused = false;
-        private Boolean encoding = false;
+        private Boolean paused;
+        private Boolean encoding;
 
         #region Encoding
 
@@ -239,15 +241,14 @@ namespace Handbrake.Queue
             Thread theQueue;
             if (this.count() != 0)
             {
-                if (paused == true)
+                if (paused)
                     paused = false;
                 else
                 {
                     paused = false;
                     try
                     {
-                        theQueue = new Thread(startProc);
-                        theQueue.IsBackground = true;
+                        theQueue = new Thread(startProc) {IsBackground = true};
                         theQueue.Start();
                     }
                     catch (Exception exc)
@@ -265,7 +266,7 @@ namespace Handbrake.Queue
 
         private void startProc(object state)
         {
-            Process hbProc = new Process();
+            Process hbProc;
             try
             {
                 // Run through each item on the queue
@@ -283,11 +284,9 @@ namespace Handbrake.Queue
 
                     hbProc.Close();
                     hbProc.Dispose();
-                    hbProc = null;
-                    query = "";
                     EncodeFinished(null);
 
-                    while (paused == true) // Need to find a better way of doing this.
+                    while (paused) // Need to find a better way of doing this.
                     {
                         Thread.Sleep(10000);
                     }
