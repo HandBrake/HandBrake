@@ -394,5 +394,7 @@ BOOL                        fIsDragging;
 - (void) remindUserOfSleepOrShutdown;
 
 - (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
+
+- (int) hbInstances;
 @end
 

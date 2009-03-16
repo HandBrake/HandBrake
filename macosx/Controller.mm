@@ -142,26 +142,48 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         
         /*On Screen Notification*/
         NSString * alertTitle;
-        if (fWorkingCount > 0)
+        
+        /* We check to see if there is already another instance of hb running.
+         * Note: hbInstances == 1 means we are the only instance of HandBrake.app
+         */
+        if ([self hbInstances] > 1)
         {
-            alertTitle = [NSString stringWithFormat:
-                         NSLocalizedString(@"HandBrake Has Detected %d Previously Encoding Item and %d Pending Item(s) In Your Queue.", @""),
-                         fWorkingCount,fPendingCount];
+        alertTitle = [NSString stringWithFormat:
+                         NSLocalizedString(@"There is already an instance of HandBrake running.", @"")];
+        NSBeginCriticalAlertSheet(
+                                      alertTitle,
+                                      NSLocalizedString(@"Reload Queue", nil),
+                                      nil,
+                                      nil,
+                                      fWindow, self,
+                                      nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
+                                      NSLocalizedString(@" HandBrake will now load up the existing queue.", nil));    
         }
         else
         {
-            alertTitle = [NSString stringWithFormat:
-                         NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
-                         fPendingCount];
+            if (fWorkingCount > 0)
+            {
+                alertTitle = [NSString stringWithFormat:
+                              NSLocalizedString(@"HandBrake Has Detected %d Previously Encoding Item and %d Pending Item(s) In Your Queue.", @""),
+                              fWorkingCount,fPendingCount];
+            }
+            else
+            {
+                alertTitle = [NSString stringWithFormat:
+                              NSLocalizedString(@"HandBrake Has Detected %d Pending Item(s) In Your Queue.", @""),
+                              fPendingCount];
+            }
+            
+            NSBeginCriticalAlertSheet(
+                                      alertTitle,
+                                      NSLocalizedString(@"Reload Queue", nil),
+                                      nil,
+                                      NSLocalizedString(@"Empty Queue", nil),
+                                      fWindow, self,
+                                      nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
+                                      NSLocalizedString(@" Do you want to reload them ?", nil));
         }
-        NSBeginCriticalAlertSheet(
-                                  alertTitle,
-                                  NSLocalizedString(@"Reload Queue", nil),
-                                  nil,
-                                  NSLocalizedString(@"Empty Queue", nil),
-                                  fWindow, self,
-                                  nil, @selector(didDimissReloadQueue:returnCode:contextInfo:), nil,
-                                  NSLocalizedString(@" Do you want to reload them ?", nil));
+        
         // call didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
         // right below to either clear the old queue or keep it loaded up.
     }
@@ -178,6 +200,24 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             [self browseSources:(id)fOpenSourceTitleMMenu];
         }
     }
+}
+
+- (int) hbInstances
+{
+    /* check to see if another instance of HandBrake.app is running */
+    NSArray *runningAppDictionaries = [[NSWorkspace sharedWorkspace] launchedApplications];
+    NSDictionary *aDictionary;
+    int hbInstances = 0;
+    for (aDictionary in runningAppDictionaries)
+	{
+        //	NSLog(@"Open App: %@", [aDictionary valueForKey:@"NSApplicationName"]);
+        
+        if ([[aDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
+		{
+            hbInstances++;
+		}
+	}
+    return hbInstances;
 }
 
 - (void) didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
@@ -198,8 +238,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
     else
     {
-    [self setQueueEncodingItemsAsPending];
-    [self showQueueWindow:NULL];
+        if ([self hbInstances] == 1)
+        {
+            [self setQueueEncodingItemsAsPending];
+        }
+        [self showQueueWindow:NULL];
     }
 }
 
