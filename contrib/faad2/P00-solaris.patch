@@ -1,0 +1,5 @@
+diff -Naur faad2.orig/INSTALL faad2/INSTALL
+--- faad2.orig/INSTALL	1969-12-31 19:00:00.000000000 -0500
++++ faad2/INSTALL	2009-03-16 20:23:56.289752314 -0400
+@@ -0,0 +1 @@
++placebo
