@@ -4,10 +4,15 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. 
    
-   The yadif algorithm was created by Michael Niedermayer. */
+   The yadif algorithm was created by Michael Niedermayer.
+   Tritical's work inspired much of the comb detection code:
+   http://web.missouri.edu/~kes25c/
+*/
+
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
+#include "eedi2.h"
 
 #define SUPPRESS_AV_LOG
 
@@ -21,17 +26,52 @@
 #define MIN3(a,b,c) MIN(MIN(a,b),c)
 #define MAX3(a,b,c) MAX(MAX(a,b),c)
 
-typedef struct yadif_arguments_s {
+// Some names to correspond to the pv->eedi_half array's contents
+#define SRCPF 0
+#define MSKPF 1
+#define TMPPF 2
+#define DSTPF 3
+// Some names to correspond to the pv->eedi_full array's contents
+#define DST2PF 0
+#define TMP2PF2 1
+#define MSK2PF 2
+#define TMP2PF 3
+#define DST2MPF 4
+
+struct yadif_arguments_s {
     uint8_t **dst;
     int parity;
     int tff;
     int stop;
     int is_combed;
-} yadif_arguments_t;
+};
 
-typedef struct decomb_arguments_s {
+struct decomb_arguments_s {
     int stop;
-} decomb_arguments_t;
+};
+
+struct eedi2_arguments_s {
+    int stop;
+};
+
+typedef struct yadif_arguments_s yadif_arguments_t;
+typedef struct decomb_arguments_s decomb_arguments_t;
+typedef struct eedi2_arguments_s eedi2_arguments_t;
+
+typedef struct eedi2_thread_arg_s {
+    hb_filter_private_t *pv;
+    int plane;
+} eedi2_thread_arg_t;
+
+typedef struct decomb_thread_arg_s {
+    hb_filter_private_t *pv;
+    int segment;
+} decomb_thread_arg_t;
+
+typedef struct yadif_thread_arg_s {
+    hb_filter_private_t *pv;
+    int segment;
+} yadif_thread_arg_t;
 
 struct hb_filter_private_s
 {
@@ -39,6 +79,7 @@ struct hb_filter_private_s
     int              width[3];
     int              height[3];
 
+    // Decomb parameters
     int              mode;
     int              spatial_metric;
     int              motion_threshold;
@@ -46,8 +87,19 @@ struct hb_filter_private_s
     int              block_threshold;
     int              block_width;
     int              block_height;
+    
+    // EEDI2 parameters
+    int              magnitude_threshold;
+    int              variance_threshold;
+    int              laplacian_threshold;
+    int              dilation_threshold;
+    int              erosion_threshold;
+    int              noise_threshold;
+    int              maximum_search_distance;
+    int              post_processing;
 
     int              parity;
+    int              tff;
     
     int              yadif_ready;
 
@@ -70,6 +122,13 @@ struct hb_filter_private_s
     /* Make a buffer to store a comb mask. */
     uint8_t        * mask[3];
 
+    uint8_t        * eedi_half[4][3];
+    uint8_t        * eedi_full[5][3];
+    int            * cx2;
+    int            * cy2;
+    int            * cxy;
+    int            * tmpc;
+    
     AVPicture        pic_in;
     AVPicture        pic_out;
     hb_buffer_t *    buf_out[2];
@@ -86,6 +145,11 @@ struct hb_filter_private_s
     hb_lock_t      ** decomb_begin_lock;     // Thread has work
     hb_lock_t      ** decomb_complete_lock;  // Thread has completed work
     decomb_arguments_t *decomb_arguments;    // Arguments to thread for work
+
+    hb_thread_t    ** eedi2_threads;        // Threads for eedi2 - one per plane
+    hb_lock_t      ** eedi2_begin_lock;     // Thread has work
+    hb_lock_t      ** eedi2_complete_lock;  // Thread has completed work
+    eedi2_arguments_t *eedi2_arguments;    // Arguments to thread for work
     
 };
 
@@ -106,7 +170,7 @@ void hb_decomb_close( hb_filter_private_t * pv );
 hb_filter_object_t hb_filter_decomb =
 {
     FILTER_DECOMB,
-    "Deinterlaces selectively with yadif/mcdeint and lowpass5 blending",
+    "Decomb",
     NULL,
     hb_decomb_init,
     hb_decomb_work,
@@ -510,10 +574,171 @@ int detect_combed_segment( hb_filter_private_t * pv, int segment_start, int segm
     }
 }
 
-typedef struct decomb_thread_arg_s {
-    hb_filter_private_t *pv;
-    int segment;
-} decomb_thread_arg_t;
+// This function calls all the eedi2 filters in sequence for a given plane.
+// It outputs the final interpolated image to pv->eedi_full[DST2PF].
+void eedi2_interpolate_plane( hb_filter_private_t * pv, int k )
+{
+    /* We need all these pointers. No, seriously.
+       I swear. It's not a joke. They're used.
+       All nine of them.                         */
+    uint8_t * mskp = pv->eedi_half[MSKPF][k];
+    uint8_t * srcp = pv->eedi_half[SRCPF][k];
+    uint8_t * tmpp = pv->eedi_half[TMPPF][k];
+    uint8_t * dstp = pv->eedi_half[DSTPF][k];
+    uint8_t * dst2p = pv->eedi_full[DST2PF][k];
+    uint8_t * tmp2p2 = pv->eedi_full[TMP2PF2][k];
+    uint8_t * msk2p = pv->eedi_full[MSK2PF][k];
+    uint8_t * tmp2p = pv->eedi_full[TMP2PF][k];
+    uint8_t * dst2mp = pv->eedi_full[DST2MPF][k];
+    int * cx2 = pv->cx2;
+    int * cy2 = pv->cy2;
+    int * cxy = pv->cxy;
+    int * tmpc = pv->tmpc;
+
+    int pitch = pv->ref_stride[k];
+    int height = pv->height[k]; int width = pv->width[k];
+    int half_height = height / 2;
+
+    // edge mask
+    eedi2_build_edge_mask( mskp, pitch, srcp, pitch,
+                     pv->magnitude_threshold, pv->variance_threshold, pv->laplacian_threshold, 
+                     half_height, width );
+    eedi2_erode_edge_mask( mskp, pitch, tmpp, pitch, pv->erosion_threshold, half_height, width );
+    eedi2_dilate_edge_mask( tmpp, pitch, mskp, pitch, pv->dilation_threshold, half_height, width );
+    eedi2_erode_edge_mask( mskp, pitch, tmpp, pitch, pv->erosion_threshold, half_height, width );
+    eedi2_remove_small_gaps( tmpp, pitch, mskp, pitch, half_height, width );
+
+    // direction mask
+    eedi2_calc_directions( k, mskp, pitch, srcp, pitch, tmpp, pitch,
+                     pv->maximum_search_distance, pv->noise_threshold,
+                     half_height, width );
+    eedi2_filter_dir_map( mskp, pitch, tmpp, pitch, dstp, pitch, half_height, width );
+    eedi2_expand_dir_map( mskp, pitch, dstp, pitch, tmpp, pitch, half_height, width );
+    eedi2_filter_map( mskp, pitch, tmpp, pitch, dstp, pitch, half_height, width );
+
+    // upscale 2x vertically
+    eedi2_upscale_by_2( srcp, dst2p, half_height, pitch );
+    eedi2_upscale_by_2( dstp, tmp2p2, half_height, pitch );
+    eedi2_upscale_by_2( mskp, msk2p, half_height, pitch );
+
+    // upscale the direction mask
+    eedi2_mark_directions_2x( msk2p, pitch, tmp2p2, pitch, tmp2p, pitch, pv->tff, height, width );
+    eedi2_filter_dir_map_2x( msk2p, pitch, tmp2p, pitch,  dst2mp, pitch, pv->tff, height, width );
+    eedi2_expand_dir_map_2x( msk2p, pitch, dst2mp, pitch, tmp2p, pitch, pv->tff, height, width );
+    eedi2_fill_gaps_2x( msk2p, pitch, tmp2p, pitch, dst2mp, pitch, pv->tff, height, width );
+    eedi2_fill_gaps_2x( msk2p, pitch, dst2mp, pitch, tmp2p, pitch, pv->tff, height, width );
+
+    // interpolate a full-size plane
+    eedi2_interpolate_lattice( k, tmp2p, pitch, dst2p, pitch, tmp2p2, pitch, pv->tff,
+                         pv->noise_threshold, height, width );
+
+    if( pv->post_processing == 1 || pv->post_processing == 3 )
+    {
+        // make sure the edge directions are consistent
+        eedi2_bit_blit( tmp2p2, pitch, tmp2p, pitch, pv->width[k], pv->height[k] );
+        eedi2_filter_dir_map_2x( msk2p, pitch, tmp2p, pitch, dst2mp, pitch, pv->tff, height, width );
+        eedi2_expand_dir_map_2x( msk2p, pitch, dst2mp, pitch, tmp2p, pitch, pv->tff, height, width );
+        eedi2_post_process( tmp2p, pitch, tmp2p2, pitch, dst2p, pitch, pv->tff, height, width );
+    }
+    if( pv->post_processing == 2 || pv->post_processing == 3 )
+    {
+        // filter junctions and corners
+        eedi2_gaussian_blur1( srcp, pitch, tmpp, pitch, srcp, pitch, half_height, width );
+        eedi2_calc_derivatives( srcp, pitch, half_height, width, cx2, cy2, cxy );
+        eedi2_gaussian_blur_sqrt2( cx2, tmpc, cx2, pitch, half_height, width);
+        eedi2_gaussian_blur_sqrt2( cy2, tmpc, cy2, pitch, half_height, width);
+        eedi2_gaussian_blur_sqrt2( cxy, tmpc, cxy, pitch, half_height, width);
+        eedi2_post_process_corner( cx2, cy2, cxy, pitch, tmp2p2, pitch, dst2p, pitch, height, width, pv->tff );
+    }
+}
+
+/*
+ *  eedi2 interpolate this plane in a single thread.
+ */
+void eedi2_filter_thread( void *thread_args_v )
+{
+    eedi2_arguments_t *eedi2_work = NULL;
+    hb_filter_private_t * pv;
+    int run = 1;
+    int plane;
+    eedi2_thread_arg_t *thread_args = thread_args_v;
+
+    pv = thread_args->pv;
+    plane = thread_args->plane;
+
+    hb_log("eedi2 thread started for plane %d", plane);
+
+    while( run )
+    {
+        /*
+         * Wait here until there is work to do. hb_lock() blocks until
+         * render releases it to say that there is more work to do.
+         */
+        hb_lock( pv->eedi2_begin_lock[plane] );
+
+        eedi2_work = &pv->eedi2_arguments[plane];
+
+        if( eedi2_work->stop )
+        {
+            /*
+             * No more work to do, exit this thread.
+             */
+            run = 0;
+            continue;
+        } 
+
+        /*
+         * Process plane
+         */
+            eedi2_interpolate_plane( pv, plane );
+        
+        /*
+         * Finished this segment, let everyone know.
+         */
+        hb_unlock( pv->eedi2_complete_lock[plane] );
+    }
+    free( thread_args_v );
+}
+
+// Sets up the input field planes for EEDI2 in pv->eedi_half[SRCPF]
+// and then runs eedi2_filter_thread for each plane.
+void eedi2_planer( hb_filter_private_t * pv )
+{
+    /* Copy the first field from the source to a half-height frame. */
+    int i;
+    for( i = 0;  i < 3; i++ )
+    {
+        int pitch = pv->ref_stride[i];
+        int start_line = !pv->tff;
+        eedi2_fill_half_height_buffer_plane( &pv->ref[1][i][pitch*start_line], pv->eedi_half[SRCPF][i], pitch, pv->height[i] );
+    }
+    
+    int plane;
+    for( plane = 0; plane < 3; plane++ )
+    {  
+        /*
+         * Let the thread for this plane know that we've setup work 
+         * for it by releasing the begin lock (ensuring that the
+         * complete lock is already locked so that we block when
+         * we try to lock it again below).
+         */
+        hb_lock( pv->eedi2_complete_lock[plane] );
+        hb_unlock( pv->eedi2_begin_lock[plane] );
+    }
+
+    /*
+     * Wait until all three threads have completed by trying to get
+     * the complete lock that we locked earlier for each thread, which
+     * will block until that thread has completed the work on that
+     * plane.
+     */
+    for( plane = 0; plane < 3; plane++ )
+    {
+        hb_lock( pv->eedi2_complete_lock[plane] );
+        hb_unlock( pv->eedi2_complete_lock[plane] );
+    }
+}
+
 
 /*
  * comb detect this segment of all three planes in a single thread.
@@ -626,10 +851,15 @@ static void yadif_filter_line( uint8_t *dst,
        to the other field in the current frame--the one not being filtered.  */
     uint8_t *prev2 = parity ? prev : cur ;
     uint8_t *next2 = parity ? cur  : next;
+    
     int w = pv->width[plane];
     int refs = pv->ref_stride[plane];
     int x;
+    int eedi2_mode = (pv->mode == 5);
     
+    /* We can replace spatial_pred with this interpolation*/
+    uint8_t * eedi2_guess = &pv->eedi_full[DST2PF][plane][y*refs];
+
     /* Decomb's cubic interpolation can only function when there are
        three samples above and below, so regress to yadif's traditional
        two-tap interpolation when filtering at the top and bottom edges. */
@@ -654,60 +884,69 @@ static void yadif_filter_line( uint8_t *dst,
         int temporal_diff2 = ( ABS(next[-refs] - cur[-refs]) + ABS(next[+refs] - cur[+refs]) ) >> 1;
         /* For the actual difference, use the largest of the previous average diffs. */
         int diff           = MAX3(temporal_diff0>>1, temporal_diff1, temporal_diff2);
-        
-        /* SAD of how the pixel-1, the pixel, and the pixel+1 change from the line above to below. */ 
-        int spatial_score  = ABS(cur[-refs-1] - cur[+refs-1]) + ABS(cur[-refs]-cur[+refs]) +
-                                     ABS(cur[-refs+1] - cur[+refs+1]) - 1;         
+
         int spatial_pred;
-         
-        /* Spatial pred is either a bilinear or cubic vertical interpolation. */
-        if( pv->mode > 0 && !edge)
+        
+        if( eedi2_mode )
         {
-            spatial_pred = cubic_interpolate( cur[-3*refs], cur[-refs], cur[+refs], cur[3*refs] );
+            /* Who needs yadif's spatial predictions when we can have EEDI2's? */
+            spatial_pred = eedi2_guess[0];
+            eedi2_guess++;
         }
-        else
+        else // Yadif spatial interpolation
         {
-            spatial_pred = (c+e)>>1;
+            /* SAD of how the pixel-1, the pixel, and the pixel+1 change from the line above to below. */ 
+            int spatial_score  = ABS(cur[-refs-1] - cur[+refs-1]) + ABS(cur[-refs]-cur[+refs]) +
+                                         ABS(cur[-refs+1] - cur[+refs+1]) - 1;         
+            
+            /* Spatial pred is either a bilinear or cubic vertical interpolation. */
+            if( pv->mode > 0 && !edge)
+            {
+                spatial_pred = cubic_interpolate( cur[-3*refs], cur[-refs], cur[+refs], cur[3*refs] );
+            }
+            else
+            {
+                spatial_pred = (c+e)>>1;
+            }
+
+        /* EDDI: Edge Directed Deinterlacing Interpolation
+           Checks 4 different slopes to see if there is more similarity along a diagonal
+           than there was vertically. If a diagonal is more similar, then it indicates
+           an edge, so interpolate along that instead of a vertical line, using either
+           linear or cubic interpolation depending on mode. */
+        #define YADIF_CHECK(j)\
+                {   int score = ABS(cur[-refs-1+j] - cur[+refs-1-j])\
+                              + ABS(cur[-refs  +j] - cur[+refs  -j])\
+                              + ABS(cur[-refs+1+j] - cur[+refs+1-j]);\
+                    if( score < spatial_score ){\
+                        spatial_score = score;\
+                        if( pv->mode > 0 && !edge )\
+                        {\
+                            switch(j)\
+                            {\
+                                case -1:\
+                                    spatial_pred = cubic_interpolate(cur[-3 * refs - 3], cur[-refs -1], cur[+refs + 1], cur[3* refs + 3] );\
+                                break;\
+                                case -2:\
+                                    spatial_pred = cubic_interpolate( ( ( cur[-3*refs - 4] + cur[-refs - 4] ) / 2 ) , cur[-refs -2], cur[+refs + 2], ( ( cur[3*refs + 4] + cur[refs + 4] ) / 2 ) );\
+                                break;\
+                                case 1:\
+                                    spatial_pred = cubic_interpolate(cur[-3 * refs +3], cur[-refs +1], cur[+refs - 1], cur[3* refs -3] );\
+                                break;\
+                                case 2:\
+                                    spatial_pred = cubic_interpolate(( ( cur[-3*refs + 4] + cur[-refs + 4] ) / 2 ), cur[-refs +2], cur[+refs - 2], ( ( cur[3*refs - 4] + cur[refs - 4] ) / 2 ) );\
+                                break;\
+                            }\
+                        }\
+                        else\
+                        {\
+                            spatial_pred = ( cur[-refs +j] + cur[+refs -j] ) >>1;\
+                        }\
+
+            YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
+            YADIF_CHECK( 1) YADIF_CHECK( 2) }} }}
         }
 
-/* EDDI: Edge Directed Deinterlacing Interpolation
-   Uses the Martinez-Lim Line Shift Parametric Modeling algorithm...I think.
-   Checks 4 different slopes to see if there is more similarity along a diagonal
-   than there was vertically. If a diagonal is more similar, then it indicates
-   an edge, so interpolate along that instead of a vertical line, using either
-   linear or cubic interpolation depending on mode. */
-#define YADIF_CHECK(j)\
-        {   int score = ABS(cur[-refs-1+j] - cur[+refs-1-j])\
-                      + ABS(cur[-refs  +j] - cur[+refs  -j])\
-                      + ABS(cur[-refs+1+j] - cur[+refs+1-j]);\
-            if( score < spatial_score ){\
-                spatial_score = score;\
-                if( pv->mode > 0 && !edge )\
-                {\
-                    switch(j)\
-                    {\
-                        case -1:\
-                            spatial_pred = cubic_interpolate(cur[-3 * refs - 3], cur[-refs -1], cur[+refs + 1], cur[3* refs + 3] );\
-                        break;\
-                        case -2:\
-                            spatial_pred = cubic_interpolate( ( ( cur[-3*refs - 4] + cur[-refs - 4] ) / 2 ) , cur[-refs -2], cur[+refs + 2], ( ( cur[3*refs + 4] + cur[refs + 4] ) / 2 ) );\
-                        break;\
-                        case 1:\
-                            spatial_pred = cubic_interpolate(cur[-3 * refs +3], cur[-refs +1], cur[+refs - 1], cur[3* refs -3] );\
-                        break;\
-                        case 2:\
-                            spatial_pred = cubic_interpolate(( ( cur[-3*refs + 4] + cur[-refs + 4] ) / 2 ), cur[-refs +2], cur[+refs - 2], ( ( cur[3*refs - 4] + cur[refs - 4] ) / 2 ) );\
-                        break;\
-                    }\
-                }\
-                else\
-                {\
-                    spatial_pred = ( cur[-refs +j] + cur[+refs -j] ) >>1;\
-                }\
-                
-                YADIF_CHECK(-1) YADIF_CHECK(-2) }} }}
-                YADIF_CHECK( 1) YADIF_CHECK( 2) }} }}
-                                
         /* Temporally adjust the spatial prediction by
            comparing against lines in the adjacent fields. */
         int b = (prev2[-2*refs] + next2[-2*refs])>>1;
@@ -737,11 +976,6 @@ static void yadif_filter_line( uint8_t *dst,
         next2++;
     }
 }
-
-typedef struct yadif_thread_arg_s {
-    hb_filter_private_t *pv;
-    int segment;
-} yadif_thread_arg_t;
 
 /*
  * deinterlace this segment of all three planes in a single thread.
@@ -902,9 +1136,9 @@ static void yadif_filter( uint8_t ** dst,
                           int tff,
                           hb_filter_private_t * pv )
 {
-    
-    int is_combed = comb_segmenter( pv );
-    
+    /* If we're running comb detection, do it now, otherwise blend if mode 4 and interpolate if not. */
+    int is_combed = pv->spatial_metric >= 0 ? comb_segmenter( pv ) : pv->mode == 4 ? 2 : 1;
+
     if( is_combed == 1 )
     {
         pv->yadif_deinterlaced_frames++;
@@ -916,6 +1150,12 @@ static void yadif_filter( uint8_t ** dst,
     else
     {
         pv->unfiltered_frames++;
+    }
+    
+    if( is_combed == 1 && pv->mode == 5 )
+    {
+        /* Generate an EEDI2 interpolation */
+        eedi2_planer( pv );
     }
     
     if( is_combed )
@@ -1131,6 +1371,15 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
     pv->block_width = 16;
     pv->block_height = 16;
     
+    pv->magnitude_threshold = 10;
+    pv->variance_threshold = 20;
+    pv->laplacian_threshold = 20;
+    pv->dilation_threshold = 4;
+    pv->erosion_threshold = 2;
+    pv->noise_threshold = 50;
+    pv->maximum_search_distance = 24;
+    pv->post_processing = 1;
+
     pv->parity   = PARITY_DEFAULT;
 
     pv->mcdeint_mode   = MCDEINT_MODE_DEFAULT;
@@ -1138,14 +1387,22 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
 
     if( settings )
     {
-        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d",
+        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
                 &pv->mode,
                 &pv->spatial_metric,
                 &pv->motion_threshold,
                 &pv->spatial_threshold,
                 &pv->block_threshold,
                 &pv->block_width,
-                &pv->block_height );
+                &pv->block_height,
+                &pv->magnitude_threshold,
+                &pv->variance_threshold,
+                &pv->laplacian_threshold,
+                &pv->dilation_threshold,
+                &pv->erosion_threshold,
+                &pv->noise_threshold,
+                &pv->maximum_search_distance,
+                &pv->post_processing );
     }
     
     pv->cpu_count = hb_get_cpu_count();
@@ -1181,7 +1438,38 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
 
         pv->mask[i] = calloc( 1, w*h*sizeof(uint8_t) ) + 3*w;
     }
+    
+    if( pv->mode == 5 )
+    {
+        /* Allocate half-height eedi2 buffers */
+        height = pv->height[0] / 2;
+        for( i = 0; i < 3; i++ )
+        {
+            int is_chroma = !!i;
+            int w = ((width   + 31) & (~31))>>is_chroma;
+            int h = ((height+6+ 31) & (~31))>>is_chroma;
 
+            for( j = 0; j < 4; j++ )
+            {
+                pv->eedi_half[j][i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
+            }
+        }
+
+        /* Allocate full-height eedi2 buffers */
+        height = pv->height[0];
+        for( i = 0; i < 3; i++ )
+        {
+            int is_chroma = !!i;
+            int w = ((width   + 31) & (~31))>>is_chroma;
+            int h = ((height+6+ 31) & (~31))>>is_chroma;
+
+            for( j = 0; j < 5; j++ )
+            {
+                pv->eedi_full[j][i] = malloc( w*h*sizeof(uint8_t) ) + 3*w;
+            }
+        }
+    }
+    
      /*
       * Create yadif threads and locks.
       */
@@ -1264,7 +1552,62 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
             hb_error( "decomb could not create threads" );
         }
     }
+    
+    if( pv->mode == 5 )
+    {
+        /*
+         * Create eedi2 threads and locks.
+         */
+        pv->eedi2_threads = malloc( sizeof( hb_thread_t* ) * 3 );
+        pv->eedi2_begin_lock = malloc( sizeof( hb_lock_t * ) * 3 );
+        pv->eedi2_complete_lock = malloc( sizeof( hb_lock_t * ) * 3 );
+        pv->eedi2_arguments = malloc( sizeof( eedi2_arguments_t ) * 3 );
 
+        if( pv->post_processing > 1 )
+        {
+            pv->cx2 = (int*)eedi2_aligned_malloc(pv->height[0]*pv->ref_stride[0]*sizeof(int), 16);
+            pv->cy2 = (int*)eedi2_aligned_malloc(pv->height[0]*pv->ref_stride[0]*sizeof(int), 16);
+            pv->cxy = (int*)eedi2_aligned_malloc(pv->height[0]*pv->ref_stride[0]*sizeof(int), 16);
+            pv->tmpc = (int*)eedi2_aligned_malloc(pv->height[0]*pv->ref_stride[0]*sizeof(int), 16);
+            if( !pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc )
+                hb_log("EEDI2: failed to malloc derivative arrays");
+            else
+                hb_log("EEDI2: successfully mallloced derivative arrays");
+        }
+
+        for( i = 0; i < 3; i++ )
+        {
+            eedi2_thread_arg_t *eedi2_thread_args;
+
+            eedi2_thread_args = malloc( sizeof( eedi2_thread_arg_t ) );
+
+            if( eedi2_thread_args )
+            {
+                eedi2_thread_args->pv = pv;
+                eedi2_thread_args->plane = i;
+
+                pv->eedi2_begin_lock[i] = hb_lock_init();
+                pv->eedi2_complete_lock[i] = hb_lock_init();
+
+                /*
+                 * Important to start off with the threads locked waiting
+                 * on input.
+                 */
+                hb_lock( pv->eedi2_begin_lock[i] );
+
+                pv->eedi2_arguments[i].stop = 0;
+
+                pv->eedi2_threads[i] = hb_thread_init( "eedi2_filter_segment",
+                                                       eedi2_filter_thread,
+                                                       eedi2_thread_args,
+                                                       HB_NORMAL_PRIORITY );
+            }
+            else
+            {
+                hb_error( "eedi2 could not create threads" );
+            }
+        }
+    }
     
     
     /* Allocate mcdeint specific buffers */
@@ -1327,7 +1670,7 @@ void hb_decomb_close( hb_filter_private_t * pv )
         return;
     }
     
-    hb_log("decomb: yadif deinterlaced %i | blend deinterlaced %i | unfiltered %i | total %i", pv->yadif_deinterlaced_frames, pv->blend_deinterlaced_frames, pv->unfiltered_frames, pv->yadif_deinterlaced_frames + pv->blend_deinterlaced_frames + pv->unfiltered_frames);
+    hb_log("decomb: %s deinterlaced %i | blend deinterlaced %i | unfiltered %i | total %i", pv->mode == 5 ? "yadif+eedi2" : "yadif", pv->yadif_deinterlaced_frames, pv->blend_deinterlaced_frames, pv->unfiltered_frames, pv->yadif_deinterlaced_frames + pv->blend_deinterlaced_frames + pv->unfiltered_frames);
 
     /* Cleanup frame buffers */
     if( pv->buf_out[0] )
@@ -1364,6 +1707,46 @@ void hb_decomb_close( hb_filter_private_t * pv )
             free( *p - 3*pv->ref_stride[i/3] );
             *p = NULL;
         }
+    }
+    
+    if( pv->mode == 5 )
+    {
+        /* Cleanup eedi-half  buffers */
+        int j;
+        for( i = 0; i<3; i++ )
+        {
+            for( j = 0; j < 4; j++ )
+            {
+                uint8_t **p = &pv->eedi_half[j][i];
+                if (*p)
+                {
+                    free( *p - 3*pv->ref_stride[i] );
+                    *p = NULL;
+                }            
+            }
+        }
+
+        /* Cleanup eedi-full  buffers */
+        for( i = 0; i<3; i++ )
+        {
+            for( j = 0; j < 5; j++ )
+            {
+                uint8_t **p = &pv->eedi_full[j][i];
+                if (*p)
+                {
+                    free( *p - 3*pv->ref_stride[i] );
+                    *p = NULL;
+                }            
+            }
+        }
+    }
+    
+    if( pv->post_processing > 1  && pv->mode == 5 )
+    {
+        if (pv->cx2) eedi2_aligned_free(pv->cx2);
+        if (pv->cy2) eedi2_aligned_free(pv->cy2);
+        if (pv->cxy) eedi2_aligned_free(pv->cxy);
+        if (pv->tmpc) eedi2_aligned_free(pv->tmpc);
     }
     
     for( i = 0; i < pv->cpu_count; i++)
@@ -1407,6 +1790,30 @@ void hb_decomb_close( hb_filter_private_t * pv )
     free( pv->decomb_begin_lock );
     free( pv->decomb_complete_lock );
     free( pv->decomb_arguments );
+    
+    if( pv->mode == 5 )
+    {
+        for( i = 0; i < 3; i++)
+        {
+            /*
+             * Tell each eedi2 thread to stop, and then cleanup.
+             */
+            pv->eedi2_arguments[i].stop = 1;
+            hb_unlock(  pv->eedi2_begin_lock[i] );
+
+            hb_thread_close( &pv->eedi2_threads[i] );
+            hb_lock_close( &pv->eedi2_begin_lock[i] );
+            hb_lock_close( &pv->eedi2_complete_lock[i] );
+        }
+
+        /*
+         * free memory for eedi2 structs
+         */
+        free( pv->eedi2_threads );
+        free( pv->eedi2_begin_lock );
+        free( pv->eedi2_complete_lock );
+        free( pv->eedi2_arguments );
+    }
     
     /* Cleanup mcdeint specific buffers */
     if( pv->mcdeint_mode >= 0 )
@@ -1456,6 +1863,8 @@ int hb_decomb_work( const hb_buffer_t * cbuf_in,
         tff = (pv->parity & 1) ^ 1;
     }
 
+    pv->tff = tff;
+    
     /* Store current frame in yadif cache */
     store_ref( (const uint8_t**)pv->pic_in.data, pv );
 
