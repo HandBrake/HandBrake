@@ -52,7 +52,7 @@ define import.CONTRIB.defs
 
     # extra line feed is required
     define $(1).PATCH.item
-        $$(PATCH.exe) -t -p1 -d $$(1) < $$(2)
+        $$(PATCH.exe) -t -N -p1 -d $$(1) < $$(2)
 
     endef
 
