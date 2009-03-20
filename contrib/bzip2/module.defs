@@ -3,7 +3,7 @@ $(eval $(call import.CONTRIB.defs,BZIP2))
 
 BZIP2.FETCH.url = http://download.m0k.org/handbrake/contrib/bzip2-1.0.5.tar.gz
 BZIP2.EXTRACT.tarbase = bzip2
-BZIP2.CONFIGURE =
+BZIP2.CONFIGURE = $(TOUCH.exe) $@
 
 BZIP2.BUILD.extra = \
     CC=$(BZIP2.GCC.gcc) \

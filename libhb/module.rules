@@ -38,7 +38,3 @@ endif
 
 clean: libhb.clean
 build: libhb.build
-
-xmike:
-	@echo $(LIBHB.yasm.asm)
-	@echo $(LIBHB.yasm.o)
