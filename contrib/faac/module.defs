@@ -1,8 +1,9 @@
 $(eval $(call import.MODULE.defs,FAAC,faac))
 $(eval $(call import.CONTRIB.defs,FAAC))
 
-FAAC.FETCH.url = http://download.m0k.org/handbrake/contrib/faac-1.26.tar.gz
-FAAC.EXTRACT.tarbase = faac
+FAAC.FETCH.url = http://download.m0k.org/handbrake/contrib/faac-1.28.tar.gz
+FAAC.EXTRACT.tarbase = faac-1.28
 
-FAAC.CONFIGURE.bootstrap = ./bootstrap;
+# If faac not already bootstrapped then add the following
+#FAAC.CONFIGURE.bootstrap = ./bootstrap;
 FAAC.CONFIGURE.extra     = --without-mp4v2

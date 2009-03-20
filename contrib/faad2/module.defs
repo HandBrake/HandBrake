@@ -1,7 +1,8 @@
 $(eval $(call import.MODULE.defs,FAAD2,faad2))
 $(eval $(call import.CONTRIB.defs,FAAD2))
 
-FAAD2.FETCH.url = http://download.m0k.org/handbrake/contrib/faad2-2.6.1.tar.gz
-FAAD2.EXTRACT.tarbase = faad2
+FAAD2.FETCH.url = http://download.m0k.org/handbrake/contrib/faad2-2.7.tar.gz
+FAAD2.EXTRACT.tarbase = faad2-2.7
 
-FAAD2.CONFIGURE.bootstrap = ./bootstrap;
+# If faad not already bootstrapped then add the following
+#FAAD2.CONFIGURE.bootstrap = ./bootstrap;
