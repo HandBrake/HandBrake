@@ -35,3 +35,11 @@ ifeq (cygwin,$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --enable-memalign-hack
     FFMPEG.GCC.args.extra = -fno-common
 endif
+
+#
+# MPC8 Doesn't compile on SPARC
+#
+ifeq (solaris,$(BUILD.system))
+    FFMPEG.CONFIGURE.extra += --disable-demuxer=mpc8
+endif
+

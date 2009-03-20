@@ -40,6 +40,8 @@ else ifeq ($(BUILD.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
 else ifeq ($(BUILD.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(BUILD.system),solaris)
+    LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else
     LIBHB.platform.D = SYS_UNKNOWN
 endif

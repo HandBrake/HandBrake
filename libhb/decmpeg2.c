@@ -94,7 +94,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
         sws_scale( context, in.data, in.linesize, 0, height, out.data, out.linesize );
         sws_freeContext( context );
 
-        u_int8_t *data = buf->data;
+        uint8_t *data = buf->data;
         memcpy( data, out.data[0], dst_wh );
         data += dst_wh;
         // U & V planes are 1/4 the size of Y plane.
@@ -110,7 +110,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     {
         // we're scanning or the frame dimensions match the title's dimensions
         // so we can do a straight copy.
-        u_int8_t *data = buf->data;
+        uint8_t *data = buf->data;
         memcpy( data, y, dst_wh );
         data += dst_wh;
         // U & V planes are 1/4 the size of Y plane.

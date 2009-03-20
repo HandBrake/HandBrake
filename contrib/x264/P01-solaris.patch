@@ -17,30 +17,6 @@ diff -ru x264/Makefile x264.solaris/Makefile
 diff -ru x264/configure x264.solaris/configure
 --- x264/configure	Tue Aug 12 03:26:58 2008
 +++ x264.modified/configure	Tue Aug 19 16:09:32 2008
-@@ -1,4 +1,4 @@
--#! /bin/sh
-+#! /usr/xpg4/bin/sh
- 
- if test x"$1" = x"-h" -o x"$1" = x"--help" ; then
- 
-@@ -75,7 +75,7 @@
- # check whether 'echo -n' works as expected, otherwise try printf
- if [ "x`echo -n houba`" = xhouba ]
- then
--  ECHON="echo -n"
-+  ECHON="/usr/ucb/echo -n"
- elif [ "x`printf houba`" = xhouba ]
- then
-   ECHON="printf"
-@@ -321,8 +321,6 @@
-         echo "If you really want to compile without asm, configure with --disable-asm."
-         exit 1
-     fi
--else
--    AS=""
- fi
- 
- CFLAGS="$CFLAGS -DARCH_$ARCH -DSYS_$SYS"
 @@ -329,8 +327,10 @@
  
  echo "unsigned int endian = 'B' << 24 | 'I' << 16 | 'G' << 8 | 'E';" > conftest.c
@@ -53,15 +29,3 @@ diff -ru x264/configure x264.solaris/configure
  # autodetect options that weren't forced nor disabled
  
  libpthread=""
-diff -ru x264/version.sh x264.solaris/version.sh
---- x264/version.sh	Mon Jun  9 01:36:08 2008
-+++ x264.solaris/version.sh	Thu Jun 19 11:56:19 2008
-@@ -1,7 +1,7 @@
- #!/bin/sh
- git-rev-list HEAD | sort > config.git-hash
- LOCALVER=`wc -l config.git-hash | awk '{print $1}'`
--if [ $LOCALVER \> 1 ] ; then
-+if [ $LOCALVER -gt 1 ] ; then
-     VER=`git-rev-list origin/master | sort | join config.git-hash - | wc -l | awk '{print $1}'`
-     if [ $VER != $LOCALVER ] ; then
-         VER="$VER+$(($LOCALVER-$VER))"
