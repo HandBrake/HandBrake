@@ -1,5 +1,23 @@
-diff -Naur faad2.orig/INSTALL faad2/INSTALL
---- faad2.orig/INSTALL	1969-12-31 19:00:00.000000000 -0500
-+++ faad2/INSTALL	2009-03-16 20:23:56.289752314 -0400
-@@ -0,0 +1 @@
-+placebo
+diff -Naur faad2-2.7.orig/libfaad/Makefile.am faad2-2.7/libfaad/Makefile.am
+--- faad2-2.7.orig/libfaad/Makefile.am	2009-02-04 19:51:03.000000000 -0500
++++ faad2-2.7/libfaad/Makefile.am	2009-03-20 03:20:46.326379809 -0400
+@@ -1,6 +1,6 @@
+ lib_LTLIBRARIES = libfaad.la
+ 
+-AM_CFLAGS	= -iquote $(top_srcdir)/include
++AM_CFLAGS	= -I$(top_srcdir)/include
+ include_HEADERS = $(top_srcdir)/include/faad.h \
+ 		  $(top_srcdir)/include/neaacdec.h
+ 
+diff -Naur faad2-2.7.orig/libfaad/Makefile.in faad2-2.7/libfaad/Makefile.in
+--- faad2-2.7.orig/libfaad/Makefile.in	2009-02-10 03:36:11.000000000 -0500
++++ faad2-2.7/libfaad/Makefile.in	2009-03-20 03:20:57.702298514 -0400
+@@ -195,7 +195,7 @@
+ sysconfdir = @sysconfdir@
+ target_alias = @target_alias@
+ lib_LTLIBRARIES = libfaad.la
+-AM_CFLAGS = -iquote $(top_srcdir)/include
++AM_CFLAGS = -I$(top_srcdir)/include
+ include_HEADERS = $(top_srcdir)/include/faad.h \
+ 		  $(top_srcdir)/include/neaacdec.h
+ 
