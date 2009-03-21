@@ -619,7 +619,6 @@ ghb_do_scan(
 			path = ghb_settings_get_string( ud->settings, "source");
 			gtk_progress_bar_set_fraction (progress, 0);
 			gtk_progress_bar_set_text (progress, "Scanning ...");
-			ghb_hb_cleanup(TRUE);
 			prune_logs(ud);
 			gint preview_count;
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
@@ -2608,7 +2607,6 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			gtk_progress_bar_set_text (progress, "Scanning ...");
 			gtk_progress_bar_set_fraction (progress, 0);
  			update_source_label(ud, device);
-			ghb_hb_cleanup(TRUE);
 			prune_logs(ud);
 			gint preview_count;
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
@@ -2616,7 +2614,6 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 		}
 		else
 		{
-			ghb_hb_cleanup(TRUE);
 			prune_logs(ud);
 			ghb_backend_scan("/dev/null", 0, 1);
 		}
