@@ -427,8 +427,7 @@
         <child>
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
-            <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
-            <property name="icon_size">GTK_ICON_SIZE_DND</property>
+            <property name="icon_size">5</property>
             <child>
               <object class="GtkToolButton" id="toolbutton1">
                 <property name="visible">True</property>
