@@ -2628,8 +2628,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 				// Adjust the cropping to accomplish the desired width and height
 				crop_width = tinfo.width - crop[2] - crop[3];
 				crop_height = tinfo.height - crop[0] - crop[1];
-				width = MULTIPLE_MOD(crop_width, mod);
-				height = MULTIPLE_MOD(crop_height, mod);
+				width = MOD_ROUND(crop_width, mod);
+				height = MOD_ROUND(crop_height, mod);
 
 				need1 = (crop_height - height) / 2;
 				need2 = crop_height - height - need1;
@@ -2659,37 +2659,35 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	{
 		width = crop_width;
 		height = crop_height;
-		max_width = 0;
-		max_height = 0;
 	}
 	else
 	{
 		width = ghb_settings_get_int(ud->settings, "scale_width");
 		height = ghb_settings_get_int(ud->settings, "scale_height");
-		max_width = ghb_settings_get_int(ud->settings, "PictureWidth");
-		max_height = ghb_settings_get_int(ud->settings, "PictureHeight");
-		// Adjust dims according to max values
-		if (!max_height)
-		{
-			max_height = crop_height;
-		}
-		if (!max_width)
-		{
-			max_width = crop_width;
-		}
-		// Align max dims 
-		max_width = MULTIPLE_MOD(max_width, mod);
-		max_height = MULTIPLE_MOD(max_height, mod);
-		g_debug("max_width %d, max_height %d\n", max_width, max_height);
+		max_width = MOD_DOWN(
+			ghb_settings_get_int(ud->settings, "PictureWidth"), mod);
+		max_height = MOD_DOWN(
+			ghb_settings_get_int(ud->settings, "PictureHeight"), mod);
 	}
+	// Adjust dims according to max values
+	if (!max_height)
+	{
+		max_height = MOD_DOWN(title->height, mod);
+	}
+	if (!max_width)
+	{
+		max_width = MOD_DOWN(title->width, mod);
+	}
+	// Align max dims 
+	g_debug("max_width %d, max_height %d\n", max_width, max_height);
 
 	if (width < 16)
 		width = title->width - crop[2] - crop[3];
 	if (height < 16)
 		height = title->height - crop[0] - crop[1];
 
-	width = MULTIPLE_MOD(width, mod);
-	height = MULTIPLE_MOD(height, mod);
+	width = MOD_ROUND(width, mod);
+	height = MOD_ROUND(height, mod);
 	if (max_height)
 		height = MIN(height, max_height);
 	if (max_width)
@@ -2703,6 +2701,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		job->anamorphic.modulus = round_dims ? 16 : 2;
 		job->width = width;
 		job->height = height;
+		if (max_width) 
+			job->maxWidth = max_width;
 		if (max_height) 
 			job->maxHeight = max_height;
 		job->crop[0] = crop[0];	job->crop[1] = crop[1];
@@ -2726,16 +2726,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			// Try to keep largest dimension
 			new_height = (crop_height * ((gdouble)width/crop_width) / par);
 			new_width = (crop_width * ((gdouble)height/crop_height) * par);
-			// Height and width are always multiples of 2, so do the rounding
-			new_height = ((new_height + 1) >> 1) << 1;
-			new_width = ((new_width + 1) >> 1) << 1;
-			if ((max_width && new_width > max_width) || 
-				new_width > title->width)
+
+			if (max_width && new_width > max_width)
 			{
 				height = new_height;
 			}
-			else if ((max_height && new_height > max_height) || 
-						new_height > title->height)
+			else if (max_height && new_height > max_height)
 			{
 				width = new_width;
 			}
@@ -2757,8 +2753,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			}
 			g_debug("new w %d h %d\n", width, height);
 		}
-		width = MULTIPLE_MOD(width, mod);
-		height = MULTIPLE_MOD(height, mod);
+		width = MOD_ROUND(width, mod);
+		height = MOD_ROUND(height, mod);
+		if (max_height)
+			height = MIN(height, max_height);
+		if (max_width)
+			width = MIN(width, max_width);
 	}
 	ghb_ui_update(ud, "scale_width", ghb_int64_value(width));
 	ghb_ui_update(ud, "scale_height", ghb_int64_value(height));
@@ -3915,23 +3915,23 @@ ghb_get_preview_image(
 	{
 		GdkScreen *ss;
 		gint s_w, s_h;
-		gint num, den;
+		gint orig_w, orig_h;
 
 		ss = gdk_screen_get_default();
 		s_w = gdk_screen_get_width(ss);
 		s_h = gdk_screen_get_height(ss);
-		num = dstWidth * par_width;
-		den = dstHeight * par_height;
+		orig_w = dstWidth;
+		orig_h = dstHeight;
 
 		if (dstWidth > s_w * 80 / 100)
 		{
 			dstWidth = s_w * 80 / 100;
-			dstHeight = dstWidth * den / num;
+			dstHeight = dstHeight * dstWidth / orig_w;
 		}
 		if (dstHeight > s_h * 80 / 100)
 		{
 			dstHeight = s_h * 80 / 100;
-			dstWidth = dstHeight * num / den;
+			dstWidth = dstWidth * dstHeight / orig_h;
 		}
 	}
 	g_debug("scaled %d x %d\n", dstWidth, dstHeight);
