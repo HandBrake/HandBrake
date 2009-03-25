@@ -96,6 +96,8 @@
 		<false />
 		<key>title_no_in_destination</key>
 		<false />
+		<key>check_updates</key>
+		<true />
 		<key>chapters_in_destination</key>
 		<false />
 		<key>default_source</key>

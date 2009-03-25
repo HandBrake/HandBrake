@@ -3311,6 +3311,20 @@ no-dct-decimate=0:cabac=1</property>
                       <object class="GtkVBox" id="vbox42">
                         <property name="visible">True</property>
                         <child>
+                          <object class="GtkCheckButton" id="check_updates">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text">Check for updates to HandBrake at startup.</property>
+                            <property name="label" translatable="yes">Check for Updates</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                          </packing>
+                        </child>
+
+                        <child>
                           <object class="GtkCheckButton" id="use_source_name">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -3323,6 +3337,7 @@ label.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
 
@@ -3369,8 +3384,8 @@ auto-generated destination name.</property>
                             </child>
                           </object>
                           <packing>
-                              <property name="expand">False</property>
-                              <property name="position">1</property>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -3386,7 +3401,7 @@ non-hidef screens.  </property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -3404,7 +3419,7 @@ the required multiple.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -3422,6 +3437,10 @@ the required multiple.</property>
                                     <property name="shadow_type">none</property>
                                     <property name="adjustment">preview_count_adj</property>
                                     <property name="numeric">True</property>
+                                    <property name="tooltip_text">Number of preview images that are generated
+during a source scan.  More images can improve
+detection of cropping and other parameters, but
+increases scan duration.</property>
                                     <signal name="value_changed" handler="pref_changed_cb"/>
                                   </object>
                                   <packing>
@@ -3446,7 +3465,7 @@ the required multiple.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
 
@@ -3462,6 +3481,8 @@ the required multiple.</property>
                                   <object class="GtkComboBox" id="VideoQualityGranularity">
                                     <property name="visible">True</property>
                                     <property name="width_request">55</property>
+                                    <property name="tooltip_text">Granularity of the video quality slider
+in the Video settings tab.</property>
                                     <signal name="changed" handler="vqual_granularity_changed_cb"/>
                                   </object>
                                   <packing>
@@ -3484,7 +3505,7 @@ the required multiple.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -3501,7 +3522,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
 
@@ -3539,7 +3560,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
 
@@ -3552,7 +3573,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">8</property>
+                            <property name="position">9</property>
                           </packing>
                         </child>
                         <child>
@@ -3564,7 +3585,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">9</property>
+                            <property name="position">10</property>
                           </packing>
                         </child>
                       </object>
