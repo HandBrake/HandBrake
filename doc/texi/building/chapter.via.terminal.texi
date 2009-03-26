@@ -15,7 +15,7 @@ Configure the build system.
 ./configure
 @end example
 
-Configure will automatically create a scratch build directory @file{build} unless you use GNU-style build procedures and first @command{cd} to a directory other than top-level source. Additionally you may specify use @command{--build} to specify the directory. The name of the directory is arbitrary but it is recommended to use something which indicates transient files which are @b{not} checked into the repository.
+Configure will automatically create a scratch build directory @file{build} unless you use GNU-style build procedures and first @command{cd} to a directory other than top-level source. Additionally you may use @command{--build} to specify the directory. The name of the directory is arbitrary but it is recommended to use something which indicates transient files which are @b{not} checked into the repository.
 
 The @command{configure} utility accepts many options. It is recommended that you specify @command{--help} for the complete list of options. The following options are also documented here:
 

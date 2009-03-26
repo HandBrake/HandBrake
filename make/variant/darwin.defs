@@ -22,10 +22,15 @@ endef
 define UB.COMBINE
 	$(RM.exe) -fr ub.combine
 	$(MKDIR.exe) -p ub.combine
+	$(CP.exe) ub.$(UB.first)/HandBrakeCLI ub.combine/.
+	$(LIPO.exe) $(foreach n,$(UB.archs),ub.$n/HandBrakeCLI) -create -output ub.combine/HandBrakeCLI
 	$(CP.exe) -R ub.$(UB.first)/HandBrake.app ub.combine/.
 	$(LIPO.exe) $(foreach n,$(UB.archs),ub.$n/$(1)) -create -output ub.combine/$(1)
 	@lipo -info ub.combine/$(1)
 	@sync
+	@echo ""
+	@echo "$@: { $(UB.archs) } combined -> ub.combine/HandBrakeCLI"
+	@echo "$@: UB executable size: `du -sh ub.combine/HandBrakeCLI | awk '{ print $$1 }'`"
 	@echo ""
 	@echo "$@: { $(UB.archs) } combined -> ub.combine/HandBrake.app"
 	@echo "$@: UB executable size: `du -sh ub.combine/$(1) | awk '{ print $$1 }'`"
