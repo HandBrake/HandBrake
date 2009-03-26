@@ -254,6 +254,17 @@ preset_get_name(GValue *dict)
 	return g_value_get_string(preset_dict_get_value(dict, "PresetName"));
 }
 
+static gboolean
+preset_folder_is_open(GValue *dict)
+{
+	const GValue *gval;
+
+	gval = preset_dict_get_value(dict, "FolderOpen");
+	if (gval != NULL)
+		return g_value_get_boolean(gval);
+	return FALSE;
+}
+
 gboolean
 ghb_preset_folder(GValue *dict)
 {
@@ -643,6 +654,20 @@ presets_set_default(gint *indices, gint len)
 		ghb_dict_insert(dict, g_strdup("Default"), ghb_boolean_value_new(TRUE));
 	}
 	store_presets();
+}
+
+static void
+presets_set_folder_open(gboolean open, gint *indices, gint len)
+{
+	GValue *dict;
+	
+	g_debug("presets_set_folder_open ()");
+	dict = presets_get_dict(presetsPlist, indices, len);
+	if (dict)
+	{
+		ghb_dict_insert(dict, g_strdup("FolderOpen"), 
+						ghb_boolean_value_new(open));
+	}
 }
 
 // Used for sorting dictionaries.
@@ -1424,6 +1449,20 @@ ghb_presets_list_init(
 		if (folder)
 		{
 			ghb_presets_list_init(ud, more_indices, len+1);
+			if (preset_folder_is_open(dict))
+			{
+				GtkTreePath *path;
+
+				if (piter != NULL)
+				{
+					path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), piter);
+					gtk_tree_view_expand_row(treeview, path, FALSE);
+					gtk_tree_path_free(path);
+				}
+				path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &iter);
+				gtk_tree_view_expand_row(treeview, path, FALSE);
+				gtk_tree_path_free(path);
+			}
 		}
 	}
 	g_free(more_indices);
@@ -3128,6 +3167,52 @@ presets_drag_cb(
 		}
 		gtk_tree_path_free(path);
 	}
+}
+
+void
+presets_row_expanded_cb(
+	GtkTreeView *treeview, 
+	GtkTreeIter *iter, 
+	GtkTreePath *path, 
+	signal_user_data_t *ud)
+{
+	gint *indices, len;
+	gboolean expanded, folder;
+
+	expanded = gtk_tree_view_row_expanded(treeview, path);
+	indices = gtk_tree_path_get_indices(path);
+	len = gtk_tree_path_get_depth(path);
+	folder = ghb_presets_get_folder(presetsPlist, indices, len);
+	if (folder)
+	{
+		presets_set_folder_open(expanded, indices, len);
+	}
+
+	// Collapsing parent folder collapses all children
+	if (!expanded)
+	{
+		GValue *presets = NULL;
+		GValue *dict;
+		gint *more_indices, count, ii;
+
+		more_indices = g_malloc((len+1)*sizeof(gint));
+		memcpy(more_indices, indices, len*sizeof(gint));
+
+		presets = presets_get_folder(presetsPlist, indices, len);
+		count = ghb_array_len(presets);
+		for (ii = 0; ii < count; ii++)
+		{
+			dict = ghb_array_get_nth(presets, ii);
+			folder = ghb_preset_folder(dict);
+			if (folder)
+			{
+				more_indices[len] = ii;
+				presets_set_folder_open(expanded, more_indices, len+1);
+			}
+		}
+		g_free(more_indices);
+	}
+	store_presets();
 }
 
 static void

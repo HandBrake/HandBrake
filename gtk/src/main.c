@@ -368,6 +368,7 @@ bind_audio_tree_model (signal_user_data_t *ud)
 extern void presets_list_selection_changed_cb(void);
 extern void presets_drag_cb(void);
 extern void presets_drag_motion_cb(void);
+extern void presets_row_expanded_cb(void);
 
 // Create and bind the tree model to the tree view for the preset list
 // Also, connect up the signal that lets us know the selection has changed
@@ -405,6 +406,8 @@ bind_presets_tree_model (signal_user_data_t *ud)
 
 	g_signal_connect(treeview, "drag_data_received", presets_drag_cb, ud);
 	g_signal_connect(treeview, "drag_motion", presets_drag_motion_cb, ud);
+	g_signal_connect(treeview, "row_expanded", presets_row_expanded_cb, ud);
+	g_signal_connect(treeview, "row_collapsed", presets_row_expanded_cb, ud);
 	g_signal_connect(selection, "changed", presets_list_selection_changed_cb, ud);
 	widget = GHB_WIDGET (ud->builder, "presets_remove");
 	gtk_widget_set_sensitive(widget, FALSE);
