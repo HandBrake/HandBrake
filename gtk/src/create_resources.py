@@ -36,8 +36,8 @@ def start_element_handler(tag, attr):
 			val = dict()
 			stack.append(val)
 	elif tag == "icon":
-		fname = attr["file"]
-		fname = find_file(fname)
+		fbase = attr["file"]
+		fname = find_file(fbase)
 		key = attr["name"]
 		if fname != None and key != None:
 			val = dict()
@@ -49,15 +49,21 @@ def start_element_handler(tag, attr):
 			val["height"] = pb.get_height()
 			val["rowstride"] = pb.get_rowstride()
 			val["data"] = plistlib.Data(pb.get_pixels())
+		elif fname == None:
+			print >> sys.stderr, ( "Error: No such icon file %s" % fbase )
+			sys.exit(1)
 	elif tag == "plist":
-		fname = attr["file"]
-		fname = find_file(fname)
+		fbase = attr["file"]
+		fname = find_file(fbase)
 		key = attr["name"]
 		if fname != None and key != None:
 			val = plistlib.readPlist(fname)
+		elif fname == None:
+			print >> sys.stderr, ( "Error: No such plist file %s" % fbase )
+			sys.exit(1)
 	elif tag == "string":
-		fname = attr["file"]
-		fname = find_file(fname)
+		fbase = attr["file"]
+		fname = find_file(fbase)
 		key = attr["name"]
 		if fname != None and key != None:
 			try:
@@ -65,6 +71,10 @@ def start_element_handler(tag, attr):
 				val = ff.read()
 			except Exception, err:
 				print >> sys.stderr, ( "Error: %s"  % str(err) )
+				sys.exit(1)
+		elif fname == None:
+			print >> sys.stderr, ( "Error: No such string file %s" % fbase )
+			sys.exit(1)
 		
 	if val != None:
 		if type(current) == types.DictType:
@@ -101,7 +111,7 @@ def find_file(name):
 	global inc_list
 
 	for inc_dir in inc_list:
-		inc = "%s/%s" % inc_dir, name
+		inc = "%s/%s" % (inc_dir, name)
 		if os.path.isfile(inc):
 			return inc
 

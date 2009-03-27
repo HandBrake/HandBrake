@@ -79,6 +79,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
 	
 	g_debug("dep_check () %s", name);
 
+	if (rev_map == NULL) return TRUE;
 	array = ghb_dict_lookup(rev_map, name);
 	count = ghb_array_len(array);
 	*out_hide = FALSE;
@@ -172,6 +173,7 @@ ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget)
 	name = gtk_widget_get_name(widget);
 	g_debug("ghb_check_dependency () %s", name);
 
+	if (dep_map == NULL) return;
 	array = ghb_dict_lookup(dep_map, name);
 	count = ghb_array_len(array);
 	for (ii = 0; ii < count; ii++)
@@ -219,6 +221,7 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 	GObject *dep_object;
 
 	g_debug("ghb_check_all_depencencies ()");
+	if (rev_map == NULL) return;
 	ghb_dict_iter_init(&iter, rev_map);
 	// middle (void*) cast prevents gcc warning "defreferencing type-punned
 	// pointer will break strict-aliasing rules"
