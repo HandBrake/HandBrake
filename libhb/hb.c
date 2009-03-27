@@ -295,6 +295,46 @@ void hb_set_cpu_count( hb_handle_t * h, int cpu_count )
 }
 
 /**
+ * Deletes current previews associated with titles
+ * @param h Handle to hb_handle_t
+ */
+void hb_remove_previews( hb_handle_t * h )
+{
+    char            filename[1024];
+    char            dirname[1024];
+    hb_title_t    * title;
+    int             i, count, len;
+    DIR           * dir;
+    struct dirent * entry;
+
+    memset( dirname, 0, 1024 );
+    hb_get_tempory_directory( h, dirname );
+    dir = opendir( dirname );
+    if (dir == NULL) return;
+
+    count = hb_list_count( h->list_title );
+    while( ( entry = readdir( dir ) ) )
+    {
+        if( entry->d_name[0] == '.' )
+        {
+            continue;
+        }
+        for( i = 0; i < count; i++ )
+        {
+            title = hb_list_item( h->list_title, i );
+            len = snprintf( filename, 1024, "%" PRIxPTR, (intptr_t) title );
+            if (strncmp(entry->d_name, filename, len) == 0)
+            {
+                snprintf( filename, 1024, "%s/%s", dirname, entry->d_name );
+                unlink( filename );
+                break;
+            }
+        }
+    }
+    closedir( dir );
+}
+
+/**
  * Initializes a scan of the by calling hb_scan_init
  * @param h Handle to hb_handle_t
  * @param path location of VIDEO_TS folder.
@@ -308,6 +348,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     hb_title_t * title;
 
     /* Clean up from previous scan */
+    hb_remove_previews( h );
     while( ( title = hb_list_item( h->list_title, 0 ) ) )
     {
         hb_list_rem( h->list_title, title );
@@ -369,7 +410,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     memset( filename, 0, 1024 );
 
-    hb_get_tempory_filename( h, filename, "%x%d",
+    hb_get_tempory_filename( h, filename, "%" PRIxPTR "%d",
                              (intptr_t) title, picture );
 
     file = fopen( filename, "r" );
@@ -639,7 +680,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
     /* Figure out what width the source would display at. */
     int source_display_width = cropped_width * (double)pixel_aspect_width /
                                (double)pixel_aspect_height ;
-    
+
     /*
        3 different ways of deciding output dimensions:
         - 1: Strict anamorphic, preserve source dimensions

@@ -593,7 +593,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         
         if( data->store_previews )
         {
-            hb_get_tempory_filename( data->h, filename, "%x%d",
+            hb_get_tempory_filename( data->h, filename, "%" PRIxPTR "%d",
                                      (intptr_t)title, i );
 
             file_preview = fopen( filename, "w" );
