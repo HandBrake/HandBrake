@@ -148,12 +148,6 @@ def main():
 		print >> sys.stderr, ( "Error: %s"  % str(err) )
 		sys.exit(1)
 
-	try:
-		infile = open(args[0])
-	except Exception, err:
-		print >> sys.stderr, ( "Error: %s"  % str(err) )
-		sys.exit(1)
-
 	if len(args) > 1:
 		try:
 			outfile = open(args[1], "w")
