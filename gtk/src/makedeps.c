@@ -50,7 +50,6 @@ static dependency_t dep_map[] =
 	{"PictureAutoCrop", "PictureRightCrop", "FALSE", FALSE, FALSE},
 	{"autoscale", "scale_width", "FALSE", FALSE, FALSE},
 	{"autoscale", "scale_height", "FALSE", FALSE, FALSE},
-	{"anamorphic", "PictureKeepRatio", "FALSE", FALSE, FALSE},
 	// "CHECK" is a dummy value that forces scale_height deps to
 	// be re-evaluated whenever anamorphic changes
 	{"anamorphic", "scale_height", "CHECK", TRUE, FALSE},
