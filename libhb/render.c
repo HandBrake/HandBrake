@@ -208,11 +208,43 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if( in->size <= 0 )
     {
+        hb_buffer_t *head = NULL, *tail = NULL, *next;
+        int counter = 2;
+
         /* If the input buffer is end of stream, send out an empty one
-         * to the next stage as well. Note that this will result in us
-         * losing the current contents of the delay queue.
-         */
-        *buf_out = in;
+         * to the next stage as well. To avoid losing the contents of
+         * the delay queue connect the buffers in the delay queue in 
+         * the correct order, and add the end of stream buffer to the
+         * end.
+         */     
+        while( next = hb_fifo_get( pv->delay_queue ) )
+        {
+            
+            /* We can't use the given time stamps. Previous frames
+               might already have been extended, throwing off the
+               raw values fed to render.c. Instead, their
+               stop and start times are stored in arrays.
+               The 4th cached frame will be the to use.
+               If it needed its duration extended to make up
+               lost time, it will have happened above. */
+            next->start = pv->last_start[counter];
+            next->stop = pv->last_stop[counter--];
+            
+            if( !head && !tail )
+            {
+                head = tail = next;
+            } else {
+                tail->next = next;
+                tail = next;
+            }
+        }
+        if( tail )
+        {
+            tail->next = in;
+            *buf_out = head;
+        } else {
+            *buf_out = in;
+        }     
         *buf_in = NULL;
         return HB_WORK_DONE;
     }
