@@ -97,6 +97,9 @@ static int    preview_count = 10;
 static int    store_previews = 0;
 static int    start_at_preview = 0;
 static int64_t stop_at_pts    = 0;
+static int    stop_at_frame = 0;
+static char * stop_at_string = NULL;
+static char * stop_at_token = NULL;
 
 /* Exit cleanly on Ctrl-C */
 static volatile int die = 0;
@@ -292,6 +295,7 @@ int main( int argc, char ** argv )
 	if( x264opts ) free (x264opts );
 	if( x264opts2 ) free (x264opts2 );
     if (preset_name) free (preset_name);
+    if( stop_at_string ) free( stop_at_string );
 
     fprintf( stderr, "HandBrake has exited.\n" );
 
@@ -468,7 +472,7 @@ static int HandleEvents( hb_handle_t * h )
 
             PrintTitleInfo( title );
 
-            if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview )
+            if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame )
             {
                 job->chapter_start = MAX( job->chapter_start,
                                           chapter_start );
@@ -1683,6 +1687,12 @@ static int HandleEvents( hb_handle_t * h )
                 subtitle_scan = 0;
             }
             
+            if( stop_at_frame )
+            {
+                job->frame_to_stop = stop_at_frame;
+                subtitle_scan = 0;
+            }
+            
             if( subtitle_scan )
             {
                 char *x264opts_tmp;
@@ -1895,9 +1905,8 @@ static void ShowHelp()
     "                            and whether or not they're stored to disk (0 or 1).\n"
     "                            (default: 10:0)\n"
     "    --start-at-preview <#>  Start encoding at a given preview.\n"
-    "    --stop-at-duration <#>  Stop encoding after a given duration in seconds.\n"
-    "    --stop-at-pts      <#>  Stop encoding at a given timestamp (90,000Hz clock).\n"
-    "      (--stop-at-pts and --stop-at-duration are mutually exclusive options)\n"
+    "    --stop-at     <unit:#>  Stop encoding at a given frame, duration (in seconds),\n"
+    "                            or pts (on a 90kHz clock)"
     "\n"
 
     "### Destination Options------------------------------------------------------\n\n"
@@ -2101,8 +2110,7 @@ static int ParseOptions( int argc, char ** argv )
     
     #define PREVIEWS 257
     #define START_AT_PREVIEW 258
-    #define STOP_AT_PTS 259
-    #define STOP_AT_DURATION 260
+    #define STOP_AT 259
     
     for( ;; )
     {
@@ -2165,8 +2173,7 @@ static int ParseOptions( int argc, char ** argv )
             { "color-matrix",required_argument, NULL,    'M' },
             { "previews",    required_argument, NULL,    PREVIEWS },
             { "start-at-preview", required_argument, NULL, START_AT_PREVIEW },
-            { "stop-at-pts", required_argument, NULL,    STOP_AT_PTS },
-            { "stop-at-duration", required_argument, NULL, STOP_AT_DURATION },
+            { "stop-at",    required_argument, NULL,     STOP_AT },
 
             { 0, 0, 0, 0 }
           };
@@ -2517,12 +2524,25 @@ static int ParseOptions( int argc, char ** argv )
             case START_AT_PREVIEW:
                 start_at_preview = atoi( optarg );
                 break;
-            case STOP_AT_PTS:
-                sscanf( optarg, "%"SCNd64, &stop_at_pts );
-                break;
-            case STOP_AT_DURATION:
-                sscanf( optarg, "%"SCNd64, &stop_at_pts );
-                stop_at_pts *= 90000LL;
+            case STOP_AT:
+                stop_at_string = strdup( optarg );
+                stop_at_token = strtok( stop_at_string, ":");
+                if( !strcmp( stop_at_token, "frame" ) )
+                {
+                    stop_at_token = strtok( NULL, ":");
+                    stop_at_frame = atoi(stop_at_token);
+                }
+                else if( !strcmp( stop_at_token, "pts" ) )
+                {
+                    stop_at_token = strtok( NULL, ":");
+                    sscanf( stop_at_token, "%"SCNd64, &stop_at_pts );
+                }
+                else if( !strcmp( stop_at_token, "duration" ) )
+                {
+                    stop_at_token = strtok( NULL, ":");
+                    sscanf( stop_at_token, "%"SCNd64, &stop_at_pts );
+                    stop_at_pts *= 90000LL;
+                }
                 break;
             case 'M':
                 if( atoi( optarg ) == 601 )

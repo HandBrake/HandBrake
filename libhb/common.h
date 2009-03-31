@@ -231,6 +231,7 @@ struct hb_job_s
     int subtitle_force;
     char * native_language;
 
+    int             frame_to_stop;       // declare eof when we hit this frame
     int64_t         pts_to_stop;        // declare eof when we pass this pts in
                                         //  the time-linearized input stream
     int             start_at_preview;   // if non-zero, encoding will start

@@ -100,6 +100,11 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     {
         duration = job->pts_to_stop + 90000;
     }
+    else if( job->frame_to_stop )
+    {
+        /* Set the duration to a rough estimate */
+        duration = ( job->frame_to_stop / ( job->vrate / job->vrate_base ) ) * 90000;
+    }
     else
     {
         duration = 0;
@@ -621,6 +626,17 @@ static void SyncVideo( hb_work_object_t * w )
 
         /* Update UI */
         UpdateState( w );
+        
+        if( job->frame_to_stop && pv->count_frames > job->frame_to_stop )
+        {
+            // Drop an empty buffer into our output to ensure that things
+            // get flushed all the way out.
+            hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
+            pv->busy &=~ 1;
+            hb_log( "sync: reached %d frames, exiting early (%i busy)",
+                    pv->count_frames, pv->busy );
+            return;
+        }
 
         /* Make sure we won't get more frames then expected */
         if( pv->count_frames >= pv->count_frames_max * 2)
@@ -731,6 +747,12 @@ static void SyncAudio( hb_work_object_t * w, int i )
         {
             buf = hb_fifo_get( audio->priv.fifo_raw );
             hb_fifo_push( fifo, buf );
+            pv->busy &=~ (1 << (i + 1) );
+            return;
+        }
+        if( job->frame_to_stop && pv->count_frames >= job->frame_to_stop )
+        {
+            hb_fifo_push( fifo, hb_buffer_init(0) );
             pv->busy &=~ (1 << (i + 1) );
             return;
         }
