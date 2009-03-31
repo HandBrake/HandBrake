@@ -75,7 +75,7 @@ namespace Handbrake
             }
 
             query += " --start-at-preview " + preview;
-            query += " --stop-at-duration " + duration + " ";
+            query += " --stop-at duration:" + duration + " ";
 
             // Destination tab
             if (mainWindow.text_destination.Text != "")
