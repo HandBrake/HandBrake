@@ -46,6 +46,7 @@ Ubuntu 8.10 packages:
 @item libhal-dev (gui)
 @item libhal-storage-dev (gui)
 @item libgtkhtml3.14-dev (gui)
+@item libnotify-dev (gui)
 @item libgstreamer0.10-dev (gui)
 @item libgstreamer-plugins-base0.10-dev (gui)
 @end itemize
@@ -55,7 +56,8 @@ To install these packages:
 sudo apt-get install subversion yasm build-essential \
 autoconf intltool libtool zlib1g-dev libbz2-dev libglib2.0-dev \
 libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
-libgtkhtml3.14-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+libgtkhtml3.14-dev libnotify-dev libgstreamer0.10-dev \
+libgstreamer-plugins-base0.10-dev
 @end example
 
 Fedora 10 package groups:
@@ -79,6 +81,7 @@ Additional Fedora 10 packages:
 @item dbus-glib-devel (gui)
 @item hal-devel (gui)
 @item gtkhtml3-devel (gui)
+@item libnotify-devel (gui)
 @item gstreamer-devel (gui)
 @item gstreamer-plugins-base-devel (gui)
 @end itemize
@@ -86,7 +89,7 @@ Additional Fedora 10 packages:
 To install these packages:
 @example
 sudo yum install yasm zlib-devel bzip2-devel \
-dbus-glib-devel hal-devel gtkhtml3-devel \
+dbus-glib-devel hal-devel gtkhtml3-devel libnotify-devel\
 gstreamer-devel gstreamer-plugins-base-devel
 @end example
 

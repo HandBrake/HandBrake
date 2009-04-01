@@ -36,6 +36,7 @@
 #include <gst/gst.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
+#include <libnotify/notify.h>
 #include "hb.h"
 #include "renderer_button.h"
 #include "hb-backend.h"
@@ -80,7 +81,7 @@
 GtkBuilder*
 create_builder_or_die(const gchar * name)
 {
-	guint res;
+	guint res = 0;
 	GValue *gval;
 	const gchar *ghb_ui;
 
@@ -521,6 +522,7 @@ main (int argc, char *argv[])
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
+	notify_init("HandBrake");
 	ghb_register_transforms();
 	ghb_resource_init();
 	ghb_load_icons();
@@ -636,6 +638,7 @@ main (int argc, char *argv[])
 	ghb_value_free(ud->settings);
 	g_io_channel_unref(ud->activity_log);
 	ghb_settings_close();
+	notify_uninit();
 	g_free(ud);
 	return 0;
 }

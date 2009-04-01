@@ -25,7 +25,6 @@ static dependency_t dep_map[] =
 	{"title", "picture_tab", "none", TRUE, FALSE},
 	{"title", "chapters_label", "none", TRUE, FALSE},
 	{"title", "chapters_tab", "none", TRUE, FALSE},
-	{"title", "title", "none", TRUE, FALSE},
 	{"title", "start_chapter", "none", TRUE, FALSE},
 	{"title", "end_chapter", "none", TRUE, FALSE},
 	{"vquality_type_bitrate", "VideoAvgBitrate", "TRUE", FALSE, FALSE},

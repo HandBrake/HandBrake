@@ -29,6 +29,7 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gio/gio.h>
+#include <libnotify/notify.h>
 
 #include "hb.h"
 #include "callbacks.h"
@@ -48,6 +49,7 @@
 static void update_chapter_list(signal_user_data_t *ud);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
+void ghb_notify_done(signal_user_data_t *ud);
 
 // This is a dependency map used for greying widgets
 // that are dependent on the state of another widget.
@@ -1560,6 +1562,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 		}
 		// Nothing pending
 		ghb_uninhibit_gpm();
+		ghb_notify_done(ud);
 		return NULL;
 	}
 	// Find the next pending item after the current running item
@@ -1599,6 +1602,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 	}
 	// Nothing found
 	ghb_uninhibit_gpm();
+	ghb_notify_done(ud);
 	return NULL;
 }
 
@@ -3147,3 +3151,22 @@ check_stable_update(signal_user_data_t *ud)
 	return NULL;
 }
 
+static void
+notify_closed_cb(NotifyNotification *notification, signal_user_data_t *ud)
+{
+	g_object_unref(G_OBJECT(notification));
+}
+
+void
+ghb_notify_done(signal_user_data_t *ud)
+{
+	NotifyNotification *notification;
+
+	notification = notify_notification_new(
+		"Encode Complete",
+		"Put down that cocktail, Your HandBrake queue is done!",
+		"hb-icon",
+		NULL);
+	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
+	notify_notification_show(notification, NULL);
+}
