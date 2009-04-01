@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Handbrake.Controls
@@ -149,7 +144,7 @@ namespace Handbrake.Controls
             drop_refFrames.SelectedIndex = 0;
             drop_subpixelMotionEstimation.SelectedIndex = 0;
             drop_trellis.SelectedIndex = 0;
-            slider_psyrd.Value = 0;
+            slider_psyrd.Value = 10;
             slider_psytrellis.Value = 0;
             drop_adaptBFrames.SelectedIndex = 0;
 
@@ -389,15 +384,9 @@ namespace Handbrake.Controls
                                 }
                                 else
                                 {
-                                    if (!alphaDeblock.Equals("0"))
-                                        drop_deblockAlpha.SelectedItem = alphaDeblock;
-                                    else
-                                        drop_deblockAlpha.SelectedItem = "0";
+                                    drop_deblockAlpha.SelectedItem = !alphaDeblock.Equals("0") ? alphaDeblock : "0";
 
-                                    if (!betaDeblock.Replace("\n", "").Equals("0"))
-                                        drop_deblockBeta.SelectedItem = betaDeblock.Replace("\n", "");
-                                    else
-                                        drop_deblockBeta.SelectedItem = "0";
+                                    drop_deblockBeta.SelectedItem = !betaDeblock.Replace("\n", "").Equals("0") ? betaDeblock.Replace("\n", "") : "0";
                                 }
                                 continue;
                             case "analyse":
@@ -417,13 +406,13 @@ namespace Handbrake.Controls
                             case "psy-rd":
                                 string[] x = optValue.Split(',');
 
-                                double psyrd = 0, psytrellis = 0;
+                                double psyrd, psytrellis;
                                 int val, val2;
-                                double.TryParse(x[0], out psyrd);
-                                double.TryParse(x[1], out psytrellis);
 
-                                psyrd = psyrd * 10;
-                                psytrellis = psytrellis * 10;
+                                // default psy-rd = 1 (10 for the slider)
+                                psyrd = double.TryParse(x[0], out psyrd) ? psyrd * 10 : 10.0;
+                                // default psy-trellis = 0
+                                psytrellis = double.TryParse(x[1], out psytrellis) ? psytrellis * 10 : 0.0; 
 
                                 int.TryParse(psyrd.ToString(), out val);
                                 int.TryParse(psytrellis.ToString(), out val2);
@@ -527,69 +516,27 @@ namespace Handbrake.Controls
                             {
                                 double psyrd = slider_psyrd.Value * 0.1;
                                 double psytre = slider_psytrellis.Value * 0.1;
-                                string rd, rt;
-                                if (psyrd == 1)
-                                    rd = "1.0";
-                                else
-                                    rd = psyrd.ToString();
 
-                                if (psytre == 1)
-                                    rt = "1.0";
-                                else
-                                    rt = psytre.ToString();
+                                string rd = psyrd.ToString("f1");
+                                string rt = psytre.ToString("f1");
 
                                 thisOpt = "psy-rd=" + rd + "," + rt;
                             }
                         }
                         else if (optNameToChange.Equals("mixed-refs"))
-                        {
-                            if (check_mixedReferences.CheckState == CheckState.Checked)
-                                thisOpt = "mixed-refs=1";
-                            else
-                                thisOpt = "";
-                        }
+                            thisOpt = check_mixedReferences.CheckState == CheckState.Checked ? "mixed-refs=1" : "";
                         else if (optNameToChange.Equals("weightb"))
-                        {
-                            if (check_weightedBFrames.CheckState == CheckState.Checked)
-                                thisOpt = "weightb=1";
-                            else
-                                thisOpt = "";
-                        }
+                            thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? "weightb=1" : "";
                         else if (optNameToChange.Equals("b-pyramid"))
-                        {
-                            if (check_pyrmidalBFrames.CheckState == CheckState.Checked)
-                                thisOpt = "b-pyramid=1";
-                            else
-                                thisOpt = "";
-                        }
+                            thisOpt = check_pyrmidalBFrames.CheckState == CheckState.Checked ? "b-pyramid=1" : "";
                         else if (optNameToChange.Equals("no-fast-pskip"))
-                        {
-                            if (check_noFastPSkip.CheckState == CheckState.Checked)
-                                thisOpt = "no-fast-pskip=1";
-                            else
-                                thisOpt = "";
-                        }
+                            thisOpt = check_noFastPSkip.CheckState == CheckState.Checked ? "no-fast-pskip=1" : "";
                         else if (optNameToChange.Equals("no-dct-decimate"))
-                        {
-                            if (check_noDCTDecimate.CheckState == CheckState.Checked)
-                                thisOpt = "no-dct-decimate=1";
-                            else
-                                thisOpt = "";
-                        }
+                            thisOpt = check_noDCTDecimate.CheckState == CheckState.Checked ? "no-dct-decimate=1" : "";
                         else if (optNameToChange.Equals("8x8dct"))
-                        {
-                            if (check_8x8DCT.CheckState == CheckState.Checked)
-                                thisOpt = "8x8dct=1";
-                            else
-                                thisOpt = "";
-                        }
+                            thisOpt = check_8x8DCT.CheckState == CheckState.Checked ? "8x8dct=1" : "";
                         else if (optNameToChange.Equals("cabac"))
-                        {
-                            if (check_Cabac.CheckState == CheckState.Checked)
-                                thisOpt = "";
-                            else
-                                thisOpt = "cabac=0";
-                        }
+                            thisOpt = check_Cabac.CheckState == CheckState.Checked ? "" : "cabac=0";
                         else if (optNameToChange.Equals("me"))
                         {
                             switch (drop_MotionEstimationMethod.SelectedIndex)
@@ -663,60 +610,49 @@ namespace Handbrake.Controls
                         }
                         else if (optNameToChange.Equals("merange"))
                         {
-                            if (!drop_MotionEstimationRange.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "merange=" + drop_MotionEstimationRange.SelectedItem;
-                            else
-                                thisOpt = "";
+                            thisOpt = !drop_MotionEstimationRange.SelectedItem.ToString().Contains("Default")
+                                          ? "merange=" + drop_MotionEstimationRange.SelectedItem
+                                          : "";
                         }
                         else if (optNameToChange.Equals("b-adapt"))
                         {
-                            if (!drop_adaptBFrames.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "b-adapt=" + (drop_adaptBFrames.SelectedIndex - 1);
-                            else
-                                thisOpt = "";
+                            thisOpt = !drop_adaptBFrames.SelectedItem.ToString().Contains("Default")
+                                          ? "b-adapt=" + (drop_adaptBFrames.SelectedIndex - 1)
+                                          : "";
                         }
                         else if (optNameToChange.Equals("ref"))
                         {
-                            if (!drop_refFrames.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "ref=" + drop_refFrames.SelectedItem;
-                            else
-                                thisOpt = "";
+                            thisOpt = !drop_refFrames.SelectedItem.ToString().Contains("Default")
+                                          ? "ref=" + drop_refFrames.SelectedItem
+                                          : "";
                         }
                         else if (optNameToChange.Equals("bframes"))
                         {
                             String value = drop_bFrames.SelectedItem.ToString();
-                            if (!drop_bFrames.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "bframes=" + value;
-                            else
-                                thisOpt = "";
+                            thisOpt = !drop_bFrames.SelectedItem.ToString().Contains("Default")
+                                          ? "bframes=" + value
+                                          : "";
                         }
                         else if (optNameToChange.Equals("subq"))
                         {
                             String value = drop_subpixelMotionEstimation.SelectedItem.ToString();
-                            if (!drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "subq=" + value;
-                            else
-                                thisOpt = "";
+                            thisOpt = !drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default")
+                                          ? "subq=" + value
+                                          : "";
                         }
                         else if (optNameToChange.Equals("trellis"))
                         {
                             String value = drop_trellis.SelectedItem.ToString();
-                            if (!drop_trellis.SelectedItem.ToString().Contains("Default"))
-                                thisOpt = "trellis=" + value;
-                            else
-                                thisOpt = "";
+                            thisOpt = !drop_trellis.SelectedItem.ToString().Contains("Default")
+                                          ? "trellis=" + value
+                                          : "";
                         }
                     }
                 }
 
                 /* Construct New String for opts here */
                 if (!thisOpt.Equals(""))
-                {
-                    if (changedOptString.Equals(""))
-                        changedOptString = thisOpt;
-                    else
-                        changedOptString = changedOptString + ":" + thisOpt;
-                }
+                    changedOptString = changedOptString.Equals("") ? thisOpt : changedOptString + ":" + thisOpt;
             }
 
             /* Change the option string to reflect the new mod settings */
@@ -844,16 +780,9 @@ namespace Handbrake.Controls
                 {
                     double psyrd = slider_psyrd.Value * 0.1;
                     double psytre = slider_psytrellis.Value * 0.1;
-                    string rd, rt;
-                    if (psyrd == 1)
-                        rd = "1.0";
-                    else
-                        rd = psyrd.ToString();
 
-                    if (psytre == 1)
-                        rt = "1.0";
-                    else
-                        rt = psytre.ToString();
+                    string rd = psyrd.ToString("f1");
+                    string rt = psytre.ToString("f1");
 
                     query += colon + "psy-rd=" + rd + "," + rt;
                 }
