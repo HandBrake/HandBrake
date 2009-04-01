@@ -895,6 +895,12 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         info->rate = 27000000;
         info->rate_base = (int64_t)context->time_base.num * 27000000LL /
                           context->time_base.den;
+        if ( context->ticks_per_frame > 1 )
+        {
+            // for ffmpeg 0.5 & later, the H.264 & MPEG-2 time base is
+            // field rate rather than frame rate so convert back to frames.
+            info->rate_base *= context->ticks_per_frame;
+        }
         
         /* Sometimes there's no pixel aspect set in the source. In that case,
            assume a 1:1 PAR. Otherwise, preserve the source PAR.             */
