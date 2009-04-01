@@ -79,8 +79,8 @@ namespace Handbrake.Parsing
         {
             if (m_subFormat == null)
                 return string.Format("{0} {1} ({2})", m_trackNumber, m_language, m_format);
-            else
-                return string.Format("{0} {1} ({2}) ({3})", m_trackNumber, m_language, m_format, m_subFormat);
+            
+            return string.Format("{0} {1} ({2}) ({3})", m_trackNumber, m_language, m_format, m_subFormat);
         }
 
         public static AudioTrack Parse(StringReader output)
@@ -91,25 +91,30 @@ namespace Handbrake.Parsing
             Match y = Regex.Match(audio_track, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\)");
             if (m.Success)
             {
-                var thisTrack = new AudioTrack();
-                thisTrack.m_trackNumber = int.Parse(m.Groups[1].Value.Trim());
-                thisTrack.m_language = m.Groups[2].Value;
-                thisTrack.m_format = m.Groups[3].Value;
-                thisTrack.m_subFormat = m.Groups[4].Value;
-                thisTrack.m_frequency = int.Parse(m.Groups[5].Value.Trim());
-                thisTrack.m_bitrate = int.Parse(m.Groups[6].Value.Trim());
+                var thisTrack = new AudioTrack
+                                    {
+                                        m_trackNumber = int.Parse(m.Groups[1].Value.Trim()),
+                                        m_language = m.Groups[2].Value,
+                                        m_format = m.Groups[3].Value,
+                                        m_subFormat = m.Groups[4].Value,
+                                        m_frequency = int.Parse(m.Groups[5].Value.Trim()),
+                                        m_bitrate = int.Parse(m.Groups[6].Value.Trim())
+                                    };
                 return thisTrack;
             }
-            else if (y.Success)
+            
+            if (y.Success)
             {
-                var thisTrack = new AudioTrack();
-                thisTrack.m_trackNumber = int.Parse(y.Groups[1].Value.Trim());
-                thisTrack.m_language = y.Groups[2].Value;
-                thisTrack.m_format = y.Groups[3].Value;
+                var thisTrack = new AudioTrack
+                                    {
+                                        m_trackNumber = int.Parse(y.Groups[1].Value.Trim()),
+                                        m_language = y.Groups[2].Value,
+                                        m_format = y.Groups[3].Value
+                                    };
                 return thisTrack;
             }
-            else
-                return null;
+            
+            return null;
         }
 
         public static AudioTrack[] ParseList(StringReader output)

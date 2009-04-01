@@ -204,8 +204,9 @@ namespace Handbrake.Queue
                     {
                         List<QueueItem> list = ser.Deserialize(strm) as List<QueueItem>;
 
-                        foreach (QueueItem item in list)
-                            queue.Add(item);
+                        if (list != null)
+                            foreach (QueueItem item in list)
+                                queue.Add(item);
 
                         if (file != "hb_queue_recovery.xml")
                             write2disk("hb_queue_recovery.xml");

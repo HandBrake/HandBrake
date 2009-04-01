@@ -18,10 +18,7 @@ namespace Handbrake
 
         private void drop_detelecine_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drop_deinterlace.Text == "Custom")
-                text_custom.Visible = true;
-            else
-                text_custom.Visible = false;
+            text_custom.Visible = drop_deinterlace.Text == "Custom";
 
             valueChanged(null);
         }

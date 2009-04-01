@@ -227,7 +227,7 @@ namespace Handbrake.Controls
         /// </summary>
         /// <param name="cleanOptNameString"></param>
         /// <returns></returns>
-        private string X264_StandardizeOptNames(String cleanOptNameString)
+        private static string X264_StandardizeOptNames(String cleanOptNameString)
         {
             String input = cleanOptNameString;
 

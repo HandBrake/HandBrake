@@ -51,13 +51,14 @@ namespace Handbrake.Parsing
                                   @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
             {
-                var thisChapter = new Chapter();
-                thisChapter.m_chapterNumber = int.Parse(m.Groups[1].Value.Trim());
-                thisChapter.m_duration = TimeSpan.Parse(m.Groups[5].Value);
+                var thisChapter = new Chapter
+                                      {
+                                          m_chapterNumber = int.Parse(m.Groups[1].Value.Trim()),
+                                          m_duration = TimeSpan.Parse(m.Groups[5].Value)
+                                      };
                 return thisChapter;
             }
-            else
-                return null;
+            return null;
         }
 
         public static Chapter[] ParseList(StringReader output)

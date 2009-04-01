@@ -12,7 +12,7 @@ namespace Handbrake.Presets
     {
         List<Preset> presets = new List<Preset>();  // Category+Level+Preset Name: Query
         List<Preset> user_presets = new List<Preset>(); // Preset Name: Query
-        private static XmlSerializer ser = new XmlSerializer(typeof(List<Preset>));
+        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Preset>));
 
         /// <summary>
         /// Add a new preset to the system
@@ -24,19 +24,13 @@ namespace Handbrake.Presets
         {
             if (checkIfPresetExists(presetName) == false)
             {
-                Preset newPreset = new Preset();
-                newPreset.Name = presetName;
-                newPreset.Query = query;
-                newPreset.PictureSettings = pictureSettings;
+                Preset newPreset = new Preset {Name = presetName, Query = query, PictureSettings = pictureSettings};
                 user_presets.Add(newPreset);
                 updateUserPresetsFile();
                 return true;
             }
-            else
-            {
-                MessageBox.Show("Sorry, that preset name already exists. Please choose another!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
+            MessageBox.Show("Sorry, that preset name already exists. Please choose another!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
         }
 
         /// <summary>
@@ -155,13 +149,16 @@ namespace Handbrake.Presets
 
             string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
 
-            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine);
-            hbGetPresets.WindowStyle = ProcessWindowStyle.Hidden;
+            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine)
+                                                {WindowStyle = ProcessWindowStyle.Hidden};
 
             Process hbproc = Process.Start(hbGetPresets);
-            hbproc.WaitForExit();
-            hbproc.Dispose();
-            hbproc.Close();
+            if (hbproc != null)
+            {
+                hbproc.WaitForExit();
+                hbproc.Dispose();
+                hbproc.Close();
+            }
 
             // Clear the current built in presets and now parse the tempory presets file.
             presets.Clear();
@@ -200,11 +197,13 @@ namespace Handbrake.Presets
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(line);
 
-                        Preset newPreset = new Preset();
-                        newPreset.Level = level;
-                        newPreset.Category = category;
-                        newPreset.Name = presetName[0].Replace("+", "").Trim();
-                        newPreset.Query = presetName[2];
+                        Preset newPreset = new Preset
+                                               {
+                                                   Level = level,
+                                                   Category = category,
+                                                   Name = presetName[0].Replace("+", "").Trim(),
+                                                   Query = presetName[2]
+                                               };
                         presets.Add(newPreset);
                     }
                 }
@@ -236,8 +235,9 @@ namespace Handbrake.Presets
                     {
                         List<Preset> list = ser.Deserialize(strm) as List<Preset>;
 
-                        foreach (Preset preset in list)
-                            presets.Add(preset);
+                        if (list != null)
+                            foreach (Preset preset in list)
+                                presets.Add(preset);
                     }
                 }
             }
@@ -252,8 +252,9 @@ namespace Handbrake.Presets
                     {
                         List<Preset> list = ser.Deserialize(strm) as List<Preset>;
 
-                        foreach (Preset preset in list)
-                            user_presets.Add(preset);
+                        if (list != null)
+                            foreach (Preset preset in list)
+                                user_presets.Add(preset);
                     }
                 }
             }

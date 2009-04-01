@@ -1042,12 +1042,7 @@ namespace Handbrake.Functions
                 if (subtitles.Success)
                     thisQuery.q_subtitles = subtitles.ToString().Replace("-s ", "");
                 else
-                {
-                    if (subScan.Success)
-                        thisQuery.q_subtitles = "Autoselect";
-                    else
-                        thisQuery.q_subtitles = "None";
-                }
+                    thisQuery.q_subtitles = subScan.Success ? "Autoselect" : "None";
 
                 thisQuery.q_forcedSubs = forcedSubtitles.Success;
 

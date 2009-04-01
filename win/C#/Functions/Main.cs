@@ -18,7 +18,7 @@ namespace Handbrake.Functions
     class Main
     {
         // Private Variables
-        private static XmlSerializer ser = new XmlSerializer(typeof(List<Queue.QueueItem>));
+        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Queue.QueueItem>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
@@ -256,7 +256,7 @@ namespace Handbrake.Functions
         {
             try
             {
-                Functions.AppcastReader rssRead = new AppcastReader();
+                AppcastReader rssRead = new AppcastReader();
                 rssRead.getInfo(); // Initializes the class.
                 string build = rssRead.build();
 
@@ -290,11 +290,13 @@ namespace Handbrake.Functions
             // 0 = SVN Build / Version
             // 1 = Build Date
             Process cliProcess = new Process();
-            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u");
-            handBrakeCLI.UseShellExecute = false;
-            handBrakeCLI.RedirectStandardError = true;
-            handBrakeCLI.RedirectStandardOutput = true;
-            handBrakeCLI.CreateNoWindow = true;
+            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u")
+                                                {
+                                                    UseShellExecute = false,
+                                                    RedirectStandardError = true,
+                                                    RedirectStandardOutput = true,
+                                                    CreateNoWindow = true
+                                                };
             cliProcess.StartInfo = handBrakeCLI;
 
             try
@@ -305,8 +307,7 @@ namespace Handbrake.Functions
 
                 while (!cliProcess.HasExited)
                 {
-                    line = stdOutput.ReadLine();
-                    if (line == null) line = "";
+                    line = stdOutput.ReadLine() ?? "";
                     Match m = Regex.Match(line, @"HandBrake ([0-9\.]*)*(svn[0-9]*[M]*)* \([0-9]*\)");
 
                     if (m.Success)
@@ -331,13 +332,13 @@ namespace Handbrake.Functions
             cliVersionData.Add("0");
             return cliVersionData;
         }
-        private void killCLI()
+        private static void killCLI()
         {
             string AppName = "HandBrakeCLI";
             AppName = AppName.ToUpper();
 
-            System.Diagnostics.Process[] prs = Process.GetProcesses();
-            foreach (System.Diagnostics.Process proces in prs)
+            Process[] prs = Process.GetProcesses();
+            foreach (Process proces in prs)
             {
                 if (proces.ProcessName.ToUpper() == AppName)
                 {
@@ -363,8 +364,9 @@ namespace Handbrake.Functions
                     using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
                     {
                         List<Queue.QueueItem> list = ser.Deserialize(strm) as List<Queue.QueueItem>;
-                        if (list.Count != 0)
-                            return true;
+                        if (list != null)
+                            if (list.Count != 0)
+                                return true;
                     }
                 }
                 return false;

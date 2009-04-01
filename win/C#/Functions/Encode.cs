@@ -45,35 +45,36 @@ namespace Handbrake.Functions
                 encoding = true;
 
                 // Set the process Priority 
-                switch (Properties.Settings.Default.processPriority)
-                {
-                    case "Realtime":
-                        hbProc.PriorityClass = ProcessPriorityClass.RealTime;
-                        break;
-                    case "High":
-                        hbProc.PriorityClass = ProcessPriorityClass.High;
-                        break;
-                    case "Above Normal":
-                        hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
-                        break;
-                    case "Normal":
-                        hbProc.PriorityClass = ProcessPriorityClass.Normal;
-                        break;
-                    case "Low":
-                        hbProc.PriorityClass = ProcessPriorityClass.Idle;
-                        break;
-                    default:
-                        hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
-                        break;
-                }
+                if (hbProc != null)
+                    switch (Properties.Settings.Default.processPriority)
+                    {
+                        case "Realtime":
+                            hbProc.PriorityClass = ProcessPriorityClass.RealTime;
+                            break;
+                        case "High":
+                            hbProc.PriorityClass = ProcessPriorityClass.High;
+                            break;
+                        case "Above Normal":
+                            hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+                            break;
+                        case "Normal":
+                            hbProc.PriorityClass = ProcessPriorityClass.Normal;
+                            break;
+                        case "Low":
+                            hbProc.PriorityClass = ProcessPriorityClass.Idle;
+                            break;
+                        default:
+                            hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+                            break;
+                    }
             }
             catch (Exception exc)
             {
-                MessageBox.Show("An error occured in runCli()\n Error Information: \n\n" + exc.ToString());
+                MessageBox.Show("An error occured in runCli()\n Error Information: \n\n" + exc);
             }
             return hbProc;
         }
-        
+
         /// <summary>
         /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
         /// </summary>
@@ -149,7 +150,7 @@ namespace Handbrake.Functions
                         destinationFile += destName[i] + "\\";
                     }
 
-                    destinationFile += DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destName[destName.Length - 1] + ".txt"; 
+                    destinationFile += DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destName[destName.Length - 1] + ".txt";
 
                     File.Copy(logPath, destinationFile);
                 }

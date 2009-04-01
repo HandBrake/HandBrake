@@ -61,15 +61,9 @@ namespace Handbrake
                     mainWindow.drop_format.SelectedIndex = 1;
             }
 
-            if (presetQuery.IpodAtom)
-                mainWindow.check_iPodAtom.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
+            mainWindow.check_iPodAtom.CheckState = presetQuery.IpodAtom ? CheckState.Checked : CheckState.Unchecked;
 
-            if (presetQuery.OptimizeMP4)
-                mainWindow.check_optimiseMP4.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_optimiseMP4.CheckState = CheckState.Unchecked;
+            mainWindow.check_optimiseMP4.CheckState = presetQuery.OptimizeMP4 ? CheckState.Checked : CheckState.Unchecked;
 
             #endregion
 
@@ -107,10 +101,7 @@ namespace Handbrake
                     mainWindow.text_height.Text = presetQuery.Height.ToString();
             }
 
-            if (presetQuery.Anamorphic)
-                mainWindow.drp_anamorphic.SelectedIndex = 1;
-            else
-                mainWindow.drp_anamorphic.SelectedIndex = 0;
+            mainWindow.drp_anamorphic.SelectedIndex = presetQuery.Anamorphic ? 1 : 0;
 
             if (presetQuery.LooseAnamorphic)
                 mainWindow.drp_anamorphic.SelectedIndex = 2;
@@ -184,7 +175,7 @@ namespace Handbrake
                     int value;
                     System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-                    double presetValue, calculated, x264step;
+                    double presetValue, x264step;
                     double.TryParse(presetQuery.VideoQuality.ToString(),
                                     System.Globalization.NumberStyles.Number,
                                     culture,
@@ -196,7 +187,7 @@ namespace Handbrake
 
                     double x = 51 / x264step;
 
-                    calculated = presetValue / x264step;
+                    double calculated = presetValue / x264step;
                     calculated = x - calculated;
 
                     int.TryParse(calculated.ToString(), out value);
@@ -219,22 +210,13 @@ namespace Handbrake
                 }
             }
 
-            if (presetQuery.TwoPass)
-                mainWindow.check_2PassEncode.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_2PassEncode.CheckState = CheckState.Unchecked;
+            mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
 
-            if (presetQuery.Grayscale)
-                mainWindow.check_grayscale.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_grayscale.CheckState = CheckState.Unchecked;
+            mainWindow.check_grayscale.CheckState = presetQuery.Grayscale ? CheckState.Checked : CheckState.Unchecked;
 
             mainWindow.drp_videoFramerate.Text = presetQuery.VideoFramerate;
 
-            if (presetQuery.TurboFirstPass)
-                mainWindow.check_turbo.CheckState = CheckState.Checked;
-            else
-                mainWindow.check_turbo.CheckState = CheckState.Unchecked;
+            mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
 
             if (presetQuery.LargeMP4)
                 mainWindow.check_largeFile.CheckState = CheckState.Checked;

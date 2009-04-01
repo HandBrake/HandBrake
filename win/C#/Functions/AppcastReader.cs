@@ -26,20 +26,19 @@ namespace Handbrake.Functions
         /// </summary>
         public void getInfo()
         {
-            Match ver;
-            int stable_build, unstable_build = 0;
-            string input, unstable_description = "", stable_description, unstable_version = "", stable_version;
-            string stable_file, unstable_file = "";
+            int unstable_build = 0;
+            string unstable_description = "", unstable_version = "";
+            string unstable_file = "";
 
             // Check the stable appcast and get the stable build number
             readRss(new XmlTextReader(Properties.Settings.Default.appcast));
-            input = nodeItem.InnerXml;
-            ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-            stable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
+            string input = nodeItem.InnerXml;
+            Match ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+            int stable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
             ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
-            stable_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-            stable_description = nodeItem["description"].InnerText;
-            stable_file = nodeItem["windows"].InnerText;
+            string stable_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+            string stable_description = nodeItem["description"].InnerText;
+            string stable_file = nodeItem["windows"].InnerText;
 
             // If this is a snapshot release, or the user wants to check for snapshot releases
             if (Properties.Settings.Default.checkSnapshot == "Checked" || Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
@@ -76,7 +75,7 @@ namespace Handbrake.Functions
         /// Read the RSS file.
         /// </summary>
         /// <param name="rssReader"></param>
-        private void readRss(XmlTextReader rssReader)
+        private void readRss(XmlReader rssReader)
         {
             rssDoc = new XmlDocument();
             rssDoc.Load(rssReader);

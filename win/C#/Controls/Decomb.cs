@@ -19,10 +19,7 @@ namespace Handbrake
 
         private void drop_decomb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drop_decomb.Text == "Custom")
-                text_custom.Visible = true;
-            else
-                text_custom.Visible = false;
+            text_custom.Visible = drop_decomb.Text == "Custom";
 
             valueChanged(null);
         }

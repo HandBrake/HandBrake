@@ -126,7 +126,7 @@ namespace Handbrake.Parsing
             if (m.Success)
                 thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim());
 
-            String testData = output.ReadLine();
+            output.ReadLine();
 
             // Get duration for this title
 
@@ -146,7 +146,7 @@ namespace Handbrake.Parsing
             // Get autocrop region for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
             if (m.Success)
-                thisTitle.m_autoCrop = new int[4]
+                thisTitle.m_autoCrop = new int[]
                                            {
                                                int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value),
                                                int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value)

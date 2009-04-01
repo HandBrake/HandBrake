@@ -219,7 +219,7 @@ namespace Handbrake
                         break;
                     case "H.264 (x264)":
                         double divided;
-                        System.Globalization.CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+                        CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                         double.TryParse(Properties.Settings.Default.x264cqstep,
                                         NumberStyles.Number,
                                         culture,
@@ -410,11 +410,9 @@ namespace Handbrake
             {
                 if (dest_name.Trim() != String.Empty)
                 {
-                    string path;
-                    if (source_title != "Automatic")
-                        path = Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv");
-                    else
-                        path = Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
+                    string path = source_title != "Automatic" 
+                                      ? Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv") 
+                                      : Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
 
                     if (chapterCSVSave(mainWindow, path) == false)
                         query += " -m ";
@@ -448,7 +446,7 @@ namespace Handbrake
         /// <param name="selectedAudio"></param>
         /// <returns></returns>
         /// 
-        private string getMixDown(string selectedAudio)
+        private static string getMixDown(string selectedAudio)
         {
             switch (selectedAudio)
             {
@@ -475,7 +473,7 @@ namespace Handbrake
         /// <param name="selectedEncoder"></param>
         /// <returns></returns>
         /// 
-        private string getAudioEncoder(string selectedEncoder)
+        private static string getAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
             {
@@ -499,7 +497,7 @@ namespace Handbrake
         /// <param name="mainWindow"></param>
         /// <param name="file_path_name"></param>
         /// <returns></returns>
-        private Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
+        private static Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
         {
             try
             {
