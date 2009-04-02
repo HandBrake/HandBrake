@@ -9,6 +9,8 @@ xclean: gtk.xclean
 gtk.configure: $(GTK.CONFIGURE.stamp)
 
 $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
+$(GTK.CONFIGURE.stamp): $(GTK.src/)Makefile.am
+$(GTK.CONFIGURE.stamp): $(GTK.src/)configure.ac $(GTK.src/)src/Makefile.am
 	set -e; cd $(GTK.src/); NOCONFIGURE=1 ./autogen.sh
 	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
 		PKG_CONFIG_DIR=$(BUILD/)contrib/lib/pkgconfig \

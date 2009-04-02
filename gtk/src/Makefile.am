@@ -35,6 +35,8 @@ icons_dep =	\
 	hb-canceled.16.png \
 	hb-complete.16.png \
 	hb-drawer.32.png \
+	hb-status.32.png \
+	hb-status-empty.32.png \
 	hb-icon.128.png \
 	hb-icon.64.png \
 	hb-pause.32.png \
