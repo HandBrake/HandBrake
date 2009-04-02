@@ -5267,6 +5267,10 @@ libxvidcore authors:
       </object>
     </child>
   </object>
+  <object class="GtkStatusIcon" id="hb_status">
+    <property name="icon_name">hb-status</property>
+    <signal handler="status_activate_cb" name="activate"/>
+  </object>
   <object class="GtkDialog" id="update_dialog">
     <property name="border_width">5</property>
     <property name="modal">True</property>

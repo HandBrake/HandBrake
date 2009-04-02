@@ -640,6 +640,12 @@ queue_add(signal_user_data_t *ud)
 	{
 		return FALSE;
 	}
+
+	GtkStatusIcon *si;
+
+	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+	gtk_status_icon_set_from_icon_name(si, "hb-status");
+
 	if (ud->queue == NULL)
 		ud->queue = ghb_array_value_new(32);
 	// Make a copy of current settings to be used for the new job

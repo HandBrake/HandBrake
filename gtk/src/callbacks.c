@@ -3151,6 +3151,15 @@ check_stable_update(signal_user_data_t *ud)
 	return NULL;
 }
 
+void
+status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
+{
+	GtkWindow *window;
+
+	window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+	gtk_window_present(window);
+}
+
 static void
 notify_closed_cb(NotifyNotification *notification, signal_user_data_t *ud)
 {
@@ -3161,12 +3170,16 @@ void
 ghb_notify_done(signal_user_data_t *ud)
 {
 	NotifyNotification *notification;
+	GtkStatusIcon *si;
 
+	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+	gtk_status_icon_set_from_icon_name(si, "hb-status-empty");
 	notification = notify_notification_new(
 		"Encode Complete",
 		"Put down that cocktail, Your HandBrake queue is done!",
 		"hb-icon",
 		NULL);
+	notify_notification_attach_to_status_icon(notification, si);
 	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
 	notify_notification_show(notification, NULL);
 }

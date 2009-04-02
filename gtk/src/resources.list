@@ -6,6 +6,8 @@
 		<icon name="hb-complete" file="hb-complete.16.png" />
 		<icon name="hb-drawer" file="hb-drawer.32.png" />
 		<icon name="hb-icon" file="hb-icon.128.png" />
+		<icon name="hb-status" file="hb-status.32.png" />
+		<icon name="hb-status-empty" file="hb-status-empty.32.png" />
 		<icon name="hb-pause" file="hb-pause.32.png" />
 		<icon name="hb-play" file="hb-play.32.png" />
 		<icon name="hb-pref" file="hb-pref.32.png" />
