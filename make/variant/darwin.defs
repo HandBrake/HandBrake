@@ -3,7 +3,7 @@ UB.builds = $(wildcard $(foreach n,$(UB.archs),$(SRC/)build.$n))
 UB.first  = $(word 1,$(UB.archs))
 UB.other  = $(wordlist 2,999,$(UB.archs))
 
-UB.BUILD = $(SRC/)configure --build=ub.$(1) --arch=$(1) --launch --launch-quiet
+UB.BUILD = $(SRC/)configure --force --build=ub.$(1) --arch=$(1) --launch --launch-quiet
 
 ## linefeed is important
 define UB.BUILD.item
