@@ -491,9 +491,9 @@ namespace Handbrake
             this.check_cli_minimized.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_cli_minimized.Location = new System.Drawing.Point(71, 18);
             this.check_cli_minimized.Name = "check_cli_minimized";
-            this.check_cli_minimized.Size = new System.Drawing.Size(155, 17);
+            this.check_cli_minimized.Size = new System.Drawing.Size(162, 17);
             this.check_cli_minimized.TabIndex = 76;
-            this.check_cli_minimized.Text = "Use window minimized";
+            this.check_cli_minimized.Text = "Start window minimized";
             this.ToolTip.SetToolTip(this.check_cli_minimized, "Starts a CLI window minimized.");
             this.check_cli_minimized.UseVisualStyleBackColor = true;
             this.check_cli_minimized.CheckedChanged += new System.EventHandler(this.check_cli_minimized_CheckedChanged);

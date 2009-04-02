@@ -57,15 +57,26 @@ namespace Handbrake.Queue
         /// <param name="destination"></param>
         public void add(string query, string source, string destination)
         {
-            QueueItem newJob = new QueueItem();
-            newJob.Id = id;
-            newJob.Query = query;
-            newJob.Source = source;
-            newJob.Destination = destination;
+            QueueItem newJob = new QueueItem {Id = id, Query = query, Source = source, Destination = destination};
             id++;
 
-            // Adds the job to the queue
             queue.Add(newJob);
+        }
+
+        /// <summary>
+        /// Check to see if a destination path is already on the queue
+        /// </summary>
+        /// <param name="destination">Destination path</param>
+        /// <returns>Boolean True/False. True = Path Exists</returns>
+        public Boolean checkDestinationPath(string destination)
+        {
+            foreach (QueueItem checkItem in queue)
+            {
+
+                if (checkItem.Destination.Contains(destination.Replace("\\\\", "\\")))
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>

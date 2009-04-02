@@ -635,9 +635,18 @@ namespace Handbrake
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
-                encodeQueue.add(query, text_source.Text, text_destination.Text);
-                encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
 
+                if (encodeQueue.checkDestinationPath(text_destination.Text))
+                {
+                    DialogResult result = MessageBox.Show("There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
+                  "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                        encodeQueue.add(query, text_source.Text, text_destination.Text);
+
+                } else
+                    encodeQueue.add(query, text_source.Text, text_destination.Text);
+
+                encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
                 queueWindow.Show();
             }
         }
@@ -936,8 +945,8 @@ namespace Handbrake
         {
             // This removes the file extension from the filename box on the save file dialog.
             // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
-            DVD_Save.FileName = Path.Combine(Path.GetDirectoryName(text_destination.Text), Path.GetFileNameWithoutExtension(text_destination.Text));
-
+            if (Path.HasExtension(text_destination.Text))
+                DVD_Save.FileName = Path.Combine(Path.GetDirectoryName(text_destination.Text), Path.GetFileNameWithoutExtension(text_destination.Text));
 
             // Show the dialog and set the main form file path
             if (drop_format.SelectedIndex.Equals(0))
