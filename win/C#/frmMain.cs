@@ -643,7 +643,8 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                         encodeQueue.add(query, text_source.Text, text_destination.Text);
 
-                } else
+                }
+                else
                     encodeQueue.add(query, text_source.Text, text_destination.Text);
 
                 encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
@@ -863,7 +864,7 @@ namespace Handbrake
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
-                    MessageBox.Show("You currently have automatic file naming enabled for the destination box, but you do not have a default direcotry set. You should set this in the program options (see Tools Menu)","Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("You currently have automatic file naming enabled for the destination box, but you do not have a default direcotry set. You should set this in the program options (see Tools Menu)", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             data_chpt.Rows.Clear();
@@ -2120,7 +2121,7 @@ namespace Handbrake
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-            if ((encodeQueue.isEncoding) && (! encodeQueue.isPaused) && (encodeQueue.count() > 0))
+            if ((encodeQueue.isEncoding) && (!encodeQueue.isPaused) && (encodeQueue.count() > 0))
             {
                 DialogResult result = MessageBox.Show("HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
                     "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
