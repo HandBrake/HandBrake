@@ -631,6 +631,19 @@ main (int argc, char *argv[])
 	// Start timer for monitoring libhb status, 500ms
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!
+
+	// Create floating window over preview image
+	GtkWidget *widget;
+	GdkWindow *parent, *win;
+
+	widget = GHB_WIDGET(ud->builder, "preview_image");
+	gtk_widget_realize(widget);
+	parent = gtk_widget_get_window(widget);
+	widget = GHB_WIDGET(ud->builder, "preview_hud");
+	gtk_widget_realize(widget);
+	win = gtk_widget_get_window(widget);
+	gdk_window_reparent(win, parent, 0, 0);
+
 	gtk_main ();
 	ghb_backend_close();
 	if (ud->queue)

@@ -1120,7 +1120,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gint preview_count;
 	preview_count = ghb_settings_get_int(ud->settings, "preview_count");
 	widget = GHB_WIDGET(ud->builder, "preview_frame");
-	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, preview_count);
+	gtk_range_set_range (GTK_RANGE(widget), 1, preview_count);
 	ghb_ui_update(ud, "preview_frame", ghb_int64_value(2));
 
 	ghb_set_preview_image (ud);

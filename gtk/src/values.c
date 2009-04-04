@@ -252,6 +252,10 @@ ghb_value_cmp(const GValue *vala, const GValue *valb)
 	GType typa;
 	GType typb;
 
+	if ((vala == NULL && valb != NULL) || (vala != NULL && valb == NULL))
+	{
+		return 1;
+	}
 	typa = G_VALUE_TYPE(vala);
 	typb = G_VALUE_TYPE(valb);
 	if (typa != typb)

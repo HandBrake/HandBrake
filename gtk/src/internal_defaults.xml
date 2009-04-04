@@ -120,8 +120,18 @@
 		<false />
 		<key>preview_count</key>
 		<integer>10</integer>
+		<key>preview_x</key>
+		<integer>-1</integer>
+		<key>preview_y</key>
+		<integer>-1</integer>
+		<key>settings_x</key>
+		<integer>-1</integer>
+		<key>settings_y</key>
+		<integer>-1</integer>
 		<key>show_presets</key>
 		<true />
+		<key>show_preview</key>
+		<false />
 		<key>use_source_name</key>
 		<true />
 		<key>update_skip_version</key>

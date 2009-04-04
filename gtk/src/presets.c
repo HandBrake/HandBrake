@@ -38,6 +38,7 @@ enum
 static GValue *presetsPlist = NULL;
 static GValue *internalPlist = NULL;
 static GValue *prefsPlist = NULL;
+static gboolean prefs_modified = FALSE;
 
 static const GValue* preset_dict_get_value(GValue *dict, const gchar *key);
 static void store_plist(GValue *plist, const gchar *name);
@@ -1196,12 +1197,13 @@ ghb_prefs_save(GValue *settings)
 	    }
 	}
     store_plist(prefsPlist, "preferences");
+	prefs_modified = FALSE;
 }
 
 void
-ghb_pref_save(GValue *settings, const gchar *key)
+ghb_pref_set(GValue *settings, const gchar *key)
 {
-	const GValue *value;
+	const GValue *value, *value2;
 	
 	if (prefs_initializing) return;
 	value = ghb_settings_get_value(settings, key);
@@ -1210,8 +1212,45 @@ ghb_pref_save(GValue *settings, const gchar *key)
 		GValue *dict;
 		dict = plist_get_dict(prefsPlist, "Preferences");
 		if (dict == NULL) return;
-		ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+		value2 = ghb_dict_lookup(dict, key);
+		if (ghb_value_cmp(value, value2) != 0)
+		{
+			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+			store_plist(prefsPlist, "preferences");
+			prefs_modified = TRUE;
+		}
+	}
+}
+
+void
+ghb_pref_save(GValue *settings, const gchar *key)
+{
+	const GValue *value, *value2;
+	
+	if (prefs_initializing) return;
+	value = ghb_settings_get_value(settings, key);
+	if (value != NULL)
+	{
+		GValue *dict;
+		dict = plist_get_dict(prefsPlist, "Preferences");
+		if (dict == NULL) return;
+		value2 = ghb_dict_lookup(dict, key);
+		if (ghb_value_cmp(value, value2) != 0)
+		{
+			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
+			store_plist(prefsPlist, "preferences");
+			prefs_modified = FALSE;
+		}
+	}
+}
+
+void
+ghb_prefs_store(void)
+{
+	if (prefs_modified)
+	{
 		store_plist(prefsPlist, "preferences");
+		prefs_modified = FALSE;
 	}
 }
 

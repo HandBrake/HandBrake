@@ -38,5 +38,7 @@ void ghb_presets_list_init(signal_user_data_t *ud, gint *indices, gint len);
 GValue* ghb_parse_preset_path(const gchar *path);
 gchar* ghb_preset_path_string(const GValue *path);
 gboolean ghb_preset_is_custom(void);
+void ghb_prefs_store(void);
+void ghb_pref_set(GValue *settings, const gchar *key);
 
 #endif // _GHB_PRESETS_H_

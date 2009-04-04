@@ -713,9 +713,12 @@ preview_expose_cb(
 		return TRUE;
 	}
 
-	gdk_draw_pixbuf(
-		widget->window, NULL, ud->preview->pix, 0, 0, 0, 0,
-		-1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+	if (ud->preview->pix != NULL)
+	{
+		gdk_draw_pixbuf(
+			widget->window, NULL, ud->preview->pix, 0, 0, 0, 0,
+			-1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+	}
 	return TRUE;
 }
 
@@ -750,21 +753,113 @@ set_visible(GtkWidget *widget, gboolean visible)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-	GtkWidget *widget = GHB_WIDGET (ud->builder, "preview_window");
-	set_visible(widget, gtk_toggle_tool_button_get_active(
-						GTK_TOGGLE_TOOL_BUTTON(xwidget)));
+	gint titleindex;
+
+	g_debug("preview_button_clicked_cb()");
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	if (titleindex >= 0)
+	{
+		gint x, y;
+		GtkWidget *widget = GHB_WIDGET (ud->builder, "preview_window");
+		x = ghb_settings_get_int(ud->settings, "preview_x");
+		y = ghb_settings_get_int(ud->settings, "preview_y");
+		if (x >= 0 && y >= 0)
+			gtk_window_move(GTK_WINDOW(widget), x, y);
+		set_visible(widget, gtk_toggle_button_get_active(
+							GTK_TOGGLE_BUTTON(xwidget)));
+	}
+	ghb_widget_to_setting (ud->settings, xwidget);
+	ghb_check_dependency(ud, xwidget);
+	const gchar *name = gtk_widget_get_name(xwidget);
+	ghb_pref_save(ud->settings, name);
 }
 
-void
-preview_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+G_MODULE_EXPORT void
+picture_settings_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-	GtkWidget *widget = GHB_WIDGET (ud->builder, "preview_window");
-	set_visible(widget, TRUE);
-	widget = GHB_WIDGET (ud->builder, "show_picture");
-	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
+	GtkWidget *widget;
+	gboolean active;
+	gint x, y;
+
+	g_debug("picture_settings_clicked_cb()");
+	widget = GHB_WIDGET (ud->builder, "settings_window");
+	active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget));
+	x = ghb_settings_get_int(ud->settings, "settings_x");
+	y = ghb_settings_get_int(ud->settings, "settings_y");
+	if (x >= 0 && y >= 0)
+		gtk_window_move(GTK_WINDOW(widget), x, y);
+	set_visible(widget, active);
+	if (ghb_settings_get_boolean(ud->settings, "show_preview"))
+	{
+		widget = GHB_WIDGET (ud->builder, "preview_window");
+		x = ghb_settings_get_int(ud->settings, "preview_x");
+		y = ghb_settings_get_int(ud->settings, "preview_y");
+		if (x >= 0 && y >= 0)
+			gtk_window_move(GTK_WINDOW(widget), x, y);
+		set_visible(widget, active);
+	}
+}
+
+G_MODULE_EXPORT void
+picture_settings_alt_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *toggle;
+	gboolean active;
+
+	g_debug("picture_settings_alt_clicked_cb()");
+	toggle = GHB_WIDGET (ud->builder, "show_picture");
+	active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggle));
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggle), !active);
+}
+
+G_MODULE_EXPORT void
+picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *toggle;
+	gboolean active;
+	gint signal_id;
+	gint handler_id = 0;
+
+	g_debug("picture_settings_alt2_clicked_cb()");
+	toggle = GHB_WIDGET (ud->builder, "show_picture");
+	active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggle));
+	if (active)
+	{
+		// I don't want deleting the settings window to also remove the
+		// preview window, but changing the toggle will do this, so temporarily
+		// ignore the toggled signal
+		signal_id = g_signal_lookup("toggled", GTK_TYPE_TOGGLE_TOOL_BUTTON);
+		if (signal_id > 0)
+		{
+			// Valid signal id found.  This should always succeed.
+			handler_id = g_signal_handler_find((gpointer)toggle, 
+												G_SIGNAL_MATCH_ID, 
+												signal_id, 0, 0, 0, 0);
+			if (handler_id > 0)
+			{
+				// This should also always succeed
+				g_signal_handler_block ((gpointer)toggle, handler_id);
+			}
+		}
+	}
+
+	GtkWidget *widget = GHB_WIDGET (ud->builder, "settings_window");
+	gint x, y;
+
+	x = ghb_settings_get_int(ud->settings, "settings_x");
+	y = ghb_settings_get_int(ud->settings, "settings_y");
+	if (x >= 0 && y >= 0)
+		gtk_window_move(GTK_WINDOW(widget), x, y);
+	set_visible(widget, !active);
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggle), !active);
+
+	if (handler_id > 0)
+	{
+		g_signal_handler_unblock ((gpointer)toggle, handler_id);
+	}
 }
 
 void
@@ -787,8 +882,43 @@ preview_window_delete_cb(
 {
 	live_preview_stop(ud);
 	gtk_widget_hide(widget);
+	return TRUE;
+}
+
+gboolean
+settings_window_delete_cb(
+	GtkWidget *widget, 
+	GdkEvent *event, 
+	signal_user_data_t *ud)
+{
+	gint signal_id;
+	gint handler_id = 0;
+
+	gtk_widget_hide(widget);
 	widget = GHB_WIDGET (ud->builder, "show_picture");
+
+	// I don't want deleting the settings window to also remove the
+	// preview window, but changing the toggle will do this, so temporarily
+	// ignore the toggled signal
+	signal_id = g_signal_lookup("toggled", GTK_TYPE_TOGGLE_TOOL_BUTTON);
+	if (signal_id > 0)
+	{
+		// Valid signal id found.  This should always succeed.
+		handler_id = g_signal_handler_find((gpointer)widget, G_SIGNAL_MATCH_ID, 
+											signal_id, 0, 0, 0, 0);
+		if (handler_id > 0)
+		{
+			// This should also always succeed
+			g_signal_handler_block ((gpointer)widget, handler_id);
+		}
+	}
+
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
+
+	if (handler_id > 0)
+	{
+		g_signal_handler_unblock ((gpointer)widget, handler_id);
+	}
 	return TRUE;
 }
 
@@ -801,5 +931,142 @@ preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
+}
+
+static guint hud_timeout_id = 0;
+
+static gboolean
+hud_timeout(signal_user_data_t *ud)
+{
+	GtkWidget *widget;
+
+	widget = GHB_WIDGET(ud->builder, "preview_hud");
+	gtk_widget_hide(widget);
+	hud_timeout_id = 0;
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+hud_enter_cb(
+	GtkWidget *widget,
+	GdkEventCrossing *event,
+	signal_user_data_t *ud)
+{
+	if (hud_timeout_id != 0)
+	{
+		GMainContext *mc;
+		GSource *source;
+
+		mc = g_main_context_default();
+		source = g_main_context_find_source_by_id(mc, hud_timeout_id);
+		if (source != NULL)
+			g_source_destroy(source);
+	}
+	widget = GHB_WIDGET(ud->builder, "preview_hud");
+	gtk_widget_show(widget);
+	hud_timeout_id = 0;
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+preview_leave_cb(
+	GtkWidget *widget,
+	GdkEventCrossing *event,
+	signal_user_data_t *ud)
+{
+	if (hud_timeout_id != 0)
+	{
+		GMainContext *mc;
+		GSource *source;
+
+		mc = g_main_context_default();
+		source = g_main_context_find_source_by_id(mc, hud_timeout_id);
+		if (source != NULL)
+			g_source_destroy(source);
+	}
+	hud_timeout_id = g_timeout_add(300, (GSourceFunc)hud_timeout, ud);
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+preview_motion_cb(
+	GtkWidget *widget,
+	GdkEventMotion *event,
+	signal_user_data_t *ud)
+{
+	if (hud_timeout_id != 0)
+	{
+		GMainContext *mc;
+		GSource *source;
+
+		mc = g_main_context_default();
+		source = g_main_context_find_source_by_id(mc, hud_timeout_id);
+		if (source != NULL)
+			g_source_destroy(source);
+	}
+	else
+	{
+		GtkWidget *widget;
+		GdkWindow *parent, *win;
+		gint pw, ph, w, h, x, y;
+
+		widget = GHB_WIDGET(ud->builder, "preview_image");
+		parent = gtk_widget_get_window(widget);
+		widget = GHB_WIDGET(ud->builder, "preview_hud");
+		win = gtk_widget_get_window(widget);
+		gtk_widget_show(widget);
+		gdk_drawable_get_size(GDK_DRAWABLE(parent), &pw, &ph);
+		gdk_drawable_get_size(GDK_DRAWABLE(win), &w, &h);
+		x = pw/2 - w/2;
+		if (ph/4 > h/2)
+			y = ph - ph/4 - h/2;
+		else
+			y = ph - h;
+		gdk_window_move(win, x, y);
+	}
+	hud_timeout_id = g_timeout_add_seconds(10, (GSourceFunc)hud_timeout, ud);
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+preview_configure_cb(
+	GtkWidget *widget,
+	GdkEventConfigure *event,
+	signal_user_data_t *ud)
+{
+	gint x, y;
+
+	g_debug("preview_configure_cb()");
+	if (GTK_WIDGET_VISIBLE(widget))
+	{
+		gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
+		ghb_settings_set_int(ud->settings, "preview_x", x);
+		ghb_settings_set_int(ud->settings, "preview_y", y);
+		ghb_pref_set(ud->settings, "preview_x");
+		ghb_pref_set(ud->settings, "preview_y");
+		ghb_prefs_store();
+	}
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+settings_configure_cb(
+	GtkWidget *widget,
+	GdkEventConfigure *event,
+	signal_user_data_t *ud)
+{
+	gint x, y;
+
+	g_debug("settings_configure_cb()");
+	if (GTK_WIDGET_VISIBLE(widget))
+	{
+		gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
+		ghb_settings_set_int(ud->settings, "settings_x", x);
+		ghb_settings_set_int(ud->settings, "settings_y", y);
+		ghb_pref_set(ud->settings, "settings_x");
+		ghb_pref_set(ud->settings, "settings_y");
+		ghb_prefs_store();
+	}
+	return FALSE;
 }
 
