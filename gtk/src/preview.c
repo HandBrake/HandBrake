@@ -1011,9 +1011,11 @@ preview_motion_cb(
 		gint pw, ph, w, h, x, y;
 
 		widget = GHB_WIDGET(ud->builder, "preview_image");
-		parent = gtk_widget_get_window(widget);
+		//parent = gtk_widget_get_window(widget);
+		parent = widget->window;
 		widget = GHB_WIDGET(ud->builder, "preview_hud");
-		win = gtk_widget_get_window(widget);
+		//win = gtk_widget_get_window(widget);
+		win = widget->window;
 		gtk_widget_show(widget);
 		gdk_drawable_get_size(GDK_DRAWABLE(parent), &pw, &ph);
 		gdk_drawable_get_size(GDK_DRAWABLE(win), &w, &h);

@@ -638,10 +638,12 @@ main (int argc, char *argv[])
 
 	widget = GHB_WIDGET(ud->builder, "preview_image");
 	gtk_widget_realize(widget);
-	parent = gtk_widget_get_window(widget);
+	//parent = gtk_widget_get_window(widget);
+	parent = widget->window;
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
 	gtk_widget_realize(widget);
-	win = gtk_widget_get_window(widget);
+	//win = gtk_widget_get_window(widget);
+	win = widget->window;
 	gdk_window_reparent(win, parent, 0, 0);
 
 	gtk_main ();
