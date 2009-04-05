@@ -3920,21 +3920,26 @@ ghb_get_preview_image(
 		GdkScreen *ss;
 		gint s_w, s_h;
 		gint orig_w, orig_h;
+		gint factor = 80;
 
+		if (ghb_settings_get_boolean(settings, "preview_fullscreen"))
+		{
+			factor = 100;
+		}
 		ss = gdk_screen_get_default();
 		s_w = gdk_screen_get_width(ss);
 		s_h = gdk_screen_get_height(ss);
 		orig_w = dstWidth;
 		orig_h = dstHeight;
 
-		if (dstWidth > s_w * 80 / 100)
+		if (dstWidth > s_w * factor / 100)
 		{
-			dstWidth = s_w * 80 / 100;
+			dstWidth = s_w * factor / 100;
 			dstHeight = dstHeight * dstWidth / orig_w;
 		}
-		if (dstHeight > s_h * 80 / 100)
+		if (dstHeight > s_h * factor / 100)
 		{
-			dstHeight = s_h * 80 / 100;
+			dstHeight = s_h * factor / 100;
 			dstWidth = dstWidth * dstHeight / orig_h;
 		}
 	}
