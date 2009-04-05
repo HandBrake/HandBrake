@@ -120,6 +120,8 @@
 		<false />
 		<key>preview_count</key>
 		<integer>10</integer>
+		<key>preview_fullscreen</key>
+		<false />
 		<key>preview_x</key>
 		<integer>-1</integer>
 		<key>preview_y</key>

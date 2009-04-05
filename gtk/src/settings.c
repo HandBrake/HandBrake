@@ -232,6 +232,13 @@ ghb_widget_value(GtkWidget *widget)
 		bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		value = ghb_boolean_value_new(bval);
 	}
+	else if (type == GTK_TYPE_TOGGLE_BUTTON)
+	{
+		g_debug("\ttoggle_button");
+		gboolean bval;
+		bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		value = ghb_boolean_value_new(bval);
+	}
 	else if (type == GTK_TYPE_TOGGLE_ACTION)
 	{
 		g_debug("\ttoggle action");
@@ -454,6 +461,11 @@ update_widget(GtkWidget *widget, const GValue *value)
 	else if (type == GTK_TYPE_CHECK_BUTTON)
 	{
 		g_debug("check button");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
+	}
+	else if (type == GTK_TYPE_TOGGLE_BUTTON)
+	{
+		g_debug("toggle button");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ival);
 	}
 	else if (type == GTK_TYPE_TOGGLE_ACTION)

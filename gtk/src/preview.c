@@ -800,6 +800,9 @@ picture_settings_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		if (x >= 0 && y >= 0)
 			gtk_window_move(GTK_WINDOW(widget), x, y);
 		set_visible(widget, active);
+		// The window may be hidden behind the main window, raise it
+		if (active)
+			gtk_window_present(GTK_WINDOW(widget));
 	}
 }
 
@@ -813,6 +816,45 @@ picture_settings_alt_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	toggle = GHB_WIDGET (ud->builder, "show_picture");
 	active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggle));
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggle), !active);
+}
+
+static void
+go_full(signal_user_data_t *ud)
+{
+	GtkWindow *window;
+	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
+	gtk_window_fullscreen(window);
+}
+
+G_MODULE_EXPORT void
+fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
+{
+	gboolean active;
+	GtkWindow *window;
+
+	g_debug("fullscreen_clicked_cb()");
+	ghb_widget_to_setting (ud->settings, toggle);
+	ghb_check_dependency(ud, toggle);
+	const gchar *name = gtk_widget_get_name(toggle);
+	ghb_pref_save(ud->settings, name);
+
+	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
+	active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle));
+	if (active)
+	{
+		gtk_window_set_resizable(window, TRUE);
+		gtk_button_set_label(GTK_BUTTON(toggle), "Windowed");
+		// Changing resizable property doesn't take effect immediately
+		// need to delay fullscreen till after this callback returns
+		// to mainloop
+		g_idle_add((GSourceFunc)go_full, ud);
+	}
+	else
+	{
+		gtk_window_unfullscreen(window);
+		gtk_window_set_resizable(window, FALSE);
+		gtk_button_set_label(GTK_BUTTON(toggle), "Fullscreen");
+	}
 }
 
 G_MODULE_EXPORT void

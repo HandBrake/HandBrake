@@ -646,6 +646,13 @@ main (int argc, char *argv[])
 	win = widget->window;
 	gdk_window_reparent(win, parent, 0, 0);
 
+/*
+	if (ghb_settings_get_boolean(ud->settings, "preview_fullscreen"))
+	{
+		gtk_window_set_resizable(window, TRUE);
+		gtk_window_fullscreen(window);
+	}
+*/
 	gtk_main ();
 	ghb_backend_close();
 	if (ud->queue)

@@ -4855,57 +4855,28 @@ location as the movie.</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
-    <property name="allow-grow">False</property>
+    <property name="resizable">False</property>
     <property name="events">GDK_STRUCTURE_MASK</property>
     <signal handler="preview_configure_cb" name="configure-event"/>
     <signal handler="preview_window_delete_cb" name="delete_event"/>
     <child>
-      <object class="GtkHBox" id="hbox2">
+      <object class="GtkAlignment" id="alignment111">
         <property name="visible">True</property>
-        <property name="spacing">4</property>
+        <property name="xalign">.5</property>
+        <property name="yalign">.5</property>
+        <property name="xscale">0</property>
+        <property name="yscale">0</property>
         <child>
-          <object class="GtkVBox" id="vbox40">
+          <object class="GtkDrawingArea" id="preview_image">
             <property name="visible">True</property>
-            <property name="spacing">5</property>
-            <child>
-              <object class="GtkAlignment" id="alignment52">
-                <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="xscale">0</property>
-                <property name="yscale">0</property>
-                <property name="top_padding">2</property>
-                <property name="bottom_padding">2</property>
-                <property name="left_padding">2</property>
-                <property name="right_padding">2</property>
-                <child>
-                  <object class="GtkDrawingArea" id="preview_image">
-                    <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK</property>
-                    <property name="app_paintable">True</property>
-                    <signal name="motion-notify-event" handler="preview_motion_cb"/>
-                    <signal name="leave-notify-event" handler="preview_leave_cb"/>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+            <property name="app_paintable">True</property>
+            <signal name="motion-notify-event" handler="preview_motion_cb"/>
+            <signal name="leave-notify-event" handler="preview_leave_cb"/>
           </object>
           <packing>
-            <property name="position">0</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkVSeparator" id="vseparator2">
-            <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-
       </object>
     </child>
   </object>
@@ -5060,6 +5031,19 @@ location as the movie.</property>
               </packing>
             </child>
             <child>
+              <object class="GtkToggleButton" id="preview_fullscreen">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip-text" translatable="yes">View Fullscreen Preview</property>
+                <property name="label" translatable="yes">Fullscreen</property>
+                <signal handler="fullscreen_clicked_cb" name="clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="settings_button">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -5069,7 +5053,7 @@ location as the movie.</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
