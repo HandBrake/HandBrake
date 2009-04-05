@@ -43,6 +43,7 @@ static gboolean prefs_modified = FALSE;
 static const GValue* preset_dict_get_value(GValue *dict, const gchar *key);
 static void store_plist(GValue *plist, const gchar *name);
 static void store_presets(void);
+static void store_prefs(void);
 
 // This only handle limited depth
 GtkTreePath*
@@ -1196,7 +1197,7 @@ ghb_prefs_save(GValue *settings)
 			ghb_dict_insert(pref_dict, g_strdup(key), ghb_value_dup(value));
 	    }
 	}
-    store_plist(prefsPlist, "preferences");
+	store_prefs();
 	prefs_modified = FALSE;
 }
 
@@ -1216,7 +1217,7 @@ ghb_pref_set(GValue *settings, const gchar *key)
 		if (ghb_value_cmp(value, value2) != 0)
 		{
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
-			store_plist(prefsPlist, "preferences");
+			store_prefs();
 			prefs_modified = TRUE;
 		}
 	}
@@ -1238,7 +1239,7 @@ ghb_pref_save(GValue *settings, const gchar *key)
 		if (ghb_value_cmp(value, value2) != 0)
 		{
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(value));
-			store_plist(prefsPlist, "preferences");
+			store_prefs();
 			prefs_modified = FALSE;
 		}
 	}
@@ -1249,7 +1250,7 @@ ghb_prefs_store(void)
 {
 	if (prefs_modified)
 	{
-		store_plist(prefsPlist, "preferences");
+		store_prefs();
 		prefs_modified = FALSE;
 	}
 }
@@ -1350,7 +1351,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 		}
 		ghb_dict_insert(dict, 
 			g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
-		store_plist(prefsPlist, "preferences");
+		store_prefs();
     }
 	// Read legacy default_preset preference and update accordingly
 	path = ghb_dict_lookup(dict, "default_preset");
@@ -1376,7 +1377,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 			g_free(indices);
 		}
 		ghb_dict_remove(dict, "default_preset");
-		store_plist(prefsPlist, "preferences");
+		store_prefs();
 	}
 }
 
@@ -2427,6 +2428,16 @@ export_xlat_presets(GValue *presets)
 	}
 }
 
+static guint prefs_timeout_id = 0;
+
+static gboolean
+delayed_store_prefs(gpointer data)
+{
+	store_plist(prefsPlist, "preferences");
+	prefs_timeout_id = 0;
+	return FALSE;
+}
+
 static void
 store_presets()
 {
@@ -2436,6 +2447,22 @@ store_presets()
 	export_xlat_presets(export);
 	store_plist(export, "presets");
 	ghb_value_free(export);
+}
+
+static void
+store_prefs(void)
+{
+	if (prefs_timeout_id != 0)
+	{
+		GMainContext *mc;
+		GSource *source;
+
+		mc = g_main_context_default();
+		source = g_main_context_find_source_by_id(mc, prefs_timeout_id);
+		if (source != NULL)
+			g_source_destroy(source);
+	}
+	prefs_timeout_id = g_timeout_add_seconds(1, (GSourceFunc)delayed_store_prefs, NULL);
 }
 
 void
