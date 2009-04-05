@@ -819,11 +819,36 @@ picture_settings_alt_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 static void
+hud_set_position(signal_user_data_t *ud)
+{
+	GtkWidget *widget;
+	GdkWindow *parent, *win;
+	gint pw, ph, w, h, x, y;
+
+	widget = GHB_WIDGET(ud->builder, "preview_image");
+	//parent = gtk_widget_get_window(widget);
+	parent = widget->window;
+	widget = GHB_WIDGET(ud->builder, "preview_hud");
+	//win = gtk_widget_get_window(widget);
+	win = widget->window;
+	gdk_drawable_get_size(GDK_DRAWABLE(parent), &pw, &ph);
+	gdk_drawable_get_size(GDK_DRAWABLE(win), &w, &h);
+	x = pw/2 - w/2;
+	if (ph/4 > h/2)
+		y = ph - ph/4 - h/2;
+	else
+		y = ph - h;
+	gdk_window_move(win, x, y);
+}
+
+static gboolean
 go_full(signal_user_data_t *ud)
 {
 	GtkWindow *window;
 	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
 	gtk_window_fullscreen(window);
+	ghb_set_preview_image(ud);
+	return FALSE;
 }
 
 G_MODULE_EXPORT void
@@ -854,6 +879,7 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 		gtk_window_unfullscreen(window);
 		gtk_window_set_resizable(window, FALSE);
 		gtk_button_set_label(GTK_BUTTON(toggle), "Fullscreen");
+		ghb_set_preview_image(ud);
 	}
 }
 
@@ -1049,28 +1075,33 @@ preview_motion_cb(
 	else
 	{
 		GtkWidget *widget;
-		GdkWindow *parent, *win;
-		gint pw, ph, w, h, x, y;
 
-		widget = GHB_WIDGET(ud->builder, "preview_image");
-		//parent = gtk_widget_get_window(widget);
-		parent = widget->window;
 		widget = GHB_WIDGET(ud->builder, "preview_hud");
-		//win = gtk_widget_get_window(widget);
-		win = widget->window;
 		gtk_widget_show(widget);
-		gdk_drawable_get_size(GDK_DRAWABLE(parent), &pw, &ph);
-		gdk_drawable_get_size(GDK_DRAWABLE(win), &w, &h);
-		x = pw/2 - w/2;
-		if (ph/4 > h/2)
-			y = ph - ph/4 - h/2;
-		else
-			y = ph - h;
-		gdk_window_move(win, x, y);
+		hud_set_position(ud);
 	}
 	hud_timeout_id = g_timeout_add_seconds(10, (GSourceFunc)hud_timeout, ud);
 	return FALSE;
 }
+
+G_MODULE_EXPORT gboolean
+preview_image_configure_cb(
+	GtkWidget *widget,
+	GdkEventConfigure *event,
+	signal_user_data_t *ud)
+{
+	static gint w = 0, h = 0;
+
+	g_debug("preview_image_configure_cb()");
+	if ((w != event->width) || (h != event->height))
+	{
+		w = event->width;
+		h = event->height;
+		hud_set_position(ud);
+	}
+	return FALSE;
+}
+
 
 G_MODULE_EXPORT gboolean
 preview_configure_cb(

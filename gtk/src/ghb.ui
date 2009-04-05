@@ -4873,6 +4873,7 @@ location as the movie.</property>
             <property name="app_paintable">True</property>
             <signal name="motion-notify-event" handler="preview_motion_cb"/>
             <signal name="leave-notify-event" handler="preview_leave_cb"/>
+            <signal handler="preview_image_configure_cb" name="configure-event"/>
           </object>
           <packing>
           </packing>
