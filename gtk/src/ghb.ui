@@ -4876,11 +4876,11 @@ location as the movie.</property>
         <child>
           <object class="GtkDrawingArea" id="preview_image">
             <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+            <signal name="enter-notify-event" handler="hud_enter_cb"/>
             <property name="app_paintable">True</property>
             <signal name="motion-notify-event" handler="preview_motion_cb"/>
             <signal name="leave-notify-event" handler="preview_leave_cb"/>
-            <signal handler="preview_image_configure_cb" name="configure-event"/>
           </object>
           <packing>
           </packing>
@@ -4902,8 +4902,10 @@ location as the movie.</property>
     <property name="visible">True</property>
     <property name="width-request">500</property>
     <property name="app-paintable">True</property>
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
+    <property name="above-child">False</property>
+    <property name="events">GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
     <signal name="enter-notify-event" handler="hud_enter_cb"/>
+    <signal name="leave-notify-event" handler="preview_leave_cb"/>
     <child>
       <object class="GtkAlignment" id="alignment53">
         <property name="visible">True</property>
@@ -4924,6 +4926,8 @@ location as the movie.</property>
             <property name="adjustment">adjustment19</property>
             <property name="digits">0</property>
             <property name="value_pos">bottom</property>
+            <property name="events">GDK_ENTER_NOTIFY_MASK</property>
+            <signal name="enter-notify-event" handler="hud_enter_cb"/>
             <signal name="value_changed" handler="preview_frame_value_changed_cb"/>
           </object>
           <packing>
@@ -4942,6 +4946,8 @@ location as the movie.</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="relief">none</property>
+                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
+                <signal name="enter-notify-event" handler="hud_enter_cb"/>
                 <signal name="clicked" handler="live_preview_start_cb"/>
                 <child>
                   <object class="GtkImage" id="live_preview_play_image">
@@ -4961,6 +4967,8 @@ location as the movie.</property>
                 <property name="adjustment">preview_progress_adj</property>
                 <property name="draw_value">False</property>
                 <property name="value_pos">right</property>
+                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
+                <signal name="enter-notify-event" handler="hud_enter_cb"/>
                 <signal name="value_changed" handler="live_preview_seek_cb"/>
               </object>
               <packing>
@@ -4983,7 +4991,8 @@ location as the movie.</property>
                   <object class="GtkProgressBar" id="live_encode_progress">
                     <property name="height_request">16</property>
                     <property name="visible">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
+                    <signal name="enter-notify-event" handler="hud_enter_cb"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -5034,6 +5043,8 @@ location as the movie.</property>
                     <property name="can_focus">True</property>
                     <property name="adjustment">adjustment21</property>
                     <property name="numeric">True</property>
+                    <property name="events">GDK_ENTER_NOTIFY_MASK</property>
+                    <signal name="enter-notify-event" handler="hud_enter_cb"/>
                     <signal name="value_changed" handler="preview_duration_changed_cb"/>
                   </object>
                   <packing>
@@ -5052,6 +5063,8 @@ location as the movie.</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip-text" translatable="yes">View Fullscreen Preview</property>
                 <property name="label" translatable="yes">Fullscreen</property>
+                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
+                <signal name="enter-notify-event" handler="hud_enter_cb"/>
                 <signal handler="fullscreen_clicked_cb" name="clicked"/>
               </object>
               <packing>
@@ -5065,6 +5078,8 @@ location as the movie.</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
                 <property name="label" translatable="yes">Settings</property>
+                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
+                <signal name="enter-notify-event" handler="hud_enter_cb"/>
                 <signal handler="picture_settings_alt2_clicked_cb" name="clicked"/>
               </object>
               <packing>

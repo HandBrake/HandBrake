@@ -988,6 +988,7 @@ hud_timeout(signal_user_data_t *ud)
 {
 	GtkWidget *widget;
 
+	g_debug("hud_timeout()");
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
 	gtk_widget_hide(widget);
 	hud_timeout_id = 0;
@@ -1000,6 +1001,7 @@ hud_enter_cb(
 	GdkEventCrossing *event,
 	signal_user_data_t *ud)
 {
+	g_debug("hud_enter_cb()");
 	if (hud_timeout_id != 0)
 	{
 		GMainContext *mc;
@@ -1022,6 +1024,7 @@ preview_leave_cb(
 	GdkEventCrossing *event,
 	signal_user_data_t *ud)
 {
+	g_debug("hud_leave_cb()");
 	if (hud_timeout_id != 0)
 	{
 		GMainContext *mc;
@@ -1042,6 +1045,7 @@ preview_motion_cb(
 	GdkEventMotion *event,
 	signal_user_data_t *ud)
 {
+	//g_debug("hud_motion_cb %d", hud_timeout_id);
 	if (hud_timeout_id != 0)
 	{
 		GMainContext *mc;
@@ -1052,34 +1056,14 @@ preview_motion_cb(
 		if (source != NULL)
 			g_source_destroy(source);
 	}
-	else
+	widget = GHB_WIDGET(ud->builder, "preview_hud");
+	if (!GTK_WIDGET_VISIBLE(widget))
 	{
-		GtkWidget *widget;
-
-		widget = GHB_WIDGET(ud->builder, "preview_hud");
 		gtk_widget_show(widget);
 	}
-	hud_timeout_id = g_timeout_add_seconds(10, (GSourceFunc)hud_timeout, ud);
+	hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);
 	return FALSE;
 }
-
-G_MODULE_EXPORT gboolean
-preview_image_configure_cb(
-	GtkWidget *widget,
-	GdkEventConfigure *event,
-	signal_user_data_t *ud)
-{
-	static gint w = 0, h = 0;
-
-	g_debug("preview_image_configure_cb()");
-	if ((w != event->width) || (h != event->height))
-	{
-		w = event->width;
-		h = event->height;
-	}
-	return FALSE;
-}
-
 
 G_MODULE_EXPORT gboolean
 preview_configure_cb(
