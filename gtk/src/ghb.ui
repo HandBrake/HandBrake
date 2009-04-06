@@ -4857,15 +4857,9 @@ location as the movie.</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="resizable">False</property>
-    <property name="events">GDK_STRUCTURE_MASK</property>
+    <property name="events">GDK_STRUCTURE_MASK | GDK_POINTER_MOTION_MASK</property>
     <signal handler="preview_configure_cb" name="configure-event"/>
     <signal handler="preview_window_delete_cb" name="delete_event"/>
-    <child>
-      <object class="GtkTable" id="table111">
-        <property name="visible">True</property>
-        <property name="n_rows">1</property>
-        <property name="n_columns">1</property>
-
     <child>
       <object class="GtkAlignment" id="alignment111">
         <property name="visible">True</property>
@@ -4874,239 +4868,222 @@ location as the movie.</property>
         <property name="xscale">0</property>
         <property name="yscale">0</property>
         <child>
-          <object class="GtkDrawingArea" id="preview_image">
+          <object class="GtkTable" id="table111">
             <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
-            <signal name="enter-notify-event" handler="hud_enter_cb"/>
-            <property name="app_paintable">True</property>
-            <signal name="motion-notify-event" handler="preview_motion_cb"/>
-            <signal name="leave-notify-event" handler="preview_leave_cb"/>
-          </object>
-          <packing>
-          </packing>
-        </child>
-      </object>
-      <packing>
-      </packing>
-    </child>
-  <child>
-  <object class="GtkAlignment" id="preview_hud">
-        <property name="visible">False</property>
-        <property name="xalign">.5</property>
-        <property name="yalign">.75</property>
-        <property name="xscale">0</property>
-        <property name="yscale">0</property>
-
-  <child>
-  <object class="GtkEventBox" id="preview_event_box">
-    <property name="visible">True</property>
-    <property name="width-request">500</property>
-    <property name="app-paintable">True</property>
-    <property name="above-child">False</property>
-    <property name="events">GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
-    <signal name="enter-notify-event" handler="hud_enter_cb"/>
-    <signal name="leave-notify-event" handler="preview_leave_cb"/>
-    <child>
-      <object class="GtkAlignment" id="alignment53">
-        <property name="visible">True</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="left_padding">10</property>
-        <property name="right_padding">10</property>
-        <property name="top_padding">5</property>
-        <property name="bottom_padding">5</property>
-
-    <child>
-      <object class="GtkVBox" id="vbox35">
-        <property name="visible">True</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <child>
-          <object class="GtkHScale" id="preview_frame">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="adjustment">adjustment19</property>
-            <property name="digits">0</property>
-            <property name="value_pos">bottom</property>
-            <property name="events">GDK_ENTER_NOTIFY_MASK</property>
-            <signal name="enter-notify-event" handler="hud_enter_cb"/>
-            <signal name="value_changed" handler="preview_frame_value_changed_cb"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox70">
-            <property name="visible">True</property>
-            <property name="spacing">5</property>
+            <property name="n_rows">1</property>
+            <property name="n_columns">1</property>
             <child>
-              <object class="GtkButton" id="live_preview_play">
-                <property name="height_request">30</property>
+              <object class="GtkDrawingArea" id="preview_image">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="relief">none</property>
-                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
-                <signal name="enter-notify-event" handler="hud_enter_cb"/>
-                <signal name="clicked" handler="live_preview_start_cb"/>
-                <child>
-                  <object class="GtkImage" id="live_preview_play_image">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-media-play</property>
-                  </object>
-                </child>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+                <property name="app_paintable">True</property>
+                <signal name="motion-notify-event" handler="preview_motion_cb"/>
+                <signal name="leave-notify-event" handler="preview_leave_cb"/>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkHScale" id="live_preview_progress">
-                <property name="can_focus">True</property>
-                <property name="adjustment">preview_progress_adj</property>
-                <property name="draw_value">False</property>
-                <property name="value_pos">right</property>
-                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
-                <signal name="enter-notify-event" handler="hud_enter_cb"/>
-                <signal name="value_changed" handler="live_preview_seek_cb"/>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkVBox" id="live_progress_box">
-                <property name="visible">True</property>
+              <object class="GtkAlignment" id="preview_hud">
+                <property name="visible">False</property>
+                <property name="xalign">.5</property>
+                <property name="yalign">.9</property>
+                <property name="xscale">0</property>
+                <property name="yscale">0</property>
                 <child>
-                  <object class="GtkLabel" id="label71">
-                    <property name="height_request">1</property>
+                  <object class="GtkEventBox" id="preview_event_box">
                     <property name="visible">True</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkProgressBar" id="live_encode_progress">
-                    <property name="height_request">16</property>
-                    <property name="visible">True</property>
+                    <property name="width-request">500</property>
+                    <property name="app-paintable">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
                     <signal name="enter-notify-event" handler="hud_enter_cb"/>
+                    <child>
+                      <object class="GtkAlignment" id="alignment53">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="left_padding">10</property>
+                        <property name="right_padding">10</property>
+                        <property name="top_padding">5</property>
+                        <property name="bottom_padding">5</property>
+                        <child>
+                          <object class="GtkVBox" id="vbox35">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <child>
+                              <object class="GtkHScale" id="preview_frame">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="adjustment">adjustment19</property>
+                                <property name="digits">0</property>
+                                <property name="value_pos">bottom</property>
+                                <signal name="value_changed" handler="preview_frame_value_changed_cb"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkHBox" id="hbox70">
+                                <property name="visible">True</property>
+                                <property name="spacing">5</property>
+                                <child>
+                                  <object class="GtkButton" id="live_preview_play">
+                                    <property name="height_request">30</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="relief">none</property>
+                                    <signal name="clicked" handler="live_preview_start_cb"/>
+                                    <child>
+                                      <object class="GtkImage" id="live_preview_play_image">
+                                        <property name="visible">True</property>
+                                        <property name="stock">gtk-media-play</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="live_preview_progress">
+                                    <property name="can_focus">True</property>
+                                    <property name="adjustment">preview_progress_adj</property>
+                                    <property name="draw_value">False</property>
+                                    <property name="value_pos">right</property>
+                                    <signal name="value_changed" handler="live_preview_seek_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVBox" id="live_progress_box">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label71">
+                                        <property name="height_request">1</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkProgressBar" id="live_encode_progress">
+                                        <property name="height_request">16</property>
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label72">
+                                        <property name="height_request">1</property>
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkHBox" id="hbox26">
+                                <property name="visible">True</property>
+                                <property name="spacing">10</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox60">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">2</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label37">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Duration:&lt;/b&gt;</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="live_duration">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="adjustment">adjustment21</property>
+                                        <property name="numeric">True</property>
+                                        <signal name="value_changed" handler="preview_duration_changed_cb"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToggleButton" id="preview_fullscreen">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip-text" translatable="yes">View Fullscreen Preview</property>
+                                    <property name="label" translatable="yes">Fullscreen</property>
+                                    <signal handler="fullscreen_clicked_cb" name="clicked"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="settings_button">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
+                                    <property name="label" translatable="yes">Settings</property>
+                                    <signal handler="picture_settings_alt2_clicked_cb" name="clicked"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label72">
-                    <property name="height_request">1</property>
-                    <property name="visible">True</property>
-                  </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox26">
-            <property name="visible">True</property>
-            <property name="spacing">10</property>
-            <child>
-              <object class="GtkHBox" id="hbox60">
-                <property name="visible">True</property>
-                <property name="spacing">2</property>
-                <child>
-                  <object class="GtkLabel" id="label37">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Duration:&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSpinButton" id="live_duration">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment21</property>
-                    <property name="numeric">True</property>
-                    <property name="events">GDK_ENTER_NOTIFY_MASK</property>
-                    <signal name="enter-notify-event" handler="hud_enter_cb"/>
-                    <signal name="value_changed" handler="preview_duration_changed_cb"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="preview_fullscreen">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip-text" translatable="yes">View Fullscreen Preview</property>
-                <property name="label" translatable="yes">Fullscreen</property>
-                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
-                <signal name="enter-notify-event" handler="hud_enter_cb"/>
-                <signal handler="fullscreen_clicked_cb" name="clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="settings_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
-                <property name="label" translatable="yes">Settings</property>
-                <property name="events">GDK_ENTER_NOTIFY_MASK</property>
-                <signal name="enter-notify-event" handler="hud_enter_cb"/>
-                <signal handler="picture_settings_alt2_clicked_cb" name="clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
     </child>
-
-      </object>
-    </child>
-  </object>
-  </child>
-
-  </object>
-      <packing>
-      </packing>
-  </child>
-  </object>
-  </child>
   </object>
   <object class="GtkAboutDialog" id="hb_about">
     <property name="border_width">5</property>
