@@ -13,6 +13,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading;
 using Handbrake.Functions;
+using Handbrake.Presets;
 
 namespace Handbrake
 {
@@ -23,7 +24,7 @@ namespace Handbrake
         Main hb_common_func = new Main();
         Encode encodeHandler = new Encode();
         Queue.QueueHandler encodeQueue = new Queue.QueueHandler();
-        Presets.PresetsHandler presetHandler = new Presets.PresetsHandler();
+        PresetsHandler presetHandler = new PresetsHandler();
         Parsing.Title selectedTitle;
         Parsing.DVD thisDVD;
 
@@ -50,9 +51,7 @@ namespace Handbrake
             splash.Show();
 
             //Create a label that can be updated from the parent thread.
-            Label lblStatus = new Label();
-            lblStatus.Size = new Size(250, 20);
-            lblStatus.Location = new Point(10, 280);
+            Label lblStatus = new Label {Size = new Size(250, 20), Location = new Point(10, 280)};
             splash.Controls.Add(lblStatus);
             InitializeComponent();
 
@@ -84,6 +83,7 @@ namespace Handbrake
             loadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
+            lbl_max.Text = "";
             queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
             if (Properties.Settings.Default.QueryEditorTab != "Checked")
                 tabs_panel.TabPages.RemoveAt(5); // Remove the query editor tab if the user does not want it enabled.
@@ -186,10 +186,39 @@ namespace Handbrake
             if (Properties.Settings.Default.MainWindowMinimize == "Checked")
                 this.Resize += new EventHandler(frmMain_Resize);
 
-            // Handle Encode Start
+            // Handle Encode Start / Finish / Pause
             encodeQueue.OnEncodeEnded += new EventHandler(encodeEnded);
             encodeQueue.OnPaused += new EventHandler(encodePaused);
             encodeQueue.OnEncodeStart += new EventHandler(encodeStarted);
+
+            // Handle a file being draged onto the GUI.
+            this.DragEnter += new DragEventHandler(frmMain_DragEnter);
+            this.DragDrop += new DragEventHandler(frmMain_DragDrop);
+        }
+
+        private static void frmMain_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, false))
+                e.Effect = DragDropEffects.All;
+        }
+        private void frmMain_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] fileList = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (fileList != null)
+            {
+                if (fileList[0].StartsWith("\\"))
+                    MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                else
+                {
+                    if (fileList[0] != "")
+                    {
+                        setupGUIforScan(fileList[0]);
+                        startScan(fileList[0]);
+                    }
+                    else
+                        text_source.Text = "Click 'Source' to continue";
+                }
+            }
         }
         private void encodeStarted(object sender, EventArgs e)
         {
@@ -227,10 +256,7 @@ namespace Handbrake
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
             String file;
-            if (lastAction == "scan")
-                file = "dvdinfo.dat";
-            else
-                file = "hb_encode_log.dat";
+            file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
 
             frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeHandler);
             dvdInfoWindow.Show();
@@ -309,7 +335,7 @@ namespace Handbrake
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
             Boolean update = hb_common_func.updateCheck(true);
-            if (update == true)
+            if (update)
             {
                 frmUpdater updateWindow = new frmUpdater();
                 updateWindow.Show();
@@ -467,7 +493,7 @@ namespace Handbrake
                         x264Panel.reset2Defaults();
 
                         // Send the query from the file to the Query Parser class
-                        Functions.QueryParser presetQuery = QueryParser.Parse(query);
+                        QueryParser presetQuery = QueryParser.Parse(query);
 
                         // Now load the preset
                         presetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
@@ -1599,8 +1625,8 @@ namespace Handbrake
 
                 string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
 
-                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine);
-                hbParseDvd.WindowStyle = ProcessWindowStyle.Hidden;
+                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine)
+                                                  {WindowStyle = ProcessWindowStyle.Hidden};
 
                 using (hbproc = Process.Start(hbParseDvd))
                 {
@@ -1707,8 +1733,8 @@ namespace Handbrake
 
                 AppName = AppName.ToUpper();
 
-                System.Diagnostics.Process[] prs = Process.GetProcesses();
-                foreach (System.Diagnostics.Process proces in prs)
+                Process[] prs = Process.GetProcesses();
+                foreach (Process proces in prs)
                 {
                     if (proces.ProcessName.ToUpper() == AppName)
                     {
@@ -1869,7 +1895,7 @@ namespace Handbrake
                 drp_videoEncoder.Text = oldval;
             }
         }
-        private void setBitrateSelections384(ComboBox dropDown)
+        private static void setBitrateSelections384(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1888,7 +1914,7 @@ namespace Handbrake
             dropDown.Items.Add("320");
             dropDown.Items.Add("384");
         }
-        private void setBitrateSelections320(ComboBox dropDown)
+        private static void setBitrateSelections320(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1906,7 +1932,7 @@ namespace Handbrake
             dropDown.Items.Add("256");
             dropDown.Items.Add("320");
         }
-        private void setBitrateSelections160(ComboBox dropDown)
+        private static void setBitrateSelections160(ComboBox dropDown)
         {
             dropDown.Items.Clear();
             dropDown.Items.Add("32");
@@ -1920,7 +1946,7 @@ namespace Handbrake
             dropDown.Items.Add("128");
             dropDown.Items.Add("160");
         }
-        private void setMixDownAllOptions(ComboBox dropdown)
+        private static void setMixDownAllOptions(ComboBox dropdown)
         {
             dropdown.Items.Clear();
             dropdown.Items.Add("Automatic");
@@ -1930,7 +1956,7 @@ namespace Handbrake
             dropdown.Items.Add("Dolby Pro Logic II");
             dropdown.Items.Add("6 Channel Discrete");
         }
-        private void setMixDownNotAAC(ComboBox dropdown)
+        private static void setMixDownNotAAC(ComboBox dropdown)
         {
             dropdown.Items.Clear();
             dropdown.Items.Add("Automatic");
@@ -2022,24 +2048,19 @@ namespace Handbrake
         public void loadPresetPanel()
         {
             presetHandler.loadPresetData();
-
             treeView_presets.Nodes.Clear();
 
-            List<Presets.Preset> presetNameList;
-            List<string> presetNames;
             TreeNode preset_treeview;
-
             TreeNode rootNode = new TreeNode();
             TreeNode rootNodeTwo = new TreeNode();
             TreeNode childNode;
             int workingLevel = 0;
-            string previousCategory = String.Empty;
-            string currentCategory = String.Empty;
+            string previousCategory = String.Empty, currentCategory = String.Empty;
 
-            presetNameList = presetHandler.getBuildInPresets();
+            List<Preset> presetNameList = presetHandler.getBuildInPresets();
             if (presetNameList.Count != 0)
             {
-                foreach (Presets.Preset preset in presetNameList)
+                foreach (Preset preset in presetNameList)
                 {
                     // Handle Root Nodes
 
@@ -2100,11 +2121,10 @@ namespace Handbrake
             }
 
             // User Presets
-            presetNames = presetHandler.getUserPresetNames();
+            List<string> presetNames = presetHandler.getUserPresetNames();
             foreach (string preset in presetNames)
             {
-                preset_treeview = new TreeNode(preset);
-                preset_treeview.ForeColor = Color.Black;
+                preset_treeview = new TreeNode(preset) {ForeColor = Color.Black};
 
                 // Now Fill Out List View with Items
                 treeView_presets.Nodes.Add(preset_treeview);

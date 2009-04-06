@@ -11,9 +11,9 @@ namespace Handbrake
 {
     public partial class frmAddPreset : Form
     {
-        private frmMain frmMainWindow;
-        Presets.PresetsHandler presetCode;
-        private string query = "";
+        private readonly frmMain frmMainWindow;
+        readonly Presets.PresetsHandler presetCode;
+        private readonly string query = "";
 
         public frmAddPreset(frmMain fmw, string query_string, Presets.PresetsHandler presetHandler)
         {
