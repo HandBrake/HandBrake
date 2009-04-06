@@ -93,8 +93,6 @@ static options_map_t d_container_opts[] =
 	{"MKV", "mkv", HB_MUX_MKV, "mkv"},
 	{"MP4", "mp4", HB_MUX_MP4, "mp4"},
 	{"M4V", "m4v", HB_MUX_MP4, "m4v"},
-	{"AVI", "avi", HB_MUX_AVI, "avi"},
-	{"OGM", "ogm", HB_MUX_OGM, "ogm"},
 };
 combo_opts_t container_opts =
 {
@@ -157,7 +155,6 @@ combo_opts_t denoise_opts =
 static options_map_t d_vcodec_opts[] =
 {
 	{"H.264 (x264)",    "x264",   HB_VCODEC_X264, ""},
-	{"MPEG-4 (XviD)",   "xvid",   HB_VCODEC_XVID, ""},
 	{"MPEG-4 (FFMPEG)", "ffmpeg", HB_VCODEC_FFMPEG, ""},
 	{"Theora",          "theora", HB_VCODEC_THEORA, ""},
 };
