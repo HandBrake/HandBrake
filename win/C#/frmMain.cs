@@ -1011,11 +1011,6 @@ namespace Handbrake
                 drop_format.SelectedIndex = 1;
             else if (path.EndsWith(".mkv"))
                 drop_format.SelectedIndex = 2;
-            else if (path.EndsWith(".avi"))
-                drop_format.SelectedIndex = 3;
-            else if (path.EndsWith(".ogm"))
-                drop_format.SelectedIndex = 4;
-
         }
 
         // Output Settings
@@ -1027,10 +1022,6 @@ namespace Handbrake
                 setExtension(".m4v");
             else if (drop_format.SelectedIndex == 2)
                 setExtension(".mkv");
-            else if (drop_format.SelectedIndex == 3)
-                setExtension(".avi");
-            else if (drop_format.SelectedIndex == 4)
-                setExtension(".ogm");
 
             setAudioByContainer(drop_format.Text);
             setVideoByContainer(drop_format.Text);
@@ -1040,8 +1031,6 @@ namespace Handbrake
             text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
             text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
             text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".avi", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".ogm", newExtension);
         }
 
         //Video Tab
@@ -1808,23 +1797,6 @@ namespace Handbrake
                     drp_audenc_1.SelectedIndex = 0;
 
             }
-            else if (path.Contains("AVI"))
-            {
-                oldval = drp_audenc_1.Text;
-                drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("MP3");
-                drp_audenc_1.Items.Add("AC3");
-                if ((oldval != "MP3") && (oldval != "AC3"))
-                    drp_audenc_1.SelectedIndex = 0;
-
-            }
-            else if (path.Contains("OGM"))
-            {
-                drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("Vorbis");
-                drp_audenc_1.SelectedIndex = 0;
-
-            }
             else if (path.Contains("MKV"))
             {
                 drp_audenc_1.Items.Clear();
@@ -1847,7 +1819,7 @@ namespace Handbrake
         {
             string oldval;
 
-            if ((path.Contains("MP3")) || (path.Contains("M4V")))
+            if ((path.Contains("MP4")) || (path.Contains("M4V")))
             {
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
@@ -1859,30 +1831,6 @@ namespace Handbrake
                 else
                     drp_videoEncoder.Text = oldval;
 
-            }
-            else if (path.Contains("AVI"))
-            {
-                oldval = drp_videoEncoder.Text;
-                drp_videoEncoder.Items.Clear();
-                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
-                drp_videoEncoder.Items.Add("H.264 (x264)");
-                if (oldval == "VP3 (Theora)")
-                    drp_videoEncoder.SelectedIndex = 2;
-                else
-                    drp_videoEncoder.Text = oldval;
-            }
-            else if (path.Contains("OGM"))
-            {
-                oldval = drp_videoEncoder.Text;
-                drp_videoEncoder.Items.Clear();
-                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
-                drp_videoEncoder.Items.Add("VP3 (Theora)");
-                if (oldval == "H.264 (x264)")
-                    drp_videoEncoder.SelectedIndex = 2;
-                else
-                    drp_videoEncoder.Text = oldval;
             }
             else if (path.Contains("MKV"))
             {

@@ -87,7 +87,7 @@ namespace Handbrake
 
                 // Get the sample filename
                 if (mainWindow.text_destination.Text != "")
-                    currently_playing = mainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm");
+                    currently_playing = mainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v");
 
                 // Play back in QT or VLC
                 if (playerSelection == "QT")

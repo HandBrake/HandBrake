@@ -221,10 +221,6 @@ namespace Handbrake.Functions
                     destination_filename += ".m4v";
                 else if (format == 2)
                     destination_filename += ".mkv";
-                else if (format == 3)
-                    destination_filename += ".avi";
-                else if (format == 4)
-                    destination_filename += ".ogm";
 
                 // Now work out the path where the file will be stored.
                 // First case: If the destination box doesn't already contain a path, make one.

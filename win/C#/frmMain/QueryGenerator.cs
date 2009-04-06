@@ -79,7 +79,7 @@ namespace Handbrake
 
             // Destination tab
             if (mainWindow.text_destination.Text != "")
-                query += " -o " + '"' + mainWindow.text_destination.Text.Replace(".m", "_sample.m").Replace(".avi", "_sample.avi").Replace(".ogm", "_sample.ogm") + '"';
+                query += " -o " + '"' + mainWindow.text_destination.Text.Replace(".m", "_sample.m") + '"';
 
             query += generateTabbedComponentsQuery(mainWindow);
             return query;
@@ -400,7 +400,7 @@ namespace Handbrake
             string[] destName =  mainWindow.text_destination.Text.Split('\\');
             string dest_name = destName[destName.Length - 1];
             dest_name = dest_name.Replace("\"", "");
-            dest_name = dest_name.Replace(".mp4", "").Replace(".m4v", "").Replace(".avi", "").Replace(".mkv", "").Replace(".ogm", "");
+            dest_name = dest_name.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "");
 
             string source_title = mainWindow.drp_dvdtitle.Text;
             string[] titlesplit = source_title.Split(' ');

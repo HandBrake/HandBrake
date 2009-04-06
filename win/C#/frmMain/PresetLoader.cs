@@ -31,9 +31,7 @@ namespace Handbrake
                 string destination = mainWindow.text_destination.Text;
                 destination = destination.Replace(".mp4", "." + presetQuery.Format);
                 destination = destination.Replace(".m4v", "." + presetQuery.Format);
-                destination = destination.Replace(".avi", "." + presetQuery.Format);
                 destination = destination.Replace(".mkv", "." + presetQuery.Format);
-                destination = destination.Replace(".ogm", "." + presetQuery.Format);
                 mainWindow.text_destination.Text = destination;
             }
 
@@ -52,10 +50,6 @@ namespace Handbrake
                     mainWindow.drop_format.SelectedIndex = 1;
                 else if (presetQuery.Format == "mkv")
                     mainWindow.drop_format.SelectedIndex = 2;
-                else if (presetQuery.Format == "avi")
-                    mainWindow.drop_format.SelectedIndex = 3;
-                else if (presetQuery.Format == "ogm")
-                    mainWindow.drop_format.SelectedIndex = 4;
 
                 if (presetQuery.ChapterMarkers && presetQuery.Format == "mp4")
                     mainWindow.drop_format.SelectedIndex = 1;

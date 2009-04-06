@@ -40,7 +40,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
@@ -183,9 +183,14 @@ namespace Handbrake
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.tabs_panel = new System.Windows.Forms.TabControl();
             this.tab_Filters = new System.Windows.Forms.TabPage();
+            this.ctl_deinterlace = new Handbrake.Deinterlace();
+            this.ctl_denoise = new Handbrake.Denoise();
+            this.ctl_decomb = new Handbrake.Decomb();
+            this.ctl_detelecine = new Handbrake.Detelecine();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.h264Tab = new System.Windows.Forms.TabPage();
+            this.x264Panel = new Handbrake.Controls.x264Panel();
             this.tab_query = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.label34 = new System.Windows.Forms.Label();
@@ -219,11 +224,6 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ctl_deinterlace = new Handbrake.Deinterlace();
-            this.ctl_denoise = new Handbrake.Denoise();
-            this.ctl_decomb = new Handbrake.Decomb();
-            this.ctl_detelecine = new Handbrake.Detelecine();
-            this.x264Panel = new Handbrake.Controls.x264Panel();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -274,7 +274,7 @@ namespace Handbrake
             // DVD_Save
             // 
             this.DVD_Save.CheckFileExists = true;
-            this.DVD_Save.Filter = "mp4|*.mp4|m4v|*.m4v|mkv|*.mkv|avi|*.avi|ogm|*.ogm";
+            this.DVD_Save.Filter = "mp4|*.mp4|m4v|*.m4v|mkv|*.mkv";
             this.DVD_Save.SupportMultiDottedExtensions = true;
             // 
             // File_Save
@@ -610,9 +610,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -681,9 +681,7 @@ namespace Handbrake
             this.drop_format.Items.AddRange(new object[] {
             "MP4 File",
             "M4V File",
-            "MKV File",
-            "AVI File",
-            "OGM File"});
+            "MKV File"});
             this.drop_format.Location = new System.Drawing.Point(75, 19);
             this.drop_format.Name = "drop_format";
             this.drop_format.Size = new System.Drawing.Size(106, 21);
@@ -1874,6 +1872,48 @@ namespace Handbrake
             this.tab_Filters.Text = "Video Filters";
             this.tab_Filters.UseVisualStyleBackColor = true;
             // 
+            // ctl_deinterlace
+            // 
+            this.ctl_deinterlace.AutoSize = true;
+            this.ctl_deinterlace.Location = new System.Drawing.Point(19, 95);
+            this.ctl_deinterlace.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_deinterlace.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_deinterlace.Name = "ctl_deinterlace";
+            this.ctl_deinterlace.Size = new System.Drawing.Size(275, 28);
+            this.ctl_deinterlace.TabIndex = 41;
+            this.ctl_deinterlace.onChange += new System.EventHandler(this.ctl_deinterlace_changed);
+            // 
+            // ctl_denoise
+            // 
+            this.ctl_denoise.AutoSize = true;
+            this.ctl_denoise.Location = new System.Drawing.Point(19, 123);
+            this.ctl_denoise.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_denoise.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_denoise.Name = "ctl_denoise";
+            this.ctl_denoise.Size = new System.Drawing.Size(275, 28);
+            this.ctl_denoise.TabIndex = 40;
+            // 
+            // ctl_decomb
+            // 
+            this.ctl_decomb.AutoSize = true;
+            this.ctl_decomb.Location = new System.Drawing.Point(19, 66);
+            this.ctl_decomb.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_decomb.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_decomb.Name = "ctl_decomb";
+            this.ctl_decomb.Size = new System.Drawing.Size(275, 28);
+            this.ctl_decomb.TabIndex = 39;
+            this.ctl_decomb.onChange += new System.EventHandler(this.ctl_decomb_changed);
+            // 
+            // ctl_detelecine
+            // 
+            this.ctl_detelecine.AutoSize = true;
+            this.ctl_detelecine.Location = new System.Drawing.Point(19, 38);
+            this.ctl_detelecine.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_detelecine.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_detelecine.Name = "ctl_detelecine";
+            this.ctl_detelecine.Size = new System.Drawing.Size(275, 28);
+            this.ctl_detelecine.TabIndex = 38;
+            // 
             // tab_chapters
             // 
             this.tab_chapters.BackColor = System.Drawing.Color.Transparent;
@@ -1910,6 +1950,14 @@ namespace Handbrake
             this.h264Tab.TabIndex = 8;
             this.h264Tab.Text = "Advanced";
             this.h264Tab.UseVisualStyleBackColor = true;
+            // 
+            // x264Panel
+            // 
+            this.x264Panel.Location = new System.Drawing.Point(0, 0);
+            this.x264Panel.Name = "x264Panel";
+            this.x264Panel.Size = new System.Drawing.Size(720, 306);
+            this.x264Panel.TabIndex = 0;
+            this.x264Panel.x264Query = "";
             // 
             // tab_query
             // 
@@ -2258,56 +2306,6 @@ namespace Handbrake
             this.lbl_encode.Name = "lbl_encode";
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
-            // 
-            // ctl_deinterlace
-            // 
-            this.ctl_deinterlace.AutoSize = true;
-            this.ctl_deinterlace.Location = new System.Drawing.Point(19, 95);
-            this.ctl_deinterlace.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_deinterlace.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_deinterlace.Name = "ctl_deinterlace";
-            this.ctl_deinterlace.Size = new System.Drawing.Size(275, 28);
-            this.ctl_deinterlace.TabIndex = 41;
-            this.ctl_deinterlace.onChange += new System.EventHandler(this.ctl_deinterlace_changed);
-            // 
-            // ctl_denoise
-            // 
-            this.ctl_denoise.AutoSize = true;
-            this.ctl_denoise.Location = new System.Drawing.Point(19, 123);
-            this.ctl_denoise.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_denoise.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_denoise.Name = "ctl_denoise";
-            this.ctl_denoise.Size = new System.Drawing.Size(275, 28);
-            this.ctl_denoise.TabIndex = 40;
-            // 
-            // ctl_decomb
-            // 
-            this.ctl_decomb.AutoSize = true;
-            this.ctl_decomb.Location = new System.Drawing.Point(19, 66);
-            this.ctl_decomb.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_decomb.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_decomb.Name = "ctl_decomb";
-            this.ctl_decomb.Size = new System.Drawing.Size(275, 28);
-            this.ctl_decomb.TabIndex = 39;
-            this.ctl_decomb.onChange += new System.EventHandler(this.ctl_decomb_changed);
-            // 
-            // ctl_detelecine
-            // 
-            this.ctl_detelecine.AutoSize = true;
-            this.ctl_detelecine.Location = new System.Drawing.Point(19, 38);
-            this.ctl_detelecine.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_detelecine.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_detelecine.Name = "ctl_detelecine";
-            this.ctl_detelecine.Size = new System.Drawing.Size(275, 28);
-            this.ctl_detelecine.TabIndex = 38;
-            // 
-            // x264Panel
-            // 
-            this.x264Panel.Location = new System.Drawing.Point(0, 0);
-            this.x264Panel.Name = "x264Panel";
-            this.x264Panel.Size = new System.Drawing.Size(720, 306);
-            this.x264Panel.TabIndex = 0;
-            this.x264Panel.x264Query = "";
             // 
             // frmMain
             // 
