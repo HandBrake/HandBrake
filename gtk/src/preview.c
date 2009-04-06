@@ -100,6 +100,8 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 	gint64 num, den;
 
 	ghb_screen_par(ud, &disp_par_n, &disp_par_d);
+	if (disp_par_n < 1) disp_par_n = 1;
+	if (disp_par_d < 1) disp_par_d = 1;
 	num = par_n * disp_par_d;
 	den = par_d * disp_par_n;
 
@@ -127,6 +129,7 @@ ghb_preview_init(signal_user_data_t *ud)
 	ud->preview->encode_frame = -1;
 	ud->preview->live_id = -1;
 	//xover = gst_element_factory_make("xvimagesink", "xover");
+	//xover = gst_element_factory_make("ximagesink", "xover");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
 	g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
 	//g_object_set(G_OBJECT(xover), "force-aspect-ratio", TRUE, NULL);
@@ -818,29 +821,6 @@ picture_settings_alt_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggle), !active);
 }
 
-static void
-hud_set_position(signal_user_data_t *ud)
-{
-	GtkWidget *widget;
-	GdkWindow *parent, *win;
-	gint pw, ph, w, h, x, y;
-
-	widget = GHB_WIDGET(ud->builder, "preview_image");
-	//parent = gtk_widget_get_window(widget);
-	parent = widget->window;
-	widget = GHB_WIDGET(ud->builder, "preview_hud");
-	//win = gtk_widget_get_window(widget);
-	win = widget->window;
-	gdk_drawable_get_size(GDK_DRAWABLE(parent), &pw, &ph);
-	gdk_drawable_get_size(GDK_DRAWABLE(win), &w, &h);
-	x = pw/2 - w/2;
-	if (ph/4 > h/2)
-		y = ph - ph/4 - h/2;
-	else
-		y = ph - h;
-	gdk_window_move(win, x, y);
-}
-
 static gboolean
 go_full(signal_user_data_t *ud)
 {
@@ -1078,7 +1058,6 @@ preview_motion_cb(
 
 		widget = GHB_WIDGET(ud->builder, "preview_hud");
 		gtk_widget_show(widget);
-		hud_set_position(ud);
 	}
 	hud_timeout_id = g_timeout_add_seconds(10, (GSourceFunc)hud_timeout, ud);
 	return FALSE;
@@ -1097,7 +1076,6 @@ preview_image_configure_cb(
 	{
 		w = event->width;
 		h = event->height;
-		hud_set_position(ud);
 	}
 	return FALSE;
 }
@@ -1142,6 +1120,57 @@ settings_configure_cb(
 		ghb_pref_set(ud->settings, "settings_y");
 		ghb_prefs_store();
 	}
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+preview_window_expose_cb(
+	GtkWidget *widget,
+	GdkEventExpose *event,
+	signal_user_data_t *ud)
+{
+	GdkRegion *region;
+	GtkWidget *child;
+	cairo_t *cr;
+
+	//g_debug("preview_window_expose_cb()");
+	/* get our child (in this case, the draw area) */
+	child = GHB_WIDGET(ud->builder, "preview_image");
+	/* create a cairo context to draw to the window */
+	cr = gdk_cairo_create (widget->window);
+	/* the source data is the (composited) event box */
+	gdk_cairo_set_source_pixmap (cr, child->window,
+								child->allocation.x,
+								child->allocation.y);
+	/* draw no more than our expose event intersects our child */
+	region = gdk_region_rectangle (&child->allocation);
+	gdk_region_intersect (region, event->region);
+	gdk_cairo_region (cr, region);
+	cairo_clip (cr);
+	/* composite, with a 100% opacity */
+	cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+	cairo_paint_with_alpha (cr, 1);
+
+	cairo_reset_clip(cr);
+	/* get our child (in this case, the event box) */
+	child = GHB_WIDGET(ud->builder, "preview_event_box");
+	/* create a cairo context to draw to the window */
+	cr = gdk_cairo_create (widget->window);
+	/* the source data is the (composited) event box */
+	gdk_cairo_set_source_pixmap (cr, child->window,
+								child->allocation.x,
+								child->allocation.y);
+	/* draw no more than our expose event intersects our child */
+	region = gdk_region_rectangle (&child->allocation);
+	gdk_region_intersect (region, event->region);
+	gdk_cairo_region (cr, region);
+	cairo_clip (cr);
+	/* composite, with a 85% opacity */
+	cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+	cairo_paint_with_alpha (cr, .85);
+
+	/* we're done */
+	cairo_destroy (cr);
 	return FALSE;
 }
 

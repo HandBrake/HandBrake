@@ -494,11 +494,11 @@ extern int mm_flags;
 int mm_support();
 
 void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
+void preview_window_expose_cb(void);
 
 int
 main (int argc, char *argv[])
 {
- 	GtkWidget *window;
 	signal_user_data_t *ud;
 	GValue *preset;
 	GError *error = NULL;
@@ -540,11 +540,50 @@ main (int argc, char *argv[])
 	// Enable events that alert us to media change events
 	watch_volumes (ud);
 	ud->builder = create_builder_or_die (BUILDER_NAME);
+
+	GtkWidget *window, *event, *draw;
+	GdkScreen *screen;
+	GdkColormap *rgba;
+	GdkColor color;
+
+	/* Make the widgets */
+	//event = gtk_event_box_new ();
+	event = GHB_WIDGET(ud->builder, "preview_event_box");
+	draw = GHB_WIDGET(ud->builder, "preview_image");
+	window = GHB_WIDGET(ud->builder, "preview_window");
+
+	gdk_color_parse("black", &color);
+	gtk_widget_modify_bg(window, GTK_STATE_NORMAL, &color);
+	gdk_color_parse("gray18", &color);
+	gtk_widget_modify_bg(event, GTK_STATE_NORMAL, &color);
+	/* Set the colourmap for the event box.
+	** Must be done before the event box is realised.
+	**/
+	screen = gtk_widget_get_screen (draw);
+	rgba = gdk_screen_get_rgba_colormap (screen);
+	//gtk_widget_set_colormap (draw, rgba);
+
+	gtk_widget_set_colormap (event, rgba);
+
+	/* Set up the compositing handler.
+	** Note that we do _after_ so that the normal (red) background is drawn
+	** by gtk before our compositing occurs.
+	**/
+	g_signal_connect_after (window, "expose-event",
+						G_CALLBACK (preview_window_expose_cb), ud);
+	/* Set the event box GdkWindow to be composited.
+	** Obviously must be performed after event box is realised.
+	**/
+	gtk_widget_realize(draw);
+	gtk_widget_realize(event);
+	gdk_window_set_composited (draw->window, TRUE);
+	gdk_window_set_composited (event->window, TRUE);
+
 	// Redirect stderr to the activity window
 	ghb_preview_init(ud);
 	IoRedirect(ud);
-    ghb_log( "%s - %s - %s",
-             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+	ghb_log( "%s - %s - %s",
+		HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
 	ghb_init_dep_map();
 
 	// Need to connect x264_options textview buffer to the changed signal
@@ -575,10 +614,6 @@ main (int argc, char *argv[])
 	// Load the presets files
 	ghb_presets_load();
 	ghb_prefs_load(ud);
-
-	// Start the show.
-	window = GHB_WIDGET (ud->builder, "hb_window");
-	gtk_widget_show (window);
 
 	ghb_prefs_to_ui(ud);
 
@@ -632,27 +667,6 @@ main (int argc, char *argv[])
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 	// Everything should be go-to-go.  Lets rock!
 
-	// Create floating window over preview image
-	GtkWidget *widget;
-	GdkWindow *parent, *win;
-
-	widget = GHB_WIDGET(ud->builder, "preview_image");
-	gtk_widget_realize(widget);
-	//parent = gtk_widget_get_window(widget);
-	parent = widget->window;
-	widget = GHB_WIDGET(ud->builder, "preview_hud");
-	gtk_widget_realize(widget);
-	//win = gtk_widget_get_window(widget);
-	win = widget->window;
-	gdk_window_reparent(win, parent, 0, 0);
-
-/*
-	if (ghb_settings_get_boolean(ud->settings, "preview_fullscreen"))
-	{
-		gtk_window_set_resizable(window, TRUE);
-		gtk_window_fullscreen(window);
-	}
-*/
 	gtk_main ();
 	ghb_backend_close();
 	if (ud->queue)

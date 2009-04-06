@@ -4086,6 +4086,7 @@ location as the movie.</property>
     </child>
   </object>
   <object class="GtkWindow" id="settings_window">
+    <property name="opacity">.85</property>
     <property name="title" translatable="yes">Picture Settings</property>
     <property name="window_position">GTK_WIN_POS_NONE</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
@@ -4860,6 +4861,12 @@ location as the movie.</property>
     <signal handler="preview_configure_cb" name="configure-event"/>
     <signal handler="preview_window_delete_cb" name="delete_event"/>
     <child>
+      <object class="GtkTable" id="table111">
+        <property name="visible">True</property>
+        <property name="n_rows">1</property>
+        <property name="n_columns">1</property>
+
+    <child>
       <object class="GtkAlignment" id="alignment111">
         <property name="visible">True</property>
         <property name="xalign">.5</property>
@@ -4879,14 +4886,22 @@ location as the movie.</property>
           </packing>
         </child>
       </object>
+      <packing>
+      </packing>
     </child>
-  </object>
-  <object class="GtkWindow" id="preview_hud">
-    <property name="default_width">500</property>
-    <property name="decorated">False</property>
-    <property name="opacity">.50</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="skip_pager_hint">True</property>
+  <child>
+  <object class="GtkAlignment" id="preview_hud">
+        <property name="visible">False</property>
+        <property name="xalign">.5</property>
+        <property name="yalign">.75</property>
+        <property name="xscale">0</property>
+        <property name="yscale">0</property>
+
+  <child>
+  <object class="GtkEventBox" id="preview_event_box">
+    <property name="visible">True</property>
+    <property name="width-request">500</property>
+    <property name="app-paintable">True</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
     <signal name="enter-notify-event" handler="hud_enter_cb"/>
     <child>
@@ -5068,6 +5083,15 @@ location as the movie.</property>
 
       </object>
     </child>
+  </object>
+  </child>
+
+  </object>
+      <packing>
+      </packing>
+  </child>
+  </object>
+  </child>
   </object>
   <object class="GtkAboutDialog" id="hb_about">
     <property name="border_width">5</property>
