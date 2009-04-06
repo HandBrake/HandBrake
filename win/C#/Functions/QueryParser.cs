@@ -823,9 +823,6 @@ namespace Handbrake.Functions
                     case "ffmpeg":
                         videoEncoderConvertion = "MPEG-4 (FFmpeg)";
                         break;
-                    case "xvid":
-                        videoEncoderConvertion = "MPEG-4 (XviD)";
-                        break;
                     case "x264":
                         videoEncoderConvertion = "H.264 (x264)";
                         break;

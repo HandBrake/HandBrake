@@ -179,9 +179,6 @@ namespace Handbrake
                 case "MPEG-4 (FFmpeg)":
                     query += " -e ffmpeg";
                     break;
-                case "MPEG-4 (XviD)":
-                    query += " -e xvid";
-                    break;
                 case "H.264 (x264)":
                     query += " -e x264";
                     break;
@@ -211,10 +208,6 @@ namespace Handbrake
                 {
                     case "MPEG-4 (FFmpeg)":
                         value = 31 - (mainWindow.slider_videoQuality.Value -1);
-                        query += " -q " + value.ToString(new CultureInfo("en-US"));
-                        break;
-                    case "MPEG-4 (XviD)":
-                        value = 31 - (mainWindow.slider_videoQuality.Value - 1);
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;
                     case "H.264 (x264)":

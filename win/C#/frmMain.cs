@@ -1083,12 +1083,6 @@ namespace Handbrake
                     slider_videoQuality.Value = 1;
                     SliderValue.Text = "0% QP: 31.00";
                     break;
-                case "MPEG-4 (XviD)":
-                    slider_videoQuality.Minimum = 1;
-                    slider_videoQuality.Maximum = 31;
-                    slider_videoQuality.Value = 1;
-                    SliderValue.Text = "0% QP: 31.00";
-                    break;
                 case "H.264 (x264)":
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.Value = 0;
@@ -1134,13 +1128,6 @@ namespace Handbrake
                     double max = slider_videoQuality.Maximum;
                     double min = slider_videoQuality.Minimum;
                     double val = ((max - min) - (rfValue - min)) / (max - min);
-                    SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
-                    break;
-                case "MPEG-4 (XviD)":
-                    rfValue = 31 - (slider_videoQuality.Value - 1);
-                    max = slider_videoQuality.Maximum;
-                    min = slider_videoQuality.Minimum;
-                    val = ((max - min) - (rfValue - min)) / (max - min);
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
@@ -1824,10 +1811,9 @@ namespace Handbrake
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
                 drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
                 drp_videoEncoder.Items.Add("H.264 (x264)");
                 if (oldval == "VP3 (Theora)")
-                    drp_videoEncoder.SelectedIndex = 2;
+                    drp_videoEncoder.SelectedIndex = 1;
                 else
                     drp_videoEncoder.Text = oldval;
 
@@ -1837,7 +1823,6 @@ namespace Handbrake
                 oldval = drp_videoEncoder.Text;
                 drp_videoEncoder.Items.Clear();
                 drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("MPEG-4 (XviD)");
                 drp_videoEncoder.Items.Add("H.264 (x264)");
                 drp_videoEncoder.Items.Add("VP3 (Theora)");
                 drp_videoEncoder.Text = oldval;
