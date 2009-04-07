@@ -655,7 +655,7 @@ namespace Handbrake.Functions
 
             //Video Settings Tab
             Match videoEncoder = Regex.Match(input, @"-e ([a-zA-Z0-9]*)");
-            Match videoFramerate = Regex.Match(input, @"-r ([0-9]*)");
+            Match videoFramerate = Regex.Match(input, @"-r ([0-9.]*)");
             Match videoBitrate = Regex.Match(input, @"-b ([0-9]*)");
             Match videoQuality = Regex.Match(input, @"-q ([0-9.]*)");
             Match videoFilesize = Regex.Match(input, @"-S ([0-9.]*)");

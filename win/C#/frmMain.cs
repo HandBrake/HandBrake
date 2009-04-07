@@ -39,6 +39,7 @@ namespace Handbrake
         public int maxWidth;
         public int maxHeight;
         Process hbproc;
+        private Form splash;
 
         // Applicaiton Startup ************************************************
 
@@ -47,11 +48,11 @@ namespace Handbrake
         public frmMain()
         {
             // Load the splash screen in this thread
-            Form splash = new frmSplashScreen();
+            splash = new frmSplashScreen();
             splash.Show();
 
             //Create a label that can be updated from the parent thread.
-            Label lblStatus = new Label {Size = new Size(250, 20), Location = new Point(10, 280)};
+            Label lblStatus = new Label { Size = new Size(250, 20), Location = new Point(10, 280) };
             splash.Controls.Add(lblStatus);
             InitializeComponent();
 
@@ -72,6 +73,7 @@ namespace Handbrake
             {
                 lblStatus.Text = "Checking for updates ...";
                 Application.DoEvents();
+
                 Thread updateCheckThread = new Thread(startupUpdateCheck);
                 updateCheckThread.Start();
             }
@@ -103,7 +105,7 @@ namespace Handbrake
                         x264Panel.reset2Defaults();
 
                         // Send the query from the file to the Query Parser class, then load the preset
-                        Functions.QueryParser presetQuery = Functions.QueryParser.Parse(query);
+                        QueryParser presetQuery = QueryParser.Parse(query);
                         presetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
@@ -157,7 +159,10 @@ namespace Handbrake
                     updateWindow.Show();
                 }
             }
-            catch (Exception) { /* Do Nothing*/ }
+            catch (Exception exc)
+            {
+                MessageBox.Show(splash, "Unable to perform update check. If this problem persists, you can turn of update checking in the program options. \nError Information: \n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void queueRecovery()
         {
@@ -716,8 +721,11 @@ namespace Handbrake
             if (FormWindowState.Minimized == this.WindowState)
             {
                 notifyIcon.Visible = true;
-                notifyIcon.BalloonTipText = lbl_encode.Text != "" ? lbl_encode.Text : "Not Encoding";
-                notifyIcon.ShowBalloonTip(500);
+                if (!encodeQueue.isEncoding)
+                {
+                    notifyIcon.BalloonTipText = lbl_encode.Text != "" ? lbl_encode.Text : "Not Encoding";
+                    notifyIcon.ShowBalloonTip(500);
+                }
                 this.Hide();
             }
             else if (FormWindowState.Normal == this.WindowState)
@@ -760,7 +768,6 @@ namespace Handbrake
                     MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
                 {
-
                     if (filename != "")
                     {
                         setupGUIforScan(filename);
@@ -982,10 +989,6 @@ namespace Handbrake
                 DVD_Save.FilterIndex = 2;
             else if (drop_format.SelectedIndex.Equals(2))
                 DVD_Save.FilterIndex = 3;
-            else if (drop_format.SelectedIndex.Equals(3))
-                DVD_Save.FilterIndex = 4;
-            else if (drop_format.SelectedIndex.Equals(4))
-                DVD_Save.FilterIndex = 5;
 
             if (DVD_Save.ShowDialog() == DialogResult.OK)
             {
@@ -1601,8 +1604,7 @@ namespace Handbrake
 
                 string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
 
-                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine)
-                                                  {WindowStyle = ProcessWindowStyle.Hidden};
+                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
 
                 using (hbproc = Process.Start(hbParseDvd))
                 {
@@ -1744,17 +1746,13 @@ namespace Handbrake
                 DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
                 foreach (DriveInfo curDrive in theCollectionOfDrives)
                 {
-                    if (curDrive.DriveType == DriveType.CDRom)
+                    if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady)
                     {
-                        if (curDrive.IsReady)
+                        if (File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
                         {
-                            if (File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
-                            {
-                                mnu_dvd_drive.Text = curDrive.RootDirectory + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
-                                foundDrive = true;
-                                break;
-                            }
-
+                            mnu_dvd_drive.Text = curDrive.RootDirectory + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
+                            foundDrive = true;
+                            break;
                         }
                     }
                 }
@@ -1772,11 +1770,9 @@ namespace Handbrake
         #region Audio Panel Code Helpers
         private void setAudioByContainer(String path)
         {
-            string oldval;
-
             if ((path.Contains("MP4")) || (path.Contains("M4V")))
             {
-                oldval = drp_audenc_1.Text;
+                string oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("AAC");
                 drp_audenc_1.Items.Add("AC3");
@@ -2057,7 +2053,7 @@ namespace Handbrake
             List<string> presetNames = presetHandler.getUserPresetNames();
             foreach (string preset in presetNames)
             {
-                preset_treeview = new TreeNode(preset) {ForeColor = Color.Black};
+                preset_treeview = new TreeNode(preset) { ForeColor = Color.Black };
 
                 // Now Fill Out List View with Items
                 treeView_presets.Nodes.Add(preset_treeview);
