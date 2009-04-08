@@ -499,6 +499,26 @@ int mm_support();
 void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 void preview_window_expose_cb(void);
 
+// Some style definitions for the preview window and hud
+const gchar *hud_rcstyle =
+"style \"ghb-preview\" {\n"
+"bg[NORMAL]=\"black\"\n"
+"}\n"
+"style \"ghb-hud\" {\n"
+"bg[NORMAL]=\"gray18\"\n"
+"bg[ACTIVE]=\"gray32\"\n"
+"bg[PRELIGHT]=\"gray46\"\n"
+"bg[SELECTED]=\"black\"\n"
+"base[NORMAL]=\"gray40\"\n"
+"text[NORMAL]=\"white\"\n"
+"text[ACTIVE]=\"white\"\n"
+"fg[NORMAL]=\"white\"\n"
+"fg[ACTIVE]=\"white\"\n"
+"fg[PRELIGHT]=\"white\"\n"
+"}\n"
+"widget \"preview_window.*.preview_hud.*\" style \"ghb-hud\"\n"
+"widget \"preview_window\" style \"ghb-preview\"\n";
+
 int
 main (int argc, char *argv[])
 {
@@ -525,6 +545,7 @@ main (int argc, char *argv[])
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
+	gtk_rc_parse_string(hud_rcstyle);
 	notify_init("HandBrake");
 	ghb_register_transforms();
 	ghb_resource_init();
@@ -545,26 +566,19 @@ main (int argc, char *argv[])
 	ud->builder = create_builder_or_die (BUILDER_NAME);
 
 	// Set up the "hud" control overlay for the preview window
-	GtkWidget *window, *eb, *draw, *hud, *blender, *align;
-	GdkColor color;
+	GtkWidget *draw, *hud, *blender, *align;
 
-	window = GHB_WIDGET(ud->builder, "preview_window");
 	align = GHB_WIDGET(ud->builder, "preview_window_alignment");
 	draw = GHB_WIDGET(ud->builder, "preview_image");
 	hud = GHB_WIDGET(ud->builder, "preview_hud");
-	eb = GHB_WIDGET(ud->builder, "preview_event_box");
 
 	// Set up compositing for hud
 	blender = ghb_compositor_new();
+
 	gtk_container_add(GTK_CONTAINER(align), blender);
 	ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), draw, 1, 1);
 	ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), hud, 2, .85);
 	gtk_widget_show(blender);
-
-	gdk_color_parse("black", &color);
-	gtk_widget_modify_bg(window, GTK_STATE_NORMAL, &color);
-	gdk_color_parse("gray18", &color);
-	gtk_widget_modify_bg(eb, GTK_STATE_NORMAL, &color);
 
 	// Redirect stderr to the activity window
 	ghb_preview_init(ud);

@@ -552,7 +552,6 @@ ghb_compositor_size_request(
 
     requisition->width = width + GTK_CONTAINER (widget)->border_width * 2;
     requisition->height = height + GTK_CONTAINER (widget)->border_width * 2;
-g_message("request_size %d x %d", requisition->width, requisition->height);
 }
 
 static void
