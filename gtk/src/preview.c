@@ -1107,6 +1107,7 @@ settings_configure_cb(
 	return FALSE;
 }
 
+#if 0
 G_MODULE_EXPORT gboolean
 preview_window_expose_cb(
 	GtkWidget *widget,
@@ -1158,3 +1159,4 @@ preview_window_expose_cb(
 	return FALSE;
 }
 
+#endif

@@ -50,6 +50,7 @@
 #include "resources.h"
 #include "presets.h"
 #include "preview.h"
+#include "ghbcompositor.h"
 
 
 /*
@@ -83,18 +84,20 @@ create_builder_or_die(const gchar * name)
 {
 	guint res = 0;
 	GValue *gval;
+	GError *error = NULL;
 	const gchar *ghb_ui;
 
     const gchar *markup =
         N_("<b><big>Unable to create %s.</big></b>\n"
         "\n"
-        "Internal error. Could not parse UI description.\n");
+        "Internal error. Could not parse UI description.\n"
+		"%s");
 	g_debug("create_builder_or_die ()\n");
 	GtkBuilder *xml = gtk_builder_new();
 	gval = ghb_resource_get("ghb-ui");
 	ghb_ui = g_value_get_string(gval);
 	if (xml != NULL)
-		res = gtk_builder_add_from_string(xml, ghb_ui, -1, NULL);
+		res = gtk_builder_add_from_string(xml, ghb_ui, -1, &error);
     if (!xml || !res) 
 	{
         GtkWidget *dialog = gtk_message_dialog_new_with_markup(NULL,
@@ -102,7 +105,7 @@ create_builder_or_die(const gchar * name)
             GTK_MESSAGE_ERROR,
             GTK_BUTTONS_CLOSE,
             _(markup),
-            name);
+            name, error->message);
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         exit(EXIT_FAILURE);
@@ -541,43 +544,27 @@ main (int argc, char *argv[])
 	watch_volumes (ud);
 	ud->builder = create_builder_or_die (BUILDER_NAME);
 
-	GtkWidget *window, *event, *draw;
-	GdkScreen *screen;
-	GdkColormap *rgba;
+	// Set up the "hud" control overlay for the preview window
+	GtkWidget *window, *eb, *draw, *hud, *blender, *align;
 	GdkColor color;
 
-	/* Make the widgets */
-	//event = gtk_event_box_new ();
-	event = GHB_WIDGET(ud->builder, "preview_event_box");
-	draw = GHB_WIDGET(ud->builder, "preview_image");
 	window = GHB_WIDGET(ud->builder, "preview_window");
+	align = GHB_WIDGET(ud->builder, "preview_window_alignment");
+	draw = GHB_WIDGET(ud->builder, "preview_image");
+	hud = GHB_WIDGET(ud->builder, "preview_hud");
+	eb = GHB_WIDGET(ud->builder, "preview_event_box");
+
+	// Set up compositing for hud
+	blender = ghb_compositor_new();
+	gtk_container_add(GTK_CONTAINER(align), blender);
+	ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), draw, 1, 1);
+	ghb_compositor_zlist_insert(GHB_COMPOSITOR(blender), hud, 2, .85);
+	gtk_widget_show(blender);
 
 	gdk_color_parse("black", &color);
 	gtk_widget_modify_bg(window, GTK_STATE_NORMAL, &color);
 	gdk_color_parse("gray18", &color);
-	gtk_widget_modify_bg(event, GTK_STATE_NORMAL, &color);
-	/* Set the colourmap for the event box.
-	** Must be done before the event box is realised.
-	**/
-	screen = gtk_widget_get_screen (draw);
-	rgba = gdk_screen_get_rgba_colormap (screen);
-	//gtk_widget_set_colormap (draw, rgba);
-
-	gtk_widget_set_colormap (event, rgba);
-
-	/* Set up the compositing handler.
-	** Note that we do _after_ so that the normal (red) background is drawn
-	** by gtk before our compositing occurs.
-	**/
-	g_signal_connect_after (window, "expose-event",
-						G_CALLBACK (preview_window_expose_cb), ud);
-	/* Set the event box GdkWindow to be composited.
-	** Obviously must be performed after event box is realised.
-	**/
-	gtk_widget_realize(draw);
-	gtk_widget_realize(event);
-	gdk_window_set_composited (draw->window, TRUE);
-	gdk_window_set_composited (event->window, TRUE);
+	gtk_widget_modify_bg(eb, GTK_STATE_NORMAL, &color);
 
 	// Redirect stderr to the activity window
 	ghb_preview_init(ud);
