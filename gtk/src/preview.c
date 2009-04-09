@@ -1065,6 +1065,101 @@ preview_motion_cb(
 	return FALSE;
 }
 
+GdkDrawable*
+ghb_curved_rect_mask(gint width, gint height, gint radius)
+{
+	GdkDrawable *shape;
+	cairo_t *cr;
+	double x1, y1;
+	double x0, y0;
+
+	shape = (GdkDrawable *)gdk_pixmap_new (NULL, width, height, 1);
+
+  	cr = gdk_cairo_create (shape);
+
+	x0 = y0 = 0;
+	x1 = width;
+	y1 = height;
+
+	// fill shape with black
+	cairo_save(cr);
+	cairo_rectangle (cr, 0, 0, width, height);
+	cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+	cairo_fill (cr);
+	cairo_restore (cr);
+
+	if (!width || !height)
+    	return NULL;
+
+	if (width/2 < radius) {
+		if (height/2 < radius) {
+			cairo_move_to  (cr, x0, (y0 + y1)/2);
+			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+		} else {
+			cairo_move_to  (cr, x0, y0 + radius);
+			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+			cairo_line_to (cr, x1 , y1 - radius);
+			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+		}
+	} else {
+		if (height/2 < radius) {
+			cairo_move_to  (cr, x0, (y0 + y1)/2);
+			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+			cairo_line_to (cr, x1 - radius, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+			cairo_line_to (cr, x0 + radius, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+		} else {
+			cairo_move_to  (cr, x0, y0 + radius);
+			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+			cairo_line_to (cr, x1 - radius, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+			cairo_line_to (cr, x1 , y1 - radius);
+			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+			cairo_line_to (cr, x0 + radius, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+		}
+	}
+	cairo_close_path(cr);
+
+	cairo_set_source_rgb(cr, 1, 1, 1);
+	cairo_fill_preserve(cr);
+
+	cairo_set_line_width(cr, 10.0);
+	cairo_stroke(cr);
+
+	cairo_destroy(cr);
+
+	return shape;
+}
+
+G_MODULE_EXPORT void
+preview_hud_size_alloc_cb(
+	GtkWidget *widget,
+	GtkAllocation *allocation,
+	signal_user_data_t *ud)
+{
+	GdkDrawable *shape;
+
+	//g_message("preview_hud_size_alloc_cb()");
+	if (GTK_WIDGET_VISIBLE(widget) && allocation->height > 50)
+	{
+		shape = ghb_curved_rect_mask(allocation->width, 
+									allocation->height, allocation->height/2);
+		if (shape != NULL)
+		{
+			gtk_widget_shape_combine_mask(widget, shape, 0, 0);
+			gdk_pixmap_unref(shape);
+		}
+	}
+}
+
 G_MODULE_EXPORT gboolean
 preview_configure_cb(
 	GtkWidget *widget,
@@ -1073,7 +1168,7 @@ preview_configure_cb(
 {
 	gint x, y;
 
-	g_debug("preview_configure_cb()");
+	//g_message("preview_configure_cb()");
 	if (GTK_WIDGET_VISIBLE(widget))
 	{
 		gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
@@ -1094,7 +1189,7 @@ settings_configure_cb(
 {
 	gint x, y;
 
-	g_debug("settings_configure_cb()");
+	//g_message("settings_configure_cb()");
 	if (GTK_WIDGET_VISIBLE(widget))
 	{
 		gtk_window_get_position(GTK_WINDOW(widget), &x, &y);
@@ -1107,56 +1202,3 @@ settings_configure_cb(
 	return FALSE;
 }
 
-#if 0
-G_MODULE_EXPORT gboolean
-preview_window_expose_cb(
-	GtkWidget *widget,
-	GdkEventExpose *event,
-	signal_user_data_t *ud)
-{
-	GdkRegion *region;
-	GtkWidget *child;
-	cairo_t *cr;
-
-	//g_debug("preview_window_expose_cb()");
-	/* get our child (in this case, the draw area) */
-	child = GHB_WIDGET(ud->builder, "preview_image");
-	/* create a cairo context to draw to the window */
-	cr = gdk_cairo_create (widget->window);
-	/* the source data is the (composited) event box */
-	gdk_cairo_set_source_pixmap (cr, child->window,
-								child->allocation.x,
-								child->allocation.y);
-	/* draw no more than our expose event intersects our child */
-	region = gdk_region_rectangle (&child->allocation);
-	gdk_region_intersect (region, event->region);
-	gdk_cairo_region (cr, region);
-	cairo_clip (cr);
-	/* composite, with a 100% opacity */
-	cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-	cairo_paint_with_alpha (cr, 1);
-
-	cairo_reset_clip(cr);
-	/* get our child (in this case, the event box) */
-	child = GHB_WIDGET(ud->builder, "preview_event_box");
-	/* create a cairo context to draw to the window */
-	cr = gdk_cairo_create (widget->window);
-	/* the source data is the (composited) event box */
-	gdk_cairo_set_source_pixmap (cr, child->window,
-								child->allocation.x,
-								child->allocation.y);
-	/* draw no more than our expose event intersects our child */
-	region = gdk_region_rectangle (&child->allocation);
-	gdk_region_intersect (region, event->region);
-	gdk_cairo_region (cr, region);
-	cairo_clip (cr);
-	/* composite, with a 85% opacity */
-	cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-	cairo_paint_with_alpha (cr, .85);
-
-	/* we're done */
-	cairo_destroy (cr);
-	return FALSE;
-}
-
-#endif

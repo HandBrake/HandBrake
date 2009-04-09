@@ -4872,6 +4872,7 @@ location as the movie.</property>
         <property name="app-paintable">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
         <signal name="enter-notify-event" handler="hud_enter_cb"/>
+        <signal handler="preview_hud_size_alloc_cb" name="size-allocate"/>
         <child>
           <object class="GtkAlignment" id="alignment53">
             <property name="visible">True</property>
