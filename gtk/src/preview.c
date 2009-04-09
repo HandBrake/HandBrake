@@ -1070,16 +1070,21 @@ ghb_curved_rect_mask(gint width, gint height, gint radius)
 {
 	GdkDrawable *shape;
 	cairo_t *cr;
-	double x1, y1;
-	double x0, y0;
+	double w, h;
+
+	if (!width || !height)
+    	return NULL;
 
 	shape = (GdkDrawable *)gdk_pixmap_new (NULL, width, height, 1);
 
   	cr = gdk_cairo_create (shape);
 
-	x0 = y0 = 0;
-	x1 = width;
-	y1 = height;
+	w = width;
+	h = height;
+	if (radius > width / 2)
+		radius = width / 2;
+	if (radius > height / 2)
+		radius = height / 2;
 
 	// fill shape with black
 	cairo_save(cr);
@@ -1088,51 +1093,19 @@ ghb_curved_rect_mask(gint width, gint height, gint radius)
 	cairo_fill (cr);
 	cairo_restore (cr);
 
-	if (!width || !height)
-    	return NULL;
+	cairo_move_to  (cr, 0, radius);
+	cairo_curve_to (cr, 0 , 0, 0 , 0, radius, 0);
+	cairo_line_to (cr, w - radius, 0);
+	cairo_curve_to (cr, w, 0, w, 0, w, radius);
+	cairo_line_to (cr, w , h - radius);
+	cairo_curve_to (cr, w, h, w, h, w - radius, h);
+	cairo_line_to (cr, 0 + radius, h);
+	cairo_curve_to (cr, 0, h, 0, h, 0, h - radius);
 
-	if (width/2 < radius) {
-		if (height/2 < radius) {
-			cairo_move_to  (cr, x0, (y0 + y1)/2);
-			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
-			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
-		} else {
-			cairo_move_to  (cr, x0, y0 + radius);
-			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
-			cairo_line_to (cr, x1 , y1 - radius);
-			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
-		}
-	} else {
-		if (height/2 < radius) {
-			cairo_move_to  (cr, x0, (y0 + y1)/2);
-			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
-			cairo_line_to (cr, x1 - radius, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
-			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
-			cairo_line_to (cr, x0 + radius, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
-		} else {
-			cairo_move_to  (cr, x0, y0 + radius);
-			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
-			cairo_line_to (cr, x1 - radius, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
-			cairo_line_to (cr, x1 , y1 - radius);
-			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
-			cairo_line_to (cr, x0 + radius, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
-		}
-	}
 	cairo_close_path(cr);
 
 	cairo_set_source_rgb(cr, 1, 1, 1);
-	cairo_fill_preserve(cr);
-
-	cairo_set_line_width(cr, 10.0);
-	cairo_stroke(cr);
+	cairo_fill(cr);
 
 	cairo_destroy(cr);
 
@@ -1151,7 +1124,7 @@ preview_hud_size_alloc_cb(
 	if (GTK_WIDGET_VISIBLE(widget) && allocation->height > 50)
 	{
 		shape = ghb_curved_rect_mask(allocation->width, 
-									allocation->height, allocation->height/2);
+									allocation->height, allocation->height/4);
 		if (shape != NULL)
 		{
 			gtk_widget_shape_combine_mask(widget, shape, 0, 0);
