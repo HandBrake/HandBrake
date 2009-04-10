@@ -32,12 +32,6 @@
 #include <gtk/gtkmarshal.h>
 #include "ghbcompositor.h"
 
-#ifdef ENABLE_NLS
-#define P_(String) g_dgettext(GETTEXT_PACKAGE "-properties",String)
-#else
-#define P_(String) (String)
-#endif
-
 enum {
     PROP_0,
 };
@@ -119,16 +113,16 @@ ghb_compositor_class_init (GhbCompositorClass *class)
     gtk_container_class_install_child_property (container_class,
                         CHILD_PROP_Z_POS,
                         g_param_spec_uint ("z-pos",
-                            P_("Position in Z-List"),
-                            P_("Sets the blending order of the child."),
+                            "Position in Z-List",
+                            "Sets the blending order of the child.",
                             0, 65535, 0,
                             GTK_PARAM_READWRITE));
 
     gtk_container_class_install_child_property (container_class,
                         CHILD_PROP_OPACITY,
                         g_param_spec_double ("opacity",
-                            P_("Opacity"),
-                            P_("Sets the opacity of the child."),
+                            "Opacity",
+                            "Sets the opacity of the child.",
                             0.0, 1.0, 1.0,
                             GTK_PARAM_READWRITE));
 
