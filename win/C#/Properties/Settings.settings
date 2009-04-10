@@ -77,5 +77,8 @@
     <Setting Name="x264cqstep" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.25</Value>
     </Setting>
+    <Setting Name="verboseLevel" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

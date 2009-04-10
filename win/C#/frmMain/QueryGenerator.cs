@@ -427,7 +427,7 @@ namespace Handbrake
             if (processors != "Automatic")
                 query += " -C " + processors + " ";
 
-            query += " -v ";
+            query += " -v " + Properties.Settings.Default.verboseLevel;
             #endregion
 
             return query;

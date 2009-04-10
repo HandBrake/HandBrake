@@ -322,5 +322,17 @@ namespace Handbrake.Properties {
                 this["x264cqstep"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int verboseLevel {
+            get {
+                return ((int)(this["verboseLevel"]));
+            }
+            set {
+                this["verboseLevel"] = value;
+            }
+        }
     }
 }

@@ -73,6 +73,9 @@ namespace Handbrake
             // Priority level for encodes
             drp_Priority.Text = Properties.Settings.Default.processPriority;
 
+            // Log Verbosity Level
+            cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
+
             // Save individual log files
             if (Properties.Settings.Default.saveLog == "Checked")
                 check_keepLogs.CheckState = CheckState.Checked;
@@ -191,6 +194,11 @@ namespace Handbrake
             Properties.Settings.Default.processPriority = drp_Priority.Text;
         }
 
+        private void cb_logVerboseLvl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.verboseLevel = cb_logVerboseLvl.SelectedIndex;
+        }
+
         private void check_keepLogs_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.saveLog = check_keepLogs.CheckState.ToString();
@@ -252,8 +260,6 @@ namespace Handbrake
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
-        }
-
-        
+        }        
     }
 }
