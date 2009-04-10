@@ -368,12 +368,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	// MKV file
     menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"MKV file" action: NULL keyEquivalent: @""];
     [menuItem setTag: HB_MUX_MKV];
-    // AVI file
-    menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"AVI file" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_MUX_AVI];
-    // OGM file
-    menuItem = [[fDstFormatPopUp menu] addItemWithTitle:@"OGM file" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_MUX_OGM];
+    
     [fDstFormatPopUp selectItemAtIndex: 0];
     
     [self formatPopUpChanged:nil];
@@ -3829,8 +3824,6 @@ fWorkingCount = 0;
     menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"MPEG-4 (FFmpeg)" action: NULL keyEquivalent: @""];
     [menuItem setTag: HB_VCODEC_FFMPEG];
     
-    menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"MPEG-4 (XviD)" action: NULL keyEquivalent: @""];
-    [menuItem setTag: HB_VCODEC_XVID];
     switch( format )
     {
         case 0:
@@ -3864,25 +3857,7 @@ fWorkingCount = 0;
 			[fCreateChapterMarkers setEnabled: YES];
 			break;
             
-            case 2: 
-            ext = "avi";
-            /* Add additional video encoders here */
-            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"H.264 (x264)" action: NULL keyEquivalent: @""];
-            [menuItem setTag: HB_VCODEC_X264];
-            /* We disable the create chapters checkbox here and make sure it is unchecked*/
-			[fCreateChapterMarkers setEnabled: NO];
-			[fCreateChapterMarkers setState: NSOffState];
-			break;
-            
-            case 3:
-            ext = "ogm";
-            /* Add additional video encoders here */
-            menuItem = [[fVidEncoderPopUp menu] addItemWithTitle:@"VP3 (Theora)" action: NULL keyEquivalent: @""];
-            [menuItem setTag: HB_VCODEC_THEORA];
-            /* We disable the create chapters checkbox here and make sure it is unchecked*/
-			[fCreateChapterMarkers setEnabled: NO];
-			[fCreateChapterMarkers setState: NSOffState];
-			break;
+
     }
     /* if we have a previously selected vid encoder tag, then try to select it */
     if (selectedVidEncoderTag)
