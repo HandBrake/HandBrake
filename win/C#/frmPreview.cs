@@ -4,6 +4,8 @@ using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO;
+using AxQTOControlLib;
+using QTOControlLib;
 using QTOLibrary;
 
 namespace Handbrake
@@ -36,18 +38,42 @@ namespace Handbrake
             cb_preview.SelectedIndex = 0;
             cb_duration.SelectedIndex = 1;
         }
- 
+
         #region Encode Sample
         private void btn_playVLC_Click(object sender, EventArgs e)
         {
+            lbl_status.Visible = true;
+            try
+            {
+                QTControl.URL = "";
+                if (File.Exists(currently_playing))
+                    File.Delete(currently_playing);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(this, "Unable to delete previous preview file. You may need to restart the application.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             btn_playQT.Enabled = false;
             btn_playVLC.Enabled = false;
             lbl_status.Text = "Encoding Sample for (VLC) ...";
             String query = hb_common_func.GeneratePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
-            ThreadPool.QueueUserWorkItem(procMonitor, query);  
+            ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
         private void btn_playQT_Click(object sender, EventArgs e)
         {
+            lbl_status.Visible = true;
+            try
+            {
+                QTControl.URL = "";
+                if (File.Exists(currently_playing))
+                    File.Delete(currently_playing);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(this, "Unable to delete previous preview file. You may need to restart the application.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
             btn_playQT.Enabled = false;
             btn_playVLC.Enabled = false;
             lbl_status.Text = "Encoding Sample for (QT) ...";
@@ -92,9 +118,9 @@ namespace Handbrake
                 // Play back in QT or VLC
                 if (playerSelection == "QT")
                     play();
-                else 
+                else
                     playVLC();
-                
+
                 lbl_status.Text = "";
             }
             catch (Exception exc)
@@ -113,6 +139,7 @@ namespace Handbrake
         {
             player = new Thread(OpenMovie) { IsBackground = true };
             player.Start();
+            lbl_status.Visible = false;
         }
 
         /// <summary>
@@ -138,6 +165,7 @@ namespace Handbrake
                 else
                     MessageBox.Show(this, "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            lbl_status.Visible = false;
         }
 
         /// <summary>
@@ -153,18 +181,13 @@ namespace Handbrake
                     BeginInvoke(new UpdateUIHandler(OpenMovie));
                     return;
                 }
+                QTControl.Sizing = QTSizingModeEnum.qtControlFitsMovie;
                 QTControl.URL = currently_playing;
-                QTControl.Width = QTControl.Movie.Width;
-                QTControl.Height = QTControl.Movie.Height;
-                // The initial control size is 64,64. If we do not reload the clip here
-                // it'll scale the video from 64,64. 
-                // Unsure why as it correctly resizes the control to the movies actual size.
-                QTControl.URL = currently_playing;
-                QTControl.SetScale(0);
+                QTControl.Sizing = QTSizingModeEnum.qtMovieFitsControl;
                 QTControl.Show();
 
-                this.Width = QTControl.Width + 5;
-                this.Height = QTControl.Height + 90;
+                this.ClientSize = QTControl.Size;
+                this.Height += 25;
             }
             catch (COMException ex)
             {

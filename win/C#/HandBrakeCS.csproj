@@ -318,6 +318,7 @@
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />
     <None Include="Resources\picture.png" />
+    <None Include="Resources\Play_small.png" />
     <Content Include="Resources\Pref_Small.png" />
     <Content Include="Resources\Queue.png" />
     <Content Include="Resources\Queue_Small.png" />

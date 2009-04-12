@@ -200,6 +200,13 @@ namespace Handbrake.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap Play_small {
+            get {
+                object obj = ResourceManager.GetObject("Play_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Pref_Small {
             get {
                 object obj = ResourceManager.GetObject("Pref_Small", resourceCulture);
