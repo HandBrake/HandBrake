@@ -203,9 +203,19 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
 
     /* Position of the title in the VTS */
     title->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
+    if ( title->ttn < 1 || title->ttn > vts->vts_ptt_srpt->nr_of_srpts )
+    {
+        hb_error( "invalid VTS PTT offset %d for title %d, skipping", title->ttn, t );
+        goto fail;
+    }
 
     /* Get pgc */
     pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgcn;
+    if ( pgc_id < 1 || pgc_id > vts->vts_pgcit->nr_of_pgci_srp )
+    {
+        hb_error( "invalid PGC ID %d for title %d, skipping", pgc_id, t );
+        goto fail;
+    }
     pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
     d->pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
 
