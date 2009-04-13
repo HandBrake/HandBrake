@@ -169,11 +169,8 @@ namespace Handbrake
                     int value;
                     System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
 
-                    double presetValue, x264step;
-                    double.TryParse(presetQuery.VideoQuality.ToString(),
-                                    System.Globalization.NumberStyles.Number,
-                                    culture,
-                                    out presetValue);
+                    double x264step;
+                    double presetValue = presetQuery.VideoQuality;
                     double.TryParse(Properties.Settings.Default.x264cqstep,
                                     System.Globalization.NumberStyles.Number,
                                     culture,
