@@ -1031,10 +1031,11 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	ghb_ui_update(ud, "scale_width", 
 		ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated
-	gboolean keep_aspect, anamorphic;
+	gboolean keep_aspect;
+	gint pic_par;
 	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
-	anamorphic = ghb_settings_get_boolean(ud->settings, "anamorphic");
-	if (!(keep_aspect || anamorphic))
+	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
+	if (!(keep_aspect || pic_par) || pic_par == 3)
 	{
 		ghb_ui_update(ud, "scale_height", 
 			ghb_int64_value(tinfo->height - tinfo->crop[0] - tinfo->crop[1]));
@@ -1341,7 +1342,24 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	text = ghb_settings_get_boolean(ud->settings, "autoscale") ? "On" : "Off";
 	widget = GHB_WIDGET (ud->builder, "scale_auto");
 	gtk_label_set_text (GTK_LABEL(widget), text);
-	text = ghb_settings_get_boolean(ud->settings, "anamorphic") ? "On" : "Off";
+	switch (ghb_settings_combo_int(ud->settings, "PicturePAR"))
+	{
+		case 0:
+			text = "Off";
+			break;
+		case 1:
+			text = "Strict";
+			break;
+		case 2:
+			text = "Loose";
+			break;
+		case 3:
+			text = "Custom";
+			break;
+		default:
+			text = "Unknown";
+			break;
+	}
 	widget = GHB_WIDGET (ud->builder, "scale_anamorphic");
 	gtk_label_set_text (GTK_LABEL(widget), text);
 }

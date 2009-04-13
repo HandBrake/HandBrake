@@ -168,6 +168,8 @@
 		<string>mp4</string>
 		<key>Folder</key>
 		<false />
+		<key>PictureAlignment</key>
+		<integer>16</integer>
 		<key>PictureDeblock</key>
 		<integer>0</integer>
 		<key>PictureDecomb</key>
@@ -210,8 +212,6 @@
 		<true />
 		<key>Mp4LargeFile</key>
 		<false />
-		<key>ModDimensions</key>
-		<true />
 		<key>PicturePAR</key>
 		<integer>2</integer>
 		<key>PictureHeight</key>

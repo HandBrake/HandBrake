@@ -47,12 +47,6 @@ static dependency_t dep_map[] =
 	{"PictureAutoCrop", "PictureBottomCrop", "FALSE", FALSE, FALSE},
 	{"PictureAutoCrop", "PictureLeftCrop", "FALSE", FALSE, FALSE},
 	{"PictureAutoCrop", "PictureRightCrop", "FALSE", FALSE, FALSE},
-	{"autoscale", "scale_width", "FALSE", FALSE, FALSE},
-	{"autoscale", "scale_height", "FALSE", FALSE, FALSE},
-	// "CHECK" is a dummy value that forces scale_height deps to
-	// be re-evaluated whenever anamorphic changes
-	{"anamorphic", "scale_height", "CHECK", TRUE, FALSE},
-	{"PictureKeepRatio", "scale_height", "FALSE", FALSE, FALSE},
 	{"VideoEncoder", "x264_tab", "x264", FALSE, FALSE},
 	{"VideoEncoder", "x264_tab_label", "x264", FALSE, FALSE},
 	{"VideoEncoder", "Mp4iPodCompatible", "x264", FALSE, FALSE},

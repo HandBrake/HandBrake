@@ -501,6 +501,13 @@ void preview_window_expose_cb(void);
 
 // Some style definitions for the preview window and hud
 const gchar *hud_rcstyle =
+"style \"ghb-entry\" {\n"
+"GtkEntry::inner-border = {2,2,1,1}\n"
+"}\n"
+"style \"ghb-combo\" {\n"
+"xthickness = 1\n"
+"ythickness = 1\n"
+"}\n"
 "style \"ghb-preview\" {\n"
 "bg[NORMAL]=\"black\"\n"
 "}\n"
@@ -516,6 +523,8 @@ const gchar *hud_rcstyle =
 "fg[ACTIVE]=\"white\"\n"
 "fg[PRELIGHT]=\"white\"\n"
 "}\n"
+"widget_class \"*.GtkComboBox.GtkToggleButton\" style \"ghb-combo\"\n"
+"widget_class \"*.GtkEntry\" style \"ghb-entry\"\n"
 "widget \"preview_window.*.preview_hud.*\" style \"ghb-hud\"\n"
 "widget \"preview_window\" style \"ghb-preview\"\n";
 
@@ -564,6 +573,9 @@ main (int argc, char *argv[])
 	// Enable events that alert us to media change events
 	watch_volumes (ud);
 	ud->builder = create_builder_or_die (BUILDER_NAME);
+
+	//GtkWidget *widget = GHB_WIDGET(ud->builder, "PictureDetelecineCustom");
+	//gtk_entry_set_inner_border(widget, 2);
 
 	// Set up the "hud" control overlay for the preview window
 	GtkWidget *draw, *hud, *blender, *align;

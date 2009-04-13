@@ -63,6 +63,33 @@ static const gchar *index_str[] =
 	"10",
 };
 
+static options_map_t d_par_opts[] =
+{
+	{"Off", "0", 0, "0"},
+	{"Strict", "1", 1, "1"},
+	{"Loose", "2", 2, "2"},
+	{"Custom", "3", 3, "3"},
+};
+combo_opts_t par_opts =
+{
+	sizeof(d_par_opts)/sizeof(options_map_t),
+	d_par_opts
+};
+
+static options_map_t d_alignment_opts[] =
+{
+	{"1", "1", 1, "1"},
+	{"2", "2", 2, "2"},
+	{"4", "4", 4, "4"},
+	{"8", "8", 8, "8"},
+	{"16", "16", 16, "16"},
+};
+combo_opts_t alignment_opts =
+{
+	sizeof(d_alignment_opts)/sizeof(options_map_t),
+	d_alignment_opts
+};
+
 static options_map_t d_logging_opts[] =
 {
 	{"0", "0", 0, "0"},
@@ -286,6 +313,8 @@ typedef struct
 
 combo_name_map_t combo_name_map[] =
 {
+	{"PicturePAR", &par_opts},
+	{"PictureAlignment", &alignment_opts},
 	{"LoggingLevel", &logging_opts},
 	{"VideoQualityGranularity", &vqual_granularity_opts},
 	{"FileFormat", &container_opts},
@@ -1980,6 +2009,8 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		title_opts_set(builder, "title");
 		audio_track_opts_set(builder, "AudioTrack", user_data);
 		generic_opts_set(builder, "VideoQualityGranularity", &vqual_granularity_opts);
+		generic_opts_set(builder, "PicturePAR", &par_opts);
+		generic_opts_set(builder, "PictureAlignment", &alignment_opts);
 		generic_opts_set(builder, "LoggingLevel", &logging_opts);
 		generic_opts_set(builder, "FileFormat", &container_opts);
 		generic_opts_set(builder, "PictureDeinterlace", &deint_opts);
@@ -2544,13 +2575,49 @@ ghb_get_default_acodec()
 	return HB_ACODEC_FAAC;
 }
 
+static void
+picture_settings_deps(signal_user_data_t *ud)
+{
+	gboolean autoscale, keep_aspect;
+	gboolean enable_scale_width, enable_scale_height;
+	gboolean enable_disp_width, enable_disp_height;
+	gint pic_par, disp_width, disp_height, scale_width, scale_height;
+
+	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
+	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
+	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
+	disp_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
+	disp_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
+	scale_width = ghb_settings_get_int(ud->settings, "scale_width");
+	scale_height = ghb_settings_get_int(ud->settings, "scale_height");
+
+	enable_scale_width = !autoscale && (pic_par != 1);
+	enable_scale_height = !autoscale &&
+		((pic_par == 0 && !keep_aspect) || (pic_par == 3));
+	enable_disp_width = (pic_par == 3) && !keep_aspect &&
+		(disp_height == scale_height);
+	enable_disp_height = (pic_par == 3) && !keep_aspect &&
+		(disp_width == scale_width);
+
+	GtkWidget *widget;
+	widget = GHB_WIDGET(ud->builder, "scale_width");
+	gtk_widget_set_sensitive(widget, enable_scale_width);
+	widget = GHB_WIDGET(ud->builder, "scale_height");
+	gtk_widget_set_sensitive(widget, enable_scale_height);
+	widget = GHB_WIDGET(ud->builder, "PictureDisplayWidth");
+	gtk_widget_set_sensitive(widget, enable_disp_width);
+	widget = GHB_WIDGET(ud->builder, "PictureDisplayHeight");
+	gtk_widget_set_sensitive(widget, enable_disp_height);
+}
+
 void
 ghb_set_scale(signal_user_data_t *ud, gint mode)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
 	hb_job_t   * job;
-	gboolean keep_aspect, round_dims, anamorphic;
+	gboolean keep_aspect;
+	gint pic_par;
 	gboolean autocrop, autoscale, noscale;
 	gint crop[4], width, height, par_width, par_height;
 	gint crop_width, crop_height;
@@ -2581,8 +2648,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	if (job == NULL) return;
 	
 	// First configure widgets
-	round_dims = ghb_settings_get_boolean(ud->settings, "ModDimensions");
-	anamorphic = ghb_settings_get_boolean(ud->settings, "anamorphic");
+	mod = ghb_settings_combo_int(ud->settings, "PictureAlignment");
+	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
 	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
 	autocrop = ghb_settings_get_boolean(ud->settings, "PictureAutoCrop");
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
@@ -2592,7 +2659,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	// Align dimensions to either 16 or 2 pixels
 	// The scaler crashes if the dimensions are not divisible by 2
 	// x264 also will not accept dims that are not multiple of 2
-	mod = round_dims ? 16 : 2;
 	if (autoscale)
 	{
 		keep_width = FALSE;
@@ -2603,50 +2669,89 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		keep_height = FALSE;
 	}
 	// Step needs to be at least 2 because odd widths cause scaler crash
-	step = round_dims ? 16 : 2;
+	step = mod;
 	widget = GHB_WIDGET (ud->builder, "scale_width");
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
+	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, mod);
 	widget = GHB_WIDGET (ud->builder, "scale_height");
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
-	if (autocrop)
+	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, mod);
+	if (mod == 1)
 	{
-		ghb_title_info_t tinfo;
-
-		if (ghb_get_title_info (&tinfo, titleindex))
+		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
+		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
+		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
+		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
+	}
+	else
+	{
+		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
+		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
+		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
+		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
+	}
+	ghb_title_info_t tinfo;
+	if (autocrop && ghb_get_title_info (&tinfo, titleindex))
+	{
+		crop[0] = tinfo.crop[0];
+		crop[1] = tinfo.crop[1];
+		crop[2] = tinfo.crop[2];
+		crop[3] = tinfo.crop[3];
+		if (noscale)
 		{
-			crop[0] = tinfo.crop[0];
-			crop[1] = tinfo.crop[1];
-			crop[2] = tinfo.crop[2];
-			crop[3] = tinfo.crop[3];
-			if (noscale)
-			{
-				gint need1, need2;
+			gint need1, need2;
 
-				// Adjust the cropping to accomplish the desired width and height
-				crop_width = tinfo.width - crop[2] - crop[3];
-				crop_height = tinfo.height - crop[0] - crop[1];
-				width = MOD_ROUND(crop_width, mod);
-				height = MOD_ROUND(crop_height, mod);
+			// Adjust the cropping to accomplish the desired width and height
+			crop_width = tinfo.width - crop[2] - crop[3];
+			crop_height = tinfo.height - crop[0] - crop[1];
+			width = MOD_ROUND(crop_width, mod);
+			height = MOD_ROUND(crop_height, mod);
 
-				need1 = (crop_height - height) / 2;
-				need2 = crop_height - height - need1;
-				crop[0] += need1;
-				crop[1] += need2;
-				need1 = (crop_width - width) / 2;
-				need2 = crop_width - width - need1;
-				crop[2] += need1;
-				crop[3] += need2;
-			}
+			need1 = (crop_height - height) / 2;
+			need2 = crop_height - height - need1;
+			crop[0] += need1;
+			crop[1] += need2;
+			need1 = (crop_width - width) / 2;
+			need2 = crop_width - width - need1;
+			crop[2] += need1;
+			crop[3] += need2;
+		}
+		if (mod == 1)
+		{
+			crop[0] = MOD_UP(crop[0], 2);
+			crop[1] = MOD_UP(crop[1], 2);
+			crop[2] = MOD_UP(crop[2], 2);
+			crop[3] = MOD_UP(crop[3], 2);
+		}
+		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
+		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
+		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
+		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(crop[3]));
+	}
+	else
+	{
+		crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+		crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+		crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+		crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+		if (mod == 1)
+		{
+			crop[0] = MOD_UP(crop[0], 2);
+			crop[1] = MOD_UP(crop[1], 2);
+			crop[2] = MOD_UP(crop[2], 2);
+			crop[3] = MOD_UP(crop[3], 2);
 			ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
 			ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
 			ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
 			ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(crop[3]));
 		}
 	}
-	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
-	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
-	crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
-	crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
 	hb_reduce(&aspect_n, &aspect_d, 
 				title->width * title->pixel_aspect_width, 
 				title->height * title->pixel_aspect_height);
@@ -2669,11 +2774,11 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	// Adjust dims according to max values
 	if (!max_height)
 	{
-		max_height = MOD_DOWN(title->height, mod);
+		max_height = MOD_DOWN(crop_height, mod);
 	}
 	if (!max_width)
 	{
-		max_width = MOD_DOWN(title->width, mod);
+		max_width = MOD_DOWN(crop_width, mod);
 	}
 	// Align max dims 
 	g_debug("max_width %d, max_height %d\n", max_width, max_height);
@@ -2690,12 +2795,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	if (max_width)
 		width = MIN(width, max_width);
 
-	if (anamorphic)
+	if (pic_par)
 	{
-		job->anamorphic.mode = autoscale || keep_aspect ? 2 : 3;
+		job->anamorphic.mode = pic_par;
 		// The scaler crashes if the dimensions are not divisible by 2
 		// Align mod 2.  And so does something in x264_encoder_headers()
-		job->anamorphic.modulus = round_dims ? 16 : 2;
+		job->anamorphic.modulus = mod;
 		job->width = width;
 		job->height = height;
 		if (max_width) 
@@ -2704,12 +2809,34 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			job->maxHeight = max_height;
 		job->crop[0] = crop[0];	job->crop[1] = crop[1];
 		job->crop[2] = crop[2];	job->crop[3] = crop[3];
+		if (job->anamorphic.mode == 3 && !keep_aspect)
+		{
+			gint dar_width, dar_height;
+			dar_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
+			dar_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
+			if (dar_width > width)
+				dar_height = height;
+			else if (dar_height > height)
+				dar_width = width;
+			else
+			{
+				dar_width = width;
+				dar_height = height;
+			}
+			job->anamorphic.dar_width = dar_width;
+			job->anamorphic.dar_height = dar_height;
+		}
+		else
+		{
+			job->anamorphic.dar_width = 0;
+			job->anamorphic.dar_height = 0;
+		}
 		hb_set_anamorphic_size( job, &width, &height, 
 								&par_width, &par_height );
 	}
 	else 
 	{
-		job->anamorphic.mode = 0;
+		job->anamorphic.mode = pic_par;
 		if (keep_aspect)
 		{
 			gdouble par;
@@ -2756,9 +2883,42 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			height = MIN(height, max_height);
 		if (max_width)
 			width = MIN(width, max_width);
+		par_width = par_height = 1;
 	}
 	ghb_ui_update(ud, "scale_width", ghb_int64_value(width));
 	ghb_ui_update(ud, "scale_height", ghb_int64_value(height));
+
+	gint disp_width, disp_height, dar_width, dar_height;
+	gchar *str;
+
+	disp_width = width;
+	disp_height = height;
+	if (par_width >= par_height)
+	{
+		disp_width = par_width * width / par_height;
+	}
+	else
+	{
+		disp_height = par_height * height / par_width;
+	}
+	hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
+		
+	if (dar_width > 2 * dar_height)
+	{
+		str = g_strdup_printf("%.2f:1", (gdouble)dar_width / dar_height);
+	}
+	else
+	{
+		str = g_strdup_printf("%d:%d", dar_width, dar_height);
+	}
+	ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
+	g_free(str);
+	str = g_strdup_printf("%d:%d", par_width, par_height);
+	ghb_ui_update(ud, "pixel_aspect", ghb_string_value(str));
+	g_free(str);
+	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
+	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(disp_height));
+	picture_settings_deps(ud);
 }
 
 static void
@@ -2769,26 +2929,31 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	job->crop[2] = ghb_settings_get_int(settings, "PictureLeftCrop");
 	job->crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
 
-	gboolean anamorphic, round_dimensions, autoscale, keep_aspect;
-	autoscale = ghb_settings_get_boolean(settings, "autoscale");
-	anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
-	round_dimensions = ghb_settings_get_boolean(settings, "ModDimensions");
-	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
-	if (anamorphic)
-	{
-		job->anamorphic.modulus = round_dimensions ? 16 : 2;
-		job->anamorphic.mode = autoscale || keep_aspect ? 2 : 3;
-	}
-	else
-	{
-		job->anamorphic.modulus = 2;
-		job->anamorphic.mode = 0;
-	}
+	job->anamorphic.mode = ghb_settings_combo_int(settings, "PicturePAR");
+	job->anamorphic.modulus = 
+		ghb_settings_combo_int(settings, "PictureAlignment");
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
+
 	gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
 	gint decomb = ghb_settings_combo_int(settings, "PictureDecomb");
 	job->deinterlace = (!decomb && deint == 0) ? 0 : 1;
+
+	gboolean keep_aspect;
+	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
+	if (job->anamorphic.mode == 3 && !keep_aspect)
+	{
+		gint disp_width, disp_height;
+		disp_width = ghb_settings_get_int(settings, "PictureDisplayWidth");
+		disp_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
+		job->anamorphic.dar_width = disp_width;
+		job->anamorphic.dar_height = disp_height;
+	}
+	else
+	{
+		job->anamorphic.dar_width = 0;
+		job->anamorphic.dar_height = 0;
+	}
 }
 
 gint
@@ -3305,23 +3470,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
 
-	gboolean autoscale, anamorphic, round_dimensions, keep_aspect;
+	job->anamorphic.mode = ghb_settings_get_boolean(js, "PicturePAR");
+	job->anamorphic.modulus = ghb_settings_combo_int(js, "PictureAlignment");
 
-	autoscale = ghb_settings_get_boolean(js, "autoscale");
-	anamorphic = ghb_settings_get_boolean(js, "anamorphic");
-	round_dimensions = ghb_settings_get_boolean(js, "ModDimensions");
-	keep_aspect = ghb_settings_get_boolean(js, "PictureKeepRatio");
-	if (anamorphic)
-	{
-		job->anamorphic.mode = autoscale || keep_aspect ? 2 : 3;
-		// Also, x264 requires things to be divisible by 2.
-		job->anamorphic.modulus = round_dimensions ? 16 : 2;
-	}
-	else
-	{
-		job->anamorphic.mode = 0;
-		job->anamorphic.modulus = 2;
-	}
 	/* Add selected filters */
 	job->filters = hb_list_init();
 	gint vrate = ghb_settings_combo_int(js, "VideoFramerate");
@@ -3807,10 +3958,11 @@ ghb_get_preview_image(
 	// hb_get_preview doesn't compensate for anamorphic, so lets
 	// calculate scale factors
 	gint width, height, par_width = 1, par_height = 1;
-	gboolean anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
-	if (anamorphic)
+	gint pic_par = ghb_settings_combo_int(settings, "PicturePAR");
+	if (pic_par)
 	{
-		hb_set_anamorphic_size( title->job, &width, &height, &par_width, &par_height );
+		hb_set_anamorphic_size( title->job, &width, &height, 
+								&par_width, &par_height );
 	}
 
 	// And also creates artifacts if the width is not a multiple of 8

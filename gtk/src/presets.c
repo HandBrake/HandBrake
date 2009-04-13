@@ -2203,32 +2203,26 @@ import_xlat_preset(GValue *dict)
 	{
 	case 0:
 	{
-		ghb_dict_insert(dict, g_strdup("anamorphic"), 
-						ghb_boolean_value_new(FALSE));
-		if (ghb_dict_lookup(dict, "ModDimensions") == NULL)
-			ghb_dict_insert(dict, g_strdup("ModDimensions"), 
-							ghb_boolean_value_new(TRUE));
+		if (ghb_dict_lookup(dict, "PictureAlignment") == NULL)
+			ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+							ghb_int_value_new(16));
 	} break;
 	case 1:
 	{
-		ghb_dict_insert(dict, g_strdup("anamorphic"), 
-						ghb_boolean_value_new(TRUE));
-		ghb_dict_insert(dict, g_strdup("ModDimensions"), 
-						ghb_boolean_value_new(FALSE));
+		ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+						ghb_int_value_new(1));
 	} break;
 	case 2:
 	{
-		ghb_dict_insert(dict, g_strdup("anamorphic"), 
-						ghb_boolean_value_new(TRUE));
-		ghb_dict_insert(dict, g_strdup("ModDimensions"), 
-						ghb_boolean_value_new(TRUE));
+		if (ghb_dict_lookup(dict, "PictureAlignment") == NULL)
+			ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+							ghb_int_value_new(16));
 	} break;
 	default:
 	{
-		ghb_dict_insert(dict, g_strdup("anamorphic"), 
-						ghb_boolean_value_new(TRUE));
-		ghb_dict_insert(dict, g_strdup("ModDimensions"), 
-						ghb_boolean_value_new(TRUE));
+		if (ghb_dict_lookup(dict, "PictureAlignment") == NULL)
+			ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+							ghb_int_value_new(16));
 	} break;
 	}
 	// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
@@ -2342,12 +2336,10 @@ import_xlat_presets(GValue *presets)
 static void
 export_xlat_preset(GValue *dict)
 {
-	gboolean ana, round, autoscale, target, br, constant;
+	gboolean autoscale, target, br, constant;
 
 	g_debug("export_xlat_prest ()");
 	autoscale = ghb_value_boolean(preset_dict_get_value(dict, "autoscale"));
-	ana = ghb_value_boolean(preset_dict_get_value(dict, "anamorphic"));
-	round = ghb_value_boolean(preset_dict_get_value(dict, "ModDimensions"));
 	target = ghb_value_boolean(
 				preset_dict_get_value(dict, "vquality_type_target"));
 	br = ghb_value_boolean(
@@ -2362,20 +2354,6 @@ export_xlat_preset(GValue *dict)
 		ghb_dict_insert(dict, g_strdup("UsesPictureSettings"), 
 						ghb_int_value_new(1));
 
-	if (ana)
-	{
-		if (round)
-			ghb_dict_insert(dict, g_strdup("PicturePAR"), 
-						ghb_int_value_new(2));
-		else
-			ghb_dict_insert(dict, g_strdup("PicturePAR"), 
-						ghb_int_value_new(1));
-	}
-	else
-	{
-		ghb_dict_insert(dict, g_strdup("PicturePAR"), 
-						ghb_int_value_new(0));
-	}
 	// VideoQualityType/0/1/2 - vquality_type_/target/bitrate/constant
 	if (target)
 	{
@@ -2394,7 +2372,6 @@ export_xlat_preset(GValue *dict)
 	}
 	ghb_dict_remove(dict, "UsesMaxPictureSettings");
 	ghb_dict_remove(dict, "autoscale");
-	ghb_dict_remove(dict, "anamorphic");
 	ghb_dict_remove(dict, "vquality_type_target");
 	ghb_dict_remove(dict, "vquality_type_bitrate");
 	ghb_dict_remove(dict, "vquality_type_constant");
@@ -3289,10 +3266,11 @@ preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	ghb_ui_update(ud, "scale_width", 
 			ghb_int64_value(tinfo->width - tinfo->crop[2] - tinfo->crop[3]));
 	// If anamorphic or keep_aspect, the hight will be automatically calculated
-	gboolean keep_aspect, anamorphic;
+	gboolean keep_aspect;
+	gint pic_par;
 	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
-	anamorphic = ghb_settings_get_boolean(ud->settings, "anamorphic");
-	if (!(keep_aspect || anamorphic))
+	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
+	if (!(keep_aspect || pic_par) || pic_par == 3)
 	{
 		ghb_ui_update(ud, "scale_height", 
 			ghb_int64_value(tinfo->height - tinfo->crop[0] - tinfo->crop[1]));

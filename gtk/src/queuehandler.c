@@ -72,7 +72,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gchar *fps, *vcodec_abbr;
 	gint title, start_chapter, end_chapter, width, height;
 	gint source_width, source_height;
-	gboolean pass2, anamorphic, round_dim, keep_aspect, vqtype, turbo;
+	gboolean pass2, keep_aspect, vqtype, turbo;
+	gint pic_par;
 	gboolean tweaks;
 	gchar *escape;
 	
@@ -186,23 +187,13 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 
 	width = ghb_settings_get_int(settings, "scale_width");
 	height = ghb_settings_get_int(settings, "scale_height");
-	anamorphic = ghb_settings_get_boolean(settings, "anamorphic");
-	round_dim = ghb_settings_get_boolean(settings, "ModDimensions");
+	pic_par = ghb_settings_combo_int(settings, "PicturePAR");
 	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
 
 	gchar *aspect_desc;
-	if (anamorphic)
+	switch (pic_par)
 	{
-		if (round_dim)
-		{
-			aspect_desc = "(Anamorphic)";
-		}
-		else
-		{
-			aspect_desc = "(Strict Anamorphic)";
-		}
-	}
-	else
+	case 0:
 	{
 		if (keep_aspect)
 		{
@@ -212,6 +203,27 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		{
 			aspect_desc = "(Aspect Lost)";
 		}
+	} break;
+
+	case 1:
+	{
+		aspect_desc = "(Strict Anamorphic)";
+	} break;
+
+	case 2:
+	{
+		aspect_desc = "(Loose Anamorphic)";
+	} break;
+
+	case 3:
+	{
+		aspect_desc = "(Custom Anamorphic)";
+	} break;
+
+	default:
+	{
+		aspect_desc = "(Unknown)";
+	} break;
 	}
 	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
 
