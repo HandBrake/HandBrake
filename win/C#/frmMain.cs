@@ -106,7 +106,7 @@ namespace Handbrake
 
                         // Send the query from the file to the Query Parser class, then load the preset
                         QueryParser presetQuery = QueryParser.Parse(query);
-                        presetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
+                        PresetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
@@ -501,7 +501,7 @@ namespace Handbrake
                         QueryParser presetQuery = QueryParser.Parse(query);
 
                         // Now load the preset
-                        presetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
+                        PresetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();

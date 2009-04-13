@@ -14,7 +14,7 @@ namespace Handbrake
         /// <param name="presetQuery">The Parsed CLI Query</param>
         /// <param name="name">Name of the preset</param>
         /// <param name="pictureSettings">Save picture settings in the preset</param>
-        public void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name, Boolean pictureSettings)
+        public static void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name, Boolean pictureSettings)
         {
             // ---------------------------
             // Setup the GUI
