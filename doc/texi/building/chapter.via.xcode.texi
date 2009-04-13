@@ -1,5 +1,5 @@
 @anchor{xcode}
-@chapter Building via Xcode
+@chapter Building via Xcode.app
 
 @c %**-------------------------------------------------------------------------
 @anchor{xcode.checkout}
@@ -9,10 +9,15 @@
 @c %**-------------------------------------------------------------------------
 @anchor{xcode.build}
 @section Build
-In Xcode perform the following steps to build the default configuration:
+Open Xcode.app from a terminal by using the @command{open} command which passes your shell environment and its @samp{PATH} setting to Xcode. Do not attempt to launch Xcode.app from Finder or by using Finder to open @file{HandBrake.xcodeproj} -- doing so will defeat any custom path settings which contain required tools.
+
+@example
+open @file{macosx/HandBrake.xcodeproj}
+@end example
+
+Once the HandBrake Xcode project is open, perform the following steps to build the default configuration:
 
 @itemize
-@item open @file{macosx/HandBrake.xcodeproj}
 @item select active configuration @b{standard}
 @item select active target @b{HandBrake}
 @item click @b{Build} or @b{Build and Go}

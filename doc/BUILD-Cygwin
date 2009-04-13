@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2252 (2009031001) on Cygwin
+Guide to Building HandBrake svn2322 (2009041301) on Cygwin
 **********************************************************
 
 Table of Contents
@@ -146,10 +146,10 @@ Configure the build system.
 
 Configure will automatically create a scratch build directory `build'
 unless you use GNU-style build procedures and first `cd' to a directory
-other than top-level source. Additionally you may specify use `--build'
-to specify the directory. The name of the directory is arbitrary but it
-is recommended to use something which indicates transient files which
-are not checked into the repository.
+other than top-level source. Additionally you may use `--build' to
+specify the directory. The name of the directory is arbitrary but it is
+recommended to use something which indicates transient files which are
+not checked into the repository.
 
 The `configure' utility accepts many options. It is recommended that
 you specify `--help' for the complete list of options. The following
@@ -172,12 +172,13 @@ options are also documented here:
 
 `--launch'
      All-in-one option which launches the build and logs output
-     automatically.  Useful for novices and quickstart procedures.
+     automatically.  Useful for novices and quick-start procedures.
 
 `--disable-xcode'
-     Disable shunting the build through Xcode. If this option is
-     applied, `HandBrakeCLI' will be produced in a similare fashion as
-     it is on other platforms; sans Xcode. Mac OS X only.
+     Disable shunting the build through `xcodebuild'. If this option is
+     applied, `HandBrakeCLI' will be produced in a similar fashion as
+     it is on other platforms; sans Xcode and the Cocoa application
+     will not be produced. Mac OS X only.
 
 `--disable-gtk'
      Disable building the GTK GUI on applicable platforms such as
@@ -213,7 +214,7 @@ some of the reasons why someone may choose to scrap an existing build:
    * build corruption is suspected
 
 There are generally two methods for scrapping a build. The `build'
-directory can be recusrively removed which has the effect of loosing
+directory can be recursively removed which has the effect of loosing
 your existing configuration but does guarantee no residuals are left
 behind. The other method is to ask the build system to perform an `make
 xclean'. This is known to work well but will leave empty directories
@@ -242,7 +243,7 @@ log. The following command allows for up to 4 concurrent jobs via make:
 The build system supports passing many kinds of targets some of which
 become very useful in normal development cycles. The targets by
 convention are lower-case words passed to `make'. Global targets are
-one-word targets. Scoped targets are usually two-words seperated by a
+one-word targets. Scoped targets are usually two-words separated by a
 period.
 
 5.4.1 Global
@@ -306,7 +307,7 @@ Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
 
 `make MODULE.fetch'
      Download source tarball from the Internet and save to
-     `TOP/downloads' directory. No checksumming is performed.
+     `TOP/downloads' directory. No check-summing is performed.
 
 `make MODULE.extract'
      Extract source tarball into `build' tree.
@@ -396,7 +397,7 @@ If the need arises to override settings in the build system
 (essentially gnu-make variables) the recommended method is to create
 optional include files which are automatically included if present and
 follow this naming convention; Do not check these files into the
-respository:
+repository:
 
 `_SRC_/custom.defs'
      Custom makevar definitions outside `build'. Suitable for settings
@@ -425,7 +426,7 @@ be lost. Here is a short example of what the contents of
      ## bump to gcc-4.2 in current path
      GCC.gcc = gcc-4.2
 
-     ## replace optimize for 'speed' with more agressive settings
+     ## replace optimize for 'speed' with more aggressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
 
 See also `make report.help' which displays a set of reports used to
@@ -438,7 +439,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2252
-     date:   2009-03-10 18:43:11 -0400
+     rev:    2322
+     date:   2009-04-13 13:28:21 -0400
      type:   developer
 

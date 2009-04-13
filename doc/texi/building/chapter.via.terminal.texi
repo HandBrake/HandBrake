@@ -35,10 +35,10 @@ This defaults to a reasonable platform-specific value.
 
 @item --launch
 All-in-one option which launches the build and logs output automatically.
-Useful for novices and quickstart procedures.
+Useful for novices and quick-start procedures.
 
 @item --disable-xcode
-Disable shunting the build through Xcode. If this option is applied, @command{HandBrakeCLI} will be produced in a similare fashion as it is on other platforms; sans Xcode. @value{OS.osx} only.
+Disable shunting the build through @command{xcodebuild}. If this option is applied, @command{HandBrakeCLI} will be produced in a similar fashion as it is on other platforms; sans Xcode and the Cocoa application will not be produced. @value{OS.osx} only.
 
 @item --disable-gtk
 Disable building the GTK GUI on applicable platforms such as @value{OS.linux}.
@@ -64,7 +64,7 @@ Clean-room procedures dictate that when certain factors change, old builds shoul
 @item build corruption is suspected
 @end itemize
 
-There are generally two methods for scrapping a build. The @file{build} directory can be recusrively removed which has the effect of loosing your existing configuration but does guarantee no residuals are left behind. The other method is to ask the build system to perform an @command{make xclean}. This is known to work well but will leave empty directories behind. However, the configuration is left intact.
+There are generally two methods for scrapping a build. The @file{build} directory can be recursively removed which has the effect of loosing your existing configuration but does guarantee no residuals are left behind. The other method is to ask the build system to perform an @command{make xclean}. This is known to work well but will leave empty directories behind. However, the configuration is left intact.
 
 @c %**-------------------------------------------------------------------------
 @anchor{terminal.build}
@@ -85,7 +85,7 @@ make -j4
 @anchor{terminal.targets}
 @section Make Targets
 
-The build system supports passing many kinds of targets some of which become very useful in normal development cycles. The targets by convention are lower-case words passed to @command{make}. Global targets are one-word targets. Scoped targets are usually two-words seperated by a period.
+The build system supports passing many kinds of targets some of which become very useful in normal development cycles. The targets by convention are lower-case words passed to @command{make}. Global targets are one-word targets. Scoped targets are usually two-words separated by a period.
 
 @anchor{terminal.targets.global}
 @subsection Global
@@ -144,7 +144,7 @@ Contrib modules such as @samp{a52dec}, @samp{bzip2}, @samp{faac}, @samp{faad2}, 
 
 @table @samp
 @item make @i{MODULE}.fetch
-Download source tarball from the Internet and save to @file{TOP/downloads} directory. No checksumming is performed.
+Download source tarball from the Internet and save to @file{TOP/downloads} directory. No check-summing is performed.
 
 @item make @i{MODULE}.extract
 Extract source tarball into @file{build} tree.
@@ -212,7 +212,7 @@ For convenience, the following targets aggregate the all contrib modules' respec
 @c %**-------------------------------------------------------------------------
 @anchor{terminal.customizing}
 @section Customizing Make
-If the need arises to override settings in the build system (essentially gnu-make variables) the recommended method is to create optional include files which are automatically included if present and follow this naming convention; @b{Do not check these files into the respository}:
+If the need arises to override settings in the build system (essentially gnu-make variables) the recommended method is to create optional include files which are automatically included if present and follow this naming convention; @b{Do not check these files into the repository}:
 
 @table @file
 @item _SRC_/custom.defs
@@ -235,7 +235,7 @@ The purpose is to allow a place to store local build settings for testing, tweak
 ## bump to gcc-4.2 in current path
 GCC.gcc = gcc-4.2
 
-## replace optimize for 'speed' with more agressive settings
+## replace optimize for 'speed' with more aggressive settings
 GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
 @end example
 

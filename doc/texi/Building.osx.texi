@@ -35,7 +35,7 @@ Building on @value{OS.osx} is well supported. It is the reference platform for @
 @c %**-------------------------------------------------------------------------
 @anchor{overview}
 @chapter Overview
-The two general methods to build on @value{OS.osx} are building from @b{terminal} or @b{Xcode}. The preferred method for automated and repeatable builds is to use the terminal. Otherwise the choice is generally up to the individual. In essence, the terminal actually invokes @command{xcodebuild} to build the very same targets contained in the Xcode project.
+The two general methods to build on @value{OS.osx} are from @b{terminal} or @b{Xcode.app}. The preferred method for automated and repeatable builds is to use the terminal. Otherwise the choice is generally up to the individual. To be extra clear, building from the terminal by default actually invokes @command{xcodebuild} to build the very same targets contained in the Xcode project. Think of it as building with Xcode but without the GUI.
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
