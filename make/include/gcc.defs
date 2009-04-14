@@ -12,7 +12,6 @@ GCC.vis     = 0
 GCC.pic     = 0
 GCC.g       = none
 GCC.O       = none
-GCC.extra   = 1
 GCC.D       =
 GCC.I       =
 GCC.muldefs = 0
@@ -23,6 +22,16 @@ GCC.f       =
 GCC.L       =
 GCC.l       =
 GCC.end     = 0
+
+GCC.extra         = 1
+GCC.extra.h_o     = 1
+GCC.extra.c_o     = 1
+GCC.extra.dylib   = 1
+GCC.extra.exe     = 1
+GCC.extra.hpp_o   = 1
+GCC.extra.cpp_o   = 1
+GCC.extra.dylib++ = 1
+GCC.extra.exe++   = 1
 
 GCC.args.pipe      = -pipe
 GCC.args.strip     = -Wl,-S
@@ -40,7 +49,6 @@ GCC.args.g.max     = -gdwarf-2 -g3
 GCC.args.O.none    = -O0
 GCC.args.O.size    = -Os
 GCC.args.O.speed   = -O3
-GCC.args.extra     =
 GCC.args.D         = -D$(1)
 GCC.args.I         = -I$(1)
 GCC.args.muldefs   = -Wl,--allow-multiple-definition
@@ -50,6 +58,16 @@ GCC.args.f         = -framework $(1)
 GCC.args.L         = -L$(1)
 GCC.args.l         = -l$(1)
 GCC.args.end       = -Wl,--end-group
+
+GCC.args.extra         =
+GCC.args.extra.h_o     =
+GCC.args.extra.c_o     =
+GCC.args.extra.dylib   =
+GCC.args.extra.exe     =
+GCC.args.extra.hpp_o   =
+GCC.args.extra.cpp_o   =
+GCC.args.extra.dylib++ =
+GCC.args.extra.exe++   =
 
 ###############################################################################
 
@@ -68,7 +86,6 @@ define import.GCC
     $(1).GCC.pic     = $$(GCC.pic)
     $(1).GCC.g       = $$(GCC.g)
     $(1).GCC.O       = $$(GCC.O)
-    $(1).GCC.extra   = $$(GCC.extra)
     $(1).GCC.D       = $$(GCC.D)
     $(1).GCC.I       = $$(GCC.I)
     $(1).GCC.muldefs = $$(GCC.muldefs)
@@ -79,6 +96,16 @@ define import.GCC
     $(1).GCC.L       = $$(GCC.L)
     $(1).GCC.l       = $$(GCC.l)
     $(1).GCC.end     = $$(GCC.end)
+
+    $(1).GCC.extra         = $$(GCC.extra)
+    $(1).GCC.extra.h_o     = $$(GCC.extra.h_o)
+    $(1).GCC.extra.c_o     = $$(GCC.extra.c_o)
+    $(1).GCC.extra.dylib   = $$(GCC.extra.dylib)
+    $(1).GCC.extra.exe     = $$(GCC.extra.exe)
+    $(1).GCC.extra.hpp_o   = $$(GCC.extra.hpp_o)
+    $(1).GCC.extra.cpp_o   = $$(GCC.extra.cpp_o)
+    $(1).GCC.extra.dylib++ = $$(GCC.extra.dylib++)
+    $(1).GCC.extra.exe++   = $$(GCC.extra.exe++)
 
     $(1).GCC.args.pipe      = $$(GCC.args.pipe)
     $(1).GCC.args.strip     = $$(GCC.args.strip)
@@ -96,7 +123,6 @@ define import.GCC
     $(1).GCC.args.O.none    = $$(GCC.args.O.none)
     $(1).GCC.args.O.size    = $$(GCC.args.O.size)
     $(1).GCC.args.O.speed   = $$(GCC.args.O.speed)
-    $(1).GCC.args.extra     = $$(GCC.args.extra)
     $(1).GCC.args.D         = $$(GCC.args.D)
     $(1).GCC.args.I         = $$(GCC.args.I)
     $(1).GCC.args.muldefs   = $$(GCC.args.muldefs)
@@ -107,25 +133,35 @@ define import.GCC
     $(1).GCC.args.l         = $$(GCC.args.l)
     $(1).GCC.args.end       = $$(GCC.args.end)
 
+    $(1).GCC.args.extra         = $$(GCC.args.extra)
+    $(1).GCC.args.extra.h_o     = $$(GCC.args.extra.h_o)
+    $(1).GCC.args.extra.c_o     = $$(GCC.args.extra.c_o)
+    $(1).GCC.args.extra.dylib   = $$(GCC.args.extra.dylib)
+    $(1).GCC.args.extra.exe     = $$(GCC.args.extra.exe)
+    $(1).GCC.args.extra.hpp_o   = $$(GCC.args.extra.hpp_o)
+    $(1).GCC.args.extra.cpp_o   = $$(GCC.args.extra.cpp_o)
+    $(1).GCC.args.extra.dylib++ = $$(GCC.args.extra.dylib++)
+    $(1).GCC.args.extra.exe++   = $$(GCC.args.extra.exe++)
+
     ###########################################################################
 
     $(1).GCC.c = -c $$(4)
     $(1).GCC.o = -o $$(3)
 
     # FUNCTION: C precompiled headers
-    $(1).GCC.H_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra *D *I !c !o
+    $(1).GCC.H_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.h_o *D *I !c !o
     $(1).GCC.H_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.H_O.args),$$(1),$$(2))
 
     # FUNCTION: C compile source
-    $(1).GCC.C_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra *D *I !c !o
+    $(1).GCC.C_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.c_o *D *I !c !o
     $(1).GCC.C_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ precompile headers
-    $(1).GCC.HPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra *D *I !c !o
+    $(1).GCC.HPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.hpp_o *D *I !c !o
     $(1).GCC.HPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.HPP_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ compile source
-    $(1).GCC.CPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra *D *I !c !o
+    $(1).GCC.CPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.cpp_o *D *I !c !o
     $(1).GCC.CPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.CPP_O.args),$$(1),$$(2))
 
     ###########################################################################
@@ -133,18 +169,18 @@ define import.GCC
     $(1).GCC.i = $$(4)
 
     # FUNCTION: C link dynamic-lib
-    $(1).GCC.DYLIB.args = !gcc ?pipe ?strip ?dylib ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB.args = !gcc ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB.args),$$(1),$$(2))
 
     # FUNCTION: C link executable
-    $(1).GCC.EXE.args = !gcc ?pipe ?strip ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE.args = !gcc ?pipe ?strip ?extra.exe ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
 
     # FUNCTION: C++ link dynamic-lib
-    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB++.args),$$(1),$$(2))
 
     # FUNCTION: C++ link executable
-    $(1).GCC.EXE++.args = !gxx ?pipe ?strip ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE++.args = !gxx ?pipe ?strip ?extra.exe++ ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.EXE++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE++.args),$$(1),$$(2))
 endef

@@ -315,7 +315,7 @@ class ShellProbe( Action ):
 ##   x86_64-unknown-linux-gnu   (Linux, Fedora 10 x86_64)
 ##
 class HostTupleProbe( ShellProbe, list ):
-    GNU_TUPLE_RX = '([^-]+)-([^-]+)-([^0-9-]+)([^-]*)-?([^-]*)'
+    GNU_TUPLE_RE = '([^-]+)-?([^-]*)-([^0-9-]+)([^-]*)-?([^-]*)'
 
     def __init__( self ):
         super( HostTupleProbe, self ).__init__( 'host tuple', '%s/config.guess' % (cfg.dir), abort=True, head=True )
@@ -327,7 +327,7 @@ class HostTupleProbe( ShellProbe, list ):
             self.spec = ''
 
         ## grok GNU host tuples
-        m = re.match( HostTupleProbe.GNU_TUPLE_RX, self.spec )
+        m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
         if not m:
             self.fail = True
             self.msg_end = 'invalid host tuple: %s' % (self.spec)
@@ -365,10 +365,14 @@ class BuildAction( Action, list ):
         super( BuildAction, self ).__init__( 'compute', 'build tuple', abort=True )
 
     def _action( self ):
-        self.spec = arch.mode[arch.mode.mode]
+        ## check if --cross spec was used; must maintain 5-tuple compatibility with regex
+        if options.cross:
+            self.spec = os.path.basename( options.cross ).rstrip( '-' )
+        else:
+            self.spec = arch.mode[arch.mode.mode]
 
         ## grok GNU host tuples
-        m = re.match( HostTupleProbe.GNU_TUPLE_RX, self.spec )
+        m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
         if not m:
             self.msg_end = 'invalid host tuple: %s' % (self.spec)
             return
@@ -386,6 +390,15 @@ class BuildAction( Action, list ):
         self.extra   = self[4]
         self.systemf = host.systemf
 
+        ## when cross we need switch for platforms
+        if options.cross:
+            if self.match( '*mingw*' ):
+                self.systemf = 'MinGW'
+            elif self.systemf:
+                self.systemf[0] = self.systemf[0].upper()
+            self.title = '%s %s' % (build.systemf,self.machine)
+        else:
+            self.title = '%s %s' % (build.systemf,arch.mode.mode)
         self.fail = False
 
     ## glob-match against spec
@@ -629,7 +642,7 @@ class Project( Action ):
         self.name          = 'HandBrake'
         self.acro_lower    = 'hb'
         self.acro_upper    = 'HB'
-        self.url_website   = 'http://handbrake.fr'
+        self.url_website   = 'http://code.google.com/p/hbfork'
         self.url_community = 'http://forum.handbrake.fr'
         self.url_irc       = 'irc://irc.freenode.net/handbrake'
 
@@ -783,9 +796,15 @@ class ConfigDocument:
 
     def _outputMake( self, file, namelen, name, value, append ):
         if append:
-            file.write( '%-*s += %s\n' % (namelen, name, value ))
+            if value == None or len(str(value)) == 0:
+                file.write( '%-*s +=\n' % (namelen, name) )
+            else:
+                file.write( '%-*s += %s\n' % (namelen, name, value) )
         else:
-            file.write( '%-*s  = %s\n' % (namelen, name, value ))
+            if value == None or len(str(value)) == 0:
+                file.write( '%-*s  =\n' % (namelen, name) )
+            else:
+                file.write( '%-*s  = %s\n' % (namelen, name, value) )
 
     def _outputM4( self, file, namelen, name, value ):
         namelen += 7
@@ -930,6 +949,8 @@ def createCLI():
 
     h = IfHost( 'disable GTK GUI', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--disable-gtk', default=False, action='store_true', help=h )
+    h = IfHost( 'enable GTK GUI (mingw)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-gtk-mingw', default=False, action='store_true', help=h )
 
     h = IfHost( 'disable Xcode', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--disable-xcode', default=False, action='store_true', help=h )
@@ -953,6 +974,8 @@ def createCLI():
     debugMode.cli_add_option( grp, '--debug' )
     optimizeMode.cli_add_option( grp, '--optimize' )
     arch.mode.cli_add_option( grp, '--arch' )
+    grp.add_option( '--cross', default=None, action='store', metavar='SPEC',
+        help='specify GCC cross-compilation spec' )
     cli.add_option_group( grp )
 
     ## add tool locations
@@ -1100,13 +1123,15 @@ try:
         else:
             gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make' )
 
-        m4    = ToolProbe( 'M4.exe',    'm4' )
-        mkdir = ToolProbe( 'MKDIR.exe', 'mkdir' )
-        patch = ToolProbe( 'PATCH.exe', 'gpatch', 'patch' )
-        rm    = ToolProbe( 'RM.exe',    'rm' )
-        tar   = ToolProbe( 'TAR.exe',   'gtar', 'tar' )
-        wget  = ToolProbe( 'WGET.exe',  'wget', abort=False )
-        yasm  = ToolProbe( 'YASM.exe',  'yasm', abort=False )
+        m4     = ToolProbe( 'M4.exe',     'm4' )
+        mkdir  = ToolProbe( 'MKDIR.exe',  'mkdir' )
+        patch  = ToolProbe( 'PATCH.exe',  'gpatch', 'patch' )
+        rm     = ToolProbe( 'RM.exe',     'rm' )
+        ranlib = ToolProbe( 'RANLIB.exe', 'ranlib' )
+        strip  = ToolProbe( 'STRIP.exe',  'strip' )
+        tar    = ToolProbe( 'TAR.exe',    'gtar', 'tar' )
+        wget   = ToolProbe( 'WGET.exe',   'wget', abort=False )
+        yasm   = ToolProbe( 'YASM.exe',   'yasm', abort=False )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
@@ -1139,6 +1164,12 @@ try:
             exports.append( m.groups() )
         else:
             targets.append( arg )
+
+    ## re-run tools with cross-compilation needs
+    if options.cross:
+        for tool in ( Tools.ar, Tools.gcc, Tools.ranlib, Tools.strip ):
+            tool.__init__( tool.var, '%s-%s' % (options.cross,tool.name), **tool.kwargs )
+            tool.run()
 
     ## run delayed actions
     for action in Action.actions:
@@ -1207,14 +1238,19 @@ try:
     doc.add( 'BUILD.systemf', build.systemf )
     doc.add( 'BUILD.release', build.release )
     doc.add( 'BUILD.extra',   build.extra )
-    doc.add( 'BUILD.title',   '%s %s' % (build.systemf,arch.mode.mode) )
+    doc.add( 'BUILD.title',   build.title )
     doc.add( 'BUILD.ncpu',    core.count )
     doc.add( 'BUILD.jobs',    core.jobs )
 
-    doc.add( 'BUILD.cross',   int(arch.mode.mode != arch.mode.default) )
-    doc.add( 'BUILD.method',  'terminal' )
-    doc.add( 'BUILD.date',    time.strftime('%c') )
-    doc.add( 'BUILD.arch',    arch.mode.mode )
+    doc.add( 'BUILD.cross',        int(options.cross != None or arch.mode.mode != arch.mode.default) )
+    if options.cross:
+        doc.add( 'BUILD.cross.prefix', '%s-' % (options.cross) )
+    else:
+        doc.add( 'BUILD.cross.prefix', '' )
+
+    doc.add( 'BUILD.method',       'terminal' )
+    doc.add( 'BUILD.date',         time.strftime('%c') )
+    doc.add( 'BUILD.arch',         arch.mode.mode )
 
     doc.addBlank()
     doc.add( 'CONF.method', options.conf_method )
@@ -1230,7 +1266,8 @@ try:
     doc.addBlank()
     doc.add( 'FEATURE.asm',   'disabled' )
     doc.add( 'FEATURE.gtk',   int( not options.disable_gtk ))
-    doc.add( 'FEATURE.xcode', int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
+    doc.add( 'FEATURE.gtk.mingw',   int( options.enable_gtk_mingw ))
+    doc.add( 'FEATURE.xcode', int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:
         doc.addBlank()

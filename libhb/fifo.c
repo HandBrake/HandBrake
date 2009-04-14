@@ -147,7 +147,7 @@ hb_buffer_t * hb_buffer_init( int size )
 
     if (size)
     {
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
         b->data  = malloc( b->alloc );
 #elif defined( SYS_CYGWIN )
         /* FIXME */

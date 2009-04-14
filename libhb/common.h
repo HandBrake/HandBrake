@@ -18,6 +18,20 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+#if defined( SYS_MINGW )
+#   define fseek fseeko64
+#   define ftell ftello64
+#   undef  fseeko
+#   define fseeko fseeko64
+#   undef  ftello
+#   define ftello ftello64
+#   define flockfile(...)
+#   define funlockfile(...)
+#   define getc_unlocked getc
+#   undef  off_t
+#   define off_t off64_t
+#endif
+
 #ifndef MIN
 #define MIN( a, b ) ( (a) > (b) ? (b) : (a) )
 #endif

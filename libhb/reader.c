@@ -27,7 +27,7 @@ typedef struct
     int64_t        scr_offset;
     hb_psdemux_t   demux;
     int            scr_changes;
-    uint           sequence;
+    uint32_t       sequence;
     uint8_t        st_slots;        // size (in slots) of stream_timing array
     uint8_t        saw_video;       // != 0 if we've seen video
     uint8_t        saw_audio;       // != 0 if we've seen audio

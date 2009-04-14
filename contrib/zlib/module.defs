@@ -4,3 +4,9 @@ $(eval $(call import.CONTRIB.defs,ZLIB))
 ZLIB.FETCH.url = http://download.m0k.org/handbrake/contrib/zlib-1.2.3.tar.gz
 ZLIB.EXTRACT.tarbase = zlib
 ZLIB.CONFIGURE.args = !sete @dir !env !exe @prefix !extra
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    ZLIB.CONFIGURE.env.AR     = AR="$(AR.exe) rc"
+    ZLIB.CONFIGURE.env.RANLIB = RANLIB="$(RANLIB.exe)"
+    ZLIB.CONFIGURE.env.args  += !AR !RANLIB
+endif

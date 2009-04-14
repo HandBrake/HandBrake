@@ -10,7 +10,7 @@ include $(SRC/)make/include/tool.defs
 
 MODULES += contrib/a52dec
 
-ifneq (,$(filter $(BUILD.system),cygwin))
+ifneq (,$(filter $(BUILD.system),cygwin mingw))
     MODULES += contrib/bzip2
 endif
 
@@ -27,10 +27,15 @@ MODULES += contrib/libsamplerate
 MODULES += contrib/libtheora
 MODULES += contrib/libvorbis
 MODULES += contrib/mpeg2dec
+
+ifneq (,$(filter $(BUILD.system),mingw))
+    MODULES += contrib/pthreadw32
+endif
+
 MODULES += contrib/x264
 MODULES += contrib/xvidcore
 
-ifneq (,$(filter $(BUILD.system),cygwin))
+ifneq (,$(filter $(BUILD.system),cygwin mingw))
     MODULES += contrib/zlib
 endif
 
@@ -39,21 +44,21 @@ MODULES += libhb
 
 ###############################################################################
 
-## test module is replaced with macosx when Darwin+Xcode
-ifneq (,$(filter $(BUILD.system),darwin))
-    ifeq (1,$(FEATURE.xcode))
-        MODULES += macosx
-    else
-        MODULES += test
-    endif
+ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+    ## use macosx module when xcode+darwin
+    MODULES += macosx
 else
+    ## default is to build CLI
     MODULES += test
 endif
 
-ifneq (,$(filter $(BUILD.system),linux))
-    ifeq (1,$(FEATURE.gtk))
-        MODULES += gtk
-    endif
+ifeq (1-mingw,$(FEATURE.gtk.mingw)-$(BUILD.system))
+    MODULES += gtk
+endif
+
+ifeq (1-linux,$(FEATURE.gtk)-$(BUILD.system))
+    ## build gtk when gtk+linux
+    MODULES += gtk
 endif
 
 ###############################################################################
@@ -63,5 +68,5 @@ MODULES += doc
 ###############################################################################
 
 include $(MODULES:%=$(SRC/)%/module.defs)
-include $(SRC/)make/variant/$(HOST.system).defs
--include $(SRC/)make/variant/$(HOST.system).$(BUILD.machine).defs
+include $(SRC/)make/variant/$(BUILD.system).defs
+-include $(SRC/)make/variant/$(BUILD.system).$(BUILD.machine).defs

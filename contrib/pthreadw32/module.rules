@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,PTHREADW32))
+$(eval $(call import.CONTRIB.rules,PTHREADW32))

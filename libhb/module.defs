@@ -1,5 +1,11 @@
-$(eval $(call import.MODULE.defs,LIBHB,libhb,A52DEC BZIP2 FAAC FAAD2 FFMPEG LAME LIBDCA LIBDVDREAD LIBMKV LIBMP4V2 LIBOGG LIBSAMPLERATE LIBTHEORA LIBVORBIS MPEG2DEC X264 XVIDCORE ZLIB LIBHB TEST DOC))
+__deps__ := A52DEC BZIP2 FAAC FAAD2 FFMPEG LAME LIBDCA \
+    LIBDVDREAD LIBMKV LIBMP4V2 LIBOGG LIBSAMPLERATE LIBTHEORA \
+    LIBVORBIS MPEG2DEC PTHREADW32 X264 XVIDCORE ZLIB
+
+$(eval $(call import.MODULE.defs,LIBHB,libhb,$(__deps__)))
 $(eval $(call import.GCC,LIBHB))
+
+###############################################################################
 
 LIBHB.src/   = $(SRC/)libhb/
 LIBHB.build/ = $(BUILD/)libhb/
@@ -10,10 +16,7 @@ LIBHB.m4.out = $(patsubst $(LIBHB.src/)%.m4,$(LIBHB.build/)%,$(LIBHB.m4.in))
 LIBHB.c   = $(wildcard $(LIBHB.src/)*.c)
 LIBHB.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%.o,$(LIBHB.c))
 LIBHB.d   = $(LIBHB.m4.out) $(LIBHB.h.out) \
-    $(foreach n, \
-    A52DEC BZIP2 FAAC FAAD2 FFMPEG LAME LIBDCA LIBDVDREAD LIBMKV LIBMP4V2 LIBOGG \
-    LIBSAMPLERATE LIBTHEORA LIBVORBIS MPEG2DEC X264 XVIDCORE ZLIB, \
-    $($n.INSTALL.target) )
+    $(foreach n,$(LIBHB.prerequisites),$($n.INSTALL.target) )
 
 LIBHB.h.in  = $(wildcard $(LIBHB.src/)*.h)
 LIBHB.h.out = $(patsubst $(SRC/)%,$(BUILD/)%,$(LIBHB.h.in))
@@ -40,6 +43,8 @@ else ifeq ($(BUILD.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
 else ifeq ($(BUILD.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(BUILD.system),mingw)
+    LIBHB.GCC.D += SYS_MINGW PTW32_STATIC_LIB
 else ifeq ($(BUILD.system),solaris)
     LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else
@@ -71,6 +76,24 @@ LIBHB.YASM.ASM_O = $(strip $(YASM.exe) \
     -o $(1) $(2))
 
 LIBHB.out += $(LIBHB.yasm.o)
+
+endif
+
+###############################################################################
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+
+LIBHB.dll = $(LIBHB.build/)hb.dll
+LIBHB.lib = $(LIBHB.build/)hb.lib
+
+LIBHB.dll.libs = $(foreach n, \
+        a52 bz2 avcodec avformat avutil dca dvdread faac faad mkv mpeg2 mp3lame mp4v2 \
+        ogg pthreadGC2 samplerate swscale theora vorbis vorbisenc x264 xvidcore z, \
+        $(CONTRIB.build/)lib/lib$(n).a )
+
+LIBHB.GCC.args.extra.dylib++ = -Wl,--out-implib,$(LIBHB.lib)
+LIBHB.GCC.l += iberty ws2_32
+LIBHB.out += $(LIBHB.dll) $(LIBHB.lib)
 
 endif
 

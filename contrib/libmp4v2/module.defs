@@ -5,5 +5,13 @@ LIBMP4V2.FETCH.url = http://download.m0k.org/handbrake/contrib/libmp4v2-2.0-r224
 LIBMP4V2.EXTRACT.tarbase = libmp4v2
 
 ## propagate more flags
-LIBMP4V2.CONFIGURE.env.CFLAGS = CFLAGS="$(call fn.ARGS,LIBMP4V2.GCC,*archs .g .O)"
-LIBMP4V2.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,LIBMP4V2.GCC,*archs .g .O)"
+LIBMP4V2.CONFIGURE.env.CFLAGS = CFLAGS="$(call fn.ARGS,LIBMP4V2.GCC,*archs *D .g .O)"
+LIBMP4V2.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,LIBMP4V2.GCC,*archs *D .g .O)"
+
+## save some build-time by disabling utils
+LIBMP4V2.CONFIGURE.extra += --disable-util
+
+ifeq ($(BUILD.system),mingw)
+    ## mingw platform patches configure.ac and requires bootstrap
+    LIBMP4V2.CONFIGURE.bootstrap = autoreconf -fiv;
+endif

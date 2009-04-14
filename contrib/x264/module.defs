@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,X264,x264))
+$(eval $(call import.MODULE.defs,X264,x264,PTHREADW32))
 $(eval $(call import.CONTRIB.defs,X264))
 
 X264.FETCH.url = http://download.m0k.org/handbrake/contrib/x264-r1130-8475977.tar.gz
@@ -8,4 +8,12 @@ X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 X264.CONFIGURE.static =
 
-X264.CONFIGURE.extra = --disable-mp4-output --enable-pthread
+X264.CONFIGURE.extra = --disable-mp4-output
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    X264.CONFIGURE.extra += --enable-pthread --cross-prefix=$(BUILD.spec)-
+    X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs ?extra)"
+    X264.CONFIGURE.env.LDFLAGS = LDFLAGS=-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)
+else
+    X264.CONFIGURE.extra += --enable-pthread
+endif

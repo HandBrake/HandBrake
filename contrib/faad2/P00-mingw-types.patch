@@ -1,0 +1,25 @@
+diff -Naur faad2.orig/common/mp4ff/mp4ff_int_types.h faad2/common/mp4ff/mp4ff_int_types.h
+--- faad2.orig/common/mp4ff/mp4ff_int_types.h	2005-02-01 08:15:55.000000000 -0500
++++ faad2/common/mp4ff/mp4ff_int_types.h	2008-10-07 16:43:06.000000000 -0400
+@@ -1,7 +1,7 @@
+ #ifndef _MP4FF_INT_TYPES_H_
+ #define _MP4FF_INT_TYPES_H_
+ 
+-#if defined (_WIN32)
++#if defined(_WIN32) && !defined(__MINGW32__)
+ 
+ typedef char int8_t;
+ typedef unsigned char uint8_t;
+diff -Naur faad2.orig/frontend/main.c faad2/frontend/main.c
+--- faad2.orig/frontend/main.c	2007-11-01 08:33:29.000000000 -0400
++++ faad2/frontend/main.c	2008-10-07 16:55:49.000000000 -0400
+@@ -31,7 +31,9 @@
+ #ifdef _WIN32
+ #define WIN32_LEAN_AND_MEAN
+ #include <windows.h>
++#ifndef __MINGW32__
+ #define off_t __int64
++#endif
+ #else
+ #include <time.h>
+ #endif

@@ -33,8 +33,8 @@ mrproper: xclean
 include $(SRC/)make/include/base.rules
 
 include $(MODULES:%=$(SRC/)%/module.rules)
--include $(SRC/)make/variant/$(HOST.system).rules
--include $(SRC/)make/variant/$(HOST.system).$(BUILD.machine).rules
+-include $(SRC/)make/variant/$(BUILD.system).rules
+-include $(SRC/)make/variant/$(BUILD.system).$(BUILD.machine).rules
 
 ###############################################################################
 

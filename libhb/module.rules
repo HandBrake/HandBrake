@@ -36,5 +36,17 @@ endif
 
 ###############################################################################
 
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+
+libhb.build: $(LIBHB.dll)
+
+$(LIBHB.dll): | $(dirname $(LIBHB.dll) $(LIBHB.lib))
+$(LIBHB.dll): $(LIBHB.c.o) $(LIBHB.yasm.o)
+	$(call LIBHB.GCC.DYLIB++,$@,$^ $(LIBHB.dll.libs))
+
+endif
+
+###############################################################################
+
 clean: libhb.clean
 build: libhb.build

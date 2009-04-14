@@ -8,6 +8,7 @@ BZIP2.CONFIGURE = $(TOUCH.exe) $@
 BZIP2.BUILD.extra = \
     CC=$(BZIP2.GCC.gcc) \
     CFLAGS="$(call fn.ARGS,BZIP2.GCC,*archs)" \
+    RANLIB="$(RANLIB.exe)"
     PREFIX=$(call fn.ABSOLUTE,$(CONTRIB.build/))
 
 BZIP2.BUILD.ntargets = libbz2.a

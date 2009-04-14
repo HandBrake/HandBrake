@@ -43,6 +43,9 @@ typedef struct hb_thread_s hb_thread_t;
 #elif defined( SYS_CYGWIN )
 #  define HB_LOW_PRIORITY    0
 #  define HB_NORMAL_PRIORITY 1
+#elif defined( SYS_MINGW )
+#  define HB_LOW_PRIORITY    0
+#  define HB_NORMAL_PRIORITY 0
 #endif
 
 hb_thread_t * hb_thread_init( char * name, void (* function)(void *),

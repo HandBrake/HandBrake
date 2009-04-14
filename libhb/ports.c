@@ -31,6 +31,11 @@
 #include <windows.h>
 #endif
 
+#ifdef SYS_MINGW
+#include <pthread.h>
+#include <windows.h>
+#endif
+
 #ifdef SYS_SunOS
 #include <sys/processor.h>
 #endif
@@ -39,15 +44,15 @@
 #include <sys/time.h>
 
 
-//#ifdef SYS_CYGWIN
-//#include <winsock2.h>
-//#include <ws2tcpip.h>
-//#else
+#ifdef SYS_MINGW
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
-//#endif
+#endif
 
 #include "hb.h"
 
@@ -97,7 +102,7 @@ void hb_snooze( int delay )
     snooze( 1000 * delay );
 #elif defined( SYS_DARWIN ) || defined( SYS_LINUX ) || defined( SYS_FREEBSD) || defined( SYS_SunOS )
     usleep( 1000 * delay );
-#elif defined( SYS_CYGWIN )
+#elif defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     Sleep( delay );
 #endif
 }
@@ -119,7 +124,7 @@ int hb_get_cpu_count()
     }
     cpu_count = 1;
 
-#if defined(SYS_CYGWIN)
+#if defined(SYS_CYGWIN) || defined(SYS_MINGW)
     SYSTEM_INFO cpuinfo;
     GetSystemInfo( &cpuinfo );
     cpu_count = cpuinfo.dwNumberOfProcessors;
@@ -181,7 +186,7 @@ void hb_get_tempory_directory( hb_handle_t * h, char path[512] )
     char base[512];
 
     /* Create the base */
-#ifdef SYS_CYGWIN
+#if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
     char *p;
     int i_size = GetTempPath( 512, base );
     if( i_size <= 0 || i_size >= 512 )
@@ -227,11 +232,11 @@ void hb_get_tempory_filename( hb_handle_t * h, char name[1024],
  ***********************************************************************/
 void hb_mkdir( char * name )
 {
-//#ifdef SYS_CYGWIN
-//    mkdir( name );
-//#else
+#ifdef SYS_MINGW
+    mkdir( name );
+#else
     mkdir( name, 0755 );
-//#endif
+#endif
 }
 
 /************************************************************************

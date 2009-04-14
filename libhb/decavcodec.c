@@ -401,7 +401,7 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     AVCodecParserContext *parser = av_parser_init( codec->id );
     AVCodecContext *context = avcodec_alloc_context();
     hb_avcodec_open( context, codec );
-#ifdef SYS_CYGWIN
+#if defined( SYS_CYGWIN )
     uint8_t *buffer = memalign(16, AVCODEC_MAX_AUDIO_FRAME_SIZE);
 #else
     uint8_t *buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
@@ -1132,7 +1132,7 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
             // complicated, machine dependent alignment here we use the
             // fact that malloc returns an aligned pointer on most architectures.
 
-            #ifdef SYS_CYGWIN
+            #if defined( SYS_CYGWIN )
                 // Cygwin's malloc doesn't appear to return 16-byte aligned memory so use memalign instead.
                pv->buffer = memalign(16, AVCODEC_MAX_AUDIO_FRAME_SIZE);
             #else

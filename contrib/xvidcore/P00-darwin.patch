@@ -1,31 +1,31 @@
-diff -ru xvidcore-1.1.0/build/generic/configure xvidcore-1.1.0-patched/build/generic/configure
---- xvidcore-1.1.0/build/generic/configure	2005-12-30 15:45:30.000000000 +0100
-+++ xvidcore-1.1.0-patched/build/generic/configure	2006-01-16 22:06:10.000000000 +0100
-@@ -4052,6 +4071,12 @@
- 	       PREFIX="-DPREFIX"
+diff -Naur xvidcore-20090311.orig/build/generic/configure.in xvidcore-20090311/build/generic/configure.in
+--- xvidcore-20090311.orig/build/generic/configure.in	2008-12-05 05:18:52.000000000 -0500
++++ xvidcore-20090311/build/generic/configure.in	2009-04-14 11:30:04.000000000 -0400
+@@ -427,8 +427,13 @@
  	       MARK_FUNCS=""
                 ;;
-+           *darwin*)
-+               echo "$as_me:$LINENO: result: macho" >&5
-+echo "${ECHO_T}macho" >&6
-+               NASM_FORMAT="macho"
-+               PREFIX="-DPREFIX"
-+               MARK_FUNCS=""
-        esac
- 
-        AS="$chosen_asm_prog"
-diff -ru xvidcore-1.1.0/build/generic/configure.in xvidcore-1.1.0-patched/build/generic/configure.in
---- xvidcore-1.1.0/build/generic/configure.in	2005-12-30 15:45:30.000000000 +0100
-+++ xvidcore-1.1.0-patched/build/generic/configure.in	2006-01-16 22:06:04.000000000 +0100
-@@ -397,6 +397,11 @@
- 	       PREFIX="-DPREFIX"
- 	       MARK_FUNCS=""
+            *darwin*)
+-               AC_MSG_RESULT([macho])
+-               NASM_FORMAT="macho"
++               if test "$ARCHITECTURE" = "X86_64" ; then
++                   AC_MSG_RESULT([macho64])
++                   NASM_FORMAT="macho64"
++               else
++                   AC_MSG_RESULT([macho])
++                   NASM_FORMAT="macho"
++               fi
+                PREFIX="-DPREFIX"
+                MARK_FUNCS=""
                 ;;
-+           *darwin*)
-+               AC_MSG_RESULT([macho])
-+               NASM_FORMAT="macho"
-+               PREFIX="-DPREFIX"
-+               MARK_FUNCS=""
-        esac
- 
-        AS="$chosen_asm_prog"
+diff -Naur xvidcore-20090311.orig/src/nasm.inc xvidcore-20090311/src/nasm.inc
+--- xvidcore-20090311.orig/src/nasm.inc	2008-12-05 05:15:02.000000000 -0500
++++ xvidcore-20090311/src/nasm.inc	2009-04-14 12:13:37.000000000 -0400
+@@ -177,6 +177,8 @@
+ %macro TEXT 0
+ %ifidn __OUTPUT_FORMAT__,macho
+       SECTION .text align=SECTION_ALIGN
++%elifidn __OUTPUT_FORMAT__,macho64
++      SECTION .text align=SECTION_ALIGN
+ %else
+       SECTION .rotext align=SECTION_ALIGN
+ %endif

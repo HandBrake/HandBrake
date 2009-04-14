@@ -130,7 +130,7 @@ static void decmp4metadata( hb_title_t *title )
                         MP4ChapterTypeQt );
 
         if( chapter_list && ( hb_list_count( title->list_chapter ) == 0 ) ) {
-            uint i = 1;
+            uint32_t i = 1;
             while( i <= chapter_count )
             {
                 hb_chapter_t * chapter;

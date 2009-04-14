@@ -1,24 +1,7 @@
-diff -Naur xvidcore/build/generic/configure xvidcore-patched/build/generic/configure
---- xvidcore/build/generic/configure	2005-12-30 09:45:30.000000000 -0500
-+++ xvidcore-patched/build/generic/configure	2007-01-01 18:43:27.953125000 -0500
-@@ -3844,10 +3844,9 @@
-      [cC][yY][gG][wW][iI][nN]*|mingw32*|mks*)
- 	echo "$as_me:$LINENO: result: ok" >&5
- echo "${ECHO_T}ok" >&6
--	STATIC_LIB="xvidcore.\$(STATIC_EXTENSION)"
--	SHARED_LIB="xvidcore.\$(SHARED_EXTENSION)"
--	SPECIFIC_LDFLAGS="-mno-cygwin -shared -Wl,--dll,--out-implib,\$@.a libxvidcore.def"
--	SPECIFIC_CFLAGS="-mno-cygwin"
-+	STATIC_LIB="libxvidcore.\$(STATIC_EXTENSION)"
-+	SHARED_LIB="libxvidcore.\$(SHARED_EXTENSION)"
-+	SPECIFIC_LDFLAGS="-shared -Wl,--dll,--out-implib,\$@.a libxvidcore.def"
- 	;;
-      darwin*|raphsody*)
- 	STATIC_LIB="libxvidcore.\$(STATIC_EXTENSION)"
-diff -Naur xvidcore/build/generic/configure.in xvidcore-patched/build/generic/configure.in
---- xvidcore/build/generic/configure.in	2005-12-30 09:45:30.000000000 -0500
-+++ xvidcore-patched/build/generic/configure.in	2007-01-01 18:43:11.453125000 -0500
-@@ -281,10 +281,9 @@
+diff -Naur xvidcore-20090311.orig/build/generic/configure.in xvidcore-20090311/build/generic/configure.in
+--- xvidcore-20090311.orig/build/generic/configure.in	2008-12-05 05:18:52.000000000 -0500
++++ xvidcore-20090311/build/generic/configure.in	2009-04-14 13:18:23.034051500 -0400
+@@ -282,10 +282,9 @@
  	;;
       [[cC]][[yY]][[gG]][[wW]][[iI]][[nN]]*|mingw32*|mks*)
  	AC_MSG_RESULT([ok])

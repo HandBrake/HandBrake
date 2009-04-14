@@ -154,6 +154,11 @@ int main( int argc, char ** argv )
         return 1;
     }
 
+#ifdef PTW32_STATIC_LIB
+    pthread_win32_process_attach_np();
+    pthread_win32_thread_attach_np();
+#endif
+
     /* Register our error handler */
     hb_register_error_handler(&hb_cli_error_handler);
 
@@ -210,7 +215,7 @@ int main( int argc, char ** argv )
     /* Wait... */
     while( !die )
     {
-#if !defined(SYS_BEOS)
+#if !defined(SYS_BEOS) && !defined(__MINGW32__)
         fd_set         fds;
         struct timeval tv;
         int            ret;
@@ -298,6 +303,11 @@ int main( int argc, char ** argv )
     if( stop_at_string ) free( stop_at_string );
 
     fprintf( stderr, "HandBrake has exited.\n" );
+
+#ifdef PTW32_STATIC_LIB
+    pthread_win32_thread_detach_np();
+    pthread_win32_process_detach_np();
+#endif
 
     return 0;
 }
