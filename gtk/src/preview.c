@@ -105,10 +105,7 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 	num = par_n * disp_par_d;
 	den = par_d * disp_par_n;
 
-	if (num > den)
-		*width = *width * num / den;
-	else
-		*height = *height * den / num;
+	*width = *width * num / den;
 }
 
 void

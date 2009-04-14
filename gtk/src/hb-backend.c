@@ -78,7 +78,6 @@ combo_opts_t par_opts =
 
 static options_map_t d_alignment_opts[] =
 {
-	{"1", "1", 1, "1"},
 	{"2", "2", 2, "2"},
 	{"4", "4", 4, "4"},
 	{"8", "8", 8, "8"},
@@ -2592,12 +2591,9 @@ picture_settings_deps(signal_user_data_t *ud)
 	scale_height = ghb_settings_get_int(ud->settings, "scale_height");
 
 	enable_scale_width = !autoscale && (pic_par != 1);
-	enable_scale_height = !autoscale &&
-		((pic_par == 0 && !keep_aspect) || (pic_par == 3));
-	enable_disp_width = (pic_par == 3) && !keep_aspect &&
-		(disp_height == scale_height);
-	enable_disp_height = (pic_par == 3) && !keep_aspect &&
-		(disp_width == scale_width);
+	enable_scale_height = !autoscale && (pic_par != 1);
+	enable_disp_width = (pic_par == 3) && !keep_aspect;
+	enable_disp_height = FALSE;
 
 	GtkWidget *widget;
 	widget = GHB_WIDGET(ud->builder, "scale_width");
@@ -2664,38 +2660,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		keep_width = FALSE;
 		keep_height = FALSE;
 	}
-	if (keep_aspect)
-	{
-		keep_height = FALSE;
-	}
 	// Step needs to be at least 2 because odd widths cause scaler crash
 	step = mod;
 	widget = GHB_WIDGET (ud->builder, "scale_width");
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, mod);
+	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
 	widget = GHB_WIDGET (ud->builder, "scale_height");
-	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, mod);
-	if (mod == 1)
-	{
-		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
-		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
-		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
-		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 2);
-	}
-	else
-	{
-		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
-		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
-		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
-		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
-		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 1);
-	}
+	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
 	ghb_title_info_t tinfo;
 	if (autocrop && ghb_get_title_info (&tinfo, titleindex))
 	{
@@ -2801,6 +2771,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		// The scaler crashes if the dimensions are not divisible by 2
 		// Align mod 2.  And so does something in x264_encoder_headers()
 		job->anamorphic.modulus = mod;
+		if (keep_height && pic_par == 2)
+			width = ((double)height * crop_width / crop_height) + 0.5;
 		job->width = width;
 		job->height = height;
 		if (max_width) 
@@ -2814,15 +2786,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			gint dar_width, dar_height;
 			dar_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
 			dar_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
-			if (dar_width > width)
-				dar_height = height;
-			else if (dar_height > height)
-				dar_width = width;
-			else
-			{
-				dar_width = width;
-				dar_height = height;
-			}
 			job->anamorphic.dar_width = dar_width;
 			job->anamorphic.dar_height = dar_height;
 		}
@@ -2888,20 +2851,11 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	ghb_ui_update(ud, "scale_width", ghb_int64_value(width));
 	ghb_ui_update(ud, "scale_height", ghb_int64_value(height));
 
-	gint disp_width, disp_height, dar_width, dar_height;
+	gint disp_width, dar_width, dar_height;
 	gchar *str;
 
-	disp_width = width;
-	disp_height = height;
-	if (par_width >= par_height)
-	{
-		disp_width = par_width * width / par_height;
-	}
-	else
-	{
-		disp_height = par_height * height / par_width;
-	}
-	hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
+	disp_width = par_width * width / par_height;
+	hb_reduce(&dar_width, &dar_height, disp_width, height);
 		
 	if (dar_width > 2 * dar_height)
 	{
@@ -2917,7 +2871,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	ghb_ui_update(ud, "pixel_aspect", ghb_string_value(str));
 	g_free(str);
 	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
-	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(disp_height));
+	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(height));
 	picture_settings_deps(ud);
 }
 

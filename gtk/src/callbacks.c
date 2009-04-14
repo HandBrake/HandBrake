@@ -1256,7 +1256,8 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("scale_width_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	ghb_set_scale (ud, GHB_SCALE_KEEP_WIDTH);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_SCALE_KEEP_WIDTH);
 	update_preview = TRUE;
 	gchar *text;
 	gint width = ghb_settings_get_int(ud->settings, "scale_width");
@@ -1274,7 +1275,8 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("scale_height_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	ghb_set_scale (ud, GHB_SCALE_KEEP_HEIGHT);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_SCALE_KEEP_HEIGHT);
 	update_preview = TRUE;
 	gchar *text;
 	gint width = ghb_settings_get_int(ud->settings, "scale_width");
@@ -1295,7 +1297,8 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("crop_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
-	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
 	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
@@ -1324,6 +1327,32 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 void
+display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("scale_changed_cb ()");
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+	update_preview = TRUE;
+}
+
+void
+display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("scale_changed_cb ()");
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+	update_preview = TRUE;
+}
+
+void
 scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_changed_cb ()");
@@ -1331,7 +1360,8 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
 	update_preview = TRUE;
 	
 	gchar *text;
