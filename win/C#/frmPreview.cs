@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO;
 using AxQTOControlLib;
+using Handbrake.Functions;
 using QTOControlLib;
 using QTOLibrary;
 

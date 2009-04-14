@@ -29,7 +29,6 @@ namespace Handbrake
         Parsing.DVD thisDVD;
 
         // Objects belonging to this window only
-        PresetLoader presetLoader = new PresetLoader();
         QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking.

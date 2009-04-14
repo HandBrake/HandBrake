@@ -11,7 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
 
-namespace Handbrake
+namespace Handbrake.Functions
 {
     class QueryGenerator
     {

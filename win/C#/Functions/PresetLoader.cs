@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Handbrake
+namespace Handbrake.Functions
 {
     class PresetLoader
     {
