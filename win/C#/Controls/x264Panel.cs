@@ -8,6 +8,11 @@ namespace Handbrake.Controls
         public x264Panel()
         {
             InitializeComponent();
+
+            if (Properties.Settings.Default.tooltipEnable == "Checked")
+                setToolTipActive(true);
+
+            reset2Defaults();
         }
 
         public string x264Query

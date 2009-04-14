@@ -14,31 +14,34 @@ using System.Diagnostics;
 using System.Threading;
 using Handbrake.Functions;
 using Handbrake.Presets;
+using Handbrake.Queue;
+using Handbrake.Parsing;
 
 namespace Handbrake
 {
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects
-        private delegate void UpdateWindowHandler();
         Main hb_common_func = new Main();
         Encode encodeHandler = new Encode();
-        Queue.QueueHandler encodeQueue = new Queue.QueueHandler();
+        QueueHandler encodeQueue = new QueueHandler();
         PresetsHandler presetHandler = new PresetsHandler();
-        Parsing.Title selectedTitle;
-        Parsing.DVD thisDVD;
-
-        // Objects belonging to this window only
         QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking.
+        Title selectedTitle;
+        DVD thisDVD;
+        Process hbproc;
         private frmQueue queueWindow;
         private frmPreview qtpreview;
+        private Form splash;
         private string lastAction;
         public int maxWidth;
         public int maxHeight;
-        Process hbproc;
-        private Form splash;
+
+        // Delegates
+        private delegate void UpdateWindowHandler();
+        private delegate void updateStatusChanger();
 
         // Applicaiton Startup ************************************************
 
@@ -46,28 +49,25 @@ namespace Handbrake
 
         public frmMain()
         {
-            // Load the splash screen in this thread
+            // Load and setup the splash screen in this thread
             splash = new frmSplashScreen();
             splash.Show();
-
-            //Create a label that can be updated from the parent thread.
             Label lblStatus = new Label { Size = new Size(250, 20), Location = new Point(10, 280) };
             splash.Controls.Add(lblStatus);
+
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
             lblStatus.Text = "Setting Version Data ...";
             Application.DoEvents();
-            ArrayList x = hb_common_func.getCliVersionData();
-            Properties.Settings.Default.hb_build = int.Parse(x[1].ToString());
-            Properties.Settings.Default.hb_version = x[0].ToString();
+            hb_common_func.setCliVersionData();
 
-            // show the form, but leave disabled until preloading is complete then show the main form
+            // Show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
             this.Show();
             Application.DoEvents(); // Forces frmMain to draw
 
-            // update the status
+            // Check for new versions, if update checking is enabled
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
                 lblStatus.Text = "Checking for updates ...";
@@ -80,7 +80,6 @@ namespace Handbrake
             // Setup the GUI components
             lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
-            x264Panel.reset2Defaults(); // Initialize all the x264 widgets to their default values
             loadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
@@ -92,7 +91,6 @@ namespace Handbrake
             // Load the user's default settings or Normal Preset
             if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultPreset != "")
             {
-                // Ok, so, we've selected a preset. Now we want to load it.
                 if (presetHandler.getPreset(Properties.Settings.Default.defaultPreset) != null)
                 {
                     string query = presetHandler.getPreset(Properties.Settings.Default.defaultPreset).Query;
@@ -120,10 +118,7 @@ namespace Handbrake
 
             // Enabled GUI tooltip's if Required
             if (Properties.Settings.Default.tooltipEnable == "Checked")
-            {
-                x264Panel.setToolTipActive(true);
                 ToolTip.Active = true;
-            }
 
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
@@ -139,8 +134,7 @@ namespace Handbrake
             queueRecovery();
         }
 
-        // Startup Functions
-        private delegate void updateStatusChanger();
+        // Startup Functions   
         private void startupUpdateCheck()
         {
             try
@@ -226,7 +220,7 @@ namespace Handbrake
         }
         private void encodeStarted(object sender, EventArgs e)
         {
-            setLastAction("encode");
+            lastAction = "encode";
             setEncodeStarted();
         }
         private void encodeEnded(object sender, EventArgs e)
@@ -978,8 +972,10 @@ namespace Handbrake
         {
             // This removes the file extension from the filename box on the save file dialog.
             // It's daft but some users don't realise that typing an extension overrides the dropdown extension selected.
-            if (Path.HasExtension(text_destination.Text))
-                DVD_Save.FileName = Path.Combine(Path.GetDirectoryName(text_destination.Text), Path.GetFileNameWithoutExtension(text_destination.Text));
+            DVD_Save.FileName = Path.GetFileNameWithoutExtension(text_destination.Text);
+
+            if (Path.IsPathRooted(text_destination.Text))
+                DVD_Save.InitialDirectory = Path.GetDirectoryName(text_destination.Text);
 
             // Show the dialog and set the main form file path
             if (drop_format.SelectedIndex.Equals(0))
@@ -994,13 +990,31 @@ namespace Handbrake
                 if (DVD_Save.FileName.StartsWith("\\"))
                     MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
-                {
-                    setAudioByContainer(DVD_Save.FileName);
+                {   
+                    // Add a file extension manually, as FileDialog.AddExtension has issues with dots in filenames
+                    switch (DVD_Save.FilterIndex)
+                    {
+                        case 1:
+                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
+                                DVD_Save.FileName += ".mp4";        
+                            break;    
+                        case 2:
+                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".m4v", StringComparison.InvariantCultureIgnoreCase))   
+                                DVD_Save.FileName += ".m4v";     
+                            break;  
+                        case 3:   
+                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))     
+                                DVD_Save.FileName += ".mkv";   
+                            break;   
+                        default:   
+                            //do nothing  
+                            break; 
+                    }
                     text_destination.Text = DVD_Save.FileName;
 
                     // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
                     if (Check_ChapterMarkers.Checked)
-                        text_destination.Text = text_destination.Text.Replace(".mp4", ".m4v");
+                        drop_format.SelectedIndex = 1;
                 }
             }
         }
@@ -1038,21 +1052,7 @@ namespace Handbrake
         //Video Tab
         private void drp_videoEncoder_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
-            {
-                check_largeFile.Enabled = true;
-                check_optimiseMP4.Enabled = true;
-                check_iPodAtom.Enabled = true;
-            }
-            else
-            {
-                check_largeFile.Enabled = false;
-                check_optimiseMP4.Enabled = false;
-                check_iPodAtom.Enabled = false;
-                check_largeFile.Checked = false;
-                check_optimiseMP4.Checked = false;
-                check_iPodAtom.Checked = false;
-            }
+            setContainerOpts();
 
             //Turn off some options which are H.264 only when the user selects a non h.264 encoder
             if (drp_videoEncoder.Text.Contains("H.264"))
@@ -1061,7 +1061,7 @@ namespace Handbrake
                     check_turbo.Enabled = true;
 
                 h264Tab.Enabled = true;
-                if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
+                if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
                     check_iPodAtom.Enabled = true;
                 else
                     check_iPodAtom.Enabled = false;
@@ -1119,6 +1119,28 @@ namespace Handbrake
                     slider_videoQuality.Value = 0;
                     SliderValue.Text = "0% QP: 0.00";
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Set the container format options
+        /// </summary>
+        public void setContainerOpts()
+        {
+            if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
+            {
+                check_largeFile.Enabled = true;
+                check_optimiseMP4.Enabled = true;
+                check_iPodAtom.Enabled = true;
+            }
+            else
+            {
+                check_largeFile.Enabled = false;
+                check_optimiseMP4.Enabled = false;
+                check_iPodAtom.Enabled = false;
+                check_largeFile.Checked = false;
+                check_optimiseMP4.Checked = false;
+                check_iPodAtom.Checked = false;
             }
         }
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
@@ -1728,6 +1750,64 @@ namespace Handbrake
         }
         #endregion
 
+        #region GUI
+        /// <summary>
+        /// Set the GUI to it's finished encoding state.
+        /// </summary>
+        private void setEncodeFinished()
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new UpdateWindowHandler(setEncodeFinished));
+                    return;
+                }
+
+                lbl_encode.Text = "Encoding Finished";
+                btn_start.Text = "Start";
+                btn_start.ToolTipText = "Start the encoding process";
+                btn_start.Image = Properties.Resources.Play;
+
+                // If the window is minimized, display the notification in a popup.
+                if (FormWindowState.Minimized == this.WindowState)
+                {
+                    notifyIcon.BalloonTipText = lbl_encode.Text;
+                    notifyIcon.ShowBalloonTip(500);
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Set the GUI to it's started encoding state.
+        /// </summary>
+        private void setEncodeStarted()
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    BeginInvoke(new UpdateWindowHandler(setEncodeStarted));
+                    return;
+                }
+
+                lbl_encode.Visible = true;
+                lbl_encode.Text = "Encoding in Progress";
+                btn_start.Text = "Stop";
+                btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
+                btn_start.Image = Properties.Resources.stop;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+        #endregion
+
         #region DVD Drive Detection
         // Source Button Drive Detection
         private delegate void ProgressUpdateHandler();
@@ -1895,81 +1975,6 @@ namespace Handbrake
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Setup the GUI for Encoding or finished Encoding.
-        /// 1 = Encode Running
-        /// 0 = Encode Finished.
-        /// </summary>
-        public void setEncodeFinished()
-        {
-            try
-            {
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new UpdateWindowHandler(setEncodeFinished));
-                    return;
-                }
-
-                lbl_encode.Text = "Encoding Finished";
-                btn_start.Text = "Start";
-                btn_start.ToolTipText = "Start the encoding process";
-                btn_start.Image = Properties.Resources.Play;
-
-                // If the window is minimized, display the notification in a popup.
-                if (FormWindowState.Minimized == this.WindowState)
-                {
-                    notifyIcon.BalloonTipText = lbl_encode.Text;
-                    notifyIcon.ShowBalloonTip(500);
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
-        }
-        public void setEncodeStarted()
-        {
-            try
-            {
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new UpdateWindowHandler(setEncodeStarted));
-                    return;
-                }
-
-                lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding in Progress";
-                btn_start.Text = "Stop";
-                btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
-                btn_start.Image = Properties.Resources.stop;
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString());
-            }
-        }
-
-        /// <summary>
-        /// Action can be "encode" or "scan"
-        /// Set the last action varible in the main window.
-        /// This is used to control which log file is displayed when the Activity window is displayed.
-        /// </summary>
-        /// <param name="last">String</param>
-        public void setLastAction(string last)
-        {
-            this.lastAction = last;
-        }
-
-        /// <summary>
-        /// DVD parseing. Pass in a parsed DVD.
-        /// </summary>
-        /// <param name="dvd"></param>
-        public void setStreamReader(Parsing.DVD dvd)
-        {
-            this.thisDVD = dvd;
-        }
-
         /// <summary>
         /// Reload the preset panel display
         /// </summary>
@@ -2058,7 +2063,6 @@ namespace Handbrake
                 treeView_presets.Nodes.Add(preset_treeview);
             }
         }
-
         #endregion
 
         #region overrides

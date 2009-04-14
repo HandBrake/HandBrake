@@ -273,7 +273,6 @@ namespace Handbrake
             // 
             // DVD_Save
             // 
-            this.DVD_Save.CheckFileExists = true;
             this.DVD_Save.Filter = "mp4|*.mp4|m4v|*.m4v|mkv|*.mkv";
             this.DVD_Save.SupportMultiDottedExtensions = true;
             // 

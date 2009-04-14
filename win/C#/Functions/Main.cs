@@ -278,9 +278,8 @@ namespace Handbrake.Functions
         /// Get's HandBrakes version data from the CLI.
         /// </summary>
         /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
-        public ArrayList getCliVersionData()
+        public void setCliVersionData()
         {
-            ArrayList cliVersionData = new ArrayList();
             String line;
 
             // 0 = SVN Build / Version
@@ -298,6 +297,7 @@ namespace Handbrake.Functions
             try
             {
                 cliProcess.Start();
+                cliProcess.Kill();
                 // Retrieve standard output and report back to parent thread until the process is complete
                 TextReader stdOutput = cliProcess.StandardError;
 
@@ -310,9 +310,9 @@ namespace Handbrake.Functions
                     {
                         string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
                         string[] arr = data.Split(' ');
-                        cliVersionData.Add(arr[0]);
-                        cliVersionData.Add(arr[1]);
-                        return cliVersionData;
+
+                        Properties.Settings.Default.hb_build = int.Parse(arr[1]);
+                        Properties.Settings.Default.hb_version = arr[0];
                     }
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
                         killCLI();
@@ -323,10 +323,6 @@ namespace Handbrake.Functions
             {
                 MessageBox.Show("Unable to retrieve version information from the CLI. \nError:\n" + e);
             }
-
-            cliVersionData.Add(0);
-            cliVersionData.Add("0");
-            return cliVersionData;
         }
         private static void killCLI()
         {

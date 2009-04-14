@@ -14,13 +14,12 @@ namespace Handbrake.Functions
         /// <param name="presetQuery">The Parsed CLI Query</param>
         /// <param name="name">Name of the preset</param>
         /// <param name="pictureSettings">Save picture settings in the preset</param>
-        public static void presetLoader(frmMain mainWindow, Functions.QueryParser presetQuery, string name, Boolean pictureSettings)
+        public static void presetLoader(frmMain mainWindow, QueryParser presetQuery, string name, Boolean pictureSettings)
         {
             // ---------------------------
             // Setup the GUI
             // ---------------------------
 
-            // Source tab
             #region source
             // Reset some vaules to stock first to prevent errors.
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
@@ -37,7 +36,6 @@ namespace Handbrake.Functions
 
             #endregion
 
-            // Destination tab
             #region destination
 
             mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
@@ -59,9 +57,12 @@ namespace Handbrake.Functions
 
             mainWindow.check_optimiseMP4.CheckState = presetQuery.OptimizeMP4 ? CheckState.Checked : CheckState.Unchecked;
 
+            mainWindow.check_largeFile.CheckState = presetQuery.LargeMP4 ? CheckState.Checked : CheckState.Unchecked;
+
+            mainWindow.setContainerOpts(); // select the container options according to the selected format
+
             #endregion
 
-            // Picture Settings Tab
             #region Picture
             mainWindow.check_autoCrop.Checked = true;
             if (presetQuery.CropBottom == "0" && presetQuery.CropTop == "0")
@@ -122,7 +123,6 @@ namespace Handbrake.Functions
 
             #endregion
 
-            // Filters Tab
             #region Filters
 
             mainWindow.ctl_decomb.setOption(presetQuery.Decomb);
@@ -147,8 +147,7 @@ namespace Handbrake.Functions
             }
             #endregion
 
-            // Video Settings Tab
-            #region video
+            #region Video
             if (presetQuery.AverageVideoBitrate != null)
             {
                 mainWindow.radio_avgBitrate.Checked = true;
@@ -209,16 +208,8 @@ namespace Handbrake.Functions
 
             mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
 
-            if (presetQuery.LargeMP4)
-                mainWindow.check_largeFile.CheckState = CheckState.Checked;
-            else
-            {
-                mainWindow.check_largeFile.CheckState = CheckState.Unchecked;
-                mainWindow.check_largeFile.BackColor = Color.Transparent;
-            }
             #endregion
 
-            // Chapter Markers Tab
             #region Chapter Markers
 
             if (presetQuery.ChapterMarkers)
@@ -231,7 +222,6 @@ namespace Handbrake.Functions
 
             #endregion
 
-            // Audio Settings Tab
             #region Audio
             // Clear the audio listing
             mainWindow.lv_audioList.Items.Clear();
@@ -295,8 +285,7 @@ namespace Handbrake.Functions
 
             #endregion
 
-            // H264 Tab & Preset Name
-            #region other
+            #region Other
             mainWindow.x264Panel.x264Query = presetQuery.H264Query;
 
             // Set the preset name
