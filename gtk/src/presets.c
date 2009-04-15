@@ -45,6 +45,18 @@ static void store_plist(GValue *plist, const gchar *name);
 static void store_presets(void);
 static void store_prefs(void);
 
+gint
+preset_path_cmp(gint *indices1, gint len1, gint *indices2, gint len2)
+{
+	gint ii;
+	for (ii = 0; ii < len1 && ii < len2; ii++)
+	{
+		if (indices1[ii] != indices2[ii])
+			return indices1[ii] - indices2[ii];
+	}
+	return len1 - len2;
+}
+
 // This only handle limited depth
 GtkTreePath*
 ghb_tree_path_new_from_indices(gint *indices, gint len)
@@ -2183,7 +2195,7 @@ import_xlat_preset(GValue *dict)
 {
 	gboolean uses_max;
 	gint uses_pic;
-	gint par;
+	gint par, par_width, par_height;
 	gint vqtype;
 
 	g_debug("import_xlat_preset ()");
@@ -2193,6 +2205,12 @@ import_xlat_preset(GValue *dict)
 						preset_dict_get_value(dict, "UsesPictureSettings"));
 	par = ghb_value_int(preset_dict_get_value(dict, "PicturePAR"));
 	vqtype = ghb_value_int(preset_dict_get_value(dict, "VideoQualityType"));
+	par_width = ghb_value_int(preset_dict_get_value(dict, "PicturePARWidth"));
+	par_height = ghb_value_int(preset_dict_get_value(dict, "PicturePARHeight"));
+	ghb_dict_insert(dict, g_strdup("par_width"), 
+					ghb_int_value_new(par_width));
+	ghb_dict_insert(dict, g_strdup("par_height"), 
+					ghb_int_value_new(par_height));
 
 	if (uses_max || uses_pic == 2)
 	{
@@ -2337,6 +2355,7 @@ static void
 export_xlat_preset(GValue *dict)
 {
 	gboolean autoscale, target, br, constant;
+	gint par_width, par_height;
 
 	g_debug("export_xlat_prest ()");
 	autoscale = ghb_value_boolean(preset_dict_get_value(dict, "autoscale"));
@@ -2346,6 +2365,10 @@ export_xlat_preset(GValue *dict)
 				preset_dict_get_value(dict, "vquality_type_bitrate"));
 	constant = ghb_value_boolean(
 				preset_dict_get_value(dict, "vquality_type_constant"));
+	par_width = ghb_value_int(
+				preset_dict_get_value(dict, "par_width"));
+	par_height = ghb_value_int(
+				preset_dict_get_value(dict, "par_height"));
 
 	if (autoscale)
 		ghb_dict_insert(dict, g_strdup("UsesPictureSettings"), 
@@ -2370,11 +2393,17 @@ export_xlat_preset(GValue *dict)
 		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
 						ghb_int_value_new(2));
 	}
+	ghb_dict_insert(dict, g_strdup("PicturePARWidth"), 
+						ghb_int_value_new(par_width));
+	ghb_dict_insert(dict, g_strdup("PicturePARHeight"), 
+						ghb_int_value_new(par_height));
 	ghb_dict_remove(dict, "UsesMaxPictureSettings");
 	ghb_dict_remove(dict, "autoscale");
 	ghb_dict_remove(dict, "vquality_type_target");
 	ghb_dict_remove(dict, "vquality_type_bitrate");
 	ghb_dict_remove(dict, "vquality_type_constant");
+	ghb_dict_remove(dict, "par_width");
+	ghb_dict_remove(dict, "par_height");
 	export_value_xlat(dict);
 }
 
@@ -2532,6 +2561,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 	GValue *value;
 	gboolean autoscale;
 	gint *indices, len, count;
+	gint *def_indices, def_len;
 	const gchar *name;
 	gboolean replace = FALSE;
 
@@ -2622,7 +2652,16 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 	}
 	ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(name));
 	if (replace)
+	{
+		def_indices = presets_find_default(presetsPlist, &def_len);
+		if (def_indices != NULL && 
+			preset_path_cmp(indices, len, def_indices, def_len) != 0)
+		{
+			ghb_dict_insert(dict, g_strdup("Default"), 
+							ghb_boolean_value_new(FALSE));
+		}
 		presets_list_update_item(ud, indices, len);
+	}
 	else
 	{
 		ghb_dict_insert(dict, g_strdup("Default"), 
@@ -3221,10 +3260,21 @@ presets_row_expanded_cb(
 {
 	gint *indices, len;
 	gboolean expanded, folder;
+	GValue *dict;
 
 	expanded = gtk_tree_view_row_expanded(treeview, path);
 	indices = gtk_tree_path_get_indices(path);
 	len = gtk_tree_path_get_depth(path);
+	dict = presets_get_dict(presetsPlist, indices, len);
+	if (preset_folder_is_open(dict))
+	{
+		if (expanded)
+			return;
+	}
+	else if (!expanded)
+	{
+		return;
+	}
 	folder = ghb_presets_get_folder(presetsPlist, indices, len);
 	if (folder)
 	{
@@ -3235,7 +3285,6 @@ presets_row_expanded_cb(
 	if (!expanded)
 	{
 		GValue *presets = NULL;
-		GValue *dict;
 		gint *more_indices, count, ii;
 
 		more_indices = g_malloc((len+1)*sizeof(gint));
@@ -3342,12 +3391,12 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			titleindex = ghb_settings_combo_int(ud->settings, "title");
 			ghb_set_pref_audio(titleindex, ud);
 			ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
-			ud->dont_clear_presets = FALSE;
 			if (ghb_get_title_info (&tinfo, titleindex))
 			{
 				preset_update_title_deps(ud, &tinfo);
 			}
-			ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+			ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
+			ud->dont_clear_presets = FALSE;
 
 			gdouble vqmin, vqmax, step, page;
 			gint digits;

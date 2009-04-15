@@ -53,9 +53,12 @@ typedef struct
 	ghb_instance_status_t queue;
 } ghb_status_t;
 
-#define GHB_SCALE_KEEP_NONE 0
-#define GHB_SCALE_KEEP_WIDTH 1
-#define GHB_SCALE_KEEP_HEIGHT 2
+#define GHB_PIC_KEEP_WIDTH          0x01
+#define GHB_PIC_KEEP_HEIGHT         0x02
+#define GHB_PIC_KEEP_DISPLAY_WIDTH  0x04
+#define GHB_PIC_KEEP_DISPLAY_HEIGHT 0x08
+#define GHB_PIC_KEEP_DAR            0x10
+#define GHB_PIC_KEEP_PAR            0x20
 
 typedef struct
 {
@@ -118,6 +121,7 @@ void ghb_track_status(void);
 void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count);
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
+void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
 void ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss);

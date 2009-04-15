@@ -2577,7 +2577,7 @@ ghb_get_default_acodec()
 static void
 picture_settings_deps(signal_user_data_t *ud)
 {
-	gboolean autoscale, keep_aspect;
+	gboolean autoscale, keep_aspect, enable_keep_aspect;
 	gboolean enable_scale_width, enable_scale_height;
 	gboolean enable_disp_width, enable_disp_height;
 	gint pic_par, disp_width, disp_height, scale_width, scale_height;
@@ -2594,6 +2594,7 @@ picture_settings_deps(signal_user_data_t *ud)
 	enable_scale_height = !autoscale && (pic_par != 1);
 	enable_disp_width = (pic_par == 3) && !keep_aspect;
 	enable_disp_height = FALSE;
+	enable_keep_aspect = (pic_par != 1 && pic_par != 2);
 
 	GtkWidget *widget;
 	widget = GHB_WIDGET(ud->builder, "scale_width");
@@ -2604,6 +2605,18 @@ picture_settings_deps(signal_user_data_t *ud)
 	gtk_widget_set_sensitive(widget, enable_disp_width);
 	widget = GHB_WIDGET(ud->builder, "PictureDisplayHeight");
 	gtk_widget_set_sensitive(widget, enable_disp_height);
+	widget = GHB_WIDGET(ud->builder, "PictureKeepRatio");
+	gtk_widget_set_sensitive(widget, enable_keep_aspect);
+	widget = GHB_WIDGET(ud->builder, "autoscale");
+	gtk_widget_set_sensitive(widget, pic_par != 1);
+	if (!enable_keep_aspect)
+	{
+		ghb_ui_update(ud, "PictureKeepRatio", ghb_boolean_value(TRUE));
+	}
+	if (pic_par == 1)
+	{
+		ghb_ui_update(ud, "autoscale", ghb_boolean_value(TRUE));
+	}
 }
 
 void
@@ -2618,8 +2631,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint crop[4], width, height, par_width, par_height;
 	gint crop_width, crop_height;
 	gint aspect_n, aspect_d;
-	gboolean keep_width = (mode == GHB_SCALE_KEEP_WIDTH);
-	gboolean keep_height = (mode == GHB_SCALE_KEEP_HEIGHT);
+	gboolean keep_width = (mode & GHB_PIC_KEEP_WIDTH);
+	gboolean keep_height = (mode & GHB_PIC_KEEP_HEIGHT);
 	gint step;
 	GtkWidget *widget;
 	gint mod;
@@ -2784,8 +2797,22 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		if (job->anamorphic.mode == 3 && !keep_aspect)
 		{
 			gint dar_width, dar_height;
-			dar_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
-			dar_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
+			if (mode & GHB_PIC_KEEP_PAR)
+			{
+				par_width = ghb_settings_get_int(ud->settings, 
+												"PicturePARWidth");
+				par_height = ghb_settings_get_int(ud->settings, 
+												"PicturePARHeight");
+				dar_width = ((gdouble)width * par_width / par_height) + 0.5;
+				dar_height = height;
+			}
+			else
+			{
+				dar_width = ghb_settings_get_int(ud->settings, 
+												"PictureDisplayWidth");
+				dar_height = ghb_settings_get_int(ud->settings, 
+												"PictureDisplayHeight");
+			}
 			job->anamorphic.dar_width = dar_width;
 			job->anamorphic.dar_height = dar_height;
 		}
@@ -2805,8 +2832,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			gdouble par;
 			gint new_width, new_height;
 			
-			g_debug("kw %s kh %s\n", keep_width ? "y":"n", keep_height ? "y":"n");
-			g_debug("w %d h %d\n", width, height);
 			// Compute pixel aspect ration.  
 			par = (gdouble)(title->height * aspect_n) / (title->width * aspect_d);
 			// Must scale so that par becomes 1:1
@@ -2854,22 +2879,30 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint disp_width, dar_width, dar_height;
 	gchar *str;
 
-	disp_width = par_width * width / par_height;
+	disp_width = (gdouble)(width * par_width / par_height) + 0.5;
 	hb_reduce(&dar_width, &dar_height, disp_width, height);
 		
+	gint iaspect = dar_width * 9 / dar_height;
 	if (dar_width > 2 * dar_height)
 	{
-		str = g_strdup_printf("%.2f:1", (gdouble)dar_width / dar_height);
+		str = g_strdup_printf("%.2f : 1", (gdouble)dar_width / dar_height);
+	}
+	else if (iaspect <= 16 && iaspect >= 15)
+	{
+		str = g_strdup_printf("%.2f : 9", (gdouble)dar_width * 9 / dar_height);
+	}
+	else if (iaspect <= 12 && iaspect >= 11)
+	{
+		str = g_strdup_printf("%.2f : 3", (gdouble)dar_width * 3 / dar_height);
 	}
 	else
 	{
-		str = g_strdup_printf("%d:%d", dar_width, dar_height);
+		str = g_strdup_printf("%d : %d", dar_width, dar_height);
 	}
 	ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
 	g_free(str);
-	str = g_strdup_printf("%d:%d", par_width, par_height);
-	ghb_ui_update(ud, "pixel_aspect", ghb_string_value(str));
-	g_free(str);
+	ghb_ui_update(ud, "par_width", ghb_int64_value(par_width));
+	ghb_ui_update(ud, "par_height", ghb_int64_value(par_height));
 	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
 	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(height));
 	picture_settings_deps(ud);

@@ -1000,6 +1000,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	GtkWidget *widget;
 	gchar *text;
 
+	ud->dont_clear_presets = TRUE;
 	widget = GHB_WIDGET (ud->builder, "title_duration");
 	if (tinfo->duration != 0)
 	{
@@ -1061,7 +1062,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(tinfo->crop[2]));
 		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(tinfo->crop[3]));
 	}
-	ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+	ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
 	gint width, height, crop[4];
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
 	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
@@ -1081,6 +1082,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	widget = GHB_WIDGET (ud->builder, "start_chapter");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
+	ud->dont_clear_presets = TRUE;
 }
 
 static gboolean update_preview = FALSE;
@@ -1256,8 +1258,9 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("scale_width_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
-		ghb_set_scale (ud, GHB_SCALE_KEEP_WIDTH);
+		ghb_set_scale (ud, GHB_PIC_KEEP_WIDTH);
 	update_preview = TRUE;
 	gchar *text;
 	gint width = ghb_settings_get_int(ud->settings, "scale_width");
@@ -1275,8 +1278,9 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("scale_height_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
-		ghb_set_scale (ud, GHB_SCALE_KEEP_HEIGHT);
+		ghb_set_scale (ud, GHB_PIC_KEEP_HEIGHT);
 	update_preview = TRUE;
 	gchar *text;
 	gint width = ghb_settings_get_int(ud->settings, "scale_width");
@@ -1297,8 +1301,9 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("crop_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
-		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+		ghb_set_scale (ud, 0);
 
 	crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
 	crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
@@ -1335,7 +1340,20 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
-		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+		ghb_set_scale (ud, GHB_PIC_KEEP_DISPLAY_WIDTH);
+
+	gint pic_par;
+
+	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
+	if (pic_par == 3)
+	{
+		gint par_width, par_height;
+
+		par_width = ghb_settings_get_int(ud->settings, "par_width");
+		par_height = ghb_settings_get_int(ud->settings, "par_height");
+		ghb_settings_set_int(ud->settings, "PicturePARWidth", par_width);
+		ghb_settings_set_int(ud->settings, "PicturePARHeight", par_height);
+	}
 	update_preview = TRUE;
 }
 
@@ -1348,7 +1366,20 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
-		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+		ghb_set_scale (ud, GHB_PIC_KEEP_DISPLAY_HEIGHT);
+
+	gint pic_par;
+
+	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
+	if (pic_par == 3)
+	{
+		gint par_width, par_height;
+
+		par_width = ghb_settings_get_int(ud->settings, "par_width");
+		par_height = ghb_settings_get_int(ud->settings, "par_height");
+		ghb_settings_set_int(ud->settings, "PicturePARWidth", par_width);
+		ghb_settings_set_int(ud->settings, "PicturePARHeight", par_height);
+	}
 	update_preview = TRUE;
 }
 
@@ -1361,7 +1392,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
-		ghb_set_scale (ud, GHB_SCALE_KEEP_NONE);
+		ghb_set_scale (ud, 0);
 	update_preview = TRUE;
 	
 	gchar *text;

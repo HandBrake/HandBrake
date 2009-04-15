@@ -149,6 +149,10 @@
 		<true />
 		<key>autoscale</key>
 		<false />
+		<key>par_width</key>
+		<integer>0</integer>
+		<key>par_height</key>
+		<integer>0</integer>
 		<key>vquality_type_bitrate</key>
 		<false />
 		<key>vquality_type_constant</key>
@@ -198,6 +202,16 @@
 		<string>none</string>
 		<key>PictureDetelecineCustom</key>
 		<string></string>
+		<key>PicturePAR</key>
+		<integer>2</integer>
+		<key>PicturePARWidth</key>
+		<integer>853</integer>
+		<key>PicturePARHeight</key>
+		<integer>720</integer>
+		<key>PictureHeight</key>
+		<integer>0</integer>
+		<key>PictureWidth</key>
+		<integer>0</integer>
 		<key>SubtitlesForced</key>
 		<true />
 		<key>VideoFramerate</key>
@@ -212,12 +226,6 @@
 		<true />
 		<key>Mp4LargeFile</key>
 		<false />
-		<key>PicturePAR</key>
-		<integer>2</integer>
-		<key>PictureHeight</key>
-		<integer>0</integer>
-		<key>PictureWidth</key>
-		<integer>0</integer>
 		<key>AudioList</key>
 		<array>
 			<dict>
