@@ -16,20 +16,29 @@
 #endif
 
 #include <string.h>
-#include <poll.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <netinet/in.h>
-#include <netdb.h>
+
+#if !defined(_WIN32)
+#include <poll.h>
 #include <libhal-storage.h>
-#include <gtk/gtk.h>
-#include <gtkhtml/gtkhtml.h>
-#include <gdk/gdkkeysyms.h>
-#include <glib/gstdio.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-#include <gio/gio.h>
+
+#include <netinet/in.h>
+#include <netdb.h>
+#include <gtkhtml/gtkhtml.h>
 #include <libnotify/notify.h>
+#else
+#define WINVER 0x0500
+#include <winsock2.h>
+#include <dbt.h>
+#endif
+
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include <glib/gstdio.h>
+#include <gio/gio.h>
 
 #include "hb.h"
 #include "callbacks.h"
@@ -260,7 +269,7 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 {
 	gint state = ghb_get_queue_state();
@@ -412,29 +421,110 @@ get_file_label(const gchar *filename)
 	return base;
 }
 
+static gchar*
+get_drive_name(const gchar *drive)
+{
+	gchar *result;
+#if defined(_WIN32)
+	gchar vname[51], fsname[51];
+	if (GetVolumeInformation(drive, vname, 50, NULL, NULL, NULL, fsname, 51))
+	{
+		result = g_strdup_printf("%s (%s)", vname, drive);
+	}
+	else
+	{
+		result = g_strdup_printf("%s", drive);
+	}
+#else
+	result = g_strdup_printf("%s", drive);
+#endif
+	return result;
+}
+
+static gchar*
+resolve_drive_name(gchar *filename)
+{
+#if defined(_WIN32)
+	if (filename[1] == ':')
+	{
+		gchar drive[4];
+		gchar *name;
+		gint dtype;
+
+		g_strlcpy(drive, filename, 4);
+		dtype = GetDriveType(drive);
+		if (dtype == DRIVE_CDROM)
+		{
+			gchar vname[51], fsname[51];
+			GetVolumeInformation(drive, vname, 50, NULL, 
+								NULL, NULL, fsname, 50);
+			name = g_strdup(vname);
+			return name;
+		}
+	}
+	return NULL;
+#else
+	return NULL;
+#endif
+}
+
 static gboolean
 update_source_label(signal_user_data_t *ud, const gchar *source)
 {
 	gchar *label = NULL;
 	gint len;
 	gchar **path;
+	gchar *start;
 	gchar *filename = g_strdup(source);
 	
 	len = strlen(filename);
-	if (filename[len-1] == '/') filename[len-1] = 0;
+	if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 	{
-		path = g_strsplit(filename, "/", -1);
-		len = g_strv_length (path);
-		if ((len > 1) && (strcmp("VIDEO_TS", path[len-1]) == 0))
+		// Skip dos drive letters
+		start = strchr(filename, ':');
+		label = resolve_drive_name(filename);
+		if (label != NULL)
 		{
-			label = g_strdup(path[len-2]);
+			if (uppers_and_unders(label))
+			{
+				camel_convert(label);
+			}
 		}
 		else
 		{
-			label = g_strdup(path[len-1]);
+			if (start != NULL)
+				start++;
+			else
+				start = filename;
+			
+			path = g_strsplit(start, G_DIR_SEPARATOR_S, -1);
+			len = g_strv_length (path);
+			if ((len > 1) && (strcmp("VIDEO_TS", path[len-1]) == 0))
+			{
+				label = g_strdup(path[len-2]);
+				if (uppers_and_unders(label))
+				{
+					camel_convert(label);
+				}
+			}
+			else if (len > 0)
+			{
+				if (path[len-1][0] != 0)
+				{
+					label = g_strdup(path[len-1]);
+					if (uppers_and_unders(label))
+					{
+						camel_convert(label);
+					}
+				}
+				else
+					label = g_strdup("new_video");
+			}
+			else
+				label = g_strdup("new_video");
+			g_strfreev (path);
 		}
-		g_strfreev (path);
 	}
 	else
 	{
@@ -472,7 +562,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
 	return TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 {
 	const gchar *name = gtk_file_chooser_get_filename (dialog);
@@ -503,7 +593,7 @@ chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 		gtk_combo_box_set_active (combo, 0);
 }
 
-void
+G_MODULE_EXPORT void
 dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
@@ -522,7 +612,7 @@ dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 source_type_changed_cb(GtkToggleButton *toggle, signal_user_data_t *ud)
 {
 	gchar *folder;
@@ -715,19 +805,19 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 	g_free(sourcename);
 }
 
-void
+G_MODULE_EXPORT void
 source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 {
 	do_source_dialog(button, FALSE, ud);
 }
 
-void
+G_MODULE_EXPORT void
 single_title_source_cb(GtkButton *button, signal_user_data_t *ud)
 {
 	do_source_dialog(button, TRUE, ud);
 }
 
-void
+G_MODULE_EXPORT void
 dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 {
 	const gchar *filename;
@@ -803,7 +893,7 @@ destination_select_title(GtkEntry *entry)
 	}
 	for (start = end; start >= 0; start--)
 	{
-		if (dest[start] == '/')
+		if (dest[start] == G_DIR_SEPARATOR)
 		{
 			start++;
 			break;
@@ -816,7 +906,7 @@ destination_select_title(GtkEntry *entry)
 	}
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 destination_grab_cb(
 	GtkEntry *entry, 
 	signal_user_data_t *ud)
@@ -827,7 +917,7 @@ destination_grab_cb(
 
 static gboolean update_default_destination = FALSE;
 
-void
+G_MODULE_EXPORT void
 dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
 {
 	gchar *dest_file, *dest_dir, *dest;
@@ -836,7 +926,7 @@ dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
 	ghb_widget_to_setting(ud->settings, (GtkWidget*)dest_chooser);
 	dest_file = ghb_settings_get_string(ud->settings, "dest_file");
 	dest_dir = ghb_settings_get_string(ud->settings, "dest_dir");
-	dest = g_strdup_printf("%s/%s", dest_dir, dest_file);
+	dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
 	ghb_settings_set_string(ud->settings, "destination", dest);
 	g_free(dest_file);
 	g_free(dest_dir);
@@ -844,7 +934,7 @@ dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
 	update_default_destination = TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 {
 	gchar *dest_file, *dest_dir, *dest;
@@ -856,7 +946,7 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 	// update on the timer.
 	dest_file = ghb_settings_get_string(ud->settings, "dest_file");
 	dest_dir = ghb_settings_get_string(ud->settings, "dest_dir");
-	dest = g_strdup_printf("%s/%s", dest_dir, dest_file);
+	dest = g_strdup_printf("%s" G_DIR_SEPARATOR_S "%s", dest_dir, dest_file);
 	ghb_settings_set_string(ud->settings, "destination", dest);
 	g_free(dest_file);
 	g_free(dest_dir);
@@ -864,7 +954,7 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 	update_default_destination = TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
@@ -904,7 +994,7 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 	gtk_widget_destroy(dialog);
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
 {
 	g_debug("window_destroy_event_cb ()");
@@ -914,7 +1004,7 @@ window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *
 	return FALSE;
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *ud)
 {
 	gint state = ghb_get_queue_state();
@@ -942,7 +1032,7 @@ update_acodec_combo(signal_user_data_t *ud)
 	ghb_grey_combo_options (ud->builder);
 }
 
-void
+G_MODULE_EXPORT void
 container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	const GValue *audio_list;
@@ -1087,7 +1177,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 
 static gboolean update_preview = FALSE;
 
-void
+G_MODULE_EXPORT void
 title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_title_info_t tinfo;
@@ -1133,7 +1223,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1142,7 +1232,7 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1166,7 +1256,7 @@ vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_range_set_value(GTK_RANGE(widget), val);
 }
 
-void
+G_MODULE_EXPORT void
 http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1177,7 +1267,7 @@ http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_grey_combo_options (ud->builder);
 }
 
-void
+G_MODULE_EXPORT void
 vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gdouble vqmin, vqmax, step, page;
@@ -1196,7 +1286,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_range_set_inverted (GTK_RANGE(qp), inverted);
 }
 
-void
+G_MODULE_EXPORT void
 target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	const gchar *name = gtk_widget_get_name(widget);
@@ -1214,7 +1304,7 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint start, end;
@@ -1233,7 +1323,7 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint start, end;
@@ -1252,7 +1342,7 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_width_changed_cb ()");
@@ -1272,7 +1362,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_height_changed_cb ()");
@@ -1292,7 +1382,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint titleindex, crop[4];
@@ -1331,7 +1421,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_changed_cb ()");
@@ -1425,7 +1515,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_label_set_text (GTK_LABEL(widget), text);
 }
 
-void
+G_MODULE_EXPORT void
 generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 {
 	// Normally (due to user input) I only want to process the entry
@@ -1442,7 +1532,7 @@ generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
@@ -2007,7 +2097,7 @@ ghb_backend_events(signal_user_data_t *ud)
 	}
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 ghb_timer_cb(gpointer data)
 {
 	signal_user_data_t *ud = (signal_user_data_t*)data;
@@ -2038,7 +2128,7 @@ ghb_timer_cb(gpointer data)
 	return TRUE;
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 {
 	gchar *text = NULL;
@@ -2092,13 +2182,25 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 			gtk_text_view_scroll_mark_onscreen(textview, mark);
 			gtk_text_buffer_delete_mark(buffer, mark);
 		}
+#if defined(_WIN32)
+		gsize one = 1;
+		text[length-1] = '\r';
+#endif
 		g_io_channel_write_chars (ud->activity_log, text, 
 								length, &length, NULL);
+#if defined(_WIN32)
+		g_io_channel_write_chars (ud->activity_log, "\n", 
+								one, &one, NULL);
+#endif
 		g_io_channel_flush(ud->activity_log, NULL);
 		if (ud->job_activity_log)
 		{
 			g_io_channel_write_chars (ud->job_activity_log, text, 
 									length, &length, NULL);
+#if defined(_WIN32)
+			g_io_channel_write_chars (ud->activity_log, "\n", 
+									one, &one, NULL);
+#endif
 			g_io_channel_flush(ud->job_activity_log, NULL);
 		}
 		g_free(text);
@@ -2133,7 +2235,7 @@ set_visible(GtkWidget *widget, gboolean visible)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
@@ -2141,7 +2243,7 @@ show_activity_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 						GTK_TOGGLE_TOOL_BUTTON(xwidget)));
 }
 
-void
+G_MODULE_EXPORT void
 show_activity_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "activity_window");
@@ -2150,7 +2252,7 @@ show_activity_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 activity_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
 {
 	set_visible(xwidget, FALSE);
@@ -2212,7 +2314,7 @@ about_web_hook(GtkAboutDialog *about, const gchar *link, gpointer data)
 	browse_url(link);
 }
 
-void
+G_MODULE_EXPORT void
 about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "hb_about");
@@ -2229,19 +2331,19 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gtk_widget_show (widget);
 }
 
-void
+G_MODULE_EXPORT void
 guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	browse_url("http://trac.handbrake.fr/wiki/HandBrakeGuide");
 }
 
-void
+G_MODULE_EXPORT void
 hb_about_response_cb(GtkWidget *widget, gint response, signal_user_data_t *ud)
 {
 	gtk_widget_hide (widget);
 }
 
-void
+G_MODULE_EXPORT void
 show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
@@ -2249,7 +2351,7 @@ show_queue_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 						GTK_TOGGLE_TOOL_BUTTON(xwidget)));
 }
 
-void
+G_MODULE_EXPORT void
 show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
@@ -2258,7 +2360,7 @@ show_queue_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 queue_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
 {
 	set_visible(xwidget, FALSE);
@@ -2267,7 +2369,7 @@ queue_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *
 	return TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 show_presets_toggled_cb(GtkWidget *action, signal_user_data_t *ud)
 {
 	GtkWidget *widget;
@@ -2369,7 +2471,7 @@ update_chapter_list(signal_user_data_t *ud)
 
 static gint chapter_edit_key = 0;
 
-gboolean
+G_MODULE_EXPORT gboolean
 chapter_keypress_cb(
 	GhbCellRendererText *cell,
 	GdkEventKey *event,
@@ -2379,7 +2481,7 @@ chapter_keypress_cb(
 	return FALSE;
 }
 
-void
+G_MODULE_EXPORT void
 chapter_edited_cb(
 	GhbCellRendererText *cell, 
 	gchar *path, 
@@ -2458,7 +2560,7 @@ chapter_edited_cb(
 	gtk_tree_path_free (treepath);
 }
 
-void
+G_MODULE_EXPORT void
 chapter_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
 	g_debug("chapter_list_selection_changed_cb ()");
@@ -2479,7 +2581,6 @@ debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, g
 void
 warn_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer data)
 {
-	printf("mywarning\n");
 	printf("%s: %s\n", domain, msg);
 }
 
@@ -2512,7 +2613,7 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 
 }
 
-void
+G_MODULE_EXPORT void
 hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("hbfd_toggled_cb");
@@ -2522,7 +2623,7 @@ hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_pref_save(ud->settings, "hbfd");
 }
 
-void
+G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("pref_changed_cb");
@@ -2532,7 +2633,7 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_pref_save(ud->settings, name);
 }
 
-void
+G_MODULE_EXPORT void
 vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("vqual_granularity_changed_cb");
@@ -2551,7 +2652,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_range_set_increments (GTK_RANGE(qp), step, page);
 }
 
-void
+G_MODULE_EXPORT void
 tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("tweaks_changed_cb");
@@ -2560,7 +2661,7 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_pref_save(ud->settings, name);
 }
 
-void
+G_MODULE_EXPORT void
 hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("hbfd_feature_changed_cb");
@@ -2594,20 +2695,30 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 	link = drives = dvd_device_list();
 	while (link != NULL)
 	{
-		gchar *name = (gchar*)link->data;
+		GtkAction *action;
+		gchar *drive = (gchar*)link->data;
+		gchar *name = get_drive_name(drive);
+		
+		action = gtk_action_group_get_action(agroup, drive);
+		if (action != NULL)
+		{
+			gtk_action_group_remove_action(agroup, action);
+			g_object_unref(G_OBJECT(action));
+		}
 		// Create action for this drive
-		GtkAction *action = gtk_action_new(name, name,
+		action = gtk_action_new(drive, name,
 			"Scan this DVD source", "gtk-cdrom");
 		// Add action to action group
-		gtk_action_group_add_action_with_accel(agroup, action, "");
+		gtk_action_group_add_action_with_accel(agroup, action, NULL);
 		// Add to ui manager
 		gtk_ui_manager_add_ui(ui, merge_id, 
-			"ui/menubar1/menuitem1/quit1", name, name,
+			"ui/menubar1/menuitem1/quit1", drive, drive,
 			GTK_UI_MANAGER_AUTO, TRUE);
 		// Connect signal to action (menu item)
 		g_signal_connect(action, "activate", 
 			(GCallback)dvd_source_activate_cb, ud);
 		g_free(name);
+		g_free(drive);
 		link = link->next;
 	}
 	g_list_free(drives);
@@ -2623,9 +2734,33 @@ gboolean ghb_is_cd(GDrive *gd);
 static GList*
 dvd_device_list()
 {
+	GList *dvd_devices = NULL;
+
+#if defined(_WIN32)
+	gint ii, drives;
+	gchar drive[5];
+
+	strcpy(drive, "A:" G_DIR_SEPARATOR_S);
+	drives = GetLogicalDrives();
+	for (ii = 0; ii < 26; ii++)
+	{
+		if (drives & 0x01)
+		{
+			guint dtype;
+
+			drive[0] = 'A' + ii;
+			dtype = GetDriveType(drive);
+			if (dtype == DRIVE_CDROM)
+			{
+				dvd_devices = g_list_append(dvd_devices, 
+						(gpointer)g_strdup(drive));
+			}
+		}
+		drives >>= 1;
+	}
+#else
 	GVolumeMonitor *gvm;
 	GList *drives, *link;
-	GList *dvd_devices = NULL;
 	
 	gvm = g_volume_monitor_get ();
 	drives = g_volume_monitor_get_connected_drives (gvm);
@@ -2645,14 +2780,19 @@ dvd_device_list()
 		link = link->next;
 	}
 	g_list_free(drives);
+#endif
+
 	return dvd_devices;
 }
 
+#if !defined(_WIN32)
 static LibHalContext *hal_ctx;
+#endif
 
 gboolean
 ghb_is_cd(GDrive *gd)
 {
+#if !defined(_WIN32)
 	gchar *device;
 	LibHalDrive *halDrive;
 	LibHalDriveType dtype;
@@ -2663,9 +2803,120 @@ ghb_is_cd(GDrive *gd)
 	libhal_drive_free(halDrive);
 	g_free(device);
 	return (dtype == LIBHAL_DRIVE_TYPE_CDROM);
+#else
+	return FALSE;
+#endif
+}
+
+#if defined(_WIN32)
+static void
+handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud)
+{
+	guint dtype;
+	static gint ins_count = 0;
+	static gint rem_count = 0;
+
+	// DVD insertion detected.  Scan it.
+	dtype = GetDriveType(device);
+	if (dtype != DRIVE_CDROM)
+		return;
+	if (insert)
+	{
+		rem_count = 0;
+		ins_count++;
+		if (ins_count == 2)
+		{
+			ghb_file_menu_add_dvd(ud);
+			if (ud->current_dvd_device != NULL &&
+				strcmp(device, ud->current_dvd_device) == 0)
+			{
+				GtkProgressBar *progress;
+				progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+				gtk_progress_bar_set_text (progress, "Scanning ...");
+				gtk_progress_bar_set_fraction (progress, 0);
+ 				update_source_label(ud, device);
+				ghb_hb_cleanup(TRUE);
+				prune_logs(ud);
+				gint preview_count;
+				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+				ghb_backend_scan(device, 0, preview_count);
+			}
+		}
+	}
+	else
+	{
+		ins_count = 0;
+		rem_count++;
+		if (rem_count == 2)
+		{
+			ghb_file_menu_add_dvd(ud);
+			if (ud->current_dvd_device != NULL &&
+				strcmp(device, ud->current_dvd_device) == 0)
+			{
+				ghb_hb_cleanup(TRUE);
+				prune_logs(ud);
+				ghb_backend_scan("/dev/null", 0, 1);
+			}
+		}
+	}
+}
+
+static gchar
+FindDriveFromMask(ULONG unitmask)
+{
+	gchar cc;
+	for (cc = 0; cc < 26; cc++)
+	{
+		if (unitmask & 0x01)
+			return 'A' + cc;
+		unitmask >>= 1;
+	}
+	return 0;
 }
 
 void
+wm_drive_changed(MSG *msg, signal_user_data_t *ud)
+{
+	PDEV_BROADCAST_HDR bch = (PDEV_BROADCAST_HDR)msg->lParam;
+	gchar drive[4];
+
+	g_strlcpy(drive, "A:" G_DIR_SEPARATOR_S, 4);
+	switch (msg->wParam)
+	{
+		case DBT_DEVICEARRIVAL:
+		{
+			if (bch->dbch_devicetype == DBT_DEVTYP_VOLUME)
+			{
+				PDEV_BROADCAST_VOLUME bcv = (PDEV_BROADCAST_VOLUME)bch;
+
+				if (bcv->dbcv_flags & DBTF_MEDIA)
+				{
+					drive[0] = FindDriveFromMask(bcv->dbcv_unitmask);
+					handle_media_change(drive, TRUE, ud);
+				}
+			}
+		} break;
+
+		case DBT_DEVICEREMOVECOMPLETE:
+		{
+			if (bch->dbch_devicetype == DBT_DEVTYP_VOLUME)
+			{
+				PDEV_BROADCAST_VOLUME bcv = (PDEV_BROADCAST_VOLUME)bch;
+
+				if (bcv->dbcv_flags & DBTF_MEDIA)
+				{
+					drive[0] = FindDriveFromMask(bcv->dbcv_unitmask);
+					handle_media_change(drive, FALSE, ud);
+				}
+			}
+		} break;
+		default: ;
+	}
+}
+
+#else
+
+G_MODULE_EXPORT void
 drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 {
 	gchar *device;
@@ -2706,8 +2957,9 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	}
 	g_free(device);
 }
+#endif
 
-
+#if !defined(_WIN32)
 static void
 dbus_init (void)
 {
@@ -2719,10 +2971,12 @@ dbus_init (void)
 #define GPM_DBUS_INHIBIT_INTERFACE	"org.freedesktop.PowerManagement.Inhibit" 
 static gboolean gpm_inhibited = FALSE;
 static guint gpm_cookie = -1;
+#endif
 
 void
 ghb_inhibit_gpm()
 {
+#if !defined(_WIN32)
 	DBusGConnection *conn;
 	DBusGProxy	*proxy;
 	GError *error = NULL;
@@ -2770,11 +3024,13 @@ ghb_inhibit_gpm()
 	gpm_inhibited = TRUE;
 	g_object_unref(G_OBJECT(proxy));
 	dbus_g_connection_unref(conn);
+#endif
 }
 
 void
 ghb_uninhibit_gpm()
 {
+#if !defined(_WIN32)
 	DBusGConnection *conn;
 	DBusGProxy	*proxy;
 	GError *error = NULL;
@@ -2818,11 +3074,13 @@ ghb_uninhibit_gpm()
 	gpm_inhibited = FALSE;
 	dbus_g_connection_unref(conn);
 	g_object_unref(G_OBJECT(proxy));
+#endif
 }
 
 void
 ghb_hal_init()
 {
+#if !defined(_WIN32)
 	DBusGConnection *gconn;
 	DBusConnection *conn;
 	GError *gerror = NULL;
@@ -2873,9 +3131,10 @@ ghb_hal_init()
 
 	libhal_free_string_array (devices);
 	dbus_g_connection_unref(gconn);
+#endif
 }
 
-gboolean 
+G_MODULE_EXPORT gboolean 
 tweak_setting_cb(
 	GtkWidget *widget, 
 	GdkEventButton *event, 
@@ -2937,7 +3196,7 @@ tweak_setting_cb(
 	return ret;
 }
 
-gboolean 
+G_MODULE_EXPORT gboolean 
 easter_egg_cb(
 	GtkWidget *widget, 
 	GdkEventButton *event, 
@@ -2963,7 +3222,7 @@ easter_egg_cb(
 	return FALSE;
 }
 
-gchar*
+G_MODULE_EXPORT gchar*
 format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
 	if (val < 5.0)
@@ -2976,7 +3235,7 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	}
 }
 
-gchar*
+G_MODULE_EXPORT gchar*
 format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
 	if (val <= 0.0)
@@ -2989,7 +3248,7 @@ format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	}
 }
 
-gchar*
+G_MODULE_EXPORT gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
 	gdouble percent;
@@ -3029,11 +3288,13 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
 }
 
-static void
+#if !defined(_WIN32)
+G_MODULE_EXPORT void
 html_link_cb(GtkHTML *html, const gchar *url, signal_user_data_t *ud)
 {
 	browse_url(url);
 }
+#endif
 
 static gpointer check_stable_update(signal_user_data_t *ud);
 static gboolean stable_update_lock = FALSE;
@@ -3042,7 +3303,10 @@ static void
 process_appcast(signal_user_data_t *ud)
 {
 	gchar *description = NULL, *build = NULL, *version = NULL, *msg;
-	GtkWidget *html, *window, *dialog, *label;
+#if !defined(_WIN32)
+	GtkWidget *html, *window;
+#endif
+	GtkWidget *dialog, *label;
 	gint	response, ibuild = 0, skip;
 
 	if (ud->appcast == NULL || ud->appcast_len < 15 || 
@@ -3067,17 +3331,21 @@ process_appcast(signal_user_data_t *ud)
 			version, build, hb_get_version(NULL), hb_get_build(NULL));
 	label = GHB_WIDGET(ud->builder, "update_message");
 	gtk_label_set_text(GTK_LABEL(label), msg);
+#if !defined(_WIN32)
 	html = gtk_html_new_from_string(description, -1);
 	g_signal_connect(html, "link_clicked", G_CALLBACK(html_link_cb), ud);
 	window = GHB_WIDGET(ud->builder, "update_scroll");
 	gtk_container_add(GTK_CONTAINER(window), html);
 	// Show it
-	dialog = GHB_WIDGET(ud->builder, "update_dialog");
 	gtk_widget_set_size_request(html, 420, 240);
 	gtk_widget_show(html);
+#endif
+	dialog = GHB_WIDGET(ud->builder, "update_dialog");
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
+#if !defined(_WIN32)
 	gtk_widget_destroy(html);
+#endif
 	if (response == GTK_RESPONSE_OK)
 	{
 		// Skip
@@ -3107,7 +3375,7 @@ ghb_net_close(GIOChannel *ioc)
 	g_io_channel_unref(ioc);
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
 {
 	gchar buf[2048];
@@ -3230,7 +3498,7 @@ check_stable_update(signal_user_data_t *ud)
 	return NULL;
 }
 
-void
+G_MODULE_EXPORT void
 status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
 {
 	GtkWindow *window;
@@ -3239,20 +3507,24 @@ status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
 	gtk_window_present(window);
 }
 
-static void
+#if !defined(_WIN32)
+G_MODULE_EXPORT void
 notify_closed_cb(NotifyNotification *notification, signal_user_data_t *ud)
 {
 	g_object_unref(G_OBJECT(notification));
 }
+#endif
 
 void
 ghb_notify_done(signal_user_data_t *ud)
 {
-	NotifyNotification *notification;
 	GtkStatusIcon *si;
 
 	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 	gtk_status_icon_set_from_icon_name(si, "hb-status-empty");
+
+#if !defined(_WIN32)
+	NotifyNotification *notification;
 	notification = notify_notification_new(
 		"Encode Complete",
 		"Put down that cocktail, Your HandBrake queue is done!",
@@ -3261,4 +3533,5 @@ ghb_notify_done(signal_user_data_t *ud)
 	notify_notification_attach_to_status_icon(notification, si);
 	g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
 	notify_notification_show(notification, NULL);
+#endif
 }

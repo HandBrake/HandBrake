@@ -1,30 +1,18 @@
 ## Process this file with automake to produce Makefile.in
 
-HB_LIBS=\
-	-lhb \
-	-la52 \
-	-lmkv \
-	-lavformat \
-	-lavcodec \
-	-lavutil \
-	-ldca \
-	-ldvdread \
-	-lfaac \
-	-lmp3lame \
-	-lmpeg2 \
-	-lvorbis \
-	-lvorbisenc \
-	-logg \
-	-lsamplerate \
-	-lx264 \
-	-lxvidcore \
-	-lmp4v2 \
-	-lswscale \
-	-ltheora \
-	-lfaad \
-	-lz \
-	-lbz2 \
-	-lpthread
+if MINGW
+HB_LIBS= \
+	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread \
+	-lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate \
+	-lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz \
+	-lbz2 -liberty -lpthreadGC2
+else
+HB_LIBS= \
+	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread \
+	-lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate \
+	-lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz \
+	-lbz2 -liberty -lpthread
+endif
 
 icons =	\
 	hb-icon.128.png 
@@ -66,13 +54,9 @@ AM_CPPFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	$(GHB_CFLAGS)
 
-AM_CFLAGS =\
-	 -Wall\
-	 -g
+AM_CFLAGS = -Wall -g
 
 bin_PROGRAMS = ghb 
-noinst_PROGRAMS = makewidgetdeps quotestring create_resources preset_xlat \
-	resource_data.h resources.plist widget.deps widget_reverse.deps
 
 # Dummy file, not built.  Forces g++ linking
 nodist_EXTRA_ghb_SOURCES = dummy.cpp
@@ -117,54 +101,26 @@ ghb_SOURCES = \
 	marshalers.c \
 	marshalers.h
 
+if MINGW
+ghb_LDFLAGS = \
+	-mwindows -Wl,--export-dynamic -Wl,--exclude-libs,ALL
+else
 ghb_LDFLAGS = \
 	-Wl,--export-dynamic -Wl,--exclude-libs,ALL
+endif
 
 ghb_LDADD = $(HB_LIBS) $(GHB_LIBS)
 
 ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhb.a
-
-makewidgetdeps_SOURCES = \
-	plist.c \
-	plist.h \
-	values.c \
-	values.h \
-	makedeps.c 
-
-makewidgetdeps_LDADD = $(GHBTOOLS_LIBS)
-
-create_resources_SOURCES = \
-	create_resources.c \
-	plist.c \
-	plist.h \
-	values.c \
-	values.h \
-	icon_tools.c \
-	icon_tools.h
-
-create_resources_LDADD = $(GHBTOOLS_LIBS)
-
-preset_xlat_SOURCES = \
-	preset_xlat.c \
-	plist.c \
-	plist.h \
-	values.c \
-	values.h
-
-preset_xlat_LDADD = $(GHBTOOLS_LIBS)
-
-quotestring_SOURCES = quotestring.c
-
-dumbell: preset_xlat
 
 resources.o: resource_data.h
 
 resource_data.h: quotestring resources.plist
 	./quotestring resources.plist resource_data.h
 
-widget_reverse.deps: makewidgetdeps
-widget.deps: makewidgetdeps
-	./makewidgetdeps
+widget_reverse.deps: widgetdeps
+widget.deps: widgetdeps
+	./widgetdeps
 
 resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget.deps widget_reverse.deps
 	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist

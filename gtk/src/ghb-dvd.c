@@ -37,6 +37,10 @@
  *	Free Software Foundation version 2 of the License.
  */
 
+#if defined(_WIN32)
+#include <windows.h>
+#endif
+
 #include <glib.h>
 #include <gio/gio.h>
 
@@ -315,7 +319,6 @@ ghb_dvd_volname(const gchar *device)
 }
 #endif
 
-#if defined(__linux__)
 gchar*
 ghb_resolve_symlink(const gchar *name)
 {
@@ -359,12 +362,11 @@ ghb_resolve_symlink(const gchar *name)
 	g_object_unref(gfile);
 	return file;
 }
-#endif
 
 void
 ghb_dvd_set_current(const gchar *name, signal_user_data_t *ud)
 {
-#if defined(__linux__)
+#if !defined(_WIN32)
 	GFile *gfile;
 	GFileInfo *info;
 	gchar *resolved = ghb_resolve_symlink(name);
@@ -395,11 +397,19 @@ ghb_dvd_set_current(const gchar *name, signal_user_data_t *ud)
 	}
 	g_object_unref(gfile);
 #else
+	gchar drive[4];
+	guint dtype;
+
 	if (ud->current_dvd_device != NULL)
 	{
 		g_free(ud->current_dvd_device);
 		ud->current_dvd_device = NULL;
 	}
-	ud->current_dvd_device = g_strdup(name);;
+	g_strlcpy(drive, name, 4);
+	dtype = GetDriveType(drive);
+	if (dtype == DRIVE_CDROM)
+	{
+		ud->current_dvd_device = g_strdup(name);
+	}
 #endif
 }

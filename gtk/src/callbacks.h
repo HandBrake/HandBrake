@@ -25,6 +25,10 @@
 #if !defined(_CALLBACKS_H_)
 #define _CALLBACKS_H_
 
+#if defined(_WIN32)
+#include <windows.h>
+#endif
+
 #include <gtk/gtk.h>
 #include "settings.h"
 
@@ -52,6 +56,9 @@ void ghb_log(gchar *log, ...);
 gpointer ghb_check_update(signal_user_data_t *ud);
 void ghb_uninhibit_gpm(void);
 void ghb_inhibit_gpm(void);
+#if defined(_WIN32)
+void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
+#endif
 
 #endif // _CALLBACKS_H_
 

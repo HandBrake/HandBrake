@@ -1,10 +1,10 @@
 $(eval $(call import.MODULE.rules,GTK))
 
-build: gtk.build
+build: hgtk.build gtk.build
 install: gtk.install
 uninstall: gtk.uninstall
-clean: gtk.clean
-xclean: gtk.xclean
+clean: hgtk.clean gtk.clean
+xclean: hgtk.clean gtk.xclean
 
 gtk.configure: $(GTK.CONFIGURE.stamp)
 
@@ -12,12 +12,22 @@ $(GTK.CONFIGURE.stamp): | $(dir $(GTK.CONFIGURE.stamp))
 $(GTK.CONFIGURE.stamp): $(GTK.src/)Makefile.am
 $(GTK.CONFIGURE.stamp): $(GTK.src/)configure.ac $(GTK.src/)src/Makefile.am
 	set -e; cd $(GTK.src/); NOCONFIGURE=1 ./autogen.sh
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
-		PKG_CONFIG_DIR=$(BUILD/)contrib/lib/pkgconfig \
-	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O)" \
+		--host=$(BUILD.spec) \
+		PKG_CONFIG_PATH=$(BUILD/)contrib/lib/pkgconfig \
+	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O *D ?extra)" \
+	    LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O) " \
+	    --prefix=$(PREFIX) \
+	    --with-hb=$(call fn.ABSOLUTE,$(BUILD/))
+else
+	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
+		PKG_CONFIG_PATH=$(BUILD/)contrib/lib/pkgconfig \
+	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O ?extra)" \
 	    LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O)" \
 	    --prefix=$(PREFIX) \
 	    --with-hb=$(call fn.ABSOLUTE,$(BUILD/))
+endif
 	$(TOUCH.exe) $@
 
 gtk.build: | $(GTK.build/)
@@ -37,3 +47,40 @@ gtk.xclean:
 	$(MAKE) -C $(GTK.build/) distclean
 	$(RM.exe) -f $(GTK.out)
 	$(RM.exe) -fr $(GTK.build/)
+
+###############################################################################
+###############################################################################
+$(eval $(call import.MODULE.rules,HGTK))
+
+hgtk.build: $(CREATE_RES.exe) $(WIDGETDEPS.exe) $(QUOTESTRING.exe)
+
+$(CREATE_RES.exe): | $(dir $(CREATE_RES.exe))
+$(CREATE_RES.exe): $(CREATE_RES.c.o) $(HGTKCOMMON.c.o)
+	$(call HGTK.GCC.EXE,$@,$^)
+
+$(HGTKCOMMON.c.o): | $(dir $(HGTKCOMMON.c.o))
+$(HGTKCOMMON.c.o): $(BUILD/)%-native.o: $(SRC/)%.c
+	$(call HGTK.GCC.C_O,$@,$<)
+
+$(CREATE_RES.c.o): | $(dir $(CREATE_RES.c.o))
+$(CREATE_RES.c.o): $(BUILD/)%-native.o: $(SRC/)%.c
+	$(call HGTK.GCC.C_O,$@,$<)
+
+$(WIDGETDEPS.exe): | $(dir $(WIDGETDEPS.exe))
+$(WIDGETDEPS.exe): $(WIDGETDEPS.c.o) $(HGTKCOMMON.c.o)
+	$(call HGTK.GCC.EXE,$@,$^)
+
+$(WIDGETDEPS.c.o): | $(dir $(WIDGETDEPS.c.o))
+$(WIDGETDEPS.c.o): $(BUILD/)%-native.o: $(SRC/)%.c
+	$(call HGTK.GCC.C_O,$@,$<)
+
+$(QUOTESTRING.c.o): | $(dir $(QUOTESTRING.c.o))
+$(QUOTESTRING.c.o): $(BUILD/)%-native.o: $(SRC/)%.c
+	$(call HGTK.GCC.C_O,$@,$<)
+
+$(QUOTESTRING.exe): | $(dir $(QUOTESTRING.exe))
+$(QUOTESTRING.exe): $(QUOTESTRING.c.o)
+	$(call HGTK.GCC.EXE,$@,$^)
+
+hgtk.clean:
+	$(RM.exe) -f $(HGTK.out)

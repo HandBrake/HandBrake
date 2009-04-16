@@ -16,11 +16,18 @@
 #include <glib/gstdio.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
+
+#if !defined(_WIN32)
 #include <gdk/gdkx.h>
+#endif
+
+#if defined(_ENABLE_GST)
 #include <gst/gst.h>
 #include <gst/interfaces/xoverlay.h>
 #include <gst/video/video.h>
 #include <gst/pbutils/missing-plugins.h>
+#endif
+
 #include "settings.h"
 #include "presets.h"
 #include "callbacks.h"
@@ -34,7 +41,10 @@
 
 struct preview_s
 {
+#if defined(_ENABLE_GST)
 	GstElement *play;
+	gulong xid;
+#endif
 	gint64 len;
 	gint64 pos;
 	gboolean seek_lock;
@@ -42,7 +52,6 @@ struct preview_s
 	gint width;
 	gint height;
 	GtkWidget *view;
-	gulong xid;
 	GdkPixbuf *pix;
 	gint button_width;
 	gint button_height;
@@ -55,15 +64,19 @@ struct preview_s
 	gchar *current;
 };
 
-static gboolean live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data);
+#if defined(_ENABLE_GST)
+G_MODULE_EXPORT gboolean live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data);
 static GstBusSyncReply create_window(GstBus *bus, GstMessage *msg, 
 				gpointer data);
-gboolean preview_expose_cb(GtkWidget *widget, GdkEventExpose *event, 
+#endif
+
+G_MODULE_EXPORT gboolean preview_expose_cb(GtkWidget *widget, GdkEventExpose *event, 
 				signal_user_data_t *ud);
 
 void
 ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
 {
+#if defined(_ENABLE_GST)
 	GValue disp_par = {0,};
 	GstElement *xover;
 	GObjectClass *klass;
@@ -91,6 +104,10 @@ ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
 	*par_n = gst_value_get_fraction_numerator(&disp_par);
 	*par_d = gst_value_get_fraction_denominator(&disp_par);
 	g_value_unset(&disp_par);
+#else
+	*par_n = 1;
+	*par_d = 1;
+#endif
 }
 
 void
@@ -111,20 +128,22 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 void
 ghb_preview_init(signal_user_data_t *ud)
 {
-	GstBus *bus;
-	GstElement *xover;
-
 	ud->preview = g_malloc0(sizeof(preview_t));
 	ud->preview->view = GHB_WIDGET(ud->builder, "preview_image");
 	gtk_widget_realize(ud->preview->view);
 	g_signal_connect(G_OBJECT(ud->preview->view), "expose_event",
 					G_CALLBACK(preview_expose_cb), ud);
-	ud->preview->xid = GDK_DRAWABLE_XID(ud->preview->view->window);
 
-	ud->preview->play = gst_element_factory_make("playbin", "play");
 	ud->preview->pause = TRUE;
 	ud->preview->encode_frame = -1;
 	ud->preview->live_id = -1;
+
+#if defined(_ENABLE_GST)
+	GstBus *bus;
+	GstElement *xover;
+
+	ud->preview->xid = GDK_DRAWABLE_XID(ud->preview->view->window);
+	ud->preview->play = gst_element_factory_make("playbin", "play");
 	//xover = gst_element_factory_make("xvimagesink", "xover");
 	//xover = gst_element_factory_make("ximagesink", "xover");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
@@ -135,6 +154,12 @@ ghb_preview_init(signal_user_data_t *ud)
 	gst_bus_add_watch(bus, live_preview_cb, ud);
 	gst_bus_set_sync_handler(bus, create_window, ud->preview);
 	gst_object_unref(bus);
+#else
+	GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
+	gtk_widget_hide (widget);
+	widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
+	gtk_widget_hide (widget);
+#endif
 }
 
 void
@@ -147,6 +172,7 @@ ghb_preview_cleanup(signal_user_data_t *ud)
 	}
 }
 
+#if defined(_ENABLE_GST)
 static GstBusSyncReply
 create_window(GstBus *bus, GstMessage *msg, gpointer data)
 {
@@ -307,7 +333,7 @@ update_stream_info(signal_user_data_t *ud)
 	g_list_free(vstreams);
 }
 
-static gboolean
+G_MODULE_EXPORT gboolean
 live_preview_cb(GstBus *bus, GstMessage *msg, gpointer data)
 {
 	signal_user_data_t *ud = (signal_user_data_t*)data;
@@ -409,6 +435,7 @@ live_preview_pause(signal_user_data_t *ud)
 	gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
 	ud->preview->pause = TRUE;
 }
+#endif
 
 void
 live_preview_stop(signal_user_data_t *ud)
@@ -418,7 +445,9 @@ live_preview_stop(signal_user_data_t *ud)
 
 	img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
 	gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
+#if defined(_ENABLE_GST)
 	gst_element_set_state(ud->preview->play, GST_STATE_NULL);
+#endif
 	ud->preview->pause = TRUE;
 	ud->preview->state = PREVIEW_STATE_IMAGE;
 
@@ -452,7 +481,7 @@ ghb_live_reset(signal_user_data_t *ud)
 
 extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
 
-void
+G_MODULE_EXPORT void
 live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	gchar *tmp_dir;
@@ -468,10 +497,12 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	if (ud->preview->encoded[frame] &&
 		g_file_test(name, G_FILE_TEST_IS_REGULAR))
 	{
+#if defined(_ENABLE_GST)
 		if (ud->preview->pause)
 			live_preview_start(ud);
 		else
 			live_preview_pause(ud);
+#endif
 	}
 	else
 	{
@@ -502,7 +533,9 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(prog), "Done");
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(prog), 1);
 		ud->preview->encoded[ud->preview->encode_frame] = TRUE;
+#if defined(_ENABLE_GST)
 		live_preview_start(ud);
+#endif
 		widget = GHB_WIDGET(ud->builder, "live_progress_box");
 		gtk_widget_hide (widget);
 		widget = GHB_WIDGET(ud->builder, "live_preview_progress");
@@ -516,7 +549,8 @@ ghb_live_encode_done(signal_user_data_t *ud, gboolean success)
 	}
 }
 
-static gboolean
+#if defined(_ENABLE_GST)
+G_MODULE_EXPORT gboolean
 unlock_progress_cb(signal_user_data_t *ud)
 {
 	ud->preview->progress_lock = FALSE;
@@ -524,10 +558,12 @@ unlock_progress_cb(signal_user_data_t *ud)
 	// so that it is not called again
 	return FALSE;
 }
+#endif
 
 void
 ghb_live_preview_progress(signal_user_data_t *ud)
 {
+#if defined(_ENABLE_GST)
 	GstFormat fmt = GST_FORMAT_TIME;
 	gint64 len = -1, pos = -1;
 
@@ -559,9 +595,11 @@ ghb_live_preview_progress(signal_user_data_t *ud)
 		gtk_range_set_value(progress, percent);
 	}
 	g_idle_add((GSourceFunc)unlock_progress_cb, ud);
+#endif
 }
 
-static gboolean
+#if defined(_ENABLE_GST)
+G_MODULE_EXPORT gboolean
 unlock_seek_cb(signal_user_data_t *ud)
 {
 	ud->preview->seek_lock = FALSE;
@@ -569,10 +607,12 @@ unlock_seek_cb(signal_user_data_t *ud)
 	// so that it is not called again
 	return FALSE;
 }
+#endif
 
-void
+G_MODULE_EXPORT void
 live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
+#if defined(_ENABLE_GST)
 	gdouble dval;
 	gint64 pos;
 
@@ -587,6 +627,7 @@ live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 		GST_SEEK_TYPE_SET, pos,
 		GST_SEEK_TYPE_NONE, GST_CLOCK_TIME_NONE);
 	g_idle_add((GSourceFunc)unlock_seek_cb, ud);
+#endif
 }
 
 void
@@ -666,7 +707,8 @@ ghb_set_preview_image(signal_user_data_t *ud)
 	}
 }
 
-static gboolean
+#if defined(_ENABLE_GST)
+G_MODULE_EXPORT gboolean
 delayed_expose_cb(signal_user_data_t *ud)
 {
 	GstElement *vsink;
@@ -683,13 +725,15 @@ delayed_expose_cb(signal_user_data_t *ud)
 	// so that it is not called again
 	return FALSE;
 }
+#endif
 
-gboolean
+G_MODULE_EXPORT gboolean
 preview_expose_cb(
 	GtkWidget *widget, 
 	GdkEventExpose *event, 
 	signal_user_data_t *ud)
 {
+#if defined(_ENABLE_GST)
 	if (ud->preview->state == PREVIEW_STATE_LIVE)
 	{
 		if (GST_STATE(ud->preview->play) >= GST_STATE_PAUSED)
@@ -712,6 +756,7 @@ preview_expose_cb(
 		}
 		return TRUE;
 	}
+#endif
 
 	if (ud->preview->pix != NULL)
 	{
@@ -722,7 +767,7 @@ preview_expose_cb(
 	return TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, signal_user_data_t *ud)
 {
 	g_debug("allocate %d x %d", allocation->width, allocation->height);
@@ -919,7 +964,7 @@ preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_set_preview_image(ud);
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 preview_window_delete_cb(
 	GtkWidget *widget, 
 	GdkEvent *event, 
@@ -967,7 +1012,7 @@ settings_window_delete_cb(
 	return TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("preview_duration_changed_cb ()");

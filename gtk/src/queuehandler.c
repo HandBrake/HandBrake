@@ -23,7 +23,7 @@
 #include "presets.h"
 #include "ghb-dvd.h"
 
-void
+G_MODULE_EXPORT void
 queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
 	GtkTreeModel *store;
@@ -674,14 +674,14 @@ queue_add(signal_user_data_t *ud)
 	return TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 queue_add_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("queue_add_clicked_cb ()");
 	queue_add(ud);
 }
 
-void
+G_MODULE_EXPORT void
 queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
@@ -761,7 +761,7 @@ find_last_finished(GValue *queue)
 // handler from expanding rows if you hover over them while
 // dragging.
 // Also controls where valid drop locations are
-gboolean
+G_MODULE_EXPORT gboolean
 queue_drag_motion_cb(
 	GtkTreeView *tv,
 	GdkDragContext *ctx,
@@ -839,7 +839,7 @@ queue_drag_motion_cb(
 	return TRUE;
 }
 
-void 
+G_MODULE_EXPORT void 
 queue_drag_cb(
 	GtkTreeView *dstwidget, 
 	GdkDragContext *dc, 
@@ -973,7 +973,7 @@ ghb_queue_buttons_grey(signal_user_data_t *ud, gboolean working)
 	gtk_action_set_sensitive (action, working);
 }
 
-void
+G_MODULE_EXPORT void
 queue_list_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, GtkCellRenderer *cell)
 {
 	GtkTreeViewColumn *column;
@@ -988,7 +988,7 @@ queue_list_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, GtkCel
 		g_object_set(cell, "wrap-width", width-70, NULL);
 }
 
-void
+G_MODULE_EXPORT void
 queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GValue *js;
@@ -1024,14 +1024,14 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 queue_stop_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	ud->cancel_encode = TRUE;
 	ghb_cancel_encode(NULL);
 }
 
-void
+G_MODULE_EXPORT void
 queue_pause_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	ghb_pause_queue();
@@ -1107,7 +1107,7 @@ ghb_reload_queue(signal_user_data_t *ud)
 	return FALSE;
 }
 
-gboolean 
+G_MODULE_EXPORT gboolean 
 queue_key_press_cb(
 	GtkWidget *widget, 
 	GdkEventKey *event,
@@ -1170,7 +1170,7 @@ queue_key_press_cb(
 
 GValue *ghb_queue_edit_settings = NULL;
 
-void
+G_MODULE_EXPORT void
 queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;

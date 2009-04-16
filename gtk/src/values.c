@@ -15,6 +15,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <string.h>
+#include <inttypes.h>
 #include "values.h"
 
 static void dict_delete_key(gpointer data);
@@ -96,7 +97,7 @@ debug_show_value(GValue *gval)
 	}
 	else if (tp == G_TYPE_INT64)
 	{
-		g_message("Type %s value %ld", "int64", g_value_get_int64(gval));
+		g_message("Type %s value %" PRId64, "int64", g_value_get_int64(gval));
 	}
 	else if (tp == G_TYPE_DOUBLE)
 	{

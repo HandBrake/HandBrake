@@ -11,3 +11,59 @@ GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure
 GTK.out += $(GTK.CONFIGURE.stamp)
 
 BUILD.out += $(GTK.out)
+
+###############################################################################
+
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+    GTK.GCC.D += PTW32_STATIC_LIB
+endif
+
+
+###############################################################################
+###############################################################################
+$(eval $(call import.MODULE.defs,HGTK,hgtk))
+$(eval $(call import.GCC,HGTK))
+
+HGTK.GCC.gcc = gcc
+HGTK.GCC.args.extra = $(shell pkg-config --cflags glib-2.0)
+HGTK.GCC.args.extra += $(shell pkg-config --cflags gdk-pixbuf-2.0)
+HGTK.GCC.args.extra += $(shell pkg-config --libs glib-2.0)
+HGTK.GCC.args.extra += $(shell pkg-config --libs gdk-pixbuf-2.0)
+
+HGTK.src/ = $(SRC/)gtk/src/
+HGTK.build/ = $(BUILD/)gtk/src/
+
+HGTKCOMMON.c = \
+	$(HGTK.src/)plist.c \
+	$(HGTK.src/)values.c
+
+HGTKCOMMON.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%-native.o,$(HGTKCOMMON.c))
+
+CREATE_RES.c = \
+	$(HGTK.src/)create_resources.c \
+	$(HGTK.src/)icon_tools.c
+
+CREATE_RES.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%-native.o,$(CREATE_RES.c))
+CREATE_RES.exe = $(HGTK.build/)create_resources
+
+WIDGETDEPS.c = \
+	$(HGTK.src/)widgetdeps.c
+
+WIDGETDEPS.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%-native.o,$(WIDGETDEPS.c))
+WIDGETDEPS.exe = $(HGTK.build/)widgetdeps
+
+QUOTESTRING.c = \
+	$(HGTK.src/)quotestring.c
+
+QUOTESTRING.c.o = $(patsubst $(SRC/)%.c,$(BUILD/)%-native.o,$(QUOTESTRING.c))
+QUOTESTRING.exe = $(HGTK.build/)quotestring
+
+HGTK.out += $(HGTKCOMMON.c.o)
+HGTK.out += $(CREATE_RES.exe)
+HGTK.out += $(CREATE_RES.c.o)
+HGTK.out += $(WIDGETDEPS.exe)
+HGTK.out += $(WIDGETDEPS.c.o)
+HGTK.out += $(QUOTESTRING.exe)
+HGTK.out += $(QUOTESTRING.c.o)
+
+BUILD.out += $(HGTK.out)

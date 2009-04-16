@@ -26,7 +26,7 @@ static gchar* sanitize_x264opts(signal_user_data_t *ud, const gchar *options);
 // Flag needed to prevent x264 options processing from chasing its tail
 static gboolean ignore_options_update = FALSE;
 
-void
+G_MODULE_EXPORT void
 x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
@@ -40,7 +40,7 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_clear_presets_selection(ud);
 }
 
-void
+G_MODULE_EXPORT void
 x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint me;
@@ -68,7 +68,7 @@ x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("x264_entry_changed_cb ()");
@@ -96,7 +96,7 @@ x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event, 
 	signal_user_data_t *ud)
 {

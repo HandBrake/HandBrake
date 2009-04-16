@@ -33,10 +33,19 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
+
+#if !defined(_WIN32)
 #include <gst/gst.h>
+#include <libnotify/notify.h>
+#else
+#include <windows.h>
+#include <io.h>
+//#include <pthread/pthread.h>
+#define pipe(phandles)	_pipe (phandles, 4096, _O_BINARY)
+#endif
+
 #include <glib/gstdio.h>
 #include <gio/gio.h>
-#include <libnotify/notify.h>
 #include "hb.h"
 #include "renderer_button.h"
 #include "hb-backend.h"
@@ -74,7 +83,6 @@
 #  define _(String) (String)
 #  define N_(String) (String)
 #endif
-
 
 
 #define BUILDER_NAME "ghb"
@@ -193,9 +201,9 @@ change_font(GtkWidget *widget, gpointer data)
     //gtk_container_foreach((GtkContainer*)window, change_font, "sans 20");
 #endif
 
-extern void chapter_list_selection_changed_cb(void);
-extern void chapter_edited_cb(void);
-extern void chapter_keypress_cb(void);
+extern G_MODULE_EXPORT void chapter_list_selection_changed_cb(void);
+extern G_MODULE_EXPORT void chapter_edited_cb(void);
+extern G_MODULE_EXPORT void chapter_keypress_cb(void);
 
 // Create and bind the tree model to the tree view for the chapter list
 // Also, connect up the signal that lets us know the selection has changed
@@ -236,11 +244,11 @@ bind_chapter_tree_model (signal_user_data_t *ud)
 }
 
 
-extern void queue_list_selection_changed_cb(void);
-extern void queue_remove_clicked_cb(void);
-extern void queue_list_size_allocate_cb(void);
-extern void queue_drag_cb(void);
-extern void queue_drag_motion_cb(void);
+extern G_MODULE_EXPORT void queue_list_selection_changed_cb(void);
+extern G_MODULE_EXPORT void queue_remove_clicked_cb(void);
+extern G_MODULE_EXPORT void queue_list_size_allocate_cb(void);
+extern G_MODULE_EXPORT void queue_drag_cb(void);
+extern G_MODULE_EXPORT void queue_drag_motion_cb(void);
 
 // Create and bind the tree model to the tree view for the queue list
 // Also, connect up the signal that lets us know the selection has changed
@@ -304,7 +312,7 @@ bind_queue_tree_model (signal_user_data_t *ud)
 	gtk_widget_hide (widget);
 }
 
-extern void audio_list_selection_changed_cb(void);
+extern G_MODULE_EXPORT void audio_list_selection_changed_cb(void);
 
 // Create and bind the tree model to the tree view for the audio track list
 // Also, connect up the signal that lets us know the selection has changed
@@ -369,9 +377,9 @@ bind_audio_tree_model (signal_user_data_t *ud)
 	g_debug("Done\n");
 }
 
-extern void presets_list_selection_changed_cb(void);
-extern void presets_drag_cb(void);
-extern void presets_drag_motion_cb(void);
+extern G_MODULE_EXPORT void presets_list_selection_changed_cb(void);
+extern G_MODULE_EXPORT void presets_drag_cb(void);
+extern G_MODULE_EXPORT void presets_drag_motion_cb(void);
 extern void presets_row_expanded_cb(void);
 
 // Create and bind the tree model to the tree view for the preset list
@@ -444,8 +452,12 @@ IoRedirect(signal_user_data_t *ud)
 	g_free(config);
 	// Set encoding to raw.
 	g_io_channel_set_encoding (ud->activity_log, NULL, NULL);
+#if !defined(_WIN32)
 	stderr->_fileno = pfd[1];
-	stdin->_fileno = pfd[0];
+#else
+	stderr->_file = pfd[1];
+#endif
+	setvbuf(stderr, NULL, _IONBF, 0);
 	channel = g_io_channel_unix_new (pfd[0]);
 	// I was getting an this error:
 	// "Invalid byte sequence in conversion input"
@@ -472,31 +484,47 @@ static GOptionEntry entries[] =
 	{ NULL }
 };
 
-#if defined(__linux__)
-void drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud);
+G_MODULE_EXPORT void drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud);
 //void drive_disconnected_cb(GnomeVFSVolumeMonitor *gvm, GnomeVFSDrive *gd, signal_user_data_t *ud);
+
+#if defined(_WIN32)
+G_MODULE_EXPORT GdkFilterReturn
+win_message_cb(GdkXEvent *wmevent, GdkEvent *event, gpointer data)
+{
+	signal_user_data_t *ud = (signal_user_data_t*)data;
+	MSG *msg = (MSG*)wmevent;
+
+	if (msg->message == WM_DEVICECHANGE)
+	{
+		wm_drive_changed(wmevent, ud);
+	}
+	return GDK_FILTER_CONTINUE;
+}
+#endif
 
 void
 watch_volumes(signal_user_data_t *ud)
 {
+#if !defined(_WIN32)
 	GVolumeMonitor *gvm;
 	gvm = g_volume_monitor_get ();
 
 	g_signal_connect(gvm, "drive-changed", (GCallback)drive_changed_cb, ud);
-	//g_signal_connect(gvm, "drive-connected", (GCallback)drive_connected_cb, ud);
-}
 #else
-void
-watch_volumes(signal_user_data_t *ud)
-{
-}
+	GdkWindow *window;
+	GtkWidget *widget;
+
+	widget = GHB_WIDGET (ud->builder, "hb_window");
+	window = gtk_widget_get_parent_window(widget);
+	gdk_window_add_filter(window, win_message_cb, ud);
 #endif
+}
 
 // Hack to avoid a segfault in libavcodec
 extern int mm_flags;
 int mm_support();
 
-void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
+G_MODULE_EXPORT void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 void preview_window_expose_cb(void);
 
 // Some style definitions for the preview window and hud
@@ -543,24 +571,33 @@ main (int argc, char *argv[])
 	textdomain (GETTEXT_PACKAGE);
 #endif
 
+#ifdef PTW32_STATIC_LIB
+	pthread_win32_process_attach_np();
+	pthread_win32_thread_attach_np();
+#endif
+
 	if (!g_thread_supported())
 		g_thread_init(NULL);
 	context = g_option_context_new ("- Rip and encode DVD or MPEG file");
 	g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
 	g_option_context_add_group (context, gtk_get_option_group (TRUE));
+#if !defined(_WIN32)
 	g_option_context_add_group (context, gst_init_get_option_group ());
+#endif
 	g_option_context_parse (context, &argc, &argv, &error);
 	g_option_context_free(context);
 	
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
 	gtk_rc_parse_string(hud_rcstyle);
+#if !defined(_WIN32)
 	notify_init("HandBrake");
+#endif
 	ghb_register_transforms();
 	ghb_resource_init();
 	ghb_load_icons();
 
-#if defined(__linux__)
+#if !defined(_WIN32)
 	ghb_hal_init();
 #endif
 
@@ -570,9 +607,9 @@ main (int argc, char *argv[])
 	g_log_set_handler ("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
 	//g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
 	ud->settings = ghb_settings_new();
+	ud->builder = create_builder_or_die (BUILDER_NAME);
 	// Enable events that alert us to media change events
 	watch_volumes (ud);
-	ud->builder = create_builder_or_die (BUILDER_NAME);
 
 	//GtkWidget *widget = GHB_WIDGET(ud->builder, "PictureDetelecineCustom");
 	//gtk_entry_set_inner_border(widget, 2);
@@ -687,8 +724,13 @@ main (int argc, char *argv[])
 	ghb_value_free(ud->settings);
 	g_io_channel_unref(ud->activity_log);
 	ghb_settings_close();
+#if !defined(_WIN32)
 	notify_uninit();
+#endif
 	g_free(ud);
+#ifdef PTW32_STATIC_LIB
+	pthread_win32_thread_detach_np();
+	pthread_win32_process_detach_np();
+#endif
 	return 0;
 }
-

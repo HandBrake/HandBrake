@@ -281,7 +281,7 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	static gint prev_acodec = 0;
@@ -337,7 +337,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
@@ -359,7 +359,7 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 audio_mix_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
@@ -376,7 +376,7 @@ audio_mix_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
@@ -392,7 +392,7 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 }
 
-void
+G_MODULE_EXPORT void
 drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
@@ -418,7 +418,7 @@ drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 // the selection is updated automaitcally when the title
 // changes.  I don't want the preset selection changed as
 // would happen for regular settings.
-void
+G_MODULE_EXPORT void
 subtitle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	const gchar *name = gtk_widget_get_name(widget);
@@ -508,7 +508,7 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	g_free(s_mix);
 }
 
-void
+G_MODULE_EXPORT void
 audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
 	GtkTreeModel *store;
@@ -545,7 +545,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 	}
 }
 
-void
+G_MODULE_EXPORT void
 audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	// Add the current audio settings to the list.
@@ -588,7 +588,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 audio_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;

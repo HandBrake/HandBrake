@@ -45,6 +45,10 @@ else
 	AC_SUBST(HB_DIR, '$(top_srcdir)/'"..")
 fi
 
+AC_ARG_ENABLE(gst,
+	AS_HELP_STRING([--enable-gst], [enable gstreamer on Win32]),
+	w32_gst=yes, w32_gst=no)
+
 # overwrite global variable (used for Makefile generation)
 AC_SUBST(GLOBALCXXFLAGS, $CXXFLAGS )
 AC_SUBST(GLOBALLDFLAGS, $LDFLAGS )
@@ -60,22 +64,34 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
 AM_GLIB_GNU_GETTEXT
 IT_PROG_INTLTOOL([0.35.0])
 
-
-
 AM_PROG_LIBTOOL
 
+case $host in
+  *-*-mingw*)
+    if test "x$w32_gst" = "xyes" ; then
+		GHB_PACKAGES="gtk+-2.0 >= 2.8 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage libgtkhtml-3.14"
+	else
+        GHB_PACKAGES="gtk+-2.0 >= 2.8 gthread-2.0 gio-2.0"
+	fi
+	mingw_flag=yes
+    ;;
+  *)
+	GHB_PACKAGES="gtk+-2.0 >= 2.8 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage libgtkhtml-3.14 libnotify"
+	mingw_flag=no
+    ;;
+esac
 
+if test "x$w32_gst" = "xyes" -o  "x$mingw_flag" != "xyes" ; then
+	CXXFLAGS="$CXXFLAGS -D_ENABLE_GST"
+	CFLAGS="$CFLAGS -D_ENABLE_GST"
+fi
 
-PKG_CHECK_MODULES(GHBTOOLS, [glib-2.0 gobject-2.0 gdk-pixbuf-2.0])
-AC_SUBST(GHBTOOLS_CFLAGS)
-AC_SUBST(GHBTOOLS_LIBS)
+AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
-PKG_CHECK_MODULES(GHB, [gtk+-2.0 >= 2.8 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage libgtkhtml-3.14 libnotify ])
+PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
+
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)
-
-
-
 
 AC_OUTPUT([
 Makefile

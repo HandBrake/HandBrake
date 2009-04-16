@@ -1977,9 +1977,9 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 	gint signal_id;
 	gint handler_id = 0;
 
-	g_debug("ghb_update_ui_combo_box() %s\n", name);
 	if (name != NULL)
 	{		
+		g_debug("ghb_update_ui_combo_box() %s\n", name);
 		// Clearing a combo box causes a rash of "changed" events, even when
 		// the active item is -1 (inactive).  To control things, I'm disabling
 		// the event till things are settled down.
@@ -3457,7 +3457,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
 
-	job->anamorphic.mode = ghb_settings_get_boolean(js, "PicturePAR");
+	job->anamorphic.mode = ghb_settings_combo_int(js, "PicturePAR");
 	job->anamorphic.modulus = ghb_settings_combo_int(js, "PictureAlignment");
 
 	/* Add selected filters */

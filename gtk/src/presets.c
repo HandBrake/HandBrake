@@ -1033,7 +1033,7 @@ ghb_get_user_config_dir(gchar *subdir)
 		gchar **split;
 		gint ii;
 
-		split = g_strsplit(subdir, "/", -1);
+		split = g_strsplit(subdir, G_DIR_SEPARATOR_S, -1);
 		for (ii = 0; split[ii] != NULL; ii++)
 		{
 			gchar *tmp;
@@ -1328,6 +1328,34 @@ ghb_settings_close()
 		ghb_value_free(prefsPlist);
 }
 
+#if defined(_WIN32)
+gchar*
+FindFirstCDROM(void)
+{
+	gint ii, drives;
+	gchar drive[5];
+
+	strcpy(drive, "A:" G_DIR_SEPARATOR_S);
+	drives = GetLogicalDrives();
+	for (ii = 0; ii < 26; ii++)
+	{
+		if (drives & 0x01)
+		{
+			guint dtype;
+
+			drive[0] = 'A' + ii;
+			dtype = GetDriveType(drive);
+			if (dtype == DRIVE_CDROM)
+			{
+				return g_strdup(drive);
+			}
+		}
+		drives >>= 1;
+	}
+	return NULL;
+}
+#endif
+
 void
 ghb_prefs_load(signal_user_data_t *ud)
 {
@@ -1363,6 +1391,18 @@ ghb_prefs_load(signal_user_data_t *ud)
 		}
 		ghb_dict_insert(dict, 
 			g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
+#if defined(_WIN32)
+		gchar *source;
+
+		source = FindFirstCDROM();
+		if (source == NULL)
+		{
+			source = g_strdup("C:" G_DIR_SEPARATOR_S);
+		}
+		ghb_dict_insert(dict, g_strdup("default_source"), 
+						ghb_value_dup(ghb_string_value(source)));
+		g_free(source);
+#endif
 		store_prefs();
     }
 	// Read legacy default_preset preference and update accordingly
@@ -2837,7 +2877,7 @@ enforce_preset_type(signal_user_data_t *ud, const GValue *path)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
@@ -2906,13 +2946,13 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 preset_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
 }
 
-void
+G_MODULE_EXPORT void
 preset_name_changed_cb(GtkWidget *entry, signal_user_data_t *ud)
 {
 	gchar *name;
@@ -2928,7 +2968,7 @@ preset_name_changed_cb(GtkWidget *entry, signal_user_data_t *ud)
 	ghb_value_free(dest);
 }
 
-void
+G_MODULE_EXPORT void
 presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GValue *preset;
@@ -2942,7 +2982,7 @@ presets_restore_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_select_preset(ud->builder, preset);
 }
 
-void
+G_MODULE_EXPORT void
 presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
@@ -3011,7 +3051,7 @@ presets_remove_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 // controls where valid drop locations are
-gboolean
+G_MODULE_EXPORT gboolean
 presets_drag_motion_cb(
 	GtkTreeView *tv,
 	GdkDragContext *ctx,
@@ -3102,7 +3142,7 @@ presets_drag_motion_cb(
 	return TRUE;
 }
 
-void 
+G_MODULE_EXPORT void 
 presets_drag_cb(
 	GtkTreeView *dstwidget, 
 	GdkDragContext *dc, 
@@ -3347,7 +3387,7 @@ preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
 	GtkTreeModel *store;
@@ -3445,7 +3485,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
 	ghb_settings_set_boolean(ud->settings, "preset_modified", TRUE);
 }
 
-void
+G_MODULE_EXPORT void
 presets_frame_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, signal_user_data_t *ud)
 {
 	GtkTreeView *treeview;
@@ -3465,7 +3505,7 @@ presets_frame_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, sig
 	}
 }
 
-void
+G_MODULE_EXPORT void
 presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GValue *preset;
