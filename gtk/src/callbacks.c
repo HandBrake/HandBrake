@@ -2685,48 +2685,55 @@ void
 ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
 	GList *link, *drives;
-
-	GtkActionGroup *agroup = GTK_ACTION_GROUP(
-		gtk_builder_get_object(ud->builder, "actiongroup1"));
-	GtkUIManager *ui = GTK_UI_MANAGER(
-		gtk_builder_get_object(ud->builder, "uimanager1"));
-	guint merge_id = gtk_ui_manager_new_merge_id(ui);
+	static GtkActionGroup *agroup = NULL;
 
 	link = drives = dvd_device_list();
-	while (link != NULL)
+	if (drives != NULL)
 	{
-		GtkAction *action;
-		gchar *drive = (gchar*)link->data;
-		gchar *name = get_drive_name(drive);
-		
-		action = gtk_action_group_get_action(agroup, drive);
-		if (action != NULL)
+		GtkUIManager *ui = GTK_UI_MANAGER(
+			gtk_builder_get_object(ud->builder, "uimanager1"));
+		guint merge_id = gtk_ui_manager_new_merge_id(ui);
+		if (agroup == NULL)
 		{
-			gtk_action_group_remove_action(agroup, action);
-			g_object_unref(G_OBJECT(action));
+			agroup = gtk_action_group_new("dvdgroup");
+			// Add separator
+			gtk_ui_manager_insert_action_group(ui, agroup, 0);
+			gtk_ui_manager_add_ui(ui, merge_id, 
+				"ui/menubar1/menuitem1/quit1", "dvdsep", NULL,
+				GTK_UI_MANAGER_SEPARATOR, TRUE);
 		}
-		// Create action for this drive
-		action = gtk_action_new(drive, name,
-			"Scan this DVD source", "gtk-cdrom");
-		// Add action to action group
-		gtk_action_group_add_action_with_accel(agroup, action, NULL);
-		// Add to ui manager
-		gtk_ui_manager_add_ui(ui, merge_id, 
-			"ui/menubar1/menuitem1/quit1", drive, drive,
-			GTK_UI_MANAGER_AUTO, TRUE);
-		// Connect signal to action (menu item)
-		g_signal_connect(action, "activate", 
-			(GCallback)dvd_source_activate_cb, ud);
-		g_free(name);
-		g_free(drive);
-		link = link->next;
-	}
-	g_list_free(drives);
 
-	// Add separator
-	gtk_ui_manager_add_ui(ui, merge_id, 
-		"ui/menubar1/menuitem1/quit1", "", NULL,
-		GTK_UI_MANAGER_AUTO, TRUE);
+		while (link != NULL)
+		{
+			GtkAction *action;
+			gchar *drive = (gchar*)link->data;
+			gchar *name = get_drive_name(drive);
+		
+			action = gtk_action_group_get_action(agroup, drive);
+			if (action != NULL)
+			{
+				gtk_action_group_remove_action(agroup, action);
+				g_object_unref(G_OBJECT(action));
+			}
+			// Create action for this drive
+			action = gtk_action_new(drive, name,
+				"Scan this DVD source", "gtk-cdrom");
+			// Add action to action group
+			gtk_action_group_add_action_with_accel(agroup, action, NULL);
+			// Add to ui manager
+			gtk_ui_manager_add_ui(ui, merge_id, 
+				"ui/menubar1/menuitem1/dvdsep", drive, drive,
+				//"ui/menubar1/menuitem1/quit1", drive, drive,
+				GTK_UI_MANAGER_AUTO, TRUE);
+			// Connect signal to action (menu item)
+			g_signal_connect(action, "activate", 
+				(GCallback)dvd_source_activate_cb, ud);
+			g_free(name);
+			g_free(drive);
+			link = link->next;
+		}
+		g_list_free(drives);
+	}
 }
 
 gboolean ghb_is_cd(GDrive *gd);

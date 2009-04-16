@@ -3907,6 +3907,7 @@ location as the movie.</property>
     </action-widgets>
   </object>
   <object class="GtkWindow" id="activity_window">
+    <property name="visible">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
@@ -3960,6 +3961,7 @@ location as the movie.</property>
     </child>
   </object>
   <object class="GtkWindow" id="queue_window">
+    <property name="visible">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">HandBrake Queue</property>
     <property name="icon_name">hb-queue</property>
@@ -4102,6 +4104,7 @@ location as the movie.</property>
     </child>
   </object>
   <object class="GtkWindow" id="settings_window">
+    <property name="visible">False</property>
     <property name="title" translatable="yes">Picture Settings</property>
     <property name="window_position">GTK_WIN_POS_NONE</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
@@ -5284,6 +5287,7 @@ location as the movie.</property>
   </object>
 
   <object class="GtkWindow" id="preview_window">
+    <property name="visible">False</property>
     <property name="title" translatable="yes">Preview</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="skip_taskbar_hint">True</property>
