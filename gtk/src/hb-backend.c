@@ -2693,8 +2693,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			// Adjust the cropping to accomplish the desired width and height
 			crop_width = tinfo.width - crop[2] - crop[3];
 			crop_height = tinfo.height - crop[0] - crop[1];
-			width = MOD_ROUND(crop_width, mod);
-			height = MOD_ROUND(crop_height, mod);
+			width = MOD_DOWN(crop_width, mod);
+			height = MOD_DOWN(crop_height, mod);
 
 			need1 = (crop_height - height) / 2;
 			need2 = crop_height - height - need1;

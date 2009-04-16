@@ -288,21 +288,21 @@ ghb_compositor_new (void)
 static void
 showtype(const gchar *msg, GtkWidget *widget)
 {
-	GType type;
-	gchar *str;
+    GType type;
+    gchar *str;
 
-	type = GTK_WIDGET_TYPE(widget);
-	if (type == GTK_TYPE_DRAWING_AREA)
-		str = "drawing area";
-	else if (type == GTK_TYPE_ALIGNMENT)
-		str = "alignment";
-	else if (type == GTK_TYPE_EVENT_BOX)
-		str = "event box";
-	else if (type == GTK_TYPE_EVENT_BOX)
-		str = "event box";
-	else
-		str = "unknown";
-	g_message("%s: %s", msg, str);
+    type = GTK_WIDGET_TYPE(widget);
+    if (type == GTK_TYPE_DRAWING_AREA)
+        str = "drawing area";
+    else if (type == GTK_TYPE_ALIGNMENT)
+        str = "alignment";
+    else if (type == GTK_TYPE_EVENT_BOX)
+        str = "event box";
+    else if (type == GTK_TYPE_EVENT_BOX)
+        str = "event box";
+    else
+        str = "unknown";
+    g_message("%s: %s", msg, str);
 }
 #endif
 
@@ -354,7 +354,6 @@ ghb_compositor_zlist_insert (
     gint z_pos, 
     gdouble opacity)
 {
-    GtkWidget *widget;
     GhbCompositorChild *cc;
     GdkDisplay *display;
 
@@ -362,20 +361,20 @@ ghb_compositor_zlist_insert (
     g_return_if_fail (GTK_IS_WIDGET (child));
     g_return_if_fail (child->parent == NULL);
 
-    widget = GTK_WIDGET (compositor);
-
-    cc = g_new(GhbCompositorChild, 1);
-    cc->widget = child;
-    cc->z_pos = z_pos;
-    cc->opacity = opacity;
-    compositor->children = g_list_insert_sorted(
-                                compositor->children, cc, zsort);
-
     gtk_widget_set_parent(child, GTK_WIDGET(compositor));
 
     display = gtk_widget_get_display (GTK_WIDGET(compositor));
     if (gdk_display_supports_composite(display))
     {
+
+        cc = g_new(GhbCompositorChild, 1);
+        cc->widget = child;
+        cc->z_pos = z_pos;
+        cc->opacity = opacity;
+        cc->drawables = NULL;
+        compositor->children = g_list_insert_sorted(
+                                compositor->children, cc, zsort);
+
         GList *link;
 
         cc->drawables = find_drawables(NULL, cc->widget);
@@ -604,6 +603,7 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
     cairo_t *cr;
     GhbCompositorChild *cc;
 
+    if (compositor->children == NULL) return;
     /* create a cairo context to draw to the window */
     cr = gdk_cairo_create (widget->window);
 
