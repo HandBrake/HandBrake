@@ -364,17 +364,17 @@ ghb_compositor_zlist_insert (
     gtk_widget_set_parent(child, GTK_WIDGET(compositor));
 
     display = gtk_widget_get_display (GTK_WIDGET(compositor));
-    if (gdk_display_supports_composite(display))
-    {
 
-        cc = g_new(GhbCompositorChild, 1);
-        cc->widget = child;
-        cc->z_pos = z_pos;
-        cc->opacity = opacity;
-        cc->drawables = NULL;
-        compositor->children = g_list_insert_sorted(
+    cc = g_new(GhbCompositorChild, 1);
+    cc->widget = child;
+    cc->z_pos = z_pos;
+    cc->opacity = opacity;
+    cc->drawables = NULL;
+    compositor->children = g_list_insert_sorted(
                                 compositor->children, cc, zsort);
 
+    if (gdk_display_supports_composite(display))
+    {
         GList *link;
 
         cc->drawables = find_drawables(NULL, cc->widget);
@@ -570,6 +570,7 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         child_allocation.x = 0;
         child_allocation.y = 0;
     }
+
     child_allocation.width = MAX (allocation->width - 
                                 GTK_CONTAINER (widget)->border_width * 2, 0);
     child_allocation.height = MAX (allocation->height - 
@@ -589,7 +590,8 @@ ghb_compositor_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     for (link = compositor->children; link != NULL; link = link->next)
     {
         cc = (GhbCompositorChild*)link->data;
-        gtk_widget_size_allocate (cc->widget, &child_allocation);
+    	if (GTK_WIDGET_REALIZED (cc->widget))
+        	gtk_widget_size_allocate (cc->widget, &child_allocation);
     }
 }
 
