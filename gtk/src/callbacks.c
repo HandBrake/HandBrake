@@ -2972,14 +2972,17 @@ wm_drive_changed(MSG *msg, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 {
+	gchar *device;
+	gint state;
+
 	g_debug("drive_changed_cb()");
 	ghb_file_menu_add_dvd(ud);
 
-	gchar *device;
-
+	state = ghb_get_scan_state();
 	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
 	if (ud->current_dvd_device == NULL ||
-		strcmp(device, ud->current_dvd_device) != 0)
+		strcmp(device, ud->current_dvd_device) != 0 ||
+		state != GHB_STATE_IDLE )
 	{
 		return;
 	}
