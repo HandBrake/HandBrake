@@ -28,6 +28,10 @@
 		<false />
 		<key>preset_type_normal</key>
 		<true />
+		<key>PictureDisplayWidth</key>
+		<integer>720</integer>
+		<key>PictureDisplayHeight</key>
+		<integer>480</integer>
 		<key>scale_height</key>
 		<integer>0</integer>
 		<key>scale_width</key>
@@ -116,8 +120,6 @@
 		<false />
 		<key>reduce_hd_preview</key>
 		<true />
-		<key>noscale</key>
-		<false />
 		<key>preview_count</key>
 		<integer>10</integer>
 		<key>preview_fullscreen</key>
@@ -171,6 +173,8 @@
 		<key>FileFormat</key>
 		<string>mp4</string>
 		<key>Folder</key>
+		<false />
+		<key>PictureLooseCrop</key>
 		<false />
 		<key>PictureAlignment</key>
 		<integer>16</integer>

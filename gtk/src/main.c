@@ -201,7 +201,6 @@ change_font(GtkWidget *widget, gpointer data)
     //gtk_container_foreach((GtkContainer*)window, change_font, "sans 20");
 #endif
 
-extern G_MODULE_EXPORT void chapter_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void chapter_edited_cb(void);
 extern G_MODULE_EXPORT void chapter_keypress_cb(void);
 
@@ -239,7 +238,6 @@ bind_chapter_tree_model (signal_user_data_t *ud)
 
 	g_signal_connect(cell, "key-press-event", chapter_keypress_cb, ud);
 	g_signal_connect(cell, "edited", chapter_edited_cb, ud);
-	g_signal_connect(selection, "changed", chapter_list_selection_changed_cb, ud);
 	g_debug("Done\n");
 }
 
@@ -485,7 +483,6 @@ static GOptionEntry entries[] =
 };
 
 G_MODULE_EXPORT void drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud);
-//void drive_disconnected_cb(GnomeVFSVolumeMonitor *gvm, GnomeVFSDrive *gd, signal_user_data_t *ud);
 
 #if defined(_WIN32)
 G_MODULE_EXPORT GdkFilterReturn

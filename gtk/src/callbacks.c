@@ -275,7 +275,7 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 	gint state = ghb_get_queue_state();
 	g_debug("on_quit1_activate ()");
 	if (state & GHB_STATE_WORKING)
-   	{
+	{
 		if (ghb_cancel_encode("Closing HandBrake will terminate encoding.\n"))
 		{
 			ghb_hb_cleanup(FALSE);
@@ -288,59 +288,6 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 	ghb_hb_cleanup(FALSE);
 	prune_logs(ud);
 	gtk_main_quit();
-}
-
-static void
-set_destination(signal_user_data_t *ud)
-{
-	g_debug("set_destination");
-	if (ghb_settings_get_boolean(ud->settings, "use_source_name"))
-	{
-		GString *str = g_string_new("");
-		gchar *vol_name, *filename, *extension;
-		gchar *new_name;
-		gint title;
-		
-		filename = ghb_settings_get_string(ud->settings, "dest_file");
-		extension = ghb_settings_get_string(ud->settings, "FileFormat");
-		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
-		g_string_append_printf(str, "%s", vol_name);
-		title = ghb_settings_combo_int(ud->settings, "title");
-		if (title >= 0)
-		{
-			if (ghb_settings_get_boolean(
-					ud->settings, "title_no_in_destination"))
-			{
-
-				title = ghb_settings_combo_int(ud->settings, "title");
-				g_string_append_printf(str, " - %d", title+1);
-			}
-			if (ghb_settings_get_boolean(
-					ud->settings, "chapters_in_destination"))
-			{
-				gint start, end;
-
-				if (!ghb_settings_get_boolean(
-						ud->settings, "title_no_in_destination"))
-				{
-					g_string_append_printf(str, " -");
-				}
-				start = ghb_settings_get_int(ud->settings, "start_chapter");
-				end = ghb_settings_get_int(ud->settings, "end_chapter");
-				if (start == end)
-					g_string_append_printf(str, " Ch %d", start);
-				else
-					g_string_append_printf(str, " Ch %d-%d", start, end);
-			}
-		}
-		g_string_append_printf(str, ".%s", extension);
-		new_name = g_string_free(str, FALSE);
-		ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
-		g_free(filename);
-		g_free(extension);
-		g_free(vol_name);
-		g_free(new_name);
-	}
 }
 
 gboolean
@@ -399,6 +346,125 @@ camel_convert(gchar *str)
 	}
 }
 
+#if defined(_WIN32)
+static gchar*
+get_dvd_device_name(gchar *device)
+{
+	return g_strdup(device);
+}
+#else
+static gchar*
+get_dvd_device_name(GDrive *gd)
+{
+	return g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
+}
+#endif
+
+#if defined(_WIN32)
+static gchar*
+get_dvd_volume_name(const gchar *drive)
+{
+	gchar *result;
+	gchar vname[51], fsname[51];
+	if (GetVolumeInformation(drive, vname, 50, NULL, NULL, NULL, fsname, 51))
+	{
+		result = g_strdup_printf("%s (%s)", vname, drive);
+	}
+	else
+	{
+		result = g_strdup_printf("%s", drive);
+	}
+	return result;
+}
+#else
+static gchar*
+get_dvd_volume_name(GDrive *gd)
+{
+	gchar *label;
+	gchar *result;
+	gchar *drive;
+
+	drive = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
+	if (g_drive_has_media (gd))
+	{
+		label = ghb_dvd_volname (drive);
+		if (label != NULL)
+		{
+			if (uppers_and_unders(label))
+			{
+				camel_convert(label);
+			}
+			result = g_strdup_printf("%s - %s", drive, label);
+			g_free(label);
+		}
+		else
+		{
+			result = g_strdup_printf("%s", drive);
+		}
+	}
+	else
+	{
+		result = g_strdup_printf("%s", drive);
+	}
+	g_free(drive);
+	return result;
+}
+#endif
+
+
+static void
+set_destination(signal_user_data_t *ud)
+{
+	g_debug("set_destination");
+	if (ghb_settings_get_boolean(ud->settings, "use_source_name"))
+	{
+		GString *str = g_string_new("");
+		gchar *vol_name, *filename, *extension;
+		gchar *new_name;
+		gint title;
+		
+		filename = ghb_settings_get_string(ud->settings, "dest_file");
+		extension = ghb_settings_get_string(ud->settings, "FileFormat");
+		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
+		g_string_append_printf(str, "%s", vol_name);
+		title = ghb_settings_combo_int(ud->settings, "title");
+		if (title >= 0)
+		{
+			if (ghb_settings_get_boolean(
+					ud->settings, "title_no_in_destination"))
+			{
+
+				title = ghb_settings_combo_int(ud->settings, "title");
+				g_string_append_printf(str, " - %d", title+1);
+			}
+			if (ghb_settings_get_boolean(
+					ud->settings, "chapters_in_destination"))
+			{
+				gint start, end;
+
+				if (!ghb_settings_get_boolean(
+						ud->settings, "title_no_in_destination"))
+				{
+					g_string_append_printf(str, " -");
+				}
+				start = ghb_settings_get_int(ud->settings, "start_chapter");
+				end = ghb_settings_get_int(ud->settings, "end_chapter");
+				if (start == end)
+					g_string_append_printf(str, " Ch %d", start);
+				else
+					g_string_append_printf(str, " Ch %d-%d", start, end);
+			}
+		}
+		g_string_append_printf(str, ".%s", extension);
+		new_name = g_string_free(str, FALSE);
+		ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
+		g_free(filename);
+		g_free(extension);
+		g_free(vol_name);
+		g_free(new_name);
+	}
+}
+
 static gchar*
 get_file_label(const gchar *filename)
 {
@@ -419,26 +485,6 @@ get_file_label(const gchar *filename)
 		}
 	}
 	return base;
-}
-
-static gchar*
-get_drive_name(const gchar *drive)
-{
-	gchar *result;
-#if defined(_WIN32)
-	gchar vname[51], fsname[51];
-	if (GetVolumeInformation(drive, vname, 50, NULL, NULL, NULL, fsname, 51))
-	{
-		result = g_strdup_printf("%s (%s)", vname, drive);
-	}
-	else
-	{
-		result = g_strdup_printf("%s", drive);
-	}
-#else
-	result = g_strdup_printf("%s", drive);
-#endif
-	return result;
 }
 
 static gchar*
@@ -663,9 +709,10 @@ source_dialog_extra_widgets(
 	gtk_combo_box_append_text (combo, "Not Selected");
 	while (link != NULL)
 	{
-		gchar *name = (gchar*)link->data;
+		gchar *name = get_dvd_volume_name(link->data);
 		gtk_combo_box_append_text(combo, name);
 		g_free(name);
+		g_object_unref(link->data);
 		link = link->next;
 	}
 	g_list_free(drives);
@@ -1172,7 +1219,7 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	widget = GHB_WIDGET (ud->builder, "start_chapter");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
-	ud->dont_clear_presets = TRUE;
+	ud->dont_clear_presets = FALSE;
 }
 
 static gboolean update_preview = FALSE;
@@ -1409,6 +1456,8 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		height = tinfo.height - crop[0] - crop[1];
 		widget = GHB_WIDGET (ud->builder, "crop_dimensions");
 		text = g_strdup_printf ("%d x %d", width, height);
+		gtk_label_set_text (GTK_LABEL(widget), text);
+		widget = GHB_WIDGET (ud->builder, "crop_dimensions2");
 		gtk_label_set_text (GTK_LABEL(widget), text);
 		g_free(text);
 	}
@@ -2560,13 +2609,6 @@ chapter_edited_cb(
 	gtk_tree_path_free (treepath);
 }
 
-G_MODULE_EXPORT void
-chapter_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
-{
-	g_debug("chapter_list_selection_changed_cb ()");
-	//chapter_selection_changed = TRUE;
-}
-
 void
 debug_log_handler(const gchar *domain, GLogLevelFlags flags, const gchar *msg, gpointer data)
 {
@@ -2686,28 +2728,33 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
 	GList *link, *drives;
 	static GtkActionGroup *agroup = NULL;
+	static gint merge_id;
 
 	link = drives = dvd_device_list();
 	if (drives != NULL)
 	{
 		GtkUIManager *ui = GTK_UI_MANAGER(
 			gtk_builder_get_object(ud->builder, "uimanager1"));
-		guint merge_id = gtk_ui_manager_new_merge_id(ui);
+
 		if (agroup == NULL)
 		{
 			agroup = gtk_action_group_new("dvdgroup");
-			// Add separator
 			gtk_ui_manager_insert_action_group(ui, agroup, 0);
-			gtk_ui_manager_add_ui(ui, merge_id, 
-				"ui/menubar1/menuitem1/quit1", "dvdsep", NULL,
-				GTK_UI_MANAGER_SEPARATOR, TRUE);
 		}
+		else
+			gtk_ui_manager_remove_ui(ui, merge_id);
+
+		merge_id = gtk_ui_manager_new_merge_id(ui);
+		// Add separator
+		gtk_ui_manager_add_ui(ui, merge_id, 
+			"ui/menubar1/menuitem1/quit1", "dvdsep", NULL,
+			GTK_UI_MANAGER_SEPARATOR, TRUE);
 
 		while (link != NULL)
 		{
 			GtkAction *action;
-			gchar *drive = (gchar*)link->data;
-			gchar *name = get_drive_name(drive);
+			gchar *drive = get_dvd_device_name(link->data);
+			gchar *name = get_dvd_volume_name(link->data);
 		
 			action = gtk_action_group_get_action(agroup, drive);
 			if (action != NULL)
@@ -2723,13 +2770,13 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 			// Add to ui manager
 			gtk_ui_manager_add_ui(ui, merge_id, 
 				"ui/menubar1/menuitem1/dvdsep", drive, drive,
-				//"ui/menubar1/menuitem1/quit1", drive, drive,
 				GTK_UI_MANAGER_AUTO, TRUE);
 			// Connect signal to action (menu item)
 			g_signal_connect(action, "activate", 
 				(GCallback)dvd_source_activate_cb, ud);
 			g_free(name);
 			g_free(drive);
+			g_object_unref(link->data);
 			link = link->next;
 		}
 		g_list_free(drives);
@@ -2779,11 +2826,10 @@ dvd_device_list()
 		gd = (GDrive*)link->data;
 		if (ghb_is_cd(gd))
 		{
-			gchar *device;
-			device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
-			dvd_devices = g_list_append(dvd_devices, (gpointer)device);
+			dvd_devices = g_list_append(dvd_devices, gd);
 		}
-		g_object_unref (gd);
+		else
+			g_object_unref (gd);
 		link = link->next;
 	}
 	g_list_free(drives);
@@ -2823,6 +2869,8 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 	static gint ins_count = 0;
 	static gint rem_count = 0;
 
+	// The media change event in windows bounces around a bit
+	// so I debounce it here
 	// DVD insertion detected.  Scan it.
 	dtype = GetDriveType(device);
 	if (dtype != DRIVE_CDROM)
@@ -2841,9 +2889,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 				progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
 				gtk_progress_bar_set_text (progress, "Scanning ...");
 				gtk_progress_bar_set_fraction (progress, 0);
- 				update_source_label(ud, device);
-				ghb_hb_cleanup(TRUE);
-				prune_logs(ud);
+				update_source_label(ud, device);
 				gint preview_count;
 				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
 				ghb_backend_scan(device, 0, preview_count);
@@ -2926,43 +2972,34 @@ wm_drive_changed(MSG *msg, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 {
-	gchar *device;
-	gint state = ghb_get_scan_state();
-	static gboolean first_time = TRUE;
+	g_debug("drive_changed_cb()");
+	ghb_file_menu_add_dvd(ud);
 
-	if (state != GHB_STATE_IDLE) return;
-	if (ud->current_dvd_device == NULL) return;
-	// A drive change event happens when the program initially starts
-	// and I don't want to automatically scan at that time.
-	if (first_time)
+	gchar *device;
+
+	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
+	if (ud->current_dvd_device == NULL ||
+		strcmp(device, ud->current_dvd_device) != 0)
 	{
-		first_time = FALSE;
 		return;
 	}
-	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
-	
-	// DVD insertion detected.  Scan it.
-	if (strcmp(device, ud->current_dvd_device) == 0)
+	if (g_drive_has_media(gd))
 	{
-		if (g_drive_has_media (gd))
-		{
-			GtkProgressBar *progress;
-			progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-			gtk_progress_bar_set_text (progress, "Scanning ...");
-			gtk_progress_bar_set_fraction (progress, 0);
- 			update_source_label(ud, device);
-			prune_logs(ud);
-			gint preview_count;
-			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-			ghb_backend_scan(device, 0, preview_count);
-		}
-		else
-		{
-			prune_logs(ud);
-			ghb_backend_scan("/dev/null", 0, 1);
-		}
+		GtkProgressBar *progress;
+		progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+		gtk_progress_bar_set_text (progress, "Scanning ...");
+		gtk_progress_bar_set_fraction (progress, 0);
+		update_source_label(ud, device);
+		gint preview_count;
+		preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+		ghb_backend_scan(device, 0, preview_count);
 	}
-	g_free(device);
+	else
+	{
+		ghb_hb_cleanup(TRUE);
+		prune_logs(ud);
+		ghb_backend_scan("/dev/null", 0, 1);
+	}
 }
 #endif
 
@@ -3464,13 +3501,13 @@ ghb_check_update(signal_user_data_t *ud)
 	g_debug("ghb_check_update");
 	if (hb_get_build(NULL) % 100)
 	{
-    	query = 
+		query = 
 		"GET /appcast_unstable.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
 	}
 	else
 	{
 		stable_update_lock = TRUE;
-    	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+		query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
 	}
 	ioc = ghb_net_open(ud, "handbrake.fr", 80);
 	if (ioc == NULL)
@@ -3493,7 +3530,7 @@ check_stable_update(signal_user_data_t *ud)
 
 	g_debug("check_stable_update");
 	stable_update_lock = TRUE;
-   	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
 	ioc = ghb_net_open(ud, "handbrake.fr", 80);
 	if (ioc == NULL)
 		return NULL;

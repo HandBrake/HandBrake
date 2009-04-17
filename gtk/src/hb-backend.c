@@ -2580,23 +2580,33 @@ picture_settings_deps(signal_user_data_t *ud)
 	gboolean autoscale, keep_aspect, enable_keep_aspect;
 	gboolean enable_scale_width, enable_scale_height;
 	gboolean enable_disp_width, enable_disp_height;
-	gint pic_par, disp_width, disp_height, scale_width, scale_height;
+	gint pic_par;
+	GtkWidget *widget;
 
 	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
+	if (pic_par == 1)
+	{
+		ghb_ui_update(ud, "autoscale", ghb_boolean_value(TRUE));
+		ghb_ui_update(ud, "PictureAlignment", ghb_int_value(2));
+		ghb_ui_update(ud, "PictureLooseCrop", ghb_boolean_value(TRUE));
+	}
+	enable_keep_aspect = (pic_par != 1 && pic_par != 2);
+	if (!enable_keep_aspect)
+	{
+		ghb_ui_update(ud, "PictureKeepRatio", ghb_boolean_value(TRUE));
+	}
 	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
-	disp_width = ghb_settings_get_int(ud->settings, "PictureDisplayWidth");
-	disp_height = ghb_settings_get_int(ud->settings, "PictureDisplayHeight");
-	scale_width = ghb_settings_get_int(ud->settings, "scale_width");
-	scale_height = ghb_settings_get_int(ud->settings, "scale_height");
 
 	enable_scale_width = !autoscale && (pic_par != 1);
 	enable_scale_height = !autoscale && (pic_par != 1);
 	enable_disp_width = (pic_par == 3) && !keep_aspect;
 	enable_disp_height = FALSE;
-	enable_keep_aspect = (pic_par != 1 && pic_par != 2);
 
-	GtkWidget *widget;
+	widget = GHB_WIDGET(ud->builder, "PictureAlignment");
+	gtk_widget_set_sensitive(widget, pic_par != 1);
+	widget = GHB_WIDGET(ud->builder, "PictureLooseCrop");
+	gtk_widget_set_sensitive(widget, pic_par != 1);
 	widget = GHB_WIDGET(ud->builder, "scale_width");
 	gtk_widget_set_sensitive(widget, enable_scale_width);
 	widget = GHB_WIDGET(ud->builder, "scale_height");
@@ -2609,14 +2619,6 @@ picture_settings_deps(signal_user_data_t *ud)
 	gtk_widget_set_sensitive(widget, enable_keep_aspect);
 	widget = GHB_WIDGET(ud->builder, "autoscale");
 	gtk_widget_set_sensitive(widget, pic_par != 1);
-	if (!enable_keep_aspect)
-	{
-		ghb_ui_update(ud, "PictureKeepRatio", ghb_boolean_value(TRUE));
-	}
-	if (pic_par == 1)
-	{
-		ghb_ui_update(ud, "autoscale", ghb_boolean_value(TRUE));
-	}
 }
 
 void
@@ -2638,9 +2640,9 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gint mod;
 	gint max_width = 0;
 	gint max_height = 0;
+	static gboolean busy = FALSE;
 	
 	g_debug("ghb_set_scale ()\n");
-
 	if (h_scan == NULL) return;
 	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
@@ -2655,6 +2657,11 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	if (title == NULL) return;
 	job   = title->job;
 	if (job == NULL) return;
+
+	picture_settings_deps(ud);
+	if (busy) return;
+	busy = TRUE;
+
 	
 	// First configure widgets
 	mod = ghb_settings_combo_int(ud->settings, "PictureAlignment");
@@ -2664,7 +2671,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
 	// "Noscale" is a flag that says we prefer to crop extra to satisfy
 	// alignment constraints rather than scaling to satisfy them.
-	noscale = ghb_settings_get_boolean(ud->settings, "noscale");
+	noscale = ghb_settings_get_boolean(ud->settings, "PictureLooseCrop");
 	// Align dimensions to either 16 or 2 pixels
 	// The scaler crashes if the dimensions are not divisible by 2
 	// x264 also will not accept dims that are not multiple of 2
@@ -2679,39 +2686,36 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
 	widget = GHB_WIDGET (ud->builder, "scale_height");
 	gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
+	if (noscale)
+	{
+		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), step, 16);
+	}
+	else
+	{
+		widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+		widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
+		gtk_spin_button_set_increments (GTK_SPIN_BUTTON(widget), 1, 16);
+	}
 	ghb_title_info_t tinfo;
-	if (autocrop && ghb_get_title_info (&tinfo, titleindex))
+	ghb_get_title_info (&tinfo, titleindex);
+	if (autocrop)
 	{
 		crop[0] = tinfo.crop[0];
 		crop[1] = tinfo.crop[1];
 		crop[2] = tinfo.crop[2];
 		crop[3] = tinfo.crop[3];
-		if (noscale)
-		{
-			gint need1, need2;
-
-			// Adjust the cropping to accomplish the desired width and height
-			crop_width = tinfo.width - crop[2] - crop[3];
-			crop_height = tinfo.height - crop[0] - crop[1];
-			width = MOD_DOWN(crop_width, mod);
-			height = MOD_DOWN(crop_height, mod);
-
-			need1 = (crop_height - height) / 2;
-			need2 = crop_height - height - need1;
-			crop[0] += need1;
-			crop[1] += need2;
-			need1 = (crop_width - width) / 2;
-			need2 = crop_width - width - need1;
-			crop[2] += need1;
-			crop[3] += need2;
-		}
-		if (mod == 1)
-		{
-			crop[0] = MOD_UP(crop[0], 2);
-			crop[1] = MOD_UP(crop[1], 2);
-			crop[2] = MOD_UP(crop[2], 2);
-			crop[3] = MOD_UP(crop[3], 2);
-		}
 		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
 		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
 		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
@@ -2723,17 +2727,29 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
 		crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
 		crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
-		if (mod == 1)
-		{
-			crop[0] = MOD_UP(crop[0], 2);
-			crop[1] = MOD_UP(crop[1], 2);
-			crop[2] = MOD_UP(crop[2], 2);
-			crop[3] = MOD_UP(crop[3], 2);
-			ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
-			ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
-			ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
-			ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(crop[3]));
-		}
+	}
+	if (noscale)
+	{
+		gint need1, need2;
+
+		// Adjust the cropping to accomplish the desired width and height
+		crop_width = tinfo.width - crop[2] - crop[3];
+		crop_height = tinfo.height - crop[0] - crop[1];
+		width = MOD_DOWN(crop_width, mod);
+		height = MOD_DOWN(crop_height, mod);
+
+		need1 = (crop_height - height) / 2;
+		need2 = crop_height - height - need1;
+		crop[0] += need1;
+		crop[1] += need2;
+		need1 = (crop_width - width) / 2;
+		need2 = crop_width - width - need1;
+		crop[2] += need1;
+		crop[3] += need2;
+		ghb_ui_update(ud, "PictureTopCrop", ghb_int64_value(crop[0]));
+		ghb_ui_update(ud, "PictureBottomCrop", ghb_int64_value(crop[1]));
+		ghb_ui_update(ud, "PictureLeftCrop", ghb_int64_value(crop[2]));
+		ghb_ui_update(ud, "PictureRightCrop", ghb_int64_value(crop[3]));
 	}
 	hb_reduce(&aspect_n, &aspect_d, 
 				title->width * title->pixel_aspect_width, 
@@ -2905,7 +2921,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	ghb_ui_update(ud, "par_height", ghb_int64_value(par_height));
 	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
 	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(height));
-	picture_settings_deps(ud);
+	busy = FALSE;
 }
 
 static void
