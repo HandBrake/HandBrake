@@ -234,6 +234,7 @@ int hb_calc_bitrate( hb_job_t * job, int size )
                 samples_per_frame = 1152;
                 break;
             case HB_ACODEC_AC3:
+            case HB_ACODEC_DCA:
                 samples_per_frame = 1536;
                 break;
             default:

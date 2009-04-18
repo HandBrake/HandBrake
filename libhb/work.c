@@ -576,7 +576,8 @@ static void do_job( hb_job_t * job, int cpu_count )
             /* sense-check the requested mixdown */
 
             if( audio->config.out.mixdown == 0 &&
-                audio->config.out.codec != HB_ACODEC_AC3 )
+                audio->config.out.codec != HB_ACODEC_AC3 && 
+                audio->config.out.codec != HB_ACODEC_DCA )
             {
                 /*
                  * Mixdown wasn't specified and this is not pass-through,
@@ -742,7 +743,8 @@ static void do_job( hb_job_t * job, int cpu_count )
         /*
          * Audio Encoder Thread
          */
-        if( audio->config.out.codec != HB_ACODEC_AC3 )
+        if( audio->config.out.codec != HB_ACODEC_AC3 &&
+            audio->config.out.codec != HB_ACODEC_DCA )
         {
             /*
              * Add the encoder thread if not doing AC-3 pass through

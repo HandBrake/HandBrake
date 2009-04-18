@@ -60,6 +60,7 @@ struct hb_work_private_s
 
     /* Audio */
     hb_sync_audio_t sync_audio[8];
+    int64_t audio_passthru_slip;
 
     /* Statistics */
     uint64_t st_counts[4];
@@ -351,7 +352,8 @@ static void SyncVideo( hb_work_object_t * w )
          * can deal with overlaps of up to a frame time but anything larger
          * we handle by dropping frames here.
          */
-        if ( (int64_t)( next->start - cur->start ) <= 0 )
+        if ( (int64_t)( next->start - cur->start ) <= 0 ||
+             (int64_t)( (cur->start - pv->audio_passthru_slip ) - pv->next_pts ) < 0 )
         {
             if ( pv->first_drop == 0 )
             {
@@ -730,8 +732,10 @@ static void SyncAudio( hb_work_object_t * w, int i )
     hb_audio_t      * audio = sync->audio;
     hb_buffer_t     * buf;
     hb_fifo_t       * fifo;
+    int64_t start;
 
-    if( audio->config.out.codec == HB_ACODEC_AC3 )
+    if( audio->config.out.codec == HB_ACODEC_AC3 ||
+        audio->config.out.codec == HB_ACODEC_DCA )
     {
         fifo = audio->priv.fifo_out;
     }
@@ -742,6 +746,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
 
     while( !hb_fifo_is_full( fifo ) && ( buf = hb_fifo_see( audio->priv.fifo_raw ) ) )
     {
+        start = buf->start - pv->audio_passthru_slip;
         /* if the next buffer is an eof send it downstream */
         if ( buf->size <= 0 )
         {
@@ -756,13 +761,13 @@ static void SyncAudio( hb_work_object_t * w, int i )
             pv->busy &=~ (1 << (i + 1) );
             return;
         }
-        if ( (int64_t)( buf->start - sync->next_pts ) < 0 )
+        if ( (int64_t)( start - sync->next_pts ) < 0 )
         {
             // audio time went backwards.
             // If our output clock is more than a half frame ahead of the
             // input clock drop this frame to move closer to sync.
             // Otherwise drop frames until the input clock matches the output clock.
-            if ( sync->first_drop || sync->next_start - buf->start > 90*15 )
+            if ( sync->first_drop || sync->next_start - start > 90*15 )
             {
                 // Discard data that's in the past.
                 if ( sync->first_drop == 0 )
@@ -774,7 +779,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                 hb_buffer_close( &buf );
                 continue;
             }
-            sync->next_pts = buf->start;
+            sync->next_pts = start;
         }
         if ( sync->first_drop )
         {
@@ -785,19 +790,19 @@ static void SyncAudio( hb_work_object_t * w, int i )
                     sync->drop_count, sync->first_drop, sync->next_pts );
             sync->first_drop = 0;
             sync->drop_count = 0;
-            sync->next_pts = buf->start;
+            sync->next_pts = start;
         }
-        if ( buf->start - sync->next_pts >= (90 * 70) )
+        if ( start - sync->next_pts >= (90 * 70) )
         {
-            if ( buf->start - sync->next_pts > (90000LL * 60) )
+            if ( start - sync->next_pts > (90000LL * 60) )
             {
                 // there's a gap of more than a minute between the last
                 // frame and this. assume we got a corrupted timestamp
                 // and just drop the next buf.
                 hb_log( "sync: %d minute time gap in audio %d - dropping buf"
                         "  start %lld, next %lld",
-                        (int)((buf->start - sync->next_pts) / (90000*60)),
-                        i, buf->start, sync->next_pts );
+                        (int)((start - sync->next_pts) / (90000*60)),
+                        i, start, sync->next_pts );
                 buf = hb_fifo_get( audio->priv.fifo_raw );
                 hb_buffer_close( &buf );
                 continue;
@@ -805,12 +810,23 @@ static void SyncAudio( hb_work_object_t * w, int i )
             /*
              * there's a gap of at least 70ms between the last
              * frame we processed & the next. Fill it with silence.
+             * Or in the case of DCA, skip some frames from the
+             * other streams.
              */
+            if( sync->audio->config.out.codec == HB_ACODEC_DCA )
+            {
+                hb_log( "sync: audio gap %d ms. Skipping frames. Audio %d"
+                        "  start %lld, next %lld",
+                        (int)((start - sync->next_pts) / 90),
+                        i, start, sync->next_pts );
+                pv->audio_passthru_slip += (start - sync->next_pts);
+                return;
+            }
             hb_log( "sync: adding %d ms of silence to audio %d"
                     "  start %lld, next %lld",
-                    (int)((buf->start - sync->next_pts) / 90),
-                    i, buf->start, sync->next_pts );
-            InsertSilence( w, i, buf->start - sync->next_pts );
+                    (int)((start - sync->next_pts) / 90),
+                    i, start, sync->next_pts );
+            InsertSilence( w, i, start - sync->next_pts );
             return;
         }
 

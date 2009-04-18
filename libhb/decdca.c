@@ -153,6 +153,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf;
+    hb_audio_t  * audio = w->audio;
     int           i, j, k;
     int64_t       pts, pos;
     int           num_blocks;
@@ -210,16 +211,6 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         pts = -1;
     }
 
-    /* Feed libdca */
-    dca_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
-
-    /* find out how many blocks are in this frame */
-    num_blocks = dca_blocks_num( pv->state );
-
-    /* num_blocks blocks per frame, 256 samples per block, channelsused channels */
-    int nsamp = num_blocks * 256;
-    buf = hb_buffer_init( nsamp * pv->out_discrete_channels * sizeof( float ) );
-
     // mkv files typically use a 1ms timebase which results in a lot of
     // truncation error in their timestamps. Also, TSMuxer or something
     // in the m2ts-to-mkv toolchain seems to take a very casual attitude
@@ -230,6 +221,31 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     {
         pts = pv->next_pts;
     }
+
+    double frame_dur = (double)(pv->frame_length & ~0xFF) / (double)pv->rate * 90000.;
+
+    /* DCA passthrough: don't decode the DCA frame */
+    if( audio->config.out.codec == HB_ACODEC_DCA )
+    {
+        buf = hb_buffer_init( pv->size );
+        memcpy( buf->data, pv->frame, pv->size );
+        buf->start = pts;
+        pv->next_pts = pts + frame_dur;
+        buf->stop  = pv->next_pts;
+        pv->sync = 0;
+        return buf;
+    }
+
+    /* Feed libdca */
+    dca_frame( pv->state, pv->frame, &pv->flags_out, &pv->level, 0 );
+
+    /* find out how many blocks are in this frame */
+    num_blocks = dca_blocks_num( pv->state );
+
+    /* num_blocks blocks per frame, 256 samples per block, channelsused channels */
+    int nsamp = num_blocks * 256;
+    buf = hb_buffer_init( nsamp * pv->out_discrete_channels * sizeof( float ) );
+
     buf->start = pts;
     pv->next_pts = pts + (double)nsamp / (double)pv->rate * 90000.;
     buf->stop  = pv->next_pts;

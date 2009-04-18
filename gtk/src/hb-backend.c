@@ -196,7 +196,7 @@ static options_map_t d_acodec_opts[] =
 	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, "lame"},
 	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, "vorbis"},
 	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, "ac3"},
-//	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA, "dts"},
+	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA, "dts"},
 };
 combo_opts_t acodec_opts =
 {

@@ -165,6 +165,11 @@ static int MKVInit( hb_mux_object_t * m )
 
         switch (audio->config.out.codec)
         {
+            case HB_ACODEC_DCA:
+                track->codecPrivate = NULL;
+                track->codecPrivateSize = 0;
+                track->codecID = MK_ACODEC_DTS;
+                break;
             case HB_ACODEC_AC3:
                 track->codecPrivate = NULL;
                 track->codecPrivateSize = 0;
@@ -221,7 +226,15 @@ static int MKVInit( hb_mux_object_t * m )
         track->trackType = MK_TRACK_AUDIO;
         track->language = audio->config.lang.iso639_2;
         track->extra.audio.samplingFreq = (float)audio->config.out.samplerate;
-        track->extra.audio.channels = (audio->config.out.codec == HB_ACODEC_AC3 ) ? HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout) : HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+        if (audio->config.out.codec == HB_ACODEC_AC3 ||
+            audio->config.out.codec == HB_ACODEC_DCA)
+        {
+            track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout);
+        }
+		else
+        {
+            track->extra.audio.channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+        }
 //        track->defaultDuration = job->arate * 1000;
         mux_data->track = mk_createTrack(m->file, track);
         if (audio->config.out.codec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
