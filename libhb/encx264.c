@@ -90,12 +90,20 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
 
+    /* Set min:max key intervals ratio to 1:10 of fps.
+     * This section is skipped if fps=25 (default).
+     */
     if (job->vrate_base != 1080000)
     {
-        /* If the fps isn't 25, adjust the key intervals. Add 1 because
-           we want 24, not 23 with a truncated remainder.               */
-        param.i_keyint_min     = (job->vrate / job->vrate_base) + 1;
-        param.i_keyint_max = (10 * job->vrate / job->vrate_base) + 1;
+        int fps = job->vrate / job->vrate_base;
+
+        /* adjust +1 when fps has remainder to bump { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
+        if (job->vrate % job->vrate_base)
+            fps += 1;
+
+        param.i_keyint_min = fps;
+        param.i_keyint_max = fps * 10;
+
         hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);
     }
 
