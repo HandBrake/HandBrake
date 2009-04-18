@@ -720,7 +720,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         audio->priv.fifo_in   = hb_fifo_init( 32 );
         audio->priv.fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
         audio->priv.fifo_sync = hb_fifo_init( 32 );
-        audio->priv.fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+        audio->priv.fifo_out  = hb_fifo_init( 8 * FIFO_CPU_MULT * cpu_count );
 
 
         /*

@@ -1092,19 +1092,15 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_LAME, FALSE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
 
-	gboolean allow_ac3 = TRUE;
-	allow_ac3 = (container != HB_MUX_OGM);
+	gboolean allow_dca = TRUE;
+	allow_dca = (container != HB_MUX_MP4);
 
-	if (allow_ac3)
-	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, FALSE);
+	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, FALSE);
+	if (allow_dca)
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, FALSE);
-	}
 	else
-	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, TRUE);
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_DCA, TRUE);
-	}
+
 	if (audio && audio->in.codec != HB_ACODEC_AC3)
 	{
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_AC3, TRUE);
@@ -3191,6 +3187,11 @@ ghb_validate_audio(signal_user_data_t *ud)
 			if (codec == HB_ACODEC_VORBIS)
 			{
 				a_unsup = "Vorbis";
+				codec = HB_ACODEC_FAAC;
+			}
+			if (codec == HB_ACODEC_DCA)
+			{
+				a_unsup = "DTS";
 				codec = HB_ACODEC_FAAC;
 			}
 		}
