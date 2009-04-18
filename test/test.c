@@ -1888,8 +1888,9 @@ void SigHandler( int i_signal )
 static void ShowHelp()
 {
     int i;
+    FILE* const out = stdout;
 
-    fprintf( stderr,
+    fprintf( out,
     "Syntax: HandBrakeCLI [options] -i <device> -o <file>\n"
     "\n"
     "### General Handbrake Options------------------------------------------------\n\n"
@@ -1949,11 +1950,11 @@ static void ShowHelp()
     "    -r, --rate              Set video framerate (" );
     for( i = 0; i < hb_video_rates_count; i++ )
     {
-        fprintf( stderr, hb_video_rates[i].string );
+        fprintf( out, hb_video_rates[i].string );
         if( i != hb_video_rates_count - 1 )
-            fprintf( stderr, "/" );
+            fprintf( out, "/" );
     }
-    fprintf( stderr, ")\n"
+    fprintf( out, ")\n"
     "                            Be aware that not specifying a framerate lets\n"
     "                            HandBrake preserve a source's time stamps,\n"
     "                            potentially creating variable framerate video\n"
@@ -1977,11 +1978,11 @@ static void ShowHelp()
     "    -R, --arate             Set audio samplerate(s) (" );
     for( i = 0; i < hb_audio_rates_count; i++ )
     {
-        fprintf( stderr, hb_audio_rates[i].string );
+        fprintf( out, hb_audio_rates[i].string );
         if( i != hb_audio_rates_count - 1 )
-            fprintf( stderr, "/" );
+            fprintf( out, "/" );
     }
-    fprintf( stderr, " kHz)\n"
+    fprintf( out, " kHz)\n"
     "                            Separated by commas for more than one audio track.\n"
     "    -D, --drc <float>       Apply extra dynamic range compression to the audio,\n"
     "                            making soft sounds louder. Range is 1.0 to 4.0\n"
