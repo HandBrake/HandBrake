@@ -92,6 +92,14 @@ else
     jobs=--jobs=$EXTERNAL_JOBS
 fi
 
+## log environment as provided by Xcode
+logdir=$EXTERNAL_BUILD/log
+if [ ! -d $logdir ]; then
+    mkdir -p $logdir
+fi
+env | sort > $logdir/xcodemake.env.txt
+
 ## pull the trigger
+## must set BUILD.method != terminal to prevent inifinite recursion
 set -x
 exec make -C $EXTERNAL_BUILD BUILD.method=xcode $jobs $goals $EXTERNAL_VARS

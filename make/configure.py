@@ -1248,9 +1248,9 @@ try:
     else:
         doc.add( 'BUILD.cross.prefix', '' )
 
-    doc.add( 'BUILD.method',       'terminal' )
-    doc.add( 'BUILD.date',         time.strftime('%c') )
-    doc.add( 'BUILD.arch',         arch.mode.mode )
+    doc.add( 'BUILD.method', 'terminal' )
+    doc.add( 'BUILD.date',   time.strftime('%c') )
+    doc.add( 'BUILD.arch',   arch.mode.mode )
 
     doc.addBlank()
     doc.add( 'CONF.method', options.conf_method )

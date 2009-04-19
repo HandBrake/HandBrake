@@ -4,7 +4,8 @@
 ###############################################################################
 
 ## file-wide conditional to use xcode rules if xcode=1 method=terminal
-ifeq ($(FEATURE.xcode):$(BUILD.method),1:terminal)
+## xcodemake will set BUILD.method != terminal to prevent infinite recursion
+ifeq (1:terminal,$(FEATURE.xcode):$(BUILD.method))
     include $(SRC/)macosx/module.xcode
 else
 
@@ -40,12 +41,12 @@ include $(MODULES:%=$(SRC/)%/module.rules)
 
 ## target which causes re-configure if project-root is svn update'd
 $(BUILD/)GNUmakefile: $(wildcard $(SRC/).svn/entries)
-	$(SRC/)configure --force $(CONF.args)
+	$(SRC/)configure --force --conf-method=$(CONF.method) $(CONF.args)
 
 ## target useful to force reconfigure; only helpful for build-system development
 .PHONY: reconfigure
 reconfigure:
-	$(SRC/)configure --force $(CONF.args)
+	$(SRC/)configure --force --conf-method=$(CONF.method) $(CONF.args)
 
 ###############################################################################
 
