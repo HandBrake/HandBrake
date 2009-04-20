@@ -1083,6 +1083,8 @@ G_MODULE_EXPORT void
 container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	const GValue *audio_list;
+	gboolean markers;
+
 	g_debug("container_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	update_destination_extension(ud);
@@ -1093,6 +1095,18 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
 	if (ghb_ac3_in_audio_list (audio_list))
+	{
+		gchar *container;
+
+		container = ghb_settings_get_string(ud->settings, "FileFormat");
+		if (strcmp(container, "mp4") == 0)
+		{
+			ghb_ui_update(ud, "FileFormat", ghb_string_value("m4v"));
+		}
+		g_free(container);
+	}
+	markers = ghb_settings_get_boolean(ud->settings, "ChapterMarkers");
+	if (markers)
 	{
 		gchar *container;
 
@@ -1277,6 +1291,29 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	gboolean markers;
+
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
+	markers = ghb_settings_get_boolean(ud->settings, "ChapterMarkers");
+	if (markers)
+	{
+		gchar *container;
+
+		container = ghb_settings_get_string(ud->settings, "FileFormat");
+		if (strcmp(container, "mp4") == 0)
+		{
+			ghb_ui_update(ud, "FileFormat", ghb_string_value("m4v"));
+		}
+		g_free(container);
+	}
 }
 
 G_MODULE_EXPORT void
