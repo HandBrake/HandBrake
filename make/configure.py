@@ -642,7 +642,7 @@ class Project( Action ):
         self.name          = 'HandBrake'
         self.acro_lower    = 'hb'
         self.acro_upper    = 'HB'
-        self.url_website   = 'http://code.google.com/p/hbfork'
+        self.url_website   = 'http://handbrake.fr'
         self.url_community = 'http://forum.handbrake.fr'
         self.url_irc       = 'irc://irc.freenode.net/handbrake'
 
