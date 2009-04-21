@@ -41,6 +41,31 @@ struct hb_mux_data_s
     MP4TrackId track;
 };
 
+/* Tune video track chunk duration.
+ * libmp4v2 default duration == dusamplerate == 1 second.
+ * Per van's suggestion we desire duration == 4 frames.
+ * Should be invoked immediately after track creation.
+ *
+ * return true on fail, false on success.
+ */
+static int MP4TuneTrackDurationPerChunk( hb_mux_object_t* m, MP4TrackId trackId )
+{
+    uint32_t tscale;
+    MP4Duration dur;
+
+    tscale = MP4GetTrackTimeScale( m->file, trackId );
+    dur = (MP4Duration)ceil( (double)tscale * (double)m->job->vrate_base / (double)m->job->vrate * 4.0 );
+
+    if( !MP4SetTrackDurationPerChunk( m->file, trackId, dur ))
+    {
+        hb_error( "muxmp4.c: MP4SetTrackDurationPerChunk failed!" );
+        *m->job->die = 1;
+        return 0;
+    }
+
+    hb_deep_log( 2, "muxmp4: track %u, chunk duration %llu", MP4FindTrackIndex( m->file, trackId ), dur );
+    return 1;
+}
 
 /**********************************************************************
  * MP4Init
@@ -115,7 +140,18 @@ static int MP4Init( hb_mux_object_t * m )
 		        job->config.h264.sps[2], /* profile_compat */
 		        job->config.h264.sps[3], /* AVCLevelIndication */
 		        3 );      /* 4 bytes length before each NAL unit */
+        if ( mux_data->track == MP4_INVALID_TRACK_ID )
+        {
+            hb_error( "muxmp4.c: MP4AddH264VideoTrack failed!" );
+            *job->die = 1;
+            return 0;
+        }
 
+        /* Tune track chunk duration */
+        if( !MP4TuneTrackDurationPerChunk( m, mux_data->track ))
+        {
+            return 0;
+        }
 
         MP4AddH264SequenceParameterSet( m->file, mux_data->track,
                 job->config.h264.sps, job->config.h264.sps_length );
@@ -143,6 +179,11 @@ static int MP4Init( hb_mux_object_t * m )
             return 0;
         }
 
+        /* Tune track chunk duration */
+        if( !MP4TuneTrackDurationPerChunk( m, mux_data->track ))
+        {
+            return 0;
+        }
 
         /* VOL from FFmpeg or XviD */
         if (!(MP4SetTrackESConfiguration( m->file, mux_data->track,
@@ -310,6 +351,9 @@ static int MP4Init( hb_mux_object_t * m )
                 lfeon,
                 bit_rate_code);
 
+            /* Tune track chunk duration */
+            MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
             if (audio->config.out.name == NULL) {
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
@@ -327,6 +371,10 @@ static int MP4Init( hb_mux_object_t * m )
             mux_data->track = MP4AddAudioTrack(
                 m->file,
                 audio->config.out.samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
+
+            /* Tune track chunk duration */
+            MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
             if (audio->config.out.name == NULL) {
                 MP4SetTrackBytesProperty(
                     m->file, mux_data->track,
@@ -368,7 +416,7 @@ static int MP4Init( hb_mux_object_t * m )
                them all at once. */
         {
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
-            hb_deep_log( 2, "muxp4: disabled extra audio track %i", mux_data->track-1);
+            hb_deep_log( 2, "muxmp4: disabled extra audio track %u", MP4FindTrackIndex( m->file, mux_data->track ));
         }
 
     }
@@ -391,7 +439,15 @@ static int MP4Init( hb_mux_object_t * m )
     char *tool_string;
     tool_string = (char *)malloc(80);
     snprintf( tool_string, 80, "HandBrake %s %i", HB_PROJECT_VERSION, HB_PROJECT_BUILD);
-    MP4SetMetadataTool(m->file, tool_string);
+
+    /* allocate,fetch,populate,store,free tags structure */
+    const MP4Tags* tags;
+    tags = MP4TagsAlloc();
+    MP4TagsFetch( tags, m->file );
+    MP4TagsSetEncodingTool( tags, tool_string );
+    MP4TagsStore( tags, m->file );
+    MP4TagsFree( tags );
+
     free(tool_string);
 
     return 0;
@@ -549,20 +605,37 @@ static int MP4End( hb_mux_object_t * m )
     if( title->metadata )
     {
         hb_metadata_t *md = title->metadata;
+        const MP4Tags* tags;
 
         hb_deep_log( 2, "Writing Metadata to output file...");
 
-        MP4SetMetadataName( m->file, md->name );
-        MP4SetMetadataArtist( m->file, md->artist );
-        MP4SetMetadataComposer( m->file, md->composer );
-        MP4SetMetadataComment( m->file, md->comment );
-        MP4SetMetadataReleaseDate( m->file, md->release_date );
-        MP4SetMetadataAlbum( m->file, md->album );
-        MP4SetMetadataGenre( m->file, md->genre );
+        /* allocate tags structure */
+        tags = MP4TagsAlloc();
+        /* fetch data from MP4 file (in case it already has some data) */
+        MP4TagsFetch( tags, m->file );
+
+        /* populate */
+        MP4TagsSetName( tags, md->name );
+        MP4TagsSetArtist( tags, md->artist );
+        MP4TagsSetComposer( tags, md->composer );
+        MP4TagsSetComments( tags, md->comment );
+        MP4TagsSetReleaseDate( tags, md->release_date );
+        MP4TagsSetAlbum( tags, md->album );
+        MP4TagsSetGenre( tags, md->genre );
+
         if( md->coverart )
         {
-            MP4SetMetadataCoverArt( m->file, md->coverart, md->coverart_size);
+            MP4TagArtwork art;
+            art.data = md->coverart;
+            art.size = md->coverart_size;
+            art.type = MP4_ART_UNDEFINED; // delegate typing to libmp4v2
+            MP4TagsAddArtwork( tags, &art );
         }
+
+        /* push data to MP4 file */
+        MP4TagsStore( tags, m->file );
+        /* free memory associated with structure */
+        MP4TagsFree( tags );
     }
 
     MP4Close( m->file );

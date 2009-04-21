@@ -465,7 +465,6 @@ struct hb_metadata_s
     char  comment[1024];
     char  album[255];
     char  genre[255];
-    enum arttype {UNKNOWN, BMP, GIF87A, GIF89A, JPG, PNG, TIFFL, TIFFB} coverart_type;
     uint32_t coverart_size;
     uint8_t *coverart;
 };

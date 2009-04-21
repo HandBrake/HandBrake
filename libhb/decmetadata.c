@@ -8,117 +8,60 @@
 
 #include "common.h"
 
-void identify_art_type( hb_metadata_t *metadata )
-{
-    typedef struct header_s {
-        enum arttype type;
-        char*   name;   // short string describing name of type
-        char*   data;   // header-bytes to match
-    } header;
-
-    // types which may be detected by first-bytes only
-    static header headers[] = {
-        { BMP,    "bmp", "\x4d\x42" },
-        { GIF87A, "GIF (87a)", "GIF87a" },
-        { GIF89A, "GIF (89a)", "GIF89a" },
-        { JPG,    "JPEG", "\xff\xd8\xff\xe0" },
-        { PNG,    "PNG", "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" },
-        { TIFFL,  "TIFF (little-endian)", "II42" },
-        { TIFFB,  "TIFF (big-endian)", "MM42" },
-        { UNKNOWN } // must be last
-    };
-    header* p;
-    header* found = NULL;
-    for( p = headers; p->type != UNKNOWN; p++ ) {
-        header *h = p;
-
-        if( metadata->coverart_size < strlen(h->data) )
-            continue;
-
-        if( memcmp(h->data, metadata->coverart, strlen(h->data)) == 0 ) {
-            metadata->coverart_type = h->type;
-            break;
-        }
-    }
-}
-
 static void decmp4metadata( hb_title_t *title )
 {
     MP4FileHandle input_file;
-
     hb_deep_log( 2, "Got an MP4 input, read the metadata");
 
     input_file = MP4Read( title->dvd, 0 );
 
     if( input_file != MP4_INVALID_FILE_HANDLE )
     { 
-        char         *value = NULL;
-        uint8_t      *cover_art = NULL;
-        uint32_t      size;
-        uint32_t      count;
-        
         /*
          * Store iTunes MetaData
          */
-        if( MP4GetMetadataName( input_file, &value) && value )
-        {
-            hb_deep_log( 2, "Metadata Name in input file is '%s'", value);
-            strncpy( title->metadata->name, value, 255);
-            MP4Free(value);
-            value = NULL;
+        const MP4Tags* tags;
+
+        /* alloc,fetch tags */
+        tags = MP4TagsAlloc();
+        MP4TagsFetch( tags, input_file );
+
+        if( tags->name ) {
+            hb_deep_log( 2, "Metadata Name in input file is '%s'", tags->name );
+            strncpy( title->metadata->name, tags->name, 255 );
         }
 
-        if( MP4GetMetadataArtist( input_file, &value) && value )
-        {
-            strncpy( title->metadata->artist, value, 255);
-            MP4Free(value);
-            value = NULL;
-        }
-        
-        if( MP4GetMetadataComposer( input_file, &value) && value )
-        {
-            strncpy( title->metadata->composer, value, 255);
-            MP4Free(value);
-            value = NULL;
-        }
+        if( tags->artist )
+            strncpy( title->metadata->artist, tags->artist, 255 );
 
-        if( MP4GetMetadataComment( input_file, &value) && value )
-        {
-            strncpy( title->metadata->comment, value, 1024);
-            value = NULL;
-        }
-        
-        if( MP4GetMetadataReleaseDate( input_file, &value) && value )
-        {
-            strncpy( title->metadata->release_date, value, 255);
-            MP4Free(value);
-            value = NULL;
-        }
-        
-        if( MP4GetMetadataAlbum( input_file, &value) && value )
-        {
-            strncpy( title->metadata->album, value, 255);
-            MP4Free(value);
-            value = NULL;
-        }
-        
-        if( MP4GetMetadataGenre( input_file, &value) && value )
-        {
-            strncpy( title->metadata->genre, value, 255);
-            MP4Free(value);
-            value = NULL;
-        }
-        
-        if( MP4GetMetadataCoverArt( input_file, &cover_art, &size, 0) && 
-            cover_art )
-        {
-            title->metadata->coverart = cover_art; 
-            title->metadata->coverart_size = size;
-            identify_art_type( title->metadata );
+        if( tags->composer )
+            strncpy( title->metadata->composer, tags->composer, 255 );
+
+        if( tags->comments )
+            strncpy( title->metadata->comment, tags->comments, 1024 );
+
+        if( tags->releaseDate )
+            strncpy( title->metadata->release_date, tags->releaseDate, 255 );
+
+        if( tags->album )
+            strncpy( title->metadata->album, tags->album, 255 );
+
+        if( tags->genre )
+            strncpy( title->metadata->genre, tags->genre, 255 );
+
+        if( tags->artworkCount > 0 ) {
+            const MP4TagArtwork* art = tags->artwork + 0; // first element
+            title->metadata->coverart = (uint8_t*)malloc( art->size );
+            title->metadata->coverart_size = art->size;
+            memcpy( title->metadata->coverart, art->data, art->size );
             hb_deep_log( 2, "Got some cover art of type %d, size %d", 
-                         title->metadata->coverart_type,
-                         title->metadata->coverart_size);
+                         art->type,
+                         title->metadata->coverart_size );
         }
+
+        /* store,free tags */
+        MP4TagsStore( tags, input_file );
+        MP4TagsFree( tags );
         
         /*
          * Handle the chapters. 
