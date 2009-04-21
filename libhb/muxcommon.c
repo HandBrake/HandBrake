@@ -13,10 +13,11 @@ struct hb_mux_object_s
 
 typedef struct
 {
-    hb_job_t * job;
-    uint64_t   pts;
-
-} hb_mux_t;
+    hb_buffer_t **fifo;
+    uint32_t    in;     // number of bufs put into fifo
+    uint32_t    out;    // number of bufs taken out of fifo
+    uint32_t    flen;   // fifo length (must be power of two)
+} mux_fifo_t;
 
 typedef struct
 {
@@ -24,72 +25,182 @@ typedef struct
     hb_mux_data_t * mux_data;
     uint64_t        frames;
     uint64_t        bytes;
-    int             eof;
+    mux_fifo_t      mf;
 } hb_track_t;
 
-static hb_track_t * GetTrack( hb_list_t * list, hb_job_t *job )
+typedef struct
 {
-    hb_buffer_t * buf;
-    hb_track_t  * track = NULL, * track2;
-    int64_t       pts = 0;
-    int           i;
+    hb_job_t    *job;
+    double      pts;        // end time of next muxing chunk
+    double      interleave; // size (in 90KHz ticks) of media chunks we mux
+    uint32_t    ntracks;    // total number of tracks we're muxing
+    uint32_t    eof;        // bitmask of track with eof
+    uint32_t    rdy;        // bitmask of tracks ready to output
+    uint32_t    allEof;     // valid bits in eof (all tracks)
+    uint32_t    allRdy;     // valid bits in rdy (audio & video tracks)
+    hb_track_t  *track[32]; // array of tracks to mux ('ntrack' elements)
+                            // NOTE- this array could be dynamically allocated
+                            // but the eof & rdy logic has to be changed to
+                            // handle more than 32 tracks anyway so we keep
+                            // it simple and fast.
+} hb_mux_t;
 
-    for( i = 0; i < hb_list_count( list ); i++ )
+// The muxer handles two different kinds of media: Video and audio tracks
+// are continuous: once they start they generate continuous, consecutive
+// sequence of bufs until they end. The muxer will time align all continuous
+// media tracks so that their data will be well interleaved in the output file.
+// (Smooth, low latency playback with minimal player buffering requires that
+// data that's going to be presented close together in time also be close
+// together in the output file). Since HB's audio and video encoders run at
+// different speeds, the time-aligning involves buffering *all* the continuous
+// media tracks until a frame with a timestamp beyond the current alignment
+// point arrives on the slowest fifo (usually the video encoder).
+//
+// The other kind of media, subtitles, close-captions, vobsubs and
+// similar tracks, are intermittent. They generate frames sporadically or on
+// human time scales (seconds) rather than near the video frame rate (milliseconds).
+// If intermittent sources were treated like continuous sources huge sections of
+// audio and video would get buffered waiting for the next subtitle to show up.
+// To keep this from happening the muxer doesn't wait for intermittent tracks
+// (essentially it assumes that they will always go through the HB processing
+// pipeline faster than the associated video). They are still time aligned and
+// interleaved at the appropriate point in the output file.
+
+// This routine adds another track for the muxer to process. The media input
+// stream will be read from HandBrake fifo 'fifo'. Buffers read from that
+// stream will be time-aligned with all the other media streams then passed
+// to the container-specific 'mux' routine with argument 'mux_data' (see
+// routine OutputTrackChunk). 'is_continuous' must be 1 for an audio or video
+// track and 0 otherwise (see above).
+
+static void add_mux_track( hb_mux_t *mux, hb_fifo_t *fifo, hb_mux_data_t *mux_data,
+                           int is_continuous )
+{
+    int max_tracks = sizeof(mux->track) / sizeof(*(mux->track));
+    if ( mux->ntracks >= max_tracks )
     {
-        track2 = hb_list_item( list, i );
-        if ( ! track2->eof )
-        {
-            buf    = hb_fifo_see( track2->fifo );
-            if( !buf )
-            {
-                // XXX the libmkv muxer will produce unplayable files if the
-                // audio & video are far out of sync.  To keep them in sync we require
-                // that *all* fifos have a buffer then we take the oldest.
-                // Unfortunately this means we can hang in a deadlock with the
-                // reader process filling the fifos.
-                if ( job->mux == HB_MUX_MKV )
-                {
-                    return NULL;
-                }
-
-                // To make sure we don't camp on one fifo & prevent the others
-                // from making progress we take the earliest data of all the
-                // data that's currently available but we don't care if some
-                // fifos don't have data.
-                continue;
-            }
-            if ( buf->size <= 0 )
-            {
-                // EOF - mark this track as done
-                buf = hb_fifo_get( track2->fifo );
-                hb_buffer_close( &buf );
-                track2->eof = 1;
-                continue;
-            }
-            if( !track || buf->start < pts )
-            {
-                track = track2;
-                pts   = buf->start;
-            }
-        }
+        hb_error( "add_mux_track: too many tracks (>%d)", max_tracks );
+        return;
     }
-    return track;
+
+    hb_track_t *track = calloc( sizeof( hb_track_t ), 1 );
+    track->fifo = fifo;
+    track->mux_data = mux_data;
+    track->mf.flen = 8;
+    track->mf.fifo = calloc( sizeof(track->mf.fifo[0]), track->mf.flen );
+
+    int t = mux->ntracks++;
+    mux->track[t] = track;
+    mux->allEof |= 1 << t;
+    mux->allRdy |= is_continuous << t;
 }
 
-static int AllTracksDone( hb_list_t * list )
+static void mf_push( hb_track_t *track, hb_buffer_t *buf )
 {
-    hb_track_t  * track;
-    int           i;
-
-    for( i = 0; i < hb_list_count( list ); i++ )
+    uint32_t mask = track->mf.flen - 1;
+    uint32_t in = track->mf.in;
+    if ( ( ( in + 1 ) & mask ) == ( track->mf.out & mask ) )
     {
-        track = hb_list_item( list, i );
-        if ( track->eof == 0 )
+        // fifo is full - expand it to double the current size.
+        // This is a bit tricky because when we change the size
+        // it changes the modulus (mask) used to convert the in
+        // and out counters to fifo indices. Since existing items
+        // will be referenced at a new location after the expand
+        // we can't just realloc the fifo. If there were
+        // hundreds of fifo entries it would be worth it to have code
+        // for each of the four possible before/after configurations
+        // but these fifos are small so we just allocate a new chunk
+        // of memory then do element by element copies using the old &
+        // new masks then free the old fifo's memory..
+        track->mf.flen *= 2;
+        uint32_t nmask = track->mf.flen - 1;
+        hb_buffer_t **nfifo = malloc( track->mf.flen * sizeof(*nfifo) );
+        int indx = track->mf.out;
+        while ( indx != track->mf.in )
         {
-            return 0;
+            nfifo[indx & nmask] = track->mf.fifo[indx & mask];
+            ++indx;
+        }
+        free( track->mf.fifo );
+        track->mf.fifo = nfifo;
+        mask = nmask;
+    }
+    track->mf.fifo[in & mask] = buf;
+    track->mf.in = in + 1;
+}
+
+static hb_buffer_t *mf_pull( hb_track_t *track )
+{
+    hb_buffer_t *b = NULL;
+    if ( track->mf.out != track->mf.in )
+    {
+        // the fifo isn't empty
+        b = track->mf.fifo[track->mf.out & (track->mf.flen - 1)];
+        ++track->mf.out;
+    }
+    return b;
+}
+
+static void MoveToInternalFifos( hb_mux_t *mux )
+{
+    int i;
+    int discard = mux->job->pass != 0 && mux->job->pass != 2;
+
+    for( i = 0; i < mux->ntracks; ++i )
+    {
+        if ( ( mux->eof & (1 << i) ) == 0 )
+        {
+            hb_track_t *track = mux->track[i];
+            hb_buffer_t *buf;
+            
+            // move all the buffers on the track's fifo to our internal
+            // fifo so that (a) we don't deadlock in the reader and
+            // (b) we can control how data from multiple tracks is
+            // interleaved in the output file.
+            while ( ( buf = hb_fifo_get( track->fifo ) ) )
+            {
+                if ( buf->size <= 0 )
+                {
+                    // EOF - mark this track as done
+                    hb_buffer_close( &buf );
+                    mux->eof |= ( 1 << i );
+                    mux->rdy |= ( 1 << i );
+                    continue;
+                }
+                if ( discard )
+                {
+                    hb_buffer_close( &buf );
+                    continue;
+                }
+                mf_push( track, buf );
+                if ( buf->stop >= mux->pts )
+                {
+                    // buffer is past our next interleave point so
+                    // note that this track is ready to be output.
+                    mux->rdy |= ( 1 << i );
+                }
+            }
         }
     }
-    return 1;
+}
+
+static void OutputTrackChunk( hb_mux_t *mux, hb_track_t *track, hb_mux_object_t *m )
+{
+    hb_buffer_t *buf;
+
+    while ( ( buf = mf_pull( track ) ) != NULL )
+    {
+        m->mux( m, track->mux_data, buf );
+        track->frames += 1;
+        track->bytes  += buf->size;
+
+        uint64_t pts = buf->stop;
+        hb_buffer_close( &buf );
+        if ( pts >= mux->pts )
+        {
+            break;
+        }
+    }
 }
 
 static void MuxerFunc( void * _mux )
@@ -97,13 +208,15 @@ static void MuxerFunc( void * _mux )
     hb_mux_t    * mux = _mux;
     hb_job_t    * job = mux->job;
     hb_title_t  * title = job->title;
-    hb_audio_t  * audio;
-    hb_list_t   * list;
-    hb_buffer_t * buf;
     hb_track_t  * track;
     int           i;
-
     hb_mux_object_t * m = NULL;
+
+    // set up to interleave track data in blocks of 1 video frame time.
+    // (the best case for buffering and playout latency). The container-
+    // specific muxers can reblock this into bigger chunks if necessary.
+    mux->interleave = 90000. * (double)job->vrate_base / (double)job->vrate;
+    mux->pts = mux->interleave;
 
     /* Get a real muxer */
     if( job->pass == 0 || job->pass == 2)
@@ -124,56 +237,76 @@ static void MuxerFunc( void * _mux )
             case HB_MUX_MKV:
                 m = hb_mux_mkv_init( job );
         }
-    }
-
-    /* Create file, write headers */
-    if( job->pass == 0 || job->pass == 2 )
-    {
+        /* Create file, write headers */
         m->init( m );
     }
 
     /* Build list of fifos we're interested in */
-    list = hb_list_init();
 
-    track           = calloc( sizeof( hb_track_t ), 1 );
-    track->fifo     = job->fifo_mpeg4;
-    track->mux_data = job->mux_data;
-    hb_list_add( list, track );
+    add_mux_track( mux, job->fifo_mpeg4, job->mux_data, 1 );
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
-        audio           = hb_list_item( title->list_audio, i );
-        track           = calloc( sizeof( hb_track_t ), 1 );
-        track->fifo     = audio->priv.fifo_out;
-        track->mux_data = audio->priv.mux_data;
-        hb_list_add( list, track );
+        hb_audio_t  *audio = hb_list_item( title->list_audio, i );
+        add_mux_track( mux, audio->priv.fifo_out, audio->priv.mux_data, 1 );
     }
+
+
+    // The following 'while' is the main muxing loop.
 
 	int thread_sleep_interval = 50;
 	while( !*job->die )
     {
-        if( !( track = GetTrack( list, job ) ) )
+        MoveToInternalFifos( mux );
+        if (  mux->rdy != mux->allRdy )
         {
-            if ( AllTracksDone( list )  )
-            {
-                // all our input fifos have signaled EOF
-                break;
-            }
             hb_snooze( thread_sleep_interval );
             continue;
         }
 
-        buf = hb_fifo_get( track->fifo );
-        if( job->pass == 0 || job->pass == 2 )
+        // all tracks have at least 'interleave' ticks of data. Output
+        // all that we can in 'interleave' size chunks.
+        while ( mux->rdy == mux->allRdy )
         {
-            m->mux( m, track->mux_data, buf );
-            track->frames += 1;
-            track->bytes  += buf->size;
-            mux->pts = buf->stop;
+            for ( i = 0; i < mux->ntracks; ++i )
+            {
+                track = mux->track[i];
+                OutputTrackChunk( mux, track, m );
+
+                // if the track is at eof or still has data that's past
+                // our next interleave point then leave it marked as rdy.
+                // Otherwise clear rdy.
+                if ( ( mux->eof & (1 << i) ) == 0 &&
+                     ( track->mf.out == track->mf.in ||
+                       track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->stop
+                         < mux->pts + mux->interleave ) )
+                {
+                    mux->rdy &=~ ( 1 << i );
+                }
+            }
+
+            // if all the tracks are at eof we're just purging their
+            // remaining data -- keep going until all internal fifos are empty.
+            if ( mux->eof == mux->allEof )
+            {
+                for ( i = 0; i < mux->ntracks; ++i )
+                {
+                    if ( mux->track[i]->mf.out != mux->track[i]->mf.in )
+                    {
+                        break;
+                    }
+                }
+                if ( i >= mux->ntracks )
+                {
+                    goto finished;
+                }
+            }
+            mux->pts += mux->interleave;
         }
-        hb_buffer_close( &buf );
     }
 
+    // we're all done muxing -- print final stats and cleanup.
+finished:
     if( job->pass == 0 || job->pass == 2 )
     {
         struct stat sb;
@@ -194,12 +327,13 @@ static void MuxerFunc( void * _mux )
 
             bytes_total  = 0;
             frames_total = 0;
-            for( i = 0; i < hb_list_count( list ); i++ )
+            for( i = 0; i < mux->ntracks; ++i )
             {
-                track = hb_list_item( list, i );
-                hb_deep_log( 2, "mux: track %d, %lld bytes, %.2f kbps",
-                        i, track->bytes,
-                        90000.0 * track->bytes / mux->pts / 125 );
+                track = mux->track[i];
+                hb_log( "mux: track %d, %lld frames, %lld bytes, %.2f kbps, fifo %d",
+                        i, track->frames, track->bytes,
+                        90000.0 * track->bytes / mux->pts / 125,
+                        track->mf.flen );
                 if( !i && ( job->vquality < 0.0 || job->vquality > 1.0 ) )
                 {
                     /* Video */
@@ -222,16 +356,16 @@ static void MuxerFunc( void * _mux )
 
     free( m );
 
-    for( i = 0; i < hb_list_count( list ); i++ )
+    for( i = 0; i < mux->ntracks; ++i )
     {
-        track = hb_list_item( list, i );
+        track = mux->track[i];
         if( track->mux_data )
         {
             free( track->mux_data );
+            free( track->mf.fifo );
         }
         free( track );
     }
-    hb_list_close( &list );
 
     free( mux );
 }
