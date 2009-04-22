@@ -11,9 +11,6 @@ namespace Handbrake
 {
     public partial class frmOptions : Form
     {
-        /// <summary>
-        /// When the form loads, Initialise all the setting components with their correct values
-        /// </summary>
         public frmOptions()
         {
             InitializeComponent();

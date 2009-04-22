@@ -8,6 +8,7 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Handbrake.Functions
 {
@@ -50,7 +51,7 @@ namespace Handbrake.Functions
         public string DeInterlace { get; private set; }
         public string DeNoise { get; private set; }
         public string Decomb { get; private set; }
-        #endregion    
+        #endregion
 
         #region Video Settings
         public string VideoEncoder { get; private set; }
@@ -64,30 +65,7 @@ namespace Handbrake.Functions
         #endregion
 
         #region Audio Settings
-        public string AudioTrack1 { get; private set; }
-        public string AudioTrack2 { get; private set; }
-        public string AudioTrack3 { get; private set; }
-        public string AudioTrack4 { get; private set; }
-        public string AudioTrackMix1 { get; private set; }
-        public string AudioTrackMix2 { get; private set; }
-        public string AudioTrackMix3 { get; private set; }
-        public string AudioTrackMix4 { get; private set; }
-        public string AudioEncoder1 { get; private set; }
-        public string AudioEncoder2 { get; private set; }
-        public string AudioEncoder3 { get; private set; }
-        public string AudioEncoder4 { get; private set; }
-        public string AudioBitrate1 { get; private set; }
-        public string AudioBitrate2 { get; private set; }
-        public string AudioBitrate3 { get; private set; }
-        public string AudioBitrate4 { get; private set; }
-        public string AudioSamplerate1 { get; private set; }
-        public string AudioSamplerate2 { get; private set; }
-        public string AudioSamplerate3 { get; private set; }
-        public string AudioSamplerate4 { get; private set; }
-        public double DRC1 { get; private set; }
-        public double DRC2 { get; private set; }
-        public double DRC3 { get; private set; }
-        public double DRC4 { get; private set; }
+        public ArrayList AudioInformation { get; private set; }
         public string Subtitles { get; private set; }
         public Boolean ForcedSubtitles { get; private set; }
         #endregion
@@ -103,7 +81,6 @@ namespace Handbrake.Functions
 
         #endregion
 
-        // All the Main Window GUI options
         /// <summary>
         /// Takes in a query which can be in any order and parses it. 
         /// All varibles are then set so they can be used elsewhere.
@@ -123,7 +100,7 @@ namespace Handbrake.Functions
             //Source
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
-           
+
             //Output Settings
             Match format = Regex.Match(input, @"-f ([a-z0-9a-z0-9a-z0-9]*)");
             Match grayscale = Regex.Match(input, @" -g");
@@ -160,35 +137,12 @@ namespace Handbrake.Functions
 
             //Audio Settings Tab
             Match noAudio = Regex.Match(input, @"-a none");
-            Match audioTrack1 = Regex.Match(input, @"-a ([0-9]*)");
-            Match audioTrack2 = Regex.Match(input, @"-a ([0-9]*),([0-9]*)");
-            Match audioTrack3 = Regex.Match(input, @"-a ([0-9]*),([0-9]*),([0-9]*)");
-            Match audioTrack4 = Regex.Match(input, @"-a ([0-9]*),([0-9]*),([0-9]*),([0-9]*)");
-
-            Match audioTrack1Mix = Regex.Match(input, @"-6 ([0-9a-z]*)");
-            Match audioTrack2Mix = Regex.Match(input, @"-6 ([0-9a-z]*),([0-9a-z]*)");
-            Match audioTrack3Mix = Regex.Match(input, @"-6 ([0-9a-z]*),([0-9a-z]*),([0-9a-z]*)");
-            Match audioTrack4Mix = Regex.Match(input, @"-6 ([0-9a-z]*),([0-9a-z]*),([0-9a-z]*),([0-9a-z]*)");
-
-            Match audioEncoder1 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*)");
-            Match audioEncoder2 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
-            Match audioEncoder3 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
-            Match audioEncoder4 = Regex.Match(input, @"-E ([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*),([a-zA-Z0-9+]*)");
-
-            Match audioBitrate1 = Regex.Match(input, @"-B ([0-9auto]*)");
-            Match audioBitrate2 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*)");
-            Match audioBitrate3 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*),([0-9auto]*)");
-            Match audioBitrate4 = Regex.Match(input, @"-B ([0-9auto]*),([0-9auto]*),([0-9auto]*),([0-9auto]*)");
-
-            Match audioSampleRate1 = Regex.Match(input, @"-R ([0-9Auto.]*)");
-            Match audioSampleRate2 = Regex.Match(input, @"-R ([0-9Auto.]*),([0-9Auto.]*)");
-            Match audioSampleRate3 = Regex.Match(input, @"-R ([0-9Auto.]*),([0-9Auto.]*),([0-9Auto.]*)");
-            Match audioSampleRate4 = Regex.Match(input, @"-R ([0-9Auto.]*),([0-9Auto.]*),([0-9Auto.]*),([0-9Auto.]*)");
-
-            Match drc1 = Regex.Match(input, @"-D ([0-9.]*)");
-            Match drc2 = Regex.Match(input, @"-D ([0-9.]*),([0-9.]*)");
-            Match drc3 = Regex.Match(input, @"-D ([0-9.]*),([0-9.]*),([0-9.]*)");
-            Match drc4 = Regex.Match(input, @"-D ([0-9.]*),([0-9.]*),([0-9.]*),([0-9.]*)");
+            Match audioTracks = Regex.Match(input, @"-a ([0-9,]*)");
+            Match audioTrackMixes = Regex.Match(input, @"-6 ([0-9a-zA-Z,]*)");
+            Match audioEncoders = Regex.Match(input, @"-E ([a-zA-Z0-9+,]*)");
+            Match audioBitrates = Regex.Match(input, @"-B ([0-9a-zA-Z,]*)");       // Auto = a-z
+            Match audioSampleRates = Regex.Match(input, @"-R ([0-9a-zA-Z.,]*)");  // Auto = a-z
+            Match drcValues = Regex.Match(input, @"-D ([0-9.,]*)");
 
             Match subtitles = Regex.Match(input, @"-s ([0-9a-zA-Z]*)");
             Match subScan = Regex.Match(input, @" -U");
@@ -262,7 +216,7 @@ namespace Handbrake.Functions
                     thisQuery.CropLeft = actCropValues[2];
                     thisQuery.CropRight = actCropValues[3];
                 }
-                
+
                 thisQuery.Anamorphic = anamorphic.Success;
                 thisQuery.LooseAnamorphic = lanamorphic.Success;
 
@@ -336,7 +290,7 @@ namespace Handbrake.Functions
                 thisQuery.Grayscale = grayscale.Success;
                 thisQuery.TwoPass = twoPass.Success;
                 thisQuery.TurboFirstPass = turboFirstPass.Success;
-                
+
                 if (videoBitrate.Success)
                     thisQuery.AverageVideoBitrate = videoBitrate.ToString().Replace("-b ", "");
                 if (videoFilesize.Success)
@@ -344,194 +298,74 @@ namespace Handbrake.Functions
 
                 if (videoQuality.Success)
                 {
-                   float qConvert = float.Parse(videoQuality.ToString().Replace("-q ", ""), Culture);
+                    float qConvert = float.Parse(videoQuality.ToString().Replace("-q ", ""), Culture);
                     //qConvert = Math.Ceiling(qConvert);
                     thisQuery.VideoQuality = qConvert;
                 }
                 #endregion
 
                 #region Audio Tab
-
-                // Tracks
-                if (noAudio.Success)
-                    thisQuery.AudioTrack1 = "None";
-                else if (audioTrack1.Success)
-                    thisQuery.AudioTrack1 = "Automatic";
-
-                if (audioTrack2.Success)
+                // Find out how many tracks we need to add by checking how many encoders or audio tracks are selected.
+                int encoderCount = 0;
+                if (audioEncoders.Success)
                 {
-                    string[] audioChan = audioTrack2.ToString().Split(',');
-                    thisQuery.AudioTrack2 = audioChan[1];
-                }
-                else
-                    thisQuery.AudioTrack2 = "None";
-
-                if (audioTrack3.Success)
-                {
-                    string[] audioChan = audioTrack3.ToString().Split(',');
-                    thisQuery.AudioTrack3 = audioChan[2];
-                }
-                else
-                    thisQuery.AudioTrack3 = "None";
-
-                if (audioTrack4.Success)
-                {
-                    string[] audioChan = audioTrack4.ToString().Split(',');
-                    thisQuery.AudioTrack4 = audioChan[3];
-                }
-                else
-                    thisQuery.AudioTrack4 = "None";
-
-
-                // Mixdowns
-                thisQuery.AudioTrackMix1 = "Automatic";
-                if (audioTrack1Mix.Success)
-                    thisQuery.AudioTrackMix1 =
-                        getMixDown(audioTrack1Mix.ToString().Replace("-6 ", "").Replace(" ", ""));
-
-                thisQuery.AudioTrackMix2 = "Automatic";
-                if (audioTrack2Mix.Success)
-                {
-                    string[] audio2mix = audioTrack2Mix.ToString().Split(',');
-                    thisQuery.AudioTrackMix2 = getMixDown(audio2mix[1].Trim());
+                    string[] audioDataCounters = audioEncoders.ToString().Replace("-E ", "").Split(',');
+                    encoderCount = audioDataCounters.Length;
                 }
 
-                thisQuery.AudioTrackMix3 = "Automatic";
-                if (audioTrack3Mix.Success)
+                // Get the data from the regular expression results
+                string[] trackData = null;
+                string[] trackMixes = null;
+                string[] trackEncoders = null;
+                string[] trackBitrates = null;
+                string[] trackSamplerates = null;
+                string[] trackDRCvalues = null;
+
+                if (audioTracks.Success)
+                    trackData = audioTracks.ToString().Replace("-a ", "").Split(',');
+                if (audioTrackMixes.Success)
+                    trackMixes = audioTrackMixes.ToString().Replace("-6 ", "").Split(',');
+                if (audioEncoders.Success)
+                    trackEncoders = audioEncoders.ToString().Replace("-E ", "").Split(',');
+                if (audioBitrates.Success)
+                    trackBitrates = audioBitrates.ToString().Replace("-B ", "").Split(',');
+                if (audioSampleRates.Success)
+                    trackSamplerates = audioSampleRates.ToString().Replace("-R ", "").Split(',');
+                if (drcValues.Success)
+                    trackDRCvalues = drcValues.ToString().Replace("-D ", "").Split(',');
+
+                // Create new Audio Track Classes and store them in the ArrayList
+                ArrayList AllAudioTrackInfo = new ArrayList();
+                for (int x = 0; x < encoderCount; x++)
                 {
-                    string[] audio3mix = audioTrack3Mix.ToString().Split(',');
-                    thisQuery.AudioTrackMix3 = getMixDown(audio3mix[2].Trim());
+                    AudioTrack track = new AudioTrack();
+                    if (trackData != null)
+                        if (trackData.Length >= (x + 1))                         // Audio Track
+                            track.Track = trackData[x].Trim();
+
+                    if (trackMixes != null)
+                        if (trackMixes.Length >= (x + 1))                        // Audio Mix
+                            track.MixDown = getMixDown(trackMixes[x].Trim());
+
+                    if (trackEncoders != null)
+                        if (trackEncoders.Length >= (x + 1))                     // Audio Mix
+                            track.Encoder = getAudioEncoder(trackEncoders[x].Trim());
+
+                    if (trackBitrates != null)
+                        if (trackBitrates.Length >= (x + 1))                     // Audio Encoder
+                            track.Bitrate = trackBitrates[x].Trim() == "auto" ? "Auto" : trackBitrates[x].Trim();
+
+                    if (trackSamplerates != null)
+                        if (trackSamplerates.Length >= (x + 1))                  // Audio SampleRate
+                            track.SampleRate = trackSamplerates[x].Trim() == "0" ? "Auto" : trackSamplerates[x].Trim();
+
+                    if (trackDRCvalues != null)
+                        if (trackDRCvalues.Length >= (x + 1))                   // Audio DRC Values
+                            track.DRC = trackDRCvalues[x].Trim();
+
+                    AllAudioTrackInfo.Add(track);
                 }
-
-                thisQuery.AudioTrackMix4 = "Automatic";
-                if (audioTrack4Mix.Success)
-                {
-                    string[] audio4mix = audioTrack4Mix.ToString().Split(',');
-                    thisQuery.AudioTrackMix4 = getMixDown(audio4mix[3].Trim());
-                }
-
-
-                // Audio Encoders
-                if (audioEncoder1.Success)
-                    thisQuery.AudioEncoder1 = getAudioEncoder(audioEncoder1.ToString().Replace("-E ", ""));
-
-                if (audioEncoder2.Success)
-                {
-                    string[] audio2enc = audioEncoder2.ToString().Split(',');
-                    thisQuery.AudioEncoder2 = getAudioEncoder(audio2enc[1].Trim());
-                }
-
-                if (audioEncoder3.Success)
-                {
-                    string[] audio3enc = audioEncoder3.ToString().Split(',');
-                    thisQuery.AudioEncoder3 = getAudioEncoder(audio3enc[2].Trim());
-                }
-
-                if (audioEncoder4.Success)
-                {
-                    string[] audio4enc = audioEncoder4.ToString().Split(',');
-                    thisQuery.AudioEncoder4 = getAudioEncoder(audio4enc[3].Trim());
-                }
-
-
-                // Audio Bitrate
-                thisQuery.AudioBitrate1 = "";
-                if (audioBitrate1.Success)
-                {
-                    thisQuery.AudioBitrate1 = audioBitrate1.ToString().Replace("-B ", "").Trim();
-                    if (audioBitrate1.ToString().Replace("-B ", "").Trim() == "0") thisQuery.AudioBitrate1 = "Auto";
-                }
-
-                thisQuery.AudioBitrate2 = "";
-                if (audioBitrate2.Success && audioTrack2.Success)
-                {
-                    string[] audioBitrateSelect = audioBitrate2.ToString().Split(',');
-                    if (audioBitrateSelect[1].Trim() == "0") audioBitrateSelect[1] = "Auto";
-                    thisQuery.AudioBitrate2 = audioBitrateSelect[1].Trim();
-                }
-
-                thisQuery.AudioBitrate3 = "";
-                if (audioBitrate3.Success && audioTrack3.Success)
-                {
-                    string[] audioBitrateSelect = audioBitrate3.ToString().Split(',');
-                    if (audioBitrateSelect[2].Trim() == "0") audioBitrateSelect[2] = "Auto";
-                    thisQuery.AudioBitrate3 = audioBitrateSelect[2].Trim();
-                }
-
-                thisQuery.AudioBitrate4 = "";
-                if (audioBitrate4.Success)
-                {
-                    string[] audioBitrateSelect = audioBitrate4.ToString().Split(',');
-                    if (audioBitrateSelect[3].Trim() == "0") audioBitrateSelect[3] = "Auto";
-                    thisQuery.AudioBitrate4 = audioBitrateSelect[3].Trim();
-                }
-
-
-                // Audio Sample Rate
-                // Make sure to change 0 to Auto
-                thisQuery.AudioSamplerate1 = "Auto";
-                if (audioSampleRate1.Success)
-                {
-                    thisQuery.AudioSamplerate1 = audioSampleRate1.ToString().Replace("-R ", "").Trim();
-                    if (thisQuery.AudioSamplerate1 == "0") thisQuery.AudioSamplerate1 = "Auto";
-                }
-
-
-                if (audioSampleRate2.Success)
-                {
-                    string[] audioSRSelect = audioSampleRate2.ToString().Split(',');
-                    if (audioSRSelect[1] == "0") audioSRSelect[1] = "Auto";
-                    thisQuery.AudioSamplerate2 = audioSRSelect[1].Trim();
-                }
-
-                if (audioSampleRate3.Success)
-                {
-                    string[] audioSRSelect = audioSampleRate3.ToString().Split(',');
-                    if (audioSRSelect[2] == "0") audioSRSelect[2] = "Auto";
-                    thisQuery.AudioSamplerate3 = audioSRSelect[2].Trim();
-                }
-
-                if (audioSampleRate4.Success)
-                {
-                    string[] audioSRSelect = audioSampleRate4.ToString().Split(',');
-                    if (audioSRSelect[3] == "0") audioSRSelect[3] = "Auto";
-                    thisQuery.AudioSamplerate4 = audioSRSelect[3].Trim();
-                }
-
-                // DRC
-                float drcValue;
-
-                thisQuery.DRC1 = 1;
-                if (drc1.Success)
-                {
-                    string value = drc1.ToString().Replace("-D ", "");
-                    float.TryParse(value, out drcValue);
-                    thisQuery.DRC1 = drcValue;
-                }
-
-                thisQuery.DRC2 = 1;
-                if (drc2.Success)
-                {
-                    string[] drcPoint = drc2.ToString().Split(',');
-                    float.TryParse(drcPoint[1], out drcValue);
-                    thisQuery.DRC2 = drcValue;
-                }
-
-                thisQuery.DRC3 = 1;
-                if (drc3.Success)
-                {
-                    string[] drcPoint = drc3.ToString().Split(',');
-                    float.TryParse(drcPoint[2], out drcValue);
-                    thisQuery.DRC3 = drcValue;
-                }
-
-                thisQuery.DRC4 = 1;
-                if (drc4.Success)
-                {
-                    string[] drcPoint = drc4.ToString().Split(',');
-                    float.TryParse(drcPoint[3], out drcValue);
-                    thisQuery.DRC4 = drcValue;
-                }
+                thisQuery.AudioInformation = AllAudioTrackInfo;
 
                 // Subtitle Stuff
                 if (subtitles.Success)
@@ -540,7 +374,6 @@ namespace Handbrake.Functions
                     thisQuery.Subtitles = subScan.Success ? "Autoselect" : "None";
 
                 thisQuery.ForcedSubtitles = forcedSubtitles.Success;
-
                 #endregion
 
                 #region Chapters Tab
@@ -603,5 +436,24 @@ namespace Handbrake.Functions
                     return "AAC";
             }
         }
+    }
+
+    public class AudioTrack
+    {
+        public AudioTrack()
+        {
+            // Default Values
+            Track = "Automatic";
+            MixDown = "Automatic";
+            SampleRate = "Auto";
+            Bitrate = "Auto";
+            DRC = "1";
+        }
+        public string Track { get; set; }
+        public string MixDown { get; set; }
+        public string Encoder { get; set; }
+        public string Bitrate { get; set; }
+        public string SampleRate { get; set; }
+        public string DRC { get; set; }
     }
 }

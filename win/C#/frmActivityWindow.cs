@@ -20,23 +20,23 @@ namespace Handbrake
         delegate void SetTextCallback(string text);
         String read_file;
         Thread monitor;
-        Functions.Encode encodeHandler;
+        Queue.QueueHandler encodeQueue;
         int position;  // Position in the arraylist reached by the current log output in the rtf box.
 
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
-        public frmActivityWindow(string file, Functions.Encode eh)
+        public frmActivityWindow(string file, Queue.QueueHandler eh)
         {
             InitializeComponent();
-            this.rtf_actLog.Text = string.Empty;
 
-            // When the window closes, we want to abort the monitor thread.
-            this.Disposed += new EventHandler(forceQuit);
-
-            encodeHandler = eh;
+            rtf_actLog.Text = string.Empty;
+            encodeQueue = eh;
             read_file = file;
             position = 0;
+            
+            // When the window closes, we want to abort the monitor thread.
+            this.Disposed += new EventHandler(forceQuit);
 
             // Print the Log header in the Rich text box.
             displayLogHeader();
@@ -47,7 +47,7 @@ namespace Handbrake
                 txt_log.Text = "Encode Log";
 
             // Start a new thread which will montior and keep the log window up to date if required/
-            startLogThread(read_file);            
+            startLogThread(read_file);
         }
 
         /// <summary>
@@ -65,6 +65,11 @@ namespace Handbrake
             rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
             rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
             rtf_actLog.AppendText("#########################################\n\n");
+            if (encodeQueue.isEncoding && encodeQueue.lastQueueItem.Query != String.Empty)
+            {
+                rtf_actLog.AppendText("### CLI Query: " + encodeQueue.lastQueueItem.Query + "\n\n");
+                rtf_actLog.AppendText("#########################################\n\n");
+            }
         }
 
         /// <summary>
@@ -94,54 +99,6 @@ namespace Handbrake
         }
 
         /// <summary>
-        /// Change the log file to be displayed to hb_encode_log.dat
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_scan_log_Click(object sender, EventArgs e)
-        {
-            if (monitor != null)
-                monitor.Abort();
-
-            rtf_actLog.Clear();
-            read_file = "dvdinfo.dat";
-            displayLogHeader();
-            startLogThread(read_file);
-            txt_log.Text = "Scan Log";
-        }
-
-        /// <summary>
-        /// Change the log file to be displayed to dvdinfo.dat
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_encode_log_Click(object sender, EventArgs e)
-        {
-            if (monitor != null)
-                monitor.Abort();
-
-            rtf_actLog.Clear();
-            read_file = "hb_encode_log.dat";
-            position = 0;
-            displayLogHeader();
-            startLogThread(read_file);
-            txt_log.Text = "Encode Log";
-        }
-
-        /// <summary>
-        /// Copy to Clipboard
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btn_copy_Click(object sender, EventArgs e)
-        {
-            if (rtf_actLog.SelectedText != "")
-                Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
-            else
-                Clipboard.SetDataObject(rtf_actLog.Text, true);
-        }
-
-        /// <summary>
         /// Updates the log window with any new data which is in the log file.
         /// This is done every 5 seconds.
         /// </summary>
@@ -154,7 +111,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if (encodeHandler.isEncoding)
+                    if (encodeQueue.isEncoding)
                         updateTextFromThread();
                     else
                     {
@@ -186,19 +143,11 @@ namespace Handbrake
         {
             try
             {
-                string text;
-                List<string> data = readFile();
-                int count = data.Count;
+                String info = readFile();
+                if (info.Contains("has exited"))
+                    info += "\n ############ End of Log ############## \n";
 
-                while (position < count)
-                {
-                    text = data[position];
-                    if (data[position].Contains("has exited"))
-                        text = "\n ############ End of Log ############## \n";
-                    position++;
-
-                    SetText(text);
-                }
+                SetText(info);
             }
             catch (Exception exc)
             {
@@ -238,12 +187,9 @@ namespace Handbrake
         /// Read the log file, and store the data in a List.
         /// </summary>
         /// <returns></returns>
-        private List<string> readFile()
+        private String readFile()
         {
-            // Ok, the task here is to, Get an arraylist of log data.
-            // And update some global varibles which are pointers to the last displayed log line.
-            List<string> logData = new List<string>();
-
+            String appendText = String.Empty;
             try
             {
                 // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
@@ -260,18 +206,21 @@ namespace Handbrake
 
                 // Open the copied log file for reading
                 StreamReader sr = new StreamReader(logFile2);
-                string line = sr.ReadLine();
-                while (line != null)
+                string line;
+                int i = 1;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    if (line.Trim() != "")
-                        logData.Add(line + Environment.NewLine);
-
-                    line = sr.ReadLine();
+                    if (i > position)
+                    {
+                        appendText += line + Environment.NewLine;
+                        position++;
+                    }
+                    i++;
                 }
                 sr.Close();
                 sr.Dispose();
 
-                return logData;
+                return appendText;
             }
             catch (Exception exc)
             {
@@ -296,11 +245,8 @@ namespace Handbrake
             this.Close();
         }
 
-        /// <summary>
-        /// Copy Log Menu Item on the right click menu for the log rtf box
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        #region User Interface
+
         private void mnu_copy_log_Click(object sender, EventArgs e)
         {
             if (rtf_actLog.SelectedText != "")
@@ -308,6 +254,42 @@ namespace Handbrake
             else
                 Clipboard.SetDataObject(rtf_actLog.Text, true);
         }
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            if (rtf_actLog.SelectedText != "")
+                Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
+            else
+                Clipboard.SetDataObject(rtf_actLog.Text, true);
+        }
+        private void btn_scan_log_Click(object sender, EventArgs e)
+        {
+            // Switch to the scan log.
+
+            if (monitor != null)
+                monitor.Abort();
+
+            rtf_actLog.Clear();
+            read_file = "dvdinfo.dat";
+            displayLogHeader();
+            startLogThread(read_file);
+            txt_log.Text = "Scan Log";
+        }
+        private void btn_encode_log_Click(object sender, EventArgs e)
+        {
+            // Switch to the encode log
+
+            if (monitor != null)
+                monitor.Abort();
+
+            rtf_actLog.Clear();
+            read_file = "hb_encode_log.dat";
+            position = 0;
+            displayLogHeader();
+            startLogThread(read_file);
+            txt_log.Text = "Encode Log";
+        }
+
+        #endregion
 
         #region System Information
         private struct MEMORYSTATUS // Unused var's are requred here.

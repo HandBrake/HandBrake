@@ -8,10 +8,12 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Handbrake"
-!define PRODUCT_VERSION "0.9.1"
+!define PRODUCT_VERSION "0.9.4"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
+
+SetCompressor lzma
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -53,7 +55,7 @@ Function .onInit
   Call GetDotNETVersion
   Pop $0
   ${If} $0 == "not found"
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed. $\r$\n You can download .Net Framework 2 from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
+    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed. $\r$\n You can download .Net Framework 3.5 from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
     Abort
   ${EndIf}
 
@@ -61,7 +63,7 @@ Function .onInit
 
   ${VersionCompare} $0 "2.0" $1
   ${If} $1 == 2
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v2.0 or newer is required. You have $0. $\r$\n You can download .Net Framework 2 from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
+    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v3.5 or newer is required. You have $0. $\r$\n You can download .Net Framework 3.5 from the Microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
     Abort
   ${EndIf}
 FunctionEnd
@@ -91,11 +93,14 @@ Section "Handbrake" SEC01
   CreateDirectory "$SMPROGRAMS\Handbrake"
   CreateShortCut "$SMPROGRAMS\Handbrake\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
   CreateShortCut "$DESKTOP\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
-  File "dvdinfo.dat"
-  File "cygwin1.dll"
-  File "hbcli.exe"
+  File "Interop.QTOLibrary.dll"
+  File "Interop.QTOControlLib.dll"
+  File "AxInterop.QTOControlLib.dll"
+  File "HandBrakeCLI.exe"
   File "Handbrake.exe.config"
   File "handbrakepineapple.ico"
+  File "presets.xml"
+  File "user_presets.xml"
   
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -134,12 +139,16 @@ FunctionEnd
 
 Section Uninstall
   Delete "$INSTDIR\uninst.exe"
+  
+  Delete "$INSTDIR\Interop.QTOLibrary.dll"
+  Delete "$INSTDIR\Interop.QTOControlLib.dll"
+  Delete "$INSTDIR\AxInterop.QTOControlLib.dll"
+  Delete "$INSTDIR\HandBrakeCLI.exe"
   Delete "$INSTDIR\handbrakepineapple.ico"
-  Delete "$INSTDIR\hbcli.exe"
-  Delete "$INSTDIR\cygwin1.dll"
-  Delete "$INSTDIR\dvdinfo.dat"
   Delete "$INSTDIR\Handbrake.exe"
   Delete "$INSTDIR\Handbrake.exe.config"
+  Delete "$INSTDIR\presets.xml"
+  Delete "$INSTDIR\user_presets.xml"
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\BUILD"
   Delete "$INSTDIR\doc\COPYING"
@@ -147,12 +156,12 @@ Section Uninstall
   Delete "$INSTDIR\doc\NEWS"
   Delete "$INSTDIR\doc\THANKS"
   Delete "$INSTDIR\doc\TRANSLATIONS"
-
+  RMDir  "$INSTDIR"
   Delete "$SMPROGRAMS\Handbrake\Uninstall.lnk"
   Delete "$DESKTOP\Handbrake.lnk"
   Delete "$SMPROGRAMS\Handbrake\Handbrake.lnk"
-  RMDir "$SMPROGRAMS\Handbrake"
-  RMDir "$INSTDIR"
+  RMDir  "$SMPROGRAMS\Handbrake"
+  RMDir  "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"

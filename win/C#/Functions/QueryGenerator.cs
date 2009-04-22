@@ -90,7 +90,7 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <returns></returns>
-        public string generateTabbedComponentsQuery(frmMain mainWindow)
+        public static string generateTabbedComponentsQuery(frmMain mainWindow)
         {
             string query = "";
 
@@ -274,11 +274,11 @@ namespace Handbrake.Functions
 
                 // Sample Rate (-R)
                 if (row.SubItems[3].Text != String.Empty)
-                    samplerates.Add(row.SubItems[3].Text.Replace("Auto", "0"));
+                    samplerates.Add(row.SubItems[3].Text.Replace("Auto", "Auto"));
 
                 // Audio Bitrate (-B)
                 if (row.SubItems[4].Text != String.Empty)
-                    bitrates.Add(row.SubItems[4].Text.Replace("Auto", "0"));
+                    bitrates.Add(row.SubItems[4].Text.Replace("Auto", "auto"));
 
                 // DRC (-D)
                 if (row.SubItems[5].Text != String.Empty)

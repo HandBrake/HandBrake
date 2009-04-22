@@ -166,17 +166,15 @@ namespace Handbrake
                 item.SubItems.Add(queue_item.Destination); // Destination
                 item.SubItems.Add(parsed.VideoEncoder); // Video
 
-                // Display the first 4 audio tracks.
-                String audio = parsed.AudioEncoder1;
-                if (parsed.AudioEncoder2 != null)
-                    audio += ", " + parsed.AudioEncoder2;
-
-                if (parsed.AudioEncoder3 != null)
-                    audio += ", " + parsed.AudioEncoder3;
-
-                if (parsed.AudioEncoder4 != null)
-                    audio += ", " + parsed.AudioEncoder4;
-
+                // Display The Audio Track Information
+                string audio = string.Empty;
+                foreach (Functions.AudioTrack track in parsed.AudioInformation)
+                {
+                    if (audio != "")
+                        audio += ", " + track.Encoder;
+                    else
+                        audio = track.Encoder;
+                }
                 item.SubItems.Add(audio); // Audio
 
                 list_queue.Items.Add(item);
@@ -203,9 +201,9 @@ namespace Handbrake
                 }
 
                 // found query is a global varible
-                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.getLastQueryItem().Query);
-                lbl_source.Text = queue.getLastQueryItem().Source;
-                lbl_dest.Text = queue.getLastQueryItem().Destination;
+                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.lastQueueItem.Query);
+                lbl_source.Text = queue.lastQueueItem.Source;
+                lbl_dest.Text = queue.lastQueueItem.Destination;
 
                 lbl_title.Text = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
 
@@ -220,16 +218,16 @@ namespace Handbrake
                 }
 
                 lbl_vEnc.Text = parsed.VideoEncoder;
-                String audio = parsed.AudioEncoder1;
-                if (parsed.AudioEncoder2 != null)
-                    audio += ", " + parsed.AudioEncoder2;
 
-                if (parsed.AudioEncoder3 != null)
-                    audio += ", " + parsed.AudioEncoder3;
-
-                if (parsed.AudioEncoder4 != null)
-                    audio += ", " + parsed.AudioEncoder4;
-
+                // Display The Audio Track Information
+                string audio = string.Empty;
+                foreach (Functions.AudioTrack track in parsed.AudioInformation)
+                {
+                    if (audio != "")
+                        audio += ", " + track.Encoder;
+                    else
+                        audio = track.Encoder;
+                }
                 lbl_aEnc.Text = audio;
             }
             catch (Exception)
@@ -379,9 +377,9 @@ namespace Handbrake
         }
         private void mnu_readd_Click(object sender, EventArgs e)
         {
-            if (queue.getLastQueryItem() != null)
+            if (queue.lastQueueItem != null)
             {
-                queue.add(queue.getLastQueryItem().Query, queue.getLastQueryItem().Source, queue.getLastQueryItem().Destination);
+                queue.add(queue.lastQueueItem.Query, queue.lastQueueItem.Source, queue.lastQueueItem.Destination);
                 queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
             }

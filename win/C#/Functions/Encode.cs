@@ -16,20 +16,18 @@ namespace Handbrake.Functions
     {
         // DLL Imports
         [DllImport("user32.dll")]
-        public static extern void LockWorkStation();
+        private static extern void LockWorkStation();
         [DllImport("user32.dll")]
-        public static extern int ExitWindowsEx(int uFlags, int dwReason);
+        private static extern int ExitWindowsEx(int uFlags, int dwReason);
 
         // Declarations
         Process hbProc = new Process();
-        Boolean encoding;
 
         /// <summary>
         /// Execute a HandBrakeCLI process.
         /// </summary>
-        /// <param name="s"></param>
         /// <param name="query">The CLI Query</param>
-        public Process runCli(object s, string query)
+        public Process runCli(string query)
         {
             try
             {
@@ -42,7 +40,8 @@ namespace Handbrake.Functions
                 if (Properties.Settings.Default.cli_minimized == "Checked")
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
                 hbProc = Process.Start(cliStart);
-                encoding = true;
+                isEncoding = true;
+                currentQuery = query;
 
                 // Set the process Priority 
                 if (hbProc != null)
@@ -80,7 +79,8 @@ namespace Handbrake.Functions
         /// </summary>
         public void afterEncodeAction()
         {
-            encoding = false;
+            isEncoding = false;
+            currentQuery = String.Empty;
             // Do something whent he encode ends.
             switch (Properties.Settings.Default.CompletionOption)
             {
@@ -132,9 +132,8 @@ namespace Handbrake.Functions
         /// Save a copy of the log to the users desired location or a default location
         /// if this feature is enabled in options.
         /// </summary>
-        /// <param name="query"></param>
         /// <param name="destination"></param>
-        public void copyLog(string query, string destination)
+        public void copyLog(string destination)
         {
             // The user may wish to do something with the log.
             if (Properties.Settings.Default.saveLog == "Checked")
@@ -169,10 +168,12 @@ namespace Handbrake.Functions
         /// <summary>
         /// Returns whether HandBrake is currently encoding or not.
         /// </summary>
-        public Boolean isEncoding
-        {
-            get { return encoding; }
-        }
+        public Boolean isEncoding { get; set; }
+
+        /// <summary>
+        /// Returns the currently encoding query string
+        /// </summary>
+        public String currentQuery { get; set; }
 
     }
 }

@@ -11,15 +11,16 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Threading;
 using System.Diagnostics;
+using Handbrake.Functions;
 
 namespace Handbrake.Queue
 {
     public class QueueHandler
     {
+        readonly Encode encodeHandler = new Encode();
         private static XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
         List<QueueItem> queue = new List<QueueItem>();
         int id; // Unique identifer number for each job
-        private QueueItem lastItem;
 
         #region Queue Handling
         public List<QueueItem> getQueue()
@@ -31,11 +32,11 @@ namespace Handbrake.Queue
         /// Get's the next CLI query for encoding
         /// </summary>
         /// <returns>String</returns>
-        public string getNextItemForEncoding()
+        private string getNextItemForEncoding()
         {
             QueueItem job = queue[0];
             String query = job.Query;
-            lastItem = job;
+            lastQueueItem = job;
             remove(0);    // Remove the item which we are about to pass out.
             return query;
         }
@@ -44,10 +45,7 @@ namespace Handbrake.Queue
         /// Get the last query that was returned by getNextItemForEncoding()
         /// </summary>
         /// <returns></returns>
-        public QueueItem getLastQueryItem()
-        {
-            return lastItem;
-        }
+        public QueueItem lastQueueItem { get; set; }    
 
         /// <summary>
         /// Add's a new item to the queue
@@ -72,7 +70,6 @@ namespace Handbrake.Queue
         {
             foreach (QueueItem checkItem in queue)
             {
-
                 if (checkItem.Destination.Contains(destination.Replace("\\\\", "\\")))
                     return true;
             }
@@ -84,10 +81,9 @@ namespace Handbrake.Queue
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns>Bolean true if successful</returns>
-        public Boolean remove(int index)
+        public void remove(int index)
         {
             queue.RemoveAt(index);
-            return true;
         }
 
         /// <summary>
@@ -135,11 +131,7 @@ namespace Handbrake.Queue
         /// </summary>
         public void write2disk(string file)
         {
-            string tempPath;
-            if (file == "hb_queue_recovery.xml")
-                tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
-            else
-                tempPath = file;
+            string tempPath = file == "hb_queue_recovery.xml" ? Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml") : file;
 
             try
             {
@@ -227,37 +219,22 @@ namespace Handbrake.Queue
         }
         #endregion
 
-        //------------------------------------------------------------------------
-        Functions.Encode encodeHandler = new Functions.Encode();
-        private Boolean started = false;
-        private Boolean paused;
-        private Boolean encoding;
-
         #region Encoding
 
-        public Boolean isEncodeStarted
-        {
-            get { return started; }
-        }
-        public Boolean isPaused
-        {
-            get { return paused; }
-        }
-        public Boolean isEncoding
-        {
-            get { return encoding; }
-        }
+        public Boolean isEncodeStarted { get; private set; }
+        public Boolean isPaused { get; private set; }
+        public Boolean isEncoding { get; private set; }
 
         public void startEncode()
         {
             Thread theQueue;
             if (this.count() != 0)
             {
-                if (paused)
-                    paused = false;
+                if (isPaused)
+                    isPaused = false;
                 else
                 {
-                    paused = false;
+                    isPaused = false;
                     try
                     {
                         theQueue = new Thread(startProc) {IsBackground = true};
@@ -272,7 +249,7 @@ namespace Handbrake.Queue
         }
         public void pauseEncode()
         {
-            paused = true;
+            isPaused = true;
             EncodePaused(null);
         }
 
@@ -288,17 +265,17 @@ namespace Handbrake.Queue
                     write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
 
                     EncodeStarted(null);
-                    hbProc = encodeHandler.runCli(this, query);
+                    hbProc = encodeHandler.runCli(query);
                     hbProc.WaitForExit();
 
                     encodeHandler.addCLIQueryToLog(query);
-                    encodeHandler.copyLog(query, getLastQueryItem().Destination);
+                    encodeHandler.copyLog(lastQueueItem.Destination);
 
                     hbProc.Close();
                     hbProc.Dispose();
                     EncodeFinished(null);
 
-                    while (paused) // Need to find a better way of doing this.
+                    while (isPaused) // Need to find a better way of doing this.
                     {
                         Thread.Sleep(10000);
                     }
@@ -327,7 +304,7 @@ namespace Handbrake.Queue
             if (OnEncodeStart != null)
                 OnEncodeStart(this, e);
 
-            encoding = true;
+            isEncoding = true;
         }
         protected virtual void EncodePaused(EventArgs e)
         {
@@ -339,7 +316,7 @@ namespace Handbrake.Queue
             if (OnEncodeEnded != null)
                 OnEncodeEnded(this, e);
 
-            encoding = false;
+            isEncoding = false;
         }
         protected virtual void EncodeQueueFinished(EventArgs e)
         {

@@ -152,6 +152,12 @@ Make sure you have selected a "Title" from the "Source" box above otherwise
 the list will not be populated with the correct amount of chapters.
 Note: Do not change any of the chapter numbers!</value>
   </data>
+  <metadata name="number.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="name.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="DVD_Open.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>232, 15</value>
   </metadata>
@@ -165,10 +171,10 @@ Note: Do not change any of the chapter numbers!</value>
     <value>106, 15</value>
   </metadata>
   <metadata name="audioMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 36</value>
+    <value>17, 52</value>
   </metadata>
   <metadata name="AudioMenuRowHeightHack.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>123, 36</value>
+    <value>123, 52</value>
   </metadata>
   <metadata name="presets_menu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1224, 15</value>
@@ -579,8 +585,11 @@ Note: Do not change any of the chapter numbers!</value>
   <metadata name="StatusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1113, 15</value>
   </metadata>
+  <metadata name="hbproc.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>308, 52</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>75</value>
+    <value>98</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

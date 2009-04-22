@@ -145,7 +145,7 @@
             this.label43.AutoSize = true;
             this.label43.BackColor = System.Drawing.Color.Transparent;
             this.label43.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label43.Location = new System.Drawing.Point(13, 18);
+            this.label43.Location = new System.Drawing.Point(13, 13);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(165, 13);
             this.label43.TabIndex = 49;

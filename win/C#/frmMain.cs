@@ -5,7 +5,6 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -22,8 +21,6 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects
-        Main hb_common_func = new Main();
-        Encode encodeHandler = new Encode();
         QueueHandler encodeQueue = new QueueHandler();
         PresetsHandler presetHandler = new PresetsHandler();
         QueryGenerator queryGen = new QueryGenerator();
@@ -31,7 +28,6 @@ namespace Handbrake
         // Globals: Mainly used for tracking.
         Title selectedTitle;
         DVD thisDVD;
-        Process hbproc;
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private Form splash;
@@ -49,6 +45,7 @@ namespace Handbrake
 
         public frmMain()
         {
+           
             // Load and setup the splash screen in this thread
             splash = new frmSplashScreen();
             splash.Show();
@@ -60,7 +57,7 @@ namespace Handbrake
             // Update the users config file with the CLI version data.
             lblStatus.Text = "Setting Version Data ...";
             Application.DoEvents();
-            hb_common_func.setCliVersionData();
+            Main.setCliVersionData();
 
             // Show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
@@ -132,6 +129,8 @@ namespace Handbrake
 
             // Queue Recovery
             queueRecovery();
+
+            
         }
 
         // Startup Functions   
@@ -145,7 +144,7 @@ namespace Handbrake
                     return;
                 }
 
-                Boolean update = hb_common_func.updateCheck(false);
+                Boolean update = Main.updateCheck(false);
                 if (update)
                 {
                     frmUpdater updateWindow = new frmUpdater();
@@ -159,7 +158,7 @@ namespace Handbrake
         }
         private void queueRecovery()
         {
-            if (hb_common_func.check_queue_recovery())
+            if (Main.check_queue_recovery())
             {
                 DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -256,7 +255,7 @@ namespace Handbrake
             String file;
             file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
 
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeHandler);
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeQueue);
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -332,7 +331,7 @@ namespace Handbrake
         }
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
-            Boolean update = hb_common_func.updateCheck(true);
+            Boolean update = Main.updateCheck(true);
             if (update)
             {
                 frmUpdater updateWindow = new frmUpdater();
@@ -370,9 +369,9 @@ namespace Handbrake
         {
             DialogResult result = MessageBox.Show("Do you wish to include picture settings when updating the preset: " + treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
-                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, queryGen.generateTabbedComponentsQuery(this), true);
+                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.generateTabbedComponentsQuery(this), true);
             else if (result == DialogResult.No)
-                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, queryGen.generateTabbedComponentsQuery(this), false);
+                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.generateTabbedComponentsQuery(this), false);
         }
         private void pmnu_delete_click(object sender, EventArgs e)
         {
@@ -415,7 +414,7 @@ namespace Handbrake
             nodeStatus.Add(true);
 
             // Now add the new preset
-            Form preset = new frmAddPreset(this, queryGen.generateTabbedComponentsQuery(this), presetHandler);
+            Form preset = new frmAddPreset(this, QueryGenerator.generateTabbedComponentsQuery(this), presetHandler);
             preset.ShowDialog();
 
             // Now reload the TreeView states
@@ -703,7 +702,7 @@ namespace Handbrake
         {
             String file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
 
-            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeHandler);
+            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeQueue);
             ActivityWindow.Show();
         }
         #endregion
@@ -886,7 +885,7 @@ namespace Handbrake
             // Run the autoName & chapterNaming functions
             if (Properties.Settings.Default.autoNaming == "Checked")
             {
-                string autoPath = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
@@ -894,7 +893,7 @@ namespace Handbrake
             }
 
             data_chpt.Rows.Clear();
-            DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterFinish.Text);
+            DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
             if (chapterGridView != null)
                 data_chpt = chapterGridView;
 
@@ -918,11 +917,11 @@ namespace Handbrake
                     drop_chapterFinish.Text = c_start.ToString();
             }
 
-            lbl_duration.Text = hb_common_func.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
+            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming == "Checked")
-                text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
@@ -941,11 +940,11 @@ namespace Handbrake
                     drop_chapterFinish.Text = c_start.ToString();
             }
 
-            lbl_duration.Text = hb_common_func.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
+            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming == "Checked")
-                text_destination.Text = hb_common_func.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
             // Add more rows to the Chapter menu if needed.
             if (Check_ChapterMarkers.Checked)
@@ -1233,7 +1232,7 @@ namespace Handbrake
                 {
                     if (drp_anamorphic.Text == "None")
                     {
-                        int height = hb_common_func.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value, text_left.Value, text_right.Value, selectedTitle);
+                        int height = Main.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value, text_left.Value, text_right.Value, selectedTitle);
                         if (height != 0)
                             text_height.Text = height.ToString();
                     }
@@ -1553,7 +1552,7 @@ namespace Handbrake
                 text_destination.Text = text_destination.Text.Replace(".m4v", ".mp4");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
-                DataGridView chapterGridView = hb_common_func.chapterNaming(data_chpt, drop_chapterFinish.Text);
+                DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
                 if (chapterGridView != null)
                     data_chpt = chapterGridView;
             }
@@ -1639,7 +1638,7 @@ namespace Handbrake
 
                 using (StreamReader sr = new StreamReader(dvdInfoPath))
                 {
-                    thisDVD = Parsing.DVD.Parse(sr);
+                    thisDVD = DVD.Parse(sr);
                     sr.Close();
                     sr.Dispose();
                 }
@@ -1672,7 +1671,7 @@ namespace Handbrake
 
                 // Now select the longest title
                 if (thisDVD.Titles.Count != 0)
-                    drp_dvdtitle.SelectedItem = hb_common_func.selectLongestTitle(drp_dvdtitle);
+                    drp_dvdtitle.SelectedItem = Main.selectLongestTitle(drp_dvdtitle);
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 if (text_source.Text.ToLower().Contains(".iso") || text_source.Text.ToLower().Contains("VIDEO_TS"))
@@ -2083,6 +2082,7 @@ namespace Handbrake
             base.OnFormClosing(e);
         }
         #endregion
+
         // This is the END of the road ------------------------------------------------------------------------------
     }
 }

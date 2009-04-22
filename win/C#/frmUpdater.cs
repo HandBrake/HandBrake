@@ -6,12 +6,13 @@
 
 using System;
 using System.Windows.Forms;
+using Handbrake.Functions;
 
 namespace Handbrake
 {
     public partial class frmUpdater : Form
     {
-        Functions.AppcastReader appcast = new Functions.AppcastReader();
+        AppcastReader appcast = new AppcastReader();
         public frmUpdater()
         {
             InitializeComponent();

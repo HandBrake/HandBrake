@@ -15,7 +15,7 @@ namespace Handbrake
     {
 
         QueryGenerator hb_common_func = new QueryGenerator();
-        Functions.Encode process = new Functions.Encode();
+        Encode process = new Encode();
         private delegate void UpdateUIHandler();
         String currently_playing = "";
         readonly frmMain mainWindow;
@@ -88,7 +88,7 @@ namespace Handbrake
                 MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                hbProc = process.runCli(this, (string)state);
+                hbProc = process.runCli((string)state);
                 hbProc.WaitForExit();
                 hbProc = null;
                 encodeCompleted();

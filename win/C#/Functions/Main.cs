@@ -1,11 +1,10 @@
-/*  Common.cs $
+/*  Main.cs $
  	
  	   This file is part of the HandBrake source code.
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
@@ -23,7 +22,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Calculate the duration of the selected title and chapters
         /// </summary>
-        public TimeSpan calculateDuration(string chapter_start, string chapter_end, Parsing.Title selectedTitle)
+        public static TimeSpan calculateDuration(string chapter_start, string chapter_end, Parsing.Title selectedTitle)
         {
             TimeSpan Duration = TimeSpan.FromSeconds(0.0);
 
@@ -62,7 +61,7 @@ namespace Handbrake.Functions
         /// <param name="right"></param>
         /// <param name="selectedTitle"></param>
         /// <returns></returns>
-        public int cacluateNonAnamorphicHeight(int width, decimal top, decimal bottom, decimal left, decimal right, Parsing.Title selectedTitle)
+        public static int cacluateNonAnamorphicHeight(int width, decimal top, decimal bottom, decimal left, decimal right, Parsing.Title selectedTitle)
         {
             float aspect = selectedTitle.AspectRatio;
             int aw = 0;
@@ -111,7 +110,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
         /// </summary>
-        public Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
+        public static Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
         {
             int current_largest = 0;
             Parsing.Title title2Select;
@@ -161,7 +160,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
-        public DataGridView chapterNaming(DataGridView data_chpt, string chapter_end)
+        public static DataGridView chapterNaming(DataGridView data_chpt, string chapter_end)
         {
             int i = 0, finish = 0;
 
@@ -185,7 +184,7 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public string autoName(ComboBox drp_dvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
+        public static string autoName(ComboBox drp_dvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
         {
             string AutoNamePath = string.Empty;
             if (drp_dvdtitle.Text != "Automatic")
@@ -227,7 +226,7 @@ namespace Handbrake.Functions
                 if (!dest.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // If there is an auto name path, use it...
-                    if (Properties.Settings.Default.autoNamePath.Trim() != "" && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location") 
+                    if (Properties.Settings.Default.autoNamePath.Trim() != "" && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
                         AutoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destination_filename);
                     else // ...otherwise, output to the source directory
                         AutoNamePath = null;
@@ -248,7 +247,7 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="debug">Turns on debug mode. Don't use on program startup</param>
         /// <returns>Boolean True = Update available</returns>
-        public Boolean updateCheck(Boolean debug)
+        public static Boolean updateCheck(Boolean debug)
         {
             try
             {
@@ -262,7 +261,7 @@ namespace Handbrake.Functions
 
                 if (latest == skip)
                     return false;
-                
+
                 Boolean update = (latest > current);
                 return update;
             }
@@ -278,7 +277,7 @@ namespace Handbrake.Functions
         /// Get's HandBrakes version data from the CLI.
         /// </summary>
         /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
-        public void setCliVersionData()
+        public static void setCliVersionData()
         {
             String line;
 
@@ -324,6 +323,10 @@ namespace Handbrake.Functions
                 MessageBox.Show("Unable to retrieve version information from the CLI. \nError:\n" + e);
             }
         }
+
+        /// <summary>
+        /// Search through the running processes on the system and kill HandBrakeCLI
+        /// </summary>
         private static void killCLI()
         {
             string AppName = "HandBrakeCLI";
@@ -346,7 +349,7 @@ namespace Handbrake.Functions
         /// If it does, it means the last queue did not complete before HandBrake closed.
         /// So, return a boolean if true. 
         /// </summary>
-        public Boolean check_queue_recovery()
+        public static Boolean check_queue_recovery()
         {
             try
             {

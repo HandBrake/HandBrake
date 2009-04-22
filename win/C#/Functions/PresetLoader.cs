@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace Handbrake.Functions
 {
@@ -20,7 +19,7 @@ namespace Handbrake.Functions
             // Setup the GUI
             // ---------------------------
 
-            #region source
+            #region Source
             // Reset some vaules to stock first to prevent errors.
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
 
@@ -36,9 +35,7 @@ namespace Handbrake.Functions
 
             #endregion
 
-            #region destination
-
-            mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
+            #region Destination and Output Settings
 
             if (presetQuery.Format != null)
             {
@@ -148,6 +145,8 @@ namespace Handbrake.Functions
             #endregion
 
             #region Video
+            mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
+
             if (presetQuery.AverageVideoBitrate != null)
             {
                 mainWindow.radio_avgBitrate.Checked = true;
@@ -186,7 +185,7 @@ namespace Handbrake.Functions
                     // with a different granularity, so, round and try again.
                     if (value == 0)
                     {
-                        double val =  Math.Round(calculated, 0);
+                        double val = Math.Round(calculated, 0);
                         int.TryParse(val.ToString(), out value);
                     }
 
@@ -226,51 +225,17 @@ namespace Handbrake.Functions
             // Clear the audio listing
             mainWindow.lv_audioList.Items.Clear();
 
-            // Create a new row for the Audio list based on the currently selected items in the dropdown.
-            ListViewItem newTrack;
-            if (presetQuery.AudioTrack1 != "None")
-            {
-                newTrack = new ListViewItem("Automatic");
-                newTrack.SubItems.Add(presetQuery.AudioEncoder1);
-                newTrack.SubItems.Add(presetQuery.AudioTrackMix1);
-                newTrack.SubItems.Add(presetQuery.AudioSamplerate1);
-                newTrack.SubItems.Add(presetQuery.AudioBitrate1);
-                newTrack.SubItems.Add(presetQuery.DRC1.ToString());
-                mainWindow.lv_audioList.Items.Add(newTrack);
-            }
-
-            if (presetQuery.AudioTrack2 != "None")
-            {
-                newTrack = new ListViewItem("Automatic");
-                newTrack.SubItems.Add(presetQuery.AudioEncoder2);
-                newTrack.SubItems.Add(presetQuery.AudioTrackMix2);
-                newTrack.SubItems.Add(presetQuery.AudioSamplerate2);
-                newTrack.SubItems.Add(presetQuery.AudioBitrate2);
-                newTrack.SubItems.Add(presetQuery.DRC2.ToString());
-                mainWindow.lv_audioList.Items.Add(newTrack);
-            }
-
-            if (presetQuery.AudioTrack3 != "None")
-            {
-                newTrack = new ListViewItem("Automatic");
-                newTrack.SubItems.Add(presetQuery.AudioEncoder3);
-                newTrack.SubItems.Add(presetQuery.AudioTrackMix3);
-                newTrack.SubItems.Add(presetQuery.AudioSamplerate3);
-                newTrack.SubItems.Add(presetQuery.AudioBitrate3);
-                newTrack.SubItems.Add(presetQuery.DRC3.ToString());
-                mainWindow.lv_audioList.Items.Add(newTrack);
-            }
-
-            if (presetQuery.AudioTrack4 != "None")
-            {
-                newTrack = new ListViewItem("Automatic");
-                newTrack.SubItems.Add(presetQuery.AudioEncoder4);
-                newTrack.SubItems.Add(presetQuery.AudioTrackMix4);
-                newTrack.SubItems.Add(presetQuery.AudioSamplerate4);
-                newTrack.SubItems.Add(presetQuery.AudioBitrate4);
-                newTrack.SubItems.Add(presetQuery.DRC4.ToString());
-                mainWindow.lv_audioList.Items.Add(newTrack);
-            }
+            if (presetQuery.AudioInformation != null)
+                foreach (AudioTrack track in presetQuery.AudioInformation)
+                {
+                    ListViewItem newTrack = new ListViewItem("Automatic");
+                    newTrack.SubItems.Add(track.Encoder);
+                    newTrack.SubItems.Add(track.MixDown);
+                    newTrack.SubItems.Add(track.SampleRate);
+                    newTrack.SubItems.Add(track.Bitrate);
+                    newTrack.SubItems.Add(track.DRC);
+                    mainWindow.lv_audioList.Items.Add(newTrack);
+                }
 
             // Subtitle Stuff
             mainWindow.drp_subtitle.Text = presetQuery.Subtitles;
