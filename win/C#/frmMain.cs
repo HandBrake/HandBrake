@@ -31,7 +31,6 @@ namespace Handbrake
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private Form splash;
-        private string lastAction;
         public int maxWidth;
         public int maxHeight;
 
@@ -42,10 +41,8 @@ namespace Handbrake
         // Applicaiton Startup ************************************************
 
         #region Application Startup
-
         public frmMain()
         {
-           
             // Load and setup the splash screen in this thread
             splash = new frmSplashScreen();
             splash.Show();
@@ -124,13 +121,9 @@ namespace Handbrake
             splash.Dispose();
             this.Enabled = true;
 
-            // Event Handlers
+            // Event Handlers and Queue Recovery
             events();
-
-            // Queue Recovery
             queueRecovery();
-
-            
         }
 
         // Startup Functions   
@@ -571,8 +564,6 @@ namespace Handbrake
         }
         private void loadNormalPreset()
         {
-            treeView_presets.Nodes.Find("Normal", true);
-
             foreach (TreeNode treenode in treeView_presets.Nodes)
             {
                 foreach (TreeNode node in treenode.Nodes)
@@ -580,7 +571,7 @@ namespace Handbrake
                     if (node.Text.Equals("Normal"))
                         treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
                 }
-            }
+            }  
         }
         #endregion
 
@@ -1120,7 +1111,6 @@ namespace Handbrake
                     break;
             }
         }
-
         /// <summary>
         /// Set the container format options
         /// </summary>
@@ -1696,7 +1686,6 @@ namespace Handbrake
                 enableGUI();
             }
         }
-
         private void enableGUI()
         {
             try
@@ -1808,7 +1797,6 @@ namespace Handbrake
         #endregion
 
         #region DVD Drive Detection
-        // Source Button Drive Detection
         private delegate void ProgressUpdateHandler();
         private void getDriveInfoThread()
         {
@@ -1975,93 +1963,18 @@ namespace Handbrake
 
         #region Public Methods
         /// <summary>
-        /// Reload the preset panel display
+        /// Access the preset Handler and setup the preset panel.
         /// </summary>
         public void loadPresetPanel()
         {
-            presetHandler.loadPresetData();
-            treeView_presets.Nodes.Clear();
-
-            TreeNode preset_treeview;
-            TreeNode rootNode = new TreeNode();
-            TreeNode rootNodeTwo = new TreeNode();
-            TreeNode childNode;
-            int workingLevel = 0;
-            string previousCategory = String.Empty, currentCategory = String.Empty;
-
-            List<Preset> presetNameList = presetHandler.getBuildInPresets();
-            if (presetNameList.Count != 0)
-            {
-                foreach (Preset preset in presetNameList)
-                {
-                    // Handle Root Nodes
-
-                    // First Case - No presets have been read yet so setup the root category
-                    if (preset.Level == 1 && currentCategory == String.Empty)
-                    {
-                        rootNode = new TreeNode(preset.Category);
-                        workingLevel = preset.Level;
-                        currentCategory = preset.Category;
-                        previousCategory = preset.Category;
-                    }
-
-                    // Second Case - This is the first sub child node.
-                    if (preset.Level == 2 && workingLevel == 1 && currentCategory != preset.Category)
-                    {
-                        rootNodeTwo = new TreeNode(preset.Category);
-                        workingLevel = preset.Level;
-                        currentCategory = preset.Category;
-                        rootNode.Nodes.Add(rootNodeTwo);
-                    }
-
-                    // Third Case - Any presets the sub presets detected in the above if statment.
-                    if (preset.Level == 1 && workingLevel == 2)
-                    {
-                        workingLevel = preset.Level;
-                        currentCategory = preset.Category;
-                    }
-
-                    // Fourth Case - We've finished this root node and are onto the next root node.
-                    if (preset.Level == 1 && workingLevel == 1 && previousCategory != preset.Category)
-                    {
-                        treeView_presets.Nodes.Add(rootNode); // Add the finished node
-
-                        rootNode = new TreeNode(preset.Category);
-                        workingLevel = preset.Level;
-                        currentCategory = preset.Category;
-                        previousCategory = preset.Category;
-                    }
-
-                    // Handle Child Nodes
-                    // Add First level child nodes to the current root node
-                    if (preset.Level == 1 && workingLevel == 1 && currentCategory == preset.Category)
-                    {
-                        childNode = new TreeNode(preset.Name);
-                        rootNode.Nodes.Add(childNode);
-                    }
-
-                    // Add Second level child nodes to the current sub root node
-                    if (preset.Level == 2 && workingLevel == 2 && currentCategory == preset.Category)
-                    {
-                        childNode = new TreeNode(preset.Name);
-                        rootNodeTwo.Nodes.Add(childNode);
-                    }
-                }
-
-                // Add the final root node which does not get added above.
-                treeView_presets.Nodes.Add(rootNode);
-            }
-
-            // User Presets
-            List<string> presetNames = presetHandler.getUserPresetNames();
-            foreach (string preset in presetNames)
-            {
-                preset_treeview = new TreeNode(preset) { ForeColor = Color.Black };
-
-                // Now Fill Out List View with Items
-                treeView_presets.Nodes.Add(preset_treeview);
-            }
+            presetHandler.getPresetPanel(ref treeView_presets);
+            treeView_presets.Update();
         }
+
+        /// <summary>
+        /// Either Encode or Scan was last performed.
+        /// </summary>
+        public string lastAction { get; set; }
         #endregion
 
         #region overrides
@@ -2083,6 +1996,6 @@ namespace Handbrake
         }
         #endregion
 
-        // This is the END of the road ------------------------------------------------------------------------------
+        // This is the END of the road ****************************************
     }
 }

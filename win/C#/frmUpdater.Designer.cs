@@ -84,6 +84,7 @@ namespace Handbrake
             // 
             this.btn_skip.AutoSize = true;
             this.btn_skip.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_skip.BackColor = System.Drawing.Color.Transparent;
             this.btn_skip.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_skip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_skip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -99,6 +100,7 @@ namespace Handbrake
             // 
             this.btn_installUpdate.AutoSize = true;
             this.btn_installUpdate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_installUpdate.BackColor = System.Drawing.Color.Transparent;
             this.btn_installUpdate.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_installUpdate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_installUpdate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -114,6 +116,7 @@ namespace Handbrake
             // 
             this.btn_remindLater.AutoSize = true;
             this.btn_remindLater.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btn_remindLater.BackColor = System.Drawing.Color.Transparent;
             this.btn_remindLater.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_remindLater.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_remindLater.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));

@@ -14,6 +14,8 @@ namespace Handbrake.Presets
         /// </summary>
         public string Category { get; set; }
 
+        public string TopCategory { get; set; }
+
         /// <summary>
         /// Get or Set the preset name
         /// </summary>

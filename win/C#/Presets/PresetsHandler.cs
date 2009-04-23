@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Collections;
 
 namespace Handbrake.Presets
 {
@@ -24,7 +26,7 @@ namespace Handbrake.Presets
         {
             if (checkIfPresetExists(presetName) == false)
             {
-                Preset newPreset = new Preset {Name = presetName, Query = query, PictureSettings = pictureSettings};
+                Preset newPreset = new Preset { Name = presetName, Query = query, PictureSettings = pictureSettings };
                 user_presets.Add(newPreset);
                 updateUserPresetsFile();
                 return true;
@@ -89,36 +91,10 @@ namespace Handbrake.Presets
         }
 
         /// <summary>
-        /// Get a List of all the built in preset names.
-        /// </summary>
-        /// <returns>List<String> of preset names</returns>
-        public List<Preset> getBuildInPresets()
-        {
-            return presets;
-        }
-
-        /// <summary>
-        /// Get a List of all the User preset names.
-        /// </summary>
-        /// <returns>List<String> of preset names</returns>
-        public List<string> getUserPresetNames()
-        {
-            List<string> names = new List<string>();
-
-            // User Presets
-            foreach (Preset item in user_presets)
-            {
-                names.Add(item.Name);
-            }
-
-            return names;
-        }
-
-        /// <summary>
         /// Return the CLI query for a preset name given in name
         /// </summary>
         /// <param name="name">String, The preset's name</param>
-        /// <returns>String, the CLI query for the given preset name</returns>
+        /// <returns>String, the CLI query for the given preset name</returns>    not
         public Preset getPreset(string name)
         {
             // Built In Presets
@@ -146,12 +122,9 @@ namespace Handbrake.Presets
             // Create a new tempory file and execute the CLI to get the built in presets.
             string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
             string presetsPath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
-
             string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
 
-            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine)
-                                                {WindowStyle = ProcessWindowStyle.Hidden};
-
+            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
             Process hbproc = Process.Start(hbGetPresets);
             if (hbproc != null)
             {
@@ -163,9 +136,11 @@ namespace Handbrake.Presets
             // Clear the current built in presets and now parse the tempory presets file.
             presets.Clear();
             string filePath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
+            
             if (File.Exists(filePath))
             {
                 StreamReader presetInput = new StreamReader(filePath);
+
                 int level = 1;
                 string category = String.Empty;
                 string level_1_category = String.Empty;
@@ -173,26 +148,26 @@ namespace Handbrake.Presets
                 while (!presetInput.EndOfStream)
                 {
                     string line = presetInput.ReadLine();
-                    if (line.Contains("<") && !line.Contains("<<"))
+                    if (line.Contains("<") && !line.Contains("<<")) // Found the beginning of a preset block 
                     {
                         level = 1;
                         category = line.Replace("<", "").Trim();
                         level_1_category = category;
                     }
 
-                    if (line.Contains("<<"))
+                    if (line.Contains("<<")) // found a sub preset block
                     {
                         level = 2;
                         category = line.Replace("<<", "").Trim();
                     }
 
-                    if (line.Trim().Contains(">>"))
+                    if (line.Trim().Contains(">>")) // End of sub preset block
                     {
                         level = 1;
                         category = level_1_category;
                     }
 
-                    if (line.Contains("+"))
+                    if (line.Contains("+")) // A Preset
                     {
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(line);
@@ -201,6 +176,7 @@ namespace Handbrake.Presets
                                                {
                                                    Level = level,
                                                    Category = category,
+                                                   TopCategory = level_1_category,
                                                    Name = presetName[0].Replace("+", "").Trim(),
                                                    Query = presetName[2]
                                                };
@@ -219,7 +195,7 @@ namespace Handbrake.Presets
         /// Load in the preset data from presets.xml and user_presets.xml
         /// Load it into the 2 arraylist's presets and user_presets
         /// </summary>
-        public void loadPresetData()
+        private void loadPresetData()
         {
             // First clear the presets arraylists
             presets.Clear();
@@ -257,6 +233,65 @@ namespace Handbrake.Presets
                                 user_presets.Add(preset);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Setup the frmMain preset panel
+        /// </summary>
+        /// <param name="presetPanel"></param>
+        public void getPresetPanel(ref TreeView presetPanel)
+        {
+            this.loadPresetData();
+            presetPanel.Nodes.Clear();
+
+            if (presets.Count != 0)
+            {
+                string category = presets[0].Category;
+                TreeNode rootNode = new TreeNode(presets[0].Category);
+                TreeNode childNode = null;
+                Boolean addChildNode = false;
+
+                foreach (Preset preset in presets)
+                {
+                    // Deal with Root
+                    if (preset.Category == category && preset.TopCategory == category)
+                        rootNode.Nodes.Add(preset.Name);
+                    else if (preset.Category != category && preset.TopCategory == category)
+                        // Deal with child nodes for that root
+                    {
+                        if (childNode == null) // For the first child node
+                            childNode = new TreeNode(preset.Category);
+
+                        childNode.Nodes.Add(preset.Name);
+                        addChildNode = true;
+                    }
+                    else if (preset.Category != category && preset.TopCategory != category && preset.Level == 1)
+                        // Deal with changing root nodes
+                    {
+                        // If we find there are child nodes, add them to the current root node set before adding the rootnode to the panel.
+                        if (addChildNode)
+                        {
+                            rootNode.Nodes.Add(childNode);
+                            childNode = null;
+                            addChildNode = false;
+                        }
+                        // Add the current rootnodes to the panel, and prepare for a new category of presets
+                        presetPanel.Nodes.Add(rootNode);
+                        rootNode = new TreeNode(preset.Category);
+                        rootNode.Nodes.Add(preset.Name);
+
+                        category = preset.Category;
+                    }
+                }
+                presetPanel.Nodes.Add(rootNode); // Add the final set of nodes 
+            }
+
+            // User Presets
+            foreach (Preset preset in user_presets)
+            {
+                TreeNode preset_treeview = new TreeNode(preset.Name) { ForeColor = Color.Black };
+                presetPanel.Nodes.Add(preset_treeview);  
             }
         }
 

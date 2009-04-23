@@ -14,7 +14,7 @@ using System.Xml.Serialization;
 
 namespace Handbrake.Functions
 {
-    class Main
+    static class Main
     {
         // Private Variables
         private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Queue.QueueItem>));
