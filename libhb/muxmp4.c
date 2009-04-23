@@ -18,9 +18,7 @@ struct hb_mux_object_s
     /* libmp4v2 handle */
     MP4FileHandle file;
 
-    /* Cumulated durations so far, in output & input timescale units (see MP4Mux) */
-    int64_t sum_dur;        // duration in output timescale units
-    int64_t sum_dur_in;     // duration in input 90KHz timescale units
+    int64_t sum_dur;    // sum of video frame durations so far
 
     // bias to keep render offsets in ctts atom positive (set up by encx264)
     int64_t init_delay;
@@ -29,11 +27,6 @@ struct hb_mux_object_s
     MP4TrackId chapter_track;
     int current_chapter;
     uint64_t chapter_duration;
-
-    /* Sample rate of the first audio track.
-     * Used for the timescale
-     */
-    int samplerate;
 };
 
 struct hb_mux_data_s
@@ -84,17 +77,6 @@ static int MP4Init( hb_mux_object_t * m )
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
 
-    if( (audio = hb_list_item(title->list_audio, 0)) != NULL )
-    {
-        /* Need the sample rate of the first audio track to use as the timescale. */
-        m->samplerate = audio->config.out.samplerate;
-        audio = NULL;
-    }
-    else
-    {
-        m->samplerate = 90000;
-    }
-
     /* Create an empty mp4 file */
     if (job->largeFileSize)
     /* Use 64-bit MP4 file */
@@ -119,11 +101,7 @@ static int MP4Init( hb_mux_object_t * m )
     mux_data      = malloc( sizeof( hb_mux_data_t ) );
     job->mux_data = mux_data;
 
-    /* When using the standard 90000 timescale, QuickTime tends to have
-       synchronization issues (audio not playing at the correct speed).
-       To workaround this, we use the audio samplerate as the
-       timescale */
-    if (!(MP4SetTimeScale( m->file, m->samplerate )))
+    if (!(MP4SetTimeScale( m->file, 90000 )))
     {
         hb_error("muxmp4.c: MP4SetTimeScale failed!");
         *job->die = 1;
@@ -134,7 +112,7 @@ static int MP4Init( hb_mux_object_t * m )
     {
         /* Stolen from mp4creator */
         MP4SetVideoProfileLevel( m->file, 0x7F );
-		mux_data->track = MP4AddH264VideoTrack( m->file, m->samplerate,
+		mux_data->track = MP4AddH264VideoTrack( m->file, 90000,
 		        MP4_INVALID_DURATION, job->width, job->height,
 		        job->config.h264.sps[1], /* AVCProfileIndication */
 		        job->config.h264.sps[2], /* profile_compat */
@@ -169,7 +147,7 @@ static int MP4Init( hb_mux_object_t * m )
     else /* FFmpeg or XviD */
     {
         MP4SetVideoProfileLevel( m->file, MPEG4_SP_L3 );
-        mux_data->track = MP4AddVideoTrack( m->file, m->samplerate,
+        mux_data->track = MP4AddVideoTrack( m->file, 90000,
                 MP4_INVALID_DURATION, job->width, job->height,
                 MP4_MPEG4_VIDEO_TYPE );
         if (mux_data->track == MP4_INVALID_TRACK_ID)
@@ -468,8 +446,14 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         // (we'll need it for both the video frame & the chapter track)
         if ( m->init_delay )
         {
-            offset = ( buf->start + m->init_delay ) * m->samplerate / 90000 -
-                     m->sum_dur;
+            offset = buf->start + m->init_delay - m->sum_dur;
+            if ( offset < 0 )
+            {
+                hb_log("MP4Mux: illegal render offset %lld, start %lld,"
+                       "stop %lld, sum_dur %lld",
+                       offset, buf->start, buf->stop, m->sum_dur );
+                offset = 0;
+            }
         }
 
         /* Add the sample before the new frame.
@@ -484,56 +468,45 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             // the duration of the previous chapter is the duration up to but
             // not including the current frame minus the duration of all
             // chapters up to the previous.
+            // The initial and final chapters can be very short (a second or
+            // less) since they're not really chapters but just a placeholder to
+            // insert a cell command. We don't write chapters shorter than 1.5 sec.
             duration = m->sum_dur - m->chapter_duration + offset;
-            if ( duration <= 0 )
+            if ( duration >= (90000*3)/2 )
             {
-                /* The initial & final chapters can have very short durations
-                 * (less than the error in our total duration estimate) so
-                 * the duration calc above can result in a negative number.
-                 * when this happens give the chapter a short duration (1/3
-                 * of an ntsc frame time). */
-                duration = 1000 * m->samplerate / 90000;
+                chapter = hb_list_item( m->job->title->list_chapter,
+                                        buf->new_chap - 2 );
+
+                MP4AddChapter( m->file,
+                               m->chapter_track,
+                               duration,
+                               (chapter != NULL) ? chapter->title : NULL);
+
+                m->current_chapter = buf->new_chap;
+                m->chapter_duration += duration;
             }
-
-            chapter = hb_list_item( m->job->title->list_chapter,
-                                    buf->new_chap - 2 );
-
-            MP4AddChapter( m->file,
-                           m->chapter_track,
-                           duration,
-                           (chapter != NULL) ? chapter->title : NULL);
-
-            m->current_chapter = buf->new_chap;
-            m->chapter_duration += duration;
         }
 
-        // since we're changing the sample rate we need to keep track of
-        // the truncation bias so that the audio and video don't go out
-        // of sync. m->sum_dur_in is the sum of the input durations so far.
-        // m->sum_dur is the sum of the output durations. Their difference
-        // (in output sample rate units) is the accumulated truncation bias.
-        int64_t bias = ( m->sum_dur_in * m->samplerate / 90000 ) - m->sum_dur;
-        int64_t dur_in = buf->stop - buf->start;
-        duration = dur_in * m->samplerate / 90000 + bias;
+        // We're getting the frames in decode order but the timestamps are
+        // for presentation so we have to use durations and effectively
+        // compute a DTS.
+        duration = buf->stop - buf->start;
         if ( duration <= 0 )
         {
             /* We got an illegal mp4/h264 duration. This shouldn't
                be possible and usually indicates a bug in the upstream code.
                Complain in the hope that someone will go find the bug but
                try to fix the error so that the file will still be playable. */
-            hb_log("MP4Mux: illegal duration %lld, bias %lld, start %lld (%lld),"
-                   "stop %lld (%lld), sum_dur %lld",
-                   duration, bias, buf->start * m->samplerate / 90000, buf->start,
-                   buf->stop * m->samplerate / 90000, buf->stop, m->sum_dur );
+            hb_log("MP4Mux: illegal duration %lld, start %lld,"
+                   "stop %lld, sum_dur %lld",
+                   duration, buf->start, buf->stop, m->sum_dur );
             /* we don't know when the next frame starts so we can't pick a
-               valid duration for this one so we pick something "short"
-               (roughly 1/3 of an NTSC frame time) and rely on the bias calc
-               for the next frame to correct things (a duration underestimate
-               just results in a large bias on the next frame). */
-            duration = 1000 * m->samplerate / 90000;
+               valid duration for this one. we pick something "short"
+               (roughly 1/3 of an NTSC frame time) to take time from
+               the next frame. */
+            duration = 1000;
         }
         m->sum_dur += duration;
-        m->sum_dur_in += dur_in;
     }
     else
     {
@@ -569,8 +542,8 @@ static int MP4End( hb_mux_object_t * m )
         hb_chapter_t *chapter = NULL;
         int64_t duration = m->sum_dur - m->chapter_duration;
         /* The final chapter can have a very short duration - if it's less
-         * than a second just skip it. */
-        if ( duration >= m->samplerate )
+         * than 1.5 seconds just skip it. */
+        if ( duration >= (90000*3)/2 )
         {
 
             chapter = hb_list_item( m->job->title->list_chapter,
@@ -587,7 +560,7 @@ static int MP4End( hb_mux_object_t * m )
     {
            // Insert track edit to get A/V back in sync.  The edit amount is
            // the init_delay.
-           int64_t edit_amt = m->init_delay * m->samplerate / 90000;
+           int64_t edit_amt = m->init_delay;
            MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
                            MP4GetTrackDuration(m->file, 1), 0);
             if ( m->job->chapter_markers )
