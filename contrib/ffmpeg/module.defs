@@ -24,7 +24,7 @@ FFMPEG.CONFIGURE.extra = \
     --enable-libfaad \
     --enable-muxer=ipod \
     --enable-swscale \
-    --cc="$(GCC.gcc)" \
+    --cc="$(FFMPEG.GCC.gcc)" \
     --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
