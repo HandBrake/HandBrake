@@ -4509,7 +4509,7 @@ the required multiple.</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="PictureAlignment">
+                                  <object class="GtkComboBox" id="PictureModulus">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <signal name="changed" handler="scale_changed_cb"/>

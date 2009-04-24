@@ -176,7 +176,7 @@
 		<false />
 		<key>PictureLooseCrop</key>
 		<false />
-		<key>PictureAlignment</key>
+		<key>PictureModulus</key>
 		<integer>16</integer>
 		<key>PictureDeblock</key>
 		<integer>0</integer>

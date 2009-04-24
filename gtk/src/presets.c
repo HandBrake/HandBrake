@@ -2261,25 +2261,25 @@ import_xlat_preset(GValue *dict)
 	{
 	case 0:
 	{
-		if (ghb_dict_lookup(dict, "PictureAlignment") == NULL)
-			ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+		if (ghb_dict_lookup(dict, "PictureModulus") == NULL)
+			ghb_dict_insert(dict, g_strdup("PictureModulus"), 
 							ghb_int_value_new(16));
 	} break;
 	case 1:
 	{
-		ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+		ghb_dict_insert(dict, g_strdup("PictureModulus"), 
 						ghb_int_value_new(1));
 	} break;
 	case 2:
 	{
-		if (ghb_dict_lookup(dict, "PictureAlignment") == NULL)
-			ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+		if (ghb_dict_lookup(dict, "PictureModulus") == NULL)
+			ghb_dict_insert(dict, g_strdup("PictureModulus"), 
 							ghb_int_value_new(16));
 	} break;
 	default:
 	{
-		if (ghb_dict_lookup(dict, "PictureAlignment") == NULL)
-			ghb_dict_insert(dict, g_strdup("PictureAlignment"), 
+		if (ghb_dict_lookup(dict, "PictureModulus") == NULL)
+			ghb_dict_insert(dict, g_strdup("PictureModulus"), 
 							ghb_int_value_new(16));
 	} break;
 	}

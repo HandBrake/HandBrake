@@ -313,7 +313,7 @@ typedef struct
 combo_name_map_t combo_name_map[] =
 {
 	{"PicturePAR", &par_opts},
-	{"PictureAlignment", &alignment_opts},
+	{"PictureModulus", &alignment_opts},
 	{"LoggingLevel", &logging_opts},
 	{"VideoQualityGranularity", &vqual_granularity_opts},
 	{"FileFormat", &container_opts},
@@ -2005,7 +2005,7 @@ ghb_update_ui_combo_box(GtkBuilder *builder, const gchar *name, gint user_data, 
 		audio_track_opts_set(builder, "AudioTrack", user_data);
 		generic_opts_set(builder, "VideoQualityGranularity", &vqual_granularity_opts);
 		generic_opts_set(builder, "PicturePAR", &par_opts);
-		generic_opts_set(builder, "PictureAlignment", &alignment_opts);
+		generic_opts_set(builder, "PictureModulus", &alignment_opts);
 		generic_opts_set(builder, "LoggingLevel", &logging_opts);
 		generic_opts_set(builder, "FileFormat", &container_opts);
 		generic_opts_set(builder, "PictureDeinterlace", &deint_opts);
@@ -2583,7 +2583,7 @@ picture_settings_deps(signal_user_data_t *ud)
 	if (pic_par == 1)
 	{
 		ghb_ui_update(ud, "autoscale", ghb_boolean_value(TRUE));
-		ghb_ui_update(ud, "PictureAlignment", ghb_int_value(2));
+		ghb_ui_update(ud, "PictureModulus", ghb_int_value(2));
 		ghb_ui_update(ud, "PictureLooseCrop", ghb_boolean_value(TRUE));
 	}
 	enable_keep_aspect = (pic_par != 1 && pic_par != 2);
@@ -2599,7 +2599,7 @@ picture_settings_deps(signal_user_data_t *ud)
 	enable_disp_width = (pic_par == 3) && !keep_aspect;
 	enable_disp_height = FALSE;
 
-	widget = GHB_WIDGET(ud->builder, "PictureAlignment");
+	widget = GHB_WIDGET(ud->builder, "PictureModulus");
 	gtk_widget_set_sensitive(widget, pic_par != 1);
 	widget = GHB_WIDGET(ud->builder, "PictureLooseCrop");
 	gtk_widget_set_sensitive(widget, pic_par != 1);
@@ -2660,7 +2660,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 
 	
 	// First configure widgets
-	mod = ghb_settings_combo_int(ud->settings, "PictureAlignment");
+	mod = ghb_settings_combo_int(ud->settings, "PictureModulus");
 	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
 	keep_aspect = ghb_settings_get_boolean(ud->settings, "PictureKeepRatio");
 	autocrop = ghb_settings_get_boolean(ud->settings, "PictureAutoCrop");
@@ -2930,7 +2930,7 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 
 	job->anamorphic.mode = ghb_settings_combo_int(settings, "PicturePAR");
 	job->anamorphic.modulus = 
-		ghb_settings_combo_int(settings, "PictureAlignment");
+		ghb_settings_combo_int(settings, "PictureModulus");
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
 
@@ -3475,7 +3475,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
 
 	job->anamorphic.mode = ghb_settings_combo_int(js, "PicturePAR");
-	job->anamorphic.modulus = ghb_settings_combo_int(js, "PictureAlignment");
+	job->anamorphic.modulus = ghb_settings_combo_int(js, "PictureModulus");
 
 	/* Add selected filters */
 	job->filters = hb_list_init();
