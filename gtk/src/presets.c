@@ -3071,6 +3071,11 @@ presets_drag_motion_cb(
 	gboolean src_folder, dst_folder;
 	GValue *preset;
 	gint tree_depth, ii;
+	GtkWidget *widget;
+
+	widget = gtk_drag_get_source_widget(ctx);
+	if (widget == NULL || widget != tv)
+		return TRUE;
 
 	// Get the type of the object being dragged
 	srctv = GTK_TREE_VIEW(gtk_drag_get_source_widget(ctx));

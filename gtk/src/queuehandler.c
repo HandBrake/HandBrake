@@ -778,6 +778,11 @@ queue_drag_motion_cb(
 	GtkTreeView *srctv;
 	GtkTreeModel *model;
 	GtkTreeSelection *select;
+	GtkWidget *widget;
+
+	widget = gtk_drag_get_source_widget(ctx);
+	if (widget == NULL || widget != tv)
+		return TRUE;
 
 	// This bit checks to see if the source is allowed to be
 	// moved.  Only pending and canceled items may be moved.
