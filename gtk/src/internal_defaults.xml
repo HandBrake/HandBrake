@@ -4,6 +4,8 @@
 <dict>
 	<key>Initialization</key>
 	<dict>
+		<key>angle</key>
+		<integer>1</integer>
 		<key>anamorphic</key>
 		<true />
 		<key>autoscale</key>
@@ -117,6 +119,8 @@
 		<key>LoggingLevel</key>
 		<string>1</string>
 		<key>nocheckvquality</key>
+		<false />
+		<key>use_dvdnav</key>
 		<false />
 		<key>reduce_hd_preview</key>
 		<true />

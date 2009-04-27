@@ -47,6 +47,7 @@
         @"English",         @"DefaultLanguage",
         @"NO",              @"DefaultMpegName",
         @"YES",             @"DefaultCrf",
+        @"NO",              @"UseDvdNav",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
         desktopDirectory,   @"LastDestinationDirectory",

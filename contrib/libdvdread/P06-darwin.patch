@@ -1,0 +1,25 @@
+diff -Naur libdvdread.orig/configure.ac libdvdread/configure.ac
+--- libdvdread.orig/configure.ac	2009-01-08 17:57:10.000000000 -0500
++++ libdvdread/configure.ac	2009-04-24 01:50:56.000000000 -0400
+@@ -145,6 +145,9 @@
+   *cygwin*)
+     LDFLAGS="-no-undefined $LDFLAGS"
+     ;;
++  *darwin*)
++    CFLAGS="${CFLAGS} -D__DARWIN__"
++    ;;
+   *os2*)
+     LDFLAGS="-no-undefined -Zbin-files $LDFLAGS"
+     ;;
+diff -Naur libdvdread.orig/src/dvd_reader.c libdvdread/src/dvd_reader.c
+--- libdvdread.orig/src/dvd_reader.c	2009-03-13 21:28:21.000000000 -0400
++++ libdvdread/src/dvd_reader.c	2009-04-24 01:35:43.000000000 -0400
+@@ -314,7 +314,7 @@
+   char *new_path;
+ 
+   /* If it doesn't start with "/dev/" or does start with "/dev/r" exit */
+-  if( !strncmp( path, "/dev/",  5 ) || strncmp( path, "/dev/r", 6 ) )
++  if( strncmp( path, "/dev/",  5 ) || !strncmp( path, "/dev/r", 6 ) )
+     return (char *) strdup( path );
+ 
+   /* Replace "/dev/" with "/dev/r" */

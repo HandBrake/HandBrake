@@ -2,13 +2,13 @@
 
 if MINGW
 HB_LIBS= \
-	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread \
+	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdnav -ldvdread \
 	-lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate \
 	-lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz \
 	-lbz2 -liberty -lpthreadGC2
 else
 HB_LIBS= \
-	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdread \
+	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdnav -ldvdread \
 	-lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate \
 	-lx264 -lxvidcore -lmp4v2 -lswscale -ltheora -lfaad -lz \
 	-lbz2 -lpthread

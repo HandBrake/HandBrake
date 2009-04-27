@@ -1,6 +1,7 @@
---- libdvdread.orig/dvdread/dvd_input.h	2005-09-06 12:23:00.000000000 -0700
-+++ libdvdread/dvdread/dvd_input.h	2009-03-25 15:01:39.000000000 -0700
-@@ -28,6 +28,24 @@
+diff -Naur libdvdread.orig/src/dvd_input.h libdvdread/src/dvd_input.h
+--- libdvdread.orig/src/dvd_input.h	2008-10-03 13:11:30.000000000 -0700
++++ libdvdread/src/dvd_input.h	2009-04-23 13:47:04.000000000 -0700
+@@ -29,6 +29,24 @@
  
  #define DVDINPUT_READ_DECRYPT    (1 << 0)
  
@@ -25,4 +26,3 @@
  typedef struct dvd_input_s *dvd_input_t;
  
  /**
-

@@ -74,6 +74,7 @@ typedef struct
 	gint minutes;
 	gint seconds;
 	gint64 duration;
+	gint angle_count;
 } ghb_title_info_t;
 
 typedef struct

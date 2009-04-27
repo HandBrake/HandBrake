@@ -42,6 +42,7 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField          * fScanSrcTitleNumField;
     IBOutlet NSButton             * fScanSrcTitleCancelButton;
     IBOutlet NSButton             * fScanSrcTitleOpenButton;
+
     
     /* Picture Settings */
     PictureController            * fPictureController;
@@ -68,6 +69,11 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSTextField         * fSrcTitleField;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
+    
+    /* Angle selection popup (only used for libdvdnav */
+    IBOutlet NSTextField         * fSrcAngleLabel;
+    IBOutlet NSPopUpButton       * fSrcAnglePopUp;
+    
     IBOutlet NSTextField         * fSrcChapterField;
     IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
     IBOutlet NSTextField         * fSrcChapterToField;

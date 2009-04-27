@@ -225,6 +225,10 @@ static void ReaderFunc( void * _r )
             hb_dvd_close( &r->dvd );
             return;
         }
+        if (r->job->angle)
+        {
+            hb_dvd_set_angle( r->dvd, r->job->angle );
+        }
 
         if ( r->job->start_at_preview )
         {

@@ -83,6 +83,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Init libhb with check for updates libhb style set to "0" so its ignored and lets sparkle take care of it */
     int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
     fHandle = hb_init(loggingLevel, 0);
+    /* Optional dvd nav UseDvdNav*/
+    hb_dvd_set_dvdnav([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]);
     /* Init a separate instance of libhb for user scanning and setting up jobs */
     fQueueEncodeLibhb = hb_init(loggingLevel, 0);
     
@@ -359,6 +361,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 		[fPresetDrawer open];
 	}
     
+    /* Initially set the dvd angle widgets to hidden (dvdnav only) */
+    [fSrcAngleLabel setHidden:YES];
+    [fSrcAnglePopUp setHidden:YES];
+    
     /* Destination box*/
     NSMenuItem *menuItem;
     [fDstFormatPopUp removeAllItems];
@@ -487,7 +493,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudTrack1BitratePopUp, fAudTrack2BitratePopUp, fAudTrack3BitratePopUp, fAudTrack4BitratePopUp,
         fAudDrcLabel, fAudTrack1DrcSlider, fAudTrack1DrcField, fAudTrack2DrcSlider,
         fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
-        fQueueStatus,fPresetsAdd,fPresetsDelete,
+        fQueueStatus,fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
     fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel};
     
@@ -1903,6 +1909,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSString stringWithUTF8String: title->dvd] forKey:@"SourcePath"];
     [queueFileJob setObject:[fSrcDVD2Field stringValue] forKey:@"SourceName"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"ChapterStart"];
     
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"ChapterEnd"];
@@ -2676,7 +2683,8 @@ fWorkingCount = 0;
             [fSrcTitlePopUp indexOfSelectedItem] );
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
-
+    /* set job->angle for libdvdnav */
+    job->angle = [fSrcAnglePopUp indexOfSelectedItem] + 1;
     /* Chapter selection */
     job->chapter_start = [fSrcChapterStartPopUp indexOfSelectedItem] + 1;
     job->chapter_end   = [fSrcChapterEndPopUp   indexOfSelectedItem] + 1;
@@ -2967,6 +2975,8 @@ fWorkingCount = 0;
     hb_title_t * title = (hb_title_t *) hb_list_item( list,0 ); // is always zero since now its a single title scan
     hb_job_t * job = title->job;
     hb_audio_config_t * audio;
+    /* Title Angle for dvdnav */
+    job->angle = [[queueToApply objectForKey:@"TitleAngle"] intValue];
     /* Chapter selection */
     job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
     job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
@@ -3692,7 +3702,26 @@ fWorkingCount = 0;
     [fSrcChapterEndPopUp   selectItemAtIndex:
         hb_list_count( title->list_chapter ) - 1];
     [self chapterPopUpChanged:nil];
-
+    
+    /* if using dvd nav, show the angle widget */
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue])
+    {
+        [fSrcAngleLabel setHidden:NO];
+        [fSrcAnglePopUp setHidden:NO];
+        
+        [fSrcAnglePopUp removeAllItems];
+        for( int i = 0; i < title->angle_count; i++ )
+        {
+            [fSrcAnglePopUp addItemWithTitle: [NSString stringWithFormat: @"%d", i + 1]];
+        }
+        [fSrcAnglePopUp selectItemAtIndex: 0];
+    }
+    else
+    {
+        [fSrcAngleLabel setHidden:YES];
+        [fSrcAnglePopUp setHidden:YES];
+    }
+    
     /* Start Get and set the initial pic size for display */
 	hb_job_t * job = title->job;
 	fTitle = title;

@@ -24,6 +24,7 @@
 /* Options */
 static int    debug       = HB_DEBUG_NONE;
 static int    update      = 0;
+static int    dvdnav      = 0;
 static char * input       = NULL;
 static char * output      = NULL;
 static char * format      = NULL;
@@ -75,6 +76,7 @@ static int    loosePixelratio = 0;
 static int    modulus       = 0;
 static int    par_height    = 0;
 static int    par_width     = 0;
+static int    angle = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
@@ -164,6 +166,7 @@ int main( int argc, char ** argv )
 
     /* Init libhb */
     h = hb_init( debug, update );
+    hb_dvd_set_dvdnav( dvdnav );
 
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
@@ -332,6 +335,8 @@ static void PrintTitleInfo( hb_title_t * title )
     fprintf( stderr, "  + vts %d, ttn %d, cells %d->%d (%d blocks)\n",
              title->vts, title->ttn, title->cell_start, title->cell_end,
              title->block_count );
+    if (dvdnav)
+        fprintf( stderr, "  + angle(s) %d\n", title->angle_count );
     fprintf( stderr, "  + duration: %02d:%02d:%02d\n",
              title->hours, title->minutes, title->seconds );
     fprintf( stderr, "  + size: %dx%d, aspect: %.2f, %.3f fps\n",
@@ -490,6 +495,11 @@ static int HandleEvents( hb_handle_t * h )
                                           chapter_end );
                 job->chapter_end   = MAX( job->chapter_start,
                                           job->chapter_end );
+            }
+
+            if ( angle )
+            {
+                job->angle = angle;
             }
 
             if (preset)
@@ -1902,6 +1912,7 @@ static void ShowHelp()
     "                            if the preset name has spaces, surround it with\n"
     "                            double quotation marks\n"
     "    -z, --preset-list       See a list of available built-in presets\n"
+    "        --dvdnav            Use dvdnav (Experimental)\n"
     "\n"
 
     "### Source Options-----------------------------------------------------------\n\n"
@@ -1912,6 +1923,7 @@ static void ShowHelp()
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
+    "        --angle <number>    Select the DVD angle\n"
     "        --previews <#:B>    Select how many preview images are generated (max 30),\n"
     "                            and whether or not they're stored to disk (0 or 1).\n"
     "                            (default: 10:0)\n"
@@ -2122,6 +2134,8 @@ static int ParseOptions( int argc, char ** argv )
     #define PREVIEWS 257
     #define START_AT_PREVIEW 258
     #define STOP_AT 259
+    #define ANGLE 260
+    #define DVDNAV 261
     
     for( ;; )
     {
@@ -2131,6 +2145,7 @@ static int ParseOptions( int argc, char ** argv )
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "cpu",         required_argument, NULL,    'C' },
+            { "dvdnav",      no_argument,       NULL,    DVDNAV },
 
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
@@ -2142,6 +2157,7 @@ static int ParseOptions( int argc, char ** argv )
             { "title",       required_argument, NULL,    't' },
             { "longest",     no_argument,       NULL,    'L' },
             { "chapters",    required_argument, NULL,    'c' },
+            { "angle",       required_argument, NULL,    ANGLE },
             { "markers",     optional_argument, NULL,    'm' },
             { "audio",       required_argument, NULL,    'a' },
             { "mixdown",     required_argument, NULL,    '6' },
@@ -2229,6 +2245,9 @@ static int ParseOptions( int argc, char ** argv )
             case 'z':
                 ShowPresets();
                 exit ( 0 );
+            case DVDNAV:
+                dvdnav = 1;
+                break;
 
             case 'f':
                 format = strdup( optarg );
@@ -2289,6 +2308,9 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             }
+            case ANGLE:
+                angle = atoi( optarg );
+                break;
             case 'm':
                 if( optarg != NULL )
                 {

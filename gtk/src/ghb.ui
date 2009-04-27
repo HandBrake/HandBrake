@@ -209,6 +209,14 @@
     <property name="page_size">0</property>
     <property name="value">0</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment27">
+    <property name="upper">10</property>
+    <property name="lower">1</property>
+    <property name="page_increment">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_size">0</property>
+    <property name="value">1</property>
+  </object>
   <object class="GtkAdjustment" id="preview_progress_adj">
     <property name="upper">100</property>
     <property name="lower">0</property>
@@ -683,6 +691,50 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <object class="GtkAlignment" id="alignment47">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="xalign">0</property>
+                                    <property name="xscale">0</property>
+                                    <property name="left_padding">16</property>
+                                    <child>
+                                      <object class="GtkHBox" id="hbox44">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="spacing">7</property>
+                                        <child>
+                                          <object class="GtkLabel" id="angle_label">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Angle:</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">False</property>
+                                            <property name="position">4</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkSpinButton" id="angle">
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="adjustment">adjustment27</property>
+                                            <signal name="value_changed" handler="setting_widget_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">5</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkAlignment" id="alignment41">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -723,7 +775,7 @@
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="position">3</property>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                               </object>
@@ -3404,6 +3456,21 @@ auto-generated destination name.</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkCheckButton" id="use_dvdnav">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text">Experimental dvdnav support.  
+Dvdnav can read some discs that dvdread can not.</property>
+                            <property name="label" translatable="yes">Use dvdnav (Experimental)</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="reduce_hd_preview">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -3416,7 +3483,7 @@ non-hidef screens.  </property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -3462,7 +3529,7 @@ increases scan duration.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
 
@@ -3502,7 +3569,7 @@ in the Video settings tab.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -3519,7 +3586,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
 
@@ -3557,7 +3624,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
 
@@ -3570,7 +3637,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">8</property>
+                            <property name="position">9</property>
                           </packing>
                         </child>
                         <child>
@@ -3582,7 +3649,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">9</property>
+                            <property name="position">10</property>
                           </packing>
                         </child>
                       </object>

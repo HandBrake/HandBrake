@@ -245,6 +245,7 @@ struct hb_job_s
     int subtitle_force;
     char * native_language;
 
+    int             angle;              // dvd angle to encode
     int             frame_to_stop;       // declare eof when we hit this frame
     int64_t         pts_to_stop;        // declare eof when we pass this pts in
                                         //  the time-linearized input stream
@@ -481,6 +482,7 @@ struct hb_title_s
     int         block_start;
     int         block_end;
     int         block_count;
+    int         angle_count;
 
     /* Visual-friendly duration */
     int         hours;

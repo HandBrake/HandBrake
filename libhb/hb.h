@@ -72,6 +72,7 @@ int           hb_check_update( hb_handle_t * h, char ** version );
 void          hb_set_cpu_count( hb_handle_t *, int );
 
 char *        hb_dvd_name( char * path );
+void          hb_dvd_set_dvdnav( int enable );
 
 /* hb_scan()
    Scan the specified path. Can be a DVD device, a VIDEO_TS folder or

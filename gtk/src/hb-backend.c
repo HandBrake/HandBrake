@@ -2541,6 +2541,8 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	tinfo->minutes = title->minutes;
 	tinfo->seconds = title->seconds;
 	tinfo->duration = title->duration;
+
+	tinfo->angle_count = title->angle_count;
 	return TRUE;
 }
 

@@ -1233,6 +1233,10 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	widget = GHB_WIDGET (ud->builder, "start_chapter");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
+
+	widget = GHB_WIDGET (ud->builder, "angle");
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
+	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->angle_count);
 	ud->dont_clear_presets = FALSE;
 }
 
@@ -1951,6 +1955,17 @@ ghb_backend_events(signal_user_data_t *ud)
 	ghb_track_status();
 	ghb_get_status(&status);
 	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+	if (status.scan.state == GHB_STATE_IDLE && 
+		status.queue.state == GHB_STATE_IDLE)
+	{
+		static gboolean prev_dvdnav;
+		gboolean dvdnav = ghb_settings_get_boolean(ud->settings, "use_dvdnav");
+		if (dvdnav != prev_dvdnav)
+		{
+			hb_dvd_set_dvdnav(dvdnav);
+			prev_dvdnav = dvdnav;
+		}
+	}
 	// First handle the status of title scans
 	// Then handle the status of the queue
 	if (status.scan.state & GHB_STATE_SCANNING)

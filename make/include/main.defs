@@ -20,6 +20,7 @@ MODULES += contrib/ffmpeg
 MODULES += contrib/lame
 MODULES += contrib/libdca
 MODULES += contrib/libdvdread
+MODULES += contrib/libdvdnav
 MODULES += contrib/libmkv
 MODULES += contrib/libmp4v2
 MODULES += contrib/libogg

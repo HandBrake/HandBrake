@@ -1,5 +1,7 @@
 $(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
-LIBDVDREAD.FETCH.url = http://download.m0k.org/handbrake/contrib/libdvdread-0.9.7.tar.gz
+LIBDVDREAD.FETCH.url = http://download.m0k.org/handbrake/contrib/libdvdread-svn1168.tar.gz
 LIBDVDREAD.EXTRACT.tarbase = libdvdread
+
+LIBDVDREAD.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;

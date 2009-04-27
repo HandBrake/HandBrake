@@ -168,7 +168,7 @@ extern void decmetadata( hb_title_t *title );
 /***********************************************************************
  * dvd.c
  **********************************************************************/
-typedef struct hb_dvd_s hb_dvd_t;
+typedef union  hb_dvd_s hb_dvd_t;
 typedef struct hb_stream_s hb_stream_t;
 
 hb_dvd_t *   hb_dvd_init( char * path );
@@ -181,6 +181,8 @@ int          hb_dvd_read( hb_dvd_t *, hb_buffer_t * );
 int          hb_dvd_chapter( hb_dvd_t * );
 int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
+int          hb_dvd_angle_count( hb_dvd_t * d );
+void         hb_dvd_set_angle( hb_dvd_t * d, int angle );
 
 hb_stream_t * hb_stream_open( char * path, hb_title_t *title );
 void		 hb_stream_close( hb_stream_t ** );
