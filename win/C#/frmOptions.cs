@@ -104,6 +104,7 @@ namespace Handbrake
             if (Properties.Settings.Default.drive_detection == "Checked")
                 btn_drive_detect.CheckState = CheckState.Checked;
 
+            // Enable / Disable Query editor tab
             if (Properties.Settings.Default.QueryEditorTab == "Checked")
                 check_queryEditorTab.CheckState = CheckState.Checked;
 
@@ -111,7 +112,12 @@ namespace Handbrake
             if (Properties.Settings.Default.MainWindowMinimize == "Checked")
                 check_mainMinimize.CheckState = CheckState.Checked;
 
+            // x264 step
             drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep;
+
+            // Use Experimental dvdnav
+            if (Properties.Settings.Default.dvdnav == "Checked")
+                check_dvdnav.CheckState = CheckState.Checked;
         }
 
         #region General
@@ -251,12 +257,18 @@ namespace Handbrake
             Properties.Settings.Default.x264cqstep = drop_x264step.Text;
         }
 
+        private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.dvdnav = check_dvdnav.CheckState.ToString();
+        } 
         #endregion
 
         private void btn_close_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
-        }        
+        }
+
+               
     }
 }

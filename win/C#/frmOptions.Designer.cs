@@ -58,6 +58,8 @@ namespace Handbrake
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
+            this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
             this.btn_saveLog = new System.Windows.Forms.Button();
@@ -114,8 +116,8 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.check_dvdnav = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -412,6 +414,33 @@ namespace Handbrake
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
             // 
+            // cb_logVerboseLvl
+            // 
+            this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_logVerboseLvl.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cb_logVerboseLvl.FormattingEnabled = true;
+            this.cb_logVerboseLvl.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2"});
+            this.cb_logVerboseLvl.Location = new System.Drawing.Point(198, 133);
+            this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
+            this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
+            this.cb_logVerboseLvl.TabIndex = 86;
+            this.ToolTip.SetToolTip(this.cb_logVerboseLvl, "Activity Log Verbosity Level");
+            this.cb_logVerboseLvl.SelectedIndexChanged += new System.EventHandler(this.cb_logVerboseLvl_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(68, 136);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(124, 13);
+            this.label3.TabIndex = 85;
+            this.label3.Text = "Log Verbosity Level:";
+            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -580,6 +609,8 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.check_dvdnav);
+            this.tab_advanced.Controls.Add(this.label32);
             this.tab_advanced.Controls.Add(this.label30);
             this.tab_advanced.Controls.Add(this.drop_x264step);
             this.tab_advanced.Controls.Add(this.label28);
@@ -600,7 +631,7 @@ namespace Handbrake
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(76, 142);
+            this.label30.Location = new System.Drawing.Point(73, 142);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(230, 13);
             this.label30.TabIndex = 87;
@@ -1069,32 +1100,30 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // cb_logVerboseLvl
+            // label32
             // 
-            this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_logVerboseLvl.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_logVerboseLvl.FormattingEnabled = true;
-            this.cb_logVerboseLvl.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2"});
-            this.cb_logVerboseLvl.Location = new System.Drawing.Point(198, 133);
-            this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
-            this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
-            this.cb_logVerboseLvl.TabIndex = 86;
-            this.ToolTip.SetToolTip(this.cb_logVerboseLvl, "Activity Log Verbosity Level");
-            this.cb_logVerboseLvl.SelectedIndexChanged += new System.EventHandler(this.cb_logVerboseLvl_SelectedIndexChanged);
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label32.Location = new System.Drawing.Point(38, 184);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(32, 13);
+            this.label32.TabIndex = 89;
+            this.label32.Text = "CLI:";
             // 
-            // label3
+            // check_dvdnav
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(68, 136);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(124, 13);
-            this.label3.TabIndex = 85;
-            this.label3.Text = "Log Verbosity Level:";
+            this.check_dvdnav.AutoSize = true;
+            this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
+            this.check_dvdnav.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_dvdnav.Location = new System.Drawing.Point(76, 184);
+            this.check_dvdnav.Name = "check_dvdnav";
+            this.check_dvdnav.Size = new System.Drawing.Size(185, 17);
+            this.check_dvdnav.TabIndex = 90;
+            this.check_dvdnav.Text = "Use DvdNav (Experimental)";
+            this.ToolTip.SetToolTip(this.check_dvdnav, "Enables the built in update checker to check for the latest development snapshot " +
+                    "builds.\r\nWarning: These are considered unstable builds and are not supported!");
+            this.check_dvdnav.UseVisualStyleBackColor = false;
+            this.check_dvdnav.CheckedChanged += new System.EventHandler(this.check_dvdnav_CheckedChanged);
             // 
             // frmOptions
             // 
@@ -1208,5 +1237,7 @@ namespace Handbrake
         private System.Windows.Forms.Label label28;
         internal System.Windows.Forms.ComboBox cb_logVerboseLvl;
         internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.CheckBox check_dvdnav;
+        private System.Windows.Forms.Label label32;
     }
 }

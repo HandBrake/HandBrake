@@ -428,6 +428,9 @@ namespace Handbrake.Functions
                 query += " -C " + processors + " ";
 
             query += " -v " + Properties.Settings.Default.verboseLevel;
+
+            if (Properties.Settings.Default.dvdnav =="Checked")
+                query += " --dvdnav";
             #endregion
 
             return query;

@@ -334,5 +334,17 @@ namespace Handbrake.Properties {
                 this["verboseLevel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string dvdnav {
+            get {
+                return ((string)(this["dvdnav"]));
+            }
+            set {
+                this["dvdnav"] = value;
+            }
+        }
     }
 }
