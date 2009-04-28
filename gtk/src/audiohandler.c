@@ -135,7 +135,8 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		if (ghb_get_audio_info (&ainfo, titleindex, track) && 
 			ghb_audio_is_passthru (acodec_code))
 		{
-			if (ainfo.codec != acodec_code)
+			// HB_ACODEC_* are bit fields.  Treat acodec_code as mask
+			if (!(ainfo.codec & acodec_code))
 			{
 				acodec_code = ghb_get_default_acodec();
 				// If there's more audio to process, or we've already
@@ -145,6 +146,10 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 					// Skip this audio
 					acodec_code = 0;
 				}
+			}
+			else
+			{
+				acodec_code &= ainfo.codec;
 			}
 		}
 		if (titleindex >= 0 && track < 0)

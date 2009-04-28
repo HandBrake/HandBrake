@@ -197,6 +197,7 @@ static options_map_t d_acodec_opts[] =
 	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, "vorbis"},
 	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, "ac3"},
 	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA, "dts"},
+	{"Auto Pass-Thru", "auto",    HB_ACODEC_DCA|HB_ACODEC_AC3, "auto"},
 };
 combo_opts_t acodec_opts =
 {
@@ -1738,9 +1739,9 @@ ghb_find_audio_track(
 		used = g_malloc0(count * sizeof(gboolean));
 		g_hash_table_insert(track_indices, &acodec, used);
 	}
-	// Try to fine an item that matches the preferred language and
+	// Try to find an item that matches the preferred language and
 	// the passthru codec type
-	if (acodec == HB_ACODEC_AC3 || acodec == HB_ACODEC_DCA)
+	if (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
 	{
 		for (ii = 0; ii < count; ii++)
 		{
@@ -1755,7 +1756,7 @@ ghb_find_audio_track(
 													audio->in.channel_layout);
 			// Find a track that is not visually impaired or dirctor's
 			// commentary, and has the highest channel count.
-			if ((audio->in.codec == acodec) &&
+			if ((audio->in.codec & acodec) &&
 				(audio->lang.type < 2) &&
 				((strcmp(lang, audio->lang.iso639_2) == 0) ||
 				(strcmp(lang, "und") == 0)))
@@ -1773,7 +1774,7 @@ ghb_find_audio_track(
 		used[track] = TRUE;
 		return track;
 	}
-	// Try to fine an item that matches the preferred language
+	// Try to find an item that matches the preferred language
 	for (ii = 0; ii < count; ii++)
 	{
 		if (used[ii])
@@ -1796,7 +1797,7 @@ ghb_find_audio_track(
 	}
 	// Try to fine an item that does not match the preferred language and
 	// matches the passthru codec type
-	if (acodec == HB_ACODEC_AC3 || acodec == HB_ACODEC_DCA)
+	if (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
 	{
 		for (ii = 0; ii < count; ii++)
 		{
@@ -1811,7 +1812,7 @@ ghb_find_audio_track(
 													audio->in.channel_layout);
 			// Find a track that is not visually impaired or dirctor's
 			// commentary, and has the highest channel count.
-			if ((audio->in.codec == acodec) &&
+			if ((audio->in.codec & acodec) &&
 				(audio->lang.type < 2))
 			{
 				if (channels > max_chan)
@@ -2563,7 +2564,7 @@ gboolean
 ghb_audio_is_passthru(gint acodec)
 {
 	g_debug("ghb_audio_is_passthru () \n");
-	return (acodec == HB_ACODEC_AC3) || (acodec == HB_ACODEC_DCA);
+	return (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA));
 }
 
 gint
@@ -3148,16 +3149,14 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gint codec = ghb_settings_combo_int(asettings, "AudioEncoder");
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 											title->list_audio, track );
-		if ((taudio->in.codec != HB_ACODEC_AC3 && codec == HB_ACODEC_AC3) ||
-		    (taudio->in.codec != HB_ACODEC_DCA && codec == HB_ACODEC_DCA))
+		if (!(taudio->in.codec & codec) && 
+			(codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
-			char *str;
-			str = (codec == HB_ACODEC_AC3) ? "AC-3" : "DTS";
 			message = g_strdup_printf(
-						"The source does not support %s Pass-Thru.\n\n"
+						"The source does not support Pass-Thru.\n\n"
 						"You should choose a different audio codec.\n"
-						"If you continue, one will be chosen for you.", str);
+						"If you continue, one will be chosen for you.");
 			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
 			{
 				g_free(message);
@@ -3618,10 +3617,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		audio.out.codec = ghb_settings_combo_int(asettings, "AudioEncoder");
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
-		if ((taudio->in.codec != HB_ACODEC_AC3 && 
-             audio.out.codec == HB_ACODEC_AC3) ||
-		    (taudio->in.codec != HB_ACODEC_DCA && 
-			 audio.out.codec == HB_ACODEC_DCA))
+		if (!(taudio->in.codec & audio.out.codec) && 
+			(audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
 		{
 			// Not supported.  AC3 is passthrough only, so input must be AC3
 			if (job->mux == HB_MUX_AVI)
@@ -3632,6 +3629,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			{
 				audio.out.codec = HB_ACODEC_FAAC;
 			}
+		}
+		else
+		{
+			audio.out.codec &= taudio->in.codec;
 		}
 		if ((job->mux == HB_MUX_MP4) && 
 			((audio.out.codec == HB_ACODEC_LAME) ||
