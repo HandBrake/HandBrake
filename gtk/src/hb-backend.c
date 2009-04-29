@@ -3617,22 +3617,24 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		audio.out.codec = ghb_settings_combo_int(asettings, "AudioEncoder");
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 									title->list_audio, audio.in.track );
-		if (!(taudio->in.codec & audio.out.codec) && 
-			(audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
+		if (audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
 		{
-			// Not supported.  AC3 is passthrough only, so input must be AC3
-			if (job->mux == HB_MUX_AVI)
+			if (!(taudio->in.codec & audio.out.codec))
 			{
-				audio.out.codec = HB_ACODEC_LAME;
+				// Not supported.  AC3 is passthrough only, so input must be AC3
+				if (job->mux == HB_MUX_AVI)
+				{
+					audio.out.codec = HB_ACODEC_LAME;
+				}
+				else
+				{
+					audio.out.codec = HB_ACODEC_FAAC;
+				}
 			}
 			else
 			{
-				audio.out.codec = HB_ACODEC_FAAC;
+				audio.out.codec &= taudio->in.codec;
 			}
-		}
-		else
-		{
-			audio.out.codec &= taudio->in.codec;
 		}
 		if ((job->mux == HB_MUX_MP4) && 
 			((audio.out.codec == HB_ACODEC_LAME) ||
