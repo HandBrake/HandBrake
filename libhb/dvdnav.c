@@ -79,6 +79,54 @@ static char * hb_dvdnav_name( char * path )
 }
 
 /***********************************************************************
+ * hb_dvdnav_reset
+ ***********************************************************************
+ * Once dvdnav has entered the 'stopped' state, it can not be revived
+ * dvdnav_reset doesn't work because it doesn't remember the path
+ * So this function re-opens dvdnav
+ **********************************************************************/
+static int hb_dvdnav_reset( hb_dvdnav_t * d )
+{
+    if ( d->dvdnav ) 
+		dvdnav_close( d->dvdnav );
+
+    /* Open device */
+    if( dvdnav_open(&d->dvdnav, d->path) != DVDNAV_STATUS_OK )
+    {
+        /*
+         * Not an error, may be a stream - which we'll try in a moment.
+         */
+        hb_log( "dvd: not a dvd - trying as a stream/file instead" );
+        goto fail;
+    }
+
+    if (dvdnav_set_readahead_flag(d->dvdnav, DVD_READ_CACHE) !=
+        DVDNAV_STATUS_OK)
+    {
+        hb_error("Error: dvdnav_set_readahead_flag: %s\n",
+                 dvdnav_err_to_string(d->dvdnav));
+        goto fail;
+    }
+
+    /*
+     ** set the PGC positioning flag to have position information
+     ** relatively to the whole feature instead of just relatively to the
+     ** current chapter 
+     **/
+    if (dvdnav_set_PGC_positioning_flag(d->dvdnav, 1) != DVDNAV_STATUS_OK)
+    {
+        hb_error("Error: dvdnav_set_PGC_positioning_flag: %s\n",
+                 dvdnav_err_to_string(d->dvdnav));
+        goto fail;
+    }
+	return 1;
+
+fail:
+    if( d->dvdnav ) dvdnav_close( d->dvdnav );
+    return 0;
+}
+
+/***********************************************************************
  * hb_dvdnav_init
  ***********************************************************************
  *
@@ -725,6 +773,10 @@ static int hb_dvdnav_start( hb_dvd_t * e, int title, int chapter )
     }
     ifoClose(ifo);
 
+	if ( d->stopped && !hb_dvdnav_reset(d) )
+    {
+        return 0;
+    }
     if ( dvdnav_part_play(d->dvdnav, title, chapter) != DVDNAV_STATUS_OK )
     {
         hb_error( "dvd: dvdnav_title_play failed - %s", 
@@ -732,6 +784,7 @@ static int hb_dvdnav_start( hb_dvd_t * e, int title, int chapter )
         return 0;
     }
     d->title = title;
+	d->stopped = 0;
     return 1;
 }
 
@@ -742,6 +795,7 @@ static int hb_dvdnav_start( hb_dvd_t * e, int title, int chapter )
  **********************************************************************/
 static void hb_dvdnav_stop( hb_dvd_t * e )
 {
+    hb_dvdnav_t * d = &(e->dvdnav);
 }
 
 /***********************************************************************
@@ -757,6 +811,10 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
     uint8_t buf[HB_DVD_READ_BUFFER_SIZE];
     int done = 0, ii;
 
+    if (d->stopped)
+	{
+		return 0;
+	}
     // dvdnav will not let you seek or poll current position
     // till it reaches a certain point in parsing.  so we
     // have to get blocks until we reach a cell
@@ -784,6 +842,7 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
             break;
 
         case DVDNAV_STOP:
+			d->stopped = 1;
             return 0;
 
         case DVDNAV_HOP_CHANNEL:
@@ -822,6 +881,10 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
 
     while ( 1 )
     {
+    	if (d->stopped)
+		{
+			return 0;
+		}
         result = dvdnav_get_next_block( d->dvdnav, b->data, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
@@ -964,6 +1027,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             /*
             * Playback should end here. 
             */
+			d->stopped = 1;
             return 0;
 
         default:

@@ -51,6 +51,7 @@ struct hb_dvdnav_s
     int            title;
 	int            title_block_count;
     int            chapter;
+    int            stopped;
 };
 
 typedef struct hb_dvdnav_s hb_dvdnav_t;
