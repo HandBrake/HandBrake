@@ -1470,8 +1470,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /*On Screen Notification*/
         int status;
         NSBeep();
-        status = NSRunAlertPanel(@"64-bit HandBrake cannot read encrypted dvds!",@"This scan will be cancelled!", @"OK", nil, nil);
+        status = NSRunAlertPanel(@"64-bit HandBrake cannot read encrypted dvds!",@"", @"Cancel Scan", @"Attempt Scan Anyway", nil);
         [NSApp requestUserAttention:NSCriticalRequest];
+        
+        if (status == NSAlertDefaultReturn)
+        {
+            /* User chose to cancel the scan */
+            [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
+            cancelScanDecrypt = 1;
+        }
+        else
+        {
+            [self writeToActivityLog: "user overrode 64-bit warning trying to open physical dvd without decryption"];
+            cancelScanDecrypt = 0;
+        }
+
 #else
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
         NSString *vlcPath = @"/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib";
