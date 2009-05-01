@@ -487,13 +487,12 @@
     hb_job_t * job = title->job;
 
     fTitle = title;
-    
-     modulus = 8; //modulus value of 16, 8 or 4
+
     [fWidthStepper  setValueWraps: NO];
-    [fWidthStepper  setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
+    [fWidthStepper  setIncrement: 16];
     [fWidthStepper  setMinValue: 64];
     [fHeightStepper setValueWraps: NO];
-    [fHeightStepper setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
+    [fHeightStepper setIncrement: 16];
     [fHeightStepper setMinValue: 64];
     
     [fCropTopStepper    setIncrement: 2];
@@ -652,9 +651,9 @@
 - (IBAction) SettingsChanged: (id) sender
 {
     hb_job_t * job = fTitle->job;
-    
-    [fWidthStepper  setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
-    [fHeightStepper setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
+    [fModulusPopUp setEnabled:NO];
+    job->anamorphic.modulus = 16;
+
     /* Since custom anamorphic allows for a height setting > fTitle->height
      * check to make sure it is returned to fTitle->height for all other modes
      */
@@ -677,11 +676,6 @@
         job->crop[2] = [fCropLeftStepper   intValue];
         job->crop[3] = [fCropRightStepper  intValue];
     }
-    /* Initially we set modulus widgets to 16 and disabled since we
-     * only use it for Custom Anamorphic below
-     */
-    [fModulusPopUp setEnabled:NO];
-    job->anamorphic.modulus = 16;
     
     [fRatioCheck setEnabled: YES];
 
@@ -692,10 +686,18 @@
     
     /* If we are not custom anamorphic, make sure we retain the orginal par */
     if( [fAnamorphicPopUp indexOfSelectedItem] != 3 )
-	{
+    {
         job->anamorphic.par_width = titleParWidth;
         job->anamorphic.par_height = titleParHeight;
         [fRatioLabel setHidden: NO];
+        
+        [fWidthStepper  setIncrement: 16];
+        [fHeightStepper setIncrement: 16];
+    }
+    else
+    {
+        [fWidthStepper  setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
+        [fHeightStepper setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
     }
     
 	if( [fAnamorphicPopUp indexOfSelectedItem] > 0 )
