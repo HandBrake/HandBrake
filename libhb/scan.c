@@ -407,7 +407,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     if (data->dvd)
     {
-      hb_dvd_start( data->dvd, title->index, 1 );
+      hb_dvd_start( data->dvd, title, 1 );
       title->angle_count = hb_dvd_angle_count( data->dvd );
       hb_log( "scan: title angle(s) %d", title->angle_count );
     }

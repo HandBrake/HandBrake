@@ -49,8 +49,9 @@ struct hb_dvdnav_s
     dvd_reader_t * reader;
     ifo_handle_t * vmg;
     int            title;
-	int            title_block_count;
+    int            title_block_count;
     int            chapter;
+    hb_list_t    * list_chapter;
     int            stopped;
 };
 
@@ -59,25 +60,25 @@ typedef struct hb_dvdread_s hb_dvdread_t;
 
 union hb_dvd_s
 {
-	hb_dvdread_t dvdread;
-	hb_dvdnav_t  dvdnav;
+    hb_dvdread_t dvdread;
+    hb_dvdnav_t  dvdnav;
 };
 
 
 struct hb_dvd_func_s
 {
-	hb_dvd_t *    (* init)        ( char * );
-	void          (* close)       ( hb_dvd_t ** );
-	char        * (* name)        ( char * );
-	int           (* title_count) ( hb_dvd_t * );
-	hb_title_t  * (* title_scan)  ( hb_dvd_t *, int );
-	int           (* start)       ( hb_dvd_t *, int, int );
-	void          (* stop)        ( hb_dvd_t * );
-	int           (* seek)        ( hb_dvd_t *, float );
-	int           (* read)        ( hb_dvd_t *, hb_buffer_t * );
-	int           (* chapter)     ( hb_dvd_t * );
-	int           (* angle_count) ( hb_dvd_t * );
-	void          (* set_angle)   ( hb_dvd_t *, int );
+    hb_dvd_t *    (* init)        ( char * );
+    void          (* close)       ( hb_dvd_t ** );
+    char        * (* name)        ( char * );
+    int           (* title_count) ( hb_dvd_t * );
+    hb_title_t  * (* title_scan)  ( hb_dvd_t *, int );
+    int           (* start)       ( hb_dvd_t *, hb_title_t *, int );
+    void          (* stop)        ( hb_dvd_t * );
+    int           (* seek)        ( hb_dvd_t *, float );
+    int           (* read)        ( hb_dvd_t *, hb_buffer_t * );
+    int           (* chapter)     ( hb_dvd_t * );
+    int           (* angle_count) ( hb_dvd_t * );
+    void          (* set_angle)   ( hb_dvd_t *, int );
 };
 typedef struct hb_dvd_func_s hb_dvd_func_t;
 

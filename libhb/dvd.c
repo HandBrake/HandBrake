@@ -16,7 +16,7 @@ static void          hb_dvdread_close( hb_dvd_t ** _d );
 static char        * hb_dvdread_name( char * path );
 static int           hb_dvdread_title_count( hb_dvd_t * d );
 static hb_title_t  * hb_dvdread_title_scan( hb_dvd_t * d, int t );
-static int           hb_dvdread_start( hb_dvd_t * d, int title, int chapter );
+static int           hb_dvdread_start( hb_dvd_t * d, hb_title_t *title, int chapter );
 static void          hb_dvdread_stop( hb_dvd_t * d );
 static int           hb_dvdread_seek( hb_dvd_t * d, float f );
 static int           hb_dvdread_read( hb_dvd_t * d, hb_buffer_t * b );
@@ -651,15 +651,16 @@ cleanup:
  ***********************************************************************
  * Title and chapter start at 1
  **********************************************************************/
-static int hb_dvdread_start( hb_dvd_t * e, int title, int chapter )
+static int hb_dvdread_start( hb_dvd_t * e, hb_title_t *title, int chapter )
 {
     hb_dvdread_t *d = &(e->dvdread);
     int pgc_id, pgn;
     int i;
+    int t = title->index;
 
     /* Open the IFO and the VOBs for this title */
-    d->vts = d->vmg->tt_srpt->title[title-1].title_set_nr;
-    d->ttn = d->vmg->tt_srpt->title[title-1].vts_ttn;
+    d->vts = d->vmg->tt_srpt->title[t-1].title_set_nr;
+    d->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
     if( !( d->ifo = ifoOpen( d->reader, d->vts ) ) )
     {
         hb_error( "dvd: ifoOpen failed for VTS %d", d->vts );
@@ -1257,7 +1258,7 @@ hb_title_t * hb_dvd_title_scan( hb_dvd_t * d, int t )
     return dvd_methods->title_scan(d, t);
 }
 
-int hb_dvd_start( hb_dvd_t * d, int title, int chapter )
+int hb_dvd_start( hb_dvd_t * d, hb_title_t *title, int chapter )
 {
     return dvd_methods->start(d, title, chapter);
 }

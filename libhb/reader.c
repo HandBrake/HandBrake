@@ -220,7 +220,7 @@ static void ReaderFunc( void * _r )
         }
         /* end chapter mapping XXX */
 
-        if( !hb_dvd_start( r->dvd, r->title->index, start ) )
+        if( !hb_dvd_start( r->dvd, r->title, start ) )
         {
             hb_dvd_close( &r->dvd );
             return;

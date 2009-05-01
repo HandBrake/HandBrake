@@ -422,6 +422,8 @@ struct hb_audio_s
 struct hb_chapter_s
 {
     int      index;
+    int      pgcn;
+    int      pgn;
     int      cell_start;
     int      cell_end;
     int      block_start;

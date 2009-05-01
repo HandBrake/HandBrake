@@ -174,7 +174,7 @@ typedef struct hb_stream_s hb_stream_t;
 hb_dvd_t *   hb_dvd_init( char * path );
 int          hb_dvd_title_count( hb_dvd_t * );
 hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title );
-int          hb_dvd_start( hb_dvd_t *, int title, int chapter );
+int          hb_dvd_start( hb_dvd_t *, hb_title_t *title, int chapter );
 void         hb_dvd_stop( hb_dvd_t * );
 int          hb_dvd_seek( hb_dvd_t *, float );
 int          hb_dvd_read( hb_dvd_t *, hb_buffer_t * );

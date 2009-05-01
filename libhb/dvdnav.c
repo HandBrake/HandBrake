@@ -18,7 +18,7 @@ static char        * hb_dvdnav_name( char * path );
 static hb_dvd_t    * hb_dvdnav_init( char * path );
 static int           hb_dvdnav_title_count( hb_dvd_t * d );
 static hb_title_t  * hb_dvdnav_title_scan( hb_dvd_t * d, int t );
-static int           hb_dvdnav_start( hb_dvd_t * d, int title, int chapter );
+static int           hb_dvdnav_start( hb_dvd_t * d, hb_title_t *title, int chapter );
 static void          hb_dvdnav_stop( hb_dvd_t * d );
 static int           hb_dvdnav_seek( hb_dvd_t * d, float f );
 static int           hb_dvdnav_read( hb_dvd_t * d, hb_buffer_t * b );
@@ -46,9 +46,11 @@ hb_dvd_func_t hb_dvdnav_func =
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
+static void PgcWalkInit( void );
+static int FindChapterIndex( hb_list_t * list, int pgcn, int pgn );
+static int NextPgcn( ifo_handle_t *ifo, int pgcn );
 static int FindNextCell( pgc_t *pgc, int cell_cur );
 static int dvdtime2msec( dvd_time_t * );
-//static int hb_dvdnav_is_break( hb_dvdnav_t * d );
 
 hb_dvd_func_t * hb_dvdnav_methods( void )
 {
@@ -88,7 +90,7 @@ static char * hb_dvdnav_name( char * path )
 static int hb_dvdnav_reset( hb_dvdnav_t * d )
 {
     if ( d->dvdnav ) 
-		dvdnav_close( d->dvdnav );
+        dvdnav_close( d->dvdnav );
 
     /* Open device */
     if( dvdnav_open(&d->dvdnav, d->path) != DVDNAV_STATUS_OK )
@@ -119,7 +121,7 @@ static int hb_dvdnav_reset( hb_dvdnav_t * d )
                  dvdnav_err_to_string(d->dvdnav));
         goto fail;
     }
-	return 1;
+    return 1;
 
 fail:
     if( d->dvdnav ) dvdnav_close( d->dvdnav );
@@ -210,6 +212,55 @@ static int hb_dvdnav_title_count( hb_dvd_t * e )
     return titles;
 }
 
+static uint64_t
+PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
+{
+    int            pgcn, pgn;
+    pgc_t        * pgc;
+    uint64_t       duration = 0;
+    int            cell_start, cell_end;
+    int            i;
+
+    // Initialize map of visited pgc's to prevent loops
+    PgcWalkInit();
+    pgcn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgcn;
+    pgn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgn;
+    if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
+    {
+        hb_error( "invalid PGC ID %d, skipping", pgcn );
+        return 0;
+    }
+
+    if( pgn <= 0 || pgn > 99 )
+    {
+        hb_error( "scan: pgn %d not valid, skipping", pgn );
+        return 0;
+    }
+
+    *blocks = 0;
+    do
+    {
+        pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
+        if (!pgc)
+        {
+            hb_error( "scan: pgc not valid, skipping" );
+            break;
+        }
+        duration += 90LL * dvdtime2msec( &pgc->playback_time );
+
+        cell_start = pgc->program_map[pgn-1] - 1;
+        cell_end = pgc->nr_of_cells - 1;
+        for(i = cell_start; i <= cell_end; i = FindNextCell(pgc, i))
+        {
+            *blocks += pgc->cell_playback[i].last_sector + 1 -
+                pgc->cell_playback[i].first_sector;
+        }
+        *last_pgcn = pgcn;
+        pgn = 1;
+    } while((pgcn = NextPgcn(ifo, pgcn)) != 0);
+    return duration;
+}
+
 /***********************************************************************
  * hb_dvdnav_title_scan
  **********************************************************************/
@@ -218,13 +269,15 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
     hb_dvdnav_t * d = &(e->dvdnav);
     hb_title_t   * title;
-    ifo_handle_t * vts = NULL;
-    int            pgc_id, pgn, i;
+    ifo_handle_t * ifo = NULL;
+    int            pgcn, pgn, pgcn_end, i, c;
+    int            title_pgcn;
     pgc_t        * pgc;
     int            cell_cur;
     hb_chapter_t * chapter;
-    int            c;
-    uint64_t       duration;
+    int            count;
+    uint64_t       duration, longest;
+    int            longest_pgcn, longest_pgn, longest_pgcn_end;
     float          duration_correction;
     const char   * name;
 
@@ -259,7 +312,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     }
 
     hb_log( "scan: opening IFO for VTS %d", title->vts );
-    if( !( vts = ifoOpen( d->reader, title->vts ) ) )
+    if( !( ifo = ifoOpen( d->reader, title->vts ) ) )
     {
         hb_error( "scan: ifoOpen failed" );
         goto fail;
@@ -267,31 +320,31 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
     /* ignore titles with bogus cell addresses so we don't abort later
      ** in libdvdread. */
-    for ( i = 0; i < vts->vts_c_adt->nr_of_vobs; ++i)
+    for ( i = 0; i < ifo->vts_c_adt->nr_of_vobs; ++i)
     {
-        if( (vts->vts_c_adt->cell_adr_table[i].start_sector & 0xffffff ) ==
+        if( (ifo->vts_c_adt->cell_adr_table[i].start_sector & 0xffffff ) ==
             0xffffff )
         {
             hb_error( "scan: cell_adr_table[%d].start_sector invalid (0x%x) "
                       "- skipping title", i,
-                      vts->vts_c_adt->cell_adr_table[i].start_sector );
+                      ifo->vts_c_adt->cell_adr_table[i].start_sector );
             goto fail;
         }
-        if( (vts->vts_c_adt->cell_adr_table[i].last_sector & 0xffffff ) ==
+        if( (ifo->vts_c_adt->cell_adr_table[i].last_sector & 0xffffff ) ==
             0xffffff )
         {
             hb_error( "scan: cell_adr_table[%d].last_sector invalid (0x%x) "
                       "- skipping title", i,
-                      vts->vts_c_adt->cell_adr_table[i].last_sector );
+                      ifo->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
-        if( vts->vts_c_adt->cell_adr_table[i].start_sector >=
-            vts->vts_c_adt->cell_adr_table[i].last_sector )
+        if( ifo->vts_c_adt->cell_adr_table[i].start_sector >=
+            ifo->vts_c_adt->cell_adr_table[i].last_sector )
         {
             hb_error( "scan: cell_adr_table[%d].start_sector (0x%x) "
                       "is not before last_sector (0x%x) - skipping title", i,
-                      vts->vts_c_adt->cell_adr_table[i].start_sector,
-                      vts->vts_c_adt->cell_adr_table[i].last_sector );
+                      ifo->vts_c_adt->cell_adr_table[i].start_sector,
+                      ifo->vts_c_adt->cell_adr_table[i].last_sector );
             goto fail;
         }
     }
@@ -303,55 +356,74 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
     /* Position of the title in the VTS */
     title->ttn = d->vmg->tt_srpt->title[t-1].vts_ttn;
-    if ( title->ttn < 1 || title->ttn > vts->vts_ptt_srpt->nr_of_srpts )
+    if ( title->ttn < 1 || title->ttn > ifo->vts_ptt_srpt->nr_of_srpts )
     {
         hb_error( "invalid VTS PTT offset %d for title %d, skipping", title->ttn, t );
         goto fail;
     }
 
+    longest = 0LL;
+    longest_pgcn = -1;
+    longest_pgn = 1;
+    longest_pgcn_end = -1;
+    pgcn_end = -1;
+    for( i = 0; i < ifo->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts; i++ )
+    {
+        int blocks = 0;
+
+        duration = PttDuration(ifo, title->ttn, i+1, &blocks, &pgcn_end);
+        pgcn  = ifo->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgcn;
+        pgn   = ifo->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgn;
+        if( duration > longest )
+        {
+            longest_pgcn  = pgcn;
+            longest_pgn   = pgn;
+            longest_pgcn_end   = pgcn_end;
+            longest = duration;
+            title->block_count = blocks;
+        }
+        else if (pgcn == longest_pgcn && pgn < longest_pgn)
+        {
+            longest_pgn   = pgn;
+            title->block_count = blocks;
+        }
+    }
+
+    /* ignore titles under 10 seconds because they're often stills or
+     * clips with no audio & our preview code doesn't currently handle
+     * either of these. */
+    if( longest < 900000LL )
+    {
+        hb_log( "scan: ignoring title (too short)" );
+        goto fail;
+    }
+
+    pgcn       = longest_pgcn;
+    pgcn_end   = longest_pgcn_end;
+    pgn        = longest_pgn;;
+    title_pgcn = pgcn;
+
 
     /* Get pgc */
-    pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgcn;
-    if ( pgc_id < 1 || pgc_id > vts->vts_pgcit->nr_of_pgci_srp )
+    if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
     {
-        hb_error( "invalid PGC ID %d for title %d, skipping", pgc_id, t );
-        goto fail;
-    }
-    pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
-    pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
-
-    hb_log("pgc_id: %d, pgn: %d: pgc: 0x%x", pgc_id, pgn, pgc);
-
-    if( !pgc )
-    {
-        hb_error( "scan: pgc not valid, skipping" );
+        hb_error( "invalid PGC ID %d for title %d, skipping", pgcn, t );
         goto fail;
     }
 
-    if( pgn <= 0 || pgn > 99 )
-    {
-        hb_error( "scan: pgn %d not valid, skipping", pgn );
-        goto fail;
-    }
+    pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
 
-    /* Start cell */
-    title->cell_start  = pgc->program_map[pgn-1] - 1;
+    hb_log("pgc_id: %d, pgn: %d: pgc: 0x%x", pgcn, pgn, pgc);
+
+    /* Title start */
+    title->cell_start = pgc->program_map[pgn-1] - 1;
     title->block_start = pgc->cell_playback[title->cell_start].first_sector;
 
-    /* End cell */
-    title->cell_end  = pgc->nr_of_cells - 1;
-    title->block_end = pgc->cell_playback[title->cell_end].last_sector;
+    pgc = ifo->vts_pgcit->pgci_srp[pgcn_end-1].pgc;
 
-    /* Block count */
-    title->block_count = 0;
-    cell_cur = title->cell_start;
-    while( cell_cur <= title->cell_end )
-    {
-#define cp pgc->cell_playback[cell_cur]
-        title->block_count += cp.last_sector + 1 - cp.first_sector;
-#undef cp
-        cell_cur = FindNextCell( pgc, cell_cur );
-    }
+    /* Title end */
+    title->cell_end = pgc->nr_of_cells - 1;
+    title->block_end = pgc->cell_playback[title->cell_end].last_sector;
 
     hb_log( "scan: vts=%d, ttn=%d, cells=%d->%d, blocks=%d->%d, "
             "%d blocks", title->vts, title->ttn, title->cell_start,
@@ -359,7 +431,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
             title->block_count );
 
     /* Get duration */
-    title->duration = 90LL * dvdtime2msec( &pgc->playback_time );
+    title->duration = longest;
     title->hours    = title->duration / 90000 / 3600;
     title->minutes  = ( ( title->duration / 90000 ) % 3600 ) / 60;
     title->seconds  = ( title->duration / 90000 ) % 60;
@@ -367,17 +439,8 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
             title->hours, title->minutes, title->seconds,
             title->duration / 90 );
 
-    /* ignore titles under 10 seconds because they're often stills or
-     * clips with no audio & our preview code doesn't currently handle
-     * either of these. */
-    if( title->duration < 900000LL )
-    {
-        hb_log( "scan: ignoring title (too short)" );
-        goto fail;
-    }
-
     /* Detect languages */
-    for( i = 0; i < vts->vtsi_mat->nr_of_vts_audio_streams; i++ )
+    for( i = 0; i < ifo->vtsi_mat->nr_of_vts_audio_streams; i++ )
     {
         hb_audio_t * audio, * audio_tmp;
         int          audio_format, lang_code, audio_control,
@@ -389,11 +452,11 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
         audio = calloc( sizeof( hb_audio_t ), 1 );
 
-        audio_format  = vts->vtsi_mat->vts_audio_attr[i].audio_format;
-        lang_code     = vts->vtsi_mat->vts_audio_attr[i].lang_code;
-        lang_extension = vts->vtsi_mat->vts_audio_attr[i].code_extension;
+        audio_format  = ifo->vtsi_mat->vts_audio_attr[i].audio_format;
+        lang_code     = ifo->vtsi_mat->vts_audio_attr[i].lang_code;
+        lang_extension = ifo->vtsi_mat->vts_audio_attr[i].code_extension;
         audio_control =
-            vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->audio_control[i];
+            ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->audio_control[i];
 
         if( !( audio_control & 0x8000 ) )
         {
@@ -459,7 +522,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
         audio->config.lang.type = lang_extension;
 
-        lang = lang_for_code( vts->vtsi_mat->vts_audio_attr[i].lang_code );
+        lang = lang_for_code( ifo->vtsi_mat->vts_audio_attr[i].lang_code );
 
         snprintf( audio->config.lang.description, sizeof( audio->config.lang.description ), "%s (%s)",
             strlen(lang->native_name) ? lang->native_name : lang->eng_name,
@@ -504,11 +567,11 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     }
 
     memcpy( title->palette,
-            vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
+            ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->palette,
             16 * sizeof( uint32_t ) );
 
     /* Check for subtitles */
-    for( i = 0; i < vts->vtsi_mat->nr_of_vts_subp_streams; i++ )
+    for( i = 0; i < ifo->vtsi_mat->nr_of_vts_subp_streams; i++ )
     {
         hb_subtitle_t * subtitle;
         int spu_control;
@@ -519,7 +582,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
         hb_log( "scan: checking subtitle %d", i + 1 );
 
         spu_control =
-            vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->subp_control[i];
+            ifo->vts_pgcit->pgci_srp[title_pgcn-1].pgc->subp_control[i];
 
         if( !( spu_control & 0x80000000 ) )
         {
@@ -527,9 +590,9 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
             continue;
         }
 
-        if( vts->vtsi_mat->vts_video_attr.display_aspect_ratio )
+        if( ifo->vtsi_mat->vts_video_attr.display_aspect_ratio )
         {
-            switch( vts->vtsi_mat->vts_video_attr.permitted_df )
+            switch( ifo->vtsi_mat->vts_video_attr.permitted_df )
             {
                 case 1:
                     position = spu_control & 0xFF;
@@ -546,9 +609,9 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
             position = ( spu_control >> 24 ) & 0x7F;
         }
 
-        lang_extension = vts->vtsi_mat->vts_subp_attr[i].code_extension;
+        lang_extension = ifo->vtsi_mat->vts_subp_attr[i].code_extension;
 
-        lang = lang_for_code( vts->vtsi_mat->vts_subp_attr[i].lang_code );
+        lang = lang_for_code( ifo->vtsi_mat->vts_subp_attr[i].lang_code );
 
         subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
         subtitle->id = ( ( 0x20 + position ) << 8 ) | 0xbd;
@@ -612,36 +675,66 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     }
 
     /* Chapters */
-    hb_log( "scan: title %d has %d chapters", t,
-            vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts );
-    for( i = 0, c = 1;
-         i < vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts; i++ )
+    PgcWalkInit();
+    c = 0;
+    do
     {
-        int pgc_id_next, pgn_next;
+        pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
+
+        for (i = pgn; i <= pgc->nr_of_programs; i++)
+        {
+            chapter = calloc( sizeof( hb_chapter_t ), 1 );
+
+            chapter->index = c + 1;
+            chapter->pgcn = pgcn;
+            chapter->pgn = i;
+            hb_list_add( title->list_chapter, chapter );
+            c++;
+        }
+
+        pgn = 1;
+    } while ((pgcn = NextPgcn(ifo, pgcn)) != 0);
+
+    hb_log( "scan: title %d has %d chapters", t, c );
+
+    duration = 0;
+    count = hb_list_count( title->list_chapter );
+    for (i = 0; i < count; i++)
+    {
+        int pgcn_next, pgn_next;
         pgc_t * pgc_next;
+        hb_chapter_t *chapter_next;
+        int pgc_cell_end;
 
-        chapter = calloc( sizeof( hb_chapter_t ), 1 );
-        /* remember the on-disc chapter number */
-        chapter->index = i + 1;
+        chapter = hb_list_item( title->list_chapter, i );
 
-        pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgcn;
-        pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i].pgn;
-        pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
+        pgcn = chapter->pgcn;
+        pgn = chapter->pgn;
+        pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
 
         /* Start cell */
         chapter->cell_start  = pgc->program_map[pgn-1] - 1;
         chapter->block_start =
             pgc->cell_playback[chapter->cell_start].first_sector;
+        pgc_cell_end    = pgc->nr_of_cells - 1;
 
         /* End cell */
-        if( i != vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts - 1 )
+        if( i < count - 1 )
         {
             /* The cell before the starting cell of the next chapter,
                or... */
-            pgc_id_next = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i+1].pgcn;
-            pgn_next    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i+1].pgn;
-            pgc_next    = vts->vts_pgcit->pgci_srp[pgc_id_next-1].pgc;
-            chapter->cell_end = pgc_next->program_map[pgn_next-1] - 2;
+            chapter_next = hb_list_item( title->list_chapter, i+1 );
+            pgcn_next = chapter_next->pgcn;
+            pgn_next = chapter_next->pgn;
+            pgc_next = ifo->vts_pgcit->pgci_srp[pgcn_next-1].pgc;
+            if (pgcn_next == pgcn)
+            {
+                chapter->cell_end = pgc_next->program_map[pgn_next-1] - 2;
+            }
+            else
+            {
+                chapter->cell_end = pgc_cell_end;
+            }
             if( chapter->cell_end < 0 )
             {
                 /* Huh? */
@@ -652,15 +745,12 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
         else
         {
             /* ... the last cell of the title */
-            chapter->cell_end = title->cell_end;
+            chapter->cell_end = pgc_cell_end;
         }
         chapter->block_end =
             pgc->cell_playback[chapter->cell_end].last_sector;
 
         /* Block count, duration */
-        pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgcn;
-        pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
-        pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
         chapter->block_count = 0;
         chapter->duration = 0;
 
@@ -673,18 +763,11 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 #undef cp
             cell_cur = FindNextCell( pgc, cell_cur );
         }
-        hb_list_add( title->list_chapter, chapter );
-        c++;
+        duration += chapter->duration;
     }
 
     /* The durations we get for chapters aren't precise. Scale them so
        the total matches the title duration */
-    duration = 0;
-    for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
-    {
-        chapter = hb_list_item( title->list_chapter, i );
-        duration += chapter->duration;
-    }
     duration_correction = (float) title->duration / (float) duration;
     for( i = 0; i < hb_list_count( title->list_chapter ); i++ )
     {
@@ -704,7 +787,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
     /* Get aspect. We don't get width/height/rate infos here as
        they tend to be wrong */
-    switch( vts->vtsi_mat->vts_video_attr.display_aspect_ratio )
+    switch( ifo->vtsi_mat->vts_video_attr.display_aspect_ratio )
     {
         case 0:
             title->container_aspect = 4. / 3.;
@@ -728,7 +811,7 @@ fail:
     title = NULL;
 
 cleanup:
-    if( vts ) ifoClose( vts );
+    if( ifo ) ifoClose( ifo );
 
     return title;
 }
@@ -738,53 +821,33 @@ cleanup:
  ***********************************************************************
  * Title and chapter start at 1
  **********************************************************************/
-static int hb_dvdnav_start( hb_dvd_t * e, int title, int chapter )
+static int hb_dvdnav_start( hb_dvd_t * e, hb_title_t *title, int c )
 {
     hb_dvdnav_t * d = &(e->dvdnav);
-    ifo_handle_t *ifo;
-    int ii;
-    int vts, ttn, pgc_id, pgn;
-    pgc_t *pgc;
-    int cell_start, cell_end, title_start, title_end;
+    int t = title->index;
+    hb_chapter_t *chapter;
+    dvdnav_status_t result;
 
-    vts = d->vmg->tt_srpt->title[title-1].title_set_nr;
-    ttn = d->vmg->tt_srpt->title[title-1].vts_ttn;
-    if( !( ifo = ifoOpen( d->reader, vts ) ) )
-    {
-        hb_error( "dvd: ifoOpen failed for VTS %d", vts );
-        return 0;
-    }
+    d->title_block_count = title->block_count;
+    d->list_chapter = title->list_chapter;
 
-    /* Get title first and last blocks */
-    pgc_id         = ifo->vts_ptt_srpt->title[ttn-1].ptt[0].pgcn;
-    pgn            = ifo->vts_ptt_srpt->title[ttn-1].ptt[0].pgn;
-    pgc         = ifo->vts_pgcit->pgci_srp[pgc_id-1].pgc;
-    cell_start  = pgc->program_map[pgn - 1] - 1;
-    cell_end    = pgc->nr_of_cells - 1;
-    title_start = pgc->cell_playback[cell_start].first_sector;
-    title_end   = pgc->cell_playback[cell_end].last_sector;
-
-    /* Block count */
-    d->title_block_count = 0;
-    for( ii = cell_start; ii <= cell_end; ii++ )
-    {
-        d->title_block_count += pgc->cell_playback[ii].last_sector + 1 -
-            pgc->cell_playback[ii].first_sector;
-    }
-    ifoClose(ifo);
-
-	if ( d->stopped && !hb_dvdnav_reset(d) )
+    if ( d->stopped && !hb_dvdnav_reset(d) )
     {
         return 0;
     }
-    if ( dvdnav_part_play(d->dvdnav, title, chapter) != DVDNAV_STATUS_OK )
+    chapter = hb_list_item( title->list_chapter, c - 1);
+    if (chapter != NULL)
+        result = dvdnav_program_play(d->dvdnav, t, chapter->pgcn, chapter->pgn);
+    else
+        result = dvdnav_part_play(d->dvdnav, t, 1);
+    if (result != DVDNAV_STATUS_OK)
     {
-        hb_error( "dvd: dvdnav_title_play failed - %s", 
+        hb_error( "dvd: dvdnav_*_play failed - %s", 
                   dvdnav_err_to_string(d->dvdnav) );
         return 0;
     }
-    d->title = title;
-	d->stopped = 0;
+    d->title = t;
+    d->stopped = 0;
     return 1;
 }
 
@@ -795,7 +858,6 @@ static int hb_dvdnav_start( hb_dvd_t * e, int title, int chapter )
  **********************************************************************/
 static void hb_dvdnav_stop( hb_dvd_t * e )
 {
-    hb_dvdnav_t * d = &(e->dvdnav);
 }
 
 /***********************************************************************
@@ -812,9 +874,10 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
     int done = 0, ii;
 
     if (d->stopped)
-	{
-		return 0;
-	}
+    {
+        return 0;
+    }
+
     // dvdnav will not let you seek or poll current position
     // till it reaches a certain point in parsing.  so we
     // have to get blocks until we reach a cell
@@ -842,7 +905,8 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
             break;
 
         case DVDNAV_STOP:
-			d->stopped = 1;
+            hb_log("dvdnav: stop encountered during seek");
+            d->stopped = 1;
             return 0;
 
         case DVDNAV_HOP_CHANNEL:
@@ -881,10 +945,10 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
 
     while ( 1 )
     {
-    	if (d->stopped)
-		{
-			return 0;
-		}
+        if (d->stopped)
+        {
+            return 0;
+        }
         result = dvdnav_get_next_block( d->dvdnav, b->data, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
@@ -980,16 +1044,17 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             * and update the decoding/displaying accordingly. 
             */
             {
-                int tt = 0, ptt = 0;
+                int tt = 0, pgcn = 0, pgn = 0, c;
 
-                dvdnav_current_title_info(d->dvdnav, &tt, &ptt);
+                dvdnav_current_title_program(d->dvdnav, &tt, &pgcn, &pgn);
                 if (tt != d->title)
                 {
                     // Transition to another title signals that we are done.
                     return 0;
                 }
-                if (ptt > d->chapter)
-                    chapter = d->chapter = ptt;
+                c = FindChapterIndex(d->list_chapter, pgcn, pgn);
+                if (c > d->chapter)
+                    chapter = d->chapter = c;
             }
             break;
 
@@ -1027,7 +1092,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             /*
             * Playback should end here. 
             */
-			d->stopped = 1;
+            d->stopped = 1;
             return 0;
 
         default:
@@ -1046,12 +1111,14 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
 static int hb_dvdnav_chapter( hb_dvd_t * e )
 {
     hb_dvdnav_t * d = &(e->dvdnav);
-    int32_t t, c;
+    int32_t t, pgcn, pgn;
+    int32_t c;
 
-    if (dvdnav_current_title_info(d->dvdnav, &t, &c) != DVDNAV_STATUS_OK)
+    if (dvdnav_current_title_program(d->dvdnav, &t, &pgcn, &pgn) != DVDNAV_STATUS_OK)
     {
         return -1;
     }
+    c = FindChapterIndex( d->list_chapter, pgcn, pgn );
     return c;
 }
 
@@ -1106,6 +1173,27 @@ static void hb_dvdnav_set_angle( hb_dvd_t * e, int angle )
 }
 
 /***********************************************************************
+ * FindChapterIndex
+ ***********************************************************************
+ * Assumes pgc and cell_cur are correctly set, and sets cell_next to the
+ * cell to be read when we will be done with cell_cur.
+ **********************************************************************/
+static int FindChapterIndex( hb_list_t * list, int pgcn, int pgn )
+{
+    int count, ii;
+    hb_chapter_t *chapter;
+
+    count = hb_list_count( list );
+    for (ii = 0; ii < count; ii++)
+    {
+        chapter = hb_list_item( list, ii );
+        if (chapter->pgcn == pgcn && chapter->pgn == pgn)
+            return chapter->index;
+    }
+    return 0;
+}
+
+/***********************************************************************
  * FindNextCell
  ***********************************************************************
  * Assumes pgc and cell_cur are correctly set, and sets cell_next to the
@@ -1135,6 +1223,49 @@ static int FindNextCell( pgc_t *pgc, int cell_cur )
         cell_next = cell_cur + 1;
     }
     return cell_next;
+}
+
+static uint8_t pgcn_map[1280];
+
+/***********************************************************************
+ * NextPgcn
+ ***********************************************************************
+ * Assumes pgc and cell_cur are correctly set, and sets cell_next to the
+ * cell to be read when we will be done with cell_cur.
+ **********************************************************************/
+static int NextPgcn( ifo_handle_t *ifo, int pgcn )
+{
+    int byte;
+    uint8_t bit;
+    int next_pgcn;
+    pgc_t *pgc;
+
+    byte = pgcn >> 3;
+    bit = 1 << (pgcn & 0x7);
+    pgcn_map[byte] |= bit;
+
+    pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
+    next_pgcn = pgc->next_pgc_nr;
+    if ( next_pgcn < 1 || next_pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
+        return 0;
+
+    byte = next_pgcn >> 3;
+    bit = 1 << (pgcn & 0x7);
+    if (pgcn_map[byte] & bit)
+        return 0;
+    
+    return next_pgcn;
+}
+
+/***********************************************************************
+ * PgcWalkInit
+ ***********************************************************************
+ * Pgc links can loop. I track which have been visited in a bit vector
+ * Initialize the bit vector to empty.
+ **********************************************************************/
+static void PgcWalkInit( void )
+{
+    memset(pgcn_map, 0, 128);
 }
 
 /***********************************************************************
