@@ -103,6 +103,17 @@
     
     [fShowPreviewMovieButton setWantsLayer:YES];
     
+    /* Since the xib has everything off center for easy acess
+     * we align our views and windows here we an align to anything
+     * since it will actually change later upon source load, but
+     * for convenience we will use the fPictureViewArea
+     */
+     
+     /* Align the still preview image view to the picture box */
+     [fPictureView setFrameSize:[fPictureViewArea frame].size];
+     [fMovieView setFrameSize:[fPictureViewArea frame].size];
+     //[fPreviewWindow setFrameSize:[fPictureViewArea frame].size];
+    
     
 }
 - (BOOL)acceptsMouseMovedEvents
@@ -212,7 +223,7 @@ return YES;
 // necessary to display as much of the picture as possible.
 - (void) displayPreview
 {
-     hb_job_t * job = fTitle->job;
+    hb_job_t * job = fTitle->job;
     /* lets make sure that the still picture view is not hidden and that 
      * the movie preview is 
      */
@@ -222,71 +233,138 @@ return YES;
     [fMovieCreationProgressIndicator setHidden: YES];
     
     [fPictureView setHidden:NO];
-    [fPictureView setImage: [self imageForPicture: fPicture]];
+    
+    //[fHBController writeToActivityLog: "displayPreview called"];
+    
+    NSImage *fPreviewImage = [self imageForPicture: fPicture];
+    NSSize imageScaledSize = [fPreviewImage size];
+    
     
     NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
+    NSString *sizeInfoString;
     /* Set the picture size display fields below the Preview Picture*/
     if( fTitle->job->anamorphic.mode == 1 ) // Original PAR Implementation
     {
         output_width = fTitle->width-fTitle->job->crop[2]-fTitle->job->crop[3];
         output_height = fTitle->height-fTitle->job->crop[0]-fTitle->job->crop[1];
         display_width = output_width * fTitle->job->anamorphic.par_width / fTitle->job->anamorphic.par_height;
-        [fInfoField setStringValue:[NSString stringWithFormat:
-                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
-                                    fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
-        displaySize.width *= ( ( CGFloat )fTitle->job->anamorphic.par_width ) / ( ( CGFloat )fTitle->job->anamorphic.par_height );   
+        sizeInfoString = [NSString stringWithFormat:
+                          @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Strict",
+                          fTitle->width, fTitle->height, output_width, output_height, display_width, output_height];
+        
+        displaySize.width = display_width;
+        displaySize.height = fTitle->height;
+        imageScaledSize.width = display_width;
+        imageScaledSize.height = output_height;   
     }
     else if (fTitle->job->anamorphic.mode == 2) // Loose Anamorphic
     {
-    hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
+        hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
         display_width = output_width * output_par_width / output_par_height;
-        [fInfoField setStringValue:[NSString stringWithFormat:
-                                    @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
-                                    fTitle->width, fTitle->height, output_width, output_height, display_width, output_height]];
+        sizeInfoString = [NSString stringWithFormat:
+                          @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Loose",
+                          fTitle->width, fTitle->height, output_width, output_height, display_width, output_height];
         
         displaySize.width = display_width;
+        displaySize.height = fTitle->height;
+        imageScaledSize.width = display_width;
+        imageScaledSize.height = output_height;
     }
+    else if (fTitle->job->anamorphic.mode == 3) // Custom Anamorphic
+    {
+        hb_set_anamorphic_size(job, &output_width, &output_height, &output_par_width, &output_par_height);
+        display_width = output_width * output_par_width / output_par_height;
+        sizeInfoString = [NSString stringWithFormat:
+                          @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
+                          fTitle->width, fTitle->height, output_width, output_height, fTitle->job->anamorphic.dar_width, fTitle->job->anamorphic.dar_height];
+        
+        displaySize.width = fTitle->job->anamorphic.dar_width + fTitle->job->crop[2] + fTitle->job->crop[3];
+        displaySize.height = fTitle->job->anamorphic.dar_height + fTitle->job->crop[0] + fTitle->job->crop[1];
+        imageScaledSize.width = (int)fTitle->job->anamorphic.dar_width;
+        imageScaledSize.height = (int)fTitle->job->height;   
+    } 
     else // No Anamorphic
     {
-        [fInfoField setStringValue: [NSString stringWithFormat:
-                                     @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
-                                     fTitle->job->width, fTitle->job->height]];
+        sizeInfoString = [NSString stringWithFormat:
+                          @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
+                          fTitle->job->width, fTitle->job->height];
+        
+        displaySize.width = fTitle->width;
+        displaySize.height = fTitle->height;
+        imageScaledSize.width = fTitle->job->width;
+        imageScaledSize.height = fTitle->job->height;
     }
     
-    
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+    
+    /* Initially set our preview image here */
+    
+    [fPreviewImage setSize: imageScaledSize];
+    [fPictureView setFrameSize: imageScaledSize];
+    [fPictureView setImage: fPreviewImage];
+    // center it vertically and horizontally
+    NSPoint origin = [fPictureViewArea frame].origin;
+    origin.y += ([fPictureViewArea frame].size.height -
+                 [fPictureView frame].size.height) / 2.0;
+    
+    origin.x += ([fPictureViewArea frame].size.width -
+                 [fPictureView frame].size.width) / 2.0;
+    
+    [fPictureView setFrameOrigin:origin]; 
+    
     /* we also need to take into account scaling to full screen to activate switching the view size */
     if( [self viewNeedsToResizeToSize:viewSize])
     {
-        /* In the case of loose anamorphic, do not resize the window when scaling down */
-        // FIX ME: we need a new way to do this as we do not havefWidthField anymore
-        //if (fTitle->job->anamorphic.mode != 2 || [fWidthField intValue] == fTitle->width)
-        if (fTitle->job->anamorphic.mode != 2 || (fTitle->job->anamorphic.mode == 2 && output_width == fTitle->width))
+        /* if we have no anamorphic. */
+        if (!fTitle->job->anamorphic.mode || fTitle->job->anamorphic.mode == 0)
         {
             [self resizeSheetForViewSize:viewSize];
             [self setViewSize:viewSize];
         }
-    }
-    
+        /* Strict anamorphic. */
+        else if (fTitle->job->anamorphic.mode == 1)
+        {
+            [self resizeSheetForViewSize:viewSize];
+            [self setViewSize:viewSize];   
+        }
+        /* In the case of loose anamorphic, do not resize the window when scaling down */
+        else if (fTitle->job->anamorphic.mode == 2 && fTitle->width == fTitle->job->width)
+        {
+            [self resizeSheetForViewSize:viewSize];
+            [self setViewSize:viewSize];
+        }
+        
+        /* custom anamorphic */
+        else if (fTitle->job->anamorphic.mode == 3)
+        {
+            [self resizeSheetForViewSize:viewSize];
+            [self setViewSize:viewSize];   
+        }
+    }   
     
     // Show the scaled text (use the height to check since the width can vary
     // with anamorphic video).
-    if( ( ( int )viewSize.height ) != fTitle->height )
+    NSString *scaleString;
+    
+    if( imageScaledSize.height > [fPictureView frame].size.height)
     {
-        CGFloat scale = viewSize.width / ( ( CGFloat ) fTitle->width );
-        NSString *scaleString = [NSString stringWithFormat:
-                                 NSLocalizedString( @" (Preview scaled to %.0f%% actual size)",
-                                                   @"String shown when a preview is scaled" ),
-                                 scale * 100.0];
-        [fscaleInfoField setStringValue: [NSString stringWithFormat:
-                                          @"%@", scaleString]];
-        
+        CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);        
+        scaleString = [NSString stringWithFormat:
+                       NSLocalizedString( @" (Scaled to %.0f%% actual size)",
+                                         @"String shown when a preview is scaled" ), scale * 100.0];
     }
     else
     {
-        [fscaleInfoField setStringValue: @""];
+        scaleString = @"";
     }
-
+    /* Set the info fields in the hud controller */
+    [fInfoField setStringValue: [NSString stringWithFormat:
+                                 @"%@", sizeInfoString]];
+    
+    [fscaleInfoField setStringValue: [NSString stringWithFormat:
+                                      @"%@", scaleString]];
+    /* Set the info field in the window title bar */
+    [[self window] setTitle:[NSString stringWithFormat: @"Preview - %@ %@",sizeInfoString, scaleString]];
 }
 
 - (IBAction) previewDurationPopUpChanged: (id) sender
@@ -301,10 +379,6 @@ return YES;
          // Purge the existing picture previews so they get recreated the next time
         // they are needed.
         [self purgeImageCache];
-        /* We actually call displayPreview now from pictureSliderChanged which keeps
-         * our picture preview slider in sync with the previews being shown
-         */
-        //[self displayPreview];
         [self pictureSliderChanged:nil];
 }
 
@@ -327,7 +401,7 @@ return YES;
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title
 {
-    [self SetTitle:title];
+    //[self SetTitle:title];
     
     if ([fPreviewWindow isVisible])
     {
@@ -345,7 +419,6 @@ return YES;
         hudTimerSeconds = 0;
         [self pictureSliderChanged:nil];
         [self startHudTimer];
-        
     }
     
 }
@@ -720,8 +793,26 @@ return YES;
         // Make sure we have a big enough buffer to receive the image from libhb. libhb
         // creates images with a one-pixel border around the original content. Hence we
         // add 2 pixels horizontally and vertically to the buffer size.
-        int srcWidth = title->width + 2;
-        int srcHeight= title->height + 2;
+        int srcWidth;
+        int srcHeight;
+        if (title->width > title->job->width)
+        {
+            srcWidth = title->width + 2;
+        }
+        else
+        {
+            srcWidth = title->job->width + 2;
+        }
+        
+        if (title->height > title->job->height)
+        {
+            srcHeight = title->height + 2;
+        }
+        else
+        {
+            srcHeight = title->job->height + 2;
+        }
+        
         int newSize;
         newSize = srcWidth * srcHeight * 4;
         if( bufferSize < newSize )
@@ -829,7 +920,6 @@ return YES;
         return img;
     }
 }
-
 // Returns the preview image for the specified index, retrieving it from its internal
 // cache or by calling makeImageForPicture if it is not cached. Generally, you should
 // use imageForPicture so that images are cached. Calling makeImageForPicture will
@@ -842,7 +932,7 @@ return YES;
     NSImage * theImage = [fPicturePreviews objectForKey:key];
     if (!theImage)
     {
-        theImage = [PreviewController makeImageForPicture:pictureIndex libhb:fHandle title:fTitle removeBorders: NO];
+        theImage = [PreviewController makeImageForPicture:pictureIndex libhb:fHandle title:fTitle removeBorders: YES];
         [fPicturePreviews setObject:theImage forKey:key];
     }
     return theImage;
@@ -1109,7 +1199,7 @@ return YES;
         /* We need to find out if the preview movie needs to be scaled down so
          * that it doesn't overflow our available viewing container (just like for image
          * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
-        if( ((int)movieBounds.size.height) > [fPictureView frame].size.height || scaleToScreen == YES)
+        if( ((int)movieBounds.size.height) > [fPictureViewArea frame].size.height || scaleToScreen == YES)
         {
             /* The preview movie would be larger than the available viewing area
              * in the preview movie, so we go ahead and scale it down to the same size
@@ -1240,8 +1330,6 @@ return YES;
     
     if (scaleToScreen == YES)
     {
-        //CGFloat scaleToScreenWidth;
-        //CGFloat scaleToScreenHeight;
         CGFloat screenAspect;
         CGFloat viewAreaAspect; 
         //note, a mbp 15" at 1440 x 900 is a 1.6 ar
@@ -1353,10 +1441,14 @@ return YES;
 {
     [fPictureView setFrameSize:viewSize];
     
-    // center it vertically
+    // center it vertically and horizontally
     NSPoint origin = [fPictureViewArea frame].origin;
     origin.y += ([fPictureViewArea frame].size.height -
                  [fPictureView frame].size.height) / 2.0;
+                 
+   origin.x += ([fPictureViewArea frame].size.width -
+                 [fPictureView frame].size.width) / 2.0;
+    
     [fPictureView setFrameOrigin:origin];
     
     NSPoint controlboxorigin = [fPictureView frame].origin;
@@ -1366,6 +1458,14 @@ return YES;
     
     controlboxorigin.x += ([fPictureViewArea frame].size.width -
                  [fPictureControlBox frame].size.width) / 2.0;
+                 
+    
+    /* origin should be rounded to integer otherwise font/antialiasing
+     * may be blurry.
+     */
+    controlboxorigin.x = floor( controlboxorigin.x );
+    controlboxorigin.y = floor( controlboxorigin.y );
+    
     /* requires that thefPictureControlBox and the fEncodingControlBox
      * are the same width to line up.
      */
@@ -1377,7 +1477,7 @@ return YES;
 
 - (BOOL)viewNeedsToResizeToSize: (NSSize)newSize
 {
-    NSSize viewSize = [fPictureView frame].size;
+    NSSize viewSize = [fPictureViewArea frame].size;
     return (newSize.width != viewSize.width || newSize.height != viewSize.height);
 }
 

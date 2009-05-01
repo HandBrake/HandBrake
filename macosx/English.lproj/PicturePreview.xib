@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="257"/>
+			<integer value="5"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -38,7 +38,7 @@
 			<object class="NSWindowTemplate" id="616825745">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{482, 423}, {475, 433}}</string>
+				<string key="NSWindowRect">{{482, 422}, {573, 434}}</string>
 				<int key="NSWTFlags">1886913536</int>
 				<string key="NSWindowTitle">HandBrake Preview</string>
 				<string key="NSWindowClass">NSPanel</string>
@@ -76,16 +76,16 @@
 													<string>NeXT TIFF v4.0 pasteboard type</string>
 												</object>
 											</object>
-											<string key="NSFrame">{{-1, -2}, {475, 450}}</string>
+											<string key="NSFrame">{{6, 29}, {535, 315}}</string>
 											<reference key="NSSuperview" ref="353606868"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSImageCell" key="NSCell" id="955430771">
 												<int key="NSCellFlags">130560</int>
 												<int key="NSCellFlags2">33554432</int>
 												<int key="NSAlign">0</int>
-												<int key="NSScale">1</int>
+												<int key="NSScale">0</int>
 												<int key="NSStyle">0</int>
-												<bool key="NSAnimates">NO</bool>
+												<bool key="NSAnimates">YES</bool>
 											</object>
 											<bool key="NSEditable">YES</bool>
 										</object>
@@ -102,7 +102,7 @@
 													<string>QTMoviePasteboardType</string>
 												</object>
 											</object>
-											<string key="NSFrame">{{-10, -2}, {484, 450}}</string>
+											<string key="NSFrame">{{-10, -1}, {460, 450}}</string>
 											<reference key="NSSuperview" ref="353606868"/>
 											<object class="NSColor" key="kCoderFillColor">
 												<int key="NSColorSpace">1</int>
@@ -451,7 +451,7 @@
 													<reference key="NSSuperview" ref="92351498"/>
 												</object>
 											</object>
-											<string key="NSFrame">{{30, 114}, {420, 100}}</string>
+											<string key="NSFrame">{{14, 114}, {420, 100}}</string>
 											<reference key="NSSuperview" ref="353606868"/>
 											<string key="NSOffsets">{0, 0}</string>
 											<object class="NSTextFieldCell" key="NSTitleCell">
@@ -575,7 +575,7 @@
 													<reference key="NSSuperview" ref="768906858"/>
 												</object>
 											</object>
-											<string key="NSFrame">{{29, 266}, {420, 100}}</string>
+											<string key="NSFrame">{{13, 266}, {420, 100}}</string>
 											<reference key="NSSuperview" ref="353606868"/>
 											<string key="NSOffsets">{0, 0}</string>
 											<object class="NSTextFieldCell" key="NSTitleCell">
@@ -602,11 +602,11 @@
 											</object>
 										</object>
 									</object>
-									<string key="NSFrame">{{1, 1}, {473, 431}}</string>
+									<string key="NSFrame">{{1, 1}, {571, 432}}</string>
 									<reference key="NSSuperview" ref="289177107"/>
 								</object>
 							</object>
-							<string key="NSFrameSize">{475, 433}</string>
+							<string key="NSFrameSize">{573, 434}</string>
 							<reference key="NSSuperview" ref="49161063"/>
 							<string key="NSOffsets">{0, 0}</string>
 							<object class="NSTextFieldCell" key="NSTitleCell">
@@ -627,7 +627,7 @@
 							<bool key="NSTransparent">NO</bool>
 						</object>
 					</object>
-					<string key="NSFrameSize">{475, 433}</string>
+					<string key="NSFrameSize">{573, 434}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
@@ -891,26 +891,12 @@
 						<reference key="object" ref="289177107"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="48693112"/>
 							<reference ref="768906858"/>
 							<reference ref="92351498"/>
+							<reference ref="48693112"/>
 							<reference ref="844127024"/>
 						</object>
 						<reference key="parent" ref="49161063"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">179</int>
-						<reference key="object" ref="844127024"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="955430771"/>
-						</object>
-						<reference key="parent" ref="289177107"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">180</int>
-						<reference key="object" ref="955430771"/>
-						<reference key="parent" ref="844127024"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">207</int>
@@ -1134,6 +1120,20 @@
 						<reference key="object" ref="1032360651"/>
 						<reference key="parent" ref="245200984"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">179</int>
+						<reference key="object" ref="844127024"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="955430771"/>
+						</object>
+						<reference key="parent" ref="289177107"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">180</int>
+						<reference key="object" ref="955430771"/>
+						<reference key="parent" ref="844127024"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -1295,9 +1295,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{34, 423}, {475, 433}}</string>
+					<string>{{33, 422}, {573, 434}}</string>
 					<reference ref="9"/>
-					<string>{{34, 423}, {475, 433}}</string>
+					<string>{{33, 422}, {573, 434}}</string>
 					<reference ref="9"/>
 					<string>{{221, 276}, {533, 580}}</string>
 					<reference ref="6"/>

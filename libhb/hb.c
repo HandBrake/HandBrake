@@ -465,31 +465,34 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     // Free context
     sws_freeContext( context );
 
-    /* Gray background */
-    p32 = (uint32_t *) buffer;
-    for( i = 0; i < ( title->width + 2 ) * ( title->height + 2 ); i++ )
+    if( job->height < title->height || job->width < title->width )
     {
-        p32[i] = 0xFF808080;
-    }
+        /* Gray background */
+        p32 = (uint32_t *) buffer;
+        for( i = 0; i < ( title->width + 2 ) * ( title->height + 2 ); i++ )
+        {
+            p32[i] = 0xFF808080;
+        }
 
-    /* Draw the picture, centered, and draw the cropping zone */
-    preview_size = pic_preview.linesize[0];
-    pen = buffer + ( title->height - job->height ) *
-        ( title->width + 2 ) * 2 + ( title->width - job->width ) * 2;
-    memset( pen, 0xFF, 4 * ( job->width + 2 ) );
-    pen += 4 * ( title->width + 2 );
-    for( i = 0; i < job->height; i++ )
-    {
-        uint8_t * nextLine;
-        nextLine = pen + 4 * ( title->width + 2 );
-        memset( pen, 0xFF, 4 );
-        pen += 4;
-        memcpy( pen, buf4 + preview_size * i, 4 * job->width );
-        pen += 4 * job->width;
-        memset( pen, 0xFF, 4 );
-        pen = nextLine;
+        /* Draw the picture, centered, and draw the cropping zone */
+        preview_size = pic_preview.linesize[0];
+        pen = buffer + ( title->height - job->height ) *
+            ( title->width + 2 ) * 2 + ( title->width - job->width ) * 2;
+        memset( pen, 0xFF, 4 * ( job->width + 2 ) );
+        pen += 4 * ( title->width + 2 );
+        for( i = 0; i < job->height; i++ )
+        {
+            uint8_t * nextLine;
+            nextLine = pen + 4 * ( title->width + 2 );
+            memset( pen, 0xFF, 4 );
+            pen += 4;
+            memcpy( pen, buf4 + preview_size * i, 4 * job->width );
+            pen += 4 * job->width;
+            memset( pen, 0xFF, 4 );
+            pen = nextLine;
+        }
+        memset( pen, 0xFF, 4 * ( job->width + 2 ) );
     }
-    memset( pen, 0xFF, 4 * ( job->width + 2 ) );
 
     // Clean up
     avpicture_free( &pic_preview );

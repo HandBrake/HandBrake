@@ -26,6 +26,8 @@
     IBOutlet NSWindow        * fPictureWindow;
     
     IBOutlet NSTabView       * fSizeFilterView;
+    IBOutlet NSTabViewItem   * fSizeTabView;
+    IBOutlet NSTabViewItem   * fFilterTabView;
     
     /* Picture Sizing */
     
@@ -35,10 +37,14 @@
 
     IBOutlet NSBox           * fPictureSizeBox;
     IBOutlet NSBox           * fPictureCropBox;
+    
+    IBOutlet NSTextField     * fWidthLabel;
     IBOutlet NSTextField     * fWidthField;
     IBOutlet NSStepper       * fWidthStepper;
     IBOutlet NSTextField     * fHeightField;
     IBOutlet NSStepper       * fHeightStepper;
+    IBOutlet NSTextField     * fRatioLabel;
+    IBOutlet NSTextField     * fRatioLabel2; // shown for capuj
     IBOutlet NSButton        * fRatioCheck;
     IBOutlet NSMatrix        * fCropMatrix;
     IBOutlet NSTextField     * fCropTopField;
@@ -49,7 +55,43 @@
     IBOutlet NSStepper       * fCropLeftStepper;
     IBOutlet NSTextField     * fCropRightField;
     IBOutlet NSStepper       * fCropRightStepper;
+    
+    IBOutlet NSTextField     * fModulusLabel;
+    IBOutlet NSPopUpButton   * fModulusPopUp;
+    /* linkers for capuj */
+    IBOutlet NSBox           * fStorageLinkBox;
+    IBOutlet NSSlider        * fStorageLinkSlider;
+    IBOutlet NSTextField     * fStorageLinkParLabel;
+    IBOutlet NSTextField     * fStorageLinkDisplayLabel;
+    
+    IBOutlet NSSlider        * fParLinkSlider;
+    IBOutlet NSTextField     * fParLinkStorageLabel;
+    IBOutlet NSTextField     * fParLinkDisplayLabel;
+    
+    IBOutlet NSSlider        * fDisplayLinkSlider;
+    IBOutlet NSTextField     * fDisplayLinkStorageLabel;
+    IBOutlet NSTextField     * fDisplayLinkParLabel;
+    
+    
+    IBOutlet NSTextField     * fDisplayWidthField;
+    IBOutlet NSTextField     * fDisplayWidthLabel;
+    
+    IBOutlet NSTextField     * fParWidthField;
+    IBOutlet NSTextField     * fParHeightField;
+    IBOutlet NSTextField     * fParWidthLabel;
+    IBOutlet NSTextField     * fParHeightLabel;
 
+    /* for now we setup some values to remember our pars and dars
+     * from scan
+    */
+    float titleDarWidth;
+    float titleDarHeight;
+    
+    int titleParWidth;
+    int titleParHeight;
+    float dar;
+    IBOutlet NSButton        * fResetParDarButton;
+    
 	IBOutlet NSPopUpButton   * fAnamorphicPopUp;
     IBOutlet NSTextField     * fSizeInfoField;
 	
@@ -63,6 +105,8 @@
     
     int output_width, output_height, output_par_width, output_par_height;
     int display_width;
+    
+    int modulus;
     
     /* used to track the previous state of the keep aspect
     ratio checkbox when turning anamorphic on, so it can be
@@ -94,6 +138,8 @@
     IBOutlet NSPopUpButton   * fDenoisePopUp;
     IBOutlet NSTextField     * fDenoiseField;
 	
+    
+    IBOutlet NSBox           * fDeblockBox; // also holds the grayscale box
     IBOutlet NSButton        * fDeblockCheck;
     IBOutlet NSTextField     * fDeblockField;
     IBOutlet NSSlider        * fDeblockSlider;
@@ -121,11 +167,13 @@
 - (void) SetTitle:  (hb_title_t *)  title;
 - (void)setHBController: (HBController *)controller;
 - (IBAction) showPictureWindow: (id)sender;
+- (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
+- (IBAction) resizeInspectorForTab: (id)sender;
 - (IBAction) showPreviewWindow: (id)sender;
 - (BOOL) previewFullScreenMode;
 - (IBAction) previewGoWindowed: (id)sender;
 
-
+- (IBAction) adjustSizingDisplay: (id) sender;
 
 
 - (IBAction) SettingsChanged: (id) sender;
@@ -140,15 +188,16 @@
 - (void) setAllowLooseAnamorphic: (BOOL) setting;
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title;
-
-
+- (IBAction) storageLinkChanged: (id) sender;
+- (IBAction) parLinkChanged: (id) sender;
+- (IBAction) displayLinkChanged: (id) sender;
 - (void) setToFullScreenMode;
 - (void) setToWindowedMode;
 
 /* Filter Actions */
 - (void) setInitialPictureFilters;
 - (IBAction) FilterSettingsChanged: (id) sender;
-- (void) adjustFilterDisplay: (id) sender;
+- (IBAction) adjustFilterDisplay: (id) sender;
 - (IBAction) modeDecombDeinterlaceSliderChanged: (id) sender;
 - (IBAction) deblockSliderChanged: (id) sender;
 

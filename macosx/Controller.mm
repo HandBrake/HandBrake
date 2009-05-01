@@ -651,8 +651,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                             NSLocalizedString( @"Scanning title %d of %d...", @"" ),
                                             p.title_cur, p.title_count]];
             [fScanIndicator setHidden: NO];
-            double scanProgress = ( p.title_cur - 1 ) / p.title_count;
-            //[fScanIndicator setDoubleValue: 100.0 * scanProgress];
             [fScanIndicator setDoubleValue: 100.0 * ((double)( p.title_cur - 1 ) / p.title_count)];
             break;
 		}
@@ -1974,6 +1972,19 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
+    /* if we are custom anamorphic, store the exact storage, par and display dims */
+    if (fTitle->job->anamorphic.mode == 3)
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PicturePARStorageWidth"];
+        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PicturePARStorageHeight"];
+        
+        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_width] forKey:@"PicturePARPixelWidth"];
+        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.par_height] forKey:@"PicturePARPixelHeight"];
+        
+        [queueFileJob setObject:[NSNumber numberWithFloat:fTitle->job->anamorphic.dar_width] forKey:@"PicturePARDisplayWidth"];
+        [queueFileJob setObject:[NSNumber numberWithFloat:fTitle->job->anamorphic.dar_height] forKey:@"PicturePARDisplayHeight"];
+
+    }
     NSString * pictureSummary;
     pictureSummary = [fPictureSizeField stringValue];
     [queueFileJob setObject:pictureSummary forKey:@"PictureSizingSummary"];                 
@@ -3090,7 +3101,18 @@ fWorkingCount = 0;
     
     job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
-    
+    if ([[queueToApply objectForKey:@"PicturePAR"]  intValue] == 3)
+    {
+        /* insert our custom values here for capuj */
+        job->width = [[queueToApply objectForKey:@"PicturePARStorageWidth"]  intValue];
+        job->height = [[queueToApply objectForKey:@"PicturePARStorageHeight"]  intValue];
+        
+        job->anamorphic.par_width = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
+        job->anamorphic.par_height = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
+        
+        job->anamorphic.dar_width = [[queueToApply objectForKey:@"PicturePARDisplayWidth"]  floatValue];
+        job->anamorphic.dar_height = [[queueToApply objectForKey:@"PicturePARDisplayHeight"]  floatValue];
+    }
     
     /* Here we use the crop values saved at the time the preset was saved */
     job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
@@ -3740,7 +3762,7 @@ fWorkingCount = 0;
 
 	/* Reset the new title in fPictureController &&  fPreviewController*/
     [fPictureController SetTitle:title];
-    //[fPictureController SetTitle:title];
+
     /* Update subtitle popups */
     hb_subtitle_t * subtitle;
     [fSubPopUp removeAllItems];
@@ -3796,7 +3818,7 @@ fWorkingCount = 0;
 	[self calculatePictureSizing:nil];
 
    /* lets call tableViewSelected to make sure that any preset we have selected is enforced after a title change */
-	[self selectPreset:nil];
+    [self selectPreset:nil];
 }
 
 - (IBAction) chapterPopUpChanged: (id) sender
@@ -4429,7 +4451,7 @@ the user is using "Custom" settings by determining the sender*/
     }
     [fVideoFiltersField setStringValue: [NSString stringWithFormat:@"Video Filters: %@", videoFilters]];
     
-    [fPictureController reloadStillPreview]; 
+    //[fPictureController reloadStillPreview]; 
 }
 
 
