@@ -536,7 +536,6 @@
     [fModulusPopUp addItemWithTitle: @"8"];
     [fModulusPopUp addItemWithTitle: @"4"];
     [fModulusPopUp addItemWithTitle: @"2"];
-    [fModulusPopUp addItemWithTitle: @"1"];
     if (job->anamorphic.mode == 3)
     {
         [fModulusPopUp selectItemWithTitle: [NSString stringWithFormat:@"%d",job->anamorphic.modulus]];
