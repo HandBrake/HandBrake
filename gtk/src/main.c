@@ -54,6 +54,7 @@
 #include "values.h"
 #include "icons.h"
 #include "callbacks.h"
+#include "queuehandler.h"
 #include "x264handler.h"
 #include "settings.h"
 #include "resources.h"
@@ -641,7 +642,6 @@ main (int argc, char *argv[])
 	buffer = gtk_text_view_get_buffer (textview);
 	g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
 
-	ghb_file_menu_add_dvd(ud);
 	ghb_combo_init(ud->builder);
 
 	g_debug("ud %p\n", ud);
@@ -712,6 +712,10 @@ main (int argc, char *argv[])
 	}
 	// Start timer for monitoring libhb status, 500ms
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
+
+	// Add dvd devices to File menu
+	g_idle_add((GSourceFunc)ghb_file_menu_add_dvd, ud);
+
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();

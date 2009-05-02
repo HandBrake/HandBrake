@@ -3074,7 +3074,7 @@ presets_drag_motion_cb(
 	GtkWidget *widget;
 
 	widget = gtk_drag_get_source_widget(ctx);
-	if (widget == NULL || widget != tv)
+	if (widget == NULL || widget != GTK_WIDGET(tv))
 		return TRUE;
 
 	// Get the type of the object being dragged

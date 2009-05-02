@@ -4138,10 +4138,11 @@ ghb_dvd_volname(const gchar *device)
 {
 	gchar *name;
 	name = hb_dvd_name((gchar*)device);
-	if (name != NULL)
+	if (name != NULL && name[0] != 0)
 	{
+		name = g_strdup(name);
 		sanitize_volname(name);
-		return g_strdup(name);
+		return name;
 	}
-	return name;
+	return NULL;
 }

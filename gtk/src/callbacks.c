@@ -291,9 +291,10 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 }
 
 gboolean
-uppers_and_unders(const gchar *str)
+uppers_and_unders(gchar *str)
 {
 	if (str == NULL) return FALSE;
+	str = g_strchomp(g_strchug(str));
 	while (*str)
 	{
 		if (*str == ' ')
@@ -709,7 +710,7 @@ source_dialog_extra_widgets(
 	gtk_combo_box_append_text (combo, "Not Selected");
 	while (link != NULL)
 	{
-		gchar *name = get_dvd_volume_name(link->data);
+		gchar *name = get_dvd_device_name(link->data);
 		gtk_combo_box_append_text(combo, name);
 		g_free(name);
 		g_object_unref(link->data);
@@ -2775,7 +2776,7 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gtk_action_set_visible(action, hbfd);
 }
 
-void
+gboolean
 ghb_file_menu_add_dvd(signal_user_data_t *ud)
 {
 	GList *link, *drives;
@@ -2833,6 +2834,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 		}
 		g_list_free(drives);
 	}
+	return FALSE;
 }
 
 gboolean ghb_is_cd(GDrive *gd);
