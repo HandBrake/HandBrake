@@ -10,4 +10,6 @@ LIBMP4V2.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,LIBMP4V2.GCC,*archs *
 
 ## save some build-time by disabling utils
 LIBMP4V2.CONFIGURE.extra += --disable-util
-LIBMP4V2.CONFIGURE.extra += --enable-gch
+
+## make sure gch is disabled; we get build errors on linux with gcc-4.3.x and -g3
+LIBMP4V2.CONFIGURE.extra += --disable-gch
