@@ -3480,12 +3480,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 	/* Add selected filters */
 	job->filters = hb_list_init();
-	gint vrate = ghb_settings_combo_int(js, "VideoFramerate");
-	if( vrate == 0 && ghb_settings_combo_int(js, "PictureDetelecine" ) )
-		job->vfr = 1;
-	else
-		job->vfr = 0;
-
 	gint detel = ghb_settings_combo_int(js, "PictureDetelecine");
 	if ( detel )
 	{
@@ -3569,13 +3563,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->vquality = -1.0;
 		job->vbitrate = ghb_settings_get_int(js, "VideoAvgBitrate");
 	}
-	// AVI container does not support variable frame rate.
-	if (job->mux == HB_MUX_AVI)
-	{
-		job->vfr = FALSE;
-		job->cfr = 1;
-	}
 
+	gint vrate = ghb_settings_combo_int(js, "VideoFramerate");
 	if( vrate == 0 )
 	{
 		job->vrate = title->rate;
@@ -3588,6 +3577,17 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->vrate_base = vrate;
 		job->cfr = 1;
 	}
+
+	// AVI container does not support variable frame rate.
+	// OGM supports variable frame rate, but bases all timing on
+	// DTS, which breaks when b-frames are used since it is
+	// impossible to reconstruct PTS from DTS when the framerate
+	// is variable.  
+	if (job->mux == HB_MUX_AVI || job->mux == HB_MUX_OGM)
+	{
+		job->cfr = 1;
+	}
+
 	// First remove any audios that are already in the list
 	// This happens if you are encoding the same title a second time.
 	gint num_audio_tracks = hb_list_count(job->list_audio);
