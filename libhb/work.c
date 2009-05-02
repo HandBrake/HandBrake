@@ -186,20 +186,19 @@ void hb_display_job_info( hb_job_t * job )
         hb_log( "     + bitrate %d kbps", title->video_bitrate / 1000 );
     }
     
-    if( job->vfr)
-    {
-        hb_log( "   + frame rate: %.3f fps -> variable fps",
-            (float) title->rate / (float) title->rate_base );
-    }
-    else if( !job->cfr )
+    if( !job->cfr )
     {
         hb_log( "   + frame rate: same as source (around %.3f fps)",
             (float) title->rate / (float) title->rate_base );
     }
     else
     {
-        hb_log( "   + frame rate: %.3f fps -> constant %.3f fps",
-            (float) title->rate / (float) title->rate_base, (float) job->vrate / (float) job->vrate_base );
+        static const char *frtypes[] = {
+            "", "constant", "peak rate limited to"
+        };
+        hb_log( "   + frame rate: %.3f fps -> %s %.3f fps",
+            (float) title->rate / (float) title->rate_base, frtypes[job->cfr],
+            (float) job->vrate / (float) job->vrate_base );
     }
 
     if( job->anamorphic.mode )
@@ -402,16 +401,19 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_log( "New dimensions %i * %i", job->width, job->height );
     }
 
-    if( ( job->mux & HB_MUX_AVI ) || job->cfr )
+    if( job->mux & HB_MUX_AVI )
     {
-        /* VFR detelecine is not compatible with AVI or constant frame rates. */
-        job->vfr = 0;
+        // The concept of variable frame rate video was a bit too advanced
+        // for Microsoft so AVI doesn't support it. Since almost all dvd
+        // video is VFR we have to convert it to constant frame rate to
+        // put it in an AVI container. So duplicate, drop and
+        // otherwise trash video frames to appease the gods of Redmond.
+        job->cfr = 1;
     }
 
-    if ( job->vfr )
+    if ( job->cfr == 0 )
     {
-        /* Ensure we're using "Same as source" FPS,
-           aka VFR, if we're doing VFR detelecine. */
+        /* Ensure we're using "Same as source" FPS */
         job->vrate_base = title->rate_base;
     }
 

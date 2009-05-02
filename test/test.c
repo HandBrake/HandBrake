@@ -1184,13 +1184,6 @@ static int HandleEvents( hb_handle_t * h )
             {
                 hb_filter_detelecine.settings = detelecine_opt;
                 hb_list_add( job->filters, &hb_filter_detelecine );
-                
-                if( !vrate )
-                {
-                    /* No framerate specified, so using same as source.
-                       That means VFR, so set detelecine up to drop frames. */
-                           job->vfr = 1;
-                }
             }
             if( decomb )
             {
@@ -1264,9 +1257,17 @@ static int HandleEvents( hb_handle_t * h )
             }
             if( vrate )
             {
-                job->cfr = 1;
+                job->cfr = cfr;
                 job->vrate = 27000000;
                 job->vrate_base = vrate;
+            }
+            else if ( cfr )
+            {
+                // cfr or pfr flag with no rate specified implies
+                // use the title rate.
+                job->cfr = cfr;
+                job->vrate = title->rate;
+                job->vrate_base = title->rate_base;
             }
 
             /* Grab audio tracks */
@@ -1970,6 +1971,16 @@ static void ShowHelp()
     "                            Be aware that not specifying a framerate lets\n"
     "                            HandBrake preserve a source's time stamps,\n"
     "                            potentially creating variable framerate video\n"
+    "    --vfr, --cfr, --pfr     Select variable, constant or peak-limited\n"
+    "                            frame rate control. VFR preserves the source\n"
+    "                            timing. CFR makes the output constant rate at\n"
+    "                            the rate given by the -r flag (or the source's\n"
+    "                            average rate if no -r is given). PFR doesn't\n"
+    "                            allow the rate to go over the rate specified\n"
+    "                            with the -r flag but won't change the source\n"
+    "                            timing if it's below that rate.\n"
+    "                            If none of these flags are given, the default\n"
+    "                            is --cfr when -r is given and --vfr otherwise\n"
 
     "\n"
     "### Audio Options-----------------------------------------------------------\n\n"
@@ -2201,7 +2212,9 @@ static int ParseOptions( int argc, char ** argv )
             { "previews",    required_argument, NULL,    PREVIEWS },
             { "start-at-preview", required_argument, NULL, START_AT_PREVIEW },
             { "stop-at",    required_argument, NULL,     STOP_AT },
-
+            { "vfr",         no_argument,       &cfr,    0 },
+            { "cfr",         no_argument,       &cfr,    1 },
+            { "pfr",         no_argument,       &cfr,    2 },
             { 0, 0, 0, 0 }
           };
 
@@ -2218,6 +2231,9 @@ static int ParseOptions( int argc, char ** argv )
 
         switch( c )
         {
+            case 0:
+                /* option was handled entirely in getopt_long */
+                break;
             case 'h':
                 ShowHelp();
                 exit( 0 );
@@ -2506,6 +2522,10 @@ static int ParseOptions( int argc, char ** argv )
                 if( !vrate )
                 {
                     fprintf( stderr, "invalid framerate %s\n", optarg );
+                }
+                else if ( cfr == 0 )
+                {
+                    cfr = 1;
                 }
                 break;
             }

@@ -50,6 +50,9 @@ struct hb_work_private_s
     x264_picture_t   pic_in;
     uint8_t         *x264_allocated_pic;
 
+    uint32_t       frames_in;
+    uint32_t       frames_out;
+    uint32_t       frames_split; // number of frames we had to split
     int            chap_mark;   // saved chap mark when we're propagating it
     int64_t        last_stop;   // Debugging - stop time of previous input frame
     int64_t        init_delay;
@@ -346,10 +349,14 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         pv->init_delay += 2;
 
         /* For VFR, libhb sees the FPS as 29.97, but the longest frames
-           will use the duration of frames running at 23.976fps instead.. */
-        if (job->vfr)
+           will use the duration of frames running at 23.976fps instead.
+           Since detelecine occasionally makes mistakes and since we have
+           to deal with some really horrible timing jitter from mkvs and
+           mp4s encoded with low resolution clocks, make the delay very
+           conservative if we're not doing CFR. */
+        if ( job->cfr != 1 )
         {
-            pv->init_delay = 7506;
+            pv->init_delay *= 2;
         }
 
         /* The delay is 1 frames for regular b-frames, 2 for b-pyramid. */
@@ -363,6 +370,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 void encx264Close( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
+
+    if ( pv->frames_split )
+    {
+        hb_log( "encx264: %u frames had to be split (%u in, %u out)",
+                pv->frames_split, pv->frames_in, pv->frames_out );
+    }
     /*
      * Patch the x264 allocated data back in so that x264 can free it
      * we have been using our own buffers during the encode to avoid copying.
@@ -606,6 +619,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_buffer_t *buf = nal_encode( w, &pic_out, i_nal, nal );
             if ( buf )
             {
+                ++pv->frames_out;
                 if ( last_buf == NULL )
                     *buf_out = buf;
                 else
@@ -624,6 +638,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     // Not EOF - encode the packet & wrap it in a NAL
+    ++pv->frames_in;
 
     // if we're re-ordering frames, check if this frame is too large to reorder
     if ( pv->init_delay && in->stop - in->start > pv->init_delay )
@@ -639,6 +654,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // error. We take advantage of the fact that x264 buffers frame
         // data internally to feed the same image into the encoder multiple
         // times, just changing its start & stop times each time.
+        ++pv->frames_split;
         int64_t orig_stop = in->stop;
         int64_t new_stop = in->start;
         hb_buffer_t *last_buf = NULL;
@@ -665,6 +681,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_buffer_t *buf = x264_encode( w, in );
             if ( buf )
             {
+                ++pv->frames_out;
                 if ( last_buf == NULL )
                     *buf_out = buf;
                 else
@@ -676,6 +693,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     else
     {
+        ++pv->frames_out;
         *buf_out = x264_encode( w, in );
     }
     return HB_WORK_OK;

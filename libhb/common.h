@@ -183,9 +183,7 @@ struct hb_job_s
                             except with x264, to use its real QP/RF scale
          vbitrate:          output bitrate (kbps)
          vrate, vrate_base: output framerate is vrate / vrate_base
-         vfr:               boolean for variable frame rate detelecine
-         cfr:               boolean to use constant frame rates instead of
-                            passing through the source's frame durations.
+         cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          h264_level:        vestigial boolean to decide if we're encoding for iPod
          crf:               boolean for whether to use constant rate factor with x264
