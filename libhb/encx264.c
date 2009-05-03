@@ -448,12 +448,20 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
         }
 
         /* H.264 in .mp4 or .mkv */
-        int naltype = buf->data[buf->size+4] & 0x1f;
-        if ( naltype == 0x7 || naltype == 0x8 )
+        switch( nal[i].i_type )
         {
-            // Sequence Parameter Set & Program Parameter Set go in the
-            // mp4 header so skip them here
-            continue;
+            /* Sequence Parameter Set & Program Parameter Set go in the
+             * mp4 header so skip them here
+             */
+            case NAL_SPS:
+            case NAL_PPS:
+                continue;
+
+            case NAL_SLICE:
+            case NAL_SLICE_IDR:
+            case NAL_SEI:
+            default:
+                break;
         }
 
         /* H.264 in mp4 (stolen from mp4creator) */
