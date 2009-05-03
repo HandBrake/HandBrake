@@ -508,6 +508,12 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
             (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE) )
             buf->frametype = HB_FRAME_BREF;
 
+        /* Expose disposable bit to muxer. */
+        if( nal[i].i_ref_idc == NAL_PRIORITY_DISPOSABLE )
+            buf->flags &= ~HB_FRAME_REF;
+        else
+            buf->flags |= HB_FRAME_REF;
+
         buf->size += size;
     }
     // make sure we found at least one video frame

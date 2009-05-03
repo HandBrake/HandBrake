@@ -514,18 +514,73 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         duration = MP4_INVALID_DURATION;
     }
 
-    // Here's where the sample actually gets muxed.
-    if( !MP4WriteSample( m->file,
-                         mux_data->track,
-                         buf->data,
-                         buf->size,
-                         duration,
-                         offset,
-                         ( job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data ) ?
-                            ( buf->frametype == HB_FRAME_IDR ) : ( ( buf->frametype & HB_FRAME_KEY ) != 0 ) ) )
+    /* Here's where the sample actually gets muxed. */
+    if( job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data )
     {
-        hb_error("Failed to write to output file, disk full?");
-        *job->die = 1;
+        /* Compute dependency flags.
+         *
+         * This mechanism is (optionally) used by media players such as QuickTime
+         * to offer better scrubbing performance. The most influential bits are
+         * MP4_SDT_HAS_NO_DEPENDENTS and MP4_SDT_EARLIER_DISPLAY_TIMES_ALLOWED.
+         *
+         * Other bits are possible but no example media using such bits have been
+         * found.
+         *
+         * It is acceptable to supply 0-bits for any samples which characteristics
+         * cannot be positively guaranteed.
+         */
+        int sync = 0;
+        uint32_t dflags = 0;
+
+        /* encoding layer signals if frame is referenced by other frames */
+        if( buf->flags & HB_FRAME_REF )
+            dflags |= MP4_SDT_HAS_DEPENDENTS;
+        else
+            dflags |= MP4_SDT_HAS_NO_DEPENDENTS; /* disposable */
+
+        switch( buf->frametype )
+        {
+            case HB_FRAME_IDR:
+                sync = 1;
+                break;
+            case HB_FRAME_I:
+                dflags |= MP4_SDT_EARLIER_DISPLAY_TIMES_ALLOWED;
+                break;
+            case HB_FRAME_P:
+                dflags |= MP4_SDT_EARLIER_DISPLAY_TIMES_ALLOWED;
+                break;
+            case HB_FRAME_BREF:
+            case HB_FRAME_B:
+            default:
+                break; /* nothing to mark */
+        }
+
+        if( !MP4WriteSampleDependency( m->file,
+                                       mux_data->track,
+                                       buf->data,
+                                       buf->size,
+                                       duration,
+                                       offset,
+                                       sync,
+                                       dflags ))
+        {
+            hb_error("Failed to write to output file, disk full?");
+            *job->die = 1;
+        }
+    }
+    else
+    {
+        if( !MP4WriteSample( m->file,
+                             mux_data->track,
+                             buf->data,
+                             buf->size,
+                             duration,
+                             offset,
+                             ( buf->frametype & HB_FRAME_KEY ) != 0 ))
+        {
+            hb_error("Failed to write to output file, disk full?");
+            *job->die = 1;
+        }
     }
 
     return 0;
