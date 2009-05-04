@@ -64,7 +64,7 @@ namespace Handbrake
             // 
             // btn_add
             // 
-            this.btn_add.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_add.BackColor = System.Drawing.Color.Transparent;
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_add.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
@@ -78,7 +78,7 @@ namespace Handbrake
             // 
             // btn_cancel
             // 
-            this.btn_cancel.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_cancel.BackColor = System.Drawing.Color.Transparent;
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));

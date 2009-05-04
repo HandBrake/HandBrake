@@ -56,7 +56,7 @@
     <Setting Name="autoNameFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">{source}-{title}-{chapters}</Value>
     </Setting>
-    <Setting Name="saveLog" Type="System.String" Scope="User">
+    <Setting Name="saveLogToSpecifiedPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="saveLogPath" Type="System.String" Scope="User">

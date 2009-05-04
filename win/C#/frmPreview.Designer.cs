@@ -37,11 +37,11 @@
             this.cb_preview = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.cb_duration = new System.Windows.Forms.ToolStripComboBox();
+            this.btn_playQT = new System.Windows.Forms.ToolStripButton();
+            this.btn_playVLC = new System.Windows.Forms.ToolStripButton();
             this.QTControl = new AxQTOControlLib.AxQTControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_status = new System.Windows.Forms.Label();
-            this.btn_playQT = new System.Windows.Forms.ToolStripButton();
-            this.btn_playVLC = new System.Windows.Forms.ToolStripButton();
             this.toolBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QTControl)).BeginInit();
             this.panel1.SuspendLayout();
@@ -121,6 +121,26 @@
             this.cb_duration.Name = "cb_duration";
             this.cb_duration.Size = new System.Drawing.Size(75, 25);
             // 
+            // btn_playQT
+            // 
+            this.btn_playQT.Image = global::Handbrake.Properties.Resources.Play_small;
+            this.btn_playQT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_playQT.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_playQT.Name = "btn_playQT";
+            this.btn_playQT.Size = new System.Drawing.Size(89, 22);
+            this.btn_playQT.Text = "Play with QT";
+            this.btn_playQT.Click += new System.EventHandler(this.btn_playQT_Click);
+            // 
+            // btn_playVLC
+            // 
+            this.btn_playVLC.Image = global::Handbrake.Properties.Resources.Play_small;
+            this.btn_playVLC.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_playVLC.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_playVLC.Name = "btn_playVLC";
+            this.btn_playVLC.Size = new System.Drawing.Size(93, 22);
+            this.btn_playVLC.Text = "Play with VLC";
+            this.btn_playVLC.Click += new System.EventHandler(this.btn_playVLC_Click);
+            // 
             // QTControl
             // 
             this.QTControl.Enabled = true;
@@ -154,26 +174,6 @@
             this.lbl_status.TabIndex = 40;
             this.lbl_status.Text = "{0}";
             this.lbl_status.Visible = false;
-            // 
-            // btn_playQT
-            // 
-            this.btn_playQT.Image = global::Handbrake.Properties.Resources.Play_small;
-            this.btn_playQT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_playQT.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_playQT.Name = "btn_playQT";
-            this.btn_playQT.Size = new System.Drawing.Size(89, 22);
-            this.btn_playQT.Text = "Play with QT";
-            this.btn_playQT.Click += new System.EventHandler(this.btn_playQT_Click);
-            // 
-            // btn_playVLC
-            // 
-            this.btn_playVLC.Image = global::Handbrake.Properties.Resources.Play_small;
-            this.btn_playVLC.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_playVLC.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_playVLC.Name = "btn_playVLC";
-            this.btn_playVLC.Size = new System.Drawing.Size(93, 22);
-            this.btn_playVLC.Text = "Play with VLC";
-            this.btn_playVLC.Click += new System.EventHandler(this.btn_playVLC_Click);
             // 
             // frmPreview
             // 

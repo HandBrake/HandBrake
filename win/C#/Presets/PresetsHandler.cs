@@ -12,9 +12,11 @@ namespace Handbrake.Presets
 {
     public class PresetsHandler
     {
-        List<Preset> presets = new List<Preset>();  // Category+Level+Preset Name: Query
-        List<Preset> user_presets = new List<Preset>(); // Preset Name: Query
+        List<Preset> presets = new List<Preset>();  
+        List<Preset> user_presets = new List<Preset>();
         private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Preset>));
+        String userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
+        string hbPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
 
         /// <summary>
         /// Add a new preset to the system
@@ -202,10 +204,9 @@ namespace Handbrake.Presets
             user_presets.Clear();
 
             // Load in the users presets from user_presets.xml
-            string filePath = Application.StartupPath + "\\presets.xml";
-            if (File.Exists(filePath))
+            if (File.Exists(hbPresetFile))
             {
-                using (FileStream strm = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                using (FileStream strm = new FileStream(hbPresetFile, FileMode.Open, FileAccess.Read))
                 {
                     if (strm.Length != 0)
                     {
@@ -219,10 +220,10 @@ namespace Handbrake.Presets
             }
 
             // Load in the users presets from user_presets.xml
-            filePath = Application.StartupPath + "\\user_presets.xml";
-            if (File.Exists(filePath))
+
+            if (File.Exists(userPresetFile))
             {
-                using (FileStream strm = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                using (FileStream strm = new FileStream(userPresetFile, FileMode.Open, FileAccess.Read))
                 {
                     if (strm.Length != 0)
                     {
@@ -257,8 +258,7 @@ namespace Handbrake.Presets
                     // Deal with Root
                     if (preset.Category == category && preset.TopCategory == category)
                         rootNode.Nodes.Add(preset.Name);
-                    else if (preset.Category != category && preset.TopCategory == category)
-                        // Deal with child nodes for that root
+                    else if (preset.Category != category && preset.TopCategory == category) // Deal with child nodes for that root
                     {
                         if (childNode == null) // For the first child node
                             childNode = new TreeNode(preset.Category);
@@ -266,8 +266,7 @@ namespace Handbrake.Presets
                         childNode.Nodes.Add(preset.Name);
                         addChildNode = true;
                     }
-                    else if (preset.Category != category && preset.TopCategory != category && preset.Level == 1)
-                        // Deal with changing root nodes
+                    else if (preset.Category != category && preset.TopCategory != category && preset.Level == 1)// Deal with changing root nodes
                     {
                         // If we find there are child nodes, add them to the current root node set before adding the rootnode to the panel.
                         if (addChildNode)
@@ -301,7 +300,7 @@ namespace Handbrake.Presets
         /// </summary>
         private void updatePresetsFile()
         {
-            string userPresets = Application.StartupPath + "\\presets.xml";
+            string userPresets = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
             try
             {
                 using (FileStream strm = new FileStream(userPresets, FileMode.Create, FileAccess.Write))
@@ -323,10 +322,9 @@ namespace Handbrake.Presets
         /// </summary>
         private void updateUserPresetsFile()
         {
-            string userPresets = Application.StartupPath + "\\user_presets.xml";
             try
             {
-                using (FileStream strm = new FileStream(userPresets, FileMode.Create, FileAccess.Write))
+                using (FileStream strm = new FileStream(userPresetFile, FileMode.Create, FileAccess.Write))
                 {
                     ser.Serialize(strm, user_presets);
                     strm.Close();

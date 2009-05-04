@@ -77,7 +77,7 @@
             // 
             this.slider_psytrellis.Location = new System.Drawing.Point(436, 194);
             this.slider_psytrellis.Name = "slider_psytrellis";
-            this.slider_psytrellis.Size = new System.Drawing.Size(131, 42);
+            this.slider_psytrellis.Size = new System.Drawing.Size(131, 45);
             this.slider_psytrellis.TabIndex = 86;
             this.ToolTip.SetToolTip(this.slider_psytrellis, "Psychovisual Trellis tries to retain more sharpness and detail, but can cause art" +
                     "ifacting. \r\nIt is considered experimental, which is why it\'s off by default. Goo" +
@@ -108,7 +108,7 @@
             // 
             this.slider_psyrd.Location = new System.Drawing.Point(436, 153);
             this.slider_psyrd.Name = "slider_psyrd";
-            this.slider_psyrd.Size = new System.Drawing.Size(131, 42);
+            this.slider_psyrd.Size = new System.Drawing.Size(131, 45);
             this.slider_psyrd.TabIndex = 83;
             this.ToolTip.SetToolTip(this.slider_psyrd, resources.GetString("slider_psyrd.ToolTip"));
             this.slider_psyrd.Scroll += new System.EventHandler(this.slider_psyrd_Scroll);
@@ -539,9 +539,9 @@
             this.check_pyrmidalBFrames.Location = new System.Drawing.Point(18, 194);
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(112, 17);
+            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(118, 17);
             this.check_pyrmidalBFrames.TabIndex = 59;
-            this.check_pyrmidalBFrames.Text = "Pyrmidal B-Frames:";
+            this.check_pyrmidalBFrames.Text = "Pyramidal B-Frames:";
             this.check_pyrmidalBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ToolTip.SetToolTip(this.check_pyrmidalBFrames, resources.GetString("check_pyrmidalBFrames.ToolTip"));
             this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;

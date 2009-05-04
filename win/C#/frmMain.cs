@@ -80,7 +80,7 @@ namespace Handbrake
             lbl_max.Text = "";
             queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
             if (Properties.Settings.Default.QueryEditorTab != "Checked")
-                tabs_panel.TabPages.RemoveAt(5); // Remove the query editor tab if the user does not want it enabled.
+                tabs_panel.TabPages.RemoveAt(6); // Remove the query editor tab if the user does not want it enabled.
 
             // Load the user's default settings or Normal Preset
             if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultPreset != "")
@@ -641,6 +641,7 @@ namespace Handbrake
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
+
             if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
@@ -1612,7 +1613,10 @@ namespace Handbrake
                 if (File.Exists(dvdInfoPath))
                     File.Delete(dvdInfoPath);
 
-                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 -v >""{2}"" 2>&1""", handbrakeCLIPath, inputFile, dvdInfoPath);
+                String dvdnav = string.Empty;
+                if (Properties.Settings.Default.dvdnav == "Checked")
+                    dvdnav = " --dvdnav";
+                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 {2} -v >""{3}"" 2>&1""", handbrakeCLIPath, inputFile, dvdnav, dvdInfoPath);
 
                 ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
 
@@ -1675,7 +1679,7 @@ namespace Handbrake
 
                 // If no titles were found, Display an error message
                 if (drp_dvdtitle.Items.Count == 0)
-                    MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show("No Title(s) found. \n\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
 
                 // Enable the GUI components and enable any disabled components
                 enableGUI();

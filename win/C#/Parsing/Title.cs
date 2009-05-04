@@ -128,8 +128,18 @@ namespace Handbrake.Parsing
 
             output.ReadLine();
 
-            // Get duration for this title
+            if (Properties.Settings.Default.dvdnav == "Checked")
+            {
+                // Get the Angles for the title.
+                m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9,])");
+                if (m.Success)
+                {
+                    //  + angle(s) 1
+                    // Do nothing. Will add this later.
+                }
+            }
 
+            // Get duration for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
                 thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);

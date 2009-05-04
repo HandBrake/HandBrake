@@ -6,6 +6,8 @@
 
 using System;
 using System.Windows.Forms;
+using System.IO;
+using Handbrake.Presets;
 
 namespace Handbrake
 {
@@ -37,6 +39,14 @@ namespace Handbrake
             // Either Launch or Close the Application
             if (launch)
             {
+                string appDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake";
+                if (!Directory.Exists(appDir))
+                {
+                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +  "\\HandBrake");
+                    PresetsHandler x = new PresetsHandler();
+                    x.updateBuiltInPresets();
+                }
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain());

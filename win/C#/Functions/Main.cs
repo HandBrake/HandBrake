@@ -296,14 +296,13 @@ namespace Handbrake.Functions
             try
             {
                 cliProcess.Start();
-                cliProcess.Kill();
                 // Retrieve standard output and report back to parent thread until the process is complete
                 TextReader stdOutput = cliProcess.StandardError;
 
                 while (!cliProcess.HasExited)
                 {
                     line = stdOutput.ReadLine() ?? "";
-                    Match m = Regex.Match(line, @"HandBrake ([0-9\.]*)*(svn[0-9]*[M]*)* \([0-9]*\)");
+                    Match m = Regex.Match(line, @"HandBrake ([0-9.]*)(svn[0-9M]*) \([0-9]*\)");
 
                     if (m.Success)
                     {

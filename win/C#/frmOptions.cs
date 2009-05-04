@@ -73,13 +73,14 @@ namespace Handbrake
             // Log Verbosity Level
             cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
 
-            // Save individual log files
-            if (Properties.Settings.Default.saveLog == "Checked")
-                check_keepLogs.CheckState = CheckState.Checked;
 
             // Save logs in the same directory as encoded files
             if (Properties.Settings.Default.saveLogWithVideo == "Checked")
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
+
+            // Save Logs in a specified path
+            if (Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
+                check_logsInSpecifiedLocation.CheckState = CheckState.Checked;
 
             // The saved log path
             text_logPath.Text = Properties.Settings.Default.saveLogPath;
@@ -202,16 +203,13 @@ namespace Handbrake
             Properties.Settings.Default.verboseLevel = cb_logVerboseLvl.SelectedIndex;
         }
 
-        private void check_keepLogs_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.saveLog = check_keepLogs.CheckState.ToString();
-        }
-
         private void check_saveLogWithVideo_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.CheckState.ToString();
-            if (check_saveLogWithVideo.Checked)
-                text_logPath.Text = "";
+        }
+        private void check_logsInSpecifiedLocation_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.CheckState.ToString();
         }
 
         private void btn_saveLog_Click(object sender, EventArgs e)
@@ -225,8 +223,6 @@ namespace Handbrake
         private void text_logPath_TextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.saveLogPath = text_logPath.Text;
-            if (text_logPath.Text != String.Empty)
-                check_saveLogWithVideo.Checked = false;
         }
 
         #endregion
@@ -268,6 +264,8 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
+        
 
                
     }

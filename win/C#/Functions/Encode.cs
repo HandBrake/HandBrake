@@ -136,31 +136,38 @@ namespace Handbrake.Functions
         public void copyLog(string destination)
         {
             // The user may wish to do something with the log.
-            if (Properties.Settings.Default.saveLog == "Checked")
+            if (Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
             {
-                string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
-
-                if (Properties.Settings.Default.saveLogWithVideo == "Checked")
+                try
                 {
-                    string[] destName = destination.Split('\\');
-                    string destinationFile = "";
-                    for (int i = 0; i < destName.Length - 1; i++)
-                    {
-                        destinationFile += destName[i] + "\\";
-                    }
+                    string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                    string tempLogFile = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
 
-                    destinationFile += DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destName[destName.Length - 1] + ".txt";
+                    string encodeDestinationPath = Path.GetDirectoryName(destination);
+                    String[] destName = destination.Split('\\');
+                    string destinationFile = destName[destName.Length - 1];
+                    string encodeLogFile = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destinationFile + ".txt";
 
-                    File.Copy(logPath, destinationFile);
+                    // Make sure the log directory exists.
+                    if (!Directory.Exists(logDir))
+                        Directory.CreateDirectory(logDir);
+
+                    // Copy the Log to HandBrakes log folder in the users applciation data folder.
+                    File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
+
+                    // Save a copy of the log file in the same location as the enocde.
+                    if (Properties.Settings.Default.saveLogWithVideo == "Checked")
+                        File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
+
+                    // Save a copy of the log file to a user specified location
+                    if (Directory.Exists(Properties.Settings.Default.saveLogPath))
+                        if (Properties.Settings.Default.saveLogPath != String.Empty && Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
+                            File.Copy(tempLogFile, Path.Combine(Properties.Settings.Default.saveLogPath, encodeLogFile));
                 }
-                else if (Properties.Settings.Default.saveLogPath != String.Empty)
+                catch (Exception exc)
                 {
-                    string[] destName = destination.Split('\\');
-                    string dest = destName[destName.Length - 1];
-                    string filename = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + dest + ".txt";
-                    string useDefinedLogPath = Path.Combine(Properties.Settings.Default.saveLogPath, filename);
-
-                    File.Copy(logPath, useDefinedLogPath);
+                    MessageBox.Show("Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
