@@ -1515,7 +1515,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	g_debug("scale_changed_cb ()");
+	g_debug("display_width_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
@@ -1541,7 +1541,7 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 void
 display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	g_debug("scale_changed_cb ()");
+	g_debug("display_height_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
@@ -2224,6 +2224,7 @@ ghb_timer_cb(gpointer data)
 	}
 	if (update_preview)
 	{
+		g_debug("Updating preview\n");
 		ghb_set_preview_image (ud);
 		update_preview = FALSE;
 	}

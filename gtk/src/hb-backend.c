@@ -3976,22 +3976,30 @@ hash_pixbuf(
 	gint        step,
 	gint		orientation)
 {
-	gint ii;
+	gint ii, jj;
+	gint line_width = 8;
+	struct
+	{
+		guint8 r;
+		guint8 g;
+		guint8 b;
+	} c[4] = 
+	{{0x80, 0x80, 0x80},{0xC0, 0x80, 0x70},{0x80, 0xA0, 0x80},{0x70, 0x80, 0xA0}};
 
 	if (!orientation)
 	{
 		// vertical lines
-		for (ii = x; ii < x+w; ii += step)
+		for (ii = x, jj = 0; ii+line_width < x+w; ii += step, jj++)
 		{
-			vert_line(pb, 0x80, 0x80, 0x80, ii, y, h, 4);
+			vert_line(pb, c[jj&3].r, c[jj&3].g, c[jj&3].b, ii, y, h, line_width);
 		}
 	}
 	else
 	{
 		// horizontal lines
-		for (ii = y; ii < y+h; ii += step)
+		for (ii = y, jj = 0; ii+line_width < y+h; ii += step, jj++)
 		{
-			horz_line(pb, 0x80, 0x80, 0x80, x, ii, w, 4);
+			horz_line(pb, c[jj&3].r, c[jj&3].g, c[jj&3].b, x, ii, w, line_width);
 		}
 	}
 }
@@ -4119,26 +4127,28 @@ ghb_get_preview_image(
 			dstHeight = s_h * factor / 100;
 			dstWidth = dstWidth * dstHeight / orig_h;
 		}
-		xscale *= dstWidth / orig_w;
-		yscale *= dstHeight / orig_h;
+		xscale *= (gdouble)dstWidth / orig_w;
+		yscale *= (gdouble)dstHeight / orig_h;
+		w *= (gdouble)dstWidth / orig_w;
+		h *= (gdouble)dstHeight / orig_h;
 	}
 	g_debug("scaled %d x %d", dstWidth, dstHeight);
 	GdkPixbuf *scaled_preview;
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
 	if (ghb_settings_get_boolean(settings, "show_crop"))
 	{
-		c0 = (32 + MIN(c0 - 32, 0)) * yscale;
-		c1 = (32 + MIN(c1 - 32, 0)) * yscale;
-		c2 = (32 + MIN(c2 - 32, 0)) * xscale;
-		c3 = (32 + MIN(c3 - 32, 0)) * xscale;
+		c0 = (c0 - MAX(c0 - 32, 0)) * yscale;
+		c1 = (c1 - MAX(c1 - 32, 0)) * yscale;
+		c2 = (c2 - MAX(c2 - 32, 0)) * xscale;
+		c3 = (c3 - MAX(c3 - 32, 0)) * xscale;
 		// Top
-		hash_pixbuf(scaled_preview, c2, 0, w, c0, 16, 0);
+		hash_pixbuf(scaled_preview, c2, 0, w, c0, 32, 0);
 		// Bottom
-		hash_pixbuf(scaled_preview, c2, dstHeight-c1, w, c1, 16, 0);
+		hash_pixbuf(scaled_preview, c2, dstHeight-c1, w, c1, 32, 0);
 		// Left
-		hash_pixbuf(scaled_preview, 0, c0, c2, h, 16, 1);
+		hash_pixbuf(scaled_preview, 0, c0, c2, h, 32, 1);
 		// Right
-		hash_pixbuf(scaled_preview, dstWidth-c3, c0, c3, h, 16, 1);
+		hash_pixbuf(scaled_preview, dstWidth-c3, c0, c3, h, 32, 1);
 	}
 	g_object_unref (preview);
 	return scaled_preview;
