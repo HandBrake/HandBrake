@@ -384,7 +384,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     char                 filename[1024];
     FILE               * file;
     uint8_t            * buf1, * buf2, * buf3, * buf4, * pen;
-    uint32_t           * p32, swsflags;
+    uint32_t             swsflags;
     AVPicture            pic_in, pic_preview, pic_deint, pic_crop, pic_scale;
     struct SwsContext  * context;
     int                  i;
@@ -395,14 +395,14 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
     buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
-    buf3 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, job->width, job->height ) );
+    buf3 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, rgb_width, job->height ) );
     buf4 = av_malloc( avpicture_get_size( PIX_FMT_RGBA32, rgb_width, job->height ) );
     avpicture_fill( &pic_in, buf1, PIX_FMT_YUV420P,
                     title->width, title->height );
     avpicture_fill( &pic_deint, buf2, PIX_FMT_YUV420P,
                     title->width, title->height );
     avpicture_fill( &pic_scale, buf3, PIX_FMT_YUV420P,
-                    job->width, job->height );
+                    rgb_width, job->height );
     avpicture_fill( &pic_preview, buf4, PIX_FMT_RGBA32,
                     rgb_width, job->height );
 
@@ -439,7 +439,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     context = sws_getContext(title->width  - (job->crop[2] + job->crop[3]),
                              title->height - (job->crop[0] + job->crop[1]),
                              PIX_FMT_YUV420P,
-                             job->width, job->height, PIX_FMT_YUV420P,
+                             rgb_width, job->height, PIX_FMT_YUV420P,
                              swsflags, NULL, NULL, NULL);
 
     // Scale
@@ -465,33 +465,12 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     // Free context
     sws_freeContext( context );
 
-    if( job->height < title->height || job->width < title->width )
+    preview_size = pic_preview.linesize[0];
+    pen = buffer;
+    for( i = 0; i < job->height; i++ )
     {
-        /* Gray background */
-        p32 = (uint32_t *) buffer;
-        for( i = 0; i < ( title->width + 2 ) * ( title->height + 2 ); i++ )
-        {
-            p32[i] = 0xFF808080;
-        }
-
-        /* Draw the picture, centered, and draw the cropping zone */
-        preview_size = pic_preview.linesize[0];
-        pen = buffer + ( title->height - job->height ) *
-            ( title->width + 2 ) * 2 + ( title->width - job->width ) * 2;
-        memset( pen, 0xFF, 4 * ( job->width + 2 ) );
-        pen += 4 * ( title->width + 2 );
-        for( i = 0; i < job->height; i++ )
-        {
-            uint8_t * nextLine;
-            nextLine = pen + 4 * ( title->width + 2 );
-            memset( pen, 0xFF, 4 );
-            pen += 4;
-            memcpy( pen, buf4 + preview_size * i, 4 * job->width );
-            pen += 4 * job->width;
-            memset( pen, 0xFF, 4 );
-            pen = nextLine;
-        }
-        memset( pen, 0xFF, 4 * ( job->width + 2 ) );
+        memcpy( pen, buf4 + preview_size * i, 4 * job->width );
+        pen += 4 * job->width;
     }
 
     // Clean up

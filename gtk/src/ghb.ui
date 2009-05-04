@@ -5302,16 +5302,29 @@ the required multiple.</property>
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="show_crop">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip-text" translatable="yes">Show Cropped area of the preview</property>
+                        <property name="label" translatable="yes">Show Crop</property>
+                        <signal name="toggled" handler="scale_changed_cb"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkToggleButton" id="preview_fullscreen">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip-text" translatable="yes">View Fullscreen Preview</property>
                         <property name="label" translatable="yes">Fullscreen</property>
-                        <signal handler="fullscreen_clicked_cb" name="clicked"/>
+                        <signal handler="fullscreen_clicked_cb" name="toggled"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -5324,7 +5337,7 @@ the required multiple.</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>

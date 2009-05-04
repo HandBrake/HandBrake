@@ -38,6 +38,8 @@
 		<integer>0</integer>
 		<key>scale_width</key>
 		<integer>0</integer>
+		<key>show_crop</key>
+		<false />
 		<key>single_title</key>
 		<integer>1</integer>
 		<key>start_chapter</key>

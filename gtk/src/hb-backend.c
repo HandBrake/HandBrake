@@ -922,25 +922,6 @@ get_acodec_value(gint val)
 	return value;
 }
 
-#if 0
-static GValue*
-get_abitrate_value(gint val)
-{
-	GValue *value = NULL;
-	gint ii;
-
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
-	{
-		if (hb_audio_bitrates[ii].rate == val)
-		{
-			value = ghb_string_value_new(hb_audio_bitrates[ii].string);
-			break;
-		}
-	}
-	return value;
-}
-#endif
-
 static GValue*
 get_amix_value(gint val)
 {
@@ -2769,16 +2750,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		max_height = MOD_DOWN(
 			ghb_settings_get_int(ud->settings, "PictureHeight"), mod);
 	}
-	// Adjust dims according to max values
-	if (!max_height)
-	{
-		max_height = MOD_DOWN(crop_height, mod);
-	}
-	if (!max_width)
-	{
-		max_width = MOD_DOWN(crop_width, mod);
-	}
-	// Align max dims 
 	g_debug("max_width %d, max_height %d\n", max_width, max_height);
 
 	if (width < 16)
@@ -2788,6 +2759,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 
 	width = MOD_ROUND(width, mod);
 	height = MOD_ROUND(height, mod);
+
+	// Adjust dims according to max values
 	if (max_height)
 		height = MIN(height, max_height);
 	if (max_width)
@@ -2936,6 +2909,21 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 		ghb_settings_combo_int(settings, "PictureModulus");
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
+	if (ghb_settings_get_boolean(settings, "show_crop"))
+	{
+		gint c0, c1;
+
+		c0 = MAX(job->crop[0] - 32, 0);
+		c1 = MAX(job->crop[1] - 32, 0);
+		job->height += (job->crop[0] - c0) + (job->crop[1] - c1);
+		job->crop[0] = c0;
+		job->crop[1] = c1;
+		c0 = MAX(job->crop[2] - 32, 0);
+		c1 = MAX(job->crop[3] - 32, 0);
+		job->width += (job->crop[2] - c0) + (job->crop[3] - c1);
+		job->crop[2] = c0;
+		job->crop[3] = c1;
+	}
 
 	gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
 	gint decomb = ghb_settings_combo_int(settings, "PictureDecomb");
@@ -3918,15 +3906,101 @@ ghb_pause_queue()
     }
 }
 
-#define RED_HEIGHT	720.0
-#define RED_WIDTH	1280.0
+static void
+vert_line(
+	GdkPixbuf * pb, 
+	guint8 r, 
+	guint8 g, 
+	guint8 b, 
+	gint x, 
+	gint y, 
+	gint len, 
+	gint width)
+{
+	guint8 *pixels = gdk_pixbuf_get_pixels (pb);
+	guint8 *dst;
+	gint ii, jj;
+	gint channels = gdk_pixbuf_get_n_channels (pb);
+	gint stride = gdk_pixbuf_get_rowstride (pb);
+
+	for (jj = 0; jj < width; jj++)
+	{
+		dst = pixels + y * stride + (x+jj) * channels;
+		for (ii = 0; ii < len; ii++)
+		{
+			dst[0] = r;
+			dst[1] = g;
+			dst[2] = b;
+			dst += stride;
+		}
+	}
+}
+
+static void
+horz_line(
+	GdkPixbuf * pb, 
+	guint8 r, 
+	guint8 g, 
+	guint8 b, 
+	gint x, 
+	gint y, 
+	gint len,
+	gint width)
+{
+	guint8 *pixels = gdk_pixbuf_get_pixels (pb);
+	guint8 *dst;
+	gint ii, jj;
+	gint channels = gdk_pixbuf_get_n_channels (pb);
+	gint stride = gdk_pixbuf_get_rowstride (pb);
+
+	for (jj = 0; jj < width; jj++)
+	{
+		dst = pixels + (y+jj) * stride + x * channels;
+		for (ii = 0; ii < len; ii++)
+		{
+			dst[0] = r;
+			dst[1] = g;
+			dst[2] = b;
+			dst += channels;
+		}
+	}
+}
+
+static void
+hash_pixbuf(
+	GdkPixbuf * pb,
+	gint        x,
+	gint        y,
+	gint        w,
+	gint        h,
+	gint        step,
+	gint		orientation)
+{
+	gint ii;
+
+	if (!orientation)
+	{
+		// vertical lines
+		for (ii = x; ii < x+w; ii += step)
+		{
+			vert_line(pb, 0x80, 0x80, 0x80, ii, y, h, 4);
+		}
+	}
+	else
+	{
+		// horizontal lines
+		for (ii = y; ii < y+h; ii += step)
+		{
+			horz_line(pb, 0x80, 0x80, 0x80, x, ii, w, 4);
+		}
+	}
+}
 
 GdkPixbuf*
 ghb_get_preview_image(
 	gint titleindex, 
 	gint index, 
 	signal_user_data_t *ud,
-	gboolean borders,
 	gint *out_width,
 	gint *out_height)
 {
@@ -3946,14 +4020,6 @@ ghb_get_preview_image(
 	if (title->job == NULL) return NULL;
 	set_preview_job_settings(title->job, settings);
 
-	// hb_get_preview can't handle sizes that are larger than the original title
-	// dimensions
-	if (title->job->width > title->width)
-		title->job->width = title->width;
-	
-	if (title->job->height > title->height)
-		title->job->height = title->height;
-
 	// hb_get_preview doesn't compensate for anamorphic, so lets
 	// calculate scale factors
 	gint width, height, par_width = 1, par_height = 1;
@@ -3964,63 +4030,15 @@ ghb_get_preview_image(
 								&par_width, &par_height );
 	}
 
-	// And also creates artifacts if the width is not a multiple of 8
-	//title->job->width = ((title->job->width + 4) >> 3) << 3;
-	// And the height must be a multiple of 2
-	//title->job->height = ((title->job->height + 1) >> 1) << 1;
-	
-	// Make sure we have a big enough buffer to receive the image from libhb. libhb
-	// creates images with a one-pixel border around the original content. Hence we
-	// add 2 pixels horizontally and vertically to the buffer size.
-	gint srcWidth = title->width + 2;
-	gint srcHeight= title->height + 2;
-	gint dstWidth = title->width;
-	gint dstHeight= title->height;
-	gint borderTop = 1;
-	gint borderLeft = 1;
-    if (borders)
-    {
-        //     |<---------- title->width ----------->|
-        //     |   |<---- title->job->width ---->|   |
-        //     |   |                             |   |
-        //     .......................................
-        //     ....+-----------------------------+....
-        //     ....|                             |....<-- gray border
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |<------- image
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....+-----------------------------+....
-        //     .......................................
-		dstWidth = title->job->width;
-        dstHeight = title->job->height;
-		borderTop = (srcHeight - dstHeight) / 2;
-		borderLeft = (srcWidth - dstWidth) / 2;
-		g_debug("boarders removed\n");
-	}
+	// Make sure we have a big enough buffer to receive the image from libhb
+	gint dstWidth = title->job->width;
+	gint dstHeight= title->job->height;
 
-	g_debug("src %d x %d\n", srcWidth, srcHeight);
-	g_debug("dst %d x %d\n", dstWidth, dstHeight);
-	g_debug("job dim %d x %d\n", title->job->width, title->job->height);
-	g_debug("title crop %d:%d:%d:%d\n", 
-			title->crop[0],
-			title->crop[1],
-			title->crop[2],
-			title->crop[3]);
-	g_debug("job crop %d:%d:%d:%d\n", 
-			title->job->crop[0],
-			title->job->crop[1],
-			title->job->crop[2],
-			title->job->crop[3]);
 	static guint8 *buffer = NULL;
 	static gint bufferSize = 0;
-
 	gint newSize;
-	newSize = srcWidth * srcHeight * 4;
+
+	newSize = dstWidth * dstHeight * 4;
 	if( bufferSize < newSize )
 	{
 		bufferSize = newSize;
@@ -4029,23 +4047,22 @@ ghb_get_preview_image(
 	hb_get_preview( h_scan, title, index, buffer );
 
 	// Create an GdkPixbuf and copy the libhb image into it, converting it from
-	// libhb's format something suitable. Along the way, we'll strip off the
-	// border around libhb's image.
+	// libhb's format something suitable.
 	
-	// The image data returned by hb_get_preview is 4 bytes per pixel, BGRA format.
-	// Alpha is ignored.
+	// The image data returned by hb_get_preview is 4 bytes per pixel, 
+	// BGRA format. Alpha is ignored.
 
 	GdkPixbuf *preview = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, dstWidth, dstHeight);
 	guint8 *pixels = gdk_pixbuf_get_pixels (preview);
 	
 	guint32 *src = (guint32*)buffer;
 	guint8 *dst = pixels;
-	src += borderTop * srcWidth;    // skip top rows in src to get to first row of dst
-	src += borderLeft;              // skip left pixels in src to get to first pixel of dst
+
 	gint ii, jj;
 	gint channels = gdk_pixbuf_get_n_channels (preview);
 	gint stride = gdk_pixbuf_get_rowstride (preview);
 	guint8 *tmp;
+
 	for (ii = 0; ii < dstHeight; ii++)
 	{
 		tmp = dst;
@@ -4058,11 +4075,23 @@ ghb_get_preview_image(
 			src++;
 		}
 		dst += stride;
-		src += (srcWidth - dstWidth);   // skip to next row in src
 	}
+	gint w = ghb_settings_get_int(settings, "scale_width");
+	gint h = ghb_settings_get_int(settings, "scale_height");
+	ghb_par_scale(ud, &w, &h, par_width, par_height);
+
+	gint c0, c1, c2, c3;
+	c0 = ghb_settings_get_int(settings, "PictureTopCrop");
+	c1 = ghb_settings_get_int(settings, "PictureBottomCrop");
+	c2 = ghb_settings_get_int(settings, "PictureLeftCrop");
+	c3 = ghb_settings_get_int(settings, "PictureRightCrop");
+
+	gdouble xscale = (gdouble)w / (gdouble)(title->width - c2 - c3);
+	gdouble yscale = (gdouble)h / (gdouble)(title->height - c0 - c1);
+	
 	ghb_par_scale(ud, &dstWidth, &dstHeight, par_width, par_height);
-	*out_width = dstWidth;
-	*out_height = dstHeight;
+	*out_width = w;
+	*out_height = h;
 	if (ghb_settings_get_boolean(settings, "reduce_hd_preview"))
 	{
 		GdkScreen *ss;
@@ -4090,10 +4119,27 @@ ghb_get_preview_image(
 			dstHeight = s_h * factor / 100;
 			dstWidth = dstWidth * dstHeight / orig_h;
 		}
+		xscale *= dstWidth / orig_w;
+		yscale *= dstHeight / orig_h;
 	}
-	g_debug("scaled %d x %d\n", dstWidth, dstHeight);
+	g_debug("scaled %d x %d", dstWidth, dstHeight);
 	GdkPixbuf *scaled_preview;
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
+	if (ghb_settings_get_boolean(settings, "show_crop"))
+	{
+		c0 = (32 + MIN(c0 - 32, 0)) * yscale;
+		c1 = (32 + MIN(c1 - 32, 0)) * yscale;
+		c2 = (32 + MIN(c2 - 32, 0)) * xscale;
+		c3 = (32 + MIN(c3 - 32, 0)) * xscale;
+		// Top
+		hash_pixbuf(scaled_preview, c2, 0, w, c0, 16, 0);
+		// Bottom
+		hash_pixbuf(scaled_preview, c2, dstHeight-c1, w, c1, 16, 0);
+		// Left
+		hash_pixbuf(scaled_preview, 0, c0, c2, h, 16, 1);
+		// Right
+		hash_pixbuf(scaled_preview, dstWidth-c3, c0, c3, h, 16, 1);
+	}
 	g_object_unref (preview);
 	return scaled_preview;
 }

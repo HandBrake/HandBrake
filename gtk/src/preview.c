@@ -122,7 +122,10 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 	num = par_n * disp_par_d;
 	den = par_d * disp_par_n;
 
-	*width = *width * num / den;
+	if (par_n > par_d)
+		*width = *width * num / den;
+	else
+		*height = *height * den / num;
 }
 
 void
@@ -667,7 +670,7 @@ ghb_set_preview_image(signal_user_data_t *ud)
 
 	ud->preview->pix = 
 		ghb_get_preview_image(titleindex, ud->preview->frame, 
-								ud, TRUE, &width, &height);
+								ud, &width, &height);
 	if (ud->preview->pix == NULL) return;
 	preview_width = gdk_pixbuf_get_width(ud->preview->pix);
 	preview_height = gdk_pixbuf_get_height(ud->preview->pix);
