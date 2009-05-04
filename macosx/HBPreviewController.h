@@ -107,8 +107,7 @@
 
 + (NSImage *) makeImageForPicture: (int)pictureIndex
                 libhb:(hb_handle_t*)handle
-                title:(hb_title_t*)title
-                removeBorders:(BOOL)removeBorders;
+                title:(hb_title_t*)title;
 - (NSImage *) imageForPicture: (int) pictureIndex;
 - (void) purgeImageCache;
 @end

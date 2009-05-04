@@ -238,7 +238,7 @@ return YES;
     
     NSImage *fPreviewImage = [self imageForPicture: fPicture];
     NSSize imageScaledSize = [fPreviewImage size];
-    
+    [fPictureView setImage: fPreviewImage];
     
     NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
     NSString *sizeInfoString;
@@ -298,9 +298,19 @@ return YES;
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     
     /* Initially set our preview image here */
-    
-    [fPreviewImage setSize: imageScaledSize];
-    [fPictureView setFrameSize: imageScaledSize];
+    /*
+    if (scaleToScreen == YES)
+    {
+        viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
+        viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
+        [fPreviewImage setSize: viewSize];
+        [fPictureView setFrameSize: viewSize];
+    }
+    else
+    {
+        [fPreviewImage setSize: imageScaledSize];
+        [fPictureView setFrameSize: imageScaledSize];
+    }
     [fPictureView setImage: fPreviewImage];
     // center it vertically and horizontally
     NSPoint origin = [fPictureViewArea frame].origin;
@@ -309,41 +319,23 @@ return YES;
     
     origin.x += ([fPictureViewArea frame].size.width -
                  [fPictureView frame].size.width) / 2.0;
-    
     [fPictureView setFrameOrigin:origin]; 
-    
+    */
     /* we also need to take into account scaling to full screen to activate switching the view size */
     if( [self viewNeedsToResizeToSize:viewSize])
     {
-        /* if we have no anamorphic. */
-        if (!fTitle->job->anamorphic.mode || fTitle->job->anamorphic.mode == 0)
+        if (fTitle->job->anamorphic.mode != 2 || (fTitle->job->anamorphic.mode == 2 && fTitle->width == fTitle->job->width))
         {
             [self resizeSheetForViewSize:viewSize];
-            [self setViewSize:viewSize];
-        }
-        /* Strict anamorphic. */
-        else if (fTitle->job->anamorphic.mode == 1)
-        {
-            [self resizeSheetForViewSize:viewSize];
-            [self setViewSize:viewSize];   
-        }
-        /* In the case of loose anamorphic, do not resize the window when scaling down */
-        else if (fTitle->job->anamorphic.mode == 2 && fTitle->width == fTitle->job->width)
-        {
-            [self resizeSheetForViewSize:viewSize];
-            [self setViewSize:viewSize];
-        }
-        
-        /* custom anamorphic */
-        else if (fTitle->job->anamorphic.mode == 3)
-        {
-            [self resizeSheetForViewSize:viewSize];
-            [self setViewSize:viewSize];   
+            //[self setViewSize:viewSize];
+            
         }
     }   
     
-    // Show the scaled text (use the height to check since the width can vary
-    // with anamorphic video).
+    viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
+    viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
+    [self setViewSize:viewSize];
+    
     NSString *scaleString;
     
     if( imageScaledSize.height > [fPictureView frame].size.height)
@@ -576,14 +568,6 @@ return YES;
         [self pictureSliderChanged:nil];
         [fScaleToScreenToggleButton setTitle:@">-<"];
     }
-    
-    /* Actually perform the scaling */
-    /*
-    NSSize displaySize = NSMakeSize( ( CGFloat )fTitle->width, ( CGFloat )fTitle->height );
-    NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-    [self resizeSheetForViewSize:viewSize];
-    [self setViewSize:viewSize];
-    */
 }
 
 - (BOOL)fullScreen
@@ -766,160 +750,63 @@ return YES;
 + (NSImage *) makeImageForPicture: (int)pictureIndex
                 libhb:(hb_handle_t*)handle
                 title:(hb_title_t*)title
-                removeBorders:(BOOL)removeBorders
 {
-    if (removeBorders)
+    static uint8_t * buffer;
+    static int bufferSize;
+
+    // Make sure we have a big enough buffer to receive the image from libhb. libhb
+    int dstWidth = title->job->width;
+    int dstHeight = title->job->height;
+        
+    int newSize;
+    newSize = dstWidth * dstHeight * 4;
+    if( bufferSize < newSize )
     {
-        //     |<---------- title->width ----------->|
-        //     |   |<---- title->job->width ---->|   |
-        //     |   |                             |   |
-        //     .......................................
-        //     ....+-----------------------------+....
-        //     ....|                             |....<-- gray border
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |<------- image
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....|                             |....
-        //     ....+-----------------------------+....
-        //     .......................................
-
-        static uint8_t * buffer;
-        static int bufferSize;
-
-        // Make sure we have a big enough buffer to receive the image from libhb. libhb
-        // creates images with a one-pixel border around the original content. Hence we
-        // add 2 pixels horizontally and vertically to the buffer size.
-        int srcWidth;
-        int srcHeight;
-        if (title->width > title->job->width)
-        {
-            srcWidth = title->width + 2;
-        }
-        else
-        {
-            srcWidth = title->job->width + 2;
-        }
-        
-        if (title->height > title->job->height)
-        {
-            srcHeight = title->height + 2;
-        }
-        else
-        {
-            srcHeight = title->job->height + 2;
-        }
-        
-        int newSize;
-        newSize = srcWidth * srcHeight * 4;
-        if( bufferSize < newSize )
-        {
-            bufferSize = newSize;
-            buffer     = (uint8_t *) realloc( buffer, bufferSize );
-        }
-
-        hb_get_preview( handle, title, pictureIndex, buffer );
-
-        // Create an NSBitmapImageRep and copy the libhb image into it, converting it from
-        // libhb's format to one suitable for NSImage. Along the way, we'll strip off the
-        // border around libhb's image.
-        
-        // The image data returned by hb_get_preview is 4 bytes per pixel, BGRA format.
-        // Alpha is ignored.
-        
-        int dstWidth = title->job->width;
-        int dstHeight = title->job->height;
-        NSBitmapFormat bitmapFormat = (NSBitmapFormat)NSAlphaFirstBitmapFormat;
-        NSBitmapImageRep * imgrep = [[[NSBitmapImageRep alloc]
-                initWithBitmapDataPlanes:nil
-                pixelsWide:dstWidth
-                pixelsHigh:dstHeight
-                bitsPerSample:8
-                samplesPerPixel:3   // ignore alpha
-                hasAlpha:NO
-                isPlanar:NO
-                colorSpaceName:NSCalibratedRGBColorSpace
-                bitmapFormat:bitmapFormat
-                bytesPerRow:dstWidth * 4
-                bitsPerPixel:32] autorelease];
-
-        int borderTop = (srcHeight - dstHeight) / 2;
-        int borderLeft = (srcWidth - dstWidth) / 2;
-        
-        UInt32 * src = (UInt32 *)buffer;
-        UInt32 * dst = (UInt32 *)[imgrep bitmapData];
-        src += borderTop * srcWidth;    // skip top rows in src to get to first row of dst
-        src += borderLeft;              // skip left pixels in src to get to first pixel of dst
-        for (int r = 0; r < dstHeight; r++)
-        {
-            for (int c = 0; c < dstWidth; c++)
-#if TARGET_RT_LITTLE_ENDIAN
-                *dst++ = Endian32_Swap(*src++);
-#else
-                *dst++ = *src++;
-#endif
-            src += (srcWidth - dstWidth);   // skip to next row in src
-        }
-
-        NSImage * img = [[[NSImage alloc] initWithSize: NSMakeSize(dstWidth, dstHeight)] autorelease];
-        [img addRepresentation:imgrep];
-
-        return img;
+        bufferSize = newSize;
+        buffer     = (uint8_t *) realloc( buffer, bufferSize );
     }
-    else
+
+    hb_get_preview( handle, title, pictureIndex, buffer );
+
+    // Create an NSBitmapImageRep and copy the libhb image into it, converting it from
+    // libhb's format to one suitable for NSImage. Along the way, we'll strip off the
+    // border around libhb's image.
+        
+    // The image data returned by hb_get_preview is 4 bytes per pixel, BGRA format.
+    // Alpha is ignored.
+        
+    NSBitmapFormat bitmapFormat = (NSBitmapFormat)NSAlphaFirstBitmapFormat;
+    NSBitmapImageRep * imgrep = [[[NSBitmapImageRep alloc]
+            initWithBitmapDataPlanes:nil
+            pixelsWide:dstWidth
+            pixelsHigh:dstHeight
+            bitsPerSample:8
+            samplesPerPixel:3   // ignore alpha
+            hasAlpha:NO
+            isPlanar:NO
+            colorSpaceName:NSCalibratedRGBColorSpace
+            bitmapFormat:bitmapFormat
+            bytesPerRow:dstWidth * 4
+            bitsPerPixel:32] autorelease];
+
+    UInt32 * src = (UInt32 *)buffer;
+    UInt32 * dst = (UInt32 *)[imgrep bitmapData];
+    for (int r = 0; r < dstHeight; r++)
     {
-        // Make sure we have big enough buffer
-        static uint8_t * buffer;
-        static int bufferSize;
-
-        int newSize;
-        newSize = ( title->width + 2 ) * (title->height + 2 ) * 4;
-        if( bufferSize < newSize )
-        {
-            bufferSize = newSize;
-            buffer     = (uint8_t *) realloc( buffer, bufferSize );
-        }
-
-        hb_get_preview( handle, title, pictureIndex, buffer );
-
-        // The image data returned by hb_get_preview is 4 bytes per pixel, BGRA format.
-        // We'll copy that into an NSImage swapping it to ARGB in the process. Alpha is
-        // ignored.
-        int width = title->width + 2;      // hblib adds a one-pixel border to the image
-        int height = title->height + 2;
-        int numPixels = width * height;
-        NSBitmapFormat bitmapFormat = (NSBitmapFormat)NSAlphaFirstBitmapFormat;
-        NSBitmapImageRep * imgrep = [[[NSBitmapImageRep alloc]
-                initWithBitmapDataPlanes:nil
-                pixelsWide:width
-                pixelsHigh:height
-                bitsPerSample:8
-                samplesPerPixel:3   // ignore alpha
-                hasAlpha:NO
-                isPlanar:NO
-                colorSpaceName:NSCalibratedRGBColorSpace
-                bitmapFormat:bitmapFormat
-                bytesPerRow:width * 4
-                bitsPerPixel:32] autorelease];
-
-        UInt32 * src = (UInt32 *)buffer;
-        UInt32 * dst = (UInt32 *)[imgrep bitmapData];
-        for (int i = 0; i < numPixels; i++)
+        for (int c = 0; c < dstWidth; c++)
 #if TARGET_RT_LITTLE_ENDIAN
             *dst++ = Endian32_Swap(*src++);
 #else
             *dst++ = *src++;
 #endif
-
-        NSImage * img = [[[NSImage alloc] initWithSize: NSMakeSize(width, height)] autorelease];
-        [img addRepresentation:imgrep];
-
-        return img;
     }
+
+    NSImage * img = [[[NSImage alloc] initWithSize: NSMakeSize(dstWidth, dstHeight)] autorelease];
+    [img addRepresentation:imgrep];
+
+    return img;
 }
+
 // Returns the preview image for the specified index, retrieving it from its internal
 // cache or by calling makeImageForPicture if it is not cached. Generally, you should
 // use imageForPicture so that images are cached. Calling makeImageForPicture will
@@ -932,7 +819,7 @@ return YES;
     NSImage * theImage = [fPicturePreviews objectForKey:key];
     if (!theImage)
     {
-        theImage = [PreviewController makeImageForPicture:pictureIndex libhb:fHandle title:fTitle removeBorders: YES];
+        theImage = [PreviewController makeImageForPicture:pictureIndex libhb:fHandle title:fTitle];
         [fPicturePreviews setObject:theImage forKey:key];
     }
     return theImage;
