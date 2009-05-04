@@ -2911,18 +2911,12 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	job->height = ghb_settings_get_int(settings, "scale_height");
 	if (ghb_settings_get_boolean(settings, "show_crop"))
 	{
-		gint c0, c1;
-
-		c0 = MAX(job->crop[0] - 32, 0);
-		c1 = MAX(job->crop[1] - 32, 0);
-		job->height += (job->crop[0] - c0) + (job->crop[1] - c1);
-		job->crop[0] = c0;
-		job->crop[1] = c1;
-		c0 = MAX(job->crop[2] - 32, 0);
-		c1 = MAX(job->crop[3] - 32, 0);
-		job->width += (job->crop[2] - c0) + (job->crop[3] - c1);
-		job->crop[2] = c0;
-		job->crop[3] = c1;
+		job->crop[0] = 0;
+		job->crop[1] = 0;
+		job->crop[2] = 0;
+		job->crop[3] = 0;
+		job->width = job->title->width;
+		job->height = job->title->height;
 	}
 
 	gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
@@ -4137,10 +4131,10 @@ ghb_get_preview_image(
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
 	if (ghb_settings_get_boolean(settings, "show_crop"))
 	{
-		c0 = (c0 - MAX(c0 - 32, 0)) * yscale;
-		c1 = (c1 - MAX(c1 - 32, 0)) * yscale;
-		c2 = (c2 - MAX(c2 - 32, 0)) * xscale;
-		c3 = (c3 - MAX(c3 - 32, 0)) * xscale;
+		c0 *= yscale;
+		c1 *= yscale;
+		c2 *= xscale;
+		c3 *= xscale;
 		// Top
 		hash_pixbuf(scaled_preview, c2, 0, w, c0, 32, 0);
 		// Bottom
