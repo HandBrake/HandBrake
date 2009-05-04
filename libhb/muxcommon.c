@@ -236,6 +236,7 @@ static void MuxerFunc( void * _mux )
             break;
         case HB_MUX_MKV:
             m = hb_mux_mkv_init( job );
+            break;
         default:
             hb_error( "No muxer selected, exiting" );
             *job->die = 1;
