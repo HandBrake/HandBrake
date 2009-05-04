@@ -1125,17 +1125,22 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                 }
             } else {
                 /*
-                 * Manually selected subtitle, in which case only
+                 * Manually selected subtitles, in which case only
                  * bother adding them for pass 0 or pass 2 of a two
                  * pass.
                  */
                 if( job->pass != 1 )
                 {
-                    if( ( subtitle = hb_list_item( title->list_subtitle, job->subtitle ) ) )
-                    {
-                        subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-                        memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-                        hb_list_add( title_copy->list_subtitle, subtitle_copy );
+                    /*
+                     * Copy all of them from the input job, to the title_copy/job_copy.
+                     */
+                    for(  i = 0; i < hb_list_count(job->list_subtitle); i++ ) {
+                        if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
+                        {
+                            subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
+                            memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
+                            hb_list_add( title_copy->list_subtitle, subtitle_copy );
+                        }
                     }
                 }
             }
@@ -1148,6 +1153,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     title_copy->job = job_copy;
     job_copy->title = title_copy;
     job_copy->list_audio = title_copy->list_audio;
+    job_copy->list_subtitle = title_copy->list_subtitle;   // sharing list between title and job
     job_copy->file  = strdup( job->file );
     job_copy->h     = h;
     job_copy->pause = h->pause_lock;

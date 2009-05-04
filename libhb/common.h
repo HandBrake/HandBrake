@@ -213,11 +213,9 @@ struct hb_job_s
     /* List of audio settings. */
     hb_list_t     * list_audio;
 
-    /* Subtitle settings:
-         subtitle: index in hb_title_t's subtitles list, starting
-         from 0. -1 means no subtitle */
-    int             subtitle;
-    int             subtitleSmartAdjust;
+    /* Subtitles
+     */
+    hb_list_t     * list_subtitle;
 
     /* Muxer settings
          mux:  output file format
@@ -442,7 +440,11 @@ struct hb_chapter_s
 
 struct hb_subtitle_s
 {
+    int track;
     int  id;
+    enum subtype { PICTURESUB, TEXTSUB } format;
+    enum subsource { VOBSUB, SRTSUB, CCSUB } source;
+    enum subdest { RENDERSUB, PASSTHRUSUB } dest;
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */

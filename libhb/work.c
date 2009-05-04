@@ -278,7 +278,7 @@ void hb_display_job_info( hb_job_t * job )
 
         if( subtitle )
         {
-            hb_log( " * subtitle track %i, %s (id %x)", job->subtitle+1, subtitle->lang, subtitle->id);
+            hb_log( " * subtitle track %i, %s (id %x)", subtitle->track, subtitle->lang, subtitle->id);
         }
     }
 
@@ -503,7 +503,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 }
             }
 
-            if (!job->indepth_scan || job->subtitle_force) {
+            if( !job->indepth_scan || job->subtitle_force ) {
                 /*
                  * Don't add threads for subtitles when we are scanning, unless
                  * looking for forced subtitles.

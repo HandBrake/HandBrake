@@ -2617,9 +2617,9 @@ fWorkingCount = 0;
         job->subtitle_force = 0;
     
     /*
-     * subtitle of -1 is a scan
+     * If scanning we need to do some extra setup of the job.
      */
-    if( job->subtitle == -1 )
+    if( job->indepth_scan == 1 )
     {
         char *x264opts_tmp;
         
@@ -2629,7 +2629,6 @@ fWorkingCount = 0;
          */
         job->pass = -1;
         x264opts_tmp = job->x264opts;
-        job->subtitle = -1;
         
         job->x264opts = NULL;
         
@@ -2646,12 +2645,6 @@ fWorkingCount = 0;
     }
     else
         job->select_subtitle = NULL;
-    
-    /* No subtitle were selected, so reset the subtitle to -1 (which before
-     * this point meant we were scanning
-     */
-    if( job->subtitle == -2 )
-        job->subtitle = -1;
     
     if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 )
     {
@@ -2786,7 +2779,28 @@ fWorkingCount = 0;
     }
 
     /* Subtitle settings */
-    job->subtitle = [fSubPopUp indexOfSelectedItem] - 2;
+    switch( [fSubPopUp indexOfSelectedItem] - 2 )
+    {
+    case -2:
+        /*
+         * No subtitles selected
+         */
+        break;
+    case -1:
+        /*
+         * Subtitle scan selected
+         */
+        job->indepth_scan = 1;
+        break;
+    default:
+        /*
+         * Subtitle selected, add it into the job from the title.
+         */
+        job->indepth_scan = 0;
+        hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, [fSubPopUp indexOfSelectedItem] - 2 );
+        hb_list_add( job->list_subtitle, subtitle );
+        break;
+    }
 
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
@@ -3184,8 +3198,31 @@ fWorkingCount = 0;
     
     job->grayscale = [[queueToApply objectForKey:@"VideoGrayScale"] intValue];
     /* Subtitle settings */
-    job->subtitle = [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2;
     
+    switch( [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2 )
+    {
+    case -2:
+        /*
+         * No subtitles selected
+         */
+        break;
+    case -1:
+        /*
+         * Subtitle scan selected
+         */
+        job->indepth_scan = 1;
+        break;
+    default:
+        /*
+         * Subtitle selected, add it into the job from the title.
+         */
+        job->indepth_scan = 0;
+        hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, 
+                                                                  [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2 );
+        hb_list_add( job->list_subtitle, subtitle );
+        break;
+    }
+
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);

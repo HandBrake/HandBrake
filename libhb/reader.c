@@ -516,37 +516,24 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
         }
     }
 
-    if( job->indepth_scan ) {
-        /*
-         * Count the occurances of the subtitles, don't actually
-         * return any to encode unless we are looking fro forced
-         * subtitles in which case we need to look in the sub picture
-         * to see if it has the forced flag enabled.
-         */
-        for (i=0; i < hb_list_count(title->list_subtitle); i++) {
-            subtitle =  hb_list_item( title->list_subtitle, i);
-            if (id == subtitle->id) {
+    for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) {
+        subtitle =  hb_list_item( title->list_subtitle, i );
+        if (id == subtitle->id) {
+            subtitle->hits++;
+            if( !job->indepth_scan || job->subtitle_force )
+            {
                 /*
-                 * A hit, count it.
+                 * Pass the subtitles to be processed if we are not scanning, or if
+                 * we are scanning and looking for forced subs, then pass them up
+                 * to decode whether the sub is a forced one.
                  */
-                subtitle->hits++;
-                if( job->subtitle_force )
-                {
-
-                    fifos[0] = subtitle->fifo_in;
-                    return fifos;
-                }
-                break;
+                fifos[0] = subtitle->fifo_in;
+                return fifos;
             }
-        }
-    } else {
-        if( ( subtitle = hb_list_item( title->list_subtitle, 0 ) ) &&
-            id == subtitle->id )
-        {
-            fifos[0] = subtitle->fifo_in;
-            return fifos;
+            break;
         }
     }
+    
     if( !job->indepth_scan )
     {
         n = 0;

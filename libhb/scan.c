@@ -224,8 +224,7 @@ static void ScanFunc( void * _data )
         job->vrate_base = title->rate_base;
 
         job->list_audio = hb_list_init();
-
-        job->subtitle = -1;
+        job->list_subtitle = hb_list_init();
 
         job->mux = HB_MUX_MP4;
     }

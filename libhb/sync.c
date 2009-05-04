@@ -44,7 +44,6 @@ struct hb_work_private_s
                                 // an eof buf. syncWork returns done when all
                                 // bits are clear.
     /* Video */
-    hb_subtitle_t * subtitle;
     int64_t pts_offset;
     int64_t next_start;         /* start time of next output frame */
     int64_t next_pts;           /* start time of next input frame */
@@ -125,15 +124,12 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     /* Initialize libsamplerate for every audio track we have */
     if ( ! job->indepth_scan )
     {
-        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        for( i = 0; i < hb_list_count( title->list_audio ) && i < 8; i++ )
         {
             pv->busy |= ( 1 << (i + 1) );
             InitAudio( w, i );
         }
     }
-
-    /* Get subtitle info, if any */
-    pv->subtitle = hb_list_item( title->list_subtitle, 0 );
 
     return 0;
 }
@@ -284,6 +280,8 @@ static void SyncVideo( hb_work_object_t * w )
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * cur, * next, * sub = NULL;
     hb_job_t * job = pv->job;
+    hb_subtitle_t *subtitle;
+    int i;
 
     if( !pv->cur && !( pv->cur = hb_fifo_get( job->fifo_raw ) ) )
     {
@@ -385,119 +383,99 @@ static void SyncVideo( hb_work_object_t * w )
          */
         pv->video_sequence = cur->sequence;
 
-        /* Look for a subtitle for this frame */
-        if( pv->subtitle )
+        /*
+         * Look for a subtitle for this frame.
+         *
+         * If found then it will be tagged onto a video buffer of the correct time and 
+         * sent in to the render pipeline. This only needs to be done for VOBSUBs which
+         * get rendered, other types of subtitles can just sit in their raw_queue until
+         * delt with at muxing.
+         */
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
         {
-            hb_buffer_t * sub2;
-            while( ( sub = hb_fifo_see( pv->subtitle->fifo_raw ) ) )
+            subtitle = hb_list_item( job->list_subtitle, i );
+            if( subtitle->dest == RENDERSUB ) 
             {
-                /* If two subtitles overlap, make the first one stop
-                   when the second one starts */
-                sub2 = hb_fifo_see2( pv->subtitle->fifo_raw );
-                if( sub2 && sub->stop > sub2->start )
-                    sub->stop = sub2->start;
-
-                // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld",
-                //       sub, cur->sequence, sub->sequence);
-
-                if( sub->sequence > cur->sequence )
+                hb_buffer_t * sub2;
+                while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
                 {
-                    /*
-                     * The video is behind where we are, so wait until
-                     * it catches up to the same reader point on the
-                     * DVD. Then our PTS should be in the same region
-                     * as the video.
-                     */
-                    sub = NULL;
-                    break;
-                }
-
-                if( sub->stop > cur->start ) {
-                    /*
-                     * The stop time is in the future, so fall through
-                     * and we'll deal with it in the next block of
-                     * code.
-                     */
-                    break;
-                }
-
-                /*
-                 * The subtitle is older than this picture, trash it
-                 */
-                sub = hb_fifo_get( pv->subtitle->fifo_raw );
-                hb_buffer_close( &sub );
-            }
-
-            /*
-             * There is a valid subtitle, is it time to display it?
-             */
-            if( sub )
-            {
-                if( sub->stop > sub->start)
-                {
-                    /*
-                     * Normal subtitle which ends after it starts, check to
-                     * see that the current video is between the start and end.
-                     */
-                    if( cur->start > sub->start &&
-                        cur->start < sub->stop )
+                    /* If two subtitles overlap, make the first one stop
+                       when the second one starts */
+                    sub2 = hb_fifo_see2( subtitle->fifo_raw );
+                    if( sub2 && sub->stop > sub2->start )
+                        sub->stop = sub2->start;
+                    
+                    // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld",
+                    //       sub, cur->sequence, sub->sequence);
+                    
+                    if( sub->sequence > cur->sequence )
                     {
                         /*
-                         * We should be playing this, so leave the
-                         * subtitle in place.
-                         *
-                         * fall through to display
-                         */
-                        if( ( sub->stop - sub->start ) < ( 3 * 90000 ) )
-                        {
-                            /*
-                             * Subtitle is on for less than three seconds, extend
-                             * the time that it is displayed to make it easier
-                             * to read. Make it 3 seconds or until the next
-                             * subtitle is displayed.
-                             *
-                             * This is in response to Indochine which only
-                             * displays subs for 1 second - too fast to read.
-                             */
-                            sub->stop = sub->start + ( 3 * 90000 );
-
-                            sub2 = hb_fifo_see2( pv->subtitle->fifo_raw );
-
-                            if( sub2 && sub->stop > sub2->start )
-                            {
-                                sub->stop = sub2->start;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        /*
-                         * Defer until the play point is within the subtitle
+                         * The video is behind where we are, so wait until
+                         * it catches up to the same reader point on the
+                         * DVD. Then our PTS should be in the same region
+                         * as the video.
                          */
                         sub = NULL;
+                        break;
                     }
-                }
-                else
-                {
+                    
+                    if( sub->stop > cur->start ) {
+                        /*
+                         * The stop time is in the future, so fall through
+                         * and we'll deal with it in the next block of
+                         * code.
+                         */
+                        break;
+                    }
+                    
                     /*
-                     * The end of the subtitle is less than the start, this is a
-                     * sign of a PTS discontinuity.
+                     * The subtitle is older than this picture, trash it
                      */
-                    if( sub->start > cur->start )
+                    sub = hb_fifo_get( subtitle->fifo_raw );
+                    hb_buffer_close( &sub );
+                }
+                
+                /*
+                 * There is a valid subtitle, is it time to display it?
+                 */
+                if( sub )
+                {
+                    if( sub->stop > sub->start)
                     {
                         /*
-                         * we haven't reached the start time yet, or
-                         * we have jumped backwards after having
-                         * already started this subtitle.
+                         * Normal subtitle which ends after it starts, check to
+                         * see that the current video is between the start and end.
                          */
-                        if( cur->start < sub->stop )
+                        if( cur->start > sub->start &&
+                            cur->start < sub->stop )
                         {
                             /*
-                             * We have jumped backwards and so should
-                             * continue displaying this subtitle.
+                             * We should be playing this, so leave the
+                             * subtitle in place.
                              *
-                             * fall through to display.
+                             * fall through to display
                              */
+                            if( ( sub->stop - sub->start ) < ( 3 * 90000 ) )
+                            {
+                                /*
+                                 * Subtitle is on for less than three seconds, extend
+                                 * the time that it is displayed to make it easier
+                                 * to read. Make it 3 seconds or until the next
+                                 * subtitle is displayed.
+                                 *
+                                 * This is in response to Indochine which only
+                                 * displays subs for 1 second - too fast to read.
+                                 */
+                                sub->stop = sub->start + ( 3 * 90000 );
+                                
+                                sub2 = hb_fifo_see2( subtitle->fifo_raw );
+                                
+                                if( sub2 && sub->stop > sub2->start )
+                                {
+                                    sub->stop = sub2->start;
+                                }
+                            }
                         }
                         else
                         {
@@ -506,17 +484,59 @@ static void SyncVideo( hb_work_object_t * w )
                              */
                             sub = NULL;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         /*
-                         * Play this subtitle as the start is greater than our
-                         * video point.
-                         *
-                         * fall through to display/
+                         * The end of the subtitle is less than the start, this is a
+                         * sign of a PTS discontinuity.
                          */
+                        if( sub->start > cur->start )
+                        {
+                            /*
+                             * we haven't reached the start time yet, or
+                             * we have jumped backwards after having
+                             * already started this subtitle.
+                             */
+                            if( cur->start < sub->stop )
+                            {
+                                /*
+                                 * We have jumped backwards and so should
+                                 * continue displaying this subtitle.
+                                 *
+                                 * fall through to display.
+                                 */
+                            }
+                            else
+                            {
+                                /*
+                                 * Defer until the play point is within the subtitle
+                                 */
+                                sub = NULL;
+                            }
+                        } else {
+                            /*
+                             * Play this subtitle as the start is greater than our
+                             * video point.
+                             *
+                             * fall through to display/
+                             */
+                        }
                     }
                 }
             }
-        }
+            if( sub )
+            {
+                /*
+                 * Don't overwrite the current sub, we'll check the
+                 * other subtitle streams on the next video buffer. 
+                 *
+                 * It doesn't make much sense having multiple rendered
+                 * subtitle tracks anyway.
+                 */
+                break;
+            }
+        } // end subtitles
 
         /*
          * Adjust the pts of the current frame so that it's contiguous

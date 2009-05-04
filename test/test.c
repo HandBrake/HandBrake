@@ -1640,7 +1640,15 @@ static int HandleEvents( hb_handle_t * h )
 
             if( sub )
             {
-                job->subtitle = sub - 1;
+                hb_subtitle_t *subtitle;
+                /* 
+                 * Find the subtitle with the same track as "sub" and
+                 * add that to the job subtitle list
+                 */
+                subtitle = hb_list_item( title->list_subtitle, sub );
+                if( subtitle ) {
+                    hb_list_add( job->list_subtitle, subtitle );
+                }
             }
 
             if( native_language )
