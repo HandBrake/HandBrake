@@ -4089,7 +4089,6 @@ ghb_get_preview_image(
 	c2 = ghb_settings_get_int(settings, "PictureLeftCrop");
 	c3 = ghb_settings_get_int(settings, "PictureRightCrop");
 
-printf("dims %dx%d\n", w, h);
 	gdouble xscale = (gdouble)w / (gdouble)(title->width - c2 - c3);
 	gdouble yscale = (gdouble)h / (gdouble)(title->height - c0 - c1);
 	
@@ -4128,7 +4127,7 @@ printf("dims %dx%d\n", w, h);
 		w *= (gdouble)dstWidth / orig_w;
 		h *= (gdouble)dstHeight / orig_h;
 	}
-	g_message("scaled %d x %d", dstWidth, dstHeight);
+	g_debug("scaled %d x %d", dstWidth, dstHeight);
 	GdkPixbuf *scaled_preview;
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
 	if (ghb_settings_get_boolean(settings, "show_crop"))
