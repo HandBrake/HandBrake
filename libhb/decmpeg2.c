@@ -7,6 +7,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
+#include "deccc608sub.h"
 
 /* Cadence tracking */
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD
@@ -34,6 +35,7 @@ typedef struct hb_libmpeg2_s
     mpeg2dec_t         * libmpeg2;
     const mpeg2_info_t * info;
     hb_job_t           * job;
+    hb_title_t         * title;
     int                  width;
     int                  height;
     int                  rate;
@@ -45,6 +47,8 @@ typedef struct hb_libmpeg2_s
     int64_t              last_pts;
     int cadence[12];
     int flag;
+    struct s_write       cc608;             /* Closed Captions */
+    hb_subtitle_t      * subtitle;
 } hb_libmpeg2_t;
 
 /**********************************************************************
@@ -60,7 +64,58 @@ static hb_libmpeg2_t * hb_libmpeg2_init()
     m->info     = mpeg2_info( m->libmpeg2 );
     m->last_pts = -1;
 
+   /* Closed Captions init, whether needed or not */
+    general_608_init( &m->cc608 );
+    m->cc608.data608 = calloc(1, sizeof(struct eia608));
     return m;
+}
+
+static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
+{
+    uint8_t cc_valid = (*cc_block & 4) >>2;
+    uint8_t cc_type = *cc_block & 3;
+    
+    if( !m->job )
+    {
+        /*
+         * Ignore CC decoding during scanning.
+         */
+        return;
+    }
+
+    if (cc_valid || cc_type==3)
+    {
+        switch (cc_type)
+        {
+        case 0:
+            // CC1 stream
+            process608( cc_block+1, 2, &m->cc608 );
+            break;
+        case 1:
+            // CC2 stream
+            //process608( cc_block+1, 2, &m->cc608 );
+            break;
+        case 2: //EIA-708
+            // DTVCC packet data
+            // Fall through
+        case 3: //EIA-708
+        {
+            uint8_t temp[4];
+            temp[0]=cc_valid;
+            temp[1]=cc_type;
+            temp[2]=cc_block[1];
+            temp[3]=cc_block[2];
+            //do_708 ((const unsigned char *) temp, 4);
+        }
+        break;
+        default:
+            break;
+        } 
+    } 
+    else
+    {
+        hb_log("Ignoring invalid CC block");
+    }
 }
 
 static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
@@ -128,7 +183,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
  *
  *********************************************************************/
 static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
-                        hb_list_t * list_raw )
+                               hb_list_t * list_raw )
 {
     mpeg2_state_t   state;
     hb_buffer_t   * buf;
@@ -345,6 +400,116 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         {
             mpeg2_reset( m->libmpeg2, 0 );
         }
+
+        /*
+         * Look for Closed Captions if scanning (!job) or if closed captions have been requested.
+         */
+        if( ( !m->job || m->subtitle) &&
+            ( m->info->user_data_len != 0 &&
+              m->info->user_data[0] == 0x43 &&
+              m->info->user_data[1] == 0x43 ) ) 
+        {
+            int i, j;
+            const uint8_t *header = &m->info->user_data[4];
+            uint8_t pattern=header[0] & 0x80;
+            int field1packet = 0; /* expect Field 1 first */
+            if (pattern==0x00) 
+                field1packet=1; /* expect Field 1 second */
+            int capcount=(header[0] & 0x1e) / 2;
+            header++;
+            
+            m->cc608.last_pts = m->last_pts;
+
+            /*
+             * Add closed captions to the title if we are scanning (no job).
+             *
+             * Just because we don't add this doesn't mean that there aren't any when 
+             * we scan, just that noone said anything. So you should be able to add
+             * closed captions some other way (See decmpeg2Init() for alternative
+             * approach of assuming that there are always CC, which is probably
+             * safer - however I want to leave the autodetect in here for now to
+             * see how it goes).
+             */
+            if( !m->job && m->title )
+            {
+                hb_subtitle_t * subtitle;
+                int found = 0;
+                int i;
+                
+                for( i = 0; i < hb_list_count( m->title->list_subtitle ); i++ )
+                {
+                    subtitle = hb_list_item( m->title->list_subtitle, i);
+                    if( subtitle && subtitle->source == CCSUB ) 
+                    {
+                        found = 1;
+                        break;
+                    }
+                }
+                
+                if( !found )
+                {
+                    subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+                    subtitle->track = 0;
+                    subtitle->id = 0x0;
+                    snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
+                    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
+                    subtitle->format = TEXTSUB;
+                    subtitle->source = CCSUB;
+                    subtitle->dest   = PASSTHRUSUB;
+                    subtitle->type = 5; 
+                    
+                    hb_list_add( m->title->list_subtitle, subtitle );
+                }
+            }
+
+            for( i=0; i<capcount; i++ )
+            {
+                for( j=0; j<2; j++ )
+                {
+                    uint8_t data[3];
+                    data[0] = header[0];
+                    data[1] = header[1];
+                    data[2] = header[2];
+                    header += 3;
+                    /* Field 1 and 2 data can be in either order,
+                       with marker bytes of \xff and \xfe
+                       Since markers can be repeated, use pattern as well */
+                    if( data[0] == 0xff && j == field1packet )
+                    {
+                        data[0] = 0x04; // Field 1
+                    }   
+                    else
+                    {
+                        data[0] = 0x05; // Field 2
+                    }
+                    hb_mpeg2_cc( m, data );
+                }
+            }
+            // Deal with extra closed captions some DVD have.
+            while( header[0]==0xfe || header[0]==0xff )
+            {
+                for( j=0; j<2; j++ )
+                {
+                    uint8_t data[3];
+                    data[0] = header[0];
+                    data[1] = header[1];
+                    data[2] = header[2];
+                    header += 3;
+                    /* Field 1 and 2 data can be in either order,
+                       with marker bytes of \xff and \xfe
+                       Since markers can be repeated, use pattern as well */
+                    if( data[0] == 0xff && j == field1packet )
+                    {
+                        data[0] = 0x04; // Field 1
+                    }   
+                    else
+                    {
+                        data[0] = 0x05; // Field 2
+                    } 
+                    hb_mpeg2_cc( m, data );
+                }
+            }   
+        }
     }
     return 1;
 }
@@ -359,6 +524,9 @@ static void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
     hb_libmpeg2_t * m = *_m;
 
     mpeg2_close( m->libmpeg2 );
+
+    free( m->cc608.data608 );
+    general_608_close( &m->cc608 );
 
     free( m );
     *_m = NULL;
@@ -392,6 +560,69 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
 
     pv->libmpeg2->job = job;
 
+    if( job && job->title ) {
+        pv->libmpeg2->title = job->title;
+    }
+
+    /*
+     * If not scanning, then are we supposed to extract Closed Captions?
+     */
+    if( job )
+    {
+        hb_subtitle_t * subtitle;
+        int i;
+        
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+        {
+            subtitle = hb_list_item( job->list_subtitle, i);
+            if( subtitle && subtitle->source == CCSUB ) 
+            {
+                pv->libmpeg2->subtitle = subtitle;
+                pv->libmpeg2->cc608.subtitle = subtitle;
+                break;
+            }
+        }
+
+    }
+
+    /*
+     * During a scan add a Closed Caption subtitle track to the title, 
+     * since we may have CC. Don't bother actually trying to detect CC
+     * since we'd have to go through too much of the source.
+     *
+    if( !job && w->title )
+    {
+        hb_subtitle_t * subtitle;
+        int found = 0;
+        int i;
+
+        for( i = 0; i < hb_list_count( w->title->list_subtitle ); i++ )
+        {
+            subtitle = hb_list_item( w->title->list_subtitle, i);
+            if( subtitle && subtitle->source == CCSUB ) 
+            {
+                found = 1;
+                break;
+            }
+        }
+
+        if( !found )
+        {
+            subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+            subtitle->track = 0;
+            subtitle->id = 0x0;
+            snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
+            snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
+            subtitle->format = TEXTSUB;
+            subtitle->source = CCSUB;
+            subtitle->dest   = PASSTHRUSUB;
+            subtitle->type = 5; 
+
+            hb_list_add( w->title->list_subtitle, subtitle );
+        }
+    }
+    */
+
     return 0;
 }
 
@@ -401,11 +632,15 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
  *
  *********************************************************************/
 static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                   hb_buffer_t ** buf_out )
+                         hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * buf, * last = NULL;
     int status = HB_WORK_OK;
+
+    if( w->title && pv && pv->libmpeg2 && !pv->libmpeg2->title ) {
+        pv->libmpeg2->title = w->title;
+    }
 
     // The reader found a chapter break, consume it completely, and remove it from the
     // stream. We need to shift it.

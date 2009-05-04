@@ -223,22 +223,28 @@ static void MuxerFunc( void * _mux )
     {
         switch( job->mux )
         {
-            case HB_MUX_MP4:
-            case HB_MUX_PSP:
-			case HB_MUX_IPOD:
-                m = hb_mux_mp4_init( job );
-                break;
-            case HB_MUX_AVI:
-                m = hb_mux_avi_init( job );
-                break;
-            case HB_MUX_OGM:
-                m = hb_mux_ogm_init( job );
-                break;
-            case HB_MUX_MKV:
-                m = hb_mux_mkv_init( job );
+        case HB_MUX_MP4:
+        case HB_MUX_PSP:
+        case HB_MUX_IPOD:
+            m = hb_mux_mp4_init( job );
+            break;
+        case HB_MUX_AVI:
+            m = hb_mux_avi_init( job );
+            break;
+        case HB_MUX_OGM:
+            m = hb_mux_ogm_init( job );
+            break;
+        case HB_MUX_MKV:
+            m = hb_mux_mkv_init( job );
+        default:
+            hb_error( "No muxer selected, exiting" );
+            *job->die = 1;
         }
         /* Create file, write headers */
-        m->init( m );
+        if( m )
+        {
+            m->init( m );
+        }
     }
 
     /* Build list of fifos we're interested in */
@@ -254,8 +260,8 @@ static void MuxerFunc( void * _mux )
 
     // The following 'while' is the main muxing loop.
 
-	int thread_sleep_interval = 50;
-	while( !*job->die )
+    int thread_sleep_interval = 50;
+    while( !*job->die )
     {
         MoveToInternalFifos( mux );
         if (  mux->rdy != mux->allRdy )
@@ -316,10 +322,13 @@ finished:
         /* Update the UI */
         hb_state_t state;
         state.state   = HB_STATE_MUXING;
-		p.progress = 0;
+        p.progress = 0;
         hb_set_state( job->h, &state );
 #undef p
-        m->end( m );
+        if( m )
+        {
+            m->end( m );
+        }
 
         if( !stat( job->file, &sb ) )
         {
@@ -353,8 +362,11 @@ finished:
             }
         }
     }
-
-    free( m );
+    
+    if( m )
+    {
+        free( m );
+    }
 
     for( i = 0; i < mux->ntracks; ++i )
     {

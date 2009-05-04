@@ -590,6 +590,7 @@ static int MP4End( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
     hb_title_t * title = job->title;
+    int i;
 
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
@@ -664,6 +665,37 @@ static int MP4End( hb_mux_object_t * m )
         MP4TagsStore( tags, m->file );
         /* free memory associated with structure */
         MP4TagsFree( tags );
+    }
+
+    /*
+     * Display any text subs.
+     *
+     * This is placeholder code, what needs to happen is that we need to
+     * convert these PTS (which are pre-sync ones) into HB timestamps,
+     * I guess sync should do that?
+     *
+     * And then this needs to move into the Mux code above and insert
+     * subtitle samples into the MP4 at the correct times.
+     */
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+    {
+        hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
+        
+        if( subtitle && subtitle->format == TEXTSUB && 
+            subtitle->dest == PASSTHRUSUB )
+        {
+            /*
+             * Should be adding this one if the timestamp is right.
+             */
+            hb_buffer_t *buffer;
+
+            while( (buffer = hb_fifo_get( subtitle->fifo_raw )) != NULL )
+            {
+                hb_log("MuxMP4: Text Sub: %s", buffer->data);
+
+                hb_buffer_close( &buffer );
+            }
+        }
     }
 
     MP4Close( m->file );

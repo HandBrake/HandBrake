@@ -634,7 +634,7 @@ struct hb_work_object_s
     hb_esconfig_t     * config;
 
     /* Pointer hb_audio_t so we have access to the info in the audio worker threads. */
-    hb_audio_t *audio;
+    hb_audio_t        * audio;
 
     hb_work_private_t * private_data;
 
@@ -642,9 +642,10 @@ struct hb_work_object_s
     volatile int      * done;
     int                 status;
     int                 codec_param;
+    hb_title_t        * title;
 
     hb_work_object_t  * next;
-	int				  thread_sleep_interval;
+    int                 thread_sleep_interval;
 #endif
 };
 

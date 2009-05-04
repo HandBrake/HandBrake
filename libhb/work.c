@@ -272,13 +272,16 @@ void hb_display_job_info( hb_job_t * job )
         }
     }
 
-    for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+    for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle =  hb_list_item( title->list_subtitle, i );
 
         if( subtitle )
         {
-            hb_log( " * subtitle track %i, %s (id %x)", subtitle->track, subtitle->lang, subtitle->id);
+            hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s ", subtitle->track, subtitle->lang, subtitle->id,
+                    subtitle->format == PICTURESUB ? "Picture" : "Text",
+                    subtitle->source == VOBSUB ? "VOBSUB" : (subtitle->source == CCSUB ? "CC" : "SRT"),
+                    subtitle->dest == RENDERSUB ? "Render/Burn in" : "Pass-Through");
         }
     }
 
