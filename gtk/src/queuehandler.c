@@ -646,6 +646,7 @@ queue_add(signal_user_data_t *ud)
 	GValue *settings;
 	gint titleindex;
 	gint titlenum;
+	gint sub;
 	
 	g_debug("queue_add ()");
 	if (!validate_settings(ud))
@@ -662,6 +663,9 @@ queue_add(signal_user_data_t *ud)
 		ud->queue = ghb_array_value_new(32);
 	// Make a copy of current settings to be used for the new job
 	settings = ghb_value_dup(ud->settings);
+	sub = ghb_settings_combo_int(settings, "Subtitles");
+	ghb_settings_set_int(settings, "subtitle_index", sub);
+	
 	ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
 	ghb_settings_set_int(settings, "job_unique_id", 0);
 	titleindex = ghb_settings_combo_int(settings, "title");

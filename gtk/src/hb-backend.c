@@ -1638,10 +1638,10 @@ subtitle_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 					   3, -1.0, 
 					   4, "auto", 
 					   -1);
-	subtitle_opts.map[0].option = "Same as audio";
-	subtitle_opts.map[0].shortOpt = "auto";
-	subtitle_opts.map[0].ivalue = -1;
-	subtitle_opts.map[0].svalue = "auto";
+	subtitle_opts.map[1].option = "Same as audio";
+	subtitle_opts.map[1].shortOpt = "auto";
+	subtitle_opts.map[1].ivalue = -1;
+	subtitle_opts.map[1].svalue = "auto";
 	if (count > 0)
 	{
 		for (ii = 0; ii < count; ii++)
@@ -3715,35 +3715,25 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->x264opts =  NULL;
 	}
 	gint subtitle;
-	gchar *slang = ghb_settings_get_string(js, "Subtitles");
-	subtitle = -2; // default to none
-	if (strcmp(slang, "auto") == 0)
+	subtitle = ghb_settings_get_int(js, "subtitle_index");
+	if (subtitle == -1)
 	{
-		subtitle = -1;
+		job->indepth_scan = 1;
 	}
-	else
+	else if (subtitle >= 0)
 	{
-		gint scount;
     	hb_subtitle_t * subt;
 
-		scount = hb_list_count(title->list_subtitle);
-		for (ii = 0; ii < scount; ii++)
+       	subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+		if (subt != NULL)
 		{
-        	subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
-			if (strcmp(slang, subt->iso639_2) == 0)
-			{
-				subtitle = ii;
-				break;
-			}
+			hb_list_add(job->list_subtitle, subt);
 		}
 	}
 	gboolean forced_subtitles = ghb_settings_get_boolean(js, "SubtitlesForced");
 	job->subtitle_force = forced_subtitles;
-	if (subtitle >= 0)
-		job->subtitle = subtitle;
-	else
-		job->subtitle = -1;
-	if (subtitle == -1)
+
+	if (job->indepth_scan == 1)
 	{
 		// Subtitle scan. Look for subtitle matching audio language
 		char *x264opts_tmp;
