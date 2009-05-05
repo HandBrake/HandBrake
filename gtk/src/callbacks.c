@@ -1410,6 +1410,17 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		set_destination(ud);
 	}
+	widget = GHB_WIDGET (ud->builder, "chapters_tab");
+	// End may have been changed above, get it again
+	end = ghb_settings_get_int(ud->settings, "end_chapter");
+	if (start == end)
+	{
+		gtk_widget_hide(widget);
+	}
+	else
+	{
+		gtk_widget_show(widget);
+	}
 }
 
 G_MODULE_EXPORT void
@@ -1428,6 +1439,17 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
 	{
 		set_destination(ud);
+	}
+	widget = GHB_WIDGET (ud->builder, "chapters_tab");
+	// Start may have been changed above, get it again
+	start = ghb_settings_get_int(ud->settings, "start_chapter");
+	if (start == end)
+	{
+		gtk_widget_hide(widget);
+	}
+	else
+	{
+		gtk_widget_show(widget);
 	}
 }
 

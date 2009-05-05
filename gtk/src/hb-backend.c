@@ -3413,6 +3413,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->chapter_end   = MAX( job->chapter_start, chapter_end );
 
 		job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
+		if (job->chapter_start == job->chapter_end)
+			job->chapter_markers = 0;
 		if ( job->chapter_markers )
 		{
 			GValue *chapters;
