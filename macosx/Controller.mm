@@ -1932,8 +1932,16 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
     
     [queueFileJob setObject:[fDstFormatPopUp titleOfSelectedItem] forKey:@"FileFormat"];
-    	/* Chapter Markers fCreateChapterMarkers*/
-	[queueFileJob setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
+    /* Chapter Markers*/
+    /* If we have only one chapter or a title without chapters, set chapter markers to off */
+    if ([fSrcChapterStartPopUp indexOfSelectedItem] ==  [fSrcChapterEndPopUp indexOfSelectedItem])
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"ChapterMarkers"];
+    }
+    else
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:[fCreateChapterMarkers state]] forKey:@"ChapterMarkers"];
+    }
 	
     /* We need to get the list of chapter names to put into an array and store 
      * in our queue, so they can be reapplied in prepareJob when this queue
@@ -3901,6 +3909,17 @@ fWorkingCount = 0;
         duration % 60]];
 
     [self calculateBitrate: sender];
+    
+    if ( [fSrcChapterStartPopUp indexOfSelectedItem] ==  [fSrcChapterEndPopUp indexOfSelectedItem] )
+    {
+    /* Disable chapter markers for any source with less than two chapters as it makes no sense. */
+    [fCreateChapterMarkers setEnabled: NO];
+    [fCreateChapterMarkers setState: NSOffState];
+    }
+    else
+    {
+    [fCreateChapterMarkers setEnabled: YES];
+    }
 }
 
 - (IBAction) formatPopUpChanged: (id) sender
@@ -5795,6 +5814,9 @@ return YES;
         
         /* Chapter Markers*/
         [fCreateChapterMarkers setState:[[chosenPreset objectForKey:@"ChapterMarkers"] intValue]];
+        /* check to see if we have only one chapter */
+        [self chapterPopUpChanged:nil];
+        
         /* Allow Mpeg4 64 bit formatting +4GB file sizes */
         [fDstMp4LargeFileCheck setState:[[chosenPreset objectForKey:@"Mp4LargeFile"] intValue]];
         /* Mux mp4 with http optimization */
