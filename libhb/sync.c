@@ -394,7 +394,39 @@ static void SyncVideo( hb_work_object_t * w )
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
         {
             subtitle = hb_list_item( job->list_subtitle, i );
-            if( subtitle->dest == RENDERSUB ) 
+
+            /*
+             * Rewrite timestamps on subtitles that need it (on raw queue).
+             */
+            if( subtitle->source == CCSUB )
+            {
+                /*
+                 * Rewrite timestamps on subtitles that came from Closed Captions
+                 * since they are using the MPEG2 timestamps.
+                 */
+                while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
+                {
+                    /*
+                     * Rewrite the timestamps as and when the video
+                     * (cur->start) reaches the same timestamp as a
+                     * closed caption (sub->start).
+                     *
+                     * What about discontinuity boundaries - not delt
+                     * with here - Van?
+                     */
+                    if( sub->start < cur->start )
+                    {
+                        sub = hb_fifo_get( subtitle->fifo_raw );
+                        sub->start = pv->next_start;
+                        hb_fifo_push( subtitle->fifo_out, sub );
+                    } else {
+                        sub = NULL;
+                        break;
+                    }
+                }
+            }
+
+            if( subtitle->source == VOBSUB ) 
             {
                 hb_buffer_t * sub2;
                 while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
@@ -528,11 +560,7 @@ static void SyncVideo( hb_work_object_t * w )
             if( sub )
             {
                 /*
-                 * Don't overwrite the current sub, we'll check the
-                 * other subtitle streams on the next video buffer. 
-                 *
-                 * It doesn't make much sense having multiple rendered
-                 * subtitle tracks anyway.
+                 * Got a sub to display...
                  */
                 break;
             }
@@ -575,14 +603,32 @@ static void SyncVideo( hb_work_object_t * w )
 
         /* If we have a subtitle for this picture, copy it */
         /* FIXME: we should avoid this memcpy */
-        if( sub )
+        if( sub && subtitle && 
+            subtitle->format == PICTURESUB )
         {
-            buf_tmp->sub         = hb_buffer_init( sub->size );
-            buf_tmp->sub->x      = sub->x;
-            buf_tmp->sub->y      = sub->y;
-            buf_tmp->sub->width  = sub->width;
-            buf_tmp->sub->height = sub->height;
-            memcpy( buf_tmp->sub->data, sub->data, sub->size );
+            if( subtitle->dest == RENDERSUB )
+            {
+                /*
+                 * Tack onto the video buffer for rendering
+                 */
+                buf_tmp->sub         = hb_buffer_init( sub->size );
+                buf_tmp->sub->x      = sub->x;
+                buf_tmp->sub->y      = sub->y;
+                buf_tmp->sub->width  = sub->width;
+                buf_tmp->sub->height = sub->height;
+                memcpy( buf_tmp->sub->data, sub->data, sub->size ); 
+            } else {
+                /*
+                 * Pass-Through, pop it off of the raw queue, rewrite times and
+                 * make it available to be muxed.
+                 */
+                uint64_t sub_duration;
+                sub = hb_fifo_get( subtitle->fifo_raw );
+                sub_duration = sub->stop - sub->start;
+                sub->start = buf_tmp->start;
+                sub->stop = sub->start + duration;
+                hb_fifo_push( subtitle->fifo_out, sub );
+            }
         }
 
         /* Push the frame to the renderer */

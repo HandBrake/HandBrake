@@ -490,6 +490,7 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
             subtitle->fifo_in  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
             subtitle->fifo_raw = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+            subtitle->fifo_out = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
             /*
              * Disable forced subtitles if we didn't find any in the scan

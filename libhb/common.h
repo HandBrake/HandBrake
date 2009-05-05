@@ -455,7 +455,8 @@ struct hb_subtitle_s
 #ifdef __LIBHB__
     /* Internal data */
     hb_fifo_t * fifo_in;  /* SPU ES */
-    hb_fifo_t * fifo_raw; /* Decodec SPU */
+    hb_fifo_t * fifo_raw; /* Decoded SPU */
+    hb_fifo_t * fifo_out; /* Correct Timestamps, ready to be muxed */
 #endif
 };
 
