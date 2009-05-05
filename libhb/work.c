@@ -861,6 +861,7 @@ cleanup:
         {
             hb_fifo_close( &subtitle->fifo_in );
             hb_fifo_close( &subtitle->fifo_raw );
+            hb_fifo_close( &subtitle->fifo_out );
         }
     }
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
