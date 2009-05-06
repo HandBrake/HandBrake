@@ -265,7 +265,7 @@ static void MuxerFunc( void * _mux )
     while( !*job->die )
     {
         MoveToInternalFifos( mux );
-        if (  mux->rdy != mux->allRdy )
+        if ( ( mux->rdy & mux->allRdy ) != mux->allRdy )
         {
             hb_snooze( thread_sleep_interval );
             continue;
@@ -273,22 +273,25 @@ static void MuxerFunc( void * _mux )
 
         // all tracks have at least 'interleave' ticks of data. Output
         // all that we can in 'interleave' size chunks.
-        while ( mux->rdy == mux->allRdy )
+        while ( ( mux->rdy & mux->allRdy ) == mux->allRdy )
         {
             for ( i = 0; i < mux->ntracks; ++i )
             {
-                track = mux->track[i];
-                OutputTrackChunk( mux, track, m );
-
-                // if the track is at eof or still has data that's past
-                // our next interleave point then leave it marked as rdy.
-                // Otherwise clear rdy.
-                if ( ( mux->eof & (1 << i) ) == 0 &&
-                     ( track->mf.out == track->mf.in ||
-                       track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->stop
-                         < mux->pts + mux->interleave ) )
+                if ( mux->rdy & (1 << i) )
                 {
-                    mux->rdy &=~ ( 1 << i );
+                    track = mux->track[i];
+                    OutputTrackChunk( mux, track, m );
+
+                    // if the track is at eof or still has data that's past
+                    // our next interleave point then leave it marked as rdy.
+                    // Otherwise clear rdy.
+                    if ( ( mux->eof & (1 << i) ) == 0 &&
+                         ( track->mf.out == track->mf.in ||
+                           track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->stop
+                             < mux->pts + mux->interleave ) )
+                    {
+                        mux->rdy &=~ ( 1 << i );
+                    }
                 }
             }
 
