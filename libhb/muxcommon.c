@@ -258,6 +258,14 @@ static void MuxerFunc( void * _mux )
         add_mux_track( mux, audio->priv.fifo_out, audio->priv.mux_data, 1 );
     }
 
+    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    {
+        hb_subtitle_t  *subtitle = hb_list_item( title->list_subtitle, i );
+
+        if (subtitle->dest != PASSTHRUSUB)
+            continue;
+        add_mux_track( mux, subtitle->fifo_out, subtitle->mux_data, 0 );
+    }
 
     // The following 'while' is the main muxing loop.
 

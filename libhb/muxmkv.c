@@ -30,6 +30,8 @@ struct hb_mux_data_s
     uint64_t  prev_chapter_tc;
     uint16_t  current_chapter;
     int       codec;
+    int       subtitle;
+    int       sub_format;
 };
 
 /**********************************************************************
@@ -158,7 +160,7 @@ static int MKVInit( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        mux_data = malloc( sizeof( hb_mux_data_t ) );
+        mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
 
         mux_data->codec = audio->config.out.codec;
@@ -231,7 +233,7 @@ static int MKVInit( hb_mux_object_t * m )
         {
             track->extra.audio.channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(audio->config.in.channel_layout);
         }
-		else
+        else
         {
             track->extra.audio.channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
         }
@@ -239,6 +241,57 @@ static int MKVInit( hb_mux_object_t * m )
         mux_data->track = mk_createTrack(m->file, track);
         if (audio->config.out.codec == HB_ACODEC_VORBIS && track->codecPrivate != NULL)
           free(track->codecPrivate);
+    }
+
+    char * subidx_fmt =
+        "size: %dx%d\n"
+        "org: %d, %d\n"
+        "scale: 100%%, 100%%\n"
+        "alpha: 100%%\n"
+        "smooth: OFF\n"
+        "fadein/out: 50, 50\n"
+        "align: OFF at LEFT TOP\n"
+        "time offset: 0\n"
+        "forced subs: %s\n"
+        "palette: %06x, %06x, %06x, %06x, %06x, %06x, "
+        "%06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x, %06x\n"
+        "custom colors: OFF, tridx: 0000, "
+        "colors: 000000, 000000, 000000, 000000\n";
+
+    for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+    {
+        hb_subtitle_t * subtitle;
+        uint32_t      * palette;
+        char            subidx[2048];
+        int             len;
+
+        subtitle = hb_list_item( title->list_subtitle, i );
+        if (subtitle->dest != PASSTHRUSUB)
+            continue;
+
+        memset(track, 0, sizeof(mk_TrackConfig));
+
+        mux_data = calloc(1, sizeof( hb_mux_data_t ) );
+        subtitle->mux_data = mux_data;
+        mux_data->subtitle = 1;
+        mux_data->sub_format = subtitle->format;
+        
+        palette = title->palette;
+        len = snprintf(subidx, 2048, subidx_fmt, title->width, title->height,
+                 0, 0, "OFF",
+                 palette[0], palette[1], palette[2], palette[3],
+                 palette[4], palette[5], palette[6], palette[7],
+                 palette[8], palette[9], palette[10], palette[11],
+                 palette[12], palette[13], palette[14], palette[15]);
+        track->codecPrivate = subidx;
+        track->codecPrivateSize = len + 1;
+        track->codecID = MK_SUBTITLE_VOBSUB;
+        track->flagEnabled = 1;
+        track->trackType = MK_TRACK_SUBTITLE;
+        track->language = subtitle->iso639_2;
+
+        mux_data->track = mk_createTrack(m->file, track);
+
     }
 
     if( mk_writeHeader( m->file, "HandBrake " HB_PROJECT_VERSION) < 0 )
@@ -310,6 +363,16 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
             mk_setFrameFlags(m->file, mux_data->track, timecode, 1);
+            return 0;
+        }
+    }
+    else if ( mux_data->subtitle )
+    {
+        timecode = buf->start * TIMECODE_SCALE;
+        if( mux_data->sub_format == TEXTSUB )
+        {
+            hb_log("MuxMKV: Text Sub:%lld: %s", buf->start, buf->data);
+            // TODO: add CC data to track
             return 0;
         }
     }

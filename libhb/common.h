@@ -458,6 +458,7 @@ struct hb_subtitle_s
     hb_fifo_t * fifo_raw; /* Decoded SPU */
     hb_fifo_t * fifo_sync;/* Synced */
     hb_fifo_t * fifo_out; /* Correct Timestamps, ready to be muxed */
+    hb_mux_data_t * mux_data;
 #endif
 };
 

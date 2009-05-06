@@ -32,6 +32,8 @@ struct hb_mux_object_s
 struct hb_mux_data_s
 {
     MP4TrackId track;
+    uint8_t    subtitle;
+    int        sub_format;
 };
 
 /* Tune video track chunk duration.
@@ -98,7 +100,7 @@ static int MP4Init( hb_mux_object_t * m )
     }
 
     /* Video track */
-    mux_data      = malloc( sizeof( hb_mux_data_t ) );
+    mux_data      = calloc(1, sizeof( hb_mux_data_t ) );
     job->mux_data = mux_data;
 
     if (!(MP4SetTimeScale( m->file, 90000 )))
@@ -220,7 +222,7 @@ static int MP4Init( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {
         audio = hb_list_item( title->list_audio, i );
-        mux_data = malloc( sizeof( hb_mux_data_t ) );
+        mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         audio->priv.mux_data = mux_data;
 
         if( audio->config.out.codec == HB_ACODEC_AC3 )
@@ -399,6 +401,22 @@ static int MP4Init( hb_mux_object_t * m )
 
     }
 
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+    {
+        hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
+        
+        if( subtitle && subtitle->format == TEXTSUB && 
+            subtitle->dest == PASSTHRUSUB )
+        {
+            mux_data = calloc(1, sizeof( hb_mux_data_t ) );
+            subtitle->mux_data = mux_data;
+            mux_data->subtitle = 1;
+            mux_data->sub_format = subtitle->format;
+            // TODO: add subtitle track
+            // mux_data->track = MP4AddSubtitleTrack(....);
+        }
+    }
+
     if (job->chapter_markers)
     {
         /* add a text track for the chapters. We add the 'chap' atom to track
@@ -437,7 +455,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     hb_job_t * job = m->job;
     int64_t duration;
     int64_t offset = 0;
-    int i;
 
     if( mux_data == job->mux_data )
     {
@@ -569,6 +586,13 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             *job->die = 1;
         }
     }
+    else if (mux_data->subtitle)
+    {
+        if( mux_data->sub_format == TEXTSUB )
+        {
+            hb_log("MuxMP4: Text Sub:%lld: %s", buf->start, buf->data);
+        }
+    }
     else
     {
         if( !MP4WriteSample( m->file,
@@ -584,43 +608,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         }
     }
 
-    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
-    {
-        hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
-        
-        if( subtitle && subtitle->format == TEXTSUB && 
-            subtitle->dest == PASSTHRUSUB )
-        {
-            /*
-             * Should be adding this one if the timestamp is right.
-             */
-            hb_buffer_t *sub;
-
-            while( ( sub = hb_fifo_see( subtitle->fifo_out )) != NULL )
-            {
-                if( sub->size == 0 )
-                {
-                    /*
-                     * EOF 
-                     */ 
-                    hb_log("MuxMP4: Text Sub: EOF");
-                    sub = hb_fifo_get( subtitle->fifo_out );
-                    hb_buffer_close( &sub );
-                } else {
-                    if( sub->start < buf->start ) {
-                        sub = hb_fifo_get( subtitle->fifo_out );
-                        hb_log("MuxMP4: Text Sub:%lld:%lld: %s", sub->start, sub->stop, sub->data);
-                        hb_buffer_close( &sub );
-                    } else {
-                        /*
-                         * Not time yet
-                         */
-                        break;
-                    }
-                }
-            }
-        }
-    }
 
     return 0;
 }
