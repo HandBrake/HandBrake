@@ -456,6 +456,7 @@ struct hb_subtitle_s
     /* Internal data */
     hb_fifo_t * fifo_in;  /* SPU ES */
     hb_fifo_t * fifo_raw; /* Decoded SPU */
+    hb_fifo_t * fifo_sync;/* Synced */
     hb_fifo_t * fifo_out; /* Correct Timestamps, ready to be muxed */
 #endif
 };
@@ -653,6 +654,7 @@ struct hb_work_object_s
 extern hb_work_object_t hb_sync;
 extern hb_work_object_t hb_decmpeg2;
 extern hb_work_object_t hb_decsub;
+extern hb_work_object_t hb_encsub;
 extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encxvid;

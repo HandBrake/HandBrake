@@ -488,9 +488,10 @@ static void do_job( hb_job_t * job, int cpu_count )
 
         if( subtitle )
         {
-            subtitle->fifo_in  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-            subtitle->fifo_raw = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-            subtitle->fifo_out = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+            subtitle->fifo_in   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+            subtitle->fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+            subtitle->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
+            subtitle->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
             /*
              * Disable forced subtitles if we didn't find any in the scan
@@ -515,6 +516,20 @@ static void do_job( hb_job_t * job, int cpu_count )
                 w = hb_get_work( WORK_DECSUB );
                 w->fifo_in  = subtitle->fifo_in;
                 w->fifo_out = subtitle->fifo_raw;
+                hb_list_add( job->list_work, w );
+            }
+
+            if( !job->indepth_scan && 
+                subtitle->format == PICTURESUB
+                && subtitle->dest == PASSTHRUSUB )
+            {
+                /*
+                 * Passing through a subtitle picture, this will have to
+                 * be rle encoded before muxing.
+                 */
+                w = hb_get_work( WORK_ENCSUB );
+                w->fifo_in  = subtitle->fifo_sync;
+                w->fifo_out = subtitle->fifo_out;
                 hb_list_add( job->list_work, w );
             }
         }
@@ -861,6 +876,7 @@ cleanup:
         {
             hb_fifo_close( &subtitle->fifo_in );
             hb_fifo_close( &subtitle->fifo_raw );
+            hb_fifo_close( &subtitle->fifo_sync );
             hb_fifo_close( &subtitle->fifo_out );
         }
     }

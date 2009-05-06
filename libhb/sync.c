@@ -413,6 +413,8 @@ static void SyncVideo( hb_work_object_t * w )
                      *
                      * What about discontinuity boundaries - not delt
                      * with here - Van?
+                     *
+                     * Bypass the sync fifo altogether.
                      */
                     if( sub->size == 0 || sub->start < cur->start )
                     {
@@ -638,14 +640,14 @@ static void SyncVideo( hb_work_object_t * w )
                 } else {
                     /*
                      * Pass-Through, pop it off of the raw queue, rewrite times and
-                     * make it available to be muxed.
+                     * make it available to be reencoded.
                      */
                     uint64_t sub_duration;
                     sub = hb_fifo_get( subtitle->fifo_raw );
                     sub_duration = sub->stop - sub->start;
                     sub->start = buf_tmp->start;
                     sub->stop = sub->start + duration;
-                    hb_fifo_push( subtitle->fifo_out, sub );
+                    hb_fifo_push( subtitle->fifo_sync, sub );
                 }
             } else {
                 /*

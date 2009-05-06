@@ -22,6 +22,7 @@ hb_init_real( v, u ); \
 hb_register( &hb_sync ); \
 hb_register( &hb_decmpeg2 ); \
 hb_register( &hb_decsub ); \
+hb_register( &hb_encsub ); \
 hb_register( &hb_render ); \
 hb_register( &hb_encavcodec ); \
 hb_register( &hb_encxvid ); \
@@ -43,6 +44,7 @@ hb_init_real( v, u ); \
 hb_register( &hb_sync ); \
 hb_register( &hb_decmpeg2 ); \
 hb_register( &hb_decsub ); \
+hb_register( &hb_encsub ); \
 hb_register( &hb_render ); \
 hb_register( &hb_encavcodec ); \
 hb_register( &hb_encx264 ); \

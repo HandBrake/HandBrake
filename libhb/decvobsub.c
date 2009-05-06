@@ -125,7 +125,7 @@ void decsubClose( hb_work_object_t * w )
 hb_work_object_t hb_decsub =
 {
     WORK_DECSUB,
-    "Subtitle decoder",
+    "VOBSUB decoder",
     decsubInit,
     decsubWork,
     decsubClose

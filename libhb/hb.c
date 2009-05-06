@@ -230,6 +230,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     hb_register( &hb_sync );
 	hb_register( &hb_decmpeg2 );
 	hb_register( &hb_decsub );
+        hb_register( &hb_encsub );
 	hb_register( &hb_render );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encxvid );
