@@ -15,7 +15,7 @@ static int trim_subs = 0;
 static int nofontcolor = 0;
 static enum encoding_type encoding = ENC_UTF_8;
 static int cc_channel = 1;
-static enum output_format write_format = OF_TRANSCRIPT;
+static enum output_format write_format = OF_SRT;
 static int sentence_cap = 1;
 static int subs_delay = 0;
 static LLONG screens_to_process = -1;
@@ -24,9 +24,9 @@ static int gui_mode_reports = 0;
 static int norollup = 1;
 static int direct_rollup = 0;
 
-static LLONG get_fts(void)
+static LLONG get_fts(struct s_write *wb)
 {
-    return 0;
+    return wb->last_pts;
 }
 
 #define fatal(N, ...) // N
@@ -1491,8 +1491,8 @@ void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb
          * Put this subtitle in a hb_buffer_t and shove it into the subtitle fifo
          */
         buffer = hb_buffer_init( strlen( wb->subline ) + 1 );
-        buffer->start = wb->last_pts;
-        buffer->stop = wb->last_pts+1;
+        buffer->start = wb->data608->current_visible_start_ms;
+        buffer->stop = get_fts(wb);
         strcpy( buffer->data, wb->subline );
         //hb_log("CC %lld: %s", buffer->stop, wb->subline);
 
@@ -1548,7 +1548,7 @@ void write_cc_buffer_to_gui (struct eia608_screen *data, struct s_write *wb)
             hb_log ("###SUBTITLE#");            
             if (!time_reported)
             {
-                LLONG ms_end = get_fts()+subs_delay;		
+                LLONG ms_end = get_fts(wb)+subs_delay;		
                 mstotime (ms_start,&h1,&m1,&s1,&ms1);
                 mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
                 // Note, only MM:SS here as we need to save space in the preview window
@@ -1581,24 +1581,24 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     if (ms_start<0) // Drop screens that because of subs_delay start too early
         return 0;
 
-    LLONG ms_end = get_fts()+subs_delay;		
+    LLONG ms_end = get_fts(wb)+subs_delay;		
     mstotime (ms_start,&h1,&m1,&s1,&ms1);
     mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
     char timeline[128];   
     wb->data608->srt_counter++;
     sprintf (timeline,"%u\r\n",wb->data608->srt_counter);
-    enc_buffer_used=encode_line (enc_buffer,(unsigned char *) timeline);
-    fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
+    //enc_buffer_used=encode_line (enc_buffer,(unsigned char *) timeline);
+    //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
     XMLRPC_APPEND(enc_buffer,enc_buffer_used);
-    sprintf (timeline, "%02u:%02u:%02u,%03u --> %02u:%02u:%02u,%03u\r\n",
-        h1,m1,s1,ms1, h2,m2,s2,ms2);
-    enc_buffer_used=encode_line (enc_buffer,(unsigned char *) timeline);
+    //sprintf (timeline, "%02u:%02u:%02u,%03u --> %02u:%02u:%02u,%03u\r\n",
+    //      h1,m1,s1,ms1, h2,m2,s2,ms2);
+    //enc_buffer_used=encode_line (enc_buffer,(unsigned char *) timeline);
     if (debug_608)
     {
         hb_log ("\n- - - SRT caption - - -\n");
         hb_log (timeline);
     }
-    fwrite (enc_buffer,enc_buffer_used,1,wb->fh);		
+    //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);		
     XMLRPC_APPEND(enc_buffer,enc_buffer_used);
     for (i=0;i<15;i++)
     {
@@ -1615,9 +1615,16 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
                 hb_log ("\r");
                 hb_log ("%s\n",wb->subline);
             }
-            fwrite (wb->subline, 1, length, wb->fh);
+            hb_buffer_t *buffer = hb_buffer_init( strlen( wb->subline ) + 1 );
+            buffer->start = ms_start;
+            buffer->stop = ms_end;
+            strcpy( buffer->data, wb->subline );
+
+            hb_fifo_push( wb->subtitle->fifo_raw, buffer );
+
+            //fwrite (wb->subline, 1, length, wb->fh);
             XMLRPC_APPEND(wb->subline,length);
-            fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
+            //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
             XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);
             wrote_something=1;
             // fhb_log (wb->fh,encoded_crlf);
@@ -1628,7 +1635,7 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
         hb_log ("- - - - - - - - - - - -\r\n");
     }
     // fhb_log (wb->fh, encoded_crlf);
-    fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
+    //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
     XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);
     return wrote_something;
 }
@@ -1643,7 +1650,7 @@ int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
     if (startms<0) // Drop screens that because of subs_delay start too early
         return 0; 
 
-    LLONG endms   = get_fts()+subs_delay;
+    LLONG endms   = get_fts(wb)+subs_delay;
     endms--; // To prevent overlapping with next line.
     sprintf ((char *) str,"<SYNC start=\"%llu\"><P class=\"UNKNOWNCC\">\r\n",startms);
     if (debug_608 && encoding!=ENC_UNICODE)
@@ -2000,7 +2007,7 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                     wb->data608->screenfuls_counter++;
             }
             roll_up(wb);		
-            wb->data608->current_visible_start_ms=get_fts();
+            wb->data608->current_visible_start_ms=get_fts(wb);
             wb->data608->cursor_column=0;
             break;
         case COM_ERASENONDISPLAYEDMEMORY:
@@ -2024,7 +2031,7 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
                     wb->data608->screenfuls_counter++;
             }
             erase_memory (wb,1);
-            wb->data608->current_visible_start_ms=get_fts();
+            wb->data608->current_visible_start_ms=get_fts(wb);
             break;
         case COM_ENDOFCAPTION: // Switch buffers
             // The currently *visible* buffer is leaving, so now we know it's ending
@@ -2032,7 +2039,7 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
             if (write_cc_buffer (wb))
                 wb->data608->screenfuls_counter++;
             wb->data608->visible_buffer = (wb->data608->visible_buffer==1) ? 2 : 1;
-            wb->data608->current_visible_start_ms=get_fts();
+            wb->data608->current_visible_start_ms=get_fts(wb);
             wb->data608->cursor_column=0;
             wb->data608->cursor_row=0;
             wb->data608->color=default_color;
@@ -2369,7 +2376,7 @@ void process608 (const unsigned char *data, int length, struct s_write *wb)
             {
                 // We don't increase screenfuls_counter here.
                 write_cc_buffer (wb);
-                wb->data608->current_visible_start_ms=get_fts();
+                wb->data608->current_visible_start_ms=get_fts(wb);
             }
         }
     }

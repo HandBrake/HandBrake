@@ -609,7 +609,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 } else {
                     if( sub->start < buf->start ) {
                         sub = hb_fifo_get( subtitle->fifo_out );
-                        hb_log("MuxMP4: Text Sub:%lld: %s", sub->start, sub->data);
+                        hb_log("MuxMP4: Text Sub:%lld:%lld: %s", sub->start, sub->stop, sub->data);
                         hb_buffer_close( &sub );
                     } else {
                         /*
