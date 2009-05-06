@@ -460,7 +460,7 @@ static void ReaderFunc( void * _r )
     hb_subtitle_t *subtitle;
     for( n = 0; ( subtitle = hb_list_item( r->job->title->list_subtitle, n ) ); ++n )
     {
-        if ( subtitle->fifo_in )
+        if ( subtitle->fifo_in && subtitle->source == VOBSUB)
             push_buf( r, subtitle->fifo_in, hb_buffer_init(0) );
     }
 

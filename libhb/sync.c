@@ -416,17 +416,25 @@ static void SyncVideo( hb_work_object_t * w )
                      *
                      * Bypass the sync fifo altogether.
                      */
-                    if( sub->size == 0 || sub->start < cur->start )
+                    if( sub->size == 0 )
                     {
-                        uint64_t duration;
-                        duration = sub->stop - sub->start;
                         sub = hb_fifo_get( subtitle->fifo_raw );
-                        sub->start = pv->next_start;
-                        sub->stop = sub->start + duration;
                         hb_fifo_push( subtitle->fifo_out, sub );
-                    } else {
                         sub = NULL;
                         break;
+                    } else {
+                        if( sub->start < cur->start )
+                        {
+                            uint64_t duration;
+                            duration = sub->stop - sub->start;
+                            sub = hb_fifo_get( subtitle->fifo_raw );
+                            sub->start = pv->next_start;
+                            sub->stop = sub->start + duration;
+                            hb_fifo_push( subtitle->fifo_out, sub );
+                        } else {
+                            sub = NULL;
+                            break;
+                        }
                     }
                 }
             }

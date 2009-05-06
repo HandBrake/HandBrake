@@ -1490,10 +1490,10 @@ void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb
         /*
          * Put this subtitle in a hb_buffer_t and shove it into the subtitle fifo
          */
-        buffer = hb_buffer_init( strlen( wb->subline ) + 1 );
+        buffer = hb_buffer_init( length + 1 );
         buffer->start = wb->data608->current_visible_start_ms;
         buffer->stop = get_fts(wb);
-        strcpy( buffer->data, wb->subline );
+        memcpy( buffer->data, wb->subline, length + 1 );
         //hb_log("CC %lld: %s", buffer->stop, wb->subline);
 
         hb_fifo_push( wb->subtitle->fifo_raw, buffer );
@@ -1615,19 +1615,22 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
                 hb_log ("\r");
                 hb_log ("%s\n",wb->subline);
             }
-            hb_buffer_t *buffer = hb_buffer_init( strlen( wb->subline ) + 1 );
-            buffer->start = ms_start;
-            buffer->stop = ms_end;
-            strcpy( buffer->data, wb->subline );
-
-            hb_fifo_push( wb->subtitle->fifo_raw, buffer );
-
-            //fwrite (wb->subline, 1, length, wb->fh);
-            XMLRPC_APPEND(wb->subline,length);
-            //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
-            XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);
-            wrote_something=1;
-            // fhb_log (wb->fh,encoded_crlf);
+            if (length > 0)
+            {
+                hb_buffer_t *buffer = hb_buffer_init( length + 1 );
+                buffer->start = ms_start;
+                buffer->stop = ms_end;
+                memcpy( buffer->data, wb->subline, length + 1 );
+                
+                hb_fifo_push( wb->subtitle->fifo_raw, buffer );
+                
+                //fwrite (wb->subline, 1, length, wb->fh);
+                XMLRPC_APPEND(wb->subline,length);
+                //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
+                XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);
+                wrote_something=1;
+                // fhb_log (wb->fh,encoded_crlf);
+            }
         }
     }
     if (debug_608)
