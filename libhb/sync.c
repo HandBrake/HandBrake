@@ -414,7 +414,7 @@ static void SyncVideo( hb_work_object_t * w )
                      * What about discontinuity boundaries - not delt
                      * with here - Van?
                      */
-                    if( sub->start < cur->start )
+                    if( sub->size == 0 || sub->start < cur->start )
                     {
                         sub = hb_fifo_get( subtitle->fifo_raw );
                         sub->start = pv->next_start;
@@ -431,6 +431,14 @@ static void SyncVideo( hb_work_object_t * w )
                 hb_buffer_t * sub2;
                 while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
                 {
+                    if( sub->size == 0 )
+                    {
+                        /*
+                         * EOF, pass it through immediately.
+                         */
+                        break;
+                    }
+
                     /* If two subtitles overlap, make the first one stop
                        when the second one starts */
                     sub2 = hb_fifo_see2( subtitle->fifo_raw );
@@ -468,6 +476,14 @@ static void SyncVideo( hb_work_object_t * w )
                     hb_buffer_close( &sub );
                 }
                 
+                if( sub && sub->size == 0 )
+                {
+                    /* 
+                     * Continue immediately on subtitle EOF
+                     */
+                    break;
+                }
+
                 /*
                  * There is a valid subtitle, is it time to display it?
                  */
@@ -606,28 +622,43 @@ static void SyncVideo( hb_work_object_t * w )
         if( sub && subtitle && 
             subtitle->format == PICTURESUB )
         {
-            if( subtitle->dest == RENDERSUB )
+            if( sub->size > 0 )
             {
-                /*
-                 * Tack onto the video buffer for rendering
-                 */
-                buf_tmp->sub         = hb_buffer_init( sub->size );
-                buf_tmp->sub->x      = sub->x;
-                buf_tmp->sub->y      = sub->y;
-                buf_tmp->sub->width  = sub->width;
-                buf_tmp->sub->height = sub->height;
-                memcpy( buf_tmp->sub->data, sub->data, sub->size ); 
+                if( subtitle->dest == RENDERSUB )
+                {
+                    /*
+                     * Tack onto the video buffer for rendering
+                     */
+                    buf_tmp->sub         = hb_buffer_init( sub->size );
+                    buf_tmp->sub->x      = sub->x;
+                    buf_tmp->sub->y      = sub->y;
+                    buf_tmp->sub->width  = sub->width;
+                    buf_tmp->sub->height = sub->height;
+                    memcpy( buf_tmp->sub->data, sub->data, sub->size ); 
+                } else {
+                    /*
+                     * Pass-Through, pop it off of the raw queue, rewrite times and
+                     * make it available to be muxed.
+                     */
+                    uint64_t sub_duration;
+                    sub = hb_fifo_get( subtitle->fifo_raw );
+                    sub_duration = sub->stop - sub->start;
+                    sub->start = buf_tmp->start;
+                    sub->stop = sub->start + duration;
+                    hb_fifo_push( subtitle->fifo_out, sub );
+                }
             } else {
                 /*
-                 * Pass-Through, pop it off of the raw queue, rewrite times and
-                 * make it available to be muxed.
+                 * EOF - consume for rendered, else pass through
                  */
-                uint64_t sub_duration;
-                sub = hb_fifo_get( subtitle->fifo_raw );
-                sub_duration = sub->stop - sub->start;
-                sub->start = buf_tmp->start;
-                sub->stop = sub->start + duration;
-                hb_fifo_push( subtitle->fifo_out, sub );
+                if( subtitle->dest == RENDERSUB )
+                {
+                    sub = hb_fifo_get( subtitle->fifo_raw );
+                    hb_buffer_close( &sub );
+                } else {
+                    sub = hb_fifo_get( subtitle->fifo_raw );
+                    hb_fifo_push( subtitle->fifo_out, sub );
+                }
             }
         }
 

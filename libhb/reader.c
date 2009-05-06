@@ -457,6 +457,13 @@ static void ReaderFunc( void * _r )
             push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
     }
 
+    hb_subtitle_t *subtitle;
+    for( n = 0; ( subtitle = hb_list_item( r->job->title->list_subtitle, n ) ); ++n )
+    {
+        if ( subtitle->fifo_in )
+            push_buf( r, subtitle->fifo_in, hb_buffer_init(0) );
+    }
+
     hb_list_empty( &list );
     hb_buffer_close( &ps );
     if (r->dvd)

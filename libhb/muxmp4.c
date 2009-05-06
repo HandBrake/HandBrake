@@ -598,15 +598,25 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
 
             while( ( sub = hb_fifo_see( subtitle->fifo_out )) != NULL )
             {
-                if (sub->start < buf->start ) {
+                if( sub->size == 0 )
+                {
+                    /*
+                     * EOF 
+                     */ 
+                    hb_log("MuxMP4: Text Sub: EOF");
                     sub = hb_fifo_get( subtitle->fifo_out );
-                    hb_log("MuxMP4: Text Sub:%lld: %s", sub->start, sub->data);
                     hb_buffer_close( &sub );
                 } else {
-                    /*
-                     * Not time yet
-                     */
-                    break;
+                    if( sub->start < buf->start ) {
+                        sub = hb_fifo_get( subtitle->fifo_out );
+                        hb_log("MuxMP4: Text Sub:%lld: %s", sub->start, sub->data);
+                        hb_buffer_close( &sub );
+                    } else {
+                        /*
+                         * Not time yet
+                         */
+                        break;
+                    }
                 }
             }
         }

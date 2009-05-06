@@ -2048,10 +2048,18 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
 }
 
 void handle_end_of_data (struct s_write *wb)
-{
+{ 
+    hb_buffer_t *buffer;
+
     // We issue a EraseDisplayedMemory here so if there's any captions pending
     // they get written to file. 
     handle_command (0x14, 0x2c, wb); // EDM
+
+    /*
+     * At the end of the subtitle stream HB wants an empty buffer
+     */
+    buffer = hb_buffer_init( 0 );
+    hb_fifo_push( wb->subtitle->fifo_raw, buffer );
 }
 
 void handle_double (const unsigned char c1, const unsigned char c2, struct s_write *wb)

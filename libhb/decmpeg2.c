@@ -658,6 +658,13 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_list_add( pv->list, *buf_in );
         *buf_in = NULL;
         status = HB_WORK_DONE;
+        /*
+         * Let the Closed Captions know that it is the end of the data.
+         */
+        if( pv->libmpeg2->subtitle )
+        {
+            handle_end_of_data( &pv->libmpeg2->cc608 );
+        }
     }
 
     *buf_out = NULL;
