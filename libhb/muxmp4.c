@@ -590,7 +590,10 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         if( mux_data->sub_format == TEXTSUB )
         {
-            hb_log("MuxMP4: Text Sub:%lld: %s", buf->start, buf->data);
+            /*
+             * Write the sample here
+             */
+            hb_log("MuxMP4:Sub:%lld:%lld: %s", buf->start, buf->stop, buf->data);
         }
     }
     else
