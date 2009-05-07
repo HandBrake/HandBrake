@@ -21,8 +21,9 @@ hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use w
 hb_init_real( v, u ); \
 hb_register( &hb_sync ); \
 hb_register( &hb_decmpeg2 ); \
-hb_register( &hb_decsub ); \
-hb_register( &hb_encsub ); \
+hb_register( &hb_decvobsub ); \
+hb_register( &hb_encvobsub ); \
+hb_register( &hb_deccc608 ); \
 hb_register( &hb_render ); \
 hb_register( &hb_encavcodec ); \
 hb_register( &hb_encxvid ); \
@@ -43,8 +44,9 @@ hb_register( &hb_encvorbis ); \
 hb_init_real( v, u ); \
 hb_register( &hb_sync ); \
 hb_register( &hb_decmpeg2 ); \
-hb_register( &hb_decsub ); \
-hb_register( &hb_encsub ); \
+hb_register( &hb_decvobsub ); \
+hb_register( &hb_encvobsub ); \
+hb_register( &hb_deccc608 ); \
 hb_register( &hb_render ); \
 hb_register( &hb_encavcodec ); \
 hb_register( &hb_encx264 ); \

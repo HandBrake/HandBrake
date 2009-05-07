@@ -90,7 +90,8 @@ struct s_write {
     int new_sentence;
     int new_channel;
     int in_xds_mode;
-    hb_subtitle_t * subtitle;
+    hb_buffer_t *hb_buffer;
+    hb_buffer_t *hb_last_buffer;
     uint64_t last_pts;
 };
 

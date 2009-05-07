@@ -7,7 +7,6 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include "mpeg2dec/mpeg2.h"
-#include "deccc608sub.h"
 
 /* Cadence tracking */
 #ifndef PIC_FLAG_REPEAT_FIRST_FIELD
@@ -47,7 +46,6 @@ typedef struct hb_libmpeg2_s
     int64_t              last_pts;
     int cadence[12];
     int flag;
-    struct s_write       cc608;             /* Closed Captions */
     hb_subtitle_t      * subtitle;
 } hb_libmpeg2_t;
 
@@ -64,9 +62,6 @@ static hb_libmpeg2_t * hb_libmpeg2_init()
     m->info     = mpeg2_info( m->libmpeg2 );
     m->last_pts = -1;
 
-   /* Closed Captions init, whether needed or not */
-    general_608_init( &m->cc608 );
-    m->cc608.data608 = calloc(1, sizeof(struct eia608));
     return m;
 }
 
@@ -74,6 +69,7 @@ static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
 {
     uint8_t cc_valid = (*cc_block & 4) >>2;
     uint8_t cc_type = *cc_block & 3;
+    hb_buffer_t *cc_buf;
     
     if( !m->job )
     {
@@ -89,7 +85,13 @@ static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
         {
         case 0:
             // CC1 stream
-            process608( cc_block+1, 2, &m->cc608 );
+            cc_buf = hb_buffer_init( 2 );
+            if( cc_buf )
+            {
+                cc_buf->start = m->last_pts;
+                memcpy( cc_buf->data, cc_block+1, 2 );
+                hb_fifo_push( m->subtitle->fifo_in, cc_buf );
+            }
             break;
         case 1:
             // CC2 stream
@@ -403,6 +405,8 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
 
         /*
          * Look for Closed Captions if scanning (!job) or if closed captions have been requested.
+         *
+         * Send them on to the closed caption decoder if requested and found.
          */
         if( ( !m->job || m->subtitle) &&
             ( m->info->user_data_len != 0 &&
@@ -418,8 +422,6 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             int capcount=(header[0] & 0x1e) / 2;
             header++;
             
-            m->cc608.last_pts = m->last_pts;
-
             /*
              * Add closed captions to the title if we are scanning (no job).
              *
@@ -439,7 +441,11 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 for( i = 0; i < hb_list_count( m->title->list_subtitle ); i++ )
                 {
                     subtitle = hb_list_item( m->title->list_subtitle, i);
-                    if( subtitle && subtitle->source == CCSUB ) 
+                    /*
+                     * Let's call them 608 subs for now even if they aren't, since they 
+                     * are the only types we grok.
+                     */
+                    if( subtitle && subtitle->source == CC608SUB ) 
                     {
                         found = 1;
                         break;
@@ -454,7 +460,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
                     snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
                     subtitle->format = TEXTSUB;
-                    subtitle->source = CCSUB;
+                    subtitle->source = CC608SUB;
                     subtitle->dest   = PASSTHRUSUB;
                     subtitle->type = 5; 
                     
@@ -525,9 +531,6 @@ static void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
 
     mpeg2_close( m->libmpeg2 );
 
-    free( m->cc608.data608 );
-    general_608_close( &m->cc608 );
-
     free( m );
     *_m = NULL;
 }
@@ -565,7 +568,8 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
     }
 
     /*
-     * If not scanning, then are we supposed to extract Closed Captions?
+     * If not scanning, then are we supposed to extract Closed Captions
+     * and send them to the decoder? 
      */
     if( job )
     {
@@ -575,53 +579,14 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
         {
             subtitle = hb_list_item( job->list_subtitle, i);
-            if( subtitle && subtitle->source == CCSUB ) 
+            if( subtitle && subtitle->source == CC608SUB ) 
             {
                 pv->libmpeg2->subtitle = subtitle;
-                pv->libmpeg2->cc608.subtitle = subtitle;
                 break;
             }
         }
 
     }
-
-    /*
-     * During a scan add a Closed Caption subtitle track to the title, 
-     * since we may have CC. Don't bother actually trying to detect CC
-     * since we'd have to go through too much of the source.
-     *
-    if( !job && w->title )
-    {
-        hb_subtitle_t * subtitle;
-        int found = 0;
-        int i;
-
-        for( i = 0; i < hb_list_count( w->title->list_subtitle ); i++ )
-        {
-            subtitle = hb_list_item( w->title->list_subtitle, i);
-            if( subtitle && subtitle->source == CCSUB ) 
-            {
-                found = 1;
-                break;
-            }
-        }
-
-        if( !found )
-        {
-            subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
-            subtitle->track = 0;
-            subtitle->id = 0x0;
-            snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
-            snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
-            subtitle->format = TEXTSUB;
-            subtitle->source = CCSUB;
-            subtitle->dest   = PASSTHRUSUB;
-            subtitle->type = 5; 
-
-            hb_list_add( w->title->list_subtitle, subtitle );
-        }
-    }
-    */
 
     return 0;
 }
@@ -663,7 +628,12 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
          */
         if( pv->libmpeg2->subtitle )
         {
-            handle_end_of_data( &pv->libmpeg2->cc608 );
+            hb_buffer_t *buf_eof = hb_buffer_init( 0 );
+            
+            if( buf_eof )
+            {
+                hb_fifo_push( pv->libmpeg2->subtitle->fifo_in, buf_eof );
+            }
         }
     }
 

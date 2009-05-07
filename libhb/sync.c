@@ -293,6 +293,19 @@ static void SyncVideo( hb_work_object_t * w )
     {
         /* we got an end-of-stream. Feed it downstream & signal that we're done. */
         hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
+
+        /*
+         * Push through any subtitle EOFs in case they were not synced through.
+         */
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
+        {
+            subtitle = hb_list_item( job->list_subtitle, i );
+            if( subtitle->dest == PASSTHRUSUB )
+            {
+                hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+            }
+        }
+
         pv->busy &=~ 1;
         return;
     }
@@ -313,6 +326,18 @@ static void SyncVideo( hb_work_object_t * w )
              * video (we don't know its duration). On DVDs the final frame
              * is often strange and dropping it seems to be a good idea. */
             hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
+
+            /*
+             * Push through any subtitle EOFs in case they were not synced through.
+             */
+            for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
+            {
+                subtitle = hb_list_item( job->list_subtitle, i );
+                if( subtitle->dest == PASSTHRUSUB )
+                {
+                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                }
+            }
             pv->busy &=~ 1;
             return;
         }
@@ -398,7 +423,8 @@ static void SyncVideo( hb_work_object_t * w )
             /*
              * Rewrite timestamps on subtitles that need it (on raw queue).
              */
-            if( subtitle->source == CCSUB )
+            if( subtitle->source == CC608SUB ||
+                subtitle->source == CC708SUB )
             {
                 /*
                  * Rewrite timestamps on subtitles that came from Closed Captions
@@ -416,7 +442,7 @@ static void SyncVideo( hb_work_object_t * w )
                      *
                      * Bypass the sync fifo altogether.
                      */
-                    if( sub->size == 0 )
+                    if( sub->size <= 0 )
                     {
                         sub = hb_fifo_get( subtitle->fifo_raw );
                         hb_fifo_push( subtitle->fifo_out, sub );

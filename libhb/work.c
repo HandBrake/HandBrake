@@ -280,7 +280,9 @@ void hb_display_job_info( hb_job_t * job )
         {
             hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s ", subtitle->track, subtitle->lang, subtitle->id,
                     subtitle->format == PICTURESUB ? "Picture" : "Text",
-                    subtitle->source == VOBSUB ? "VOBSUB" : (subtitle->source == CCSUB ? "CC" : "SRT"),
+                    subtitle->source == VOBSUB ? "VOBSUB" : 
+                    ((subtitle->source == CC608SUB ||
+                      subtitle->source == CC708SUB) ? "CC" : "SRT"),
                     subtitle->dest == RENDERSUB ? "Render/Burn in" : "Pass-Through");
         }
     }
@@ -508,12 +510,21 @@ static void do_job( hb_job_t * job, int cpu_count )
                 }
             }
 
-            if( !job->indepth_scan || job->subtitle_force ) {
+            if( (!job->indepth_scan || job->subtitle_force) && 
+                subtitle->source == VOBSUB ) {
                 /*
                  * Don't add threads for subtitles when we are scanning, unless
                  * looking for forced subtitles.
                  */
-                w = hb_get_work( WORK_DECSUB );
+                w = hb_get_work( WORK_DECVOBSUB );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+                hb_list_add( job->list_work, w );
+            }
+
+            if( !job->indepth_scan && subtitle->source == CC608SUB )
+            {
+                w = hb_get_work( WORK_DECCC608 );
                 w->fifo_in  = subtitle->fifo_in;
                 w->fifo_out = subtitle->fifo_raw;
                 hb_list_add( job->list_work, w );
@@ -527,7 +538,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                  * Passing through a subtitle picture, this will have to
                  * be rle encoded before muxing.
                  */
-                w = hb_get_work( WORK_ENCSUB );
+                w = hb_get_work( WORK_ENCVOBSUB );
                 w->fifo_in  = subtitle->fifo_sync;
                 w->fifo_out = subtitle->fifo_out;
                 hb_list_add( job->list_work, w );

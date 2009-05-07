@@ -51,9 +51,9 @@ void encsubClose( hb_work_object_t * w )
     free( w->private_data );
 }
 
-hb_work_object_t hb_encsub =
+hb_work_object_t hb_encvobsub =
 {
-    WORK_ENCSUB,
+    WORK_ENCVOBSUB,
     "VOBSUB encoder",
     encsubInit,
     encsubWork,

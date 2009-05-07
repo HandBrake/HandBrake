@@ -177,6 +177,10 @@ int general_608_init (struct s_write *wb)
     wb->new_sentence = 1;
     wb->new_channel = 1;
     wb->in_xds_mode = 0;
+
+    wb->hb_buffer = NULL;
+    wb->hb_last_buffer = NULL;
+    wb->last_pts = 0;
     return 0;
 }
 
@@ -194,6 +198,10 @@ void general_608_close (struct s_write *wb)
     }
     if( wb->subline ) {
         free(wb->subline);
+    }
+
+    if( wb->hb_buffer ) {
+        hb_buffer_close( &wb->hb_buffer );
     }
 }
 
@@ -1496,7 +1504,12 @@ void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb
         memcpy( buffer->data, wb->subline, length + 1 );
         //hb_log("CC %lld: %s", buffer->stop, wb->subline);
 
-        hb_fifo_push( wb->subtitle->fifo_raw, buffer );
+        if (wb->hb_last_buffer) {
+            wb->hb_last_buffer->next = buffer;
+        } else {
+            wb->hb_buffer = buffer;
+        }
+        wb->hb_last_buffer = buffer;
 
         XMLRPC_APPEND(wb->subline,length);
         //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
@@ -1622,7 +1635,12 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
                 buffer->stop = ms_end;
                 memcpy( buffer->data, wb->subline, length + 1 );
                 
-                hb_fifo_push( wb->subtitle->fifo_raw, buffer );
+                if (wb->hb_last_buffer) {
+                    wb->hb_last_buffer->next = buffer;
+                } else {
+                    wb->hb_buffer = buffer;
+                }
+                wb->hb_last_buffer = buffer;
                 
                 //fwrite (wb->subline, 1, length, wb->fh);
                 XMLRPC_APPEND(wb->subline,length);
@@ -2059,17 +2077,9 @@ void handle_command (/*const */ unsigned char c1, const unsigned char c2, struct
 
 void handle_end_of_data (struct s_write *wb)
 { 
-    hb_buffer_t *buffer;
-
     // We issue a EraseDisplayedMemory here so if there's any captions pending
     // they get written to file. 
     handle_command (0x14, 0x2c, wb); // EDM
-
-    /*
-     * At the end of the subtitle stream HB wants an empty buffer
-     */
-    buffer = hb_buffer_init( 0 );
-    hb_fifo_push( wb->subtitle->fifo_raw, buffer );
 }
 
 void handle_double (const unsigned char c1, const unsigned char c2, struct s_write *wb)
@@ -2419,3 +2429,98 @@ unsigned char *debug_608toASC (unsigned char *cc_data, int channel)
     }
     return output;
 }
+
+
+struct hb_work_private_s
+{
+    hb_job_t           * job;
+    struct s_write     * cc608;
+};
+
+int decccInit( hb_work_object_t * w, hb_job_t * job )
+{
+    int retval = 1;
+    hb_work_private_t * pv;
+
+    pv = calloc( 1, sizeof( hb_work_private_t ) );
+    if( pv )
+    {
+        w->private_data = pv;
+
+        pv->job = job;
+
+        pv->cc608 = calloc(1, sizeof(struct s_write));
+
+        if( pv->cc608 )
+        {
+            retval = general_608_init(pv->cc608);
+            if( !retval )
+            {
+                pv->cc608->data608 = calloc(1, sizeof(struct eia608));
+                if( !pv->cc608->data608 )
+                {
+                    retval = 1;
+                }
+            }
+        }
+    }
+    return retval;
+}
+
+int decccWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+               hb_buffer_t ** buf_out )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_buffer_t * in = *buf_in;
+
+    if ( in->size <= 0 )
+    {
+        /* EOF on input stream - send it downstream & say that we're done */
+        handle_end_of_data(pv->cc608);
+        /*
+         * Grab any pending buffer and output them with the EOF on the end
+         */
+        if (pv->cc608->hb_last_buffer) {
+            pv->cc608->hb_last_buffer->next = in;
+            *buf_out = pv->cc608->hb_buffer;
+            *buf_in = NULL;
+            pv->cc608->hb_buffer = NULL;
+            pv->cc608->hb_last_buffer = NULL;
+        } else {
+            *buf_out = in;
+            *buf_in = NULL;
+        }
+        return HB_WORK_DONE;
+    }
+
+    pv->cc608->last_pts = in->start;
+
+    process608(in->data, in->size, pv->cc608);
+
+    /*
+     * If there is one waiting then pass it on
+     */
+    *buf_out = pv->cc608->hb_buffer;
+    pv->cc608->hb_buffer = NULL;
+    pv->cc608->hb_last_buffer = NULL;
+
+    return HB_WORK_OK; 
+}
+
+void decccClose( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    general_608_close( pv->cc608 );
+    free( pv->cc608->data608 );
+    free( pv->cc608 );
+    free( w->private_data );
+}
+
+hb_work_object_t hb_deccc608 =
+{
+    WORK_DECCC608,
+    "Closed Caption (608) decoder",
+    decccInit,
+    decccWork,
+    decccClose
+};

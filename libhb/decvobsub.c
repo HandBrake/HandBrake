@@ -122,9 +122,9 @@ void decsubClose( hb_work_object_t * w )
     free( w->private_data );
 }
 
-hb_work_object_t hb_decsub =
+hb_work_object_t hb_decvobsub =
 {
-    WORK_DECSUB,
+    WORK_DECVOBSUB,
     "VOBSUB decoder",
     decsubInit,
     decsubWork,

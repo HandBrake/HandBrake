@@ -443,7 +443,7 @@ struct hb_subtitle_s
     int track;
     int  id;
     enum subtype { PICTURESUB, TEXTSUB } format;
-    enum subsource { VOBSUB, SRTSUB, CCSUB } source;
+    enum subsource { VOBSUB, SRTSUB, CC608SUB, CC708SUB } source;
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
     char lang[1024];
     char iso639_2[4];
@@ -654,8 +654,9 @@ struct hb_work_object_s
 
 extern hb_work_object_t hb_sync;
 extern hb_work_object_t hb_decmpeg2;
-extern hb_work_object_t hb_decsub;
-extern hb_work_object_t hb_encsub;
+extern hb_work_object_t hb_decvobsub;
+extern hb_work_object_t hb_encvobsub;
+extern hb_work_object_t hb_deccc608;
 extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encxvid;
