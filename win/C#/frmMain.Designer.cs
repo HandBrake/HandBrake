@@ -75,6 +75,7 @@ namespace Handbrake
             this.check_customCrop = new System.Windows.Forms.RadioButton();
             this.check_autoCrop = new System.Windows.Forms.RadioButton();
             this.text_source = new System.Windows.Forms.TextBox();
+            this.drop_angle = new System.Windows.Forms.ComboBox();
             this.lbl_src_res = new System.Windows.Forms.Label();
             this.lbl_duration = new System.Windows.Forms.Label();
             this.label_duration = new System.Windows.Forms.Label();
@@ -109,6 +110,7 @@ namespace Handbrake
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_qptest = new System.Windows.Forms.ToolStripMenuItem();
             this.gb_source = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.Label13 = new System.Windows.Forms.Label();
             this.Label17 = new System.Windows.Forms.Label();
             this.Label9 = new System.Windows.Forms.Label();
@@ -136,8 +138,6 @@ namespace Handbrake
             this.lbl_drc = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.tb_drc = new System.Windows.Forms.TrackBar();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label68 = new System.Windows.Forms.Label();
             this.label67 = new System.Windows.Forms.Label();
             this.label66 = new System.Windows.Forms.Label();
@@ -183,9 +183,14 @@ namespace Handbrake
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.tabs_panel = new System.Windows.Forms.TabControl();
             this.tab_Filters = new System.Windows.Forms.TabPage();
+            this.ctl_deinterlace = new Handbrake.Deinterlace();
+            this.ctl_denoise = new Handbrake.Denoise();
+            this.ctl_decomb = new Handbrake.Decomb();
+            this.ctl_detelecine = new Handbrake.Detelecine();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.h264Tab = new System.Windows.Forms.TabPage();
+            this.x264Panel = new Handbrake.Controls.x264Panel();
             this.tab_query = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.label34 = new System.Windows.Forms.Label();
@@ -220,13 +225,6 @@ namespace Handbrake
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
             this.hbproc = new System.Diagnostics.Process();
-            this.drop_angle = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.ctl_deinterlace = new Handbrake.Deinterlace();
-            this.ctl_denoise = new Handbrake.Denoise();
-            this.ctl_decomb = new Handbrake.Decomb();
-            this.ctl_detelecine = new Handbrake.Detelecine();
-            this.x264Panel = new Handbrake.Controls.x264Panel();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -716,6 +714,17 @@ namespace Handbrake
             this.text_source.Text = "Click \'Source\' to continue";
             this.ToolTip.SetToolTip(this.text_source, "Location of the source input file, folder or dvd.");
             // 
+            // drop_angle
+            // 
+            this.drop_angle.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drop_angle.FormattingEnabled = true;
+            this.drop_angle.Location = new System.Drawing.Point(250, 52);
+            this.drop_angle.Name = "drop_angle";
+            this.drop_angle.Size = new System.Drawing.Size(45, 21);
+            this.drop_angle.TabIndex = 45;
+            this.drop_angle.Text = "1";
+            this.ToolTip.SetToolTip(this.drop_angle, "Select the chapter range you would like to enocde. (default: All Chapters)");
+            // 
             // lbl_src_res
             // 
             this.lbl_src_res.AutoSize = true;
@@ -1009,6 +1018,17 @@ namespace Handbrake
             this.gb_source.TabStop = false;
             this.gb_source.Text = "Source";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.Black;
+            this.label4.Location = new System.Drawing.Point(200, 55);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(44, 13);
+            this.label4.TabIndex = 44;
+            this.label4.Text = "Angle:";
+            // 
             // Label13
             // 
             this.Label13.AutoSize = true;
@@ -1110,8 +1130,6 @@ namespace Handbrake
             this.TabPage2.Controls.Add(this.lbl_drc);
             this.TabPage2.Controls.Add(this.label16);
             this.TabPage2.Controls.Add(this.tb_drc);
-            this.TabPage2.Controls.Add(this.groupBox5);
-            this.TabPage2.Controls.Add(this.groupBox3);
             this.TabPage2.Controls.Add(this.label68);
             this.TabPage2.Controls.Add(this.label67);
             this.TabPage2.Controls.Add(this.label66);
@@ -1290,22 +1308,6 @@ namespace Handbrake
             this.tb_drc.TabIndex = 13;
             this.tb_drc.TickFrequency = 10;
             this.tb_drc.ValueChanged += new System.EventHandler(this.tb_drc_Scroll);
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Location = new System.Drawing.Point(107, 13);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(577, 10);
-            this.groupBox5.TabIndex = 1;
-            this.groupBox5.TabStop = false;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Location = new System.Drawing.Point(83, 260);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(601, 10);
-            this.groupBox3.TabIndex = 41;
-            this.groupBox3.TabStop = false;
             // 
             // label68
             // 
@@ -1875,6 +1877,48 @@ namespace Handbrake
             this.tab_Filters.Text = "Video Filters";
             this.tab_Filters.UseVisualStyleBackColor = true;
             // 
+            // ctl_deinterlace
+            // 
+            this.ctl_deinterlace.AutoSize = true;
+            this.ctl_deinterlace.Location = new System.Drawing.Point(19, 95);
+            this.ctl_deinterlace.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_deinterlace.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_deinterlace.Name = "ctl_deinterlace";
+            this.ctl_deinterlace.Size = new System.Drawing.Size(275, 28);
+            this.ctl_deinterlace.TabIndex = 41;
+            this.ctl_deinterlace.onChange += new System.EventHandler(this.ctl_deinterlace_changed);
+            // 
+            // ctl_denoise
+            // 
+            this.ctl_denoise.AutoSize = true;
+            this.ctl_denoise.Location = new System.Drawing.Point(19, 123);
+            this.ctl_denoise.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_denoise.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_denoise.Name = "ctl_denoise";
+            this.ctl_denoise.Size = new System.Drawing.Size(275, 28);
+            this.ctl_denoise.TabIndex = 40;
+            // 
+            // ctl_decomb
+            // 
+            this.ctl_decomb.AutoSize = true;
+            this.ctl_decomb.Location = new System.Drawing.Point(19, 66);
+            this.ctl_decomb.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_decomb.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_decomb.Name = "ctl_decomb";
+            this.ctl_decomb.Size = new System.Drawing.Size(275, 28);
+            this.ctl_decomb.TabIndex = 39;
+            this.ctl_decomb.onChange += new System.EventHandler(this.ctl_decomb_changed);
+            // 
+            // ctl_detelecine
+            // 
+            this.ctl_detelecine.AutoSize = true;
+            this.ctl_detelecine.Location = new System.Drawing.Point(19, 38);
+            this.ctl_detelecine.Margin = new System.Windows.Forms.Padding(0);
+            this.ctl_detelecine.MaximumSize = new System.Drawing.Size(400, 30);
+            this.ctl_detelecine.Name = "ctl_detelecine";
+            this.ctl_detelecine.Size = new System.Drawing.Size(275, 28);
+            this.ctl_detelecine.TabIndex = 38;
+            // 
             // tab_chapters
             // 
             this.tab_chapters.BackColor = System.Drawing.Color.Transparent;
@@ -1911,6 +1955,14 @@ namespace Handbrake
             this.h264Tab.TabIndex = 8;
             this.h264Tab.Text = "Advanced";
             this.h264Tab.UseVisualStyleBackColor = true;
+            // 
+            // x264Panel
+            // 
+            this.x264Panel.Location = new System.Drawing.Point(0, 0);
+            this.x264Panel.Name = "x264Panel";
+            this.x264Panel.Size = new System.Drawing.Size(720, 306);
+            this.x264Panel.TabIndex = 0;
+            this.x264Panel.x264Query = "";
             // 
             // tab_query
             // 
@@ -2271,78 +2323,6 @@ namespace Handbrake
             this.hbproc.StartInfo.UserName = "";
             this.hbproc.SynchronizingObject = this;
             // 
-            // drop_angle
-            // 
-            this.drop_angle.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drop_angle.FormattingEnabled = true;
-            this.drop_angle.Location = new System.Drawing.Point(250, 52);
-            this.drop_angle.Name = "drop_angle";
-            this.drop_angle.Size = new System.Drawing.Size(45, 21);
-            this.drop_angle.TabIndex = 45;
-            this.drop_angle.Text = "1";
-            this.ToolTip.SetToolTip(this.drop_angle, "Select the chapter range you would like to enocde. (default: All Chapters)");
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(200, 55);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(44, 13);
-            this.label4.TabIndex = 44;
-            this.label4.Text = "Angle:";
-            // 
-            // ctl_deinterlace
-            // 
-            this.ctl_deinterlace.AutoSize = true;
-            this.ctl_deinterlace.Location = new System.Drawing.Point(19, 95);
-            this.ctl_deinterlace.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_deinterlace.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_deinterlace.Name = "ctl_deinterlace";
-            this.ctl_deinterlace.Size = new System.Drawing.Size(275, 28);
-            this.ctl_deinterlace.TabIndex = 41;
-            this.ctl_deinterlace.onChange += new System.EventHandler(this.ctl_deinterlace_changed);
-            // 
-            // ctl_denoise
-            // 
-            this.ctl_denoise.AutoSize = true;
-            this.ctl_denoise.Location = new System.Drawing.Point(19, 123);
-            this.ctl_denoise.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_denoise.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_denoise.Name = "ctl_denoise";
-            this.ctl_denoise.Size = new System.Drawing.Size(275, 28);
-            this.ctl_denoise.TabIndex = 40;
-            // 
-            // ctl_decomb
-            // 
-            this.ctl_decomb.AutoSize = true;
-            this.ctl_decomb.Location = new System.Drawing.Point(19, 66);
-            this.ctl_decomb.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_decomb.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_decomb.Name = "ctl_decomb";
-            this.ctl_decomb.Size = new System.Drawing.Size(275, 28);
-            this.ctl_decomb.TabIndex = 39;
-            this.ctl_decomb.onChange += new System.EventHandler(this.ctl_decomb_changed);
-            // 
-            // ctl_detelecine
-            // 
-            this.ctl_detelecine.AutoSize = true;
-            this.ctl_detelecine.Location = new System.Drawing.Point(19, 38);
-            this.ctl_detelecine.Margin = new System.Windows.Forms.Padding(0);
-            this.ctl_detelecine.MaximumSize = new System.Drawing.Size(400, 30);
-            this.ctl_detelecine.Name = "ctl_detelecine";
-            this.ctl_detelecine.Size = new System.Drawing.Size(275, 28);
-            this.ctl_detelecine.TabIndex = 38;
-            // 
-            // x264Panel
-            // 
-            this.x264Panel.Location = new System.Drawing.Point(0, 0);
-            this.x264Panel.Name = "x264Panel";
-            this.x264Panel.Size = new System.Drawing.Size(720, 306);
-            this.x264Panel.TabIndex = 0;
-            this.x264Panel.x264Query = "";
-            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -2519,8 +2499,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label label66;
         internal System.Windows.Forms.Label label67;
         internal System.Windows.Forms.Label label68;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btn_destBrowse;
         internal System.Windows.Forms.TrackBar tb_drc;
         internal System.Windows.Forms.Label label16;

@@ -33,5 +33,10 @@ namespace Handbrake.Presets
         /// Get or set the usage of Picture Settings in presets.
         /// </summary>
         public Boolean PictureSettings { get; set; }
+
+        /// <summary>
+        /// The version number which associates this preset with a HB build
+        /// </summary>
+        public string Version { get; set; }
     }
 }

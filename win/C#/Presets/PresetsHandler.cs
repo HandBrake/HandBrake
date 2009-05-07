@@ -12,7 +12,7 @@ namespace Handbrake.Presets
 {
     public class PresetsHandler
     {
-        List<Preset> presets = new List<Preset>();  
+        List<Preset> presets = new List<Preset>();
         List<Preset> user_presets = new List<Preset>();
         private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Preset>));
         String userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
@@ -28,7 +28,7 @@ namespace Handbrake.Presets
         {
             if (checkIfPresetExists(presetName) == false)
             {
-                Preset newPreset = new Preset { Name = presetName, Query = query, PictureSettings = pictureSettings };
+                Preset newPreset = new Preset { Name = presetName, Query = query, PictureSettings = pictureSettings, Version = Properties.Settings.Default.hb_version};
                 user_presets.Add(newPreset);
                 updateUserPresetsFile();
                 return true;
@@ -138,7 +138,7 @@ namespace Handbrake.Presets
             // Clear the current built in presets and now parse the tempory presets file.
             presets.Clear();
             string filePath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
-            
+
             if (File.Exists(filePath))
             {
                 StreamReader presetInput = new StreamReader(filePath);
@@ -180,7 +180,8 @@ namespace Handbrake.Presets
                                                    Category = category,
                                                    TopCategory = level_1_category,
                                                    Name = presetName[0].Replace("+", "").Trim(),
-                                                   Query = presetName[2]
+                                                   Query = presetName[2],
+                                                   Version = Properties.Settings.Default.hb_version
                                                };
                         presets.Add(newPreset);
                     }
@@ -218,6 +219,11 @@ namespace Handbrake.Presets
                     }
                 }
             }
+
+            // Update built-in presets if the built-in presets belong to an older version.
+            if (presets.Count != 0)
+                if (presets[0].Version != Properties.Settings.Default.hb_version)
+                    updateBuiltInPresets();
 
             // Load in the users presets from user_presets.xml
 
@@ -290,7 +296,7 @@ namespace Handbrake.Presets
             foreach (Preset preset in user_presets)
             {
                 TreeNode preset_treeview = new TreeNode(preset.Name) { ForeColor = Color.Black };
-                presetPanel.Nodes.Add(preset_treeview);  
+                presetPanel.Nodes.Add(preset_treeview);
             }
         }
 
