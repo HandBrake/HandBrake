@@ -894,7 +894,8 @@ namespace Handbrake
                 DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
                 if (chapterGridView != null)
                     data_chpt = chapterGridView;
-            } else
+            }
+            else
             {
                 Check_ChapterMarkers.Checked = false;
                 Check_ChapterMarkers.Enabled = false;
@@ -930,7 +931,7 @@ namespace Handbrake
             if (c_start == c_end)
             {
                 Check_ChapterMarkers.Checked = false;
-                Check_ChapterMarkers.Enabled = false; 
+                Check_ChapterMarkers.Enabled = false;
             }
             else
                 Check_ChapterMarkers.Enabled = true;
@@ -2002,6 +2003,12 @@ namespace Handbrake
         /// </summary>
         public void loadPresetPanel()
         {
+            if (presetHandler.checkIfPresetsAreOutOfDate())
+                if (Properties.Settings.Default.presetNotification == "Unchecked")
+                    MessageBox.Show(
+                    "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
+                    "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             presetHandler.getPresetPanel(ref treeView_presets);
             treeView_presets.Update();
         }

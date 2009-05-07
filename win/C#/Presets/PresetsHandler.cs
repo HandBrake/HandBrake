@@ -220,13 +220,7 @@ namespace Handbrake.Presets
                 }
             }
 
-            // Update built-in presets if the built-in presets belong to an older version.
-            if (presets.Count != 0)
-                if (presets[0].Version != Properties.Settings.Default.hb_version)
-                    updateBuiltInPresets();
-
             // Load in the users presets from user_presets.xml
-
             if (File.Exists(userPresetFile))
             {
                 using (FileStream strm = new FileStream(userPresetFile, FileMode.Open, FileAccess.Read))
@@ -386,6 +380,20 @@ namespace Handbrake.Presets
                 if (item.Name == name)
                     return true;
             }
+
+            return false;
+        }
+
+        public Boolean checkIfPresetsAreOutOfDate()
+        {
+            loadPresetData();
+            // Update built-in presets if the built-in presets belong to an older version.
+            if (presets.Count != 0)
+                if (presets[0].Version != Properties.Settings.Default.hb_version)
+                {
+                    updateBuiltInPresets();
+                    return true;
+                }
 
             return false;
         }

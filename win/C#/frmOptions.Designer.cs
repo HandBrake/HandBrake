@@ -58,6 +58,7 @@ namespace Handbrake
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
+            this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
             this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
@@ -116,7 +117,7 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
+            this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -412,6 +413,19 @@ namespace Handbrake
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
             // 
+            // check_logsInSpecifiedLocation
+            // 
+            this.check_logsInSpecifiedLocation.AutoSize = true;
+            this.check_logsInSpecifiedLocation.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(71, 201);
+            this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.TabIndex = 87;
+            this.check_logsInSpecifiedLocation.Text = "Put individual encode logs in a specified location:";
+            this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
+            this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
+            this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
+            // 
             // cb_logVerboseLvl
             // 
             this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -584,6 +598,7 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
             this.tab_advanced.Controls.Add(this.check_dvdnav);
             this.tab_advanced.Controls.Add(this.label32);
             this.tab_advanced.Controls.Add(this.label30);
@@ -608,7 +623,7 @@ namespace Handbrake
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_dvdnav.Location = new System.Drawing.Point(76, 184);
+            this.check_dvdnav.Location = new System.Drawing.Point(76, 209);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(297, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -620,7 +635,7 @@ namespace Handbrake
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(38, 184);
+            this.label32.Location = new System.Drawing.Point(38, 209);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(32, 13);
             this.label32.TabIndex = 89;
@@ -629,7 +644,7 @@ namespace Handbrake
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(73, 142);
+            this.label30.Location = new System.Drawing.Point(73, 167);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(230, 13);
             this.label30.TabIndex = 87;
@@ -645,7 +660,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(312, 139);
+            this.drop_x264step.Location = new System.Drawing.Point(312, 164);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(111, 21);
             this.drop_x264step.TabIndex = 86;
@@ -657,7 +672,7 @@ namespace Handbrake
             // 
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(27, 142);
+            this.label28.Location = new System.Drawing.Point(27, 167);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(43, 13);
             this.label28.TabIndex = 85;
@@ -682,7 +697,7 @@ namespace Handbrake
             // 
             this.lbl_appcastUnstable.AutoSize = true;
             this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 105);
+            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 130);
             this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
             this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
             this.lbl_appcastUnstable.TabIndex = 83;
@@ -709,7 +724,7 @@ namespace Handbrake
             this.check_snapshot.AutoSize = true;
             this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
             this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_snapshot.Location = new System.Drawing.Point(76, 104);
+            this.check_snapshot.Location = new System.Drawing.Point(76, 129);
             this.check_snapshot.Name = "check_snapshot";
             this.check_snapshot.Size = new System.Drawing.Size(273, 17);
             this.check_snapshot.TabIndex = 80;
@@ -1098,18 +1113,20 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // check_logsInSpecifiedLocation
+            // check_disablePresetNotification
             // 
-            this.check_logsInSpecifiedLocation.AutoSize = true;
-            this.check_logsInSpecifiedLocation.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(71, 201);
-            this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
-            this.check_logsInSpecifiedLocation.TabIndex = 87;
-            this.check_logsInSpecifiedLocation.Text = "Put individual encode logs in a specified location:";
-            this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
-            this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
-            this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
+            this.check_disablePresetNotification.AutoSize = true;
+            this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
+            this.check_disablePresetNotification.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_disablePresetNotification.Location = new System.Drawing.Point(76, 87);
+            this.check_disablePresetNotification.Name = "check_disablePresetNotification";
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(261, 17);
+            this.check_disablePresetNotification.TabIndex = 91;
+            this.check_disablePresetNotification.Text = "Disable Built-in preset update notification";
+            this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
+                    " of HandBrake is installed.");
+            this.check_disablePresetNotification.UseVisualStyleBackColor = false;
+            this.check_disablePresetNotification.CheckedChanged += new System.EventHandler(this.check_disablePresetNotification_CheckedChanged);
             // 
             // frmOptions
             // 
@@ -1224,5 +1241,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_dvdnav;
         private System.Windows.Forms.Label label32;
         internal System.Windows.Forms.CheckBox check_logsInSpecifiedLocation;
+        internal System.Windows.Forms.CheckBox check_disablePresetNotification;
     }
 }

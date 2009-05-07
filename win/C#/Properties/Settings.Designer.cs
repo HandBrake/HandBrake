@@ -346,5 +346,17 @@ namespace Handbrake.Properties {
                 this["dvdnav"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string presetNotification {
+            get {
+                return ((string)(this["presetNotification"]));
+            }
+            set {
+                this["presetNotification"] = value;
+            }
+        }
     }
 }
