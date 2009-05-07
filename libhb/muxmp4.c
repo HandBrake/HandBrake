@@ -23,6 +23,8 @@ struct hb_mux_object_s
     // bias to keep render offsets in ctts atom positive (set up by encx264)
     int64_t init_delay;
 
+    uint64_t sum_sub_duration; // sum of subtitle frame durations so far
+
     /* Chapter state information for muxing */
     MP4TrackId chapter_track;
     int current_chapter;
@@ -404,7 +406,7 @@ static int MP4Init( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
         hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
-        
+
         if( subtitle && subtitle->format == TEXTSUB && 
             subtitle->dest == PASSTHRUSUB )
         {
@@ -412,8 +414,56 @@ static int MP4Init( hb_mux_object_t * m )
             subtitle->mux_data = mux_data;
             mux_data->subtitle = 1;
             mux_data->sub_format = subtitle->format;
-            // TODO: add subtitle track
-            // mux_data->track = MP4AddSubtitleTrack(....);
+            mux_data->track = MP4AddSubtitleTrack( m->file, 1 );
+
+            /* Tune track chunk duration */
+            MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
+            const uint8_t textColor[4] = { 255,255,255,255 };
+            uint64_t subHeight = 60;
+
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 2);
+
+            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", job->width);
+            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.height", subHeight);
+
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.dataReferenceIndex", 1);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.horizontalJustification", 1);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.verticalJustification", 0);
+
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.bgColorAlpha", 255);
+
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.defTextBoxBottom", subHeight);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.defTextBoxRight", job->width);
+
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontID", 1);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontSize", 24);
+
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontColorRed", textColor[0]);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontColorGreen", textColor[1]);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontColorBlue", textColor[2]);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontColorAlpha", textColor[3]);
+            
+            /* translate the track */
+            uint8_t* val;
+            uint8_t nval[36];
+            uint32_t *ptr32 = (uint32_t*) nval;
+            uint32_t size;
+
+            MP4GetTrackBytesProperty(m->file, mux_data->track, "tkhd.matrix", &val, &size);
+            memcpy(nval, val, size);
+
+            const uint32_t ytranslation = (job->height - subHeight) * 0x10000;
+                
+#ifdef WORDS_BIGENDIAN
+            ptr32[7] = ytranslation;
+#else
+            /* we need to switch the endianness, as the file format expects big endian */
+            ptr32[7] = ((ytranslation & 0x000000FF) << 24) + ((ytranslation & 0x0000FF00) << 8) + 
+                            ((ytranslation & 0x00FF0000) >> 8) + ((ytranslation & 0xFF000000) >> 24);
+#endif
+
+            MP4SetTrackBytesProperty(m->file, mux_data->track, "tkhd.matrix", nval, size);  
         }
     }
 
@@ -590,10 +640,45 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     {
         if( mux_data->sub_format == TEXTSUB )
         {
-            /*
-             * Write the sample here
-             */
+            /* Write an empty sample */
+            if ( m->sum_sub_duration < buf->start )
+            {
+                uint8_t empty[2] = {0,0};
+                if( !MP4WriteSample( m->file,
+                                    mux_data->track,
+                                    empty,
+                                    2,
+                                    buf->start - m->sum_sub_duration,
+                                    0,
+                                    1 ))
+                {
+                    hb_error("Failed to write to output file, disk full?");
+                    *job->die = 1;
+                }
+                m->sum_sub_duration += buf->start - m->sum_sub_duration;
+            }
+
+            /* Write the subtitle sample */
+            uint8_t buffer[2048];
+            memcpy( buffer + 2, buf->data, buf->size );
+            buffer[0] = ( buf->size >> 8 ) & 0xff;
+            buffer[1] = buf->size & 0xff;
+            
+            if( !MP4WriteSample( m->file,
+                                 mux_data->track,
+                                 buffer,
+                                 buf->size,
+                                 buf->stop - buf->start,
+                                 0,
+                                 1 ))
+            {
+                hb_error("Failed to write to output file, disk full?");
+                *job->die = 1;
+            }
+
+            m->sum_sub_duration += buf->stop - buf->start;
             hb_log("MuxMP4:Sub:%lld:%lld: %s", buf->start, buf->stop, buf->data);
+            hb_log("MuxMP4:Total time elapsed:%lld", m->sum_sub_duration);
         }
     }
     else
