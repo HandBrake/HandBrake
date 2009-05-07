@@ -416,6 +416,8 @@ static int MP4Init( hb_mux_object_t * m )
             mux_data->sub_format = subtitle->format;
             mux_data->track = MP4AddSubtitleTrack( m->file, 1 );
 
+            MP4SetTrackLanguage(m->file, mux_data->track, subtitle->iso639_2);
+
             /* Tune track chunk duration */
             MP4TuneTrackDurationPerChunk( m, mux_data->track );
 
@@ -654,7 +656,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 {
                     hb_error("Failed to write to output file, disk full?");
                     *job->die = 1;
-                }
+                } 
+                hb_log("Subtitle not due yet, adding delay of %lld",  buf->start - m->sum_sub_duration);
                 m->sum_sub_duration += buf->start - m->sum_sub_duration;
             }
 
@@ -663,7 +666,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             memcpy( buffer + 2, buf->data, buf->size );
             buffer[0] = ( buf->size >> 8 ) & 0xff;
             buffer[1] = buf->size & 0xff;
-            
+
             if( !MP4WriteSample( m->file,
                                  mux_data->track,
                                  buffer,
@@ -676,13 +679,17 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
 
-            m->sum_sub_duration += buf->stop - buf->start;
-            hb_log("MuxMP4:Sub:%lld:%lld: %s", buf->start, buf->stop, buf->data);
+            m->sum_sub_duration += (buf->stop - buf->start);
+            hb_log("MuxMP4:Sub:%lld:%lld:%lld: %s", buf->start, buf->stop, 
+                   (buf->stop - buf->start), buf->data);
             hb_log("MuxMP4:Total time elapsed:%lld", m->sum_sub_duration);
         }
     }
     else
     {
+        /*
+         * Audio
+         */
         if( !MP4WriteSample( m->file,
                              mux_data->track,
                              buf->data,

@@ -458,7 +458,18 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     subtitle->track = 0;
                     subtitle->id = 0x0;
                     snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
-                    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
+                    /*
+                     * The language of the subtitles will be the same as the first audio
+                     * track, i.e. the same as the video.
+                     */
+                    hb_audio_t *audio = hb_list_item( m->title->list_audio, 0 );
+                    if( audio )
+                    {
+                        snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), 
+                                  audio->config.lang.iso639_2);
+                    } else {
+                        snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
+                    }
                     subtitle->format = TEXTSUB;
                     subtitle->source = CC608SUB;
                     subtitle->dest   = PASSTHRUSUB;

@@ -11,7 +11,7 @@
  * ccextractor static configuration variables.
  */
 static int debug_608 = 0;
-static int trim_subs = 0;
+static int trim_subs = 1;
 static int nofontcolor = 0;
 static enum encoding_type encoding = ENC_UTF_8;
 static int cc_channel = 1;
@@ -24,6 +24,9 @@ static int gui_mode_reports = 0;
 static int norollup = 1;
 static int direct_rollup = 0;
 
+/*
+ * Get the time of the last buffer that we have received.
+ */
 static LLONG get_fts(struct s_write *wb)
 {
     return wb->last_pts;
@@ -39,14 +42,11 @@ int     rowdata[] = {11,-1,1,2,3,4,12,13,14,15,5,6,7,8,9,10};
 // we need to bring it into the swrite struct. Same for "str".
 #define INITIAL_ENC_BUFFER_CAPACITY		2048
 
-unsigned char *enc_buffer=NULL; // Generic general purpose buffer
 unsigned char str[2048]; // Another generic general purpose buffer
-unsigned enc_buffer_used;
-unsigned enc_buffer_capacity;
 
-#define GUARANTEE(length) if (length>enc_buffer_capacity) \
-{enc_buffer_capacity*=2; enc_buffer=(unsigned char*) realloc (enc_buffer, enc_buffer_capacity); \
-    if (enc_buffer==NULL) { fatal (EXIT_NOT_ENOUGH_MEMORY, "Not enough memory, bailing out\n"); } \
+#define GUARANTEE(wb, length) if (length>wb->enc_buffer_capacity)            \
+{wb->enc_buffer_capacity*=2; wb->enc_buffer=(unsigned char*) realloc (wb->enc_buffer, wb->enc_buffer_capacity); \
+    if (wb->enc_buffer==NULL) { fatal (EXIT_NOT_ENOUGH_MEMORY, "Not enough memory, bailing out\n"); } \
 }
 
 const unsigned char pac2_attribs[][3]= // Color, font, ident
@@ -153,17 +153,13 @@ const char *color_text[][2]=
 
 int general_608_init (struct s_write *wb)
 {
-    /*
-     * Not currently used.
-     *
-    if( !enc_buffer )
+    if( !wb->enc_buffer )
     {
-        enc_buffer=(unsigned char *) malloc (INITIAL_ENC_BUFFER_CAPACITY); 
-        if (enc_buffer==NULL)
+        wb->enc_buffer=(unsigned char *) malloc (INITIAL_ENC_BUFFER_CAPACITY); 
+        if (wb->enc_buffer==NULL)
             return -1;
-        enc_buffer_capacity=INITIAL_ENC_BUFFER_CAPACITY;
+        wb->enc_buffer_capacity=INITIAL_ENC_BUFFER_CAPACITY;
     }
-    */
 
     if( !wb->subline) {
         wb->subline = malloc(2048);
@@ -191,10 +187,10 @@ int general_608_init (struct s_write *wb)
  */
 void general_608_close (struct s_write *wb)
 {
-    if( enc_buffer ) {
-        free(enc_buffer);
-        enc_buffer_capacity = 0;
-        enc_buffer_used = 0;
+    if( wb->enc_buffer ) {
+        free(wb->enc_buffer);
+        wb->enc_buffer_capacity = 0;
+        wb->enc_buffer_used = 0;
     }
     if( wb->subline ) {
         free(wb->subline);
@@ -1439,9 +1435,9 @@ void write_subtitle_file_footer (struct s_write *wb)
             {
                 hb_log ("\r%s\n", str);
             }
-            enc_buffer_used=encode_line (enc_buffer,(unsigned char *) str);
+            wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
             //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-            XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+            XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
             break;
         default: // Nothing to do. Only SAMI has a footer
             break;
@@ -1450,9 +1446,9 @@ void write_subtitle_file_footer (struct s_write *wb)
 
 void fhb_log_encoded (FILE *fh, const char *string)
 {
-    GUARANTEE(strlen (string)*3);
-    enc_buffer_used=encode_line (enc_buffer,(unsigned char *) string);
-    fwrite (enc_buffer,enc_buffer_used,1,fh);
+    //GUARANTEE(wb, strlen (string)*3);
+    //wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) string);
+    //fwrite (wb->enc_buffer,wb->enc_buffer_used,1,fh);
 }
 
 void write_subtitle_file_header (struct s_write *wb)
@@ -1463,10 +1459,10 @@ void write_subtitle_file_header (struct s_write *wb)
             break; 
         case OF_SAMI: // This header brought to you by McPoodle's CCASDI  
             //fhb_log_encoded (wb->fh, sami_header);
-            GUARANTEE(strlen (sami_header)*3);
-            enc_buffer_used=encode_line (enc_buffer,(unsigned char *) sami_header);
+            GUARANTEE(wb, strlen (sami_header)*3);
+            wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) sami_header);
             //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-            XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+            XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
             break;
         case OF_RCWT: // Write header
             //fwrite (rcwt_header, sizeof(rcwt_header),1,wb->fh);
@@ -1600,19 +1596,26 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     char timeline[128];   
     wb->data608->srt_counter++;
     sprintf (timeline,"%u\r\n",wb->data608->srt_counter);
-    //enc_buffer_used=encode_line (enc_buffer,(unsigned char *) timeline);
-    //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-    XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+    //wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) timeline);
+    //fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
+    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
     //sprintf (timeline, "%02u:%02u:%02u,%03u --> %02u:%02u:%02u,%03u\r\n",
     //      h1,m1,s1,ms1, h2,m2,s2,ms2);
-    //enc_buffer_used=encode_line (enc_buffer,(unsigned char *) timeline);
+    //wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) timeline);
     if (debug_608)
     {
         hb_log ("\n- - - SRT caption - - -\n");
         hb_log (timeline);
     }
     //fwrite (enc_buffer,enc_buffer_used,1,wb->fh);		
-    XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
+    
+    /*
+     * Write all the lines into enc_buffer, and then write that out at the end
+     * ensure that we only have two lines, insert a newline after the first one,
+     * and have a big bottom line (strip spaces from any joined lines).
+     */
+    int line = 1;
     for (i=0;i<15;i++)
     {
         if (data->row_used[i])
@@ -1622,34 +1625,39 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
                 capitalize(i,data, &wb->new_sentence);
                 correct_case(i,data);
             }
-            int length = get_decoder_line_encoded (wb->subline, i, data);
-            if (debug_608 && encoding!=ENC_UNICODE)
-            {
-                hb_log ("\r");
-                hb_log ("%s\n",wb->subline);
-            }
-            if (length > 0)
-            {
-                hb_buffer_t *buffer = hb_buffer_init( length + 1 );
-                buffer->start = ms_start;
-                buffer->stop = ms_end;
-                memcpy( buffer->data, wb->subline, length + 1 );
-                
-                if (wb->hb_last_buffer) {
-                    wb->hb_last_buffer->next = buffer;
+            /*
+             * The intention was to use a newline but QT doesn't like it, old code still
+             * here just in case..
+             */
+            if (line == 1) {
+                wb->enc_buffer_used = get_decoder_line_encoded (wb->enc_buffer, i, data);
+                line = 2;
+            } else {
+                if (line == 2) {
+                    wb->enc_buffer_used += encode_line (wb->enc_buffer+wb->enc_buffer_used,
+                                                        (unsigned char *) " ");
                 } else {
-                    wb->hb_buffer = buffer;
+                    wb->enc_buffer_used += encode_line (wb->enc_buffer+wb->enc_buffer_used,
+                                                        (unsigned char *) " "); 
                 }
-                wb->hb_last_buffer = buffer;
-                
-                //fwrite (wb->subline, 1, length, wb->fh);
-                XMLRPC_APPEND(wb->subline,length);
-                //fwrite (encoded_crlf, 1, encoded_crlf_length,wb->fh);
-                XMLRPC_APPEND(encoded_crlf,encoded_crlf_length);
-                wrote_something=1;
-                // fhb_log (wb->fh,encoded_crlf);
+                wb->enc_buffer_used += get_decoder_line_encoded (wb->enc_buffer+wb->enc_buffer_used, i, data);
             }
         }
+    }
+    if (wb->enc_buffer_used)
+    {
+        hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 2 );
+        buffer->start = ms_start;
+        buffer->stop = ms_end;
+        memcpy( buffer->data, wb->enc_buffer, wb->enc_buffer_used + 1 );
+        if (wb->hb_last_buffer) {
+            wb->hb_last_buffer->next = buffer;
+        } else {
+            wb->hb_buffer = buffer;
+        }
+        wb->hb_last_buffer = buffer;
+        
+        wrote_something=1;
     }
     if (debug_608)
     {
@@ -1678,9 +1686,9 @@ int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
     {
         hb_log ("\r%s\n", str);
     }
-    enc_buffer_used=encode_line (enc_buffer,(unsigned char *) str);
-    fwrite (enc_buffer,enc_buffer_used,1,wb->fh);		
-    XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+    wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
+    fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);		
+    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
     for (i=0;i<15;i++)
     {
         if (data->row_used[i])
@@ -1708,17 +1716,17 @@ int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
     {
         hb_log ("\r%s\n", str);
     }
-    enc_buffer_used=encode_line (enc_buffer,(unsigned char *) str);
-    fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-    XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+    wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
+    fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
+    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
     sprintf ((char *) str,"<SYNC start=\"%llu\"><P class=\"UNKNOWNCC\">&nbsp;</P></SYNC>\r\n\r\n",endms);
     if (debug_608 && encoding!=ENC_UNICODE)
     {
         hb_log ("\r%s\n", str);
     }
-    enc_buffer_used=encode_line (enc_buffer,(unsigned char *) str);
-    fwrite (enc_buffer,enc_buffer_used,1,wb->fh);
-    XMLRPC_APPEND(enc_buffer,enc_buffer_used);
+    wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
+    fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
+    XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
     return wrote_something;
 }
 
