@@ -32,7 +32,8 @@ namespace Handbrake.Functions
             try
             {
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logPath = Path.Combine(logDir, "last_encode_log.txt");
 
                 string strCmdLine = String.Format(@" CMD /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
 
@@ -113,7 +114,8 @@ namespace Handbrake.Functions
         /// <param name="query"></param>
         public void addCLIQueryToLog(string query)
         {
-            string logPath = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string logPath = Path.Combine(logDir, "last_encode_log.txt");
 
             StreamReader reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read));
             String log = reader.ReadToEnd();
@@ -141,7 +143,7 @@ namespace Handbrake.Functions
                 try
                 {
                     string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-                    string tempLogFile = Path.Combine(Path.GetTempPath(), "hb_encode_log.dat");
+                    string tempLogFile = Path.Combine(logDir, "last_encode_log.txt");
 
                     string encodeDestinationPath = Path.GetDirectoryName(destination);
                     String[] destName = destination.Split('\\');

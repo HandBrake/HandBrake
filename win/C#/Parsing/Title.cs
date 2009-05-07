@@ -22,6 +22,7 @@ namespace Handbrake.Parsing
         private readonly List<AudioTrack> m_audioTracks;
         private readonly List<Chapter> m_chapters;
         private readonly List<Subtitle> m_subtitles;
+        private List<String> m_angles = new List<string>();
         private float m_aspectRatio;
         private int[] m_autoCrop;
         private TimeSpan m_duration;
@@ -108,6 +109,14 @@ namespace Handbrake.Parsing
         }
 
         /// <summary>
+        /// Collection of Angles in this Title
+        /// </summary>
+        public List<string> Angles
+        {
+            get { return m_angles; }
+        }
+  
+        /// <summary>
         /// Override of the ToString method to provide an easy way to use this object in the UI
         /// </summary>
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
@@ -134,8 +143,16 @@ namespace Handbrake.Parsing
                 m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9,])");
                 if (m.Success)
                 {
-                    //  + angle(s) 1
-                    // Do nothing. Will add this later.
+                    String angleList = m.Value.Replace("+ angle(s) ", "").Trim();
+
+                    if (angleList.Contains(","))
+                    {
+                        string[] angles = angleList.Split(',');
+                        foreach (string s in angles)
+                            thisTitle.m_angles.Add(s);
+                    }
+                    else
+                        thisTitle.m_angles.Add(m.Value.Replace("+ angle(s) ", "").Trim());
                 }
             }
 

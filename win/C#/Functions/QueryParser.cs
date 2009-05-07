@@ -425,15 +425,17 @@ namespace Handbrake.Functions
             switch (audioEnc)
             {
                 case "faac":
-                    return "AAC";
+                    return "AAC (faac)";
                 case "lame":
-                    return "MP3";
+                    return "MP3 (lame)";
                 case "vorbis":
-                    return "Vorbis";
+                    return "Vorbis (vorbis)";
                 case "ac3":
-                    return "AC3";
+                    return "AC3 Passthru";
+                case "dts":
+                    return "DTS Passthru";
                 default:
-                    return "AAC";
+                    return "AAC (faac)";
             }
         }
     }

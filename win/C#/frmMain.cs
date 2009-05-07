@@ -246,7 +246,7 @@ namespace Handbrake
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
             String file;
-            file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
+            file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
 
             frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeQueue);
             dvdInfoWindow.Show();
@@ -571,7 +571,7 @@ namespace Handbrake
                     if (node.Text.Equals("Normal"))
                         treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
                 }
-            }  
+            }
         }
         #endregion
 
@@ -692,7 +692,7 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            String file = lastAction == "scan" ? "dvdinfo.dat" : "hb_encode_log.dat";
+            String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
 
             frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeQueue);
             ActivityWindow.Show();
@@ -845,6 +845,10 @@ namespace Handbrake
                 text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
                 text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
 
+                // Populate the Angles dropdown
+                drop_angle.Items.Clear();
+                drop_angle.Items.AddRange(selectedTitle.Angles.ToArray());
+
                 // Populate the Start chapter Dropdown
                 drop_chapterStart.Items.Clear();
                 drop_chapterStart.Items.AddRange(selectedTitle.Chapters.ToArray());
@@ -885,9 +889,16 @@ namespace Handbrake
             }
 
             data_chpt.Rows.Clear();
-            DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
-            if (chapterGridView != null)
-                data_chpt = chapterGridView;
+            if (selectedTitle.Chapters.Count != 1)
+            {
+                DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
+                if (chapterGridView != null)
+                    data_chpt = chapterGridView;
+            } else
+            {
+                Check_ChapterMarkers.Checked = false;
+                Check_ChapterMarkers.Enabled = false;
+            }
 
             // Hack to force the redraw of the scrollbars which don't resize properly when the control is disabled.
             data_chpt.Columns[0].Width = 166;
@@ -915,6 +926,14 @@ namespace Handbrake
             if (Properties.Settings.Default.autoNaming == "Checked")
                 text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
+            // Disable chapter markers if only 1 chapter is selected.
+            if (c_start == c_end)
+            {
+                Check_ChapterMarkers.Checked = false;
+                Check_ChapterMarkers.Enabled = false; 
+            }
+            else
+                Check_ChapterMarkers.Enabled = true;
         }
         private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -956,6 +975,15 @@ namespace Handbrake
                     i++;
                 }
             }
+
+            // Disable chapter markers if only 1 chapter is selected.
+            if (c_start == c_end)
+            {
+                Check_ChapterMarkers.Checked = false;
+                Check_ChapterMarkers.Enabled = false;
+            }
+            else
+                Check_ChapterMarkers.Enabled = true;
         }
 
         //Destination
@@ -981,25 +1009,25 @@ namespace Handbrake
                 if (DVD_Save.FileName.StartsWith("\\"))
                     MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 else
-                {   
+                {
                     // Add a file extension manually, as FileDialog.AddExtension has issues with dots in filenames
                     switch (DVD_Save.FilterIndex)
                     {
                         case 1:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
-                                DVD_Save.FileName += ".mp4";        
-                            break;    
+                                DVD_Save.FileName += ".mp4";
+                            break;
                         case 2:
-                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".m4v", StringComparison.InvariantCultureIgnoreCase))   
-                                DVD_Save.FileName += ".m4v";     
-                            break;  
-                        case 3:   
-                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))     
-                                DVD_Save.FileName += ".mkv";   
-                            break;   
-                        default:   
+                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".m4v", StringComparison.InvariantCultureIgnoreCase))
+                                DVD_Save.FileName += ".m4v";
+                            break;
+                        case 3:
+                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
+                                DVD_Save.FileName += ".mkv";
+                            break;
+                        default:
                             //do nothing  
-                            break; 
+                            break;
                     }
                     text_destination.Text = DVD_Save.FileName;
 
@@ -1334,7 +1362,7 @@ namespace Handbrake
         }
         private void drp_audenc_1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audenc_1.Text == "AC3")
+            if (drp_audenc_1.Text == "AC3" || drp_audenc_1.Text == "DTS")
             {
                 drp_audmix_1.Enabled = false;
                 drp_audbit_1.Enabled = false;
@@ -1607,9 +1635,10 @@ namespace Handbrake
             {
                 string inputFile = (string)state;
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string dvdInfoPath = Path.Combine(Path.GetTempPath(), "dvdinfo.dat");
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string dvdInfoPath = Path.Combine(logDir, "last_scan_log.txt");
 
-                // Make we don't pick up a stale hb_encode_log.dat (and that we have rights to the file)
+                // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
                     File.Delete(dvdInfoPath);
 
@@ -1627,7 +1656,7 @@ namespace Handbrake
 
                 if (!File.Exists(dvdInfoPath))
                 {
-                    throw new Exception("Unable to retrieve the DVD Info. dvdinfo.dat is missing. \nExpected location of dvdinfo.dat: \n" + dvdInfoPath);
+                    throw new Exception("Unable to retrieve the DVD Info. last_scan_log.txt is missing. \nExpected location of last_scan_log.txt: \n" + dvdInfoPath);
                 }
 
                 using (StreamReader sr = new StreamReader(dvdInfoPath))
@@ -1844,8 +1873,8 @@ namespace Handbrake
             {
                 string oldval = drp_audenc_1.Text;
                 drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("AAC");
-                drp_audenc_1.Items.Add("AC3");
+                drp_audenc_1.Items.Add("AAC (faac)");
+                drp_audenc_1.Items.Add("AC3 Passthru");
                 if ((oldval != "AAC") && (oldval != "AC3"))
                     drp_audenc_1.SelectedIndex = 0;
 
@@ -1853,10 +1882,12 @@ namespace Handbrake
             else if (path.Contains("MKV"))
             {
                 drp_audenc_1.Items.Clear();
-                drp_audenc_1.Items.Add("AAC");
-                drp_audenc_1.Items.Add("MP3");
-                drp_audenc_1.Items.Add("AC3");
-                drp_audenc_1.Items.Add("Vorbis");
+                drp_audenc_1.Items.Add("AAC (faac)");
+                drp_audenc_1.Items.Add("MP3 (lame)");
+                drp_audenc_1.Items.Add("AC3 Passthru");
+                drp_audenc_1.Items.Add("DTS Passthru");
+                drp_audenc_1.Items.Add("Vorbis (vorbis)");
+
                 if (drp_audenc_1.Text == string.Empty)
                     drp_audenc_1.SelectedIndex = 0;
             }

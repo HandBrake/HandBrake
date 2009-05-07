@@ -5,7 +5,6 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
@@ -22,6 +21,7 @@ namespace Handbrake
         Thread monitor;
         Queue.QueueHandler encodeQueue;
         int position;  // Position in the arraylist reached by the current log output in the rtf box.
+        string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
 
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
@@ -41,9 +41,9 @@ namespace Handbrake
             // Print the Log header in the Rich text box.
             displayLogHeader();
 
-            if (file == "dvdinfo.dat")
+            if (file == "last_scan_log.txt")
                 txt_log.Text = "Scan Log";
-            else if (file == "hb_encode_log.dat")
+            else if (file == "last_encode_log.txt")
                 txt_log.Text = "Encode Log";
 
             // Start a new thread which will montior and keep the log window up to date if required/
@@ -80,7 +80,7 @@ namespace Handbrake
         {
             try
             {
-                string logFile = Path.Combine(Path.GetTempPath(), file);
+                string logFile = Path.Combine(logDir, file);
                 if (File.Exists(logFile))
                 {
                     // Start a new thread to run the autoUpdate process
@@ -192,10 +192,10 @@ namespace Handbrake
             String appendText = String.Empty;
             try
             {
-                // hb_encode_log.dat is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
+                // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
                 // we'll need to make a copy of it.
-                string logFile = Path.Combine(Path.GetTempPath(), read_file);
-                string logFile2 = Path.Combine(Path.GetTempPath(), "hb_encode_log_AppReadable.dat");
+                string logFile = Path.Combine(logDir, read_file);
+                string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
 
                 // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
                 if (File.Exists(logFile2))
@@ -254,6 +254,15 @@ namespace Handbrake
             else
                 Clipboard.SetDataObject(rtf_actLog.Text, true);
         }
+        private void mnu_openLogFolder_Click(object sender, EventArgs e)
+        {
+            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string windir = Environment.GetEnvironmentVariable("WINDIR");
+            System.Diagnostics.Process prc = new System.Diagnostics.Process();
+            prc.StartInfo.FileName = windir + @"\explorer.exe";
+            prc.StartInfo.Arguments = logDir;
+            prc.Start();
+        }
         private void btn_copy_Click(object sender, EventArgs e)
         {
             if (rtf_actLog.SelectedText != "")
@@ -269,7 +278,7 @@ namespace Handbrake
                 monitor.Abort();
 
             rtf_actLog.Clear();
-            read_file = "dvdinfo.dat";
+            read_file = "last_scan_log.txt";
             displayLogHeader();
             startLogThread(read_file);
             txt_log.Text = "Scan Log";
@@ -282,7 +291,7 @@ namespace Handbrake
                 monitor.Abort();
 
             rtf_actLog.Clear();
-            read_file = "hb_encode_log.dat";
+            read_file = "last_encode_log.txt";
             position = 0;
             displayLogHeader();
             startLogThread(read_file);

@@ -34,6 +34,9 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
+            if (mainWindow.drop_angle.SelectedIndex != 0)
+                query += " --angle " + mainWindow.drop_angle.SelectedItem;
+
             if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "Auto")
                 query += " -c " + mainWindow.drop_chapterStart.Text;
             else if (mainWindow.drop_chapterStart.Text == "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
@@ -73,6 +76,9 @@ namespace Handbrake.Functions
                 string[] titleInfo = mainWindow.drp_dvdtitle.Text.Split(' ');
                 query += " -t " + titleInfo[0];
             }
+
+            if (mainWindow.drop_angle.SelectedIndex != 0)
+                query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
             query += " --start-at-preview " + preview;
             query += " --stop-at duration:" + duration + " ";
@@ -305,6 +311,7 @@ namespace Handbrake.Functions
             // Audio Codec (-E)
             foreach (String item in codecs)
             {
+                
                 if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
@@ -473,14 +480,16 @@ namespace Handbrake.Functions
         {
             switch (selectedEncoder)
             {
-                case "AAC":
+                case "AAC (faac)":
                     return "faac";
-                case "MP3":
+                case "MP3 (lame)":
                     return "lame";
-                case "Vorbis":
+                case "Vorbis (vorbis)":
                     return "vorbis";
-                case "AC3":
+                case "AC3 Passthru":
                     return "ac3";
+                case "DTS Passthru":
+                    return "dts";
                 default:
                     return "";
             }

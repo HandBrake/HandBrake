@@ -49,6 +49,7 @@ namespace Handbrake
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_slb = new System.Windows.Forms.ToolStripStatusLabel();
             this.txt_log = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mnu_openLogFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.rightClickMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -70,15 +71,16 @@ namespace Handbrake
             // rightClickMenu
             // 
             this.rightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_copy_log});
+            this.mnu_copy_log,
+            this.mnu_openLogFolder});
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(111, 26);
+            this.rightClickMenu.Size = new System.Drawing.Size(247, 70);
             // 
             // mnu_copy_log
             // 
             this.mnu_copy_log.Image = global::Handbrake.Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
-            this.mnu_copy_log.Size = new System.Drawing.Size(110, 22);
+            this.mnu_copy_log.Size = new System.Drawing.Size(246, 22);
             this.mnu_copy_log.Text = "Copy";
             this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
             // 
@@ -172,6 +174,14 @@ namespace Handbrake
             this.txt_log.Size = new System.Drawing.Size(74, 17);
             this.txt_log.Text = "{selected log}";
             // 
+            // mnu_openLogFolder
+            // 
+            this.mnu_openLogFolder.Image = global::Handbrake.Properties.Resources.folder;
+            this.mnu_openLogFolder.Name = "mnu_openLogFolder";
+            this.mnu_openLogFolder.Size = new System.Drawing.Size(246, 22);
+            this.mnu_openLogFolder.Text = "Open Individual Log File Directory";
+            this.mnu_openLogFolder.Click += new System.EventHandler(this.mnu_openLogFolder_Click);
+            // 
             // frmActivityWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -215,5 +225,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripStatusLabel lbl_slb;
         private System.Windows.Forms.ContextMenuStrip rightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem mnu_copy_log;
+        private System.Windows.Forms.ToolStripMenuItem mnu_openLogFolder;
     }
 }
