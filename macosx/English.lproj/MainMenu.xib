@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="1949"/>
 			<integer value="2"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -3487,6 +3488,22 @@
 									<reference key="NSOnImage" ref="447995298"/>
 									<reference key="NSMixedImage" ref="760317610"/>
 								</object>
+								<object class="NSMenuItem" id="734454745">
+									<reference key="NSMenu" ref="112579544"/>
+									<string key="NSTitle">Export ...</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="447995298"/>
+									<reference key="NSMixedImage" ref="760317610"/>
+								</object>
+								<object class="NSMenuItem" id="685593004">
+									<reference key="NSMenu" ref="112579544"/>
+									<string key="NSTitle">Import ...</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="447995298"/>
+									<reference key="NSMixedImage" ref="760317610"/>
+								</object>
 								<object class="NSMenuItem" id="454042588">
 									<reference key="NSMenu" ref="112579544"/>
 									<string key="NSTitle">Select Default Preset</string>
@@ -6160,6 +6177,22 @@
 					</object>
 					<int key="connectionID">5187</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">browseExportPresetFile:</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="734454745"/>
+					</object>
+					<int key="connectionID">5191</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">browseImportPresetFile:</string>
+						<reference key="source" ref="2258723"/>
+						<reference key="destination" ref="685593004"/>
+					</object>
+					<int key="connectionID">5193</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -7441,6 +7474,8 @@
 							<reference ref="644928468"/>
 							<reference ref="180231"/>
 							<reference ref="454042588"/>
+							<reference ref="734454745"/>
+							<reference ref="685593004"/>
 						</object>
 						<reference key="parent" ref="226787934"/>
 					</object>
@@ -9332,6 +9367,16 @@
 						<reference key="object" ref="677126774"/>
 						<reference key="parent" ref="303369850"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">5188</int>
+						<reference key="object" ref="734454745"/>
+						<reference key="parent" ref="112579544"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">5192</int>
+						<reference key="object" ref="685593004"/>
+						<reference key="parent" ref="112579544"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -10078,6 +10123,8 @@
 					<string>5184.IBPluginDependency</string>
 					<string>5184.ImportedFromIB2</string>
 					<string>5185.IBPluginDependency</string>
+					<string>5188.IBPluginDependency</string>
+					<string>5192.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
 					<string>57.IBPluginDependency</string>
@@ -10369,7 +10416,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{195, 732}, {236, 93}}</string>
+					<string>{{195, 692}, {236, 133}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -10863,6 +10910,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
@@ -10897,7 +10946,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">5187</int>
+			<int key="maxID">5193</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -10923,7 +10972,9 @@
 							<string>audioTrackMixdownChanged:</string>
 							<string>audioTrackPopUpChanged:</string>
 							<string>autoSetM4vExtension:</string>
+							<string>browseExportPresetFile:</string>
 							<string>browseFile:</string>
+							<string>browseImportPresetFile:</string>
 							<string>browseSources:</string>
 							<string>calculateBitrate:</string>
 							<string>calculatePictureSizing:</string>
@@ -10963,6 +11014,8 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

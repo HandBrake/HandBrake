@@ -364,9 +364,18 @@ BOOL                        fIsDragging;
 - (void)outlineView:(NSOutlineView *)fPresetsOutlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item;
 /* We use this to provide tooltips for the items in the presets outline view */
 - (NSString *)outlineView:(NSOutlineView *)fPresetsOutlineView toolTipForCell:(NSCell *)cell rect:(NSRectPointer)rect tableColumn:(NSTableColumn *)tc item:(id)item mouseLocation:(NSPoint)mouseLocation;
-
+- (void) checkBuiltInsForUpdates;
 /* We use this to actually select the preset and act accordingly */
 - (IBAction)selectPreset:(id)sender;    
+
+/* Export / Import Presets */
+- (IBAction) browseExportPresetFile: (id) sender;
+- (void) browseExportPresetFileDone: (NSSavePanel *) sheet
+             returnCode: (int) returnCode contextInfo: (void *) contextInfo;
+             
+- (IBAction) browseImportPresetFile: (id) sender;
+- (void) browseImportPresetDone: (NSSavePanel *) sheet
+                   returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 /* Manage User presets */    
 - (void) loadPresets;

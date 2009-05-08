@@ -6296,6 +6296,46 @@ return YES;
 		[self addFactoryPresets:nil];
 	}
 	[fPresetsOutlineView reloadData];
+    
+    [self checkBuiltInsForUpdates];
+}
+
+- (void) checkBuiltInsForUpdates {
+    
+	BOOL updateBuiltInPresets = NO;
+    int i = 0;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+    id tempObject;
+    while (tempObject = [enumerator nextObject])
+    {
+        /* iterate through the built in presets to see if any have an old build number */
+        NSMutableDictionary *thisPresetDict = tempObject;
+        /*Key Type == 0 is built in, and key PresetBuildNumber is the build number it was created with */
+        if ([[thisPresetDict objectForKey:@"Type"] intValue] == 0)		
+        {
+			if (![thisPresetDict objectForKey:@"PresetBuildNumber"] || [[thisPresetDict objectForKey:@"PresetBuildNumber"] intValue] < [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue])
+            {
+                updateBuiltInPresets = YES;
+            }	
+		}
+        i++;
+    }
+    /* if we have built in presets to update, then do so AlertBuiltInPresetUpdate*/
+    if ( updateBuiltInPresets == YES)
+    {
+        if( [[NSUserDefaults standardUserDefaults] boolForKey:@"AlertBuiltInPresetUpdate"] == YES)
+        {
+            /* Show an alert window that built in presets will be updated */
+            /*On Screen Notification*/
+            int status;
+            NSBeep();
+            status = NSRunAlertPanel(@"HandBrake has determined your built in presets are out of date...",@"HandBrake will now update your built-in presets.", @"OK", nil, nil);
+            [NSApp requestUserAttention:NSCriticalRequest];
+        }
+        /* when alert is dismissed, go ahead and update the built in presets */
+        [self addFactoryPresets:nil];
+    }
+    
 }
 
 
@@ -6383,6 +6423,9 @@ return YES;
 - (NSDictionary *)createPreset
 {
     NSMutableDictionary *preset = [[NSMutableDictionary alloc] init];
+    /* Preset build number */
+    [preset setObject:[NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]] forKey:@"PresetBuildNumber"];
+    [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
 	/* Get the New Preset Name from the field in the AddPresetPanel */
     [preset setObject:[fPresetNewName stringValue] forKey:@"PresetName"];
     /* Set whether or not this is to be a folder fPresetNewFolderCheck*/
@@ -6602,6 +6645,119 @@ return YES;
         [presetsArrayToMod removeObjectsInArray:tempArray];
         [fPresetsOutlineView reloadData];
         [self savePreset];   
+    }
+}
+
+
+#pragma mark -
+#pragma mark Import Export Preset(s)
+
+- (IBAction) browseExportPresetFile: (id) sender
+{
+    /* Open a panel to let the user choose where and how to save the export file */
+    NSSavePanel * panel = [NSSavePanel savePanel];
+	/* We get the current file name and path from the destination field here */
+    NSString *defaultExportDirectory = [NSString stringWithFormat: @"%@/Desktop/", NSHomeDirectory()];
+
+	[panel beginSheetForDirectory: defaultExportDirectory file: @"HB_Export.plist"
+				   modalForWindow: fWindow modalDelegate: self
+				   didEndSelector: @selector( browseExportPresetFileDone:returnCode:contextInfo: )
+					  contextInfo: NULL];
+}
+
+- (void) browseExportPresetFileDone: (NSSavePanel *) sheet
+                   returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSOKButton )
+    {
+        NSString *presetExportDirectory = [[sheet filename] stringByDeletingLastPathComponent];
+        NSString *exportPresetsFile = [sheet filename];
+        [[NSUserDefaults standardUserDefaults] setObject:presetExportDirectory forKey:@"LastPresetExportDirectory"];
+        /* We check for the presets.plist */
+        if ([[NSFileManager defaultManager] fileExistsAtPath:exportPresetsFile] == 0)
+        {
+            [[NSFileManager defaultManager] createFileAtPath:exportPresetsFile contents:nil attributes:nil];
+        }
+        NSMutableArray * presetsToExport = [[NSMutableArray alloc] initWithContentsOfFile:exportPresetsFile];
+        if (nil == presetsToExport)
+        {
+            presetsToExport = [[NSMutableArray alloc] init];
+            
+            /* now get and add selected presets to export */
+            
+        }
+        if ([fPresetsOutlineView selectedRow] >= 0 && [[[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]] objectForKey:@"Folder"] intValue] != 1)
+        {
+            [presetsToExport addObject:[fPresetsOutlineView itemAtRow:[fPresetsOutlineView selectedRow]]];
+            [presetsToExport writeToFile:exportPresetsFile atomically:YES];
+            
+        }
+        
+    }
+}
+
+
+- (IBAction) browseImportPresetFile: (id) sender
+{
+
+    NSOpenPanel * panel;
+	
+    panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection: NO];
+    [panel setCanChooseFiles: YES];
+    [panel setCanChooseDirectories: NO ];
+    NSString * sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastPresetImportDirectory"])
+	{
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastPresetImportDirectory"];
+	}
+	else
+	{
+		sourceDirectory = @"~/Desktop";
+		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+	}
+    /* we open up the browse sources sheet here and call for browseSourcesDone after the sheet is closed
+        * to evaluate whether we want to specify a title, we pass the sender in the contextInfo variable
+        */
+    /* set this for allowed file types, not sure if we should allow xml or not */
+    NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"xml", nil];
+    [panel beginSheetForDirectory: sourceDirectory file: nil types: fileTypes
+                   modalForWindow: fWindow modalDelegate: self
+                   didEndSelector: @selector( browseImportPresetDone:returnCode:contextInfo: )
+                      contextInfo: sender];
+}
+
+- (void) browseImportPresetDone: (NSSavePanel *) sheet
+                     returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSOKButton )
+    {
+        NSString *importPresetsDirectory = [[sheet filename] stringByDeletingLastPathComponent];
+        NSString *importPresetsFile = [sheet filename];
+        [[NSUserDefaults standardUserDefaults] setObject:importPresetsDirectory forKey:@"LastPresetImportDirectory"];
+        /* NOTE: here we need to do some sanity checking to verify we do not hose up our presets file   */
+        NSMutableArray * presetsToImport = [[NSMutableArray alloc] initWithContentsOfFile:importPresetsFile];
+        /* iterate though the new array of presets to import and add them to our presets array */
+        int i = 0;
+        NSEnumerator *enumerator = [presetsToImport objectEnumerator];
+        id tempObject;
+        while (tempObject = [enumerator nextObject])
+        {
+            /* make any changes to the incoming preset we see fit */
+            /* make sure the incoming preset is not tagged as default */
+            [tempObject setObject:[NSNumber numberWithInt:0] forKey:@"Default"];
+            /* prepend "(imported) to the name of the incoming preset for clarification since it can be changed */
+            NSString * prependedName = [@"(import) " stringByAppendingString:[tempObject objectForKey:@"PresetName"]] ;
+            [tempObject setObject:prependedName forKey:@"PresetName"];
+            
+            /* actually add the new preset to our presets array */
+            [UserPresets addObject:tempObject];
+            i++;
+        }
+        [presetsToImport autorelease];
+        [self sortPresets];
+        [self addPreset];
+        
     }
 }
 
@@ -6863,16 +7019,33 @@ return YES;
 
 }
 
-   /* We use this method to recreate new, updated factory
-   presets */
+   /* We use this method to recreate new, updated factory presets */
 - (IBAction)addFactoryPresets:(id)sender
 {
-   
-   /* First, we delete any existing built in presets */
+    
+    /* First, we delete any existing built in presets */
     [self deleteFactoryPresets: sender];
     /* Then we generate new built in presets programmatically with fPresetsBuiltin
-    * which is all setup in HBPresets.h and  HBPresets.m*/
+     * which is all setup in HBPresets.h and  HBPresets.m*/
     [fPresetsBuiltin generateBuiltinPresets:UserPresets];
+    /* update build number for built in presets */
+    /* iterate though the new array of presets to import and add them to our presets array */
+    int i = 0;
+    NSEnumerator *enumerator = [UserPresets objectEnumerator];
+    id tempObject;
+    while (tempObject = [enumerator nextObject])
+    {
+        /* Record the apps current build number in the PresetBuildNumber key */
+        if ([[tempObject objectForKey:@"Type"] intValue] == 0) // Type 0 is a built in preset		
+        {
+            /* Preset build number */
+            [[UserPresets objectAtIndex:i] setObject:[NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]] forKey:@"PresetBuildNumber"];
+        }
+        i++;
+    }
+    /* report the built in preset updating to the activity log */
+    [self writeToActivityLog: "built in presets updated to build number: %d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]];
+    
     [self sortPresets];
     [self addPreset];
     
