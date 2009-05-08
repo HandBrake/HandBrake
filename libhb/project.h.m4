@@ -32,7 +32,7 @@ dnl
 <<#>>define HB_PROJECT_BUILD_MACHINE   "__BUILD_machine"
 <<#>>define HB_PROJECT_BUILD_VENDOR    "__BUILD_vendor"
 <<#>>define HB_PROJECT_BUILD_SYSTEM    "__BUILD_system"
-<<#>>define HB_PROJECT_BUILD_SYSTEMC   "__BUILD_systemc"
+<<#>>define HB_PROJECT_BUILD_SYSTEMF   "__BUILD_systemf"
 <<#>>define HB_PROJECT_BUILD_RELEASE   "__BUILD_release"
 <<#>>define HB_PROJECT_BUILD_TITLE     "__BUILD_title"
 <<#>>define HB_PROJECT_BUILD_ARCH      "__BUILD_arch"
