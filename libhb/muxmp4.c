@@ -23,8 +23,6 @@ struct hb_mux_object_s
     // bias to keep render offsets in ctts atom positive (set up by encx264)
     int64_t init_delay;
 
-    uint64_t sum_sub_duration; // sum of subtitle frame durations so far
-
     /* Chapter state information for muxing */
     MP4TrackId chapter_track;
     int current_chapter;
@@ -33,9 +31,11 @@ struct hb_mux_object_s
 
 struct hb_mux_data_s
 {
-    MP4TrackId track;
-    uint8_t    subtitle;
-    int        sub_format;
+    MP4TrackId  track;
+    uint8_t     subtitle;
+    int         sub_format;
+
+    uint64_t    sum_dur; // sum of the frame durations so far
 };
 
 /* Tune video track chunk duration.
@@ -410,6 +410,12 @@ static int MP4Init( hb_mux_object_t * m )
         if( subtitle && subtitle->format == TEXTSUB && 
             subtitle->dest == PASSTHRUSUB )
         {
+            uint64_t width, height = 60;
+            if( job->anamorphic.mode )
+                width = job->width * ( (float) job->anamorphic.par_width / job->anamorphic.par_height );
+            else
+                width = job->width;
+
             mux_data = calloc(1, sizeof( hb_mux_data_t ) );
             subtitle->mux_data = mux_data;
             mux_data->subtitle = 1;
@@ -422,12 +428,11 @@ static int MP4Init( hb_mux_object_t * m )
             MP4TuneTrackDurationPerChunk( m, mux_data->track );
 
             const uint8_t textColor[4] = { 255,255,255,255 };
-            uint64_t subHeight = 60;
 
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 2);
 
-            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", job->width);
-            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.height", subHeight);
+            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", width);
+            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.height", height);
 
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.dataReferenceIndex", 1);
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.horizontalJustification", 1);
@@ -435,8 +440,8 @@ static int MP4Init( hb_mux_object_t * m )
 
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.bgColorAlpha", 255);
 
-            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.defTextBoxBottom", subHeight);
-            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.defTextBoxRight", job->width);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.defTextBoxBottom", height);
+            MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.defTextBoxRight", width);
 
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontID", 1);
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.fontSize", 24);
@@ -455,7 +460,7 @@ static int MP4Init( hb_mux_object_t * m )
             MP4GetTrackBytesProperty(m->file, mux_data->track, "tkhd.matrix", &val, &size);
             memcpy(nval, val, size);
 
-            const uint32_t ytranslation = (job->height - subHeight) * 0x10000;
+            const uint32_t ytranslation = (job->height - height) * 0x10000;
                 
 #ifdef WORDS_BIGENDIAN
             ptr32[7] = ytranslation;
@@ -643,21 +648,21 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
         if( mux_data->sub_format == TEXTSUB )
         {
             /* Write an empty sample */
-            if ( m->sum_sub_duration < buf->start )
+            if ( mux_data->sum_dur < buf->start )
             {
                 uint8_t empty[2] = {0,0};
                 if( !MP4WriteSample( m->file,
                                     mux_data->track,
                                     empty,
                                     2,
-                                    buf->start - m->sum_sub_duration,
+                                    buf->start - mux_data->sum_dur,
                                     0,
                                     1 ))
                 {
                     hb_error("Failed to write to output file, disk full?");
                     *job->die = 1;
                 } 
-                m->sum_sub_duration += buf->start - m->sum_sub_duration;
+                mux_data->sum_dur += buf->start - mux_data->sum_dur;
             }
 
             /* Write the subtitle sample */
@@ -669,7 +674,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             if( !MP4WriteSample( m->file,
                                  mux_data->track,
                                  buffer,
-                                 buf->size,
+                                 buf->size + 2,
                                  buf->stop - buf->start,
                                  0,
                                  1 ))
@@ -678,10 +683,10 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
 
-            m->sum_sub_duration += (buf->stop - buf->start);
+            mux_data->sum_dur += (buf->stop - buf->start);
             hb_deep_log(3, "MuxMP4:Sub:%fs:%lld:%lld:%lld: %s", (float)buf->start / 90000, buf->start, buf->stop, 
                    (buf->stop - buf->start), buf->data);
-            hb_deep_log(3, "MuxMP4:Total time elapsed:%lld", m->sum_sub_duration);
+            hb_deep_log(3, "MuxMP4:Total time elapsed:%lld", mux_data->sum_dur);
         }
     }
     else

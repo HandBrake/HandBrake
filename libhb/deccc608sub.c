@@ -535,6 +535,8 @@ void get_char_in_unicode (unsigned char *buffer, unsigned char c)
 
 int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number of bytes used
 {
+    if (c==0x00)
+        return 0;
     if (c<0x80) // Regular line-21 character set, mostly ASCII except these exceptions
     {
         switch (c)
@@ -1646,7 +1648,7 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     }
     if (wb->enc_buffer_used)
     {
-        hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 2 );
+        hb_buffer_t *buffer = hb_buffer_init( wb->enc_buffer_used + 1 );
         buffer->start = ms_start;
         buffer->stop = ms_end;
         memcpy( buffer->data, wb->enc_buffer, wb->enc_buffer_used + 1 );
