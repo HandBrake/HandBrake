@@ -449,13 +449,20 @@ static void SyncVideo( hb_work_object_t * w )
                         sub = NULL;
                         break;
                     } else {
+                        /*
+                         * Sync the subtitles to the incoming video, and use
+                         * the matching converted video timestamp.
+                         *
+                         * Note that it doesn't appear that we need to convert 
+                         * timestamps, I guess that they were already correct,
+                         * so just push them through for rendering.
+                         *
+                         */
                         if( sub->start < cur->start )
                         {
                             uint64_t duration;
                             duration = sub->stop - sub->start;
                             sub = hb_fifo_get( subtitle->fifo_raw );
-                            sub->start = pv->next_start;
-                            sub->stop = sub->start + duration;
                             hb_fifo_push( subtitle->fifo_out, sub );
                         } else {
                             sub = NULL;

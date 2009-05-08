@@ -657,7 +657,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                     hb_error("Failed to write to output file, disk full?");
                     *job->die = 1;
                 } 
-                hb_log("Subtitle not due yet, adding delay of %lld",  buf->start - m->sum_sub_duration);
                 m->sum_sub_duration += buf->start - m->sum_sub_duration;
             }
 
@@ -680,9 +679,9 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
 
             m->sum_sub_duration += (buf->stop - buf->start);
-            hb_log("MuxMP4:Sub:%lld:%lld:%lld: %s", buf->start, buf->stop, 
+            hb_deep_log(3, "MuxMP4:Sub:%fs:%lld:%lld:%lld: %s", (float)buf->start / 90000, buf->start, buf->stop, 
                    (buf->stop - buf->start), buf->data);
-            hb_log("MuxMP4:Total time elapsed:%lld", m->sum_sub_duration);
+            hb_deep_log(3, "MuxMP4:Total time elapsed:%lld", m->sum_sub_duration);
         }
     }
     else
