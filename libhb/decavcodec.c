@@ -589,6 +589,14 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
         {
             frame_dur += frame.repeat_pict * frame_dur * 0.5;
         }
+        // XXX Unlike every other video decoder, the Raw decoder doesn't
+        //     use the standard buffer allocation routines so we never
+        //     get to put a PTS in the frame. Do it now.
+        if ( pv->context->codec_id == CODEC_ID_RAWVIDEO )
+        {
+            frame.pts = pv->pts;
+            pv->pts = -1;
+        }
         // If there was no pts for this frame, assume constant frame rate
         // video & estimate the next frame time from the last & duration.
         double pts = frame.pts;
