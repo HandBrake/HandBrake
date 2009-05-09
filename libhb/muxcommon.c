@@ -141,6 +141,12 @@ static hb_buffer_t *mf_pull( hb_track_t *track )
     return b;
 }
 
+static hb_buffer_t *mf_peek( hb_track_t *track )
+{
+    return track->mf.out == track->mf.in ?
+                NULL : track->mf.fifo[track->mf.out & (track->mf.flen - 1)];
+}
+
 static void MoveToInternalFifos( hb_mux_t *mux )
 {
     int i;
@@ -188,18 +194,12 @@ static void OutputTrackChunk( hb_mux_t *mux, hb_track_t *track, hb_mux_object_t 
 {
     hb_buffer_t *buf;
 
-    while ( ( buf = mf_pull( track ) ) != NULL )
+    while ( ( buf = mf_peek( track ) ) != NULL && buf->start < mux->pts )
     {
-        m->mux( m, track->mux_data, buf );
+        m->mux( m, track->mux_data, mf_pull( track ) );
         track->frames += 1;
         track->bytes  += buf->size;
-
-        uint64_t pts = buf->stop;
         hb_buffer_close( &buf );
-        if ( pts >= mux->pts )
-        {
-            break;
-        }
     }
 }
 
