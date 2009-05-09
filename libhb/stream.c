@@ -2914,7 +2914,6 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 
     if( stream->title &&
         stream->title->job &&
-        stream->title->job->chapter_markers &&
         buf->id == stream->ffmpeg_video_id &&
         buf->start >= stream->chapter_end )
     {
