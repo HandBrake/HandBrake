@@ -41,6 +41,7 @@ namespace Handbrake.Functions
                 if (Properties.Settings.Default.cli_minimized == "Checked")
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
                 hbProc = Process.Start(cliStart);
+                processID = hbProc.Id;
                 isEncoding = true;
                 currentQuery = query;
 
@@ -137,40 +138,36 @@ namespace Handbrake.Functions
         /// <param name="destination"></param>
         public void copyLog(string destination)
         {
-            // The user may wish to do something with the log.
-            if (Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
+            try
             {
-                try
-                {
-                    string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-                    string tempLogFile = Path.Combine(logDir, "last_encode_log.txt");
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string tempLogFile = Path.Combine(logDir, "last_encode_log.txt");
 
-                    string encodeDestinationPath = Path.GetDirectoryName(destination);
-                    String[] destName = destination.Split('\\');
-                    string destinationFile = destName[destName.Length - 1];
-                    string encodeLogFile = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destinationFile + ".txt";
+                string encodeDestinationPath = Path.GetDirectoryName(destination);
+                String[] destName = destination.Split('\\');
+                string destinationFile = destName[destName.Length - 1];
+                string encodeLogFile = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destinationFile + ".txt";
 
-                    // Make sure the log directory exists.
-                    if (!Directory.Exists(logDir))
-                        Directory.CreateDirectory(logDir);
+                // Make sure the log directory exists.
+                if (!Directory.Exists(logDir))
+                    Directory.CreateDirectory(logDir);
 
-                    // Copy the Log to HandBrakes log folder in the users applciation data folder.
-                    File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
+                // Copy the Log to HandBrakes log folder in the users applciation data folder.
+                File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
-                    // Save a copy of the log file in the same location as the enocde.
-                    if (Properties.Settings.Default.saveLogWithVideo == "Checked")
-                        File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
+                // Save a copy of the log file in the same location as the enocde.
+                if (Properties.Settings.Default.saveLogWithVideo == "Checked")
+                    File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
 
-                    // Save a copy of the log file to a user specified location
-                    if (Directory.Exists(Properties.Settings.Default.saveLogPath))
-                        if (Properties.Settings.Default.saveLogPath != String.Empty && Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
-                            File.Copy(tempLogFile, Path.Combine(Properties.Settings.Default.saveLogPath, encodeLogFile));
-                }
-                catch (Exception exc)
-                {
-                    MessageBox.Show("Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc, "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                // Save a copy of the log file to a user specified location
+                if (Directory.Exists(Properties.Settings.Default.saveLogPath))
+                    if (Properties.Settings.Default.saveLogPath != String.Empty && Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
+                        File.Copy(tempLogFile, Path.Combine(Properties.Settings.Default.saveLogPath, encodeLogFile));
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -183,6 +180,11 @@ namespace Handbrake.Functions
         /// Returns the currently encoding query string
         /// </summary>
         public String currentQuery { get; set; }
+
+        /// <summary>
+        /// Get the process ID of the current encode.
+        /// </summary>
+        public int processID { get; set; }
 
     }
 }

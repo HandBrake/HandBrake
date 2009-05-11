@@ -36,7 +36,7 @@ namespace Handbrake
 
         // Delegates
         private delegate void UpdateWindowHandler();
-        private delegate void updateStatusChanger();
+        private delegate void UpdateStatusChanger();
 
         // Applicaiton Startup ************************************************
 
@@ -133,7 +133,7 @@ namespace Handbrake
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new updateStatusChanger(startupUpdateCheck));
+                    BeginInvoke(new UpdateStatusChanger(startupUpdateCheck));
                     return;
                 }
 
@@ -230,7 +230,7 @@ namespace Handbrake
         #region File Menu
         private void mnu_killCLI_Click(object sender, EventArgs e)
         {
-            killCLI();
+            killScan();
         }
         private void mnu_exit_Click(object sender, EventArgs e)
         {
@@ -847,7 +847,19 @@ namespace Handbrake
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
-                drop_angle.Items.AddRange(selectedTitle.Angles.ToArray());
+                if (Properties.Settings.Default.dvdnav == "Checked")
+                {
+                    drop_angle.Visible = true;
+                    lbl_angle.Visible = true;
+                    drop_angle.Items.AddRange(selectedTitle.Angles.ToArray());
+                    if (drop_angle.Items.Count != 0)
+                        drop_angle.SelectedIndex = 0;
+                }
+                else
+                {
+                    drop_angle.Visible = false;
+                    lbl_angle.Visible = false;
+                }
 
                 // Populate the Start chapter Dropdown
                 drop_chapterStart.Items.Clear();
@@ -1363,7 +1375,7 @@ namespace Handbrake
         }
         private void drp_audenc_1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drp_audenc_1.Text == "AC3" || drp_audenc_1.Text == "DTS")
+            if (drp_audenc_1.Text.Contains("AC3") || drp_audenc_1.Text.Contains("DTS"))
             {
                 drp_audmix_1.Enabled = false;
                 drp_audbit_1.Enabled = false;
@@ -1384,7 +1396,7 @@ namespace Handbrake
                 drp_audsr_1.Text = "Auto";
             }
 
-            if (drp_audenc_1.Text == "AAC")
+            if (drp_audenc_1.Text.Contains("AAC"))
             {
                 setMixDownAllOptions(drp_audmix_1);
                 setBitrateSelections160(drp_audbit_1);
@@ -1404,9 +1416,9 @@ namespace Handbrake
         }
         private void drp_audmix_1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text == "6 Channel Discrete"))
+            if ((drp_audenc_1.Text.Contains("AAC")) && (drp_audmix_1.Text == "6 Channel Discrete"))
                 setBitrateSelections384(drp_audbit_1);
-            else if ((drp_audenc_1.Text == "AAC") && (drp_audmix_1.Text != "6 Channel Discrete"))
+            else if ((drp_audenc_1.Text.Contains("AAC")) && (drp_audmix_1.Text != "6 Channel Discrete"))
                 setBitrateSelections160(drp_audbit_1); drp_audbit_1.Text = "160";
 
             // Update an item in the Audio list if required.
@@ -1430,7 +1442,7 @@ namespace Handbrake
             // Update an item in the Audio list if required.
             if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
             {
-                if (drp_audenc_1.Text == "AC3")
+                if (drp_audenc_1.Text.Contains("AC3"))
                     drp_audbit_1.Text = "Auto";
                 lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text = drp_audbit_1.Text;
                 lv_audioList.Select();
@@ -1598,6 +1610,7 @@ namespace Handbrake
         // MainWindow Components, Actions and Functions ***********************
 
         #region Source Scan
+        private static int scanProcessID { get; set; }
         private void setupGUIforScan(String filename)
         {
             text_source.Text = filename;
@@ -1650,24 +1663,33 @@ namespace Handbrake
 
                 ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
 
+                Boolean cleanExit = true;
                 using (hbproc = Process.Start(hbParseDvd))
                 {
+                    scanProcessID = hbproc.Id;
                     hbproc.WaitForExit();
+                    if (hbproc.ExitCode != 0)
+                        cleanExit = false;
                 }
 
-                if (!File.Exists(dvdInfoPath))
+                if (cleanExit) // If 0 exit code, CLI exited cleanly.
                 {
-                    throw new Exception("Unable to retrieve the DVD Info. last_scan_log.txt is missing. \nExpected location of last_scan_log.txt: \n" + dvdInfoPath);
-                }
+                    if (!File.Exists(dvdInfoPath))
+                    {
+                        throw new Exception(
+                            "Unable to retrieve the DVD Info. last_scan_log.txt is missing. \nExpected location of last_scan_log.txt: \n" +
+                            dvdInfoPath);
+                    }
 
-                using (StreamReader sr = new StreamReader(dvdInfoPath))
-                {
-                    thisDVD = DVD.Parse(sr);
-                    sr.Close();
-                    sr.Dispose();
-                }
+                    using (StreamReader sr = new StreamReader(dvdInfoPath))
+                    {
+                        thisDVD = DVD.Parse(sr);
+                        sr.Close();
+                        sr.Dispose();
+                    }
 
-                updateUIafterScan();
+                    updateUIafterScan();
+                }
             }
             catch (Exception exc)
             {
@@ -1725,9 +1747,7 @@ namespace Handbrake
             try
             {
                 if (InvokeRequired)
-                {
-                    BeginInvoke(new UpdateWindowHandler(updateUIafterScan));
-                }
+                    BeginInvoke(new UpdateWindowHandler(enableGUI));
                 lbl_encode.Text = "Scan Completed";
                 gb_source.Text = "Source";
                 foreach (Control ctrl in Controls)
@@ -1741,27 +1761,24 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - enableGUI " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmMain.cs - enableGUI() " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private static void killCLI()
+        private void killScan()
         {
-            // This may seem like a long way of killing HandBrakeCLI, but for whatever reason,
-            // hbproc.kill/close just won't do the trick.
             try
             {
-                string AppName = "HandBrakeCLI";
-
-                AppName = AppName.ToUpper();
-
+                enableGUI();
+                resetGUI();
+                
                 Process[] prs = Process.GetProcesses();
-                foreach (Process proces in prs)
+                foreach (Process process in prs)
                 {
-                    if (proces.ProcessName.ToUpper() == AppName)
+                    if (process.Id == scanProcessID)
                     {
-                        proces.Refresh();
-                        if (!proces.HasExited)
-                            proces.Kill();
+                        process.Refresh();
+                        if (!process.HasExited)
+                            process.Kill();
                     }
                 }
             }
@@ -1769,6 +1786,22 @@ namespace Handbrake
             {
                 MessageBox.Show("Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        private void resetGUI()
+        {
+            drp_dvdtitle.Items.Clear();
+            drp_dvdtitle.Text = "Automatic";
+            drop_chapterStart.Items.Clear();
+            drop_chapterStart.Text = "Auto";
+            drop_chapterFinish.Items.Clear();
+            drop_chapterFinish.Text = "Auto";
+            lbl_duration.Text = "Select a Title";
+            lbl_src_res.Text = "Select a Title";
+            lbl_Aspect.Text = "Select a Title";
+            text_source.Text = "Click 'Source' to continue";
+            text_destination.Text = "";
+            thisDVD = null;
+            selectedTitle = null;
         }
         #endregion
 
@@ -1876,7 +1909,7 @@ namespace Handbrake
                 drp_audenc_1.Items.Clear();
                 drp_audenc_1.Items.Add("AAC (faac)");
                 drp_audenc_1.Items.Add("AC3 Passthru");
-                if ((oldval != "AAC") && (oldval != "AC3"))
+                if ((oldval != "AAC (faac)") && (oldval != "AC3 Passthru"))
                     drp_audenc_1.SelectedIndex = 0;
 
             }

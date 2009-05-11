@@ -34,8 +34,9 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (mainWindow.drop_angle.SelectedIndex != 0)
-                query += " --angle " + mainWindow.drop_angle.SelectedItem;
+            if (Properties.Settings.Default.dvdnav == "Checked")
+                if (mainWindow.drop_angle.Items.Count != 0)
+                    query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
             if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "Auto")
                 query += " -c " + mainWindow.drop_chapterStart.Text;

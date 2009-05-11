@@ -384,6 +384,11 @@ namespace Handbrake.Presets
             return false;
         }
 
+        /// <summary>
+        /// Check if the built in presets stored are not out of date.
+        /// Update them if they are.
+        /// </summary>
+        /// <returns></returns>
         public Boolean checkIfPresetsAreOutOfDate()
         {
             loadPresetData();
