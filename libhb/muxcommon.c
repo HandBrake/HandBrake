@@ -285,21 +285,18 @@ static void MuxerFunc( void * _mux )
         {
             for ( i = 0; i < mux->ntracks; ++i )
             {
-                if ( mux->rdy & (1 << i) )
-                {
-                    track = mux->track[i];
-                    OutputTrackChunk( mux, track, m );
+                track = mux->track[i];
+                OutputTrackChunk( mux, track, m );
 
-                    // if the track is at eof or still has data that's past
-                    // our next interleave point then leave it marked as rdy.
-                    // Otherwise clear rdy.
-                    if ( ( mux->eof & (1 << i) ) == 0 &&
-                         ( track->mf.out == track->mf.in ||
-                           track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->stop
-                             < mux->pts + mux->interleave ) )
-                    {
-                        mux->rdy &=~ ( 1 << i );
-                    }
+                // if the track is at eof or still has data that's past
+                // our next interleave point then leave it marked as rdy.
+                // Otherwise clear rdy.
+                if ( ( mux->eof & (1 << i) ) == 0 &&
+                     ( track->mf.out == track->mf.in ||
+                       track->mf.fifo[(track->mf.in-1) & (track->mf.flen-1)]->stop
+                         < mux->pts + mux->interleave ) )
+                {
+                    mux->rdy &=~ ( 1 << i );
                 }
             }
 
@@ -330,13 +327,12 @@ finished:
         struct stat sb;
         uint64_t bytes_total, frames_total;
 
-#define p state.param.muxing
         /* Update the UI */
         hb_state_t state;
-        state.state   = HB_STATE_MUXING;
-        p.progress = 0;
+        state.state = HB_STATE_MUXING;
+        state.param.muxing.progress = 0;
         hb_set_state( job->h, &state );
-#undef p
+
         if( m )
         {
             m->end( m );
