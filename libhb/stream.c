@@ -118,7 +118,7 @@ struct hb_stream_s
     hb_buffer_t *fwrite_buf;      /* PS buffer (set by hb_ts_stream_decode) */
 
     int      chapter;           /* Chapter that we are currently in */
-    uint64_t chapter_end;       /* HB time that the current chapter ends */
+    int64_t  chapter_end;       /* HB time that the current chapter ends */
 
     /*
      * Stuff before this point is dynamic state updated as we read the
@@ -1202,61 +1202,40 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
     return hb_ts_stream_decode( src_stream, b );
 }
 
-/***********************************************************************
- * hb_stream_seek_chapter
- ***********************************************************************
- *
- **********************************************************************/
 int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 {
-    AVFormatContext *ic = stream->ffmpeg_ic;
-    uint64_t end_offset = 0;
-    uint64_t start_offset = 0;
-    uint64_t pos = 0;
-    hb_chapter_t *chapter = NULL;
-    int i;
 
-    if( !stream || !stream->title )
-    {
-        return 0;
-    }
     if ( stream->hb_stream_type != ffmpeg )
     {
         // currently meaningliess for transport and program streams
         return 1;
     }
-
-    for( i = 0; i < chapter_num; i++)
+    if ( !stream || !stream->title ||
+         chapter_num > hb_list_count( stream->title->list_chapter ) )
     {
-        chapter = hb_list_item( stream->title->list_chapter,
-                                i );
-        
-        if( chapter )
-        {
-            /*
-             * Seeking to a chapter means that we are in that chapter,
-             * so track which chapter we are in so that we can output
-             * the correct chapter numbers in buf->new_chap
-             */
-            start_offset = end_offset;
-            end_offset += chapter->duration;
-            stream->chapter = i;
-            stream->chapter_end = end_offset;
-        } else {
-            return 0;
-        }
+        return 0;
     }
 
-    /*
-     * Is the the correct way to convert timebases? It seems to get it pretty
-     * much right - plus a few seconds, which is odd.
-     */
-    pos = ((start_offset * AV_TIME_BASE) / 90000);
+    int64_t sum_dur = 0;
+    hb_chapter_t *chapter;
+    int i;
+    for ( i = 0; i < chapter_num; ++i)
+    {
+        chapter = hb_list_item( stream->title->list_chapter, i );
+        sum_dur += chapter->duration;
+    }
+    stream->chapter = chapter_num - 1;
+    stream->chapter_end = sum_dur;
 
-    hb_deep_log( 2, "Seeking to chapter %d time (starts: %lld ends %lld) AV pos %lld", chapter_num-1, start_offset, end_offset, pos);
+    int64_t pos = ( ( ( sum_dur - chapter->duration ) * AV_TIME_BASE ) / 90000 );
 
-    av_seek_frame( ic, -1, pos, 0);
+    hb_deep_log( 2, "Seeking to chapter %d: starts %lld, ends %lld, AV pos %lld",
+                 chapter_num, sum_dur - chapter->duration, sum_dur, pos);
 
+    if ( chapter_num > 1 && pos > 0 )
+    {
+        av_seek_frame( stream->ffmpeg_ic, -1, pos, 0);
+    }
     return 1;
 }
 
@@ -2564,6 +2543,7 @@ static int ffmpeg_open( hb_stream_t *stream, hb_title_t *title )
     stream->hb_stream_type = ffmpeg;
     stream->ffmpeg_pkt = malloc(sizeof(*stream->ffmpeg_pkt));
     av_init_packet( stream->ffmpeg_pkt );
+    stream->chapter_end = INT64_MAX;
 
     if ( title )
     {
@@ -2727,7 +2707,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
         AVChapter *m;
         uint64_t duration_sum = 0;
         for( i = 0; i < ic->nb_chapters; i++ )
-            if( m = ic->chapters[i] )
+            if( ( m = ic->chapters[i] ) != NULL )
             {
                 hb_chapter_t * chapter;
                 chapter = calloc( sizeof( hb_chapter_t ), 1 );
@@ -2901,47 +2881,25 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
 
     /*
      * Check to see whether this video buffer is on a chapter
-     * boundary, if so mark it as such in the buffer. The chapters for
-     * a stream have a simple duration for each chapter. So we keep
-     * track of what chapter we are in currently, and when it is due
-     * to end.
+     * boundary, if so mark it as such in the buffer then advance
+     * chapter_end to the end of the next chapter.
+     * If there are no chapters, chapter_end is always initialized to INT64_MAX
+     * (roughly 3 million years at our 90KHz clock rate) so the test
+     * below handles both the chapters & no chapters case.
      */
-    hb_deep_log( 3, "title=0x%x, job=0x%x, chapter_markers=%d, time=%lld, chapter=%d, end_chapter=%lld",
-                 stream->title, 
-                 stream->title ? (stream->title->job ? stream->title->job : 0x0) : 0x0, 
-                 stream->title ? (stream->title->job ? stream->title->job->chapter_markers : 2) : 0x0,  
-                 buf->start, stream->chapter, stream->chapter_end);
-
-    if( stream->title &&
-        stream->title->job &&
-        buf->id == stream->ffmpeg_video_id &&
-        buf->start >= stream->chapter_end )
+    if ( buf->id == stream->ffmpeg_video_id && buf->start >= stream->chapter_end )
     {
-        hb_chapter_t *chapter = NULL;
-
-        /*
-         * Store when this chapter ends using HB time.
-         */
-        chapter = hb_list_item( stream->title->list_chapter,
-                                stream->chapter );
-
+        hb_chapter_t *chapter = hb_list_item( stream->title->list_chapter,
+                                              ++stream->chapter );
         if( chapter )
         {
-            buf->new_chap = stream->chapter + 2;
-
-            hb_deep_log( 2, "Starting chapter %i at %lld", buf->new_chap, buf->start);
-            hb_chapter_t *nextChapter = NULL;
-            nextChapter = hb_list_item( stream->title->list_chapter,
-                                   stream->chapter + 1 );
-            if( nextChapter )
-                stream->chapter_end += nextChapter->duration;
-            stream->chapter++;
-            hb_deep_log( 2, "Looking for chapter %i at %lld", stream->chapter + 2, stream->chapter_end );
+            stream->chapter_end += chapter->duration;
+            buf->new_chap = stream->chapter + 1;
+            hb_deep_log( 2, "ffmpeg_read starting chapter %i at %lld",
+                         buf->new_chap, buf->start);
         } else {
-            /*
-             * Must have run out of chapters, stop looking.
-             */
-            stream->chapter_end = -1;
+            // Must have run out of chapters, stop looking.
+            stream->chapter_end = INT64_MAX;
         }
     } else {
         buf->new_chap = 0;
@@ -2956,7 +2914,7 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
     if ( frac > 0. )
     {
         int64_t pos = (double)ic->duration * (double)frac;
-        if ( ic->start_time != AV_NOPTS_VALUE )
+        if ( ic->start_time != AV_NOPTS_VALUE && ic->start_time > 0 )
         {
             pos += ic->start_time;
         }
