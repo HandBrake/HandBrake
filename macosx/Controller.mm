@@ -4612,7 +4612,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack1DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack1DrcSlider];
     }
-    else if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    else if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
     {
         [fAudTrack1RatePopUp setEnabled: NO];
         [fAudTrack1BitratePopUp setEnabled: NO];
@@ -4636,7 +4636,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack2DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack2DrcSlider];
     }
-    else if ([[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    else if ([[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
     {
         [fAudTrack2RatePopUp setEnabled: NO];
         [fAudTrack2BitratePopUp setEnabled: NO];
@@ -4660,7 +4660,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack3DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack3DrcSlider];
     }
-    else if ([[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    else if ([[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
     {
         [fAudTrack3RatePopUp setEnabled: NO];
         [fAudTrack3BitratePopUp setEnabled: NO];
@@ -4684,7 +4684,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack4DrcSlider setFloatValue: 1.00];
         [self audioDRCSliderChanged: fAudTrack4DrcSlider];
     }
-    else if ([[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    else if ([[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
     {
         [fAudTrack4RatePopUp setEnabled: NO];
         [fAudTrack4BitratePopUp setEnabled: NO];
@@ -4804,6 +4804,9 @@ the user is using "Custom" settings by determining the sender*/
                 // AC3 Passthru
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_AC3];
+                // DTS Passthru
+                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"DTS Passthru" action: NULL keyEquivalent: @""];
+                [menuItem setTag: HB_ACODEC_DCA];
                 // MP3
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"MP3 (lame)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_LAME];
@@ -4969,6 +4972,13 @@ the user is using "Custom" settings by determining the sender*/
                                                action: NULL keyEquivalent: @""];
              [menuItem setTag: HB_ACODEC_AC3];   
             }
+            else if (audio->in.codec == HB_ACODEC_DCA && acodec == HB_ACODEC_DCA)
+            {
+            NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                 [NSString stringWithCString: "DTS Passthru"]
+                                               action: NULL keyEquivalent: @""];
+             [menuItem setTag: HB_ACODEC_DCA]; 
+            }
             else
             {
                 
@@ -5051,6 +5061,17 @@ the user is using "Custom" settings by determining the sender*/
                     maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
                 }
                 
+                /* do we want to add a DTS Passthru option ? HB_ACODEC_DCA*/
+                if (audio->in.codec == HB_ACODEC_DCA && acodec == HB_ACODEC_DCA) 
+                {
+                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                            [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
+                                                                          action: NULL keyEquivalent: @""];
+                    [menuItem setTag: HB_ACODEC_DCA];
+                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
+                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[5].amixdown);
+                }
+                
                 /* auto-select the best mixdown based on our saved mixdown preference */
                 
                 /* for now, this is hard-coded to a "best" mixdown of HB_AMIXDOWN_DOLBYPLII */
@@ -5099,6 +5120,24 @@ the user is using "Custom" settings by determining the sender*/
                     [audiocodecPopUp selectItemWithTag: HB_ACODEC_FAAC];
                 }
             }
+            
+            /* In the case of a source track that is not DTS and the user tries to use DTS Passthru (which does not work)
+             * we force the Audio Codec choice back to a workable codec. We use MP3 for avi and aac for all
+             * other containers.
+             */
+            if (audio->in.codec != HB_ACODEC_DCA && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_DCA)
+            {
+                /* If we are using the avi container, we select MP3 as there is no aac available*/
+                if ([[fDstFormatPopUp selectedItem] tag] == HB_MUX_AVI)
+                {
+                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_LAME];
+                }
+                else
+                {
+                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_FAAC];
+                }
+            }
+            
             /* Setup our samplerate and bitrate popups we will need based on mixdown */
             [self audioTrackMixdownChanged: mixdownPopUp];	       
         }
@@ -5231,7 +5270,7 @@ the user is using "Custom" settings by determining the sender*/
     int inputbitrate = audio->in.bitrate / 1000;
     int inputsamplerate = audio->in.samplerate;
     
-    if ([[mixdownPopUp selectedItem] tag] != HB_ACODEC_AC3)
+    if ([[mixdownPopUp selectedItem] tag] != HB_ACODEC_AC3 && [[mixdownPopUp selectedItem] tag] != HB_ACODEC_DCA)
     {
         [bitratePopUp removeAllItems];
         
@@ -5279,11 +5318,11 @@ the user is using "Custom" settings by determining the sender*/
     [sampleratePopUp selectItemWithTag: inputsamplerate];
     
     
-    /* Since AC3 Pass Thru uses the input ac3 bitrate and sample rate, we get the input tracks
-    * bitrate and dispay it in the bitrate popup even though libhb happily ignores any bitrate input from
+    /* Since AC3 Pass Thru and DTS Pass Thru uses the input bitrate and sample rate, we get the input tracks
+    * bitrate and display it in the bitrate popup even though libhb happily ignores any bitrate input from
     * the gui. We do this for better user feedback in the audio tab as well as the queue for the most part
     */
-    if ([[mixdownPopUp selectedItem] tag] == HB_ACODEC_AC3)
+    if ([[mixdownPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[mixdownPopUp selectedItem] tag] == HB_ACODEC_DCA)
     {
         
         /* lets also set the bitrate popup to the input bitrate as thats what passthru will use */
