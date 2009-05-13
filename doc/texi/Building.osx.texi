@@ -20,10 +20,10 @@ Building on @value{OS.osx} is well supported. It is the reference platform for @
 
 @itemize @bullet
 @item Mac Intel hardware
-@item @value{OS.osx} 10.5.6
+@item @value{OS.osx} 10.5.7
 @item Xcode-3.1.2
 @item gcc 4.0.1 (Apple Inc. build 5490)
-@item yasm 0.7.2.2153 (for i386 and x86_64 architectures)
+@item yasm 0.8.0.2194 (for i386 and x86_64 architectures)
 @end itemize
 
 @include building/prerequisites.bundled.texi
@@ -67,4 +67,5 @@ UB.archs = i386 x86_64
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.xcode.texi
+@include building/chapter.troubleshooting.texi
 @include building/appendix.repo.texi

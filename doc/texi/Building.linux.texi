@@ -103,4 +103,5 @@ gstreamer-devel gstreamer-plugins-base-devel
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
+@include building/chapter.troubleshooting.texi
 @include building/appendix.repo.texi

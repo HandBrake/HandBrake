@@ -1,4 +1,4 @@
-Build Guide for HandBrake svn2322 on Mac OS X
+Build Guide for HandBrake svn2413 on Mac OS X
 *********************************************
 
 Table of Contents
@@ -25,6 +25,7 @@ Table of Contents
   6.2 Build
   6.3 External Targets
   6.4 User-Defined Settings
+7 Troubleshooting
 Appendix A Project Repository Details
 
 
@@ -45,13 +46,13 @@ possible:
 
    * Mac Intel hardware
 
-   * Mac OS X 10.5.6
+   * Mac OS X 10.5.7
 
    * Xcode-3.1.2
 
    * gcc 4.0.1 (Apple Inc. build 5490)
 
-   * yasm 0.7.2.2153 (for i386 and x86_64 architectures)
+   * yasm 0.8.0.2194 (for i386 and x86_64 architectures)
 
      Note: It is recommended to use the platform distribution's bundled
      compiler for maximum C++ compatibility. If you build with a custom
@@ -620,6 +621,31 @@ external build system:
      Specifies the top-level source directory for HandBrake.
 
 
+7 Troubleshooting
+*****************
+
+When troubleshooting build issues, the following files relative to the
+`build/' directory may be especially useful:
+
+`GNUmakefile'
+     Top-level makefile which contains build settings generated via
+     configure.
+
+`log/config.info.txt'
+     Record of output from configure.
+
+`log/config.verbose.txt'
+     Record of verbose output from configure.
+
+`log/build.txt'
+     Record of output from `configure --launch'. Similar output may be
+     recorded using `make' depending on which shell is in use, eg:
+     `make >& log/build.txt' or `make > log/build.txt 2>&1'.
+
+`log/xcodemake.env.txt'
+     Environment (variables) dump as seen when Xcode forks `make'.
+     Mac OS X only.
+
 Appendix A Project Repository Details
 *************************************
 
@@ -627,7 +653,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2322
-     date:   2009-04-13 13:28:21 -0400
+     rev:    2413
+     date:   2009-05-12 14:06:22 -0400
      type:   developer
 

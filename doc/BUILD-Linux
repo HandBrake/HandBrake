@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2322 (2009041301) on Linux
+Guide to Building HandBrake svn2413 (2009051201) on Linux
 *********************************************************
 
 Table of Contents
@@ -19,6 +19,7 @@ Table of Contents
     5.4.4 Contrib Touch and Untouch
     5.4.5 Contrib Aggregates
   5.5 Customizing Make
+6 Troubleshooting
 Appendix A Project Repository Details
 
 
@@ -503,6 +504,31 @@ be lost. Here is a short example of what the contents of
 See also `make report.help' which displays a set of reports used to
 dump makefile vars.
 
+6 Troubleshooting
+*****************
+
+When troubleshooting build issues, the following files relative to the
+`build/' directory may be especially useful:
+
+`GNUmakefile'
+     Top-level makefile which contains build settings generated via
+     configure.
+
+`log/config.info.txt'
+     Record of output from configure.
+
+`log/config.verbose.txt'
+     Record of verbose output from configure.
+
+`log/build.txt'
+     Record of output from `configure --launch'. Similar output may be
+     recorded using `make' depending on which shell is in use, eg:
+     `make >& log/build.txt' or `make > log/build.txt 2>&1'.
+
+`log/xcodemake.env.txt'
+     Environment (variables) dump as seen when Xcode forks `make'.
+     Mac OS X only.
+
 Appendix A Project Repository Details
 *************************************
 
@@ -510,7 +536,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2322
-     date:   2009-04-13 13:28:21 -0400
+     rev:    2413
+     date:   2009-05-12 14:06:22 -0400
      type:   developer
 

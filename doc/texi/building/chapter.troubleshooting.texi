@@ -1,0 +1,20 @@
+@anchor{troubleshooting}
+@chapter Troubleshooting
+When troubleshooting build issues, the following files relative to the @file{build/} directory may be especially useful:
+
+@table @file
+@item GNUmakefile
+Top-level makefile which contains build settings generated via @b{configure}.
+
+@item log/config.info.txt
+Record of output from @b{configure}.
+
+@item log/config.verbose.txt
+Record of verbose output from @b{configure}.
+
+@item log/build.txt
+Record of output from @command{configure --launch}. Similar output may be recorded using @command{make} depending on which shell is in use, eg: @command{make >& log/build.txt} or @command{make > log/build.txt 2>&1}.
+
+@item log/xcodemake.env.txt
+Environment (variables) dump as seen when Xcode forks @command{make}. @value{OS.osx} only.
+@end table

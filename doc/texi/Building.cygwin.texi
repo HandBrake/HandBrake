@@ -44,4 +44,5 @@ As of this writing, @value{OS.cygwin} has available to it several versions of gc
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.via.terminal.texi
+@include building/chapter.troubleshooting.texi
 @include building/appendix.repo.texi
