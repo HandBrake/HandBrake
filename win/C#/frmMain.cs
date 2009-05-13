@@ -256,7 +256,7 @@ namespace Handbrake
             String file;
             file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
 
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeQueue);
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeQueue, this);
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -632,6 +632,7 @@ namespace Handbrake
 
                     setEncodeStarted(); // Encode is running, so setup the GUI appropriately
                     encodeQueue.startEncode(); // Start The Queue Encoding Process
+                    this.Focus();
                 }
                 else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                     MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -692,7 +693,7 @@ namespace Handbrake
         {
             String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
 
-            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeQueue);
+            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeQueue, this);
             ActivityWindow.Show();
         }
         #endregion
@@ -1608,6 +1609,7 @@ namespace Handbrake
         // MainWindow Components, Actions and Functions ***********************
 
         #region Source Scan
+        public Boolean isScanning { get; set; }
         private static int scanProcessID { get; set; }
         private void setupGUIforScan(String filename)
         {
@@ -1634,6 +1636,7 @@ namespace Handbrake
             {
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Scanning...";
+                isScanning = true;
                 ThreadPool.QueueUserWorkItem(scanProcess, filename);
             }
             catch (Exception exc)
@@ -1801,6 +1804,7 @@ namespace Handbrake
             text_destination.Text = "";
             thisDVD = null;
             selectedTitle = null;
+            isScanning = false;
         }
         #endregion
 

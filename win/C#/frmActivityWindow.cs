@@ -22,11 +22,12 @@ namespace Handbrake
         Queue.QueueHandler encodeQueue;
         int position;  // Position in the arraylist reached by the current log output in the rtf box.
         string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+        private frmMain mainWin;
 
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
-        public frmActivityWindow(string file, Queue.QueueHandler eh)
+        public frmActivityWindow(string file, Queue.QueueHandler eh, frmMain mw)
         {
             InitializeComponent();
 
@@ -34,6 +35,7 @@ namespace Handbrake
             encodeQueue = eh;
             read_file = file;
             position = 0;
+            mainWin = mw;
             
             // When the window closes, we want to abort the monitor thread.
             this.Disposed += new EventHandler(forceQuit);
@@ -111,7 +113,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if (encodeQueue.isEncoding)
+                    if (encodeQueue.isEncoding || mainWin.isScanning)
                         updateTextFromThread();
                     else
                     {

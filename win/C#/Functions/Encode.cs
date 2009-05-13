@@ -49,27 +49,31 @@ namespace Handbrake.Functions
                 isEncoding = true;
                 currentQuery = query;
 
-                // Set the process Priority 
-                if (hbProc != null)
+                // Set the process Priority
+                Process hbCliProcess = null;
+                if (processID != -1)
+                    hbCliProcess = Process.GetProcessById(processID);
+
+                if (hbCliProcess != null)
                     switch (Properties.Settings.Default.processPriority)
                     {
                         case "Realtime":
-                            hbProc.PriorityClass = ProcessPriorityClass.RealTime;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.RealTime;
                             break;
                         case "High":
-                            hbProc.PriorityClass = ProcessPriorityClass.High;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.High;
                             break;
                         case "Above Normal":
-                            hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
                             break;
                         case "Normal":
-                            hbProc.PriorityClass = ProcessPriorityClass.Normal;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.Normal;
                             break;
                         case "Low":
-                            hbProc.PriorityClass = ProcessPriorityClass.Idle;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.Idle;
                             break;
                         default:
-                            hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
                             break;
                     }
             }
