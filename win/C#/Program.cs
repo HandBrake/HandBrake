@@ -41,8 +41,14 @@ namespace Handbrake
             {
                 string appDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake";
                 if (!Directory.Exists(appDir))
+                    Directory.CreateDirectory(appDir);
+
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                if (!Directory.Exists(logDir))
+                    Directory.CreateDirectory(logDir);
+
+                if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml"))
                 {
-                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +  "\\HandBrake");
                     PresetsHandler x = new PresetsHandler();
                     x.updateBuiltInPresets();
                 }
