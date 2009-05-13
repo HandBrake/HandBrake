@@ -147,6 +147,14 @@ int main( int argc, char ** argv )
     int           build;
     char        * version;
 
+/* win32 _IOLBF (line-buffering) is the same as _IOFBF (full-buffering).
+ * force it to unbuffered otherwise informative output is not easily parsed.
+ */
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+    setvbuf( stdout, NULL, _IONBF, 0 );
+    setvbuf( stderr, NULL, _IONBF, 0 );
+#endif
+
     audios = hb_list_init();
 
     /* Parse command line */
