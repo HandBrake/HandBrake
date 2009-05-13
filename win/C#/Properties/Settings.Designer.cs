@@ -358,5 +358,17 @@ namespace Handbrake.Properties {
                 this["presetNotification"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string enocdeStatusInGui {
+            get {
+                return ((string)(this["enocdeStatusInGui"]));
+            }
+            set {
+                this["enocdeStatusInGui"] = value;
+            }
+        }
     }
 }

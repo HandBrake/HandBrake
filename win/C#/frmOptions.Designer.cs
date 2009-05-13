@@ -73,6 +73,7 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
             this.check_dvdnav = new System.Windows.Forms.CheckBox();
             this.label32 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
@@ -117,7 +118,7 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
+            this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -132,7 +133,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(430, 370);
+            this.btn_close.Location = new System.Drawing.Point(430, 382);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -169,7 +170,7 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 55);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(490, 309);
+            this.tab_options.Size = new System.Drawing.Size(490, 321);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
@@ -598,6 +599,7 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.check_inGuiStatus);
             this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
             this.tab_advanced.Controls.Add(this.check_dvdnav);
             this.tab_advanced.Controls.Add(this.label32);
@@ -613,17 +615,32 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(482, 283);
+            this.tab_advanced.Size = new System.Drawing.Size(482, 295);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
+            // 
+            // check_disablePresetNotification
+            // 
+            this.check_disablePresetNotification.AutoSize = true;
+            this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
+            this.check_disablePresetNotification.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_disablePresetNotification.Location = new System.Drawing.Point(76, 87);
+            this.check_disablePresetNotification.Name = "check_disablePresetNotification";
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(261, 17);
+            this.check_disablePresetNotification.TabIndex = 91;
+            this.check_disablePresetNotification.Text = "Disable Built-in preset update notification";
+            this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
+                    " of HandBrake is installed.");
+            this.check_disablePresetNotification.UseVisualStyleBackColor = false;
+            this.check_disablePresetNotification.CheckedChanged += new System.EventHandler(this.check_disablePresetNotification_CheckedChanged);
             // 
             // check_dvdnav
             // 
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_dvdnav.Location = new System.Drawing.Point(76, 209);
+            this.check_dvdnav.Location = new System.Drawing.Point(76, 232);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(297, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -635,7 +652,7 @@ namespace Handbrake
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(38, 209);
+            this.label32.Location = new System.Drawing.Point(38, 232);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(32, 13);
             this.label32.TabIndex = 89;
@@ -644,7 +661,7 @@ namespace Handbrake
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(73, 167);
+            this.label30.Location = new System.Drawing.Point(73, 190);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(230, 13);
             this.label30.TabIndex = 87;
@@ -660,7 +677,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(312, 164);
+            this.drop_x264step.Location = new System.Drawing.Point(312, 187);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(111, 21);
             this.drop_x264step.TabIndex = 86;
@@ -672,7 +689,7 @@ namespace Handbrake
             // 
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(27, 167);
+            this.label28.Location = new System.Drawing.Point(27, 190);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(43, 13);
             this.label28.TabIndex = 85;
@@ -697,7 +714,7 @@ namespace Handbrake
             // 
             this.lbl_appcastUnstable.AutoSize = true;
             this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 130);
+            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 153);
             this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
             this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
             this.lbl_appcastUnstable.TabIndex = 83;
@@ -724,7 +741,7 @@ namespace Handbrake
             this.check_snapshot.AutoSize = true;
             this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
             this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_snapshot.Location = new System.Drawing.Point(76, 129);
+            this.check_snapshot.Location = new System.Drawing.Point(76, 152);
             this.check_snapshot.Name = "check_snapshot";
             this.check_snapshot.Size = new System.Drawing.Size(273, 17);
             this.check_snapshot.TabIndex = 80;
@@ -1113,24 +1130,23 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // check_disablePresetNotification
+            // check_inGuiStatus
             // 
-            this.check_disablePresetNotification.AutoSize = true;
-            this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
-            this.check_disablePresetNotification.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_disablePresetNotification.Location = new System.Drawing.Point(76, 87);
-            this.check_disablePresetNotification.Name = "check_disablePresetNotification";
-            this.check_disablePresetNotification.Size = new System.Drawing.Size(261, 17);
-            this.check_disablePresetNotification.TabIndex = 91;
-            this.check_disablePresetNotification.Text = "Disable Built-in preset update notification";
-            this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
-                    " of HandBrake is installed.");
-            this.check_disablePresetNotification.UseVisualStyleBackColor = false;
-            this.check_disablePresetNotification.CheckedChanged += new System.EventHandler(this.check_disablePresetNotification_CheckedChanged);
+            this.check_inGuiStatus.AutoSize = true;
+            this.check_inGuiStatus.BackColor = System.Drawing.Color.Transparent;
+            this.check_inGuiStatus.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_inGuiStatus.Location = new System.Drawing.Point(76, 110);
+            this.check_inGuiStatus.Name = "check_inGuiStatus";
+            this.check_inGuiStatus.Size = new System.Drawing.Size(281, 17);
+            this.check_inGuiStatus.TabIndex = 92;
+            this.check_inGuiStatus.Text = "Enable in-GUI Encode status. (Experimental)";
+            this.ToolTip.SetToolTip(this.check_inGuiStatus, "Displays the CLI status in the GUI windows instead of the CLI window.");
+            this.check_inGuiStatus.UseVisualStyleBackColor = false;
+            this.check_inGuiStatus.CheckedChanged += new System.EventHandler(this.check_inGuiStatus_CheckedChanged);
             // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(514, 402);
+            this.ClientSize = new System.Drawing.Size(514, 413);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.tab_options);
@@ -1242,5 +1258,6 @@ namespace Handbrake
         private System.Windows.Forms.Label label32;
         internal System.Windows.Forms.CheckBox check_logsInSpecifiedLocation;
         internal System.Windows.Forms.CheckBox check_disablePresetNotification;
+        internal System.Windows.Forms.CheckBox check_inGuiStatus;
     }
 }

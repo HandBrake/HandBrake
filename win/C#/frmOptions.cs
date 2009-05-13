@@ -109,8 +109,13 @@ namespace Handbrake
             if (Properties.Settings.Default.QueryEditorTab == "Checked")
                 check_queryEditorTab.CheckState = CheckState.Checked;
 
+            // Preset update notification
             if (Properties.Settings.Default.presetNotification == "Checked")
                 check_disablePresetNotification.CheckState = CheckState.Checked;
+
+            // Experimental In-GUI encode status indicator.
+            if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
+                check_inGuiStatus.CheckState = CheckState.Checked;
 
             // Enable snapshot updating
             if (Properties.Settings.Default.MainWindowMinimize == "Checked")
@@ -251,6 +256,11 @@ namespace Handbrake
             Properties.Settings.Default.presetNotification = check_disablePresetNotification.CheckState.ToString();
         }
 
+        private void check_inGuiStatus_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.CheckState.ToString();
+        } 
+
         private void check_snapshot_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.checkSnapshot = check_snapshot.CheckState.ToString();
@@ -271,6 +281,7 @@ namespace Handbrake
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
-        } 
+        }
+
     }
 }

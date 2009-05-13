@@ -19,29 +19,33 @@ namespace Handbrake.Functions
         private static extern void LockWorkStation();
         [DllImport("user32.dll")]
         private static extern int ExitWindowsEx(int uFlags, int dwReason);
-
-        // Declarations
-        Process hbProc = new Process();
-
+ 
         /// <summary>
         /// Execute a HandBrakeCLI process.
         /// </summary>
         /// <param name="query">The CLI Query</param>
         public Process runCli(string query)
         {
+            Process hbProc = new Process();
             try
             {
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
                 string logPath = Path.Combine(logDir, "last_encode_log.txt");
-
                 string strCmdLine = String.Format(@" CMD /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
+                if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
+                {
+                    cliStart.RedirectStandardOutput = true;
+                    cliStart.UseShellExecute = false;
+                }
                 if (Properties.Settings.Default.cli_minimized == "Checked")
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
+
+                Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 hbProc = Process.Start(cliStart);
-                processID = hbProc.Id;
+                processID = Main.getCliProcess(before);
                 isEncoding = true;
                 currentQuery = query;
 
@@ -73,7 +77,27 @@ namespace Handbrake.Functions
             {
                 MessageBox.Show("An error occured in runCli()\n Error Information: \n\n" + exc);
             }
+
             return hbProc;
+        }
+
+        /// <summary>
+        /// Kill the CLI process
+        /// </summary>
+        public void closeCLI()
+        {
+            Process[] prs = Process.GetProcesses();
+            foreach (Process process in prs)
+            {
+                if (process.Id == processID)
+                {
+                    process.Refresh();
+                    if (!process.HasExited)
+                        process.Kill();
+
+                    process.WaitForExit();
+                }
+            } 
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.Threading;
 
 namespace Handbrake.Functions
 {
@@ -369,6 +370,53 @@ namespace Handbrake.Functions
             {
                 return false; // Keep quiet about the error.
             }
+        }
+
+        /// <summary>
+        /// Get the Process ID of HandBrakeCLI for the current instance.
+        /// </summary>
+        /// <param name="before">List of processes before the new process was started</param>
+        /// <returns>Int - Process ID</returns>
+        public static int getCliProcess(Process[] before)
+        {
+            // This is a bit of a cludge. Maybe someone has a better idea on how to impliment this.
+            // Since we used CMD to start HandBrakeCLI, we don't get the process ID from hbProc.
+            // Instead we take the processes before and after, and get the ID of HandBrakeCLI.exe
+            // avoiding any previous instances of HandBrakeCLI.exe in before.
+            // Kill the current process.
+
+            Process[] hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
+
+            // Another hack. We maybe need to wait a few seconds for HandBrakeCLI to launch
+            if (hbProcesses.Length == 0)
+            {
+                Thread.Sleep(2000);
+                hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
+            }
+
+            Process hbProcess = null;
+            if (hbProcesses.Length > 0)
+                foreach (Process process in hbProcesses)
+                {
+                    Boolean found = false;
+                    // Check if the current CLI instance was running before we started the current one
+                    foreach (Process bprocess in before)
+                    {
+                        if (process.Id == bprocess.Id)
+                            found = true;
+                    }
+
+                    // If it wasn't running before, we found the process we want.
+                    if (!found)
+                    {
+                        hbProcess = process;
+                        break;
+                    }
+                }
+            if (hbProcess != null)
+                return hbProcess.Id;
+
+            return -1;
         }
 
     }

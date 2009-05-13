@@ -17,7 +17,7 @@ namespace Handbrake.Queue
 {
     public class QueueHandler
     {
-        readonly Encode encodeHandler = new Encode();
+        Encode encodeHandler = new Encode();
         private static XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
         List<QueueItem> queue = new List<QueueItem>();
         int id; // Unique identifer number for each job
@@ -45,7 +45,7 @@ namespace Handbrake.Queue
         /// Get the last query that was returned by getNextItemForEncoding()
         /// </summary>
         /// <returns></returns>
-        public QueueItem lastQueueItem { get; set; }    
+        public QueueItem lastQueueItem { get; set; }
 
         /// <summary>
         /// Add's a new item to the queue
@@ -55,7 +55,7 @@ namespace Handbrake.Queue
         /// <param name="destination"></param>
         public void add(string query, string source, string destination)
         {
-            QueueItem newJob = new QueueItem {Id = id, Query = query, Source = source, Destination = destination};
+            QueueItem newJob = new QueueItem { Id = id, Query = query, Source = source, Destination = destination };
             id++;
 
             queue.Add(newJob);
@@ -224,6 +224,7 @@ namespace Handbrake.Queue
         public Boolean isEncodeStarted { get; private set; }
         public Boolean isPaused { get; private set; }
         public Boolean isEncoding { get; private set; }
+        public Process hbProc { get; set; }
 
         public void startEncode()
         {
@@ -237,7 +238,7 @@ namespace Handbrake.Queue
                     isPaused = false;
                     try
                     {
-                        theQueue = new Thread(startProc) {IsBackground = true};
+                        theQueue = new Thread(startProc) { IsBackground = true };
                         theQueue.Start();
                     }
                     catch (Exception exc)
@@ -252,10 +253,13 @@ namespace Handbrake.Queue
             isPaused = true;
             EncodePaused(null);
         }
+        public void endEncode()
+        {
+            encodeHandler.closeCLI();
+        }
 
         private void startProc(object state)
         {
-            Process hbProc;
             try
             {
                 // Run through each item on the queue
@@ -264,8 +268,8 @@ namespace Handbrake.Queue
                     string query = getNextItemForEncoding();
                     write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
 
-                    EncodeStarted(null);
                     hbProc = encodeHandler.runCli(query);
+                    EncodeStarted(null);
                     hbProc.WaitForExit();
 
                     encodeHandler.addCLIQueryToLog(query);

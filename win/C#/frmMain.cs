@@ -214,6 +214,14 @@ namespace Handbrake
         {
             lastAction = "encode";
             setEncodeStarted();
+
+            // Experimental HBProc Process Monitoring.
+            if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
+            {
+                HBProcess = encodeQueue.hbProc;
+                Thread EncodeMon = new Thread(encodeMonitorThread);
+                EncodeMon.Start();
+            }
         }
         private void encodeEnded(object sender, EventArgs e)
         {
@@ -597,15 +605,7 @@ namespace Handbrake
                 {
                     // Pause The Queue
                     encodeQueue.pauseEncode();
-
-                    // Kill the current process.
-                    Process[] aProc = Process.GetProcessesByName("HandBrakeCLI");
-                    Process HandBrakeCLI;
-                    if (aProc.Length > 0)
-                    {
-                        HandBrakeCLI = aProc[0];
-                        HandBrakeCLI.Kill();
-                    }
+                    encodeQueue.endEncode();
 
                     // Update the GUI
                     setEncodeFinished();
@@ -632,11 +632,9 @@ namespace Handbrake
 
                     setEncodeStarted(); // Encode is running, so setup the GUI appropriately
                     encodeQueue.startEncode(); // Start The Queue Encoding Process
-
                 }
                 else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                     MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             }
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
@@ -1666,7 +1664,8 @@ namespace Handbrake
                 Boolean cleanExit = true;
                 using (hbproc = Process.Start(hbParseDvd))
                 {
-                    scanProcessID = hbproc.Id;
+                    Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
+                    scanProcessID = Main.getCliProcess(before); 
                     hbproc.WaitForExit();
                     if (hbproc.ExitCode != 0)
                         cleanExit = false;
@@ -1770,7 +1769,7 @@ namespace Handbrake
             {
                 enableGUI();
                 resetGUI();
-                
+
                 Process[] prs = Process.GetProcesses();
                 foreach (Process process in prs)
                 {
@@ -2070,6 +2069,39 @@ namespace Handbrake
             base.OnFormClosing(e);
         }
         #endregion
+
+        #region In-GUI Encode Status (Experimental)
+        private Process HBProcess { get; set; }
+
+        private void encodeMonitorThread()
+        {
+            try
+            {
+                Parser encode = new Parser(HBProcess.StandardOutput.BaseStream);
+                encode.OnEncodeProgress += encode_OnEncodeProgress;
+                while (!encode.EndOfStream)
+                {
+                    encode.readEncodeStatus();
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString());
+            }
+        }
+
+        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new EncodeProgressEventHandler(encode_OnEncodeProgress),
+                    new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
+                return;
+            }
+            lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
+        }
+        #endregion
+
 
         // This is the END of the road ****************************************
     }
