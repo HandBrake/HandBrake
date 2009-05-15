@@ -3,7 +3,7 @@ dnl Created by Anjuta application wizard.
 
 AC_INIT(ghb, 0.1)
 
-AM_INIT_AUTOMAKE([1.9.6 foreign no-dist-gzip dist-bzip2 dist-zip])
+AM_INIT_AUTOMAKE([1.7.9 foreign dist-bzip2 dist-zip])
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
