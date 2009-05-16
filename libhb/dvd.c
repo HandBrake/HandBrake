@@ -533,9 +533,6 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
     for( i = 0, c = 1;
          i < vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts; i++ )
     {
-        int pgc_id_next, pgn_next;
-        pgc_t * pgc_next;
-
         chapter = calloc( sizeof( hb_chapter_t ), 1 );
         /* remember the on-disc chapter number */
         chapter->index = i + 1;
@@ -549,34 +546,20 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
         chapter->block_start =
             d->pgc->cell_playback[chapter->cell_start].first_sector;
 
-        /* End cell */
-        if( i != vts->vts_ptt_srpt->title[title->ttn-1].nr_of_ptts - 1 )
+        // if there are no more programs in this pgc, the end cell is the
+        // last cell. Otherwise it's the cell before the start cell of the
+        // next program.
+        if ( pgn == d->pgc->nr_of_programs )
         {
-            /* The cell before the starting cell of the next chapter,
-               or... */
-            pgc_id_next = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i+1].pgcn;
-            pgn_next    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[i+1].pgn;
-            pgc_next    = vts->vts_pgcit->pgci_srp[pgc_id_next-1].pgc;
-            chapter->cell_end = pgc_next->program_map[pgn_next-1] - 2;
-            if( chapter->cell_end < 0 )
-            {
-                /* Huh? */
-                free( chapter );
-                continue;
-            }
+            chapter->cell_end = d->pgc->nr_of_cells - 1;
         }
         else
         {
-            /* ... the last cell of the title */
-            chapter->cell_end = title->cell_end;
+            chapter->cell_end = d->pgc->program_map[pgn] - 2;;
         }
-        chapter->block_end =
-            d->pgc->cell_playback[chapter->cell_end].last_sector;
+        chapter->block_end = d->pgc->cell_playback[chapter->cell_end].last_sector;
 
         /* Block count, duration */
-        pgc_id = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgcn;
-        pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
-        d->pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
         chapter->block_count = 0;
         chapter->duration = 0;
 
