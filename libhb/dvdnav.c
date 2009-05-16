@@ -46,9 +46,9 @@ hb_dvd_func_t hb_dvdnav_func =
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
-static void PgcWalkInit( void );
+static void PgcWalkInit( uint32_t pgcn_map[8] );
 static int FindChapterIndex( hb_list_t * list, int pgcn, int pgn );
-static int NextPgcn( ifo_handle_t *ifo, int pgcn );
+static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[8] );
 static int FindNextCell( pgc_t *pgc, int cell_cur );
 static int dvdtime2msec( dvd_time_t * );
 
@@ -222,7 +222,8 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
     int            i;
 
     // Initialize map of visited pgc's to prevent loops
-    PgcWalkInit();
+    uint32_t pgcn_map[8];
+    PgcWalkInit( pgcn_map );
     pgcn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgcn;
     pgn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgn;
     if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
@@ -257,7 +258,7 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
         }
         *last_pgcn = pgcn;
         pgn = 1;
-    } while((pgcn = NextPgcn(ifo, pgcn)) != 0);
+    } while((pgcn = NextPgcn(ifo, pgcn, pgcn_map)) != 0);
     return duration;
 }
 
@@ -675,7 +676,8 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     }
 
     /* Chapters */
-    PgcWalkInit();
+    uint32_t pgcn_map[8];
+    PgcWalkInit( pgcn_map );
     c = 0;
     do
     {
@@ -693,7 +695,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
         }
 
         pgn = 1;
-    } while ((pgcn = NextPgcn(ifo, pgcn)) != 0);
+    } while ((pgcn = NextPgcn(ifo, pgcn, pgcn_map)) != 0);
 
     hb_log( "scan: title %d has %d chapters", t, c );
 
@@ -701,11 +703,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     count = hb_list_count( title->list_chapter );
     for (i = 0; i < count; i++)
     {
-        int pgcn_next, pgn_next;
-        pgc_t * pgc_next;
-        hb_chapter_t *chapter_next;
-        int pgc_cell_end;
-
         chapter = hb_list_item( title->list_chapter, i );
 
         pgcn = chapter->pgcn;
@@ -714,41 +711,19 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
         /* Start cell */
         chapter->cell_start  = pgc->program_map[pgn-1] - 1;
-        chapter->block_start =
-            pgc->cell_playback[chapter->cell_start].first_sector;
-        pgc_cell_end    = pgc->nr_of_cells - 1;
-
-        /* End cell */
-        if( i < count - 1 )
+        chapter->block_start = pgc->cell_playback[chapter->cell_start].first_sector;
+        // if there are no more programs in this pgc, the end cell is the
+        // last cell. Otherwise it's the cell before the start cell of the
+        // next program.
+        if ( pgn == pgc->nr_of_programs )
         {
-            /* The cell before the starting cell of the next chapter,
-               or... */
-            chapter_next = hb_list_item( title->list_chapter, i+1 );
-            pgcn_next = chapter_next->pgcn;
-            pgn_next = chapter_next->pgn;
-            pgc_next = ifo->vts_pgcit->pgci_srp[pgcn_next-1].pgc;
-            if (pgcn_next == pgcn)
-            {
-                chapter->cell_end = pgc_next->program_map[pgn_next-1] - 2;
-            }
-            else
-            {
-                chapter->cell_end = pgc_cell_end;
-            }
-            if( chapter->cell_end < 0 )
-            {
-                /* Huh? */
-                free( chapter );
-                continue;
-            }
+            chapter->cell_end = pgc->nr_of_cells - 1;
         }
         else
         {
-            /* ... the last cell of the title */
-            chapter->cell_end = pgc_cell_end;
+            chapter->cell_end = pgc->program_map[pgn] - 2;;
         }
-        chapter->block_end =
-            pgc->cell_playback[chapter->cell_end].last_sector;
+        chapter->block_end = pgc->cell_playback[chapter->cell_end].last_sector;
 
         /* Block count, duration */
         chapter->block_count = 0;
@@ -868,7 +843,7 @@ static void hb_dvdnav_stop( hb_dvd_t * e )
 static int hb_dvdnav_seek( hb_dvd_t * e, float f )
 {
     hb_dvdnav_t * d = &(e->dvdnav);
-    uint64_t sector;
+    uint64_t sector = f * d->title_block_count;
     int result, event, len;
     uint8_t buf[HB_DVD_READ_BUFFER_SIZE];
     int done = 0, ii;
@@ -876,6 +851,26 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
     if (d->stopped)
     {
         return 0;
+    }
+
+    // XXX the current version of libdvdnav can't seek outside the current
+    // PGC. Check if the place we're seeking to is in a different
+    // PGC. Position there & adjust the offset if so.
+    for ( ii = 0; ii < hb_list_count( d->list_chapter ); ++ii )
+    {
+        hb_chapter_t *chapter = hb_list_item( d->list_chapter, ii );
+        if ( chapter->block_start <= sector && sector <= chapter->block_end )
+        {
+            int32_t title, pgcn, pgn;
+            if (dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn ) != DVDNAV_STATUS_OK)
+                hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
+            if ( d->title != title || chapter->pgcn != pgcn )
+                if (dvdnav_program_play(d->dvdnav, d->title, chapter->pgcn, chapter->pgn) != DVDNAV_STATUS_OK)
+                    hb_log("dvdnav prog play err: %s", dvdnav_err_to_string(d->dvdnav));
+            // seek sectors are pgc-relative so remove the pgc start sector.
+            sector -= chapter->block_start;
+            break;
+        }
     }
 
     // dvdnav will not let you seek or poll current position
@@ -895,6 +890,7 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
         case DVDNAV_BLOCK_OK:
         case DVDNAV_CELL_CHANGE:
             done = 1;
+            break;
 
         case DVDNAV_STILL_FRAME:
             dvdnav_still_skip( d->dvdnav );
@@ -920,9 +916,8 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
         default:
             break;
         }
-    } while (!(event == DVDNAV_CELL_CHANGE || event == DVDNAV_BLOCK_OK));
+    }
 
-    sector = f * d->title_block_count;
     if (dvdnav_sector_search(d->dvdnav, sector, SEEK_SET) != DVDNAV_STATUS_OK)
     {
         hb_error( "dvd: dvdnav_sector_search failed - %s", 
@@ -1225,36 +1220,28 @@ static int FindNextCell( pgc_t *pgc, int cell_cur )
     return cell_next;
 }
 
-static uint8_t pgcn_map[1280];
-
 /***********************************************************************
  * NextPgcn
  ***********************************************************************
  * Assumes pgc and cell_cur are correctly set, and sets cell_next to the
  * cell to be read when we will be done with cell_cur.
+ * Since pg chains can be circularly linked (either from a read error or
+ * deliberately) pgcn_map tracks program chains we've already seen.
+ * There can be at most 255 PGCNs so we need 256 bits = 8 ints to map them.
  **********************************************************************/
-static int NextPgcn( ifo_handle_t *ifo, int pgcn )
+static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[8] )
 {
-    int byte;
-    uint8_t bit;
     int next_pgcn;
     pgc_t *pgc;
 
-    byte = pgcn >> 3;
-    bit = 1 << (pgcn & 0x7);
-    pgcn_map[byte] |= bit;
+    pgcn_map[pgcn >> 5] |= (1 << (pgcn & 31));
 
     pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
     next_pgcn = pgc->next_pgc_nr;
     if ( next_pgcn < 1 || next_pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
         return 0;
 
-    byte = next_pgcn >> 3;
-    bit = 1 << (pgcn & 0x7);
-    if (pgcn_map[byte] & bit)
-        return 0;
-    
-    return next_pgcn;
+    return pgcn_map[next_pgcn >> 5] & (1 << (next_pgcn & 31))? 0 : next_pgcn;
 }
 
 /***********************************************************************
@@ -1263,9 +1250,9 @@ static int NextPgcn( ifo_handle_t *ifo, int pgcn )
  * Pgc links can loop. I track which have been visited in a bit vector
  * Initialize the bit vector to empty.
  **********************************************************************/
-static void PgcWalkInit( void )
+static void PgcWalkInit( uint32_t pgcn_map[8] )
 {
-    memset(pgcn_map, 0, 128);
+    memset(pgcn_map, 0, sizeof(pgcn_map) );
 }
 
 /***********************************************************************
