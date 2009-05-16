@@ -43,12 +43,16 @@ hb_dvd_func_t hb_dvdnav_func =
     hb_dvdnav_set_angle
 };
 
+// there can be at most 999 PGCs per title. round that up to the nearest
+// power of two.
+#define MAX_PGCN 1024
+
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
-static void PgcWalkInit( uint32_t pgcn_map[8] );
+static void PgcWalkInit( uint32_t pgcn_map[MAX_PGCN/32] );
 static int FindChapterIndex( hb_list_t * list, int pgcn, int pgn );
-static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[8] );
+static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[MAX_PGCN/32] );
 static int FindNextCell( pgc_t *pgc, int cell_cur );
 static int dvdtime2msec( dvd_time_t * );
 
@@ -222,11 +226,11 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
     int            i;
 
     // Initialize map of visited pgc's to prevent loops
-    uint32_t pgcn_map[8];
+    uint32_t pgcn_map[MAX_PGCN/32];
     PgcWalkInit( pgcn_map );
     pgcn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgcn;
     pgn   = ifo->vts_ptt_srpt->title[ttn-1].ptt[pttn-1].pgn;
-    if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
+    if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp || pgcn >= MAX_PGCN)
     {
         hb_error( "invalid PGC ID %d, skipping", pgcn );
         return 0;
@@ -406,7 +410,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
 
     /* Get pgc */
-    if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
+    if ( pgcn < 1 || pgcn > ifo->vts_pgcit->nr_of_pgci_srp || pgcn >= MAX_PGCN)
     {
         hb_error( "invalid PGC ID %d for title %d, skipping", pgcn, t );
         goto fail;
@@ -676,7 +680,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     }
 
     /* Chapters */
-    uint32_t pgcn_map[8];
+    uint32_t pgcn_map[MAX_PGCN/32];
     PgcWalkInit( pgcn_map );
     c = 0;
     do
@@ -856,19 +860,32 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
     // XXX the current version of libdvdnav can't seek outside the current
     // PGC. Check if the place we're seeking to is in a different
     // PGC. Position there & adjust the offset if so.
+    hb_chapter_t *pgc_change = hb_list_item(d->list_chapter, 0 );
     for ( ii = 0; ii < hb_list_count( d->list_chapter ); ++ii )
     {
         hb_chapter_t *chapter = hb_list_item( d->list_chapter, ii );
+
+        if ( chapter->pgcn != pgc_change->pgcn )
+        {
+            // this chapter's in a different pgc from the previous - note the
+            // change so we can make sector offset's be pgc relative.
+            pgc_change = chapter;
+        }
         if ( chapter->block_start <= sector && sector <= chapter->block_end )
         {
+            // this chapter contains the sector we want - see if it's in a
+            // different pgc than the one we're currently in.
             int32_t title, pgcn, pgn;
             if (dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn ) != DVDNAV_STATUS_OK)
                 hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
             if ( d->title != title || chapter->pgcn != pgcn )
+            {
+                // this chapter is in a different pgc - switch to it.
                 if (dvdnav_program_play(d->dvdnav, d->title, chapter->pgcn, chapter->pgn) != DVDNAV_STATUS_OK)
                     hb_log("dvdnav prog play err: %s", dvdnav_err_to_string(d->dvdnav));
+            }
             // seek sectors are pgc-relative so remove the pgc start sector.
-            sector -= chapter->block_start;
+            sector -= pgc_change->block_start;
             break;
         }
     }
@@ -1227,9 +1244,8 @@ static int FindNextCell( pgc_t *pgc, int cell_cur )
  * cell to be read when we will be done with cell_cur.
  * Since pg chains can be circularly linked (either from a read error or
  * deliberately) pgcn_map tracks program chains we've already seen.
- * There can be at most 255 PGCNs so we need 256 bits = 8 ints to map them.
  **********************************************************************/
-static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[8] )
+static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[MAX_PGCN/32] )
 {
     int next_pgcn;
     pgc_t *pgc;
@@ -1238,7 +1254,7 @@ static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[8] )
 
     pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
     next_pgcn = pgc->next_pgc_nr;
-    if ( next_pgcn < 1 || next_pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
+    if ( next_pgcn < 1 || next_pgcn >= MAX_PGCN || next_pgcn > ifo->vts_pgcit->nr_of_pgci_srp )
         return 0;
 
     return pgcn_map[next_pgcn >> 5] & (1 << (next_pgcn & 31))? 0 : next_pgcn;
@@ -1250,7 +1266,7 @@ static int NextPgcn( ifo_handle_t *ifo, int pgcn, uint32_t pgcn_map[8] )
  * Pgc links can loop. I track which have been visited in a bit vector
  * Initialize the bit vector to empty.
  **********************************************************************/
-static void PgcWalkInit( uint32_t pgcn_map[8] )
+static void PgcWalkInit( uint32_t pgcn_map[MAX_PGCN/32] )
 {
     memset(pgcn_map, 0, sizeof(pgcn_map) );
 }
