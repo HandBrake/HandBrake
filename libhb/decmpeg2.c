@@ -618,11 +618,15 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->libmpeg2->title = w->title;
     }
 
-    // The reader found a chapter break, consume it completely, and remove it from the
-    // stream. We need to shift it.
+    // The reader found a chapter break. Remove it from the input 
+    // stream. If we're reading (as opposed to scanning) start looking
+    // for the next GOP start since that's where the chapter begins.
     if( (*buf_in)->new_chap )
     {
-        pv->libmpeg2->look_for_break = (*buf_in)->new_chap;
+        if ( pv->libmpeg2->job )
+        {
+            pv->libmpeg2->look_for_break = (*buf_in)->new_chap;
+        }
         (*buf_in)->new_chap = 0;
     }
 
