@@ -2483,9 +2483,6 @@ static int ffmpeg_codec_param( hb_stream_t *stream, int stream_index )
 // (the original scan stream was closed and no longer exists).
 static void ffmpeg_remap_stream( hb_stream_t *stream, hb_title_t *title )
 {
-    // tell ffmpeg we want a pts on every frame it returns
-    stream->ffmpeg_ic->flags |= AVFMT_FLAG_GENPTS;
-
     // all the video & audio came from the same stream so remapping
     // the video's stream slot takes care of everything.
     int slot = title->video_codec_param & (ffmpeg_sl_size - 1);
