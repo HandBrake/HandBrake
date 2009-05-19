@@ -530,7 +530,7 @@ static void SyncVideo( hb_work_object_t * w )
                                 *
                                 * fall through to display
                                 */
-                                if( ( sub->stop - sub->start ) < ( 3 * 90000 ) )
+                                if( ( sub->stop - sub->start ) < ( 2 * 90000 ) )
                                 {
                                     /*
                                      * Subtitle is on for less than three 
@@ -543,7 +543,7 @@ static void SyncVideo( hb_work_object_t * w )
                                      * only displays subs for 1 second - 
                                      * too fast to read.
                                      */
-                                    sub->stop = sub->start + ( 3 * 90000 );
+                                    sub->stop = sub->start + ( 2 * 90000 );
                                 
                                     sub2 = hb_fifo_see2( subtitle->fifo_raw );
                                 
