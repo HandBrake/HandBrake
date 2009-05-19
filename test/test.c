@@ -1655,6 +1655,9 @@ static int HandleEvents( hb_handle_t * h )
                  */
                 subtitle = hb_list_item( title->list_subtitle, sub-1 );
                 if( subtitle ) {
+                    if( subtitle_force ) {
+                        subtitle->force = subtitle_force;
+                    }
                     hb_list_add( job->list_subtitle, subtitle );
                 } else {
                     fprintf( stderr, "Could not find subtitle track %d, skipped\n", sub );
@@ -1708,11 +1711,6 @@ static int HandleEvents( hb_handle_t * h )
                 job->maxWidth = maxWidth;
             if (maxHeight)
                 job->maxHeight = maxHeight;
-
-            if( subtitle_force )
-            {
-                job->subtitle_force = subtitle_force;
-            }
 
             if( start_at_preview )
             {

@@ -86,6 +86,7 @@ gchar* ghb_settings_get_string(const GValue *settings, const gchar *key);
 gint ghb_settings_combo_int(const GValue *settings, const gchar *key);
 gdouble ghb_settings_combo_double(const GValue *settings, const gchar *key);
 const gchar* ghb_settings_combo_option(const GValue *settings, const gchar *key);
+const gchar* ghb_settings_combo_string(const GValue *settings, const gchar *key);
 
 GValue* ghb_widget_value(GtkWidget *widget);
 gchar* ghb_widget_string(GtkWidget *widget);

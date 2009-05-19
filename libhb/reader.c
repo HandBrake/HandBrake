@@ -527,7 +527,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
         subtitle =  hb_list_item( title->list_subtitle, i );
         if (id == subtitle->id) {
             subtitle->hits++;
-            if( !job->indepth_scan || job->subtitle_force )
+            if( !job->indepth_scan || subtitle->force )
             {
                 /*
                  * Pass the subtitles to be processed if we are not scanning, or if

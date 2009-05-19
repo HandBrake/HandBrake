@@ -89,6 +89,9 @@
 		<key>audio_list</key>
 		<array>
 		</array>
+		<key>subtitle_list</key>
+		<array>
+		</array>
 		<key>vquality_type_bitrate</key>
 		<false />
 		<key>vquality_type_constant</key>
@@ -222,8 +225,6 @@
 		<integer>0</integer>
 		<key>PictureWidth</key>
 		<integer>0</integer>
-		<key>SubtitlesForced</key>
-		<true />
 		<key>VideoFramerate</key>
 		<string>source</string>
 		<key>VideoGrayScale</key>
@@ -263,8 +264,17 @@
 		<integer>1</integer>
 		<key>SourceAudioLang</key>
 		<string>und</string>
-		<key>Subtitles</key>
-		<string>none</string>
+		<key>SubtitleList</key>
+		<array>
+			<dict>
+				<key>SubtitleLanguage</key>
+				<string>und</string>
+				<key>SubtitleForced</key>
+				<false />
+				<key>SubtitleBurned</key>
+				<true />
+			</dict>
+		</array>
 		<key>VideoTurboTwoPass</key>
 		<false />
 		<key>UsesPictureFilters</key>

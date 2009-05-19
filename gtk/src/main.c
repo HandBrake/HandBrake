@@ -376,6 +376,67 @@ bind_audio_tree_model (signal_user_data_t *ud)
 	g_debug("Done\n");
 }
 
+extern G_MODULE_EXPORT void subtitle_list_selection_changed_cb(void);
+extern G_MODULE_EXPORT void subtitle_forced_toggled_cb(void);
+extern G_MODULE_EXPORT void subtitle_burned_toggled_cb(void);
+
+// Create and bind the tree model to the tree view for the subtitle track list
+// Also, connect up the signal that lets us know the selection has changed
+static void
+bind_subtitle_tree_model (signal_user_data_t *ud)
+{
+	GtkCellRenderer *cell;
+	GtkTreeViewColumn *column;
+	GtkListStore *treestore;
+	GtkTreeView  *treeview;
+	GtkTreeSelection *selection;
+	GtkWidget *widget;
+
+	g_debug("bind_subtitle_tree_model ()\n");
+	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "subtitle_list"));
+	selection = gtk_tree_view_get_selection (treeview);
+	// 5 columns in model.  4 are visible, the other 1 is for storing
+	// values that I need
+	treestore = gtk_list_store_new(5, 
+									G_TYPE_STRING,
+									G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
+									G_TYPE_STRING, G_TYPE_STRING);
+	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
+
+	cell = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(
+									_("Track"), cell, "text", 0, NULL);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+
+	cell = gtk_cell_renderer_toggle_new();
+	column = gtk_tree_view_column_new_with_attributes(
+									_("Forced Only"), cell, "active", 1, NULL);
+	gtk_tree_view_column_set_max_width (column, 50);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	g_signal_connect(cell, "toggled", subtitle_forced_toggled_cb, ud);
+
+	cell = gtk_cell_renderer_toggle_new();
+	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
+	column = gtk_tree_view_column_new_with_attributes(
+									_("Burned In"), cell, "active", 2, NULL);
+	gtk_tree_view_column_set_max_width (column, 50);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	g_signal_connect(cell, "toggled", subtitle_burned_toggled_cb, ud);
+
+	cell = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(
+									_("Type"), cell, "text", 3, NULL);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+
+
+	g_signal_connect(selection, "changed", subtitle_list_selection_changed_cb, ud);
+	// Need to disable remove and update buttons since there are initially
+	// no selections
+	widget = GHB_WIDGET (ud->builder, "subtitle_remove");
+	gtk_widget_set_sensitive(widget, FALSE);
+	g_debug("Done\n");
+}
+
 extern G_MODULE_EXPORT void presets_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void presets_drag_cb(void);
 extern G_MODULE_EXPORT void presets_drag_motion_cb(void);
@@ -642,12 +703,13 @@ main (int argc, char *argv[])
 	buffer = gtk_text_view_get_buffer (textview);
 	g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
 
-	ghb_combo_init(ud->builder);
+	ghb_combo_init(ud);
 
 	g_debug("ud %p\n", ud);
 	g_debug("ud->builder %p\n", ud->builder);
 
 	bind_audio_tree_model(ud);
+	bind_subtitle_tree_model(ud);
 	bind_presets_tree_model(ud);
 	bind_queue_tree_model(ud);
 	bind_chapter_tree_model(ud);

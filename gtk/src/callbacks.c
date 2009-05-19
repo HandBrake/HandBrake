@@ -44,6 +44,7 @@
 #include "callbacks.h"
 #include "queuehandler.h"
 #include "audiohandler.h"
+#include "subtitlehandler.h"
 #include "resources.h"
 #include "settings.h"
 #include "presets.h"
@@ -1118,6 +1119,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		}
 		g_free(container);
 	}
+	ghb_subtitle_adjust_burn(ud);
 }
 
 static gchar*
@@ -1254,10 +1256,10 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	ghb_update_ui_combo_box (ud->builder, "AudioTrack", titleindex, FALSE);
-	ghb_update_ui_combo_box (ud->builder, "Subtitles", titleindex, FALSE);
+	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
+	ghb_update_ui_combo_box (ud, "SubtitleTrack", titleindex, FALSE);
 
-	ghb_update_from_preset(ud, "Subtitles");
+	ghb_set_pref_subtitle(titleindex, ud);
 	if (ghb_get_title_info (&tinfo, titleindex))
 	{
 		show_title_info(ud, &tinfo);
@@ -2019,7 +2021,7 @@ ghb_backend_events(signal_user_data_t *ud)
 
 		ghb_title_info_t tinfo;
 			
-		ghb_update_ui_combo_box(ud->builder, "title", 0, FALSE);
+		ghb_update_ui_combo_box(ud, "title", 0, FALSE);
 		titleindex = ghb_longest_title();
 		ghb_ui_update(ud, "title", ghb_int64_value(titleindex));
 

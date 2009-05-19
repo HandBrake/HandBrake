@@ -485,7 +485,9 @@ static void SyncVideo( hb_work_object_t * w )
                        when the second one starts */
                     sub2 = hb_fifo_see2( subtitle->fifo_raw );
                     if( sub2 && sub->stop > sub2->start )
+                    {
                         sub->stop = sub2->start;
+                    }
                     
                     // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld",
                     //       sub, cur->sequence, sub->sequence);
@@ -508,119 +510,159 @@ static void SyncVideo( hb_work_object_t * w )
                          * and we'll deal with it in the next block of
                          * code.
                          */
-                        break;
-                    }
-                    
-                    /*
-                     * The subtitle is older than this picture, trash it
-                     */
-                    sub = hb_fifo_get( subtitle->fifo_raw );
-                    hb_buffer_close( &sub );
-                }
-                
-                if( sub && sub->size == 0 )
-                {
-                    /* 
-                     * Continue immediately on subtitle EOF
-                     */
-                    break;
-                }
 
-                /*
-                 * There is a valid subtitle, is it time to display it?
-                 */
-                if( sub )
-                {
-                    if( sub->stop > sub->start)
-                    {
                         /*
-                         * Normal subtitle which ends after it starts, check to
-                         * see that the current video is between the start and end.
+                         * There is a valid subtitle, is it time to display it?
                          */
-                        if( cur->start > sub->start &&
-                            cur->start < sub->stop )
+                        if( sub->stop > sub->start)
                         {
                             /*
-                             * We should be playing this, so leave the
-                             * subtitle in place.
-                             *
-                             * fall through to display
+                             * Normal subtitle which ends after it starts, 
+                             * check to see that the current video is between 
+                             * the start and end.
                              */
-                            if( ( sub->stop - sub->start ) < ( 3 * 90000 ) )
+                            if( cur->start > sub->start &&
+                                cur->start < sub->stop )
                             {
                                 /*
-                                 * Subtitle is on for less than three seconds, extend
-                                 * the time that it is displayed to make it easier
-                                 * to read. Make it 3 seconds or until the next
-                                 * subtitle is displayed.
-                                 *
-                                 * This is in response to Indochine which only
-                                 * displays subs for 1 second - too fast to read.
-                                 */
-                                sub->stop = sub->start + ( 3 * 90000 );
-                                
-                                sub2 = hb_fifo_see2( subtitle->fifo_raw );
-                                
-                                if( sub2 && sub->stop > sub2->start )
+                                * We should be playing this, so leave the
+                                * subtitle in place.
+                                *
+                                * fall through to display
+                                */
+                                if( ( sub->stop - sub->start ) < ( 3 * 90000 ) )
                                 {
-                                    sub->stop = sub2->start;
+                                    /*
+                                     * Subtitle is on for less than three 
+                                     * seconds, extend the time that it is 
+                                     * displayed to make it easier to read. 
+                                     * Make it 3 seconds or until the next
+                                     * subtitle is displayed.
+                                     *
+                                     * This is in response to Indochine which 
+                                     * only displays subs for 1 second - 
+                                     * too fast to read.
+                                     */
+                                    sub->stop = sub->start + ( 3 * 90000 );
+                                
+                                    sub2 = hb_fifo_see2( subtitle->fifo_raw );
+                                
+                                    if( sub2 && sub->stop > sub2->start )
+                                    {
+                                        sub->stop = sub2->start;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                /*
+                                 * Defer until the play point is within 
+                                 * the subtitle
+                                 */
+                                sub = NULL;
                             }
                         }
                         else
                         {
                             /*
-                             * Defer until the play point is within the subtitle
+                             * The end of the subtitle is less than the start, 
+                             * this is a sign of a PTS discontinuity.
                              */
-                            sub = NULL;
+                            if( sub->start > cur->start )
+                            {
+                                /*
+                                 * we haven't reached the start time yet, or
+                                 * we have jumped backwards after having
+                                 * already started this subtitle.
+                                 */
+                                if( cur->start < sub->stop )
+                                {
+                                    /*
+                                     * We have jumped backwards and so should
+                                     * continue displaying this subtitle.
+                                     *
+                                     * fall through to display.
+                                     */
+                                }
+                                else
+                                {
+                                    /*
+                                     * Defer until the play point is 
+                                     * within the subtitle
+                                     */
+                                    sub = NULL;
+                                }
+                            } else {
+                                /*
+                                * Play this subtitle as the start is 
+                                * greater than our video point.
+                                *
+                                * fall through to display/
+                                */
+                            }
                         }
+                    	break;
                     }
                     else
                     {
+                    
                         /*
-                         * The end of the subtitle is less than the start, this is a
-                         * sign of a PTS discontinuity.
+                         * The subtitle is older than this picture, trash it
                          */
-                        if( sub->start > cur->start )
+                        sub = hb_fifo_get( subtitle->fifo_raw );
+                        hb_buffer_close( &sub );
+                    }
+                }
+                
+                /* If we have a subtitle for this picture, copy it */
+                /* FIXME: we should avoid this memcpy */
+                if( sub )
+                {
+                    if( sub->size > 0 )
+                    {
+                        if( subtitle->dest == RENDERSUB )
                         {
-                            /*
-                             * we haven't reached the start time yet, or
-                             * we have jumped backwards after having
-                             * already started this subtitle.
-                             */
-                            if( cur->start < sub->stop )
+                            if ( cur->sub == NULL )
                             {
                                 /*
-                                 * We have jumped backwards and so should
-                                 * continue displaying this subtitle.
-                                 *
-                                 * fall through to display.
+                                 * Tack onto the video buffer for rendering
                                  */
-                            }
-                            else
-                            {
-                                /*
-                                 * Defer until the play point is within the subtitle
-                                 */
-                                sub = NULL;
+                                cur->sub         = hb_buffer_init( sub->size );
+                                cur->sub->x      = sub->x;
+                                cur->sub->y      = sub->y;
+                                cur->sub->width  = sub->width;
+                                cur->sub->height = sub->height;
+                                memcpy( cur->sub->data, sub->data, sub->size ); 
                             }
                         } else {
                             /*
-                             * Play this subtitle as the start is greater than our
-                             * video point.
-                             *
-                             * fall through to display/
+                             * Pass-Through, pop it off of the raw queue, 
+                             * rewrite times and make it available to be 
+                             * reencoded.
                              */
+                            uint64_t sub_duration;
+                            sub = hb_fifo_get( subtitle->fifo_raw );
+                            sub_duration = sub->stop - sub->start;
+                            sub->start = cur->start;
+                            buf_tmp = hb_fifo_see( job->fifo_raw );
+                            int64_t duration = buf_tmp->start - cur->start;
+                            sub->stop = sub->start + duration;
+                            hb_fifo_push( subtitle->fifo_sync, sub );
+                        }
+                    } else {
+                        /*
+                        * EOF - consume for rendered, else pass through
+                        */
+                        if( subtitle->dest == RENDERSUB )
+                        {
+                            sub = hb_fifo_get( subtitle->fifo_raw );
+                            hb_buffer_close( &sub );
+                        } else {
+                            sub = hb_fifo_get( subtitle->fifo_raw );
+                            hb_fifo_push( subtitle->fifo_out, sub );
                         }
                     }
                 }
-            }
-            if( sub )
-            {
-                /*
-                 * Got a sub to display...
-                 */
-                break;
             }
         } // end subtitles
 
@@ -639,6 +681,7 @@ static void SyncVideo( hb_work_object_t * w )
          */
         buf_tmp = cur;
         pv->cur = cur = hb_fifo_get( job->fifo_raw );
+        cur->sub = NULL;
         pv->next_pts = cur->start;
         int64_t duration = cur->start - buf_tmp->start;
         if ( duration <= 0 )
@@ -657,51 +700,6 @@ static void SyncVideo( hb_work_object_t * w )
             // buffer (this may make it one frame late but we can't do any better).
             buf_tmp->new_chap = pv->chap_mark;
             pv->chap_mark = 0;
-        }
-
-        /* If we have a subtitle for this picture, copy it */
-        /* FIXME: we should avoid this memcpy */
-        if( sub && subtitle && 
-            subtitle->format == PICTURESUB )
-        {
-            if( sub->size > 0 )
-            {
-                if( subtitle->dest == RENDERSUB )
-                {
-                    /*
-                     * Tack onto the video buffer for rendering
-                     */
-                    buf_tmp->sub         = hb_buffer_init( sub->size );
-                    buf_tmp->sub->x      = sub->x;
-                    buf_tmp->sub->y      = sub->y;
-                    buf_tmp->sub->width  = sub->width;
-                    buf_tmp->sub->height = sub->height;
-                    memcpy( buf_tmp->sub->data, sub->data, sub->size ); 
-                } else {
-                    /*
-                     * Pass-Through, pop it off of the raw queue, rewrite times and
-                     * make it available to be reencoded.
-                     */
-                    uint64_t sub_duration;
-                    sub = hb_fifo_get( subtitle->fifo_raw );
-                    sub_duration = sub->stop - sub->start;
-                    sub->start = buf_tmp->start;
-                    sub->stop = sub->start + duration;
-                    hb_fifo_push( subtitle->fifo_sync, sub );
-                }
-            } else {
-                /*
-                 * EOF - consume for rendered, else pass through
-                 */
-                if( subtitle->dest == RENDERSUB )
-                {
-                    sub = hb_fifo_get( subtitle->fifo_raw );
-                    hb_buffer_close( &sub );
-                } else {
-                    sub = hb_fifo_get( subtitle->fifo_raw );
-                    hb_fifo_push( subtitle->fifo_out, sub );
-                }
-            }
         }
 
         /* Push the frame to the renderer */

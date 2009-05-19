@@ -170,6 +170,12 @@ ghb_settings_combo_option(const GValue *settings, const gchar *key)
 	return ghb_lookup_combo_option(key, ghb_settings_get_value(settings, key));
 }
 
+const gchar*
+ghb_settings_combo_string(const GValue *settings, const gchar *key)
+{
+	return ghb_lookup_combo_string(key, ghb_settings_get_value(settings, key));
+}
+
 // Map widget names to setting keys
 // Widgets that map to settings have names
 // of this format: s_<setting key>

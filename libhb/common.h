@@ -238,7 +238,6 @@ struct hb_job_s
 
     int indepth_scan;
     hb_subtitle_t ** select_subtitle;
-    int subtitle_force;
     char * native_language;
 
     int             angle;              // dvd angle to encode
@@ -445,6 +444,7 @@ struct hb_subtitle_s
     enum subtype { PICTURESUB, TEXTSUB } format;
     enum subsource { VOBSUB, SRTSUB, CC608SUB, CC708SUB } source;
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
+    int  force;
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */
@@ -638,6 +638,9 @@ struct hb_work_object_s
 
     /* Pointer hb_audio_t so we have access to the info in the audio worker threads. */
     hb_audio_t        * audio;
+
+    /* Pointer hb_subtitle_t so we have access to the info in the subtitle worker threads. */
+    hb_subtitle_t     * subtitle;
 
     hb_work_private_t * private_data;
 

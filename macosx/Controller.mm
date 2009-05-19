@@ -2615,10 +2615,6 @@ fWorkingCount = 0;
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
     //[self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
     [self prepareJob];
-    if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
-        job->subtitle_force = 1;
-    else
-        job->subtitle_force = 0;
     
     /*
      * If scanning we need to do some extra setup of the job.
@@ -3217,6 +3213,10 @@ fWorkingCount = 0;
         job->indepth_scan = 0;
         hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, 
                                                                   [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2 );
+        if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
+            subtitle->force = 1;
+        else
+            subtitle->force = 0;
         hb_list_add( job->list_subtitle, subtitle );
         break;
     }

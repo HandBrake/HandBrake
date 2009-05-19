@@ -619,11 +619,15 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
         lang = lang_for_code( ifo->vtsi_mat->vts_subp_attr[i].lang_code );
 
         subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+        subtitle->track = i+1;
         subtitle->id = ( ( 0x20 + position ) << 8 ) | 0xbd;
         snprintf( subtitle->lang, sizeof( subtitle->lang ), "%s",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name);
         snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
                   lang->iso639_2);
+        subtitle->format = PICTURESUB;
+        subtitle->source = VOBSUB;
+        subtitle->dest   = RENDERSUB;  // By default render (burn-in) the VOBSUB.
 
         subtitle->type = lang_extension;
 

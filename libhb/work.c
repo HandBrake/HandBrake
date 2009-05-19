@@ -501,16 +501,16 @@ static void do_job( hb_job_t * job, int cpu_count )
              *
              * select_subtitle implies that we did a scan.
              */
-            if( !job->indepth_scan && job->subtitle_force &&
+            if( !job->indepth_scan && subtitle->force &&
                 job->select_subtitle )
             {
                 if( subtitle->forced_hits == 0 )
                 {
-                    job->subtitle_force = 0;
+                    subtitle->force = 0;
                 }
             }
 
-            if( (!job->indepth_scan || job->subtitle_force) && 
+            if( (!job->indepth_scan || subtitle->force) && 
                 subtitle->source == VOBSUB ) {
                 /*
                  * Don't add threads for subtitles when we are scanning, unless
@@ -519,6 +519,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 w = hb_get_work( WORK_DECVOBSUB );
                 w->fifo_in  = subtitle->fifo_in;
                 w->fifo_out = subtitle->fifo_raw;
+                w->subtitle = subtitle;
                 hb_list_add( job->list_work, w );
             }
 
@@ -541,6 +542,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 w = hb_get_work( WORK_ENCVOBSUB );
                 w->fifo_in  = subtitle->fifo_sync;
                 w->fifo_out = subtitle->fifo_out;
+                w->subtitle = subtitle;
                 hb_list_add( job->list_work, w );
             }
         }

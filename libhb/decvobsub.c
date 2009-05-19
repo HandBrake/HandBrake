@@ -8,27 +8,27 @@
 
 struct hb_work_private_s
 {
-    hb_job_t * job;
+    hb_job_t    * job;
 
-    uint8_t    buf[0xFFFF];
-    int        size_sub;
-    int        size_got;
-    int        size_rle;
-    int64_t    pts;
-    int64_t    pts_start;
-    int64_t    pts_stop;
-    int        pts_forced;
-    int        x;
-    int        y;
-    int        width;
-    int        height;
-    int        stream_id;
+    hb_buffer_t * buf;
+    int           size_sub;
+    int           size_got;
+    int           size_rle;
+    int64_t       pts;
+    int64_t       pts_start;
+    int64_t       pts_stop;
+    int           pts_forced;
+    int           x;
+    int           y;
+    int           width;
+    int           height;
+    int           stream_id;
 
-    int        offsets[2];
-    uint8_t    lum[4];
-    uint8_t    chromaU[4];
-    uint8_t    chromaV[4];
-    uint8_t    alpha[4];
+    int           offsets[2];
+    uint8_t       lum[4];
+    uint8_t       chromaU[4];
+    uint8_t       chromaV[4];
+    uint8_t       alpha[4];
 };
 
 static hb_buffer_t * Decode( hb_work_object_t * );
@@ -76,7 +76,10 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->size_sub = size_sub;
             pv->size_rle = size_rle;
 
-            memcpy( pv->buf, in->data, in->size );
+            pv->buf      = hb_buffer_init( 0xFFFF );
+            memcpy( pv->buf->data, in->data, in->size );
+            pv->buf->id = in->id;
+            pv->buf->sequence = in->sequence;
             pv->size_got = in->size;
             pv->pts      = in->start;
         }
@@ -86,7 +89,9 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /* We are waiting for the end of the current subtitle */
         if( in->size <= pv->size_sub - pv->size_got )
         {
-            memcpy( pv->buf + pv->size_got, in->data, in->size );
+            memcpy( pv->buf->data + pv->size_got, in->data, in->size );
+            pv->buf->id = in->id;
+            pv->buf->sequence = in->sequence;
             pv->size_got += in->size;
             if( in->start >= 0 )
             {
@@ -99,11 +104,14 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if( pv->size_sub && pv->size_sub == pv->size_got )
     {
+        pv->buf->size = pv->size_sub;
+
         /* We got a complete subtitle, decode it */
         *buf_out = Decode( w );
 
         if( buf_out && *buf_out )
         {
+            (*buf_out)->id = in->id;
             (*buf_out)->sequence = in->sequence;
         }
 
@@ -145,6 +153,7 @@ static void ParseControls( hb_work_object_t * w )
     hb_job_t * job = pv->job;
     hb_title_t * title = job->title;
     hb_subtitle_t * subtitle;
+    uint8_t * buf = pv->buf->data;
 
     int i, n;
     int command;
@@ -161,12 +170,12 @@ static void ParseControls( hb_work_object_t * w )
 
     for( i = pv->size_rle; ; )
     {
-        date = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
-        next = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
+        date = ( buf[i] << 8 ) | buf[i+1]; i += 2;
+        next = ( buf[i] << 8 ) | buf[i+1]; i += 2;
 
         for( ;; )
         {
-            command = pv->buf[i++];
+            command = buf[i++];
 
             /*
              * There are eight commands available for
@@ -224,10 +233,10 @@ static void ParseControls( hb_work_object_t * w )
                     int colors[4];
                     int j;
 
-                    colors[0] = (pv->buf[i+0]>>4)&0x0f;
-                    colors[1] = (pv->buf[i+0])&0x0f;
-                    colors[2] = (pv->buf[i+1]>>4)&0x0f;
-                    colors[3] = (pv->buf[i+1])&0x0f;
+                    colors[0] = (buf[i+0]>>4)&0x0f;
+                    colors[1] = (buf[i+0])&0x0f;
+                    colors[2] = (buf[i+1]>>4)&0x0f;
+                    colors[3] = (buf[i+1])&0x0f;
 
                     for( j = 0; j < 4; j++ )
                     {
@@ -267,10 +276,10 @@ static void ParseControls( hb_work_object_t * w )
                      */
                     uint8_t    alpha[4];
 
-                    alpha[3] = (pv->buf[i+0]>>4)&0x0f;
-                    alpha[2] = (pv->buf[i+0])&0x0f;
-                    alpha[1] = (pv->buf[i+1]>>4)&0x0f;
-                    alpha[0] = (pv->buf[i+1])&0x0f;
+                    alpha[3] = (buf[i+0]>>4)&0x0f;
+                    alpha[2] = (buf[i+0])&0x0f;
+                    alpha[1] = (buf[i+1]>>4)&0x0f;
+                    alpha[0] = (buf[i+1])&0x0f;
 
 
                     int lastAlpha = pv->alpha[3] + pv->alpha[2] + pv->alpha[1] + pv->alpha[0];
@@ -296,17 +305,17 @@ static void ParseControls( hb_work_object_t * w )
                 }
                 case 0x05: // 0x05 - SET_DAREA - defines the display area
                 {
-                    pv->x     = (pv->buf[i+0]<<4) | ((pv->buf[i+1]>>4)&0x0f);
-                    pv->width = (((pv->buf[i+1]&0x0f)<<8)| pv->buf[i+2]) - pv->x + 1;
-                    pv->y     = (pv->buf[i+3]<<4)| ((pv->buf[i+4]>>4)&0x0f);
-                    pv->height = (((pv->buf[i+4]&0x0f)<<8)| pv->buf[i+5]) - pv->y + 1;
+                    pv->x     = (buf[i+0]<<4) | ((buf[i+1]>>4)&0x0f);
+                    pv->width = (((buf[i+1]&0x0f)<<8)| buf[i+2]) - pv->x + 1;
+                    pv->y     = (buf[i+3]<<4)| ((buf[i+4]>>4)&0x0f);
+                    pv->height = (((buf[i+4]&0x0f)<<8)| buf[i+5]) - pv->y + 1;
                     i += 6;
                     break;
                 }
                 case 0x06: // 0x06 - SET_DSPXA - defines the pixel data addresses
                 {
-                    pv->offsets[0] = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
-                    pv->offsets[1] = ( pv->buf[i] << 8 ) | pv->buf[i+1]; i += 2;
+                    pv->offsets[0] = ( buf[i] << 8 ) | buf[i+1]; i += 2;
+                    pv->offsets[1] = ( buf[i] << 8 ) | buf[i+1]; i += 2;
                     break;
                 }
             }
@@ -475,7 +484,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Get infos about the subtitle */
     ParseControls( w );
 
-    if( job->indepth_scan || ( job->subtitle_force && pv->pts_forced == 0 ) )
+    if( job->indepth_scan || ( w->subtitle->force && pv->pts_forced == 0 ) )
     {
         /*
          * Don't encode subtitles when doing a scan.
@@ -486,11 +495,18 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         return NULL;
     }
 
+    if (w->subtitle->dest == PASSTHRUSUB)
+    {
+        pv->buf->start  = pv->pts_start;
+        pv->buf->stop   = pv->pts_stop;
+        return pv->buf;
+    }
+
     /* Do the actual decoding now */
     buf_raw = malloc( ( pv->width * pv->height ) * 4 );
 
 #define GET_NEXT_NIBBLE code = ( code << 4 ) | ( ( ( *offset & 1 ) ? \
-( pv->buf[((*offset)>>1)] & 0xF ) : ( pv->buf[((*offset)>>1)] >> 4 ) ) ); \
+( pv->buf->data[((*offset)>>1)] & 0xF ) : ( pv->buf->data[((*offset)>>1)] >> 4 ) ) ); \
 (*offset)++
 
     offsets[0] = pv->offsets[0] * 2;
@@ -546,6 +562,8 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
             (*offset)++;
         }
     }
+
+    hb_buffer_close( &pv->buf );
 
     /* Crop subtitle (remove transparent borders) */
     buf = CropSubtitle( w, buf_raw );

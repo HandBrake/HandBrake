@@ -34,6 +34,27 @@ struct hb_mux_data_s
     int       sub_format;
 };
 
+static int yuv2rgb(int yuv)
+{
+    double y, Cr, Cb;
+    int r, g, b;
+
+    y =  (yuv >> 16) & 0xff;
+    Cr = (yuv >>  8) & 0xff;
+    Cb = (yuv)       & 0xff;
+
+    r = 1.164 * (y - 16)                      + 2.018 * (Cb - 128);
+    g = 1.164 * (y - 16) - 0.813 * (Cr - 128) - 0.391 * (Cb - 128);
+    b = 1.164 * (y - 16) + 1.596 * (Cr - 128);
+    r = (r < 0) ? 0 : r;
+    g = (g < 0) ? 0 : g;
+    b = (b < 0) ? 0 : b;
+    r = (r > 255) ? 255 : r;
+    g = (g > 255) ? 255 : g;
+    b = (b > 255) ? 255 : b;
+    return (r << 16) | (g << 8) | b;
+}
+
 /**********************************************************************
  * MKVInit
  **********************************************************************
@@ -48,7 +69,7 @@ static int MKVInit( hb_mux_object_t * m )
 
     uint8_t         *avcC = NULL;
     uint8_t         default_track_flag = 1;
-    int             avcC_len, i;
+    int             avcC_len, i, j;
     ogg_packet      *ogg_headers[3];
     mk_TrackConfig *track;
 
@@ -261,7 +282,7 @@ static int MKVInit( hb_mux_object_t * m )
     for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         hb_subtitle_t * subtitle;
-        uint32_t      * palette;
+        uint32_t        rgb[16];
         char            subidx[2048];
         int             len;
 
@@ -270,28 +291,39 @@ static int MKVInit( hb_mux_object_t * m )
             continue;
 
         memset(track, 0, sizeof(mk_TrackConfig));
+        switch (subtitle->format)
+        {
+            case PICTURESUB:
+                track->codecID = MK_SUBTITLE_VOBSUB;
+                for (j = 0; j < 16; j++)
+                    rgb[j] = yuv2rgb(title->palette[j]);
+                len = snprintf(subidx, 2048, subidx_fmt, 
+                        title->width, title->height,
+                        0, 0, "OFF",
+                        rgb[0], rgb[1], rgb[2], rgb[3],
+                        rgb[4], rgb[5], rgb[6], rgb[7],
+                        rgb[8], rgb[9], rgb[10], rgb[11],
+                        rgb[12], rgb[13], rgb[14], rgb[15]);
+                track->codecPrivate = subidx;
+                track->codecPrivateSize = len + 1;
+                break;
+            case TEXTSUB:
+                track->codecID = MK_SUBTITLE_UTF8;
+                break;
+            default:
+                continue;
+        }
 
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );
         subtitle->mux_data = mux_data;
         mux_data->subtitle = 1;
         mux_data->sub_format = subtitle->format;
         
-        palette = title->palette;
-        len = snprintf(subidx, 2048, subidx_fmt, title->width, title->height,
-                 0, 0, "OFF",
-                 palette[0], palette[1], palette[2], palette[3],
-                 palette[4], palette[5], palette[6], palette[7],
-                 palette[8], palette[9], palette[10], palette[11],
-                 palette[12], palette[13], palette[14], palette[15]);
-        track->codecPrivate = subidx;
-        track->codecPrivateSize = len + 1;
-        track->codecID = MK_SUBTITLE_VOBSUB;
         track->flagEnabled = 1;
         track->trackType = MK_TRACK_SUBTITLE;
         track->language = subtitle->iso639_2;
 
         mux_data->track = mk_createTrack(m->file, track);
-
     }
 
     if( mk_writeHeader( m->file, "HandBrake " HB_PROJECT_VERSION) < 0 )
@@ -362,19 +394,33 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
             mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1);
+            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
             return 0;
         }
     }
     else if ( mux_data->subtitle )
     {
         timecode = buf->start * TIMECODE_SCALE;
+        if( mk_startFrame(m->file, mux_data->track) < 0)
+        {
+            hb_error( "Failed to write frame to output file, Disk Full?" );
+            *job->die = 1;
+        }
         if( mux_data->sub_format == TEXTSUB )
         {
-            hb_log("MuxMKV: Text Sub:%lld: %s", buf->start, buf->data);
-            // TODO: add CC data to track
-            return 0;
+            uint64_t   duration;
+
+            duration = buf->stop * TIMECODE_SCALE - timecode;
+            mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
+            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         }
+        else
+        {
+            mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
+            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
+        }
+        mk_flushFrame(m->file, mux_data->track);
+        return 0;
     }
     else
     {
@@ -391,7 +437,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 *job->die = 1;
             }
             mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1);
+            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
             return 0;
         }
     }
@@ -403,7 +449,10 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     }
     mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
     mk_setFrameFlags(m->file, mux_data->track, timecode,
-                     ((job->vcodec == HB_VCODEC_X264 && mux_data == job->mux_data) ? (buf->frametype == HB_FRAME_IDR) : ((buf->frametype & HB_FRAME_KEY) != 0)) );
+                     ((job->vcodec == HB_VCODEC_X264 && 
+                       mux_data == job->mux_data) ? 
+                            (buf->frametype == HB_FRAME_IDR) : 
+                            ((buf->frametype & HB_FRAME_KEY) != 0)), 0 );
     return 0;
 }
 

@@ -191,6 +191,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
     if( buffer_pool && b->data && !hb_fifo_is_full( buffer_pool ) )
     {
         hb_fifo_push_head( buffer_pool, b );
+        *_b = NULL;
         return;
     }
     /* either the pool is full or this size doesn't use a pool - free the buf */

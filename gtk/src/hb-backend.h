@@ -98,7 +98,7 @@ void ghb_vquality_range(
 	gint *digits,
 	gboolean *inverted);
 //const gchar* ghb_get_rate_string(gint rate, gint type);
-void ghb_combo_init(GtkBuilder *builder);
+void ghb_combo_init(signal_user_data_t *ud);
 void ghb_backend_init(gint debug);
 void ghb_backend_close(void);
 void ghb_add_job(GValue *js, gint unique_id);
@@ -136,10 +136,12 @@ void ghb_set_passthru_bitrate_opts(GtkBuilder *builder, gint bitrate);
 void ghb_set_default_bitrate_opts(GtkBuilder *builder, gint last_rate);
 void ghb_grey_combo_options(GtkBuilder *builder);
 void ghb_update_ui_combo_box(
-	GtkBuilder *builder, const gchar *name, gint user_data, gboolean all);
+	signal_user_data_t *ud, const gchar *name, gint user_data, gboolean all);
 gint ghb_find_audio_track(
-	gint titleindex, const gchar *lang, 
-	gint acodec, GHashTable *track_indices);
+	gint titleindex, const gchar *lang, gint acodec, GHashTable *track_indices);
+gint ghb_find_subtitle_track(
+	gint titleindex, const gchar *lang, GHashTable *track_indices);
+gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_longest_title(void);
 gchar* ghb_build_x264opts_string(GValue *settings);
 GdkPixbuf* ghb_get_preview_image(
@@ -148,6 +150,8 @@ GdkPixbuf* ghb_get_preview_image(
 gint ghb_calculate_target_bitrate(GValue *settings, gint titleindex);
 gchar* ghb_dvd_volname(const gchar *device);
 gint ghb_get_title_number(gint titleindex);
+gint ghb_subtitle_track_source(signal_user_data_t *ud, gint track);
+const char* ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track);
 
 gboolean ghb_validate_vquality(GValue *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
@@ -155,9 +159,10 @@ gboolean ghb_validate_video(signal_user_data_t *ud);
 gboolean ghb_validate_filters(signal_user_data_t *ud);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);
 void ghb_hb_cleanup(gboolean partial);
-gint ghb_lookup_combo_int(const gchar *name, const GValue *acodec);
-gdouble ghb_lookup_combo_double(const gchar *name, const GValue *acodec);
-const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *acodec);
+gint ghb_lookup_combo_int(const gchar *name, const GValue *gval);
+gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
+const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
+const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
 
 #endif // _HBBACKEND_H_
