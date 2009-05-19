@@ -34,7 +34,7 @@ define import.CONTRIB.defs
     ##
     ## target: extract
     ##
-    $(1).EXTRACT.tarbase = $$(patsubst %.tar.gz,%,$$(notdir $$($(1).FETCH.url)))
+    $(1).EXTRACT.tarbase = $$(foreach x,tar.bz2 tar.gz,$$(patsubst %.$$(x),%,$$(filter %.$$(x),$$(notdir $$($(1).FETCH.url)))))
     $(1).EXTRACT.dir/    = $$($(1).build/)$$($(1).EXTRACT.tarbase)/
     $(1).EXTRACT.target  = $$($(1).build/).stamp.extract
     define $(1).EXTRACT
