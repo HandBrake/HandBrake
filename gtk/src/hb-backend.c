@@ -1028,11 +1028,15 @@ ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 	const gchar * name = "Unknown";
 
 	if (track == -2)
-		return CC608SUB;
-	if (track < 0)
-		return VOBSUB;
-	if (track < 0)
+	{
+		name = "Text";
 		goto done;
+	}
+	if (track == -1)
+	{
+		name = "Bitmap";
+		goto done;
+	}
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	if (titleindex < 0)
@@ -1042,7 +1046,8 @@ ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 	hb_title_t * title;
 	hb_subtitle_t * sub;
 	
-	if (h_scan == NULL) return VOBSUB;
+	if (h_scan == NULL) 
+		goto done;
 	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
 		goto done;

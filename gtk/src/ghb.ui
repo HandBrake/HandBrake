@@ -2130,6 +2130,8 @@
                               <object class="GtkAlignment" id="alignment57">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="xalign">0</property>
+                                <property name="xscale">0</property>
                                 <property name="top_padding">6</property>
                                 <property name="bottom_padding">2</property>
                                 <property name="left_padding">12</property>
@@ -2272,7 +2274,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkComboBox" id="SubtitleTrack">
-                                                <property name="width_request">150</property>
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <signal handler="subtitle_track_changed_cb" name="changed"/>

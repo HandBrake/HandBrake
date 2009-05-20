@@ -93,11 +93,14 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each language.
 		track = ghb_find_subtitle_track(titleindex, lang, track_indices);
-		ghb_settings_set_int(subtitle, "SubtitleTrack", track);
-		// Add to subtitle list
-		add_pref(ud, subtitle);
-		ghb_ui_update(ud, "SubtitleTrack", ghb_int64_value(track));
 		g_free(lang);
+		if (track >= 0)
+		{
+			ghb_settings_set_int(subtitle, "SubtitleTrack", track);
+			// Add to subtitle list
+			add_pref(ud, subtitle);
+			ghb_ui_update(ud, "SubtitleTrack", ghb_int64_value(track));
+		}
 	}
 	g_hash_table_destroy(track_indices);
 }
