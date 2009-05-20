@@ -3335,6 +3335,60 @@ ghb_validate_video(signal_user_data_t *ud)
 }
 
 gboolean
+ghb_validate_subtitles(signal_user_data_t *ud)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+	gchar *message;
+
+	if (h_scan == NULL) return FALSE;
+	list = hb_get_titles( h_scan );
+	if( !hb_list_count( list ) )
+	{
+		/* No valid title, stop right there */
+		g_message("No title found.\n");
+		return FALSE;
+	}
+
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
+    title = hb_list_item( list, titleindex );
+	if (title == NULL) return FALSE;
+	gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+
+	const GValue *slist, *settings;
+	gint count, ii, track, source;
+	gboolean burned;
+
+	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
+	count = ghb_array_len(slist);
+	for (ii = 0; ii < count; ii++)
+	{
+		settings = ghb_array_get_nth(slist, ii);
+		track = ghb_settings_combo_int(settings, "SubtitleTrack");
+		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
+		source = ghb_subtitle_track_source(ud, track);
+		if (!burned && mux == HB_MUX_MP4 && source == VOBSUB)
+		{
+			// MP4 can only handle burned vobsubs.  make sure there isn't
+			// already something burned in the list
+			message = g_strdup_printf(
+			"Your chosen container does not support soft bitmap subtitles.\n\n"
+				"You should change your subtitle selections.\n"
+				"If you continue, some subtitles will be lost.");
+			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+			{
+				g_free(message);
+				return FALSE;
+			}
+			g_free(message);
+		}
+	}
+	return TRUE;
+}
+
+gboolean
 ghb_validate_audio(signal_user_data_t *ud)
 {
 	hb_list_t  * list;
@@ -3949,7 +4003,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *ssettings;
-		gboolean burned;
+		gboolean burned, one_burned = FALSE;
 
 		ssettings = ghb_array_get_nth(subtitle_list, ii);
 
@@ -3970,6 +4024,19 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 					subt->format == PICTURESUB)
 				{
 					subt->dest = PASSTHRUSUB;
+				}
+				else if (!burned && job->mux == HB_MUX_MP4 && 
+					subt->format == PICTURESUB)
+				{
+					// Skip any non-burned vobsubs when output is mp4
+					continue;
+				}
+				else if (subt->format == PICTURESUB)
+				{
+					// Only allow one subtitle to be burned into the video
+					if (one_burned)
+						continue;
+					one_burned = TRUE;
 				}
 				subt->force = ghb_settings_get_boolean(ssettings, "SubtitleForced");
 				hb_list_add(job->list_subtitle, subt);

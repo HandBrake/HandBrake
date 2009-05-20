@@ -155,6 +155,7 @@ const char* ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track);
 
 gboolean ghb_validate_vquality(GValue *settings);
 gboolean ghb_validate_audio(signal_user_data_t *ud);
+gboolean ghb_validate_subtitles(signal_user_data_t *ud);
 gboolean ghb_validate_video(signal_user_data_t *ud);
 gboolean ghb_validate_filters(signal_user_data_t *ud);
 gboolean ghb_validate_filter_string(const gchar *str, gint max_fields);

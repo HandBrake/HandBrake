@@ -625,6 +625,11 @@ validate_settings(signal_user_data_t *ud)
 	{
 		return FALSE;
 	}
+	// Validate audio settings
+	if (!ghb_validate_subtitles(ud))
+	{
+		return FALSE;
+	}
 	// Validate video settings
 	if (!ghb_validate_video(ud))
 	{

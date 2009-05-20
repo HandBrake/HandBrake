@@ -3225,7 +3225,7 @@ no-dct-decimate=0:cabac=1</property>
             </child>
             <child>
               <object class="GtkProgressBar" id="progressbar">
-                <property name="height_request">16</property>
+                <property name="height_request">20</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="text" translatable="yes"/>
@@ -5321,7 +5321,7 @@ the required multiple.</property>
                         </child>
                         <child>
                           <object class="GtkProgressBar" id="live_encode_progress">
-                            <property name="height_request">16</property>
+                            <property name="height_request">20</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                           </object>
