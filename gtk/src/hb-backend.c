@@ -1349,6 +1349,8 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
 	g_debug("init_combo_box() %s\n", name);
 	// First modify the combobox model to allow greying out of options
 	combo = GTK_COMBO_BOX(GHB_WIDGET(builder, name));
+	if (combo == NULL)
+		return;
 	// Store contains:
 	// 1 - String to display
 	// 2 - bool indicating whether the entry is selectable (grey or not)
@@ -1680,7 +1682,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 }
 
 void
-subtitle_opts_set(signal_user_data_t *ud, const gchar *name, gint titleindex)
+ghb_subtitle_track_model(signal_user_data_t *ud, gint titleindex)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
@@ -1689,9 +1691,7 @@ subtitle_opts_set(signal_user_data_t *ud, const gchar *name, gint titleindex)
 	hb_subtitle_t * subtitle;
 	gint ii, count = 0;
 	
-	g_debug("subtitle_opts_set () %s\n", name);
-	store = get_combo_box_store(ud->builder, name);
-	gtk_list_store_clear(store);
+	g_debug("ghb_subtitle_track_model ()\n");
 	if (h_scan != NULL)
 	{
 		list = hb_get_titles( h_scan );
@@ -1712,6 +1712,23 @@ subtitle_opts_set(signal_user_data_t *ud, const gchar *name, gint titleindex)
 	{
 		subtitle_opts.count = LANG_TABLE_SIZE+2;
 		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE+2)*sizeof(options_map_t));
+	}
+	if (ud->subtitle_track_model == NULL)
+	{
+		// Store contains:
+		// 1 - String to display
+		// 2 - bool indicating whether the entry is selectable (grey or not)
+		// 3 - String that is used for presets
+		// 4 - Int value determined by backend
+		// 5 - String value determined by backend
+		store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, 
+							   G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
+		ud->subtitle_track_model = store;
+	}
+	else
+	{
+		store = ud->subtitle_track_model;
+		gtk_list_store_clear(store);
 	}
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
@@ -2039,7 +2056,7 @@ ghb_pick_subtitle_track(signal_user_data_t *ud)
 		{
 			// Already in use, pick another
 			candidate++;
-			if (candidate >= subtitle_opts.count)
+			if (candidate >= subtitle_opts.count-1)
 			{
 				candidate = 0;
 			}
@@ -2223,7 +2240,6 @@ ghb_update_ui_combo_box(
 		video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		mix_opts_set(ud->builder, "AudioMixdown");
 		language_opts_set(ud->builder, "SourceAudioLang");
-		subtitle_opts_set(ud, "SubtitleTrack", user_data);
 		title_opts_set(ud->builder, "title");
 		audio_track_opts_set(ud->builder, "AudioTrack", user_data);
 		generic_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
@@ -2256,8 +2272,6 @@ ghb_update_ui_combo_box(
 			mix_opts_set(ud->builder, "AudioMixdown");
 		else if (strcmp(name, "SourceAudioLang") == 0)
 			language_opts_set(ud->builder, "SourceAudioLang");
-		else if (strcmp(name, "SubtitleTrack") == 0)
-			subtitle_opts_set(ud, "SubtitleTrack", user_data);
 		else if (strcmp(name, "title") == 0)
 			title_opts_set(ud->builder, "title");
 		else if (strcmp(name, "AudioTrack") == 0)
@@ -2281,7 +2295,6 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "VideoFramerate");
 	init_combo_box(builder, "AudioMixdown");
 	init_combo_box(builder, "SourceAudioLang");
-	init_combo_box(builder, "SubtitleTrack");
 	init_combo_box(builder, "title");
 	init_combo_box(builder, "AudioTrack");
 	for (ii = 0; combo_name_map[ii].name != NULL; ii++)

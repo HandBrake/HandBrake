@@ -1257,7 +1257,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
-	ghb_update_ui_combo_box (ud, "SubtitleTrack", titleindex, FALSE);
+	ghb_subtitle_track_model(ud, titleindex);
 
 	ghb_set_pref_subtitle(titleindex, ud);
 	if (ghb_get_title_info (&tinfo, titleindex))

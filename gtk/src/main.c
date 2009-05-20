@@ -379,6 +379,7 @@ bind_audio_tree_model (signal_user_data_t *ud)
 extern G_MODULE_EXPORT void subtitle_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void subtitle_forced_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_burned_toggled_cb(void);
+extern G_MODULE_EXPORT void subtitle_track_changed_cb(void);
 
 // Create and bind the tree model to the tree view for the subtitle track list
 // Also, connect up the signal that lets us know the selection has changed
@@ -405,10 +406,14 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 									G_TYPE_INT);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
-	cell = gtk_cell_renderer_text_new();
+	cell = gtk_cell_renderer_combo_new();
+	ghb_subtitle_track_model(ud, -1);
+	g_object_set(G_OBJECT(cell), "model", ud->subtitle_track_model,
+	"text-column", 0, "editable", TRUE, "width", 200, "has-entry", FALSE, NULL);
 	column = gtk_tree_view_column_new_with_attributes( _("Track"), cell, 
 				"text", 0, "foreground", 5, "weight", 6, "style", 7, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	g_signal_connect(cell, "changed", subtitle_track_changed_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(

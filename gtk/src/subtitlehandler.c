@@ -99,7 +99,6 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 			ghb_settings_set_int(subtitle, "SubtitleTrack", track);
 			// Add to subtitle list
 			add_pref(ud, subtitle);
-			ghb_ui_update(ud, "SubtitleTrack", ghb_int64_value(track));
 		}
 	}
 	g_hash_table_destroy(track_indices);
@@ -184,78 +183,6 @@ ghb_selected_subtitle_settings(signal_user_data_t *ud)
 	return settings;
 }
 
-static void
-subtitle_list_refresh_selected(signal_user_data_t *ud)
-{
-	GtkTreeView *treeview;
-	GtkTreePath *treepath;
-	GtkTreeSelection *selection;
-	GtkTreeModel *store;
-	GtkTreeIter iter;
-	gint *indices;
-	gint row;
-	GValue *settings = NULL;
-	const GValue *subtitle_list;
-	
-	g_debug("subtitle_list_refresh_selected ()");
-	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
-	selection = gtk_tree_view_get_selection (treeview);
-	if (gtk_tree_selection_get_selected(selection, &store, &iter))
-	{
-		const gchar *track, *source, *color;
-		gboolean forced, burned;
-		gchar *s_track;
-		gint i_track, weight, style;
-
-		// Get the row number
-		treepath = gtk_tree_model_get_path (store, &iter);
-		indices = gtk_tree_path_get_indices (treepath);
-		row = indices[0];
-		gtk_tree_path_free(treepath);
-		// find subtitle settings
-		if (row < 0) return;
-		subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
-		if (row >= ghb_array_len(subtitle_list))
-			return;
-		settings = ghb_array_get_nth(subtitle_list, row);
-
-		track = ghb_settings_combo_option(settings, "SubtitleTrack");
-		forced = ghb_settings_get_boolean(settings, "SubtitleForced");
-		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
-
-		s_track = ghb_settings_get_string(settings, "SubtitleTrack");
-		i_track = ghb_settings_get_int(settings, "SubtitleTrack");
-		source = ghb_subtitle_track_source_name(ud, i_track);
-
-		if (!burned && mustBurn(ud, i_track))
-		{
-			weight = 800;
-			style = 2;
-			color = "red";
-		}
-		else
-		{
-			weight = 400;
-			style = 0;
-			color = NULL;
-		}
-
-		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
-			// These are displayed in list
-			0, track,
-			1, forced,
-			2, burned,
-			3, source,
-			// These are used to set combo values when a list item is selected
-			4, s_track,
-			5, color,
-			6, weight,
-			7, style,
-			-1);
-		g_free(s_track);
-	}
-}
-
 G_MODULE_EXPORT void
 subtitle_forced_toggled_cb(
 	GtkCellRendererToggle *cell, 
@@ -279,7 +206,6 @@ subtitle_forced_toggled_cb(
 	gtk_tree_model_get_iter(tm, &ti, tp);
 	gtk_tree_model_get(tm, &ti, 1, &active, -1);
 	active ^= 1;
-	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 1, active, -1);
 
 	// Get the row number
 	indices = gtk_tree_path_get_indices (tp);
@@ -288,15 +214,25 @@ subtitle_forced_toggled_cb(
 
 	if (row >= 0)
 	{
-		GValue *subtitle_list;
+		GValue *subtitle_list, *settings;
+		gint source, track;
 
 		subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+
+		settings = ghb_array_get_nth(subtitle_list, row);
+		track = ghb_settings_combo_int(settings, "SubtitleTrack");
+
+		source = ghb_subtitle_track_source(ud, track);
+		if (source != VOBSUB)
+			return;
+
 		if (row < ghb_array_len(subtitle_list))
 		{
 			GValue *settings;
 
 			settings = ghb_array_get_nth(subtitle_list, row);
 			ghb_settings_set_boolean(settings, "SubtitleForced", active);
+			gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 1, active, -1);
 		}
 	}
 }
@@ -359,7 +295,7 @@ subtitle_burned_toggled_cb(
 	gint          row;
 	gint *indices;
 	GValue *subtitle_list;
-	gint count, track;
+	gint count, track, source;
 	GValue *settings;
 
 	g_debug("burned toggled");
@@ -384,6 +320,11 @@ subtitle_burned_toggled_cb(
 
 	settings = ghb_array_get_nth(subtitle_list, row);
 	track = ghb_settings_combo_int(settings, "SubtitleTrack");
+
+	source = ghb_subtitle_track_source(ud, track);
+	if (source != VOBSUB)
+		return;
+
 	if (!active && mustBurn(ud, track))
 		return;
 
@@ -415,41 +356,99 @@ trackUsed(signal_user_data_t *ud, gint track)
 }
 
 G_MODULE_EXPORT void
-subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+subtitle_track_changed_cb(
+	GtkCellRendererCombo *combo,
+	gchar *path,
+	GtkTreeIter *iter,
+	signal_user_data_t *ud)
 {
-	GValue *settings;
+	GtkTreeView  *tv;
+	GtkTreeModel *tm;
+	GtkTreeIter   ti;
+	GtkTreePath  *tp;
+	gdouble dtrack;
+	gint *indices;
+	int tt, row;
+	GValue *subtitle_list, *settings;
+	const char *lang;
 
 	g_debug("subtitle_track_changed_cb ()");
-	ghb_check_dependency(ud, widget);
-	settings = ghb_selected_subtitle_settings(ud);
-	if (settings != NULL)
-	{
-		const gchar *lang;
-		GValue *gval;
-		GtkWidget *widget;
-		gint track;
+	gtk_tree_model_get(GTK_TREE_MODEL(ud->subtitle_track_model), iter, 
+						3, &dtrack, -1);
+	tt = (gint)dtrack;
+	if (trackUsed(ud, tt))
+		return;
 
-		widget = GHB_WIDGET (ud->builder, "SubtitleTrack");
-		gval = ghb_widget_value(widget);
-		track = ghb_value_int(gval);
-		ghb_value_free(gval);
-		if (trackUsed(ud, track))
-			return;
-		ghb_widget_to_setting(settings, widget);
-		track = ghb_settings_combo_int(settings, "SubtitleTrack");
-		lang = ghb_settings_combo_string(settings, "SubtitleTrack");
-		if (mustBurn(ud, track))
-		{
-			ghb_settings_set_boolean(settings, "SubtitleBurned", TRUE);
-		}
-		else
-		{
-			ghb_settings_set_boolean(settings, "SubtitleBurned", FALSE);
-		}
-		ghb_settings_set_string(settings, "SubtitleLanguage", lang);
-		subtitle_list_refresh_selected(ud);
+	tp = gtk_tree_path_new_from_string (path);
+	tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
+	g_return_if_fail(tv != NULL);
+	tm = gtk_tree_view_get_model(tv);
+	g_return_if_fail(tm != NULL);
+	gtk_tree_model_get_iter(tm, &ti, tp);
+
+	// Get the row number
+	indices = gtk_tree_path_get_indices (tp);
+	row = indices[0];
+	gtk_tree_path_free(tp);
+
+	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+	if (row >= ghb_array_len(subtitle_list))
+		return;
+	settings = ghb_array_get_nth(subtitle_list, row);
+
+	ghb_settings_set_int(settings, "SubtitleTrack", tt);
+	lang = ghb_settings_combo_string(settings, "SubtitleTrack");
+	if (mustBurn(ud, tt))
+	{
+		ghb_settings_set_boolean(settings, "SubtitleBurned", TRUE);
 	}
+	else
+	{
+		ghb_settings_set_boolean(settings, "SubtitleBurned", FALSE);
+	}
+	ghb_settings_set_string(settings, "SubtitleLanguage", lang);
+
+	const gchar *track, *source, *color;
+	gboolean forced, burned;
+	gchar *s_track;
+	gint i_track, weight, style;
+
+	track = ghb_settings_combo_option(settings, "SubtitleTrack");
+	forced = ghb_settings_get_boolean(settings, "SubtitleForced");
+	burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
+
+	s_track = ghb_settings_get_string(settings, "SubtitleTrack");
+	i_track = ghb_settings_get_int(settings, "SubtitleTrack");
+	source = ghb_subtitle_track_source_name(ud, i_track);
+
+	if (!burned && mustBurn(ud, i_track))
+	{
+		weight = 800;
+		style = 2;
+		color = "red";
+	}
+	else
+	{
+		weight = 400;
+		style = 0;
+		color = NULL;
+	}
+
+	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 
+			// These are displayed in list
+			0, track,
+			1, forced,
+			2, burned,
+			3, source,
+			// These are used to set combo values when a list item is selected
+			4, s_track,
+			5, color,
+			6, weight,
+			7, style,
+			-1);
+	g_free(s_track);
 	ghb_live_reset(ud);
+
 }
 
 void
@@ -581,7 +580,8 @@ add_to_subtitle_list(signal_user_data_t *ud, GValue *settings)
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
 	g_free(s_track);
-	ghb_subtitle_exclusive_burn(ud, i_track);
+	if (burned)
+		ghb_subtitle_exclusive_burn(ud, i_track);
 }
 
 G_MODULE_EXPORT void
@@ -597,7 +597,8 @@ subtitle_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data
 		const gchar *track;
 
 		gtk_tree_model_get(store, &iter, 4, &track, -1);
-		ghb_ui_update(ud, "SubtitleTrack", ghb_string_value(track));
+		ghb_settings_set_string(ud->settings, "SubtitleTrack", track);
+
 		widget = GHB_WIDGET (ud->builder, "subtitle_remove");
 		gtk_widget_set_sensitive(widget, TRUE);
 	}
@@ -613,7 +614,6 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	// Add the current subtitle settings to the list.
 	GValue *settings;
-	GtkWidget *widget;
 	gint count;
 	GValue *subtitle_list;
 	gboolean burned = FALSE;
@@ -630,7 +630,6 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	}
 	settings = ghb_dict_value_new();
 	// Only allow up to 8 subtitle entries
-	widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
 	ghb_settings_set_int(settings, "SubtitleTrack", track);
 	ghb_settings_take_value(settings, "SubtitleForced", 
 							ghb_boolean_value_new(FALSE));
