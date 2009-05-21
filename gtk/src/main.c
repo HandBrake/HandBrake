@@ -377,6 +377,7 @@ bind_audio_tree_model (signal_user_data_t *ud)
 }
 
 extern G_MODULE_EXPORT void subtitle_list_selection_changed_cb(void);
+extern G_MODULE_EXPORT void subtitle_enable_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_forced_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_burned_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_track_changed_cb(void);
@@ -398,41 +399,44 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	selection = gtk_tree_view_get_selection (treeview);
 	// 6 columns in model.  4 are visible, the other 2 is for storing
 	// values that I need
-	treestore = gtk_list_store_new(8, 
-									G_TYPE_STRING,
+	treestore = gtk_list_store_new(7, 
+									G_TYPE_BOOLEAN, G_TYPE_STRING,
 									G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
-									G_TYPE_STRING,  G_TYPE_STRING, 
-									G_TYPE_STRING,  G_TYPE_INT, 
-									G_TYPE_INT);
+									G_TYPE_STRING,  G_TYPE_STRING,
+									G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
+
+	cell = gtk_cell_renderer_toggle_new();
+	column = gtk_tree_view_column_new_with_attributes(
+									_("On"), cell, "active", 0, NULL);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	g_signal_connect(cell, "toggled", subtitle_enable_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_combo_new();
 	ghb_subtitle_track_model(ud, -1);
 	g_object_set(G_OBJECT(cell), "model", ud->subtitle_track_model,
 	"text-column", 0, "editable", TRUE, "width", 200, "has-entry", FALSE, NULL);
 	column = gtk_tree_view_column_new_with_attributes( _("Track"), cell, 
-				"text", 0, "foreground", 5, "weight", 6, "style", 7, NULL);
+				"text", 1, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "changed", subtitle_track_changed_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Forced Only"), cell, "active", 1, NULL);
-	gtk_tree_view_column_set_max_width (column, 50);
+									_("Forced Only"), cell, "active", 2, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_forced_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
 	column = gtk_tree_view_column_new_with_attributes(
-				_("Burned In"), cell, "active", 2, "cell-background", 5, NULL);
-	gtk_tree_view_column_set_max_width (column, 50);
+				_("Burned In"), cell, "active", 3, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_burned_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Type"), cell, "text", 3, NULL);
+									_("Type"), cell, "text", 4, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
 

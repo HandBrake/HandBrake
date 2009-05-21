@@ -2259,11 +2259,20 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkTreeView" id="subtitle_list">
+                                  <object class="GtkScrolledWindow" id="scrolledwindow4">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="headers_clickable">True</property>
+                                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                                    <child>
+                                      <object class="GtkTreeView" id="subtitle_list">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="headers_clickable">True</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>

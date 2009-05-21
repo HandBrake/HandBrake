@@ -1981,6 +1981,63 @@ ghb_find_audio_track(
 	return track;
 }
 
+void
+ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+	hb_subtitle_t * subtitle;
+	gint ii;
+	gint count = 0;
+	GValue *subdict;
+	
+	g_debug("ghb_add_all_subtitles ()\n");
+	if (h_scan == NULL) 
+		return;
+	list = hb_get_titles( h_scan );
+	title = (hb_title_t*)hb_list_item( list, titleindex );
+	if (title == NULL)
+		return;
+
+	// Add special auto selection track
+	subdict = ghb_dict_value_new();
+	ghb_settings_set_boolean(subdict, "SubtitleEnabled", FALSE);
+	ghb_settings_set_int(subdict, "SubtitleTrack", -1);
+	ghb_settings_set_boolean(subdict, "SubtitleForced", FALSE);
+	ghb_settings_set_boolean(subdict, "SubtitleBurned", FALSE);
+	ghb_settings_set_string(subdict, "SubtitleLanguage", "auto");
+	ghb_add_subtitle(ud, subdict, FALSE);
+
+	count = hb_list_count( title->list_subtitle );
+	for (ii = 0; ii < count; ii++)
+	{
+       	subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
+		subdict = ghb_dict_value_new();
+		ghb_settings_set_boolean(subdict, "SubtitleEnabled", FALSE);
+		ghb_settings_set_int(subdict, "SubtitleTrack", ii);
+		ghb_settings_set_boolean(subdict, "SubtitleForced", FALSE);
+		ghb_settings_set_boolean(subdict, "SubtitleBurned", FALSE);
+		ghb_settings_set_string(subdict, "SubtitleLanguage", 
+								subtitle->iso639_2);
+		ghb_add_subtitle(ud, subdict, FALSE);
+	}
+}
+
+gint
+ghb_find_pref_subtitle_track(const gchar *lang)
+{
+	gint ii, count;
+	count = subtitle_opts.count;
+	for (ii = 0; ii < count; ii++)
+	{
+		if (strcmp(lang, subtitle_opts.map[ii].svalue) == 0)
+		{
+			return subtitle_opts.map[ii].ivalue;
+		}
+	}
+	return -1;
+}
+
 gint
 ghb_find_subtitle_track(
 	gint titleindex, 
@@ -1990,8 +2047,7 @@ ghb_find_subtitle_track(
 	hb_list_t  * list;
 	hb_title_t * title;
 	hb_subtitle_t * subtitle;
-	gint ii;
-	gint count = 0;
+	gint count, ii;
 	gboolean *used;
 	
 	g_debug("find_subtitle_track ()\n");
@@ -2023,20 +2079,8 @@ ghb_find_subtitle_track(
 				return ii;
 			}
 		}
-		return -1;
 	}
-	else
-	{
-		count = subtitle_opts.count;
-		for (ii = 0; ii < count; ii++)
-		{
-			if (strcmp(lang, subtitle_opts.map[ii].svalue) == 0)
-			{
-				return subtitle_opts.map[ii].ivalue;
-			}
-		}
-		return -1;
-	}
+	return -1;
 }
 
 gint
@@ -4016,12 +4060,18 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *ssettings;
-		gboolean burned, one_burned = FALSE;
+		gboolean burned, enabled, one_burned = FALSE;
 
 		ssettings = ghb_array_get_nth(subtitle_list, ii);
 
+		enabled = ghb_settings_get_boolean(ssettings, "SubtitleEnabled");
+
+		if (!enabled)
+			continue;
+
 		subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
 		burned = ghb_settings_get_boolean(ssettings, "SubtitleBurned");
+
 		if (subtitle == -1)
 		{
 			job->indepth_scan = 1;

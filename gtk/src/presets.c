@@ -1133,14 +1133,14 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
 	// pointer will break strict-aliasing rules"
 	while (g_hash_table_iter_next(
 			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-    {
+	{
 		const GValue *value = NULL;
 		if (dict)
 			value = ghb_dict_lookup(dict, key);
 		if (value == NULL)
 			value = gval;
 		ghb_settings_set_value(ud->settings, key, value);
-    }
+	}
 	internal = plist_get_dict(internalPlist, "Preferences");
 	ghb_dict_iter_init(&iter, internal);
 	// middle (void*) cast prevents gcc warning "defreferencing type-punned
@@ -1203,12 +1203,12 @@ ghb_prefs_save(GValue *settings)
 	// pointer will break strict-aliasing rules"
 	while (g_hash_table_iter_next(
 			&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&value))
-    {
-	    value = ghb_settings_get_value(settings, key);
-	    if (value != NULL)
-	    {
+	{
+		value = ghb_settings_get_value(settings, key);
+		if (value != NULL)
+		{
 			ghb_dict_insert(pref_dict, g_strdup(key), ghb_value_dup(value));
-	    }
+		}
 	}
 	store_prefs();
 	prefs_modified = FALSE;
@@ -1371,20 +1371,20 @@ ghb_prefs_load(signal_user_data_t *ud)
 		prefsPlist = ghb_dict_value_new();
 	dict = plist_get_dict(prefsPlist, "Preferences");
 	internal = plist_get_dict(internalPlist, "Preferences");
-    if (dict == NULL && internal)
-    {
+	if (dict == NULL && internal)
+	{
 		dict = ghb_dict_value_new();
 		ghb_dict_insert(prefsPlist, g_strdup("Preferences"), dict);
 
-        // Get defaults from internal defaults 
+		// Get defaults from internal defaults 
 		ghb_dict_iter_init(&iter, internal);
 		// middle (void*) cast prevents gcc warning "defreferencing type-punned
 		// pointer will break strict-aliasing rules"
 		while (g_hash_table_iter_next(
 				&iter, (gpointer*)(void*)&key, (gpointer*)(void*)&gval))
-        {
+		{
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
-        }
+		}
 		const gchar *dir = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
 		if (dir == NULL)
 		{
@@ -1405,7 +1405,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 		g_free(source);
 #endif
 		store_prefs();
-    }
+	}
 	// Read legacy default_preset preference and update accordingly
 	path = ghb_dict_lookup(dict, "default_preset");
 	if (path)
@@ -2618,7 +2618,7 @@ ghb_presets_reload(signal_user_data_t *ud)
 	if (std_presets == NULL) return;
 
 	remove_std_presets(ud);
-    indices = presets_find_default(presetsPlist, &len);
+	indices = presets_find_default(presetsPlist, &len);
 	if (indices)
 	{
 		presets_clear_default(std_presets);
@@ -2946,10 +2946,23 @@ static void
 update_subtitle_presets(signal_user_data_t *ud)
 {
 	g_debug("update_subtitle_presets");
-	const GValue *subtitle_list;
+	const GValue *subtitle_list, *subtitle;
+	GValue *slist, *dict;
+	gint count, ii;
 
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
-	ghb_settings_set_value(ud->settings, "SubtitleList", subtitle_list);
+	slist = ghb_array_value_new(8);
+	count = ghb_array_len(subtitle_list);
+	for (ii = 0; ii < count; ii++)
+	{
+		subtitle = ghb_array_get_nth(subtitle_list, ii);
+		if (ghb_settings_get_boolean(subtitle, "SubtitleEnabled"))
+		{
+			dict = ghb_value_dup(subtitle);
+			ghb_array_append(slist, dict);
+		}
+	}
+	ghb_settings_set_value(ud->settings, "SubtitleList", slist);
 }
 
 void
