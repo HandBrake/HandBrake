@@ -740,6 +740,7 @@ ghb_do_scan(
 			jstatus = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
 			ghb_settings_to_ui(ud, ghb_queue_edit_settings);
 			ghb_set_audio(ud, ghb_queue_edit_settings);
+			ghb_reset_subtitles(ud, ghb_queue_edit_settings);
 			if (jstatus == GHB_QUEUE_PENDING)
 			{
 				ghb_value_free(ghb_queue_edit_settings);
@@ -2042,6 +2043,7 @@ ghb_backend_events(signal_user_data_t *ud)
 			jstatus = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
 			ghb_settings_to_ui(ud, ghb_queue_edit_settings);
 			ghb_set_audio(ud, ghb_queue_edit_settings);
+			ghb_reset_subtitles(ud, ghb_queue_edit_settings);
 			if (jstatus == GHB_QUEUE_PENDING)
 			{
 				ghb_value_free(ghb_queue_edit_settings);

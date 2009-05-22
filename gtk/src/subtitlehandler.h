@@ -35,5 +35,6 @@ GValue* ghb_selected_subtitle_settings(signal_user_data_t *ud);
 gint ghb_selected_subtitle_row(signal_user_data_t *ud);
 void ghb_add_subtitle(
 	signal_user_data_t *ud, GValue *settings, gboolean can_delete);
+void ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings);
 
 #endif // _SUBTITLEHANDLER_H_

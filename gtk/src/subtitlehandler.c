@@ -124,7 +124,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		g_free(lang);
 		if (track >= 0)
 		{
-			// Add to subtitle list
+			ghb_settings_set_boolean(subtitle, "SubtitleEnabled", TRUE);
 			ghb_set_subtitle(ud, track, subtitle);
 		}
 	}
@@ -753,7 +753,7 @@ ghb_set_subtitle(signal_user_data_t *ud, gint track, GValue *settings)
 	GValue *slist;
 	GValue *subtitle;
 	gint count, ii, tt;
-	gboolean forced, burned;
+	gboolean forced, burned, enabled;
 	
 	g_debug("ghb_set_subtitle");
 	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
@@ -766,6 +766,7 @@ ghb_set_subtitle(signal_user_data_t *ud, gint track, GValue *settings)
 		if (track != tt)
 			continue;
 		
+		enabled = ghb_settings_get_boolean(settings, "SubtitleEnabled");
 		forced = ghb_settings_get_boolean(settings, "SubtitleForced");
 		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 
@@ -774,16 +775,43 @@ ghb_set_subtitle(signal_user_data_t *ud, gint track, GValue *settings)
 		tm = gtk_tree_view_get_model(tv);
 		gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
 
-		ghb_settings_set_boolean(subtitle, "SubtitleEnabled", TRUE);
+		ghb_settings_set_boolean(subtitle, "SubtitleEnabled", enabled);
 		ghb_settings_set_boolean(subtitle, "SubtitleForced", forced);
 		ghb_settings_set_boolean(subtitle, "SubtitleBurned", burned);
 		gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 
-			0, TRUE, 
+			0, enabled, 
 			2, forced, 
 			3, burned, 
 			6, FALSE, 
 			-1);
 		break;
+	}
+}
+
+void
+ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings)
+{
+	GValue *slist;
+	GValue *subtitle;
+	gint count, ii, track;
+	gint titleindex;
+	
+	g_debug("ghb_reset_subtitles");
+	ghb_clear_subtitle_list(ud);
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	if (titleindex < 0)
+		return;
+
+	ghb_add_all_subtitles(ud, titleindex);
+	slist = ghb_settings_get_value(settings, "subtitle_list");
+
+	count = ghb_array_len(slist);
+	for (ii = 0; ii < count; ii++)
+	{
+		subtitle = ghb_array_get_nth(slist, ii);
+		track = ghb_settings_get_int(subtitle, "SubtitleTrack");
+
+		ghb_set_subtitle(ud, track, subtitle);
 	}
 }
 
