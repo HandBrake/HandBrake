@@ -1710,8 +1710,8 @@ ghb_subtitle_track_model(signal_user_data_t *ud, gint titleindex)
 	}
 	else
 	{
-		subtitle_opts.count = LANG_TABLE_SIZE+2;
-		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE+2)*sizeof(options_map_t));
+		subtitle_opts.count = LANG_TABLE_SIZE+1;
+		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE+1)*sizeof(options_map_t));
 	}
 	if (ud->subtitle_track_model == NULL)
 	{
@@ -1766,25 +1766,13 @@ ghb_subtitle_track_model(signal_user_data_t *ud, gint titleindex)
 	}
 	else
 	{
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, 
-					   0, "Closed Captions", 
-					   1, TRUE, 
-					   2, "-2", 
-					   3, -2.0, 
-					   4, "und", 
-					   -1);
-		subtitle_opts.map[1].option = "Closed Captions";
-		subtitle_opts.map[1].shortOpt = "-2";
-		subtitle_opts.map[1].ivalue = -2;
-		subtitle_opts.map[1].svalue = "und";
 		index_str_init(LANG_TABLE_SIZE-1);
 		for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
 		{
-			subtitle_opts.map[ii+2].option = ghb_language_table[ii].eng_name;
-			subtitle_opts.map[ii+2].shortOpt = index_str[ii];
-			subtitle_opts.map[ii+2].ivalue = ii;
-			subtitle_opts.map[ii+2].svalue = ghb_language_table[ii].iso639_2;
+			subtitle_opts.map[ii+1].option = ghb_language_table[ii].eng_name;
+			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
+			subtitle_opts.map[ii+1].ivalue = ii;
+			subtitle_opts.map[ii+1].svalue = ghb_language_table[ii].iso639_2;
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, 
 					0, ghb_language_table[ii].eng_name, 
@@ -3416,7 +3404,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 
 	const GValue *slist, *settings;
 	gint count, ii, track, source;
-	gboolean burned;
+	gboolean burned, enabled;
 
 	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(slist);
@@ -3424,9 +3412,10 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	{
 		settings = ghb_array_get_nth(slist, ii);
 		track = ghb_settings_combo_int(settings, "SubtitleTrack");
+		enabled = ghb_settings_get_boolean(settings, "SubtitleEnabled");
 		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 		source = ghb_subtitle_track_source(ud, track);
-		if (!burned && mux == HB_MUX_MP4 && source == VOBSUB)
+		if (enabled && !burned && mux == HB_MUX_MP4 && source == VOBSUB)
 		{
 			// MP4 can only handle burned vobsubs.  make sure there isn't
 			// already something burned in the list

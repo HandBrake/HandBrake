@@ -68,14 +68,13 @@ add_all_pref_subtitles(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		subtitle = ghb_value_dup(ghb_array_get_nth(pref_subtitle, ii));
-		ghb_settings_set_boolean(subtitle, "SubtitleEnabled", TRUE);
 		lang = ghb_settings_get_string(subtitle, "SubtitleLanguage");
 		// If there are multiple subtitles using the same language, then
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each language.
 		track = ghb_find_pref_subtitle_track(lang);
 		g_free(lang);
-		if (track >= 0)
+		if (track >= -1)
 		{
 			// Add to subtitle list
 			ghb_settings_set_int(subtitle, "SubtitleTrack", track);
@@ -88,7 +87,6 @@ void
 ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 {
 	gint track;
-	GtkWidget *button;
 	GHashTable *track_indices;
 	char *lang;
 
@@ -107,9 +105,8 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		return;
 	}
 	ghb_add_all_subtitles(ud, titleindex);
-	// Find "best" subtitle based on subtitle preferences
-	button = GHB_WIDGET (ud->builder, "subtitle_add");
 
+	// Find "best" subtitle based on subtitle preferences
 	pref_subtitle = ghb_settings_get_value(ud->settings, "SubtitleList");
 
 	count = ghb_array_len(pref_subtitle);
@@ -122,9 +119,8 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		// of the tracks used for each language.
 		track = ghb_find_subtitle_track(titleindex, lang, track_indices);
 		g_free(lang);
-		if (track >= 0)
+		if (track >= -1)
 		{
-			ghb_settings_set_boolean(subtitle, "SubtitleEnabled", TRUE);
 			ghb_set_subtitle(ud, track, subtitle);
 		}
 	}
