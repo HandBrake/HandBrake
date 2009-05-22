@@ -90,20 +90,17 @@ namespace Handbrake
             // Advanced
             // #############################
 
-            // Unstable Snapshot checking should only be visible for stable builds.
-            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-            {
-                lbl_appcastUnstable.Visible = false;
-                check_snapshot.Visible = false;
-            }
-
-            // Enable snapshot updating
-            if (Properties.Settings.Default.checkSnapshot == "Checked")
-                check_snapshot.CheckState = CheckState.Checked;
-
             // Enable GUI DVD Drive detection code
             if (Properties.Settings.Default.drive_detection == "Checked")
                 btn_drive_detect.CheckState = CheckState.Checked;
+
+            // Minimise to Tray
+            if (Properties.Settings.Default.trayIconAlerts == "Checked")
+                check_trayStatusAlerts.CheckState = CheckState.Checked;
+
+            // Tray Balloon popups
+            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+                check_mainMinimize.CheckState = CheckState.Checked;
 
             // Enable / Disable Query editor tab
             if (Properties.Settings.Default.QueryEditorTab == "Checked")
@@ -116,10 +113,17 @@ namespace Handbrake
             // Experimental In-GUI encode status indicator.
             if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
                 check_inGuiStatus.CheckState = CheckState.Checked;
-
+           
             // Enable snapshot updating
-            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
-                check_mainMinimize.CheckState = CheckState.Checked;
+            if (Properties.Settings.Default.checkSnapshot == "Checked")
+                check_snapshot.CheckState = CheckState.Checked;
+            
+            // Unstable Snapshot checking should only be visible for stable builds.
+            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
+            {
+                lbl_appcastUnstable.Visible = false;
+                check_snapshot.Visible = false;
+            }
 
             // x264 step
             drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep;
@@ -244,6 +248,11 @@ namespace Handbrake
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.CheckState.ToString();
+        }
+
+        private void check_trayStatusAlerts_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.trayIconAlerts = check_trayStatusAlerts.CheckState.ToString();
         }
 
         private void check_queryEditorTab_CheckedChanged(object sender, EventArgs e)

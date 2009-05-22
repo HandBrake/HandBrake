@@ -370,5 +370,17 @@ namespace Handbrake.Properties {
                 this["enocdeStatusInGui"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string trayIconAlerts {
+            get {
+                return ((string)(this["trayIconAlerts"]));
+            }
+            set {
+                this["trayIconAlerts"] = value;
+            }
+        }
     }
 }

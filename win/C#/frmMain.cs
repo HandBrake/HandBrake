@@ -253,8 +253,7 @@ namespace Handbrake
         }
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            String file;
-            file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
+            String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
 
             frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeQueue, this);
             dvdInfoWindow.Show();
@@ -379,15 +378,9 @@ namespace Handbrake
             if (treeView_presets.SelectedNode != null)
             {
                 presetHandler.remove(treeView_presets.SelectedNode.Text);
-
-                // Remember each nodes expanded status so we can reload it
-                List<Boolean> nodeStatus = saveTreeViewState();
-
-                // Now reload the preset panel
+                List<Boolean> nodeStatus = saveTreeViewState();  // Remember each nodes expanded status so we can reload it
                 loadPresetPanel();
-
-                // Now reload the TreeView states
-                loadTreeViewStates(nodeStatus);
+                loadTreeViewStates(nodeStatus);   // Now reload the TreeView states
             }
             treeView_presets.Select();
         }
@@ -398,12 +391,9 @@ namespace Handbrake
 
             // Now enable the save menu if the selected preset is a user preset
             if (treeView_presets.SelectedNode != null)
-            {
                 if (presetHandler.checkIfUserPresetExists(treeView_presets.SelectedNode.Text))
-                {
                     pmnu_saveChanges.Enabled = true;
-                }
-            }
+
             treeView_presets.Select();
         }
 
@@ -429,14 +419,9 @@ namespace Handbrake
                 if (treeView_presets.SelectedNode != null)
                     presetHandler.remove(treeView_presets.SelectedNode.Text);
 
-                // Remember each nodes expanded status so we can reload it
-                List<Boolean> nodeStatus = saveTreeViewState();
-
-                // Now reload the preset panel
+                List<Boolean> nodeStatus = saveTreeViewState();  // Remember each nodes expanded status so we can reload it
                 loadPresetPanel();
-
-                // Now reload the TreeView states
-                loadTreeViewStates(nodeStatus);
+                loadTreeViewStates(nodeStatus); // Now reload the TreeView states
             }
             treeView_presets.Select();
         }
@@ -649,7 +634,6 @@ namespace Handbrake
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
-
                 if (encodeQueue.checkDestinationPath(text_destination.Text))
                 {
                     DialogResult result = MessageBox.Show("There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
@@ -707,7 +691,8 @@ namespace Handbrake
                 if (!encodeQueue.isEncoding)
                 {
                     notifyIcon.BalloonTipText = lbl_encode.Text != "" ? lbl_encode.Text : "Not Encoding";
-                    notifyIcon.ShowBalloonTip(500);
+                    if (Properties.Settings.Default.trayIconAlerts == "Checked")
+                        notifyIcon.ShowBalloonTip(500);
                 }
                 this.Hide();
             }
@@ -1067,7 +1052,28 @@ namespace Handbrake
                 setExtension(".mkv");
 
             audioPanel.setAudioByContainer(drop_format.Text);
-            setVideoByContainer(drop_format.Text);
+
+            string oldval;
+            if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
+            {
+                oldval = drp_videoEncoder.Text;
+                drp_videoEncoder.Items.Clear();
+                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
+                drp_videoEncoder.Items.Add("H.264 (x264)");
+                if (oldval == "VP3 (Theora)")
+                    drp_videoEncoder.SelectedIndex = 1;
+                else
+                    drp_videoEncoder.Text = oldval;
+            }
+            else if (drop_format.Text.Contains("MKV"))
+            {
+                oldval = drp_videoEncoder.Text;
+                drp_videoEncoder.Items.Clear();
+                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
+                drp_videoEncoder.Items.Add("H.264 (x264)");
+                drp_videoEncoder.Items.Add("VP3 (Theora)");
+                drp_videoEncoder.Text = oldval;
+            }
         }
         private void setExtension(string newExtension)
         {
@@ -1153,7 +1159,7 @@ namespace Handbrake
         /// </summary>
         public void setContainerOpts()
         {
-            if ((text_destination.Text.Contains(".mp4")) || (text_destination.Text.Contains(".m4v")))
+            if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
             {
                 check_largeFile.Enabled = true;
                 check_optimiseMP4.Enabled = true;
@@ -1272,10 +1278,7 @@ namespace Handbrake
                 text_height.BackColor = Color.White;
 
             maxHeight = 0;  // Reset max height so that it's not using the MaxHeight -Y. Quick hack to allow -Y for preset usage.
-            if (maxWidth != 0)
-                lbl_max.Text = "Max Width";
-            else
-                lbl_max.Text = "";
+            lbl_max.Text = maxWidth != 0 ? "Max Width" : "";
 
             int height;
             Boolean parsed = int.TryParse(text_height.Text, out height);
@@ -1360,7 +1363,6 @@ namespace Handbrake
         }
 
         //Subtitles Tab
-
         private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitle.Text.Contains("None"))
@@ -1377,7 +1379,7 @@ namespace Handbrake
         {
             if (Check_ChapterMarkers.Checked)
             {
-                text_destination.Text = text_destination.Text.Replace(".m4v", ".mp4");
+                drop_format.SelectedIndex = 1;
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
                 DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
@@ -1386,7 +1388,7 @@ namespace Handbrake
             }
             else
             {
-                text_destination.Text = text_destination.Text.Replace(".m4v", ".mp4");
+                drop_format.SelectedIndex = 0;
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
             }
@@ -1700,36 +1702,6 @@ namespace Handbrake
         }
         #endregion
 
-        #region Audio Panel Code Helpers
-        
-        private void setVideoByContainer(String path)
-        {
-            string oldval;
-
-            if ((path.Contains("MP4")) || (path.Contains("M4V")))
-            {
-                oldval = drp_videoEncoder.Text;
-                drp_videoEncoder.Items.Clear();
-                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("H.264 (x264)");
-                if (oldval == "VP3 (Theora)")
-                    drp_videoEncoder.SelectedIndex = 1;
-                else
-                    drp_videoEncoder.Text = oldval;
-
-            }
-            else if (path.Contains("MKV"))
-            {
-                oldval = drp_videoEncoder.Text;
-                drp_videoEncoder.Items.Clear();
-                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("H.264 (x264)");
-                drp_videoEncoder.Items.Add("VP3 (Theora)");
-                drp_videoEncoder.Text = oldval;
-            }
-        }
-        #endregion
-
         #region Public Methods
         /// <summary>
         /// Access the preset Handler and setup the preset panel.
@@ -1802,8 +1774,6 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
-
-
 
         // This is the END of the road ****************************************
     }
