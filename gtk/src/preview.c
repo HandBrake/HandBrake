@@ -85,7 +85,13 @@ ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
 	g_value_init(&disp_par, GST_TYPE_FRACTION);
 	gst_value_set_fraction(&disp_par, 1, 1);
 	g_object_get(ud->preview->play, "video-sink", &xover, NULL);
+	if (xover == NULL)
+		goto fail;
+
 	klass = G_OBJECT_GET_CLASS(xover);
+	if (klass == NULL)
+		goto fail;
+
 	pspec = g_object_class_find_property(klass, "pixel-aspect_ratio");
 	if (pspec)
 	{
@@ -104,6 +110,11 @@ ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
 	*par_n = gst_value_get_fraction_numerator(&disp_par);
 	*par_d = gst_value_get_fraction_denominator(&disp_par);
 	g_value_unset(&disp_par);
+	return;
+
+fail:
+	*par_n = 1;
+	*par_d = 1;
 #else
 	*par_n = 1;
 	*par_d = 1;
@@ -150,6 +161,15 @@ ghb_preview_init(signal_user_data_t *ud)
 	//xover = gst_element_factory_make("xvimagesink", "xover");
 	//xover = gst_element_factory_make("ximagesink", "xover");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
+	if (xover == NULL)
+	{
+		GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
+		gtk_widget_hide (widget);
+		widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
+		gtk_widget_hide (widget);
+		return;
+	}
+
 	g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
 	//g_object_set(G_OBJECT(xover), "force-aspect-ratio", TRUE, NULL);
 
@@ -718,6 +738,9 @@ delayed_expose_cb(signal_user_data_t *ud)
 	GstXOverlay *xover;
 
 	g_object_get(ud->preview->play, "video-sink", &vsink, NULL);
+	if (vsink == NULL)
+		return FALSE;
+
 	if (GST_IS_BIN(vsink))
 		xover = GST_X_OVERLAY(gst_bin_get_by_interface(
 								GST_BIN(vsink), GST_TYPE_X_OVERLAY));
