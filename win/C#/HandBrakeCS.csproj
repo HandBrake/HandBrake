@@ -54,7 +54,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -106,6 +106,12 @@
     <Reference Include="WindowsFormsIntegration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\AudioPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AudioPanel.Designer.cs">
+      <DependentUpon>AudioPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Denoise.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -213,6 +219,10 @@
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\AudioPanel.resx">
+      <DependentUpon>AudioPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Denoise.resx">
       <DependentUpon>Denoise.cs</DependentUpon>
       <SubType>Designer</SubType>

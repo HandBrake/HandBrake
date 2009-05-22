@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*  PresetLoader.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.fr>.
+ 	   It may be used under the terms of the GNU General Public License. */
+
+using System;
 using System.Windows.Forms;
 
 namespace Handbrake.Functions
@@ -223,18 +229,20 @@ namespace Handbrake.Functions
 
             #region Audio
             // Clear the audio listing
-            mainWindow.lv_audioList.Items.Clear();
+            mainWindow.audioPanel.clearAudioList();
 
             if (presetQuery.AudioInformation != null)
                 foreach (AudioTrack track in presetQuery.AudioInformation)
                 {
-                    ListViewItem newTrack = new ListViewItem("Automatic");
+                    ListViewItem newTrack = new ListViewItem(mainWindow.audioPanel.getNewID().ToString());
+
+                    newTrack.SubItems.Add("Automatic");
                     newTrack.SubItems.Add(track.Encoder);
                     newTrack.SubItems.Add(track.MixDown);
                     newTrack.SubItems.Add(track.SampleRate);
                     newTrack.SubItems.Add(track.Bitrate);
                     newTrack.SubItems.Add(track.DRC);
-                    mainWindow.lv_audioList.Items.Add(newTrack);
+                    mainWindow.audioPanel.addTrackForPreset(newTrack);
                 }
 
             // Subtitle Stuff

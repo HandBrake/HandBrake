@@ -247,7 +247,7 @@ namespace Handbrake.Functions
 
             #region Audio Settings Tab
 
-            ListView audioTracks = mainWindow.lv_audioList;
+            ListView audioTracks = mainWindow.audioPanel.getAudioPanel();
             List<string> tracks = new List<string>();
             List<string> codecs = new List<string>();
             List<string> mixdowns = new List<string>();

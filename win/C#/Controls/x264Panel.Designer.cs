@@ -1,4 +1,10 @@
-﻿namespace Handbrake.Controls
+﻿/*  x264Panel.Designer.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.fr>.
+ 	   It may be used under the terms of the GNU General Public License. */
+
+namespace Handbrake.Controls
 {
     partial class x264Panel
     {
@@ -126,7 +132,6 @@
             // drop_adaptBFrames
             // 
             this.drop_adaptBFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_adaptBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_adaptBFrames.FormattingEnabled = true;
             this.drop_adaptBFrames.Items.AddRange(new object[] {
             "Default (Fast)",
@@ -153,6 +158,8 @@
             // 
             // btn_reset
             // 
+            this.btn_reset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_reset.ForeColor = System.Drawing.Color.DarkOrange;
             this.btn_reset.Location = new System.Drawing.Point(13, 229);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(75, 23);
@@ -177,11 +184,11 @@
             this.check_Cabac.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_Cabac.Checked = true;
             this.check_Cabac.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.check_Cabac.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_Cabac.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_Cabac.Location = new System.Drawing.Point(273, 128);
             this.check_Cabac.Name = "check_Cabac";
             this.check_Cabac.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_Cabac.Size = new System.Drawing.Size(136, 17);
+            this.check_Cabac.Size = new System.Drawing.Size(147, 16);
             this.check_Cabac.TabIndex = 78;
             this.check_Cabac.Text = "CABAC Entropy Coding:";
             this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -193,11 +200,11 @@
             // 
             this.check_noDCTDecimate.AutoSize = true;
             this.check_noDCTDecimate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_noDCTDecimate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_noDCTDecimate.Location = new System.Drawing.Point(593, 40);
+            this.check_noDCTDecimate.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_noDCTDecimate.Location = new System.Drawing.Point(592, 40);
             this.check_noDCTDecimate.Name = "check_noDCTDecimate";
             this.check_noDCTDecimate.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_noDCTDecimate.Size = new System.Drawing.Size(113, 17);
+            this.check_noDCTDecimate.Size = new System.Drawing.Size(121, 16);
             this.check_noDCTDecimate.TabIndex = 77;
             this.check_noDCTDecimate.Text = "No DCT-Decimate:";
             this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -209,11 +216,11 @@
             // 
             this.check_noFastPSkip.AutoSize = true;
             this.check_noFastPSkip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_noFastPSkip.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_noFastPSkip.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_noFastPSkip.Location = new System.Drawing.Point(608, 19);
             this.check_noFastPSkip.Name = "check_noFastPSkip";
             this.check_noFastPSkip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_noFastPSkip.Size = new System.Drawing.Size(97, 17);
+            this.check_noFastPSkip.Size = new System.Drawing.Size(106, 16);
             this.check_noFastPSkip.TabIndex = 76;
             this.check_noFastPSkip.Text = "No Fast-P-Skip:";
             this.check_noFastPSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -235,7 +242,6 @@
             // drop_trellis
             // 
             this.drop_trellis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_trellis.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_trellis.FormattingEnabled = true;
             this.drop_trellis.Items.AddRange(new object[] {
             "Default (0)",
@@ -252,7 +258,6 @@
             // drop_deblockBeta
             // 
             this.drop_deblockBeta.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_deblockBeta.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_deblockBeta.FormattingEnabled = true;
             this.drop_deblockBeta.Items.AddRange(new object[] {
             "Default (0)",
@@ -289,7 +294,6 @@
             // drop_deblockAlpha
             // 
             this.drop_deblockAlpha.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_deblockAlpha.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_deblockAlpha.FormattingEnabled = true;
             this.drop_deblockAlpha.Items.AddRange(new object[] {
             "Default (0)",
@@ -344,11 +348,11 @@
             // 
             this.check_8x8DCT.AutoSize = true;
             this.check_8x8DCT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_8x8DCT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_8x8DCT.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_8x8DCT.Location = new System.Drawing.Point(492, 100);
             this.check_8x8DCT.Name = "check_8x8DCT";
             this.check_8x8DCT.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_8x8DCT.Size = new System.Drawing.Size(68, 17);
+            this.check_8x8DCT.Size = new System.Drawing.Size(74, 16);
             this.check_8x8DCT.TabIndex = 72;
             this.check_8x8DCT.Text = "8x8 DCT:";
             this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -369,7 +373,6 @@
             // drop_analysis
             // 
             this.drop_analysis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_analysis.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_analysis.FormattingEnabled = true;
             this.drop_analysis.Items.AddRange(new object[] {
             "Default (some)",
@@ -395,7 +398,6 @@
             // drop_subpixelMotionEstimation
             // 
             this.drop_subpixelMotionEstimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_subpixelMotionEstimation.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_subpixelMotionEstimation.FormattingEnabled = true;
             this.drop_subpixelMotionEstimation.Items.AddRange(new object[] {
             "Default (6)",
@@ -429,7 +431,6 @@
             // drop_MotionEstimationRange
             // 
             this.drop_MotionEstimationRange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_MotionEstimationRange.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_MotionEstimationRange.FormattingEnabled = true;
             this.drop_MotionEstimationRange.Items.AddRange(new object[] {
             "Default (16)",
@@ -514,7 +515,6 @@
             // drop_MotionEstimationMethod
             // 
             this.drop_MotionEstimationMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_MotionEstimationMethod.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_MotionEstimationMethod.FormattingEnabled = true;
             this.drop_MotionEstimationMethod.ItemHeight = 13;
             this.drop_MotionEstimationMethod.Items.AddRange(new object[] {
@@ -535,14 +535,13 @@
             // 
             this.check_pyrmidalBFrames.AutoSize = true;
             this.check_pyrmidalBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_pyrmidalBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(18, 194);
+            this.check_pyrmidalBFrames.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(12, 194);
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(118, 17);
+            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(130, 16);
             this.check_pyrmidalBFrames.TabIndex = 59;
             this.check_pyrmidalBFrames.Text = "Pyramidal B-Frames:";
-            this.check_pyrmidalBFrames.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ToolTip.SetToolTip(this.check_pyrmidalBFrames, resources.GetString("check_pyrmidalBFrames.ToolTip"));
             this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;
             this.check_pyrmidalBFrames.CheckedChanged += new System.EventHandler(this.check_pyrmidalBFrames_CheckedChanged);
@@ -551,11 +550,11 @@
             // 
             this.check_weightedBFrames.AutoSize = true;
             this.check_weightedBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_weightedBFrames.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_weightedBFrames.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_weightedBFrames.Location = new System.Drawing.Point(16, 173);
             this.check_weightedBFrames.Name = "check_weightedBFrames";
             this.check_weightedBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_weightedBFrames.Size = new System.Drawing.Size(119, 17);
+            this.check_weightedBFrames.Size = new System.Drawing.Size(126, 16);
             this.check_weightedBFrames.TabIndex = 58;
             this.check_weightedBFrames.Text = "Weighted B-Frames:";
             this.ToolTip.SetToolTip(this.check_weightedBFrames, resources.GetString("check_weightedBFrames.ToolTip"));
@@ -575,7 +574,6 @@
             // drop_directPrediction
             // 
             this.drop_directPrediction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_directPrediction.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_directPrediction.FormattingEnabled = true;
             this.drop_directPrediction.Items.AddRange(new object[] {
             "Default (Spatial)",
@@ -603,7 +601,6 @@
             // drop_bFrames
             // 
             this.drop_bFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_bFrames.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_bFrames.FormattingEnabled = true;
             this.drop_bFrames.Items.AddRange(new object[] {
             "Default (0)",
@@ -646,7 +643,6 @@
             // drop_refFrames
             // 
             this.drop_refFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_refFrames.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.drop_refFrames.FormattingEnabled = true;
             this.drop_refFrames.Items.AddRange(new object[] {
             "Default (1)",
@@ -680,11 +676,11 @@
             // 
             this.check_mixedReferences.AutoSize = true;
             this.check_mixedReferences.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_mixedReferences.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.check_mixedReferences.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_mixedReferences.Location = new System.Drawing.Point(25, 68);
             this.check_mixedReferences.Name = "check_mixedReferences";
             this.check_mixedReferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_mixedReferences.Size = new System.Drawing.Size(112, 17);
+            this.check_mixedReferences.Size = new System.Drawing.Size(117, 16);
             this.check_mixedReferences.TabIndex = 55;
             this.check_mixedReferences.Text = "Mixed References:";
             this.check_mixedReferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
