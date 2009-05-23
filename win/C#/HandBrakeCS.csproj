@@ -205,11 +205,13 @@
     <Compile Include="frmTestWindow.Designer.cs">
       <DependentUpon>frmTestWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\Win32.cs" />
     <Compile Include="Presets\preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="Queue\QueueHandler.cs" />
+    <Compile Include="EncodeQueue\EncodeProcess.cs" />
+    <Compile Include="EncodeQueue\QueueHandler.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
-    <Compile Include="Functions\Encode.cs" />
+    <Compile Include="EncodeQueue\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />
@@ -313,7 +315,7 @@
     <Compile Include="frmSplashScreen.Designer.cs">
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Queue\QueueItem.cs" />
+    <Compile Include="EncodeQueue\QueueItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO;
 using AxQTOControlLib;
+using Handbrake.EncodeQueue;
 using Handbrake.Functions;
 using QTOControlLib;
 using QTOLibrary;
@@ -88,7 +89,7 @@ namespace Handbrake
                 MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                hbProc = process.runCli((string)state);
+                hbProc = process.runCli((string)state).hbProcProcess;
                 hbProc.WaitForExit();
                 hbProc = null;
                 encodeCompleted();

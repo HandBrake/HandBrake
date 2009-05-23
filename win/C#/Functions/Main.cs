@@ -12,13 +12,14 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Threading;
+using Handbrake.EncodeQueue;
 
 namespace Handbrake.Functions
 {
     static class Main
     {
         // Private Variables
-        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Queue.QueueItem>));
+        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
@@ -358,7 +359,7 @@ namespace Handbrake.Functions
                 {
                     using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
                     {
-                        List<Queue.QueueItem> list = ser.Deserialize(strm) as List<Queue.QueueItem>;
+                        List<QueueItem> list = ser.Deserialize(strm) as List<QueueItem>;
                         if (list != null)
                             if (list.Count != 0)
                                 return true;

@@ -383,7 +383,5 @@ namespace Handbrake.Controls
                 AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
         }
 
-        
-
     }
 }

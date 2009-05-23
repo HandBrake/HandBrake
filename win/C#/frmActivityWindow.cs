@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using System.Runtime.InteropServices;
+using Handbrake.EncodeQueue;
 using Microsoft.Win32;
 
 
@@ -19,7 +20,7 @@ namespace Handbrake
         delegate void SetTextCallback(string text);
         String read_file;
         Thread monitor;
-        Queue.QueueHandler encodeQueue;
+        QueueHandler encodeQueue;
         int position;  // Position in the arraylist reached by the current log output in the rtf box.
         string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
         private frmMain mainWin;
@@ -27,7 +28,7 @@ namespace Handbrake
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
-        public frmActivityWindow(string file, Queue.QueueHandler eh, frmMain mw)
+        public frmActivityWindow(string file, QueueHandler eh, frmMain mw)
         {
             InitializeComponent();
 

@@ -8,15 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Handbrake.EncodeQueue;
 
 namespace Handbrake
 {
     public partial class frmQueue : Form
     {
         private delegate void UpdateHandler();
-        Queue.QueueHandler queue;
+        QueueHandler queue;
 
-        public frmQueue(Queue.QueueHandler q)
+        public frmQueue(QueueHandler q)
         {
             InitializeComponent();
 
@@ -84,7 +85,7 @@ namespace Handbrake
         }
         private void btn_pause_Click(object sender, EventArgs e)
         {
-            queue.pauseEncode();
+            queue.pauseEncodeQueue();
             setUIEncodeFinished();
             resetQueue();
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -139,8 +140,8 @@ namespace Handbrake
             }
 
             list_queue.Items.Clear();
-            List<Queue.QueueItem> theQueue = queue.getQueue();
-            foreach (Queue.QueueItem queue_item in theQueue)
+            List<QueueItem> theQueue = queue.getQueue();
+            foreach (QueueItem queue_item in theQueue)
             {
                 string q_item = queue_item.Query;
                 Functions.QueryParser parsed = Functions.QueryParser.Parse(q_item);

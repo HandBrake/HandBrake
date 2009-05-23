@@ -11,9 +11,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using Handbrake.EncodeQueue;
 using Handbrake.Functions;
 using Handbrake.Presets;
-using Handbrake.Queue;
 using Handbrake.Parsing;
 
 namespace Handbrake
@@ -218,7 +218,7 @@ namespace Handbrake
             // Experimental HBProc Process Monitoring.
             if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
             {
-                HBProcess = encodeQueue.hbProc;
+                HBProcess = encodeQueue.encodeProcess.hbProcProcess;
                 Thread EncodeMon = new Thread(encodeMonitorThread);
                 EncodeMon.Start();
             }
@@ -584,13 +584,16 @@ namespace Handbrake
         {
             if (btn_start.Text == "Stop")
             {
-                DialogResult result = MessageBox.Show("Are you sure you wish to cancel the encode? Please note that this may break the encoded file. \nTo safely cancel your encode, press ctrl-c on your keyboard in the CLI window. This *may* allow you to preview your encoded content.", "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
                     // Pause The Queue
-                    encodeQueue.pauseEncode();
-                    encodeQueue.endEncode();
+                    encodeQueue.pauseEncodeQueue();
+
+                    // Allow the CLI to exit cleanly
+                    Win32.SetForegroundWindow(encodeQueue.encodeProcess.processHandle);
+                    SendKeys.Send("^C");
 
                     // Update the GUI
                     setEncodeFinished();
