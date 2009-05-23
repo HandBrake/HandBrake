@@ -2747,6 +2747,12 @@ static int get_acodec_for_string( char *codec )
     {
         return HB_ACODEC_VORBIS;
     }
+#ifdef __APPLE__
+    else if( !strcasecmp( codec, "ca_aac") )
+    {
+        return HB_ACODEC_CA_AAC;
+    }
+#endif
     else
     {
         return -1;

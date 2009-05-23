@@ -86,7 +86,7 @@ void hb_register( hb_work_object_t * w )
  * @param update_check signals libhb to check for updated version from HandBrake website.
  * @return Handle to hb_handle_t for use on all subsequent calls to libhb.
  */
-hb_handle_t * hb_init_real( int verbose, int update_check )
+hb_handle_t * hb_init( int verbose, int update_check )
 {
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
     uint64_t      date;
@@ -150,11 +150,31 @@ hb_handle_t * hb_init_real( int verbose, int update_check )
     h->die         = 0;
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
+    hb_register( &hb_sync );
+	hb_register( &hb_decmpeg2 );
+	hb_register( &hb_decvobsub );
+    hb_register( &hb_encvobsub );
+    hb_register( &hb_deccc608 );
+	hb_register( &hb_render );
+	hb_register( &hb_encavcodec );
+	hb_register( &hb_encxvid );
+	hb_register( &hb_encx264 );
+    hb_register( &hb_enctheora );
+	hb_register( &hb_deca52 );
+	hb_register( &hb_decdca );
+	hb_register( &hb_decavcodec );
+	hb_register( &hb_decavcodecv );
+	hb_register( &hb_decavcodecvi );
+	hb_register( &hb_decavcodecai );
+	hb_register( &hb_declpcm );
+	hb_register( &hb_encfaac );
+	hb_register( &hb_enclame );
+	hb_register( &hb_encvorbis );
+#ifdef __APPLE__
+	hb_register( &hb_encca_aac );
+#endif
 
     return h;
-
-	/* Set the scan count to start at 0 */
-	//scan_count = 0;
 }
 
 /**
@@ -230,13 +250,13 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     hb_register( &hb_sync );
 	hb_register( &hb_decmpeg2 );
 	hb_register( &hb_decvobsub );
-        hb_register( &hb_encvobsub );
-        hb_register( &hb_deccc608 );
+    hb_register( &hb_encvobsub );
+    hb_register( &hb_deccc608 );
 	hb_register( &hb_render );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encxvid );
 	hb_register( &hb_encx264 );
-        hb_register( &hb_enctheora );
+    hb_register( &hb_enctheora );
 	hb_register( &hb_deca52 );
 	hb_register( &hb_decdca );
 	hb_register( &hb_decavcodec );
@@ -247,6 +267,9 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 	hb_register( &hb_encfaac );
 	hb_register( &hb_enclame );
 	hb_register( &hb_encvorbis );
+#ifdef __APPLE__
+	hb_register( &hb_encca_aac );
+#endif
 
 	return h;
 }
@@ -1301,7 +1324,7 @@ int hb_get_scancount( hb_handle_t * h)
  }
 
 /**
- * Closes access to libhb by freeing the hb_handle_t handle ontained in hb_init_real.
+ * Closes access to libhb by freeing the hb_handle_t handle ontained in hb_init.
  * @param _h Pointer to handle to hb_handle_t.
  */
 void hb_close( hb_handle_t ** _h )

@@ -57,6 +57,8 @@
 		A2D7AD6D0C998AD30082CA33 /* pref-picture.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD640C998AD30082CA33 /* pref-picture.tiff */; };
 		A2D7AD6E0C998AD30082CA33 /* Queue.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD650C998AD30082CA33 /* Queue.tiff */; };
 		A2D7AD6F0C998AD30082CA33 /* Source.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD660C998AD30082CA33 /* Source.tiff */; };
+		A906A0510F7A7B210007A827 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A906A0500F7A7B210007A827 /* AudioToolbox.framework */; };
+		A906A0520F7A7B210007A827 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A906A0500F7A7B210007A827 /* AudioToolbox.framework */; };
 		A9AC41DF0C918DB500DDF9B8 /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */; };
 		A9AC41E00C918DB500DDF9B8 /* HBAdvancedController.h in Headers */ = {isa = PBXBuildFile; fileRef = A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */; };
 		D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D289A9F20DBBE7AC00CE614B /* CoreServices.framework */; };
@@ -177,6 +179,7 @@
 		A2D7AD640C998AD30082CA33 /* pref-picture.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "pref-picture.tiff"; sourceTree = "<group>"; };
 		A2D7AD650C998AD30082CA33 /* Queue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Queue.tiff; sourceTree = "<group>"; };
 		A2D7AD660C998AD30082CA33 /* Source.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Source.tiff; sourceTree = "<group>"; };
+		A906A0500F7A7B210007A827 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		A9AC41DD0C918DB500DDF9B8 /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
 		A9AC41DE0C918DB500DDF9B8 /* HBAdvancedController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		D289A9F20DBBE7AC00CE614B /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
@@ -224,6 +227,7 @@
 				2713E6300F676510002E0A01 /* libhb.a in Frameworks */,
 				2774BE900F66F47100B65FC6 /* libbz2.dylib in Frameworks */,
 				2774BE920F66F48200B65FC6 /* libz.dylib in Frameworks */,
+				A906A0520F7A7B210007A827 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +245,7 @@
 				2713E6420F676526002E0A01 /* libhb.a in Frameworks */,
 				2774BEC70F66F61A00B65FC6 /* libbz2.dylib in Frameworks */,
 				2774BEC80F66F61A00B65FC6 /* libz.dylib in Frameworks */,
+				A906A0510F7A7B210007A827 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +293,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A906A0500F7A7B210007A827 /* AudioToolbox.framework */,
 				A25962E00F15077500B3BF4E /* Quartz.framework */,
 				A20F47000EBB5EC2005B861B /* QTKit.framework */,
 				A20F46DB0EBB5E7A005B861B /* QuickTime.framework */,

@@ -4787,10 +4787,14 @@ the user is using "Custom" settings by determining the sender*/
         {
             case 0:
                 /* MP4 */
-                // AAC
+                // FAAC
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_FAAC];
-                
+
+                // CA_AAC
+                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (CoreAudio)" action: NULL keyEquivalent: @""];
+                [menuItem setTag: HB_ACODEC_CA_AAC];
+
                 // AC3 Passthru
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_AC3];
@@ -4798,9 +4802,12 @@ the user is using "Custom" settings by determining the sender*/
                 
             case 1:
                 /* MKV */
-                // AAC
+                // FAAC
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_FAAC];
+                // CA_AAC
+                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (CoreAudio)" action: NULL keyEquivalent: @""];
+                [menuItem setTag: HB_ACODEC_CA_AAC];
                 // AC3 Passthru
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_AC3];
@@ -5229,7 +5236,22 @@ the user is using "Custom" settings by determining the sender*/
                 maxbitrate = 160;
                 break;
             }
-            
+
+        case HB_ACODEC_CA_AAC:
+            /* check if we have a 6ch discrete conversion in either audio track */
+            if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
+            {
+                minbitrate = 128;
+                maxbitrate = 768;
+                break;
+            }
+            else
+            {
+                minbitrate = 64;
+                maxbitrate = 320;
+                break;
+            }
+
             case HB_ACODEC_LAME:
             /* Lame is happy using our min bitrate of 32 kbps */
             minbitrate = 32;

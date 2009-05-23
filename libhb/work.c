@@ -106,6 +106,7 @@ hb_work_object_t * hb_codec_encoder( int codec )
         case HB_ACODEC_FAAC:   return hb_get_work( WORK_ENCFAAC );
         case HB_ACODEC_LAME:   return hb_get_work( WORK_ENCLAME );
         case HB_ACODEC_VORBIS: return hb_get_work( WORK_ENCVORBIS );
+        case HB_ACODEC_CA_AAC:  return hb_get_work( WORK_ENC_CA_AAC );
     }
     return NULL;
 }
@@ -329,8 +330,9 @@ void hb_display_job_info( hb_job_t * job )
             else
             {
                 hb_log( "   + encoder: %s", ( audio->config.out.codec == HB_ACODEC_FAAC ) ?
-                    "faac" : ( ( audio->config.out.codec == HB_ACODEC_LAME ) ? "lame" :
-                    "vorbis" ) );
+                    "faac" : ( ( audio->config.out.codec == HB_ACODEC_LAME ) ?
+                    "lame" : ( ( audio->config.out.codec == HB_ACODEC_CA_AAC ) ?
+                              "ca_aac" : "vorbis"  ) ) );
                 hb_log( "     + bitrate: %d kbps, samplerate: %d Hz", audio->config.out.bitrate, audio->config.out.samplerate );            
             }
         }

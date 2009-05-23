@@ -36,7 +36,7 @@ BUILD.out += $(TEST.install.exe)
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
-    TEST.GCC.f += IOKit CoreServices
+    TEST.GCC.f += IOKit CoreServices AudioToolbox
     TEST.GCC.l += bz2 z
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += bz2 z pthread dl m

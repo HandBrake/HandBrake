@@ -41,6 +41,7 @@ ifeq ($(BUILD.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN
 else ifeq ($(BUILD.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
+    LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
 else ifeq ($(BUILD.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(BUILD.system),mingw)

@@ -286,6 +286,7 @@ struct hb_job_s
 #define HB_ACODEC_LPCM   0x002000
 #define HB_ACODEC_DCA    0x004000
 #define HB_ACODEC_FFMPEG 0x008000
+#define HB_ACODEC_CA_AAC 0x010000
 
 /* Audio Mixdown */
 /* define some masks, used to extract the various information from the HB_AMIXDOWN_XXXX values */
@@ -675,6 +676,7 @@ extern hb_work_object_t hb_declpcm;
 extern hb_work_object_t hb_encfaac;
 extern hb_work_object_t hb_enclame;
 extern hb_work_object_t hb_encvorbis;
+extern hb_work_object_t hb_encca_aac;
 
 #define FILTER_OK      0
 #define FILTER_DELAY   1
