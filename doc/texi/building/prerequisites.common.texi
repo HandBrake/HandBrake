@@ -1,9 +1,9 @@
 The following general tools are used on various platforms and it is recommended you use these versions or similar:
 
 @itemize @bullet
-@item subversion - 1.5.5
+@item subversion - 1.6.2
 @item python - Python 2.4.6
-@item curl - curl 7.19.3 (or wget)
+@item curl - curl 7.19.4 (or wget)
 @item m4 - GNU M4 1.4.6
 @item make - GNU Make 3.81
 @item patch - Patch 2.5.8

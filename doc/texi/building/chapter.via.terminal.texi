@@ -140,7 +140,7 @@ Clean build output for @i{MODULE}.
 @anchor{terminal.targets.contrib}
 @subsection Contrib Modules
 
-Contrib modules such as @samp{a52dec}, @samp{bzip2}, @samp{faac}, @samp{faad2}, @samp{ffmpeg}, @samp{lame}, @samp{libdca}, @samp{libdvdread}, @samp{libmkv}, @samp{libmp4v2}, @samp{libogg}, @samp{libsamplerate}, @samp{libtheora}, @samp{libvorbis}, @samp{mpeg2dec}, @samp{x264}, @samp{xvidcore} and @samp{zlib} have the following scoped targets:
+Contrib modules such as @samp{a52dec}, @samp{bzip2}, @samp{faac}, @samp{faad2}, @samp{ffmpeg}, @samp{lame}, @samp{libdca}, @samp{libdvdread}, @samp{libmkv}, @samp{libogg}, @samp{libsamplerate}, @samp{libtheora}, @samp{libvorbis}, @samp{mp4v2}, @samp{mpeg2dec}, @samp{x264}, @samp{xvidcore} and @samp{zlib} have the following scoped targets:
 
 @table @samp
 @item make @i{MODULE}.fetch

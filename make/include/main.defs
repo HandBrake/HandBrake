@@ -22,11 +22,11 @@ MODULES += contrib/libdca
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libmkv
-MODULES += contrib/libmp4v2
 MODULES += contrib/libogg
 MODULES += contrib/libsamplerate
 MODULES += contrib/libtheora
 MODULES += contrib/libvorbis
+MODULES += contrib/mp4v2
 MODULES += contrib/mpeg2dec
 
 ifneq (,$(filter $(BUILD.system),mingw))

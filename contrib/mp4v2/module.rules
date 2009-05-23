@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,MP4V2))
+$(eval $(call import.CONTRIB.rules,MP4V2))

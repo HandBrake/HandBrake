@@ -420,7 +420,7 @@ static int MP4Init( hb_mux_object_t * m )
             subtitle->mux_data = mux_data;
             mux_data->subtitle = 1;
             mux_data->sub_format = subtitle->format;
-            mux_data->track = MP4AddSubtitleTrack( m->file, 1 );
+            mux_data->track = MP4AddSubtitleTrack( m->file, 90000, width, height );
 
             MP4SetTrackLanguage(m->file, mux_data->track, subtitle->iso639_2);
 
@@ -430,9 +430,6 @@ static int MP4Init( hb_mux_object_t * m )
             const uint8_t textColor[4] = { 255,255,255,255 };
 
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.alternate_group", 2);
-
-            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.width", width);
-            MP4SetTrackFloatProperty(m->file, mux_data->track, "tkhd.height", height);
 
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.dataReferenceIndex", 1);
             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.tx3g.horizontalJustification", 1);
@@ -768,13 +765,20 @@ static int MP4End( hb_mux_object_t * m )
         MP4TagsFetch( tags, m->file );
 
         /* populate */
-        MP4TagsSetName( tags, md->name );
-        MP4TagsSetArtist( tags, md->artist );
-        MP4TagsSetComposer( tags, md->composer );
-        MP4TagsSetComments( tags, md->comment );
-        MP4TagsSetReleaseDate( tags, md->release_date );
-        MP4TagsSetAlbum( tags, md->album );
-        MP4TagsSetGenre( tags, md->genre );
+        if( strlen( md->name ))
+            MP4TagsSetName( tags, md->name );
+        if( strlen( md->artist ))
+            MP4TagsSetArtist( tags, md->artist );
+        if( strlen( md->composer ))
+            MP4TagsSetComposer( tags, md->composer );
+        if( strlen( md->comment ))
+            MP4TagsSetComments( tags, md->comment );
+        if( strlen( md->release_date ))
+            MP4TagsSetReleaseDate( tags, md->release_date );
+        if( strlen( md->album ))
+            MP4TagsSetAlbum( tags, md->album );
+        if( strlen( md->genre ))
+            MP4TagsSetGenre( tags, md->genre );
 
         if( md->coverart )
         {
