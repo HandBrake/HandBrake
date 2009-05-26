@@ -22,6 +22,7 @@ MODULES += contrib/libdca
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libmkv
+MODULES += contrib/bdtools
 MODULES += contrib/libogg
 MODULES += contrib/libsamplerate
 MODULES += contrib/libtheora

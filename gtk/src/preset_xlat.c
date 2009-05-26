@@ -210,7 +210,7 @@ static value_map_t subtitle_xlat[] =
 static value_map_t vcodec_xlat[] =
 {
 	{"MPEG-4 (FFmpeg)", "ffmpeg"},
-	{"MPEG-4 (XviD)", "xvid"},
+	{"MPEG-4 (XviD)", "ffmpeg"},
 	{"H.264 (x264)", "x264"},
 	{"VP3 (Theora)", "theora"},
 	{NULL,NULL}

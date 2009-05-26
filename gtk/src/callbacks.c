@@ -3395,7 +3395,6 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 				return g_strdup_printf("QP: %.4g (%.0f%%)", val, percent);
 		} break;
 
-		case HB_VCODEC_XVID:
 		case HB_VCODEC_FFMPEG:
 		{
 			percent = 100. * (30 - (val - 1)) / 30.;

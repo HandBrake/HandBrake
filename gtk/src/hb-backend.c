@@ -607,7 +607,6 @@ ghb_vquality_range(
 			*inverted = TRUE;
 		} break;
 
-		case HB_VCODEC_XVID:
 		case HB_VCODEC_FFMPEG:
 		{
 			*min = 1;
@@ -3366,14 +3365,14 @@ ghb_validate_video(signal_user_data_t *ud)
 		message = g_strdup_printf(
 					"Theora is not supported in the MP4 and AVI containers.\n\n"
 					"You should choose a different video codec or container.\n"
-					"If you continue, XviD will be chosen for you.");
+					"If you continue, FFMPEG will be chosen for you.");
 		if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
 		{
 			g_free(message);
 			return FALSE;
 		}
 		g_free(message);
-		vcodec = HB_VCODEC_XVID;
+		vcodec = HB_VCODEC_FFMPEG;
 		ghb_ui_update(ud, "VideoEncoder", ghb_int64_value(vcodec));
 	}
 	return TRUE;
@@ -3429,6 +3428,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 				return FALSE;
 			}
 			g_free(message);
+			break;
 		}
 	}
 	return TRUE;
@@ -3655,7 +3655,6 @@ ghb_validate_vquality(GValue *settings)
 				max = 30;
 			} break;
 
-			case HB_VCODEC_XVID:
 			case HB_VCODEC_FFMPEG:
 			{
 				min = 1;
@@ -3871,7 +3870,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		(job->vcodec == HB_VCODEC_THEORA))
 	{
 		// mp4|avi/theora combination is not supported.
-		job->vcodec = HB_VCODEC_XVID;
+		job->vcodec = HB_VCODEC_FFMPEG;
 	}
 	if ((job->vcodec == HB_VCODEC_X264) && (job->mux == HB_MUX_MP4))
 	{

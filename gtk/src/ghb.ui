@@ -5617,19 +5617,6 @@ libvorbis authors:
 libx264 authors:
   Laurent Aimar
 
-libxvidcore authors:
-  Christoph Lampert
-  Michael Militzer
-  Peter Ross
-  Benjamin Herrenschmidt
-  Daniel Smith
-  Dirk Knop
-  Edouard Gomez
-  Guillaume Morin
-  MinChen
-  Pascal Massimino
-  Radoslaw Czyz
-
 </property>
     <property name="logo_icon_name">hb-icon</property>
     <property name="wrap_license">True</property>

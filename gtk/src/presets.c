@@ -2437,7 +2437,6 @@ import_xlat_preset(GValue *dict)
 				vquality = 51. - vquality * 51.;
 			} break;
 
-			case HB_VCODEC_XVID:
 			case HB_VCODEC_FFMPEG:
 			{
 				vquality = 31. - vquality * 30.;
