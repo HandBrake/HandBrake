@@ -267,29 +267,29 @@ namespace Handbrake.Functions
                     tracks.Add("1");
                 else if (row.Text != "None")
                 {
-                    string[] tempSub = row.Text.Split(' ');
+                    string[] tempSub = row.SubItems[1].Text.Split(' ');
                     tracks.Add(tempSub[0]);
                 }
 
                 // Audio Codec (-E)
                 if (row.SubItems[1].Text != String.Empty)
-                    codecs.Add(getAudioEncoder(row.SubItems[1].Text));
+                    codecs.Add(getAudioEncoder(row.SubItems[2].Text));
 
                 // Audio Mixdown (-6)
                 if (row.SubItems[2].Text != String.Empty)
-                    mixdowns.Add(getMixDown(row.SubItems[2].Text));
+                    mixdowns.Add(getMixDown(row.SubItems[3].Text));
 
                 // Sample Rate (-R)
                 if (row.SubItems[3].Text != String.Empty)
-                    samplerates.Add(row.SubItems[3].Text.Replace("Auto", "Auto"));
+                    samplerates.Add(row.SubItems[4].Text.Replace("Auto", "Auto"));
 
                 // Audio Bitrate (-B)
                 if (row.SubItems[4].Text != String.Empty)
-                    bitrates.Add(row.SubItems[4].Text.Replace("Auto", "auto"));
+                    bitrates.Add(row.SubItems[5].Text.Replace("Auto", "auto"));
 
                 // DRC (-D)
                 if (row.SubItems[5].Text != String.Empty)
-                    drcs.Add(row.SubItems[5].Text);
+                    drcs.Add(row.SubItems[6].Text);
             }
 
             // Audio Track (-a)
