@@ -736,7 +736,7 @@ main (int argc, char *argv[])
 	// Load all internal settings
 	ghb_settings_init(ud);
 	// Load the presets files
-	ghb_presets_load();
+	ghb_presets_load(ud);
 	ghb_prefs_load(ud);
 
 	ghb_prefs_to_ui(ud);

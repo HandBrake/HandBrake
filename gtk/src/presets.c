@@ -2633,6 +2633,8 @@ ghb_presets_reload(signal_user_data_t *ud)
 
 		std_dict = ghb_array_get_nth(std_presets, ii);
 		copy_dict = ghb_value_dup(std_dict);
+		ghb_dict_insert(copy_dict, g_strdup("PresetBuildNumber"), 
+						ghb_int64_value_new(hb_get_build(NULL)));
 		ghb_presets_insert(presetsPlist, copy_dict, &indices, 1);
 		presets_list_insert(ud, &indices, 1);
 	}
@@ -2659,8 +2661,102 @@ check_old_presets()
 	return FALSE;
 }
 
+static void
+replace_standard_presets()
+{
+	GValue *std_presets;
+	int *indices, len;
+	gint count, ii;
+
+	count = ghb_array_len(presetsPlist);
+	for (ii = count-1; ii >= 0; ii--)
+	{
+		GValue *dict;
+		gint ptype;
+
+		dict = ghb_array_get_nth(presetsPlist, ii);
+		ptype = ghb_value_int(preset_dict_get_value(dict, "Type"));
+		if (ptype == PRESETS_BUILTIN)
+		{
+			gint indices = 0;
+			ghb_presets_remove(presetsPlist, &indices, 1);
+		}
+	}
+
+	std_presets = ghb_resource_get("standard-presets");
+	if (std_presets == NULL) return;
+
+	indices = presets_find_default(presetsPlist, &len);
+	if (indices)
+	{
+		presets_clear_default(std_presets);
+		g_free(indices);
+	}
+	// Merge the keyfile contents into our presets
+	count = ghb_array_len(std_presets);
+	for (ii = count-1; ii >= 0; ii--)
+	{
+		GValue *std_dict;
+		GValue *copy_dict;
+		gint indices = 0;
+
+		std_dict = ghb_array_get_nth(std_presets, ii);
+		copy_dict = ghb_value_dup(std_dict);
+		ghb_dict_insert(copy_dict, g_strdup("PresetBuildNumber"), 
+						ghb_int64_value_new(hb_get_build(NULL)));
+		ghb_presets_insert(presetsPlist, copy_dict, &indices, 1);
+	}
+	import_xlat_presets(presetsPlist);
+	store_presets();
+}
+
+static void
+update_standard_presets(signal_user_data_t *ud)
+{
+	gint count, ii;
+
+	count = ghb_array_len(presetsPlist);
+	for (ii = count-1; ii >= 0; ii--)
+	{
+		GValue *dict;
+		const GValue *gval;
+		gint64 build;
+		gint type;
+
+		dict = ghb_array_get_nth(presetsPlist, ii);
+		gval = ghb_dict_lookup(dict, "Type");
+		if (gval == NULL)
+		{
+			// Old preset that doesn't have a Type
+			replace_standard_presets();
+			return;
+		}
+			
+		type = ghb_value_int(gval);
+		if (type == 0)
+		{
+			gval = ghb_dict_lookup(dict, "PresetBuildNumber");
+			if (gval == NULL)
+			{
+				// Old preset that doesn't have a build number
+				replace_standard_presets();
+				return;
+			}
+
+			build = ghb_value_int64(gval);
+			if (build != hb_get_build(NULL))
+			{
+				// Build number does not match
+				replace_standard_presets();
+				return;
+			}
+		}
+	}
+	return;
+}
+
 void
-ghb_presets_load()
+ghb_presets_load(signal_user_data_t *ud)
 {
 	presetsPlist = load_plist("presets");
 	if (presetsPlist == NULL)
@@ -2683,6 +2779,7 @@ ghb_presets_load()
 		import_xlat_presets(presetsPlist);
 		store_presets();
 	}
+	update_standard_presets(ud);
 	import_xlat_presets(presetsPlist);
 }
 
@@ -2738,6 +2835,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 	current_preset = dict;
 	autoscale = ghb_settings_get_boolean(ud->settings, "autoscale");
 	ghb_settings_set_int64(ud->settings, "Type", PRESETS_CUSTOM);
+	ghb_settings_set_int64(ud->settings, "PresetBuildNumber", hb_get_build(NULL));
 
 	internal = plist_get_dict(internalPlist, "Presets");
 	ghb_dict_iter_init(&iter, internal);

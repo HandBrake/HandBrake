@@ -17,7 +17,7 @@
 #define _GHB_PRESETS_H_
 
 void ghb_settings_save(signal_user_data_t *ud, const gchar *name);
-void ghb_presets_load(void);
+void ghb_presets_load(signal_user_data_t *ud);
 void ghb_update_from_preset(signal_user_data_t *ud, const gchar *key);
 void ghb_prefs_load(signal_user_data_t *ud);
 void ghb_settings_init(signal_user_data_t *ud);

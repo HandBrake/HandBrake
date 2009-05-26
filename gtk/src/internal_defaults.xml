@@ -173,6 +173,8 @@
 	</dict>
 	<key>Presets</key>
 	<dict>
+		<key>PresetBuildNumber</key>
+		<string></string>
 		<key>PictureAutoCrop</key>
 		<true />
 		<key>ChapterMarkers</key>
