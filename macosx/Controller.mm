@@ -7099,7 +7099,7 @@ return YES;
         if ([[tempObject objectForKey:@"Type"] intValue] == 0) // Type 0 is a built in preset		
         {
             /* Preset build number */
-            [[UserPresets objectAtIndex:i] setObject:[NSString stringWithFormat: @"%d", [[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]] forKey:@"PresetBuildNumber"];
+            [[UserPresets objectAtIndex:i] setObject:[NSNumber numberWithInt:[[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] intValue]] forKey:@"PresetBuildNumber"];
         }
         i++;
     }
