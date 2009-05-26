@@ -1962,8 +1962,8 @@ static void ShowHelp()
 
 
     "### Video Options------------------------------------------------------------\n\n"
-    "    -e, --encoder <string>  Set video library encoder (ffmpeg,xvid,\n"
-    "                            x264,theora default: ffmpeg)\n"
+    "    -e, --encoder <string>  Set video library encoder (ffmpeg,x264,theora)\n"
+    "                            (default: ffmpeg)\n"
     "    -x, --x264opts <string> Specify advanced x264 options in the\n"
     "                            same style as mencoder:\n"
     "                            option1=value1:option2=value2\n"
@@ -2469,10 +2469,6 @@ static int ParseOptions( int argc, char ** argv )
                 if( !strcasecmp( optarg, "ffmpeg" ) )
                 {
                     vcodec = HB_VCODEC_FFMPEG;
-                }
-                else if( !strcasecmp( optarg, "xvid" ) )
-                {
-                    vcodec = HB_VCODEC_XVID;
                 }
                 else if( !strcasecmp( optarg, "x264" ) )
                 {

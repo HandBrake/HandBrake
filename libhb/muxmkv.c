@@ -124,7 +124,6 @@ static int MKVInit( hb_mux_object_t * m )
             if (job->areBframes)
                 track->minCache = 1;
             break;
-        case HB_VCODEC_XVID:
         case HB_VCODEC_FFMPEG:
             track->codecID = MK_VCODEC_MP4ASP;
             track->codecPrivate = job->config.mpeg4.bytes;

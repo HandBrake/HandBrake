@@ -395,7 +395,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Video encoder */
     [fVidEncoderPopUp removeAllItems];
     [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
-    [fVidEncoderPopUp addItemWithTitle: @"XviD"];
     
     
     
@@ -4200,8 +4199,8 @@ the user is using "Custom" settings by determining the sender*/
             qpRFLabelString = @"RF:";
         }
     }
-    /* ffmpeg and xvid 1-31 */
-    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_FFMPEG || [[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_XVID)
+    /* ffmpeg  1-31 */
+    if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_FFMPEG )
     {
         [fVidQualitySlider setMinValue:1.0];
         [fVidQualitySlider setMaxValue:31.0];

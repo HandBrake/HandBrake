@@ -11,7 +11,7 @@ TEST.exe = $(BUILD/)$(call TARGET.exe,$(HB.name)CLI)
 
 TEST.libs = $(LIBHB.a) $(foreach n, \
         a52 avcodec avformat avutil dca dvdnav dvdread faac faad mkv mpeg2 mp3lame mp4v2 \
-        ogg samplerate swscale theora vorbis vorbisenc x264 xvidcore, \
+        ogg samplerate swscale theora vorbis vorbisenc x264, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 TEST.install.exe = $(PREFIX/)bin/$(notdir $(TEST.exe))

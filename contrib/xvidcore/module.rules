@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,XVIDCORE))
-$(eval $(call import.CONTRIB.rules,XVIDCORE))

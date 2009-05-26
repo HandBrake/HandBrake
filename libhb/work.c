@@ -244,10 +244,6 @@ void hb_display_job_info( hb_job_t * job )
                 hb_log( "   + encoder: FFmpeg" );
                 break;
 
-            case HB_VCODEC_XVID:
-                hb_log( "   + encoder: XviD" );
-                break;
-
             case HB_VCODEC_X264:
                 hb_log( "   + encoder: x264" );
                 if( job->x264opts != NULL && *job->x264opts != '\0' )
@@ -455,9 +451,6 @@ static void do_job( hb_job_t * job, int cpu_count )
         {
         case HB_VCODEC_FFMPEG:
             w = hb_get_work( WORK_ENCAVCODEC );
-            break;
-        case HB_VCODEC_XVID:
-            w = hb_get_work( WORK_ENCXVID );
             break;
         case HB_VCODEC_X264:
             w = hb_get_work( WORK_ENCX264 );

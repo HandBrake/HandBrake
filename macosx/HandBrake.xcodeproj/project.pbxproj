@@ -711,7 +711,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -742,7 +741,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -808,7 +806,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -845,7 +842,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -932,7 +928,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -969,7 +964,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1056,7 +1050,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1093,7 +1086,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1180,7 +1172,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1217,7 +1208,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1307,7 +1297,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1344,7 +1333,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1434,7 +1422,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1471,7 +1458,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1561,7 +1547,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1598,7 +1583,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1688,7 +1672,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1725,7 +1708,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrakeCLI;
 			};
@@ -1824,7 +1806,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (
@@ -1866,7 +1847,6 @@
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbis.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libvorbisenc.a",
 					"$(EXTERNAL_BUILD)/contrib/lib/libx264.a",
-					"$(EXTERNAL_BUILD)/contrib/lib/libxvidcore.a",
 				);
 				PRODUCT_NAME = HandBrake;
 				WARNING_CFLAGS = (

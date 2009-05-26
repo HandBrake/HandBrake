@@ -34,7 +34,6 @@ ifneq (,$(filter $(BUILD.system),mingw))
 endif
 
 MODULES += contrib/x264
-MODULES += contrib/xvidcore
 
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
     MODULES += contrib/zlib

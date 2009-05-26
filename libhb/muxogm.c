@@ -153,7 +153,6 @@ static int OGMInit( hb_mux_object_t * m )
             op.packet = job->config.theora.headers[0] + sizeof(op);
             ogg_stream_packetin( &mux_data->os, &op );
             break;
-        case HB_VCODEC_XVID:
         case HB_VCODEC_X264:
         case HB_VCODEC_FFMPEG:
         {
@@ -163,10 +162,6 @@ static int OGMInit( hb_mux_object_t * m )
                 if( mux_data->codec == HB_VCODEC_X264 )
                 {
                     memcpy( h.sub_type, "H264", 4 );
-                }
-                else if( mux_data->codec == HB_VCODEC_XVID )
-                {
-                    memcpy( h.sub_type, "XVID", 4 );
                 }
                 else
                 {
@@ -262,7 +257,6 @@ static int OGMInit( hb_mux_object_t * m )
                 OGMFlush( m, mux_data );
             }
             break;
-        case HB_VCODEC_XVID:
         case HB_VCODEC_X264:
         case HB_VCODEC_FFMPEG:
             break;
@@ -310,7 +304,6 @@ static int OGMMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             memcpy( op.packet, buf->data + sizeof( ogg_packet ), op.bytes );
             break;
         case HB_VCODEC_FFMPEG:
-        case HB_VCODEC_XVID:
         case HB_VCODEC_X264:
             op.bytes  = buf->size + 1;
             op.packet = malloc( op.bytes );
