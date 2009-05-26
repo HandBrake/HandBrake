@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2413 (2009051201) on Linux
+Guide to Building HandBrake svn2449 (2009052601) on Linux
 *********************************************************
 
 Table of Contents
@@ -58,11 +58,11 @@ Linux; but is not necessarily the only configuration that is possible:
 The following general tools are used on various platforms and it is
 recommended you use these versions or similar:
 
-   * subversion - 1.5.5
+   * subversion - 1.6.2
 
    * python - Python 2.4.6
 
-   * curl - curl 7.19.3 (or wget)
+   * curl - curl 7.19.4 (or wget)
 
    * m4 - GNU M4 1.4.6
 
@@ -373,9 +373,9 @@ scoped targets:
 ---------------------
 
 Contrib modules such as `a52dec', `bzip2', `faac', `faad2', `ffmpeg',
-`lame', `libdca', `libdvdread', `libmkv', `libmp4v2', `libogg',
-`libsamplerate', `libtheora', `libvorbis', `mpeg2dec', `x264',
-`xvidcore' and `zlib' have the following scoped targets:
+`lame', `libdca', `libdvdread', `libmkv', `libogg', `libsamplerate',
+`libtheora', `libvorbis', `mp4v2', `mpeg2dec', `x264' and `zlib' have
+the following scoped targets:
 
 `make MODULE.fetch'
      Download source tarball from the Internet and save to
@@ -536,7 +536,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2413
-     date:   2009-05-12 14:06:22 -0400
+     rev:    2449
+     date:   2009-05-26 11:25:54 -0400
      type:   developer
 
