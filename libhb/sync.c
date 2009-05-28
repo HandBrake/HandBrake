@@ -60,6 +60,7 @@ struct hb_work_private_s
     /* Audio */
     hb_sync_audio_t sync_audio[8];
     int64_t audio_passthru_slip;
+    int64_t video_pts_slip;
 
     /* Statistics */
     uint64_t st_counts[4];
@@ -282,6 +283,7 @@ static void SyncVideo( hb_work_object_t * w )
     hb_job_t * job = pv->job;
     hb_subtitle_t *subtitle;
     int i;
+    int64_t pts_skip;
 
     if( !pv->cur && !( pv->cur = hb_fifo_get( job->fifo_raw ) ) )
     {
@@ -289,6 +291,7 @@ static void SyncVideo( hb_work_object_t * w )
         return;
     }
     cur = pv->cur;
+    pts_skip = 0;
     if( cur->size == 0 )
     {
         /* we got an end-of-stream. Feed it downstream & signal that we're done. */
@@ -371,14 +374,18 @@ static void SyncVideo( hb_work_object_t * w )
          * can deal with overlaps of up to a frame time but anything larger
          * we handle by dropping frames here.
          */
-        if ( (int64_t)( next->start - cur->start ) <= 0 ||
-             (int64_t)( (cur->start - pv->audio_passthru_slip ) - pv->next_pts ) < 0 )
+        if ( (int64_t)( next->start - pv->video_pts_slip - cur->start ) <= 0 )
         {
             if ( pv->first_drop == 0 )
             {
                 pv->first_drop = next->start;
             }
             ++pv->drop_count;
+            if (next->start - cur->start > 0)
+            {
+                pts_skip += next->start - cur->start;
+                pv->video_pts_slip -= next->start - cur->start;
+            }
             buf_tmp = hb_fifo_get( job->fifo_raw );
             if ( buf_tmp->new_chap )
             {
@@ -683,7 +690,8 @@ static void SyncVideo( hb_work_object_t * w )
         pv->cur = cur = hb_fifo_get( job->fifo_raw );
         cur->sub = NULL;
         pv->next_pts = cur->start;
-        int64_t duration = cur->start - buf_tmp->start;
+        int64_t duration = cur->start - pts_skip - buf_tmp->start;
+        pts_skip = 0;
         if ( duration <= 0 )
         {
             hb_log( "sync: invalid video duration %lld, start %lld, next %lld",
@@ -899,6 +907,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                         (int)((start - sync->next_pts) / 90),
                         i, start, sync->next_pts );
                 pv->audio_passthru_slip += (start - sync->next_pts);
+                pv->video_pts_slip += (start - sync->next_pts);
                 return;
             }
             hb_log( "sync: adding %d ms of silence to audio %d"
