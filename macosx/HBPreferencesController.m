@@ -45,6 +45,7 @@
         @"YES",             @"CheckForUpdates",
         @"Open Source",     @"LaunchSourceBehavior",
         @"English",         @"DefaultLanguage",
+        @"YES",              @"UseCoreAudio",
         @"NO",              @"DefaultMpegName",
         @"YES",             @"DefaultCrf",
         @"NO",              @"UseDvdNav",

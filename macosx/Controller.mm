@@ -5947,6 +5947,13 @@ return YES;
                     }
                     [self audioTrackPopUpChanged: fAudLang1PopUp];
                     [fAudTrack1CodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
+                    /* check our pref for core audio and use it in place of faac if applicable */
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                        [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
+                    {
+                        [fAudTrack1CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                    }                    
+                    
                     [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
                     [fAudTrack1MixPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
                     /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
@@ -5974,6 +5981,12 @@ return YES;
                     }
                     [self audioTrackPopUpChanged: fAudLang2PopUp];
                     [fAudTrack2CodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
+                    /* check our pref for core audio and use it in place of faac if applicable */
+                    if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                        [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
+                    {
+                        [fAudTrack2CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                    }
                     [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
                     [fAudTrack2MixPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
                     /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
@@ -6026,6 +6039,12 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang1PopUp];
                 [fAudTrack1CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Encoder"]];
+                /* check our pref for core audio and use it in place of faac if applicable */
+                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                    [[chosenPreset objectForKey:@"Audio1Encoder"] isEqualToString: @"AAC (faac)"])
+                {
+                    [fAudTrack1CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                }
                 [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
                 [fAudTrack1MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
@@ -6051,6 +6070,12 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang2PopUp];
                 [fAudTrack2CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Encoder"]];
+                /* check our pref for core audio and use it in place of faac if applicable */
+                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                    [[chosenPreset objectForKey:@"Audio2Encoder"] isEqualToString: @"AAC (faac)"])
+                {
+                    [fAudTrack2CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                }
                 [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
                 [fAudTrack2MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
@@ -6076,6 +6101,12 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang3PopUp];
                 [fAudTrack3CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Encoder"]];
+                /* check our pref for core audio and use it in place of faac if applicable */
+                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                    [[chosenPreset objectForKey:@"Audio3Encoder"] isEqualToString: @"AAC (faac)"])
+                {
+                    [fAudTrack3CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                }
                 [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
                 [fAudTrack3MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
@@ -6101,6 +6132,12 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang4PopUp];
                 [fAudTrack4CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Encoder"]];
+                /* check our pref for core audio and use it in place of faac if applicable */
+                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                    [[chosenPreset objectForKey:@"Audio4Encoder"] isEqualToString: @"AAC (faac)"])
+                {
+                    [fAudTrack4CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                }
                 [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
                 [fAudTrack4MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
