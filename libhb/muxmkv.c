@@ -40,8 +40,8 @@ static int yuv2rgb(int yuv)
     int r, g, b;
 
     y =  (yuv >> 16) & 0xff;
-    Cr = (yuv >>  8) & 0xff;
-    Cb = (yuv)       & 0xff;
+    Cb = (yuv >>  8) & 0xff;
+    Cr = (yuv      ) & 0xff;
 
     r = 1.164 * (y - 16)                      + 2.018 * (Cb - 128);
     g = 1.164 * (y - 16) - 0.813 * (Cr - 128) - 0.391 * (Cb - 128);
