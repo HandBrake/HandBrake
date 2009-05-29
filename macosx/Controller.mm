@@ -13,13 +13,14 @@
 
 #define DragDropSimplePboardType 	@"MyCustomOutlineViewPboardType"
 
-/* We setup the toolbar values here */
+/* We setup the toolbar values here ShowPreviewIdentifier */
 static NSString *        ToggleDrawerIdentifier             = @"Toggle Drawer Item Identifier";
 static NSString *        StartEncodingIdentifier            = @"Start Encoding Item Identifier";
 static NSString *        PauseEncodingIdentifier            = @"Pause Encoding Item Identifier";
 static NSString *        ShowQueueIdentifier                = @"Show Queue Item Identifier";
 static NSString *        AddToQueueIdentifier               = @"Add to Queue Item Identifier";
 static NSString *        ShowPictureIdentifier             = @"Show Picture Window Item Identifier";
+static NSString *        ShowPreviewIdentifier             = @"Show Preview Window Item Identifier";
 static NSString *        ShowActivityIdentifier             = @"Debug Output Item Identifier";
 static NSString *        ChooseSourceIdentifier             = @"Choose Source Item Identifier";
 
@@ -1010,6 +1011,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [item setTarget: self];
         [item setAction: @selector(showPicturePanel:)];
     }
+    else if ([itemIdent isEqualToString: ShowPreviewIdentifier])
+    {
+        [item setLabel: @"Preview Window"];
+        [item setPaletteLabel: @"Show Preview"];
+        [item setToolTip: @"Show Preview"];
+        //[item setImage: [NSImage imageNamed: @"pref-picture"]];
+        [item setImage: [NSImage imageNamed: @"Brushed_Window"]];
+        [item setTarget: self];
+        [item setAction: @selector(showPreviewWindow:)];
+    }
     else if ([itemIdent isEqualToString: ShowActivityIdentifier]) 
     {
         [item setLabel: @"Activity Window"];
@@ -1041,13 +1052,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     return [NSArray arrayWithObjects: ChooseSourceIdentifier, NSToolbarSeparatorItemIdentifier, StartEncodingIdentifier,
         PauseEncodingIdentifier, AddToQueueIdentifier, ShowQueueIdentifier, NSToolbarFlexibleSpaceItemIdentifier, 
-		NSToolbarSpaceItemIdentifier, ShowPictureIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
+		NSToolbarSpaceItemIdentifier, ShowPictureIdentifier, ShowPreviewIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier, nil];
 }
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
 {
     return [NSArray arrayWithObjects:  StartEncodingIdentifier, PauseEncodingIdentifier, AddToQueueIdentifier,
-        ChooseSourceIdentifier, ShowQueueIdentifier, ShowPictureIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
+        ChooseSourceIdentifier, ShowQueueIdentifier, ShowPictureIdentifier, ShowPreviewIdentifier, ShowActivityIdentifier, ToggleDrawerIdentifier,
         NSToolbarCustomizeToolbarItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier,
         NSToolbarSpaceItemIdentifier, NSToolbarSeparatorItemIdentifier, nil];
 }
@@ -1085,6 +1096,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     return YES;
                 if ([ident isEqualToString: ShowPictureIdentifier])
                     return YES;
+                if ([ident isEqualToString: ShowPreviewIdentifier])
+                    return YES;
             }
         }
         else if (s.state == HB_STATE_PAUSED)
@@ -1102,6 +1115,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if ([ident isEqualToString: AddToQueueIdentifier])
                 return YES;
             if ([ident isEqualToString: ShowPictureIdentifier])
+                return YES;
+            if ([ident isEqualToString: ShowPreviewIdentifier])
                 return YES;
         }
         else if (s.state == HB_STATE_SCANNING)
@@ -1122,6 +1137,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if ([ident isEqualToString: AddToQueueIdentifier])
                 return YES;
             if ([ident isEqualToString: ShowPictureIdentifier])
+                return YES;
+            if ([ident isEqualToString: ShowPreviewIdentifier])
                 return YES;
         }
 

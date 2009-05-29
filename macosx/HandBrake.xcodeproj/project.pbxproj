@@ -37,6 +37,7 @@
 		A20F47010EBB5EC2005B861B /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20F47000EBB5EC2005B861B /* QTKit.framework */; };
 		A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */ = {isa = PBXBuildFile; fileRef = A22C85EA0D05D35000C10E36 /* HBPresets.h */; };
 		A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */ = {isa = PBXBuildFile; fileRef = A22C85EB0D05D35000C10E36 /* HBPresets.m */; };
+		A256080C0FD06720006A4277 /* Brushed_Window.png in Resources */ = {isa = PBXBuildFile; fileRef = A256080B0FD06720006A4277 /* Brushed_Window.png */; };
 		A25962E10F15077500B3BF4E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25962E00F15077500B3BF4E /* Quartz.framework */; };
 		A273E0510C57B39A00493A45 /* Pause.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04A0C57B39A00493A45 /* Pause.tiff */; };
 		A273E0520C57B39A00493A45 /* Play.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A273E04B0C57B39A00493A45 /* Play.tiff */; };
@@ -161,6 +162,7 @@
 		A20F47000EBB5EC2005B861B /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		A22C85EA0D05D35000C10E36 /* HBPresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPresets.h; sourceTree = "<group>"; };
 		A22C85EB0D05D35000C10E36 /* HBPresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPresets.m; sourceTree = "<group>"; };
+		A256080B0FD06720006A4277 /* Brushed_Window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Brushed_Window.png; path = icons/Brushed_Window.png; sourceTree = "<group>"; };
 		A25962E00F15077500B3BF4E /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = /System/Library/Frameworks/Quartz.framework; sourceTree = "<absolute>"; };
 		A273E04A0C57B39A00493A45 /* Pause.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Pause.tiff; sourceTree = "<group>"; };
 		A273E04B0C57B39A00493A45 /* Play.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Play.tiff; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A256080B0FD06720006A4277 /* Brushed_Window.png */,
 				A27BB4E80EFAB9310027CDF9 /* PicturePreview.xib */,
 				A273E0460C57B39A00493A45 /* icons */,
 				0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */,
@@ -567,6 +570,7 @@
 				E39AA4EA0D32DC0B0007A415 /* AdvancedView.xib in Resources */,
 				E39AA4EB0D32DC0B0007A415 /* OutputPanel.xib in Resources */,
 				A27BB4EA0EFAB9310027CDF9 /* PicturePreview.xib in Resources */,
+				A256080C0FD06720006A4277 /* Brushed_Window.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
