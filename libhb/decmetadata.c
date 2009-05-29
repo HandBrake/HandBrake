@@ -28,26 +28,26 @@ static void decmp4metadata( hb_title_t *title )
 
         if( tags->name ) {
             hb_deep_log( 2, "Metadata Name in input file is '%s'", tags->name );
-            strncpy( title->metadata->name, tags->name, 255 );
+            strncpy( title->metadata->name, tags->name, sizeof(title->metadata->name) );
         }
 
         if( tags->artist )
-            strncpy( title->metadata->artist, tags->artist, 255 );
+            strncpy( title->metadata->artist, tags->artist, sizeof(title->metadata->artist) );
 
         if( tags->composer )
-            strncpy( title->metadata->composer, tags->composer, 255 );
+            strncpy( title->metadata->composer, tags->composer, sizeof(title->metadata->composer) );
 
         if( tags->comments )
-            strncpy( title->metadata->comment, tags->comments, 1024 );
+            strncpy( title->metadata->comment, tags->comments, sizeof(title->metadata->comment) );
 
         if( tags->releaseDate )
-            strncpy( title->metadata->release_date, tags->releaseDate, 255 );
+            strncpy( title->metadata->release_date, tags->releaseDate, sizeof(title->metadata->release_date) );
 
         if( tags->album )
-            strncpy( title->metadata->album, tags->album, 255 );
+            strncpy( title->metadata->album, tags->album, sizeof(title->metadata->album) );
 
         if( tags->genre )
-            strncpy( title->metadata->genre, tags->genre, 255 );
+            strncpy( title->metadata->genre, tags->genre, sizeof(title->metadata->genre) );
 
         if( tags->artworkCount > 0 ) {
             const MP4TagArtwork* art = tags->artwork + 0; // first element
