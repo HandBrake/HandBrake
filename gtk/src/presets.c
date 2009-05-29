@@ -1753,6 +1753,7 @@ static value_map_t vcodec_xlat[] =
 static value_map_t acodec_xlat[] =
 {
 	{"AAC (faac)", "faac"},
+	{"AAC (CoreAudio)", "faac"},
 	{"AC3 Passthru", "ac3"},
 	{"MP3 (lame)", "lame"},
 	{"Vorbis (vorbis)", "vorbis"},
