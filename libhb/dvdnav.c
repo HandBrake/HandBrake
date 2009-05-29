@@ -251,6 +251,12 @@ PttDuration(ifo_handle_t *ifo, int ttn, int pttn, int *blocks, int *last_pgcn)
             hb_error( "scan: pgc not valid, skipping" );
             break;
         }
+        if (pgn > pgc->nr_of_programs)
+        {
+            pgn = 1;
+            continue;
+        }
+
         duration += 90LL * dvdtime2msec( &pgc->playback_time );
 
         cell_start = pgc->program_map[pgn-1] - 1;
@@ -419,6 +425,11 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
 
     hb_log("pgc_id: %d, pgn: %d: pgc: 0x%x", pgcn, pgn, pgc);
+    if (pgn > pgc->nr_of_programs)
+    {
+        hb_error( "invalid PGN %d for title %d, skipping", pgn, t );
+        goto fail;
+    }
 
     /* Title start */
     title->cell_start = pgc->program_map[pgn-1] - 1;
