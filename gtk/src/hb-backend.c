@@ -2022,7 +2022,7 @@ ghb_find_pref_subtitle_track(const gchar *lang)
 			return subtitle_opts.map[ii].ivalue;
 		}
 	}
-	return -1;
+	return -2;
 }
 
 gint
@@ -2067,7 +2067,7 @@ ghb_find_subtitle_track(
 			}
 		}
 	}
-	return -1;
+	return -2;
 }
 
 gint

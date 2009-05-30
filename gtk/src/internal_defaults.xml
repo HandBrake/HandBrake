@@ -144,7 +144,7 @@
 		<key>show_presets</key>
 		<true />
 		<key>show_preview</key>
-		<false />
+		<true />
 		<key>use_source_name</key>
 		<true />
 		<key>update_skip_version</key>
