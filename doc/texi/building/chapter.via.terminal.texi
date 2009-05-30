@@ -233,7 +233,7 @@ The purpose is to allow a place to store local build settings for testing, tweak
 
 @example
 ## bump to gcc-4.2 in current path
-GCC.gcc = gcc-4.2
+GCC.gcc = /usr/bin/gcc-4.2
 
 ## replace optimize for 'speed' with more aggressive settings
 GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
