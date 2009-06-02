@@ -1,8 +1,7 @@
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,FAAD2))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg_0.5.tar.gz
-FFMPEG.EXTRACT.tarbase = ffmpeg-0.5
+FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg-r19067.tar.bz2
 
 FFMPEG.CONFIGURE.deps =
 FFMPEG.CONFIGURE.env  =
@@ -16,14 +15,13 @@ FFMPEG.CONFIGURE.extra = \
     --disable-ffmpeg \
     --disable-ffserver \
     --disable-muxers \
-    --disable-vhook \
+    --disable-network \
     --enable-encoder=ac3 \
     --enable-encoder=mpeg4 \
     --enable-encoder=snow \
     --enable-gpl \
     --enable-libfaad \
     --enable-muxer=ipod \
-    --enable-swscale \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
@@ -52,4 +50,3 @@ endif
 ifeq (solaris,$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --disable-demuxer=mpc8
 endif
-

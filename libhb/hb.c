@@ -419,14 +419,14 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     buf1 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
     buf2 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, title->width, title->height ) );
     buf3 = av_malloc( avpicture_get_size( PIX_FMT_YUV420P, rgb_width, job->height ) );
-    buf4 = av_malloc( avpicture_get_size( PIX_FMT_RGBA32, rgb_width, job->height ) );
+    buf4 = av_malloc( avpicture_get_size( PIX_FMT_RGB32, rgb_width, job->height ) );
     avpicture_fill( &pic_in, buf1, PIX_FMT_YUV420P,
                     title->width, title->height );
     avpicture_fill( &pic_deint, buf2, PIX_FMT_YUV420P,
                     title->width, title->height );
     avpicture_fill( &pic_scale, buf3, PIX_FMT_YUV420P,
                     rgb_width, job->height );
-    avpicture_fill( &pic_preview, buf4, PIX_FMT_RGBA32,
+    avpicture_fill( &pic_preview, buf4, PIX_FMT_RGB32,
                     rgb_width, job->height );
 
     // Allocate the AVPicture frames and fill in
@@ -476,7 +476,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     // Get preview context
     context = sws_getContext(rgb_width, job->height, PIX_FMT_YUV420P,
-                              rgb_width, job->height, PIX_FMT_RGBA32,
+                              rgb_width, job->height, PIX_FMT_RGB32,
                               swsflags, NULL, NULL, NULL);
 
     // Create preview

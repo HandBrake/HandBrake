@@ -1,7 +1,7 @@
-diff -Naur ffmpeg.orig/libavcodec/h264.c ffmpeg/libavcodec/h264.c
---- ffmpeg.orig/libavcodec/h264.c	2008-12-01 11:24:19.000000000 -0500
-+++ ffmpeg/libavcodec/h264.c	2009-02-21 08:23:58.000000000 -0500
-@@ -3298,7 +3298,7 @@
+diff -Naur ffmpeg-r19067.orig/libavcodec/h264.c ffmpeg-r19067/libavcodec/h264.c
+--- ffmpeg-r19067.orig/libavcodec/h264.c	2009-05-29 20:24:20.000000000 -0400
++++ ffmpeg-r19067/libavcodec/h264.c	2009-06-01 12:45:16.000000000 -0400
+@@ -3406,7 +3406,7 @@
           * stream. Need to discard one frame. Prevents overrun of the
           * short_ref and long_ref buffers.
           */
@@ -10,7 +10,7 @@ diff -Naur ffmpeg.orig/libavcodec/h264.c ffmpeg/libavcodec/h264.c
                 "number of reference frames exceeds max (probably "
                 "corrupt input), discarding one\n");
  
-@@ -7556,7 +7556,7 @@
+@@ -7770,7 +7770,7 @@
  
      if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
          if (avctx->skip_frame >= AVDISCARD_NONREF || s->hurry_up) return 0;
@@ -19,10 +19,10 @@ diff -Naur ffmpeg.orig/libavcodec/h264.c ffmpeg/libavcodec/h264.c
          return -1;
      }
  
-diff -Naur ffmpeg.orig/libavcodec/mpegvideo.c ffmpeg/libavcodec/mpegvideo.c
---- ffmpeg.orig/libavcodec/mpegvideo.c	2008-10-01 20:27:09.000000000 -0400
-+++ ffmpeg/libavcodec/mpegvideo.c	2009-02-21 08:23:58.000000000 -0500
-@@ -779,19 +779,18 @@
+diff -Naur ffmpeg-r19067.orig/libavcodec/mpegvideo.c ffmpeg-r19067/libavcodec/mpegvideo.c
+--- ffmpeg-r19067.orig/libavcodec/mpegvideo.c	2009-05-27 15:55:35.000000000 -0400
++++ ffmpeg-r19067/libavcodec/mpegvideo.c	2009-06-01 12:45:16.000000000 -0400
+@@ -831,19 +831,18 @@
      }
  
      av_log(s->avctx, AV_LOG_FATAL, "Internal error, picture buffer overflow\n");
