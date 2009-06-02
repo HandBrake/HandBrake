@@ -318,167 +318,74 @@ class Display
     end
     
     #Audio tracks
-    commandString << " -a "
-    commandString << hash["Audio1Track"].to_s
-    if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"].to_s
-    end
-    if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"].to_s
-    end
-    if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"].to_s
-    end
+    audioBitrates = ""
+    audioEncoders = ""
+    audioMixdowns = ""
+    audioSamplerates = ""
+    audioTracks = ""
+    audioTrackDRCs = ""
+    audioCount = hash["AudioList"].size
     
-    #Audio encoders
-    commandString << " -E "
-    case hash["Audio1Encoder"]
-    when /AC3 /
-      commandString << "ac3"
-    when /AAC/
-      commandString << "faac"
-    when /Vorbis/
-      commandString << "vorbis"
-    when /MP3/
-      commandString << "lame"
-    end
-    case hash["Audio2Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio3Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio4Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    
-    #Audio bit rate
-    commandString << " -B "
-    commandString << hash["Audio1Bitrate"]
-    if hash["Audio2Bitrate"]
-      if hash["Audio2Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio2Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    if hash["Audio3Bitrate"]
-      if hash["Audio3Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio3Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    if hash["Audio4Bitrate"]
-      if hash["Audio4Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio4Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
+    hash["AudioList"].each do |audioTrack|
+      audioCount = audioCount - 1
 
-    #Audio sample rate
-    commandString << " -R "
-    commandString << hash["Audio1Samplerate"]
-    if hash["Audio2Samplerate"]
-      commandString << "," << hash["Audio2Samplerate"]
-    end
-    if hash["Audio3Samplerate"]
-      commandString << "," << hash["Audio3Samplerate"]
-    end
-    if hash["Audio4Samplerate"]
-      commandString << "," << hash["Audio4Samplerate"]
-    end
-    
-    #Audio Mixdown
-    commandString << " -6 "
-    case hash["Audio1Mixdown"]
-    when /Mono/
-      commandString << "mono"
-    when /Stereo/
-      commandString << "stereo"
-    when /Dolby Surround/
-      commandString << "dpl1"
-    when /Dolby Pro Logic II/
-      commandString << "dpl2"
-    when /discrete/
-      commandString << "6ch"
-    when /Passthru/
-      commandString << "auto"
-    end
-    
-    if hash["Audio2Mixdown"]
-      case hash["Audio2Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
+      #Bitrates
+      audioBitrates << audioTrack["AudioBitrate"]
+      
+      #Encoders
+      case audioTrack["AudioEncoder"]
+        when /AC3 /
+          audioEncoders << "ac3"
+        when /AAC/
+          audioEncoders << "faac"
+        when /Vorbis/
+          audioEncoders << "vorbis"
+        when /MP3/
+          audioEncoders << "lame"
       end
-    end
-    
-    if hash["Audio3Mixdown"]
-      case hash["Audio3Mixdown"]
+      
+      #Mixdowns
+      case audioTrack["AudioMixdown"]
       when /Mono/
-        commandString << ",mono"
+        audioMixdowns << "mono"
       when /Stereo/
-        commandString << ",stereo"
+        audioMixdowns << "stereo"
       when /Dolby Surround/
-        commandString << ",dpl1"
+        audioMixdowns << "dpl1"
       when /Dolby Pro Logic II/
-        commandString << ",dpl2"
+        audioMixdowns << "dpl2"
       when /discrete/
-        commandString << ",6ch"
+        audioMixdowns << "6ch"
       when /Passthru/
-        commandString << ",auto"
+        audioMixdowns << "auto"
       end
-    end
-    
-    if hash["Audio4Mixdown"]
-      case hash["Audio4Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
+      
+      #Samplerates
+      audioSamplerates << audioTrack["AudioSamplerate"]
+      
+      #Tracks
+      audioTracks << audioTrack["AudioTrack"].to_s
+      
+      #DRC
+      audioTrackDRCs << audioTrack["AudioTrackDRCSlider"].to_s
+      
+      if audioCount > 0
+        audioBitrates << ","
+        audioEncoders << ","
+        audioMixdowns << ","
+        audioSamplerates << ","
+        audioTracks << ","
+        audioTrackDRCs << ","
       end
+      
     end
-    
+    commandString << " -a " << audioTracks
+    commandString << " -E " << audioEncoders
+    commandString << " -B " << audioBitrates
+    commandString << " -6 " << audioMixdowns
+    commandString << " -R " << audioSamplerates
+    commandString << " -D " << audioTrackDRCs
+        
     #Container
     commandString << " -f "
     case hash["FileFormat"]
@@ -657,167 +564,73 @@ class Display
     end
     
     #Audio tracks
-    commandString << " -a "
-    commandString << hash["Audio1Track"].to_s
-    if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"].to_s
-    end
-    if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"].to_s
-    end
-    if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"].to_s
-    end
+    audioBitrates = ""
+    audioEncoders = ""
+    audioMixdowns = ""
+    audioSamplerates = ""
+    audioTracks = ""
+    audioTrackDRCs = ""
+    audioCount = hash["AudioList"].size
     
-    #Audio encoders
-    commandString << " -E "
-    case hash["Audio1Encoder"]
-    when /AC3/
-      commandString << "ac3"
-    when /AAC/
-      commandString << "faac"
-    when /Vorbis/
-      commandString << "vorbis"
-    when /MP3/
-      commandString << "lame"
-    end
-    case hash["Audio2Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio3Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio4Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
+    hash["AudioList"].each do |audioTrack|
+      audioCount = audioCount - 1
 
-    #Audio bit rate
-    commandString << " -B "
-    commandString << hash["Audio1Bitrate"]
-    if hash["Audio2Bitrate"]
-      if hash["Audio2Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio2Bitrate"]
-      else
-        commandString << "," << "auto"
+      #Bitrates
+      audioBitrates << audioTrack["AudioBitrate"]
+      
+      #Encoders
+      case audioTrack["AudioEncoder"]
+        when /AC3 /
+          audioEncoders << "ac3"
+        when /AAC/
+          audioEncoders << "faac"
+        when /Vorbis/
+          audioEncoders << "vorbis"
+        when /MP3/
+          audioEncoders << "lame"
       end
-    end
-    if hash["Audio3Bitrate"]
-      if hash["Audio3Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio3Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    if hash["Audio4Bitrate"]
-      if hash["Audio4Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio4Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-
-    #Audio sample rate
-    commandString << " -R "
-    commandString << hash["Audio1Samplerate"]
-    if hash["Audio2Samplerate"]
-      commandString << "," << hash["Audio2Samplerate"]
-    end
-    if hash["Audio3Samplerate"]
-      commandString << "," << hash["Audio3Samplerate"]
-    end
-    if hash["Audio4Samplerate"]
-      commandString << "," << hash["Audio4Samplerate"]
-    end
-    
-    #Audio Mixdown
-    commandString << " -6 "
-    case hash["Audio1Mixdown"]
-    when /Mono/
-      commandString << "mono"
-    when /Stereo/
-      commandString << "stereo"
-    when /Dolby Surround/
-      commandString << "dpl1"
-    when /Dolby Pro Logic II/
-      commandString << "dpl2"
-    when /discrete/
-      commandString << "6ch"
-    when /Passthru/
-      commandString << "auto"
-    end
-    
-    if hash["Audio2Mixdown"]
-      case hash["Audio2Mixdown"]
+      
+      #Mixdowns
+      case audioTrack["AudioMixdown"]
       when /Mono/
-        commandString << ",mono"
+        audioMixdowns << "mono"
       when /Stereo/
-        commandString << ",stereo"
+        audioMixdowns << "stereo"
       when /Dolby Surround/
-        commandString << ",dpl1"
+        audioMixdowns << "dpl1"
       when /Dolby Pro Logic II/
-        commandString << ",dpl2"
+        audioMixdowns << "dpl2"
       when /discrete/
-        commandString << ",6ch"
+        audioMixdowns << "6ch"
       when /Passthru/
-        commandString << ",auto"
+        audioMixdowns << "auto"
       end
-    end
-    
-    if hash["Audio3Mixdown"]
-      case hash["Audio3Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
+      
+      #Samplerates
+      audioSamplerates << audioTrack["AudioSamplerate"]
+      
+      #Tracks
+      audioTracks << audioTrack["AudioTrack"].to_s
+      
+      #DRC
+      audioTrackDRCs << audioTrack["AudioTrackDRCSlider"].to_s
+      
+      if audioCount > 0
+        audioBitrates << ","
+        audioEncoders << ","
+        audioMixdowns << ","
+        audioSamplerates << ","
+        audioTracks << ","
+        audioTrackDRCs << ","
       end
+      
     end
-    
-    if hash["Audio4Mixdown"]
-      case hash["Audio4Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
-      end
-    end
-
+    commandString << " -a " << audioTracks
+    commandString << " -E " << audioEncoders
+    commandString << " -B " << audioBitrates
+    commandString << " -6 " << audioMixdowns
+    commandString << " -R " << audioSamplerates
+    commandString << " -D " << audioTrackDRCs
     
     #Container
     commandString << " -f "
@@ -935,16 +748,20 @@ class Display
     commandString = "if (!strcmp(preset_name, \"" << hash["PresetName"] << "\"))\n{\n    "
     
     #Filename suffix
+    commandString << "if( !mux )\n    "
+    commandString << "{\n    "
+
     case hash["FileFormat"]
     when /MP4/
-      commandString << "mux = " << "HB_MUX_MP4;\n    "
+      commandString << "    mux = " << "HB_MUX_MP4;\n    "
     when /AVI/
-      commandString << "mux = " << "HB_MUX_AVI;\n    "
+      commandString << "    mux = " << "HB_MUX_AVI;\n    "
     when /OGM/
-      commandString << "mux = " << "HB_MUX_OGM;\n    "
+      commandString << "    mux = " << "HB_MUX_OGM;\n    "
     when /MKV/
-      commandString << "mux = " << "HB_MUX_MKV;\n    "
+      commandString << "    mux = " << "HB_MUX_MKV;\n    "
     end
+    commandString << "}\n    "
     
     #iPod MP4 atom
     if hash["Mp4iPodCompatible"].to_i == 1
@@ -992,185 +809,100 @@ class Display
     end
     
     #Audio tracks
+    audioBitrates = ""
+    audioEncoders = ""
+    audioMixdowns = ""
+    audioSamplerates = ""
+    audioTracks = ""
+    audioTrackDRCs = ""
+    audioCount = hash["AudioList"].size
+
+    hash["AudioList"].each do |audioTrack|
+      audioCount = audioCount - 1
+
+      #Bitrates
+      audioBitrates << audioTrack["AudioBitrate"]
+
+      #Encoders
+      case audioTrack["AudioEncoder"]
+        when /AC3 /
+          audioEncoders << "ac3"
+        when /AAC/
+          audioEncoders << "faac"
+        when /Vorbis/
+          audioEncoders << "vorbis"
+        when /MP3/
+          audioEncoders << "lame"
+      end
+
+      #Mixdowns
+      case audioTrack["AudioMixdown"]
+      when /Mono/
+        audioMixdowns << "mono"
+      when /Stereo/
+        audioMixdowns << "stereo"
+      when /Dolby Surround/
+        audioMixdowns << "dpl1"
+      when /Dolby Pro Logic II/
+        audioMixdowns << "dpl2"
+      when /discrete/
+        audioMixdowns << "6ch"
+      when /Passthru/
+        audioMixdowns << "auto"
+      end
+
+      #Samplerates
+      audioSamplerates << audioTrack["AudioSamplerate"]
+
+      #Tracks
+      audioTracks << audioTrack["AudioTrack"].to_s
+
+      #DRC
+      audioTrackDRCs << audioTrack["AudioTrackDRCSlider"].to_s
+
+      if audioCount > 0
+        audioBitrates << ","
+        audioEncoders << ","
+        audioMixdowns << ","
+        audioSamplerates << ","
+        audioTracks << ","
+        audioTrackDRCs << ","
+      end
+
+    end
     commandString << "if( !atracks )\n    "
     commandString << "{\n    "
-    commandString << "    atracks = strdup(\""
-    commandString << hash["Audio1Track"].to_s
-    if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"].to_s
-    end
-    if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"].to_s
-    end
-    if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"].to_s
-    end
+    commandString << "    atracks = strdup(\"" << audioTracks
     commandString << "\");\n    "
     commandString << "}\n    "
-    
-    # Audio bitrate
-    commandString << "if( !abitrates )\n    "
-    commandString << "{\n    "
-    commandString << "    abitrates = strdup(\""
-    if hash["Audio1Encoder"] != "AC3 Passthru"
-      commandString << hash["Audio1Bitrate"]
-    else
-      commandString << "auto"
-    end
-    if hash["Audio2Bitrate"]
-      if hash["Audio2Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio2Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    if hash["Audio3Bitrate"]
-      if hash["Audio3Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio3Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    if hash["Audio4Bitrate"]
-      if hash["Audio4Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio4Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    commandString << "\");\n    "
-    commandString << "}\n    "
-        
-    #Audio samplerate
-    commandString << "if( !arates )\n    "
-    commandString << "{\n    "
-    commandString << "    arates = strdup(\""
-    commandString << hash["Audio1Samplerate"]
-    if hash["Audio2Samplerate"]
-      commandString << "," << hash["Audio2Samplerate"]
-    end
-    if hash["Audio3Samplerate"]
-      commandString << "," << hash["Audio3Samplerate"]
-    end
-    if hash["Audio4Samplerate"]
-      commandString << "," << hash["Audio4Samplerate"]
-    end
-    commandString << "\");\n    "
-    commandString << "}\n    "
-      
-    #Audio encoder
+
     commandString << "if( !acodecs )\n    "
     commandString << "{\n    "
-    commandString << "    acodecs = strdup(\""
-    case hash["Audio1Encoder"]
-    when /AC3/
-      commandString << "ac3"
-    when /AAC/
-      commandString << "faac"
-    when /Vorbis/
-      commandString << "vorbis"
-    when /MP3/
-      commandString << "lame"
-    end
-    case hash["Audio2Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio3Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio4Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
+    commandString << "    acodecs = strdup(\"" << audioEncoders
     commandString << "\");\n    "
     commandString << "}\n    "
-    
-    #Audio mixdowns
+
+    commandString << "if( !abitrates )\n    "
+    commandString << "{\n    "
+    commandString << "    abitrates = strdup(\"" << audioBitrates
+    commandString << "\");\n    "
+    commandString << "}\n    "
+
     commandString << "if( !mixdowns )\n    "
     commandString << "{\n    "
-    commandString << "    mixdowns = strdup(\""
-    case hash["Audio1Mixdown"]
-    when /Mono/
-      commandString << "mono"
-    when /Stereo/
-      commandString << "stereo"
-    when /Dolby Surround/
-      commandString << "dpl1"
-    when /Dolby Pro Logic II/
-      commandString << "dpl2"
-    when /discrete/
-      commandString << "6ch"
-    when /Passthru/
-      commandString << "auto"
-    end
-    if hash["Audio2Mixdown"]
-      case hash["Audio2Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
-      end
-    end
-    if hash["Audio3Mixdown"]
-      case hash["Audio3Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
-      end
-    end
-    if hash["Audio4Mixdown"]
-      case hash["Audio4Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
-      end
-    end
+    commandString << "    mixdowns = strdup(\"" << audioMixdowns
+    commandString << "\");\n    "
+    commandString << "}\n    "
+
+    commandString << "if( !arates )\n    "
+    commandString << "{\n    "
+    commandString << "    arates = strdup(\"" << audioSamplerates
+    commandString << "\");\n    "
+    commandString << "}\n    "
+
+    commandString << "if( !dynamic_range_compression )\n    "
+    commandString << "{\n    "
+    commandString << "    dynamic_range_compression = strdup(\"" << audioTrackDRCs
     commandString << "\");\n    "
     commandString << "}\n    "
     
@@ -1342,166 +1074,73 @@ class Display
     end
     
     #Audio tracks
-    commandString << " -a "
-    commandString << hash["Audio1Track"].to_s
-    if hash["Audio2Track"]
-      commandString << "," << hash["Audio2Track"].to_s
-    end
-    if hash["Audio3Track"]
-      commandString << "," << hash["Audio3Track"].to_s
-    end
-    if hash["Audio4Track"]
-      commandString << "," << hash["Audio4Track"].to_s
-    end
+    audioBitrates = ""
+    audioEncoders = ""
+    audioMixdowns = ""
+    audioSamplerates = ""
+    audioTracks = ""
+    audioTrackDRCs = ""
+    audioCount = hash["AudioList"].size
     
-    #Audio encoders
-    commandString << " -E "
-    case hash["Audio1Encoder"]
-    when /AC3/
-      commandString << "ac3"
-    when /AAC/
-      commandString << "faac"
-    when /Vorbis/
-      commandString << "vorbis"
-    when /MP3/
-      commandString << "lame"
-    end
-    case hash["Audio2Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio3Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
-    case hash["Audio4Encoder"]
-    when /AC3 /
-      commandString << ",ac3"
-    when /AAC/
-      commandString << ",faac"
-    when /Vorbis/
-      commandString << ",vorbis"
-    when /MP3/
-      commandString << ",lame"
-    end
+    hash["AudioList"].each do |audioTrack|
+      audioCount = audioCount - 1
 
-    #Audio bit rate
-    commandString << " -B "
-    commandString << hash["Audio1Bitrate"]
-    if hash["Audio2Bitrate"]
-      if hash["Audio2Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio2Bitrate"]
-      else
-        commandString << "," << "auto"
+      #Bitrates
+      audioBitrates << audioTrack["AudioBitrate"]
+      
+      #Encoders
+      case audioTrack["AudioEncoder"]
+        when /AC3 /
+          audioEncoders << "ac3"
+        when /AAC/
+          audioEncoders << "faac"
+        when /Vorbis/
+          audioEncoders << "vorbis"
+        when /MP3/
+          audioEncoders << "lame"
       end
-    end
-    if hash["Audio3Bitrate"]
-      if hash["Audio3Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio3Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-    if hash["Audio4Bitrate"]
-      if hash["Audio4Encoder"] != "AC3 Passthru"
-        commandString << "," << hash["Audio4Bitrate"]
-      else
-        commandString << "," << "auto"
-      end
-    end
-
-    #Audio sample rate
-    commandString << " -R "
-    commandString << hash["Audio1Samplerate"]
-    if hash["Audio2Samplerate"]
-      commandString << "," << hash["Audio2Samplerate"]
-    end
-    if hash["Audio3Samplerate"]
-      commandString << "," << hash["Audio3Samplerate"]
-    end
-    if hash["Audio4Samplerate"]
-      commandString << "," << hash["Audio4Samplerate"]
-    end
-    
-    #Audio Mixdown
-    commandString << " -6 "
-    case hash["Audio1Mixdown"]
-    when /Mono/
-      commandString << "mono"
-    when /Stereo/
-      commandString << "stereo"
-    when /Dolby Surround/
-      commandString << "dpl1"
-    when /Dolby Pro Logic II/
-      commandString << "dpl2"
-    when /discrete/
-      commandString << "6ch"
-    when /Passthru/
-      commandString << "auto"
-    end
-    
-    if hash["Audio2Mixdown"]
-      case hash["Audio2Mixdown"]
+      
+      #Mixdowns
+      case audioTrack["AudioMixdown"]
       when /Mono/
-        commandString << ",mono"
+        audioMixdowns << "mono"
       when /Stereo/
-        commandString << ",stereo"
+        audioMixdowns << "stereo"
       when /Dolby Surround/
-        commandString << ",dpl1"
+        audioMixdowns << "dpl1"
       when /Dolby Pro Logic II/
-        commandString << ",dpl2"
+        audioMixdowns << "dpl2"
       when /discrete/
-        commandString << ",6ch"
+        audioMixdowns << "6ch"
       when /Passthru/
-        commandString << ",auto"
+        audioMixdowns << "auto"
       end
-    end
-    
-    if hash["Audio3Mixdown"]
-      case hash["Audio3Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
+      
+      #Samplerates
+      audioSamplerates << audioTrack["AudioSamplerate"]
+      
+      #Tracks
+      audioTracks << audioTrack["AudioTrack"].to_s
+      
+      #DRC
+      audioTrackDRCs << audioTrack["AudioTrackDRCSlider"].to_s
+      
+      if audioCount > 0
+        audioBitrates << ","
+        audioEncoders << ","
+        audioMixdowns << ","
+        audioSamplerates << ","
+        audioTracks << ","
+        audioTrackDRCs << ","
       end
+      
     end
-    
-    if hash["Audio4Mixdown"]
-      case hash["Audio4Mixdown"]
-      when /Mono/
-        commandString << ",mono"
-      when /Stereo/
-        commandString << ",stereo"
-      when /Dolby Surround/
-        commandString << ",dpl1"
-      when /Dolby Pro Logic II/
-        commandString << ",dpl2"
-      when /discrete/
-        commandString << ",6ch"
-      when /Passthru/
-        commandString << ",auto"
-      end
-    end
+    commandString << " -a " << audioTracks
+    commandString << " -E " << audioEncoders
+    commandString << " -B " << audioBitrates
+    commandString << " -6 " << audioMixdowns
+    commandString << " -R " << audioSamplerates
+    commandString << " -D " << audioTrackDRCs
     
     #Container
     commandString << " -f "
