@@ -719,6 +719,7 @@
             [fWidthField setEnabled: NO];
             [fHeightStepper setEnabled: NO];
             [fHeightField setEnabled: NO];
+            [fRatioCheck setEnabled: NO];
         }
         else if ([fAnamorphicPopUp indexOfSelectedItem] == 2) // Loose anamorphic
         {
@@ -786,18 +787,14 @@
             [fDisplayWidthField setEnabled: YES];
             
             
-            /* If we are coming into custom ana or if in custom ana and the 
-             * keep ar checkbox is checked, we reset the par to original
-             * which gives us a way back if things are hosed up
+            /* If we are coming into custom anamorphic we reset the par to original
+             * which gives us a way back if things get hosed up.
              */
              
-            if (sender == fAnamorphicPopUp || (sender == fRatioCheck && [fRatioCheck  state] == NSOnState))
+            if (sender == fAnamorphicPopUp)
             {
-                if (sender == fAnamorphicPopUp)
-                {
-                    [fRatioCheck  setState: NSOnState];
-                }
-                
+                /* When entering custom anamorphic, we start with keep ar on */
+                [fRatioCheck  setState: NSOnState];
                 /*
                  KEEPING ASPECT RATIO
                  Disable editing: PIXEL WIDTH, PIXEL HEIGHT
