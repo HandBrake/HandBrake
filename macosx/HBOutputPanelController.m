@@ -215,11 +215,11 @@
 {
 	[outputTextStorage deleteCharactersInRange:NSMakeRange(0, [outputTextStorage length])];
     /* We want to rewrite the app version info to the top of the activity window so it is always present */
-    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleGetInfoString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+    NSString *versionStringFull = [[NSString stringWithFormat: @"Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
     time_t _now = time( NULL );
     struct tm * now  = localtime( &_now );
     fprintf(stderr, "[%02d:%02d:%02d] macgui: %s\n", now->tm_hour, now->tm_min, now->tm_sec, [versionStringFull UTF8String]);
-    
+
 }
 
 /**
@@ -273,7 +273,7 @@
         [startOutputLogString writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
         
         /* We want to rewrite the app version info to the top of the activity window so it is always present */
-        NSString *versionStringFull = [[NSString stringWithFormat: @"macgui: Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleGetInfoString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
+        NSString *versionStringFull = [[NSString stringWithFormat: @"macgui: Handbrake Version: %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAppendingString: [NSString stringWithFormat: @" (%@)\n\n", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]]];
         [versionStringFull writeToFile:outputLogFile atomically:NO encoding:NSUTF8StringEncoding error:NULL];
         
 }
