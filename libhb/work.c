@@ -280,7 +280,7 @@ void hb_display_job_info( hb_job_t * job )
                     subtitle->source == VOBSUB ? "VOBSUB" : 
                     ((subtitle->source == CC608SUB ||
                       subtitle->source == CC708SUB) ? "CC" : "SRT"),
-                    subtitle->dest == RENDERSUB ? "Render/Burn in" : "Pass-Through");
+                    subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through");
         }
     }
 
@@ -466,18 +466,64 @@ static void do_job( hb_job_t * job, int cpu_count )
         hb_list_add( job->list_work, w );
     }
 
-    if( job->select_subtitle && !job->indepth_scan )
+    /*
+     * Look for the scanned subtitle in the existing subtitle list
+     */
+    if ( !job->indepth_scan && job->select_subtitle && *(job->select_subtitle) )
     {
         /*
-         * Must be second pass of a two pass with subtitle scan enabled, so
-         * add the subtitle that we found on the first pass for use in this
-         * pass.
+         * Disable forced subtitles if we didn't find any in the scan
+         * so that we display normal subtitles instead.
+         *
+         * select_subtitle implies that we did a scan.
          */
-        if (*(job->select_subtitle))
+        if( (*job->select_subtitle)->config.force && 
+            (*job->select_subtitle)->forced_hits == 0 )
         {
-            hb_list_add( title->list_subtitle, *( job->select_subtitle ) );
+            (*job->select_subtitle)->config.force = 0;
+        }
+        for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+        {
+            subtitle =  hb_list_item( title->list_subtitle, i );
+
+            if( subtitle )
+            {
+                /*
+                * Disable forced subtitles if we didn't find any in the scan
+                * so that we display normal subtitles instead.
+                *
+                * select_subtitle implies that we did a scan.
+                */
+                if( (*job->select_subtitle)->id == subtitle->id )
+                {
+                    *subtitle = *(*job->select_subtitle);
+                    free( *job->select_subtitle );
+                    free( job->select_subtitle );
+                    job->select_subtitle = NULL;
+                }
+            }
+        }
+
+        if( job->select_subtitle )
+        {
+            /*
+             * Its not in the existing list
+             *
+             * Must be second pass of a two pass with subtitle scan enabled, so
+             * add the subtitle that we found on the first pass for use in this
+             * pass.
+             */
+            hb_list_add( title->list_subtitle, *job->select_subtitle );
+            free( job->select_subtitle );
+            job->select_subtitle = NULL;
         }
     }
+    else if ( !job->indepth_scan && job->select_subtitle )
+    {
+        free( job->select_subtitle );
+        job->select_subtitle = NULL;
+    }
+
 
     for( i=0; i < hb_list_count(title->list_subtitle); i++ )
     {
@@ -490,22 +536,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             subtitle->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
             subtitle->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
-            /*
-             * Disable forced subtitles if we didn't find any in the scan
-             * so that we display normal subtitles instead.
-             *
-             * select_subtitle implies that we did a scan.
-             */
-            if( !job->indepth_scan && subtitle->force &&
-                job->select_subtitle )
-            {
-                if( subtitle->forced_hits == 0 )
-                {
-                    subtitle->force = 0;
-                }
-            }
-
-            if( (!job->indepth_scan || subtitle->force) && 
+            if( (!job->indepth_scan || subtitle->config.force) && 
                 subtitle->source == VOBSUB ) {
                 /*
                  * Don't add threads for subtitles when we are scanning, unless
@@ -528,7 +559,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
             if( !job->indepth_scan && 
                 subtitle->format == PICTURESUB
-                && subtitle->dest == PASSTHRUSUB )
+                && subtitle->config.dest == PASSTHRUSUB )
             {
                 /*
                  * Passing through a subtitle picture, this will have to
@@ -910,9 +941,14 @@ cleanup:
         for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle =  hb_list_item( title->list_subtitle, i );
+
             hb_log( "Subtitle stream 0x%x '%s': %d hits (%d forced)",
                     subtitle->id, subtitle->lang, subtitle->hits,
                     subtitle->forced_hits );
+
+            if( subtitle->hits == 0 )
+                continue;
+
             if( subtitle->hits > subtitle_highest )
             {
                 subtitle_highest = subtitle->hits;
@@ -982,19 +1018,12 @@ cleanup:
                 subtitle =  hb_list_item( title->list_subtitle, i );
                 if( subtitle->id == subtitle_hit )
                 {
+                    subtitle->config = job->select_subtitle_config;
                     hb_list_rem( title->list_subtitle, subtitle );
-                    *( job->select_subtitle ) = subtitle;
+                    *job->select_subtitle = subtitle;
+                    break;
                 }
             }
-        } else {
-            /*
-             * Must be the end of pass 0 or 2 - we don't need this anymore.
-             *
-             * Have to put the subtitle list back together in the title though
-             * or the GUI will have a hissy fit.
-             */
-            free( job->select_subtitle );
-            job->select_subtitle = NULL;
         }
     }
 

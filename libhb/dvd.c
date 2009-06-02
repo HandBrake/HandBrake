@@ -471,7 +471,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
                   lang->iso639_2);
         subtitle->format = PICTURESUB;
         subtitle->source = VOBSUB;
-        subtitle->dest   = RENDERSUB;  // By default render (burn-in) the VOBSUB.
+        subtitle->config.dest   = RENDERSUB;  // By default render (burn-in) the VOBSUB.
 
         subtitle->type = lang_extension;
 

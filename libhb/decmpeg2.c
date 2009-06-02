@@ -472,7 +472,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     }
                     subtitle->format = TEXTSUB;
                     subtitle->source = CC608SUB;
-                    subtitle->dest   = PASSTHRUSUB;
+                    subtitle->config.dest   = PASSTHRUSUB;
                     subtitle->type = 5; 
                     
                     hb_list_add( m->title->list_subtitle, subtitle );

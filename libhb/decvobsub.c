@@ -484,7 +484,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     /* Get infos about the subtitle */
     ParseControls( w );
 
-    if( job->indepth_scan || ( w->subtitle->force && pv->pts_forced == 0 ) )
+    if( job->indepth_scan || ( w->subtitle->config.force && pv->pts_forced == 0 ) )
     {
         /*
          * Don't encode subtitles when doing a scan.
@@ -495,7 +495,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         return NULL;
     }
 
-    if (w->subtitle->dest == PASSTHRUSUB)
+    if (w->subtitle->config.dest == PASSTHRUSUB)
     {
         pv->buf->start  = pv->pts_start;
         pv->buf->stop   = pv->pts_stop;

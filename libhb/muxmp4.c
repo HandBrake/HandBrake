@@ -408,7 +408,7 @@ static int MP4Init( hb_mux_object_t * m )
         hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
 
         if( subtitle && subtitle->format == TEXTSUB && 
-            subtitle->dest == PASSTHRUSUB )
+            subtitle->config.dest == PASSTHRUSUB )
         {
             uint64_t width, height = 60;
             if( job->anamorphic.mode )

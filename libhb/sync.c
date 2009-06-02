@@ -303,7 +303,7 @@ static void SyncVideo( hb_work_object_t * w )
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
         {
             subtitle = hb_list_item( job->list_subtitle, i );
-            if( subtitle->dest == PASSTHRUSUB )
+            if( subtitle->config.dest == PASSTHRUSUB )
             {
                 hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
             }
@@ -336,7 +336,7 @@ static void SyncVideo( hb_work_object_t * w )
             for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
             {
                 subtitle = hb_list_item( job->list_subtitle, i );
-                if( subtitle->dest == PASSTHRUSUB )
+                if( subtitle->config.dest == PASSTHRUSUB )
                 {
                     hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
                 }
@@ -627,7 +627,7 @@ static void SyncVideo( hb_work_object_t * w )
                 {
                     if( sub->size > 0 )
                     {
-                        if( subtitle->dest == RENDERSUB )
+                        if( subtitle->config.dest == RENDERSUB )
                         {
                             if ( cur->sub == NULL )
                             {
@@ -660,7 +660,7 @@ static void SyncVideo( hb_work_object_t * w )
                         /*
                         * EOF - consume for rendered, else pass through
                         */
-                        if( subtitle->dest == RENDERSUB )
+                        if( subtitle->config.dest == RENDERSUB )
                         {
                             sub = hb_fifo_get( subtitle->fifo_raw );
                             hb_buffer_close( &sub );

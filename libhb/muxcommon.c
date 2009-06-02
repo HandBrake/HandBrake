@@ -262,7 +262,7 @@ static void MuxerFunc( void * _mux )
     {
         hb_subtitle_t  *subtitle = hb_list_item( title->list_subtitle, i );
 
-        if (subtitle->dest != PASSTHRUSUB)
+        if (subtitle->config.dest != PASSTHRUSUB)
             continue;
         add_mux_track( mux, subtitle->fifo_out, subtitle->mux_data, 0 );
     }

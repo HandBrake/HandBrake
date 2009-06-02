@@ -3230,9 +3230,9 @@ fWorkingCount = 0;
         hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, 
                                                                   [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2 );
         if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
-            subtitle->force = 1;
+            subtitle->config.force = 1;
         else
-            subtitle->force = 0;
+            subtitle->config.force = 0;
         hb_list_add( job->list_subtitle, subtitle );
         break;
     }

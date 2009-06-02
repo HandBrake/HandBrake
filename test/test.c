@@ -1656,7 +1656,7 @@ static int HandleEvents( hb_handle_t * h )
                 subtitle = hb_list_item( title->list_subtitle, sub-1 );
                 if( subtitle ) {
                     if( subtitle_force ) {
-                        subtitle->force = subtitle_force;
+                        subtitle->config.force = subtitle_force;
                     }
                     hb_list_add( job->list_subtitle, subtitle );
                 } else {
@@ -1749,6 +1749,10 @@ static int HandleEvents( hb_handle_t * h )
                          "subtitles if found for foreign language segments\n");
                 job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
                 *(job->select_subtitle) = NULL;
+
+                job->select_subtitle_config.dest = RENDERSUB;
+                job->select_subtitle_config.default_track = 0;
+                job->select_subtitle_config.force = subtitle_force;
 
                 /*
                  * Add the pre-scan job

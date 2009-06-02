@@ -55,6 +55,7 @@ typedef struct hb_chapter_s hb_chapter_t;
 typedef struct hb_audio_s hb_audio_t;
 typedef struct hb_audio_config_s hb_audio_config_t;
 typedef struct hb_subtitle_s hb_subtitle_t;
+typedef struct hb_subtitle_config_s hb_subtitle_config_t;
 typedef struct hb_metadata_s hb_metadata_t;
 typedef struct hb_state_s hb_state_t;
 typedef union  hb_esconfig_u     hb_esconfig_t;
@@ -106,6 +107,13 @@ struct hb_mixdown_s
     char * internal_name;
     char * short_name;
     int    amixdown;
+};
+
+struct hb_subtitle_config_s
+{
+    enum subdest { RENDERSUB, PASSTHRUSUB } dest;
+    int  force;
+    int  default_track;
 };
 
 #define HB_VIDEO_RATE_BASE   27000000
@@ -235,9 +243,10 @@ struct hb_job_s
     int             mp4_optimize;
     int             ipod_atom;
 
-    int indepth_scan;
-    hb_subtitle_t ** select_subtitle;
-    char * native_language;
+    int                     indepth_scan;
+    hb_subtitle_config_t    select_subtitle_config;
+    hb_subtitle_t        ** select_subtitle;
+    char                  * native_language;
 
     int             angle;              // dvd angle to encode
     int             frame_to_stop;       // declare eof when we hit this frame
@@ -439,12 +448,13 @@ struct hb_chapter_s
 
 struct hb_subtitle_s
 {
-    int track;
     int  id;
+    int track;
+
+    hb_subtitle_config_t config;
+
     enum subtype { PICTURESUB, TEXTSUB } format;
     enum subsource { VOBSUB, SRTSUB, CC608SUB, CC708SUB } source;
-    enum subdest { RENDERSUB, PASSTHRUSUB } dest;
-    int  force;
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */

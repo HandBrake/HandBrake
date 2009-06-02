@@ -277,6 +277,8 @@
 				<true />
 				<key>SubtitleBurned</key>
 				<true />
+				<key>SubtitleDefaultTrack</key>
+				<false />
 			</dict>
 		</array>
 		<key>VideoTurboTwoPass</key>

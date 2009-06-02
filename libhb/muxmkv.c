@@ -287,7 +287,7 @@ static int MKVInit( hb_mux_object_t * m )
         int             len;
 
         subtitle = hb_list_item( title->list_subtitle, i );
-        if (subtitle->dest != PASSTHRUSUB)
+        if (subtitle->config.dest != PASSTHRUSUB)
             continue;
 
         memset(track, 0, sizeof(mk_TrackConfig));
@@ -312,6 +312,10 @@ static int MKVInit( hb_mux_object_t * m )
                 break;
             default:
                 continue;
+        }
+        if ( subtitle->config.default_track )
+        {
+            track->flagDefault = 1;
         }
 
         mux_data = calloc(1, sizeof( hb_mux_data_t ) );

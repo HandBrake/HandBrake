@@ -2274,6 +2274,8 @@ import_value_xlat(GValue *dict)
 					}
 					ghb_dict_insert(sdict, g_strdup("SubtitleBurned"),
 									ghb_boolean_value_new(TRUE));
+					ghb_dict_insert(sdict, g_strdup("SubtitleDefaultTrack"),
+									ghb_boolean_value_new(FALSE));
 				}
 				else
 				{

@@ -384,6 +384,7 @@ extern G_MODULE_EXPORT void subtitle_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void subtitle_enable_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_forced_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_burned_toggled_cb(void);
+extern G_MODULE_EXPORT void subtitle_default_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_track_changed_cb(void);
 
 // Create and bind the tree model to the tree view for the subtitle track list
@@ -403,16 +404,17 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	selection = gtk_tree_view_get_selection (treeview);
 	// 6 columns in model.  4 are visible, the other 2 is for storing
 	// values that I need
-	treestore = gtk_list_store_new(7, 
+	// Enable, Track, force, burn, default, type, track short, can delete
+	treestore = gtk_list_store_new(8, 
 									G_TYPE_BOOLEAN, G_TYPE_STRING,
 									G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
-									G_TYPE_STRING,  G_TYPE_STRING,
-									G_TYPE_BOOLEAN);
+									G_TYPE_BOOLEAN, G_TYPE_STRING,  
+									G_TYPE_STRING, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
 	cell = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("On"), cell, "active", 0, NULL);
+									_("Enable"), cell, "active", 0, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_enable_toggled_cb, ud);
 
@@ -438,9 +440,16 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_burned_toggled_cb, ud);
 
+	cell = gtk_cell_renderer_toggle_new();
+	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
+	column = gtk_tree_view_column_new_with_attributes(
+				_("Default"), cell, "active", 4, NULL);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	g_signal_connect(cell, "toggled", subtitle_default_toggled_cb, ud);
+
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Type"), cell, "text", 4, NULL);
+									_("Type"), cell, "text", 5, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
 

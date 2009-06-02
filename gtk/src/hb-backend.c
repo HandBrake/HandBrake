@@ -1992,6 +1992,7 @@ ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex)
 	ghb_settings_set_int(subdict, "SubtitleTrack", -1);
 	ghb_settings_set_boolean(subdict, "SubtitleForced", FALSE);
 	ghb_settings_set_boolean(subdict, "SubtitleBurned", FALSE);
+	ghb_settings_set_boolean(subdict, "SubtitleDefaultTrack", FALSE);
 	ghb_settings_set_string(subdict, "SubtitleLanguage", "auto");
 	ghb_add_subtitle(ud, subdict, FALSE);
 
@@ -2004,6 +2005,7 @@ ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex)
 		ghb_settings_set_int(subdict, "SubtitleTrack", ii);
 		ghb_settings_set_boolean(subdict, "SubtitleForced", FALSE);
 		ghb_settings_set_boolean(subdict, "SubtitleBurned", FALSE);
+		ghb_settings_set_boolean(subdict, "SubtitleDefaultTrack", FALSE);
 		ghb_settings_set_string(subdict, "SubtitleLanguage", 
 								subtitle->iso639_2);
 		ghb_add_subtitle(ud, subdict, FALSE);
@@ -3913,18 +3915,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->cfr = 1;
 	}
 
-	// First remove any audios that are already in the list
-	// This happens if you are encoding the same title a second time.
-	gint num_audio_tracks = hb_list_count(job->list_audio);
-	gint ii;
-    for(ii = 0; ii < num_audio_tracks; ii++)
-    {
-        hb_audio_t *audio = (hb_audio_t*)hb_list_item(job->list_audio, 0);
-        hb_list_rem(job->list_audio, audio);
-    }
-
 	const GValue *audio_list;
-	gint count;
+	gint count, ii;
 	gint tcount = 0;
 	
 	audio_list = ghb_settings_get_value(js, "audio_list");
@@ -4043,12 +4035,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	const GValue *subtitle_list;
 	gint subtitle;
 	
+	job->select_subtitle = NULL;
 	subtitle_list = ghb_settings_get_value(js, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *ssettings;
-		gboolean burned, enabled, one_burned = FALSE;
+		gboolean enabled, force, burned, def, one_burned = FALSE;
 
 		ssettings = ghb_array_get_nth(subtitle_list, ii);
 
@@ -4058,11 +4051,33 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			continue;
 
 		subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
+		force = ghb_settings_get_boolean(ssettings, "SubtitleForced");
 		burned = ghb_settings_get_boolean(ssettings, "SubtitleBurned");
+		def = ghb_settings_get_boolean(ssettings, "SubtitleDefaultTrack");
 
 		if (subtitle == -1)
 		{
+			if (!burned && job->mux == HB_MUX_MKV)
+			{
+				job->select_subtitle_config.dest = PASSTHRUSUB;
+			}
+			else if (!burned && job->mux == HB_MUX_MP4)
+			{
+				// Skip any non-burned vobsubs when output is mp4
+				continue;
+			}
+			else
+			{
+				// Only allow one subtitle to be burned into the video
+				if (one_burned)
+					continue;
+				one_burned = TRUE;
+			}
+			job->select_subtitle_config.force = force;
+			job->select_subtitle_config.default_track = def;
 			job->indepth_scan = 1;
+			job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
+			*job->select_subtitle = NULL;
 		}
 		else if (subtitle >= 0)
 		{
@@ -4074,7 +4089,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				if (!burned && job->mux == HB_MUX_MKV && 
 					subt->format == PICTURESUB)
 				{
-					subt->dest = PASSTHRUSUB;
+					subt->config.dest = PASSTHRUSUB;
 				}
 				else if (!burned && job->mux == HB_MUX_MP4 && 
 					subt->format == PICTURESUB)
@@ -4089,7 +4104,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 						continue;
 					one_burned = TRUE;
 				}
-				subt->force = ghb_settings_get_boolean(ssettings, "SubtitleForced");
+				subt->config.force = force;
+				subt->config.default_track = def;
 				hb_list_add(job->list_subtitle, subt);
 			}
 		}
@@ -4110,8 +4126,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		x264opts_tmp = job->x264opts;
 		job->x264opts = NULL;
 
-		job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
-		*(job->select_subtitle) = NULL;
 
 		/*
 		 * Add the pre-scan job
@@ -4123,10 +4137,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 		job->x264opts = x264opts_tmp;
 	}
-	else
-	{
-		job->select_subtitle = NULL;
-	}
+
 	if( ghb_settings_get_boolean(js, "VideoTwoPass") &&
 		!ghb_settings_get_boolean(js, "vquality_type_constant"))
 	{
@@ -4198,6 +4209,17 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 	}
+
+	// First remove any audios that are already in the list
+	// This happens if you are encoding the same title a second time.
+	gint num_audio_tracks = hb_list_count(job->list_audio);
+	for(ii = 0; ii < num_audio_tracks; ii++)
+	{
+		hb_audio_t *audio = (hb_audio_t*)hb_list_item(job->list_audio, 0);
+		hb_list_rem(job->list_audio, audio);
+		free(audio);
+	}
+
 	if (detel_str) g_free(detel_str);
 	if (decomb_str) g_free(decomb_str);
 	if (deint_str) g_free(deint_str);

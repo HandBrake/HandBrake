@@ -1066,7 +1066,8 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
         for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
         {
             subtitle = hb_list_item( title->list_subtitle, i );
-            if( strcmp( subtitle->iso639_2, audio_lang ) == 0 )
+            if( strcmp( subtitle->iso639_2, audio_lang ) == 0 &&
+                subtitle->source == VOBSUB )
             {
                 /*
                  * Matched subtitle language with audio language, so
@@ -1093,56 +1094,45 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
          * Not doing a subtitle scan in this pass, but maybe we are in the
          * first pass?
          */
-        if( job->select_subtitle )
+        if( job->pass != 1 && job->native_language )
         {
             /*
-             * Don't add subtitles here, we'll add them via select_subtitle
-             * at the end of the subtitle_scan.
+             * We are not doing a subtitle scan but do want the
+             * native langauge subtitle selected, so select it
+             * for pass 0 or pass 2 of a two pass.
              */
+            for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
+            {
+                subtitle = hb_list_item( title->list_subtitle, i );
+                if( strcmp( subtitle->iso639_2, audio_lang ) == 0 )
+                {
+                    /*
+                     * Matched subtitle language with audio language, so
+                     * add this to our list to scan.
+                     */
+                    subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
+                    memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
+                    hb_list_add( title_copy->list_subtitle, subtitle_copy );
+                    break;
+                }
+            }
         } else {
             /*
-             * Definitely not doing a subtitle scan.
+             * Manually selected subtitles, in which case only
+             * bother adding them for pass 0 or pass 2 of a two
+             * pass.
              */
-            if( job->pass != 1 && job->native_language )
+            if( job->pass != 1 )
             {
                 /*
-                 * We are not doing a subtitle scan but do want the
-                 * native langauge subtitle selected, so select it
-                 * for pass 0 or pass 2 of a two pass.
+                 * Copy all of them from the input job, to the title_copy/job_copy.
                  */
-                for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
-                {
-                    subtitle = hb_list_item( title->list_subtitle, i );
-                    if( strcmp( subtitle->iso639_2, audio_lang ) == 0 )
+                for(  i = 0; i < hb_list_count(job->list_subtitle); i++ ) {
+                    if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
                     {
-                        /*
-                         * Matched subtitle language with audio language, so
-                         * add this to our list to scan.
-                         */
                         subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
                         memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
                         hb_list_add( title_copy->list_subtitle, subtitle_copy );
-                        break;
-                    }
-                }
-            } else {
-                /*
-                 * Manually selected subtitles, in which case only
-                 * bother adding them for pass 0 or pass 2 of a two
-                 * pass.
-                 */
-                if( job->pass != 1 )
-                {
-                    /*
-                     * Copy all of them from the input job, to the title_copy/job_copy.
-                     */
-                    for(  i = 0; i < hb_list_count(job->list_subtitle); i++ ) {
-                        if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
-                        {
-                            subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-                            memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-                            hb_list_add( title_copy->list_subtitle, subtitle_copy );
-                        }
                     }
                 }
             }
