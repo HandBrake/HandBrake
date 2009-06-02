@@ -1986,7 +1986,13 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
 
 static void hb_ts_stream_find_pids(hb_stream_t *stream)
 {
-	// align to first packet
+    // To be different from every other broadcaster in the world, New Zealand TV
+    // changes PMTs (and thus video & audio PIDs) when 'programs' change. Since
+    // we may have the tail of the previous program at the beginning of this
+    // file, take our PMT from the middle of the file.
+    fseeko(stream->file_handle, 0, SEEK_END);
+    uint64_t fsize = ftello(stream->file_handle);
+    fseeko(stream->file_handle, fsize >> 1, SEEK_SET);
     align_to_next_packet(stream);
 
 	// Read the Transport Stream Packets (188 bytes each) looking at first for PID 0 (the PAT PID), then decode that
