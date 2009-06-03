@@ -3323,7 +3323,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 
 	const GValue *slist, *settings;
 	gint count, ii, track, source;
-	gboolean burned;
+	gboolean burned, one_burned = FALSE;
 
 	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(slist);
@@ -3333,6 +3333,26 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 		track = ghb_settings_combo_int(settings, "SubtitleTrack");
 		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 		source = ghb_subtitle_track_source(ud, track);
+		if (burned && one_burned)
+		{
+			// MP4 can only handle burned vobsubs.  make sure there isn't
+			// already something burned in the list
+			message = g_strdup_printf(
+			"Only one subtitle may be burned into the video.\n\n"
+				"You should change your subtitle selections.\n"
+				"If you continue, some subtitles will be lost.");
+			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+			{
+				g_free(message);
+				return FALSE;
+			}
+			g_free(message);
+			break;
+		}
+		else if (burned)
+		{
+			one_burned = TRUE;
+		}
 		if (!burned && mux == HB_MUX_MP4 && source == VOBSUB)
 		{
 			// MP4 can only handle burned vobsubs.  make sure there isn't
