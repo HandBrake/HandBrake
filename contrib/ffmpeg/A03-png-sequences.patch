@@ -1,7 +1,7 @@
 diff -Naur ffmpeg-r19067.orig/libavcodec/pngdec.c ffmpeg-r19067/libavcodec/pngdec.c
 --- ffmpeg-r19067.orig/libavcodec/pngdec.c	2009-05-24 08:44:54.000000000 -0400
-+++ ffmpeg-r19067/libavcodec/pngdec.c	2009-06-02 23:42:29.000000000 -0400
-@@ -593,6 +593,14 @@
++++ ffmpeg-r19067/libavcodec/pngdec.c	2009-06-03 18:53:52.000000000 -0400
+@@ -593,6 +593,18 @@
          }
      }
   exit_loop:
@@ -20,7 +20,7 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/pngdec.c ffmpeg-r19067/libavcodec/pngde
       /* handle p-frames only if a predecessor frame is available */
       if(s->last_picture->data[0] != NULL) {
           if(!(avpkt->flags & PKT_FLAG_KEY)) {
-@@ -609,6 +617,7 @@
+@@ -609,6 +621,7 @@
              }
          }
      }
