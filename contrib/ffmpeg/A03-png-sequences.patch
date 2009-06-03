@@ -10,6 +10,10 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/pngdec.c ffmpeg-r19067/libavcodec/pngde
 + * since only the first png appears to be marked as PKT_FLAG_KEY
 + * it means either QuickTime Pro is encoding incorrectly, or
 + * this code block needs to find other criteria.
++ *
++ * As of ffmpeg-r19079 this patch should no longer be required.
++ * It offers a similar solution; forces code block to be skipped.
++ *
 + * --kb
 + */
 +#if 0
