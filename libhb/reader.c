@@ -501,8 +501,8 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
     hb_title_t    * title = job->title;
     hb_audio_t    * audio;
     hb_subtitle_t * subtitle;
-    int             i, n;
-    static hb_fifo_t * fifos[8];
+    int             i, n, count;
+    static hb_fifo_t * fifos[100];
 
     memset(fifos, 0, sizeof(fifos));
 
@@ -523,7 +523,10 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
         }
     }
 
-    for( i=0; i < hb_list_count( title->list_subtitle ); i++ ) {
+    n = 0;
+    count = hb_list_count( title->list_subtitle );
+    count = count > 99 ? 99 : count;
+    for( i=0; i < count; i++ ) {
         subtitle =  hb_list_item( title->list_subtitle, i );
         if (id == subtitle->id) {
             subtitle->hits++;
@@ -534,11 +537,13 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
                  * we are scanning and looking for forced subs, then pass them up
                  * to decode whether the sub is a forced one.
                  */
-                fifos[0] = subtitle->fifo_in;
-                return fifos;
+                fifos[n++] = subtitle->fifo_in;
             }
-            break;
         }
+    }
+    if ( n != 0 )
+    {
+        return fifos;
     }
     
     if( !job->indepth_scan )

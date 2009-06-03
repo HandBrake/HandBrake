@@ -46,7 +46,7 @@ typedef struct hb_libmpeg2_s
     int64_t              last_pts;
     int cadence[12];
     int flag;
-    hb_subtitle_t      * subtitle;
+    hb_list_t          * list_subtitle;
 } hb_libmpeg2_t;
 
 /**********************************************************************
@@ -70,6 +70,8 @@ static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
     uint8_t cc_valid = (*cc_block & 4) >>2;
     uint8_t cc_type = *cc_block & 3;
     hb_buffer_t *cc_buf;
+    int i;
+    hb_subtitle_t * subtitle;
     
     if( !m->job )
     {
@@ -85,12 +87,16 @@ static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
         {
         case 0:
             // CC1 stream
-            cc_buf = hb_buffer_init( 2 );
-            if( cc_buf )
+            for (i = 0; i < hb_list_count( m->list_subtitle ); i++)
             {
-                cc_buf->start = m->last_pts;
-                memcpy( cc_buf->data, cc_block+1, 2 );
-                hb_fifo_push( m->subtitle->fifo_in, cc_buf );
+                subtitle = hb_list_item( m->list_subtitle, i );
+                cc_buf = hb_buffer_init( 2 );
+                if( cc_buf )
+                {
+                    cc_buf->start = m->last_pts;
+                    memcpy( cc_buf->data, cc_block+1, 2 );
+                    hb_fifo_push( subtitle->fifo_in, cc_buf );
+                }
             }
             break;
         case 1:
@@ -408,7 +414,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
          *
          * Send them on to the closed caption decoder if requested and found.
          */
-        if( ( !m->job || m->subtitle) &&
+        if( ( !m->job || hb_list_count( m->list_subtitle) ) &&
             ( m->info->user_data_len != 0 &&
               m->info->user_data[0] == 0x43 &&
               m->info->user_data[1] == 0x43 ) ) 
@@ -582,6 +588,7 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
      * If not scanning, then are we supposed to extract Closed Captions
      * and send them to the decoder? 
      */
+    pv->libmpeg2->list_subtitle = hb_list_init();
     if( job )
     {
         hb_subtitle_t * subtitle;
@@ -592,8 +599,7 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
             subtitle = hb_list_item( job->list_subtitle, i);
             if( subtitle && subtitle->source == CC608SUB ) 
             {
-                pv->libmpeg2->subtitle = subtitle;
-                break;
+                hb_list_add(pv->libmpeg2->list_subtitle, subtitle);
             }
         }
 
@@ -635,19 +641,23 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if ( (*buf_in)->size == 0 )
     {
+        int i;
+
         hb_list_add( pv->list, *buf_in );
         *buf_in = NULL;
         status = HB_WORK_DONE;
         /*
          * Let the Closed Captions know that it is the end of the data.
          */
-        if( pv->libmpeg2->subtitle )
+        for (i = 0; i < hb_list_count( pv->libmpeg2->list_subtitle ); i++)
         {
+            hb_subtitle_t * subtitle;
             hb_buffer_t *buf_eof = hb_buffer_init( 0 );
             
+            subtitle = hb_list_item( pv->libmpeg2->list_subtitle, i );
             if( buf_eof )
             {
-                hb_fifo_push( pv->libmpeg2->subtitle->fifo_in, buf_eof );
+                hb_fifo_push( subtitle->fifo_in, buf_eof );
             }
         }
     }
@@ -686,6 +696,7 @@ static void decmpeg2Close( hb_work_object_t * w )
         hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
     }
     hb_list_close( &pv->list );
+    hb_list_close( &pv->libmpeg2->list_subtitle );
     hb_libmpeg2_close( &pv->libmpeg2 );
     free( pv );
 }
