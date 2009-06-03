@@ -381,11 +381,9 @@ bind_audio_tree_model (signal_user_data_t *ud)
 }
 
 extern G_MODULE_EXPORT void subtitle_list_selection_changed_cb(void);
-extern G_MODULE_EXPORT void subtitle_enable_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_forced_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_burned_toggled_cb(void);
 extern G_MODULE_EXPORT void subtitle_default_toggled_cb(void);
-extern G_MODULE_EXPORT void subtitle_track_changed_cb(void);
 
 // Create and bind the tree model to the tree view for the subtitle track list
 // Also, connect up the signal that lets us know the selection has changed
@@ -402,54 +400,44 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	g_debug("bind_subtitle_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "subtitle_list"));
 	selection = gtk_tree_view_get_selection (treeview);
-	// 6 columns in model.  4 are visible, the other 2 is for storing
+	// 6 columns in model.  5 are visible, the other 1 is for storing
 	// values that I need
-	// Enable, Track, force, burn, default, type, track short, can delete
-	treestore = gtk_list_store_new(8, 
-									G_TYPE_BOOLEAN, G_TYPE_STRING,
+	// Track, force, burn, default, type, track short
+	treestore = gtk_list_store_new(6, 
+									G_TYPE_STRING,
 									G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
 									G_TYPE_BOOLEAN, G_TYPE_STRING,  
-									G_TYPE_STRING, G_TYPE_BOOLEAN);
+									G_TYPE_STRING);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
-	cell = gtk_cell_renderer_toggle_new();
+	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Enable"), cell, "active", 0, NULL);
+									_("Track"), cell, "text", 0, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	g_signal_connect(cell, "toggled", subtitle_enable_toggled_cb, ud);
-
-	cell = gtk_cell_renderer_combo_new();
-	ghb_subtitle_track_model(ud, -1);
-	g_object_set(G_OBJECT(cell), "model", ud->subtitle_track_model,
-	"text-column", 0, "editable", TRUE, "width", 200, "has-entry", FALSE, NULL);
-	column = gtk_tree_view_column_new_with_attributes( _("Track"), cell, 
-				"text", 1, NULL);
-	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	g_signal_connect(cell, "changed", subtitle_track_changed_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Forced Only"), cell, "active", 2, NULL);
+									_("Forced Only"), cell, "active", 1, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_forced_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
 	column = gtk_tree_view_column_new_with_attributes(
-				_("Burned In"), cell, "active", 3, NULL);
+				_("Burned In"), cell, "active", 2, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_burned_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
 	column = gtk_tree_view_column_new_with_attributes(
-				_("Default"), cell, "active", 4, NULL);
+				_("Default"), cell, "active", 3, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_default_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Type"), cell, "text", 5, NULL);
+									_("Type"), cell, "text", 4, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
 

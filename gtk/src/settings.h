@@ -53,7 +53,6 @@ typedef struct
 	preview_t *preview;
 	gchar *appcast;
 	gint appcast_len;
-	GtkListStore *subtitle_track_model;
 } signal_user_data_t;
 
 enum

@@ -269,8 +269,6 @@
 		<key>SubtitleList</key>
 		<array>
 			<dict>
-				<key>SubtitleEnabled</key>
-				<false />
 				<key>SubtitleLanguage</key>
 				<string>und</string>
 				<key>SubtitleForced</key>

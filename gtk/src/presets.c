@@ -3056,11 +3056,8 @@ update_subtitle_presets(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		subtitle = ghb_array_get_nth(subtitle_list, ii);
-		if (ghb_settings_get_boolean(subtitle, "SubtitleEnabled"))
-		{
-			dict = ghb_value_dup(subtitle);
-			ghb_array_append(slist, dict);
-		}
+		dict = ghb_value_dup(subtitle);
+		ghb_array_append(slist, dict);
 	}
 	ghb_settings_set_value(ud->settings, "SubtitleList", slist);
 }

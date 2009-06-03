@@ -1681,7 +1681,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 }
 
 void
-ghb_subtitle_track_model(signal_user_data_t *ud, gint titleindex)
+subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
@@ -1689,8 +1689,11 @@ ghb_subtitle_track_model(signal_user_data_t *ud, gint titleindex)
 	hb_title_t * title = NULL;
 	hb_subtitle_t * subtitle;
 	gint ii, count = 0;
+	static char ** options = NULL;
 	
-	g_debug("ghb_subtitle_track_model ()\n");
+	g_debug("subtitle_track_opts_set ()\n");
+	store = get_combo_box_store(builder, name);
+	gtk_list_store_clear(store);
 	if (h_scan != NULL)
 	{
 		list = hb_get_titles( h_scan );
@@ -1712,56 +1715,44 @@ ghb_subtitle_track_model(signal_user_data_t *ud, gint titleindex)
 		subtitle_opts.count = LANG_TABLE_SIZE+1;
 		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE+1)*sizeof(options_map_t));
 	}
-	if (ud->subtitle_track_model == NULL)
-	{
-		// Store contains:
-		// 1 - String to display
-		// 2 - bool indicating whether the entry is selectable (grey or not)
-		// 3 - String that is used for presets
-		// 4 - Int value determined by backend
-		// 5 - String value determined by backend
-		store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_BOOLEAN, 
-							   G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_STRING);
-		ud->subtitle_track_model = store;
-	}
-	else
-	{
-		store = ud->subtitle_track_model;
-		gtk_list_store_clear(store);
-	}
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
-					   0, "Autoselect", 
+					   0, "Foreign Audio Search", 
 					   1, TRUE, 
 					   2, "-1", 
 					   3, -1.0, 
 					   4, "auto", 
 					   -1);
-	subtitle_opts.map[0].option = "Same as audio";
+	subtitle_opts.map[0].option = "Foreign Audio Search";
 	subtitle_opts.map[0].shortOpt = "-1";
 	subtitle_opts.map[0].ivalue = -1;
 	subtitle_opts.map[0].svalue = "auto";
 	if (count > 0)
 	{
+		if (options != NULL)
+			g_strfreev(options);
+		options = g_malloc((count+1)*sizeof(gchar*));
 		index_str_init(count-1);
 		for (ii = 0; ii < count; ii++)
 		{
        		subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
 			// Skip subtitles that must be burned if there is already
 			// a burned subtitle in the list
-			subtitle_opts.map[ii+1].option = subtitle->lang;
+			options[ii] = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
+			subtitle_opts.map[ii+1].option = options[ii];
 			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
 			subtitle_opts.map[ii+1].ivalue = ii;
 			subtitle_opts.map[ii+1].svalue = subtitle->iso639_2;
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, 
-					   	0, subtitle->lang, 
+					   	0, options[ii], 
 					   	1, TRUE, 
 					   	2, index_str[ii], 
 					   	3, (gdouble)ii, 
 					   	4, subtitle->iso639_2, 
 					   	-1);
 		}
+		options[count] = NULL;
 	}
 	else
 	{
@@ -1968,50 +1959,6 @@ ghb_find_audio_track(
 	return track;
 }
 
-void
-ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex)
-{
-	hb_list_t  * list;
-	hb_title_t * title;
-	hb_subtitle_t * subtitle;
-	gint ii;
-	gint count = 0;
-	GValue *subdict;
-	
-	g_debug("ghb_add_all_subtitles ()\n");
-	if (h_scan == NULL) 
-		return;
-	list = hb_get_titles( h_scan );
-	title = (hb_title_t*)hb_list_item( list, titleindex );
-	if (title == NULL)
-		return;
-
-	// Add special auto selection track
-	subdict = ghb_dict_value_new();
-	ghb_settings_set_boolean(subdict, "SubtitleEnabled", FALSE);
-	ghb_settings_set_int(subdict, "SubtitleTrack", -1);
-	ghb_settings_set_boolean(subdict, "SubtitleForced", FALSE);
-	ghb_settings_set_boolean(subdict, "SubtitleBurned", FALSE);
-	ghb_settings_set_boolean(subdict, "SubtitleDefaultTrack", FALSE);
-	ghb_settings_set_string(subdict, "SubtitleLanguage", "auto");
-	ghb_add_subtitle(ud, subdict, FALSE);
-
-	count = hb_list_count( title->list_subtitle );
-	for (ii = 0; ii < count; ii++)
-	{
-       	subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-		subdict = ghb_dict_value_new();
-		ghb_settings_set_boolean(subdict, "SubtitleEnabled", FALSE);
-		ghb_settings_set_int(subdict, "SubtitleTrack", ii);
-		ghb_settings_set_boolean(subdict, "SubtitleForced", FALSE);
-		ghb_settings_set_boolean(subdict, "SubtitleBurned", FALSE);
-		ghb_settings_set_boolean(subdict, "SubtitleDefaultTrack", FALSE);
-		ghb_settings_set_string(subdict, "SubtitleLanguage", 
-								subtitle->iso639_2);
-		ghb_add_subtitle(ud, subdict, FALSE);
-	}
-}
-
 gint
 ghb_find_pref_subtitle_track(const gchar *lang)
 {
@@ -2070,38 +2017,6 @@ ghb_find_subtitle_track(
 		}
 	}
 	return -2;
-}
-
-gint
-ghb_pick_subtitle_track(signal_user_data_t *ud)
-{
-	gint ii, count, track, candidate, first;
-	GValue *settings, *subtitle_list;
-
-	first = candidate = ghb_settings_combo_int(ud->settings, "SubtitleTrack");
-	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
-	count = ghb_array_len(subtitle_list);
-	for (ii = 0; ii < count; ii++)
-	{
-		settings = ghb_array_get_nth(subtitle_list, ii);
-		track = ghb_settings_combo_int(settings, "SubtitleTrack");
-		if (candidate == track)
-		{
-			// Already in use, pick another
-			candidate++;
-			if (candidate >= subtitle_opts.count-1)
-			{
-				candidate = 0;
-			}
-			if (candidate == first)
-			{
-				candidate = -1;
-				break;
-			}
-			ii = -1;
-		}
-	}
-	return candidate;
 }
 
 static void
@@ -2275,6 +2190,7 @@ ghb_update_ui_combo_box(
 		language_opts_set(ud->builder, "SourceAudioLang");
 		title_opts_set(ud->builder, "title");
 		audio_track_opts_set(ud->builder, "AudioTrack", user_data);
+		subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
 		generic_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
 		generic_opts_set(ud->builder, "PicturePAR", &par_opts);
 		generic_opts_set(ud->builder, "PictureModulus", &alignment_opts);
@@ -2307,6 +2223,8 @@ ghb_update_ui_combo_box(
 			language_opts_set(ud->builder, "SourceAudioLang");
 		else if (strcmp(name, "title") == 0)
 			title_opts_set(ud->builder, "title");
+		else if (strcmp(name, "SubtitleTrack") == 0)
+			subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
 		else if (strcmp(name, "AudioTrack") == 0)
 			audio_track_opts_set(ud->builder, "AudioTrack", user_data);
 		else
@@ -3405,7 +3323,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 
 	const GValue *slist, *settings;
 	gint count, ii, track, source;
-	gboolean burned, enabled;
+	gboolean burned;
 
 	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(slist);
@@ -3413,10 +3331,9 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	{
 		settings = ghb_array_get_nth(slist, ii);
 		track = ghb_settings_combo_int(settings, "SubtitleTrack");
-		enabled = ghb_settings_get_boolean(settings, "SubtitleEnabled");
 		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 		source = ghb_subtitle_track_source(ud, track);
-		if (enabled && !burned && mux == HB_MUX_MP4 && source == VOBSUB)
+		if (!burned && mux == HB_MUX_MP4 && source == VOBSUB)
 		{
 			// MP4 can only handle burned vobsubs.  make sure there isn't
 			// already something burned in the list
@@ -4041,14 +3958,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *ssettings;
-		gboolean enabled, force, burned, def, one_burned = FALSE;
+		gboolean force, burned, def, one_burned = FALSE;
 
 		ssettings = ghb_array_get_nth(subtitle_list, ii);
-
-		enabled = ghb_settings_get_boolean(ssettings, "SubtitleEnabled");
-
-		if (!enabled)
-			continue;
 
 		subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
 		force = ghb_settings_get_boolean(ssettings, "SubtitleForced");
@@ -4082,14 +3994,16 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		else if (subtitle >= 0)
 		{
     		hb_subtitle_t * subt;
+    		hb_subtitle_config_t sub_config;
 
        		subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+			sub_config = subt->config;
 			if (subt != NULL)
 			{
 				if (!burned && job->mux == HB_MUX_MKV && 
 					subt->format == PICTURESUB)
 				{
-					subt->config.dest = PASSTHRUSUB;
+					sub_config.dest = PASSTHRUSUB;
 				}
 				else if (!burned && job->mux == HB_MUX_MP4 && 
 					subt->format == PICTURESUB)
@@ -4104,9 +4018,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 						continue;
 					one_burned = TRUE;
 				}
-				subt->config.force = force;
-				subt->config.default_track = def;
-				hb_list_add(job->list_subtitle, subt);
+				sub_config.force = force;
+				sub_config.default_track = def;
+        		hb_subtitle_add( job, &sub_config, subtitle );
 			}
 		}
 	}
@@ -4210,14 +4124,22 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		//	g_free(job->x264opts);
 	}
 
-	// First remove any audios that are already in the list
-	// This happens if you are encoding the same title a second time.
+	// clean up audio list
 	gint num_audio_tracks = hb_list_count(job->list_audio);
 	for(ii = 0; ii < num_audio_tracks; ii++)
 	{
 		hb_audio_t *audio = (hb_audio_t*)hb_list_item(job->list_audio, 0);
 		hb_list_rem(job->list_audio, audio);
 		free(audio);
+	}
+
+	// clean up subtitle list
+	gint num_subtitle_tracks = hb_list_count(job->list_subtitle);
+	for(ii = 0; ii < num_subtitle_tracks; ii++)
+	{
+		hb_subtitle_t *subtitle = hb_list_item(job->list_subtitle, 0);
+		hb_list_rem(job->list_subtitle, subtitle);
+		free(subtitle);
 	}
 
 	if (detel_str) g_free(detel_str);

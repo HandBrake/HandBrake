@@ -95,6 +95,8 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg);
 int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
+int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track);
+
 struct hb_rate_s
 {
     char * string;
@@ -449,7 +451,7 @@ struct hb_chapter_s
 struct hb_subtitle_s
 {
     int  id;
-    int track;
+    int  track;
 
     hb_subtitle_config_t config;
 

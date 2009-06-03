@@ -816,3 +816,42 @@ hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i)
 
     return NULL;
 }
+
+/**********************************************************************
+ * hb_subtitle_copy
+ **********************************************************************
+ *
+ *********************************************************************/
+hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src)
+{
+    hb_subtitle_t *subtitle = NULL;
+
+    if( src )
+    {
+        subtitle = calloc(1, sizeof(*subtitle));
+        memcpy(subtitle, src, sizeof(*subtitle));
+    }
+    return subtitle;
+}
+
+/**********************************************************************
+ * hb_subtitle_add
+ **********************************************************************
+ *
+ *********************************************************************/
+int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track)
+{
+    hb_title_t *title = job->title;
+    hb_subtitle_t *subtitle;
+
+    subtitle = hb_subtitle_copy( hb_list_item( title->list_subtitle, track ) );
+    if( subtitle == NULL )
+    {
+        /* We fail! */
+        return 0;
+    }
+	subtitle->config = *subtitlecfg;
+    hb_list_add(job->list_subtitle, subtitle);
+    return 1;
+}
+
