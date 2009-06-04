@@ -98,15 +98,28 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
      */
     if (job->vrate_base != 1080000)
     {
-        int fps = job->vrate / job->vrate_base;
+        if (job->pass == 2 && !job->cfr )
+        {
+            /* Even though the framerate might be different due to VFR,
+               we still want the same keyframe intervals as the 1st pass,
+               so the 1st pass stats won't conflict on frame decisions.    */
+            hb_interjob_t * interjob = hb_interjob_get( job->h );
+            param.i_keyint_min     = ( interjob->vrate / interjob->vrate_base ) + 1;
+            param.i_keyint_max = ( 10 * interjob->vrate / interjob->vrate_base ) + 1;
+        }
+        else
+        {
+            int fps = job->vrate / job->vrate_base;
 
-        /* adjust +1 when fps has remainder to bump { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
-        if (job->vrate % job->vrate_base)
-            fps += 1;
+            /* adjust +1 when fps has remainder to bump
+               { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
+            if (job->vrate % job->vrate_base)
+                fps += 1;
 
-        param.i_keyint_min = fps;
-        param.i_keyint_max = fps * 10;
-
+            param.i_keyint_min = fps;
+            param.i_keyint_max = fps * 10;
+        }
+        
         hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);
     }
 

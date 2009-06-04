@@ -70,6 +70,19 @@ void          hb_pause( hb_handle_t * );
 void          hb_resume( hb_handle_t * );
 void          hb_stop( hb_handle_t * );
 
+/* Persistent data between jobs. */
+typedef struct hb_interjob_s
+{
+    int last_job;          /* job->sequence_id & 0xFFFFFF */
+    int frame_count;       /* number of frames counted by sync */
+    uint64_t total_time;   /* real length in 90khz (i.e. / 90000 */
+    int render_dropped;    /* frames droped by telecine */
+    int vrate;             /* initial assigned vrate */
+    int vrate_base;        /* initial assigned vrate_base */
+} hb_interjob_t;
+
+hb_interjob_t * hb_interjob_get( hb_handle_t * ); 
+
 /* hb_get_state()
    Should be regularly called by the UI (like 5 or 10 times a second).
    Look at test/test.c to see how to use it. */

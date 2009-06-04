@@ -668,6 +668,11 @@ void renderClose( hb_work_object_t * w )
                pv->count_frames, pv->drops, pv->dups );
     }
 
+    hb_interjob_t * interjob = hb_interjob_get( w->private_data->job->h );
+    
+    /* Preserve dropped frame count for more accurate framerates in 2nd passes. */
+    interjob->render_dropped = pv->dropped_frames;
+
     hb_log("render: lost time: %lld (%i frames)", pv->total_lost_time, pv->dropped_frames);
     hb_log("render: gained time: %lld (%i frames) (%lld not accounted for)", pv->total_gained_time, pv->extended_frames, pv->total_lost_time - pv->total_gained_time);
     if (pv->dropped_frames)

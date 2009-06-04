@@ -9,6 +9,7 @@
 #include <sys/time.h>
 
 #include "common.h"
+#include "hb.h"
 
 /**********************************************************************
  * Global variables
@@ -215,8 +216,20 @@ int hb_calc_bitrate( hb_job_t * job, int size )
     length += 135000;
     length /= 90000;
 
+    if( size == -1 )
+    {
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        avail = job->vbitrate * 125 * length;
+        avail += length * interjob->vrate * overhead / interjob->vrate_base;
+    }
+
     /* Video overhead */
     avail -= length * job->vrate * overhead / job->vrate_base;
+
+    if( size == -1 )
+    {
+        goto ret;
+    }
 
     for( i = 0; i < hb_list_count(job->list_audio); i++ )
     {
@@ -266,6 +279,7 @@ int hb_calc_bitrate( hb_job_t * job, int size )
         avail -= length * audio->config.out.samplerate * overhead / samples_per_frame;
     }
 
+ret:
     if( avail < 0 )
     {
         return 0;

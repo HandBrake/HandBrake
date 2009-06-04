@@ -38,6 +38,11 @@ struct hb_handle_s
     /* For MacGui active queue
        increments each time the scan thread completes*/
     int            scanCount;
+    
+    /* Stash of persistent data between jobs, for stuff
+       like correcting frame count and framerate estimates
+       on multi-pass encodes where frames get dropped.     */
+    hb_interjob_t * interjob;
 
 };
 
@@ -141,6 +146,8 @@ hb_handle_t * hb_init( int verbose, int update_check )
     h->state.state = HB_STATE_IDLE;
 
     h->pause_lock = hb_lock_init();
+
+    h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
 
     /* libavcodec */
     hb_avcodec_init();
@@ -1474,4 +1481,10 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     }
     hb_unlock( h->state_lock );
     hb_unlock( h->pause_lock );
+}
+
+/* Passes a pointer to persistent data */
+hb_interjob_t * hb_interjob_get( hb_handle_t * h )
+{
+    return h->interjob;
 }

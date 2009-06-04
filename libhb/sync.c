@@ -96,28 +96,37 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
     pv->job            = job;
     pv->pts_offset     = INT64_MIN;
 
-    /* Calculate how many video frames we are expecting */
-    if (job->pts_to_stop)
+    if( job->pass == 2 )
     {
-        duration = job->pts_to_stop + 90000;
-    }
-    else if( job->frame_to_stop )
-    {
-        /* Set the duration to a rough estimate */
-        duration = ( job->frame_to_stop / ( job->vrate / job->vrate_base ) ) * 90000;
+        /* We already have an accurate frame count from pass 1 */
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        pv->count_frames_max = interjob->frame_count;
     }
     else
     {
-        duration = 0;
-        for( i = job->chapter_start; i <= job->chapter_end; i++ )
+        /* Calculate how many video frames we are expecting */
+        if ( job->pts_to_stop )
         {
-            chapter   = hb_list_item( title->list_chapter, i - 1 );
-            duration += chapter->duration;
+            duration = job->pts_to_stop + 90000;
         }
-        duration += 90000;
-        /* 1 second safety so we're sure we won't miss anything */
+        else if( job->frame_to_stop )
+        {
+            /* Set the duration to a rough estimate */
+            duration = ( job->frame_to_stop / ( job->vrate / job->vrate_base ) ) * 90000;
+        }
+        else
+        {
+            duration = 0;
+            for( i = job->chapter_start; i <= job->chapter_end; i++ )
+            {
+                chapter   = hb_list_item( title->list_chapter, i - 1 );
+                duration += chapter->duration;
+            }
+            duration += 90000;
+            /* 1 second safety so we're sure we won't miss anything */
+        }
+        pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
     }
-    pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
 
     hb_log( "sync: expecting %d video frames", pv->count_frames_max );
     pv->busy |= 1;
@@ -155,6 +164,16 @@ void syncClose( hb_work_object_t * w )
 
     hb_log( "sync: got %d frames, %d expected",
             pv->count_frames, pv->count_frames_max );
+
+    /* save data for second pass */
+    if( job->pass == 1 )
+    {
+        /* Preserve frame count for better accuracy in pass 2 */
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        interjob->frame_count = pv->count_frames;
+        interjob->last_job = job->sequence_id;
+        interjob->total_time = pv->next_start;
+    }
 
     if (pv->drops || pv->dups )
     {

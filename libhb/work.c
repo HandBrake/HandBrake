@@ -335,6 +335,25 @@ void hb_display_job_info( hb_job_t * job )
     }
 }
 
+/* Corrects framerates when actual duration and frame count numbers are known. */
+void correct_framerate( hb_job_t * job )
+{
+    int real_frames;
+
+    hb_interjob_t * interjob = hb_interjob_get( job->h );
+
+    if( ( job->sequence_id & 0xFFFFFF ) != ( interjob->last_job ) )
+        return; // Interjob information is for a different encode.
+
+    /* Cache the original framerate before altering it. */
+    interjob->vrate = job->vrate;
+    interjob->vrate_base = job->vrate_base;
+
+    real_frames = interjob->frame_count - interjob->render_dropped;
+    job->vrate = job->vrate_base * ( real_frames / ( interjob->total_time / 90000 ) );
+}
+
+
 /**
  * Job initialization rountine.
  * Initializes fifos.
@@ -362,6 +381,11 @@ static void do_job( hb_job_t * job, int cpu_count )
     unsigned int subtitle_hit = 0;
 
     title = job->title;
+
+    if( job->pass == 2 && !job->cfr )
+    {
+        correct_framerate( job );
+    }
 
     job->list_work = hb_list_init();
 
