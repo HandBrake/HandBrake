@@ -2248,17 +2248,17 @@ import_value_xlat(GValue *dict)
 		{
 			key = "Subtitles";
 			mac_val = ghb_dict_lookup(dict, key);
+			slist = ghb_array_value_new(8);
+			ghb_dict_insert(dict, g_strdup("SubtitleList"), slist);
 			if (mac_val)
 			{
 				gchar *lang;
 	
 				gval = import_subtitle_xlat2(mac_val);
 				lang = ghb_value_string(gval);
-				if (lang && strcmp(lang, "none") != 0 && !slist)
+				if (lang && strcasecmp(lang, "none") != 0 && !slist)
 				{
-					slist = ghb_array_value_new(8);
 					sdict = ghb_dict_value_new();
-					ghb_dict_insert(dict, g_strdup("SubtitleList"), slist);
 					ghb_array_append(slist, sdict);
 					ghb_dict_insert(sdict, g_strdup("SubtitleLanguage"), gval);
 					gval = ghb_dict_lookup(dict, "SubtitlesForced");
