@@ -266,6 +266,14 @@
 		<integer>1</integer>
 		<key>SourceAudioLang</key>
 		<string>und</string>
+		<key>SubtitleForeignSearch</key>
+		<false />
+		<key>SubtitleForeignForced</key>
+		<true />
+		<key>SubtitleForeignBurned</key>
+		<false />
+		<key>SubtitleForeignDefaultTrack</key>
+		<false />
 		<key>SubtitleList</key>
 		<array>
 			<dict>

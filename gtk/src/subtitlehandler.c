@@ -18,6 +18,7 @@
 #include "values.h"
 #include "callbacks.h"
 #include "preview.h"
+#include "presets.h"
 #include "subtitlehandler.h"
 
 static void add_to_subtitle_list(signal_user_data_t *ud, GValue *settings);
@@ -70,6 +71,12 @@ ghb_subtitle_exclusive_burn(signal_user_data_t *ud, gint index)
 	g_debug("ghb_subtitle_exclusive_burn");
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
+	if (index != -1)
+	{
+		burned = ghb_settings_get_boolean(ud->settings, "SubtitleForeignBurned");
+		if (burned && !mustBurn(ud, -1))
+			ghb_ui_update(ud, "SubtitleForeignBurned", ghb_boolean_value(FALSE));
+	}
 	for (ii = 0; ii < count; ii++)
 	{
 		settings = ghb_array_get_nth(subtitle_list, ii);
@@ -83,18 +90,17 @@ ghb_subtitle_exclusive_burn(signal_user_data_t *ud, gint index)
 		if (burned && ii != index && !mustBurn(ud, tt))
 		{
 			ghb_settings_set_boolean(settings, "SubtitleBurned", FALSE);
-			burned = FALSE;
 			gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 2, FALSE, -1);
 		}
 	}
 }
 
 void
-ghb_subtitle_exclusive_default(signal_user_data_t *ud, gint track)
+ghb_subtitle_exclusive_default(signal_user_data_t *ud, gint index)
 {
 	GValue *subtitle_list;
 	GValue *settings;
-	gint ii, count, tt;
+	gint ii, count;
 	GtkTreeView  *tv;
 	GtkTreeModel *tm;
 	GtkTreeIter   ti;
@@ -103,17 +109,22 @@ ghb_subtitle_exclusive_default(signal_user_data_t *ud, gint track)
 	g_debug("ghb_subtitle_exclusive_default");
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
+	if (index != -1)
+	{
+		def = ghb_settings_get_boolean(ud->settings, "SubtitleForeignDefaultTrack");
+		if (def)
+			ghb_ui_update(ud, "SubtitleForeignDefaultTrack", ghb_boolean_value(FALSE));
+	}
 	for (ii = 0; ii < count; ii++)
 	{
 		settings = ghb_array_get_nth(subtitle_list, ii);
-		tt = ghb_settings_combo_int(settings, "SubtitleTrack");
 		def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
 
 		tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
 		g_return_if_fail(tv != NULL);
 		tm = gtk_tree_view_get_model(tv);
 		gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
-		if (def && tt != track)
+		if (def && ii != index)
 		{
 
 			ghb_settings_set_boolean(settings, "SubtitleDefaultTrack", FALSE);
@@ -429,7 +440,7 @@ subtitle_default_toggled_cb(
 
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 3, active, -1);
 	// allow only one default
-	ghb_subtitle_exclusive_default(ud, track);
+	ghb_subtitle_exclusive_default(ud, row);
 }
 
 static void
@@ -743,6 +754,13 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 	{
 		ghb_subtitle_exclusive_burn(ud, first_track);
 	}
+	int mux;
+	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	if (mux == HB_MUX_MP4)
+	{
+		ghb_ui_update(ud, "SubtitleForeignBurned", ghb_boolean_value(TRUE));
+		ghb_ui_update(ud, "SubtitleForeignDefaultTrack", ghb_boolean_value(FALSE));
+	}
 }
 
 void
@@ -765,6 +783,24 @@ ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings)
 	{
 		subtitle = ghb_value_dup(ghb_array_get_nth(slist, ii));
 		ghb_add_subtitle(ud, subtitle);
+	}
+}
+
+G_MODULE_EXPORT void
+subtitle_foreign_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
+
+	if (ghb_settings_get_boolean(ud->settings, "SubtitleForeignBurned"))
+	{
+		ghb_subtitle_exclusive_burn(ud, -1);
+	}
+	if (ghb_settings_get_boolean(ud->settings, "SubtitleForeignDefaultTrack"))
+	{
+		ghb_subtitle_exclusive_default(ud, -1);
 	}
 }
 

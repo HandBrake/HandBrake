@@ -40,6 +40,8 @@ static dependency_t dep_map[] =
 	{"FileFormat", "Mp4LargeFile", "mp4|m4v", FALSE, TRUE},
 	{"FileFormat", "Mp4HttpOptimize", "mp4|m4v", FALSE, TRUE},
 	{"FileFormat", "Mp4iPodCompatible", "mp4|m4v", FALSE, TRUE},
+	{"FileFormat", "SubtitleForeignBurned", "mp4|m4v", TRUE, FALSE},
+	{"FileFormat", "SubtitleForeignDefaultTrack", "mp4|m4v", TRUE, FALSE},
 	{"PictureDecomb", "PictureDeinterlace", "none", FALSE, FALSE},
 	{"PictureDecomb", "PictureDeinterlaceCustom", "none", FALSE, TRUE},
 	{"PictureDeinterlace", "PictureDeinterlaceCustom", "custom", FALSE, TRUE},
