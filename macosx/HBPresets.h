@@ -14,27 +14,18 @@
 
 /* Built-In Preset Dictionaries (one for each built in preset) */
 - (NSDictionary *)createApplePresetFolder;
-- (NSDictionary *)createBasicPresetFolder;
-- (NSDictionary *)createGamingConsolesPresetFolder;
-- (NSDictionary *)createHiProfilePresetFolder;
+- (NSDictionary *)createRegularPresetFolder;
 - (NSDictionary *)createLegacyPresetFolder;
 
-- (NSDictionary *)create360Preset;
-- (NSDictionary *)createAnimationPreset;
 - (NSDictionary *)createAppleTVPreset;
 - (NSDictionary *)createAppleTVLegacyPreset;
 - (NSDictionary *)createAppleUniversalPreset;
 - (NSDictionary *)createClassicPreset;
-- (NSDictionary *)createCRFPreset;
-- (NSDictionary *)createFilmPreset;
 - (NSDictionary *)createiPhonePreset;
 - (NSDictionary *)createiPhoneLegacyPreset;
 - (NSDictionary *)createIpodHighPreset;
 - (NSDictionary *)createIpodLowPreset;
 - (NSDictionary *)createNormalPreset;
-- (NSDictionary *)createPSPPreset;
-- (NSDictionary *)createPSThreePreset;  
-- (NSDictionary *)createQuickTimePreset;
-- (NSDictionary *)createTelevisionPreset;
+- (NSDictionary *)createHighProfilePreset;
 
 @end
