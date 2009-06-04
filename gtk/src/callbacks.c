@@ -1563,7 +1563,7 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	update_preview = TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("display_height_changed_cb ()");
@@ -1589,7 +1589,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	update_preview = TRUE;
 }
 
-void
+G_MODULE_EXPORT void
 scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_changed_cb ()");
@@ -1629,6 +1629,18 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 	widget = GHB_WIDGET (ud->builder, "scale_anamorphic");
 	gtk_label_set_text (GTK_LABEL(widget), text);
+}
+
+G_MODULE_EXPORT void
+show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("show_crop_changed_cb ()");
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_live_reset(ud);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, 0);
+	update_preview = TRUE;
 }
 
 G_MODULE_EXPORT void

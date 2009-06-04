@@ -3116,12 +3116,17 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	job->height = ghb_settings_get_int(settings, "scale_height");
 	if (ghb_settings_get_boolean(settings, "show_crop"))
 	{
+		gdouble xscale = (gdouble)job->width / 
+			(gdouble)(job->title->width - job->crop[2] - job->crop[3]);
+		gdouble yscale = (gdouble)job->height / 
+			(gdouble)(job->title->height - job->crop[0] - job->crop[1]);
+	
+		job->width += xscale * (job->crop[2] + job->crop[3]);
+		job->height += yscale * (job->crop[0] + job->crop[1]);
 		job->crop[0] = 0;
 		job->crop[1] = 0;
 		job->crop[2] = 0;
 		job->crop[3] = 0;
-		job->width = job->title->width;
-		job->height = job->title->height;
 		job->anamorphic.modulus = 2;
 	}
 

@@ -5385,7 +5385,7 @@ the required multiple.</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip-text" translatable="yes">Show Cropped area of the preview</property>
                         <property name="label" translatable="yes">Show Crop</property>
-                        <signal name="toggled" handler="scale_changed_cb"/>
+                        <signal name="toggled" handler="show_crop_changed_cb"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
