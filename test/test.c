@@ -59,7 +59,6 @@ static char * abitrates   = NULL;
 static char * acodecs     = NULL;
 static char * anames      = NULL;
 static int    default_acodec = HB_ACODEC_FAAC;
-static int    default_arate = 48000;
 static int    default_abitrate = 160;
 static int    sub         = 0;
 static int    width       = 0;
