@@ -803,7 +803,9 @@ void hb_set_anamorphic_size( hb_job_t * job,
                    which could easily be stored in a different resolution. */
                    
                 int output_display_width = width * (double)pixel_aspect_width /
-                                           (double)pixel_aspect_height ;
+                    (double)pixel_aspect_height;
+                pixel_aspect_width = output_display_width;
+                pixel_aspect_height = width;
             }
             
             /* Back to caller */
