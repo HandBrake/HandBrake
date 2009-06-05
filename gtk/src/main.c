@@ -691,7 +691,7 @@ main (int argc, char *argv[])
 	GtkWidget *draw, *hud, *blender, *align;
 
 	align = GHB_WIDGET(ud->builder, "preview_window_alignment");
-	draw = GHB_WIDGET(ud->builder, "preview_image");
+	draw = GHB_WIDGET(ud->builder, "preview_image_align");
 	hud = GHB_WIDGET(ud->builder, "preview_hud");
 
 	// Set up compositing for hud
