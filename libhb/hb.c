@@ -796,12 +796,14 @@ void hb_set_anamorphic_size( hb_job_t * job,
             }
             else
             {
-                /* We first need the display ar.
-                   That's the source display width divided by the source height after cropping.
-                   Then we multiple the output height by that to get the pixel aspect width,
-                   and the pixel aspect height is the storage width.*/
-                pixel_aspect_width = height * source_display_width / cropped_height;
-                pixel_aspect_height = width;
+                /* If we're doing ana 3 and not specifying a DAR, care needs to be taken.
+                   This indicates a PAR is potentially being set by the interface. But
+                   this is an output PAR, to correct a source, and it should not be assumed
+                   that it properly creates a display aspect ratio when applied to the source,
+                   which could easily be stored in a different resolution. */
+                   
+                int output_display_width = width * (double)pixel_aspect_width /
+                                           (double)pixel_aspect_height ;
             }
             
             /* Back to caller */

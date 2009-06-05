@@ -473,9 +473,9 @@ class Display
     
     #Anamorphic
     if hash["PicturePAR"] == 1
-      commandString << " -p"
+      commandString << " --strict-anamorphic"
     elsif hash["PicturePAR"] == 2
-      commandString << " -P"
+      commandString << " --loose-anamorphic"
     end
 
     #Booleans
@@ -718,9 +718,9 @@ class Display
 
     #Anamorphic
     if hash["PicturePAR"] == 1
-      commandString << " -p"
+      commandString << " --strict-anamorphic"
     elsif hash["PicturePAR"] == 2
-      commandString << " -P"
+      commandString << " --loose-anamorphic"
     end
     
     #Booleans
@@ -982,9 +982,9 @@ class Display
     
     #Anamorphic
     if hash["PicturePAR"] == 1
-      commandString << "pixelratio = 1;\n    "
+      commandString << "anamorphic_mode = 1;\n    "
     elsif hash["PicturePAR"] == 2
-      commandString << "pixelratio = 2;\n    "
+      commandString << "anamorphic_mode = 2;\n    "
     end
     
     #Booleans
@@ -1228,9 +1228,9 @@ class Display
     
     #Anamorphic
     if hash["PicturePAR"] == 1
-      commandString << " -p"
+      commandString << " --strict-anamorphic"
     elsif hash["PicturePAR"] == 2
-      commandString << " -P"
+      commandString << " --loose-anamorphic"
     end
     
     #Booleans

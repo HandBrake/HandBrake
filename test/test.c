@@ -71,11 +71,13 @@ static float  vquality    = -1.0;
 static int    vbitrate    = 0;
 static int    size        = 0;
 static int    mux         = 0;
-static int    pixelratio  = 0;
-static int    loosePixelratio = 0;
+static int    anamorphic_mode  = 0;
 static int    modulus       = 0;
 static int    par_height    = 0;
 static int    par_width     = 0;
+static int    display_width = 0;
+static int    keep_display_aspect = 0;
+static int    itu_par       = 0;
 static int    angle = 0;
 static int    chapter_start = 0;
 static int    chapter_end   = 0;
@@ -347,8 +349,10 @@ static void PrintTitleInfo( hb_title_t * title )
         fprintf( stderr, "  + angle(s) %d\n", title->angle_count );
     fprintf( stderr, "  + duration: %02d:%02d:%02d\n",
              title->hours, title->minutes, title->seconds );
-    fprintf( stderr, "  + size: %dx%d, aspect: %.2f, %.3f fps\n",
+    fprintf( stderr, "  + size: %dx%d, pixel aspect: %d/%d, display aspect: %.2f, %.3f fps\n",
              title->width, title->height,
+             title->pixel_aspect_width,
+             title->pixel_aspect_height,
              (float) title->aspect,
              (float) title->rate / title->rate_base );
     fprintf( stderr, "  + autocrop: %d/%d/%d/%d\n", title->crop[0],
@@ -552,7 +556,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("cabac=0:ref=2:mixed-refs=1:me=umh");
                     }
-                    pixelratio = 2;
+                    anamorphic_mode = 2;
                     job->chapter_markers = 1;
                 }
 
@@ -677,7 +681,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("cabac=0:ref=2:mixed-refs=1:bframes=3:me=umh:subme=7:b-adapt=2:8x8dct=1");
                     }
-                    pixelratio = 2;
+                    anamorphic_mode = 2;
                     job->chapter_markers = 1;
                 }
 
@@ -718,7 +722,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("ref=2:bframes=2:me=umh");
                     }
-                    pixelratio = 1;
+                    anamorphic_mode = 1;
                     job->chapter_markers = 1;
                 }
 
@@ -761,7 +765,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     detelecine = 1;
                     decomb = 1;
-                    pixelratio = 2;
+                    anamorphic_mode = 2;
                     job->chapter_markers = 1;
                 }
 
@@ -835,7 +839,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0");
                     }
-                    pixelratio = 1;
+                    anamorphic_mode = 1;
                     job->chapter_markers = 1;
                 }
 
@@ -997,25 +1001,7 @@ static int HandleEvents( hb_handle_t * h )
 
             job->deinterlace = deinterlace;
             job->grayscale   = grayscale;
-            if (loosePixelratio)
-            {
-                job->anamorphic.mode = 2;
-                if (modulus)
-                {
-                    job->anamorphic.modulus = modulus;
-                }
-                if( par_width && par_height )
-                {
-                    job->anamorphic.mode = 3;
-                    job->anamorphic.par_width = par_width;
-                    job->anamorphic.par_height = par_height;
-                }
-            }
-            else
-            {
-                job->anamorphic.mode = pixelratio;
-            }
-
+            
             /* Add selected filters */
             job->filters = hb_list_init();
             if( detelecine )
@@ -1044,31 +1030,168 @@ static int HandleEvents( hb_handle_t * h )
                 hb_list_add( job->filters, &hb_filter_denoise );
             }
 
-            if( width && height )
+            switch( anamorphic_mode )
             {
-                job->width  = width;
-                job->height = height;
-            }
-            else if( width )
-            {
-                job->width = width;
-                hb_fix_aspect( job, HB_KEEP_WIDTH );
-            }
-            else if( height && !loosePixelratio)
-            {
-                job->height = height;
-                hb_fix_aspect( job, HB_KEEP_HEIGHT );
-            }
-            else if( !width && !height && !pixelratio && !loosePixelratio )
-            {
-                hb_fix_aspect( job, HB_KEEP_WIDTH );
-            }
-            else if (!width && loosePixelratio)
-            {
-                /* Default to full width when one isn't specified for loose anamorphic */
-                job->width = title->width - job->crop[2] - job->crop[3];
-                /* The height will be thrown away in hb.c but calculate it anyway */
-                hb_fix_aspect( job, HB_KEEP_WIDTH );
+                case 0: // Non-anamorphic
+                    
+                    if( width && height )
+                    {
+                        job->width  = width;
+                        job->height = height;
+                    }
+                    else if( width )
+                    {
+                        job->width = width;
+                        hb_fix_aspect( job, HB_KEEP_WIDTH );
+                    }
+                    else if( height )
+                    {
+                        job->height = height;
+                        hb_fix_aspect( job, HB_KEEP_HEIGHT );
+                    }
+                    else if( !width && !height )
+                    {
+                        hb_fix_aspect( job, HB_KEEP_WIDTH );
+                    }
+
+                break;
+                
+                case 1: // Strict anammorphic
+                    job->anamorphic.mode = anamorphic_mode;
+                break;
+                
+                case 2: // Loose anamorphic
+                    job->anamorphic.mode = 2;
+                    
+                    if (modulus)
+                    {
+                        job->anamorphic.modulus = modulus;
+                    }
+                    
+                    if( itu_par )
+                    {
+                        job->anamorphic.itu_par = itu_par;
+                    }
+                    
+                    if( width )
+                    {
+                        job->width = width;
+                    }
+                    else if( !width && !height )
+                    {
+                        /* Default to full width when one isn't specified for loose anamorphic */
+                        job->width = title->width - job->crop[2] - job->crop[3];
+                    }
+                    
+                break;
+                
+                case 3: // Custom Anamorphic 3: Power User Jamboree 
+                    job->anamorphic.mode = 3;
+                    
+                    if (modulus)
+                    {
+                        job->anamorphic.modulus = modulus;
+                    }
+                    
+                    if( itu_par )
+                    {
+                        job->anamorphic.itu_par = itu_par;
+                    }
+                    
+                    if( par_width && par_height )
+                    {
+                        job->anamorphic.par_width = par_width;
+                        job->anamorphic.par_height = par_height;
+                    }
+                    
+                    if( keep_display_aspect )
+                    {
+                        /* First, what *is* the display aspect? */
+                        int cropped_width = title->width - job->crop[2] - job->crop[3];
+                        int cropped_height = title->height - job->crop[0] - job->crop[1];
+                        
+                        /* XXX -- I'm assuming people want to keep the source
+                           display AR even though they might have already
+                           asked for ITU values instead. */
+                        float source_display_width = (float)cropped_width *
+                            (float)title->pixel_aspect_width / (float)title->pixel_aspect_height;
+                        float display_aspect = source_display_width / cropped_height;
+                        
+                        /* When keeping display aspect, we have to rank some values
+                           by priority in order to consistently handle situations
+                           when more than one might be specified by default.
+                           
+                           * First off, PAR gets ignored. (err make this reality)
+                           * Height will be respected over all other settings,
+                           * If it isn't set, display_width will be followed.
+                           * If it isn't set, width will be followed.          */
+                        if( height )
+                        {
+                            /* We scale the display width to the new height */
+                            display_width = (int)( (double)height * display_aspect );
+                        }
+                        else if( display_width )
+                        {
+                            /* We scale the height to the new display width */
+                            height = (int)( (double)display_width / display_aspect );
+                        }
+                        else if( width )
+                        {
+                            /* We assume the source height minus cropping, round
+                               to a mod-friendly number, figure out the proper
+                               display width at that height, and adjust the PAR
+                               to create that display width from the new source width. */
+                            int temp_height;
+                            temp_height = title->height - job->crop[0] - job->crop[1];
+                            int temp_modulus;
+                            if( modulus )
+                                temp_modulus = modulus;
+                            else
+                                temp_modulus = 16;
+                            
+                            temp_height = MULTIPLE_MOD( temp_height, temp_modulus );
+                            job->anamorphic.par_width =  (int)( (double)temp_height * display_aspect );
+                            job->anamorphic.par_height = width;
+                        }
+                    }
+                    
+                    if( display_width )
+                    {
+                        /* Adjust the PAR to create the new display width
+                           from the default job width. */
+                        job->anamorphic.dar_width = display_width;
+                        
+                        job->anamorphic.dar_height = height ?
+                                                        height :
+                                                        title->height - job->crop[0] - job->crop[1];
+                    }
+                    
+                    if( width && height )
+                    {
+                        /* Use these storage dimensions */
+                        job->width  = width;
+                        job->height = height;
+                    }
+                    else if( width )
+                    {
+                        /* Use just this storage width */
+                        job->width = width;
+                        job->height = title->height - job->crop[0] - job->crop[1];
+                    }
+                    else if( height )
+                    {
+                        /* Use just this storage height. */
+                        job->height = height;
+                        job->width = title->width - job->crop[2] - job->crop[3];
+                    }
+                    else if( !width && !height )
+                    {
+                        /* Assume source dimensions after cropping. */
+                        job->width = title->width - job->crop[2] - job->crop[3];
+                        job->height = title->height - job->crop[0] - job->crop[1];
+                    }
+                    
+                break;
             }
 
             if( vquality >= 0.0 && ( ( vquality <= 1.0 ) || ( vcodec == HB_VCODEC_X264 ) || (vcodec == HB_VCODEC_FFMPEG) ) )
@@ -1871,11 +1994,23 @@ static void ShowHelp()
     "        --crop <T:B:L:R>    Set cropping values (default: autocrop)\n"
     "    -Y, --maxHeight <#>     Set maximum height\n"
     "    -X, --maxWidth <#>      Set maximum width\n"
-    "    -p, --pixelratio        Store pixel aspect ratio in video stream\n"
-    "    -P, --loosePixelratio   Store pixel aspect ratio with specified width\n"
-    "          <MOD:PARX:PARY>   Takes as optional arguments what number you want\n"
-    "                            the dimensions to divide cleanly by (default 16)\n"
-    "                            and the pixel ratio to use (default autodetected)\n"
+    "    --strict-anamorphic     Store pixel aspect ratio in video stream\n"
+    "    --loose-anamorphic      Store pixel aspect ratio with specified width\n"
+    "    --custom-anamorphic     Store pixel aspect ratio in video stream and\n"
+    "                            directly control all parameters.\n"
+    "    --display-width         Set the width to scale the actual pixels to\n"
+    "      <number>              at playback, for custom anamorphic.\n"
+    "    --keep-display-aspect   Preserve the source's display aspect ratio\n"
+    "                            when using custom anamorphic\n"
+    "    --pixel-aspect          Set a custom pixel aspect for custom anamorphic\n"
+    "      <PARX:PARY>\n"
+    "                            (--display-width and --pixel-aspect are mutually\n"
+    "                             exclusive and the former will override the latter)\n"
+    "    --itu-par               Use wider, ITU pixel aspect values for loose and\n"
+    "                            custom anamorphic, useful with underscanned sources\n"
+    "    --modulus               Set the number you want the scaled pixel dimensions\n"
+    "      <number>              to divide cleanly by, for loose and custom\n"
+    "                            anamorphic modes (default: 16)\n"
     "    -M  --color-matrix      Set the color space signaled by the output\n"
     "          <601 or 709>      (Bt.601 is mostly for SD content, Bt.709 for HD,\n"
     "                             default: set by resolution)\n"
@@ -1932,21 +2067,21 @@ static void ShowPresets()
 {
     printf("\n< Apple\n");
 
-    printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -X 720 -P -m -x cabac=0:ref=2:mixed-refs=1:me=umh\n");
+    printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:mixed-refs=1:me=umh\n");
 
     printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
 
     printf("\n   + iPhone & iPod Touch:  -e x264  -q 20.0 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 480 -m -x cabac=0:ref=2:mixed-refs:me=umh\n");
 
-    printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 -X 960 -P -m -x cabac=0:ref=2:mixed-refs=1:bframes=3:me=umh:subme=7:b-adapt=2:8x8dct=1\n");
+    printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:mixed-refs=1:bframes=3:me=umh:subme=7:b-adapt=2:8x8dct=1\n");
 
     printf("\n>\n");
 
     printf("\n< Regular\n");
 
-    printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -p -m -x ref=2:bframes=2:me=umh\n");
+    printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 --strict-anamorphic -m -x ref=2:bframes=2:me=umh\n");
 
-    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb -P -m -x ref=3:mixed-refs:bframes=3:weightb:b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:8x8dct\n");
+    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb --loose-anamorphic -m -x ref=3:mixed-refs:bframes=3:weightb:b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:8x8dct\n");
 
     printf("\n>\n");
 
@@ -1954,7 +2089,7 @@ static void ShowPresets()
 
     printf("\n   + Classic:  -b 1000 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4\n");
 
-    printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 -p -m -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0\n");
+    printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 --strict-anamorphic -m -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0\n");
 
     printf("\n   + iPhone Legacy:  -e x264  -b 960 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0\n");
 
@@ -1974,6 +2109,10 @@ static int ParseOptions( int argc, char ** argv )
     #define STOP_AT 259
     #define ANGLE 260
     #define DVDNAV 261
+    #define DISPLAY_WIDTH 262
+    #define PIXEL_ASPECT 263
+    #define MODULUS 264
+    #define KEEP_DISPLAY_ASPECT 265
     
     for( ;; )
     {
@@ -2014,8 +2153,14 @@ static int ParseOptions( int argc, char ** argv )
             { "detelecine",  optional_argument, NULL,    '9' },
             { "decomb",      optional_argument, NULL,    '5' },
             { "grayscale",   no_argument,       NULL,    'g' },
-            { "pixelratio",  no_argument,       NULL,    'p' },
-            { "loosePixelratio", optional_argument,   NULL,    'P' },
+            { "strict-anamorphic",  no_argument, &anamorphic_mode, 1 },
+            { "loose-anamorphic", no_argument, &anamorphic_mode, 2 },
+            { "custom-anamorphic", no_argument, &anamorphic_mode, 3 },
+            { "display-width", required_argument, NULL, DISPLAY_WIDTH },
+            { "keep-display-aspect", no_argument, &keep_display_aspect, 1 },
+            { "pixel-aspect", required_argument, NULL, PIXEL_ASPECT },
+            { "modulus",     required_argument, NULL, MODULUS },
+            { "itu-par",     no_argument,       &itu_par, 1  },
             { "width",       required_argument, NULL,    'w' },
             { "height",      required_argument, NULL,    'l' },
             { "crop",        required_argument, NULL,    'n' },
@@ -2049,7 +2194,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UFN:e:E:2dD:7895gpOP::w:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UFN:e:E:2dD:7895gOw:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2266,14 +2411,22 @@ static int ParseOptions( int argc, char ** argv )
             case 'g':
                 grayscale = 1;
                 break;
-            case 'p':
-                pixelratio = 1;
-                break;
-            case 'P':
-                loosePixelratio = 1;
+            case DISPLAY_WIDTH:
                 if( optarg != NULL )
                 {
-                    sscanf( optarg, "%i:%i:%i", &modulus, &par_width, &par_height );
+                    sscanf( optarg, "%i", &display_width );
+                }
+                break;
+            case PIXEL_ASPECT:
+                if( optarg != NULL )
+                {
+                    sscanf( optarg, "%i:%i", &par_width, &par_height );
+                }
+                break;
+            case MODULUS:
+                if( optarg != NULL )
+                {
+                    sscanf( optarg, "%i", &modulus );
                 }
                 break;
             case 'e':
