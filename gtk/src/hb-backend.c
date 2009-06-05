@@ -4021,7 +4021,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 					// Skip any non-burned vobsubs when output is mp4
 					continue;
 				}
-				else if (subt->format == PICTURESUB)
+				else if ( burned && subt->format == PICTURESUB )
 				{
 					// Only allow one subtitle to be burned into the video
 					if (one_burned)
