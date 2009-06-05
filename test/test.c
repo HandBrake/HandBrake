@@ -1961,11 +1961,22 @@ static void ShowHelp()
     "                            More than one output track can be used for one\n"
     "                            input.\n"
     "                            (\"none\" for no audio, \"1,2,3\" for multiple\n"
-    "                             tracks, default: first one)\n"
+    "                             tracks, default: first one)\n" );
+
+#ifdef __APPLE_CC__
+    fprintf( out,
+    "    -E, --aencoder <string> Audio encoder(s) (ca_aac/faac/lame/vorbis/ac3/dts) \n"
+    "                            ac3 and dts meaning passthrough\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "                            (default: guessed)\n" );
+#else
+    fprintf( out,
     "    -E, --aencoder <string> Audio encoder(s) (faac/lame/vorbis/ac3/dts) \n"
     "                            ac3 and dts meaning passthrough\n"
     "                            Separated by commas for more than one audio track.\n"
-    "                            (default: guessed)\n"
+    "                            (default: guessed)\n" );
+#endif
+    fprintf( out,
     "    -B, --ab <kb/s>         Set audio bitrate(s)  (default: 160)\n"
     "                            Separated by commas for more than one audio track.\n"
     "    -6, --mixdown <string>  Format(s) for surround sound downmixing\n"
