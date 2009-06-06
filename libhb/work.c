@@ -205,9 +205,21 @@ void hb_display_job_info( hb_job_t * job )
     if( job->anamorphic.mode )
     {
         hb_log( "   + %s anamorphic", job->anamorphic.mode == 1 ? "strict" : job->anamorphic.mode == 2? "loose" : "custom" );
+        if( job->anamorphic.mode == 3 && job->anamorphic.keep_display_aspect )
+        {
+            hb_log( "     + keeping source display aspect ratio"); 
+        }
+        if( job->anamorphic.modulus != 16 )
+        {
+            hb_log( "     + modulus: %i", job->anamorphic.modulus ); 
+        }
         hb_log( "     + storage dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d",
                     title->width, title->height, job->width, job->height,
                     job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+        if( job->anamorphic.itu_par )
+        {
+            hb_log( "     + using ITU pixel aspect ratio values"); 
+        }
         hb_log( "     + pixel aspect ratio: %i / %i", job->anamorphic.par_width, job->anamorphic.par_height );
         hb_log( "     + display dimensions: %.0f * %i",
             (float)( job->width * job->anamorphic.par_width / job->anamorphic.par_height ), job->height );

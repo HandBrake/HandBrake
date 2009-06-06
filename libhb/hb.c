@@ -801,11 +801,19 @@ void hb_set_anamorphic_size( hb_job_t * job,
                    this is an output PAR, to correct a source, and it should not be assumed
                    that it properly creates a display aspect ratio when applied to the source,
                    which could easily be stored in a different resolution. */
-                   
-                int output_display_width = width * (double)pixel_aspect_width /
-                    (double)pixel_aspect_height;
-                pixel_aspect_width = output_display_width;
-                pixel_aspect_height = width;
+                if( job->anamorphic.keep_display_aspect )
+                {
+                    /* We can ignore the possibility of a PAR change */
+                    pixel_aspect_width = height * ( (double)source_display_width / (double)cropped_height );
+                    pixel_aspect_height = width;
+                }
+                else
+                {
+                    int output_display_width = width * (double)pixel_aspect_width /
+                        (double)pixel_aspect_height;
+                    pixel_aspect_width = output_display_width;
+                    pixel_aspect_height = width;
+                }
             }
             
             /* Back to caller */

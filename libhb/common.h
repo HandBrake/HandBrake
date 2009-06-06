@@ -181,6 +181,7 @@ struct hb_job_s
         int             par_height;
         int             dar_width;
         int             dar_height;
+        int             keep_display_aspect;
     } anamorphic;
     
     int             maxWidth;

@@ -1105,6 +1105,8 @@ static int HandleEvents( hb_handle_t * h )
                     
                     if( keep_display_aspect )
                     {
+                        job->anamorphic.keep_display_aspect = 1;
+                        
                         /* First, what *is* the display aspect? */
                         int cropped_width = title->width - job->crop[2] - job->crop[3];
                         int cropped_height = title->height - job->crop[0] - job->crop[1];
@@ -1114,8 +1116,7 @@ static int HandleEvents( hb_handle_t * h )
                            asked for ITU values instead. */
                         float source_display_width = (float)cropped_width *
                             (float)title->pixel_aspect_width / (float)title->pixel_aspect_height;
-                        float display_aspect = source_display_width / cropped_height;
-                        
+                        float display_aspect = source_display_width / (float)cropped_height;
                         /* When keeping display aspect, we have to rank some values
                            by priority in order to consistently handle situations
                            when more than one might be specified by default.
@@ -1133,24 +1134,6 @@ static int HandleEvents( hb_handle_t * h )
                         {
                             /* We scale the height to the new display width */
                             height = (int)( (double)display_width / display_aspect );
-                        }
-                        else if( width )
-                        {
-                            /* We assume the source height minus cropping, round
-                               to a mod-friendly number, figure out the proper
-                               display width at that height, and adjust the PAR
-                               to create that display width from the new source width. */
-                            int temp_height;
-                            temp_height = title->height - job->crop[0] - job->crop[1];
-                            int temp_modulus;
-                            if( modulus )
-                                temp_modulus = modulus;
-                            else
-                                temp_modulus = 16;
-                            
-                            temp_height = MULTIPLE_MOD( temp_height, temp_modulus );
-                            job->anamorphic.par_width =  (int)( (double)temp_height * display_aspect );
-                            job->anamorphic.par_height = width;
                         }
                     }
                     
