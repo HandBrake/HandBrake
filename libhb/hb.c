@@ -469,7 +469,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     context = sws_getContext(title->width  - (job->crop[2] + job->crop[3]),
                              title->height - (job->crop[0] + job->crop[1]),
                              PIX_FMT_YUV420P,
-                             rgb_width, job->height, PIX_FMT_YUV420P,
+                             job->width, job->height, PIX_FMT_YUV420P,
                              swsflags, NULL, NULL, NULL);
 
     // Scale
