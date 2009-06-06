@@ -3131,9 +3131,11 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 		disp_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
 		job->anamorphic.dar_width = disp_width;
 		job->anamorphic.dar_height = disp_height;
+		job->anamorphic.keep_display_aspect = 0;
 	}
 	else
 	{
+		job->anamorphic.keep_display_aspect = 1;
 		job->anamorphic.dar_width = 0;
 		job->anamorphic.dar_height = 0;
 	}
@@ -4460,7 +4462,6 @@ ghb_get_preview_image(
 		w *= (gdouble)dstWidth / orig_w;
 		h *= (gdouble)dstHeight / orig_h;
 	}
-	g_debug("scaled %d x %d", dstWidth, dstHeight);
 	GdkPixbuf *scaled_preview;
 	scaled_preview = gdk_pixbuf_scale_simple(preview, dstWidth, dstHeight, GDK_INTERP_HYPER);
 	if (ghb_settings_get_boolean(settings, "show_crop"))
