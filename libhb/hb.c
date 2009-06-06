@@ -443,7 +443,7 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
     hb_get_tempory_filename( h, filename, "%" PRIxPTR "%d",
                              (intptr_t) title, picture );
 
-    file = fopen( filename, "r" );
+    file = fopen( filename, "rb" );
     if( !file )
     {
         hb_log( "hb_get_preview: fopen failed" );

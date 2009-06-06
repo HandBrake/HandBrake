@@ -11,6 +11,10 @@
 #include <unistd.h>
 #include <inttypes.h>
 
+#ifdef PTW32_STATIC_LIB
+#include <pthread.h>
+#endif
+
 #include "hb.h"
 #include "parsecsv.h"
 

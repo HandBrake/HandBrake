@@ -470,7 +470,7 @@ static int audio_inactive( hb_stream_t *stream, int indx )
  **********************************************************************/
 hb_stream_t * hb_stream_open( char *path, hb_title_t *title )
 {
-    FILE *f = fopen( path, "r" );
+    FILE *f = fopen( path, "rb" );
     if ( f == NULL )
     {
         hb_log( "hb_stream_open: open %s failed", path );

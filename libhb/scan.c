@@ -600,7 +600,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
             hb_get_tempory_filename( data->h, filename, "%" PRIxPTR "%d",
                                      (intptr_t)title, i );
 
-            file_preview = fopen( filename, "w" );
+            file_preview = fopen( filename, "wb" );
             if( file_preview )
             {
                 fwrite( vid_buf->data, title->width * title->height * 3 / 2,
