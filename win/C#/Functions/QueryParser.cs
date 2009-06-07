@@ -299,7 +299,6 @@ namespace Handbrake.Functions
                 if (videoQuality.Success)
                 {
                     float qConvert = float.Parse(videoQuality.ToString().Replace("-q ", ""), Culture);
-                    //qConvert = Math.Ceiling(qConvert);
                     thisQuery.VideoQuality = qConvert;
                 }
                 #endregion

@@ -77,7 +77,6 @@ namespace Handbrake
             loadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
-            lbl_max.Text = "";
             queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
             if (Properties.Settings.Default.QueryEditorTab != "Checked")
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
@@ -485,12 +484,7 @@ namespace Handbrake
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
 
-                        if (maxWidth != 0 && maxHeight != 0)
-                            lbl_max.Text = "Max Width / Height";
-                        else if (maxWidth != 0)
-                            lbl_max.Text = "Max Width";
-                        else
-                            lbl_max.Text = "";
+                        pictureSettings.setMax();
                     }
                 }
             }
@@ -810,7 +804,7 @@ namespace Handbrake
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Reset some values on the form
-            lbl_Aspect.Text = "Select a Title";
+            pictureSettings.lbl_Aspect.Text = "Select a Title";
             //lbl_RecomendedCrop.Text = "Select a Title";
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
@@ -820,17 +814,8 @@ namespace Handbrake
             if (drp_dvdtitle.Text != "Automatic")
             {
                 selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
-
-                // Set the Aspect Ratio
-                lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
-                lbl_src_res.Text = selectedTitle.Resolution.Width + " x " + selectedTitle.Resolution.Height;
                 lbl_duration.Text = selectedTitle.Duration.ToString();
-
-                // Set the Recommended Cropping values
-                text_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
-                text_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
-                text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
-                text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
+                pictureSettings.setComponentsAfterScan(selectedTitle);  // Setup Picture Settings Tab Control
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
@@ -1249,104 +1234,6 @@ namespace Handbrake
             }
         }
 
-        //Picture Tab
-        private void text_width_TextChanged(object sender, EventArgs e)
-        {
-            if (text_width.Text == "")
-                text_width.BackColor = Color.White;
-
-            maxWidth = 0; maxHeight = 0;  // Reset max width so that it's not using the MaxWidth -X. Quick hack to allow -X for preset usage.
-            lbl_max.Text = "";
-
-            int width;
-            Boolean parsed = int.TryParse(text_width.Text, out width);
-            if (parsed)
-            {
-                text_width.BackColor = (width % 16) != 0 ? Color.LightCoral : Color.LightGreen;
-
-                if (lbl_Aspect.Text != "Select a Title" && maxWidth == 0 && maxHeight == 0)
-                {
-                    if (drp_anamorphic.Text == "None")
-                    {
-                        int height = Main.cacluateNonAnamorphicHeight(width, text_top.Value, text_bottom.Value, text_left.Value, text_right.Value, selectedTitle);
-                        if (height != 0)
-                            text_height.Text = height.ToString();
-                    }
-                }
-            }
-        }
-        private void text_height_TextChanged(object sender, EventArgs e)
-        {
-            if (text_height.Text == "")
-                text_height.BackColor = Color.White;
-
-            maxHeight = 0;  // Reset max height so that it's not using the MaxHeight -Y. Quick hack to allow -Y for preset usage.
-            lbl_max.Text = maxWidth != 0 ? "Max Width" : "";
-
-            int height;
-            Boolean parsed = int.TryParse(text_height.Text, out height);
-            if (parsed)
-                text_height.BackColor = (height % 16) != 0 ? Color.LightCoral : Color.LightGreen;
-        }
-        private void check_customCrop_CheckedChanged(object sender, EventArgs e)
-        {
-            text_left.Enabled = true;
-            text_right.Enabled = true;
-            text_top.Enabled = true;
-            text_bottom.Enabled = true;
-            if (selectedTitle != null)
-            {
-                text_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
-                text_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
-                text_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
-                text_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
-            }
-            else
-            {
-                text_left.Text = "0";
-                text_right.Text = "0";
-                text_top.Text = "0";
-                text_bottom.Text = "0";
-            }
-        }
-        private void check_autoCrop_CheckedChanged(object sender, EventArgs e)
-        {
-            text_left.Enabled = false;
-            text_right.Enabled = false;
-            text_top.Enabled = false;
-            text_bottom.Enabled = false;
-        }
-        private void drp_anamorphic_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (drp_anamorphic.SelectedIndex == 1)
-            {
-                text_height.BackColor = Color.LightGray;
-                text_width.BackColor = Color.LightGray;
-                text_height.Text = "";
-                text_width.Text = "";
-                text_height.Enabled = false;
-                text_width.Enabled = false;
-            }
-
-            if (drp_anamorphic.SelectedIndex == 2)
-            {
-                text_height.Text = "";
-                text_height.Enabled = false;
-                text_height.BackColor = Color.LightGray;
-
-                text_width.Enabled = true;
-                text_width.BackColor = Color.White;
-            }
-
-            if (drp_anamorphic.SelectedIndex == 0)
-            {
-                text_height.BackColor = Color.White;
-                text_width.BackColor = Color.White;
-                text_height.Enabled = true;
-                text_width.Enabled = true;
-            }
-        }
-
         // Filter Tab
         private void ctl_decomb_changed(object sender, EventArgs e)
         {
@@ -1600,8 +1487,8 @@ namespace Handbrake
             drop_chapterFinish.Items.Clear();
             drop_chapterFinish.Text = "Auto";
             lbl_duration.Text = "Select a Title";
-            lbl_src_res.Text = "Select a Title";
-            lbl_Aspect.Text = "Select a Title";
+            pictureSettings.lbl_src_res.Text = "Select a Title";
+            pictureSettings.lbl_Aspect.Text = "Select a Title";
             text_source.Text = "Click 'Source' to continue";
             text_destination.Text = "";
             thisDVD = null;

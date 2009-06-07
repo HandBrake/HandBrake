@@ -40,6 +40,7 @@ namespace Handbrake.EncodeQueue
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
+                    
                 }
                 if (Properties.Settings.Default.cli_minimized == "Checked")
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;

@@ -121,55 +121,63 @@ namespace Handbrake.Functions
             if (mainWindow.maxWidth == 0)
             {
 
-                if (mainWindow.text_width.Text != "")
-                    query += " -w " + mainWindow.text_width.Text;
+                if (mainWindow.pictureSettings.text_width.Text != "")
+                    query += " -w " + mainWindow.pictureSettings.text_width.Text;
             }
             else
             {
-                if (mainWindow.text_width.Text != "")
-                    query += " -X " + mainWindow.text_width.Text;
+                if (mainWindow.pictureSettings.text_width.Text != "")
+                    query += " -X " + mainWindow.pictureSettings.text_width.Text;
             }
 
             // Use MaxHeight for built-in presets and height for user settings.
             if (mainWindow.maxHeight == 0)
             {
-                if (mainWindow.text_height.Text != "")
-                    query += " -l " + mainWindow.text_height.Text;
+                if (mainWindow.pictureSettings.text_height.Text != "")
+                    query += " -l " + mainWindow.pictureSettings.text_height.Text;
             }
             else
             {
-                if (mainWindow.text_height.Text != "")
-                    query += " -Y " + mainWindow.text_height.Text;
+                if (mainWindow.pictureSettings.text_height.Text != "")
+                    query += " -Y " + mainWindow.pictureSettings.text_height.Text;
             }
 
-            string cropTop = mainWindow.text_top.Text;
-            string cropBottom = mainWindow.text_bottom.Text;
-            string cropLeft = mainWindow.text_left.Text;
-            string cropRight = mainWindow.text_right.Text;
+            string cropTop = mainWindow.pictureSettings.crop_top.Text;
+            string cropBottom = mainWindow.pictureSettings.crop_bottom.Text;
+            string cropLeft = mainWindow.pictureSettings.crop_left.Text;
+            string cropRight = mainWindow.pictureSettings.crop_right.Text;
 
-            if (mainWindow.check_customCrop.Checked)
+            if (mainWindow.pictureSettings.check_customCrop.Checked)
             {
-                if (mainWindow.text_top.Text == string.Empty)
+                if (mainWindow.pictureSettings.crop_top.Text == string.Empty)
                     cropTop = "0";
-                if (mainWindow.text_bottom.Text == string.Empty)
+                if (mainWindow.pictureSettings.crop_bottom.Text == string.Empty)
                     cropBottom = "0";
-                if (mainWindow.text_left.Text == string.Empty)
+                if (mainWindow.pictureSettings.crop_left.Text == string.Empty)
                     cropLeft = "0";
-                if (mainWindow.text_right.Text == string.Empty)
+                if (mainWindow.pictureSettings.crop_right.Text == string.Empty)
                     cropRight = "0";
 
                 query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
             }
 
-            if (mainWindow.drp_anamorphic.SelectedIndex == 1)
-                query += " -p ";
-            else if (mainWindow.drp_anamorphic.SelectedIndex == 2)
-                query += " -P ";
-
-            if (mainWindow.slider_deblock.Value != 4)
-                query += " --deblock=" + mainWindow.slider_deblock.Value;
-
-            
+            switch (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex)
+            {
+                case 1:
+                    query += " --strict-anamorphic ";
+                    break;
+                case 2:
+                    query += " --loose-anamorphic ";
+                    break;
+                case 3:
+                    query += " --custom-anamorphic ";
+                    query += " --display-width " + mainWindow.pictureSettings.txt_displayWidth.Text + " ";
+                    if (mainWindow.pictureSettings.check_KeepAR.Checked)
+                        query += " --keep-display-aspect ";
+                    if (mainWindow.pictureSettings.txt_parWidth.Text != "" && mainWindow.pictureSettings.txt_parHeight.Text != "")
+                        query += " --pixel-aspect " + mainWindow.pictureSettings.txt_parWidth.Text + ":" + mainWindow.pictureSettings.txt_parHeight.Text + " ";
+                    break;
+            }           
             #endregion
 
             #region Filters
@@ -177,6 +185,9 @@ namespace Handbrake.Functions
             query += mainWindow.ctl_decomb.getCLIQuery;
             query += mainWindow.ctl_deinterlace.getCLIQuery;
             query += mainWindow.ctl_denoise.getCLIQuery;
+
+            if (mainWindow.slider_deblock.Value != 4)
+                query += " --deblock=" + mainWindow.slider_deblock.Value;
             #endregion
 
             #region Video Settings Tab

@@ -99,9 +99,7 @@ Section "Handbrake" SEC01
   File "HandBrakeCLI.exe"
   File "Handbrake.exe.config"
   File "handbrakepineapple.ico"
-  File "presets.xml"
-  File "user_presets.xml"
-  
+
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
   File "doc\AUTHORS"
@@ -147,8 +145,6 @@ Section Uninstall
   Delete "$INSTDIR\handbrakepineapple.ico"
   Delete "$INSTDIR\Handbrake.exe"
   Delete "$INSTDIR\Handbrake.exe.config"
-  Delete "$INSTDIR\presets.xml"
-  Delete "$INSTDIR\user_presets.xml"
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\BUILD"
   Delete "$INSTDIR\doc\COPYING"

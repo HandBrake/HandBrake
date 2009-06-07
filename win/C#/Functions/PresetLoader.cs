@@ -67,13 +67,13 @@ namespace Handbrake.Functions
             #endregion
 
             #region Picture
-            mainWindow.check_autoCrop.Checked = true;
+            mainWindow.pictureSettings.check_autoCrop.Checked = true;
             if (presetQuery.CropBottom == "0" && presetQuery.CropTop == "0")
                 if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
-                    mainWindow.check_customCrop.Checked = true;
+                    mainWindow.pictureSettings.check_customCrop.Checked = true;
 
-            mainWindow.text_width.Text = "";
-            mainWindow.text_height.Text = "";
+            mainWindow.pictureSettings.text_width.Text = "";
+            mainWindow.pictureSettings.text_height.Text = "";
 
             if (pictureSettings)
             {
@@ -85,41 +85,41 @@ namespace Handbrake.Functions
                     int.TryParse(presetQuery.CropLeft, out left);
                     int.TryParse(presetQuery.CropRight, out right);
 
-                    mainWindow.check_customCrop.Checked = true;
-                    mainWindow.text_top.Value = top;
-                    mainWindow.text_bottom.Value = bottom;
-                    mainWindow.text_left.Value = left;
-                    mainWindow.text_right.Value = right;
+                    mainWindow.pictureSettings.check_customCrop.Checked = true;
+                    mainWindow.pictureSettings.crop_top.Value = top;
+                    mainWindow.pictureSettings.crop_bottom.Value = bottom;
+                    mainWindow.pictureSettings.crop_left.Value = left;
+                    mainWindow.pictureSettings.crop_right.Value = right;
                 }
 
                 if (presetQuery.Width != 0)
-                    mainWindow.text_width.Text = presetQuery.Width.ToString();
+                    mainWindow.pictureSettings.text_width.Text = presetQuery.Width.ToString();
 
                 if (presetQuery.Height != 0)
-                    mainWindow.text_height.Text = presetQuery.Height.ToString();
+                    mainWindow.pictureSettings.text_height.Text = presetQuery.Height.ToString();
             }
 
-            mainWindow.drp_anamorphic.SelectedIndex = presetQuery.Anamorphic ? 1 : 0;
+            mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.Anamorphic ? 1 : 0;
 
             if (presetQuery.LooseAnamorphic)
-                mainWindow.drp_anamorphic.SelectedIndex = 2;
+                mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = 2;
             else
             {
                 if (presetQuery.Anamorphic != true)
-                    mainWindow.drp_anamorphic.SelectedIndex = 0;
+                    mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = 0;
             }
 
             // Set the public max width and max height varibles in frmMain
             // These are used by the query generator to determine if it should use -X or -w  / -Y or -h
             if (presetQuery.MaxWidth != 0)
             {
-                mainWindow.text_width.Text = presetQuery.MaxWidth.ToString();
+                mainWindow.pictureSettings.text_width.Text = presetQuery.MaxWidth.ToString();
                 mainWindow.maxWidth = presetQuery.MaxWidth;
             }
 
             if (presetQuery.MaxHeight != 0)
             {
-                mainWindow.text_height.Text = presetQuery.MaxHeight.ToString();
+                mainWindow.pictureSettings.text_height.Text = presetQuery.MaxHeight.ToString();
                 mainWindow.maxHeight = presetQuery.MaxHeight;
             }
 

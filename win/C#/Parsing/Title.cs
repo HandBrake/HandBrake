@@ -28,7 +28,8 @@ namespace Handbrake.Parsing
         private TimeSpan m_duration;
         private Size m_resolution;
         private int m_titleNumber;
-
+        private Size m_parVal;
+        
         /// <summary>
         /// The constructor for this object
         /// </summary>
@@ -93,6 +94,14 @@ namespace Handbrake.Parsing
         public float AspectRatio
         {
             get { return m_aspectRatio; }
+        }
+
+        /// <summary>
+        /// Par Value
+        /// </summary>
+        public Size ParVal
+        {
+            get { return m_parVal; }
         }
 
         /// <summary>
@@ -163,11 +172,16 @@ namespace Handbrake.Parsing
 
             // Get resolution, aspect ratio and FPS for this title
             m = Regex.Match(output.ReadLine(),
-                            @"^  \+ size: ([0-9]*)x([0-9]*), aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
+                            @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
+            //size: 720x576, pixel aspect: 16/15, display aspect: 1.33, 25.000 fps
+
+
+
             if (m.Success)
             {
                 thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                thisTitle.m_aspectRatio = float.Parse(m.Groups[3].Value, Culture);
+                thisTitle.m_parVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
+                thisTitle.m_aspectRatio = float.Parse(m.Groups[5].Value, Culture);
             }
 
             // Get autocrop region for this title
