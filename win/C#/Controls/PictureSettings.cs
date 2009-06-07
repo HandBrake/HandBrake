@@ -680,7 +680,7 @@ namespace Handbrake.Controls
                     storageAspect = (double)actualWidth / source_cropped_height;               
 
                 // Calculate the new height based on the input cropped width
-                double hcalc = actualWidth / storageAspect;
+                double hcalc = (actualWidth / storageAspect) + 0.5;
                 double newHeight = getModulusAuto(16, hcalc);
                 looseAnamorphicHeightGuard = true;
                 text_height.Value = (decimal)newHeight;   // BUG Out of Range Exception with Width too low here.
@@ -691,7 +691,7 @@ namespace Handbrake.Controls
                 double displayWidth = (actualWidth * parW / parH);
 
                 // Now correct DisplayWidth to maintain Aspect ratio.  ActualHeight was mod16'd and thus AR is slightly different than the worked out displayWidths
-                return Math.Round(displayWidth, 0) + "x" + newHeight;  
+                return Math.Truncate(displayWidth) + "x" + newHeight;  
             }
             return "Select a Title";
 
