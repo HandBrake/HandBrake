@@ -226,6 +226,7 @@ static hb_buffer_t *delete_buffer_from_chain( hb_buffer_t **buf_out, hb_buffer_t
         // found 'out' - remove it from the chain
         pred->next = succ;
     }
+    out->next = 0;
     hb_buffer_close( &out );
     return succ;
 }

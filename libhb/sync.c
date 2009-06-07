@@ -112,7 +112,7 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
         else if( job->frame_to_stop )
         {
             /* Set the duration to a rough estimate */
-            duration = ( job->frame_to_stop / ( job->vrate / job->vrate_base ) ) * 90000;
+            duration = ( job->frame_to_stop / ( title->rate / title->rate_base ) ) * 90000;
         }
         else
         {
@@ -125,7 +125,7 @@ int syncInit( hb_work_object_t * w, hb_job_t * job )
             duration += 90000;
             /* 1 second safety so we're sure we won't miss anything */
         }
-        pv->count_frames_max = duration * job->vrate / job->vrate_base / 90000;
+        pv->count_frames_max = duration * title->rate / title->rate_base / 90000;
     }
 
     hb_log( "sync: expecting %d video frames", pv->count_frames_max );
@@ -743,19 +743,6 @@ static void SyncVideo( hb_work_object_t * w )
             pv->busy &=~ 1;
             hb_log( "sync: reached %d frames, exiting early (%i busy)",
                     pv->count_frames, pv->busy );
-            return;
-        }
-
-        /* Make sure we won't get more frames then expected */
-        if( pv->count_frames >= pv->count_frames_max * 2)
-        {
-            hb_log( "sync: got too many frames (%d), exiting early",
-                    pv->count_frames );
-
-            // Drop an empty buffer into our output to ensure that things
-            // get flushed all the way out.
-            hb_fifo_push( job->fifo_sync, hb_buffer_init( 0 ) );
-            pv->busy &=~ 1;
             return;
         }
     }
