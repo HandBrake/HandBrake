@@ -1707,14 +1707,26 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	if (subtitle_opts.map) g_free(subtitle_opts.map);
 	if (count > 0)
 	{
-		subtitle_opts.count = count;
-		subtitle_opts.map = g_malloc((count)*sizeof(options_map_t));
+		subtitle_opts.count = count+1;
+		subtitle_opts.map = g_malloc((count+1)*sizeof(options_map_t));
 	}
 	else
 	{
-		subtitle_opts.count = LANG_TABLE_SIZE;
-		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE)*sizeof(options_map_t));
+		subtitle_opts.count = LANG_TABLE_SIZE+1;
+		subtitle_opts.map = g_malloc((LANG_TABLE_SIZE+1)*sizeof(options_map_t));
 	}
+	gtk_list_store_append(store, &iter);
+	gtk_list_store_set(store, &iter, 
+					   0, "Foreign Audio Search", 
+					   1, TRUE, 
+					   2, "-1", 
+					   3, -1.0, 
+					   4, "auto", 
+					   -1);
+	subtitle_opts.map[0].option = "Foreign Audio Search";
+	subtitle_opts.map[0].shortOpt = "-1";
+	subtitle_opts.map[0].ivalue = -1;
+	subtitle_opts.map[0].svalue = "auto";
 	if (count > 0)
 	{
 		if (options != NULL)
@@ -1727,10 +1739,10 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 			// Skip subtitles that must be burned if there is already
 			// a burned subtitle in the list
 			options[ii] = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
-			subtitle_opts.map[ii].option = options[ii];
-			subtitle_opts.map[ii].shortOpt = index_str[ii];
-			subtitle_opts.map[ii].ivalue = ii;
-			subtitle_opts.map[ii].svalue = subtitle->iso639_2;
+			subtitle_opts.map[ii+1].option = options[ii];
+			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
+			subtitle_opts.map[ii+1].ivalue = ii;
+			subtitle_opts.map[ii+1].svalue = subtitle->iso639_2;
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, 
 					   	0, options[ii], 
@@ -1747,10 +1759,10 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		index_str_init(LANG_TABLE_SIZE-1);
 		for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
 		{
-			subtitle_opts.map[ii].option = ghb_language_table[ii].eng_name;
-			subtitle_opts.map[ii].shortOpt = index_str[ii];
-			subtitle_opts.map[ii].ivalue = ii;
-			subtitle_opts.map[ii].svalue = ghb_language_table[ii].iso639_2;
+			subtitle_opts.map[ii+1].option = ghb_language_table[ii].eng_name;
+			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
+			subtitle_opts.map[ii+1].ivalue = ii;
+			subtitle_opts.map[ii+1].svalue = ghb_language_table[ii].iso639_2;
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, 
 					0, ghb_language_table[ii].eng_name, 
@@ -3971,27 +3983,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	gboolean force, burned, def, one_burned = FALSE;
 	
 	job->select_subtitle = NULL;
-	if (ghb_settings_get_boolean(js, "SubtitleForeignSearch"))
-	{
-		force = ghb_settings_get_boolean(js, "SubtitleForeignForced");
-		burned = ghb_settings_get_boolean(js, "SubtitleForeignBurned");
-		def = ghb_settings_get_boolean(js, "SubtitleForeignDefaultTrack");
-
-		if (burned || job->mux != HB_MUX_MP4)
-		{
-			if (!burned && job->mux == HB_MUX_MKV)
-			{
-				job->select_subtitle_config.dest = PASSTHRUSUB;
-			}
-			if (burned)
-				one_burned = TRUE;
-			job->select_subtitle_config.force = force;
-			job->select_subtitle_config.default_track = def;
-			job->indepth_scan = 1;
-			job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
-			*job->select_subtitle = NULL;
-		}
-	}
 	subtitle_list = ghb_settings_get_value(js, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
 	for (ii = 0; ii < count; ii++)
@@ -4005,7 +3996,31 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		burned = ghb_settings_get_boolean(ssettings, "SubtitleBurned");
 		def = ghb_settings_get_boolean(ssettings, "SubtitleDefaultTrack");
 
-		if (subtitle >= 0)
+		if (subtitle == -1)
+		{
+			if (!burned && job->mux == HB_MUX_MKV)
+			{
+				job->select_subtitle_config.dest = PASSTHRUSUB;
+			}
+			else if (!burned && job->mux == HB_MUX_MP4)
+			{
+				// Skip any non-burned vobsubs when output is mp4
+				continue;
+			}
+			else if (burned)
+			{
+				// Only allow one subtitle to be burned into the video
+				if (one_burned)
+					continue;
+				one_burned = TRUE;
+			}
+			job->select_subtitle_config.force = force;
+			job->select_subtitle_config.default_track = def;
+			job->indepth_scan = 1;
+			job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
+			*job->select_subtitle = NULL;
+		}
+		else if (subtitle >= 0)
 		{
     		hb_subtitle_t * subt;
     		hb_subtitle_config_t sub_config;

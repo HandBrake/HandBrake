@@ -71,12 +71,6 @@ ghb_subtitle_exclusive_burn(signal_user_data_t *ud, gint index)
 	g_debug("ghb_subtitle_exclusive_burn");
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
-	if (index != -1)
-	{
-		burned = ghb_settings_get_boolean(ud->settings, "SubtitleForeignBurned");
-		if (burned && !mustBurn(ud, -1))
-			ghb_ui_update(ud, "SubtitleForeignBurned", ghb_boolean_value(FALSE));
-	}
 	for (ii = 0; ii < count; ii++)
 	{
 		settings = ghb_array_get_nth(subtitle_list, ii);
@@ -109,12 +103,6 @@ ghb_subtitle_exclusive_default(signal_user_data_t *ud, gint index)
 	g_debug("ghb_subtitle_exclusive_default");
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
-	if (index != -1)
-	{
-		def = ghb_settings_get_boolean(ud->settings, "SubtitleForeignDefaultTrack");
-		if (def)
-			ghb_ui_update(ud, "SubtitleForeignDefaultTrack", ghb_boolean_value(FALSE));
-	}
 	for (ii = 0; ii < count; ii++)
 	{
 		settings = ghb_array_get_nth(subtitle_list, ii);
@@ -128,7 +116,6 @@ ghb_subtitle_exclusive_default(signal_user_data_t *ud, gint index)
 		{
 
 			ghb_settings_set_boolean(settings, "SubtitleDefaultTrack", FALSE);
-			def = FALSE;
 			gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 3, FALSE, -1);
 		}
 	}
@@ -723,7 +710,7 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 	GValue *subtitle_list, *settings;
 	gint count, ii, track;
 	gboolean burned;
-	gint first_track, one_burned = 0;
+	gint first_track = 0, one_burned = 0;
 
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	if (subtitle_list == NULL)
@@ -754,13 +741,6 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 	{
 		ghb_subtitle_exclusive_burn(ud, first_track);
 	}
-	int mux;
-	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
-	if (mux == HB_MUX_MP4)
-	{
-		ghb_ui_update(ud, "SubtitleForeignBurned", ghb_boolean_value(TRUE));
-		ghb_ui_update(ud, "SubtitleForeignDefaultTrack", ghb_boolean_value(FALSE));
-	}
 }
 
 void
@@ -783,24 +763,6 @@ ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings)
 	{
 		subtitle = ghb_value_dup(ghb_array_get_nth(slist, ii));
 		ghb_add_subtitle(ud, subtitle);
-	}
-}
-
-G_MODULE_EXPORT void
-subtitle_foreign_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
-	ghb_clear_presets_selection(ud);
-	ghb_live_reset(ud);
-
-	if (ghb_settings_get_boolean(ud->settings, "SubtitleForeignBurned"))
-	{
-		ghb_subtitle_exclusive_burn(ud, -1);
-	}
-	if (ghb_settings_get_boolean(ud->settings, "SubtitleForeignDefaultTrack"))
-	{
-		ghb_subtitle_exclusive_default(ud, -1);
 	}
 }
 
