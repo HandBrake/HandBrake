@@ -587,7 +587,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_array_append(audio_list, asettings);
 	add_to_audio_list(ud, asettings);
 	count = ghb_array_len(audio_list);
-	if (count >= 8)
+	if (count >= 99)
 	{
 		gtk_widget_set_sensitive(xwidget, FALSE);
 	}
