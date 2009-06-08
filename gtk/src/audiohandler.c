@@ -402,13 +402,25 @@ drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *asettings;
 	gdouble val;
+	GtkLabel *label;
+	gchar *drc;
 
 	g_debug("drc_widget_changed_cb ()");
-	val = gtk_range_get_value(GTK_RANGE(widget));
-	if (val < 0.5)
-		gtk_range_set_value(GTK_RANGE(widget), 0.0);
-	else if (val < 1.0)
-		gtk_range_set_value(GTK_RANGE(widget), 1.0);
+	val = gtk_scale_button_get_value(GTK_SCALE_BUTTON(widget));
+	if (val > 0.8 && val < 1.0)
+		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 1.0);
+	if (val <= 0.8 && val > 0.5)
+		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 0.0);
+	else if (val > 0.0 && val <= 0.5)
+		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 1.0);
+
+	label = GTK_LABEL(GHB_WIDGET(ud->builder, "drc_label"));
+	if (val < 1.0)
+		drc = g_strdup_printf("Off");
+	else
+		drc = g_strdup_printf("%.1f", val);
+	gtk_label_set_text(label, drc);
+	g_free(drc);
 	ghb_check_dependency(ud, widget);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)

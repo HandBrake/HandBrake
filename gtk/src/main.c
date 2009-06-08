@@ -625,6 +625,7 @@ const gchar *hud_rcstyle =
 "fg[PRELIGHT]=\"white\"\n"
 "}\n"
 "widget_class \"*.GtkComboBox.GtkToggleButton\" style \"ghb-combo\"\n"
+"widget_class \"*.GtkScaleButton\" style \"ghb-combo\"\n"
 "widget_class \"*.GtkEntry\" style \"ghb-entry\"\n"
 "widget \"preview_window.*.preview_hud.*\" style \"ghb-hud\"\n"
 "widget \"preview_window\" style \"ghb-preview\"\n";

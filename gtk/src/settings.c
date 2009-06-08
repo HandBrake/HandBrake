@@ -322,6 +322,13 @@ ghb_widget_value(GtkWidget *widget)
 			value = ghb_int_value_new(dval);
 		}
 	}
+	else if (type == GTK_TYPE_SCALE_BUTTON)
+	{
+		gdouble dval;
+
+		dval = gtk_scale_button_get_value(GTK_SCALE_BUTTON(widget));
+		value = ghb_double_value_new(dval);
+	}
 	else if (type == GTK_TYPE_TEXT_VIEW)
 	{
 		GtkTextBuffer *buffer;
@@ -587,6 +594,11 @@ update_widget(GtkWidget *widget, const GValue *value)
 	{
 		g_debug("hscale");
 		gtk_range_set_value(GTK_RANGE(widget), dval);
+	}
+	else if (type == GTK_TYPE_SCALE_BUTTON)
+	{
+		g_debug("scale_button");
+		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), dval);
 	}
 	else if (type == GTK_TYPE_TEXT_VIEW)
 	{

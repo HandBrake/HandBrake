@@ -217,6 +217,14 @@
     <property name="page_size">0</property>
     <property name="value">1</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment28">
+    <property name="upper">4</property>
+    <property name="lower">0</property>
+    <property name="page_increment">1</property>
+    <property name="step_increment">0.2</property>
+    <property name="page_size">0</property>
+    <property name="value">2.6</property>
+  </object>
   <object class="GtkAdjustment" id="preview_progress_adj">
     <property name="upper">100</property>
     <property name="lower">0</property>
@@ -1904,46 +1912,6 @@
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment42">
-                                        <property name="visible">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="xalign">0.98000001907348633</property>
-                                        <property name="xscale">0.40000000596046448</property>
-                                        <child>
-                                          <object class="GtkVBox" id="vbox18">
-                                            <property name="visible">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <child>
-                                              <object class="GtkLabel" id="label2">
-                                                <property name="visible">True</property>
-                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="label" translatable="yes">Dynamic Range Compression</property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkHScale" id="AudioTrackDRCSlider">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="adjustment">adjustment6</property>
-                                                <property name="restrict_to_fill_level">False</property>
-                                                <property name="fill_level">3823.35009765625</property>
-                                                <property name="value_pos">GTK_POS_RIGHT</property>
-                                                <signal handler="drc_widget_changed_cb" name="value_changed"/>
-                                                <signal name="format_value" handler="format_drc_cb"/>
-                                              </object>
-                                              <packing>
-                                                <property name="position">1</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1954,7 +1922,7 @@
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="n_rows">2</property>
-                                    <property name="n_columns">5</property>
+                                    <property name="n_columns">7</property>
                                     <child>
                                       <object class="GtkComboBox" id="AudioTrack">
                                         <property name="width_request">215</property>
@@ -2058,6 +2026,18 @@
                                       </packing>
                                     </child>
                                     <child>
+                                      <object class="GtkLabel" id="label39">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">DRC</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">5</property>
+                                        <property name="right_attach">7</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <object class="GtkComboBox" id="AudioMixdown">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2066,6 +2046,41 @@
                                       <packing>
                                         <property name="left_attach">4</property>
                                         <property name="right_attach">5</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkScaleButton" id="AudioTrackDRCSlider">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">1</property>
+                                        <property name="icons">audio-volume-muted
+audio-volume-high
+audio-volume-low
+audio-volume-medium</property>
+                                        <property name="adjustment">adjustment28</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <signal handler="drc_widget_changed_cb" name="value_changed"/>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">5</property>
+                                        <property name="right_attach">6</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                        <property name="x_options">GTK_FILL</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="drc_label">
+                                        <property name="visible">True</property>
+                                        <property name="width-chars">3</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">Off</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">6</property>
+                                        <property name="right_attach">7</property>
                                         <property name="top_attach">1</property>
                                         <property name="bottom_attach">2</property>
                                         <property name="x_options">GTK_FILL</property>
