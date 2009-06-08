@@ -1080,8 +1080,16 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
                     return 0;
                 }
                 c = FindChapterIndex(d->list_chapter, pgcn, pgn);
-                if (c > d->chapter)
+                if (c != d->chapter)
+                {
+                    if (c < d->chapter)
+                    {
+                        // Some titles end with a 'link' back to the beginning so
+                        // a transition to an earlier chapter means we're done.
+                        return 0;
+                    }
                     chapter = d->chapter = c;
+                }
             }
             break;
 
