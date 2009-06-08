@@ -13,8 +13,6 @@ namespace Handbrake.Controls
      *  - Code needs cleaned up and a ton of bugs probably need fixed.
      */ 
 
-
-
     /*
      * DISPLAY WIDTH       STORAGE WIDTH   PIXEL WIDTH
      * HEIGHT              KEEP ASPECT     PIXEL HEIGHT
@@ -202,6 +200,7 @@ namespace Handbrake.Controls
                     text_height.Text = heightVal.ToString();
                     check_KeepAR.Enabled = true;
                     lbl_anamorphic.Text = "";
+                    lbl_anamprohicLbl.Visible = false;
                     break;
                 case 1: // Strict
                     text_height.BackColor = Color.LightGray;
@@ -214,17 +213,22 @@ namespace Handbrake.Controls
                     check_KeepAR.Enabled = false;
                     disableCustomAnaControls();
                     lbl_anamorphic.Text = strictAnamorphic();
+                    lbl_anamprohicLbl.Visible = true;
                     break;
                 case 2: // Loose
                     storageAspect = 0;
-                    text_width.Text = widthVal.ToString();
-                    text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                    if (selectedTitle != null)
+                    {
+                        text_width.Value = selectedTitle.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                    }
                     text_height.Enabled = false;
                     text_height.BackColor = Color.LightGray;
                     text_width.Enabled = true;
                     text_width.BackColor = Color.White;
                     disableCustomAnaControls();
                     lbl_anamorphic.Text = looseAnamorphic();
+                    lbl_anamprohicLbl.Visible = true;
                     break;
                 case 3: // Custom
 
@@ -235,19 +239,22 @@ namespace Handbrake.Controls
                     text_height.Enabled = true;
                     text_width.Enabled = true;
 
-                    // Actual Work                
-                    text_width.Text = widthVal.ToString();
-                    text_height.Text = cacluateHeight(widthVal).ToString(); // Bug here
-
-                    txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
-                    txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
-                    txt_displayWidth.Text = displayWidth().ToString();
-
+                    // Actual Work  
+                    if (selectedTitle != null)
+                    {
+                        widthVal = selectedTitle.Resolution.Width;
+                        text_width.Text = widthVal.ToString();
+                        text_height.Text = cacluateHeight(widthVal).ToString();
+                        txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
+                        txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
+                        txt_displayWidth.Text = displayWidth().ToString();
+                    }
+   
                     darValue = calculateDar();
 
                     check_KeepAR.CheckState = CheckState.Checked;
                     check_KeepAR.Enabled = true;
-
+                    lbl_anamprohicLbl.Visible = true;
 
                     break;
             }
@@ -573,40 +580,45 @@ namespace Handbrake.Controls
         }
         private int cacluateHeight(int width)
         {
-            int aw = 0;
-            int ah = 0;
-            if (selectedTitle.AspectRatio.ToString() == "1.78")
+            if (selectedTitle != null)
             {
-                aw = 16;
-                ah = 9;
-            }
-            else if (selectedTitle.AspectRatio.ToString() == "1.33")
-            {
-                aw = 4;
-                ah = 3;
-            }
+                int aw = 0;
+                int ah = 0;
+                if (selectedTitle.AspectRatio.ToString() == "1.78")
+                {
+                    aw = 16;
+                    ah = 9;
+                }
+                else if (selectedTitle.AspectRatio.ToString() == "1.33")
+                {
+                    aw = 4;
+                    ah = 3;
+                }
 
-            if (aw != 0)
-            {
-                // Crop_Width = Title->Width - crop_Left - crop_right
-                // Crop_Height = Title->Height - crop_top - crop_bottom
-                double crop_width = selectedTitle.Resolution.Width - (double)crop_left.Value - (double)crop_right.Value;
-                double crop_height = selectedTitle.Resolution.Height - (double)crop_top.Value - (double)crop_bottom.Value;
+                if (aw != 0)
+                {
+                    // Crop_Width = Title->Width - crop_Left - crop_right
+                    // Crop_Height = Title->Height - crop_top - crop_bottom
+                    double crop_width = selectedTitle.Resolution.Width - (double) crop_left.Value -
+                                        (double) crop_right.Value;
+                    double crop_height = selectedTitle.Resolution.Height - (double) crop_top.Value -
+                                         (double) crop_bottom.Value;
 
-                double new_height = (width * selectedTitle.Resolution.Width * ah * crop_height) /
-                                    (selectedTitle.Resolution.Height * aw * crop_width);
+                    double new_height = (width*selectedTitle.Resolution.Width*ah*crop_height)/
+                                        (selectedTitle.Resolution.Height*aw*crop_width);
 
-                if (drp_anamorphic.SelectedIndex == 3)
-                    new_height = getModulusAuto(int.Parse(drop_modulus.SelectedItem.ToString()), new_height);
-                else
-                    new_height = getModulusAuto(16, new_height);
+                    if (drp_anamorphic.SelectedIndex == 3)
+                        new_height = getModulusAuto(int.Parse(drop_modulus.SelectedItem.ToString()), new_height);
+                    else
+                        new_height = getModulusAuto(16, new_height);
 
-                //16 * (421 / 16)
-                //double z = ( 16 * (( y + 8 ) / 16 ) );
-                int x = int.Parse(new_height.ToString());
-                if (x < 64)
-                    x = 64;
-                return x;
+                    //16 * (421 / 16)
+                    //double z = ( 16 * (( y + 8 ) / 16 ) );
+                    int x = int.Parse(new_height.ToString());
+                    if (x < 64)
+                        x = 64;
+                    return x;
+                }
             }
             return 0;
         }
@@ -683,6 +695,9 @@ namespace Handbrake.Controls
                 double hcalc = (actualWidth / storageAspect) + 0.5;
                 double newHeight = getModulusAuto(16, hcalc);
                 looseAnamorphicHeightGuard = true;
+
+                if (newHeight < 64)
+                    newHeight = 64;
                 text_height.Value = (decimal)newHeight;   // BUG Out of Range Exception with Width too low here.
 
                 // Calculate the anamorphic width

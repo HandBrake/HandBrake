@@ -41,8 +41,12 @@ namespace Handbrake.Functions
         public string CropBottom { get; private set; }
         public string CropLeft { get; private set; }
         public string CropRight { get; private set; }
-        public Boolean Anamorphic { get; private set; }
-        public Boolean LooseAnamorphic { get; private set; }
+        public int AnamorphicMode { get; private set; }
+        public Boolean keepDisplayAsect { get; private set; }
+        public double displayWidthValue { get; private set; }
+        public int pixelAspectWidth { get; private set; }
+        public int pixelAspectHeight { get; private set; }
+        public int AnamorphicModulus { get; private set; }
         #endregion
 
         #region Video Filters
@@ -113,8 +117,15 @@ namespace Handbrake.Functions
             Match maxWidth = Regex.Match(input, @"-X ([0-9]*)");
             Match maxHeight = Regex.Match(input, @"-Y ([0-9]*)");
             Match crop = Regex.Match(input, @"--crop ([0-9]*):([0-9]*):([0-9]*):([0-9]*)");
-            Match lanamorphic = Regex.Match(input, @" -P");
-            Match anamorphic = Regex.Match(input, @" -p ");
+
+            Match looseAnamorphic = Regex.Match(input, @"--loose-anamorphic");
+            Match strictAnamorphic = Regex.Match(input, @"--strict-anamorphic");
+            Match customAnamorphic = Regex.Match(input, @"--custom-anamorphic");
+
+            Match keepDisplayAsect = Regex.Match(input, @"--keep-display-aspect");
+            Match displayWidth = Regex.Match(input, @"--display-width ([0-9*])");
+            Match pixelAspect = Regex.Match(input, @"--pixel-aspect ([0-9]*):([0-9]*)");
+            Match modulus = Regex.Match(input, @"--modulus ([0-9*])");
 
             // Picture Settings - Filters
             Match decomb = Regex.Match(input, @" --decomb");
@@ -196,16 +207,16 @@ namespace Handbrake.Functions
                 #region Picture Tab
 
                 if (width.Success)
-                    thisQuery.Width = int.Parse(width.ToString().Replace("-w ", ""));
-
+                    thisQuery.Width = int.Parse(width.Groups[0].Value.Replace("-w ", ""));
+                                                              
                 if (height.Success)
-                    thisQuery.Height = int.Parse(height.ToString().Replace("-l ", ""));
+                    thisQuery.Height = int.Parse(height.Groups[0].Value.Replace("-l ", ""));
 
                 if (maxWidth.Success)
-                    thisQuery.MaxWidth = int.Parse(maxWidth.ToString().Replace("-X ", ""));
+                    thisQuery.MaxWidth = int.Parse(maxWidth.Groups[0].Value.Replace("-X ", ""));
 
                 if (maxHeight.Success)
-                    thisQuery.MaxHeight = int.Parse(maxHeight.ToString().Replace("-Y ", ""));
+                    thisQuery.MaxHeight = int.Parse(maxHeight.Groups[0].Value.Replace("-Y ", ""));
 
                 if (crop.Success)
                 {
@@ -217,8 +228,29 @@ namespace Handbrake.Functions
                     thisQuery.CropRight = actCropValues[3];
                 }
 
-                thisQuery.Anamorphic = anamorphic.Success;
-                thisQuery.LooseAnamorphic = lanamorphic.Success;
+                if (strictAnamorphic.Success)
+                    thisQuery.AnamorphicMode = 1;
+                else if (looseAnamorphic.Success)
+                    thisQuery.AnamorphicMode = 2;
+                else if (customAnamorphic.Success)
+                    thisQuery.AnamorphicMode = 3;
+                else
+                    thisQuery.AnamorphicMode = 0;
+
+                thisQuery.keepDisplayAsect = keepDisplayAsect.Success;
+
+                if (displayWidth.Success)
+                    thisQuery.displayWidthValue = double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", ""));
+
+                if (pixelAspect.Success)
+                    thisQuery.pixelAspectWidth = int.Parse(pixelAspect.Groups[0].Value.Replace("--pixel-aspect ", ""));
+
+                if (pixelAspect.Success)
+                    thisQuery.pixelAspectHeight = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", ""));
+
+                if (modulus.Success)
+                    thisQuery.AnamorphicModulus = int.Parse(modulus.Groups[0].Value.Replace("--modulus ", ""));
+
 
                 #endregion
 
@@ -400,7 +432,6 @@ namespace Handbrake.Functions
 
             return thisQuery;
         }
-
         private static string getMixDown(string mixdown)
         {
             switch (mixdown.Trim())

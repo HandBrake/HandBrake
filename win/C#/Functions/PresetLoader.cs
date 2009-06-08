@@ -99,16 +99,19 @@ namespace Handbrake.Functions
                     mainWindow.pictureSettings.text_height.Text = presetQuery.Height.ToString();
             }
 
-            mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.Anamorphic ? 1 : 0;
+            // Set the anamorphic mode 0,1,2,3
+            mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
-            if (presetQuery.LooseAnamorphic)
-                mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = 2;
-            else
-            {
-                if (presetQuery.Anamorphic != true)
-                    mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = 0;
-            }
 
+            // Custom Anamorphic Controls
+            mainWindow.pictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
+
+            mainWindow.pictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
+            mainWindow.pictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
+            mainWindow.pictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
+            mainWindow.pictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
+
+ 
             // Set the public max width and max height varibles in frmMain
             // These are used by the query generator to determine if it should use -X or -w  / -Y or -h
             if (presetQuery.MaxWidth != 0)

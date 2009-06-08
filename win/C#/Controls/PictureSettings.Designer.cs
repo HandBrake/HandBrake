@@ -63,7 +63,7 @@ namespace Handbrake.Controls
             this.Label51 = new System.Windows.Forms.Label();
             this.Label15 = new System.Windows.Forms.Label();
             this.lbl_anamorphic = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lbl_anamprohicLbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.text_height)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_width)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.crop_bottom)).BeginInit();
@@ -468,21 +468,21 @@ namespace Handbrake.Controls
             this.lbl_anamorphic.TabIndex = 74;
             this.lbl_anamorphic.Text = "Select a Title";
             // 
-            // label3
+            // lbl_anamprohicLbl
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(13, 221);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(66, 13);
-            this.label3.TabIndex = 73;
-            this.label3.Text = "Anamorphic:";
+            this.lbl_anamprohicLbl.AutoSize = true;
+            this.lbl_anamprohicLbl.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_anamprohicLbl.Location = new System.Drawing.Point(13, 221);
+            this.lbl_anamprohicLbl.Name = "lbl_anamprohicLbl";
+            this.lbl_anamprohicLbl.Size = new System.Drawing.Size(66, 13);
+            this.lbl_anamprohicLbl.TabIndex = 73;
+            this.lbl_anamprohicLbl.Text = "Anamorphic:";
             // 
             // PictureSettings
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.Controls.Add(this.lbl_anamorphic);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lbl_anamprohicLbl);
             this.Controls.Add(this.check_customCrop);
             this.Controls.Add(this.check_autoCrop);
             this.Controls.Add(this.crop_bottom);
@@ -563,7 +563,7 @@ namespace Handbrake.Controls
         internal System.Windows.Forms.TextBox txt_parHeight;
         internal System.Windows.Forms.CheckBox check_KeepAR;
         internal System.Windows.Forms.Label lbl_anamorphic;
-        internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.Label lbl_anamprohicLbl;
 
     }
 }

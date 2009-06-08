@@ -49,10 +49,7 @@ namespace Handbrake.Functions
                 rtf_testContent.Text += "Max Width: " + parsed.MaxWidth + Environment.NewLine;
             if (parsed.MaxHeight != 0)
                 rtf_testContent.Text += "Max Height: " + parsed.MaxHeight + Environment.NewLine;
-            if (parsed.Anamorphic)
-                rtf_testContent.Text += "Anamorphic: " + parsed.Anamorphic + Environment.NewLine;
-            if (parsed.LooseAnamorphic)
-                rtf_testContent.Text += "Loose Anamorphic: " + parsed.LooseAnamorphic + Environment.NewLine;
+            rtf_testContent.Text += "Anamorphic Mode: " + parsed.AnamorphicMode + Environment.NewLine;
 
             //Picture Settings - Filters
             rtf_testContent.Text += Environment.NewLine + "## Filters " + Environment.NewLine;
