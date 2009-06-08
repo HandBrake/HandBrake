@@ -2996,11 +2996,13 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			}
 			job->anamorphic.dar_width = dar_width;
 			job->anamorphic.dar_height = dar_height;
+			job->anamorphic.keep_display_aspect = 0;
 		}
 		else
 		{
 			job->anamorphic.dar_width = 0;
 			job->anamorphic.dar_height = 0;
+			job->anamorphic.keep_display_aspect = 1;
 		}
 		hb_set_anamorphic_size( job, &width, &height, 
 								&par_width, &par_height );
