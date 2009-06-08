@@ -251,7 +251,7 @@
 				<key>AudioTrackDescription</key>
 				<string></string>
 				<key>AudioTrackDRCSlider</key>
-				<real>1</real>
+				<real>0</real>
 				<key>AudioMixdown</key>
 				<string>dpl2</string>
 				<key>AudioSamplerate</key>

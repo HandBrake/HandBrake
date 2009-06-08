@@ -63,6 +63,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
 			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
 		}
+		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(0));
 	}
 	else if (acodec == HB_ACODEC_FAAC && mix != HB_AMIXDOWN_6CH)
 	{

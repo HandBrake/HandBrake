@@ -57,6 +57,7 @@ static dependency_t dep_map[] =
 	{"AudioEncoder", "AudioSamplerate", "ac3|dts|auto", TRUE, FALSE},
 	{"AudioEncoder", "AudioMixdown", "ac3|dts|auto", TRUE, FALSE},
 	{"AudioEncoder", "AudioTrackDRCSlider", "ac3|dts|auto", TRUE, FALSE},
+	{"AudioEncoder", "drc_label", "ac3|dts|auto", TRUE, FALSE},
 	{"x264_bframes", "x264_weighted_bframes", "0", TRUE, FALSE},
 	{"x264_bframes", "x264_bpyramid", "<2", TRUE, FALSE},
 	{"x264_bframes", "x264_direct", "0", TRUE, FALSE},
