@@ -399,15 +399,13 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-drc_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
 {
 	GValue *asettings;
-	gdouble val;
 	GtkLabel *label;
 	gchar *drc;
 
 	g_debug("drc_widget_changed_cb ()");
-	val = gtk_scale_button_get_value(GTK_SCALE_BUTTON(widget));
 	if (val > 0.8 && val < 1.0)
 		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 1.0);
 	if (val <= 0.8 && val > 0.5)
