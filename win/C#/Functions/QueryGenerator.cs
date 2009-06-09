@@ -122,7 +122,8 @@ namespace Handbrake.Functions
             {
 
                 if (mainWindow.pictureSettings.text_width.Text != "")
-                    query += " -w " + mainWindow.pictureSettings.text_width.Text;
+                    if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
+                        query += " -w " + mainWindow.pictureSettings.text_width.Text;
             }
             else
             {
@@ -134,12 +135,13 @@ namespace Handbrake.Functions
             if (mainWindow.maxHeight == 0)
             {
                 if (mainWindow.pictureSettings.text_height.Text != "")
-                    query += " -l " + mainWindow.pictureSettings.text_height.Text;
+                    if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                        query += " -l " + mainWindow.pictureSettings.text_height.Text;
             }
             else
             {
                 if (mainWindow.pictureSettings.text_height.Text != "")
-                    query += " -Y " + mainWindow.pictureSettings.text_height.Text;
+                        query += " -Y " + mainWindow.pictureSettings.text_height.Text;
             }
 
             string cropTop = mainWindow.pictureSettings.crop_top.Text;

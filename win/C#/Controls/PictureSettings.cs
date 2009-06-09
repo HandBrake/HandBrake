@@ -10,33 +10,6 @@ namespace Handbrake.Controls
     // - Fix MAX Width / Height Code.
     // - Tie in the cropping controls.
     
-    /* Custom Anamorphic Mode 
-     * 
-     * DISPLAY WIDTH       STORAGE WIDTH   PIXEL WIDTH
-     * HEIGHT              KEEP ASPECT     PIXEL HEIGHT
-     *
-     * --- NOT KEEPING DISPLAY ASPECT ---
-     * Changing STORAGE WIDTH changes DISPLAY WIDTH to STORAGE WIDTH * PIXEL WIDTH / PIXEL HEIGHT
-     * Changing PIXEL dimensions changes DISPLAY WIDTH to STORAGE WIDTH * PIXEL WIDTH / PIXEL HEIGHT
-     * Changing DISPLAY WIDTH changes PIXEL WIDTH to DISPLAY WIDTH and PIXEL HEIGHT to STORAGE WIDTH
-     * Changing HEIGHT just....changes the height.
-     *
-     * --- KEEPING DISPLAY ASPECT RATIO ---
-     * DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
-     * Disable editing: PIXEL WIDTH, PIXEL HEIGHT
-     * Changing DISPLAY WIDTH:
-     *    Changes HEIGHT to keep DAR
-     *    Changes PIXEL WIDTH to new DISPLAY WIDTH
-     *    Changes PIXEL HEIGHT to STORAGE WIDTH
-     * Changing HEIGHT
-     *    Changes DISPLAY WIDTH to keep DAR
-     *    Changes PIXEL WIDTH to new DISPLAY WIDTH
-     *    Changes PIXEL HEIGHT to STORAGE WIDTH
-     * Changing STORAGE_WIDTH:
-     *    Changes PIXEL WIDTH to DISPLAY WIDTH
-     *    Changes PIXEL HEIGHT to new STORAGE WIDTH
-     */
-
     public partial class PictureSettings : UserControl
     {
         // Globals
@@ -47,7 +20,7 @@ namespace Handbrake.Controls
         public Title selectedTitle { get; set; }
         private Boolean heightChangeGuard;
         private Boolean looseAnamorphicHeightGuard;
-        private Boolean heightModJumpGaurd = false;
+        private Boolean heightModJumpGaurd;
 
         // Window Setup
         public PictureSettings()
