@@ -49,6 +49,7 @@ namespace Handbrake.Controls
         public Title selectedTitle { get; set; }
         private Boolean heightChangeGuard;
         private Boolean looseAnamorphicHeightGuard;
+        private Boolean heightModJumpGaurd = false;
 
         // Window Setup
         public PictureSettings()
@@ -130,7 +131,7 @@ namespace Handbrake.Controls
             int.TryParse(drop_modulus.SelectedItem.ToString(), out mod);
 
             // Increase or decrease value by the correct mod.
-            if (drp_anamorphic.SelectedIndex != 2)
+            if (drp_anamorphic.SelectedIndex != 2 && !heightModJumpGaurd)
             {
                 decimal val = heightChangeMod(mod);
                 heightChangeGuard = true;
@@ -165,6 +166,7 @@ namespace Handbrake.Controls
             }
             heightChangeGuard = false;
             looseAnamorphicHeightGuard = false;
+            heightModJumpGaurd = false;
         }
         private void check_KeepAR_CheckedChanged(object sender, EventArgs e)
         {
@@ -205,8 +207,12 @@ namespace Handbrake.Controls
                 case 1: // Strict
                     text_height.BackColor = Color.LightGray;
                     text_width.BackColor = Color.LightGray;
-                    text_height.Text = "";
-                    text_width.Text = "";
+                    if (selectedTitle != null)
+                    {
+                        heightModJumpGaurd = true;
+                        text_width.Value = selectedTitle.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                    }
                     text_height.Enabled = false;
                     text_width.Enabled = false;
                     check_KeepAR.CheckState = CheckState.Unchecked;
@@ -216,17 +222,18 @@ namespace Handbrake.Controls
                     lbl_anamprohicLbl.Visible = true;
                     break;
                 case 2: // Loose
+                    disableCustomAnaControls();
                     storageAspect = 0;
-                    if (selectedTitle != null)
-                    {
-                        text_width.Value = selectedTitle.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
-                        text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
-                    }
                     text_height.Enabled = false;
                     text_height.BackColor = Color.LightGray;
                     text_width.Enabled = true;
                     text_width.BackColor = Color.White;
-                    disableCustomAnaControls();
+                    if (selectedTitle != null)
+                    {
+                        heightModJumpGaurd = true;
+                        text_width.Value = selectedTitle.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                    }
                     lbl_anamorphic.Text = looseAnamorphic();
                     lbl_anamprohicLbl.Visible = true;
                     break;
@@ -242,9 +249,10 @@ namespace Handbrake.Controls
                     // Actual Work  
                     if (selectedTitle != null)
                     {
+                        heightModJumpGaurd = true;
                         widthVal = selectedTitle.Resolution.Width;
-                        text_width.Text = widthVal.ToString();
-                        text_height.Text = cacluateHeight(widthVal).ToString();
+                        text_width.Value = selectedTitle.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
                         txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
                         txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
                         txt_displayWidth.Text = displayWidth().ToString();
@@ -334,22 +342,25 @@ namespace Handbrake.Controls
              */
             if (!check_KeepAR.Checked)
             {
-                switch (control.Name) // TODO Check if CroppedWidth or just Width
+                switch (control.Name)
                 {
                     case "text_width":
                         double dw = (double)cropped_width * parW / parH;
+                        dw = Math.Round(dw, 2);
                         txt_displayWidth.Text = dw.ToString();
                         break;
                     case "txt_parWidth":
                         double dwpw = (double)cropped_width * parW / parH;
+                        dwpw = Math.Round(dwpw, 2);
                         txt_displayWidth.Text = dwpw.ToString();
                         break;
                     case "txt_parHeight":
                         double dwph = (double)cropped_width * parW / parH;
+                        dwph = Math.Round(dwph, 2);
                         txt_displayWidth.Text = dwph.ToString();
                         break;
                     case "txt_displayWidth":
-                        txt_parWidth.Text = txt_displayWidth.Text;
+                        txt_parWidth.Text = Math.Round(displayWidth, 0).ToString();
                         txt_parHeight.Text = text_width.Text;
                         break;
                 }
@@ -668,8 +679,6 @@ namespace Handbrake.Controls
                 // Calculate the Actual Height
                 int actualWidth = (int)text_width.Value - (int)crop_left.Value - (int)crop_right.Value; ;
                 int actualHeight = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
-                if (drp_anamorphic.SelectedIndex == 2)
-                    actualHeight = (int)getModulusAuto(16, actualHeight);
 
                 // Calculate Actual Width
                 double displayWidth = ((double)actualWidth * selectedTitle.ParVal.Width / selectedTitle.ParVal.Height);

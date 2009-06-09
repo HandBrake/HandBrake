@@ -30,6 +30,7 @@ namespace Handbrake.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.text_height = new System.Windows.Forms.NumericUpDown();
             this.text_width = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
@@ -64,6 +65,7 @@ namespace Handbrake.Controls
             this.Label15 = new System.Windows.Forms.Label();
             this.lbl_anamorphic = new System.Windows.Forms.Label();
             this.lbl_anamprohicLbl = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.text_height)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_width)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.crop_bottom)).BeginInit();
@@ -264,6 +266,7 @@ namespace Handbrake.Controls
             this.txt_displayWidth.Name = "txt_displayWidth";
             this.txt_displayWidth.Size = new System.Drawing.Size(100, 20);
             this.txt_displayWidth.TabIndex = 53;
+            this.toolTip.SetToolTip(this.txt_displayWidth, "Display Width - Press \"Enter\" after entering a new value.");
             this.txt_displayWidth.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_displayWidth_Keyup);
             // 
             // lbl_displayWidth
@@ -294,6 +297,7 @@ namespace Handbrake.Controls
             this.txt_parWidth.Name = "txt_parWidth";
             this.txt_parWidth.Size = new System.Drawing.Size(100, 20);
             this.txt_parWidth.TabIndex = 55;
+            this.toolTip.SetToolTip(this.txt_parWidth, "PAR Width - Press \"Enter\" after entering a new value.\r\n");
             this.txt_parWidth.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_parWidth_Keyup);
             // 
             // lbl_parHeight
@@ -313,6 +317,7 @@ namespace Handbrake.Controls
             this.txt_parHeight.Name = "txt_parHeight";
             this.txt_parHeight.Size = new System.Drawing.Size(100, 20);
             this.txt_parHeight.TabIndex = 57;
+            this.toolTip.SetToolTip(this.txt_parHeight, "PAR Height - Press \"Enter\" after entering a new value.\r\n");
             this.txt_parHeight.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_parHeight_Keyup);
             // 
             // check_KeepAR
@@ -564,6 +569,7 @@ namespace Handbrake.Controls
         internal System.Windows.Forms.CheckBox check_KeepAR;
         internal System.Windows.Forms.Label lbl_anamorphic;
         internal System.Windows.Forms.Label lbl_anamprohicLbl;
+        private ToolTip toolTip;
 
     }
 }

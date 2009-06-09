@@ -72,9 +72,6 @@ namespace Handbrake.Functions
                 if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
                     mainWindow.pictureSettings.check_customCrop.Checked = true;
 
-            mainWindow.pictureSettings.text_width.Text = "";
-            mainWindow.pictureSettings.text_height.Text = "";
-
             if (pictureSettings)
             {
                 if (presetQuery.CropTop != null)
