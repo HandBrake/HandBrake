@@ -20,12 +20,12 @@ namespace Handbrake
 {
     public partial class frmMain : Form
     {
-        // Objects which may be used by one or more other objects
+        // Objects which may be used by one or more other objects *************
         QueueHandler encodeQueue = new QueueHandler();
         PresetsHandler presetHandler = new PresetsHandler();
         QueryGenerator queryGen = new QueryGenerator();
 
-        // Globals: Mainly used for tracking.
+        // Globals: Mainly used for tracking. *********************************
         Title selectedTitle;
         DVD thisDVD;
         private frmQueue queueWindow;
@@ -34,7 +34,7 @@ namespace Handbrake
         public int maxWidth;
         public int maxHeight;
 
-        // Delegates
+        // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
         private delegate void UpdateStatusChanger();
 
@@ -1614,7 +1614,7 @@ namespace Handbrake
         public string lastAction { get; set; }
         #endregion
 
-        #region overrides
+        #region Overrides
         /// <summary>
         /// If the queue is being processed, prompt the user to confirm application close.
         /// </summary>

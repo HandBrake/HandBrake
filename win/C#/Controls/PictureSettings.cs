@@ -5,15 +5,13 @@ using Handbrake.Parsing;
 
 namespace Handbrake.Controls
 {
-    /*
-     *  ***** WARNING *****
-     *  This file is incomplete.
-     *  - Custom Anamorphic mode does not work.
-     *  - Several Out of bound exceptions on the numeric up down width/height inputs need fixed.
-     *  - Code needs cleaned up and a ton of bugs probably need fixed.
-     */ 
+    // TODO
 
-    /*
+    // - Fix MAX Width / Height Code.
+    // - Tie in the cropping controls.
+    
+    /* Custom Anamorphic Mode 
+     * 
      * DISPLAY WIDTH       STORAGE WIDTH   PIXEL WIDTH
      * HEIGHT              KEEP ASPECT     PIXEL HEIGHT
      *
@@ -76,7 +74,21 @@ namespace Handbrake.Controls
 
             // Set the Resolution Boxes
             text_width.Value = selectedTitle.Resolution.Width;
-            text_height.Value = cacluateHeight(selectedTitle.Resolution.Width);
+
+            if (drp_anamorphic.SelectedIndex == 0)
+                text_height.Value = cacluateHeight(selectedTitle.Resolution.Width);
+            else if (drp_anamorphic.SelectedIndex == 1 || drp_anamorphic.SelectedIndex == 3)
+            {
+                heightModJumpGaurd = true;
+                text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+            }
+            else if (drp_anamorphic.SelectedIndex == 2)
+            {
+                heightModJumpGaurd = false;
+                text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+            }
+
+
 
             if (drp_anamorphic.SelectedIndex == 3)
             {
@@ -390,6 +402,7 @@ namespace Handbrake.Controls
                     case "txt_displayWidth":
                         heightChangeGuard = true;
                         text_height.Value = (decimal)getHeightKeepDar();  //Changes HEIGHT to keep DAR
+                        //darValue = calculateDar(); // Cache the dar value
                         txt_parWidth.Text = txt_displayWidth.Text;
                         txt_parHeight.Text = cropped_width.ToString();
                         break;
@@ -398,7 +411,7 @@ namespace Handbrake.Controls
                         txt_displayWidth.Text = getDisplayWidthKeepDar().ToString();  //Changes DISPLAY WIDTH to keep DAR
                         txt_parWidth.Text = txt_displayWidth.Text;
                         txt_parHeight.Text = cropped_width.ToString();
-                        break;
+                        break; 
                     case "text_width":
                         txt_parWidth.Text = txt_displayWidth.Text;
                         txt_parHeight.Text = cropped_width.ToString();
@@ -433,8 +446,7 @@ namespace Handbrake.Controls
                 }
             }
 
-            darValue = calculateDar(); // Cache the dar value
-            return newDwValue;
+            return Math.Round(newDwValue, 2);
         }
         private double getHeightKeepDar()
         {
@@ -463,33 +475,24 @@ namespace Handbrake.Controls
                 }
             }
 
-            darValue = calculateDar(); // Cache the dar value
             return newHeightVal;
         }
         private double calculateDar()
         {
             // DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
-            int cropTop = (int)crop_top.Value;
-            int cropBottom = (int)crop_bottom.Value;
-            int croppedHeight = (int)text_height.Value - cropTop - cropBottom;
-
             double displayWidth;
             double.TryParse(txt_displayWidth.Text, out displayWidth);
 
-            double calculatedDar = displayWidth / croppedHeight;
+            double calculatedDar = displayWidth / (int)text_height.Value;
 
             return calculatedDar;
         }
-        private double calculateDarByVal(decimal height, double displayWidth)
+        private double calculateDarByVal(decimal croppedHeight, double displayWidth)
         {
             // DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
-            int cropTop = (int)crop_top.Value;
-            int cropBottom = (int)crop_bottom.Value;
-            int croppedHeight = (int)height - cropTop - cropBottom;
-
             double calculatedDar = darValue;
             if (croppedHeight > 0)
-                 calculatedDar = displayWidth / croppedHeight;
+                calculatedDar = displayWidth / (double)croppedHeight;
 
             return calculatedDar;
         }
