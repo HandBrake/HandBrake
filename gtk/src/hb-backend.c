@@ -3923,6 +3923,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
         audio.out.dynamic_range_compression = 
 			ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+        if (audio.out.dynamic_range_compression < 1.0)
+        	audio.out.dynamic_range_compression = 0.0;
+
 		// It would be better if this were done in libhb for us, but its not yet.
 		if (audio.out.codec == HB_ACODEC_AC3 || audio.out.codec == HB_ACODEC_DCA)
 		{

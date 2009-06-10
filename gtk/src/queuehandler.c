@@ -465,7 +465,7 @@ audio_list_refresh(signal_user_data_t *ud)
 			s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
 			s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
 			s_drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
-			if (s_drc < 0.1)
+			if (s_drc < 1.0)
 				drc = g_strdup("Off");
 			else
 				drc = g_strdup_printf("%.1f", s_drc);

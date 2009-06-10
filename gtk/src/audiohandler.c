@@ -231,8 +231,8 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
 		const gchar *track, *codec, *br, *sr, *mix;
-		gchar *drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
-		gdouble s_drc;
+		gchar *s_drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+		gdouble drc;
 		// Get the row number
 		treepath = gtk_tree_model_get_path (store, &iter);
 		indices = gtk_tree_path_get_indices (treepath);
@@ -256,11 +256,11 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 		s_br = ghb_settings_get_string(asettings, "AudioBitrate");
 		s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
 		s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
-		s_drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
-		if (s_drc < 0.1)
-			drc = g_strdup("Off");
+		drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+		if (drc < 1.0)
+			s_drc = g_strdup("Off");
 		else
-			drc = g_strdup_printf("%.1f", s_drc);
+			s_drc = g_strdup_printf("%.1f", drc);
 
 		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 			// These are displayed in list
@@ -269,16 +269,16 @@ audio_list_refresh_selected(signal_user_data_t *ud)
 			2, br,
 			3, sr,
 			4, mix,
-			5, drc,
+			5, s_drc,
 			// These are used to set combo values when a list item is selected
 			6, s_track,
 			7, s_codec,
 			8, s_br,
 			9, s_sr,
 			10, s_mix,
-			11, s_drc,
+			11, drc,
 			-1);
-		g_free(drc);
+		g_free(s_drc);
 		g_free(s_track);
 		g_free(s_codec);
 		g_free(s_br);
@@ -314,7 +314,6 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		mix_code = ghb_lookup_combo_int("AudioMixdown", ghb_string_value("dpl2"));
 		mix_code = ghb_get_best_mix( titleindex, track, acodec_code, mix_code);
 		ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
-		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(1.0));
 	}
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_grey_combo_options (ud->builder);
@@ -406,12 +405,6 @@ drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
 	gchar *drc;
 
 	g_debug("drc_widget_changed_cb ()");
-	if (val > 0.8 && val < 1.0)
-		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 1.0);
-	if (val <= 0.8 && val > 0.5)
-		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 0.0);
-	else if (val > 0.0 && val <= 0.5)
-		gtk_scale_button_set_value(GTK_SCALE_BUTTON(widget), 1.0);
 
 	label = GTK_LABEL(GHB_WIDGET(ud->builder, "drc_label"));
 	if (val < 1.0)
@@ -473,8 +466,8 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	GtkListStore *store;
 	GtkTreeSelection *selection;
 	const gchar *track, *codec, *br, *sr, *mix;
-	gchar *drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
-	gdouble s_drc;
+	gchar *s_drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+	gdouble drc;
 	
 	g_debug("add_to_audio_list ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list"));
@@ -492,11 +485,12 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	s_br = ghb_settings_get_string(settings, "AudioBitrate");
 	s_sr = ghb_settings_get_string(settings, "AudioSamplerate");
 	s_mix = ghb_settings_get_string(settings, "AudioMixdown");
-	s_drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
-	if (s_drc < 0.1)
-		drc = g_strdup("Off");
+	drc = ghb_settings_get_double(settings, "AudioTrackDRCSlider");
+	if (drc < 1.0)
+		s_drc = g_strdup("Off");
 	else
-		drc = g_strdup_printf("%.1f", s_drc);
+		s_drc = g_strdup_printf("%.1f", drc);
+
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
@@ -506,17 +500,17 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 		2, br,
 		3, sr,
 		4, mix,
-		5, drc,
+		5, s_drc,
 		// These are used to set combo box values when a list item is selected
 		6, s_track,
 		7, s_codec,
 		8, s_br,
 		9, s_sr,
 		10, s_mix,
-		11, s_drc,
+		11, drc,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
-	g_free(drc);
+	g_free(s_drc);
 	g_free(s_track);
 	g_free(s_codec);
 	g_free(s_br);

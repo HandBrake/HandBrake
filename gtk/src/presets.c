@@ -2219,6 +2219,7 @@ import_value_xlat(GValue *dict)
 	if (gval)
 		ghb_dict_insert(dict, g_strdup(key), gval);
 
+
 	GValue *sdeflist;
 	GValue *sdefaults;
 	GValue *slist;
@@ -2324,6 +2325,18 @@ import_value_xlat(GValue *dict)
 			gval = import_value_xlat2(adefaults, mix_xlat, key, mac_val);
 			if (gval)
 				ghb_dict_insert(adict, g_strdup(key), gval);
+
+			mac_val = ghb_dict_lookup(adict, "AudioTrackDRCSlider");
+			if (mac_val != NULL)
+			{
+				gdouble drc;
+				drc = ghb_value_double(mac_val);
+				if (drc < 1.0 && drc > 0.0)
+				{
+					ghb_dict_insert(adict, g_strdup("AudioTrackDRCSlider"), 
+									ghb_double_value_new(0.0));
+				}
+			}
 		}
 	}
 }
@@ -2530,6 +2543,26 @@ export_xlat_preset(GValue *dict)
 		ghb_dict_insert(dict, g_strdup("VideoQualityType"), 
 						ghb_int_value_new(2));
 	}
+
+	GValue *alist, *adict;
+	gint count, ii;
+
+	alist = ghb_dict_lookup(dict, "AudioList");
+	count = ghb_array_len(alist);
+	for (ii = 0; ii < count; ii++)
+	{
+		gdouble drc;
+
+		adict = ghb_array_get_nth(alist, ii);
+		drc = ghb_value_double(
+				preset_dict_get_value(adict, "AudioTrackDRCSlider"));
+		if (drc < 1.0 && drc > 0.0)
+		{
+			ghb_dict_insert(adict, g_strdup("AudioTrackDRCSlider"), 
+							ghb_double_value_new(0.0));
+		}
+	}
+
 	ghb_dict_insert(dict, g_strdup("PicturePARWidth"), 
 						ghb_int_value_new(par_width));
 	ghb_dict_insert(dict, g_strdup("PicturePARHeight"), 
