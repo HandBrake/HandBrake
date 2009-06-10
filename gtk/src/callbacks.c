@@ -3132,7 +3132,7 @@ ghb_inhibit_gpm()
 	conn = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
 	if (error != NULL)
 	{
-		g_debug("DBUS cannot connect: %s", error->message);
+		g_warning("DBUS cannot connect: %s", error->message);
 		g_error_free(error);
 		return;
 	}
@@ -3140,7 +3140,7 @@ ghb_inhibit_gpm()
 							GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
 	if (proxy == NULL)
 	{
-		g_debug("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		g_warning("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
 		dbus_g_connection_unref(conn);
 		return;
 	}
@@ -3150,18 +3150,20 @@ ghb_inhibit_gpm()
 							G_TYPE_INVALID,
 							G_TYPE_UINT, &gpm_cookie,
 							G_TYPE_INVALID);
+	gpm_inhibited = TRUE;
 	if (!res)
 	{
-		g_warning("Inhibit method failed");
+		if (error != NULL)
+		{
+			g_warning("Inhibit failed: %s", error->message);
+			g_error_free(error);
+			gpm_cookie = -1;
+		}
+		else
+			g_warning("Inhibit failed");
 		gpm_cookie = -1;
+		gpm_inhibited = FALSE;
 	}
-	if (error != NULL)
-	{
-		g_warning("Inhibit problem: %s", error->message);
-		g_error_free(error);
-		gpm_cookie = -1;
-	}
-	gpm_inhibited = TRUE;
 	g_object_unref(G_OBJECT(proxy));
 	dbus_g_connection_unref(conn);
 #endif
@@ -3186,7 +3188,7 @@ ghb_uninhibit_gpm()
 	conn = dbus_g_bus_get(DBUS_BUS_SESSION, &error);
 	if (error != NULL)
 	{
-		g_debug("DBUS cannot connect: %s", error->message);
+		g_warning("DBUS cannot connect: %s", error->message);
 		g_error_free(error);
 		return;
 	}
@@ -3194,7 +3196,7 @@ ghb_uninhibit_gpm()
 							GPM_DBUS_INHIBIT_PATH, GPM_DBUS_INHIBIT_INTERFACE);
 	if (proxy == NULL)
 	{
-		g_debug("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		g_warning("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
 		dbus_g_connection_unref(conn);
 		return;
 	}
@@ -3204,12 +3206,13 @@ ghb_uninhibit_gpm()
 							G_TYPE_INVALID);
 	if (!res)
 	{
-		g_warning("UnInhibit method failed");
-	}
-	if (error != NULL)
-	{
-		g_warning("UnInhibit problem: %s", error->message);
-		g_error_free(error);
+		if (error != NULL)
+		{
+			g_warning("UnInhibit failed: %s", error->message);
+			g_error_free(error);
+		}
+		else
+			g_warning("UnInhibit failed");
 	}
 	gpm_inhibited = FALSE;
 	dbus_g_connection_unref(conn);
