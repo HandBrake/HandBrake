@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Handbrake.Parsing;
 
@@ -10,6 +11,8 @@ namespace Handbrake.Controls
     
     public partial class PictureSettings : UserControl
     {
+        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
+
         // Globals
         public int maxWidth, maxHeight;
         int widthVal, heightVal;
@@ -596,12 +599,12 @@ namespace Handbrake.Controls
             {
                 int aw = 0;
                 int ah = 0;
-                if (selectedTitle.AspectRatio.ToString() == "1.78")
+                if (selectedTitle.AspectRatio.ToString(Culture) == "1.78")
                 {
                     aw = 16;
                     ah = 9;
                 }
-                else if (selectedTitle.AspectRatio.ToString() == "1.33")
+                else if (selectedTitle.AspectRatio.ToString(Culture) == "1.33")
                 {
                     aw = 4;
                     ah = 3;
@@ -638,12 +641,12 @@ namespace Handbrake.Controls
         {
             int aw = 0;
             int ah = 0;
-            if (selectedTitle.AspectRatio.ToString() == "1.78")
+            if (selectedTitle.AspectRatio.ToString(Culture) == "1.78")
             {
                 aw = 16;
                 ah = 9;
             }
-            else if (selectedTitle.AspectRatio.ToString() == "1.33")
+            else if (selectedTitle.AspectRatio.ToString(Culture) == "1.33")
             {
                 aw = 4;
                 ah = 3;
