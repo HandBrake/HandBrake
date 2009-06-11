@@ -36,7 +36,7 @@ namespace Handbrake.Controls
             storageAspect = 0;
             selectedTitle = st;
             // Set the Aspect Ratio
-            lbl_Aspect.Text = selectedTitle.AspectRatio.ToString();
+            lbl_Aspect.Text = selectedTitle.AspectRatio.ToString(Culture);
             lbl_src_res.Text = selectedTitle.Resolution.Width + " x " + selectedTitle.Resolution.Height;
 
             // Set the Recommended Cropping values
