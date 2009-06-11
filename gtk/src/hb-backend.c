@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "callbacks.h"
 #include "subtitlehandler.h"
+#include "x264handler.h"
 #include "preview.h"
 #include "values.h"
 #include "lang.h"
@@ -2256,7 +2257,7 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	
 static const char * turbo_opts = 
 	"ref=1:subme=1:me=dia:analyse=none:trellis=0:"
-	"no-fast-pskip=0:8x8dct=0:weightb=0";
+	"no-fast-pskip=0:8x8dct=0";
 
 // Construct the x264 options string
 // The result is allocated, so someone must free it at some point.
@@ -3965,21 +3966,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	dest_str = ghb_settings_get_string(js, "destination");
 	job->file = dest_str;
 	job->crf = ghb_settings_get_boolean(js, "constant_rate_factor");
-	// TODO: libhb holds onto a reference to the x264opts and is not
-	// finished with it until encoding the job is done.  But I can't
-	// find a way to get at the job before it is removed in order to
-	// free up the memory I am allocating here.
-	// The short story is THIS LEAKS.
-	x264opts = ghb_build_x264opts_string(js);
-	
-	if( x264opts != NULL && *x264opts != '\0' )
-	{
-		job->x264opts = x264opts;
-	}
-	else /*avoids a bus error crash when options aren't specified*/
-	{
-		job->x264opts =  NULL;
-	}
 
 	const GValue *subtitle_list;
 	gint subtitle;
@@ -4057,10 +4043,22 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 	}
 
+	// TODO: libhb holds onto a reference to the x264opts and is not
+	// finished with it until encoding the job is done.  But I can't
+	// find a way to get at the job before it is removed in order to
+	// free up the memory I am allocating here.
+	// The short story is THIS LEAKS.
+	x264opts = ghb_build_x264opts_string(js);
+	
+	if( *x264opts == '\0' )
+	{
+		g_free(x264opts);
+		x264opts = NULL;
+	}
+
 	if (job->indepth_scan == 1)
 	{
 		// Subtitle scan. Look for subtitle matching audio language
-		char *x264opts_tmp;
 
 		/*
 		 * When subtitle scan is enabled do a fast pre-scan job
@@ -4068,20 +4066,13 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 */
 		job->pass = -1;
 		job->indepth_scan = 1;
-
-		x264opts_tmp = job->x264opts;
 		job->x264opts = NULL;
-
 
 		/*
 		 * Add the pre-scan job
 		 */
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
-		//if (job->x264opts != NULL)
-		//	g_free(job->x264opts);
-
-		job->x264opts = x264opts_tmp;
 	}
 
 	if( ghb_settings_get_boolean(js, "VideoTwoPass") &&
@@ -4096,23 +4087,30 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->select_subtitle = NULL;
 		job->pass = 1;
 		job->indepth_scan = 0;
-		gchar *x264opts2 = NULL;
-		if (x264opts)
-		{
-			x264opts2 = g_strdup(x264opts);
-		}
+
 		/*
 		 * If turbo options have been selected then append them
 		 * to the x264opts now (size includes one ':' and the '\0')
 		 */
 		if( ghb_settings_get_boolean(js, "VideoTurboTwoPass") )
 		{
-			char *tmp_x264opts;
+			gchar *tmp_x264opts;
+			gchar *extra_opts;
+			gint badapt;
 
+			badapt = ghb_lookup_badapt(x264opts);
+			if (badapt == 2)
+			{
+				extra_opts = g_strdup_printf("%s", turbo_opts);
+			}
+			else
+			{
+				extra_opts = g_strdup_printf("%s:weightb=0", turbo_opts);
+			}
+	
 			if ( x264opts )
 			{
-				tmp_x264opts = g_strdup_printf("%s:%s", x264opts, turbo_opts);
-				g_free(x264opts);
+				tmp_x264opts = g_strdup_printf("%s:%s", x264opts, extra_opts);
 			} 
 			else 
 			{
@@ -4120,11 +4118,11 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				 * No x264opts to modify, but apply the turbo options
 				 * anyway as they may be modifying defaults
 				 */
-				tmp_x264opts = g_strdup_printf("%s", turbo_opts);
+				tmp_x264opts = g_strdup_printf("%s", extra_opts);
 			}
-			x264opts = tmp_x264opts;
+			g_free(extra_opts);
 
-			job->x264opts = x264opts;
+			job->x264opts = tmp_x264opts;
 		}
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
@@ -4140,7 +4138,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 * attribute of the job).
 		 */
 		job->indepth_scan = 0;
-		job->x264opts = x264opts2;
+		job->x264opts = x264opts;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
 		//if (job->x264opts != NULL)
@@ -4148,6 +4146,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	}
 	else
 	{
+		job->x264opts = x264opts;
 		job->indepth_scan = 0;
 		job->pass = 0;
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);

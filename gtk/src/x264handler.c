@@ -651,6 +651,56 @@ x264_remove_opt(gchar **opts, gchar **opt_syns)
 	}
 }
 
+static gchar*
+x264_lookup_value(gchar **opts, gchar **opt_syns)
+{
+	gchar *ret = NULL;
+	gint pos;
+
+	const gchar *def_val = x264_opt_get_default(opt_syns[0]);
+
+	pos = x264_find_opt(opts, opt_syns);
+	if (pos >= 0)
+	{
+		gchar *cpos = strchr(opts[pos], '=');
+		if (cpos != NULL)
+		{
+			ret = g_strdup(cpos+1);
+		}
+		else
+		{
+			ret = g_strdup("");
+		}
+	}
+	else if (def_val != NULL)
+	{
+		ret = g_strdup(def_val);
+	}
+	return ret;
+}
+
+gint
+ghb_lookup_badapt(gchar *options)
+{
+	gint ret = 0;
+	gchar *result;
+	gchar **split;
+	
+	if (options == NULL)
+		options = "";
+
+	split = g_strsplit(options, ":", -1);
+
+	result = x264_lookup_value(split, x264_badapt_syns);
+	g_strfreev(split);
+	if (result != NULL)
+	{
+		ret = g_strtod(result, NULL);
+		g_free(result);
+	}
+	return ret;
+}
+
 // Construct the x264 options string
 // The result is allocated, so someone must free it at some point.
 static gchar*
