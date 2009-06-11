@@ -632,7 +632,7 @@ namespace Handbrake.Controls
                     return x;
                 }
             }
-            return 0;
+            return 64;
         }
         private int cacluateWidth(int height)
         {
@@ -663,12 +663,15 @@ namespace Handbrake.Controls
                 else
                     new_width = getModulusAuto(16, new_width);
 
-                //16 * (421 / 16)
-                //double z = ( 16 * (( y + 8 ) / 16 ) );
+
                 int x = int.Parse(new_width.ToString());
+
+                if (x < 64)
+                    x = 64;
+
                 return x;
             }
-            return 0;
+            return 64;
         }
 
         // Calculate Resolution for Anamorphic functions

@@ -31,6 +31,7 @@ namespace Handbrake.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PictureSettings));
             this.text_height = new System.Windows.Forms.NumericUpDown();
             this.text_width = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
@@ -76,7 +77,7 @@ namespace Handbrake.Controls
             // 
             // text_height
             // 
-            this.text_height.Location = new System.Drawing.Point(206, 59);
+            resources.ApplyResources(this.text_height, "text_height");
             this.text_height.Maximum = new decimal(new int[] {
             2560,
             0,
@@ -88,8 +89,6 @@ namespace Handbrake.Controls
             0,
             0});
             this.text_height.Name = "text_height";
-            this.text_height.Size = new System.Drawing.Size(64, 20);
-            this.text_height.TabIndex = 50;
             this.text_height.Value = new decimal(new int[] {
             64,
             0,
@@ -99,7 +98,7 @@ namespace Handbrake.Controls
             // 
             // text_width
             // 
-            this.text_width.Location = new System.Drawing.Point(68, 59);
+            resources.ApplyResources(this.text_width, "text_width");
             this.text_width.Maximum = new decimal(new int[] {
             2560,
             0,
@@ -111,8 +110,6 @@ namespace Handbrake.Controls
             0,
             0});
             this.text_width.Name = "text_width";
-            this.text_width.Size = new System.Drawing.Size(64, 20);
-            this.text_width.TabIndex = 49;
             this.text_width.Value = new decimal(new int[] {
             64,
             0,
@@ -122,390 +119,257 @@ namespace Handbrake.Controls
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
+            resources.ApplyResources(this.label4, "label4");
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Black;
-            this.label4.Location = new System.Drawing.Point(152, 63);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 13);
-            this.label4.TabIndex = 48;
-            this.label4.Text = "Height:";
             // 
             // lbl_max
             // 
-            this.lbl_max.AutoSize = true;
-            this.lbl_max.Location = new System.Drawing.Point(279, 61);
+            resources.ApplyResources(this.lbl_max, "lbl_max");
             this.lbl_max.Name = "lbl_max";
-            this.lbl_max.Size = new System.Drawing.Size(34, 13);
-            this.lbl_max.TabIndex = 47;
-            this.lbl_max.Text = "{max}";
             // 
             // lbl_src_res
             // 
-            this.lbl_src_res.AutoSize = true;
+            resources.ApplyResources(this.lbl_src_res, "lbl_src_res");
             this.lbl_src_res.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_src_res.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_src_res.Location = new System.Drawing.Point(66, 36);
             this.lbl_src_res.Name = "lbl_src_res";
-            this.lbl_src_res.Size = new System.Drawing.Size(72, 12);
-            this.lbl_src_res.TabIndex = 41;
-            this.lbl_src_res.Text = "Select a Title";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
+            resources.ApplyResources(this.label7, "label7");
             this.label7.BackColor = System.Drawing.Color.Transparent;
-            this.label7.Location = new System.Drawing.Point(13, 35);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(44, 13);
-            this.label7.TabIndex = 40;
-            this.label7.Text = "Source:";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
+            resources.ApplyResources(this.label6, "label6");
             this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(14, 120);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 13);
-            this.label6.TabIndex = 45;
-            this.label6.Text = "Anamorphic:";
             // 
             // drp_anamorphic
             // 
             this.drp_anamorphic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_anamorphic.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.drp_anamorphic, "drp_anamorphic");
             this.drp_anamorphic.FormattingEnabled = true;
             this.drp_anamorphic.Items.AddRange(new object[] {
-            "None",
-            "Strict",
-            "Loose",
-            "Custom"});
-            this.drp_anamorphic.Location = new System.Drawing.Point(110, 117);
+            resources.GetString("drp_anamorphic.Items"),
+            resources.GetString("drp_anamorphic.Items1"),
+            resources.GetString("drp_anamorphic.Items2"),
+            resources.GetString("drp_anamorphic.Items3")});
             this.drp_anamorphic.Name = "drp_anamorphic";
-            this.drp_anamorphic.Size = new System.Drawing.Size(110, 21);
-            this.drp_anamorphic.TabIndex = 46;
             this.drp_anamorphic.SelectedIndexChanged += new System.EventHandler(this.drp_anamorphic_SelectedIndexChanged);
             // 
             // label26
             // 
-            this.label26.AutoSize = true;
+            resources.ApplyResources(this.label26, "label26");
             this.label26.BackColor = System.Drawing.Color.Transparent;
-            this.label26.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label26.Location = new System.Drawing.Point(13, 13);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(34, 13);
-            this.label26.TabIndex = 39;
-            this.label26.Text = "Size";
             // 
             // lbl_Aspect
             // 
-            this.lbl_Aspect.AutoSize = true;
+            resources.ApplyResources(this.lbl_Aspect, "lbl_Aspect");
             this.lbl_Aspect.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_Aspect.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Aspect.Location = new System.Drawing.Point(241, 36);
             this.lbl_Aspect.Name = "lbl_Aspect";
-            this.lbl_Aspect.Size = new System.Drawing.Size(72, 12);
-            this.lbl_Aspect.TabIndex = 43;
-            this.lbl_Aspect.Text = "Select a Title";
             // 
             // Label91
             // 
-            this.Label91.AutoSize = true;
+            resources.ApplyResources(this.Label91, "Label91");
             this.Label91.BackColor = System.Drawing.Color.Transparent;
-            this.Label91.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label91.Location = new System.Drawing.Point(152, 35);
             this.Label91.Name = "Label91";
-            this.Label91.Size = new System.Drawing.Size(83, 13);
-            this.Label91.TabIndex = 42;
-            this.Label91.Text = "Aspect Ratio:";
             // 
             // Label55
             // 
-            this.Label55.AutoSize = true;
+            resources.ApplyResources(this.Label55, "Label55");
             this.Label55.BackColor = System.Drawing.Color.Transparent;
-            this.Label55.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label55.ForeColor = System.Drawing.Color.Black;
-            this.Label55.Location = new System.Drawing.Point(13, 63);
             this.Label55.Name = "Label55";
-            this.Label55.Size = new System.Drawing.Size(44, 13);
-            this.Label55.TabIndex = 44;
-            this.Label55.Text = "Width:";
             // 
             // lbl_modulus
             // 
-            this.lbl_modulus.AutoSize = true;
+            resources.ApplyResources(this.lbl_modulus, "lbl_modulus");
             this.lbl_modulus.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_modulus.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_modulus.Location = new System.Drawing.Point(14, 147);
             this.lbl_modulus.Name = "lbl_modulus";
-            this.lbl_modulus.Size = new System.Drawing.Size(58, 13);
-            this.lbl_modulus.TabIndex = 51;
-            this.lbl_modulus.Text = "Modulus:";
             // 
             // drop_modulus
             // 
             this.drop_modulus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_modulus.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            resources.ApplyResources(this.drop_modulus, "drop_modulus");
             this.drop_modulus.FormattingEnabled = true;
             this.drop_modulus.Items.AddRange(new object[] {
-            "16",
-            "8",
-            "4",
-            "2"});
-            this.drop_modulus.Location = new System.Drawing.Point(110, 144);
+            resources.GetString("drop_modulus.Items"),
+            resources.GetString("drop_modulus.Items1"),
+            resources.GetString("drop_modulus.Items2"),
+            resources.GetString("drop_modulus.Items3")});
             this.drop_modulus.Name = "drop_modulus";
-            this.drop_modulus.Size = new System.Drawing.Size(110, 21);
-            this.drop_modulus.TabIndex = 52;
             // 
             // txt_displayWidth
             // 
-            this.txt_displayWidth.Location = new System.Drawing.Point(110, 171);
+            resources.ApplyResources(this.txt_displayWidth, "txt_displayWidth");
             this.txt_displayWidth.Name = "txt_displayWidth";
-            this.txt_displayWidth.Size = new System.Drawing.Size(100, 20);
-            this.txt_displayWidth.TabIndex = 53;
-            this.toolTip.SetToolTip(this.txt_displayWidth, "Display Width - Press \"Enter\" after entering a new value.");
+            this.toolTip.SetToolTip(this.txt_displayWidth, resources.GetString("txt_displayWidth.ToolTip"));
             this.txt_displayWidth.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_displayWidth_Keyup);
             // 
             // lbl_displayWidth
             // 
-            this.lbl_displayWidth.AutoSize = true;
+            resources.ApplyResources(this.lbl_displayWidth, "lbl_displayWidth");
             this.lbl_displayWidth.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_displayWidth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_displayWidth.Location = new System.Drawing.Point(14, 174);
             this.lbl_displayWidth.Name = "lbl_displayWidth";
-            this.lbl_displayWidth.Size = new System.Drawing.Size(90, 13);
-            this.lbl_displayWidth.TabIndex = 54;
-            this.lbl_displayWidth.Text = "Display Width:";
             // 
             // lbl_parWidth
             // 
-            this.lbl_parWidth.AutoSize = true;
+            resources.ApplyResources(this.lbl_parWidth, "lbl_parWidth");
             this.lbl_parWidth.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_parWidth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_parWidth.Location = new System.Drawing.Point(14, 200);
             this.lbl_parWidth.Name = "lbl_parWidth";
-            this.lbl_parWidth.Size = new System.Drawing.Size(71, 13);
-            this.lbl_parWidth.TabIndex = 56;
-            this.lbl_parWidth.Text = "PAR Width:";
             // 
             // txt_parWidth
             // 
-            this.txt_parWidth.Location = new System.Drawing.Point(110, 197);
+            resources.ApplyResources(this.txt_parWidth, "txt_parWidth");
             this.txt_parWidth.Name = "txt_parWidth";
-            this.txt_parWidth.Size = new System.Drawing.Size(100, 20);
-            this.txt_parWidth.TabIndex = 55;
-            this.toolTip.SetToolTip(this.txt_parWidth, "PAR Width - Press \"Enter\" after entering a new value.\r\n");
+            this.toolTip.SetToolTip(this.txt_parWidth, resources.GetString("txt_parWidth.ToolTip"));
             this.txt_parWidth.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_parWidth_Keyup);
             // 
             // lbl_parHeight
             // 
-            this.lbl_parHeight.AutoSize = true;
+            resources.ApplyResources(this.lbl_parHeight, "lbl_parHeight");
             this.lbl_parHeight.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_parHeight.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_parHeight.Location = new System.Drawing.Point(14, 226);
             this.lbl_parHeight.Name = "lbl_parHeight";
-            this.lbl_parHeight.Size = new System.Drawing.Size(75, 13);
-            this.lbl_parHeight.TabIndex = 58;
-            this.lbl_parHeight.Text = "PAR Height:";
             // 
             // txt_parHeight
             // 
-            this.txt_parHeight.Location = new System.Drawing.Point(110, 223);
+            resources.ApplyResources(this.txt_parHeight, "txt_parHeight");
             this.txt_parHeight.Name = "txt_parHeight";
-            this.txt_parHeight.Size = new System.Drawing.Size(100, 20);
-            this.txt_parHeight.TabIndex = 57;
-            this.toolTip.SetToolTip(this.txt_parHeight, "PAR Height - Press \"Enter\" after entering a new value.\r\n");
+            this.toolTip.SetToolTip(this.txt_parHeight, resources.GetString("txt_parHeight.ToolTip"));
             this.txt_parHeight.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_parHeight_Keyup);
             // 
             // check_KeepAR
             // 
-            this.check_KeepAR.AutoSize = true;
-            this.check_KeepAR.Location = new System.Drawing.Point(68, 85);
+            resources.ApplyResources(this.check_KeepAR, "check_KeepAR");
             this.check_KeepAR.Name = "check_KeepAR";
-            this.check_KeepAR.Size = new System.Drawing.Size(115, 17);
-            this.check_KeepAR.TabIndex = 59;
-            this.check_KeepAR.Text = "Keep Aspect Ratio";
             this.check_KeepAR.UseVisualStyleBackColor = true;
             this.check_KeepAR.CheckedChanged += new System.EventHandler(this.check_KeepAR_CheckedChanged);
             // 
             // check_customCrop
             // 
-            this.check_customCrop.AutoSize = true;
-            this.check_customCrop.Location = new System.Drawing.Point(387, 57);
+            resources.ApplyResources(this.check_customCrop, "check_customCrop");
             this.check_customCrop.Name = "check_customCrop";
-            this.check_customCrop.Size = new System.Drawing.Size(63, 17);
-            this.check_customCrop.TabIndex = 70;
-            this.check_customCrop.Text = "Custom:";
             this.check_customCrop.UseVisualStyleBackColor = true;
             this.check_customCrop.CheckedChanged += new System.EventHandler(this.check_customCrop_CheckedChanged);
             // 
             // check_autoCrop
             // 
-            this.check_autoCrop.AutoSize = true;
+            resources.ApplyResources(this.check_autoCrop, "check_autoCrop");
             this.check_autoCrop.Checked = true;
-            this.check_autoCrop.Location = new System.Drawing.Point(387, 33);
             this.check_autoCrop.Name = "check_autoCrop";
-            this.check_autoCrop.Size = new System.Drawing.Size(72, 17);
-            this.check_autoCrop.TabIndex = 69;
             this.check_autoCrop.TabStop = true;
-            this.check_autoCrop.Text = "Automatic";
             this.check_autoCrop.UseVisualStyleBackColor = true;
             this.check_autoCrop.CheckedChanged += new System.EventHandler(this.check_autoCrop_CheckedChanged);
             // 
             // crop_bottom
             // 
-            this.crop_bottom.Enabled = false;
+            resources.ApplyResources(this.crop_bottom, "crop_bottom");
             this.crop_bottom.Increment = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.crop_bottom.Location = new System.Drawing.Point(467, 146);
             this.crop_bottom.Maximum = new decimal(new int[] {
             1080,
             0,
             0,
             0});
             this.crop_bottom.Name = "crop_bottom";
-            this.crop_bottom.Size = new System.Drawing.Size(44, 20);
-            this.crop_bottom.TabIndex = 67;
             this.crop_bottom.ValueChanged += new System.EventHandler(this.crop_bottom_ValueChanged);
             // 
             // crop_top
             // 
-            this.crop_top.Enabled = false;
+            resources.ApplyResources(this.crop_top, "crop_top");
             this.crop_top.Increment = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.crop_top.Location = new System.Drawing.Point(467, 100);
             this.crop_top.Maximum = new decimal(new int[] {
             1080,
             0,
             0,
             0});
             this.crop_top.Name = "crop_top";
-            this.crop_top.Size = new System.Drawing.Size(44, 20);
-            this.crop_top.TabIndex = 64;
             this.crop_top.ValueChanged += new System.EventHandler(this.crop_top_ValueChanged);
             // 
             // crop_left
             // 
-            this.crop_left.Enabled = false;
+            resources.ApplyResources(this.crop_left, "crop_left");
             this.crop_left.Increment = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.crop_left.Location = new System.Drawing.Point(416, 122);
             this.crop_left.Maximum = new decimal(new int[] {
             1920,
             0,
             0,
             0});
             this.crop_left.Name = "crop_left";
-            this.crop_left.Size = new System.Drawing.Size(44, 20);
-            this.crop_left.TabIndex = 62;
             this.crop_left.ValueChanged += new System.EventHandler(this.crop_left_ValueChanged);
             // 
             // crop_right
             // 
-            this.crop_right.Enabled = false;
+            resources.ApplyResources(this.crop_right, "crop_right");
             this.crop_right.Increment = new decimal(new int[] {
             2,
             0,
             0,
             0});
-            this.crop_right.Location = new System.Drawing.Point(518, 122);
             this.crop_right.Maximum = new decimal(new int[] {
             1920,
             0,
             0,
             0});
             this.crop_right.Name = "crop_right";
-            this.crop_right.Size = new System.Drawing.Size(44, 20);
-            this.crop_right.TabIndex = 65;
             this.crop_right.ValueChanged += new System.EventHandler(this.crop_right_ValueChanged);
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
+            resources.ApplyResources(this.label8, "label8");
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(384, 13);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(37, 13);
-            this.label8.TabIndex = 60;
-            this.label8.Text = "Crop";
             // 
             // Label53
             // 
-            this.Label53.AutoSize = true;
+            resources.ApplyResources(this.Label53, "Label53");
             this.Label53.BackColor = System.Drawing.Color.Transparent;
-            this.Label53.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label53.Location = new System.Drawing.Point(465, 170);
             this.Label53.Name = "Label53";
-            this.Label53.Size = new System.Drawing.Size(48, 13);
-            this.Label53.TabIndex = 68;
-            this.Label53.Text = "Bottom";
             // 
             // Label52
             // 
-            this.Label52.AutoSize = true;
+            resources.ApplyResources(this.Label52, "Label52");
             this.Label52.BackColor = System.Drawing.Color.Transparent;
-            this.Label52.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label52.Location = new System.Drawing.Point(474, 85);
             this.Label52.Name = "Label52";
-            this.Label52.Size = new System.Drawing.Size(28, 13);
-            this.Label52.TabIndex = 63;
-            this.Label52.Text = "Top";
             // 
             // Label51
             // 
-            this.Label51.AutoSize = true;
+            resources.ApplyResources(this.Label51, "Label51");
             this.Label51.BackColor = System.Drawing.Color.Transparent;
-            this.Label51.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label51.Location = new System.Drawing.Point(561, 124);
             this.Label51.Name = "Label51";
-            this.Label51.Size = new System.Drawing.Size(36, 13);
-            this.Label51.TabIndex = 66;
-            this.Label51.Text = "Right";
             // 
             // Label15
             // 
-            this.Label15.AutoSize = true;
+            resources.ApplyResources(this.Label15, "Label15");
             this.Label15.BackColor = System.Drawing.Color.Transparent;
-            this.Label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label15.Location = new System.Drawing.Point(384, 124);
             this.Label15.Name = "Label15";
-            this.Label15.Size = new System.Drawing.Size(28, 13);
-            this.Label15.TabIndex = 61;
-            this.Label15.Text = "Left";
             // 
             // lbl_anamorphic
             // 
-            this.lbl_anamorphic.AutoSize = true;
+            resources.ApplyResources(this.lbl_anamorphic, "lbl_anamorphic");
             this.lbl_anamorphic.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_anamorphic.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_anamorphic.Location = new System.Drawing.Point(108, 251);
             this.lbl_anamorphic.Name = "lbl_anamorphic";
-            this.lbl_anamorphic.Size = new System.Drawing.Size(72, 12);
-            this.lbl_anamorphic.TabIndex = 74;
-            this.lbl_anamorphic.Text = "Select a Title";
             // 
             // lbl_anamprohicLbl
             // 
-            this.lbl_anamprohicLbl.AutoSize = true;
+            resources.ApplyResources(this.lbl_anamprohicLbl, "lbl_anamprohicLbl");
             this.lbl_anamprohicLbl.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_anamprohicLbl.Location = new System.Drawing.Point(14, 250);
             this.lbl_anamprohicLbl.Name = "lbl_anamprohicLbl";
-            this.lbl_anamprohicLbl.Size = new System.Drawing.Size(66, 13);
-            this.lbl_anamprohicLbl.TabIndex = 73;
-            this.lbl_anamprohicLbl.Text = "Anamorphic:";
             // 
             // PictureSettings
             // 
@@ -545,7 +409,7 @@ namespace Handbrake.Controls
             this.Controls.Add(this.Label91);
             this.Controls.Add(this.Label55);
             this.Name = "PictureSettings";
-            this.Size = new System.Drawing.Size(666, 279);
+            resources.ApplyResources(this, "$this");
             ((System.ComponentModel.ISupportInitialize)(this.text_height)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_width)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.crop_bottom)).EndInit();
