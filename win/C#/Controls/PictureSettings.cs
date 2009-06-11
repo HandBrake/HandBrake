@@ -40,10 +40,10 @@ namespace Handbrake.Controls
             lbl_src_res.Text = selectedTitle.Resolution.Width + " x " + selectedTitle.Resolution.Height;
 
             // Set the Recommended Cropping values
-            crop_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
-            crop_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
-            crop_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
-            crop_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
+            crop_top.Value = selectedTitle.AutoCropDimensions[0];
+            crop_bottom.Value = selectedTitle.AutoCropDimensions[1];
+            crop_left.Value = selectedTitle.AutoCropDimensions[2];
+            crop_right.Value = selectedTitle.AutoCropDimensions[3];
 
 
             // Set the Resolution Boxes
@@ -66,7 +66,7 @@ namespace Handbrake.Controls
             {
                 txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
                 txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
-                txt_displayWidth.Text = displayWidth().ToString();
+                txt_displayWidth.Text = displayWidth().ToString(Culture);
             }
 
             setMax();
@@ -242,7 +242,7 @@ namespace Handbrake.Controls
                         text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
                         txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
                         txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
-                        txt_displayWidth.Text = displayWidth().ToString();
+                        txt_displayWidth.Text = displayWidth().ToString(Culture);
                     }
    
                     darValue = calculateDar();
@@ -288,17 +288,17 @@ namespace Handbrake.Controls
             crop_bottom.Enabled = true;
             if (selectedTitle != null)
             {
-                crop_top.Text = selectedTitle.AutoCropDimensions[0].ToString();
-                crop_bottom.Text = selectedTitle.AutoCropDimensions[1].ToString();
-                crop_left.Text = selectedTitle.AutoCropDimensions[2].ToString();
-                crop_right.Text = selectedTitle.AutoCropDimensions[3].ToString();
+                crop_top.Value = selectedTitle.AutoCropDimensions[0];
+                crop_bottom.Value = selectedTitle.AutoCropDimensions[1];
+                crop_left.Value = selectedTitle.AutoCropDimensions[2];
+                crop_right.Value = selectedTitle.AutoCropDimensions[3];
             }
             else
             {
-                crop_left.Text = "0";
-                crop_right.Text = "0";
-                crop_top.Text = "0";
-                crop_bottom.Text = "0";
+                crop_left.Value = 0;
+                crop_right.Value = 0;
+                crop_top.Value = 0;
+                crop_bottom.Value = 0;
             }
         }
         private void crop_left_ValueChanged(object sender, EventArgs e)
@@ -354,17 +354,17 @@ namespace Handbrake.Controls
                     case "text_width":
                         double dw = (double)cropped_width * parW / parH;
                         dw = Math.Round(dw, 2);
-                        txt_displayWidth.Text = dw.ToString();
+                        txt_displayWidth.Text = dw.ToString(Culture);
                         break;
                     case "txt_parWidth":
                         double dwpw = (double)cropped_width * parW / parH;
                         dwpw = Math.Round(dwpw, 2);
-                        txt_displayWidth.Text = dwpw.ToString();
+                        txt_displayWidth.Text = dwpw.ToString(Culture);
                         break;
                     case "txt_parHeight":
                         double dwph = (double)cropped_width * parW / parH;
                         dwph = Math.Round(dwph, 2);
-                        txt_displayWidth.Text = dwph.ToString();
+                        txt_displayWidth.Text = dwph.ToString(Culture);
                         break;
                     case "txt_displayWidth":
                         txt_parWidth.Text = Math.Round(displayWidth, 0).ToString();
@@ -403,7 +403,7 @@ namespace Handbrake.Controls
                         break;
                     case "text_height":
                         heightChangeGuard = true;
-                        txt_displayWidth.Text = getDisplayWidthKeepDar().ToString();  //Changes DISPLAY WIDTH to keep DAR
+                        txt_displayWidth.Text = getDisplayWidthKeepDar().ToString(Culture);  //Changes DISPLAY WIDTH to keep DAR
                         txt_parWidth.Text = txt_displayWidth.Text;
                         txt_parHeight.Text = cropped_width.ToString();
                         break; 
