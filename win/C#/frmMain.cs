@@ -301,15 +301,8 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            // Remember each nodes expanded status so we can reload it
-            List<Boolean> nodeStatus = saveTreeViewState();
-            nodeStatus.Add(true);
-
             Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
             preset.ShowDialog();
-
-            // Now reload the TreeView states
-            loadTreeViewStates(nodeStatus);
         }
         #endregion
 
@@ -375,9 +368,7 @@ namespace Handbrake
             if (treeView_presets.SelectedNode != null)
             {
                 presetHandler.remove(treeView_presets.SelectedNode.Text);
-                List<Boolean> nodeStatus = saveTreeViewState();  // Remember each nodes expanded status so we can reload it
-                loadPresetPanel();
-                loadTreeViewStates(nodeStatus);   // Now reload the TreeView states
+                treeView_presets.Nodes.Remove(treeView_presets.SelectedNode); 
             }
             treeView_presets.Select();
         }
@@ -397,16 +388,8 @@ namespace Handbrake
         // Presets Management
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
-            // Remember each nodes expanded status so we can reload it
-            List<Boolean> nodeStatus = saveTreeViewState();
-            nodeStatus.Add(true);
-
-            // Now add the new preset
             Form preset = new frmAddPreset(this, QueryGenerator.generateTabbedComponentsQuery(this), presetHandler);
             preset.ShowDialog();
-
-            // Now reload the TreeView states
-            loadTreeViewStates(nodeStatus);
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
@@ -414,11 +397,10 @@ namespace Handbrake
             if (result == DialogResult.Yes)
             {
                 if (treeView_presets.SelectedNode != null)
+                {
                     presetHandler.remove(treeView_presets.SelectedNode.Text);
-
-                List<Boolean> nodeStatus = saveTreeViewState();  // Remember each nodes expanded status so we can reload it
-                loadPresetPanel();
-                loadTreeViewStates(nodeStatus); // Now reload the TreeView states
+                    treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
+                }
             }
             treeView_presets.Select();
         }
@@ -456,35 +438,6 @@ namespace Handbrake
         {
             selectPreset();
         }
-        private void selectPreset()
-        {
-            if (treeView_presets.SelectedNode != null)
-            {
-                // Ok, so, we've selected a preset. Now we want to load it.
-                string presetName = treeView_presets.SelectedNode.Text;
-                if (presetHandler.getPreset(presetName) != null)
-                {
-                    string query = presetHandler.getPreset(presetName).Query;
-                    Boolean loadPictureSettings = presetHandler.getPreset(presetName).PictureSettings;
-
-                    if (query != null)
-                    {
-                        //Ok, Reset all the H264 widgets before changing the preset
-                        x264Panel.reset2Defaults();
-
-                        // Send the query from the file to the Query Parser class
-                        QueryParser presetQuery = QueryParser.Parse(query);
-
-                        // Now load the preset
-                        PresetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
-
-                        // The x264 widgets will need updated, so do this now:
-                        x264Panel.X264_StandardizeOptString();
-                        x264Panel.X264_SetCurrentSettingsInPanel();
-                    }
-                }
-            }
-        }
         private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -515,36 +468,35 @@ namespace Handbrake
                 }
             }
         }
-        private List<Boolean> saveTreeViewState()
+        private void selectPreset()
         {
-            // Remember each nodes expanded status so we can reload it
-            List<Boolean> nodeStatus = new List<Boolean>();
-            foreach (TreeNode node in treeView_presets.Nodes)
+            if (treeView_presets.SelectedNode != null)
             {
-                nodeStatus.Add(node.IsExpanded);
-                foreach (TreeNode subNode in node.Nodes)
-                    nodeStatus.Add(node.IsExpanded);
-            }
-            return nodeStatus;
-        }
-        private void loadTreeViewStates(List<Boolean> nodeStatus)
-        {
-            // And finally, re-expand any of the nodes if required
-            int i = 0;
-            foreach (TreeNode node in treeView_presets.Nodes)
-            {
-                if (nodeStatus[i])
-                    node.Expand();
-
-                foreach (TreeNode subNode in node.Nodes)
+                // Ok, so, we've selected a preset. Now we want to load it.
+                string presetName = treeView_presets.SelectedNode.Text;
+                if (presetHandler.getPreset(presetName) != null)
                 {
-                    if (nodeStatus[i])
-                        subNode.Expand();
-                }
+                    string query = presetHandler.getPreset(presetName).Query;
+                    Boolean loadPictureSettings = presetHandler.getPreset(presetName).PictureSettings;
 
-                i++;
+                    if (query != null)
+                    {
+                        //Ok, Reset all the H264 widgets before changing the preset
+                        x264Panel.reset2Defaults();
+
+                        // Send the query from the file to the Query Parser class
+                        QueryParser presetQuery = QueryParser.Parse(query);
+
+                        // Now load the preset
+                        PresetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
+
+                        // The x264 widgets will need updated, so do this now:
+                        x264Panel.X264_StandardizeOptString();
+                        x264Panel.X264_SetCurrentSettingsInPanel();
+                    }
+                }
             }
-        }
+        }      
         private void loadNormalPreset()
         {
             foreach (TreeNode treenode in treeView_presets.Nodes)

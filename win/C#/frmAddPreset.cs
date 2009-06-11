@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Handbrake
@@ -31,7 +32,10 @@ namespace Handbrake
 
             if (presetCode.addPreset(txt_preset_name.Text.Trim(), query, pictureSettings))
             {
-                frmMainWindow.loadPresetPanel();
+                TreeNode preset_treeview = new TreeNode(txt_preset_name.Text.Trim()) { ForeColor = Color.Black };
+                frmMainWindow.treeView_presets.Nodes.Add(preset_treeview);
+
+                //frmMainWindow.loadPresetPanel();
                 this.Close();
             }
         }

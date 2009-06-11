@@ -8,6 +8,7 @@ namespace Handbrake.Controls
 {
     // TODO
     // - Tie in the cropping controls.
+    // - Cleanup this code. It's a bit messy.
     
     public partial class PictureSettings : UserControl
     {

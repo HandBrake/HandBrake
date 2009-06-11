@@ -11,7 +11,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Xml.Serialization;
-using System.Collections;
 
 namespace Handbrake.Presets
 {
