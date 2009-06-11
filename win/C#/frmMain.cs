@@ -31,8 +31,6 @@ namespace Handbrake
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private Form splash;
-        public int maxWidth;
-        public int maxHeight;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -483,8 +481,6 @@ namespace Handbrake
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
-
-                        pictureSettings.setMax();
                     }
                 }
             }

@@ -135,7 +135,7 @@ namespace Handbrake.Controls
             // lbl_max
             // 
             this.lbl_max.AutoSize = true;
-            this.lbl_max.Location = new System.Drawing.Point(273, 80);
+            this.lbl_max.Location = new System.Drawing.Point(279, 61);
             this.lbl_max.Name = "lbl_max";
             this.lbl_max.Size = new System.Drawing.Size(34, 13);
             this.lbl_max.TabIndex = 47;
@@ -167,7 +167,7 @@ namespace Handbrake.Controls
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
             this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(13, 91);
+            this.label6.Location = new System.Drawing.Point(14, 120);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(80, 13);
             this.label6.TabIndex = 45;
@@ -183,7 +183,7 @@ namespace Handbrake.Controls
             "Strict",
             "Loose",
             "Custom"});
-            this.drp_anamorphic.Location = new System.Drawing.Point(109, 88);
+            this.drp_anamorphic.Location = new System.Drawing.Point(110, 117);
             this.drp_anamorphic.Name = "drp_anamorphic";
             this.drp_anamorphic.Size = new System.Drawing.Size(110, 21);
             this.drp_anamorphic.TabIndex = 46;
@@ -239,7 +239,7 @@ namespace Handbrake.Controls
             this.lbl_modulus.AutoSize = true;
             this.lbl_modulus.BackColor = System.Drawing.Color.Transparent;
             this.lbl_modulus.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_modulus.Location = new System.Drawing.Point(13, 118);
+            this.lbl_modulus.Location = new System.Drawing.Point(14, 147);
             this.lbl_modulus.Name = "lbl_modulus";
             this.lbl_modulus.Size = new System.Drawing.Size(58, 13);
             this.lbl_modulus.TabIndex = 51;
@@ -255,14 +255,14 @@ namespace Handbrake.Controls
             "8",
             "4",
             "2"});
-            this.drop_modulus.Location = new System.Drawing.Point(109, 115);
+            this.drop_modulus.Location = new System.Drawing.Point(110, 144);
             this.drop_modulus.Name = "drop_modulus";
             this.drop_modulus.Size = new System.Drawing.Size(110, 21);
             this.drop_modulus.TabIndex = 52;
             // 
             // txt_displayWidth
             // 
-            this.txt_displayWidth.Location = new System.Drawing.Point(109, 142);
+            this.txt_displayWidth.Location = new System.Drawing.Point(110, 171);
             this.txt_displayWidth.Name = "txt_displayWidth";
             this.txt_displayWidth.Size = new System.Drawing.Size(100, 20);
             this.txt_displayWidth.TabIndex = 53;
@@ -274,7 +274,7 @@ namespace Handbrake.Controls
             this.lbl_displayWidth.AutoSize = true;
             this.lbl_displayWidth.BackColor = System.Drawing.Color.Transparent;
             this.lbl_displayWidth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_displayWidth.Location = new System.Drawing.Point(13, 145);
+            this.lbl_displayWidth.Location = new System.Drawing.Point(14, 174);
             this.lbl_displayWidth.Name = "lbl_displayWidth";
             this.lbl_displayWidth.Size = new System.Drawing.Size(90, 13);
             this.lbl_displayWidth.TabIndex = 54;
@@ -285,7 +285,7 @@ namespace Handbrake.Controls
             this.lbl_parWidth.AutoSize = true;
             this.lbl_parWidth.BackColor = System.Drawing.Color.Transparent;
             this.lbl_parWidth.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_parWidth.Location = new System.Drawing.Point(13, 171);
+            this.lbl_parWidth.Location = new System.Drawing.Point(14, 200);
             this.lbl_parWidth.Name = "lbl_parWidth";
             this.lbl_parWidth.Size = new System.Drawing.Size(71, 13);
             this.lbl_parWidth.TabIndex = 56;
@@ -293,7 +293,7 @@ namespace Handbrake.Controls
             // 
             // txt_parWidth
             // 
-            this.txt_parWidth.Location = new System.Drawing.Point(109, 168);
+            this.txt_parWidth.Location = new System.Drawing.Point(110, 197);
             this.txt_parWidth.Name = "txt_parWidth";
             this.txt_parWidth.Size = new System.Drawing.Size(100, 20);
             this.txt_parWidth.TabIndex = 55;
@@ -305,7 +305,7 @@ namespace Handbrake.Controls
             this.lbl_parHeight.AutoSize = true;
             this.lbl_parHeight.BackColor = System.Drawing.Color.Transparent;
             this.lbl_parHeight.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_parHeight.Location = new System.Drawing.Point(13, 197);
+            this.lbl_parHeight.Location = new System.Drawing.Point(14, 226);
             this.lbl_parHeight.Name = "lbl_parHeight";
             this.lbl_parHeight.Size = new System.Drawing.Size(75, 13);
             this.lbl_parHeight.TabIndex = 58;
@@ -313,7 +313,7 @@ namespace Handbrake.Controls
             // 
             // txt_parHeight
             // 
-            this.txt_parHeight.Location = new System.Drawing.Point(109, 194);
+            this.txt_parHeight.Location = new System.Drawing.Point(110, 223);
             this.txt_parHeight.Name = "txt_parHeight";
             this.txt_parHeight.Size = new System.Drawing.Size(100, 20);
             this.txt_parHeight.TabIndex = 57;
@@ -323,11 +323,11 @@ namespace Handbrake.Controls
             // check_KeepAR
             // 
             this.check_KeepAR.AutoSize = true;
-            this.check_KeepAR.Location = new System.Drawing.Point(276, 60);
+            this.check_KeepAR.Location = new System.Drawing.Point(68, 85);
             this.check_KeepAR.Name = "check_KeepAR";
-            this.check_KeepAR.Size = new System.Drawing.Size(69, 17);
+            this.check_KeepAR.Size = new System.Drawing.Size(115, 17);
             this.check_KeepAR.TabIndex = 59;
-            this.check_KeepAR.Text = "Keep AR";
+            this.check_KeepAR.Text = "Keep Aspect Ratio";
             this.check_KeepAR.UseVisualStyleBackColor = true;
             this.check_KeepAR.CheckedChanged += new System.EventHandler(this.check_KeepAR_CheckedChanged);
             // 
@@ -358,6 +358,11 @@ namespace Handbrake.Controls
             // crop_bottom
             // 
             this.crop_bottom.Enabled = false;
+            this.crop_bottom.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.crop_bottom.Location = new System.Drawing.Point(467, 146);
             this.crop_bottom.Maximum = new decimal(new int[] {
             1080,
@@ -367,10 +372,16 @@ namespace Handbrake.Controls
             this.crop_bottom.Name = "crop_bottom";
             this.crop_bottom.Size = new System.Drawing.Size(44, 20);
             this.crop_bottom.TabIndex = 67;
+            this.crop_bottom.ValueChanged += new System.EventHandler(this.crop_bottom_ValueChanged);
             // 
             // crop_top
             // 
             this.crop_top.Enabled = false;
+            this.crop_top.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.crop_top.Location = new System.Drawing.Point(467, 100);
             this.crop_top.Maximum = new decimal(new int[] {
             1080,
@@ -380,10 +391,16 @@ namespace Handbrake.Controls
             this.crop_top.Name = "crop_top";
             this.crop_top.Size = new System.Drawing.Size(44, 20);
             this.crop_top.TabIndex = 64;
+            this.crop_top.ValueChanged += new System.EventHandler(this.crop_top_ValueChanged);
             // 
             // crop_left
             // 
             this.crop_left.Enabled = false;
+            this.crop_left.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.crop_left.Location = new System.Drawing.Point(416, 122);
             this.crop_left.Maximum = new decimal(new int[] {
             1920,
@@ -393,10 +410,16 @@ namespace Handbrake.Controls
             this.crop_left.Name = "crop_left";
             this.crop_left.Size = new System.Drawing.Size(44, 20);
             this.crop_left.TabIndex = 62;
+            this.crop_left.ValueChanged += new System.EventHandler(this.crop_left_ValueChanged);
             // 
             // crop_right
             // 
             this.crop_right.Enabled = false;
+            this.crop_right.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.crop_right.Location = new System.Drawing.Point(518, 122);
             this.crop_right.Maximum = new decimal(new int[] {
             1920,
@@ -406,6 +429,7 @@ namespace Handbrake.Controls
             this.crop_right.Name = "crop_right";
             this.crop_right.Size = new System.Drawing.Size(44, 20);
             this.crop_right.TabIndex = 65;
+            this.crop_right.ValueChanged += new System.EventHandler(this.crop_right_ValueChanged);
             // 
             // label8
             // 
@@ -467,7 +491,7 @@ namespace Handbrake.Controls
             this.lbl_anamorphic.AutoSize = true;
             this.lbl_anamorphic.BackColor = System.Drawing.Color.Transparent;
             this.lbl_anamorphic.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_anamorphic.Location = new System.Drawing.Point(107, 222);
+            this.lbl_anamorphic.Location = new System.Drawing.Point(108, 251);
             this.lbl_anamorphic.Name = "lbl_anamorphic";
             this.lbl_anamorphic.Size = new System.Drawing.Size(72, 12);
             this.lbl_anamorphic.TabIndex = 74;
@@ -477,7 +501,7 @@ namespace Handbrake.Controls
             // 
             this.lbl_anamprohicLbl.AutoSize = true;
             this.lbl_anamprohicLbl.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_anamprohicLbl.Location = new System.Drawing.Point(13, 221);
+            this.lbl_anamprohicLbl.Location = new System.Drawing.Point(14, 250);
             this.lbl_anamprohicLbl.Name = "lbl_anamprohicLbl";
             this.lbl_anamprohicLbl.Size = new System.Drawing.Size(66, 13);
             this.lbl_anamprohicLbl.TabIndex = 73;

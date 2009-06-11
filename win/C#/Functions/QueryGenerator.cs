@@ -118,7 +118,7 @@ namespace Handbrake.Functions
             #region Picture Settings Tab
 
             // Use MaxWidth for built-in presets and width for user settings.
-            if (mainWindow.maxWidth == 0)
+            if (mainWindow.pictureSettings.maxWidth == 0)
             {
 
                 if (mainWindow.pictureSettings.text_width.Text != "")
@@ -132,7 +132,7 @@ namespace Handbrake.Functions
             }
 
             // Use MaxHeight for built-in presets and height for user settings.
-            if (mainWindow.maxHeight == 0)
+            if (mainWindow.pictureSettings.maxHeight == 0)
             {
                 if (mainWindow.pictureSettings.text_height.Text != "")
                     if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic

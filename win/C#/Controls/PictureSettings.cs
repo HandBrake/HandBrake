@@ -6,18 +6,16 @@ using Handbrake.Parsing;
 namespace Handbrake.Controls
 {
     // TODO
-
-    // - Fix MAX Width / Height Code.
     // - Tie in the cropping controls.
     
     public partial class PictureSettings : UserControl
     {
         // Globals
-        int maxWidth, maxHeight;
+        public int maxWidth, maxHeight;
         int widthVal, heightVal;
         private double darValue;
-        private double storageAspect = 0; // Storage Aspect Cache for current source and title
-        public Title selectedTitle { get; set; }
+        private double storageAspect; // Storage Aspect Cache for current source and title
+        public Title selectedTitle { private get; set; }
         private Boolean heightChangeGuard;
         private Boolean looseAnamorphicHeightGuard;
         private Boolean heightModJumpGaurd;
@@ -61,14 +59,14 @@ namespace Handbrake.Controls
                 text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
             }
 
-
-
             if (drp_anamorphic.SelectedIndex == 3)
             {
                 txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
                 txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
                 txt_displayWidth.Text = displayWidth().ToString();
             }
+
+            setMax();
         }
         public void setMax()
         {
@@ -83,6 +81,9 @@ namespace Handbrake.Controls
         // Basic Picture Setting Controls
         private void text_width_ValueChanged(object sender, EventArgs e)
         {
+            maxWidth = 0;
+            setMax();
+            
             // Get the Modulus
             int mod;
             int.TryParse(drop_modulus.SelectedItem.ToString(), out mod);
@@ -94,7 +95,7 @@ namespace Handbrake.Controls
             switch (drp_anamorphic.SelectedIndex)
             {
                 case 0:
-                    if (calculateUnchangeValue(true) != -1)
+                    if (calculateUnchangeValue(true) != -1 && check_KeepAR.Checked)
                         text_height.Value = calculateUnchangeValue(true);
                     break;
                 case 1:
@@ -111,6 +112,9 @@ namespace Handbrake.Controls
         }
         private void text_height_ValueChanged(object sender, EventArgs e)
         {
+            maxHeight = 0;
+            setMax();
+
             // Get the Modulus
             int mod;
             int.TryParse(drop_modulus.SelectedItem.ToString(), out mod);
@@ -176,22 +180,21 @@ namespace Handbrake.Controls
             switch (drp_anamorphic.SelectedIndex)
             {
                 case 0: // None
-                    text_height.BackColor = Color.White;
-                    text_width.BackColor = Color.White;
                     text_height.Enabled = true;
                     text_width.Enabled = true;
                     check_KeepAR.CheckState = CheckState.Checked;
                     check_KeepAR.Enabled = true;
                     disableCustomAnaControls();
-                    text_width.Text = widthVal.ToString();
-                    text_height.Text = heightVal.ToString();
+                    if (selectedTitle != null)
+                    {
+                        text_width.Value = selectedTitle.Resolution.Width;
+                        text_height.Value = selectedTitle.Resolution.Height;
+                    }
                     check_KeepAR.Enabled = true;
                     lbl_anamorphic.Text = "";
                     lbl_anamprohicLbl.Visible = false;
                     break;
                 case 1: // Strict
-                    text_height.BackColor = Color.LightGray;
-                    text_width.BackColor = Color.LightGray;
                     if (selectedTitle != null)
                     {
                         heightModJumpGaurd = true;
@@ -210,13 +213,11 @@ namespace Handbrake.Controls
                     disableCustomAnaControls();
                     storageAspect = 0;
                     text_height.Enabled = false;
-                    text_height.BackColor = Color.LightGray;
                     text_width.Enabled = true;
-                    text_width.BackColor = Color.White;
                     if (selectedTitle != null)
                     {
                         heightModJumpGaurd = true;
-                        text_width.Value = selectedTitle.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
+                        text_width.Value = selectedTitle.Resolution.Width;
                         text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
                     }
                     lbl_anamorphic.Text = looseAnamorphic();
@@ -226,8 +227,6 @@ namespace Handbrake.Controls
 
                     // Display Elements
                     enableCustomAnaControls();
-                    text_height.BackColor = Color.White;
-                    text_width.BackColor = Color.White;
                     text_height.Enabled = true;
                     text_width.Enabled = true;
 
@@ -270,7 +269,7 @@ namespace Handbrake.Controls
                 customAnamorphic(txt_parWidth);
         }
         
-        // Cropping Control
+        // Cropping Controls
         private void check_autoCrop_CheckedChanged(object sender, EventArgs e)
         {
             crop_left.Enabled = false;
@@ -298,6 +297,26 @@ namespace Handbrake.Controls
                 crop_top.Text = "0";
                 crop_bottom.Text = "0";
             }
+        }
+        private void crop_left_ValueChanged(object sender, EventArgs e)
+        {
+            if (crop_left.Value % 2 != 0)
+                crop_left.Value++;
+        }
+        private void crop_right_ValueChanged(object sender, EventArgs e)
+        {
+            if (crop_right.Value % 2 != 0)
+                crop_right.Value++;
+        }
+        private void crop_top_ValueChanged(object sender, EventArgs e)
+        {
+            if (crop_top.Value % 2 != 0)
+                crop_top.Value++;
+        }
+        private void crop_bottom_ValueChanged(object sender, EventArgs e)
+        {
+            if (crop_bottom.Value % 2 != 0)
+                crop_bottom.Value++;
         }
 
         // Custom Anamorphic Code

@@ -88,41 +88,43 @@ namespace Handbrake.Functions
                     mainWindow.pictureSettings.crop_left.Value = left;
                     mainWindow.pictureSettings.crop_right.Value = right;
                 }
-
-                if (presetQuery.Width != 0)
-                    mainWindow.pictureSettings.text_width.Text = presetQuery.Width.ToString();
-
-                if (presetQuery.Height != 0)
-                    mainWindow.pictureSettings.text_height.Text = presetQuery.Height.ToString();
             }
 
             // Set the anamorphic mode 0,1,2,3
             mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
-
             // Custom Anamorphic Controls
             mainWindow.pictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
-
             mainWindow.pictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
             mainWindow.pictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
             mainWindow.pictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
             mainWindow.pictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
 
- 
-            // Set the public max width and max height varibles in frmMain
-            // These are used by the query generator to determine if it should use -X or -w  / -Y or -h
+
+            // Reset maxWidth and MaxHeight to 0
+            mainWindow.pictureSettings.maxWidth = 0;
+            mainWindow.pictureSettings.maxHeight = 0;
+
+            // Set the width and height
+            if (presetQuery.Width != 0)
+                mainWindow.pictureSettings.text_width.Value = presetQuery.Width;
+
+            if (presetQuery.Height != 0)
+                mainWindow.pictureSettings.text_height.Value = presetQuery.Height;
+
+            // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
             {
-                mainWindow.pictureSettings.text_width.Text = presetQuery.MaxWidth.ToString();
-                mainWindow.maxWidth = presetQuery.MaxWidth;
+                mainWindow.pictureSettings.text_width.Value = presetQuery.MaxWidth;
+                mainWindow.pictureSettings.maxWidth = presetQuery.MaxWidth;
             }
 
             if (presetQuery.MaxHeight != 0)
             {
-                mainWindow.pictureSettings.text_height.Text = presetQuery.MaxHeight.ToString();
-                mainWindow.maxHeight = presetQuery.MaxHeight;
+                mainWindow.pictureSettings.text_height.Value = presetQuery.MaxHeight;
+                mainWindow.pictureSettings.maxHeight = presetQuery.MaxHeight;
             }
-
+            mainWindow.pictureSettings.setMax();
 
             #endregion
 
