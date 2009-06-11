@@ -520,6 +520,9 @@ namespace Handbrake.Controls
                 if (selectedTitle.Resolution.Width < returnVal)
                     returnVal = selectedTitle.Resolution.Width;
 
+            if (returnVal < 64)
+                returnVal = 64;
+
             // Set the global tracker
             widthVal = (int)returnVal;
 
@@ -535,8 +538,11 @@ namespace Handbrake.Controls
                 if (selectedTitle.Resolution.Height < returnVal)
                     returnVal = selectedTitle.Resolution.Height;
 
+            if (returnVal < 64)
+                returnVal = 64;
+
             // Set the global tracker
-            heightVal = (int)returnVal;     // TODO THIS IS CAUSING PROBLEM
+            heightVal = (int)returnVal;
 
             return returnVal;
         }
