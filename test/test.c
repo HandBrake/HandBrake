@@ -34,8 +34,6 @@ static char * output      = NULL;
 static char * format      = NULL;
 static int    titleindex  = 1;
 static int    longest_title = 0;
-static int    subtitle_scan = 0;
-static int    subtitle_force = 0;
 static char * native_language = NULL;
 static int    twoPass     = 0;
 static int    deinterlace           = 0;
@@ -64,7 +62,11 @@ static char * acodecs     = NULL;
 static char * anames      = NULL;
 static int    default_acodec = HB_ACODEC_FAAC;
 static int    default_abitrate = 160;
-static int    sub         = 0;
+static char * subtracks   = NULL;
+static char * subforce    = NULL;
+static char * subburn     = NULL;
+static char * subdefault  = NULL;
+static int    subtitle_scan = 0;
 static int    width       = 0;
 static int    height      = 0;
 static int    crop[4]     = { -1,-1,-1,-1 };
@@ -388,8 +390,10 @@ static void PrintTitleInfo( hb_title_t * title )
     for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
     {
         subtitle = hb_list_item( title->list_subtitle, i );
-        fprintf( stderr, "    + %d, %s (iso639-2: %s)\n", i + 1, subtitle->lang,
-            subtitle->iso639_2);
+        fprintf( stderr, "    + %d, %s (iso639-2: %s) (%s)\n", 
+                 i + 1, subtitle->lang,
+                 subtitle->iso639_2,
+                 (subtitle->format == TEXTSUB) ? "Text" : "Bitmap");
     }
 
     if(title->detected_interlacing)
@@ -398,6 +402,44 @@ static void PrintTitleInfo( hb_title_t * title )
         fprintf( stderr, "  + combing detected, may be interlaced or telecined\n");
     }
 
+}
+
+static int search_csv( const char * list, char * needle )
+{
+    char * token;
+    char * copy_list;
+    int pos = 1;
+
+    if ( list == NULL || needle == NULL )
+        return 0;
+
+    copy_list = strdup( list );
+    token = strtok(copy_list, ",");
+    if (token == NULL)
+        token = copy_list;
+    while( token != NULL )
+    {
+        if( !strcasecmp(token, needle ) )
+        {
+            free( copy_list );
+            return pos;
+        }
+        pos++;
+        token = strtok(NULL, ",");
+    }
+    free( copy_list );
+    return 0;
+}
+
+static int test_sub_list( const char * list, char * needle, int pos )
+{
+    if ( list == NULL || needle == NULL )
+        return 0;
+
+    if ( list[0] == '\0' && pos == 1 )
+        return 1;
+
+    return search_csv( list, needle );
 }
 
 static int HandleEvents( hb_handle_t * h )
@@ -428,6 +470,7 @@ static int HandleEvents( hb_handle_t * h )
             hb_title_t * title;
             hb_job_t   * job;
             int i;
+            int sub_burned = 0;
 
             /* Audio argument string parsing variables */
             int acodec = 0;
@@ -446,8 +489,8 @@ static int HandleEvents( hb_handle_t * h )
                 die = 1;
                 break;
             }
-	    if( longest_title )
-	    {
+	        if( longest_title )
+	        {
                 int i;
                 int longest_title_idx=0;
                 int longest_title_pos=-1;
@@ -1585,27 +1628,111 @@ static int HandleEvents( hb_handle_t * h )
                          job->vbitrate );
             }
 
-            if( sub )
+            if( subtracks )
             {
-                hb_subtitle_t *subtitle;
-                /* 
-                 * Find the subtitle with the same track as "sub" and
-                 * add that to the job subtitle list
-                 */
-                subtitle = hb_list_item( title->list_subtitle, sub-1 );
-                if( subtitle ) {
-                    if( subtitle_force ) {
-                        subtitle->config.force = subtitle_force;
+                int pos;
+
+                pos = search_csv(subtracks, "scan");
+                if ( pos )
+                {
+                    int                    burn, force, def;
+
+                    burn = test_sub_list(subburn, "scan", pos);
+                    force = test_sub_list(subforce, "scan", pos);
+                    def = test_sub_list(subdefault, "scan", pos);
+
+                    if ( !burn && mux == HB_MUX_MKV )
+                    {
+                        job->select_subtitle_config.dest = PASSTHRUSUB;
                     }
-                    hb_list_add( job->list_subtitle, subtitle );
-                } else {
-                    fprintf( stderr, "Could not find subtitle track %d, skipped\n", sub );
+                    if ( !( !burn && mux == HB_MUX_MP4 ) )
+                    {
+                        job->select_subtitle_config.force = force;
+                        job->select_subtitle_config.default_track = def;
+                        subtitle_scan = 1;
+                        sub_burned = burn;
+                    }
+                }
+
+                char * save;
+                char * token = strtok_r(subtracks, ",", &save);
+                if (token == NULL)
+                    token = subtracks;
+                pos = 0;
+                while( token != NULL )
+                {
+                    pos++;
+                    if( !strcasecmp(token, "scan" ) )
+                    {
+                        token = strtok_r(NULL, ",", &save);
+                        continue;
+                    }
+                    else
+                    {
+                        hb_subtitle_t        * subtitle;
+                        hb_subtitle_config_t   sub_config;
+                        int                    track;
+                        int                    burn, force, def;
+
+                        track = atoi(token) - 1;
+                        subtitle = hb_list_item(title->list_subtitle, track);
+                        if( subtitle == NULL ) 
+                        {
+                            fprintf( stderr, "Could not find subtitle track %d, skipped\n", track );
+                            token = strtok_r(NULL, ",", &save);
+                            continue;
+                        }
+                        sub_config = subtitle->config;
+
+                        burn = test_sub_list(subburn, token, pos);
+                        force = test_sub_list(subforce, token, pos);
+                        def = test_sub_list(subdefault, token, pos);
+
+                        if ( !burn && mux == HB_MUX_MKV && 
+                             subtitle->format == PICTURESUB)
+                        {
+                            sub_config.dest = PASSTHRUSUB;
+                        }
+                        else if (!burn && mux == HB_MUX_MP4 &&
+                             subtitle->format == PICTURESUB)
+                        {
+                            // Skip any non-burned vobsubs when output is mp4
+                            token = strtok_r(NULL, ",", &save);
+                            continue;
+                        }
+                        else if ( burn && subtitle->format == PICTURESUB )
+                        {
+                            // Only allow one subtitle to be burned into video
+                            if ( sub_burned )
+                            {
+                                token = strtok_r(NULL, ",", &save);
+                                continue;
+                            }
+                            sub_burned = 1;
+                        }
+
+                        sub_config.force = force;
+                        sub_config.default_track = def;
+                        hb_subtitle_add( job, &sub_config, track );
+                    }
+                    token = strtok_r(NULL, ",", &save);
                 }
             }
 
             if( native_language )
             {
                 job->native_language = strdup( native_language );
+                if ( subtracks == NULL )
+                {
+                    if ( subforce )
+                        job->select_subtitle_config.force = 1;
+
+                    if ( subburn == NULL && mux != HB_MUX_MP4 )
+                        job->select_subtitle_config.force = 1;
+
+                    if ( subdefault )
+                        job->select_subtitle_config.default_track = 1;
+                }
             }
 
             if( job->mux )
@@ -1688,10 +1815,6 @@ static int HandleEvents( hb_handle_t * h )
                          "subtitles if found for foreign language segments\n");
                 job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
                 *(job->select_subtitle) = NULL;
-
-                job->select_subtitle_config.dest = RENDERSUB;
-                job->select_subtitle_config.default_track = 0;
-                job->select_subtitle_config.force = subtitle_force;
 
                 /*
                  * Add the pre-scan job
@@ -2036,19 +2159,39 @@ static void ShowHelp()
     "\n"
 
     "### Subtitle Options------------------------------------------------------------\n\n"
-    "    -s, --subtitle <number> Select subtitle (default: none)\n"
-    "    -U, --subtitle-scan     Scan for subtitles in an extra 1st pass, and choose\n"
-    "                            the one that's only used 10 percent of the time\n"
-    "                            or less. This should locate subtitles for short\n"
-    "                            foreign language segments. Best used in conjunction\n"
-    "                            with --subtitle-forced.\n"
+    "    -s, --subtitle <string> Select subtitle track(s), separated by commas\n"
+    "                            More than one output track can be used for one\n"
+    "                            input.\n"
+    "                            (\"1,2,3\" for multiple tracks.\n"
+    "                            A special track name \"scan\" adds an extra 1st pass.\n"
+    "                            This extra pass scans subtitles matching the\n"
+    "                            language of the first audio or the language \n"
+    "                            selected by --native-language.\n"
+    "                            The one that's only used 10 percent of the time\n"
+    "                            or less is selected. This should locate subtitles\n"
+    "                            for short foreign language segments. Best used in\n"
+    "                            conjunction with --subtitle-forced.\n"
     "    -F, --subtitle-forced   Only display subtitles from the selected stream if\n"
-    "                            the subtitle has the forced flag set. May be used in\n"
-    "                            conjunction with --subtitle-scan to auto-select\n"
+    "          <string>          the subtitle has the forced flag set. May be used in\n"
+    "                            conjunction with \"scan\" track to auto-select\n"
     "                            a stream if it contains forced subtitles.\n"
+    "                            Separated by commas for more than one audio track.\n"
+    "                            (\"1,2,3\" for multiple tracks.\n"
+    "                            If \"string\" is omitted, the first trac is forced.\n"
+    "        --subtitle-burn     \"Burn\" the selected subtitle into the video track\n"
+    "          <number>          If \"number\" is omitted, the first trac is burned.\n"
+    "        --subtitle-default  Flag the selected subtitle as the default subtitle\n"
+    "          <number>          to be displayed upon playback.  Settings no default\n"
+    "                            means no subtitle will be automatically displayed\n"
+    "                            If \"number\" is omitted, the first trac is default.\n"
     "    -N, --native-language   Select subtitles with this language if it does not\n"
     "          <string>          match the Audio language. Provide the language's\n"
     "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"
+    "                            --native-language may be used in conjunction with\n"
+    "                            a subtitle \"scan\", in which case all tracks\n"
+    "                            matching native language will be scanned.\n"
+    "                            Otherwise --native-language is mutually exclusive\n"
+    "                            with --subtitle\n"
 
 
     "\n"
@@ -2101,15 +2244,17 @@ static void ShowPresets()
 static int ParseOptions( int argc, char ** argv )
 {
     
-    #define PREVIEWS 257
-    #define START_AT_PREVIEW 258
-    #define STOP_AT 259
-    #define ANGLE 260
-    #define DVDNAV 261
-    #define DISPLAY_WIDTH 262
-    #define PIXEL_ASPECT 263
-    #define MODULUS 264
+    #define PREVIEWS            257
+    #define START_AT_PREVIEW    258
+    #define STOP_AT             259
+    #define ANGLE               260
+    #define DVDNAV              261
+    #define DISPLAY_WIDTH       262
+    #define PIXEL_ASPECT        263
+    #define MODULUS             264
     #define KEEP_DISPLAY_ASPECT 265
+    #define SUB_BURNED          266
+    #define SUB_DEFAULT         267
     
     for( ;; )
     {
@@ -2137,8 +2282,9 @@ static int ParseOptions( int argc, char ** argv )
             { "mixdown",     required_argument, NULL,    '6' },
             { "drc",         required_argument, NULL,    'D' },
             { "subtitle",    required_argument, NULL,    's' },
-            { "subtitle-scan", no_argument,     NULL,    'U' },
-            { "subtitle-forced", no_argument,   NULL,    'F' },
+            { "subtitle-forced", optional_argument,   NULL,    'F' },
+            { "subtitle-burned", optional_argument,   NULL,    SUB_BURNED },
+            { "subtitle-default", optional_argument,   NULL,    SUB_DEFAULT },
             { "native-language", required_argument, NULL,'N' },
 
             { "encoder",     required_argument, NULL,    'e' },
@@ -2326,13 +2472,40 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case 's':
-                sub = atoi( optarg );
-                break;
-            case 'U':
-                subtitle_scan = 1;
+                if( optarg != NULL )
+                {
+                    subtracks = strdup( optarg );
+                }
                 break;
             case 'F':
-                subtitle_force = 1;
+                if( optarg != NULL )
+                {
+                    subforce = strdup( optarg );
+                }
+                else
+                {
+                    subforce = "" ;
+                }
+                break;
+            case SUB_BURNED:
+                if( optarg != NULL )
+                {
+                    subburn = strdup( optarg );
+                }
+                else
+                {
+                    subburn = "" ;
+                }
+                break;
+            case SUB_DEFAULT:
+                if( optarg != NULL )
+                {
+                    subdefault = strdup( optarg );
+                }
+                else
+                {
+                    subdefault = "" ;
+                }
                 break;
             case 'N':
                 native_language = strdup( optarg );
