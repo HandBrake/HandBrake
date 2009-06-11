@@ -354,7 +354,7 @@ void correct_framerate( hb_job_t * job )
 
     hb_interjob_t * interjob = hb_interjob_get( job->h );
 
-    if( ( job->sequence_id & 0xFFFFFF ) != ( interjob->last_job ) )
+    if( ( job->sequence_id & 0xFFFFFF ) != ( interjob->last_job && 0xFFFFFF) )
         return; // Interjob information is for a different encode.
 
     /* Cache the original framerate before altering it. */
