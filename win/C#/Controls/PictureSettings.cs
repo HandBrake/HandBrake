@@ -599,12 +599,12 @@ namespace Handbrake.Controls
             {
                 int aw = 0;
                 int ah = 0;
-                if (selectedTitle.AspectRatio.ToString(Culture) == "1.78")
+                if (selectedTitle.AspectRatio == 1.78F)
                 {
                     aw = 16;
                     ah = 9;
                 }
-                else if (selectedTitle.AspectRatio.ToString(Culture) == "1.33")
+                if (selectedTitle.AspectRatio == 1.33F)
                 {
                     aw = 4;
                     ah = 3;
@@ -641,12 +641,12 @@ namespace Handbrake.Controls
         {
             int aw = 0;
             int ah = 0;
-            if (selectedTitle.AspectRatio.ToString(Culture) == "1.78")
+            if (selectedTitle.AspectRatio == 1.78F)
             {
                 aw = 16;
                 ah = 9;
             }
-            else if (selectedTitle.AspectRatio.ToString(Culture) == "1.33")
+            if (selectedTitle.AspectRatio == 1.33F)
             {
                 aw = 4;
                 ah = 3;
