@@ -142,6 +142,12 @@
     <Compile Include="Controls\PictureSettings.Designer.cs">
       <DependentUpon>PictureSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Subtitles.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Subtitles.Designer.cs">
+      <DependentUpon>Subtitles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\x264Panel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -249,6 +255,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PictureSettings.resx">
       <DependentUpon>PictureSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Subtitles.resx">
+      <DependentUpon>Subtitles.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\x264Panel.resx">

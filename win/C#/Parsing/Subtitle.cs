@@ -17,6 +17,8 @@ namespace Handbrake.Parsing
     {
         private string m_language;
         private int m_trackNumber;
+        private string m_type;
+        private string m_typecode;
 
         /// <summary>
         /// The track number of this Subtitle
@@ -35,6 +37,24 @@ namespace Handbrake.Parsing
         }
 
         /// <summary>
+        /// Langauage Code
+        /// </summary>
+        public string LanguageCode
+        {
+            get { return m_typecode; }
+        }
+
+
+        /// <summary>
+        /// Subtitle Type
+        /// </summary>
+        public string Type
+        {
+            get { return m_type; }
+        }
+
+
+        /// <summary>
         /// Override of the ToString method to make this object easier to use in the UI
         /// </summary>
         /// <returns>A string formatted as: {track #} {language}</returns>
@@ -47,13 +67,15 @@ namespace Handbrake.Parsing
         {
             string curLine = output.ReadLine();
 
-            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\)");
+            Match m = Regex.Match(curLine, @"^    \+ ([0-9]*), ([A-Za-z, ]*) \((.*)\) \(([a-zA-Z]*)\)");
             if (m.Success && !curLine.Contains("HandBrake has exited."))
             {
                 var thisSubtitle = new Subtitle
                                        {
                                            m_trackNumber = int.Parse(m.Groups[1].Value.Trim()),
-                                           m_language = m.Groups[2].Value
+                                           m_language = m.Groups[2].Value,
+                                           m_typecode = m.Groups[3].Value,
+                                           m_type = m.Groups[4].Value
                                        };
                 return thisSubtitle;
             }
