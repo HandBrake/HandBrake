@@ -8,8 +8,8 @@ using System;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
-using System.Runtime.InteropServices;
 using Handbrake.EncodeQueue;
+using Handbrake.Functions;
 using Microsoft.Win32;
 
 
@@ -304,23 +304,7 @@ namespace Handbrake
         #endregion
 
         #region System Information
-        private struct MEMORYSTATUS // Unused var's are requred here.
-        {
-            public UInt32 dwLength;
-            public UInt32 dwMemoryLoad;
-            public UInt32 dwTotalPhys; // Used
-            public UInt32 dwAvailPhys;
-            public UInt32 dwTotalPageFile;
-            public UInt32 dwAvailPageFile;
-            public UInt32 dwTotalVirtual;
-            public UInt32 dwAvailVirtual;
-        }
-
-        [DllImport("kernel32.dll")]
-        private static extern void GlobalMemoryStatus
-        (
-            ref MEMORYSTATUS lpBuffer
-        );
+        
 
         /// <summary>
         /// Returns the total physical ram in a system
@@ -328,8 +312,8 @@ namespace Handbrake
         /// <returns></returns>
         public uint TotalPhysicalMemory()
         {
-            MEMORYSTATUS memStatus = new MEMORYSTATUS();
-            GlobalMemoryStatus(ref memStatus);
+            Win32.MEMORYSTATUS memStatus = new Win32.MEMORYSTATUS();
+            Win32.GlobalMemoryStatus(ref memStatus);
 
             uint MemoryInfo = memStatus.dwTotalPhys;
             MemoryInfo = MemoryInfo / 1024 / 1024;

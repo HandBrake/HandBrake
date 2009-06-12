@@ -100,7 +100,6 @@ namespace Handbrake.Functions
             mainWindow.pictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
             mainWindow.pictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
 
-
             // Reset maxWidth and MaxHeight to 0
             mainWindow.pictureSettings.maxWidth = 0;
             mainWindow.pictureSettings.maxHeight = 0;

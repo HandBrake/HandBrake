@@ -10,7 +10,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using System.Threading;
-using System.Diagnostics;
 
 namespace Handbrake.EncodeQueue
 {

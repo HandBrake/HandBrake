@@ -941,6 +941,7 @@ namespace Handbrake
             this.audioPanel.Name = "audioPanel";
             this.audioPanel.Size = new System.Drawing.Size(715, 310);
             this.audioPanel.TabIndex = 0;
+
             // 
             // AudioMenuRowHeightHack
             // 

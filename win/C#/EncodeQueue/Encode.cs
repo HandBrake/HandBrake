@@ -8,19 +8,12 @@ using System;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
-using System.Runtime.InteropServices;
 using Handbrake.Functions;
 
 namespace Handbrake.EncodeQueue
 {
     public class Encode
     {
-        // DLL Imports
-        [DllImport("user32.dll")]
-        private static extern void LockWorkStation();
-        [DllImport("user32.dll")]
-        private static extern int ExitWindowsEx(int uFlags, int dwReason);
- 
         /// <summary>
         /// Execute a HandBrakeCLI process.
         /// </summary>
@@ -121,7 +114,7 @@ namespace Handbrake.EncodeQueue
                     Process.Start("Shutdown", "-s -t 60");
                     break;
                 case "Log Off":
-                    ExitWindowsEx(0, 0);
+                    Win32.ExitWindowsEx(0, 0);
                     break;
                 case "Suspend":
                     Application.SetSuspendState(PowerState.Suspend, true, true);
@@ -130,7 +123,7 @@ namespace Handbrake.EncodeQueue
                     Application.SetSuspendState(PowerState.Hibernate, true, true);
                     break;
                 case "Lock System":
-                    LockWorkStation();
+                    Win32.LockWorkStation();
                     break;
                 case "Quit HandBrake":
                     Application.Exit();

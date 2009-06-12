@@ -4,7 +4,6 @@ using System.Threading;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.IO;
-using AxQTOControlLib;
 using Handbrake.EncodeQueue;
 using Handbrake.Functions;
 using QTOControlLib;
@@ -32,7 +31,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show(mw, "It would appear QuickTime 7 is not installed. QuickTime preview functionality will be disabled! \n\n Debug Info:\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(mw, "It would appear QuickTime 7 is not installed or not accessible. QuickTime preview functionality will be disabled! \n\n Debug Info:\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 btn_playQT.Enabled = false;
                 noQT = true;
             }
@@ -59,7 +58,7 @@ namespace Handbrake
             btn_playQT.Enabled = false;
             btn_playVLC.Enabled = false;
             lbl_status.Text = "Encoding Sample for (VLC) ...";
-            String query = hb_common_func.GeneratePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
+            String query = hb_common_func.generatePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
             ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
         private void btn_playQT_Click(object sender, EventArgs e)
@@ -79,7 +78,7 @@ namespace Handbrake
             btn_playQT.Enabled = false;
             btn_playVLC.Enabled = false;
             lbl_status.Text = "Encoding Sample for (QT) ...";
-            String query = hb_common_func.GeneratePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
+            String query = hb_common_func.generatePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
             ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
         private void procMonitor(object state)

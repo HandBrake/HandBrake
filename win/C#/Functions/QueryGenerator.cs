@@ -5,7 +5,6 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using System.Text;
 using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
@@ -20,7 +19,7 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <returns>The CLI String</returns>
-        public string GenerateTheQuery(frmMain mainWindow)
+        public string generateTheQuery(frmMain mainWindow)
         {
             // Source tab
             string query = "";
@@ -61,7 +60,7 @@ namespace Handbrake.Functions
         /// <param name="duration">Duration</param>
         /// <param name="preview">Start at preview</param>
         /// <returns>Returns a CLI query String.</returns>
-        public string GeneratePreviewQuery(frmMain mainWindow, string duration, string preview)
+        public string generatePreviewQuery(frmMain mainWindow, string duration, string preview)
         {
             int seconds;
             int.TryParse(duration, out seconds);
@@ -141,7 +140,7 @@ namespace Handbrake.Functions
             else
             {
                 if (mainWindow.pictureSettings.text_height.Text != "")
-                        query += " -Y " + mainWindow.pictureSettings.text_height.Text;
+                    query += " -Y " + mainWindow.pictureSettings.text_height.Text;
             }
 
             string cropTop = mainWindow.pictureSettings.crop_top.Text;
@@ -179,7 +178,7 @@ namespace Handbrake.Functions
                     if (mainWindow.pictureSettings.txt_parWidth.Text != "" && mainWindow.pictureSettings.txt_parHeight.Text != "")
                         query += " --pixel-aspect " + mainWindow.pictureSettings.txt_parWidth.Text + ":" + mainWindow.pictureSettings.txt_parHeight.Text + " ";
                     break;
-            }           
+            }
             #endregion
 
             #region Filters
@@ -227,7 +226,7 @@ namespace Handbrake.Functions
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
                     case "MPEG-4 (FFmpeg)":
-                        value = 31 - (mainWindow.slider_videoQuality.Value -1);
+                        value = 31 - (mainWindow.slider_videoQuality.Value - 1);
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;
                     case "H.264 (x264)":
@@ -245,8 +244,8 @@ namespace Handbrake.Functions
                         value = mainWindow.slider_videoQuality.Value;
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;
-                } 
-            }     
+                }
+            }
 
             if (mainWindow.check_2PassEncode.Checked)
                 query += " -2 ";
@@ -325,7 +324,7 @@ namespace Handbrake.Functions
             // Audio Codec (-E)
             foreach (String item in codecs)
             {
-                
+
                 if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
@@ -411,7 +410,7 @@ namespace Handbrake.Functions
 
             // Attach Source name and dvd title to the start of the chapters.csv filename.
             // This is for the queue. It allows different chapter name files for each title.
-            string[] destName =  mainWindow.text_destination.Text.Split('\\');
+            string[] destName = mainWindow.text_destination.Text.Split('\\');
             string dest_name = destName[destName.Length - 1];
             dest_name = dest_name.Replace("\"", "");
             dest_name = dest_name.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "");
@@ -424,8 +423,8 @@ namespace Handbrake.Functions
             {
                 if (dest_name.Trim() != String.Empty)
                 {
-                    string path = source_title != "Automatic" 
-                                      ? Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv") 
+                    string path = source_title != "Automatic"
+                                      ? Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv")
                                       : Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
 
                     if (chapterCSVSave(mainWindow, path) == false)
@@ -450,19 +449,13 @@ namespace Handbrake.Functions
 
             query += " -v " + Properties.Settings.Default.verboseLevel;
 
-            if (Properties.Settings.Default.dvdnav =="Checked")
+            if (Properties.Settings.Default.dvdnav == "Checked")
                 query += " --dvdnav";
             #endregion
 
             return query;
         }
 
-        /// <summary>
-        /// Get the CLI equive of the audio mixdown from the widget name.
-        /// </summary>
-        /// <param name="selectedAudio"></param>
-        /// <returns></returns>
-        /// 
         private static string getMixDown(string selectedAudio)
         {
             switch (selectedAudio)
@@ -483,13 +476,6 @@ namespace Handbrake.Functions
                     return "auto";
             }
         }
-
-        /// <summary>
-        /// Get the CLI equiv of the audio encoder from the widget name.
-        /// </summary>
-        /// <param name="selectedEncoder"></param>
-        /// <returns></returns>
-        /// 
         private static string getAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
@@ -508,29 +494,21 @@ namespace Handbrake.Functions
                     return "";
             }
         }
-
-        /// <summary>
-        /// This function saves the data in the chapters tab, dataGridView into a CSV file called chapters.csv
-        /// in a directory specified by file_path_name
-        /// </summary>
-        /// <param name="mainWindow"></param>
-        /// <param name="file_path_name"></param>
-        /// <returns></returns>
-        private static Boolean chapterCSVSave(frmMain mainWindow, string file_path_name)
+        private static Boolean chapterCSVSave(frmMain mainWindow, string filePathName)
         {
             try
             {
-                StringBuilder csv = new StringBuilder();
+                string csv = "";
 
                 foreach (DataGridViewRow row in mainWindow.data_chpt.Rows)
                 {
-                    csv.Append(row.Cells[0].Value.ToString());
-                    csv.Append(",");
-                    csv.Append(row.Cells[1].Value.ToString());
-                    csv.Append(Environment.NewLine);
+                    csv += row.Cells[0].Value.ToString();
+                    csv += ",";
+                    csv += row.Cells[1].Value.ToString();
+                    csv += Environment.NewLine;
                 }
-                StreamWriter file = new StreamWriter(file_path_name);
-                file.Write(csv.ToString());
+                StreamWriter file = new StreamWriter(filePathName);
+                file.Write(csv);
                 file.Close();
                 file.Dispose();
                 return true;

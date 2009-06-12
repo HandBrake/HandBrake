@@ -301,7 +301,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, queryGen.GenerateTheQuery(this), presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.generateTheQuery(this), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -549,7 +549,7 @@ namespace Handbrake
                     // This is used for tracking which file to load in the activity window
                     lastAction = "encode";
 
-                    String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.GenerateTheQuery(this);
+                    String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
 
                     if (encodeQueue.count() == 0)
                     {
@@ -575,7 +575,7 @@ namespace Handbrake
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query = queryGen.GenerateTheQuery(this);
+                String query = queryGen.generateTheQuery(this);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -1235,7 +1235,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = queryGen.GenerateTheQuery(this);
+            rtf_query.Text = queryGen.generateTheQuery(this);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {
@@ -1612,6 +1612,8 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
+
+
 
         // This is the END of the road ****************************************
     }
