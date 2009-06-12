@@ -62,8 +62,8 @@ static char * acodecs     = NULL;
 static char * anames      = NULL;
 static int    default_acodec = HB_ACODEC_FAAC;
 static int    default_abitrate = 160;
-static char * subtracks   = NULL;
-static char * subforce    = NULL;
+static char ** subtracks   = NULL;
+static char ** subforce    = NULL;
 static char * subburn     = NULL;
 static char * subdefault  = NULL;
 static int    subtitle_scan = 0;
@@ -404,42 +404,22 @@ static void PrintTitleInfo( hb_title_t * title )
 
 }
 
-static int search_csv( const char * list, char * needle )
+static int test_sub_list( char ** list, char * needle, int pos )
 {
-    char * token;
-    char * copy_list;
-    int pos = 1;
+    int i;
 
     if ( list == NULL || needle == NULL )
         return 0;
 
-    copy_list = strdup( list );
-    token = strtok(copy_list, ",");
-    if (token == NULL)
-        token = copy_list;
-    while( token != NULL )
-    {
-        if( !strcasecmp(token, needle ) )
-        {
-            free( copy_list );
-            return pos;
-        }
-        pos++;
-        token = strtok(NULL, ",");
-    }
-    free( copy_list );
-    return 0;
-}
-
-static int test_sub_list( const char * list, char * needle, int pos )
-{
-    if ( list == NULL || needle == NULL )
-        return 0;
-
-    if ( list[0] == '\0' && pos == 1 )
+    if ( list[0] == NULL && pos == 1 )
         return 1;
 
-    return search_csv( list, needle );
+    for ( i = 0; list[i] != NULL; i++ )
+    {
+        if ( strcasecmp( list[i], needle ) == 0 )
+            return i + 1;
+    }
+    return 0;
 }
 
 static int HandleEvents( hb_handle_t * h )
@@ -1630,63 +1610,77 @@ static int HandleEvents( hb_handle_t * h )
 
             if( subtracks )
             {
-                int pos;
+                char * token;
+                int    i, pos;
 
-                pos = search_csv(subtracks, "scan");
-                if ( pos )
-                {
-                    int                    burn, force, def;
-
-                    burn = test_sub_list(subburn, "scan", pos);
-                    force = test_sub_list(subforce, "scan", pos);
-                    def = test_sub_list(subdefault, "scan", pos);
-
-                    if ( !burn && mux == HB_MUX_MKV )
-                    {
-                        job->select_subtitle_config.dest = PASSTHRUSUB;
-                    }
-                    if ( !( !burn && mux == HB_MUX_MP4 ) )
-                    {
-                        job->select_subtitle_config.force = force;
-                        job->select_subtitle_config.default_track = def;
-                        subtitle_scan = 1;
-                        sub_burned = burn;
-                    }
-                }
-
-                char * save;
-                char * token = strtok_r(subtracks, ",", &save);
-                if (token == NULL)
-                    token = subtracks;
                 pos = 0;
-                while( token != NULL )
+                for ( i = 0; subtracks[i] != NULL; i++ )
                 {
                     pos++;
-                    if( !strcasecmp(token, "scan" ) )
+                    token = subtracks[i];
+                    if( strcasecmp(token, "scan" ) == 0 )
                     {
-                        token = strtok_r(NULL, ",", &save);
-                        continue;
+                        int burn = 0, force = 0, def = 0;
+
+                        if ( subburn != NULL )
+                        {
+                            burn = ( pos == 1 && subburn[0] == 0 ) ||
+                                   ( strcmp( "scan", subburn ) == 0 );
+                        }
+                        if ( subdefault != NULL )
+                        {
+                            def =  ( pos == 1 && subdefault[0] == 0 ) ||
+                                   ( strcmp( "scan", subdefault ) == 0 );
+                        }
+                        force = test_sub_list( subforce, "scan", pos );
+
+                        if ( !burn && mux == HB_MUX_MKV )
+                        {
+                            job->select_subtitle_config.dest = PASSTHRUSUB;
+                        }
+                        else if ( burn )
+                        {
+                            if ( sub_burned )
+                            {
+                                continue;
+                            }
+                            sub_burned = 1;
+                        }
+                        if ( !( !burn && mux == HB_MUX_MP4 ) )
+                        {
+                            job->select_subtitle_config.force = force;
+                            job->select_subtitle_config.default_track = def;
+                            subtitle_scan = 1;
+                        }
                     }
                     else
                     {
                         hb_subtitle_t        * subtitle;
                         hb_subtitle_config_t   sub_config;
                         int                    track;
-                        int                    burn, force, def;
+                        int                    burn = 0, force = 0, def = 0;
 
                         track = atoi(token) - 1;
                         subtitle = hb_list_item(title->list_subtitle, track);
                         if( subtitle == NULL ) 
                         {
                             fprintf( stderr, "Could not find subtitle track %d, skipped\n", track );
-                            token = strtok_r(NULL, ",", &save);
                             continue;
                         }
                         sub_config = subtitle->config;
 
-                        burn = test_sub_list(subburn, token, pos);
+                        if ( subburn != NULL )
+                        {
+                            burn = ( pos == 1 && subburn[0] == 0 ) ||
+                                   ( strcmp( token, subburn ) == 0 );
+                        }
+                        if ( subdefault != NULL )
+                        {
+                            def =  ( pos == 1 && subdefault[0] == 0 ) ||
+                                   ( strcmp( token, subdefault ) == 0 );
+                        }
+
                         force = test_sub_list(subforce, token, pos);
-                        def = test_sub_list(subdefault, token, pos);
 
                         if ( !burn && mux == HB_MUX_MKV && 
                              subtitle->format == PICTURESUB)
@@ -1697,7 +1691,6 @@ static int HandleEvents( hb_handle_t * h )
                              subtitle->format == PICTURESUB)
                         {
                             // Skip any non-burned vobsubs when output is mp4
-                            token = strtok_r(NULL, ",", &save);
                             continue;
                         }
                         else if ( burn && subtitle->format == PICTURESUB )
@@ -1705,7 +1698,6 @@ static int HandleEvents( hb_handle_t * h )
                             // Only allow one subtitle to be burned into video
                             if ( sub_burned )
                             {
-                                token = strtok_r(NULL, ",", &save);
                                 continue;
                             }
                             sub_burned = 1;
@@ -1715,7 +1707,6 @@ static int HandleEvents( hb_handle_t * h )
                         sub_config.default_track = def;
                         hb_subtitle_add( job, &sub_config, track );
                     }
-                    token = strtok_r(NULL, ",", &save);
                 }
             }
 
@@ -1813,8 +1804,6 @@ static int HandleEvents( hb_handle_t * h )
                 job->indepth_scan = subtitle_scan;
                 fprintf( stderr, "Subtitle Scan Enabled - enabling "
                          "subtitles if found for foreign language segments\n");
-                job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
-                *(job->select_subtitle) = NULL;
 
                 /*
                  * Add the pre-scan job
@@ -1831,10 +1820,6 @@ static int HandleEvents( hb_handle_t * h )
                  * for the first pass and then off again for the
                  * second.
                  */
-                hb_subtitle_t **subtitle_tmp = job->select_subtitle;
-
-                job->select_subtitle = NULL;
-
                 job->pass = 1;
 
                 job->indepth_scan = 0;
@@ -1875,8 +1860,6 @@ static int HandleEvents( hb_handle_t * h )
                     job->x264opts = x264opts;
                 }
                 hb_add( h, job );
-
-                job->select_subtitle = subtitle_tmp;
 
                 job->pass = 2;
                 /*
@@ -2238,6 +2221,45 @@ static void ShowPresets()
     printf("\n>\n");
 }
 
+static char** str_split( char *str, char *delem )
+{
+    char *  token;
+    char *  copy_str;
+    char *  pos;
+    char ** ret;
+    int     count, i;
+
+    if ( str == NULL || delem == NULL || str[0] == 0 )
+    {
+        ret = malloc( sizeof(char*) );
+        *ret = NULL;
+        return ret;
+    }
+
+    // Find number of elements in the string
+    count = 1;
+    pos = str;
+    while ( ( pos = strstr( pos+1, delem ) ) != NULL )
+    {
+        if ( *(pos+1) != 0 )
+            count++;
+    }
+    ret = calloc( ( count + 1 ), sizeof(char*) );
+
+    copy_str = strdup( str );
+    token = strtok( copy_str, delem );
+
+    i = 0;
+    while( token != NULL && i < count )
+    {
+        ret[i] = strdup( token );
+        token = strtok(NULL, ",");
+        i++;
+    }
+    free( copy_str );
+    return ret;
+}
+
 /****************************************************************************
  * ParseOptions:
  ****************************************************************************/
@@ -2472,20 +2494,10 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case 's':
-                if( optarg != NULL )
-                {
-                    subtracks = strdup( optarg );
-                }
+                subtracks = str_split( optarg, "," );
                 break;
             case 'F':
-                if( optarg != NULL )
-                {
-                    subforce = strdup( optarg );
-                }
-                else
-                {
-                    subforce = "" ;
-                }
+                subtracks = str_split( optarg, "," );
                 break;
             case SUB_BURNED:
                 if( optarg != NULL )
