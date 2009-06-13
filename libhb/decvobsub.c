@@ -98,6 +98,15 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 pv->pts = in->start;
             }
         }
+        else
+        {
+            // bad size, must have lost sync
+            // force re-sync
+            if ( pv->buf != NULL )
+                hb_buffer_close( &pv->buf );
+            pv->size_sub = 0;
+        }
+
     }
 
     *buf_out = NULL;

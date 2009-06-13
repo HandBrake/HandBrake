@@ -572,7 +572,7 @@ static void do_job( hb_job_t * job, int cpu_count )
             subtitle->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
             subtitle->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
 
-            if( (!job->indepth_scan || subtitle->config.force) && 
+            if( (!job->indepth_scan || job->select_subtitle_config.force) && 
                 subtitle->source == VOBSUB ) {
                 /*
                  * Don't add threads for subtitles when we are scanning, unless

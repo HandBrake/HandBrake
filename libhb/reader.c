@@ -408,6 +408,8 @@ static void ReaderFunc( void * _r )
                             // packet of a stream we've never seen before. We
                             // have no idea what the timing should be so toss
                             // this buffer & wait for a stream we've already seen.
+                            // add stream to list of streams we have seen
+                            id_to_st( r, buf );
                             hb_buffer_close( &buf );
                             continue;
                         }
@@ -530,7 +532,7 @@ static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id )
         subtitle =  hb_list_item( title->list_subtitle, i );
         if (id == subtitle->id) {
             subtitle->hits++;
-            if( !job->indepth_scan || subtitle->config.force )
+            if( !job->indepth_scan || job->select_subtitle_config.force )
             {
                 /*
                  * Pass the subtitles to be processed if we are not scanning, or if
