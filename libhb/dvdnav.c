@@ -842,6 +842,7 @@ static int hb_dvdnav_start( hb_dvd_t * e, hb_title_t *title, int c )
     }
     d->title = t;
     d->stopped = 0;
+    d->chapter = c;
     return 1;
 }
 
