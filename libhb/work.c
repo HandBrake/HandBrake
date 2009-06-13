@@ -382,6 +382,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_title_t    * title;
     int             i, j;
     hb_work_object_t * w;
+    hb_interjob_t * interjob;
 
     hb_audio_t   * audio;
     hb_subtitle_t * subtitle;
@@ -393,6 +394,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     unsigned int subtitle_hit = 0;
 
     title = job->title;
+    interjob = hb_interjob_get( job->h );
 
     if( job->pass == 2 && !job->cfr )
     {
@@ -505,7 +507,8 @@ static void do_job( hb_job_t * job, int cpu_count )
     /*
      * Look for the scanned subtitle in the existing subtitle list
      */
-    if ( !job->indepth_scan && job->select_subtitle && *(job->select_subtitle) )
+    if ( !job->indepth_scan && interjob->select_subtitle &&
+         ( job->pass == 0 || job->pass == 2 ) )
     {
         /*
          * Disable forced subtitles if we didn't find any in the scan
@@ -513,10 +516,10 @@ static void do_job( hb_job_t * job, int cpu_count )
          *
          * select_subtitle implies that we did a scan.
          */
-        if( (*job->select_subtitle)->config.force && 
-            (*job->select_subtitle)->forced_hits == 0 )
+        if( interjob->select_subtitle->config.force && 
+            interjob->select_subtitle->forced_hits == 0 )
         {
-            (*job->select_subtitle)->config.force = 0;
+            interjob->select_subtitle->config.force = 0;
         }
         for( i=0; i < hb_list_count(title->list_subtitle); i++ )
         {
@@ -530,17 +533,16 @@ static void do_job( hb_job_t * job, int cpu_count )
                 *
                 * select_subtitle implies that we did a scan.
                 */
-                if( (*job->select_subtitle)->id == subtitle->id )
+                if( interjob->select_subtitle->id == subtitle->id )
                 {
-                    *subtitle = *(*job->select_subtitle);
-                    free( *job->select_subtitle );
-                    free( job->select_subtitle );
-                    job->select_subtitle = NULL;
+                    *subtitle = *(interjob->select_subtitle);
+                    free( interjob->select_subtitle );
+                    interjob->select_subtitle = NULL;
                 }
             }
         }
 
-        if( job->select_subtitle )
+        if( interjob->select_subtitle )
         {
             /*
              * Its not in the existing list
@@ -549,15 +551,9 @@ static void do_job( hb_job_t * job, int cpu_count )
              * add the subtitle that we found on the first pass for use in this
              * pass.
              */
-            hb_list_add( title->list_subtitle, *job->select_subtitle );
-            free( job->select_subtitle );
-            job->select_subtitle = NULL;
+            hb_list_add( title->list_subtitle, interjob->select_subtitle );
+            interjob->select_subtitle = NULL;
         }
-    }
-    else if ( !job->indepth_scan && job->select_subtitle )
-    {
-        free( job->select_subtitle );
-        job->select_subtitle = NULL;
     }
 
 
@@ -1045,20 +1041,17 @@ cleanup:
         }
     }
 
-    if( job->select_subtitle )
+    if( job->indepth_scan )
     {
-        if( job->indepth_scan )
+        for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
         {
-            for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
+            subtitle =  hb_list_item( title->list_subtitle, i );
+            if( subtitle->id == subtitle_hit )
             {
-                subtitle =  hb_list_item( title->list_subtitle, i );
-                if( subtitle->id == subtitle_hit )
-                {
-                    subtitle->config = job->select_subtitle_config;
-                    hb_list_rem( title->list_subtitle, subtitle );
-                    *job->select_subtitle = subtitle;
-                    break;
-                }
+                subtitle->config = job->select_subtitle_config;
+                hb_list_rem( title->list_subtitle, subtitle );
+                interjob->select_subtitle = subtitle;
+                break;
             }
         }
     }

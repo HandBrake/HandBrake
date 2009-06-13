@@ -79,6 +79,8 @@ typedef struct hb_interjob_s
     int render_dropped;    /* frames droped by telecine */
     int vrate;             /* initial assigned vrate */
     int vrate_base;        /* initial assigned vrate_base */
+
+    hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 } hb_interjob_t;
 
 hb_interjob_t * hb_interjob_get( hb_handle_t * ); 

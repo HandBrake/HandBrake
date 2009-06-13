@@ -248,7 +248,6 @@ struct hb_job_s
 
     int                     indepth_scan;
     hb_subtitle_config_t    select_subtitle_config;
-    hb_subtitle_t        ** select_subtitle;
     char                  * native_language;
 
     int             angle;              // dvd angle to encode
