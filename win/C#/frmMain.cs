@@ -337,14 +337,6 @@ namespace Handbrake
         }
         #endregion
 
-        #region Debug Menu
-        private void mnu_qptest_Click(object sender, EventArgs e)
-        {
-            QueryParserTester qptest = new QueryParserTester();
-            qptest.Show();
-        }
-        #endregion
-
         #region Preset Bar
         // Right Click Menu Code
         private void pmnu_expandAll_Click(object sender, EventArgs e)
@@ -797,13 +789,10 @@ namespace Handbrake
                 audioPanel.setTrackList(selectedTitle);
 
                 // Populate the Subtitles dropdown
-                drp_subtitle.Items.Clear();
-                drp_subtitle.Items.Add("None");
-                drp_subtitle.Items.Add("Autoselect");
-                drp_subtitle.Items.AddRange(selectedTitle.Subtitles.ToArray());
-                if (drp_subtitle.Items.Count > 0)
-                    drp_subtitle.Text = drp_subtitle.Items[0].ToString();
-
+                Subtitles.drp_subtitleTracks.Items.Clear();
+                Subtitles.drp_subtitleTracks.Items.Add("Foreign Audio Search (Bitmap)");
+                Subtitles.drp_subtitleTracks.Items.AddRange(selectedTitle.Subtitles.ToArray());
+                Subtitles.drp_subtitleTracks.SelectedIndex = 0;
             }
 
             // Run the autoName & chapterNaming functions
@@ -988,6 +977,7 @@ namespace Handbrake
                 setExtension(".mkv");
 
             audioPanel.setAudioByContainer(drop_format.Text);
+            Subtitles.setContainer = drop_format.SelectedIndex;
 
             string oldval;
             if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
@@ -1198,18 +1188,6 @@ namespace Handbrake
         private void slider_deblock_Scroll(object sender, EventArgs e)
         {
             lbl_deblockVal.Text = slider_deblock.Value == 4 ? "Off" : slider_deblock.Value.ToString();
-        }
-
-        //Subtitles Tab
-        private void drp_subtitle_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (drp_subtitle.Text.Contains("None"))
-            {
-                check_forced.Enabled = false;
-                check_forced.Checked = false;
-            }
-            else
-                check_forced.Enabled = true;
         }
 
         // Chapter Marker Tab
@@ -1612,7 +1590,6 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
-
 
 
         // This is the END of the road ****************************************

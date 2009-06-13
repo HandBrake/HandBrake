@@ -86,18 +86,9 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public void closeCLI(EncodeProcess ep)
         {
-            Process[] prs = Process.GetProcesses();
-            foreach (Process process in prs)
-            {
-                if (process.Id == ep.processID)
-                {
-                    process.Refresh();
-                    if (!process.HasExited)
-                        process.Kill();
-
-                    process.WaitForExit();
-                }
-            } 
+            Process cli = Process.GetProcessById(ep.processID);
+            if (!cli.HasExited)
+                cli.Kill();
         }
 
         /// <summary>

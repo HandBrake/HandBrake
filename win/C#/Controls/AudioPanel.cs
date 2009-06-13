@@ -137,27 +137,7 @@ namespace Handbrake.Controls
         }
         private void btn_RemoveAudioTrack_Click(object sender, EventArgs e)
         {
-            // Remove the Item and reselect the control if the following conditions are met.
-            if (lv_audioList.SelectedItems.Count != 0)
-            {
-                // Record the current selected index.
-                int currentPosition = lv_audioList.SelectedIndices[0];
-
-                lv_audioList.Items.RemoveAt(lv_audioList.SelectedIndices[0]);
-
-                // Now reslect the correct item and give focus to the audio list.
-                if (lv_audioList.Items.Count != 0)
-                {
-                    if (currentPosition <= (lv_audioList.Items.Count - 1))
-                        lv_audioList.Items[currentPosition].Selected = true;
-                    else if (currentPosition > (lv_audioList.Items.Count - 1))
-                        lv_audioList.Items[lv_audioList.Items.Count - 1].Selected = true;
-
-                    lv_audioList.Select();
-                }
-                // Regenerate the ID numers
-                reGenerateListIDs();
-            }
+            removeAudioTrack();
         }
 
         // Audio List Menu
@@ -219,6 +199,8 @@ namespace Handbrake.Controls
 
                     lv_audioList.Select();
                 }
+                // Regenerate the ID numers
+                reGenerateListIDs();
             }
         }
 

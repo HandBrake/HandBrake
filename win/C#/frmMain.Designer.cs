@@ -56,7 +56,6 @@ namespace Handbrake
             this.slider_videoQuality = new System.Windows.Forms.TrackBar();
             this.text_filesize = new System.Windows.Forms.TextBox();
             this.text_bitrate = new System.Windows.Forms.TextBox();
-            this.drp_subtitle = new System.Windows.Forms.ComboBox();
             this.btn_setDefault = new System.Windows.Forms.Button();
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
@@ -97,8 +96,6 @@ namespace Handbrake
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_qptest = new System.Windows.Forms.ToolStripMenuItem();
             this.gb_source = new System.Windows.Forms.GroupBox();
             this.lbl_angle = new System.Windows.Forms.Label();
             this.Label13 = new System.Windows.Forms.Label();
@@ -112,9 +109,6 @@ namespace Handbrake
             this.tab_audio = new System.Windows.Forms.TabPage();
             this.audioPanel = new Handbrake.Controls.AudioPanel();
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
-            this.check_forced = new System.Windows.Forms.CheckBox();
-            this.Label19 = new System.Windows.Forms.Label();
-            this.Label20 = new System.Windows.Forms.Label();
             this.tab_video = new System.Windows.Forms.TabPage();
             this.radio_cq = new System.Windows.Forms.RadioButton();
             this.radio_avgBitrate = new System.Windows.Forms.RadioButton();
@@ -139,6 +133,7 @@ namespace Handbrake
             this.ctl_decomb = new Handbrake.Decomb();
             this.ctl_detelecine = new Handbrake.Detelecine();
             this.tab_subtitles = new System.Windows.Forms.TabPage();
+            this.Subtitles = new Handbrake.Controls.Subtitles();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
@@ -382,21 +377,6 @@ namespace Handbrake
             this.text_bitrate.Size = new System.Drawing.Size(81, 21);
             this.text_bitrate.TabIndex = 10;
             this.ToolTip.SetToolTip(this.text_bitrate, "Set the bitrate of the video");
-            // 
-            // drp_subtitle
-            // 
-            this.drp_subtitle.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drp_subtitle.FormattingEnabled = true;
-            this.drp_subtitle.Items.AddRange(new object[] {
-            "None",
-            "Autoselect"});
-            this.drp_subtitle.Location = new System.Drawing.Point(79, 39);
-            this.drp_subtitle.Name = "drp_subtitle";
-            this.drp_subtitle.Size = new System.Drawing.Size(138, 21);
-            this.drp_subtitle.TabIndex = 43;
-            this.drp_subtitle.Text = "None";
-            this.ToolTip.SetToolTip(this.drp_subtitle, resources.GetString("drp_subtitle.ToolTip"));
-            this.drp_subtitle.SelectedIndexChanged += new System.EventHandler(this.drp_subtitle_SelectedIndexChanged);
             // 
             // btn_setDefault
             // 
@@ -771,30 +751,13 @@ namespace Handbrake
             this.FileToolStripMenuItem,
             this.ToolsToolStripMenuItem,
             this.PresetsToolStripMenuItem,
-            this.HelpToolStripMenuItem,
-            this.debugToolStripMenuItem});
+            this.HelpToolStripMenuItem});
             this.frmMainMenu.Location = new System.Drawing.Point(0, 0);
             this.frmMainMenu.Name = "frmMainMenu";
             this.frmMainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.frmMainMenu.Size = new System.Drawing.Size(1000, 24);
             this.frmMainMenu.TabIndex = 0;
             this.frmMainMenu.Text = "MenuStrip";
-            // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_qptest});
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.debugToolStripMenuItem.Text = "Debug";
-            this.debugToolStripMenuItem.Visible = false;
-            // 
-            // mnu_qptest
-            // 
-            this.mnu_qptest.Name = "mnu_qptest";
-            this.mnu_qptest.Size = new System.Drawing.Size(201, 22);
-            this.mnu_qptest.Text = "Query Parser Tester";
-            this.mnu_qptest.Click += new System.EventHandler(this.mnu_qptest_Click);
             // 
             // gb_source
             // 
@@ -941,47 +904,12 @@ namespace Handbrake
             this.audioPanel.Name = "audioPanel";
             this.audioPanel.Size = new System.Drawing.Size(715, 310);
             this.audioPanel.TabIndex = 0;
-
             // 
             // AudioMenuRowHeightHack
             // 
             this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.AudioMenuRowHeightHack.ImageSize = new System.Drawing.Size(1, 18);
             this.AudioMenuRowHeightHack.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // check_forced
-            // 
-            this.check_forced.AutoSize = true;
-            this.check_forced.BackColor = System.Drawing.Color.Transparent;
-            this.check_forced.Enabled = false;
-            this.check_forced.Location = new System.Drawing.Point(223, 42);
-            this.check_forced.Name = "check_forced";
-            this.check_forced.Size = new System.Drawing.Size(147, 17);
-            this.check_forced.TabIndex = 44;
-            this.check_forced.Text = "Forced Subtitles Only";
-            this.check_forced.UseVisualStyleBackColor = false;
-            // 
-            // Label19
-            // 
-            this.Label19.AutoSize = true;
-            this.Label19.BackColor = System.Drawing.Color.Transparent;
-            this.Label19.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label19.Location = new System.Drawing.Point(13, 13);
-            this.Label19.Name = "Label19";
-            this.Label19.Size = new System.Drawing.Size(64, 13);
-            this.Label19.TabIndex = 40;
-            this.Label19.Text = "Subtitles";
-            // 
-            // Label20
-            // 
-            this.Label20.AutoSize = true;
-            this.Label20.BackColor = System.Drawing.Color.Transparent;
-            this.Label20.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label20.Location = new System.Drawing.Point(13, 42);
-            this.Label20.Name = "Label20";
-            this.Label20.Size = new System.Drawing.Size(61, 13);
-            this.Label20.TabIndex = 42;
-            this.Label20.Text = "Subtitles:";
             // 
             // tab_video
             // 
@@ -1269,10 +1197,7 @@ namespace Handbrake
             // 
             // tab_subtitles
             // 
-            this.tab_subtitles.Controls.Add(this.drp_subtitle);
-            this.tab_subtitles.Controls.Add(this.check_forced);
-            this.tab_subtitles.Controls.Add(this.Label20);
-            this.tab_subtitles.Controls.Add(this.Label19);
+            this.tab_subtitles.Controls.Add(this.Subtitles);
             this.tab_subtitles.Location = new System.Drawing.Point(4, 22);
             this.tab_subtitles.Name = "tab_subtitles";
             this.tab_subtitles.Padding = new System.Windows.Forms.Padding(3);
@@ -1280,6 +1205,15 @@ namespace Handbrake
             this.tab_subtitles.TabIndex = 10;
             this.tab_subtitles.Text = "Subtitles";
             this.tab_subtitles.UseVisualStyleBackColor = true;
+            // 
+            // Subtitles
+            // 
+            this.Subtitles.BackColor = System.Drawing.Color.Transparent;
+            this.Subtitles.Location = new System.Drawing.Point(0, 0);
+            this.Subtitles.Name = "Subtitles";
+            this.Subtitles.setContainer = 0;
+            this.Subtitles.Size = new System.Drawing.Size(722, 310);
+            this.Subtitles.TabIndex = 0;
             // 
             // tab_chapters
             // 
@@ -1723,7 +1657,6 @@ namespace Handbrake
             this.tab_filters.ResumeLayout(false);
             this.tab_filters.PerformLayout();
             this.tab_subtitles.ResumeLayout(false);
-            this.tab_subtitles.PerformLayout();
             this.tab_chapters.ResumeLayout(false);
             this.tab_chapters.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
@@ -1791,9 +1724,6 @@ namespace Handbrake
         internal System.Windows.Forms.TabControl tabs_panel;
         internal System.Windows.Forms.Label Label46;
         private System.Windows.Forms.GroupBox groupBox_dest;
-        internal System.Windows.Forms.ComboBox drp_subtitle;
-        internal System.Windows.Forms.Label Label19;
-        internal System.Windows.Forms.Label Label20;
         internal System.Windows.Forms.CheckBox check_grayscale;
         internal System.Windows.Forms.Label label24;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -1808,7 +1738,6 @@ namespace Handbrake
         private System.Windows.Forms.TabPage tab_chapters;
         internal System.Windows.Forms.Label label31;
         internal System.Windows.Forms.CheckBox check_optimiseMP4;
-        internal System.Windows.Forms.CheckBox check_forced;
         internal System.Windows.Forms.DataGridView data_chpt;
         private System.Windows.Forms.TabPage tab_query;
         private System.Windows.Forms.Label label34;
@@ -1862,8 +1791,6 @@ namespace Handbrake
         private System.Windows.Forms.ImageList AudioMenuRowHeightHack;
         private System.Windows.Forms.ToolStripMenuItem pmnu_saveChanges;
         private System.Windows.Forms.ToolStripMenuItem mnu_killCLI;
-        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mnu_qptest;
         private System.Windows.Forms.TabPage tab_filters;
         internal Deinterlace ctl_deinterlace;
         internal Denoise ctl_denoise;
@@ -1883,6 +1810,7 @@ namespace Handbrake
         private TabPage tab_subtitles;
         internal Handbrake.Controls.AudioPanel audioPanel;
         internal Handbrake.Controls.PictureSettings pictureSettings;
+        internal Handbrake.Controls.Subtitles Subtitles;
 
  
     }

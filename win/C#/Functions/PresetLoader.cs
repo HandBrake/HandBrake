@@ -246,7 +246,7 @@ namespace Handbrake.Functions
                     mainWindow.audioPanel.addTrackForPreset(newTrack);
                 }
 
-            // Subtitle Stuff
+            /*/ Subtitle Stuff
             mainWindow.drp_subtitle.Text = presetQuery.Subtitles;
 
             if (presetQuery.ForcedSubtitles)
@@ -255,7 +255,7 @@ namespace Handbrake.Functions
                 mainWindow.check_forced.Enabled = true;
             }
             else
-                mainWindow.check_forced.CheckState = CheckState.Unchecked;
+                mainWindow.check_forced.CheckState = CheckState.Unchecked;*/
 
             #endregion
 

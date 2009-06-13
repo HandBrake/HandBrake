@@ -54,62 +54,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Calculate the non-anamorphic resoltuion of the source
-        /// </summary>
-        /// <param name="width"></param>
-        /// <param name="top"></param>
-        /// <param name="bottom"></param>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        /// <param name="selectedTitle"></param>
-        /// <returns></returns>
-        public static int cacluateNonAnamorphicHeight(int width, decimal top, decimal bottom, decimal left, decimal right, Parsing.Title selectedTitle)
-        {
-            float aspect = selectedTitle.AspectRatio;
-            int aw = 0;
-            int ah = 0;
-            if (aspect.ToString() == "1.78")
-            {
-                aw = 16;
-                ah = 9;
-            }
-            else if (aspect.ToString() == "1.33")
-            {
-                aw = 4;
-                ah = 3;
-            }
-
-            if (aw != 0)
-            {
-                double a = width * selectedTitle.Resolution.Width * ah * (selectedTitle.Resolution.Height - (double)top - (double)bottom);
-                double b = selectedTitle.Resolution.Height * aw * (selectedTitle.Resolution.Width - (double)left - (double)right);
-
-                double y = a / b;
-
-                // If it's not Mod 16, make it mod 16
-                if ((y % 16) != 0)
-                {
-                    double mod16 = y % 16;
-                    if (mod16 >= 8)
-                    {
-                        mod16 = 16 - mod16;
-                        y = y + mod16;
-                    }
-                    else
-                    {
-                        y = y - mod16;
-                    }
-                }
-
-                //16 * (421 / 16)
-                //double z = ( 16 * (( y + 8 ) / 16 ) );
-                int x = int.Parse(y.ToString());
-                return x;
-            }
-            return 0;
-        }
-
-        /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
         /// </summary>
         public static Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
@@ -315,8 +259,7 @@ namespace Handbrake.Functions
                         Properties.Settings.Default.hb_version = arr[0];
                     }
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
-                        killCLI();
-
+                        killCLI(cliProcess.Id);
                 }
             }
             catch (Exception e)
@@ -328,21 +271,11 @@ namespace Handbrake.Functions
         /// <summary>
         /// Search through the running processes on the system and kill HandBrakeCLI
         /// </summary>
-        private static void killCLI()
+        private static void killCLI(int id)
         {
-            string AppName = "HandBrakeCLI";
-            AppName = AppName.ToUpper();
-
-            Process[] prs = Process.GetProcesses();
-            foreach (Process proces in prs)
-            {
-                if (proces.ProcessName.ToUpper() == AppName)
-                {
-                    proces.Refresh();
-                    if (!proces.HasExited)
-                        proces.Kill();
-                }
-            }
+            Process cli = Process.GetProcessById(id);
+            if (!cli.HasExited)
+                cli.Kill();
         }
 
         /// <summary>

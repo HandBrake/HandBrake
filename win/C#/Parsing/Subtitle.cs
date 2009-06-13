@@ -60,7 +60,7 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1}", m_trackNumber, m_language);
+            return string.Format("{0} {1} ({2})", m_trackNumber, m_language, m_type);
         }
 
         public static Subtitle Parse(StringReader output)

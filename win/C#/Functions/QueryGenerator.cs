@@ -391,18 +391,74 @@ namespace Handbrake.Functions
             if (audioItems.Trim() != String.Empty)
                 query += " -D " + audioItems;
 
-            // Subtitles
-            string subtitles = mainWindow.drp_subtitle.Text;
-            if (subtitles == "Autoselect")
-                query += " -U ";
-            else if (subtitles != "" && subtitles != "None")
-            {
-                string[] tempSub = subtitles.Split(' ');
-                query += " -s " + tempSub[0];
-            }
+            #endregion
 
-            if (mainWindow.check_forced.Checked)
-                query += " -F ";
+            #region Subtitles Tab
+
+            if (mainWindow.Subtitles.lv_subList.Items.Count != 0) // If we have subtitle tracks
+            {
+                // Find --subtitle <string>
+                query += " --subtitle ";
+                String subtitleTracks = "";
+                String itemToAdd;
+                foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
+                {
+                    if (item.SubItems[1].Text.Contains("Foreign Audio Search"))
+                        itemToAdd = "scan";
+                    else
+                    {
+                        string[] tempSub = item.SubItems[1].Text.Split(' ');
+                        itemToAdd = tempSub[0];
+                    }
+
+                    subtitleTracks += subtitleTracks == "" ? itemToAdd : "," + itemToAdd;
+                }
+                query += subtitleTracks;
+
+
+                // Find --subtitle-forced
+                String forcedTrack = "";
+                foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
+                {
+                    itemToAdd = "";
+                    string[] tempSub = item.SubItems[1].Text.Split(' ');
+                    string trackID = tempSub[0];
+
+                    if (item.SubItems[2].Text == "Yes")
+                        itemToAdd = trackID;
+
+                    if (itemToAdd != "")
+                        forcedTrack += forcedTrack == "" ? itemToAdd : "," + itemToAdd;
+                }
+                if (forcedTrack != "")
+                    query += " --subtitle-forced " + forcedTrack;
+
+
+                // Find --subtitle-burn and --subtitle-default
+                String burned = "";
+                String defaultTrack = "";
+                foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
+                {
+                    string[] tempSub = item.SubItems[1].Text.Split(' ');
+                    string trackID = tempSub[0];
+
+                    if (trackID.Trim() == "Foreign")
+                        trackID = "scan";
+
+                    if (item.SubItems[3].Text == "Yes") // Burned
+                        burned = trackID;
+
+                    if (item.SubItems[4].Text == "Yes") // Burned
+                        defaultTrack = trackID;
+
+                }
+                if (burned != "")
+                    query += " --subtitle-burn " + burned;
+
+                if (defaultTrack != "")
+                    query += " --subtitle-default " + defaultTrack;
+
+            }
 
             #endregion
 

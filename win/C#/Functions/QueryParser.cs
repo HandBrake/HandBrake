@@ -97,10 +97,6 @@ namespace Handbrake.Functions
 
             #region Regular Expressions
 
-            // Useful Destination Finder
-            //Regex r1 = new Regex(@"(-i)(?:\s\"")([a-zA-Z0-9?';!^%&*()_\-:\\\s\.]+)(?:\"")");
-            //Match source = r1.Match(input.Replace('"', '\"'));
-
             //Source
             Match title = Regex.Match(input, @"-t ([0-9]*)");
             Match chapters = Regex.Match(input, @"-c ([0-9-]*)");
