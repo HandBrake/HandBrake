@@ -3971,7 +3971,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	gint subtitle;
 	gboolean force, burned, def, one_burned = FALSE;
 	
-	job->select_subtitle = NULL;
 	subtitle_list = ghb_settings_get_value(js, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
 	for (ii = 0; ii < count; ii++)
@@ -4006,8 +4005,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			job->select_subtitle_config.force = force;
 			job->select_subtitle_config.default_track = def;
 			job->indepth_scan = 1;
-			job->select_subtitle = malloc(sizeof(hb_subtitle_t*));
-			*job->select_subtitle = NULL;
 		}
 		else if (subtitle >= 0)
 		{
@@ -4083,8 +4080,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		 * for the second pass and then off again for the
 		 * second.
 		 */
-		hb_subtitle_t **subtitle_tmp = job->select_subtitle;
-		job->select_subtitle = NULL;
 		job->pass = 1;
 		job->indepth_scan = 0;
 
@@ -4129,7 +4124,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		//if (job->x264opts != NULL)
 		//	g_free(job->x264opts);
 
-		job->select_subtitle = subtitle_tmp;
 		job->pass = 2;
 		/*
 		 * On the second pass we turn off subtitle scan so that we
