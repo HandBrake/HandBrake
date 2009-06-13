@@ -101,7 +101,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     fChapterTitlesDelegate = [[ChapterTitles alloc] init];
     [fChapterTable setDataSource:fChapterTitlesDelegate];
     [fChapterTable setDelegate:fChapterTitlesDelegate];
-
+    
+    /* setup the subtitles delegate and connections to table */
+    fSubtitlesDelegate = [[HBSubtitles alloc] init];
+    [fSubtitlesTable setDataSource:fSubtitlesDelegate];
+    [fSubtitlesTable setDelegate:fSubtitlesDelegate];
+    [fSubtitlesTable setRowHeight:25.0];
+    
     [fPresetsOutlineView setAutosaveName:@"Presets View"];
     [fPresetsOutlineView setAutosaveExpandedItems:YES];
     
@@ -1470,6 +1476,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fChapterTitlesDelegate resetWithTitle:nil];
     [fChapterTable reloadData];
     
+    // Notify Subtitles that there's no title
+    [fSubtitlesDelegate resetWithTitle:nil];
+    [fSubtitlesTable reloadData];
+    
     [self enableUI: NO];
     
     if( [detector isVideoDVD] )
@@ -1556,6 +1566,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         /* We use our advance pref to determine how many previews to scan */
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
+        /* set title to NULL */
+        //fTitle = NULL;
         hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 );
         [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
     }
@@ -1578,6 +1590,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             SuccessfulScan = NO;
             
             // Notify ChapterTitles that there's no title
+            [fSubtitlesDelegate resetWithTitle:nil];
+            [fSubtitlesTable reloadData];
+            
+            // Notify Subtitles that there's no title
             [fChapterTitlesDelegate resetWithTitle:nil];
             [fChapterTable reloadData];
         }
@@ -2093,13 +2109,10 @@ fWorkingCount = 0;
     }
     
 	/* Subtitles*/
-	[queueFileJob setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSubPopUp indexOfSelectedItem]] forKey:@"JobSubtitlesIndex"];
-    /* Forced Subtitles */
-	[queueFileJob setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
-    
-    
-    
+    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] init];
+    [queueFileJob setObject:[NSArray arrayWithArray: [fSubtitlesDelegate getSubtitleArray: subtitlesArray]] forKey:@"SubtitleList"];
+    [subtitlesArray autorelease];
+
     /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */
      
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"JobChapterStart"];
@@ -2133,8 +2146,6 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[2]] forKey:@"PictureLeftCrop"];
 	[queueFileJob setObject:[NSNumber numberWithInt:job->crop[3]] forKey:@"PictureRightCrop"];
     
-    /* Picture Filters */
-    //[queueFileJob setObject:[fPicSettingDecomb stringValue] forKey:@"JobPictureDecomb"];
     
     /*Audio*/
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
@@ -2169,10 +2180,7 @@ fWorkingCount = 0;
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4RatePopUp selectedItem] tag]] forKey:@"JobAudio4Samplerate"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4BitratePopUp selectedItem] tag]] forKey:@"JobAudio4Bitrate"];
     }
-	/* Subtitles*/
-	[queueFileJob setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
-    /* Forced Subtitles */
-	[queueFileJob setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
+
  
     /* we need to auto relase the queueFileJob and return it */
     [queueFileJob autorelease];
@@ -2649,9 +2657,7 @@ fWorkingCount = 0;
         job->x264opts = NULL;
         
         job->indepth_scan = 1;  
-        
-        job->select_subtitle = (hb_subtitle_t**)malloc(sizeof(hb_subtitle_t*));
-        *(job->select_subtitle) = NULL;
+
         
         /*
          * Add the pre-scan job
@@ -2659,18 +2665,13 @@ fWorkingCount = 0;
         hb_add( fQueueEncodeLibhb, job );
         job->x264opts = x264opts_tmp;
     }
-    else
-        job->select_subtitle = NULL;
+
     
     if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 )
     {
-        hb_subtitle_t **subtitle_tmp = job->select_subtitle;
         job->indepth_scan = 0;
         
-        /*
-         * Do not autoselect subtitles on the first pass of a two pass
-         */
-        job->select_subtitle = NULL;
+
         
         job->pass = 1;
         
@@ -2680,8 +2681,6 @@ fWorkingCount = 0;
         
         job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */  
         strcpy(job->x264opts, [[queueToApply objectForKey:@"x264Option"] UTF8String]);
-        
-        job->select_subtitle = subtitle_tmp;
         
         hb_add( fQueueEncodeLibhb, job );
         
@@ -2699,6 +2698,21 @@ fWorkingCount = 0;
 	/* Lets mark our new encode as 1 or "Encoding" */
     [queueToApply setObject:[NSNumber numberWithInt:1] forKey:@"Status"];
     [self saveQueueFileItem];
+    
+    /* we need to clean up the subtitle tracks after the job(s) have been set  */
+    int num_subtitle_tracks = hb_list_count(job->list_subtitle);
+    int ii;
+    for(ii = 0; ii < num_subtitle_tracks; ii++)
+    {
+        hb_subtitle_t * subtitle;
+        subtitle = (hb_subtitle_t *)hb_list_item(job->list_subtitle, 0);
+        
+
+        hb_list_rem(job->list_subtitle, subtitle);
+        free(subtitle);
+    }
+    
+    
     /* We should be all setup so let 'er rip */   
     [self doRip];
 }
@@ -2795,29 +2809,131 @@ fWorkingCount = 0;
     }
 
     /* Subtitle settings */
-    switch( [fSubPopUp indexOfSelectedItem] - 2 )
-    {
-    case -2:
-        /*
-         * No subtitles selected
-         */
-        break;
-    case -1:
-        /*
-         * Subtitle scan selected
-         */
-        job->indepth_scan = 1;
-        break;
-    default:
-        /*
-         * Subtitle selected, add it into the job from the title.
-         */
-        job->indepth_scan = 0;
-        hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, [fSubPopUp indexOfSelectedItem] - 2 );
-        hb_list_add( job->list_subtitle, subtitle );
-        break;
-    }
+    NSMutableArray *subtitlesArray = nil;
+    subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray: subtitlesArray]];
+    
+    
+    
+ int subtitle = nil;
+int force;
+int burned;
+int def;
+bool one_burned = FALSE;
 
+    int i = 0;
+    NSEnumerator *enumerator = [subtitlesArray objectEnumerator];
+    id tempObject;
+    while (tempObject = [enumerator nextObject])
+    {
+        
+        subtitle = [[tempObject objectForKey:@"subtitleSourceTrackNum"] intValue];
+        force = [[tempObject objectForKey:@"subtitleTrackForced"] intValue];
+        burned = [[tempObject objectForKey:@"subtitleTrackBurned"] intValue];
+        def = [[tempObject objectForKey:@"subtitleTrackDefault"] intValue];
+        
+        /* since the subtitleSourceTrackNum 0 is "None" in our array of the subtitle popups,
+         * we want to ignore it for display as well as encoding.
+         */
+        if (subtitle > 0)
+        {
+            hb_subtitle_t * subt;
+            hb_subtitle_config_t sub_config;
+            
+            subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+            sub_config = subt->config;
+            
+            /* if i is 0, then we are in the first item of the subtitles which we need to 
+             * check for the "Foreign Audio Search" which would be subtitleSourceTrackNum of 1
+             * bearing in mind that for all tracks subtitleSourceTrackNum of 0 is None.
+             */
+            
+            /* if we are on the first track and using "Foreign Audio Search" */ 
+            if (i == 0 && subtitle == 1)
+            {
+                /* NOTE: Currently foreign language search is borked for preview.
+                 * Commented out but left in for initial commit. */
+                
+                /*
+                [self writeToActivityLog: "Foreign Language Search: %d", 1];
+                
+                job->indepth_scan = 1;
+                if (burned == 1 || job->mux != HB_MUX_MP4)
+                {
+                    if (burned != 1 && job->mux == HB_MUX_MKV)
+                    {
+                        job->select_subtitle_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    }
+                    
+                    job->select_subtitle_config.force = force;
+                    job->select_subtitle_config.default_track = def;
+                    
+                }
+               */ 
+                
+            }
+            else
+            {
+                
+                /* for the actual source tracks, we must subtract the non source entries so 
+                 * that the menu index matches the source subtitle_list index for convenience */
+                if (i == 0)
+                {
+                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
+                     * Foreign Language Search is 1) so subtract 2 */
+                    subtitle = subtitle - 2;
+                }
+                else
+                {
+                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
+                     * so subtract 1. */
+                    
+                    subtitle = subtitle - 1;
+                }
+                
+                /* We are setting a source subtitle so access the source subtitle info */  
+                hb_subtitle_t * subt;
+                hb_subtitle_config_t sub_config;
+                
+                subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+                sub_config = subt->config;
+                
+                if (subt != NULL)
+                {
+                    [self writeToActivityLog: "Setting Subtitle: %s", subt];
+                    
+                    if (!burned && job->mux == HB_MUX_MKV && 
+                        subt->format == hb_subtitle_s::PICTURESUB)
+                    {
+                        sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    }
+                    else if (!burned && job->mux == HB_MUX_MP4 && 
+                             subt->format == hb_subtitle_s::PICTURESUB)
+                    {
+                        // Skip any non-burned vobsubs when output is mp4
+                        continue;
+                    }
+                    else if ( burned && subt->format == hb_subtitle_s::PICTURESUB )
+                    {
+                        // Only allow one subtitle to be burned into the video
+                        if (one_burned)
+                            continue;
+                        one_burned = TRUE;
+                    }
+                    sub_config.force = force;
+                    sub_config.default_track = def;
+                    hb_subtitle_add( job, &sub_config, subtitle );
+                }   
+                
+            }
+        }
+        i++;
+    }
+   
+    
+    
+[subtitlesArray autorelease];    
+    
+    
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);
@@ -3207,36 +3323,133 @@ fWorkingCount = 0;
     }
     
     job->grayscale = [[queueToApply objectForKey:@"VideoGrayScale"] intValue];
-    /* Subtitle settings */
     
-    switch( [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2 )
+
+
+#pragma mark -
+#pragma mark Process Subtitles to libhb
+
+/* Map the settings in the dictionaries for the SubtitleList array to match title->list_subtitle
+ * which means that we need to account for the offset of non source language settings in from
+ * the NSPopUpCell menu. For all of the objects in the SubtitleList array this means 0 is "None"
+ * from the popup menu, additionally the first track has "Foreign Audio Search" at 1. So we use
+ * an int to offset the index number for the objectForKey:@"subtitleSourceTrackNum" to map that
+ * to the source tracks position in title->list_subtitle.
+ */
+
+int subtitle = nil;
+int force;
+int burned;
+int def;
+bool one_burned = FALSE;
+
+    int i = 0;
+    NSEnumerator *enumerator = [[queueToApply objectForKey:@"SubtitleList"] objectEnumerator];
+    id tempObject;
+    while (tempObject = [enumerator nextObject])
     {
-    case -2:
-        /*
-         * No subtitles selected
+        
+        subtitle = [[tempObject objectForKey:@"subtitleSourceTrackNum"] intValue];
+        force = [[tempObject objectForKey:@"subtitleTrackForced"] intValue];
+        burned = [[tempObject objectForKey:@"subtitleTrackBurned"] intValue];
+        def = [[tempObject objectForKey:@"subtitleTrackDefault"] intValue];
+        
+        /* since the subtitleSourceTrackNum 0 is "None" in our array of the subtitle popups,
+         * we want to ignore it for display as well as encoding.
          */
-        break;
-    case -1:
-        /*
-         * Subtitle scan selected
-         */
-        job->indepth_scan = 1;
-        break;
-    default:
-        /*
-         * Subtitle selected, add it into the job from the title.
-         */
-        job->indepth_scan = 0;
-        hb_subtitle_t *subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, 
-                                                                  [[queueToApply objectForKey:@"JobSubtitlesIndex"] intValue] - 2 );
-        if( [[queueToApply objectForKey:@"SubtitlesForced"] intValue] == 1 )
-            subtitle->config.force = 1;
-        else
-            subtitle->config.force = 0;
-        hb_list_add( job->list_subtitle, subtitle );
-        break;
+        if (subtitle > 0)
+        {
+            hb_subtitle_t * subt;
+            hb_subtitle_config_t sub_config;
+            
+            subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+            sub_config = subt->config;
+            
+            /* if i is 0, then we are in the first item of the subtitles which we need to 
+             * check for the "Foreign Audio Search" which would be subtitleSourceTrackNum of 1
+             * bearing in mind that for all tracks subtitleSourceTrackNum of 0 is None.
+             */
+            
+            /* if we are on the first track and using "Foreign Audio Search" */ 
+            if (i == 0 && subtitle == 1)
+            {
+                [self writeToActivityLog: "Foreign Language Search: %d", 1];
+                
+                job->indepth_scan = 1;
+                if (burned == 1 || job->mux != HB_MUX_MP4)
+                {
+                    if (burned != 1 && job->mux == HB_MUX_MKV)
+                    {
+                        job->select_subtitle_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    }
+                    
+                    job->select_subtitle_config.force = force;
+                    job->select_subtitle_config.default_track = def;
+                }
+                
+                
+            }
+            else
+            {
+                
+                /* for the actual source tracks, we must subtract the non source entries so 
+                 * that the menu index matches the source subtitle_list index for convenience */
+                if (i == 0)
+                {
+                    /* for the first track, the source tracks start at menu index 2 ( None is 0,
+                     * Foreign Language Search is 1) so subtract 2 */
+                    subtitle = subtitle - 2;
+                }
+                else
+                {
+                    /* for all other tracks, the source tracks start at menu index 1 (None is 0)
+                     * so subtract 1. */
+                    
+                    subtitle = subtitle - 1;
+                }
+                
+                /* We are setting a source subtitle so access the source subtitle info */  
+                hb_subtitle_t * subt;
+                hb_subtitle_config_t sub_config;
+                
+                subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+                sub_config = subt->config;
+                
+                if (subt != NULL)
+                {
+                    [self writeToActivityLog: "Setting Subtitle: %s", subt];
+                    
+                    if (!burned && job->mux == HB_MUX_MKV && 
+                        subt->format == hb_subtitle_s::PICTURESUB)
+                    {
+                        sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    }
+                    else if (!burned && job->mux == HB_MUX_MP4 && 
+                             subt->format == hb_subtitle_s::PICTURESUB)
+                    {
+                        // Skip any non-burned vobsubs when output is mp4
+                        continue;
+                    }
+                    else if ( burned && subt->format == hb_subtitle_s::PICTURESUB )
+                    {
+                        // Only allow one subtitle to be burned into the video
+                        if (one_burned)
+                            continue;
+                        one_burned = TRUE;
+                    }
+                    sub_config.force = force;
+                    sub_config.default_track = def;
+                    hb_subtitle_add( job, &sub_config, subtitle );
+                }   
+                
+            }
+        }
+        i++;
     }
 
+#pragma mark -
+
+   
     /* Audio tracks and mixdowns */
     /* Lets make sure there arent any erroneous audio tracks in the job list, so lets make sure its empty*/
     int audiotrack_count = hb_list_count(job->list_audio);
@@ -3312,7 +3525,8 @@ fWorkingCount = 0;
         audio->out.dynamic_range_compression = [[queueToApply objectForKey:@"Audio4TrackDRCSlider"] floatValue];
         
         hb_audio_add( job, audio );
-        free(audio);
+        
+
     }
     
     /* Filters */ 
@@ -3827,23 +4041,11 @@ fWorkingCount = 0;
 	/* Reset the new title in fPictureController &&  fPreviewController*/
     [fPictureController SetTitle:title];
 
-    /* Update subtitle popups */
-    hb_subtitle_t * subtitle;
-    [fSubPopUp removeAllItems];
-    [fSubPopUp addItemWithTitle: @"None"];
-    [fSubPopUp addItemWithTitle: @"Autoselect"];
-    for( int i = 0; i < hb_list_count( title->list_subtitle ); i++ )
-    {
-        subtitle = (hb_subtitle_t *) hb_list_item( title->list_subtitle, i );
-
-        /* We cannot use NSPopUpButton's addItemWithTitle because
-           it checks for duplicate entries */
-        [[fSubPopUp menu] addItemWithTitle: [NSString stringWithCString:
-            subtitle->lang] action: NULL keyEquivalent: @""];
-    }
-    [fSubPopUp selectItemAtIndex: 0];
-
-	[self subtitleSelectionChanged:nil];
+        
+    /* Update Subtitle Table */
+    [fSubtitlesDelegate resetWithTitle:title];
+    [fSubtitlesTable reloadData];
+    
 
     /* Update chapter table */
     [fChapterTitlesDelegate resetWithTitle:title];
@@ -3985,6 +4187,10 @@ fWorkingCount = 0;
             
 
     }
+    /* tell fSubtitlesDelegate we have a new video container */
+    
+    [fSubtitlesDelegate containerChanged:[[fDstFormatPopUp selectedItem] tag]];
+    [fSubtitlesTable reloadData];
     /* if we have a previously selected vid encoder tag, then try to select it */
     if (selectedVidEncoderTag)
     {
@@ -5426,22 +5632,6 @@ the user is using "Custom" settings by determining the sender*/
     */
     //[self customSettingUsed: sender];
 }
-
-- (IBAction) subtitleSelectionChanged: (id) sender
-{
-	if ([fSubPopUp indexOfSelectedItem] == 0)
-	{
-        [fSubForcedCheck setState: NSOffState];
-        [fSubForcedCheck setEnabled: NO];	
-	}
-	else
-	{
-        [fSubForcedCheck setEnabled: YES];	
-	}
-	
-}
-
-
 
 
 #pragma mark -
@@ -7164,9 +7354,6 @@ return YES;
     [self addPreset];
     
 }
-
-
-
 
 
 @end

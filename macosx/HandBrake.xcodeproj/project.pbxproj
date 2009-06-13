@@ -51,6 +51,8 @@
 		A2BEA5FC0F2A1ED1001CE7A1 /* PictureController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A2BEA5FA0F2A1ED1001CE7A1 /* PictureController.mm */; };
 		A2D0A0AB0D3E5929002D57CB /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */; };
 		A2D0A0BF0D3E596F002D57CB /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */; };
+		A2D18AA70FD81C50003C997B /* HBSubtitles.h in Headers */ = {isa = PBXBuildFile; fileRef = A2D18AA50FD81C50003C997B /* HBSubtitles.h */; };
+		A2D18AA80FD81C50003C997B /* HBSubtitles.m in Sources */ = {isa = PBXBuildFile; fileRef = A2D18AA60FD81C50003C997B /* HBSubtitles.m */; };
 		A2D7AD670C998AD30082CA33 /* ActivityWindow.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */; };
 		A2D7AD680C998AD30082CA33 /* AddToQueue.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */; };
 		A2D7AD690C998AD30082CA33 /* Drawer.tiff in Resources */ = {isa = PBXBuildFile; fileRef = A2D7AD600C998AD30082CA33 /* Drawer.tiff */; };
@@ -174,6 +176,8 @@
 		A2BEA5F90F2A1ED1001CE7A1 /* PictureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PictureController.h; sourceTree = "<group>"; };
 		A2BEA5FA0F2A1ED1001CE7A1 /* PictureController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PictureController.mm; sourceTree = "<group>"; };
 		A2D0A0AA0D3E5929002D57CB /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		A2D18AA50FD81C50003C997B /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
+		A2D18AA60FD81C50003C997B /* HBSubtitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitles.m; sourceTree = "<group>"; };
 		A2D7AD5E0C998AD30082CA33 /* ActivityWindow.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = ActivityWindow.tiff; sourceTree = "<group>"; };
 		A2D7AD5F0C998AD30082CA33 /* AddToQueue.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = AddToQueue.tiff; sourceTree = "<group>"; };
 		A2D7AD600C998AD30082CA33 /* Drawer.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Drawer.tiff; sourceTree = "<group>"; };
@@ -328,13 +332,15 @@
 		526FBC930B4CAA260064E04C /* HandBrake Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A2D18AA50FD81C50003C997B /* HBSubtitles.h */,
+				A2D18AA60FD81C50003C997B /* HBSubtitles.m */,
 				4DF3C8CC052889CD00A80101 /* Controller.mm */,
 				A2BEA5F90F2A1ED1001CE7A1 /* PictureController.h */,
 				A2BEA5FA0F2A1ED1001CE7A1 /* PictureController.mm */,
 				A22C85EA0D05D35000C10E36 /* HBPresets.h */,
 				A22C85EB0D05D35000C10E36 /* HBPresets.m */,
-				4D1FD381073D19CE00E46515 /* HBPreviewController.h */,
 				4D1FD382073D19CE00E46515 /* HBPreviewController.mm */,
+				4D1FD381073D19CE00E46515 /* HBPreviewController.h */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
 				593034EA0BBA39A100172349 /* ChapterTitles.m */,
@@ -415,6 +421,7 @@
 				A22C85EC0D05D35000C10E36 /* HBPresets.h in Headers */,
 				A2BEA5FB0F2A1ED1001CE7A1 /* PictureController.h in Headers */,
 				278070240F5C261300699207 /* ChapterTitles.h in Headers */,
+				A2D18AA70FD81C50003C997B /* HBSubtitles.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +611,7 @@
 				E37172670C977D340072B384 /* HBImageAndTextCell.m in Sources */,
 				A22C85ED0D05D35100C10E36 /* HBPresets.m in Sources */,
 				A2BEA5FC0F2A1ED1001CE7A1 /* PictureController.mm in Sources */,
+				A2D18AA80FD81C50003C997B /* HBSubtitles.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

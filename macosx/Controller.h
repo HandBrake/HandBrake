@@ -10,6 +10,7 @@
 #include "hb.h"
 
 #import "ChapterTitles.h"
+#import "HBSubtitles.h"
 #import "PictureController.h"
 #import "HBPreviewController.h"
 #import "HBQueueController.h"
@@ -70,7 +71,8 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fSrcTitleField;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
     
-    /* Angle selection popup (only used for libdvdnav */
+    
+    /* lib dvd nav specific */
     IBOutlet NSTextField         * fSrcAngleLabel;
     IBOutlet NSPopUpButton       * fSrcAnglePopUp;
     
@@ -132,6 +134,12 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fSubField;
     IBOutlet NSPopUpButton       * fSubPopUp;
 	IBOutlet NSButton            * fSubForcedCheck;
+    
+    
+    IBOutlet NSTableView         * fSubtitlesTable;
+	HBSubtitles                  * fSubtitlesDelegate;
+    //NSMutableArray               * subtitleArray;
+    
 	
     /* Audio box */
     /* Track Labels */
@@ -287,7 +295,6 @@ BOOL                        fIsDragging;
 - (IBAction) audioTrackPopUpChanged: (id) sender;
 - (IBAction) audioTrackPopUpChanged: (id) sender mixdownToUse: (int) mixdownToUse;
 - (IBAction) audioTrackMixdownChanged: (id) sender;
-- (IBAction) subtitleSelectionChanged: (id) sender;
 - (void) prepareJob;
 - (IBAction) browseFile: (id) sender;
 - (void)     browseFileDone: (NSSavePanel *) sheet
@@ -411,5 +418,9 @@ BOOL                        fIsDragging;
 - (void)moveObjectsInPresetsArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;
 
 - (int) hbInstances;
+
+
+
+
 @end
 

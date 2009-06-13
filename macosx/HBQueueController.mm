@@ -1187,6 +1187,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         }
         
         
+        
         /* Seventh Line Audio Details*/
         [finalString appendString: @"Audio Track 1: " withAttributes:detailBoldAttr];
         [finalString appendString: audioDetail1 withAttributes:detailAttr];
@@ -1202,6 +1203,39 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         
         [finalString appendString: @"Audio Track 4: " withAttributes:detailBoldAttr];
         [finalString appendString: audioDetail4 withAttributes:detailAttr];
+        [finalString appendString:@"\n" withAttributes:detailAttr];
+        
+        /* Eighth Line Subtitle Details */
+        
+        int i = 0;
+        NSEnumerator *enumerator = [[item objectForKey:@"SubtitleList"] objectEnumerator];
+        id tempObject;
+        while (tempObject = [enumerator nextObject])
+        {
+            /* since the subtitleSourceTrackNum 0 is "None" in our array of the subtitle popups,
+             * we want to ignore it for display as well as encoding.
+             */
+            if ([[tempObject objectForKey:@"subtitleSourceTrackNum"] intValue] > 0)
+            { 
+                /* remember that index 0 of Subtitles can contain "Foreign Audio Search*/
+                [finalString appendString: @"Subtitle: " withAttributes:detailBoldAttr];
+                [finalString appendString: [tempObject objectForKey:@"subtitleSourceTrackName"] withAttributes:detailAttr];
+                if ([[tempObject objectForKey:@"subtitleTrackForced"] intValue] == 1)
+                {
+                    [finalString appendString: @" - Forced Only" withAttributes:detailAttr];
+                }
+                if ([[tempObject objectForKey:@"subtitleTrackBurned"] intValue] == 1)
+                {
+                    [finalString appendString: @" - Burned In" withAttributes:detailAttr];
+                }
+                if ([[tempObject objectForKey:@"subtitleTrackDefault"] intValue] == 1)
+                {
+                    [finalString appendString: @" - Default" withAttributes:detailAttr];
+                }
+                [finalString appendString:@"\n" withAttributes:detailAttr];
+            }
+            i++;
+        }      
         
         return finalString;
     }
