@@ -33,7 +33,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="autoNaming" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Checked</Value>
     </Setting>
     <Setting Name="autoNamePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -54,7 +54,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="autoNameFormat" Type="System.String" Scope="User">
-      <Value Profile="(Default)">{source}-{title}-{chapters}</Value>
+      <Value Profile="(Default)">{source}-{title}</Value>
     </Setting>
     <Setting Name="saveLogToSpecifiedPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

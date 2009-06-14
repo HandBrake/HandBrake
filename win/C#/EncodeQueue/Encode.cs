@@ -33,7 +33,7 @@ namespace Handbrake.EncodeQueue
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
-                    
+
                 }
                 if (Properties.Settings.Default.cli_minimized == "Checked")
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
@@ -43,7 +43,8 @@ namespace Handbrake.EncodeQueue
                 currentEncode.processID = Main.getCliProcess(before);
                 currentEncode.isEncoding = true;
                 currentEncode.currentQuery = query;
-                currentEncode.processHandle = (int)currentEncode.hbProcProcess.MainWindowHandle; // Set the process Handle
+                if (currentEncode.hbProcProcess != null)
+                    currentEncode.processHandle = (int)currentEncode.hbProcProcess.MainWindowHandle; // Set the process Handle
 
                 // Set the process Priority
                 Process hbCliProcess = null;
@@ -75,7 +76,7 @@ namespace Handbrake.EncodeQueue
             }
             catch (Exception exc)
             {
-                MessageBox.Show("An error occured in runCli()\n Error Information: \n\n" + exc);
+                MessageBox.Show("It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\n   Detailed Error Information: error occured in runCli()\n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             return currentEncode;

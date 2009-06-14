@@ -36,6 +36,9 @@ namespace Handbrake.EncodeQueue
             String query = job.Query;
             lastQueueItem = job;
             remove(0);    // Remove the item which we are about to pass out.
+
+            updateQueueRecoveryFile("hb_queue_recovery.xml");
+
             return query;
         }
 
@@ -57,6 +60,7 @@ namespace Handbrake.EncodeQueue
             id++;
 
             queue.Add(newJob);
+            updateQueueRecoveryFile("hb_queue_recovery.xml");
         }
 
         /// <summary>
@@ -82,6 +86,7 @@ namespace Handbrake.EncodeQueue
         public void remove(int index)
         {
             queue.RemoveAt(index);
+            updateQueueRecoveryFile("hb_queue_recovery.xml");
         }
 
         /// <summary>
@@ -106,6 +111,7 @@ namespace Handbrake.EncodeQueue
                 queue.RemoveAt(index);
                 queue.Insert((index - 1), item);
             }
+            updateQueueRecoveryFile("hb_queue_recovery.xml"); // Update the queue recovery file
         }
 
         /// <summary>
@@ -121,13 +127,14 @@ namespace Handbrake.EncodeQueue
                 queue.RemoveAt(index);
                 queue.Insert((index + 1), item);
             }
+            updateQueueRecoveryFile("hb_queue_recovery.xml"); // Update the queue recovery file
         }
 
         /// <summary>
         /// Writes the current queue to disk. hb_queue_recovery.xml
         /// This function is called after getNextItemForEncoding()
         /// </summary>
-        public void write2disk(string file)
+        public void updateQueueRecoveryFile(string file)
         {
             string tempPath = file == "hb_queue_recovery.xml" ? Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml") : file;
 
@@ -191,11 +198,7 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public void recoverQueue(string file)
         {
-            string tempPath;
-            if (file == "hb_queue_recovery.xml")
-                tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
-            else
-                tempPath = file;
+            string tempPath = file == "hb_queue_recovery.xml" ? Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml") : file;
 
             if (File.Exists(tempPath))
             {
@@ -210,7 +213,7 @@ namespace Handbrake.EncodeQueue
                                 queue.Add(item);
 
                         if (file != "hb_queue_recovery.xml")
-                            write2disk("hb_queue_recovery.xml");
+                            updateQueueRecoveryFile("hb_queue_recovery.xml");
                     }
                 }
             }
@@ -226,7 +229,6 @@ namespace Handbrake.EncodeQueue
 
         public void startEncode()
         { 
-            Thread theQueue;
             if (this.count() != 0)
             {
                 if (isPaused)
@@ -236,7 +238,7 @@ namespace Handbrake.EncodeQueue
                     isPaused = false;
                     try
                     {
-                        theQueue = new Thread(startProc) { IsBackground = true };
+                        Thread theQueue = new Thread(startProcess) { IsBackground = true };
                         theQueue.Start();
                     }
                     catch (Exception exc)
@@ -256,7 +258,7 @@ namespace Handbrake.EncodeQueue
             encodeHandler.closeCLI(encodeProcess);
         }
 
-        private void startProc(object state)
+        private void startProcess(object state)
         {
             try
             {
@@ -264,7 +266,7 @@ namespace Handbrake.EncodeQueue
                 while (this.count() != 0)
                 {
                     string query = getNextItemForEncoding();
-                    write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
+                    updateQueueRecoveryFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
                     encodeProcess = encodeHandler.runCli(query);
                     EncodeStarted(null);

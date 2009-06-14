@@ -26,8 +26,8 @@ namespace Handbrake
         QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking. *********************************
-        Title selectedTitle;
-        DVD thisDVD;
+        private Title selectedTitle;
+        private DVD thisDVD;
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private Form splash;
@@ -215,9 +215,8 @@ namespace Handbrake
             // Experimental HBProc Process Monitoring.
             if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
             {
-                HBProcess = encodeQueue.encodeProcess.hbProcProcess;
-                Thread EncodeMon = new Thread(encodeMonitorThread);
-                EncodeMon.Start();
+                Thread encodeMon = new Thread(encodeMonitorThread);
+                encodeMon.Start();
             }
         }
         private void encodeEnded(object sender, EventArgs e)
@@ -544,10 +543,8 @@ namespace Handbrake
                     String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
 
                     if (encodeQueue.count() == 0)
-                    {
                         encodeQueue.add(query, text_source.Text, text_destination.Text);
-                        encodeQueue.write2disk("hb_queue_recovery.xml");
-                    }
+
                     queueWindow.setQueue();
                     if (encodeQueue.count() > 1)
                         queueWindow.Show(false);
@@ -582,7 +579,6 @@ namespace Handbrake
                 else
                     encodeQueue.add(query, text_source.Text, text_destination.Text);
 
-                encodeQueue.write2disk("hb_queue_recovery.xml"); // Writes the queue to the recovery file, just incase the GUI crashes.
                 queueWindow.Show();
             }
         }
@@ -1560,14 +1556,13 @@ namespace Handbrake
         #endregion
 
         #region In-GUI Encode Status (Experimental)
-        private Process HBProcess { get; set; }
-
+        
         private void encodeMonitorThread()
         {
             try
             {
-                Parser encode = new Parser(HBProcess.StandardOutput.BaseStream);
-                encode.OnEncodeProgress += encode_OnEncodeProgress;
+                Parser encode = new Parser(encodeQueue.encodeProcess.hbProcProcess.StandardOutput.BaseStream);
+                encode.OnEncodeProgress += encodeOnEncodeProgress;
                 while (!encode.EndOfStream)
                 {
                     encode.readEncodeStatus();
@@ -1578,12 +1573,11 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
             }
         }
-
-        private void encode_OnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        private void encodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new EncodeProgressEventHandler(encode_OnEncodeProgress),
+                this.BeginInvoke(new EncodeProgressEventHandler(encodeOnEncodeProgress),
                     new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
                 return;
             }

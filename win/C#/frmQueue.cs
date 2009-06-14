@@ -255,7 +255,6 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.remove(selectedIndex);
 
-                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
 
                 // Select the item where the first deleted item was previously
@@ -310,7 +309,6 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.moveUp(selectedIndex);
 
-                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
 
                 // Keep the selected item(s) selected, now moved up one index
@@ -339,7 +337,6 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.moveDown(selectedIndex);
 
-                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
 
                 // Keep the selected item(s) selected, now moved down one index
@@ -366,7 +363,7 @@ namespace Handbrake
             SaveFile.Filter = "HandBrake Queue|*.queue";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
-                queue.write2disk(SaveFile.FileName);
+                queue.updateQueueRecoveryFile(SaveFile.FileName);
         }
         private void mnu_import_Click(object sender, EventArgs e)
         {
@@ -381,7 +378,6 @@ namespace Handbrake
             if (queue.lastQueueItem != null)
             {
                 queue.add(queue.lastQueueItem.Query, queue.lastQueueItem.Source, queue.lastQueueItem.Destination);
-                queue.write2disk("hb_queue_recovery.xml"); // Update the queue recovery file
                 updateUIElements();
             }
         }
