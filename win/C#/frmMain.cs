@@ -525,7 +525,7 @@ namespace Handbrake
                     encodeQueue.pauseEncodeQueue();
 
                     // Allow the CLI to exit cleanly
-                    Win32.SetForegroundWindow(encodeQueue.encodeProcess.processHandle);
+                    Win32.SetForegroundWindow((int)encodeQueue.encodeHandler.processHandle);
                     SendKeys.Send("^C");
 
                     // Update the GUI
@@ -1561,7 +1561,7 @@ namespace Handbrake
         {
             try
             {
-                Parser encode = new Parser(encodeQueue.encodeProcess.hbProcProcess.StandardOutput.BaseStream);
+                Parser encode = new Parser(encodeQueue.encodeHandler.hbProcess.StandardOutput.BaseStream);
                 encode.OnEncodeProgress += encodeOnEncodeProgress;
                 while (!encode.EndOfStream)
                 {

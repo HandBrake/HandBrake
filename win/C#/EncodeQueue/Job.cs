@@ -6,7 +6,7 @@
 
 namespace Handbrake.EncodeQueue
 {
-    public class QueueItem
+    public class Job
     {
         /// <summary>
         /// Get or Set the job id.

@@ -140,8 +140,8 @@ namespace Handbrake
             }
 
             list_queue.Items.Clear();
-            List<QueueItem> theQueue = queue.getQueue();
-            foreach (QueueItem queue_item in theQueue)
+            List<Job> theQueue = queue.getQueue();
+            foreach (Job queue_item in theQueue)
             {
                 string q_item = queue_item.Query;
                 Functions.QueryParser parsed = Functions.QueryParser.Parse(q_item);

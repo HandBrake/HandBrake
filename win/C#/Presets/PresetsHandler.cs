@@ -185,7 +185,8 @@ namespace Handbrake.Presets
                                                    TopCategory = level_1_category,
                                                    Name = presetName[0].Replace("+", "").Trim(),
                                                    Query = presetName[2],
-                                                   Version = Properties.Settings.Default.hb_version
+                                                   Version = Properties.Settings.Default.hb_version,
+                                                   PictureSettings = true
                                                };
                         presets.Add(newPreset);
                     }

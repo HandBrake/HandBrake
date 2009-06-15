@@ -19,7 +19,7 @@ namespace Handbrake.Functions
     static class Main
     {
         // Private Variables
-        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
+        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Job>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
@@ -259,23 +259,17 @@ namespace Handbrake.Functions
                         Properties.Settings.Default.hb_version = arr[0];
                     }
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
-                        killCLI(cliProcess.Id);
+                    {
+                        Process cli = Process.GetProcessById(cliProcess.Id);
+                        if (!cli.HasExited)
+                            cli.Kill();
+                    }
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show("Unable to retrieve version information from the CLI. \nError:\n" + e);
             }
-        }
-
-        /// <summary>
-        /// Search through the running processes on the system and kill HandBrakeCLI
-        /// </summary>
-        private static void killCLI(int id)
-        {
-            Process cli = Process.GetProcessById(id);
-            if (!cli.HasExited)
-                cli.Kill();
         }
 
         /// <summary>
@@ -292,7 +286,7 @@ namespace Handbrake.Functions
                 {
                     using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
                     {
-                        List<QueueItem> list = ser.Deserialize(strm) as List<QueueItem>;
+                        List<Job> list = ser.Deserialize(strm) as List<Job>;
                         if (list != null)
                             if (list.Count != 0)
                                 return true;

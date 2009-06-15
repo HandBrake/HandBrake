@@ -15,13 +15,13 @@ namespace Handbrake.EncodeQueue
 {
     public class QueueHandler
     {
-        Encode encodeHandler = new Encode();
-        private static XmlSerializer ser = new XmlSerializer(typeof(List<QueueItem>));
-        List<QueueItem> queue = new List<QueueItem>();
+        public Encode encodeHandler = new Encode();
+        private static XmlSerializer ser = new XmlSerializer(typeof(List<Job>));
+        List<Job> queue = new List<Job>();
         int id; // Unique identifer number for each job
 
         #region Queue Handling
-        public List<QueueItem> getQueue()
+        public List<Job> getQueue()
         {
             return queue;
         }
@@ -30,23 +30,22 @@ namespace Handbrake.EncodeQueue
         /// Get's the next CLI query for encoding
         /// </summary>
         /// <returns>String</returns>
-        private string getNextItemForEncoding()
+        private Job getNextJobForEncoding()
         {
-            QueueItem job = queue[0];
-            String query = job.Query;
+            Job job = queue[0];
             lastQueueItem = job;
             remove(0);    // Remove the item which we are about to pass out.
 
             updateQueueRecoveryFile("hb_queue_recovery.xml");
 
-            return query;
+            return job;
         }
 
         /// <summary>
         /// Get the last query that was returned by getNextItemForEncoding()
         /// </summary>
         /// <returns></returns>
-        public QueueItem lastQueueItem { get; set; }
+        public Job lastQueueItem { get; set; }
 
         /// <summary>
         /// Add's a new item to the queue
@@ -56,26 +55,11 @@ namespace Handbrake.EncodeQueue
         /// <param name="destination"></param>
         public void add(string query, string source, string destination)
         {
-            QueueItem newJob = new QueueItem { Id = id, Query = query, Source = source, Destination = destination };
+            Job newJob = new Job { Id = id, Query = query, Source = source, Destination = destination };
             id++;
 
             queue.Add(newJob);
             updateQueueRecoveryFile("hb_queue_recovery.xml");
-        }
-
-        /// <summary>
-        /// Check to see if a destination path is already on the queue
-        /// </summary>
-        /// <param name="destination">Destination path</param>
-        /// <returns>Boolean True/False. True = Path Exists</returns>
-        public Boolean checkDestinationPath(string destination)
-        {
-            foreach (QueueItem checkItem in queue)
-            {
-                if (checkItem.Destination.Contains(destination.Replace("\\\\", "\\")))
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -106,7 +90,7 @@ namespace Handbrake.EncodeQueue
         {
             if (index > 0)
             {
-                QueueItem item = queue[index];
+                Job item = queue[index];
 
                 queue.RemoveAt(index);
                 queue.Insert((index - 1), item);
@@ -122,7 +106,7 @@ namespace Handbrake.EncodeQueue
         {
             if (index < queue.Count - 1)
             {
-                QueueItem item = queue[index];
+                Job item = queue[index];
 
                 queue.RemoveAt(index);
                 queue.Insert((index + 1), item);
@@ -161,7 +145,7 @@ namespace Handbrake.EncodeQueue
         public void writeBatchScript(string file)
         {
             string queries = "";
-            foreach (QueueItem queue_item in queue)
+            foreach (Job queue_item in queue)
             {
                 string q_item = queue_item.Query;
                 string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + q_item;
@@ -206,10 +190,10 @@ namespace Handbrake.EncodeQueue
                 {
                     if (strm.Length != 0)
                     {
-                        List<QueueItem> list = ser.Deserialize(strm) as List<QueueItem>;
+                        List<Job> list = ser.Deserialize(strm) as List<Job>;
 
                         if (list != null)
-                            foreach (QueueItem item in list)
+                            foreach (Job item in list)
                                 queue.Add(item);
 
                         if (file != "hb_queue_recovery.xml")
@@ -218,6 +202,21 @@ namespace Handbrake.EncodeQueue
                 }
             }
         }
+
+        /// <summary>
+        /// Check to see if a destination path is already on the queue
+        /// </summary>
+        /// <param name="destination">Destination path</param>
+        /// <returns>Boolean True/False. True = Path Exists</returns>
+        public Boolean checkDestinationPath(string destination)
+        {
+            foreach (Job checkItem in queue)
+            {
+                if (checkItem.Destination.Contains(destination.Replace("\\\\", "\\")))
+                    return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Encoding
@@ -225,7 +224,6 @@ namespace Handbrake.EncodeQueue
         public Boolean isEncodeStarted { get; private set; }
         public Boolean isPaused { get; private set; }
         public Boolean isEncoding { get; private set; }
-        public EncodeProcess encodeProcess { get; set; }
 
         public void startEncode()
         { 
@@ -255,7 +253,7 @@ namespace Handbrake.EncodeQueue
         }
         public void endEncode()
         {
-            encodeHandler.closeCLI(encodeProcess);
+            encodeHandler.closeCLI();
         }
 
         private void startProcess(object state)
@@ -265,29 +263,29 @@ namespace Handbrake.EncodeQueue
                 // Run through each item on the queue
                 while (this.count() != 0)
                 {
-                    string query = getNextItemForEncoding();
+                    string query = getNextJobForEncoding().Query;
                     updateQueueRecoveryFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
-                    encodeProcess = encodeHandler.runCli(query);
+                    encodeHandler.runCli(query);
                     EncodeStarted(null);
-                    encodeProcess.hbProcProcess.WaitForExit();
+                    encodeHandler.hbProcess.WaitForExit();
 
                     encodeHandler.addCLIQueryToLog(query);
                     encodeHandler.copyLog(lastQueueItem.Destination);
 
-                    encodeProcess.hbProcProcess.Close();
-                    encodeProcess.hbProcProcess.Dispose();
+                    encodeHandler.hbProcess.Close();
+                    encodeHandler.hbProcess.Dispose();
                     EncodeFinished(null);
 
                     while (isPaused) // Need to find a better way of doing this.
                     {
-                        Thread.Sleep(10000);
+                        Thread.Sleep(5000);
                     }
                 }
                 EncodeQueueFinished(null);
 
                 // After the encode is done, we may want to shutdown, suspend etc.
-                encodeHandler.afterEncodeAction(encodeProcess);
+                encodeHandler.afterEncodeAction();
             }
             catch (Exception exc)
             {

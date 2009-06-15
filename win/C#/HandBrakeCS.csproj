@@ -41,7 +41,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -214,7 +214,6 @@
     <Compile Include="Functions\Win32.cs" />
     <Compile Include="Presets\preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="EncodeQueue\EncodeProcess.cs" />
     <Compile Include="EncodeQueue\QueueHandler.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="EncodeQueue\Encode.cs" />
@@ -245,6 +244,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Deinterlace.resx">
       <DependentUpon>Deinterlace.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PictureSettings.en.resx">
+      <DependentUpon>PictureSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PictureSettings.resx">
@@ -325,7 +328,7 @@
     <Compile Include="frmSplashScreen.Designer.cs">
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="EncodeQueue\QueueItem.cs" />
+    <Compile Include="EncodeQueue\Job.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />

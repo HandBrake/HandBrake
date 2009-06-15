@@ -14,13 +14,18 @@ namespace Handbrake.EncodeQueue
 {
     public class Encode
     {
+        public Process hbProcess { get; set; }
+        public int processID { get; set; }
+        public IntPtr processHandle { get; set; }
+        public Boolean isEncoding { get; set; }
+        public String currentQuery { get; set; }
+
         /// <summary>
         /// Execute a HandBrakeCLI process.
         /// </summary>
         /// <param name="query">The CLI Query</param>
-        public EncodeProcess runCli(string query)
+        public void runCli(string query)
         {
-            EncodeProcess currentEncode = new EncodeProcess();
             try
             {
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
@@ -39,17 +44,17 @@ namespace Handbrake.EncodeQueue
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
-                currentEncode.hbProcProcess = Process.Start(cliStart);
-                currentEncode.processID = Main.getCliProcess(before);
-                currentEncode.isEncoding = true;
-                currentEncode.currentQuery = query;
-                if (currentEncode.hbProcProcess != null)
-                    currentEncode.processHandle = (int)currentEncode.hbProcProcess.MainWindowHandle; // Set the process Handle
+                hbProcess = Process.Start(cliStart);
+                processID = Main.getCliProcess(before);
+                isEncoding = true;
+                currentQuery = query;
+                if (hbProcess != null)
+                    processHandle = hbProcess.MainWindowHandle; // Set the process Handle
 
                 // Set the process Priority
                 Process hbCliProcess = null;
-                if (currentEncode.processID != -1)
-                    hbCliProcess = Process.GetProcessById(currentEncode.processID);
+                if (processID != -1)
+                    hbCliProcess = Process.GetProcessById(processID);
 
                 if (hbCliProcess != null)
                     switch (Properties.Settings.Default.processPriority)
@@ -79,26 +84,23 @@ namespace Handbrake.EncodeQueue
                 MessageBox.Show("It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\n   Detailed Error Information: error occured in runCli()\n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            return currentEncode;
         }
 
         /// <summary>
         /// Kill the CLI process
         /// </summary>
-        public void closeCLI(EncodeProcess ep)
+        public void closeCLI()
         {
-            Process cli = Process.GetProcessById(ep.processID);
-            if (!cli.HasExited)
-                cli.Kill();
+            hbProcess.Kill();
         }
 
         /// <summary>
         /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
         /// </summary>
-        public void afterEncodeAction(EncodeProcess ep)
+        public void afterEncodeAction()
         {
-            ep.isEncoding = false;
-            ep.currentQuery = String.Empty;
+            isEncoding = false;
+            currentQuery = String.Empty;
             // Do something whent he encode ends.
             switch (Properties.Settings.Default.CompletionOption)
             {

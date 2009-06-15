@@ -72,7 +72,7 @@ namespace Handbrake.Functions
                 if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
                     mainWindow.pictureSettings.check_customCrop.Checked = true;
 
-            if (pictureSettings)
+            if (pictureSettings) // only Load picture settings if the perset requires it
             {
                 if (presetQuery.CropTop != null)
                 {
@@ -110,6 +110,8 @@ namespace Handbrake.Functions
 
             if (presetQuery.Height != 0)
                 mainWindow.pictureSettings.text_height.Value = presetQuery.Height;
+            else
+                mainWindow.pictureSettings.text_height.Value = 0;
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
@@ -124,6 +126,7 @@ namespace Handbrake.Functions
                 mainWindow.pictureSettings.maxHeight = presetQuery.MaxHeight;
             }
             mainWindow.pictureSettings.setMax();
+
 
             #endregion
 

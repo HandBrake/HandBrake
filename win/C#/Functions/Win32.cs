@@ -6,7 +6,7 @@ namespace Handbrake.Functions
     class Win32
     {
         [DllImport("user32.dll")]
-        public static extern int SetForegroundWindow(int hWnd);
+        public static extern bool SetForegroundWindow(int hWnd);
 
         [DllImport("user32.dll")]
         public static extern void LockWorkStation();
@@ -14,7 +14,7 @@ namespace Handbrake.Functions
         [DllImport("user32.dll")]
         public static extern int ExitWindowsEx(int uFlags, int dwReason);
 
-        public struct MEMORYSTATUS // Unused var's are requred here.
+        public struct MEMORYSTATUS // Unused var's are required here.
         {
             public UInt32 dwLength;
             public UInt32 dwMemoryLoad;
@@ -31,5 +31,15 @@ namespace Handbrake.Functions
         (
             ref MEMORYSTATUS lpBuffer
         );
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GenerateConsoleCtrlEvent(ConsoleCtrlEvent sigevent, int dwProcessGroupId);
+
+        public enum ConsoleCtrlEvent
+        {
+            CTRL_C = 0,
+            CTRL_BREAK = 1,
+            CTRL_CLOSE = 2,
+        }
     }
 }

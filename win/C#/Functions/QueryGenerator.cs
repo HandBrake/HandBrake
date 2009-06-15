@@ -133,9 +133,10 @@ namespace Handbrake.Functions
             // Use MaxHeight for built-in presets and height for user settings.
             if (mainWindow.pictureSettings.maxHeight == 0)
             {
-                if (mainWindow.pictureSettings.text_height.Text != "")
-                    if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
-                        query += " -l " + mainWindow.pictureSettings.text_height.Text;
+                if (mainWindow.pictureSettings.text_height.Text != "0")
+                    if (mainWindow.pictureSettings.text_height.Text != "")
+                        if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                            query += " -l " + mainWindow.pictureSettings.text_height.Text;
             }
             else
             {

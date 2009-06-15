@@ -542,8 +542,8 @@ namespace Handbrake.Controls
                 if (selectedTitle.Resolution.Height < returnVal)
                     returnVal = selectedTitle.Resolution.Height;
 
-            if (returnVal < 64)
-                returnVal = 64;
+            /*if (returnVal < 64)
+                returnVal = 64;*/
 
             // Set the global tracker
             heightVal = (int)returnVal;
@@ -623,20 +623,15 @@ namespace Handbrake.Controls
                     double new_height = (width*selectedTitle.Resolution.Width*ah*crop_height)/
                                         (selectedTitle.Resolution.Height*aw*crop_width);
 
-                    if (drp_anamorphic.SelectedIndex == 3)
-                        new_height = getModulusAuto(int.Parse(drop_modulus.SelectedItem.ToString()), new_height);
-                    else
-                        new_height = getModulusAuto(16, new_height);
+                    new_height = drp_anamorphic.SelectedIndex == 3 ? getModulusAuto(int.Parse(drop_modulus.SelectedItem.ToString()), new_height) : getModulusAuto(16, new_height);
 
-                    //16 * (421 / 16)
-                    //double z = ( 16 * (( y + 8 ) / 16 ) );
                     int x = int.Parse(new_height.ToString());
-                    if (x < 64)
-                        x = 64;
+                    /*if (x < 64)
+                        x = 64; */
                     return x;
                 }
             }
-            return 64;
+            return 0;
         }
         private int cacluateWidth(int height)
         {

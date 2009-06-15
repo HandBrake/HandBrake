@@ -19,7 +19,6 @@ namespace Handbrake
         private delegate void UpdateUIHandler();
         String currently_playing = "";
         readonly frmMain mainWindow;
-        private Process hbProc;
         private Thread player;
         private Boolean noQT;
 
@@ -84,13 +83,16 @@ namespace Handbrake
         private void procMonitor(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
-            if (hbProc != null)
+            if (process.hbProcess != null)
                 MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                hbProc = process.runCli((string)state).hbProcProcess;
-                hbProc.WaitForExit();
-                hbProc = null;
+                process.runCli((string)state);
+                if (process.hbProcess != null)
+                {
+                    process.hbProcess.WaitForExit();
+                    process.hbProcess = null;
+                }
                 encodeCompleted();
             }
         }
