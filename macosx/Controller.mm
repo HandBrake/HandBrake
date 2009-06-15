@@ -2836,12 +2836,6 @@ bool one_burned = FALSE;
          */
         if (subtitle > 0)
         {
-            hb_subtitle_t * subt;
-            hb_subtitle_config_t sub_config;
-            
-            subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-            sub_config = subt->config;
-            
             /* if i is 0, then we are in the first item of the subtitles which we need to 
              * check for the "Foreign Audio Search" which would be subtitleSourceTrackNum of 1
              * bearing in mind that for all tracks subtitleSourceTrackNum of 0 is None.
@@ -2892,14 +2886,14 @@ bool one_burned = FALSE;
                 
                 /* We are setting a source subtitle so access the source subtitle info */  
                 hb_subtitle_t * subt;
-                hb_subtitle_config_t sub_config;
                 
                 subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-                sub_config = subt->config;
                 
                 if (subt != NULL)
                 {
                     [self writeToActivityLog: "Setting Subtitle: %s", subt];
+
+                    hb_subtitle_config_t sub_config = subt->config;
                     
                     if (!burned && job->mux == HB_MUX_MKV && 
                         subt->format == hb_subtitle_s::PICTURESUB)
@@ -3359,12 +3353,6 @@ bool one_burned = FALSE;
          */
         if (subtitle > 0)
         {
-            hb_subtitle_t * subt;
-            hb_subtitle_config_t sub_config;
-            
-            subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-            sub_config = subt->config;
-            
             /* if i is 0, then we are in the first item of the subtitles which we need to 
              * check for the "Foreign Audio Search" which would be subtitleSourceTrackNum of 1
              * bearing in mind that for all tracks subtitleSourceTrackNum of 0 is None.
@@ -3381,6 +3369,10 @@ bool one_burned = FALSE;
                     if (burned != 1 && job->mux == HB_MUX_MKV)
                     {
                         job->select_subtitle_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    }
+                    else
+                    {
+                        job->select_subtitle_config.dest = hb_subtitle_config_s::RENDERSUB;
                     }
                     
                     job->select_subtitle_config.force = force;
@@ -3410,14 +3402,14 @@ bool one_burned = FALSE;
                 
                 /* We are setting a source subtitle so access the source subtitle info */  
                 hb_subtitle_t * subt;
-                hb_subtitle_config_t sub_config;
                 
                 subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-                sub_config = subt->config;
                 
                 if (subt != NULL)
                 {
                     [self writeToActivityLog: "Setting Subtitle: %s", subt];
+
+                    hb_subtitle_config_t sub_config = subt->config;
                     
                     if (!burned && job->mux == HB_MUX_MKV && 
                         subt->format == hb_subtitle_s::PICTURESUB)
