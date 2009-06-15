@@ -4000,6 +4000,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				// Only allow one subtitle to be burned into the video
 				if (one_burned)
 					continue;
+				job->select_subtitle_config.dest = RENDERSUB;
 				one_burned = TRUE;
 			}
 			job->select_subtitle_config.force = force;
