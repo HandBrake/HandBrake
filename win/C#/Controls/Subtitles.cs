@@ -13,8 +13,28 @@ namespace Handbrake.Controls
         public Subtitles()
         {
             InitializeComponent();
+
         }
-        public int setContainer { get; set; }
+
+        private int fileContainer;
+        public void setContainer(int value)
+        {
+            fileContainer = value;
+            Boolean trigger = false;
+            if (fileContainer != 2)
+                foreach (ListViewItem item in lv_subList.Items)
+                {
+                    if (item.SubItems[1].Text.Contains("Bitmap"))
+                    {
+                        if (trigger)
+                            lv_subList.Items.Remove(item);
+                        trigger = true;
+                    }
+                }
+        }
+
+
+
 
         // Controls
         private void btn_addSubTrack_Click(object sender, EventArgs e)
@@ -42,7 +62,7 @@ namespace Handbrake.Controls
             }
 
             Boolean addTrack = true;
-            if (setContainer == 0 || setContainer == 1)
+            if (fileContainer == 0 || fileContainer == 1)
             {
                 burnedVal = "Yes";  // MP4 must have bitmap subs burned in.
 
@@ -53,7 +73,7 @@ namespace Handbrake.Controls
                         if (item.SubItems[1].Text.Contains("Bitmap"))
                         {
                             MessageBox.Show(this,
-                                            "MP4 files can only have 1 bitmap track. If you wish to have multiple bitmap tracks you should consider using MKV if suitable.",
+                                            "More than one vobsub is not supported in mp4... Your first vobsub track will now be used.",
                                             "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             addTrack = false;
                         }
@@ -114,7 +134,7 @@ namespace Handbrake.Controls
 
         private void drp_subtitleTracks_SelectedIndexChanged(object sender, EventArgs e)
         {
-             // Update an item in the  list if required.
+            // Update an item in the  list if required.
             if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
             {
                 lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text = drp_subtitleTracks.SelectedItem.ToString();
@@ -123,7 +143,7 @@ namespace Handbrake.Controls
         }
         private void check_forced_CheckedChanged(object sender, EventArgs e)
         {
-               // Update an item in the  list if required.
+            // Update an item in the  list if required.
             if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
             {
                 lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[2].Text = check_forced.Checked ? "Yes" : "No";
@@ -132,7 +152,7 @@ namespace Handbrake.Controls
         }
         private void check_burned_CheckedChanged(object sender, EventArgs e)
         {
-           // Update an item in the  list if required.
+            // Update an item in the  list if required.
             if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
             {
                 if (check_burned.Checked) // Make sure we only have 1 burned track
@@ -213,5 +233,5 @@ namespace Handbrake.Controls
             }
         }
 
-     }
+    }
 }

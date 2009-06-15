@@ -973,7 +973,7 @@ namespace Handbrake
                 setExtension(".mkv");
 
             audioPanel.setAudioByContainer(drop_format.Text);
-            Subtitles.setContainer = drop_format.SelectedIndex;
+            Subtitles.setContainer(drop_format.SelectedIndex);
 
             string oldval;
             if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))

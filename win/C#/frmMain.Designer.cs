@@ -1211,7 +1211,6 @@ namespace Handbrake
             this.Subtitles.BackColor = System.Drawing.Color.Transparent;
             this.Subtitles.Location = new System.Drawing.Point(0, 0);
             this.Subtitles.Name = "Subtitles";
-            this.Subtitles.setContainer = 0;
             this.Subtitles.Size = new System.Drawing.Size(722, 310);
             this.Subtitles.TabIndex = 0;
             // 
