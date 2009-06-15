@@ -11,14 +11,18 @@
 #include <unistd.h>
 #include <inttypes.h>
 
-#ifdef PTW32_STATIC_LIB
+#if defined( __MINGW32__ )
+#include <conio.h>
+#endif
+
+#if defined( PTW32_STATIC_LIB )
 #include <pthread.h>
 #endif
 
 #include "hb.h"
 #include "parsecsv.h"
 
-#ifdef __APPLE_CC__
+#if defined( __APPLE_CC__ )
 #import <CoreServices/CoreServices.h>
 #include <IOKit/IOKitLib.h>
 #include <IOKit/storage/IOMedia.h>
@@ -171,7 +175,7 @@ int main( int argc, char ** argv )
         return 1;
     }
 
-#ifdef PTW32_STATIC_LIB
+#if defined( PTW32_STATIC_LIB )
     pthread_win32_process_attach_np();
     pthread_win32_thread_attach_np();
 #endif
@@ -233,7 +237,29 @@ int main( int argc, char ** argv )
     /* Wait... */
     while( !die )
     {
-#if !defined(SYS_BEOS) && !defined(__MINGW32__)
+#if defined( __MINGW32__ )
+        if( _kbhit() ) {
+            switch( _getch() )
+            {
+                case 0x03: /* ctrl-c */
+                case 'q':
+                    fprintf( stdout, "\nEncoding Quit by user command\n" );
+                    die = 1;
+                    break;
+                case 'p':
+                    fprintf( stdout, "\nEncoding Paused by user command, 'r' to resume\n" );
+                    hb_pause( h );
+                    break;
+                case 'r':
+                    hb_resume( h );
+                    break;
+                case 'h':
+                    ShowCommands();
+                    break;
+            }
+        }
+        hb_snooze( 200 );
+#elif !defined(SYS_BEOS)
         fd_set         fds;
         struct timeval tv;
         int            ret;
@@ -322,7 +348,7 @@ int main( int argc, char ** argv )
 
     fprintf( stderr, "HandBrake has exited.\n" );
 
-#ifdef PTW32_STATIC_LIB
+#if defined( PTW32_STATIC_LIB )
     pthread_win32_thread_detach_np();
     pthread_win32_process_detach_np();
 #endif
