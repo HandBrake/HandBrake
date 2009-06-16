@@ -1,0 +1,29 @@
+$(eval $(call import.MODULE.defs,PKG,pkg))
+
+PKG.in/  = $(SRC/)pkg/
+PKG.out/ = $(BUILD/)pkg/
+
+PKG.src.tar.bz2 = $(PKG.out/)$(HB.name)-$(HB.version).tar.bz2
+
+STAGE.src/ = $(BUILD/)stage/src/
+
+###############################################################################
+
+define STAGE.doc
+	$(MKDIR.exe) -p $(1)doc
+	$(CP.exe) $(SRC/)AUTHORS $(1)doc
+	$(CP.exe) $(SRC/)COPYING $(1)doc
+	$(CP.exe) $(SRC/)CREDITS $(1)doc
+	$(CP.exe) $(SRC/)NEWS $(1)doc
+	$(CP.exe) $(SRC/)THANKS $(1)doc
+	$(CP.exe) $(SRC/)TRANSLATIONS $(1)doc
+endef
+
+###############################################################################
+
+BUILD.out += $(PKG.src.tar.bz2)
+
+###############################################################################
+
+## include optional platform packaging
+-include $(SRC/)pkg/$(BUILD.system)/module.defs

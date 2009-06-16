@@ -1,0 +1,19 @@
+$(eval $(call import.MODULE.rules,PKG))
+
+###############################################################################
+
+.PHONY: pkg.create
+
+pkg.create:: $(PKG.src.tar.bz2)
+
+$(PKG.src.tar.bz2): | $(dir $(PKG.src.tar.bz2))
+$(PKG.src.tar.bz2): | $(STAGE.src/)
+	$(TAR.exe) cjf $@ -C $(STAGE.src/) .
+
+$(STAGE.src/):
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(HB.name)-$(HB.version)
+
+###############################################################################
+
+## include optional platform packaging
+-include $(SRC/)pkg/$(BUILD.system)/module.rules

@@ -1,0 +1,36 @@
+pkg.create:: $(PKG.cli.dmg) $(PKG.gui.dmg)
+
+$(PKG.cli.dmg): | $(dir $(PKG.cli.dmg))
+$(PKG.cli.dmg): | $(STAGE.cli/)
+	hdiutil create -srcfolder $(STAGE.cli/) -format UDBZ -mode 755 \
+	    -volname $(basename $(notdir $@)) $@
+
+$(PKG.gui.dmg): | $(dir $(PKG.gui.dmg))
+$(PKG.gui.dmg): | $(STAGE.gui/)
+	hdiutil create -srcfolder $(STAGE.gui/) -format UDBZ -mode 755 \
+	    -volname $(basename $(notdir $@)) $@
+
+pkg.cli.clean:
+	$(RM.exe) -fr $(STAGE.cli/)
+	$(RM.exe) $(PKG.cli.dmg)
+
+pkg.gui.clean:
+	$(RM.exe) -fr $(STAGE.gui/)
+	$(RM.exe) $(PKG.gui.dmg)
+
+$(STAGE.cli/):
+	$(MKDIR.exe) -p $@
+ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+	$(CP.exe) $(BUILD/)HandBrakeCLI $(STAGE.cli/)
+	$(call STAGE.doc,$(STAGE.cli/))
+else
+	$(CP.exe) $(TEST.exe) $(STAGE.cli/)
+	$(call STAGE.doc,$(STAGE.cli/))
+endif
+
+$(STAGE.gui/):
+	$(MKDIR.exe) -p $@
+ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+	$(CP.exe) -R $(BUILD/)HandBrake.app $(STAGE.gui/)
+	$(call STAGE.doc,$(STAGE.gui/))
+endif
