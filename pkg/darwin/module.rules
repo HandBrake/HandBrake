@@ -2,13 +2,19 @@ pkg.create:: $(PKG.cli.dmg) $(PKG.gui.dmg)
 
 $(PKG.cli.dmg): | $(dir $(PKG.cli.dmg))
 $(PKG.cli.dmg): | $(STAGE.cli/)
-	hdiutil create -srcfolder $(STAGE.cli/) -format UDBZ -mode 755 \
-	    -volname $(basename $(notdir $@)) $@
+	hdiutil create -srcfolder $(STAGE.cli/) -format UDRO -mode 755 \
+	    -volname $(basename $(notdir $@)) \
+	    -ov $(PKG.cli.tmp.dmg)
+	hdiutil convert -format UDBZ -o $@ $(PKG.cli.tmp.dmg)
+	$(RM.exe) $(PKG.cli.tmp.dmg)
 
 $(PKG.gui.dmg): | $(dir $(PKG.gui.dmg))
 $(PKG.gui.dmg): | $(STAGE.gui/)
-	hdiutil create -srcfolder $(STAGE.gui/) -format UDBZ -mode 755 \
-	    -volname $(basename $(notdir $@)) $@
+	hdiutil create -srcfolder $(STAGE.gui/) -format UDRO -mode 755 \
+	    -volname $(basename $(notdir $@)) \
+	    -ov $(PKG.gui.tmp.dmg)
+	hdiutil convert -format UDBZ -o $@ $(PKG.gui.tmp.dmg)
+	$(RM.exe) $(PKG.gui.tmp.dmg)
 
 pkg.cli.clean:
 	$(RM.exe) -fr $(STAGE.cli/)
