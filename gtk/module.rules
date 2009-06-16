@@ -35,7 +35,7 @@ gtk.build: $(GTK.CONFIGURE.stamp) $(LIBHB.a)
 	+$(MAKE) -C $(GTK.build/)
 
 gtk.install:
-	$(MAKE) -C $(GTK.build/) install-strip
+	$(MAKE) -C $(GTK.build/) prefix=$(PREFIX) install-strip
 
 gtk.uninstall:
 	$(MAKE) -C $(GTK.build/) uninstall
