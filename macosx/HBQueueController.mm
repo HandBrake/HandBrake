@@ -898,10 +898,10 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         /* Third Line  (Format Summary) */
         NSString * audioCodecSummary = @"";
         /* Lets also get our audio track detail since we are going through the logic for use later */
-        NSString * audioDetail1 = @"None";
-        NSString * audioDetail2 = @"None";
-        NSString * audioDetail3 = @"None";
-        NSString * audioDetail4 = @"None";
+        NSString * audioDetail1 = @"";
+        NSString * audioDetail2 = @"";
+        NSString * audioDetail3 = @"";
+        NSString * audioDetail4 = @"";
         if ([[item objectForKey:@"Audio1Track"] intValue] > 0)
         {
             audioCodecSummary = [NSString stringWithFormat:@"%@", [item objectForKey:@"Audio1Encoder"]];
@@ -1189,22 +1189,33 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         
         
         /* Seventh Line Audio Details*/
-        [finalString appendString: @"Audio Track 1: " withAttributes:detailBoldAttr];
-        [finalString appendString: audioDetail1 withAttributes:detailAttr];
-        [finalString appendString:@"\n" withAttributes:detailAttr];
+        if ([audioDetail1 length] != 0)
+        {
+            [finalString appendString: @"Audio Track 1: " withAttributes:detailBoldAttr];
+            [finalString appendString: audioDetail1 withAttributes:detailAttr];
+            [finalString appendString:@"\n" withAttributes:detailAttr];
+        }
         
-        [finalString appendString: @"Audio Track 2: " withAttributes:detailBoldAttr];
-        [finalString appendString: audioDetail2 withAttributes:detailAttr];
-        [finalString appendString:@"\n" withAttributes:detailAttr];
+        if ([audioDetail2 length] != 0)
+        {
+            [finalString appendString: @"Audio Track 2: " withAttributes:detailBoldAttr];
+            [finalString appendString: audioDetail2 withAttributes:detailAttr];
+            [finalString appendString:@"\n" withAttributes:detailAttr];
+        }
         
-        [finalString appendString: @"Audio Track 3: " withAttributes:detailBoldAttr];
-        [finalString appendString: audioDetail3 withAttributes:detailAttr];
-        [finalString appendString:@"\n" withAttributes:detailAttr];
+        if ([audioDetail3 length] != 0)
+        {
+            [finalString appendString: @"Audio Track 3: " withAttributes:detailBoldAttr];
+            [finalString appendString: audioDetail3 withAttributes:detailAttr];
+            [finalString appendString:@"\n" withAttributes:detailAttr];
+        }
         
-        [finalString appendString: @"Audio Track 4: " withAttributes:detailBoldAttr];
-        [finalString appendString: audioDetail4 withAttributes:detailAttr];
-        [finalString appendString:@"\n" withAttributes:detailAttr];
-        
+        if ([audioDetail4 length] != 0)
+        {
+            [finalString appendString: @"Audio Track 4: " withAttributes:detailBoldAttr];
+            [finalString appendString: audioDetail4 withAttributes:detailAttr];
+            [finalString appendString:@"\n" withAttributes:detailAttr];
+        }
         /* Eighth Line Subtitle Details */
         
         int i = 0;
