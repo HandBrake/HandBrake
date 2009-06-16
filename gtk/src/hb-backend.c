@@ -2983,6 +2983,11 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		// The scaler crashes if the dimensions are not divisible by 2
 		// Align mod 2.  And so does something in x264_encoder_headers()
 		job->anamorphic.modulus = mod;
+		job->anamorphic.par_width = title->pixel_aspect_width;
+		job->anamorphic.par_height = title->pixel_aspect_height;
+		job->anamorphic.dar_width = 0;
+		job->anamorphic.dar_height = 0;
+
 		if (keep_height && pic_par == 2)
 			width = ((double)height * crop_width / crop_height) + 0.5;
 		job->width = width;
@@ -2995,32 +3000,26 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		job->crop[2] = crop[2];	job->crop[3] = crop[3];
 		if (job->anamorphic.mode == 3 && !keep_aspect)
 		{
-			gint dar_width, dar_height;
+			job->anamorphic.keep_display_aspect = 0;
 			if (mode & GHB_PIC_KEEP_PAR)
 			{
-				dar_width = dar_height = 0;
-				job->anamorphic.par_width = ghb_settings_get_int(ud->settings, 
-												"PicturePARWidth");
-				job->anamorphic.par_height = ghb_settings_get_int(ud->settings, 
-												"PicturePARHeight");
+				job->anamorphic.par_width = 
+					ghb_settings_get_int(ud->settings, "PicturePARWidth");
+				job->anamorphic.par_height = 
+					ghb_settings_get_int(ud->settings, "PicturePARHeight");
 			}
 			else
 			{
-				dar_width = ghb_settings_get_int(ud->settings, 
-												"PictureDisplayWidth");
-				dar_height = ghb_settings_get_int(ud->settings, 
-												"PictureDisplayHeight");
+				job->anamorphic.dar_width = 
+					ghb_settings_get_int(ud->settings, 
+										"PictureDisplayWidth");
+				job->anamorphic.dar_height =
+					ghb_settings_get_int(ud->settings, 
+										"PictureDisplayHeight");
 			}
-			job->anamorphic.dar_width = dar_width;
-			job->anamorphic.dar_height = dar_height;
-			job->anamorphic.keep_display_aspect = 0;
 		}
 		else
 		{
-			job->anamorphic.par_width = title->pixel_aspect_width;
-			job->anamorphic.par_height = title->pixel_aspect_height;
-			job->anamorphic.dar_width = 0;
-			job->anamorphic.dar_height = 0;
 			job->anamorphic.keep_display_aspect = 1;
 		}
 		hb_set_anamorphic_size( job, &width, &height, 
@@ -3156,20 +3155,25 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 
 	gboolean keep_aspect;
 	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
-	if (job->anamorphic.mode == 3 && !keep_aspect)
+	if (job->anamorphic.mode)
 	{
-		gint disp_width, disp_height;
-		disp_width = ghb_settings_get_int(settings, "PictureDisplayWidth");
-		disp_height = ghb_settings_get_int(settings, "PictureDisplayHeight");
-		job->anamorphic.dar_width = disp_width;
-		job->anamorphic.dar_height = disp_height;
-		job->anamorphic.keep_display_aspect = 0;
-	}
-	else
-	{
-		job->anamorphic.keep_display_aspect = 1;
+		job->anamorphic.par_width = job->title->pixel_aspect_width;
+		job->anamorphic.par_height = job->title->pixel_aspect_height;
 		job->anamorphic.dar_width = 0;
 		job->anamorphic.dar_height = 0;
+
+		if (job->anamorphic.mode == 3 && !keep_aspect)
+		{
+			job->anamorphic.keep_display_aspect = 0;
+			job->anamorphic.par_width = 
+				ghb_settings_get_int(settings, "PicturePARWidth");
+			job->anamorphic.par_height = 
+				ghb_settings_get_int(settings, "PicturePARHeight");
+		}
+		else
+		{
+			job->anamorphic.keep_display_aspect = 1;
+		}
 	}
 }
 
@@ -3766,8 +3770,30 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->deinterlace = 0;
     job->grayscale   = ghb_settings_get_boolean(js, "VideoGrayScale");
 
+	gboolean keep_aspect;
+	keep_aspect = ghb_settings_get_boolean(js, "PictureKeepRatio");
 	job->anamorphic.mode = ghb_settings_combo_int(js, "PicturePAR");
 	job->anamorphic.modulus = ghb_settings_combo_int(js, "PictureModulus");
+	if (job->anamorphic.mode)
+	{
+		job->anamorphic.par_width = title->pixel_aspect_width;
+		job->anamorphic.par_height = title->pixel_aspect_height;
+		job->anamorphic.dar_width = 0;
+		job->anamorphic.dar_height = 0;
+
+		if (job->anamorphic.mode == 3 && !keep_aspect)
+		{
+			job->anamorphic.keep_display_aspect = 0;
+			job->anamorphic.par_width = 
+				ghb_settings_get_int(js, "PicturePARWidth");
+			job->anamorphic.par_height = 
+				ghb_settings_get_int(js, "PicturePARHeight");
+		}
+		else
+		{
+			job->anamorphic.keep_display_aspect = 1;
+		}
+	}
 
 	/* Add selected filters */
 	job->filters = hb_list_init();
