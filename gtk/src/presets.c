@@ -2346,7 +2346,7 @@ import_xlat_preset(GValue *dict)
 {
 	gboolean uses_max;
 	gint uses_pic;
-	gint par, par_width, par_height;
+	gint par;
 	gint vqtype;
 
 	g_debug("import_xlat_preset ()");
@@ -2356,12 +2356,6 @@ import_xlat_preset(GValue *dict)
 						preset_dict_get_value(dict, "UsesPictureSettings"));
 	par = ghb_value_int(preset_dict_get_value(dict, "PicturePAR"));
 	vqtype = ghb_value_int(preset_dict_get_value(dict, "VideoQualityType"));
-	par_width = ghb_value_int(preset_dict_get_value(dict, "PicturePARWidth"));
-	par_height = ghb_value_int(preset_dict_get_value(dict, "PicturePARHeight"));
-	ghb_dict_insert(dict, g_strdup("par_width"), 
-					ghb_int_value_new(par_width));
-	ghb_dict_insert(dict, g_strdup("par_height"), 
-					ghb_int_value_new(par_height));
 
 	if (uses_max || uses_pic == 2)
 	{
@@ -2505,7 +2499,6 @@ static void
 export_xlat_preset(GValue *dict)
 {
 	gboolean autoscale, target, br, constant;
-	gint par_width, par_height;
 
 	g_debug("export_xlat_prest ()");
 	autoscale = ghb_value_boolean(preset_dict_get_value(dict, "autoscale"));
@@ -2515,10 +2508,6 @@ export_xlat_preset(GValue *dict)
 				preset_dict_get_value(dict, "vquality_type_bitrate"));
 	constant = ghb_value_boolean(
 				preset_dict_get_value(dict, "vquality_type_constant"));
-	par_width = ghb_value_int(
-				preset_dict_get_value(dict, "par_width"));
-	par_height = ghb_value_int(
-				preset_dict_get_value(dict, "par_height"));
 
 	if (autoscale)
 		ghb_dict_insert(dict, g_strdup("UsesPictureSettings"), 
@@ -2563,17 +2552,11 @@ export_xlat_preset(GValue *dict)
 		}
 	}
 
-	ghb_dict_insert(dict, g_strdup("PicturePARWidth"), 
-						ghb_int_value_new(par_width));
-	ghb_dict_insert(dict, g_strdup("PicturePARHeight"), 
-						ghb_int_value_new(par_height));
 	ghb_dict_remove(dict, "UsesMaxPictureSettings");
 	ghb_dict_remove(dict, "autoscale");
 	ghb_dict_remove(dict, "vquality_type_target");
 	ghb_dict_remove(dict, "vquality_type_bitrate");
 	ghb_dict_remove(dict, "vquality_type_constant");
-	ghb_dict_remove(dict, "par_width");
-	ghb_dict_remove(dict, "par_height");
 	export_value_xlat(dict);
 }
 

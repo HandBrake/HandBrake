@@ -1548,18 +1548,6 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (GTK_WIDGET_SENSITIVE(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_DISPLAY_WIDTH);
 
-	gint pic_par;
-
-	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-	if (pic_par == 3)
-	{
-		gint par_width, par_height;
-
-		par_width = ghb_settings_get_int(ud->settings, "par_width");
-		par_height = ghb_settings_get_int(ud->settings, "par_height");
-		ghb_settings_set_int(ud->settings, "PicturePARWidth", par_width);
-		ghb_settings_set_int(ud->settings, "PicturePARHeight", par_height);
-	}
 	update_preview = TRUE;
 }
 
@@ -1574,18 +1562,20 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	if (GTK_WIDGET_SENSITIVE(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_DISPLAY_HEIGHT);
 
-	gint pic_par;
+	update_preview = TRUE;
+}
 
-	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
-	if (pic_par == 3)
-	{
-		gint par_width, par_height;
+G_MODULE_EXPORT void
+par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("par_changed_cb ()");
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	ghb_clear_presets_selection(ud);
+	ghb_live_reset(ud);
+	if (GTK_WIDGET_SENSITIVE(widget))
+		ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
 
-		par_width = ghb_settings_get_int(ud->settings, "par_width");
-		par_height = ghb_settings_get_int(ud->settings, "par_height");
-		ghb_settings_set_int(ud->settings, "PicturePARWidth", par_width);
-		ghb_settings_set_int(ud->settings, "PicturePARHeight", par_height);
-	}
 	update_preview = TRUE;
 }
 

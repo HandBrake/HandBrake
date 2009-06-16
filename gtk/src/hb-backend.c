@@ -2765,7 +2765,7 @@ picture_settings_deps(signal_user_data_t *ud)
 {
 	gboolean autoscale, keep_aspect, enable_keep_aspect;
 	gboolean enable_scale_width, enable_scale_height;
-	gboolean enable_disp_width, enable_disp_height;
+	gboolean enable_disp_width, enable_disp_height, enable_par;
 	gint pic_par;
 	GtkWidget *widget;
 
@@ -2787,6 +2787,7 @@ picture_settings_deps(signal_user_data_t *ud)
 	enable_scale_width = !autoscale && (pic_par != 1);
 	enable_scale_height = !autoscale && (pic_par != 1);
 	enable_disp_width = (pic_par == 3) && !keep_aspect;
+	enable_par = (pic_par == 3) && !keep_aspect;
 	enable_disp_height = FALSE;
 
 	widget = GHB_WIDGET(ud->builder, "PictureModulus");
@@ -2801,6 +2802,10 @@ picture_settings_deps(signal_user_data_t *ud)
 	gtk_widget_set_sensitive(widget, enable_disp_width);
 	widget = GHB_WIDGET(ud->builder, "PictureDisplayHeight");
 	gtk_widget_set_sensitive(widget, enable_disp_height);
+	widget = GHB_WIDGET(ud->builder, "PicturePARWidth");
+	gtk_widget_set_sensitive(widget, enable_par);
+	widget = GHB_WIDGET(ud->builder, "PicturePARHeight");
+	gtk_widget_set_sensitive(widget, enable_par);
 	widget = GHB_WIDGET(ud->builder, "PictureKeepRatio");
 	gtk_widget_set_sensitive(widget, enable_keep_aspect);
 	widget = GHB_WIDGET(ud->builder, "autoscale");
@@ -2993,12 +2998,11 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			gint dar_width, dar_height;
 			if (mode & GHB_PIC_KEEP_PAR)
 			{
-				par_width = ghb_settings_get_int(ud->settings, 
+				dar_width = dar_height = 0;
+				job->anamorphic.par_width = ghb_settings_get_int(ud->settings, 
 												"PicturePARWidth");
-				par_height = ghb_settings_get_int(ud->settings, 
+				job->anamorphic.par_height = ghb_settings_get_int(ud->settings, 
 												"PicturePARHeight");
-				dar_width = ((gdouble)width * par_width / par_height) + 0.5;
-				dar_height = height;
 			}
 			else
 			{
@@ -3013,12 +3017,25 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		}
 		else
 		{
+			job->anamorphic.par_width = title->pixel_aspect_width;
+			job->anamorphic.par_height = title->pixel_aspect_height;
 			job->anamorphic.dar_width = 0;
 			job->anamorphic.dar_height = 0;
 			job->anamorphic.keep_display_aspect = 1;
 		}
 		hb_set_anamorphic_size( job, &width, &height, 
 								&par_width, &par_height );
+		if (job->anamorphic.mode == 3 && !keep_aspect && 
+			mode & GHB_PIC_KEEP_PAR)
+		{
+			// hb_set_anamorphic_size reduces the par, which we
+			// don't want in this case because the user is
+			// explicitely specifying it.
+			par_width = ghb_settings_get_int(ud->settings, 
+											"PicturePARWidth");
+			par_height = ghb_settings_get_int(ud->settings, 
+												"PicturePARHeight");
+		}
 	}
 	else 
 	{
@@ -3097,8 +3114,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	}
 	ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
 	g_free(str);
-	ghb_ui_update(ud, "par_width", ghb_int64_value(par_width));
-	ghb_ui_update(ud, "par_height", ghb_int64_value(par_height));
+	ghb_ui_update(ud, "PicturePARWidth", ghb_int64_value(par_width));
+	ghb_ui_update(ud, "PicturePARHeight", ghb_int64_value(par_height));
 	ghb_ui_update(ud, "PictureDisplayWidth", ghb_int64_value(disp_width));
 	ghb_ui_update(ud, "PictureDisplayHeight", ghb_int64_value(height));
 	busy = FALSE;
