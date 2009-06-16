@@ -321,10 +321,20 @@ container = newContainer;
             /* add a new empty None track */
             [self addSubtitleTrack];
         }
-        else if ([anObject intValue] == 0 && rowIndex != ([subtitleArray count] -1))// if this track is none and not the last track displayed
+        else if ([anObject intValue] == 0 && rowIndex != ([subtitleArray count] -1))// if this track is set to "None" and not the last track displayed
         {
             /* we know the user chose to remove this track by setting it to None, so remove it from the array */
-            [subtitleArray removeObjectAtIndex: rowIndex];
+            /* However,if this is the first track we have to reset the selected index of the next track by + 1, since it will now become
+             * the first track, which has to account for the extra "Foreign Language Search" index. */
+            if (rowIndex == 0 && [[[subtitleArray objectAtIndex: 1] objectForKey: @"subtitleSourceTrackNum"] intValue] != 0)
+            {
+                /* get the index of the selection in row one (which is track two) */
+                int trackOneSelectedIndex = [[[subtitleArray objectAtIndex: 1] objectForKey: @"subtitleSourceTrackNum"] intValue];
+                /* increment the index of the subtitle menu item by one, to account for Foreign Language Search which is unique to the first track */
+                [[subtitleArray objectAtIndex: 1] setObject:[NSNumber numberWithInt:trackOneSelectedIndex + 1] forKey:@"subtitleSourceTrackNum"];
+            }
+           /* now that we have made the adjustment for track one (index 0) go ahead and delete the track */
+           [subtitleArray removeObjectAtIndex: rowIndex]; 
         }
         
         
@@ -346,7 +356,7 @@ container = newContainer;
         /* now that we have actually selected our track, we can grok the titleOfSelectedItem for that track */
         [[subtitleArray objectAtIndex:rowIndex] setObject:[[aTableColumn dataCellForRow:rowIndex] titleOfSelectedItem] forKey:@"subtitleSourceTrackName"];
         
-     }
+    }
     else
     {
         
@@ -390,54 +400,49 @@ container = newContainer;
         
     }
     
-    BOOL useMp4VobsubDelete = YES;
-    if (useMp4VobsubDelete == YES)
+    
+    if (container == HB_MUX_MP4)
     {
-        if (container == HB_MUX_MP4)
+        /* now remove any other tracks that are set as burned and are picturesubs */
+        int i = 0;
+        int removedTracks = 0;
+        NSEnumerator *enumerator = [subtitleArray objectEnumerator];
+        id tempObject;
+        NSMutableArray *tempArrayToDelete = [NSMutableArray array];
+        BOOL removeTrack = NO; 
+        while ( tempObject = [enumerator nextObject] )  
         {
-            /* now remove any other tracks that are set as burned and are picturesubs */
-            int i = 0;
-            int removedTracks = 0;
-            NSEnumerator *enumerator = [subtitleArray objectEnumerator];
-            id tempObject;
-            NSMutableArray *tempArrayToDelete = [NSMutableArray array];
-            BOOL removeTrack = NO; 
-            while ( tempObject = [enumerator nextObject] )  
+            
+            if ([[tempObject objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 1)
             {
-                
-                    if ([[tempObject objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 1)
-                    {
-                        /* if this is the first vobsub mark it. if not, remove it */
-                        if (removeTrack == NO)
-                        {
-                            /* make sure that this is set to be burned in */
-                            [tempObject setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
-                            removeTrack = YES;
-                        }
-                        else
-                        {
-                            [tempArrayToDelete addObject:tempObject];
-                            removedTracks ++;
-                        }
-                    }
-                
-                i++;
+                /* if this is the first vobsub mark it. if not, remove it */
+                if (removeTrack == NO)
+                {
+                    /* make sure that this is set to be burned in */
+                    [tempObject setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
+                    removeTrack = YES;
+                }
+                else
+                {
+                    [tempArrayToDelete addObject:tempObject];
+                    removedTracks ++;
+                }
             }
-            /* check to see if there are tracks to remove from the array */
-            if ([tempArrayToDelete count] > 0)
-            {
-                /* Popup a warning that hb only support one pic sub being burned in with mp4 */
-                int status;
-                NSBeep();
-                status = NSRunAlertPanel(@"More than one vobsub is not supported in an mp4...",@"Your first vobsub track will now be used.", @"OK", nil, nil);
-                [NSApp requestUserAttention:NSCriticalRequest];
-                
-                [subtitleArray removeObjectsInArray:tempArrayToDelete];
-                [aTableView reloadData];
-            }
+            
+            i++;
+        }
+        /* check to see if there are tracks to remove from the array */
+        if ([tempArrayToDelete count] > 0)
+        {
+            /* Popup a warning that hb only support one pic sub being burned in with mp4 */
+            int status;
+            status = NSRunAlertPanel(@"More than one vobsub is not supported in an mp4...",@"Your first vobsub track will now be used.", @"OK", nil, nil);
+            [NSApp requestUserAttention:NSCriticalRequest];
+            
+            [subtitleArray removeObjectsInArray:tempArrayToDelete];
+            [aTableView reloadData];
         }
     }
-
 }
 
 
