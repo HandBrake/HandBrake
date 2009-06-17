@@ -73,6 +73,8 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.numeric_updateCheckDays = new System.Windows.Forms.NumericUpDown();
+            this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
             this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
             this.check_dvdnav = new System.Windows.Forms.CheckBox();
@@ -81,9 +83,7 @@ namespace Handbrake
             this.drop_x264step = new System.Windows.Forms.ComboBox();
             this.label28 = new System.Windows.Forms.Label();
             this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
-            this.lbl_appcastUnstable = new System.Windows.Forms.Label();
             this.check_mainMinimize = new System.Windows.Forms.CheckBox();
-            this.check_snapshot = new System.Windows.Forms.CheckBox();
             this.btn_drive_detect = new System.Windows.Forms.CheckBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -119,12 +119,14 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numeric_updateCheckDays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -600,6 +602,9 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.label31);
+            this.tab_advanced.Controls.Add(this.label15);
+            this.tab_advanced.Controls.Add(this.numeric_updateCheckDays);
             this.tab_advanced.Controls.Add(this.check_trayStatusAlerts);
             this.tab_advanced.Controls.Add(this.check_inGuiStatus);
             this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
@@ -609,9 +614,7 @@ namespace Handbrake
             this.tab_advanced.Controls.Add(this.drop_x264step);
             this.tab_advanced.Controls.Add(this.label28);
             this.tab_advanced.Controls.Add(this.check_queryEditorTab);
-            this.tab_advanced.Controls.Add(this.lbl_appcastUnstable);
             this.tab_advanced.Controls.Add(this.check_mainMinimize);
-            this.tab_advanced.Controls.Add(this.check_snapshot);
             this.tab_advanced.Controls.Add(this.btn_drive_detect);
             this.tab_advanced.Controls.Add(this.label6);
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
@@ -621,6 +624,45 @@ namespace Handbrake
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
+            // 
+            // numeric_updateCheckDays
+            // 
+            this.numeric_updateCheckDays.Location = new System.Drawing.Point(323, 166);
+            this.numeric_updateCheckDays.Maximum = new decimal(new int[] {
+            31,
+            0,
+            0,
+            0});
+            this.numeric_updateCheckDays.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numeric_updateCheckDays.Name = "numeric_updateCheckDays";
+            this.numeric_updateCheckDays.Size = new System.Drawing.Size(50, 21);
+            this.numeric_updateCheckDays.TabIndex = 94;
+            this.numeric_updateCheckDays.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numeric_updateCheckDays.ValueChanged += new System.EventHandler(this.numeric_updateCheckDays_ValueChanged);
+            // 
+            // check_trayStatusAlerts
+            // 
+            this.check_trayStatusAlerts.AutoSize = true;
+            this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
+            this.check_trayStatusAlerts.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_trayStatusAlerts.Location = new System.Drawing.Point(97, 64);
+            this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(352, 17);
+            this.check_trayStatusAlerts.TabIndex = 93;
+            this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
+            this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
+                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
+                    "");
+            this.check_trayStatusAlerts.UseVisualStyleBackColor = false;
+            this.check_trayStatusAlerts.CheckedChanged += new System.EventHandler(this.check_trayStatusAlerts_CheckedChanged);
             // 
             // check_inGuiStatus
             // 
@@ -656,7 +698,7 @@ namespace Handbrake
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_dvdnav.Location = new System.Drawing.Point(76, 257);
+            this.check_dvdnav.Location = new System.Drawing.Point(76, 247);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(297, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -668,7 +710,7 @@ namespace Handbrake
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(38, 257);
+            this.label32.Location = new System.Drawing.Point(38, 247);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(32, 13);
             this.label32.TabIndex = 89;
@@ -677,7 +719,7 @@ namespace Handbrake
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(73, 215);
+            this.label30.Location = new System.Drawing.Point(73, 205);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(230, 13);
             this.label30.TabIndex = 87;
@@ -693,9 +735,9 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(312, 212);
+            this.drop_x264step.Location = new System.Drawing.Point(323, 202);
             this.drop_x264step.Name = "drop_x264step";
-            this.drop_x264step.Size = new System.Drawing.Size(111, 21);
+            this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
             this.ToolTip.SetToolTip(this.drop_x264step, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
                     "n Automatic.");
@@ -705,7 +747,7 @@ namespace Handbrake
             // 
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(27, 215);
+            this.label28.Location = new System.Drawing.Point(27, 205);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(43, 13);
             this.label28.TabIndex = 85;
@@ -726,16 +768,6 @@ namespace Handbrake
             this.check_queryEditorTab.UseVisualStyleBackColor = false;
             this.check_queryEditorTab.CheckedChanged += new System.EventHandler(this.check_queryEditorTab_CheckedChanged);
             // 
-            // lbl_appcastUnstable
-            // 
-            this.lbl_appcastUnstable.AutoSize = true;
-            this.lbl_appcastUnstable.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_appcastUnstable.Location = new System.Drawing.Point(6, 178);
-            this.lbl_appcastUnstable.Name = "lbl_appcastUnstable";
-            this.lbl_appcastUnstable.Size = new System.Drawing.Size(64, 13);
-            this.lbl_appcastUnstable.TabIndex = 83;
-            this.lbl_appcastUnstable.Text = "Updates:";
-            // 
             // check_mainMinimize
             // 
             this.check_mainMinimize.AutoSize = true;
@@ -751,21 +783,6 @@ namespace Handbrake
                     "");
             this.check_mainMinimize.UseVisualStyleBackColor = false;
             this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
-            // 
-            // check_snapshot
-            // 
-            this.check_snapshot.AutoSize = true;
-            this.check_snapshot.BackColor = System.Drawing.Color.Transparent;
-            this.check_snapshot.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_snapshot.Location = new System.Drawing.Point(76, 177);
-            this.check_snapshot.Name = "check_snapshot";
-            this.check_snapshot.Size = new System.Drawing.Size(273, 17);
-            this.check_snapshot.TabIndex = 80;
-            this.check_snapshot.Text = "Check for unstable development snapshots";
-            this.ToolTip.SetToolTip(this.check_snapshot, "Enables the built in update checker to check for the latest development snapshot " +
-                    "builds.\r\nWarning: These are considered unstable builds and are not supported!");
-            this.check_snapshot.UseVisualStyleBackColor = false;
-            this.check_snapshot.CheckedChanged += new System.EventHandler(this.check_snapshot_CheckedChanged);
             // 
             // btn_drive_detect
             // 
@@ -1146,21 +1163,24 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // check_trayStatusAlerts
+            // label15
             // 
-            this.check_trayStatusAlerts.AutoSize = true;
-            this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
-            this.check_trayStatusAlerts.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_trayStatusAlerts.Location = new System.Drawing.Point(97, 64);
-            this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(352, 17);
-            this.check_trayStatusAlerts.TabIndex = 93;
-            this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
-            this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
-                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
-                    "");
-            this.check_trayStatusAlerts.UseVisualStyleBackColor = false;
-            this.check_trayStatusAlerts.CheckedChanged += new System.EventHandler(this.check_trayStatusAlerts_CheckedChanged);
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(6, 168);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(64, 13);
+            this.label15.TabIndex = 95;
+            this.label15.Text = "Updates:";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(73, 168);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(241, 13);
+            this.label31.TabIndex = 96;
+            this.label31.Text = "Number of days between update checks:";
             // 
             // frmOptions
             // 
@@ -1186,6 +1206,7 @@ namespace Handbrake
             this.tab_cli.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numeric_updateCheckDays)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1222,7 +1243,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_cli_minimized;
         private System.Windows.Forms.Label label12;
         internal System.Windows.Forms.ToolTip ToolTip;
-        internal System.Windows.Forms.CheckBox check_snapshot;
         private System.Windows.Forms.TabPage tab_picture;
         internal System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txt_autoNameFormat;
@@ -1264,7 +1284,6 @@ namespace Handbrake
         private System.Windows.Forms.Label label27;
         internal System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.OpenFileDialog openFile_vlc;
-        private System.Windows.Forms.Label lbl_appcastUnstable;
         internal System.Windows.Forms.CheckBox check_mainMinimize;
         internal System.Windows.Forms.CheckBox check_queryEditorTab;
         private System.Windows.Forms.Label label30;
@@ -1278,5 +1297,8 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_disablePresetNotification;
         internal System.Windows.Forms.CheckBox check_inGuiStatus;
         internal System.Windows.Forms.CheckBox check_trayStatusAlerts;
+        private System.Windows.Forms.NumericUpDown numeric_updateCheckDays;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label31;
     }
 }

@@ -4,6 +4,7 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
+using System;
 using System.Xml;
 using System.Text.RegularExpressions;
 
@@ -15,7 +16,7 @@ namespace Handbrake.Functions
         XmlNode nodeRss;
         XmlNode nodeChannel;
         XmlNode nodeItem;
-        private string hb_description;
+        private Uri hb_description;
         private string hb_version;
         private string hb_build;
         private string hb_file;
@@ -26,49 +27,26 @@ namespace Handbrake.Functions
         /// </summary>
         public void getInfo()
         {
-            int unstable_build = 0;
-            string unstable_description = "", unstable_version = "";
-            string unstable_file = "";
-
-            // Check the stable appcast and get the stable build number
-            readRss(new XmlTextReader(Properties.Settings.Default.appcast));
-            string input = nodeItem.InnerXml;
-            Match ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-            int stable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
-            ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
-            string stable_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-            string stable_description = nodeItem["description"].InnerText;
-            string stable_file = nodeItem["windows"].InnerText;
-
-            // If this is a snapshot release, or the user wants to check for snapshot releases
-            if (Properties.Settings.Default.checkSnapshot == "Checked" || Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-            {
-                // Get the stable build
+            // Get the correct Appcast and set input.
+            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
                 readRss(new XmlTextReader(Properties.Settings.Default.appcast_unstable));
-                input = nodeItem.InnerXml;
-                ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-                unstable_build = int.Parse(ver.ToString().Replace("sparkle:version=", "").Replace("\"", ""));
-                ver = Regex.Match(input, @"sparkle:shortVersionString=""([0-9a-zA-Z.]*)\""");
-                unstable_version = ver.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-                unstable_description = nodeItem["description"].InnerText;
-                unstable_file = nodeItem["windows"].InnerText;
+            else 
+                readRss(new XmlTextReader(Properties.Settings.Default.appcast));
+
+            string input = nodeItem.InnerXml;
+
+            // Regular Expressions
+            Match ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
+            Match verShort = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+
+            if (nodeItem != null)
+            {
+                hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
+                hb_version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+                hb_file = nodeItem["windows"].InnerText;
+                hb_description = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
             }
 
-            // Set the global version information
-            if (stable_build >= unstable_build)
-            {
-                hb_description = stable_description;
-                hb_version = stable_version;
-                hb_build = stable_build.ToString();
-                hb_file = stable_file;
-            }
-            else
-            {
-                hb_description = unstable_description;
-                hb_version = unstable_version;
-                hb_build = unstable_build.ToString();
-                hb_file = unstable_file;
-            }
         }
 
         /// <summary>
@@ -103,7 +81,7 @@ namespace Handbrake.Functions
         /// Get Information about an update to HandBrake
         /// </summary>
         /// <returns></returns>
-        public string versionInfo()
+        public System.Uri descriptionUrl()
         {
             return hb_description;
         }

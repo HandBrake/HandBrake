@@ -62,11 +62,17 @@ namespace Handbrake
             // Check for new versions, if update checking is enabled
             if (Properties.Settings.Default.updateStatus == "Checked")
             {
-                lblStatus.Text = "Checking for updates ...";
-                Application.DoEvents();
+                DateTime now = DateTime.Now;
+                DateTime lastCheck = Properties.Settings.Default.lastUpdateCheckDate;
+                TimeSpan elapsed = now.Subtract(lastCheck);
+                if (elapsed.TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
+                {
+                    lblStatus.Text = "Checking for updates ...";
+                    Application.DoEvents();
 
-                Thread updateCheckThread = new Thread(startupUpdateCheck);
-                updateCheckThread.Start();
+                    Thread updateCheckThread = new Thread(startupUpdateCheck);
+                    updateCheckThread.Start();
+                }
             }
 
             // Setup the GUI components

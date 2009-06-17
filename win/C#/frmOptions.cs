@@ -113,17 +113,9 @@ namespace Handbrake
             // Experimental In-GUI encode status indicator.
             if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
                 check_inGuiStatus.CheckState = CheckState.Checked;
-           
-            // Enable snapshot updating
-            if (Properties.Settings.Default.checkSnapshot == "Checked")
-                check_snapshot.CheckState = CheckState.Checked;
-            
-            // Unstable Snapshot checking should only be visible for stable builds.
-            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-            {
-                lbl_appcastUnstable.Visible = false;
-                check_snapshot.Visible = false;
-            }
+
+            // Days between update checks
+            numeric_updateCheckDays.Value = Properties.Settings.Default.daysBetweenUpdateCheck;
 
             // x264 step
             drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep;
@@ -268,11 +260,11 @@ namespace Handbrake
         private void check_inGuiStatus_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.CheckState.ToString();
-        } 
+        }
 
-        private void check_snapshot_CheckedChanged(object sender, EventArgs e)
+        private void numeric_updateCheckDays_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.checkSnapshot = check_snapshot.CheckState.ToString();
+            Properties.Settings.Default.daysBetweenUpdateCheck = (int)numeric_updateCheckDays.Value;
         }
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)
@@ -291,6 +283,5 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
-
     }
 }

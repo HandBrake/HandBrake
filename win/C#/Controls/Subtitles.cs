@@ -33,9 +33,6 @@ namespace Handbrake.Controls
                 }
         }
 
-
-
-
         // Controls
         private void btn_addSubTrack_Click(object sender, EventArgs e)
         {

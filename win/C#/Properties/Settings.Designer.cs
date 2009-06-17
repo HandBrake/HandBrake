@@ -217,18 +217,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string checkSnapshot {
-            get {
-                return ((string)(this["checkSnapshot"]));
-            }
-            set {
-                this["checkSnapshot"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("{source}-{title}")]
         public string autoNameFormat {
             get {
@@ -380,6 +368,29 @@ namespace Handbrake.Properties {
             }
             set {
                 this["trayIconAlerts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime lastUpdateCheckDate {
+            get {
+                return ((global::System.DateTime)(this["lastUpdateCheckDate"]));
+            }
+            set {
+                this["lastUpdateCheckDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int daysBetweenUpdateCheck {
+            get {
+                return ((int)(this["daysBetweenUpdateCheck"]));
+            }
+            set {
+                this["daysBetweenUpdateCheck"] = value;
             }
         }
     }

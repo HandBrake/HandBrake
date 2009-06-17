@@ -50,9 +50,6 @@
     <Setting Name="cli_minimized" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="checkSnapshot" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="autoNameFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">{source}-{title}</Value>
     </Setting>
@@ -91,6 +88,12 @@
     </Setting>
     <Setting Name="trayIconAlerts" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="lastUpdateCheckDate" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="daysBetweenUpdateCheck" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5</Value>
     </Setting>
   </Settings>
 </SettingsFile>

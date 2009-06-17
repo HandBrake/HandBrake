@@ -24,7 +24,7 @@ namespace Handbrake
 
         private void getRss()
         {
-            wBrowser.DocumentText = "<font face=\"verdana\" size=\"1\">" + appcast.versionInfo() + "</font>";
+            wBrowser.Url = appcast.descriptionUrl();
         }
 
         private void setVersions()

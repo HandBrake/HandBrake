@@ -208,6 +208,9 @@ namespace Handbrake.Functions
                 if (latest == skip)
                     return false;
 
+                Properties.Settings.Default.lastUpdateCheckDate = DateTime.Now;
+                Properties.Settings.Default.Save();
+
                 Boolean update = (latest > current);
                 return update;
             }
