@@ -542,21 +542,26 @@ namespace Handbrake
             {
                 if (encodeQueue.count() != 0 || (text_source.Text != string.Empty && text_source.Text != "Click 'Source' to continue" && text_destination.Text != string.Empty))
                 {
-                    // Set the last action to encode. 
-                    // This is used for tracking which file to load in the activity window
-                    lastAction = "encode";
-
                     String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
 
-                    if (encodeQueue.count() == 0)
-                        encodeQueue.add(query, text_source.Text, text_destination.Text);
+                    DialogResult overwrite = DialogResult.Yes;
+                    if (text_destination.Text != "")
+                        if (File.Exists(text_destination.Text))
+                            overwrite = MessageBox.Show("The destination file already exists. Are you sure you want to overwrite it?", "Overwrite File?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                    queueWindow.setQueue();
-                    if (encodeQueue.count() > 1)
-                        queueWindow.Show(false);
+                    if (overwrite == DialogResult.Yes)
+                    {
+                        if (encodeQueue.count() == 0)
+                            encodeQueue.add(query, text_source.Text, text_destination.Text);
 
-                    setEncodeStarted(); // Encode is running, so setup the GUI appropriately
-                    encodeQueue.startEncode(); // Start The Queue Encoding Process
+                        queueWindow.setQueue();
+                        if (encodeQueue.count() > 1)
+                            queueWindow.Show(false);
+
+                        setEncodeStarted(); // Encode is running, so setup the GUI appropriately
+                        encodeQueue.startEncode(); // Start The Queue Encoding Process
+                        lastAction = "encode";   // Set the last action to encode - Used for activity window.
+                    }
                     this.Focus();
                 }
                 else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
