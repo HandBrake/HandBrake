@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2449 (2009052601) on Linux
+Guide to Building HandBrake svn2550 (2009061701) on Linux
 *********************************************************
 
 Table of Contents
@@ -101,7 +101,7 @@ Ubuntu 8.10 packages:
 
    * libhal-storage-dev (gui)
 
-   * libgtkhtml3.14-dev (gui)
+   * libwebkit-dev (gui)
 
    * libnotify-dev (gui)
 
@@ -113,7 +113,7 @@ To install these packages:
      sudo apt-get install subversion yasm build-essential \
      autoconf intltool libtool zlib1g-dev libbz2-dev libglib2.0-dev \
      libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
-     libgtkhtml3.14-dev libnotify-dev libgstreamer0.10-dev \
+     libwebkit-dev libnotify-dev libgstreamer0.10-dev \
      libgstreamer-plugins-base0.10-dev
 
 Fedora 10 package groups:
@@ -138,7 +138,7 @@ Additional Fedora 10 packages:
 
    * hal-devel (gui)
 
-   * gtkhtml3-devel (gui)
+   * webkitgtk-devel (gui)
 
    * libnotify-devel (gui)
 
@@ -148,7 +148,7 @@ Additional Fedora 10 packages:
 
 To install these packages:
      sudo yum install yasm zlib-devel bzip2-devel \
-     dbus-glib-devel hal-devel gtkhtml3-devel libnotify-devel\
+     dbus-glib-devel hal-devel webkitgtk-devel libnotify-devel\
      gstreamer-devel gstreamer-plugins-base-devel
 
 3 QuickStart
@@ -157,7 +157,7 @@ To install these packages:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *Note overview:: which describes procedures
+available beginning with *note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -496,7 +496,7 @@ be lost. Here is a short example of what the contents of
 `_SRC_/custom.defs' might contain:
 
      ## bump to gcc-4.2 in current path
-     GCC.gcc = gcc-4.2
+     GCC.gcc = /usr/bin/gcc-4.2
 
      ## replace optimize for 'speed' with more aggressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
@@ -536,7 +536,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2449
-     date:   2009-05-26 11:25:54 -0400
+     rev:    2550
+     date:   2009-06-17 08:04:14 -0700
      type:   developer
 
