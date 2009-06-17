@@ -233,7 +233,7 @@ static void decavcodecClose( hb_work_object_t * w )
         }
         if ( pv->buffer )
         {
-            free( pv->buffer );
+            av_free( pv->buffer );
             pv->buffer = NULL;
         }
         free( pv );
@@ -339,7 +339,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     pv->pts_next = cur;
 
-    free( bufaligned );
+    av_free( bufaligned );
     return HB_WORK_OK;
 }
 
@@ -429,7 +429,7 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
             }
         }
     }
-    free( buffer );
+    av_free( buffer );
     av_parser_close( parser );
     hb_avcodec_close( context );
     return ret;
@@ -1160,7 +1160,7 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
                                                               NULL, 0 );
                 // get output buffer size (in 2-byte samples) then malloc a buffer
                 out_size = ( out_size * 2 ) / isamp;
-                buffer = malloc( out_size );
+                buffer = av_malloc( out_size );
 
                 // we're doing straight sample format conversion which behaves as if
                 // there were only one channel.
@@ -1194,7 +1194,7 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
             // if we allocated a buffer for sample format conversion, free it
             if ( buffer != pv->buffer )
             {
-                free( buffer );
+                av_free( buffer );
             }
         }
     }
