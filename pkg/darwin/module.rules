@@ -38,5 +38,11 @@ $(STAGE.gui/):
 	$(MKDIR.exe) -p $@
 ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
 	$(CP.exe) -R $(BUILD/)HandBrake.app $(STAGE.gui/)
+	$(LIPO.exe) -thin $(BUILD.arch) \
+	    $(SRC/)macosx/Growl.framework/Versions/A/Growl \
+	    -output $(STAGE.gui/)HandBrake.app/Contents/Frameworks/Growl.framework/Versions/A/Growl
+	$(LIPO.exe) -thin $(BUILD.arch) \
+	    $(SRC/)macosx/Sparkle.framework/Versions/A/Sparkle \
+	    -output $(STAGE.gui/)HandBrake.app/Contents/Frameworks/Sparkle.framework/Versions/A/Sparkle
 	$(call STAGE.doc,$(STAGE.gui/))
 endif
