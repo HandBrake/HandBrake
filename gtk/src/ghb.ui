@@ -3496,16 +3496,42 @@ no-dct-decimate=0:cabac=1</property>
                       <object class="GtkVBox" id="vbox42">
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkCheckButton" id="check_updates">
+                          <object class="GtkAlignment" id="alignment60">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text">Check for updates to HandBrake at startup.</property>
-                            <property name="label" translatable="yes">Check for Updates</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
+                            <property name="left_padding">0</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox80">
+                                <property name="spacing">4</property>
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkComboBox" id="check_updates">
+                                    <property name="visible">True</property>
+                                    <property name="tooltip_text">Frequency to poll for HandBrake updates.</property>
+                                    <signal name="changed" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label74">
+                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Check For Updates</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
 
@@ -3610,6 +3636,7 @@ non-hidef screens.  </property>
                             <property name="left_padding">4</property>
                             <child>
                               <object class="GtkHBox" id="hbox66">
+                                <property name="spacing">4</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkSpinButton" id="preview_count">
@@ -3634,7 +3661,7 @@ increases scan duration.</property>
                                   <object class="GtkLabel" id="label77">
                                     <property name="justify">GTK_JUSTIFY_LEFT</property>
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes"> Number of previews </property>
+                                    <property name="label" translatable="yes">Number of previews</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                   <packing>

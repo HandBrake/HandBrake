@@ -107,8 +107,10 @@
 		<false />
 		<key>title_no_in_destination</key>
 		<false />
+		<key>last_update_check</key>
+		<integer>0</integer>
 		<key>check_updates</key>
-		<true />
+		<string>weekly</string>
 		<key>chapters_in_destination</key>
 		<false />
 		<key>default_source</key>

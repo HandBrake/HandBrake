@@ -107,6 +107,19 @@ combo_opts_t logging_opts =
 	d_logging_opts
 };
 
+static options_map_t d_appcast_update_opts[] =
+{
+	{"Never", "never", 0, "never"},
+	{"Daily", "daily", 1, "daily"},
+	{"Weekly", "weekly", 2, "weekly"},
+	{"Monthly", "monthly", 3, "monthly"},
+};
+combo_opts_t appcast_update_opts =
+{
+	sizeof(d_appcast_update_opts)/sizeof(options_map_t),
+	d_appcast_update_opts
+};
+
 static options_map_t d_vqual_granularity_opts[] =
 {
 	{"0.2",  "0.2",  0.2,  "0.2"},
@@ -322,6 +335,7 @@ combo_name_map_t combo_name_map[] =
 	{"PicturePAR", &par_opts},
 	{"PictureModulus", &alignment_opts},
 	{"LoggingLevel", &logging_opts},
+	{"check_updates", &appcast_update_opts},
 	{"VideoQualityGranularity", &vqual_granularity_opts},
 	{"FileFormat", &container_opts},
 	{"PictureDeinterlace", &deint_opts},
@@ -2196,6 +2210,7 @@ ghb_update_ui_combo_box(
 		generic_opts_set(ud->builder, "PicturePAR", &par_opts);
 		generic_opts_set(ud->builder, "PictureModulus", &alignment_opts);
 		generic_opts_set(ud->builder, "LoggingLevel", &logging_opts);
+		generic_opts_set(ud->builder, "check_updates", &appcast_update_opts);
 		generic_opts_set(ud->builder, "FileFormat", &container_opts);
 		generic_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);
 		generic_opts_set(ud->builder, "PictureDetelecine", &detel_opts);

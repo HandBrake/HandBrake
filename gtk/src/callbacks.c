@@ -18,6 +18,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <time.h>
 
 #if !defined(_WIN32)
 #include <poll.h>
@@ -60,6 +61,8 @@ static void update_chapter_list(signal_user_data_t *ud);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
 void ghb_notify_done(signal_user_data_t *ud);
+gpointer ghb_check_update(signal_user_data_t *ud);
+static gboolean appcast_busy = FALSE;
 
 // This is a dependency map used for greying widgets
 // that are dependent on the state of another widget.
@@ -2256,6 +2259,37 @@ ghb_timer_cb(gpointer data)
 		ghb_set_preview_image (ud);
 		update_preview = FALSE;
 	}
+
+	if (!appcast_busy)
+	{
+		gchar *updates;
+		updates = ghb_settings_get_string(ud->settings, "check_updates");
+		gint64 duration = 0;
+		if (strcmp(updates, "daily") == 0)
+			duration = 60 * 60 * 24;
+		else if (strcmp(updates, "weekly") == 0)
+			duration = 60 * 60 * 24 * 7;
+		else if (strcmp(updates, "monthly") == 0)
+			duration = 60 * 60 * 24 * 7;
+
+		g_free(updates);
+		if (duration != 0)
+		{
+			gint64 last;
+			time_t tt;
+
+			last = ghb_settings_get_int64(ud->settings, "last_update_check");
+			time(&tt);
+			if (last + duration < tt)
+			{
+				ghb_settings_set_int64(ud->settings, 
+										"last_update_check", tt);
+				ghb_pref_save(ud->settings, "last_update_check");
+				g_thread_create((GThreadFunc)ghb_check_update, ud, 
+								FALSE, NULL);
+			}
+		}
+	}
 	return TRUE;
 }
 
@@ -3487,6 +3521,7 @@ done:
 	g_free(ud->appcast);
 	ud->appcast_len = 0;
 	ud->appcast = NULL;
+	appcast_busy = FALSE;
 }
 
 void
@@ -3544,6 +3579,7 @@ ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
 	if( !( host = gethostbyname( address ) ) )
 	{
 		g_warning( "gethostbyname failed (%s)", address );
+		appcast_busy = FALSE;
 		return NULL;
 	}
 
@@ -3556,12 +3592,14 @@ ghb_net_open(signal_user_data_t *ud, gchar *address, gint port)
 	if( fd < 0 )
 	{
 		g_debug( "socket failed" );
+		appcast_busy = FALSE;
 		return NULL;
 	}
 
 	if(connect(fd, (struct sockaddr*)&sock, sizeof(struct sockaddr_in )) < 0 )
 	{
 		g_debug( "connect failed" );
+		appcast_busy = FALSE;
 		return NULL;
 	}
 	ioc = g_io_channel_unix_new(fd);
@@ -3581,6 +3619,7 @@ ghb_check_update(signal_user_data_t *ud)
 	GError *gerror = NULL;
 
 	g_debug("ghb_check_update");
+	appcast_busy = TRUE;
 	if (hb_get_build(NULL) % 100)
 	{
 		query = 
