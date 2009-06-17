@@ -3772,7 +3772,20 @@ location as the movie.</property>
                             <property name="position">8</property>
                           </packing>
                         </child>
-
+                        <child>
+                          <object class="GtkCheckButton" id="skip_taskbar">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text">Do not put HandBrake in the system TaskBar when minimized.</property>
+                            <property name="label" translatable="yes">Minimize to System Tray</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="skip_taskbar_cb"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">9</property>
+                          </packing>
+                        </child>
                         <child>
                           <object class="GtkCheckButton" id="allow_tweaks">
                             <property name="can_focus">True</property>
@@ -3782,7 +3795,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">9</property>
+                            <property name="position">10</property>
                           </packing>
                         </child>
                         <child>
@@ -3794,7 +3807,7 @@ location as the movie.</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">10</property>
+                            <property name="position">11</property>
                           </packing>
                         </child>
                       </object>
@@ -5743,7 +5756,8 @@ libx264 authors:
     </child>
   </object>
   <object class="GtkStatusIcon" id="hb_status">
-    <property name="icon_name">hb-status</property>
+    <property name="icon_name">hb-icon</property>
+    <signal handler="status_icon_query_tooltip_cb" name="query-tooltip"/>
     <signal handler="status_activate_cb" name="activate"/>
   </object>
   <object class="GtkDialog" id="update_dialog">

@@ -2231,6 +2231,32 @@ ghb_backend_events(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT gboolean
+status_icon_query_tooltip_cb(
+	GtkStatusIcon *si,
+	gint           x,
+	gint           y,
+	gboolean       kbd_mode,
+	GtkTooltip    *tt,
+	signal_user_data_t *ud)
+{
+	ghb_status_t status;
+	gchar *status_str;
+
+	ghb_get_status(&status);
+	if (status.queue.state & GHB_STATE_WORKING)
+		status_str = working_status_string(ud, &status.queue);
+	else if (status.queue.state & GHB_STATE_WORKDONE)
+		status_str = g_strdup("Encode Complete");
+	else
+		status_str = g_strdup("HandBrake");
+
+	gtk_tooltip_set_text(tt, status_str);
+	gtk_tooltip_set_icon_from_icon_name(tt, "hb-icon", GTK_ICON_SIZE_BUTTON);
+	g_free(status_str);
+	return TRUE;
+}
+
+G_MODULE_EXPORT gboolean
 ghb_timer_cb(gpointer data)
 {
 	signal_user_data_t *ud = (signal_user_data_t*)data;
@@ -2789,6 +2815,21 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
+}
+
+G_MODULE_EXPORT void
+skip_taskbar_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("pref_changed_cb");
+	ghb_widget_to_setting (ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
+
+	GtkWindow *window;
+	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
+	gtk_window_set_skip_taskbar_hint(window, 
+			ghb_settings_get_boolean(ud->settings, "skip_taskbar"));
 }
 
 G_MODULE_EXPORT void
@@ -3686,7 +3727,6 @@ ghb_notify_done(signal_user_data_t *ud)
 	GtkStatusIcon *si;
 
 	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-	gtk_status_icon_set_from_icon_name(si, "hb-status-empty");
 
 #if !defined(_WIN32)
 	NotifyNotification *notification;

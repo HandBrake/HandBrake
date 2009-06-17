@@ -103,6 +103,8 @@
 	<dict>
 		<key>EncodeLogLocation</key>
 		<false />
+		<key>skip_taskbar</key>
+		<false />
 		<key>allow_tweaks</key>
 		<false />
 		<key>title_no_in_destination</key>

@@ -790,6 +790,15 @@ main (int argc, char *argv[])
 	// Add dvd devices to File menu
 	g_idle_add((GSourceFunc)ghb_file_menu_add_dvd, ud);
 
+	GtkStatusIcon *si;
+	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+	gtk_status_icon_set_has_tooltip(si, TRUE);
+
+	GtkWindow *window;
+	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
+	gtk_window_set_skip_taskbar_hint(window, 
+			ghb_settings_get_boolean(ud->settings, "skip_taskbar"));
+
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();
