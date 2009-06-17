@@ -90,16 +90,6 @@ namespace Handbrake.Functions
                 }
             }
 
-            // Set the anamorphic mode 0,1,2,3
-            mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
-
-            // Custom Anamorphic Controls
-            mainWindow.pictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
-            mainWindow.pictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
-            mainWindow.pictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
-            mainWindow.pictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
-            mainWindow.pictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
-
             // Reset maxWidth and MaxHeight to 0
             mainWindow.pictureSettings.maxWidth = 0;
             mainWindow.pictureSettings.maxHeight = 0;
@@ -107,11 +97,10 @@ namespace Handbrake.Functions
             // Set the width and height
             if (presetQuery.Width != 0)
                 mainWindow.pictureSettings.text_width.Value = presetQuery.Width;
+            else if (presetQuery.MaxWidth == 0)
+                mainWindow.pictureSettings.text_width.Value = 0;
 
-            if (presetQuery.Height != 0)
-                mainWindow.pictureSettings.text_height.Value = presetQuery.Height;
-            else
-                mainWindow.pictureSettings.text_height.Value = 0;
+            mainWindow.pictureSettings.text_height.Value = presetQuery.Height != 0 ? presetQuery.Height : 0;
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
@@ -126,6 +115,16 @@ namespace Handbrake.Functions
                 mainWindow.pictureSettings.maxHeight = presetQuery.MaxHeight;
             }
             mainWindow.pictureSettings.setMax();
+
+            // Set the anamorphic mode 0,1,2,3
+            mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
+
+            // Custom Anamorphic Controls
+            mainWindow.pictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.pictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
+            mainWindow.pictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
+            mainWindow.pictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
+            mainWindow.pictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
 
 
             #endregion

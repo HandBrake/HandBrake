@@ -524,8 +524,8 @@ namespace Handbrake.Controls
                 if (selectedTitle.Resolution.Width < returnVal)
                     returnVal = selectedTitle.Resolution.Width;
 
-            if (returnVal < 64)
-                returnVal = 64;
+            /*if (returnVal < 64)
+                returnVal = 64; */
 
             // Set the global tracker
             widthVal = (int)returnVal;

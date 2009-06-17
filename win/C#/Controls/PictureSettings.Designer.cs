@@ -106,11 +106,6 @@ namespace Handbrake.Controls
             0,
             0,
             0});
-            this.text_width.Minimum = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
             this.text_width.Name = "text_width";
             this.toolTip.SetToolTip(this.text_width, resources.GetString("text_width.ToolTip"));
             this.text_width.Value = new decimal(new int[] {
