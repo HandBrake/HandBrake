@@ -31,6 +31,7 @@ BOOL                        fIsDragging;
 
 @interface HBController : NSObject <GrowlApplicationBridgeDelegate>
 {
+    NSImage                      * fApplicationIcon;
     IBOutlet NSWindow            * fWindow;
 
     /* Main Menu Outlets */
@@ -266,6 +267,8 @@ BOOL                        fIsDragging;
     
     double                         dockIconProgress;
 }
+
+- (IBAction) showAboutPanel:(id)sender;
 
 - (void) writeToActivityLog:(const char *) format, ...;
 - (IBAction) browseSources: (id) sender;

@@ -37,6 +37,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     {
         return nil;
     }
+
+    /* replace bundled app icon with one which is 32/64-bit savvy */
+#if defined( __LP64__ )
+    fApplicationIcon = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"HandBrake-64.icns"]];
+#else
+    fApplicationIcon = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForImageResource:@"HandBrake.icns"]];
+#endif
+    if( fApplicationIcon != nil )
+        [NSApp setApplicationIconImage:fApplicationIcon];
     
     [HBPreferencesController registerUserDefaults];
     fHandle = NULL;
@@ -310,7 +319,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[fQueueController release];
     [fPreviewController release];
     [fPictureController release];
-    
+    [fApplicationIcon release];
+
 	hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
 }
@@ -1431,6 +1441,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
 }
 
+- (IBAction)showAboutPanel:(id)sender
+{
+    //[NSApp orderFrontStandardAboutPanel:sender];
+    NSMutableDictionary* d = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+        fApplicationIcon, @"ApplicationIcon",
+        nil ];
+    [NSApp orderFrontStandardAboutPanelWithOptions:d];
+    [d release];
+}
+
 /* Here we open the title selection sheet where we can specify an exact title to be scanned */
 - (IBAction) showSourceTitleScanPanel: (id) sender
 {
@@ -1489,7 +1509,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
         
-#ifdef __LP64__
+#if defined( __LP64__ )
         /* If we are 64 bit, we cannot read encrypted dvd's as vlc is 32 bit only */
         cancelScanDecrypt = 1;
         [self writeToActivityLog: "64 bit mode cannot read dvd's, scan cancelled"];

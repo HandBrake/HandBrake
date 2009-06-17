@@ -17,6 +17,7 @@
 		25DE1FB70C169A0C00F01FC8 /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */; };
 		2713E6300F676510002E0A01 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713E50C0F675F32002E0A01 /* libhb.a */; };
 		2713E6420F676526002E0A01 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713E50C0F675F32002E0A01 /* libhb.a */; };
+		2728D25B0FE8419900758EC9 /* HandBrake-64.icns in Resources */ = {isa = PBXBuildFile; fileRef = 2728D25A0FE8419900758EC9 /* HandBrake-64.icns */; };
 		2774BE900F66F47100B65FC6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE8F0F66F47100B65FC6 /* libbz2.dylib */; };
 		2774BE920F66F48200B65FC6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE910F66F48200B65FC6 /* libz.dylib */; };
 		2774BEC70F66F61A00B65FC6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE8F0F66F47100B65FC6 /* libbz2.dylib */; };
@@ -144,6 +145,7 @@
 		25DE1FB40C169A0C00F01FC8 /* HBPreferencesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreferencesController.h; sourceTree = "<group>"; };
 		25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesController.m; sourceTree = "<group>"; };
 		2713E50C0F675F32002E0A01 /* libhb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhb.a; path = libhb/libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2728D25A0FE8419900758EC9 /* HandBrake-64.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "HandBrake-64.icns"; sourceTree = "<group>"; };
 		2774BE8F0F66F47100B65FC6 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		2774BE910F66F48200B65FC6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		27AC71840F5A0AF600053B83 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
@@ -287,6 +289,7 @@
 				A27BB4E80EFAB9310027CDF9 /* PicturePreview.xib */,
 				A273E0460C57B39A00493A45 /* icons */,
 				0DFA5C7A0B8DD1E90020BC09 /* HandBrake.icns */,
+				2728D25A0FE8419900758EC9 /* HandBrake-64.icns */,
 				E39AA4DA0D32DC0B0007A415 /* MainMenu.xib */,
 				E39AA4E20D32DC0B0007A415 /* AdvancedView.xib */,
 				E39AA4E40D32DC0B0007A415 /* OutputPanel.xib */,
@@ -578,6 +581,7 @@
 				E39AA4EB0D32DC0B0007A415 /* OutputPanel.xib in Resources */,
 				A27BB4EA0EFAB9310027CDF9 /* PicturePreview.xib in Resources */,
 				A256080C0FD06720006A4277 /* Brushed_Window.png in Resources */,
+				2728D25B0FE8419900758EC9 /* HandBrake-64.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
