@@ -3469,7 +3469,7 @@ process_appcast(signal_user_data_t *ud)
 	}
 #endif
 	dialog = GHB_WIDGET(ud->builder, "update_dialog");
-	webkit_web_view_load_uri(WEBKIT_WEB_VIEW(html), description);
+	webkit_web_view_open(WEBKIT_WEB_VIEW(html), description);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
 	if (response == GTK_RESPONSE_OK)
