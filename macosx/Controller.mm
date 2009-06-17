@@ -6895,11 +6895,12 @@ return YES;
         [preset setObject:[NSMutableArray arrayWithArray: audioListArray] forKey:@"AudioList"];
 
         
-        
+        /* Temporarily remove subtitles from creating a new preset as it has to be converted over to use the new
+         * subititle array code. */
         /* Subtitles*/
-        [preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
+        //[preset setObject:[fSubPopUp titleOfSelectedItem] forKey:@"Subtitles"];
         /* Forced Subtitles */
-        [preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
+        //[preset setObject:[NSNumber numberWithInt:[fSubForcedCheck state]] forKey:@"SubtitlesForced"];
     }
     [preset autorelease];
     return preset;
