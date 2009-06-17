@@ -27,7 +27,7 @@
 
 #include <netinet/in.h>
 #include <netdb.h>
-#include <gtkhtml/gtkhtml.h>
+#include <webkit/webkit.h>
 #include <libnotify/notify.h>
 #else
 #define WINVER 0x0500
@@ -3420,14 +3420,6 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
 }
 
-#if !defined(_WIN32)
-G_MODULE_EXPORT void
-html_link_cb(GtkHTML *html, const gchar *url, signal_user_data_t *ud)
-{
-	browse_url(url);
-}
-#endif
-
 static gpointer check_stable_update(signal_user_data_t *ud);
 static gboolean stable_update_lock = FALSE;
 
@@ -3436,7 +3428,8 @@ process_appcast(signal_user_data_t *ud)
 {
 	gchar *description = NULL, *build = NULL, *version = NULL, *msg;
 #if !defined(_WIN32)
-	GtkWidget *html, *window;
+	GtkWidget *window;
+	static GtkWidget *html = NULL;
 #endif
 	GtkWidget *dialog, *label;
 	gint	response, ibuild = 0, skip;
@@ -3463,21 +3456,22 @@ process_appcast(signal_user_data_t *ud)
 			version, build, hb_get_version(NULL), hb_get_build(NULL));
 	label = GHB_WIDGET(ud->builder, "update_message");
 	gtk_label_set_text(GTK_LABEL(label), msg);
+
 #if !defined(_WIN32)
-	html = gtk_html_new_from_string(description, -1);
-	g_signal_connect(html, "link_clicked", G_CALLBACK(html_link_cb), ud);
-	window = GHB_WIDGET(ud->builder, "update_scroll");
-	gtk_container_add(GTK_CONTAINER(window), html);
-	// Show it
-	gtk_widget_set_size_request(html, 420, 240);
-	gtk_widget_show(html);
+	if (html == NULL)
+	{
+		html = webkit_web_view_new();
+		window = GHB_WIDGET(ud->builder, "update_scroll");
+		gtk_container_add(GTK_CONTAINER(window), html);
+		// Show it
+		gtk_widget_set_size_request(html, 420, 240);
+		gtk_widget_show(html);
+	}
 #endif
 	dialog = GHB_WIDGET(ud->builder, "update_dialog");
+	webkit_web_view_load_uri(WEBKIT_WEB_VIEW(html), description);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
-#if !defined(_WIN32)
-	gtk_widget_destroy(html);
-#endif
 	if (response == GTK_RESPONSE_OK)
 	{
 		// Skip

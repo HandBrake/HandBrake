@@ -35,7 +35,7 @@ typedef struct
 
 static tag_map_t tag_map[] =
 {
-	{"description", A_DESCRIPTION},
+	{"sparkle:releaseNotesLink", A_DESCRIPTION},
 	{"enclosure", A_ENCLOSURE},
 	{"item", A_ITEM},
 };
