@@ -276,7 +276,7 @@ namespace Handbrake.Functions
             foreach (ListViewItem row in audioTracks.Items)
             {
                 // Audio Track (-a)
-                if (row.Text == "Automatic")
+                if (row.SubItems[1].Text == "Automatic")
                     tracks.Add("1");
                 else if (row.Text != "None")
                 {
@@ -285,23 +285,23 @@ namespace Handbrake.Functions
                 }
 
                 // Audio Codec (-E)
-                if (row.SubItems[1].Text != String.Empty)
+                if (row.SubItems[2].Text != String.Empty)
                     codecs.Add(getAudioEncoder(row.SubItems[2].Text));
 
                 // Audio Mixdown (-6)
-                if (row.SubItems[2].Text != String.Empty)
+                if (row.SubItems[3].Text != String.Empty)
                     mixdowns.Add(getMixDown(row.SubItems[3].Text));
 
                 // Sample Rate (-R)
-                if (row.SubItems[3].Text != String.Empty)
+                if (row.SubItems[4].Text != String.Empty)
                     samplerates.Add(row.SubItems[4].Text.Replace("Auto", "Auto"));
 
                 // Audio Bitrate (-B)
-                if (row.SubItems[4].Text != String.Empty)
+                if (row.SubItems[5].Text != String.Empty)
                     bitrates.Add(row.SubItems[5].Text.Replace("Auto", "auto"));
 
                 // DRC (-D)
-                if (row.SubItems[5].Text != String.Empty)
+                if (row.SubItems[6].Text != String.Empty)
                     drcs.Add(row.SubItems[6].Text);
             }
 

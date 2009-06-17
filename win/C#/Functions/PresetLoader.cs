@@ -248,18 +248,6 @@ namespace Handbrake.Functions
                     newTrack.SubItems.Add(track.DRC);
                     mainWindow.audioPanel.addTrackForPreset(newTrack);
                 }
-
-            /*/ Subtitle Stuff
-            mainWindow.drp_subtitle.Text = presetQuery.Subtitles;
-
-            if (presetQuery.ForcedSubtitles)
-            {
-                mainWindow.check_forced.CheckState = CheckState.Checked;
-                mainWindow.check_forced.Enabled = true;
-            }
-            else
-                mainWindow.check_forced.CheckState = CheckState.Unchecked;*/
-
             #endregion
 
             #region Other
