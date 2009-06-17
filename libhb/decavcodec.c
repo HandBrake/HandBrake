@@ -252,7 +252,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_buffer_t * in = *buf_in, * buf, * last = NULL;
     int   pos, len, out_size, i, uncompressed_len;
-    short buffer[AVCODEC_MAX_AUDIO_FRAME_SIZE];
+    short* bufaligned;
     uint64_t cur;
     unsigned char *parser_output_buffer;
     int parser_output_buffer_len;
@@ -275,6 +275,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     cur = ( in->start < 0 )? pv->pts_next : in->start;
 
+    bufaligned = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
     pos = 0;
     while( pos < in->size )
     {
@@ -285,8 +286,8 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         uncompressed_len = 0;
         if (parser_output_buffer_len)
         {
-            out_size = sizeof(buffer);
-            uncompressed_len = avcodec_decode_audio2( pv->context, buffer,
+            out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
+            uncompressed_len = avcodec_decode_audio2( pv->context, bufaligned,
                                                       &out_size,
                                                       parser_output_buffer,
                                                       parser_output_buffer_len );
@@ -316,7 +317,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                          pv->context->sample_rate;
             cur = buf->stop;
 
-            s16  = buffer;
+            s16  = bufaligned;
             fl32 = (float *) buf->data;
             for( i = 0; i < out_size / 2; i++ )
             {
@@ -338,6 +339,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     pv->pts_next = cur;
 
+    free( bufaligned );
     return HB_WORK_OK;
 }
 
@@ -401,11 +403,7 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     AVCodecParserContext *parser = av_parser_init( codec->id );
     AVCodecContext *context = avcodec_alloc_context();
     hb_avcodec_open( context, codec );
-#if defined( SYS_CYGWIN )
-    uint8_t *buffer = memalign(16, AVCODEC_MAX_AUDIO_FRAME_SIZE);
-#else
-    uint8_t *buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
-#endif
+    uint8_t *buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
     int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
     unsigned char *pbuffer;
     int pos = 0, pbuffer_size;
@@ -1132,21 +1130,7 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
         int16_t *buffer = pv->buffer;
         if ( buffer == NULL )
         {
-            // XXX ffmpeg bug workaround
-            // malloc a buffer for the audio decode. On an x86, ffmpeg
-            // uses mmx/sse instructions on this buffer without checking
-            // that it's 16 byte aligned and this will cause an abort if
-            // the buffer is allocated on our stack. Rather than doing
-            // complicated, machine dependent alignment here we use the
-            // fact that malloc returns an aligned pointer on most architectures.
-
-            #if defined( SYS_CYGWIN )
-                // Cygwin's malloc doesn't appear to return 16-byte aligned memory so use memalign instead.
-               pv->buffer = memalign(16, AVCODEC_MAX_AUDIO_FRAME_SIZE);
-            #else
-                pv->buffer = malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
-            #endif
-
+            pv->buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
             buffer = pv->buffer;
         }
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
