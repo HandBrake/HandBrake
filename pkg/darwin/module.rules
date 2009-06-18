@@ -1,4 +1,13 @@
-pkg.create:: $(PKG.cli.dmg) $(PKG.gui.dmg)
+pkg.create:: $(PKG.appcast) $(PKG.cli.dmg) $(PKG.gui.dmg)
+
+
+$(PKG.appcast): | $(dir $(PKG.appcast))
+$(PKG.appcast): $(BUILD/)project/handbrake.m4
+$(PKG.appcast): $(PKG.in/)appcast.xml.m4
+	$(M4.exe) -I$(BUILD/)project \
+	    -D__APPCAST_dmg="$(notdir $(PKG.gui.dmg))" \
+	    -D__APPCAST_dmg_size="$(shell stat -f '%z' $(PKG.gui.dmg))" \
+	    $(PKG.in/)appcast.xml.m4 > $@
 
 $(PKG.cli.dmg): | $(dir $(PKG.cli.dmg))
 $(PKG.cli.dmg): | $(STAGE.cli/)
@@ -10,11 +19,15 @@ $(PKG.cli.dmg): | $(STAGE.cli/)
 
 $(PKG.gui.dmg): | $(dir $(PKG.gui.dmg))
 $(PKG.gui.dmg): | $(STAGE.gui/)
+ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
 	hdiutil create -srcfolder $(STAGE.gui/) -format UDRO -mode 755 \
 	    -volname $(basename $(notdir $@)) \
 	    -ov $(PKG.gui.tmp.dmg)
 	hdiutil convert -format UDBZ -o $@ $(PKG.gui.tmp.dmg)
 	$(RM.exe) $(PKG.gui.tmp.dmg)
+else
+	$(TOUCH.exe) $@
+endif
 
 pkg.cli.clean:
 	$(RM.exe) -fr $(STAGE.cli/)

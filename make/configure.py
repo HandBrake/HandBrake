@@ -654,23 +654,33 @@ class Project( Action ):
         self.vpoint = 4
 
     def _action( self ):
-        appcastfmt = 'http://handbrake.fr/appcast%s.xml'
+        ## add architecture to URL only for Mac
+        if fnmatch.fnmatch( build.spec, '*-*-darwin*' ):
+            url_arch = '.%s' % (arch.mode.mode)
+        else:
+            url_arch = ''
 
         if repo.type == 'release':
             self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
-            self.url_appcast = appcastfmt % ('')
+            url_type = ''
             self.build = time.strftime('%Y%m%d') + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         elif repo.type == 'developer':
             self.version = 'svn%d' % (repo.rev)
-            self.url_appcast = appcastfmt % ('_unstable')
+            url_type = '_unstable'
             self.build = time.strftime('%Y%m%d') + '01'
             self.title = '%s svn%d (%s)' % (self.name,repo.rev,self.build)
         else:
             self.version = 'svn%d' % (repo.rev)
-            self.url_appcast = appcastfmt % ('_unofficial')
+            url_type = '_unofficial'
+            self.url_appcast = appcast_fmt % ('_unofficial',appcast_arch)
             self.build = time.strftime('%Y%m%d') + '99'
             self.title = 'Unofficial svn%d (%s)' % (repo.rev,self.build)
+
+        #self.url_appbase = 'http://handbrake.fr/appcast%s.xml' % (url_type)
+        #self.url_appcast = 'http://handbrake.fr/appcast%s%s.xml' % (url_type,url_arch)
+        self.url_appbase = 'http://localhost/appcast%s' % (url_type)
+        self.url_appcast = 'http://localhost/appcast%s%s.xml' % (url_type,url_arch)
 
         self.msg_end = '%s (%s)' % (self.name,repo.type)
         self.fail = False
@@ -1190,17 +1200,18 @@ try:
     doc.add( 'CONF.args', ' '.join( args ))
 
     doc.addBlank()
-    doc.add( 'HB.title',         project.title )
-    doc.add( 'HB.name',          project.name )
-    doc.add( 'HB.name.lower',    project.name_lower )
-    doc.add( 'HB.name.upper',    project.name_upper )
-    doc.add( 'HB.acro.lower',    project.acro_lower )
-    doc.add( 'HB.acro.upper',    project.acro_upper )
+    doc.add( 'HB.title',       project.title )
+    doc.add( 'HB.name',        project.name )
+    doc.add( 'HB.name.lower',  project.name_lower )
+    doc.add( 'HB.name.upper',  project.name_upper )
+    doc.add( 'HB.acro.lower',  project.acro_lower )
+    doc.add( 'HB.acro.upper',  project.acro_upper )
 
-    doc.add( 'HB.url.website',   project.url_website )
-    doc.add( 'HB.url.community', project.url_community )
-    doc.add( 'HB.url.irc',       project.url_irc )
-    doc.add( 'HB.url.appcast',   project.url_appcast )
+    doc.add( 'HB.url.website',    project.url_website )
+    doc.add( 'HB.url.community',  project.url_community )
+    doc.add( 'HB.url.irc',        project.url_irc )
+    doc.add( 'HB.url.appbase',    project.url_appbase )
+    doc.add( 'HB.url.appcast',    project.url_appcast )
 
     doc.add( 'HB.version.major',  project.vmajor )
     doc.add( 'HB.version.minor',  project.vminor )
