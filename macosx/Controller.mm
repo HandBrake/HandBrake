@@ -559,7 +559,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
  **********************************************************************/
 - (void) UpdateDockIcon: (float) progress
 {
-    NSImage * icon;
     NSData * tiff;
     NSBitmapImageRep * bmp;
     uint32_t * pen;
@@ -569,17 +568,14 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     int row_start, row_end;
     int i, j;
 
-    /* Get application original icon */
-    icon = [NSImage imageNamed: @"NSApplicationIcon"];
-
     if( progress < 0.0 || progress > 1.0 )
     {
-        [NSApp setApplicationIconImage: icon];
+        [NSApp setApplicationIconImage: fApplicationIcon];
         return;
     }
 
     /* Get it in a raw bitmap form */
-    tiff = [icon TIFFRepresentationUsingCompression:
+    tiff = [fApplicationIcon TIFFRepresentationUsingCompression:
             NSTIFFCompressionNone factor: 1.0];
     bmp = [NSBitmapImageRep imageRepWithData: tiff];
     
@@ -628,7 +624,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Now update the dock icon */
     tiff = [bmp TIFFRepresentationUsingCompression:
             NSTIFFCompressionNone factor: 1.0];
-    icon = [[NSImage alloc] initWithData: tiff];
+    NSImage* icon = [[NSImage alloc] initWithData: tiff];
     [NSApp setApplicationIconImage: icon];
     [icon release];
 }
@@ -1443,7 +1439,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (IBAction)showAboutPanel:(id)sender
 {
-    //[NSApp orderFrontStandardAboutPanel:sender];
     NSMutableDictionary* d = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
         fApplicationIcon, @"ApplicationIcon",
         nil ];
