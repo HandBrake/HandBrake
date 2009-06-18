@@ -2,6 +2,7 @@ pkg.create:: $(PKG.appcast) $(PKG.cli.dmg) $(PKG.gui.dmg)
 
 
 $(PKG.appcast): | $(dir $(PKG.appcast))
+$(PKG.appcast): $(PKG.gui.dmg)
 $(PKG.appcast): $(BUILD/)project/handbrake.m4
 $(PKG.appcast): $(PKG.in/)appcast.xml.m4
 	$(M4.exe) -I$(BUILD/)project \
