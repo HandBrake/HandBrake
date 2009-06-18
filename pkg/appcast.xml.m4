@@ -21,7 +21,6 @@ dnl
             <cli>__HB_build "__HB_version __BUILD_arch"</cli>
             <sparkle:releaseNotesLink>__HB_url_appnote</sparkle:releaseNotesLink>
             <pubDate>__BUILD_date</pubDate>
-            <description></description>
             <enclosure
                 sparkle:version="__HB_build"
                 sparkle:shortVersionString="__HB_version __BUILD_arch"
