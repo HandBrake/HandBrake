@@ -2363,7 +2363,7 @@ ghb_ac3_in_audio_list(const GValue *audio_list)
 
 		asettings = ghb_array_get_nth(audio_list, ii);
 		acodec = ghb_settings_combo_int(asettings, "AudioEncoder");
-		if (acodec == HB_ACODEC_AC3)
+		if (acodec & HB_ACODEC_AC3)
 			return TRUE;
 	}
 	return FALSE;
