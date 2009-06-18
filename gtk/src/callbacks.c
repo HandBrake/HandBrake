@@ -3495,9 +3495,6 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
 }
 
-static gpointer check_stable_update(signal_user_data_t *ud);
-static gboolean stable_update_lock = FALSE;
-
 static void
 process_appcast(signal_user_data_t *ud)
 {
@@ -3512,8 +3509,6 @@ process_appcast(signal_user_data_t *ud)
 	if (ud->appcast == NULL || ud->appcast_len < 15 || 
 		strncmp(&(ud->appcast[9]), "200 OK", 6))
 	{
-		if (!stable_update_lock && hb_get_build(NULL) % 100)
-			g_idle_add((GSourceFunc)check_stable_update, ud);
 		goto done;
 	}
 	ghb_appcast_parse(ud->appcast, &description, &build, &version);
@@ -3523,8 +3518,6 @@ process_appcast(signal_user_data_t *ud)
 	if (description == NULL || build == NULL || version == NULL 
 		|| ibuild <= hb_get_build(NULL) || skip == ibuild)
 	{
-		if (!stable_update_lock && hb_get_build(NULL) % 100)
-			g_thread_create((GThreadFunc)check_stable_update, ud, FALSE, NULL);
 		goto done;
 	}
 	msg = g_strdup_printf("HandBrake %s/%s is now available (you have %s/%d).",
@@ -3658,49 +3651,38 @@ ghb_check_update(signal_user_data_t *ud)
 	gsize len;
 	GIOChannel *ioc;
 	GError *gerror = NULL;
+	GRegex *regex;
+	GMatchInfo *mi;
+	gchar *host, *appcast;
 
 	g_debug("ghb_check_update");
 	appcast_busy = TRUE;
-	if (hb_get_build(NULL) % 100)
+	regex = g_regex_new("^http://(.+)/(.+)$", 0, 0, NULL);
+	if (!g_regex_match(regex, HB_PROJECT_URL_APPCAST, 0, &mi))
 	{
-		query = 
-		"GET /appcast_unstable.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
+		return NULL;
 	}
-	else
-	{
-		stable_update_lock = TRUE;
-		query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
-	}
-	ioc = ghb_net_open(ud, "handbrake.fr", 80);
+
+	host = g_match_info_fetch(mi, 1);
+	appcast = g_match_info_fetch(mi, 2);
+
+	if (host == NULL || appcast == NULL)
+		return NULL;
+
+	query = g_strdup_printf( "GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n",
+							appcast, host);
+
+	ioc = ghb_net_open(ud, host, 80);
 	if (ioc == NULL)
 		return NULL;
 
 	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
 	g_io_channel_flush(ioc, &gerror);
-	// This function is initiated by g_idle_add.  Must return false
-	// so that it is not called again
-	return NULL;
-}
-
-static gpointer
-check_stable_update(signal_user_data_t *ud)
-{
-	gchar *query;
-	gsize len;
-	GIOChannel *ioc;
-	GError *gerror = NULL;
-
-	g_debug("check_stable_update");
-	stable_update_lock = TRUE;
-	query = "GET /appcast.xml HTTP/1.0\r\nHost: handbrake.fr\r\n\r\n";
-	ioc = ghb_net_open(ud, "handbrake.fr", 80);
-	if (ioc == NULL)
-		return NULL;
-
-	g_io_channel_write_chars(ioc, query, strlen(query), &len, &gerror);
-	g_io_channel_flush(ioc, &gerror);
-	// This function is initiated by g_idle_add.  Must return false
-	// so that it is not called again
+	g_free(query);
+	g_free(host);
+	g_free(appcast);
+	g_match_info_free(mi);
+	g_regex_unref(regex);
 	return NULL;
 }
 
