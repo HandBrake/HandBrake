@@ -5,7 +5,8 @@ PKG.out/ = $(BUILD/)pkg/
 
 PKG.src.tar.bz2 = $(PKG.out/)$(HB.name)-$(HB.version).tar.bz2
 
-STAGE.src/ = $(BUILD/)stage/src/
+STAGE.out/     = $(BUILD/)stage/
+STAGE.out.src/ = $(STAGE.out/)src/
 
 ###############################################################################
 

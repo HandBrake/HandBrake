@@ -4,8 +4,8 @@ PKG.gui.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_GUI_$(BUILD.machine).
 PKG.cli.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_CLI_$(BUILD.machine).tmp.dmg
 PKG.gui.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_GUI_$(BUILD.machine).tmp.dmg
 
-STAGE.cli/ = $(BUILD/)stage/cli/
-STAGE.gui/ = $(BUILD/)stage/gui/
+STAGE.out.cli/ = $(STAGE.out/)cli/
+STAGE.out.gui/ = $(STAGE.out/)gui/
 
 PKG.appcast = $(PKG.out/)$(notdir $(HB.url.appcast))
 

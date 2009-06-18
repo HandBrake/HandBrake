@@ -6,11 +6,15 @@ $(eval $(call import.MODULE.rules,PKG))
 
 pkg.create:: $(PKG.src.tar.bz2)
 
-$(PKG.src.tar.bz2): | $(dir $(PKG.src.tar.bz2))
-$(PKG.src.tar.bz2): | $(STAGE.src/)
-	$(TAR.exe) cjf $@ -C $(STAGE.src/) .
+pkg.clean:
+	$(RM.exe) -fr $(STAGE.out/)
+	$(RM.exe) -fr $(PKG.out/)
 
-$(STAGE.src/):
+$(PKG.src.tar.bz2): | $(dir $(PKG.src.tar.bz2))
+$(PKG.src.tar.bz2): | $(STAGE.out.src/)
+	$(TAR.exe) cjf $@ -C $(STAGE.out.src/) .
+
+$(STAGE.out.src/):
 	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(HB.name)-$(HB.version)
 
 ###############################################################################
