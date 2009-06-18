@@ -19,7 +19,7 @@ dnl
         <item>
             <title>__HB_name __HB_version Released</title>
             <cli>__HB_build "__HB_version __BUILD_arch"</cli>
-            <sparkle:releaseNotesLink>__HB_url_appbase.html</sparkle:releaseNotesLink>
+            <sparkle:releaseNotesLink>__HB_url_appnote</sparkle:releaseNotesLink>
             <pubDate>__BUILD_date</pubDate>
             <description></description>
             <enclosure

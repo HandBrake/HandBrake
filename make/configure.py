@@ -662,25 +662,26 @@ class Project( Action ):
 
         if repo.type == 'release':
             self.version = '%d.%d.%d' % (self.vmajor,self.vminor,self.vpoint)
-            url_type = ''
+            url_ctype = ''
+            url_ntype = 'stable'
             self.build = time.strftime('%Y%m%d') + '00'
             self.title = '%s %s (%s)' % (self.name,self.version,self.build)
         elif repo.type == 'developer':
             self.version = 'svn%d' % (repo.rev)
-            url_type = '_unstable'
+            url_ctype = '_unstable'
+            url_ntype = 'unstable'
             self.build = time.strftime('%Y%m%d') + '01'
             self.title = '%s svn%d (%s)' % (self.name,repo.rev,self.build)
         else:
             self.version = 'svn%d' % (repo.rev)
-            url_type = '_unofficial'
+            url_ctype = '_unofficial'
+            url_ntype = 'unofficial'
             self.url_appcast = appcast_fmt % ('_unofficial',appcast_arch)
             self.build = time.strftime('%Y%m%d') + '99'
             self.title = 'Unofficial svn%d (%s)' % (repo.rev,self.build)
 
-        #self.url_appbase = 'http://handbrake.fr/appcast%s.xml' % (url_type)
-        #self.url_appcast = 'http://handbrake.fr/appcast%s%s.xml' % (url_type,url_arch)
-        self.url_appbase = 'http://localhost/appcast%s' % (url_type)
-        self.url_appcast = 'http://localhost/appcast%s%s.xml' % (url_type,url_arch)
+        self.url_appcast = 'http://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
+        self.url_appnote = 'http://handbrake.fr/appcast/%s.html' % (url_ntype)
 
         self.msg_end = '%s (%s)' % (self.name,repo.type)
         self.fail = False
@@ -1210,8 +1211,8 @@ try:
     doc.add( 'HB.url.website',    project.url_website )
     doc.add( 'HB.url.community',  project.url_community )
     doc.add( 'HB.url.irc',        project.url_irc )
-    doc.add( 'HB.url.appbase',    project.url_appbase )
     doc.add( 'HB.url.appcast',    project.url_appcast )
+    doc.add( 'HB.url.appnote',    project.url_appnote )
 
     doc.add( 'HB.version.major',  project.vmajor )
     doc.add( 'HB.version.minor',  project.vminor )
