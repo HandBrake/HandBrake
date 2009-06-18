@@ -77,6 +77,7 @@ static int MP4Init( hb_mux_object_t * m )
     hb_audio_t    * audio;
     hb_mux_data_t * mux_data;
     int i;
+    int subtitle_default;
 
     /* Flags for enabling/disabling tracks in an MP4. */
     typedef enum { TRACK_DISABLED = 0x0, TRACK_ENABLED = 0x1, TRACK_IN_MOVIE = 0x2, TRACK_IN_PREVIEW = 0x4, TRACK_IN_POSTER = 0x8}  track_header_flags;
@@ -403,6 +404,23 @@ static int MP4Init( hb_mux_object_t * m )
 
     }
 
+    // Quicktime requires that at least one subtitle is enabled,
+    // else it doesn't show any of the subtitles.
+    // So check to see if any of the subtitles are flagged to be
+    // the defualt.  The default will the the enabled track, else
+    // enable the first track.
+    subtitle_default = 0;
+    for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+    {
+        hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
+
+        if( subtitle && subtitle->format == TEXTSUB && 
+            subtitle->config.dest == PASSTHRUSUB )
+        {
+            if ( subtitle->config.default_track )
+                subtitle_default = 1;
+        }
+    }
     for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
     {
         hb_subtitle_t *subtitle = hb_list_item( job->list_subtitle, i );
@@ -468,6 +486,15 @@ static int MP4Init( hb_mux_object_t * m )
 #endif
 
             MP4SetTrackBytesProperty(m->file, mux_data->track, "tkhd.matrix", nval, size);  
+            if ( !subtitle_default || subtitle->config.default_track ) {
+                /* Enable the default subtitle track */
+                MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_ENABLED | TRACK_IN_MOVIE));
+                subtitle_default = 1;
+            }
+            else
+            {
+                MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
+            }
         }
     }
 
