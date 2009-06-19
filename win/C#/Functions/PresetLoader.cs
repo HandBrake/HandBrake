@@ -243,7 +243,10 @@ namespace Handbrake.Functions
                     newTrack.SubItems.Add(track.Encoder);
                     newTrack.SubItems.Add(track.MixDown);
                     newTrack.SubItems.Add(track.SampleRate);
-                    newTrack.SubItems.Add(track.Bitrate);
+                    if (track.Encoder.Contains("AC3"))
+                        newTrack.SubItems.Add("Auto");
+                    else
+                        newTrack.SubItems.Add(track.Bitrate);
                     newTrack.SubItems.Add(track.DRC);
                     mainWindow.audioPanel.addTrackForPreset(newTrack);
                 }

@@ -199,7 +199,7 @@ namespace Handbrake.Functions
             {
                 AppcastReader rssRead = new AppcastReader();
                 rssRead.getInfo(); // Initializes the class.
-                string build = rssRead.build();
+                string build = rssRead.build;
 
                 int latest = int.Parse(build);
                 int current = Properties.Settings.Default.hb_build;

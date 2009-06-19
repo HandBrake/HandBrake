@@ -12,50 +12,36 @@ namespace Handbrake.Functions
 {
     public class AppcastReader
     {
-        XmlDocument rssDoc;
-        XmlNode nodeRss;
-        XmlNode nodeChannel;
-        XmlNode nodeItem;
-        private Uri hb_description;
-        private string hb_version;
-        private string hb_build;
-        private string hb_file;
-
         /// <summary>
-        /// Get the build information from the required appcasts.
-        /// This must be run before calling any of the public return functions.
+        /// Get the build information from the required appcasts. Run before accessing the public vars.
         /// </summary>
         public void getInfo()
         {
             // Get the correct Appcast and set input.
-            if (Properties.Settings.Default.hb_build.ToString().EndsWith("1"))
-                readRss(new XmlTextReader(Properties.Settings.Default.appcast_unstable));
-            else 
-                readRss(new XmlTextReader(Properties.Settings.Default.appcast));
-
+            XmlNode nodeItem = Properties.Settings.Default.hb_build.ToString().EndsWith("1") ? readRss(new XmlTextReader(Properties.Settings.Default.appcast_unstable)) : readRss(new XmlTextReader(Properties.Settings.Default.appcast));
             string input = nodeItem.InnerXml;
 
             // Regular Expressions
             Match ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
             Match verShort = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
 
-            if (nodeItem != null)
-            {
-                hb_build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
-                hb_version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-                hb_file = nodeItem["windows"].InnerText;
-                hb_description = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
-            }
-
+            build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
+            version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+            downloadFile = nodeItem["windows"].InnerText;
+            descriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
         }
 
         /// <summary>
         /// Read the RSS file.
         /// </summary>
         /// <param name="rssReader"></param>
-        private void readRss(XmlReader rssReader)
+        private static XmlNode readRss(XmlReader rssReader)
         {
-            rssDoc = new XmlDocument();
+            XmlNode nodeItem = null;
+            XmlNode nodeChannel = null;
+            XmlNode nodeRss = null;
+
+            XmlDocument rssDoc = new XmlDocument();
             rssDoc.Load(rssReader);
 
             for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
@@ -64,53 +50,41 @@ namespace Handbrake.Functions
                     nodeRss = rssDoc.ChildNodes[i];
             }
 
-            for (int i = 0; i < nodeRss.ChildNodes.Count; i++)
-            {
-                if (nodeRss.ChildNodes[i].Name == "channel")
-                    nodeChannel = nodeRss.ChildNodes[i];
-            }
+            if (nodeRss != null)
+                for (int i = 0; i < nodeRss.ChildNodes.Count; i++)
+                {
+                    if (nodeRss.ChildNodes[i].Name == "channel")
+                        nodeChannel = nodeRss.ChildNodes[i];
+                }
 
-            for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
-            {
-                if (nodeChannel.ChildNodes[i].Name == "item")
-                    nodeItem = nodeChannel.ChildNodes[i];
-            }
+            if (nodeChannel != null)
+                for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
+                {
+                    if (nodeChannel.ChildNodes[i].Name == "item")
+                        nodeItem = nodeChannel.ChildNodes[i];
+                }
+
+            return nodeItem;
         }
 
         /// <summary>
         /// Get Information about an update to HandBrake
         /// </summary>
-        /// <returns></returns>
-        public System.Uri descriptionUrl()
-        {
-            return hb_description;
-        }
+        public Uri descriptionUrl { get; set; }
 
         /// <summary>
         /// Get HandBrake's version from the appcast.xml file.
         /// </summary>
-        /// <returns></returns>
-        public string version()
-        {
-            return hb_version;
-        }
+        public string version { get; set; }
 
         /// <summary>
         /// Get HandBrake's Build from the appcast.xml file.
         /// </summary>
-        /// <returns></returns>
-        public string build()
-        {
-            return hb_build;
-        }
+        public string build { get; set; }
 
         /// <summary>
         /// Get's the URL for update file.
         /// </summary>
-        /// <returns></returns>
-        public string downloadFile()
-        {
-            return hb_file;
-        }
+        public string downloadFile { get; set; }
     }
 }
