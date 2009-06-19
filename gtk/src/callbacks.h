@@ -59,6 +59,7 @@ void ghb_inhibit_gpm(void);
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
 gpointer ghb_cache_volnames(signal_user_data_t *ud);
+void ghb_volname_cache_init(void);
 
 #endif // _CALLBACKS_H_
 

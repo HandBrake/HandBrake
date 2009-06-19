@@ -366,6 +366,7 @@ get_dvd_device_name(GDrive *gd)
 #endif
 
 static GHashTable *volname_hash = NULL;
+static GMutex     *volname_mutex = NULL;
 
 static void
 free_volname_key(gpointer data)
@@ -414,8 +415,9 @@ get_dvd_volume_name(GDrive *gd)
 	drive = get_dvd_device_name(gd);
 	if (g_drive_has_media (gd))
 	{
-		if (volname_hash != NULL)
-			label = g_strdup(g_hash_table_lookup(volname_hash, drive));
+		g_mutex_lock(volname_mutex);
+		label = g_strdup(g_hash_table_lookup(volname_hash, drive));
+		g_mutex_unlock(volname_mutex);
 		if (label != NULL)
 		{
 			if (uppers_and_unders(label))
@@ -442,6 +444,14 @@ get_dvd_volume_name(GDrive *gd)
 	return result;
 }
 
+void
+ghb_volname_cache_init(void)
+{
+	volname_mutex = g_mutex_new();
+	volname_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+										free_volname_key, free_volname_value);
+}
+
 gpointer
 ghb_cache_volnames(signal_user_data_t *ud)
 {
@@ -452,11 +462,8 @@ ghb_cache_volnames(signal_user_data_t *ud)
 	if (drives == NULL)
 		return NULL;
 
-	if (volname_hash == NULL)
-	{
-		volname_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
-										free_volname_key, free_volname_value);
-	}
+	g_mutex_lock(volname_mutex);
+	g_hash_table_remove_all(volname_hash);
 	while (link != NULL)
 	{
 		gchar *drive = get_dvd_device_name(link->data);
@@ -476,6 +483,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
 		g_object_unref(link->data);
 		link = link->next;
 	}
+	g_mutex_unlock(volname_mutex);
 
 	g_list_free(drives);
 
