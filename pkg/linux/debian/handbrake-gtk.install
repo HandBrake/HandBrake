@@ -1,0 +1,5 @@
+usr/bin/ghb
+usr/share/applications/*
+usr/share/doc/ghb/*
+usr/share/icons/*
+#DOCS#

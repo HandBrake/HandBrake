@@ -1,0 +1,74 @@
+handbrake for Debian
+--------------------
+
+HandBrake bundles its own copies of ffmpeg and related media libraries. This is
+an upstream decision that the Ubuntu maintainers will respect.
+
+This is done by running contrib/getcontrib.sh which wgets each library from
+HandBrake's website.
+
+
+Upstream has asked us to do this because they have modified their libraries to
+address the finickiness of the platforms that they support, along with
+prerelease patches that add support for advanced HandBrake functionality such as
+surround-sound downmixing.
+
+HandBrake then statically links against these libraries, and they are not
+installed to the system so it doesn't interfere with other parts of the system.
+Different or older versions of these packages are included in the Ubuntu
+distribution already, and have passed our guidelines for Multiverse inclusion.
+
+
+=== Detailed Breakdown of Bundled Libraries and Reasons ===
+
+a52dec - 0.7.4
+patch to allow downmix to dolby prologic ii
+
+faad2 2.6.1
+patch to configure.ac so it will build with libtool 2.2.x
+
+ffmpeg svn 15462
+patch for building on beos
+patch that adds aac-latm codec
+patch fixes memory leak provoked by h264 streams with lots of errors
+patch for cygwin
+patch for solaris
+
+libdca svn 81
+newer than released version
+
+libdvdread 0.9.7
+patch for os x, changes path to dvdcss
+patch for cygwin, configure fixes
+
+faac
+patch for cygwin configure
+
+lame version 3.98
+
+libmp4v2 svn 45
+project was stagnant. using a fork that has picked up development
+
+libmkv 0.6.3
+
+mpeg2dec 0.5.1
+
+libogg 1.1.3
+
+libsamplerate 0.1.4
+
+libvorbis aotuv fork b5
+
+libtheora 1.0
+
+libx264 git 1028
+patch for cygwin configure
+patch for solaris build scripts
+patch to allow forcing an IDR frame
+
+xvidcore 1.1.3
+patch for os x configure
+patch for cygwin configure
+patch configure to recognize nasm 2.0
+
+ -- John Dong <jdong@ubuntu.com>  Fri, 28 Nov 2008 14:17:16 -0500

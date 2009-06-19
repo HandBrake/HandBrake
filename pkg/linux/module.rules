@@ -1,0 +1,15 @@
+pkg.create:: $(PKG.cli.deb) $(PKG.gui.deb)
+
+
+$(PKG.cli.deb): | $(dir $(PKG.cli.deb))
+$(PKG.gui.deb) $(PKG.cli.deb):
+	-rm $(BUILD/)debian
+	ln -s $(PKG.debian) $(BUILD/)debian
+	fakeroot $(MAKE) -f debian/rules clean
+	$(MAKE) BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure -f debian/rules build
+	echo $(PKG.out/)
+	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.version)" BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure PKGDESTDIR=$(PKG.out/) -f debian/rules binary
+
+	$(MV.exe) $(PKG.cli.tmp.deb) $(PKG.cli.deb)
+	$(MV.exe) $(PKG.gui.tmp.deb) $(PKG.gui.deb)
+

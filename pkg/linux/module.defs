@@ -1,0 +1,12 @@
+PKG.deb.machine = `dpkg --print-architecture`
+PKG.debian  = $(PKG.in/)linux/debian
+PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_CLI_$(BUILD.machine).deb
+PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_GUI_$(BUILD.machine).deb
+
+PKG.cli.tmp.deb = $(PKG.out/)handbrake-cli_$(HB.version)_$(PKG.deb.machine).deb
+PKG.gui.tmp.deb = $(PKG.out/)handbrake-gtk_$(HB.version)_$(PKG.deb.machine).deb
+
+###############################################################################
+
+BUILD.out += $(PKG.cli.deb)
+BUILD.out += $(PKG.gui.deb)

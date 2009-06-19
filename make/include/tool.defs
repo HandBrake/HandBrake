@@ -8,3 +8,4 @@ RM.exe    = rm
 TAR.exe   = tar
 TOUCH.exe = touch
 WGET.exe  = wget
+MV.exe    = mv

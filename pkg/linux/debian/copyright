@@ -1,0 +1,897 @@
+This package was debianized by John Dong <jdong@ubuntu.com> on
+Fri, 28 Nov 2008 14:17:16 -0500.
+
+It was downloaded from http://handbrake.fr/
+
+Upstream Author(s): See AUTHORS file for details
+
+    Eric Petit <titer@m0k.org>
+    Laurent Aimar <fenrir@via.ecp.fr>
+    John Allen (?) <johnallenemail@gmail.com> (johnallen)
+    Joe Crain <joe@dynaflashtech.net> (dynaflash)
+    Damiano Galassi <damiog@gmail.com> (ritsuka)
+    Edward Groenendaal <eddyg.hb@myreflection.org> (eddyg)
+    Rodney Hester <rhester@multics.dynalias.com> (rhester)
+    Andrew Kimpton <awk@awkward.org> (awk)
+    Chris Lee <clee@kde.org>
+    Chris Long <chris.long@mac.com> (chrislong)
+    Brian Mario <Unknown> (brianmario)
+    Maurj <handbrake@maurj.com> (maurj)
+    Mirkwood <mirkwood07@gmail.com> (mirkwood)
+    Nyx <unknown> (Nyx)
+    Philippe Rigaux <pri@nopapers.org> (prigaux)
+    Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
+    Scott <sr55ww@googlemail.com> (sr55)
+    Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
+    Mark Krenek <markkrenek@mac.com> (travistex)
+    Van Jacobson <vanj.hb@gmail.com> (van)
+
+Copyright:
+  
+    Copyright (C) 2008 by the HandBrake team (See AUTHORS)
+
+License:
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+The full text of this license is at `/usr/share/common-licenses/GPL'.
+
+---
+
+The Debian packaging is (C) 2008, John Dong <jdong@ubuntu.com> and
+is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
+
+
+==== Contrib Libraries ====
+
+HandBrake also includes and statically links against several open source
+supporting libraries. The source code for these libraries may be found in the
+`contribs/' directory. The projects and authors are listed in the
+CREDITS file of the source. A copy is installed to
+`/usr/share/doc/handbrake-common/CREDITS' when HandBrake is installed. The
+source for each library is found in a .txt in the contribs directory. For
+example, `contribs/a52dec.tar.gz' is downloaded from the URL in
+`contribs/version_a52dec.txt'.
+
+--- a52dec ---
+
+License:
+
+  Copyright (C) 2000-2002 Michel Lespinasse <walken@zoy.org>
+  Copyright (C) 1999-2000 Aaron Holtzman <aholtzma@ess.engr.uvic.ca>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in /usr/share/common-licenses/GPL file.
+
+--- faad2 ---
+Upstream Authors: menno     <menno@audiocoding.com>
+      Alexander Kurpiers  <a.kurpiers@nt.tu-darmstadt.de>
+      M. Bakker   <mbakker@nero.com>
+      Ahead Software AG
+      Nero AG
+Copyright:    2002-2005   M. Bakker
+      2003-2005   Ahead Software AG
+      2003-2005   Nero AG
+
+Other Authors:    John Edwards
+      Bill May    <wmay@cisco.com>
+      Quinnware
+      VideoLAN
+Copyright:    2002      John Edwards
+      2003      Bill May
+      1997-2002   Quinnware
+      2004      VideoLAN
+
+License Declaration:
+
+The GPL may be found in the file /usr/share/common-licenses/GPL.
+
+The upstream source has the follwing license declaration:
+---
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place - Suite 330, Boston, MA 02111-1307, USA.
+
+Any non-GPL usage of this software or parts of this software is strictly
+forbidden.
+
+The "appropriate copyright message" mentioned in section 2c of the GPLv2 must
+read: "Code from FAAD2 is copyright (c) Nero AG, www.nero.com"
+---
+
+The aacDECdrop module has the following license declaration:
+---
+This program is distributed under the GNU General Public License, version 2. A
+copy of this license is included with this source.
+---
+
+Some files (extra components and plugins) and the Debian packaging have the
+following license declaration:
+---
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+---
+
+--- ffmpeg ---
+
+Upstream Authors: Fabrice Bellard
+                  Alex Beregszaszi
+                  BERO
+                  Mario Brito
+                  Ronald Bultje
+                  Tim Ferguson
+                  Brian Foley
+                  Arpad Gereoffy
+                  Philip Gladstone
+                  Vladimir Gneushev
+                  Wolfgang Hesseler
+                  Falk Hueffner
+                  Zdenek Kabelac
+                  Robin Kay
+                  Todd Kirby
+                  Nick Kurshev
+                  Mike Melanson
+                  Michael Niedermayer
+                  François Revol
+                  Roman Shaposhnik
+                  Dieter Shirley
+                  Juan J. Sierralta
+                  Ewald Snel
+                  Leon van Stuivenberg
+                  Roberto Togni
+                  Lionel Ulmer
+
+Copyright (c) 2000-2004 Fabrice Bellard et al.
+
+The following files are licensed under the GNU GPL, as clarified below:
+
+ * ffmpeg.c
+ * libavcodec:
+   + dtsdec.c
+   + i386/idct_mmx.c
+   + liba52/*.[ch]
+ * libavformat:
+   + x11grab.c
+   + gxfenc.c
+ * libpostproc:
+   + postprocess_internal.h
+   + postprocess_altivec_template.c
+   + postprocess.h
+   + postprocess_template.c
+   + postprocess.c
+   + mangle.h
+ * libswscale:
+   + swscale.c
+   + swscale-example.c
+   + yuv2rgb_template.c
+   + swscale_altivec_template.c
+   + yuv2rgb_altivec.c
+   + swscale_template.c
+   + rgb2rgb_template.c
+   + rgb2rgb.c
+   + cs_test.c
+   + yuv2rgb_mlib.c
+   + yuv2rgb.c
+
+ | This library is free software; you can redistribute it and/or
+ | modify it under the terms of the GNU General Public License as
+ | published by the Free Software Foundation; either version 2 of
+ | the License, or (at your option) any later version.
+ |
+ | This library is distributed in the hope that it will be useful,
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ | Lesser General Public License for more details.
+ |
+ | You should have received a copy of the GNU General Public License
+ | along with this program; if not, write to the Free Software
+ | Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+The debian/libfaad directory contains header from the libfaad-dev package.
+
+ | Upstream Authors: menno      <menno@audiocoding.com>
+ |      Alexander Kurpiers  <a.kurpiers@nt.tu-darmstadt.de>
+ |        M. Bakker   <mbakker@nero.com>
+ |      Ahead Software AG
+ |      Nero AG
+ | Copyright:   2002-2005   M. Bakker
+ |      2003-2005   Ahead Software AG
+ |      2003-2005   Nero AG
+ | 
+ | Other Authors:   John Edwards
+ |      Bill May    <wmay@cisco.com>
+ |      Quinnware
+ |      VideoLAN
+ | Copyright:   2002      John Edwards
+ |      2003      Bill May
+ |      1997-2002   Quinnware
+ |      2004      VideoLAN
+ | 
+ | License Declaration:
+ | 
+ | The GPL may be found in the file /usr/share/common-licenses/GPL.
+ | 
+ | The upstream source has the follwing license declaration:
+ | ---
+ | This program is free software; you can redistribute it and/or modify it under
+ | the terms of the GNU General Public License as published by the Free Software
+ | Foundation; either version 2 of the License, or (at your option) any later
+ | version.
+ | 
+ | This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ | WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ | PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ | 
+ | You should have received a copy of the GNU General Public License along with
+ | this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ | Place - Suite 330, Boston, MA 02111-1307, USA.
+
+The debian/liba52 directory contains a copy of the header file from the
+liba52-0.7.4-dev package.
+
+ | License:
+ | 
+ |  Copyright (C) 2000-2002 Michel Lespinasse <walken@zoy.org>
+ |  Copyright (C) 1999-2000 Aaron Holtzman <aholtzma@ess.engr.uvic.ca>
+ | 
+ |  This program is free software; you can redistribute it and/or modify
+ |  it under the terms of the GNU General Public License as published by
+ |  the Free Software Foundation; either version 2 of the License, or
+ |  (at your option) any later version.
+ | 
+ |  This program is distributed in the hope that it will be useful,
+ |  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ |  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ |  GNU General Public License for more details.
+ | 
+ |  You should have received a copy of the GNU General Public License
+ |  along with this program; if not, write to the Free Software
+ |  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+
+The rest of the code is licensed under the GNU LGPL:
+
+ | This library is free software; you can redistribute it and/or
+ | modify it under the terms of the GNU Lesser General Public License as
+ | published by the Free Software Foundation; either version 2.1 of
+ | the License, or (at your option) any later version.
+ |
+ | This library is distributed in the hope that it will be useful,
+ | but WITHOUT ANY WARRANTY; without even the implied warranty of
+ | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ | Lesser General Public License for more details.
+ |
+ | You should have received a copy of the GNU General Public License
+ | along with this program; if not, write to the Free Software
+ | Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian GNU/Linux systems, the complete text of the GNU General Public
+License can be found in `/usr/share/common-licenses/GPL' and the text of the
+GNU Lesser General Public License is in `/usr/share/common-licenses/LGPL'.
+
+--- libdca ---
+
+Authors:
+Gildas Bazin <gbazin@videolan.org> implementation of the
+DTS Coherent Acoustics decoder and current maintainer of libdts.
+
+Other libdts contributors include:
+        Sam Hocevar <sam@zoy.org> - build system improvements and debian package
+
+While the libdts part of the source code was mostly written from scratch, this
+project was started from the a52dec code base so the original credits for
+a52dec are preserved:
+
+Aaron Holtzman <aholtzma@ess.engr.uvic.ca> started the project and
+made the initial working implementation.
+
+Michel Lespinasse <walken@zoy.org> did major changes for speed and
+conformance and is the current maintainer.
+
+Other contributors include:
+  Gildas Bazin <gbazin@netcourrier.com> - mingw32 port
+  Billy Biggs <vektor@div8.net> - most of liba52.txt
+  Jeroen Dobbelaere <jeroen.dobbelaere@acunia.com> - fixed point version
+  Eduard Hasenleithner <eduardh@aon.at> - gcc 3.0 fixes
+  H�kan Hjort <d95hjort@dtek.chalmers.se> - Solaris output, mlib code
+  Charles M. Hannum <root@ihack.net> - fixes
+  Chris Hodges <hodges@stradis.com> - made the library reentrant
+  Michael Holzt <kju@flummi.de> - OSS output.c and misc errata
+  Angelos Keromytis <angelos@dsl.cis.upenn.edu> - OpenBSD fixes
+  David I. Lehn <dlehn@vt.edu> - API cleanup suggestion
+  Don Mahurin <dmahurin@dma.org> - stdin support for extract_a52
+  Jim Miller <jmiller@heli.engr.sgi.com> - IRIX output.c
+  Takefumi Sayo <stake@niagara.shiojiri.ne.jp> - FreeBSD tweak
+  Shoji Tokunaga <toku@mac.com> - aif file output
+
+Copyright:
+
+    <Copyright © 2004-2008 Gildas Bazin <gbazin@videolan.org>
+
+License:
+
+    You should have received a copy of the GNU General Public License with the
+    Debian GNU/Linux distribution in file /usr/share/common-licenses/GPL; if
+    not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth
+    Floor, Boston, MA 02110-1301, USA.
+
+--- libdvdread ---
+
+Author: Bjorn Englund <d4bjorn@dtek.chalmers.se>
+
+Copyright:
+ (C) 2000-2001 Bjorn Englund <d4bjorn@dtek.chalmers.se>
+ (C) 2000-2001 Hakan Hjort <d95hjort@dtek.chalmers.se>
+ (C) 2000-2001 Billy Biggs <vektor@dumbterm.net>
+ (C) 2000-2001 Christian Wolff <scarabaeus@convergence.de>
+License: GPL-2+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in /usr/share/common-licenses/GPL-2 file.
+
+
+--- faac ---
+
+Authors: (see AUTHORS in contrib/faac.tar.gz for more information)
+  lenox (Tony Lenox)
+  menno
+  oxygene2000/oxygene (?)
+  thebard (wmilas@rarcoa.com)
+  prkoat (?)
+  xfhobbes (?)
+  flyingfox (?)
+  eraser (?)
+  knik (Krzysztof Nikiel)
+  stux (Stuart Espey)
+  ca5e (Janne Hyvärinen)
+  danchr (Dan Christiansen)
+  corrados (Volker Fischer)
+
+
+Copyright: 2001 M. Bakker
+  You should have received a copy of the GNU General Public License with the
+  Debian GNU/Linux distribution in file /usr/share/common-licenses/GPL; if
+  not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth
+  Floor, Boston, MA 02110-1301, USA.
+
+--- LAME ---
+
+Authors: 
+  The following people contributed to the LAME development:
+
+  Lauri Ahonen
+  Sakari Ailus
+  Tero Auvinen
+  Michal Bacik
+  Alex Ballegooy
+  Wilfried Behne
+  Bob Bell
+  Simon Blandford
+  Segher Boessenkool
+  Florian Bome
+  Lionel Bonnet
+  Gabriel Bouvigne
+  Rogério Theodoro de Brito
+  Erik de Castro Lopo
+  David Chandler
+  Michael Cheng
+  John Dahlstrom
+  Goran Dokic
+  James Droppo
+  Sergey Dubov
+  Dominique Duvivier
+  John Edwards
+  Alvaro Martinez Echevarria
+  Joakim Enerstam
+  Albert Faber
+  Nils Faerber
+  Sami Farin
+  Mikhail M. Fedotov
+  Joseph Fourier
+  Jani Frilander
+  Richard Gorton
+  Casper Gripenberg
+  Steffan Haeuser
+  Jeremy Hall
+  Paul Hartman
+  John Hayward-Warburton
+  Peder Hedlund
+  Robert Hegemann
+  Mathew Hendry
+  Magnus Holmgren
+  Vitaly Ivanov
+  Ben "Jacobs"
+  Tamito Kajiyama
+  Ti Kan
+  Mo Katz
+  Iwasa Kazmi
+  Ralf Kempkens
+  Frank Klemm
+  Aleksander Korzynski
+  Joachim Kuebart
+  Leonid Kulakov
+  Dmitry Kutsanov
+  Jarmo Laakkonen
+  An van Lam
+  Dennis Lambe Jr
+  Juha Laukala
+  Greg Lehey
+  Felix von Leitner
+  Rafael Luebbert
+  Macik
+  Lars Magne Ingebrigtsen
+  Scott Manley
+  Vladimir Marek
+  Goran Markovic
+  Sergey A. Maslyakov
+  Chris Matrakidis
+  Greg Maxwell
+  Chris Miller
+  Scott Miller
+  Darin Morrison
+  Tomasz Motylewski
+  Kimmo Mustonen
+  Dan Nelson
+  Nyaochi
+  Anton Oleynikov
+  Mike Oliphant
+  André Osterhues
+  Johannes Overmann
+  Gian-Carlo Pascutto
+  Jan Peman
+  Jan Rafaj
+  Gertjan van Ratingen
+  Miguel Revilla Rodriguez
+  Shawn Riley
+  Tim Ruddick
+  Ingo Saitz
+  Conrad Sanderson
+  Sergey Sapelin
+  William Schelter
+  Justin Schoeman
+  Anton Sergunov
+  Naoki Shibata
+  Sigbjørn Skjæret
+  Nathan Slingerland
+  Patrick De Smet
+  Acy Stapp
+  Mark Stephens
+  Jonathan Stott
+  Alexander Stumpf
+  Stephane Tavenard
+  Mark Taylor
+  Mikhail Teterin
+  Brad Threatt
+  Takehiro Tominaga
+  Warren Toomey
+  Atro Tossavainen
+  Roel Van Den Berghe
+  Kyle VanderBeek
+  Linus Walleij
+  Martin Weghofer
+  William Welch
+  Gerhard Wesp
+  Alfred Weyers
+  Christopher Wise
+  Ethan Yeo
+  Chuck Zenkus
+
+   
+
+  Original ISO contributors:
+
+  Bill Aspromonte
+  Shaun Astarabadi
+  R. Bittner
+  Karlheinz Brandenburg
+  W. Joseph Carter
+  Jack Chang
+  Mike Coleman
+  Johnathan Devine
+  Ernst Eberlein
+  Dan Ellis
+  Peter Farrett
+  Jean-Georges Fritsch
+  Vlad Fruchter
+  Hendrik Fuchs
+  Bernhard Grill
+  Amit Gulati
+  Munsi Haque
+  Chuck Hsiao
+  Toshiyuki Ishino
+  Masahiro Iwadare
+  Earl Jennings
+  James Johnston
+  Leon v.d. Kerkhof
+  Don Lee
+  Mike Li
+  Yu-Tang Lin
+  Soren Neilsen
+  Simao F. Campos Neto
+  Mark Paley
+  Davis Pan
+  Tan Ah Peng
+  Kevin Peterson
+  Juan Pineda
+  Ernst F. Schroeder
+  Peter Siebert
+  Jens Spille
+  John Stewart
+  Sam Stewart
+  Al Tabayoyon
+  Kathy Wang
+  Franz-Otto Witte
+  Douglas Wong
+
+
+Copyright: 1999-2008 by LAME authors
+
+    LAME is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    LAME is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth  Floor, Boston, MA 02110-1301, USA.
+
+On Debian systems, the complete text of the GNU Library
+General Public License can be found in `/usr/share/common-licenses/LGPL'.
+
+
+--- libmp4v2 (mpeg4ip) ---
+
+libmp4v2 is a subset of the mpeg4ip project.
+Upstream Authors: menno (menno@audiocoding.com) Alexander Kurpiers
+                   (a.kurpiers@nt.tu-darmstadt.de)
+
+The mpeg4ip subset in libmp4v2.tar.gz is original code by menno
+and Alexander Kurpiers. It is licensed under the terms of the Mozilla Public
+License (MPL) version 1.1. The complete text of the license is reproduced at the
+end of this section.
+
+
+
+                          MOZILLA PUBLIC LICENSE
+                                Version 1.1
+
+                              ---------------
+
+1. Definitions.
+
+     1.0.1. "Commercial Use" means distribution or otherwise making the
+     Covered Code available to a third party.
+
+     1.1. "Contributor" means each entity that creates or contributes to
+     the creation of Modifications.
+
+     1.2. "Contributor Version" means the combination of the Original
+     Code, prior Modifications used by a Contributor, and the Modifications
+     made by that particular Contributor.
+
+     1.3. "Covered Code" means the Original Code or Modifications or the
+     combination of the Original Code and Modifications, in each case
+     including portions thereof.
+
+     1.4. "Electronic Distribution Mechanism" means a mechanism generally
+     accepted in the software development community for the electronic
+     transfer of data.
+
+     1.5. "Executable" means Covered Code in any form other than Source
+     Code.
+
+     1.6. "Initial Developer" means the individual or entity identified
+     as the Initial Developer in the Source Code notice required by Exhibit
+     A.
+
+     1.7. "Larger Work" means a work which combines Covered Code or
+     portions thereof with code not governed by the terms of this License.
+
+     1.8. "License" means this document.
+
+     1.8.1. "Licensable" means having the right to grant, to the maximum
+     extent possible, whether at the time of the initial grant or
+     subsequently acquired, any and all of the rights conveyed herein.
+
+     1.9. "Modifications" means any addition to or deletion from the
+     substance or structure of either the Original Code or any previous
+     Modifications. When Covered Code is released as a series of files, a
+     Modification is:
+          A. Any addition to or deletion from the contents of a file
+          containing Original Code or previous Modifications.
+
+          B. Any new file that contains any part of the Original Code or
+          previous Modifications.
+
+     1.10. "Original Code" means Source Code of computer software code
+     which is described in the Source Code notice required by Exhibit A as
+     Original Code, and which, at the time of its release under this
+     License is not already Covered Code governed by this License.
+
+     1.10.1. "Patent Claims" means any patent claim(s), now owned or
+     hereafter acquired, including without limitation,  method, process,
+     and apparatus claims, in any patent Licensable by grantor.
+
+     1.11. "Source Code" means the preferred form of the Covered Code for
+     making modifications to it, including all modules it contains, plus
+     any associated interface definition files, scripts used to control
+     compilation and installation of an Executable, or source code
+     differential comparisons against either the Original Code or another
+     well known, available Covered Code of the Contributor's choice. The
+     Source Code can be in a compressed or archival form, provided the
+     appropriate decompression or de-archiving software is widely available
+     for no charge.
+
+     1.12. "You" (or "Your")  means an individual or a legal entity
+     exercising rights under, and complying with all of the terms of, this
+     License or a future version of this License issued under Section 6.1.
+     For legal entities, "You" includes any entity which controls, is
+     controlled by, or is under common control with You. For purposes of
+     this definition, "control" means (a) the power, direct or indirect,
+     to cause the direction or management of such entity, whether by
+     contract or otherwise, or (b) ownership of more than fifty percent
+     (50%) of the outstanding shares or beneficial ownership of such
+     entity.
+
+2. Source Code License.
+
+     2.1. The Initial Developer Grant.
+     The Initial Developer hereby grants You a world-wide, royalty-free,
+     non-exclusive license, subject to third party intellectual property
+     claims:
+          (a)  under intellectual property rights (other than patent or
+          trademark) Licensable by Initial Developer to use, reproduce,
+          modify, display, perform, sublicense and distribute the Original
+          Code (or portions thereof) with or without Modifications, and/or
+          as part of a Larger Work; and
+
+          (b) under Patents Claims infringed by the making, using or
+          selling of Original Code, to make, have made, use, practice,
+          sell, and offer for sale, and/or otherwise dispose of the
+          Original Code (or portions thereof).
+
+          (c) the licenses granted in this Section 2.1(a) and (b) are
+          effective on the date Initial Developer first distributes
+          Original Code under the terms of this License.
+
+          (d) Notwithstanding Section 2.1(b) above, no patent license is
+          granted: 1) for code that You delete from the Original Code; 2)
+          separate from the Original Code;  or 3) for infringements caused
+          by: i) the modification of the Original Code or ii) the
+          combination of the Original Code with other software or devices.
+
+     2.2. Contributor Grant.
+     Subject to third party intellectual property claims, each Contributor
+     hereby grants You a world-wide, royalty-free, non-exclusive license
+
+          (a)  under intellectual property rights (other than patent or
+          trademark) Licensable by Contributor, to use, reproduce, modify,
+          display, perform, sublicense and distribute the Modifications
+          created by such Contributor (or portions thereof) either on an
+          unmodified basis, with other Modifications, as Covered Code
+          and/or as part of a Larger Work; and
+
+          (b) under Patent Claims infringed by the making, using, or
+          selling of  Modifications made by that Contributor either alone
+          and/or in combination with its Contributor Version (or portions
+          of such combination), to make, use, sell, offer for sale, have
+          made, and/or otherwise dispose of: 1) Modifications made by that
+          Contributor (or portions thereof); and 2) the combination of
+          Modifications made by that Contributor with its Contributor
+          Version (or portions of such combination).
+
+          (c) the licenses granted in Sections 2.2(a) and 2.2(b) are
+          effective on the date Contributor first makes Commercial Use of
+          the Covered Code.
+
+          (d)    Notwithstanding Section 2.2(b) above, no patent license is
+          granted: 1) for any code that Contributor has deleted from the
+          Contributor Version; 2)  separate from the Contributor Version;
+          3)  for infringements caused by: i) third party modifications of
+          Contributor Version or ii)  the combination of Modifications made
+          by that Contributor with other software  (except as part of the
+          Contributor Version) or other devices; or 4) under Patent Claims
+          infringed by Covered Code in the absence of Modifications made by
+          that Contributor.
+
+3. Distribution Obligations.
+
+     3.1. Application of License.
+     The Modifications which You create or to which You contribute are
+     governed by the terms of this License, including without limitation
+     Section 2.2. The Source Code version of Covered Code may be
+     distributed only under the terms of this License or a future version
+     of this License released under Section 6.1, and You must include a
+     copy of this License with every copy of the Source Code You
+     distribute. You may not offer or impose any terms on any Source Code
+     version that alters or restricts the applicable version of this
+     License or the recipients' rights hereunder. However, You may include
+     an additional document offering the additional rights described in
+     Section 3.5.
+
+     3.2. Availability of Source Code.
+     Any Modification which You create or to which You contribute must be
+     made available in Source Code form under the terms of this License
+     either on the same media as an Executable version or via an accepted
+     Electronic Distribution Mechanism to anyone to whom you made an
+     Executable version available; and if made available via Electronic
+     Distribution Mechanism, must remain available for at least twelve (12)
+     months after the date it initially became available, or at least six
+     (6) months after a subsequent version of that particular Modification
+     has been made available to.
+
+--- libmkv ---
+
+Authors:
+
+  Most of this code was taken from Mike Mastnev's matroska muxer included in
+  x264.
+
+  Glue provided by saintdev@gmail.com
+
+Copyright: 
+    Copyright (C) saintdev@gmail.com
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2, or (at your option)
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+--- mpeg2dec ---
+
+Upstream Authors:
+
+    Aaron Holtzman <aholtzma@ess.engr.uvic.ca>
+    Michel Lespinasse <walken@zoy.org>
+
+    Bruno Barreyra <barreyra@ufl.edu> - build fixes
+    Gildas Bazin <gbazin@netcourrier.com> - mingw32 port
+    Alexander W. Chin <alexc@newt.phys.unsw.edu.au> - progressive_seq fix
+    Stephen Crowley <stephenc@dns2.digitalpassage.com> - build fixes
+    Didier Gautheron <dgautheron@magic.fr> - bug fixes
+    Ryan C. Gordon <icculus@lokigames.com> - SDL support
+    Peter Gubanov <peter@elecard.net.ru> - MMX IDCT scheduling
+    Håkan Hjort <d95hjort@dtek.chalmers.se> - Solaris fixes, mlib code
+    Nicolas Joly <njoly@pasteur.fr> - assorted bug fixes
+    Gerd Knorr <kraxel@goldbach.in-berlin.de> - Xv support
+    David I. Lehn <dlehn@vt.edu> - motion_comp mmx code
+    Olie Lho <ollie@sis.com.tw> - MMX yuv2rgb routine
+    David S. Miller <davem@redhat.com> - sparc VIS optimizations
+    Rick Niles <niles@scyld.com> - build fixes
+    Real Ouellet <realo@sympatico.ca> - g200 fixes
+    Bajusz Peter <hyp-x@inf.bme.hu> - motion comp fixes
+    Franck Sicard <Franck.Sicard@miniruth.solsoft.fr> - x11 fixes
+    Brion Vibber <brion@gizmo.usc.edu> - x11 fixes
+    Martin Vogt <mvogt@rhrk.uni-kl.de> - reentrancy fixes
+    Fredrik Vraalsen <vraalsen@cs.uiuc.edu> - general hackage and stuff
+
+mpeg2dec is Copyright (C) 1999-2000 Aaron Holtzman <aholtzma@ess.engr.uvic.ca>
+            Copyright (C) 2000-2003 Michel Lespinasse <walken@zoy.org>
+            Copyright (C) 2000-2003 Silicon Integrated System Corp.
+            Copyright (C) 2000-2003 Ryan C. Gordon <icculus@lokigames.com>
+            Copyright (C) 2000-2003 Dominik Schnitzer <aeneas@linuxvideo.org>
+            Copyright (C) 2003      Regis Duchesne <hpreg@zoy.org>
+            Copyright (C) 2003      David S. Miller <davem@redhat.com>
+            Copyright (C) 2003      Peter Gubanov <peter@elecard.net.ru>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2, or (at your option)
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian systems, the complete text of the GNU General Public License can
+be found in `/usr/share/common-licenses/GPL'.
+
+--- libogg ---
+
+
+Upstream Author: Christopher Montgomery <monty@xiph.org>
+
+Copyright:
+Copyright (c) 2002-2004, Xiph.org Foundation
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+- Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+- Neither the name of the Xiph.Org Foundation nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+

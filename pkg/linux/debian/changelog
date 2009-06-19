@@ -1,0 +1,100 @@
+handbrake (svn2573) jaunty; urgency=low
+  * CORE
+   - Allows sources with no audio to be encoded
+   - TrueHD and DTS-HD demuxing
+   - Transport stream improvements
+   - Better reading of audio source parameters
+   - Support for 8-bit audio sources
+   - Fixed 5.1 Vorbis channel maps
+   - Better DTS handling
+   - Better VC1 handling
+   - Better frame synchronization validation
+   - Better identification of valid tracks in streams
+   - Better handle of New Zealand FreeView broadcasts
+   - Avoids a crash when a user tries to encode the same audio multiple times with file inputs, a big problem with the Universal and AppleTV presets
+   - Preserves metadata when encoding MP4 sources
+   - Avoids libavcodec threading issue by better locking
+   - Fixes aspect ratio rounding bug
+   - ffmpeg libraries update, libmp4v2 update, libx264 update
+   - Other assorted improvements
+       
+  * MAC
+   - Live preview encoding
+   - Picture settings split off to its own window instead of a sheet, with a button in the toolbar
+   - Variable number of preview images, default is now 30 not 10
+   - Logging level preference
+   - On launch preference for whether or not to show Open Source window
+   - Autocrop re-enabled for AppleTV Legacy preset
+   - Support dropped for user presets generated in 0.9.2 or earlier
+   - Correct dates for single-serving activity logs
+   - Fixes issue where changing format reset video codec selection
+   - Other assorted interface enhancements and bug fixes
+       
+  * WIN
+   - XML-based queue system
+   - Removed RAM limitation
+   - Better memory alignment in Cygwin
+   - Other assorted interface enhancements and bug fixes
+   
+  * LIN
+   - Live preview encoding
+   - Picture settings split off to its own window with a button in the toolbar
+   - Variable number of preview images, default is now 30 not 10
+   - Interface improvements
+   - Logging level preference
+   - Other assorted interface enhancements and bug fixes
+   
+  * CLI
+   - Added a --previews option to control how many preview images are scanned and whether or not they're written to disk (now defaults to not storing them) 
+
+ -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 21 Dec 2008 9:51:07 -0800
+
+handbrake (0.9.3+repack1-0ubuntu0~8.04jdong4) hardy; urgency=low
+
+  * Incorporate fixes suggested by John Stebbins:
+   - Don't have the buildsys override HB's optimized CFLAGS
+   - Do an official build (not a snapshot)
+   - dh_icons/dh_desktop to correctly install menu icon
+
+ -- John Dong <jdong@ubuntu.com>  Wed, 17 Dec 2008 21:15:07 -0500
+
+handbrake (0.9.3+repack1-0ubuntu0~8.04jdong3) hardy; urgency=low
+
+  *  Switch to bzip2 compression
+
+ -- John Dong <jdong@ubuntu.com>  Mon, 01 Dec 2008 14:19:06 -0500
+
+handbrake (0.9.3+repack1-0ubuntu0~8.04jdong2) hardy; urgency=low
+
+  * Split the GUI from the CLI:
+   - handbrake-gtk: GUI frontend
+   - handbrake-cli: CLI frontend
+   - handbrake-common: README files and documentations common to both.
+
+ -- John Dong <jdong@ubuntu.com>  Mon, 01 Dec 2008 12:39:22 -0500
+
+handbrake (0.9.3+repack1-0ubuntu0~8.10jdong1) intrepid; urgency=low
+
+  * Repacked orig.tar.gz:
+    - Bundled contribs/ libraries so they don't get fetched as a part of the 
+      build process.
+    - Documented this process in README.Debian
+  * TODO:
+    - Document debian/copyright for contrib libraries
+    - Split handbrake-cli and handbrake-gtk
+
+ -- John Dong <jdong@ubuntu.com>  Sat, 29 Nov 2008 00:31:50 -0500
+
+handbrake (0.9.3-0ubuntu0~8.10jdong2) jaunty; urgency=low
+
+  * UNRELEASED:
+   - Work-in-progress documenting debian/copyright
+
+ -- John Dong <jdong@ubuntu.com>  Sat, 29 Nov 2008 00:26:56 -0500
+
+handbrake (0.9.3-0ubuntu0~8.10jdong1) jaunty; urgency=low
+
+  * Initial attempt at packaging
+
+ -- John Dong <jdong@ubuntu.com>  Fri, 28 Nov 2008 14:17:16 -0500
+
