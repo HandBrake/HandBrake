@@ -144,7 +144,7 @@
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
 {
-    return [NSArray arrayWithObjects: TOOLBAR_GENERAL, TOOLBAR_PICTURE,
+    return [NSArray arrayWithObjects: TOOLBAR_GENERAL, /*TOOLBAR_PICTURE, */
                                         TOOLBAR_AUDIO, TOOLBAR_ADVANCED, nil];
 }
 
