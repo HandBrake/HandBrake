@@ -365,41 +365,68 @@ get_dvd_device_name(GDrive *gd)
 }
 #endif
 
+static GHashTable *volname_hash = NULL;
+
+static void
+free_volname_key(gpointer data)
+{
+	if (data != NULL)
+		g_free(data);
+}
+
+static void
+free_volname_value(gpointer data)
+{
+	if (data != NULL)
+		g_free(data);
+}
+
 #if defined(_WIN32)
 static gchar*
-get_dvd_volume_name(const gchar *drive)
+get_direct_dvd_volume_name(const gchar *drive)
 {
-	gchar *result;
+	gchar *result = NULL;
 	gchar vname[51], fsname[51];
+
 	if (GetVolumeInformation(drive, vname, 50, NULL, NULL, NULL, fsname, 51))
 	{
-		result = g_strdup_printf("%s (%s)", vname, drive);
-	}
-	else
-	{
-		result = g_strdup_printf("%s", drive);
+		result = g_strdup_printf("%s", vname);
 	}
 	return result;
 }
 #else
 static gchar*
+get_direct_dvd_volume_name(const gchar *drive)
+{
+	gchar *result;
+
+	result = ghb_dvd_volname (drive);
+	return result;
+}
+#endif
+static gchar*
 get_dvd_volume_name(GDrive *gd)
 {
-	gchar *label;
+	gchar *label = NULL;
 	gchar *result;
 	gchar *drive;
 
-	drive = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
+	drive = get_dvd_device_name(gd);
 	if (g_drive_has_media (gd))
 	{
-		label = ghb_dvd_volname (drive);
+		if (volname_hash != NULL)
+			label = g_strdup(g_hash_table_lookup(volname_hash, drive));
 		if (label != NULL)
 		{
 			if (uppers_and_unders(label))
 			{
 				camel_convert(label);
 			}
+#if defined(_WIN32)
+			result = g_strdup_printf("%s (%s)", label, drive);
+#else
 			result = g_strdup_printf("%s - %s", drive, label);
+#endif
 			g_free(label);
 		}
 		else
@@ -414,8 +441,48 @@ get_dvd_volume_name(GDrive *gd)
 	g_free(drive);
 	return result;
 }
-#endif
 
+gpointer
+ghb_cache_volnames(signal_user_data_t *ud)
+{
+	GList *link, *drives;
+
+	g_debug("ghb_cache_volnames()");
+	link = drives = dvd_device_list();
+	if (drives == NULL)
+		return NULL;
+
+	if (volname_hash == NULL)
+	{
+		volname_hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+										free_volname_key, free_volname_value);
+	}
+	while (link != NULL)
+	{
+		gchar *drive = get_dvd_device_name(link->data);
+		gchar *name = get_direct_dvd_volume_name(drive);
+		if (drive != NULL && name != NULL)
+		{
+			g_hash_table_insert(volname_hash, drive, name);
+		}
+		else
+		{
+			if (drive != NULL)
+				g_free(drive);
+			if (name != NULL)
+				g_free(name);
+		}
+	
+		g_object_unref(link->data);
+		link = link->next;
+	}
+
+	g_list_free(drives);
+
+	g_idle_add((GSourceFunc)ghb_file_menu_add_dvd, ud);
+
+	return NULL;
+}
 
 static void
 set_destination(signal_user_data_t *ud)
@@ -2887,6 +2954,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 	static GtkActionGroup *agroup = NULL;
 	static gint merge_id;
 
+	g_debug("ghb_file_menu_add_dvd()\n");
 	link = drives = dvd_device_list();
 	if (drives != NULL)
 	{
@@ -3134,7 +3202,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	gint state;
 
 	g_debug("drive_changed_cb()");
-	ghb_file_menu_add_dvd(ud);
+	g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
 
 	state = ghb_get_scan_state();
 	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);

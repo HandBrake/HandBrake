@@ -788,7 +788,7 @@ main (int argc, char *argv[])
 	g_timeout_add (500, ghb_timer_cb, (gpointer)ud);
 
 	// Add dvd devices to File menu
-	g_idle_add((GSourceFunc)ghb_file_menu_add_dvd, ud);
+	g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
 
 	GtkStatusIcon *si;
 	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));

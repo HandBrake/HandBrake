@@ -23,13 +23,13 @@
 
 static void add_to_subtitle_list(signal_user_data_t *ud, GValue *settings);
 
-void
+static void
 free_subtitle_index_list(gpointer data)
 {
 	g_free(data);
 }
 
-void
+static void
 free_subtitle_key(gpointer data)
 {
 	if (data != NULL)
@@ -188,7 +188,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 	
 	g_debug("ghb_set_pref_subtitle %d", titleindex);
 	track_indices = g_hash_table_new_full(g_str_hash, g_str_equal, 
-											NULL, free_subtitle_index_list);
+											free_subtitle_key, free_subtitle_index_list);
 
 	ghb_ui_update(ud, "SubtitleTrack", ghb_int_value(0));
 
