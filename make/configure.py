@@ -676,7 +676,6 @@ class Project( Action ):
             self.version = 'svn%d' % (repo.rev)
             url_ctype = '_unofficial'
             url_ntype = 'unofficial'
-            self.url_appcast = appcast_fmt % ('_unofficial',appcast_arch)
             self.build = time.strftime('%Y%m%d') + '99'
             self.title = 'Unofficial svn%d (%s)' % (repo.rev,self.build)
 
