@@ -673,11 +673,11 @@ class Project( Action ):
             self.build = time.strftime('%Y%m%d') + '01'
             self.title = '%s svn%d (%s)' % (self.name,repo.rev,self.build)
         else:
-            self.version = 'svn%d' % (repo.rev)
+            self.version = 'rev%d' % (repo.rev)
             url_ctype = '_unofficial'
             url_ntype = 'unofficial'
             self.build = time.strftime('%Y%m%d') + '99'
-            self.title = '%s svn%d (%s)' % (self.name,repo.rev,self.build)
+            self.title = '%s rev%d (%s)' % (self.name,repo.rev,self.build)
 
         self.url_appcast = 'http://handbrake.fr/appcast%s%s.xml' % (url_ctype,url_arch)
         self.url_appnote = 'http://handbrake.fr/appcast/%s.html' % (url_ntype)
