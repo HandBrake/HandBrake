@@ -630,6 +630,10 @@ const gchar *hud_rcstyle =
 "widget \"preview_window.*.preview_hud.*\" style \"ghb-hud\"\n"
 "widget \"preview_window\" style \"ghb-preview\"\n";
 
+#if GTK_CHECK_VERSION(2, 16, 0)
+extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
+#endif
+
 int
 main (int argc, char *argv[])
 {
@@ -793,7 +797,14 @@ main (int argc, char *argv[])
 
 	GtkStatusIcon *si;
 	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+
+#if GTK_CHECK_VERSION(2, 16, 0)
 	gtk_status_icon_set_has_tooltip(si, TRUE);
+	g_signal_connect(si, "query-tooltip", 
+					status_icon_query_tooltip_cb, ud);
+#else
+	gtk_status_icon_set_tooltip(si, "HandBrake");
+#endif
 
 	GtkWindow *window;
 	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));

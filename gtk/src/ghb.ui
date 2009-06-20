@@ -5757,7 +5757,6 @@ libx264 authors:
   </object>
   <object class="GtkStatusIcon" id="hb_status">
     <property name="icon_name">hb-icon</property>
-    <signal handler="status_icon_query_tooltip_cb" name="query-tooltip"/>
     <signal handler="status_activate_cb" name="activate"/>
   </object>
   <object class="GtkDialog" id="update_dialog">

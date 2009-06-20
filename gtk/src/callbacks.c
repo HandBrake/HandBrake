@@ -2230,6 +2230,12 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_settings_set_int(js, "job_status", qstatus);
 		ghb_save_queue(ud->queue);
 		ud->cancel_encode = FALSE;
+#if !GTK_CHECK_VERSION(2, 16, 0)
+		GtkStatusIcon *si;
+
+		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+		gtk_status_icon_set_tooltip(si, "HandBrake");
+#endif
 	}
 	else if (status.queue.state & GHB_STATE_MUXING)
 	{
@@ -2276,6 +2282,12 @@ ghb_backend_events(signal_user_data_t *ud)
 		status_str = working_status_string(ud, &status.queue);
 		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
 		gtk_label_set_text (label, status_str);
+#if !GTK_CHECK_VERSION(2, 16, 0)
+		GtkStatusIcon *si;
+
+		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+		gtk_status_icon_set_tooltip(si, status_str);
+#endif
 		g_free(status_str);
 	}
 	if (status.scan.state & GHB_STATE_WORKING)
@@ -2305,6 +2317,7 @@ ghb_backend_events(signal_user_data_t *ud)
 	}
 }
 
+#if GTK_CHECK_VERSION(2, 16, 0)
 G_MODULE_EXPORT gboolean
 status_icon_query_tooltip_cb(
 	GtkStatusIcon *si,
@@ -2330,6 +2343,7 @@ status_icon_query_tooltip_cb(
 	g_free(status_str);
 	return TRUE;
 }
+#endif
 
 G_MODULE_EXPORT gboolean
 ghb_timer_cb(gpointer data)
