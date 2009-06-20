@@ -1,15 +1,32 @@
-pkg.create:: $(PKG.cli.deb) $(PKG.gui.deb)
+pkg.create.deb:: pkg.create $(PKG.gui.deb) $(PKG.cli.deb)
+pkg.create.rpm:: pkg.create $(PKG.gui.rpm) $(PKG.cli.rpm)
 
+$(PKG.rpm): | $(dir $(PKG.rpm))
+$(PKG.gui.rpm) $(PKG.cli.rpm):
+	-$(MKDIR.exe) -p $(RPM.out/)SOURCES
+	-$(MKDIR.exe) -p $(RPM.out/)SPECS
+	-$(MKDIR.exe) -p $(RPM.out/)BUILD
+	-$(MKDIR.exe) -p $(RPM.out/)RPMS
+	-$(MKDIR.exe) -p $(RPM.out/)SRPMS
+	-$(MKDIR.exe) -p $(RPMROOT.out/)
+	$(CP.exe) $(GTK.src/)ghb.spec $(RPM.out/)SPECS
+	$(CP.exe) $(PKG.src.tar.bz2) $(RPM.out/)SOURCES
+	$(TAR.exe) -xf $(PKG.src.tar.bz2) -C $(RPM.out/)BUILD
+	fakeroot $(MAKE) PREFIX=$(RPMROOT.out/)usr PREFIX/=$(RPMROOT.out/)usr/ install
+	rpmbuild --define="version $(HB.version)" --define="_topdir $(PWD)/$(RPM.out)" --buildroot $(RPMROOT.out) -ba $(GTK.src/)ghb.spec
+	$(CP.exe) $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-cli-$(HB.version)*.rpm $(PKG.cli.rpm)
+	$(CP.exe) $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-gui-$(HB.version)*.rpm $(PKG.gui.rpm)
 
-$(PKG.cli.deb): | $(dir $(PKG.cli.deb))
-$(PKG.gui.deb) $(PKG.cli.deb):
+$(PKG.gui.deb): | $(dir $(PKG.gui.deb))
+$(PKG.gui.deb):
 	-rm $(BUILD/)debian
 	ln -s $(PKG.debian) $(BUILD/)debian
 	fakeroot $(MAKE) -f debian/rules clean
 	$(MAKE) BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure -f debian/rules build
 	echo $(PKG.out/)
 	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.version)" BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure PKGDESTDIR=$(PKG.out/) -f debian/rules binary
-
-	$(MV.exe) $(PKG.cli.tmp.deb) $(PKG.cli.deb)
 	$(MV.exe) $(PKG.gui.tmp.deb) $(PKG.gui.deb)
+
+$(PKG.cli.deb): $(PKG.gui.deb)
+	$(MV.exe) $(PKG.cli.tmp.deb) $(PKG.cli.deb)
 

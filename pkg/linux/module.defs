@@ -1,4 +1,5 @@
 PKG.deb.machine = `dpkg --print-architecture`
+PKG.rpm.machine = `rpm -E "%_build_arch"`
 PKG.debian  = $(PKG.in/)linux/debian
 PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_CLI_$(BUILD.machine).deb
 PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_GUI_$(BUILD.machine).deb
@@ -6,7 +7,16 @@ PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_GUI_$(BUILD.machine).de
 PKG.cli.tmp.deb = $(PKG.out/)handbrake-cli_$(HB.version)_$(PKG.deb.machine).deb
 PKG.gui.tmp.deb = $(PKG.out/)handbrake-gtk_$(HB.version)_$(PKG.deb.machine).deb
 
+PKG.cli.rpm  = $(PKG.out/)$(HB.name)-$(HB.version)-Fedora_CLI_$(BUILD.machine).rpm
+PKG.gui.rpm  = $(PKG.out/)$(HB.name)-$(HB.version)-Fedora_GUI_$(BUILD.machine).rpm
+RPM.out  = $(STAGE.out/)rpm
+RPM.out/ = $(STAGE.out/)rpm/
+RPMROOT.out  = $(PWD)/$(STAGE.out/)rpmroot
+RPMROOT.out/ = $(PWD)/$(STAGE.out/)rpmroot/
+
 ###############################################################################
 
 BUILD.out += $(PKG.cli.deb)
 BUILD.out += $(PKG.gui.deb)
+BUILD.out += $(PKG.cli.rpm)
+BUILD.out += $(PKG.gui.rpm)

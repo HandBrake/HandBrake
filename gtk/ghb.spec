@@ -1,32 +1,55 @@
-Name:		handbrake
-Version:	0.9.2
-Release:	1%{?dist}
-Summary:	A program to rip and encode DVDs and other sources to MPEG-4
+%define name HandBrake
+%define release 1
+
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}%{?dist}
+Summary:	A program to transcode DVDs and other sources to MPEG-4
 
 Group:		Applications/Multimedia
 License:	GPL
 URL:		http://handbrake.fr/
-Source0:	HandBrake.tgz
+Vendor:		The HandBrake Project
+Source0:	%{name}-%{version}.tar.bz2
+Prefix:		%{_prefix}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
-Requires:	glib2 >= 2.16, gtk2 >= 2.12, hal-libs
+Requires:	glib2 >= 2.16, gtk2 >= 2.12, hal-libs, webkitgtk, gstreamer
+Requires:	gstreamer-plugins-base
 
 %description
 HandBrake is an open-source, GPL-licensed, multiplatform, multithreaded 
-DVD to MPEG-4 converter, available for MacOS X, Linux and Windows.
+transcoder, available for MacOS X, Linux and Windows.
+
+%package gui
+Summary:	A program to transcode DVDs and other sources to MPEG-4
+Group:		Applications/Multimedia
+
+%package cli
+Summary:	A program to transcode DVDs and other sources to MPEG-4
+Group:		Applications/Multimedia
+
+%description gui
+HandBrake is an open-source, GPL-licensed, multiplatform, multithreaded 
+transcoder, available for MacOS X, Linux and Windows.
+
+%description cli
+HandBrake is an open-source, GPL-licensed, multiplatform, multithreaded 
+transcoder, available for MacOS X, Linux and Windows.
 
 %prep
-%setup -q
+%setup -n %{name}-%{version} -D -T
+#%setup -q
+#cd %{_builddir}/%{name}-%{version}
 
 
 %build
-%configure
-jam
+#./configure --prefix=%{_prefix}
+#make -C build
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-DESTDIR=$RPM_BUILD_ROOT jam install 
+#rm -rf $RPM_BUILD_ROOT
+#make -C build PREFIX=$RPM_BUILD_ROOT PREFIX/=$RPM_BUILD_ROOT/ install
 
 ## blow away stuff we don't want
 /bin/rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
@@ -34,28 +57,29 @@ DESTDIR=$RPM_BUILD_ROOT jam install
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post gui
 touch --no-create %{_datadir}/icons/hicolor
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -q %{_datadir}/icons/hicolor
 fi
 
-%postun
-/sbin/ldconfig
+%postun gui
 touch --no-create %{_datadir}/icons/hicolor
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -q %{_datadir}/icons/hicolor
 fi
 
-%files
+%files gui
 %defattr(-,root,root,-)
-%doc %{_datadir}/doc
-%{_datadir}/ghb
+%doc NEWS AUTHORS CREDITS THANKS COPYING
 %{_datadir}/icons
-%{_datadir}/locale
 %{_datadir}/applications
-%{_bindir}
+%{_bindir}/ghb
 
+%files cli
+%defattr(-,root,root,-)
+%doc NEWS AUTHORS CREDITS THANKS COPYING
+%{_bindir}/HandBrakeCLI
 
 %changelog
 * Sat May 31 2008 John Stebbins <jstebbins@jetheaddev.com> 

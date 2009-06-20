@@ -4,8 +4,6 @@
 SUBDIRS = src po
 
 ghbdocdir = ${prefix}/share/doc/ghb
-ghbdoc_DATA = \
-	ChangeLog
 
 EXTRA_DIST = $(ghbdoc_DATA)
 
