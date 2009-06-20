@@ -16,6 +16,9 @@ $(PKG.src.tar.bz2): | $(STAGE.out.src/)
 
 $(STAGE.out.src/):
 	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(HB.name)-$(HB.version)
+	sed 's/\(self.rev.*=.*\)0/\1$(HB.repo.rev)/' \
+	    $@/$(HB.name)-$(HB.version)/make/configure.py > $@/$(HB.name)-$(HB.version)/make/configure.py.tmp
+	$(MV.exe) $@/$(HB.name)-$(HB.version)/make/configure.py.tmp $@/$(HB.name)-$(HB.version)/make/configure.py
 
 ###############################################################################
 
