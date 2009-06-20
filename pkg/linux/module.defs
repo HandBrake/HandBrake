@@ -1,5 +1,5 @@
 PKG.deb.machine = `dpkg --print-architecture`
-PKG.rpm.machine = `rpm -E "%_build_arch"`
+PKG.rpm.machine = `rpm -E "%_target_cpu"`
 PKG.debian  = $(PKG.in/)linux/debian
 PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_CLI_$(BUILD.machine).deb
 PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_GUI_$(BUILD.machine).deb

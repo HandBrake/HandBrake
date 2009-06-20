@@ -1,7 +1,7 @@
 pkg.create.deb:: pkg.create $(PKG.gui.deb) $(PKG.cli.deb)
 pkg.create.rpm:: pkg.create $(PKG.gui.rpm) $(PKG.cli.rpm)
 
-$(PKG.rpm): | $(dir $(PKG.rpm))
+$(PKG.gui.rpm) $(PKG.cli.rpm): | $(dir $(PKG.gui.rpm) $(PKG.cli.rpm))
 $(PKG.gui.rpm) $(PKG.cli.rpm):
 	-$(MKDIR.exe) -p $(RPM.out/)SOURCES
 	-$(MKDIR.exe) -p $(RPM.out/)SPECS
@@ -27,6 +27,7 @@ $(PKG.gui.deb):
 	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.version)" BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure PKGDESTDIR=$(PKG.out/) -f debian/rules binary
 	$(MV.exe) $(PKG.gui.tmp.deb) $(PKG.gui.deb)
 
+$(PKG.cli.deb): | $(dir $(PKG.cli.deb))
 $(PKG.cli.deb): $(PKG.gui.deb)
 	$(MV.exe) $(PKG.cli.tmp.deb) $(PKG.cli.deb)
 
