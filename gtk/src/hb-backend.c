@@ -4178,6 +4178,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 			job->x264opts = tmp_x264opts;
 		}
+		else
+		{
+			job->x264opts = x264opts;
+		}
 		job->sequence_id = (unique_id & 0xFFFFFF) | (sub_id++ << 24);
 		hb_add( h, job );
 		//if (job->x264opts != NULL)
