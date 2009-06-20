@@ -304,8 +304,9 @@ return YES;
         viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
         viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
         [fPreviewImage setSize: viewSize];
-        [fPictureView setFrameSize: viewSize];
+        //[fPictureView setFrameSize: viewSize];
     }
+    
     else
     {
         [fPreviewImage setSize: imageScaledSize];
@@ -335,6 +336,13 @@ return YES;
     viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
     viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
     [self setViewSize:viewSize];
+    
+    /* special case for scaleToScreen */
+    if (scaleToScreen == YES)
+    {
+        [fPreviewImage setSize: viewSize];
+        [fPictureView setImage: fPreviewImage];
+    }
     
     NSString *scaleString;
     
@@ -533,6 +541,7 @@ return YES;
     else
     {
         [[fPictureControlBox animator] setHidden: YES];
+        [self stopHudTimer];
     }
     
 }
@@ -662,7 +671,6 @@ return YES;
         /* make sure we are set to a still preview */
         [self pictureSliderChanged:nil];
         
-        //[fPreviewWindow setAcceptsMouseMovedEvents:NO];
         [fFullScreenWindow setAcceptsMouseMovedEvents:YES];
         
         
@@ -1325,16 +1333,35 @@ return YES;
 // Assumes resizeSheetForViewSize: has already been called.
 //
 - (void)setViewSize: (NSSize)viewSize
-{
+{   
+    /* special case for scaleToScreen */
+    if (scaleToScreen == YES)
+    {
+        /* for scaleToScreen, we expand the fPictureView to fit the entire screen */
+        NSSize areaSize = [fPictureViewArea frame].size;
+        CGFloat viewSizeAspect = viewSize.width / viewSize.height;
+        if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
+        {
+            viewSize.width = areaSize.width;
+            viewSize.height = viewSize.width / viewSizeAspect;
+        }
+        else
+        {
+            viewSize.height = areaSize.height;
+            viewSize.width = viewSize.height * viewSizeAspect;
+        }
+        
+    }
+    
     [fPictureView setFrameSize:viewSize];
     
-    // center it vertically and horizontally
+        // center it vertically and horizontally
     NSPoint origin = [fPictureViewArea frame].origin;
     origin.y += ([fPictureViewArea frame].size.height -
                  [fPictureView frame].size.height) / 2.0;
-                 
-   origin.x += ([fPictureViewArea frame].size.width -
-                 [fPictureView frame].size.width) / 2.0;
+    
+    origin.x += ([fPictureViewArea frame].size.width -
+                 [fPictureView frame].size.width) / 2.0; 
     
     [fPictureView setFrameOrigin:origin];
     
@@ -1344,8 +1371,8 @@ return YES;
     controlboxorigin.y += 100;
     
     controlboxorigin.x += ([fPictureViewArea frame].size.width -
-                 [fPictureControlBox frame].size.width) / 2.0;
-                 
+                           [fPictureControlBox frame].size.width) / 2.0;
+    
     
     /* origin should be rounded to integer otherwise font/antialiasing
      * may be blurry.
