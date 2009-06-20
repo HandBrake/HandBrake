@@ -5,7 +5,7 @@ struct hb_handle_s
 {
     /* The "Check for update" thread */
     int            build;
-    char           version[16];
+    char           version[32];
     hb_thread_t  * update_thread;
 
     /* This thread's only purpose is to check other threads'
