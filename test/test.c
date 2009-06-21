@@ -39,6 +39,7 @@ static char * format      = NULL;
 static int    titleindex  = 1;
 static int    longest_title = 0;
 static char * native_language = NULL;
+static int    native_dub  = 0;
 static int    twoPass     = 0;
 static int    deinterlace           = 0;
 static char * deinterlace_opt       = 0;
@@ -66,6 +67,7 @@ static char * acodecs     = NULL;
 static char * anames      = NULL;
 static int    default_acodec = HB_ACODEC_FAAC;
 static int    default_abitrate = 160;
+static int    audio_explicit = 0;
 static char ** subtracks   = NULL;
 static char ** subforce    = NULL;
 static char * subburn     = NULL;
@@ -368,7 +370,6 @@ static void ShowCommands()
 static void PrintTitleInfo( hb_title_t * title )
 {
     hb_chapter_t  * chapter;
-    hb_audio_config_t    * audio;
     hb_subtitle_t * subtitle;
     int i;
 
@@ -1319,8 +1320,58 @@ static int HandleEvents( hb_handle_t * h )
             }
 
             /* Parse audio tracks */
-            if( hb_list_count(audios) == 0 )
+            if( native_language && native_dub )
             {
+                if( hb_list_count( audios ) == 0 || !audio_explicit )
+                {
+                    for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+                    {
+                        char audio_lang[4];
+                        int track = i;
+                        
+                        audio = hb_list_audio_config_item( title->list_audio, i );
+                        
+                        strncpy( audio_lang, audio->lang.iso639_2, sizeof( audio_lang ) );
+                        
+                        if( strncasecmp( native_language, audio_lang, 
+                                         sizeof( audio_lang ) ) == 0 &&
+                            audio->lang.type != 3 && // Directors 1
+                            audio->lang.type != 4)   // Directors 2
+                        {
+                            /*
+                             * Matched an audio to our native language - use it.
+                             * Replace any existing audio tracks that a preset may
+                             * have put here.
+                             */
+                            if( hb_list_count(audios) == 0) {
+                                audio = calloc(1, sizeof(*audio));
+                                hb_audio_config_init(audio);
+                                audio->in.track = track;
+                                audio->out.track = num_audio_tracks++;
+                                /* Add it to our audios */
+                                hb_list_add(audios, audio);
+                            } else {
+                                /*
+                                 * Update the track numbers on what is already in
+                                 * there.
+                                 */
+                                for( i=0; i < hb_list_count( audios ); i++ )
+                                {
+                                    audio = hb_list_item( audios, i );
+
+                                    audio->in.track = track;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    fprintf( stderr, "Warning: Native language (dubbing) selection ignored since an audio track has already been selected\n");
+                }
+            }
+
+            if( hb_list_count(audios) == 0 )
+            {        
                 /* Create a new audio track with default settings */
                 audio = calloc(1, sizeof(*audio));
                 hb_audio_config_init(audio);
@@ -1677,6 +1728,8 @@ static int HandleEvents( hb_handle_t * h )
                             job->select_subtitle_config.force = force;
                             job->select_subtitle_config.default_track = def;
                             subtitle_scan = 1;
+                        } else {
+                            fprintf( stderr, "Warning: Subtitle Scan for MP4 requires the '--subtitle-burn' option to be selected\n");
                         }
                     }
                     else
@@ -1690,7 +1743,7 @@ static int HandleEvents( hb_handle_t * h )
                         subtitle = hb_list_item(title->list_subtitle, track);
                         if( subtitle == NULL ) 
                         {
-                            fprintf( stderr, "Could not find subtitle track %d, skipped\n", track );
+                            fprintf( stderr, "Warning: Could not find subtitle track %d, skipped\n", track+1 );
                             continue;
                         }
                         sub_config = subtitle->config;
@@ -1717,6 +1770,7 @@ static int HandleEvents( hb_handle_t * h )
                              subtitle->format == PICTURESUB)
                         {
                             // Skip any non-burned vobsubs when output is mp4
+                            fprintf( stderr, "Warning: Skipping subtitle track %d, can't pass-through VOBSUBs in an MP4 container,\nadd '--subtitle-burn %d' to the command line\n", track+1, track+1 );
                             continue;
                         }
                         else if ( burn && subtitle->format == PICTURESUB )
@@ -1724,11 +1778,11 @@ static int HandleEvents( hb_handle_t * h )
                             // Only allow one subtitle to be burned into video
                             if ( sub_burned )
                             {
+                                fprintf( stderr, "Warning: Skipping subtitle track %d, can't have more than one track burnt in\n", track+1 );
                                 continue;
                             }
                             sub_burned = 1;
                         }
-
                         sub_config.force = force;
                         sub_config.default_track = def;
                         hb_subtitle_add( job, &sub_config, track );
@@ -1738,17 +1792,77 @@ static int HandleEvents( hb_handle_t * h )
 
             if( native_language )
             {
-                job->native_language = strdup( native_language );
-                if ( subtracks == NULL )
+                char audio_lang[4];
+                
+                audio = hb_list_audio_config_item(job->list_audio, 0);
+                
+                if( audio ) 
                 {
-                    if ( subforce )
-                        job->select_subtitle_config.force = 1;
+                    strncpy( audio_lang, audio->lang.iso639_2, sizeof( audio_lang ) );
+                    
+                    if( strncasecmp( native_language, audio_lang, 
+                                     sizeof( audio_lang ) ) != 0 )
+                    {
+                        /*
+                         * Audio language is not the same as our native language. 
+                         * If we have any subtitles in our native language they
+                         * should be selected here if they haven't already been.
+                         */
+                        hb_subtitle_t *subtitle, *subtitle2 = NULL;
+                        int matched_track = 0;
 
-                    if ( subburn == NULL && mux != HB_MUX_MP4 )
-                        job->select_subtitle_config.force = 1;
+                        for( i = 0; i < hb_list_count( title->list_subtitle ); i++ )
+                        {
+                            subtitle = hb_list_item( title->list_subtitle, i );
+                            matched_track = i;
+                            if( strcmp( subtitle->iso639_2, native_language ) == 0 )
+                            {  
+                                /*
+                                 * Found the first matching subtitle in our
+                                 * native language. Is it already selected?
+                                 */
+                                for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+                                {
+                                    subtitle2 =  hb_list_item( job->list_subtitle, i );
+                                    
+                                    if( subtitle2->track == subtitle->track) {
+                                        /*
+                                         * Already selected
+                                         */
+                                        break;
+                                    }
+                                    subtitle2 = NULL;
+                                }
+                                
+                                if( subtitle2 == NULL ) 
+                                {
+                                    /*
+                                     * Not already selected, so select it.
+                                     */
+                                    hb_subtitle_config_t sub_config;
 
-                    if ( subdefault )
-                        job->select_subtitle_config.default_track = 1;
+                                    if( native_dub )
+                                    {
+                                        fprintf( stderr, "Warning: no matching audio for native language - using subtitles instead.\n");
+                                    }
+                                    sub_config = subtitle->config;
+
+                                    if( mux == HB_MUX_MKV || subtitle->format == TEXTSUB)
+                                    {
+                                        sub_config.dest = PASSTHRUSUB;
+                                    }
+
+                                    sub_config.force = 0;
+                                    sub_config.default_track = 1;
+                                    hb_subtitle_add( job, &sub_config, matched_track);
+                                }
+                                /*
+                                 * Stop searching.
+                                 */
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -2193,15 +2307,18 @@ static void ShowHelp()
     "          <number>          to be displayed upon playback.  Settings no default\n"
     "                            means no subtitle will be automatically displayed\n"
     "                            If \"number\" is omitted, the first trac is default.\n"
-    "    -N, --native-language   Select subtitles with this language if it does not\n"
-    "          <string>          match the Audio language. Provide the language's\n"
-    "                            iso639-2 code (fre, eng, spa, dut, et cetera)\n"
-    "                            --native-language may be used in conjunction with\n"
-    "                            a subtitle \"scan\", in which case all tracks\n"
-    "                            matching native language will be scanned.\n"
-    "                            Otherwise --native-language is mutually exclusive\n"
-    "                            with --subtitle\n"
-
+    "    -N, --native-language   Specifiy the your language preference. When the first\n"
+    "          <string>          audio track does not match your native language then\n"
+    "                            select the first subtitle that does. When used in\n"
+    "                            conjunction with --native-dub the audio track is\n"
+    "                            changed in preference to subtitles. Provide the\n"
+    "                            language's iso639-2 code (fre, eng, spa, dut, et cetera)\n"
+    "        --native-dub        Used in conjunction with --native-language\n"
+    "                            requests that if no audio tracks are selected the\n"
+    "                            default selected audio track will be the first one\n"
+    "                            that matches the --native-language. If there are no\n"
+    "                            matching audio tracks then the first matching\n"
+    "                            subtitle track is used instead.\n"
 
     "\n"
 
@@ -2303,6 +2420,7 @@ static int ParseOptions( int argc, char ** argv )
     #define KEEP_DISPLAY_ASPECT 265
     #define SUB_BURNED          266
     #define SUB_DEFAULT         267
+    #define NATIVE_DUB          268
     
     for( ;; )
     {
@@ -2334,6 +2452,7 @@ static int ParseOptions( int argc, char ** argv )
             { "subtitle-burned", optional_argument,   NULL,    SUB_BURNED },
             { "subtitle-default", optional_argument,   NULL,    SUB_DEFAULT },
             { "native-language", required_argument, NULL,'N' },
+            { "native-dub",  no_argument,       NULL,    NATIVE_DUB },
 
             { "encoder",     required_argument, NULL,    'e' },
             { "aencoder",    required_argument, NULL,    'E' },
@@ -2501,6 +2620,7 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     atracks = strdup( optarg );
+                    audio_explicit = 1;
                 }
                 else
                 {
@@ -2547,6 +2667,9 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'N':
                 native_language = strdup( optarg );
+                break;
+            case NATIVE_DUB:
+                native_dub = 1;
                 break;
             case '2':
                 twoPass = 1;

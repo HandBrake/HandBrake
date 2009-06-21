@@ -248,7 +248,6 @@ struct hb_job_s
 
     int                     indepth_scan;
     hb_subtitle_config_t    select_subtitle_config;
-    char                  * native_language;
 
     int             angle;              // dvd angle to encode
     int             frame_to_stop;       // declare eof when we hit this frame

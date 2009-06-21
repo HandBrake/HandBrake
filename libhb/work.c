@@ -1002,41 +1002,32 @@ cleanup:
             }
         }
 
-        if( job->native_language ) {
+        
+        if( subtitle_forced_id )
+        {
             /*
-             * We still have a native_language, so the audio and subtitles are
-             * different, so in this case it is a foreign film and we want to
-             * select the subtitle with the highest hits in our language.
+             * If there are any subtitle streams with forced subtitles
+             * then select it in preference to the lowest.
              */
-            subtitle_hit = subtitle_highest_id;
-            hb_log( "Found a native-language subtitle id 0x%x", subtitle_hit);
-        } else {
-            if( subtitle_forced_id )
+            subtitle_hit = subtitle_forced_id;
+            hb_log("Found a subtitle candidate id 0x%x (contains forced subs)",
+                   subtitle_hit);
+        } else if( subtitle_lowest < subtitle_highest )
+        {
+            /*
+             * OK we have more than one, and the lowest is lower,
+             * but how much lower to qualify for turning it on by
+             * default?
+             *
+             * Let's say 10% as a default.
+             */
+            if( subtitle_lowest < ( subtitle_highest * 0.1 ) )
             {
-                /*
-                 * If there are any subtitle streams with forced subtitles
-                 * then select it in preference to the lowest.
-                 */
-                subtitle_hit = subtitle_forced_id;
-                hb_log("Found a subtitle candidate id 0x%x (contains forced subs)",
-                       subtitle_hit);
-            } else if( subtitle_lowest < subtitle_highest )
-            {
-                /*
-                 * OK we have more than one, and the lowest is lower,
-                 * but how much lower to qualify for turning it on by
-                 * default?
-                 *
-                 * Let's say 10% as a default.
-                 */
-                if( subtitle_lowest < ( subtitle_highest * 0.1 ) )
-                {
-                    subtitle_hit = subtitle_lowest_id;
-                    hb_log( "Found a subtitle candidate id 0x%x",
-                            subtitle_hit );
-                } else {
-                    hb_log( "No candidate subtitle detected during subtitle-scan");
-                }
+                subtitle_hit = subtitle_lowest_id;
+                hb_log( "Found a subtitle candidate id 0x%x",
+                        subtitle_hit );
+            } else {
+                hb_log( "No candidate subtitle detected during subtitle-scan");
             }
         }
     }

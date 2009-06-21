@@ -1014,7 +1014,7 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
     title_copy->list_subtitle = hb_list_init();
 
     /*
-     * The following code is confusing, there are three ways in which
+     * The following code is confusing, there are two ways in which
      * we select subtitles and it depends on whether this is single or
      * two pass mode.
      *
@@ -1022,17 +1022,13 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
      * scans all subtitles of that language. The second pass does not
      * select any because they are set at the end of the first pass.
      *
-     * native_language may have a preferred language, in which case we
-     * may be switching the language we want for the subtitles in the
-     * first pass of a single pass, or the second pass of a two pass.
-     *
      * We may have manually selected a subtitle, in which case that is
      * selected in the first pass of a single pass, or the second of a
      * two pass.
      */
     memset( audio_lang, 0, sizeof( audio_lang ) );
 
-    if ( job->indepth_scan || job->native_language ) {
+    if ( job->indepth_scan ) {
 
         /*
          * Find the first audio language that is being encoded
@@ -1043,35 +1039,6 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
             {
                 strncpy(audio_lang, audio->config.lang.iso639_2, sizeof(audio_lang));
                 break;
-            }
-        }
-
-        /*
-         * In all cases switch the language if we need to to our native
-         * language.
-         */
-        if( job->native_language )
-        {
-            if( strncasecmp( job->native_language, audio_lang,
-                             sizeof( audio_lang ) ) != 0 )
-            {
-
-                if( job->pass != 2 )
-                {
-                    hb_log( "Enabled subtitles in native language '%s', audio is in '%s'",
-                            job->native_language, audio_lang);
-                }
-                /*
-                 * The main audio track is not in our native language, so switch
-                 * the subtitles to use our native language instead.
-                 */
-                strncpy( audio_lang, job->native_language, sizeof( audio_lang ) );
-            } else {
-                /*
-                 * native language is irrelevent, free it.
-                 */
-                free( job->native_language );
-                job->native_language = NULL;
             }
         }
     }
@@ -1098,14 +1065,6 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
                 subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
                 memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
                 hb_list_add( title_copy->list_subtitle, subtitle_copy );
-                if ( job->native_language ) {
-                    /*
-                     * With native language just select the
-                     * first match in our langiage, not all of
-                     * them. Subsequent ones are likely to be commentary
-                     */
-                    break;
-                }
             }
         }
     } else {
@@ -1113,46 +1072,17 @@ void hb_add( hb_handle_t * h, hb_job_t * job )
          * Not doing a subtitle scan in this pass, but maybe we are in the
          * first pass?
          */
-        if( job->pass != 1 && job->native_language )
+        if( job->pass != 1 )
         {
             /*
-             * We are not doing a subtitle scan but do want the
-             * native langauge subtitle selected, so select it
-             * for pass 0 or pass 2 of a two pass.
+             * Copy all of them from the input job, to the title_copy/job_copy.
              */
-            for( i=0; i < hb_list_count( title->list_subtitle ); i++ )
-            {
-                subtitle = hb_list_item( title->list_subtitle, i );
-                if( strcmp( subtitle->iso639_2, audio_lang ) == 0 )
+            for(  i = 0; i < hb_list_count(job->list_subtitle); i++ ) {
+                if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
                 {
-                    /*
-                     * Matched subtitle language with audio language, so
-                     * add this to our list to scan.
-                     */
                     subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
                     memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
                     hb_list_add( title_copy->list_subtitle, subtitle_copy );
-                    break;
-                }
-            }
-        } else {
-            /*
-             * Manually selected subtitles, in which case only
-             * bother adding them for pass 0 or pass 2 of a two
-             * pass.
-             */
-            if( job->pass != 1 )
-            {
-                /*
-                 * Copy all of them from the input job, to the title_copy/job_copy.
-                 */
-                for(  i = 0; i < hb_list_count(job->list_subtitle); i++ ) {
-                    if( ( subtitle = hb_list_item( job->list_subtitle, i ) ) )
-                    {
-                        subtitle_copy = malloc( sizeof( hb_subtitle_t ) );
-                        memcpy( subtitle_copy, subtitle, sizeof( hb_subtitle_t ) );
-                        hb_list_add( title_copy->list_subtitle, subtitle_copy );
-                    }
                 }
             }
         }
