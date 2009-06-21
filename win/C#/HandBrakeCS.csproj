@@ -246,10 +246,6 @@
       <DependentUpon>Deinterlace.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\PictureSettings.en.resx">
-      <DependentUpon>PictureSettings.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\PictureSettings.resx">
       <DependentUpon>PictureSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
