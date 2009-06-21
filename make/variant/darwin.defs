@@ -7,7 +7,7 @@ UB.BUILD = $(SRC/)configure --force --build=ub.$(1) --arch=$(1) --launch --launc
 
 ## linefeed is important
 define UB.BUILD.item
-	$(call UB.BUILD,$(1))
+	$(call UB.BUILD,$(1)) --launch-jobs=0
 
 endef
 

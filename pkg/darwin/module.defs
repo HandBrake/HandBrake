@@ -1,8 +1,8 @@
-PKG.cli.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_CLI_$(BUILD.machine).dmg
-PKG.gui.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_GUI_$(BUILD.machine).dmg
+PKG.cli.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_CLI_$(BUILD.arch).dmg
+PKG.gui.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_GUI_$(BUILD.arch).dmg
 
-PKG.cli.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_CLI_$(BUILD.machine).tmp.dmg
-PKG.gui.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_GUI_$(BUILD.machine).tmp.dmg
+PKG.cli.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_CLI_$(BUILD.arch).tmp.dmg
+PKG.gui.tmp.dmg = $(PKG.out/)$(HB.name)-$(HB.version)-MacOSX.5_GUI_$(BUILD.arch).tmp.dmg
 
 STAGE.out.cli/ = $(STAGE.out/)cli/
 STAGE.out.gui/ = $(STAGE.out/)gui/
