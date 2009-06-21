@@ -137,7 +137,7 @@ static char* bsd_name_for_path(char *path);
 static int device_is_dvd(char *device);
 static io_service_t get_iokit_service( char *device );
 static int is_dvd_service( io_service_t service );
-static is_whole_media_service( io_service_t service );
+static int is_whole_media_service( io_service_t service );
 #endif
 
 /* Only print the "Muxing..." message once */
@@ -3206,7 +3206,7 @@ static int is_dvd_service( io_service_t service )
  * The whole media object is indicated in the IORegistry by the presence of a
  * property with the key "Whole" and value "Yes".
  ****************************************************************************/
-static is_whole_media_service( io_service_t service )
+static int is_whole_media_service( io_service_t service )
 {
     int result = 0;
 
