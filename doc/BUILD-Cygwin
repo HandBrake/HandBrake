@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2449 (2009052601) on Cygwin
+Guide to Building HandBrake svn2591 (2009062101) on Cygwin
 **********************************************************
 
 Table of Contents
@@ -425,7 +425,7 @@ be lost. Here is a short example of what the contents of
 `_SRC_/custom.defs' might contain:
 
      ## bump to gcc-4.2 in current path
-     GCC.gcc = gcc-4.2
+     GCC.gcc = /usr/bin/gcc-4.2
 
      ## replace optimize for 'speed' with more aggressive settings
      GCC.args.O.speed = -O3 -fomit-frame-pointer -msse4.2
@@ -465,7 +465,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2449
-     date:   2009-05-26 11:25:54 -0400
+     rev:    2591
+     date:   2009-06-21 13:15:04 -0400
      type:   developer
 
