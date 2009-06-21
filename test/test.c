@@ -2643,7 +2643,7 @@ static int ParseOptions( int argc, char ** argv )
                 subtracks = str_split( optarg, "," );
                 break;
             case 'F':
-                subtracks = str_split( optarg, "," );
+                subforce = str_split( optarg, "," );
                 break;
             case SUB_BURNED:
                 if( optarg != NULL )
