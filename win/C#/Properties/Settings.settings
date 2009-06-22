@@ -66,7 +66,7 @@
       <Value Profile="(Default)">C:\Program Files\VideoLAN\vlc\vlc.exe</Value>
     </Setting>
     <Setting Name="MainWindowMinimize" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="QueryEditorTab" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

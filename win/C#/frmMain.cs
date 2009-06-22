@@ -82,7 +82,7 @@ namespace Handbrake
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
             queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
-            if (Properties.Settings.Default.QueryEditorTab)
+            if (!Properties.Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
 
             // Load the user's default settings or Normal Preset
