@@ -15,7 +15,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            if (Properties.Settings.Default.tooltipEnable == "Checked")
+            if (Properties.Settings.Default.tooltipEnable)
                 setToolTipActive(true);
 
             reset2Defaults();

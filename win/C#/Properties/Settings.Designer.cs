@@ -49,10 +49,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string defaultSettings {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool defaultSettings {
             get {
-                return ((string)(this["defaultSettings"]));
+                return ((bool)(this["defaultSettings"]));
             }
             set {
                 this["defaultSettings"] = value;
@@ -61,10 +61,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string updateStatus {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool updateStatus {
             get {
-                return ((string)(this["updateStatus"]));
+                return ((bool)(this["updateStatus"]));
             }
             set {
                 this["updateStatus"] = value;
@@ -85,10 +85,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string tooltipEnable {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool tooltipEnable {
             get {
-                return ((string)(this["tooltipEnable"]));
+                return ((bool)(this["tooltipEnable"]));
             }
             set {
                 this["tooltipEnable"] = value;
@@ -145,10 +145,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string autoNaming {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool autoNaming {
             get {
-                return ((string)(this["autoNaming"]));
+                return ((bool)(this["autoNaming"]));
             }
             set {
                 this["autoNaming"] = value;
@@ -193,10 +193,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string drive_detection {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool drive_detection {
             get {
-                return ((string)(this["drive_detection"]));
+                return ((bool)(this["drive_detection"]));
             }
             set {
                 this["drive_detection"] = value;
@@ -205,10 +205,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string cli_minimized {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cli_minimized {
             get {
-                return ((string)(this["cli_minimized"]));
+                return ((bool)(this["cli_minimized"]));
             }
             set {
                 this["cli_minimized"] = value;
@@ -229,10 +229,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string saveLogToSpecifiedPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool saveLogToSpecifiedPath {
             get {
-                return ((string)(this["saveLogToSpecifiedPath"]));
+                return ((bool)(this["saveLogToSpecifiedPath"]));
             }
             set {
                 this["saveLogToSpecifiedPath"] = value;
@@ -253,10 +253,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string saveLogWithVideo {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool saveLogWithVideo {
             get {
-                return ((string)(this["saveLogWithVideo"]));
+                return ((bool)(this["saveLogWithVideo"]));
             }
             set {
                 this["saveLogWithVideo"] = value;
@@ -265,7 +265,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("T:\\Program Files\\VideoLAN\\vlc\\vlc.exe")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\VideoLAN\\vlc\\vlc.exe")]
         public string VLC_Path {
             get {
                 return ((string)(this["VLC_Path"]));
@@ -277,10 +277,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
-        public string MainWindowMinimize {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MainWindowMinimize {
             get {
-                return ((string)(this["MainWindowMinimize"]));
+                return ((bool)(this["MainWindowMinimize"]));
             }
             set {
                 this["MainWindowMinimize"] = value;
@@ -289,10 +289,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string QueryEditorTab {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool QueryEditorTab {
             get {
-                return ((string)(this["QueryEditorTab"]));
+                return ((bool)(this["QueryEditorTab"]));
             }
             set {
                 this["QueryEditorTab"] = value;
@@ -325,10 +325,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string dvdnav {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool dvdnav {
             get {
-                return ((string)(this["dvdnav"]));
+                return ((bool)(this["dvdnav"]));
             }
             set {
                 this["dvdnav"] = value;
@@ -337,10 +337,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string presetNotification {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool presetNotification {
             get {
-                return ((string)(this["presetNotification"]));
+                return ((bool)(this["presetNotification"]));
             }
             set {
                 this["presetNotification"] = value;
@@ -349,10 +349,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string enocdeStatusInGui {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool enocdeStatusInGui {
             get {
-                return ((string)(this["enocdeStatusInGui"]));
+                return ((bool)(this["enocdeStatusInGui"]));
             }
             set {
                 this["enocdeStatusInGui"] = value;
@@ -361,10 +361,10 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string trayIconAlerts {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool trayIconAlerts {
             get {
-                return ((string)(this["trayIconAlerts"]));
+                return ((bool)(this["trayIconAlerts"]));
             }
             set {
                 this["trayIconAlerts"] = value;

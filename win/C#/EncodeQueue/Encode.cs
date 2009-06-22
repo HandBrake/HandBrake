@@ -34,13 +34,13 @@ namespace Handbrake.EncodeQueue
                 string strCmdLine = String.Format(@" CMD /c """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
 
                 ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
-                if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
+                if (Properties.Settings.Default.enocdeStatusInGui)
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
 
                 }
-                if (Properties.Settings.Default.cli_minimized == "Checked")
+                if (Properties.Settings.Default.cli_minimized)
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
@@ -174,12 +174,12 @@ namespace Handbrake.EncodeQueue
                 File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
 
                 // Save a copy of the log file in the same location as the enocde.
-                if (Properties.Settings.Default.saveLogWithVideo == "Checked")
+                if (Properties.Settings.Default.saveLogWithVideo)
                     File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
 
                 // Save a copy of the log file to a user specified location
                 if (Directory.Exists(Properties.Settings.Default.saveLogPath))
-                    if (Properties.Settings.Default.saveLogPath != String.Empty && Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
+                    if (Properties.Settings.Default.saveLogPath != String.Empty && Properties.Settings.Default.saveLogToSpecifiedPath)
                         File.Copy(tempLogFile, Path.Combine(Properties.Settings.Default.saveLogPath, encodeLogFile));
             }
             catch (Exception exc)

@@ -20,25 +20,25 @@ namespace Handbrake
             // #############################
 
             // Enable Tooltips.
-            if (Properties.Settings.Default.tooltipEnable == "Checked")
+            if (Properties.Settings.Default.tooltipEnable)
             {
                 check_tooltip.CheckState = CheckState.Checked;
                 ToolTip.Active = true;
             }
 
             // Setup Widgets to match settings.
-            if (Properties.Settings.Default.updateStatus == "Checked")
+            if (Properties.Settings.Default.updateStatus)
                 check_updateCheck.CheckState = CheckState.Checked;
 
             // enable loading of default user settings.
-            if (Properties.Settings.Default.defaultSettings == "Checked")
+            if (Properties.Settings.Default.defaultSettings)
                 check_userDefaultSettings.CheckState = CheckState.Checked;
 
             // On Encode Completeion Action
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
             
             // Enable auto naming feature.
-            if (Properties.Settings.Default.autoNaming == "Checked")
+            if (Properties.Settings.Default.autoNaming)
                 check_autoNaming.CheckState = CheckState.Checked;
 
             // Store the auto name path
@@ -61,7 +61,7 @@ namespace Handbrake
             // #############################
 
             // Enable Start CLI minimized
-            if (Properties.Settings.Default.cli_minimized == "Checked")
+            if (Properties.Settings.Default.cli_minimized)
                 check_cli_minimized.CheckState = CheckState.Checked;
 
             // Number of processor cores
@@ -75,11 +75,11 @@ namespace Handbrake
 
 
             // Save logs in the same directory as encoded files
-            if (Properties.Settings.Default.saveLogWithVideo == "Checked")
+            if (Properties.Settings.Default.saveLogWithVideo)
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
 
             // Save Logs in a specified path
-            if (Properties.Settings.Default.saveLogToSpecifiedPath == "Checked")
+            if (Properties.Settings.Default.saveLogToSpecifiedPath)
                 check_logsInSpecifiedLocation.CheckState = CheckState.Checked;
 
             // The saved log path
@@ -91,27 +91,27 @@ namespace Handbrake
             // #############################
 
             // Enable GUI DVD Drive detection code
-            if (Properties.Settings.Default.drive_detection == "Checked")
+            if (Properties.Settings.Default.drive_detection)
                 btn_drive_detect.CheckState = CheckState.Checked;
 
             // Minimise to Tray
-            if (Properties.Settings.Default.trayIconAlerts == "Checked")
+            if (Properties.Settings.Default.trayIconAlerts)
                 check_trayStatusAlerts.CheckState = CheckState.Checked;
 
             // Tray Balloon popups
-            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+            if (Properties.Settings.Default.MainWindowMinimize)
                 check_mainMinimize.CheckState = CheckState.Checked;
 
             // Enable / Disable Query editor tab
-            if (Properties.Settings.Default.QueryEditorTab == "Checked")
+            if (Properties.Settings.Default.QueryEditorTab)
                 check_queryEditorTab.CheckState = CheckState.Checked;
 
             // Preset update notification
-            if (Properties.Settings.Default.presetNotification == "Checked")
+            if (Properties.Settings.Default.presetNotification)
                 check_disablePresetNotification.CheckState = CheckState.Checked;
 
             // Experimental In-GUI encode status indicator.
-            if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
+            if (Properties.Settings.Default.enocdeStatusInGui)
                 check_inGuiStatus.CheckState = CheckState.Checked;
 
             // Days between update checks
@@ -121,24 +121,24 @@ namespace Handbrake
             drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep;
 
             // Use Experimental dvdnav
-            if (Properties.Settings.Default.dvdnav == "Checked")
+            if (Properties.Settings.Default.dvdnav)
                 check_dvdnav.CheckState = CheckState.Checked;
         }
 
         #region General
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.updateStatus = check_updateCheck.CheckState.ToString();
+            Properties.Settings.Default.updateStatus = check_updateCheck.Checked;
         }
 
         private void check_userDefaultSettings_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.defaultSettings = check_userDefaultSettings.CheckState.ToString();
+            Properties.Settings.Default.defaultSettings = check_userDefaultSettings.Checked;
         }
 
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.tooltipEnable = check_tooltip.CheckState.ToString();
+            Properties.Settings.Default.tooltipEnable = check_tooltip.Checked;
         }
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -147,7 +147,7 @@ namespace Handbrake
 
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.autoNaming = check_autoNaming.CheckState.ToString();
+            Properties.Settings.Default.autoNaming = check_autoNaming.Checked;
         }
 
         private void txt_autoNameFormat_TextChanged(object sender, EventArgs e)
@@ -189,7 +189,7 @@ namespace Handbrake
         #region CLI
         private void check_cli_minimized_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.cli_minimized = check_cli_minimized.CheckState.ToString();
+            Properties.Settings.Default.cli_minimized = check_cli_minimized.Checked;
         }
 
         private void drp_processors_SelectedIndexChanged(object sender, EventArgs e)
@@ -209,11 +209,11 @@ namespace Handbrake
 
         private void check_saveLogWithVideo_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.CheckState.ToString();
+            Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.Checked;
         }
         private void check_logsInSpecifiedLocation_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.CheckState.ToString();
+            Properties.Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.Checked;
         }
 
         private void btn_saveLog_Click(object sender, EventArgs e)
@@ -234,32 +234,32 @@ namespace Handbrake
         #region Advanced
         private void btn_drive_detect_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.drive_detection = btn_drive_detect.CheckState.ToString();
+            Properties.Settings.Default.drive_detection = btn_drive_detect.Checked;
         }
 
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.CheckState.ToString();
+            Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.Checked;
         }
 
         private void check_trayStatusAlerts_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.trayIconAlerts = check_trayStatusAlerts.CheckState.ToString();
+            Properties.Settings.Default.trayIconAlerts = check_trayStatusAlerts.Checked;
         }
 
         private void check_queryEditorTab_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.QueryEditorTab = check_queryEditorTab.CheckState.ToString();
+            Properties.Settings.Default.QueryEditorTab = check_queryEditorTab.Checked;
         }
 
         private void check_disablePresetNotification_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.presetNotification = check_disablePresetNotification.CheckState.ToString();
+            Properties.Settings.Default.presetNotification = check_disablePresetNotification.Checked;
         }
 
         private void check_inGuiStatus_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.CheckState.ToString();
+            Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.Checked;
         }
 
         private void numeric_updateCheckDays_ValueChanged(object sender, EventArgs e)
@@ -274,7 +274,7 @@ namespace Handbrake
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.dvdnav = check_dvdnav.CheckState.ToString();
+            Properties.Settings.Default.dvdnav = check_dvdnav.Checked;
         } 
         #endregion
 

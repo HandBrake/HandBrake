@@ -8,17 +8,17 @@
     <Setting Name="Processors" Type="System.String" Scope="User">
       <Value Profile="(Default)">Automatic</Value>
     </Setting>
-    <Setting Name="defaultSettings" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
+    <Setting Name="defaultSettings" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="updateStatus" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
+    <Setting Name="updateStatus" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="hb_version" Type="System.String" Scope="User">
       <Value Profile="(Default)">{hb_version}</Value>
     </Setting>
-    <Setting Name="tooltipEnable" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
+    <Setting Name="tooltipEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="CompletionOption" Type="System.String" Scope="User">
       <Value Profile="(Default)">Do Nothing</Value>
@@ -32,8 +32,8 @@
     <Setting Name="skipversion" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="autoNaming" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
+    <Setting Name="autoNaming" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="autoNamePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -44,32 +44,32 @@
     <Setting Name="appcast_unstable" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://handbrake.fr/appcast_unstable.xml</Value>
     </Setting>
-    <Setting Name="drive_detection" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
+    <Setting Name="drive_detection" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="cli_minimized" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="cli_minimized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="autoNameFormat" Type="System.String" Scope="User">
       <Value Profile="(Default)">{source}-{title}</Value>
     </Setting>
-    <Setting Name="saveLogToSpecifiedPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="saveLogToSpecifiedPath" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="saveLogPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="saveLogWithVideo" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="saveLogWithVideo" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="VLC_Path" Type="System.String" Scope="User">
-      <Value Profile="(Default)">T:\Program Files\VideoLAN\vlc\vlc.exe</Value>
+      <Value Profile="(Default)">C:\Program Files\VideoLAN\vlc\vlc.exe</Value>
     </Setting>
-    <Setting Name="MainWindowMinimize" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Checked</Value>
+    <Setting Name="MainWindowMinimize" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="QueryEditorTab" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="QueryEditorTab" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="x264cqstep" Type="System.String" Scope="User">
       <Value Profile="(Default)">0.25</Value>
@@ -77,17 +77,17 @@
     <Setting Name="verboseLevel" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
-    <Setting Name="dvdnav" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="dvdnav" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="presetNotification" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="presetNotification" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="enocdeStatusInGui" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="enocdeStatusInGui" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="trayIconAlerts" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="trayIconAlerts" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="lastUpdateCheckDate" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />

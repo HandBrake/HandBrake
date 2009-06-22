@@ -60,7 +60,7 @@ namespace Handbrake
             Application.DoEvents(); // Forces frmMain to draw
 
             // Check for new versions, if update checking is enabled
-            if (Properties.Settings.Default.updateStatus == "Checked")
+            if (Properties.Settings.Default.updateStatus)
             {
                 DateTime now = DateTime.Now;
                 DateTime lastCheck = Properties.Settings.Default.lastUpdateCheckDate;
@@ -82,11 +82,11 @@ namespace Handbrake
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
             queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
-            if (Properties.Settings.Default.QueryEditorTab != "Checked")
+            if (Properties.Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
 
             // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultSettings == "Checked" && Properties.Settings.Default.defaultPreset != "")
+            if (Properties.Settings.Default.defaultSettings && Properties.Settings.Default.defaultPreset != "")
             {
                 if (presetHandler.getPreset(Properties.Settings.Default.defaultPreset) != null)
                 {
@@ -114,7 +114,7 @@ namespace Handbrake
                 loadNormalPreset();
 
             // Enabled GUI tooltip's if Required
-            if (Properties.Settings.Default.tooltipEnable == "Checked")
+            if (Properties.Settings.Default.tooltipEnable)
                 ToolTip.Active = true;
 
             //Finished Loading
@@ -176,7 +176,7 @@ namespace Handbrake
         private void events()
         {
             // Handle Window Resize
-            if (Properties.Settings.Default.MainWindowMinimize == "Checked")
+            if (Properties.Settings.Default.MainWindowMinimize)
                 this.Resize += new EventHandler(frmMain_Resize);
 
             // Handle Encode Start / Finish / Pause
@@ -219,7 +219,7 @@ namespace Handbrake
             setEncodeStarted();
 
             // Experimental HBProc Process Monitoring.
-            if (Properties.Settings.Default.enocdeStatusInGui == "Checked")
+            if (Properties.Settings.Default.enocdeStatusInGui)
             {
                 Thread encodeMon = new Thread(encodeMonitorThread);
                 encodeMon.Start();
@@ -262,8 +262,8 @@ namespace Handbrake
         }
         private void mnu_options_Click(object sender, EventArgs e)
         {
-            Form Options = new frmOptions();
-            Options.ShowDialog();
+            Form options = new frmOptions();
+            options.ShowDialog();
         }
         #endregion
 
@@ -510,7 +510,7 @@ namespace Handbrake
         #region ToolStrip
         private void btn_source_Click(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.drive_detection == "Checked")
+            if (Properties.Settings.Default.drive_detection)
             {
                 mnu_dvd_drive.Visible = true;
                 Thread driveInfoThread = new Thread(getDriveInfoThread);
@@ -632,12 +632,6 @@ namespace Handbrake
             if (FormWindowState.Minimized == this.WindowState)
             {
                 notifyIcon.Visible = true;
-                if (!encodeQueue.isEncoding)
-                {
-                    notifyIcon.BalloonTipText = lbl_encode.Text != "" ? lbl_encode.Text : "Not Encoding";
-                    if (Properties.Settings.Default.trayIconAlerts == "Checked")
-                        notifyIcon.ShowBalloonTip(500);
-                }
                 this.Hide();
             }
             else if (FormWindowState.Normal == this.WindowState)
@@ -760,13 +754,13 @@ namespace Handbrake
             // Otheriwse if its not, title data has to be loased from parsing.
             if (drp_dvdtitle.Text != "Automatic")
             {
-                selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
+                selectedTitle = drp_dvdtitle.SelectedItem as Title;
                 lbl_duration.Text = selectedTitle.Duration.ToString();
                 PictureSettings.setComponentsAfterScan(selectedTitle);  // Setup Picture Settings Tab Control
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
-                if (Properties.Settings.Default.dvdnav == "Checked")
+                if (Properties.Settings.Default.dvdnav)
                 {
                     drop_angle.Visible = true;
                     lbl_angle.Visible = true;
@@ -803,7 +797,7 @@ namespace Handbrake
             }
 
             // Run the autoName & chapterNaming functions
-            if (Properties.Settings.Default.autoNaming == "Checked")
+            if (Properties.Settings.Default.autoNaming)
             {
                 string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
                 if (autoPath != null)
@@ -848,7 +842,7 @@ namespace Handbrake
             lbl_duration.Text = Main.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
 
             // Run the Autonaming function
-            if (Properties.Settings.Default.autoNaming == "Checked")
+            if (Properties.Settings.Default.autoNaming)
                 text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
             // Disable chapter markers if only 1 chapter is selected.
@@ -879,7 +873,7 @@ namespace Handbrake
             lbl_duration.Text = Main.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
 
             // Run the Autonaming function
-            if (Properties.Settings.Default.autoNaming == "Checked")
+            if (Properties.Settings.Default.autoNaming)
                 text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
             // Add more rows to the Chapter menu if needed.
@@ -1262,7 +1256,7 @@ namespace Handbrake
                     File.Delete(dvdInfoPath);
 
                 String dvdnav = string.Empty;
-                if (Properties.Settings.Default.dvdnav == "Checked")
+                if (Properties.Settings.Default.dvdnav)
                     dvdnav = " --dvdnav";
                 string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 {2} -v >""{3}"" 2>&1""", handbrakeCLIPath, inputFile, dvdnav, dvdInfoPath);
 
@@ -1432,11 +1426,12 @@ namespace Handbrake
                 btn_start.Image = Properties.Resources.Play;
 
                 // If the window is minimized, display the notification in a popup.
-                if (FormWindowState.Minimized == this.WindowState)
-                {
-                    notifyIcon.BalloonTipText = lbl_encode.Text;
-                    notifyIcon.ShowBalloonTip(500);
-                }
+                if (Properties.Settings.Default.trayIconAlerts)
+                    if (FormWindowState.Minimized == this.WindowState)
+                    {
+                        notifyIcon.BalloonTipText = lbl_encode.Text;
+                        notifyIcon.ShowBalloonTip(500);
+                    }
             }
             catch (Exception exc)
             {
@@ -1460,7 +1455,7 @@ namespace Handbrake
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Encoding in Progress";
                 btn_start.Text = "Stop";
-                btn_start.ToolTipText = "Stop the encoding process. \nWarning: This may break your file. Press ctrl-c in the CLI window if you wish it to exit cleanly.";
+                btn_start.ToolTipText = "Stop the encoding process.";
                 btn_start.Image = Properties.Resources.stop;
             }
             catch (Exception exc)
@@ -1514,7 +1509,7 @@ namespace Handbrake
         public void loadPresetPanel()
         {
             if (presetHandler.checkIfPresetsAreOutOfDate())
-                if (Properties.Settings.Default.presetNotification == "Unchecked")
+                if (!Properties.Settings.Default.presetNotification)
                     MessageBox.Show(
                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);

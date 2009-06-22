@@ -146,7 +146,7 @@ namespace Handbrake.Parsing
 
             output.ReadLine();
 
-            if (Properties.Settings.Default.dvdnav == "Checked")
+            if (Properties.Settings.Default.dvdnav)
             {
                 // Get the Angles for the title.
                 m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9,])");

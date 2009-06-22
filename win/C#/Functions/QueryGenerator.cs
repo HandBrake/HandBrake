@@ -33,7 +33,7 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (Properties.Settings.Default.dvdnav == "Checked")
+            if (Properties.Settings.Default.dvdnav)
                 if (mainWindow.drop_angle.Items.Count != 0)
                     query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
@@ -497,7 +497,7 @@ namespace Handbrake.Functions
 
             query += " -v " + Properties.Settings.Default.verboseLevel;
 
-            if (Properties.Settings.Default.dvdnav == "Checked")
+            if (Properties.Settings.Default.dvdnav)
                 query += " --dvdnav";
             #endregion
 
