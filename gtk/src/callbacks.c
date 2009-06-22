@@ -1338,7 +1338,6 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
 	ghb_update_ui_combo_box (ud, "SubtitleTrack", titleindex, FALSE);
 
-	ghb_set_pref_subtitle(titleindex, ud);
 	if (ghb_get_title_info (&tinfo, titleindex))
 	{
 		show_title_info(ud, &tinfo);
@@ -1346,6 +1345,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	update_chapter_list (ud);
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_set_pref_audio(titleindex, ud);
+	ghb_set_pref_subtitle(titleindex, ud);
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
 	{
 		gint bitrate = ghb_calculate_target_bitrate (ud->settings, titleindex);
@@ -2551,7 +2551,7 @@ ghb_log(gchar *log, ...)
 
 	_now = time(NULL);
 	now = localtime( &_now );
-	snprintf(fmt, 362, "[%02d:%02d:%02d] lingui: %s\n", 
+	snprintf(fmt, 362, "[%02d:%02d:%02d] gtkgui: %s\n", 
 			now->tm_hour, now->tm_min, now->tm_sec, log);
 	va_start(args, log);
 	vfprintf(stderr, fmt, args);

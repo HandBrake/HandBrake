@@ -2159,55 +2159,93 @@ audio-volume-medium</property>
                       <object class="GtkHBox" id="hbox63">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="spacing">5</property>
+                        <property name="spacing">4</property>
                         <child>
-                          <object class="GtkFrame" id="frame18">
+                          <object class="GtkAlignment" id="alignment61">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="label_xalign">0</property>
-                            <property name="shadow_type">none</property>
+                            <property name="left_padding">12</property>
+                            <property name="right_padding">2</property>
+                            <property name="yscale">0</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment57">
+                              <object class="GtkHBox" id="hbox81">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="xalign">0</property>
-                                <property name="xscale">0</property>
-                                <property name="top_padding">6</property>
-                                <property name="bottom_padding">2</property>
-                                <property name="left_padding">12</property>
-                                <property name="right_padding">2</property>
+                                <property name="spacing">4</property>
+
                                 <child>
-                                  <object class="GtkHBox" id="hbox64">
+                                  <object class="GtkLabel" id="label87">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="spacing">5</property>
-
-                                    <child>
-                                      <object class="GtkComboBox" id="SourceAudioLang">
-                                        <property name="width_request">150</property>
-                                        <property name="visible">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <signal handler="setting_widget_changed_cb" name="changed"/>
-                                      </object>
-                                    </child>
+                                    <property name="label" translatable="yes">Preferred Language:</property>
+                                    <property name="use_markup">True</property>
                                   </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                  </packing>
+                                </child>
+
+                                <child>
+                                  <object class="GtkComboBox" id="SourceAudioLang">
+                                    <property name="width_request">150</property>
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <signal handler="setting_widget_changed_cb" name="changed"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label87">
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkVBox" id="vbox49">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <child>
+                              <object class="GtkRadioButton" id="AudioDUB">
                                 <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Preferred Audio Language&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">DUB Audio</property>
+                                <property name="tooltip-text" translatable="yes">DUB Audio of foreign language films with "Preferred Language"</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="setting_widget_changed_cb"/>
                               </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="not_dub_audio">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">Add Subtitles</property>
+                                <property name="tooltip-text" translatable="yes">Add "Preferred Language" subtitles to foreign language films</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                                <property name="group">AudioDUB</property>
+                                <signal name="toggled" handler="setting_widget_changed_cb"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">3</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                   </object>

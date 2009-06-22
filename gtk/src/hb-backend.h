@@ -137,6 +137,7 @@ void ghb_set_default_bitrate_opts(GtkBuilder *builder, gint last_rate);
 void ghb_grey_combo_options(GtkBuilder *builder);
 void ghb_update_ui_combo_box(
 	signal_user_data_t *ud, const gchar *name, gint user_data, gboolean all);
+gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
 gint ghb_find_audio_track(
 	gint titleindex, const gchar *lang, gint acodec, GHashTable *track_indices);
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);

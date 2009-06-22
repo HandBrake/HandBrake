@@ -1817,6 +1817,32 @@ ghb_longest_title()
 	return titleindex;
 }
 
+gchar*
+ghb_get_source_audio_lang(gint titleindex, gint track)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+    hb_audio_config_t * audio;
+	gchar *lang = NULL;
+	
+	g_debug("ghb_lookup_1st_audio_lang ()\n");
+	if (h_scan == NULL) 
+		return NULL;
+	list = hb_get_titles( h_scan );
+    title = (hb_title_t*)hb_list_item( list, titleindex );
+	if (title == NULL)
+		return NULL;
+	if (hb_list_count( title->list_audio ) <= track)
+		return NULL;
+
+	audio = hb_list_audio_config_item(title->list_audio, track);
+	if (audio == NULL)
+		return NULL;
+
+	lang = g_strdup(audio->lang.iso639_2);
+	return lang;
+}
+
 gint
 ghb_find_audio_track(
 	gint titleindex, 

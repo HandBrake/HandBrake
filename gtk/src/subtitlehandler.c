@@ -19,6 +19,7 @@
 #include "callbacks.h"
 #include "preview.h"
 #include "presets.h"
+#include "audiohandler.h"
 #include "subtitlehandler.h"
 
 static void add_to_subtitle_list(signal_user_data_t *ud, GValue *settings);
@@ -180,13 +181,32 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 {
 	gint track;
 	GHashTable *track_indices;
-	char *lang;
+	gchar *lang, *pref_lang = NULL;
+	gchar *audio_lang;
+	gint foreign_lang_index = -1;
 
 	const GValue *pref_subtitle;
 	GValue *subtitle;
-	gint count, ii;
+	gint count, ii, jj;
 	
 	g_debug("ghb_set_pref_subtitle %d", titleindex);
+
+	// Check to see if we need to add a subtitle track for foreign audio
+	// language films. A subtitle track will be added if:
+	//
+	// The first (default) audio track language does NOT match the users
+	// chosen Preferred Language AND the Preferred Language is NOT Any (und).
+	//
+	audio_lang = ghb_get_user_audio_lang(ud, titleindex, 0);
+	pref_lang = ghb_settings_get_string(ud->settings, "SourceAudioLang");
+
+	if (audio_lang != NULL && pref_lang != NULL &&
+		(strcmp(audio_lang, pref_lang) == 0 || strcmp("und", pref_lang) == 0))
+	{
+		g_free(pref_lang);
+		pref_lang = NULL;
+	}
+
 	track_indices = g_hash_table_new_full(g_str_hash, g_str_equal, 
 											free_subtitle_key, free_subtitle_index_list);
 
@@ -204,6 +224,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 	pref_subtitle = ghb_settings_get_value(ud->settings, "SubtitleList");
 
 	count = ghb_array_len(pref_subtitle);
+	jj = 0;
 	for (ii = 0; ii < count; ii++)
 	{
 		subtitle = ghb_array_get_nth(pref_subtitle, ii);
@@ -212,14 +233,66 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each language.
 		track = ghb_find_subtitle_track(titleindex, lang, track_indices);
-		g_free(lang);
 		if (track >= -1)
 		{
 			GValue *dup = ghb_value_dup(subtitle);
 			ghb_settings_set_int(dup, "SubtitleTrack", track);
+			if (foreign_lang_index < 0 && pref_lang != NULL &&
+				strcmp(lang, pref_lang) == 0)
+			{
+				foreign_lang_index = jj;
+				ghb_settings_take_value(dup, "SubtitleForced", 
+								ghb_boolean_value_new(FALSE));
+				ghb_settings_take_value(dup, "SubtitleDefaultTrack", 
+								ghb_boolean_value_new(TRUE));
+			}
 			ghb_add_subtitle(ud, dup);
+			jj++;
+		}
+		g_free(lang);
+	}
+	if (foreign_lang_index < 0 && pref_lang != NULL)
+	{
+		GValue *settings;
+		gboolean burn;
+
+		track = ghb_find_subtitle_track(titleindex, pref_lang, track_indices);
+		if (track >= -1)
+		{
+			burn = mustBurn(ud, track);
+			settings = ghb_dict_value_new();
+			ghb_settings_set_int(settings, "SubtitleTrack", track);
+			ghb_settings_take_value(settings, "SubtitleForced", 
+							ghb_boolean_value_new(FALSE));
+			ghb_settings_take_value(settings, "SubtitleBurned", 
+							ghb_boolean_value_new(burn));
+			ghb_settings_take_value(settings, "SubtitleDefaultTrack", 
+							ghb_boolean_value_new(TRUE));
+
+			ghb_add_subtitle(ud, settings);
+			foreign_lang_index = jj;
 		}
 	}
+	if (foreign_lang_index >= 0)
+	{
+		GValue *subtitle_list;
+		gboolean burn, def;
+
+		subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+		subtitle = ghb_array_get_nth(subtitle_list, foreign_lang_index);
+
+		burn = ghb_settings_get_boolean(subtitle, "SubtitleBurned");
+		def = ghb_settings_get_boolean(subtitle, "SubtitleDefaultTrack");
+		if (burn)
+			ghb_subtitle_exclusive_burn(ud, foreign_lang_index);
+		if (def)
+			ghb_subtitle_exclusive_default(ud, foreign_lang_index);
+		ghb_log("adding subtitle for foreign language audio: %s", audio_lang);
+	}
+	if (pref_lang != NULL)
+		g_free(pref_lang);
+	if (audio_lang != NULL)
+		g_free(audio_lang);
 	g_hash_table_destroy(track_indices);
 }
 

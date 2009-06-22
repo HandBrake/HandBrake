@@ -89,11 +89,26 @@ free_audio_index_list(gpointer data)
 	g_free(data);
 }
 
+gchar*
+ghb_get_user_audio_lang(signal_user_data_t *ud, gint titleindex, gint track)
+{
+	GValue *audio_list, *asettings;
+	gchar *lang = NULL;
+
+	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+	if (ghb_array_len(audio_list) <= track)
+		return NULL;
+	asettings = ghb_array_get_nth(audio_list, track);
+	track = ghb_settings_get_int(asettings, "AudioTrack");
+	lang = ghb_get_source_audio_lang(titleindex, track);
+	return lang;
+}
+
 void
 ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 {
 	gint acodec_code, mix_code, track;
-	gchar *source_lang;
+	gchar *source_lang = NULL;
 	GtkWidget *button;
 	ghb_audio_info_t ainfo;
 	GHashTable *track_indices;
@@ -109,7 +124,12 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	ghb_clear_audio_list(ud);
 	// Find "best" audio based on audio preferences
 	button = GHB_WIDGET (ud->builder, "audio_add");
-	source_lang = ghb_settings_get_string(ud->settings, "SourceAudioLang");
+	if (!ghb_settings_get_boolean(ud->settings, "AudioDUB"))
+	{
+		source_lang = ghb_get_source_audio_lang(titleindex, 0);
+	}
+	if (source_lang == NULL)
+		source_lang = ghb_settings_get_string(ud->settings, "SourceAudioLang");
 
 	pref_audio = ghb_settings_get_value(ud->settings, "AudioList");
 
