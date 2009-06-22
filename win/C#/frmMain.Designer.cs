@@ -356,7 +356,8 @@ namespace Handbrake
             this.slider_videoQuality.Size = new System.Drawing.Size(322, 45);
             this.slider_videoQuality.TabIndex = 14;
             this.slider_videoQuality.TickFrequency = 17;
-            this.ToolTip.SetToolTip(this.slider_videoQuality, "Set the quality level of the video. (Around 70% is fine for most)");
+            this.ToolTip.SetToolTip(this.slider_videoQuality, "Set the quality level of the video. Typical sane values are between 59~63%. \r\n>70" +
+                    "% will likely result in the output file being larger than the input file.");
             this.slider_videoQuality.ValueChanged += new System.EventHandler(this.slider_videoQuality_Scroll);
             // 
             // text_filesize
