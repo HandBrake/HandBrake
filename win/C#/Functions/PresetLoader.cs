@@ -67,10 +67,10 @@ namespace Handbrake.Functions
             #endregion
 
             #region Picture
-            mainWindow.pictureSettings.check_autoCrop.Checked = true;
+            mainWindow.PictureSettings.check_autoCrop.Checked = true;
             if (presetQuery.CropBottom == "0" && presetQuery.CropTop == "0")
                 if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
-                    mainWindow.pictureSettings.check_customCrop.Checked = true;
+                    mainWindow.PictureSettings.check_customCrop.Checked = true;
 
             if (pictureSettings) // only Load picture settings if the perset requires it
             {
@@ -82,75 +82,60 @@ namespace Handbrake.Functions
                     int.TryParse(presetQuery.CropLeft, out left);
                     int.TryParse(presetQuery.CropRight, out right);
 
-                    mainWindow.pictureSettings.check_customCrop.Checked = true;
-                    mainWindow.pictureSettings.crop_top.Value = top;
-                    mainWindow.pictureSettings.crop_bottom.Value = bottom;
-                    mainWindow.pictureSettings.crop_left.Value = left;
-                    mainWindow.pictureSettings.crop_right.Value = right;
+                    mainWindow.PictureSettings.check_customCrop.Checked = true;
+                    mainWindow.PictureSettings.crop_top.Value = top;
+                    mainWindow.PictureSettings.crop_bottom.Value = bottom;
+                    mainWindow.PictureSettings.crop_left.Value = left;
+                    mainWindow.PictureSettings.crop_right.Value = right;
                 }
             }
 
             // Reset maxWidth and MaxHeight to 0
-            mainWindow.pictureSettings.maxWidth = 0;
-            mainWindow.pictureSettings.maxHeight = 0;
+            mainWindow.PictureSettings.maxWidth = 0;
+            mainWindow.PictureSettings.maxHeight = 0;
 
             // Set the width and height
             if (presetQuery.Width != 0)
-                mainWindow.pictureSettings.text_width.Value = presetQuery.Width;
+                mainWindow.PictureSettings.text_width.Value = presetQuery.Width;
             else if (presetQuery.MaxWidth == 0)
-                mainWindow.pictureSettings.text_width.Value = 0;
+                mainWindow.PictureSettings.text_width.Value = 0;
 
-            mainWindow.pictureSettings.text_height.Value = presetQuery.Height != 0 ? presetQuery.Height : 0;
+            mainWindow.PictureSettings.text_height.Value = presetQuery.Height != 0 ? presetQuery.Height : 0;
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
             {
-                mainWindow.pictureSettings.text_width.Value = presetQuery.MaxWidth;
-                mainWindow.pictureSettings.maxWidth = presetQuery.MaxWidth;
+                mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth;
+                mainWindow.PictureSettings.maxWidth = presetQuery.MaxWidth;
             }
 
             if (presetQuery.MaxHeight != 0)
             {
-                mainWindow.pictureSettings.text_height.Value = presetQuery.MaxHeight;
-                mainWindow.pictureSettings.maxHeight = presetQuery.MaxHeight;
+                mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight;
+                mainWindow.PictureSettings.maxHeight = presetQuery.MaxHeight;
             }
-            mainWindow.pictureSettings.setMax();
+            mainWindow.PictureSettings.setMax();
 
             // Set the anamorphic mode 0,1,2,3
-            mainWindow.pictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
+            mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
             // Custom Anamorphic Controls
-            mainWindow.pictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
-            mainWindow.pictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
-            mainWindow.pictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
-            mainWindow.pictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
-            mainWindow.pictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
+            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.PictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
+            mainWindow.PictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
+            mainWindow.PictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
+            mainWindow.PictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
 
 
             #endregion
 
             #region Filters
-
-            mainWindow.ctl_decomb.setOption(presetQuery.Decomb);
-
-            if (mainWindow.ctl_decomb.getDropValue == "Off")
-                mainWindow.ctl_deinterlace.setOption(presetQuery.DeInterlace);
-            else
-                mainWindow.ctl_deinterlace.setOption("None"); // Don't want decomb and deinterlace on at the same time
-
-            mainWindow.ctl_denoise.setOption(presetQuery.DeNoise);
-            mainWindow.ctl_detelecine.setOption(presetQuery.DeTelecine);
-
-            if (presetQuery.DeBlock != 0)
-            {
-                mainWindow.slider_deblock.Value = presetQuery.DeBlock;
-                mainWindow.lbl_deblockVal.Text = presetQuery.DeBlock.ToString();
-            }
-            else
-            {
-                mainWindow.slider_deblock.Value = 4;
-                mainWindow.lbl_deblockVal.Text = "Off";
-            }
+            mainWindow.Filters.setDecomb(presetQuery.Decomb);
+            mainWindow.Filters.setDeInterlace(presetQuery.DeInterlace);
+            mainWindow.Filters.setDeNoise(presetQuery.DeNoise);
+            mainWindow.Filters.setDeTelecine(presetQuery.DeTelecine);
+            mainWindow.Filters.setDeBlock(presetQuery.DeBlock);
+            mainWindow.Filters.setGrayScale(presetQuery.Grayscale);
             #endregion
 
             #region Video
@@ -210,7 +195,6 @@ namespace Handbrake.Functions
 
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
 
-            mainWindow.check_grayscale.CheckState = presetQuery.Grayscale ? CheckState.Checked : CheckState.Unchecked;
 
             mainWindow.drp_videoFramerate.Text = presetQuery.VideoFramerate;
 
@@ -232,12 +216,12 @@ namespace Handbrake.Functions
 
             #region Audio
             // Clear the audio listing
-            mainWindow.audioPanel.clearAudioList();
+            mainWindow.AudioSettings.clearAudioList();
 
             if (presetQuery.AudioInformation != null)
                 foreach (AudioTrack track in presetQuery.AudioInformation)
                 {
-                    ListViewItem newTrack = new ListViewItem(mainWindow.audioPanel.getNewID().ToString());
+                    ListViewItem newTrack = new ListViewItem(mainWindow.AudioSettings.getNewID().ToString());
 
                     newTrack.SubItems.Add("Automatic");
                     newTrack.SubItems.Add(track.Encoder);
@@ -248,7 +232,7 @@ namespace Handbrake.Functions
                     else
                         newTrack.SubItems.Add(track.Bitrate);
                     newTrack.SubItems.Add(track.DRC);
-                    mainWindow.audioPanel.addTrackForPreset(newTrack);
+                    mainWindow.AudioSettings.addTrackForPreset(newTrack);
                 }
             #endregion
 

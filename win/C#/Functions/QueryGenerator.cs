@@ -117,53 +117,53 @@ namespace Handbrake.Functions
             #region Picture Settings Tab
 
             // Use MaxWidth for built-in presets and width for user settings.
-            if (mainWindow.pictureSettings.maxWidth == 0)
+            if (mainWindow.PictureSettings.maxWidth == 0)
             {
 
-                if (mainWindow.pictureSettings.text_width.Text != "")
-                    if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
-                        query += " -w " + mainWindow.pictureSettings.text_width.Text;
+                if (mainWindow.PictureSettings.text_width.Text != "")
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
+                        query += " -w " + mainWindow.PictureSettings.text_width.Text;
             }
             else
             {
-                if (mainWindow.pictureSettings.text_width.Text != "")
-                    query += " -X " + mainWindow.pictureSettings.text_width.Text;
+                if (mainWindow.PictureSettings.text_width.Text != "")
+                    query += " -X " + mainWindow.PictureSettings.text_width.Text;
             }
 
             // Use MaxHeight for built-in presets and height for user settings.
-            if (mainWindow.pictureSettings.maxHeight == 0)
+            if (mainWindow.PictureSettings.maxHeight == 0)
             {
-                if (mainWindow.pictureSettings.text_height.Text != "0")
-                    if (mainWindow.pictureSettings.text_height.Text != "")
-                        if (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.pictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
-                            query += " -l " + mainWindow.pictureSettings.text_height.Text;
+                if (mainWindow.PictureSettings.text_height.Text != "0")
+                    if (mainWindow.PictureSettings.text_height.Text != "")
+                        if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                            query += " -l " + mainWindow.PictureSettings.text_height.Text;
             }
             else
             {
-                if (mainWindow.pictureSettings.text_height.Text != "")
-                    query += " -Y " + mainWindow.pictureSettings.text_height.Text;
+                if (mainWindow.PictureSettings.text_height.Text != "")
+                    query += " -Y " + mainWindow.PictureSettings.text_height.Text;
             }
 
-            string cropTop = mainWindow.pictureSettings.crop_top.Text;
-            string cropBottom = mainWindow.pictureSettings.crop_bottom.Text;
-            string cropLeft = mainWindow.pictureSettings.crop_left.Text;
-            string cropRight = mainWindow.pictureSettings.crop_right.Text;
+            string cropTop = mainWindow.PictureSettings.crop_top.Text;
+            string cropBottom = mainWindow.PictureSettings.crop_bottom.Text;
+            string cropLeft = mainWindow.PictureSettings.crop_left.Text;
+            string cropRight = mainWindow.PictureSettings.crop_right.Text;
 
-            if (mainWindow.pictureSettings.check_customCrop.Checked)
+            if (mainWindow.PictureSettings.check_customCrop.Checked)
             {
-                if (mainWindow.pictureSettings.crop_top.Text == string.Empty)
+                if (mainWindow.PictureSettings.crop_top.Text == string.Empty)
                     cropTop = "0";
-                if (mainWindow.pictureSettings.crop_bottom.Text == string.Empty)
+                if (mainWindow.PictureSettings.crop_bottom.Text == string.Empty)
                     cropBottom = "0";
-                if (mainWindow.pictureSettings.crop_left.Text == string.Empty)
+                if (mainWindow.PictureSettings.crop_left.Text == string.Empty)
                     cropLeft = "0";
-                if (mainWindow.pictureSettings.crop_right.Text == string.Empty)
+                if (mainWindow.PictureSettings.crop_right.Text == string.Empty)
                     cropRight = "0";
 
                 query += " --crop " + cropTop + ":" + cropBottom + ":" + cropLeft + ":" + cropRight;
             }
 
-            switch (mainWindow.pictureSettings.drp_anamorphic.SelectedIndex)
+            switch (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex)
             {
                 case 1:
                     query += " --strict-anamorphic ";
@@ -173,23 +173,17 @@ namespace Handbrake.Functions
                     break;
                 case 3:
                     query += " --custom-anamorphic ";
-                    query += " --display-width " + mainWindow.pictureSettings.txt_displayWidth.Text + " ";
-                    if (mainWindow.pictureSettings.check_KeepAR.Checked)
+                    query += " --display-width " + mainWindow.PictureSettings.txt_displayWidth.Text + " ";
+                    if (mainWindow.PictureSettings.check_KeepAR.Checked)
                         query += " --keep-display-aspect ";
-                    if (mainWindow.pictureSettings.txt_parWidth.Text != "" && mainWindow.pictureSettings.txt_parHeight.Text != "")
-                        query += " --pixel-aspect " + mainWindow.pictureSettings.txt_parWidth.Text + ":" + mainWindow.pictureSettings.txt_parHeight.Text + " ";
+                    if (mainWindow.PictureSettings.txt_parWidth.Text != "" && mainWindow.PictureSettings.txt_parHeight.Text != "")
+                        query += " --pixel-aspect " + mainWindow.PictureSettings.txt_parWidth.Text + ":" + mainWindow.PictureSettings.txt_parHeight.Text + " ";
                     break;
             }
             #endregion
 
             #region Filters
-            query += mainWindow.ctl_detelecine.getCLIQuery;
-            query += mainWindow.ctl_decomb.getCLIQuery;
-            query += mainWindow.ctl_deinterlace.getCLIQuery;
-            query += mainWindow.ctl_denoise.getCLIQuery;
-
-            if (mainWindow.slider_deblock.Value != 4)
-                query += " --deblock=" + mainWindow.slider_deblock.Value;
+            query += mainWindow.Filters.getCLIQuery;           
             #endregion
 
             #region Video Settings Tab
@@ -209,9 +203,6 @@ namespace Handbrake.Functions
                     query += " -e x264";
                     break;
             }
-
-            if (mainWindow.check_grayscale.Checked)
-                query += " -g ";
 
             // Video Settings
             if (mainWindow.radio_avgBitrate.Checked)
@@ -260,7 +251,7 @@ namespace Handbrake.Functions
 
             #region Audio Settings Tab
 
-            ListView audioTracks = mainWindow.audioPanel.getAudioPanel();
+            ListView audioTracks = mainWindow.AudioSettings.getAudioPanel();
             List<string> tracks = new List<string>();
             List<string> codecs = new List<string>();
             List<string> mixdowns = new List<string>();

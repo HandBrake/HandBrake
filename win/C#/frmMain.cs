@@ -751,7 +751,7 @@ namespace Handbrake
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Reset some values on the form
-            pictureSettings.lbl_Aspect.Text = "Select a Title";
+            PictureSettings.lbl_Aspect.Text = "Select a Title";
             //lbl_RecomendedCrop.Text = "Select a Title";
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
@@ -762,7 +762,7 @@ namespace Handbrake
             {
                 selectedTitle = drp_dvdtitle.SelectedItem as Parsing.Title;
                 lbl_duration.Text = selectedTitle.Duration.ToString();
-                pictureSettings.setComponentsAfterScan(selectedTitle);  // Setup Picture Settings Tab Control
+                PictureSettings.setComponentsAfterScan(selectedTitle);  // Setup Picture Settings Tab Control
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
@@ -793,7 +793,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
 
                 // Populate the Audio Channels Dropdown
-                audioPanel.setTrackList(selectedTitle);
+                AudioSettings.setTrackList(selectedTitle);
 
                 // Populate the Subtitles dropdown
                 Subtitles.drp_subtitleTracks.Items.Clear();
@@ -983,7 +983,7 @@ namespace Handbrake
             else if (drop_format.SelectedIndex == 2)
                 setExtension(".mkv");
 
-            audioPanel.setAudioByContainer(drop_format.Text);
+            AudioSettings.setAudioByContainer(drop_format.Text);
             Subtitles.setContainer(drop_format.SelectedIndex);
 
             string oldval;
@@ -1177,24 +1177,6 @@ namespace Handbrake
                 check_turbo.Enabled = false;
                 check_turbo.CheckState = CheckState.Unchecked;
             }
-        }
-
-        // Filter Tab
-        private void ctl_decomb_changed(object sender, EventArgs e)
-        {
-            if (ctl_decomb.getDropValue != "Off")
-                if (ctl_deinterlace.getDropValue != "None")
-                    ctl_deinterlace.setOption("None");
-        }
-        private void ctl_deinterlace_changed(object sender, EventArgs e)
-        {
-            if (ctl_detelecine.getDropValue != "None")
-                if (ctl_decomb.getDropValue != "Off")
-                    ctl_decomb.setOption("Off");
-        }
-        private void slider_deblock_Scroll(object sender, EventArgs e)
-        {
-            lbl_deblockVal.Text = slider_deblock.Value == 4 ? "Off" : slider_deblock.Value.ToString();
         }
 
         // Chapter Marker Tab
@@ -1420,8 +1402,8 @@ namespace Handbrake
             drop_chapterFinish.Items.Clear();
             drop_chapterFinish.Text = "Auto";
             lbl_duration.Text = "Select a Title";
-            pictureSettings.lbl_src_res.Text = "Select a Title";
-            pictureSettings.lbl_Aspect.Text = "Select a Title";
+            PictureSettings.lbl_src_res.Text = "Select a Title";
+            PictureSettings.lbl_Aspect.Text = "Select a Title";
             text_source.Text = "Click 'Source' to continue";
             text_destination.Text = "";
             thisDVD = null;
@@ -1595,7 +1577,6 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
-
 
         // This is the END of the road ****************************************
     }
