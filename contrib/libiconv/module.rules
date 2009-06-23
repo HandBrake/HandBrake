@@ -1,0 +1,8 @@
+$(eval $(call import.MODULE.rules,LIBICONV))
+$(eval $(call import.CONTRIB.rules,LIBICONV))
+$(eval $(call import.MODULE.rules,LIBICONV))
+$(eval $(call import.CONTRIB.rules,LIBICONV))
+$(eval $(call import.MODULE.rules,LIBICONV))
+$(eval $(call import.CONTRIB.rules,LIBICONV))
+$(eval $(call import.MODULE.rules,LIBICONV))
+$(eval $(call import.CONTRIB.rules,LIBICONV))
