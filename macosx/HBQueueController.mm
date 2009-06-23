@@ -749,6 +749,12 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
 {
     if ([outlineView isItemExpanded: item])
     {
+        /* Below is the original code to accommodate a live resize,
+         * however as stated in travistex's comments it's very buggy.
+         * For now I will leave it here ... commented out and use
+         * the code below to determine the row height based on each
+         * encodes optional parameters and how they are displayed. */
+        
         // Short-circuit here if in a live resize primarily to fix a bug but also to
         // increase resposivness during a resize. There's a bug in NSTableView that
         // causes row heights to get messed up if you try to change them during a live
@@ -756,8 +762,8 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         // height. The row heights will get fixed up after the resize because we have
         // implemented viewDidEndLiveResize to force all of them to be recalculated.
         // if ([outlineView inLiveResize] && [item lastDescriptionHeight] > 0)
-         //   return [item lastDescriptionHeight];
-
+        //   return [item lastDescriptionHeight];
+        
         // CGFloat width = [[outlineView tableColumnWithIdentifier: @"desc"] width];
         // Column width is NOT what is ultimately used. I can't quite figure out what
         // width to use for calculating text metrics. No matter how I tweak this value,
@@ -765,14 +771,114 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         // of the row cell. In previous versions, which ran under Tiger, I was
         // reducing width by 47 pixles.
         // width -= 2;     // (?) for intercell spacing
-
+        
         // CGFloat height = [item heightOfDescriptionForWidth: width];
         // return height;
         
-        return HB_ROW_HEIGHT_FULL_DESCRIPTION;
+        /* So, we know several rows of text that are in all queue items for display.
+         * These are the title line, Preset, Format, Destination, Picture, and Video Lines
+         */
+        CGFloat rowHeightNonTitle = 15.0;
+        /* Add the title line height, then the non title line height for Preset, Format, Destination
+         * Picture and Video
+         */
+        CGFloat itemHeightForDisplay = HB_ROW_HEIGHT_TITLE_ONLY + (rowHeightNonTitle * 5);
+        
+        /* get our item row number so we an use it to calc how many lines we have to display based
+         * on MP4 Options, Filter Options, X264 Options, Audio Tracks and Subtitles from our queue array */
+        int itemRowNum = [outlineView rowForItem: item];
+        NSMutableDictionary *queueItemToCheck = [outlineView itemAtRow: itemRowNum];
+        
+        /* Check to see if we need to allow for mp4 opts */
+        BOOL mp4OptsPresent = NO;
+        if ([[queueItemToCheck objectForKey:@"FileFormat"] isEqualToString: @"MP4 file"])
+        {
+            
+            if( [[queueItemToCheck objectForKey:@"Mp4LargeFile"] intValue] == 1)
+            {
+                mp4OptsPresent = YES;
+            }
+            if( [[queueItemToCheck objectForKey:@"Mp4HttpOptimize"] intValue] == 1)
+            {
+                mp4OptsPresent = YES;
+            }
+            if( [[queueItemToCheck objectForKey:@"Mp4iPodCompatible"] intValue] == 1)
+            {
+                mp4OptsPresent = YES;
+            }
+        }
+        
+        if (mp4OptsPresent == YES)
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle;   
+        }
+        
+        /* check to see if we need to allow for the Picture Filters row */
+        BOOL pictureFiltersPresent = NO;
+        if( [[queueItemToCheck objectForKey:@"PictureDetelecine"] intValue] > 0)
+        {
+            pictureFiltersPresent = YES;
+        }
+        if( [[queueItemToCheck objectForKey:@"PictureDecomb"] intValue] > 0)
+        {
+            pictureFiltersPresent = YES;
+        }
+        if( [[queueItemToCheck objectForKey:@"PictureDeinterlace"] intValue] > 0)
+        {
+            pictureFiltersPresent = YES;
+        }
+        if( [[queueItemToCheck objectForKey:@"PictureDenoise"] intValue] > 0)
+        {
+            pictureFiltersPresent = YES;
+        }
+        if( [[queueItemToCheck objectForKey:@"PictureDeblock"] intValue] > 0)
+        {
+            pictureFiltersPresent = YES;
+        }
+        if( [[queueItemToCheck objectForKey:@"VideoGrayScale"] intValue] > 0)
+        {
+            pictureFiltersPresent = YES;
+        }
+        
+        if (pictureFiltersPresent == YES)
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle;
+        }
+        
+        /* check to see if we need a line to display x264 options */
+        if ([[queueItemToCheck objectForKey:@"VideoEncoder"] isEqualToString: @"H.264 (x264)"])
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle;
+        }
+        
+        /* check to see how many audio track lines to allow for */
+        if ([[queueItemToCheck objectForKey:@"Audio1Track"] intValue] > 0)
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle; 
+        }
+        if ([[queueItemToCheck objectForKey:@"Audio2Track"] intValue] > 0)
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle; 
+        }
+        if ([[queueItemToCheck objectForKey:@"Audio3Track"] intValue] > 0)
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle; 
+        }
+        if ([[queueItemToCheck objectForKey:@"Audio4Track"] intValue] > 0)
+        {
+            itemHeightForDisplay +=  rowHeightNonTitle; 
+        }
+        
+        /* add in subtitle lines for each subtitle in the SubtitleList array */
+        itemHeightForDisplay +=  rowHeightNonTitle * [[queueItemToCheck objectForKey:@"SubtitleList"] count];
+        
+        return itemHeightForDisplay;
+        
     }
     else
+    {
         return HB_ROW_HEIGHT_TITLE_ONLY;
+    }
 }
 
 - (CGFloat) heightOfDescriptionForWidth:(CGFloat)width
