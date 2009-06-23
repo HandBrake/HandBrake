@@ -2,15 +2,3 @@ $(eval $(call import.MODULE.defs,LIBICONV,libiconv))
 $(eval $(call import.CONTRIB.defs,LIBICONV))
 
 LIBICONV.FETCH.url = http://download.m0k.org/handbrake/contrib/libiconv-1.13.tar.bz2
-$(eval $(call import.MODULE.defs,LIBICONV,libiconv))
-$(eval $(call import.CONTRIB.defs,LIBICONV))
-
-LIBICONV.FETCH.url = http://download.m0k.org/handbrake/contrib/libiconv-1.13.tar.bz2
-$(eval $(call import.MODULE.defs,LIBICONV,libiconv))
-$(eval $(call import.CONTRIB.defs,LIBICONV))
-
-LIBICONV.FETCH.url = http://download.m0k.org/handbrake/contrib/libiconv-1.13.tar.bz2
-$(eval $(call import.MODULE.defs,LIBICONV,libiconv))
-$(eval $(call import.CONTRIB.defs,LIBICONV))
-
-LIBICONV.FETCH.url = http://download.m0k.org/handbrake/contrib/libiconv-1.13.tar.bz2
