@@ -928,7 +928,33 @@ return YES;
     /* lets go ahead and send it off to libhb
      * Note: unlike a full encode, we only send 1 pass regardless if the final encode calls for 2 passes.
      * this should suffice for a fairly accurate short preview and cuts our preview generation time in half.
+     * However we also need to take into account the indepth scan for subtitles.
      */
+    /*
+     * If scanning we need to do some extra setup of the job.
+     */
+    if( job->indepth_scan == 1 )
+    {
+        char *x264opts_tmp;
+        
+        /*
+         * When subtitle scan is enabled do a fast pre-scan job
+         * which will determine which subtitles to enable, if any.
+         */
+        job->pass = -1;
+        x264opts_tmp = job->x264opts;
+        
+        job->x264opts = NULL;
+        job->indepth_scan = 1;  
+        /*
+         * Add the pre-scan job
+         */
+        hb_add( fPreviewLibhb, job );
+        job->x264opts = x264opts_tmp;
+    }                  
+    /* Go ahead and perform the actual encoding preview scan */
+    job->indepth_scan = 0;
+    job->pass = 0;
     hb_add( fPreviewLibhb, job );
     
     [fEncodingControlBox setHidden: NO];

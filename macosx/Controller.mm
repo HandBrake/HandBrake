@@ -2862,7 +2862,7 @@ bool one_burned = FALSE;
                 /* NOTE: Currently foreign language search is borked for preview.
                  * Commented out but left in for initial commit. */
                 
-                /*
+                
                 [self writeToActivityLog: "Foreign Language Search: %d", 1];
                 
                 job->indepth_scan = 1;
@@ -2872,12 +2872,16 @@ bool one_burned = FALSE;
                     {
                         job->select_subtitle_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
                     }
+                    else
+                    {
+                        job->select_subtitle_config.dest = hb_subtitle_config_s::RENDERSUB;
+                    }
                     
                     job->select_subtitle_config.force = force;
                     job->select_subtitle_config.default_track = def;
                     
                 }
-               */ 
+                
                 
             }
             else
