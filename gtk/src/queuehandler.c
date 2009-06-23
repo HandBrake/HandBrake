@@ -406,15 +406,61 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		}
 		track = ghb_settings_get_string(asettings, "AudioTrackDescription");
 		mix = ghb_settings_combo_option(asettings, "AudioMixdown");
+		if (count == 1)
+			g_string_append_printf(str, "<b>Audio:</b>");
+		else if (ii == 0)
+			g_string_append_printf(str, "<b>Audio:</b>\n");
+		if (count != 1)
+			g_string_append_printf(str, "\t");
+
 		g_string_append_printf(str,
-			"<b>Audio:</b><small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s</small>",
+			"<small> %s, Encoder: %s, Mixdown: %s, SampleRate: %s, Bitrate: %s</small>\n",
 			 track, acodec, mix, samplerate, bitrate);
-		if (ii < count-1)
-			g_string_append_printf(str, "\n");
 		g_free(track);
 		g_free(bitrate);
 		g_free(samplerate);
 	}
+
+	// Add the audios
+	const GValue *sub_list;
+
+	sub_list = ghb_settings_get_value(settings, "subtitle_list");
+	count = ghb_array_len(sub_list);
+	for (ii = 0; ii < count; ii++)
+	{
+		GValue *settings;
+		gchar *track;
+		gboolean force, burn, def;
+		gint source;
+
+		settings = ghb_array_get_nth(sub_list, ii);
+		track = ghb_settings_get_string(settings, "SubtitleTrackDescription");
+		source = ghb_settings_get_int(settings, "SubtitleSource");
+		force = ghb_settings_get_boolean(settings, "SubtitleForced");
+		burn = ghb_settings_get_boolean(settings, "SubtitleBurned");
+		def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
+		if (count == 1)
+			g_string_append_printf(str, "<b>Subtitle:</b>");
+		else if (ii == 0)
+			g_string_append_printf(str, "<b>Subtitles:</b>\n");
+		if (count != 1)
+			g_string_append_printf(str, "\t");
+
+		if (source != SRTSUB)
+		{
+			g_string_append_printf(str,
+				"<small> %s%s%s%s</small>",
+			 	track, 
+				force ? " (Force)":"",
+				burn  ? " (Burn)":"",
+				def   ? " (Default)":""
+			);
+		}
+		if (ii < count-1)
+			g_string_append_printf(str, "\n");
+		g_free(track);
+	}
+
 	info = g_string_free(str, FALSE);
 	gtk_tree_store_append(store, &citer, &iter);
 	gtk_tree_store_set(store, &citer, 1, info, -1);

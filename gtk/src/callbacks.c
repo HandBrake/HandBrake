@@ -2976,7 +2976,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 	static GtkActionGroup *agroup = NULL;
 	static gint merge_id;
 
-	g_debug("ghb_file_menu_add_dvd()\n");
+	g_debug("ghb_file_menu_add_dvd()");
 	link = drives = dvd_device_list();
 	if (drives != NULL)
 	{

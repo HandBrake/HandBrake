@@ -129,10 +129,20 @@ ghb_add_subtitle(signal_user_data_t *ud, GValue *settings)
 	GValue *subtitle_list;
 	gint count;
 	gboolean burned;
+	const gchar *track;
+	gint tt, source;
 	
 	g_debug("ghb_add_subtitle ()");
 
-	// Only allow up to 8 subtitle entries
+	// Add the long track description so the queue can access it
+	// when a different title is selected.
+	track = ghb_settings_combo_option(settings, "SubtitleTrack");
+	ghb_settings_set_string(settings, "SubtitleTrackDescription", track);
+
+	tt = ghb_settings_get_int(settings, "SubtitleTrack");
+	source = ghb_subtitle_track_source(ud, tt);
+	ghb_settings_set_int(settings, "SubtitleSource", source);
+
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	if (subtitle_list == NULL)
 	{
@@ -140,12 +150,27 @@ ghb_add_subtitle(signal_user_data_t *ud, GValue *settings)
 		ghb_settings_set_value(ud->settings, "subtitle_list", subtitle_list);
 	}
 	count = ghb_array_len(subtitle_list);
+
+	// Don't allow more than 99
+	// This is a had limit imposed by libhb/sync.c:GetFifoForId()
+	if (count >= 99)
+	{
+		ghb_value_free(settings);
+		return;
+	}
+
 	ghb_array_append(subtitle_list, settings);
 	add_to_subtitle_list(ud, settings);
 
 	burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 	if (burned)
 		ghb_subtitle_exclusive_burn(ud, count);
+	if (count == 98)
+	{
+		GtkWidget *widget;
+		widget = GHB_WIDGET (ud->builder, "subtitle_add");
+		gtk_widget_set_sensitive(widget, FALSE);
+	}
 }
 
 static void
@@ -584,8 +609,16 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	settings = ghb_selected_subtitle_settings(ud);
 	if (settings != NULL)
 	{
+		const gchar *track;
+		gint tt, source;
+
 		ghb_widget_to_setting(settings, widget);
 		subtitle_list_refresh_selected(ud);
+		track = ghb_settings_combo_option(settings, "SubtitleTrack");
+		ghb_settings_set_string(settings, "SubtitleTrackDescription", track);
+		tt = ghb_settings_get_int(settings, "SubtitleTrack");
+		source = ghb_subtitle_track_source(ud, tt);
+		ghb_settings_set_int(settings, "SubtitleSource", source);
 	}
 	ghb_live_reset(ud);
 }
@@ -679,26 +712,12 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	// Add the current subtitle settings to the list.
 	GValue *settings;
-	gint count;
-	GValue *subtitle_list;
 	gboolean burned = FALSE;
 	gint track;
 	
 	g_debug("subtitle_add_clicked_cb ()");
-	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
-	if (subtitle_list == NULL)
-	{
-		subtitle_list = ghb_array_value_new(8);
-		ghb_settings_set_value(ud->settings, "subtitle_list", subtitle_list);
-	}
-	count = ghb_array_len(subtitle_list);
-	// Don't allow more than 99
-	// This is a had limit imposed by libhb/sync.c:GetFifoForId()
-	if (count >= 99)
-		return;
 
 	track = ghb_settings_get_int(ud->settings, "SubtitleTrack");
-
 	if (mustBurn(ud, track))
 	{
 		burned = TRUE;
@@ -712,16 +731,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_settings_take_value(settings, "SubtitleDefaultTrack", 
 							ghb_boolean_value_new(FALSE));
 
-	ghb_array_append(subtitle_list, settings);
-	add_to_subtitle_list(ud, settings);
-	if (burned)
-		ghb_subtitle_exclusive_burn(ud, count);
-	if (count == 98)
-	{
-		GtkWidget *widget;
-		widget = GHB_WIDGET (ud->builder, "subtitle_add");
-		gtk_widget_set_sensitive(widget, FALSE);
-	}
+	ghb_add_subtitle(ud, settings);
 }
 
 G_MODULE_EXPORT void
