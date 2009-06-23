@@ -589,6 +589,15 @@ static void do_job( hb_job_t * job, int cpu_count )
                 hb_list_add( job->list_work, w );
             }
 
+            if( !job->indepth_scan && subtitle->source == SRTSUB )
+            {
+                w = hb_get_work( WORK_DECSRTSUB );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+                w->subtitle = subtitle;
+                hb_list_add( job->list_work, w );
+            }
+
             if( !job->indepth_scan && 
                 subtitle->format == PICTURESUB
                 && subtitle->config.dest == PASSTHRUSUB )

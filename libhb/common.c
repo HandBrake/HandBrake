@@ -9,6 +9,7 @@
 #include <sys/time.h>
 
 #include "common.h"
+#include "lang.h"
 #include "hb.h"
 
 /**********************************************************************
@@ -864,8 +865,37 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
         /* We fail! */
         return 0;
     }
-	subtitle->config = *subtitlecfg;
+    subtitle->config = *subtitlecfg;
     hb_list_add(job->list_subtitle, subtitle);
     return 1;
 }
 
+int hb_srt_add( const hb_job_t * job, 
+                const hb_subtitle_config_t * subtitlecfg, 
+                const char *lang )
+{
+    hb_subtitle_t *subtitle;
+    iso639_lang_t *language = NULL;
+    int retval = 0;
+
+    subtitle = calloc( 1, sizeof( *subtitle ) );
+    
+    subtitle->format = TEXTSUB;
+    subtitle->source = SRTSUB;
+
+    language = lang_for_code2( lang );
+
+    if( language )
+    {
+
+        strcpy( subtitle->lang, language->eng_name );
+        strncpy( subtitle->iso639_2, lang, 4 );
+        
+        subtitle->config = *subtitlecfg;
+        subtitle->config.dest = PASSTHRUSUB;
+
+        hb_list_add(job->list_subtitle, subtitle);
+        retval = 1;
+    }
+    return retval;
+}

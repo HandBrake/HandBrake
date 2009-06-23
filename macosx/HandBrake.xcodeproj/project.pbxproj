@@ -18,6 +18,8 @@
 		2713E6300F676510002E0A01 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713E50C0F675F32002E0A01 /* libhb.a */; };
 		2713E6420F676526002E0A01 /* libhb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2713E50C0F675F32002E0A01 /* libhb.a */; };
 		2728D25B0FE8419900758EC9 /* HandBrake-64.icns in Resources */ = {isa = PBXBuildFile; fileRef = 2728D25A0FE8419900758EC9 /* HandBrake-64.icns */; };
+		274DD1E40FEF109900881E69 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 274DD1E30FEF109900881E69 /* libiconv.dylib */; };
+		274DD20B0FEF10FD00881E69 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 274DD1E30FEF109900881E69 /* libiconv.dylib */; };
 		2774BE900F66F47100B65FC6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE8F0F66F47100B65FC6 /* libbz2.dylib */; };
 		2774BE920F66F48200B65FC6 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE910F66F48200B65FC6 /* libz.dylib */; };
 		2774BEC70F66F61A00B65FC6 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2774BE8F0F66F47100B65FC6 /* libbz2.dylib */; };
@@ -146,6 +148,7 @@
 		25DE1FB50C169A0C00F01FC8 /* HBPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreferencesController.m; sourceTree = "<group>"; };
 		2713E50C0F675F32002E0A01 /* libhb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhb.a; path = libhb/libhb.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2728D25A0FE8419900758EC9 /* HandBrake-64.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "HandBrake-64.icns"; sourceTree = "<group>"; };
+		274DD1E30FEF109900881E69 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		2774BE8F0F66F47100B65FC6 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		2774BE910F66F48200B65FC6 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		27AC71840F5A0AF600053B83 /* fakexcode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fakexcode.cpp; path = ../test/fakexcode.cpp; sourceTree = SOURCE_ROOT; };
@@ -231,11 +234,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D289A9F30DBBE7AC00CE614B /* CoreServices.framework in Frameworks */,
+				A906A0520F7A7B210007A827 /* AudioToolbox.framework in Frameworks */,
 				D289AAC40DBBF3F100CE614B /* IOKit.framework in Frameworks */,
 				2713E6300F676510002E0A01 /* libhb.a in Frameworks */,
+				274DD1E40FEF109900881E69 /* libiconv.dylib in Frameworks */,
 				2774BE900F66F47100B65FC6 /* libbz2.dylib in Frameworks */,
 				2774BE920F66F48200B65FC6 /* libz.dylib in Frameworks */,
-				A906A0520F7A7B210007A827 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,13 +251,14 @@
 				A25962E10F15077500B3BF4E /* Quartz.framework in Frameworks */,
 				A20F47010EBB5EC2005B861B /* QTKit.framework in Frameworks */,
 				4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */,
+				A906A0510F7A7B210007A827 /* AudioToolbox.framework in Frameworks */,
 				4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */,
 				A29E05800BE1283E000533F5 /* Growl.framework in Frameworks */,
 				A2D0A0AB0D3E5929002D57CB /* Sparkle.framework in Frameworks */,
 				2713E6420F676526002E0A01 /* libhb.a in Frameworks */,
+				274DD20B0FEF10FD00881E69 /* libiconv.dylib in Frameworks */,
 				2774BEC70F66F61A00B65FC6 /* libbz2.dylib in Frameworks */,
 				2774BEC80F66F61A00B65FC6 /* libz.dylib in Frameworks */,
-				A906A0510F7A7B210007A827 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +283,7 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				274DD1E30FEF109900881E69 /* libiconv.dylib */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";

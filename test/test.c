@@ -72,6 +72,10 @@ static char ** subtracks   = NULL;
 static char ** subforce    = NULL;
 static char * subburn     = NULL;
 static char * subdefault  = NULL;
+static char ** srtfile     = NULL;
+static char ** srtcodeset  = NULL;
+static char ** srtoffset   = NULL;
+static char ** srtlang     = NULL;
 static int    subtitle_scan = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -1790,6 +1794,43 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
+            if( srtfile )
+            {
+                char * token;
+                int i, pos;
+                hb_subtitle_config_t sub_config;
+
+                pos = 0;
+                for( i=0; srtfile[i] != NULL; i++ )
+                {
+                    char *codeset = "L1";
+                    int64_t offset = 0;
+                    char *lang = "und";
+
+                    pos++;
+                    token = srtfile[i];
+                    if( srtcodeset && srtcodeset[i] )
+                    {
+                        codeset = srtcodeset[i];
+                    }
+                    if( srtoffset && srtoffset[i] )
+                    {
+                        offset = strtoll( srtoffset[i], &srtoffset[i], 0 );
+                    }
+                    if ( srtlang && srtlang[i] )
+                    {
+                        lang = srtlang[i];
+                    }
+                    sub_config.force = 0;
+                    sub_config.default_track = 0;
+                    strncpy( sub_config.src_filename, srtfile[i], 128);
+                    strncpy( sub_config.src_codeset, codeset, 40);
+                    sub_config.offset = offset;
+
+                    hb_srt_add( job, &sub_config, lang);
+                }
+            }
+
             if( native_language )
             {
                 char audio_lang[4];
@@ -2319,7 +2360,17 @@ static void ShowHelp()
     "                            that matches the --native-language. If there are no\n"
     "                            matching audio tracks then the first matching\n"
     "                            subtitle track is used instead.\n"
-
+    "        --srt-file <string> SubRip SRT filename(s), separated by commas.\n"
+    "        --srt-codeset       Character codeset(s) that the SRT file(s) are\n"
+    "          <string>          encoded in, separted by commas.\n"
+    "                            Use 'iconv -l' for a list of valid\n"
+    "                            codesets. If not specified latin1 is assumed\n"
+    "        --srt-offset        Offset in milli-seconds to apply to the SRT file(s)\n"
+    "          <string>          separted by commas. If not specified zero is assumed.\n"
+    "                            Offsets may be negative.\n"
+    "        --srt-lang <string> Language as an iso639-2 code fra, eng, spa et cetera)\n"
+    "                            for the SRT file(s) separated by commas. If not specified\n"
+    "                            then 'und' is used.\n"
     "\n"
 
 
@@ -2421,6 +2472,10 @@ static int ParseOptions( int argc, char ** argv )
     #define SUB_BURNED          266
     #define SUB_DEFAULT         267
     #define NATIVE_DUB          268
+    #define SRT_FILE            269
+    #define SRT_CODESET         270
+    #define SRT_OFFSET          271
+    #define SRT_LANG            272
     
     for( ;; )
     {
@@ -2451,9 +2506,12 @@ static int ParseOptions( int argc, char ** argv )
             { "subtitle-forced", optional_argument,   NULL,    'F' },
             { "subtitle-burned", optional_argument,   NULL,    SUB_BURNED },
             { "subtitle-default", optional_argument,   NULL,    SUB_DEFAULT },
+            { "srt-file",    required_argument, NULL, SRT_FILE },
+            { "srt-codeset", required_argument, NULL, SRT_CODESET },
+            { "srt-offset",  required_argument, NULL, SRT_OFFSET },
+            { "srt-lang",    required_argument, NULL, SRT_LANG },
             { "native-language", required_argument, NULL,'N' },
             { "native-dub",  no_argument,       NULL,    NATIVE_DUB },
-
             { "encoder",     required_argument, NULL,    'e' },
             { "aencoder",    required_argument, NULL,    'E' },
             { "two-pass",    no_argument,       NULL,    '2' },
@@ -2670,6 +2728,18 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case NATIVE_DUB:
                 native_dub = 1;
+                break;
+            case SRT_FILE:
+                srtfile = str_split( optarg, "," );
+                break;
+            case SRT_CODESET:
+                srtcodeset = str_split( optarg, "," );
+                break;
+            case SRT_OFFSET:
+                srtoffset = str_split( optarg, "," );
+                break;
+            case SRT_LANG:
+                srtlang = str_split( optarg, "," );
                 break;
             case '2':
                 twoPass = 1;

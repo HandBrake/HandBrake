@@ -96,6 +96,9 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg);
 hb_audio_config_t * hb_list_audio_config_item(hb_list_t * list, int i);
 
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track);
+int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, 
+               const char *lang);
+
 
 struct hb_rate_s
 {
@@ -115,7 +118,10 @@ struct hb_subtitle_config_s
 {
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
     int  force;
-    int  default_track;
+    int  default_track; 
+    char src_filename[128];
+    char src_codeset[40];
+    int64_t offset;
 };
 
 #define HB_VIDEO_RATE_BASE   27000000
@@ -671,6 +677,7 @@ extern hb_work_object_t hb_decmpeg2;
 extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_encvobsub;
 extern hb_work_object_t hb_deccc608;
+extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encx264;

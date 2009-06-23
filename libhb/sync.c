@@ -446,7 +446,8 @@ static void SyncVideo( hb_work_object_t * w )
              * Rewrite timestamps on subtitles that need it (on raw queue).
              */
             if( subtitle->source == CC608SUB ||
-                subtitle->source == CC708SUB )
+                subtitle->source == CC708SUB ||
+                subtitle->source == SRTSUB )
             {
                 /*
                  * Rewrite timestamps on subtitles that came from Closed Captions

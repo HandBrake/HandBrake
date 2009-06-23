@@ -16,6 +16,9 @@ TEST.libs = $(LIBHB.a) $(foreach n, \
 
 TEST.install.exe = $(PREFIX/)bin/$(notdir $(TEST.exe))
 
+ifeq (1,$(LIBICONV.enabled))
+    TEST.libs += $(CONTRIB.build/)lib/libiconv.a
+endif
 ifeq (1,$(BZIP2.enabled))
     TEST.libs += $(CONTRIB.build/)lib/libbz2.a
 endif
@@ -37,7 +40,7 @@ TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
     TEST.GCC.f += IOKit CoreServices AudioToolbox
-    TEST.GCC.l += bz2 z
+    TEST.GCC.l += iconv bz2 z
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += bz2 z pthread dl m
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))

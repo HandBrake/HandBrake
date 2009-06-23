@@ -36,6 +36,7 @@ endif
 MODULES += contrib/x264
 
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
+    MODULES += contrib/libiconv
     MODULES += contrib/zlib
 endif
 
