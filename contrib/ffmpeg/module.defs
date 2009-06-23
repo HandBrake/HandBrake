@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,FAAD2))
+$(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,BZIP2 FAAD2 ZLIB))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
 FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg-r19067.tar.bz2
@@ -6,8 +6,6 @@ FFMPEG.FETCH.url = http://download.m0k.org/handbrake/contrib/ffmpeg-r19067.tar.b
 FFMPEG.CONFIGURE.deps =
 FFMPEG.CONFIGURE.env  =
 FFMPEG.CONFIGURE.host =
-#FFMPEG.CONFIGURE.shared =
-#FFMPEG.CONFIGURE.static =
 
 FFMPEG.CONFIGURE.extra = \
     --disable-bsfs \
@@ -16,12 +14,14 @@ FFMPEG.CONFIGURE.extra = \
     --disable-ffserver \
     --disable-muxers \
     --disable-network \
+    --enable-bzlib \
     --enable-encoder=ac3 \
     --enable-encoder=mpeg4 \
     --enable-encoder=snow \
     --enable-gpl \
     --enable-libfaad \
     --enable-muxer=ipod \
+    --enable-zlib \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
