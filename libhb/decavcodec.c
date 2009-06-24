@@ -279,18 +279,20 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     pos = 0;
     while( pos < in->size )
     {
-        len = av_parser_parse( pv->parser, pv->context,
-                               &parser_output_buffer, &parser_output_buffer_len,
-                               in->data + pos, in->size - pos, cur, cur );
+        len = av_parser_parse2( pv->parser, pv->context,
+                                &parser_output_buffer, &parser_output_buffer_len,
+                                in->data + pos, in->size - pos, cur, cur, AV_NOPTS_VALUE );
         out_size = 0;
         uncompressed_len = 0;
         if (parser_output_buffer_len)
         {
+            AVPacket avp;
+            av_init_packet( &avp );
+            avp.data = parser_output_buffer;
+            avp.size = parser_output_buffer_len;
+
             out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
-            uncompressed_len = avcodec_decode_audio2( pv->context, bufaligned,
-                                                      &out_size,
-                                                      parser_output_buffer,
-                                                      parser_output_buffer_len );
+            uncompressed_len = avcodec_decode_audio3( pv->context, bufaligned, &out_size, &avp );
         }
         if( out_size )
         {
@@ -410,14 +412,18 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     while ( pos < buf->size )
     {
-        int len = av_parser_parse( parser, context, &pbuffer, &pbuffer_size,
-                                   buf->data + pos, buf->size - pos,
-                                   buf->start, buf->start );
+        int len = av_parser_parse2( parser, context, &pbuffer, &pbuffer_size,
+                                    buf->data + pos, buf->size - pos,
+                                    buf->start, buf->start, AV_NOPTS_VALUE );
         pos += len;
         if ( pbuffer_size > 0 )
         {
-            len = avcodec_decode_audio2( context, (int16_t*)buffer, &out_size,
-                                         pbuffer, pbuffer_size );
+            AVPacket avp;
+            av_init_packet( &avp );
+            avp.data = pbuffer;
+            avp.size = pbuffer_size;
+
+            len = avcodec_decode_audio3( context, (int16_t*)buffer, &out_size, &avp );
             if ( len > 0 && context->sample_rate > 0 )
             {
                 info->bitrate = context->bit_rate;
@@ -548,13 +554,18 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
 {
     int got_picture, oldlevel = 0;
     AVFrame frame;
+    AVPacket avp;
 
     if ( global_verbosity_level <= 1 )
     {
         oldlevel = av_log_get_level();
         av_log_set_level( AV_LOG_QUIET );
     }
-    if ( avcodec_decode_video( pv->context, &frame, &got_picture, data, size ) < 0 )
+
+    av_init_packet( &avp );
+    avp.data = data;
+    avp.size = size;
+    if ( avcodec_decode_video2( pv->context, &frame, &got_picture, &avp ) < 0 )
     {
         ++pv->decode_errors;     
     }
@@ -681,8 +692,8 @@ static void decodeVideo( hb_work_private_t *pv, uint8_t *data, int size,
     do {
         uint8_t *pout;
         int pout_len;
-        int len = av_parser_parse( pv->parser, pv->context, &pout, &pout_len,
-                                   data + pos, size - pos, pts, dts );
+        int len = av_parser_parse2( pv->parser, pv->context, &pout, &pout_len,
+                                    data + pos, size - pos, pts, dts, AV_NOPTS_VALUE );
         pos += len;
 
         if ( pout_len > 0 )
@@ -1133,9 +1144,14 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
             pv->buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
             buffer = pv->buffer;
         }
+
+        AVPacket avp;
+        av_init_packet( &avp );
+        avp.data = data + pos;
+        avp.size = size - pos;
+
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
-        int len = avcodec_decode_audio2( context, buffer, &out_size,
-                                         data + pos, size - pos );
+        int len = avcodec_decode_audio3( context, buffer, &out_size, &avp );
         if ( len <= 0 )
         {
             return;
