@@ -6121,7 +6121,16 @@ return YES;
         }
         else
         {
-            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+            /* Since theora's qp value goes up from left to right, we can just set the slider float value */
+            if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+            {
+                [fVidQualitySlider setFloatValue:[[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+            }
+            else
+            {
+                /* since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
+                [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[chosenPreset objectForKey:@"VideoQualitySlider"] floatValue]];
+            }
         }
         
         [self videoMatrixChanged:nil];
