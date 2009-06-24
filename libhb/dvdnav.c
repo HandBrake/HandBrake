@@ -10,6 +10,7 @@
 
 #include "dvdnav/dvdnav.h"
 #include "dvdread/ifo_read.h"
+#include "dvdread/ifo_print.h"
 #include "dvdread/nav_read.h"
 
 #define DVD_READ_CACHE 1

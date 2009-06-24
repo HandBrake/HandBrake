@@ -9,6 +9,7 @@
 #include "dvd.h"
 
 #include "dvdread/ifo_read.h"
+#include "dvdread/ifo_print.h"
 #include "dvdread/nav_read.h"
 
 static hb_dvd_t    * hb_dvdread_init( char * path );

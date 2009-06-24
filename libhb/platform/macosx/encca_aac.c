@@ -57,7 +57,7 @@ static int readDescr(UInt8 **buffer, int *tag)
 }
 
 // based off of mov_read_esds from mov.c in ffmpeg's libavformat
-static long ReadESDSDescExt(void* descExt, UInt8 **buffer, int *size, int versionFlags)
+static long ReadESDSDescExt(void* descExt, UInt8 **buffer, UInt32 *size, int versionFlags)
 {
 	UInt8 *esds = (UInt8 *) descExt;
 	int tag, len;
@@ -154,7 +154,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
 
     // get available bitrates
     AudioValueRange *bitrates;
-    ssize_t bitrateCounts, n;
+    ssize_t bitrateCounts;
     err = AudioConverterGetPropertyInfo( pv->converter, kAudioConverterApplicableEncodeBitRates,
                                          &tmpsiz, NULL);
     bitrates = malloc( tmpsiz );
@@ -200,7 +200,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
                                &tmp, w->config->aac.bytes );
     // CoreAudio returns a complete ESDS, but we only need
     // the DecoderSpecific info.
-    UInt8* buffer;
+    UInt8* buffer = NULL;
     ReadESDSDescExt(w->config->aac.bytes, &buffer, &tmpsiz, 0);
     w->config->aac.length = tmpsiz;
     memmove( w->config->aac.bytes, buffer,

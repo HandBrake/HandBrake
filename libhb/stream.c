@@ -1217,7 +1217,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     }
 
     int64_t sum_dur = 0;
-    hb_chapter_t *chapter;
+    hb_chapter_t *chapter = NULL;
     int i;
     for ( i = 0; i < chapter_num; ++i)
     {

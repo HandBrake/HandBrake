@@ -31,7 +31,6 @@ static void UpdateFunc( void * _data )
 
     hb_update_t * data = (hb_update_t *) _data;
 
-    char*       p;
     char* const url  = HB_PROJECT_URL_APPCAST;
     char* const urlz = url + strlen( HB_PROJECT_URL_APPCAST ); /* marks null-term */
     char        url_host[64];

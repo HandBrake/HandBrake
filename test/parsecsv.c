@@ -139,7 +139,7 @@ void hb_dispose_cell( hb_csv_cell_t *cell )
 static uint16_t hb_parse_character( hb_csv_file_t * file )
 {
     int byte;
-    uint16_t c;
+    uint16_t c = 0;
     int need_char = 1;
 
     if( file == NULL )

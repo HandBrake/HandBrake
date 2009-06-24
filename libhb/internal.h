@@ -189,6 +189,9 @@ void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *);
 int          hb_stream_read( hb_stream_t *, hb_buffer_t *);
 int          hb_stream_seek( hb_stream_t *, float );
+int          hb_stream_seek_chapter( hb_stream_t *, int );
+int          hb_stream_chapter( hb_stream_t * );
+
 
 void       * hb_ffmpeg_context( int codec_param );
 void       * hb_ffmpeg_avstream( int codec_param );
