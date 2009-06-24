@@ -405,36 +405,30 @@ get_direct_dvd_volume_name(const gchar *drive)
 	return result;
 }
 #endif
+
 static gchar*
-get_dvd_volume_name(GDrive *gd)
+get_dvd_volume_name(gpointer gd)
 {
 	gchar *label = NULL;
 	gchar *result;
 	gchar *drive;
 
 	drive = get_dvd_device_name(gd);
-	if (g_drive_has_media (gd))
+	g_mutex_lock(volname_mutex);
+	label = g_strdup(g_hash_table_lookup(volname_hash, drive));
+	g_mutex_unlock(volname_mutex);
+	if (label != NULL)
 	{
-		g_mutex_lock(volname_mutex);
-		label = g_strdup(g_hash_table_lookup(volname_hash, drive));
-		g_mutex_unlock(volname_mutex);
-		if (label != NULL)
+		if (uppers_and_unders(label))
 		{
-			if (uppers_and_unders(label))
-			{
-				camel_convert(label);
-			}
+			camel_convert(label);
+		}
 #if defined(_WIN32)
-			result = g_strdup_printf("%s (%s)", label, drive);
+		result = g_strdup_printf("%s (%s)", label, drive);
 #else
-			result = g_strdup_printf("%s - %s", drive, label);
+		result = g_strdup_printf("%s - %s", drive, label);
 #endif
-			g_free(label);
-		}
-		else
-		{
-			result = g_strdup_printf("%s", drive);
-		}
+		g_free(label);
 	}
 	else
 	{
@@ -466,8 +460,19 @@ ghb_cache_volnames(signal_user_data_t *ud)
 	g_hash_table_remove_all(volname_hash);
 	while (link != NULL)
 	{
-		gchar *drive = get_dvd_device_name(link->data);
-		gchar *name = get_direct_dvd_volume_name(drive);
+		gchar *name, *drive;
+
+#if !defined(_WIN32)
+		if (!g_drive_has_media (link->data))
+		{
+			g_object_unref(link->data);
+			link = link->next;
+			continue;
+		}
+#endif
+		drive = get_dvd_device_name(link->data);
+		name = get_direct_dvd_volume_name(drive);
+
 		if (drive != NULL && name != NULL)
 		{
 			g_hash_table_insert(volname_hash, drive, name);
@@ -480,7 +485,11 @@ ghb_cache_volnames(signal_user_data_t *ud)
 				g_free(name);
 		}
 	
+#if defined(_WIN32)
+		g_free(link->data);
+#else
 		g_object_unref(link->data);
+#endif
 		link = link->next;
 	}
 	g_mutex_unlock(volname_mutex);
@@ -3023,7 +3032,11 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 				(GCallback)dvd_source_activate_cb, ud);
 			g_free(name);
 			g_free(drive);
+#if defined(_WIN32)
+			g_free(link->data);
+#else
 			g_object_unref(link->data);
+#endif
 			link = link->next;
 		}
 		g_list_free(drives);
@@ -3129,7 +3142,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 		ins_count++;
 		if (ins_count == 2)
 		{
-			ghb_file_menu_add_dvd(ud);
+			g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
 			if (ud->current_dvd_device != NULL &&
 				strcmp(device, ud->current_dvd_device) == 0)
 			{
@@ -3150,7 +3163,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 		rem_count++;
 		if (rem_count == 2)
 		{
-			ghb_file_menu_add_dvd(ud);
+			g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
 			if (ud->current_dvd_device != NULL &&
 				strcmp(device, ud->current_dvd_device) == 0)
 			{
@@ -3625,9 +3638,9 @@ process_appcast(signal_user_data_t *ud)
 		gtk_widget_set_size_request(html, 420, 240);
 		gtk_widget_show(html);
 	}
+	webkit_web_view_open(WEBKIT_WEB_VIEW(html), description);
 #endif
 	dialog = GHB_WIDGET(ud->builder, "update_dialog");
-	webkit_web_view_open(WEBKIT_WEB_VIEW(html), description);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
 	if (response == GTK_RESPONSE_OK)

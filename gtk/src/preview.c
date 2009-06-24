@@ -978,7 +978,7 @@ picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	}
 }
 
-void
+G_MODULE_EXPORT void
 preview_frame_value_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	if (ud->preview->live_id >= 0)
@@ -1001,7 +1001,7 @@ preview_window_delete_cb(
 	return TRUE;
 }
 
-gboolean
+G_MODULE_EXPORT gboolean
 settings_window_delete_cb(
 	GtkWidget *widget, 
 	GdkEvent *event, 

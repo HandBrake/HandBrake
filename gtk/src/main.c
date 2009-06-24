@@ -816,6 +816,7 @@ main (int argc, char *argv[])
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();
+	gtk_status_icon_set_visible(si, FALSE);
 	ghb_backend_close();
 	if (ud->queue)
 		ghb_value_free(ud->queue);
