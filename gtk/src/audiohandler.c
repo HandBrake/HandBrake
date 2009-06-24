@@ -129,7 +129,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		source_lang = ghb_get_source_audio_lang(titleindex, 0);
 	}
 	if (source_lang == NULL)
-		source_lang = ghb_settings_get_string(ud->settings, "SourceAudioLang");
+		source_lang = ghb_settings_get_string(ud->settings, "PreferredLanguage");
 
 	pref_audio = ghb_settings_get_value(ud->settings, "AudioList");
 

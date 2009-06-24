@@ -1797,30 +1797,6 @@
                                         <property name="position">6</property>
                                       </packing>
                                     </child>
-                                    <child>
-                                      <object class="GtkAlignment" id="alignment17">
-                                        <property name="visible">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="left_padding">16</property>
-                                        <child>
-                                          <object class="GtkCheckButton" id="constant_rate_factor">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="label" translatable="yes">Constant Rate Factor</property>
-                                            <property name="active">True</property>
-                                            <property name="draw_indicator">True</property>
-                                            <signal handler="setting_widget_changed_cb" name="toggled"/>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">7</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <placeholder/>
-                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -2154,99 +2130,6 @@ audio-volume-medium</property>
                           </object>
                         </child>
                       </object>
-                    </child>
-                    <child>
-                      <object class="GtkHBox" id="hbox63">
-                        <property name="visible">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="spacing">4</property>
-                        <child>
-                          <object class="GtkAlignment" id="alignment61">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="left_padding">12</property>
-                            <property name="right_padding">2</property>
-                            <property name="yscale">0</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox81">
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="spacing">4</property>
-
-                                <child>
-                                  <object class="GtkLabel" id="label87">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="label" translatable="yes">Preferred Language:</property>
-                                    <property name="use_markup">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                  </packing>
-                                </child>
-
-                                <child>
-                                  <object class="GtkComboBox" id="SourceAudioLang">
-                                    <property name="width_request">150</property>
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <signal handler="setting_widget_changed_cb" name="changed"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkVBox" id="vbox49">
-                            <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <child>
-                              <object class="GtkRadioButton" id="AudioDUB">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">DUB Audio</property>
-                                <property name="tooltip-text" translatable="yes">DUB Audio of foreign language films with "Preferred Language"</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="setting_widget_changed_cb"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="not_dub_audio">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="label" translatable="yes">Add Subtitles</property>
-                                <property name="tooltip-text" translatable="yes">Add "Preferred Language" subtitles to foreign language films</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                                <property name="group">AudioDUB</property>
-                                <signal name="toggled" handler="setting_widget_changed_cb"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">2</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
@@ -3484,8 +3367,8 @@ no-dct-decimate=0:cabac=1</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="modal">True</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="has_separator">False</property>
@@ -3504,47 +3387,56 @@ no-dct-decimate=0:cabac=1</property>
                   <object class="GtkEventBox" id="eventbox1">
                     <property name="visible">True</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="visible_window">True</property>
                     <property name="above_child">True</property>
                     <signal name="button_press_event" handler="easter_egg_cb"/>
                     <child>
                       <object class="GtkImage" id="image3">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="icon_size">6</property>
                         <property name="icon_name">hb-icon</property>
+                        <property name="icon-size">6</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <placeholder/>
                 </child>
               </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
             </child>
-
+            <child>
+              <object class="GtkAlignment" id="alignment22">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkAlignment" id="alignment22">
+                  <object class="GtkNotebook" id="notebook1">
                     <property name="visible">True</property>
-                    <property name="left_padding">12</property>
+                    <property name="can_focus">True</property>
+                    <property name="show-border">False</property>
                     <child>
                       <object class="GtkVBox" id="vbox42">
                         <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkAlignment" id="alignment60">
                             <property name="visible">True</property>
-                            <property name="left_padding">0</property>
+                            <property name="left_padding">12</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
                             <child>
                               <object class="GtkHBox" id="hbox80">
-                                <property name="spacing">4</property>
                                 <property name="visible">True</property>
+                                <property name="spacing">4</property>
                                 <child>
                                   <object class="GtkComboBox" id="check_updates">
                                     <property name="visible">True</property>
-                                    <property name="tooltip_text">Frequency to poll for HandBrake updates.</property>
                                     <signal name="changed" handler="pref_changed_cb"/>
                                   </object>
                                   <packing>
@@ -3554,9 +3446,8 @@ no-dct-decimate=0:cabac=1</property>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label74">
-                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Check For Updates</property>
+                                    <property name="label" translatable="yes">Automatically check for updates</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                   <packing>
@@ -3572,57 +3463,115 @@ no-dct-decimate=0:cabac=1</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
-
                         <child>
-                          <object class="GtkCheckButton" id="use_source_name">
+                          <object class="GtkAlignment" id="alignment5">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text">The destination filename will be automatically
-generated from the source filename or volume
-label.</property>
-                            <property name="label" translatable="yes">Automatically generate destination</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
+                            <property name="left_padding">12</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox5">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="use_source_name">
+                                    <property name="label" translatable="yes">Use automatic naming (uses DVD name)</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment6">
+                                    <property name="visible">True</property>
+                                    <property name="left_padding">18</property>
+                                    <child>
+                                      <object class="GtkVBox" id="vbox29">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkCheckButton" id="chapters_in_destination">
+                                            <property name="label" translatable="yes">Add chapters to destination name</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="pref_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCheckButton" id="title_no_in_destination">
+                                            <property name="label" translatable="yes">Add title # to destination name</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="pref_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-
                         <child>
-                          <object class="GtkAlignment" id="alignment6">
+                          <object class="GtkAlignment" id="alignment50">
                             <property name="visible">True</property>
-                            <property name="left_padding">18</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkVBox" id="vbox29">
+                              <object class="GtkHBox" id="hbox66">
                                 <property name="visible">True</property>
-
+                                <property name="spacing">4</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="chapters_in_destination">
+                                  <object class="GtkSpinButton" id="preview_count">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text">Add chapter numbers to the 
-auto-generated destination name.</property>
-                                    <property name="label" translatable="yes">Add chapters to destination name</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                    <signal name="toggled" handler="pref_changed_cb"/>
+                                    <property name="max_length">2</property>
+                                    <property name="invisible_char">&#x25CF;</property>
+                                    <property name="shadow_type">none</property>
+                                    <property name="adjustment">preview_count_adj</property>
+                                    <property name="numeric">True</property>
+                                    <signal name="value_changed" handler="pref_changed_cb"/>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="title_no_in_destination">
+                                  <object class="GtkLabel" id="label77">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="tooltip_text">Add title number to the 
-auto-generated destination name.</property>
-                                    <property name="label" translatable="yes">Add title # to destination name</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                    <signal name="toggled" handler="pref_changed_cb"/>
+                                    <property name="label" translatable="yes">Number of previews</property>
+                                    <property name="use_markup">True</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -3638,14 +3587,356 @@ auto-generated destination name.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="use_dvdnav">
+                          <object class="GtkAlignment" id="alignment7">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text">Experimental dvdnav support.  
-Dvdnav can read some discs that dvdread can not.</property>
-                            <property name="label" translatable="yes">Use dvdnav (Experimental)</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkCheckButton" id="skip_taskbar">
+                                <property name="label" translatable="yes">Minimize to System Tray</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="skip_taskbar_cb"/>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">General</property>
+                      </object>
+                      <packing>
+                        <property name="tab_fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkVBox" id="vbox6">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment61">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="yscale">0</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox7">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox81">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="spacing">4</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label87">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="label" translatable="yes">Preferred Language:</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="PreferredLanguage">
+                                        <property name="width_request">150</property>
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <signal name="changed" handler="pref_changed_cb"/>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment8">
+                                    <property name="visible">True</property>
+                                    <property name="left_padding">17</property>
+                                    <child>
+                                      <object class="GtkVBox" id="vbox49">
+                                        <property name="visible">True</property>
+                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkRadioButton" id="AudioDUB">
+                                            <property name="label" translatable="yes">DUB Foreign language audio</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <signal name="toggled" handler="pref_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="not_dub_audio">
+                                            <property name="label" translatable="yes">Use foreign language audio and add subtitles</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="draw_indicator">True</property>
+                                            <property name="group">AudioDUB</property>
+                                            <signal name="toggled" handler="pref_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox63">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="spacing">4</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel" id="label3">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Audio</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                        <property name="tab_fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkVBox" id="vbox1">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment3">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox3">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="constant_rate_factor">
+                                    <property name="label" translatable="yes">Use CRF (Instead of CQP) for Constant Quality encodes</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment59">
+                                    <property name="visible">True</property>
+                                    <property name="left_padding">22</property>
+                                    <child>
+                                      <object class="GtkHBox" id="hbox6">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkComboBox" id="VideoQualityGranularity">
+                                            <property name="width_request">55</property>
+                                            <property name="visible">True</property>
+                                            <signal name="changed" handler="vqual_granularity_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label85">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">Constant Quality fractional granularity</property>
+                                          </object>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="alignment2">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkCheckButton" id="use_dvdnav">
+                                <property name="label" translatable="yes">Use dvdnav (instead of libdvdread)</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="pref_changed_cb"/>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="alignment1">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox2">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="EncodeLogLocation">
+                                    <property name="label" translatable="yes">Put individual encode logs in same location as movie</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment51">
+                                    <property name="visible">True</property>
+                                    <property name="left_padding">21</property>
+                                    <child>
+                                      <object class="GtkHBox" id="hbox50">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkComboBox" id="LoggingLevel">
+                                            <property name="width_request">55</property>
+                                            <property name="visible">True</property>
+                                            <signal name="changed" handler="pref_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="label1">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">Activity Log Verbosity Level</property>
+                                          </object>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkAlignment" id="alignment4">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkCheckButton" id="reduce_hd_preview">
+                                <property name="label" translatable="yes">Scale down High Definition previews</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="pref_changed_cb"/>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -3653,209 +3944,71 @@ Dvdnav can read some discs that dvdread can not.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="reduce_hd_preview">
+                          <object class="GtkAlignment" id="hidden_prefs">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text"> Automatically reduce the size of High Definition previews.
-This is helpfull when working on laptops or similar
-non-hidef screens.  </property>
-                            <property name="label" translatable="yes">Scale down High Definition previews</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox4">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="allow_tweaks">
+                                    <property name="label" translatable="yes">Allow Tweaks</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="tweaks_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="hbfd_feature">
+                                    <property name="label" translatable="yes">Allow HandBrake For Dummies</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="hbfd_feature_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="position">4</property>
                           </packing>
                         </child>
-                        <child>
-                          <object class="GtkAlignment" id="alignment50">
-                            <property name="visible">True</property>
-                            <property name="left_padding">4</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox66">
-                                <property name="spacing">4</property>
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkSpinButton" id="preview_count">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="max_length">2</property>
-                                    <property name="shadow_type">none</property>
-                                    <property name="adjustment">preview_count_adj</property>
-                                    <property name="numeric">True</property>
-                                    <property name="tooltip_text">Number of preview images that are generated
-during a source scan.  More images can improve
-detection of cropping and other parameters, but
-increases scan duration.</property>
-                                    <signal name="value_changed" handler="pref_changed_cb"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label77">
-                                    <property name="justify">GTK_JUSTIFY_LEFT</property>
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Number of previews</property>
-                                    <property name="use_markup">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">5</property>
-                          </packing>
-                        </child>
-
-                        <child>
-                          <object class="GtkAlignment" id="alignment59">
-                            <property name="visible">True</property>
-                            <property name="left_padding">4</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox6">
-                                <property name="visible">True</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkComboBox" id="VideoQualityGranularity">
-                                    <property name="visible">True</property>
-                                    <property name="width_request">55</property>
-                                    <property name="tooltip_text">Granularity of the video quality slider
-in the Video settings tab.</property>
-                                    <signal name="changed" handler="vqual_granularity_changed_cb"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label85">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Video Quality Granularity</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">6</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="EncodeLogLocation">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text"> HandBrake produces 2 activity logs.  
-One for the session and one for each encoding.
-Store the individual encode logs in the same
-location as the movie.</property>
-                            <property name="label" translatable="yes">Store logs in destination video directory</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">7</property>
-                          </packing>
-                        </child>
-
-                        <child>
-                          <object class="GtkAlignment" id="alignment51">
-                            <property name="visible">True</property>
-                            <property name="left_padding">4</property>
-                            <child>
-                              <object class="GtkHBox" id="hbox50">
-                                <property name="visible">True</property>
-                                <property name="spacing">4</property>
-                                <child>
-                                  <object class="GtkComboBox" id="LoggingLevel">
-                                    <property name="visible">True</property>
-                                    <property name="width_request">55</property>
-                                    <signal name="changed" handler="pref_changed_cb"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label1">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Logging Level</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">8</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="skip_taskbar">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip_text">Do not put HandBrake in the system TaskBar when minimized.</property>
-                            <property name="label" translatable="yes">Minimize to System Tray</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="skip_taskbar_cb"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">9</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="allow_tweaks">
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Allow Tweaks</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="tweaks_changed_cb"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">10</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkCheckButton" id="hbfd_feature">
-                            <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Allow HandBrake For Dummies</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="hbfd_feature_changed_cb"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="position">11</property>
-                          </packing>
-                        </child>
                       </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Advanced</property>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                        <property name="tab_fill">False</property>
+                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
-
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="position">1</property>
@@ -3864,20 +4017,26 @@ location as the movie.</property>
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area6">
             <property name="visible">True</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="pref_ok">
+                <property name="label" translatable="yes">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>

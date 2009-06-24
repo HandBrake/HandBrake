@@ -157,6 +157,12 @@
 		<string>1</string>
 		<key>version</key>
 		<string>0.1</string>
+		<key>PreferredLanguage</key>
+		<string>und</string>
+		<key>AudioDUB</key>
+		<false />
+		<key>constant_rate_factor</key>
+		<true />
 	</dict>
 	<key>XlatPresets</key>
 	<dict>
@@ -182,8 +188,6 @@
 		<key>PictureAutoCrop</key>
 		<true />
 		<key>ChapterMarkers</key>
-		<true />
-		<key>constant_rate_factor</key>
 		<true />
 		<key>FileFormat</key>
 		<string>mp4</string>
@@ -268,10 +272,6 @@
 		<string>Name Missing</string>
 		<key>Type</key>
 		<integer>1</integer>
-		<key>AudioDUB</key>
-		<false />
-		<key>SourceAudioLang</key>
-		<string>und</string>
 		<key>SubtitleList</key>
 		<array>
 			<dict>

@@ -223,7 +223,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 	// chosen Preferred Language AND the Preferred Language is NOT Any (und).
 	//
 	audio_lang = ghb_get_user_audio_lang(ud, titleindex, 0);
-	pref_lang = ghb_settings_get_string(ud->settings, "SourceAudioLang");
+	pref_lang = ghb_settings_get_string(ud->settings, "PreferredLanguage");
 
 	if (audio_lang != NULL && pref_lang != NULL &&
 		(strcmp(audio_lang, pref_lang) == 0 || strcmp("und", pref_lang) == 0))

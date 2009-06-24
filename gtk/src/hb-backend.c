@@ -2112,7 +2112,7 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
 		return lookup_video_rate_int(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_int(gval);
-	else if (strcmp(name, "SourceAudioLang") == 0)
+	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_int(gval);
 	else
 	{
@@ -2135,7 +2135,7 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
 		return lookup_video_rate_int(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_int(gval);
-	else if (strcmp(name, "SourceAudioLang") == 0)
+	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_int(gval);
 	else
 	{
@@ -2158,7 +2158,7 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
 		return lookup_video_rate_option(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_option(gval);
-	else if (strcmp(name, "SourceAudioLang") == 0)
+	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_option(gval);
 	else
 	{
@@ -2181,7 +2181,7 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
 		return lookup_video_rate_option(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_option(gval);
-	else if (strcmp(name, "SourceAudioLang") == 0)
+	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_option(gval);
 	else
 	{
@@ -2228,7 +2228,7 @@ ghb_update_ui_combo_box(
 		audio_samplerate_opts_set(ud->builder, "AudioSamplerate", hb_audio_rates, hb_audio_rates_count);
 		video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		mix_opts_set(ud->builder, "AudioMixdown");
-		language_opts_set(ud->builder, "SourceAudioLang");
+		language_opts_set(ud->builder, "PreferredLanguage");
 		title_opts_set(ud->builder, "title");
 		audio_track_opts_set(ud->builder, "AudioTrack", user_data);
 		subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
@@ -2261,8 +2261,8 @@ ghb_update_ui_combo_box(
 			video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		else if (strcmp(name, "AudioMixdown") == 0)
 			mix_opts_set(ud->builder, "AudioMixdown");
-		else if (strcmp(name, "SourceAudioLang") == 0)
-			language_opts_set(ud->builder, "SourceAudioLang");
+		else if (strcmp(name, "PreferredLanguage") == 0)
+			language_opts_set(ud->builder, "PreferredLanguage");
 		else if (strcmp(name, "title") == 0)
 			title_opts_set(ud->builder, "title");
 		else if (strcmp(name, "SubtitleTrack") == 0)
@@ -2287,7 +2287,7 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "AudioSamplerate");
 	init_combo_box(builder, "VideoFramerate");
 	init_combo_box(builder, "AudioMixdown");
-	init_combo_box(builder, "SourceAudioLang");
+	init_combo_box(builder, "PreferredLanguage");
 	init_combo_box(builder, "title");
 	init_combo_box(builder, "AudioTrack");
 	for (ii = 0; combo_name_map[ii].name != NULL; ii++)
