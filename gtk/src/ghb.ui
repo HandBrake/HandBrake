@@ -3694,7 +3694,7 @@ no-dct-decimate=0:cabac=1</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkRadioButton" id="not_dub_audio">
+                                          <object class="GtkRadioButton" id="NotAudioDUB">
                                             <property name="label" translatable="yes">Use foreign language audio and add subtitles</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>

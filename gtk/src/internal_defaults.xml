@@ -161,6 +161,8 @@
 		<string>und</string>
 		<key>AudioDUB</key>
 		<false />
+		<key>NotAudioDUB</key>
+		<true />
 		<key>constant_rate_factor</key>
 		<true />
 	</dict>
