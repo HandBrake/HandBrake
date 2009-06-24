@@ -1,0 +1,33 @@
+diff -Naur ffmpeg-r19067.orig/common.mak ffmpeg-r19067/common.mak
+--- ffmpeg-r19067.orig/common.mak	2009-05-29 07:56:54.000000000 -0400
++++ ffmpeg-r19067/common.mak	2009-06-23 20:36:58.000000000 -0400
+@@ -29,17 +29,6 @@
+ %.ho: %.h
+ 	$(CC) $(CFLAGS) $(LIBOBJFLAGS) -Wno-unused -c -o $@ -x c $<
+ 
+-%.d: %.c
+-	$(DEPEND_CMD) > $@
+-
+-%.d: %.S
+-	$(DEPEND_CMD) > $@
+-
+-%.d: %.cpp
+-	$(DEPEND_CMD) > $@
+-
+-%.o: %.d
+-
+ %$(EXESUF): %.c
+ 
+ SVN_ENTRIES = $(SRC_PATH_BARE)/.svn/entries
+@@ -76,11 +65,6 @@
+ ALLHEADERS := $(subst $(SRC_DIR)/,$(SUBDIR),$(wildcard $(SRC_DIR)/*.h $(SRC_DIR)/$(ARCH)/*.h))
+ checkheaders: $(filter-out %_template.ho,$(ALLHEADERS:.h=.ho))
+ 
+-DEPS := $(OBJS:.o=.d)
+-depend dep: $(DEPS)
+-
+ CLEANSUFFIXES     = *.o *~ *.ho *.map
+ DISTCLEANSUFFIXES = *.d *.pc
+ LIBSUFFIXES       = *.a *.lib *.so *.so.* *.dylib *.dll *.def *.dll.a *.exp
+-
+--include $(DEPS)
