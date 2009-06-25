@@ -18,6 +18,12 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
+#if defined( __GNUC__ ) && !(defined( _WIN32 ) || defined( __MINGW32__ ))
+#   define HB_WPRINTF(s,v) __attribute__((format(printf,s,v)))
+#else
+#   define HB_WPRINTF(s,v)
+#endif
+
 #if defined( SYS_MINGW )
 #   define fseek fseeko64
 #   define ftell ftello64

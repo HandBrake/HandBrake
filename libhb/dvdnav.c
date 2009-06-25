@@ -425,7 +425,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
 
     pgc = ifo->vts_pgcit->pgci_srp[pgcn-1].pgc;
 
-    hb_log("pgc_id: %d, pgn: %d: pgc: 0x%x", pgcn, pgn, pgc);
+    hb_log("pgc_id: %d, pgn: %d: pgc: %p", pgcn, pgn, pgc);
     if (pgn > pgc->nr_of_programs)
     {
         hb_error( "invalid PGN %d for title %d, skipping", pgn, t );

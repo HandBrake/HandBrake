@@ -123,8 +123,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 hb_error( "Invalid shift sequence" );
             } else if ( ( retval == -1 ) && ( errno == EILSEQ ) )
             {
-                hb_error( "Invalid byte for codeset in input, %d bytes discarded",
-                          in_size);
+                hb_error( "Invalid byte for codeset in input, %"PRId64" bytes discarded", (int64_t)in_size);
             } else if ( ( retval == -1 ) && ( errno == E2BIG ) )
             {
                 hb_error( "Not enough space in output buffer");

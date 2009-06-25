@@ -130,7 +130,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     err = AudioConverterNew( &input, &output, &pv->converter );
     if( err != noErr)
     {
-        hb_log( "Error creating an AudioConverter %x %d", err, output.mBytesPerFrame );
+        hb_log( "Error creating an AudioConverter err=%"PRId64" %"PRIu64, (int64_t)err, (uint64_t)output.mBytesPerFrame );
         *job->die = 1;
         return 0;
     }

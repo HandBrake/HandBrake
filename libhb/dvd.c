@@ -232,7 +232,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
     pgn    = vts->vts_ptt_srpt->title[title->ttn-1].ptt[0].pgn;
     d->pgc = vts->vts_pgcit->pgci_srp[pgc_id-1].pgc;
 
-    hb_log("pgc_id: %d, pgn: %d: pgc: 0x%x", pgc_id, pgn, d->pgc);
+    hb_log("pgc_id: %d, pgn: %d: pgc: %p", pgc_id, pgn, d->pgc);
 
     if( !d->pgc )
     {

@@ -355,8 +355,7 @@ finished:
                 {
                     /* Video */
                     hb_deep_log( 2, "mux: video bitrate error, %+lld bytes",
-                            track->bytes - mux->pts * job->vbitrate *
-                            125 / 90000 );
+                            (int64_t)(track->bytes - mux->pts * job->vbitrate * 125 / 90000) );
                 }
                 bytes_total  += track->bytes;
                 frames_total += track->frames;

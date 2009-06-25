@@ -54,6 +54,8 @@
 #include <netinet/in.h>
 #endif
 
+#include <stddef.h>
+
 #include "hb.h"
 
 /************************************************************************
@@ -261,6 +263,25 @@ struct hb_thread_s
 #endif
 };
 
+/* Get a unique identifier to thread and represent as 64-bit unsigned.
+ * If unsupported, the value 0 is be returned.
+ * Caller should use result only for display/log purposes.
+ */
+static uint64_t hb_thread_to_integer( const hb_thread_t* t )
+{
+#if defined( USE_PTHREAD )
+    #if defined( _WIN32 ) || defined( __MINGW32__ )
+        return (uint64_t)(ptrdiff_t)t->thread.p;
+    #elif defined( SYS_DARWIN )
+        return (uint64_t)(ptrdiff_t)t->thread;
+    #else
+        return (uint64_t)t->thread;
+    #endif
+#else
+    return 0;
+#endif
+}
+
 /************************************************************************
  * hb_thread_func()
  ************************************************************************
@@ -291,7 +312,7 @@ static void hb_thread_func( void * _t )
     t->function( t->arg );
 
     /* Inform that the thread can be joined now */
-    hb_deep_log( 2, "thread %x exited (\"%s\")", t->thread, t->name );
+    hb_deep_log( 2, "thread %"PRIx64" exited (\"%s\")", hb_thread_to_integer( t ), t->name );
     hb_lock( t->lock );
     t->exited = 1;
     hb_unlock( t->lock );
@@ -336,7 +357,7 @@ hb_thread_t * hb_thread_init( char * name, void (* function)(void *),
 //        SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL );
 #endif
 
-    hb_deep_log( 2, "thread %x started (\"%s\")", t->thread, t->name );
+    hb_deep_log( 2, "thread %"PRIx64" started (\"%s\")", hb_thread_to_integer( t ), t->name );
     return t;
 }
 
@@ -361,8 +382,7 @@ void hb_thread_close( hb_thread_t ** _t )
 //    WaitForSingleObject( t->thread, INFINITE );
 #endif
 
-    hb_deep_log( 2, "thread %x joined (\"%s\")",
-            t->thread, t->name );
+    hb_deep_log( 2, "thread %"PRIx64" joined (\"%s\")", hb_thread_to_integer( t ), t->name );
 
     hb_lock_close( &t->lock );
     free( t->name );

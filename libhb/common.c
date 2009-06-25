@@ -124,8 +124,8 @@ void hb_fix_aspect( hb_job_t * job, int keep )
     if ( title->height == 0 || title->width == 0 || title->aspect == 0 )
     {
         hb_log( "hb_fix_aspect: incomplete info for title %d: "
-                "height = %d, width = %d, aspect = %d",
-                title->height, title->width, title->aspect );
+                "height = %d, width = %d, aspect = %.3f",
+                title->index, title->height, title->width, title->aspect );
         return;
     }
 

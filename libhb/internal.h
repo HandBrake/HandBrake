@@ -7,7 +7,7 @@
 /***********************************************************************
  * common.c
  **********************************************************************/
-void hb_log( char * log, ... );
+void hb_log( char * log, ... ) HB_WPRINTF(1,2);
 extern int global_verbosity_level; // Global variable for hb_deep_log
 typedef enum hb_debug_level_s
 {
@@ -15,8 +15,8 @@ typedef enum hb_debug_level_s
     HB_HOUSEKEEPING_LOG = 2, // stuff we hate scrolling through  
     HB_GRANULAR_LOG     = 3  // sample-by-sample
 } hb_debug_level_t;
-void hb_deep_log( hb_debug_level_t level, char * log, ... );
-void hb_error( char * fmt, ...);
+void hb_deep_log( hb_debug_level_t level, char * log, ... ) HB_WPRINTF(2,3);
+void hb_error( char * fmt, ...) HB_WPRINTF(1,2);
 
 int  hb_list_bytes( hb_list_t * );
 void hb_list_seebytes( hb_list_t * l, uint8_t * dst, int size );
