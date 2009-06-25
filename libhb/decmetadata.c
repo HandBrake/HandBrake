@@ -84,7 +84,7 @@ static void decmp4metadata( hb_title_t *title )
                 chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
                 chapter->seconds  = ( chapter->duration / 90000 ) % 60;
                 strcpy( chapter->title, chapter_list[i-1].title );
-                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%lld, (%02i:%02i:%02i)", chapter->index, chapter->title, 
+                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRId64", (%02i:%02i:%02i)", chapter->index, chapter->title, 
                        chapter->duration, chapter->hours, 
                        chapter->minutes, chapter->seconds);
                 hb_list_add( title->list_chapter, chapter );

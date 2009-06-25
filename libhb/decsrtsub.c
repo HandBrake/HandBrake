@@ -155,7 +155,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
                     if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
                     {
-                        hb_deep_log( 3, "Discarding SRT at time start %lld, stop %lld", start_time, stop_time);
+                        hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
                         memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
                         ++(pv->number_of_entries);
                         pv->current_state = k_state_timecode;
@@ -259,7 +259,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
             retval = 0;
         }
 
-        hb_deep_log( 3, "SRT Start time %lld, stop time %lld", pv->start_time, pv->stop_time);
+        hb_deep_log( 3, "SRT Start time %"PRId64", stop time %"PRId64, pv->start_time, pv->stop_time);
 
         pv->iconv_context = iconv_open( "utf8", pv->subtitle->config.src_codeset );
 

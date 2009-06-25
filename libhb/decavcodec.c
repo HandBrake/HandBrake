@@ -525,12 +525,12 @@ static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
     hb_chapter_t *c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
     if ( c && c->title )
     {
-        hb_log( "%s: \"%s\" (%d) at frame %u time %lld",
+        hb_log( "%s: \"%s\" (%d) at frame %u time %"PRId64,
                 pv->context->codec->name, c->title, chap_num, pv->nframes, pts );
     }
     else
     {
-        hb_log( "%s: Chapter %d at frame %u time %lld",
+        hb_log( "%s: Chapter %d at frame %u time %"PRId64,
                 pv->context->codec->name, chap_num, pv->nframes, pts );
     }
 }

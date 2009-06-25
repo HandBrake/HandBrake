@@ -90,8 +90,8 @@ void hb_buffer_pool_free( void )
         }
     }
 
-    hb_deep_log( 2, "Allocated %lld bytes of buffers on this pass and Freed %lld bytes, "
-           "%lld bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
+    hb_deep_log( 2, "Allocated %"PRId64" bytes of buffers on this pass and Freed %"PRId64" bytes, "
+           "%"PRId64" bytes leaked", buffers.allocated, freed, buffers.allocated - freed);
     buffers.allocated = 0;
     hb_unlock(buffers.lock);
 }

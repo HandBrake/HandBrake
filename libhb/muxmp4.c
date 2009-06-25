@@ -60,7 +60,7 @@ static int MP4TuneTrackDurationPerChunk( hb_mux_object_t* m, MP4TrackId trackId 
         return 0;
     }
 
-    hb_deep_log( 2, "muxmp4: track %u, chunk duration %llu", MP4FindTrackIndex( m->file, trackId ), dur );
+    hb_deep_log( 2, "muxmp4: track %u, chunk duration %"PRIu64, MP4FindTrackIndex( m->file, trackId ), dur );
     return 1;
 }
 
@@ -548,8 +548,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             offset = buf->start + m->init_delay - m->sum_dur;
             if ( offset < 0 )
             {
-                hb_log("MP4Mux: illegal render offset %lld, start %lld,"
-                       "stop %lld, sum_dur %lld",
+                hb_log("MP4Mux: illegal render offset %"PRId64", start %"PRId64","
+                       "stop %"PRId64", sum_dur %"PRId64,
                        offset, buf->start, buf->stop, m->sum_dur );
                 offset = 0;
             }
@@ -596,8 +596,8 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                be possible and usually indicates a bug in the upstream code.
                Complain in the hope that someone will go find the bug but
                try to fix the error so that the file will still be playable. */
-            hb_log("MP4Mux: illegal duration %lld, start %lld,"
-                   "stop %lld, sum_dur %lld",
+            hb_log("MP4Mux: illegal duration %"PRId64", start %"PRId64","
+                   "stop %"PRId64", sum_dur %"PRId64,
                    duration, buf->start, buf->stop, m->sum_dur );
             /* we don't know when the next frame starts so we can't pick a
                valid duration for this one. we pick something "short"
@@ -708,9 +708,9 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
 
             mux_data->sum_dur += (buf->stop - buf->start);
-            hb_deep_log(3, "MuxMP4:Sub:%fs:%lld:%lld:%lld: %s", (float)buf->start / 90000, buf->start, buf->stop, 
+            hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s", (float)buf->start / 90000, buf->start, buf->stop, 
                    (buf->stop - buf->start), buf->data);
-            hb_deep_log(3, "MuxMP4:Total time elapsed:%lld", mux_data->sum_dur);
+            hb_deep_log(3, "MuxMP4:Total time elapsed:%"PRId64, mux_data->sum_dur);
         }
     }
     else

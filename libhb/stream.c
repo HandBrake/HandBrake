@@ -275,9 +275,12 @@ static void ts_warn_helper( hb_stream_t *stream, char *log, va_list args )
     }
 }
 
+static void ts_warn( hb_stream_t*, char*, ... ) HB_WPRINTF(2,3);
+static void ts_err( hb_stream_t*, int, char*, ... ) HB_WPRINTF(3,4);
+
 static void ts_warn( hb_stream_t *stream, char *log, ... )
 {
-    va_list     args;
+    va_list args;
     va_start( args, log );
     ts_warn_helper( stream, log, args );
     va_end( args );
@@ -285,7 +288,7 @@ static void ts_warn( hb_stream_t *stream, char *log, ... )
 
 static void ts_err( hb_stream_t *stream, int curstream, char *log, ... )
 {
-    va_list     args;
+    va_list args;
     va_start( args, log );
     ts_warn_helper( stream, log, args );
     va_end( args );
@@ -751,10 +754,10 @@ static const uint8_t *next_packet( hb_stream_t *stream )
         off_t pos2 = align_to_next_packet(stream);
         if ( pos2 == 0 )
         {
-            hb_log( "next_packet: eof while re-establishing sync @ %lld", pos );
+            hb_log( "next_packet: eof while re-establishing sync @ %"PRId64, pos );
             return NULL;
         }
-        ts_warn( stream, "next_packet: sync lost @ %lld, regained after %lld bytes",
+        ts_warn( stream, "next_packet: sync lost @ %"PRId64", regained after %"PRId64" bytes",
                  pos, pos2 );
     }
 }
@@ -1025,12 +1028,12 @@ static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
         buf = hb_ts_stream_getPEStype( stream, stream->ts_video_pids[0] );
         if ( buf == NULL )
         {
-            hb_log("hb_sample_pts: couldn't find video packet near %llu", fpos);
+            hb_log("hb_sample_pts: couldn't find video packet near %"PRIu64, fpos);
             return pp;
         }
         if ( ( buf[7] >> 7 ) != 1 )
         {
-            hb_log("hb_sample_pts: no PTS in video packet near %llu", fpos);
+            hb_log("hb_sample_pts: no PTS in video packet near %"PRIu64, fpos);
             return pp;
         }
         pp.pts = ( ( (uint64_t)buf[9] >> 1 ) & 7 << 30 ) |
@@ -1229,7 +1232,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 
     int64_t pos = ( ( ( sum_dur - chapter->duration ) * AV_TIME_BASE ) / 90000 );
 
-    hb_deep_log( 2, "Seeking to chapter %d: starts %lld, ends %lld, AV pos %lld",
+    hb_deep_log( 2, "Seeking to chapter %d: starts %"PRId64", ends %"PRId64", AV pos %"PRId64,
                  chapter_num, sum_dur - chapter->duration, sum_dur, pos);
 
     if ( chapter_num > 1 && pos > 0 )
@@ -2721,7 +2724,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
                 chapter->minutes  = ( ( chapter->duration / 90000 ) % 3600 ) / 60;
                 chapter->seconds  = ( chapter->duration / 90000 ) % 60;
                 strcpy( chapter->title, m->title );
-                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%llu, (%02i:%02i:%02i)",
+                hb_deep_log( 2, "Added chapter %i, name='%s', dur=%"PRIu64", (%02i:%02i:%02i)",
                             chapter->index, chapter->title,
                             chapter->duration, chapter->hours,
                             chapter->minutes, chapter->seconds );
@@ -2898,7 +2901,7 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
         {
             stream->chapter_end += chapter->duration;
             buf->new_chap = stream->chapter + 1;
-            hb_deep_log( 2, "ffmpeg_read starting chapter %i at %lld",
+            hb_deep_log( 2, "ffmpeg_read starting chapter %i at %"PRId64,
                          buf->new_chap, buf->start);
         } else {
             // Must have run out of chapters, stop looking.

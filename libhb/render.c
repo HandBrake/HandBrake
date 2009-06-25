@@ -674,10 +674,10 @@ void renderClose( hb_work_object_t * w )
     /* Preserve dropped frame count for more accurate framerates in 2nd passes. */
     interjob->render_dropped = pv->dropped_frames;
 
-    hb_log("render: lost time: %lld (%i frames)", pv->total_lost_time, pv->dropped_frames);
-    hb_log("render: gained time: %lld (%i frames) (%lld not accounted for)", pv->total_gained_time, pv->extended_frames, pv->total_lost_time - pv->total_gained_time);
+    hb_log("render: lost time: %"PRId64" (%i frames)", pv->total_lost_time, pv->dropped_frames);
+    hb_log("render: gained time: %"PRId64" (%i frames) (%"PRId64" not accounted for)", pv->total_gained_time, pv->extended_frames, pv->total_lost_time - pv->total_gained_time);
     if (pv->dropped_frames)
-        hb_log("render: average dropped frame duration: %lld", (pv->total_lost_time / pv->dropped_frames) );
+        hb_log("render: average dropped frame duration: %"PRId64, (pv->total_lost_time / pv->dropped_frames) );
 
     /* Cleanup subtitle queue */
     if( pv->subtitle_queue )

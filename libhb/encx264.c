@@ -596,7 +596,7 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
      */
     if( pv->last_stop != in->start )
     {
-        hb_log("encx264 input continuity err: last stop %lld  start %lld",
+        hb_log("encx264 input continuity err: last stop %"PRId64"  start %"PRId64,
                 pv->last_stop, in->start);
     }
     pv->last_stop = in->stop;

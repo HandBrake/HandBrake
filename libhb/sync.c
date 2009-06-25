@@ -377,7 +377,7 @@ static void SyncVideo( hb_work_object_t * w )
                  * as if it started at zero so that our audio timing will
                  * be in sync.
                  */
-                hb_log( "sync: first pts is %lld", cur->start );
+                hb_log( "sync: first pts is %"PRId64, cur->start );
                 cur->start = 0;
             }
         }
@@ -417,7 +417,7 @@ static void SyncVideo( hb_work_object_t * w )
         if ( pv->first_drop )
         {
             hb_log( "sync: video time didn't advance - dropped %d frames "
-                    "(delta %d ms, current %lld, next %lld, dur %d)",
+                    "(delta %d ms, current %"PRId64", next %"PRId64", dur %d)",
                     pv->drop_count, (int)( cur->start - pv->first_drop ) / 90,
                     cur->start, next->start, (int)( next->start - cur->start ) );
             pv->first_drop = 0;
@@ -714,7 +714,7 @@ static void SyncVideo( hb_work_object_t * w )
         pts_skip = 0;
         if ( duration <= 0 )
         {
-            hb_log( "sync: invalid video duration %lld, start %lld, next %lld",
+            hb_log( "sync: invalid video duration %"PRId64", start %"PRId64", next %"PRId64"",
                     duration, buf_tmp->start, next->start );
         }
 
@@ -879,7 +879,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
         {
             // we were dropping old data but input buf time is now current
             hb_log( "sync: audio %d time went backwards %d ms, dropped %d frames "
-                    "(next %lld, current %lld)", i,
+                    "(next %"PRId64", current %"PRId64")", i,
                     (int)( sync->next_pts - sync->first_drop ) / 90,
                     sync->drop_count, sync->first_drop, sync->next_pts );
             sync->first_drop = 0;
@@ -894,7 +894,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                 // frame and this. assume we got a corrupted timestamp
                 // and just drop the next buf.
                 hb_log( "sync: %d minute time gap in audio %d - dropping buf"
-                        "  start %lld, next %lld",
+                        "  start %"PRId64", next %"PRId64,
                         (int)((start - sync->next_pts) / (90000*60)),
                         i, start, sync->next_pts );
                 buf = hb_fifo_get( audio->priv.fifo_raw );
@@ -910,7 +910,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
             if( sync->audio->config.out.codec == HB_ACODEC_DCA )
             {
                 hb_log( "sync: audio gap %d ms. Skipping frames. Audio %d"
-                        "  start %lld, next %lld",
+                        "  start %"PRId64", next %"PRId64,
                         (int)((start - sync->next_pts) / 90),
                         i, start, sync->next_pts );
                 pv->audio_passthru_slip += (start - sync->next_pts);
@@ -918,7 +918,7 @@ static void SyncAudio( hb_work_object_t * w, int i )
                 return;
             }
             hb_log( "sync: adding %d ms of silence to audio %d"
-                    "  start %lld, next %lld",
+                    "  start %"PRId64", next %"PRId64,
                     (int)((start - sync->next_pts) / 90),
                     i, start, sync->next_pts );
             InsertSilence( w, i, start - sync->next_pts );

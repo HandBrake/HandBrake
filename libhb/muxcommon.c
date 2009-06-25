@@ -340,21 +340,21 @@ finished:
 
         if( !stat( job->file, &sb ) )
         {
-            hb_deep_log( 2, "mux: file size, %lld bytes", (uint64_t) sb.st_size );
+            hb_deep_log( 2, "mux: file size, %"PRId64" bytes", (uint64_t) sb.st_size );
 
             bytes_total  = 0;
             frames_total = 0;
             for( i = 0; i < mux->ntracks; ++i )
             {
                 track = mux->track[i];
-                hb_log( "mux: track %d, %lld frames, %lld bytes, %.2f kbps, fifo %d",
+                hb_log( "mux: track %d, %"PRId64" frames, %"PRId64" bytes, %.2f kbps, fifo %d",
                         i, track->frames, track->bytes,
                         90000.0 * track->bytes / mux->pts / 125,
                         track->mf.flen );
                 if( !i && ( job->vquality < 0.0 || job->vquality > 1.0 ) )
                 {
                     /* Video */
-                    hb_deep_log( 2, "mux: video bitrate error, %+lld bytes",
+                    hb_deep_log( 2, "mux: video bitrate error, %+"PRId64" bytes",
                             (int64_t)(track->bytes - mux->pts * job->vbitrate * 125 / 90000) );
                 }
                 bytes_total  += track->bytes;

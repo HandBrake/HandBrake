@@ -452,7 +452,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
     title->hours    = title->duration / 90000 / 3600;
     title->minutes  = ( ( title->duration / 90000 ) % 3600 ) / 60;
     title->seconds  = ( title->duration / 90000 ) % 60;
-    hb_log( "scan: duration is %02d:%02d:%02d (%lld ms)",
+    hb_log( "scan: duration is %02d:%02d:%02d (%"PRId64" ms)",
             title->hours, title->minutes, title->seconds,
             title->duration / 90 );
 
@@ -774,7 +774,7 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t )
         chapter->minutes   = ( seconds % 3600 ) / 60;
         chapter->seconds   = seconds % 60;
 
-        hb_log( "scan: chap %d c=%d->%d, b=%d->%d (%d), %lld ms",
+        hb_log( "scan: chap %d c=%d->%d, b=%d->%d (%d), %"PRId64" ms",
                 chapter->index, chapter->cell_start, chapter->cell_end,
                 chapter->block_start, chapter->block_end,
                 chapter->block_count, chapter->duration / 90 );

@@ -299,7 +299,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                                                          buf->new_chap - 1 );
                         chap_name = c->title;
                     }
-                    hb_log( "mpeg2: \"%s\" (%d) at frame %u time %lld",
+                    hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64,
                             chap_name, buf->new_chap, m->nframes, buf->start );
                 } else if ( m->nframes == 0 && m->job &&
                             hb_list_item( m->job->title->list_chapter,
@@ -307,7 +307,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 {
                     hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
                                                      m->job->chapter_start - 1 );
-                    hb_log( "mpeg2: \"%s\" (%d) at frame %u time %lld", c->title,
+                    hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64, c->title,
                             m->job->chapter_start, m->nframes, buf->start );
                 }
                 ++m->nframes;

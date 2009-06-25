@@ -343,7 +343,7 @@ static void ReaderFunc( void * _r )
                     // force a new scr offset computation
                     r->scr_changes = r->demux.scr_changes - 1;
                     r->saw_video = 1;
-                    hb_log( "reader: first SCR %lld", r->demux.last_scr );
+                    hb_log( "reader: first SCR %"PRId64, r->demux.last_scr );
                 }
                 else
                 {
