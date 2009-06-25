@@ -507,6 +507,38 @@ ghb_cache_volnames(signal_user_data_t *ud)
 	return NULL;
 }
 
+static const gchar*
+get_extension(signal_user_data_t *ud)
+{
+	int container;
+	const gchar *extension = "error";
+	GValue *audio_list;
+
+	container = ghb_settings_combo_int(ud->settings, "FileFormat");
+	if (container == HB_MUX_MP4)
+	{
+		extension = "mp4";
+		audio_list = ghb_settings_get_value(ud->settings, "audio_list");
+		if (ghb_ac3_in_audio_list (audio_list))
+		{
+			extension = "m4v";
+		}
+		else if (ghb_settings_get_boolean(ud->settings, "ChapterMarkers"))
+		{
+			extension = "m4v";
+		}
+		else if (ghb_settings_get_boolean(ud->settings, "UseM4v"))
+		{
+			extension = "m4v";
+		}
+	}
+	else if (container == HB_MUX_MKV)
+	{
+		extension = "mkv";
+	}
+	return extension;
+}
+
 static void
 set_destination(signal_user_data_t *ud)
 {
@@ -514,12 +546,13 @@ set_destination(signal_user_data_t *ud)
 	if (ghb_settings_get_boolean(ud->settings, "use_source_name"))
 	{
 		GString *str = g_string_new("");
-		gchar *vol_name, *filename, *extension;
+		gchar *vol_name, *filename;
+		const gchar *extension;
 		gchar *new_name;
 		gint title;
 		
 		filename = ghb_settings_get_string(ud->settings, "dest_file");
-		extension = ghb_settings_get_string(ud->settings, "FileFormat");
+		extension = get_extension(ud);
 		vol_name = ghb_settings_get_string(ud->settings, "volume_label");
 		g_string_append_printf(str, "%s", vol_name);
 		title = ghb_settings_combo_int(ud->settings, "title");
@@ -554,7 +587,6 @@ set_destination(signal_user_data_t *ud)
 		new_name = g_string_free(str, FALSE);
 		ghb_ui_update(ud, "dest_file", ghb_string_value(new_name));
 		g_free(filename);
-		g_free(extension);
 		g_free(vol_name);
 		g_free(new_name);
 	}
@@ -978,17 +1010,24 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 	g_free(sourcename);
 }
 
-static void
-update_destination_extension(signal_user_data_t *ud)
+void
+ghb_update_destination_extension(signal_user_data_t *ud)
 {
-	static gchar *containers[] = {".mkv", ".mp4", ".m4v", ".avi", ".ogm", NULL};
+	static gchar *containers[] = {".mkv", ".mp4", ".m4v", NULL};
 	gchar *filename;
-	gchar *extension;
+	const gchar *extension;
 	gint ii;
 	GtkEntry *entry;
+	static gboolean busy = FALSE;
 
-	g_debug("update_destination_extension ()");
-	extension = ghb_settings_get_string(ud->settings, "FileFormat");
+	g_debug("ghb_update_destination_extension ()");
+	// Since this function modifies the thing that triggers it's
+	// invocation, check to see if busy to prevent accidental infinite
+	// recursion.
+	if (busy)
+		return;
+	busy = TRUE;
+	extension = get_extension(ud);
 	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "dest_file"));
 	filename = g_strdup(gtk_entry_get_text(entry));
 	for (ii = 0; containers[ii] != NULL; ii++)
@@ -1016,8 +1055,8 @@ update_destination_extension(signal_user_data_t *ud)
 			break;
 		}
 	}
-	g_free(extension);
 	g_free(filename);
+	busy = FALSE;
 }
 
 static void
@@ -1083,7 +1122,7 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 	gchar *dest_file, *dest_dir, *dest;
 	
 	g_debug("dest_file_changed_cb ()");
-	update_destination_extension(ud);
+	ghb_update_destination_extension(ud);
 	ghb_widget_to_setting(ud->settings, (GtkWidget*)entry);
 	// This signal goes off with ever keystroke, so I'm putting this
 	// update on the timer.
@@ -1178,41 +1217,13 @@ update_acodec_combo(signal_user_data_t *ud)
 G_MODULE_EXPORT void
 container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	const GValue *audio_list;
-	gboolean markers;
-
 	g_debug("container_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	update_destination_extension(ud);
 	ghb_check_dependency(ud, widget);
 	update_acodec_combo(ud);
+	ghb_update_destination_extension(ud);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-
-	audio_list = ghb_settings_get_value(ud->settings, "audio_list");
-	if (ghb_ac3_in_audio_list (audio_list))
-	{
-		gchar *container;
-
-		container = ghb_settings_get_string(ud->settings, "FileFormat");
-		if (strcmp(container, "mp4") == 0)
-		{
-			ghb_ui_update(ud, "FileFormat", ghb_string_value("m4v"));
-		}
-		g_free(container);
-	}
-	markers = ghb_settings_get_boolean(ud->settings, "ChapterMarkers");
-	if (markers)
-	{
-		gchar *container;
-
-		container = ghb_settings_get_string(ud->settings, "FileFormat");
-		if (strcmp(container, "mp4") == 0)
-		{
-			ghb_ui_update(ud, "FileFormat", ghb_string_value("m4v"));
-		}
-		g_free(container);
-	}
 	ghb_subtitle_prune(ud);
 }
 
@@ -1397,24 +1408,11 @@ setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	gboolean markers;
-
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
-	markers = ghb_settings_get_boolean(ud->settings, "ChapterMarkers");
-	if (markers)
-	{
-		gchar *container;
-
-		container = ghb_settings_get_string(ud->settings, "FileFormat");
-		if (strcmp(container, "mp4") == 0)
-		{
-			ghb_ui_update(ud, "FileFormat", ghb_string_value("m4v"));
-		}
-		g_free(container);
-	}
+	ghb_update_destination_extension(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2919,6 +2917,17 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_check_dependency(ud, widget);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
+}
+
+G_MODULE_EXPORT void
+use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	g_debug("use_m4v_changed_cb");
+	ghb_widget_to_setting (ud->settings, widget);
+	ghb_check_dependency(ud, widget);
+	const gchar *name = gtk_widget_get_name(widget);
+	ghb_pref_save(ud->settings, name);
+	ghb_update_destination_extension(ud);
 }
 
 G_MODULE_EXPORT void

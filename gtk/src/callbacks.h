@@ -60,6 +60,7 @@ void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
 gpointer ghb_cache_volnames(signal_user_data_t *ud);
 void ghb_volname_cache_init(void);
+void ghb_update_destination_extension(signal_user_data_t *ud);
 
 #endif // _CALLBACKS_H_
 

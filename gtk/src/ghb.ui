@@ -900,10 +900,11 @@
                                 <child>
                                   <object class="GtkHBox" id="hbox3">
                                     <property name="visible">True</property>
+                                    <property name="spacing">4</property>
                                     <child>
                                       <object class="GtkLabel" id="label45">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Container:</property>
+                                        <property name="label" translatable="yes">Format:</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -3531,6 +3532,20 @@ no-dct-decimate=0:cabac=1</property>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="UseM4v">
+                                    <property name="label" translatable="yes">Use iPod/iTunes friendly (.m4v) file extension for MP4</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="use_m4v_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>

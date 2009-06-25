@@ -137,7 +137,6 @@ static options_map_t d_container_opts[] =
 {
 	{"MKV", "mkv", HB_MUX_MKV, "mkv"},
 	{"MP4", "mp4", HB_MUX_MP4, "mp4"},
-	{"M4V", "m4v", HB_MUX_MP4, "m4v"},
 };
 combo_opts_t container_opts =
 {

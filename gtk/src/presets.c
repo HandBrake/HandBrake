@@ -1763,7 +1763,7 @@ static value_map_t acodec_xlat[] =
 value_map_t container_xlat[] =
 {
 	{"MP4 file", "mp4"},
-	{"M4V file", "m4v"},
+	{"M4V file", "mp4"},
 	{"MKV file", "mkv"},
 	{"AVI file", "mkv"},
 	{"OGM file", "mkv"},
