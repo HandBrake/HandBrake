@@ -273,7 +273,7 @@ static uint64_t hb_thread_to_integer( const hb_thread_t* t )
     #if defined( _WIN32 ) || defined( __MINGW32__ )
         return (uint64_t)(ptrdiff_t)t->thread.p;
     #elif defined( SYS_DARWIN )
-        return (uint64_t)(ptrdiff_t)t->thread;
+        return (unsigned long)t->thread;
     #else
         return (uint64_t)t->thread;
     #endif
