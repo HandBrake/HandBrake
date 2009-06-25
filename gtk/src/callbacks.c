@@ -446,6 +446,16 @@ ghb_volname_cache_init(void)
 										free_volname_key, free_volname_value);
 }
 
+static void
+free_drive(gpointer drive)
+{
+#if defined(_WIN32)
+		g_free(drive);
+#else
+		g_object_unref(drive);
+#endif
+}
+
 gpointer
 ghb_cache_volnames(signal_user_data_t *ud)
 {
@@ -485,11 +495,7 @@ ghb_cache_volnames(signal_user_data_t *ud)
 				g_free(name);
 		}
 	
-#if defined(_WIN32)
-		g_free(link->data);
-#else
-		g_object_unref(link->data);
-#endif
+		free_drive(link->data);
 		link = link->next;
 	}
 	g_mutex_unlock(volname_mutex);
@@ -801,7 +807,7 @@ source_dialog_extra_widgets(
 		gchar *name = get_dvd_device_name(link->data);
 		gtk_combo_box_append_text(combo, name);
 		g_free(name);
-		g_object_unref(link->data);
+		free_drive(link->data);
 		link = link->next;
 	}
 	g_list_free(drives);
@@ -3032,11 +3038,7 @@ ghb_file_menu_add_dvd(signal_user_data_t *ud)
 				(GCallback)dvd_source_activate_cb, ud);
 			g_free(name);
 			g_free(drive);
-#if defined(_WIN32)
-			g_free(link->data);
-#else
-			g_object_unref(link->data);
-#endif
+			free_drive(link->data);
 			link = link->next;
 		}
 		g_list_free(drives);
