@@ -596,6 +596,8 @@ validate_settings(signal_user_data_t *ud)
 		g_free(destdir);
 		return FALSE;
 	}
+#if !defined(_WIN32)
+	// This doesn't work properly on windows
 	if (g_access(destdir, R_OK|W_OK) != 0)
 	{
 		message = g_strdup_printf(
@@ -608,6 +610,7 @@ validate_settings(signal_user_data_t *ud)
 		g_free(destdir);
 		return FALSE;
 	}
+#endif
 	GFile *gfile;
 	GFileInfo *info;
 	guint64 size;
