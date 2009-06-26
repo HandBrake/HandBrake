@@ -171,6 +171,8 @@ ghb_preview_init(signal_user_data_t *ud)
 	}
 
 	g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
+	g_object_set(ud->preview->play, "subtitle-font-desc", 
+				"sans bold 20", NULL);
 	//g_object_set(G_OBJECT(xover), "force-aspect-ratio", TRUE, NULL);
 
 	bus = gst_pipeline_get_bus(GST_PIPELINE(ud->preview->play));

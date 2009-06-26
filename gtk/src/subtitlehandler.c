@@ -171,6 +171,7 @@ ghb_add_subtitle(signal_user_data_t *ud, GValue *settings)
 		widget = GHB_WIDGET (ud->builder, "subtitle_add");
 		gtk_widget_set_sensitive(widget, FALSE);
 	}
+	ghb_live_reset(ud);
 }
 
 static void
@@ -424,6 +425,7 @@ subtitle_forced_toggled_cb(
 
 	ghb_settings_set_boolean(settings, "SubtitleForced", active);
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 1, active, -1);
+	ghb_live_reset(ud);
 }
 
 G_MODULE_EXPORT void
@@ -479,6 +481,7 @@ subtitle_burned_toggled_cb(
 	// Unburn the rest
 	if (active)
 		ghb_subtitle_exclusive_burn(ud, row);
+	ghb_live_reset(ud);
 }
 
 G_MODULE_EXPORT void
@@ -526,6 +529,7 @@ subtitle_default_toggled_cb(
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 3, active, -1);
 	// allow only one default
 	ghb_subtitle_exclusive_default(ud, row);
+	ghb_live_reset(ud);
 }
 
 static void
@@ -606,6 +610,7 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	g_debug("subtitle_track_changed_cb ()");
 	ghb_check_dependency(ud, widget);
+	ghb_widget_to_setting(ud->settings, widget);
 	settings = ghb_selected_subtitle_settings(ud);
 	if (settings != NULL)
 	{
@@ -619,6 +624,7 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		tt = ghb_settings_get_int(settings, "SubtitleTrack");
 		source = ghb_subtitle_track_source(ud, tt);
 		ghb_settings_set_int(settings, "SubtitleSource", source);
+		ghb_live_reset(ud);
 	}
 	ghb_live_reset(ud);
 }
@@ -781,6 +787,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 		GValue *old = ghb_array_get_nth(subtitle_list, row);
 		ghb_value_free(old);
 		ghb_array_remove(subtitle_list, row);
+		ghb_live_reset(ud);
 	}
 }
 
