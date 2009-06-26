@@ -45,7 +45,7 @@ namespace Handbrake
             // Load and setup the splash screen in this thread
             splash = new frmSplashScreen();
             splash.Show();
-            Label lblStatus = new Label { Size = new Size(250, 20), Location = new Point(10, 280) };
+            Label lblStatus = new Label { Size = new Size(150, 20), Location = new Point(182, 102) };
             splash.Controls.Add(lblStatus);
 
             InitializeComponent();
@@ -974,37 +974,32 @@ namespace Handbrake
         // Output Settings
         private void drop_format_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drop_format.SelectedIndex == 0)
-                setExtension(".mp4");
-            else if (drop_format.SelectedIndex == 1)
-                setExtension(".m4v");
-            else if (drop_format.SelectedIndex == 2)
-                setExtension(".mkv");
+            switch (drop_format.SelectedIndex)
+            {
+                case 0:
+                    setExtension(".mp4");
+                    break;
+                case 1:
+                    setExtension(".m4v");
+                    break;
+                case 2:
+                    setExtension(".mkv");
+                    break;
+            }
 
             AudioSettings.setAudioByContainer(drop_format.Text);
             Subtitles.setContainer(drop_format.SelectedIndex);
 
-            string oldval;
             if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
             {
-                oldval = drp_videoEncoder.Text;
-                drp_videoEncoder.Items.Clear();
-                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("H.264 (x264)");
-                if (oldval == "VP3 (Theora)")
+                if (drp_videoEncoder.Items.Contains("VP3 (Theora)"))
+                {
+                    drp_videoEncoder.Items.Remove("VP3 (Theora)");
                     drp_videoEncoder.SelectedIndex = 1;
-                else
-                    drp_videoEncoder.Text = oldval;
+                }
             }
             else if (drop_format.Text.Contains("MKV"))
-            {
-                oldval = drp_videoEncoder.Text;
-                drp_videoEncoder.Items.Clear();
-                drp_videoEncoder.Items.Add("MPEG-4 (FFmpeg)");
-                drp_videoEncoder.Items.Add("H.264 (x264)");
                 drp_videoEncoder.Items.Add("VP3 (Theora)");
-                drp_videoEncoder.Text = oldval;
-            }
         }
         private void setExtension(string newExtension)
         {
@@ -1044,18 +1039,19 @@ namespace Handbrake
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
+                    if (slider_videoQuality.Value > 31)
+                        slider_videoQuality.Value = 20;   // Just reset to 70% QP 10 on encode change.
                     slider_videoQuality.Minimum = 1;
                     slider_videoQuality.Maximum = 31;
-                    slider_videoQuality.Value = 1;
-                    SliderValue.Text = "0% QP: 31.00";
                     break;
                 case "H.264 (x264)":
                     slider_videoQuality.Minimum = 0;
-                    slider_videoQuality.Value = 0;
                     slider_videoQuality.TickFrequency = 1;
-                    SliderValue.Text = "0% RF: 51.00";
-                    String step = Properties.Settings.Default.x264cqstep;
-                    switch (step)
+
+                    double multiplier = 1.0 / Properties.Settings.Default.x264cqstep;
+                    double value = slider_videoQuality.Value*multiplier;
+                    
+                    switch (Properties.Settings.Default.x264cqstep.ToString())
                     {
                         case "0.20":
                             slider_videoQuality.Maximum = 255;
@@ -1063,11 +1059,8 @@ namespace Handbrake
                         case "0.25":
                             slider_videoQuality.Maximum = 204;
                             break;
-                        case "0.33":
-                            slider_videoQuality.Maximum = 155;
-                            break;
                         case "0.50":
-                            slider_videoQuality.Maximum = 102;
+                            slider_videoQuality.Maximum = 40;
                             break;
                         case "1.0":
                             slider_videoQuality.Maximum = 51;
@@ -1076,12 +1069,15 @@ namespace Handbrake
                             slider_videoQuality.Maximum = 51;
                             break;
                     }
+                    if (value < slider_videoQuality.Maximum)
+                        slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
+
                     break;
                 case "VP3 (Theora)":
+                    if (slider_videoQuality.Value > 63)
+                        slider_videoQuality.Value = 45;  // Just reset to 70% QP 45 on encode change.
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.Maximum = 63;
-                    slider_videoQuality.Value = 0;
-                    SliderValue.Text = "0% QP: 0.00";
                     break;
             }
         }
@@ -1118,12 +1114,7 @@ namespace Handbrake
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
-                    double divided;
-                    System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-                    double.TryParse(Properties.Settings.Default.x264cqstep,
-                                    System.Globalization.NumberStyles.Number,
-                                    culture,
-                                    out divided);
+                    double divided = Properties.Settings.Default.x264cqstep;
                     rfValue = 51.0 - slider_videoQuality.Value * divided;
                     max = slider_videoQuality.Maximum * divided;
                     min = slider_videoQuality.Minimum;
@@ -1513,7 +1504,7 @@ namespace Handbrake
         {
             if (presetHandler.checkIfPresetsAreOutOfDate())
                 if (!Properties.Settings.Default.presetNotification)
-                    MessageBox.Show(
+                    MessageBox.Show(this,
                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

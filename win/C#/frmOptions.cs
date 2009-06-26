@@ -119,7 +119,7 @@ namespace Handbrake
             numeric_updateCheckDays.Value = Properties.Settings.Default.daysBetweenUpdateCheck;
 
             // x264 step
-            drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep;
+            drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep.ToString();
 
             // Use Experimental dvdnav
             if (Properties.Settings.Default.dvdnav)
@@ -291,7 +291,21 @@ namespace Handbrake
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.x264cqstep = drop_x264step.Text;
+            switch (drop_x264step.SelectedIndex)
+            {
+                case 0:
+                    Properties.Settings.Default.x264cqstep = 1.0;
+                    break;
+                case 1:
+                    Properties.Settings.Default.x264cqstep = 0.50;
+                    break;
+                case 2:
+                    Properties.Settings.Default.x264cqstep = 0.25;
+                    break;
+                case 3:
+                    Properties.Settings.Default.x264cqstep = 0.20;
+                    break;
+            }
         }
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)

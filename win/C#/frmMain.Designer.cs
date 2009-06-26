@@ -1228,7 +1228,6 @@ namespace Handbrake
             // 
             // toolStrip1
             // 
-            this.toolStrip1.BackColor = System.Drawing.Color.Transparent;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_source,
@@ -1241,7 +1240,7 @@ namespace Handbrake
             this.btn_ActivityWindow});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip1.Size = new System.Drawing.Size(1000, 39);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
@@ -1437,6 +1436,7 @@ namespace Handbrake
             // 
             // PictureSettings
             // 
+            this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
             this.PictureSettings.Location = new System.Drawing.Point(0, 0);
             this.PictureSettings.Name = "PictureSettings";
             this.PictureSettings.Size = new System.Drawing.Size(713, 310);

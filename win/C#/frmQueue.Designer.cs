@@ -67,6 +67,11 @@ namespace Handbrake
             this.Destination = new System.Windows.Forms.ColumnHeader();
             this.EncoderVideo = new System.Windows.Forms.ColumnHeader();
             this.Audio = new System.Windows.Forms.ColumnHeader();
+            this.mnu_queue = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_up = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_Down = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
@@ -74,17 +79,12 @@ namespace Handbrake
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.mnu_queue = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnu_up = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_Down = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
+            this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.mnu_queue.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_down
@@ -231,7 +231,7 @@ namespace Handbrake
             this.drop_button_queue});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip1.Size = new System.Drawing.Size(779, 39);
             this.toolStrip1.TabIndex = 71;
             this.toolStrip1.Text = "toolStrip1";
@@ -242,7 +242,7 @@ namespace Handbrake
             this.btn_encode.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_encode.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_encode.Name = "btn_encode";
-            this.btn_encode.Size = new System.Drawing.Size(84, 36);
+            this.btn_encode.Size = new System.Drawing.Size(78, 36);
             this.btn_encode.Text = "Encode";
             this.btn_encode.Click += new System.EventHandler(this.btn_encode_Click);
             // 
@@ -253,7 +253,7 @@ namespace Handbrake
             this.btn_pause.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_pause.Name = "btn_pause";
             this.btn_pause.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.btn_pause.Size = new System.Drawing.Size(75, 36);
+            this.btn_pause.Size = new System.Drawing.Size(72, 36);
             this.btn_pause.Text = "Pause";
             this.btn_pause.Visible = false;
             this.btn_pause.Click += new System.EventHandler(this.btn_pause_Click);
@@ -275,14 +275,14 @@ namespace Handbrake
             this.drop_button_queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.drop_button_queue.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.drop_button_queue.Name = "drop_button_queue";
-            this.drop_button_queue.Size = new System.Drawing.Size(89, 36);
+            this.drop_button_queue.Size = new System.Drawing.Size(84, 36);
             this.drop_button_queue.Text = "Queue";
             // 
             // mnu_batch
             // 
             this.mnu_batch.Image = global::Handbrake.Properties.Resources.Output_Small;
             this.mnu_batch.Name = "mnu_batch";
-            this.mnu_batch.Size = new System.Drawing.Size(207, 22);
+            this.mnu_batch.Size = new System.Drawing.Size(190, 22);
             this.mnu_batch.Text = "Generate Batch Script";
             this.mnu_batch.Click += new System.EventHandler(this.mnu_batch_Click);
             // 
@@ -290,7 +290,7 @@ namespace Handbrake
             // 
             this.mnu_import.Image = global::Handbrake.Properties.Resources.folder;
             this.mnu_import.Name = "mnu_import";
-            this.mnu_import.Size = new System.Drawing.Size(207, 22);
+            this.mnu_import.Size = new System.Drawing.Size(190, 22);
             this.mnu_import.Text = "Import Queue";
             this.mnu_import.Click += new System.EventHandler(this.mnu_import_Click);
             // 
@@ -298,21 +298,21 @@ namespace Handbrake
             // 
             this.mnu_export.Image = global::Handbrake.Properties.Resources.save;
             this.mnu_export.Name = "mnu_export";
-            this.mnu_export.Size = new System.Drawing.Size(207, 22);
+            this.mnu_export.Size = new System.Drawing.Size(190, 22);
             this.mnu_export.Text = "Export Queue";
             this.mnu_export.Click += new System.EventHandler(this.mnu_export_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(204, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
             // 
             // mnu_readd
             // 
             this.mnu_readd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.mnu_readd.Image = global::Handbrake.Properties.Resources.AddToQueue_small;
             this.mnu_readd.Name = "mnu_readd";
-            this.mnu_readd.Size = new System.Drawing.Size(207, 22);
+            this.mnu_readd.Size = new System.Drawing.Size(190, 22);
             this.mnu_readd.Text = "Re-Add Current Job";
             this.mnu_readd.Click += new System.EventHandler(this.mnu_readd_Click);
             // 
@@ -373,6 +373,42 @@ namespace Handbrake
             this.Audio.Text = "Audio Encoder";
             this.Audio.Width = 94;
             // 
+            // mnu_queue
+            // 
+            this.mnu_queue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_up,
+            this.mnu_Down,
+            this.toolStripSeparator3,
+            this.mnu_delete});
+            this.mnu_queue.Name = "mnu_queue";
+            this.mnu_queue.Size = new System.Drawing.Size(142, 76);
+            // 
+            // mnu_up
+            // 
+            this.mnu_up.Name = "mnu_up";
+            this.mnu_up.Size = new System.Drawing.Size(141, 22);
+            this.mnu_up.Text = "Move Up";
+            this.mnu_up.Click += new System.EventHandler(this.mnu_up_Click);
+            // 
+            // mnu_Down
+            // 
+            this.mnu_Down.Name = "mnu_Down";
+            this.mnu_Down.Size = new System.Drawing.Size(141, 22);
+            this.mnu_Down.Text = "Move Down";
+            this.mnu_Down.Click += new System.EventHandler(this.mnu_Down_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(138, 6);
+            // 
+            // mnu_delete
+            // 
+            this.mnu_delete.Name = "mnu_delete";
+            this.mnu_delete.Size = new System.Drawing.Size(141, 22);
+            this.mnu_delete.Text = "Delete";
+            this.mnu_delete.Click += new System.EventHandler(this.mnu_delete_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -388,7 +424,7 @@ namespace Handbrake
             this.lbl_encodesPending.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.lbl_encodesPending.Margin = new System.Windows.Forms.Padding(0, 3, 10, 2);
             this.lbl_encodesPending.Name = "lbl_encodesPending";
-            this.lbl_encodesPending.Size = new System.Drawing.Size(122, 17);
+            this.lbl_encodesPending.Size = new System.Drawing.Size(105, 17);
             this.lbl_encodesPending.Text = "0 encode(s) pending";
             // 
             // OpenFile
@@ -454,42 +490,6 @@ namespace Handbrake
             this.panel1.Size = new System.Drawing.Size(15, 234);
             this.panel1.TabIndex = 75;
             // 
-            // mnu_queue
-            // 
-            this.mnu_queue.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_up,
-            this.mnu_Down,
-            this.toolStripSeparator3,
-            this.mnu_delete});
-            this.mnu_queue.Name = "mnu_queue";
-            this.mnu_queue.Size = new System.Drawing.Size(153, 98);
-            // 
-            // mnu_up
-            // 
-            this.mnu_up.Name = "mnu_up";
-            this.mnu_up.Size = new System.Drawing.Size(152, 22);
-            this.mnu_up.Text = "Move Up";
-            this.mnu_up.Click += new System.EventHandler(this.mnu_up_Click);
-            // 
-            // mnu_Down
-            // 
-            this.mnu_Down.Name = "mnu_Down";
-            this.mnu_Down.Size = new System.Drawing.Size(152, 22);
-            this.mnu_Down.Text = "Move Down";
-            this.mnu_Down.Click += new System.EventHandler(this.mnu_Down_Click);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
-            // 
-            // mnu_delete
-            // 
-            this.mnu_delete.Name = "mnu_delete";
-            this.mnu_delete.Size = new System.Drawing.Size(152, 22);
-            this.mnu_delete.Text = "Delete";
-            this.mnu_delete.Click += new System.EventHandler(this.mnu_delete_Click);
-            // 
             // frmQueue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -506,13 +506,13 @@ namespace Handbrake
             this.Text = "Encode Queue";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.mnu_queue.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            this.mnu_queue.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
