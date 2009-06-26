@@ -3467,6 +3467,46 @@ no-dct-decimate=0:cabac=1</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkAlignment" id="alignment62">
+                            <property name="visible">True</property>
+                            <property name="left_padding">12</property>
+                            <property name="right_padding">12</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
+                            <child>
+                              <object class="GtkHBox" id="hbox82">
+                                <property name="visible">True</property>
+                                <property name="spacing">4</property>
+                                <child>
+                                  <object class="GtkComboBox" id="WhenComplete">
+                                    <property name="visible">True</property>
+                                    <signal name="changed" handler="pref_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="labela1">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">When all encodes are complete</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkAlignment" id="alignment5">
                             <property name="visible">True</property>
                             <property name="left_padding">12</property>
@@ -3555,7 +3595,7 @@ no-dct-decimate=0:cabac=1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -3600,7 +3640,7 @@ no-dct-decimate=0:cabac=1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -3622,7 +3662,7 @@ no-dct-decimate=0:cabac=1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                       </object>

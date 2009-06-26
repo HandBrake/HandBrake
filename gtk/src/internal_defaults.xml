@@ -167,6 +167,8 @@
 		<true />
 		<key>constant_rate_factor</key>
 		<true />
+		<key>WhenComplete</key>
+		<string>notify</string>
 	</dict>
 	<key>XlatPresets</key>
 	<dict>

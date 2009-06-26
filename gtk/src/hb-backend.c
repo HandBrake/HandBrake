@@ -69,6 +69,19 @@ index_str_init(gint max_index)
 	}
 }
 
+static options_map_t d_when_complete_opts[] =
+{
+	{"Do Nothing",            "nothing",  0, "0"},
+	{"Show Notification",     "notify",   1, "1"},
+	{"Put Computer To Sleep", "sleep",    2, "2"},
+	{"Shutdown Computer",     "shutdown", 3, "3"},
+};
+combo_opts_t when_complete_opts =
+{
+	sizeof(d_when_complete_opts)/sizeof(options_map_t),
+	d_when_complete_opts
+};
+
 static options_map_t d_par_opts[] =
 {
 	{"Off", "0", 0, "0"},
@@ -331,6 +344,7 @@ typedef struct
 
 combo_name_map_t combo_name_map[] =
 {
+	{"WhenComplete", &when_complete_opts},
 	{"PicturePAR", &par_opts},
 	{"PictureModulus", &alignment_opts},
 	{"LoggingLevel", &logging_opts},
@@ -2232,6 +2246,7 @@ ghb_update_ui_combo_box(
 		audio_track_opts_set(ud->builder, "AudioTrack", user_data);
 		subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
 		generic_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
+		generic_opts_set(ud->builder, "WhenComplete", &when_complete_opts);
 		generic_opts_set(ud->builder, "PicturePAR", &par_opts);
 		generic_opts_set(ud->builder, "PictureModulus", &alignment_opts);
 		generic_opts_set(ud->builder, "LoggingLevel", &logging_opts);
