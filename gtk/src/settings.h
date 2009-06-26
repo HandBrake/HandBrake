@@ -53,6 +53,7 @@ typedef struct
 	preview_t *preview;
 	gchar *appcast;
 	gint appcast_len;
+	GdkVisibilityState hb_visibility;
 } signal_user_data_t;
 
 enum

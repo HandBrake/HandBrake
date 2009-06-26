@@ -457,6 +457,8 @@
     <property name="default_width">500</property>
     <property name="default_height">400</property>
     <property name="icon_name">hb-icon</property>
+    <property name="events">GDK_VISIBILITY_NOTIFY_MASK</property>
+    <signal handler="hb_visibility_event_cb" name="visibility_notify_event"/>
     <signal handler="window_destroy_event_cb" name="destroy_event"/>
     <signal handler="window_delete_event_cb" name="delete_event"/>
     <child>
@@ -3608,13 +3610,13 @@ no-dct-decimate=0:cabac=1</property>
                             <property name="bottom_padding">6</property>
                             <property name="left_padding">12</property>
                             <child>
-                              <object class="GtkCheckButton" id="skip_taskbar">
-                                <property name="label" translatable="yes">Minimize to System Tray</property>
+                              <object class="GtkCheckButton" id="show_status">
+                                <property name="label" translatable="yes">Show system tray icon</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="skip_taskbar_cb"/>
+                                <signal name="toggled" handler="show_status_cb"/>
                               </object>
                             </child>
                           </object>
@@ -5969,6 +5971,7 @@ libx264 authors:
     </child>
   </object>
   <object class="GtkStatusIcon" id="hb_status">
+    <property name="visible">False</property>
     <property name="icon_name">hb-icon</property>
     <signal handler="status_activate_cb" name="activate"/>
   </object>

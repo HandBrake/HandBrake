@@ -800,6 +800,9 @@ main (int argc, char *argv[])
 	GtkStatusIcon *si;
 	si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 
+	gtk_status_icon_set_visible(si,
+			ghb_settings_get_boolean(ud->settings, "show_status"));
+
 #if GTK_CHECK_VERSION(2, 16, 0)
 	gtk_status_icon_set_has_tooltip(si, TRUE);
 	g_signal_connect(si, "query-tooltip", 
@@ -807,11 +810,6 @@ main (int argc, char *argv[])
 #else
 	gtk_status_icon_set_tooltip(si, "HandBrake");
 #endif
-
-	GtkWindow *window;
-	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
-	gtk_window_set_skip_taskbar_hint(window, 
-			ghb_settings_get_boolean(ud->settings, "skip_taskbar"));
 
 	// Everything should be go-to-go.  Lets rock!
 

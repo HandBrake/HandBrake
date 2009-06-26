@@ -2932,18 +2932,19 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-skip_taskbar_cb(GtkWidget *widget, signal_user_data_t *ud)
+show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	g_debug("pref_changed_cb");
+	g_debug("show_status_cb");
 	ghb_widget_to_setting (ud->settings, widget);
 	ghb_check_dependency(ud, widget);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
 
-	GtkWindow *window;
-	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
-	gtk_window_set_skip_taskbar_hint(window, 
-			ghb_settings_get_boolean(ud->settings, "skip_taskbar"));
+	GtkStatusIcon *si;
+
+	si = GTK_STATUS_ICON(GHB_OBJECT (ud->builder, "hb_status"));
+	gtk_status_icon_set_visible(si,
+			ghb_settings_get_boolean(ud->settings, "show_status"));
 }
 
 G_MODULE_EXPORT void
@@ -3801,13 +3802,35 @@ ghb_check_update(signal_user_data_t *ud)
 	return NULL;
 }
 
+G_MODULE_EXPORT gboolean
+hb_visibility_event_cb(
+	GtkWidget *widget, 
+	GdkEventVisibility *vs, 
+	signal_user_data_t *ud)
+{
+	ud->hb_visibility = vs->state;
+	return FALSE;
+}
+
 G_MODULE_EXPORT void
 status_activate_cb(GtkStatusIcon *si, signal_user_data_t *ud)
 {
 	GtkWindow *window;
+	GdkWindowState state;
 
 	window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-	gtk_window_present(window);
+	state = gdk_window_get_state(GTK_WIDGET(window)->window);
+	if ((state & GDK_WINDOW_STATE_ICONIFIED) ||
+		(ud->hb_visibility != GDK_VISIBILITY_UNOBSCURED))
+	{
+		gtk_window_present(window);
+		gtk_window_set_skip_taskbar_hint(window, FALSE);
+	}
+	else
+	{
+		gtk_window_set_skip_taskbar_hint(window, TRUE);
+		gtk_window_iconify(window);
+	}
 }
 
 #if !defined(_WIN32)
