@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.drp_subtitleTracks = new System.Windows.Forms.ComboBox();
             this.AudioTrackGroup = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -43,7 +44,13 @@
             this.burned = new System.Windows.Forms.ColumnHeader();
             this.defaultTrack = new System.Windows.Forms.ColumnHeader();
             this.label68 = new System.Windows.Forms.Label();
+            this.subMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_moveup = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_movedown = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnu_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.AudioTrackGroup.SuspendLayout();
+            this.subMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // drp_subtitleTracks
@@ -154,6 +161,7 @@
             this.forced,
             this.burned,
             this.defaultTrack});
+            this.lv_subList.ContextMenuStrip = this.subMenu;
             this.lv_subList.FullRowSelect = true;
             this.lv_subList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lv_subList.HideSelection = false;
@@ -203,6 +211,43 @@
             this.label68.TabIndex = 67;
             this.label68.Text = "Subtitles";
             // 
+            // subMenu
+            // 
+            this.subMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_moveup,
+            this.mnu_movedown,
+            this.toolStripSeparator2,
+            this.mnu_remove});
+            this.subMenu.Name = "audioMenu";
+            this.subMenu.Size = new System.Drawing.Size(142, 76);
+            // 
+            // mnu_moveup
+            // 
+            this.mnu_moveup.Name = "mnu_moveup";
+            this.mnu_moveup.Size = new System.Drawing.Size(141, 22);
+            this.mnu_moveup.Text = "Move Up";
+            this.mnu_moveup.Click += new System.EventHandler(this.mnu_moveup_Click);
+            // 
+            // mnu_movedown
+            // 
+            this.mnu_movedown.Name = "mnu_movedown";
+            this.mnu_movedown.Size = new System.Drawing.Size(141, 22);
+            this.mnu_movedown.Text = "Move Down";
+            this.mnu_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.mnu_movedown.Click += new System.EventHandler(this.mnu_movedown_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            // 
+            // mnu_remove
+            // 
+            this.mnu_remove.Name = "mnu_remove";
+            this.mnu_remove.Size = new System.Drawing.Size(141, 22);
+            this.mnu_remove.Text = "Remove";
+            this.mnu_remove.Click += new System.EventHandler(this.mnu_remove_Click);
+            // 
             // Subtitles
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -216,6 +261,7 @@
             this.Size = new System.Drawing.Size(719, 300);
             this.AudioTrackGroup.ResumeLayout(false);
             this.AudioTrackGroup.PerformLayout();
+            this.subMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,5 +284,10 @@
         private System.Windows.Forms.CheckBox check_default;
         private System.Windows.Forms.CheckBox check_burned;
         private System.Windows.Forms.CheckBox check_forced;
+        private System.Windows.Forms.ContextMenuStrip subMenu;
+        private System.Windows.Forms.ToolStripMenuItem mnu_moveup;
+        private System.Windows.Forms.ToolStripMenuItem mnu_movedown;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem mnu_remove;
     }
 }

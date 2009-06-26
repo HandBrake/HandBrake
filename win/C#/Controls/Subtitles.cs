@@ -6,10 +6,6 @@ namespace Handbrake.Controls
     public partial class Subtitles : UserControl
     {
 
-        // TODO
-        // - Right click menu for adding/removal of tracks.
-        // - Multi-select for removal.
-
         public Subtitles()
         {
             InitializeComponent();
@@ -171,6 +167,46 @@ namespace Handbrake.Controls
                 lv_subList.Select();
             }
         }
+        
+        // Right Click Menu
+        private void mnu_moveup_Click(object sender, EventArgs e)
+        {
+            if (lv_subList.SelectedIndices.Count != 0)
+            {
+                ListViewItem item = lv_subList.SelectedItems[0];
+                int index = item.Index;
+                index--;
+
+                if (lv_subList.Items.Count > index && index >= 0)
+                {
+                    lv_subList.Items.Remove(item);
+                    lv_subList.Items.Insert(index, item);
+                    item.Selected = true;
+                    lv_subList.Focus();
+                }
+            }
+        }
+        private void mnu_movedown_Click(object sender, EventArgs e)
+        {
+            if (lv_subList.SelectedIndices.Count != 0)
+            {
+                ListViewItem item = lv_subList.SelectedItems[0];
+                int index = item.Index;
+                index++;
+
+                if (index < lv_subList.Items.Count)
+                {
+                    lv_subList.Items.Remove(item);
+                    lv_subList.Items.Insert(index, item);
+                    item.Selected = true;
+                    lv_subList.Focus();
+                }
+            }
+        }
+        private void mnu_remove_Click(object sender, EventArgs e)
+        {
+            removeTrack();
+        }
 
         // Functions
         private void setNoDefault()
@@ -229,6 +265,5 @@ namespace Handbrake.Controls
                 i++;
             }
         }
-
     }
 }

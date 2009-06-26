@@ -212,6 +212,7 @@ namespace Handbrake
         {
             Properties.Settings.Default.saveLogWithVideo = check_saveLogWithVideo.Checked;
         }
+
         private void check_logsInSpecifiedLocation_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.saveLogToSpecifiedPath = check_logsInSpecifiedLocation.Checked;
@@ -242,9 +243,13 @@ namespace Handbrake
 
         private void btn_clearLogs_Click(object sender, EventArgs e)
         {
-            Main.clearLogs();
-            MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+            DialogResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                Main.clearLogs();
+                MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+            }
         }
         #endregion
 
