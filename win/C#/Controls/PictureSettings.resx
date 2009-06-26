@@ -117,713 +117,166 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;label7.Parent" xml:space="preserve">
-    <value>$this</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="text_height.Location" type="System.Drawing.Point, System.Drawing">
+    <value>206, 59</value>
+  </data>
+  <data name="text_height.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 20</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txt_displayWidth.TabIndex" type="System.Int32, mscorlib">
-    <value>53</value>
+  <data name="text_height.TabIndex" type="System.Int32, mscorlib">
+    <value>50</value>
   </data>
-  <data name="&gt;&gt;crop_left.Type" xml:space="preserve">
+  <data name="&gt;&gt;text_height.Name" xml:space="preserve">
+    <value>text_height</value>
+  </data>
+  <data name="&gt;&gt;text_height.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="check_KeepAR.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;lbl_src_res.Parent" xml:space="preserve">
+  <data name="&gt;&gt;text_height.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="crop_left.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="&gt;&gt;text_height.ZOrder" xml:space="preserve">
+    <value>22</value>
   </data>
-  <data name="drop_modulus.Items3" xml:space="preserve">
-    <value>2</value>
+  <data name="text_width.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 59</value>
   </data>
-  <data name="lbl_modulus.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="text_width.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 20</value>
   </data>
-  <data name="check_KeepAR.Text" xml:space="preserve">
-    <value>Keep Aspect Ratio</value>
+  <data name="text_width.TabIndex" type="System.Int32, mscorlib">
+    <value>49</value>
   </data>
-  <data name="label8.TabIndex" type="System.Int32, mscorlib">
-    <value>60</value>
+  <data name="&gt;&gt;text_width.Name" xml:space="preserve">
+    <value>text_width</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="lbl_parHeight.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 225</value>
-  </data>
-  <data name="&gt;&gt;crop_bottom.Name" xml:space="preserve">
-    <value>crop_bottom</value>
-  </data>
-  <data name="&gt;&gt;lbl_Aspect.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbl_Aspect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 12</value>
-  </data>
-  <data name="&gt;&gt;check_KeepAR.Name" xml:space="preserve">
-    <value>check_KeepAR</value>
-  </data>
-  <data name="&gt;&gt;crop_right.Name" xml:space="preserve">
-    <value>crop_right</value>
-  </data>
-  <data name="lbl_src_res.Text" xml:space="preserve">
-    <value>Select a Title</value>
-  </data>
-  <data name="&gt;&gt;lbl_displayWidth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Label15.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_parHeight.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_parWidth.TabIndex" type="System.Int32, mscorlib">
-    <value>56</value>
-  </data>
-  <data name="crop_top.Location" type="System.Drawing.Point, System.Drawing">
-    <value>467, 100</value>
-  </data>
-  <data name="&gt;&gt;toolTip.Name" xml:space="preserve">
-    <value>toolTip</value>
-  </data>
-  <data name="txt_parWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
-  </data>
-  <data name="Label51.Text" xml:space="preserve">
-    <value>Right</value>
-  </data>
-  <data name="&gt;&gt;lbl_max.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lbl_modulus.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label55.Name" xml:space="preserve">
-    <value>Label55</value>
-  </data>
-  <data name="&gt;&gt;label26.ZOrder" xml:space="preserve">
-    <value>30</value>
-  </data>
-  <data name="&gt;&gt;lbl_displayWidth.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;crop_top.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="lbl_anamprohicLbl.Text" xml:space="preserve">
-    <value>Anamorphic:</value>
-  </data>
-  <data name="&gt;&gt;Label15.Name" xml:space="preserve">
-    <value>Label15</value>
-  </data>
-  <data name="&gt;&gt;label6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbl_anamorphic.Text" xml:space="preserve">
-    <value>Select a Title</value>
-  </data>
-  <data name="Label55.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;lbl_src_res.Name" xml:space="preserve">
-    <value>lbl_src_res</value>
-  </data>
-  <data name="drop_modulus.Items" xml:space="preserve">
-    <value>16</value>
-  </data>
-  <data name="label6.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;check_autoCrop.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="lbl_displayWidth.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamprohicLbl.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="label26.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;crop_bottom.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 13</value>
-  </data>
-  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label52.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="check_autoCrop.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_max.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;txt_displayWidth.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="label4.TabIndex" type="System.Int32, mscorlib">
-    <value>48</value>
-  </data>
-  <data name="txt_parWidth.ToolTip" xml:space="preserve">
-    <value>PAR Width - Press "Enter" after entering a new value.
-</value>
-  </data>
-  <data name="lbl_anamorphic.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 12</value>
-  </data>
-  <data name="Label53.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 13</value>
-  </data>
-  <data name="Label53.TabIndex" type="System.Int32, mscorlib">
-    <value>68</value>
-  </data>
-  <data name="check_customCrop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 17</value>
-  </data>
-  <data name="&gt;&gt;lbl_max.ZOrder" xml:space="preserve">
-    <value>25</value>
-  </data>
-  <data name="crop_left.TabIndex" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <data name="lbl_displayWidth.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="lbl_modulus.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_anamprohicLbl.TabIndex" type="System.Int32, mscorlib">
-    <value>73</value>
-  </data>
-  <data name="&gt;&gt;crop_right.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="Label91.TabIndex" type="System.Int32, mscorlib">
-    <value>42</value>
-  </data>
-  <data name="Label53.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="&gt;&gt;crop_left.Name" xml:space="preserve">
-    <value>crop_left</value>
-  </data>
-  <data name="check_customCrop.TabIndex" type="System.Int32, mscorlib">
-    <value>70</value>
-  </data>
-  <data name="&gt;&gt;label4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Label55.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 13</value>
-  </data>
-  <data name="lbl_parWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 199</value>
-  </data>
-  <data name="lbl_max.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 13</value>
-  </data>
-  <data name="label26.Text" xml:space="preserve">
-    <value>Size</value>
-  </data>
-  <data name="lbl_modulus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 13</value>
-  </data>
-  <data name="label4.Text" xml:space="preserve">
-    <value>Height:</value>
-  </data>
-  <data name="lbl_modulus.TabIndex" type="System.Int32, mscorlib">
-    <value>51</value>
-  </data>
-  <data name="&gt;&gt;lbl_parWidth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;check_customCrop.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>PictureSettings</value>
-  </data>
-  <data name="crop_bottom.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="lbl_parWidth.Text" xml:space="preserve">
-    <value>PAR Width:</value>
-  </data>
-  <data name="&gt;&gt;drop_modulus.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label8.Name" xml:space="preserve">
-    <value>label8</value>
-  </data>
-  <data name="drp_anamorphic.Items1" xml:space="preserve">
-    <value>Strict</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamprohicLbl.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="drp_anamorphic.Items3" xml:space="preserve">
-    <value>Custom</value>
-  </data>
-  <data name="&gt;&gt;lbl_Aspect.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="drop_modulus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 143</value>
-  </data>
-  <data name="&gt;&gt;drop_modulus.Name" xml:space="preserve">
-    <value>drop_modulus</value>
-  </data>
-  <data name="&gt;&gt;crop_left.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;lbl_modulus.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;label4.Name" xml:space="preserve">
-    <value>label4</value>
-  </data>
-  <data name="txt_displayWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 170</value>
-  </data>
-  <data name="&gt;&gt;check_customCrop.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lbl_parHeight.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="Label55.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 13</value>
-  </data>
-  <data name="&gt;&gt;crop_bottom.Type" xml:space="preserve">
+  <data name="&gt;&gt;text_width.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lbl_modulus.ZOrder" xml:space="preserve">
-    <value>20</value>
-  </data>
-  <data name="&gt;&gt;lbl_parHeight.Parent" xml:space="preserve">
+  <data name="&gt;&gt;text_width.Parent" xml:space="preserve">
     <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label53.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;Label53.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label91.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="crop_top.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;label8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="drp_anamorphic.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="&gt;&gt;crop_top.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label51.Name" xml:space="preserve">
-    <value>Label51</value>
   </data>
   <data name="&gt;&gt;text_width.ZOrder" xml:space="preserve">
     <value>23</value>
   </data>
-  <data name="txt_displayWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="lbl_parHeight.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 13</value>
+  <data name="label4.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
   </data>
-  <data name="lbl_parHeight.TabIndex" type="System.Int32, mscorlib">
-    <value>58</value>
+  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>152, 63</value>
   </data>
-  <data name="lbl_Aspect.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 13</value>
+  </data>
+  <data name="label4.TabIndex" type="System.Int32, mscorlib">
+    <value>48</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Height:</value>
+  </data>
+  <data name="&gt;&gt;label4.Name" xml:space="preserve">
+    <value>label4</value>
+  </data>
+  <data name="&gt;&gt;label4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
+    <value>24</value>
+  </data>
+  <data name="lbl_max.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_max.Location" type="System.Drawing.Point, System.Drawing">
+    <value>279, 61</value>
+  </data>
+  <data name="lbl_max.Size" type="System.Drawing.Size, System.Drawing">
+    <value>34, 13</value>
+  </data>
+  <data name="lbl_max.TabIndex" type="System.Int32, mscorlib">
+    <value>47</value>
+  </data>
+  <data name="lbl_max.Text" xml:space="preserve">
+    <value>{max}</value>
+  </data>
+  <data name="&gt;&gt;lbl_max.Name" xml:space="preserve">
+    <value>lbl_max</value>
+  </data>
+  <data name="&gt;&gt;lbl_max.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_max.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_max.ZOrder" xml:space="preserve">
+    <value>25</value>
+  </data>
+  <data name="lbl_src_res.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lbl_src_res.Font" type="System.Drawing.Font, System.Drawing">
     <value>Verdana, 6.75pt</value>
   </data>
-  <data name="lbl_displayWidth.Text" xml:space="preserve">
-    <value>Display Width:</value>
+  <data name="lbl_src_res.Location" type="System.Drawing.Point, System.Drawing">
+    <value>66, 36</value>
   </data>
-  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 13</value>
-  </data>
-  <data name="lbl_parWidth.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="check_customCrop.Text" xml:space="preserve">
-    <value>Custom:</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamprohicLbl.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbl_displayWidth.TabIndex" type="System.Int32, mscorlib">
-    <value>54</value>
-  </data>
-  <data name="&gt;&gt;Label55.ZOrder" xml:space="preserve">
-    <value>33</value>
-  </data>
-  <data name="label8.Text" xml:space="preserve">
-    <value>Crop</value>
-  </data>
-  <data name="drop_modulus.Items1" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;label7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label26.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 13</value>
-  </data>
-  <data name="&gt;&gt;lbl_displayWidth.ZOrder" xml:space="preserve">
-    <value>18</value>
-  </data>
-  <data name="lbl_parHeight.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lbl_src_res.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="crop_top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="lbl_Aspect.TabIndex" type="System.Int32, mscorlib">
-    <value>43</value>
-  </data>
-  <data name="&gt;&gt;crop_bottom.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="label7.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label7.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;Label52.Name" xml:space="preserve">
-    <value>Label52</value>
-  </data>
-  <data name="&gt;&gt;drp_anamorphic.ZOrder" xml:space="preserve">
-    <value>29</value>
-  </data>
-  <data name="drop_modulus.TabIndex" type="System.Int32, mscorlib">
-    <value>52</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;check_KeepAR.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="Label51.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="check_autoCrop.TabIndex" type="System.Int32, mscorlib">
-    <value>69</value>
-  </data>
-  <data name="&gt;&gt;txt_parWidth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolTip.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;check_autoCrop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="check_customCrop.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;lbl_max.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label26.Name" xml:space="preserve">
-    <value>label26</value>
-  </data>
-  <data name="Label53.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>384, 13</value>
-  </data>
-  <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>152, 63</value>
-  </data>
-  <data name="&gt;&gt;check_customCrop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="crop_right.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamorphic.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lbl_src_res.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label55.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 63</value>
-  </data>
-  <data name="label8.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;lbl_Aspect.ZOrder" xml:space="preserve">
-    <value>31</value>
-  </data>
-  <data name="Label15.Text" xml:space="preserve">
-    <value>Left</value>
-  </data>
-  <data name="text_height.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 20</value>
-  </data>
-  <data name="&gt;&gt;lbl_src_res.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;check_autoCrop.Name" xml:space="preserve">
-    <value>check_autoCrop</value>
-  </data>
-  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
-    <value>27</value>
-  </data>
-  <data name="&gt;&gt;Label15.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="label7.Text" xml:space="preserve">
-    <value>Source:</value>
-  </data>
-  <data name="Label55.TabIndex" type="System.Int32, mscorlib">
-    <value>44</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamorphic.Name" xml:space="preserve">
-    <value>lbl_anamorphic</value>
-  </data>
-  <data name="Label15.TabIndex" type="System.Int32, mscorlib">
-    <value>61</value>
-  </data>
-  <data name="&gt;&gt;lbl_Aspect.Name" xml:space="preserve">
-    <value>lbl_Aspect</value>
-  </data>
-  <data name="label26.TabIndex" type="System.Int32, mscorlib">
-    <value>39</value>
-  </data>
-  <data name="Label51.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 13</value>
-  </data>
-  <data name="lbl_max.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;text_height.Name" xml:space="preserve">
-    <value>text_height</value>
+  <data name="lbl_src_res.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 12</value>
   </data>
   <data name="lbl_src_res.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
   </data>
-  <data name="&gt;&gt;Label91.ZOrder" xml:space="preserve">
-    <value>32</value>
+  <data name="lbl_src_res.Text" xml:space="preserve">
+    <value>Select a Title</value>
   </data>
-  <data name="Label52.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 13</value>
+  <data name="&gt;&gt;lbl_src_res.Name" xml:space="preserve">
+    <value>lbl_src_res</value>
   </data>
-  <data name="&gt;&gt;crop_right.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;lbl_src_res.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lbl_src_res.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="Label52.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+  <data name="&gt;&gt;lbl_src_res.ZOrder" xml:space="preserve">
+    <value>26</value>
   </data>
-  <data name="Label91.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
-  </data>
-  <data name="&gt;&gt;label6.Name" xml:space="preserve">
-    <value>label6</value>
-  </data>
-  <data name="&gt;&gt;txt_parWidth.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;label7.Name" xml:space="preserve">
-    <value>label7</value>
-  </data>
-  <data name="&gt;&gt;check_autoCrop.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="text_width.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 20</value>
-  </data>
-  <data name="lbl_anamorphic.TabIndex" type="System.Int32, mscorlib">
-    <value>74</value>
-  </data>
-  <data name="lbl_anamorphic.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lbl_max.TabIndex" type="System.Int32, mscorlib">
-    <value>47</value>
-  </data>
-  <data name="drp_anamorphic.TabIndex" type="System.Int32, mscorlib">
-    <value>46</value>
-  </data>
-  <data name="Label52.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 13</value>
   </data>
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 35</value>
   </data>
-  <data name="label4.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 13</value>
   </data>
-  <data name="Label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>561, 124</value>
+  <data name="label7.TabIndex" type="System.Int32, mscorlib">
+    <value>40</value>
   </data>
-  <data name="&gt;&gt;drp_anamorphic.Name" xml:space="preserve">
-    <value>drp_anamorphic</value>
+  <data name="label7.Text" xml:space="preserve">
+    <value>Source:</value>
   </data>
-  <data name="&gt;&gt;check_KeepAR.ZOrder" xml:space="preserve">
-    <value>13</value>
+  <data name="&gt;&gt;label7.Name" xml:space="preserve">
+    <value>label7</value>
   </data>
-  <data name="lbl_parHeight.Text" xml:space="preserve">
-    <value>PAR Height:</value>
+  <data name="&gt;&gt;label7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>24</value>
-  </data>
-  <data name="&gt;&gt;crop_right.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label7.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="lbl_parWidth.ToolTip" xml:space="preserve">
-    <value />
+  <data name="&gt;&gt;label7.ZOrder" xml:space="preserve">
+    <value>27</value>
   </data>
-  <data name="lbl_src_res.Location" type="System.Drawing.Point, System.Drawing">
-    <value>66, 36</value>
-  </data>
-  <data name="txt_parHeight.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
-  </data>
-  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
-    <value>28</value>
-  </data>
-  <data name="txt_parHeight.TabIndex" type="System.Int32, mscorlib">
-    <value>57</value>
-  </data>
-  <data name="text_height.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_Aspect.Location" type="System.Drawing.Point, System.Drawing">
-    <value>241, 36</value>
-  </data>
-  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>666, 279</value>
-  </data>
-  <data name="lbl_anamorphic.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label52.TabIndex" type="System.Int32, mscorlib">
-    <value>63</value>
-  </data>
-  <data name="Label51.AutoSize" type="System.Boolean, mscorlib">
+  <data name="label6.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
-  </data>
-  <data name="crop_right.Location" type="System.Drawing.Point, System.Drawing">
-    <value>518, 122</value>
-  </data>
-  <data name="&gt;&gt;Label51.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;text_width.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="Label91.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 13</value>
-  </data>
-  <data name="&gt;&gt;lbl_parHeight.Name" xml:space="preserve">
-    <value>lbl_parHeight</value>
-  </data>
-  <data name="&gt;&gt;lbl_parWidth.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="label26.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="crop_right.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="text_height.Location" type="System.Drawing.Point, System.Drawing">
-    <value>206, 59</value>
-  </data>
-  <data name="check_KeepAR.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 85</value>
-  </data>
-  <data name="lbl_anamorphic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>108, 250</value>
-  </data>
-  <data name="crop_left.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="check_autoCrop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 17</value>
-  </data>
-  <data name="lbl_Aspect.Text" xml:space="preserve">
-    <value>Select a Title</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamorphic.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;lbl_parHeight.ZOrder" xml:space="preserve">
-    <value>14</value>
-  </data>
-  <data name="lbl_modulus.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="crop_bottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>467, 146</value>
-  </data>
-  <data name="&gt;&gt;lbl_parWidth.Name" xml:space="preserve">
-    <value>lbl_parWidth</value>
-  </data>
-  <data name="&gt;&gt;label26.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txt_parHeight.Name" xml:space="preserve">
-    <value>txt_parHeight</value>
-  </data>
-  <data name="lbl_displayWidth.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label91.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_modulus.Text" xml:space="preserve">
-    <value>Modulus:</value>
-  </data>
-  <data name="&gt;&gt;text_height.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;crop_top.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="Label91.Location" type="System.Drawing.Point, System.Drawing">
-    <value>152, 35</value>
-  </data>
-  <data name="&gt;&gt;lbl_parWidth.ZOrder" xml:space="preserve">
-    <value>16</value>
   </data>
   <data name="label6.Font" type="System.Drawing.Font, System.Drawing">
     <value>Verdana, 8.25pt</value>
@@ -831,257 +284,676 @@
   <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 119</value>
   </data>
-  <data name="&gt;&gt;Label55.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txt_parWidth.ZOrder" xml:space="preserve">
-    <value>17</value>
-  </data>
-  <data name="&gt;&gt;Label55.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="lbl_anamorphic.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 6.75pt</value>
-  </data>
-  <data name="&gt;&gt;txt_parHeight.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label53.Name" xml:space="preserve">
-    <value>Label53</value>
-  </data>
-  <data name="Label91.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamorphic.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="crop_bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="check_KeepAR.TabIndex" type="System.Int32, mscorlib">
-    <value>59</value>
-  </data>
-  <data name="&gt;&gt;txt_parWidth.Name" xml:space="preserve">
-    <value>txt_parWidth</value>
-  </data>
-  <data name="Label52.Text" xml:space="preserve">
-    <value>Top</value>
-  </data>
-  <data name="crop_right.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label26.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 13</value>
-  </data>
-  <data name="&gt;&gt;lbl_src_res.ZOrder" xml:space="preserve">
-    <value>26</value>
-  </data>
-  <data name="&gt;&gt;lbl_anamprohicLbl.Name" xml:space="preserve">
-    <value>lbl_anamprohicLbl</value>
-  </data>
-  <data name="Label15.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;txt_parHeight.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="drp_anamorphic.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 21</value>
-  </data>
-  <data name="Label53.Location" type="System.Drawing.Point, System.Drawing">
-    <value>465, 170</value>
-  </data>
-  <data name="check_customCrop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>387, 57</value>
-  </data>
-  <data name="lbl_modulus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 146</value>
-  </data>
-  <data name="lbl_anamprohicLbl.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="crop_top.TabIndex" type="System.Int32, mscorlib">
-    <value>64</value>
-  </data>
-  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="Label15.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="&gt;&gt;crop_top.Name" xml:space="preserve">
-    <value>crop_top</value>
-  </data>
-  <data name="crop_left.Location" type="System.Drawing.Point, System.Drawing">
-    <value>416, 122</value>
-  </data>
-  <data name="check_KeepAR.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;lbl_max.Name" xml:space="preserve">
-    <value>lbl_max</value>
-  </data>
-  <data name="&gt;&gt;text_width.Name" xml:space="preserve">
-    <value>text_width</value>
-  </data>
-  <data name="Label53.Text" xml:space="preserve">
-    <value>Bottom</value>
-  </data>
-  <data name="&gt;&gt;txt_displayWidth.Name" xml:space="preserve">
-    <value>txt_displayWidth</value>
-  </data>
-  <data name="txt_displayWidth.ToolTip" xml:space="preserve">
-    <value>Display Width - Press "Enter" after entering a new value.</value>
-  </data>
-  <data name="drop_modulus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 21</value>
-  </data>
-  <data name="Label15.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 13</value>
-  </data>
-  <data name="&gt;&gt;check_KeepAR.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="drp_anamorphic.Items2" xml:space="preserve">
-    <value>Loose</value>
-  </data>
-  <data name="txt_parHeight.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 222</value>
-  </data>
-  <data name="check_autoCrop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>387, 33</value>
-  </data>
-  <data name="Label55.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="Label52.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="drop_modulus.Items2" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="lbl_parWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 13</value>
-  </data>
-  <data name="label6.Text" xml:space="preserve">
-    <value>Anamorphic:</value>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 13</value>
   </data>
   <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
   </data>
-  <data name="&gt;&gt;lbl_displayWidth.Name" xml:space="preserve">
-    <value>lbl_displayWidth</value>
+  <data name="label6.Text" xml:space="preserve">
+    <value>Anamorphic:</value>
   </data>
-  <data name="label8.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt, style=Bold</value>
+  <data name="&gt;&gt;label6.Name" xml:space="preserve">
+    <value>label6</value>
   </data>
-  <data name="lbl_parHeight.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="check_autoCrop.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="$this.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="text_width.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="drp_anamorphic.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;label26.Type" xml:space="preserve">
+  <data name="&gt;&gt;label6.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;drp_anamorphic.Parent" xml:space="preserve">
+  <data name="&gt;&gt;label6.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;Label15.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;label6.ZOrder" xml:space="preserve">
+    <value>28</value>
   </data>
-  <data name="crop_top.ToolTip" xml:space="preserve">
-    <value />
+  <data name="drp_anamorphic.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
   </data>
-  <data name="check_KeepAR.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 17</value>
+  <data name="drp_anamorphic.Items" xml:space="preserve">
+    <value>None</value>
   </data>
-  <data name="&gt;&gt;txt_displayWidth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="drp_anamorphic.Items1" xml:space="preserve">
+    <value>Strict</value>
+  </data>
+  <data name="drp_anamorphic.Items2" xml:space="preserve">
+    <value>Loose</value>
+  </data>
+  <data name="drp_anamorphic.Items3" xml:space="preserve">
+    <value>Custom</value>
   </data>
   <data name="drp_anamorphic.Location" type="System.Drawing.Point, System.Drawing">
     <value>110, 116</value>
   </data>
-  <data name="&gt;&gt;Label15.ZOrder" xml:space="preserve">
-    <value>12</value>
+  <data name="drp_anamorphic.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 21</value>
   </data>
-  <data name="label6.ToolTip" xml:space="preserve">
-    <value />
+  <data name="drp_anamorphic.TabIndex" type="System.Int32, mscorlib">
+    <value>46</value>
   </data>
-  <data name="lbl_parWidth.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="drop_modulus.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="lbl_max.Location" type="System.Drawing.Point, System.Drawing">
-    <value>279, 61</value>
-  </data>
-  <data name="drop_modulus.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lbl_src_res.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 12</value>
-  </data>
-  <data name="crop_bottom.TabIndex" type="System.Int32, mscorlib">
-    <value>67</value>
-  </data>
-  <data name="lbl_max.Text" xml:space="preserve">
-    <value>{max}</value>
-  </data>
-  <data name="text_width.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 59</value>
-  </data>
-  <data name="&gt;&gt;text_height.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;drop_modulus.ZOrder" xml:space="preserve">
-    <value>21</value>
-  </data>
-  <data name="&gt;&gt;drop_modulus.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="Label55.Text" xml:space="preserve">
-    <value>Width:</value>
-  </data>
-  <data name="Label91.Text" xml:space="preserve">
-    <value>Aspect Ratio:</value>
-  </data>
-  <data name="crop_bottom.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label51.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
-  </data>
-  <data name="&gt;&gt;Label91.Name" xml:space="preserve">
-    <value>Label91</value>
-  </data>
-  <data name="lbl_displayWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 173</value>
-  </data>
-  <data name="Label53.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;lbl_modulus.Name" xml:space="preserve">
-    <value>lbl_modulus</value>
+  <data name="&gt;&gt;drp_anamorphic.Name" xml:space="preserve">
+    <value>drp_anamorphic</value>
   </data>
   <data name="&gt;&gt;drp_anamorphic.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;drp_anamorphic.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;drp_anamorphic.ZOrder" xml:space="preserve">
+    <value>29</value>
+  </data>
+  <data name="label26.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label26.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt, style=Bold</value>
+  </data>
+  <data name="label26.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="label26.Size" type="System.Drawing.Size, System.Drawing">
+    <value>34, 13</value>
+  </data>
+  <data name="label26.TabIndex" type="System.Int32, mscorlib">
+    <value>39</value>
+  </data>
+  <data name="label26.Text" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="&gt;&gt;label26.Name" xml:space="preserve">
+    <value>label26</value>
+  </data>
+  <data name="&gt;&gt;label26.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label26.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label26.ZOrder" xml:space="preserve">
+    <value>30</value>
+  </data>
+  <data name="lbl_Aspect.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_Aspect.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 6.75pt</value>
+  </data>
+  <data name="lbl_Aspect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>241, 36</value>
+  </data>
+  <data name="lbl_Aspect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 12</value>
+  </data>
+  <data name="lbl_Aspect.TabIndex" type="System.Int32, mscorlib">
+    <value>43</value>
+  </data>
+  <data name="lbl_Aspect.Text" xml:space="preserve">
+    <value>Select a Title</value>
+  </data>
+  <data name="&gt;&gt;lbl_Aspect.Name" xml:space="preserve">
+    <value>lbl_Aspect</value>
+  </data>
+  <data name="&gt;&gt;lbl_Aspect.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_Aspect.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_Aspect.ZOrder" xml:space="preserve">
+    <value>31</value>
+  </data>
+  <data name="Label91.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label91.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="Label91.Location" type="System.Drawing.Point, System.Drawing">
+    <value>152, 35</value>
+  </data>
+  <data name="Label91.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 13</value>
+  </data>
+  <data name="Label91.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="Label91.Text" xml:space="preserve">
+    <value>Aspect Ratio:</value>
+  </data>
+  <data name="&gt;&gt;Label91.Name" xml:space="preserve">
+    <value>Label91</value>
+  </data>
+  <data name="&gt;&gt;Label91.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label91.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label91.ZOrder" xml:space="preserve">
+    <value>32</value>
+  </data>
+  <data name="Label55.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label55.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="Label55.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 63</value>
+  </data>
+  <data name="Label55.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 13</value>
+  </data>
+  <data name="Label55.TabIndex" type="System.Int32, mscorlib">
+    <value>44</value>
+  </data>
+  <data name="Label55.Text" xml:space="preserve">
+    <value>Width:</value>
+  </data>
+  <data name="&gt;&gt;Label55.Name" xml:space="preserve">
+    <value>Label55</value>
+  </data>
+  <data name="&gt;&gt;Label55.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label55.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label55.ZOrder" xml:space="preserve">
+    <value>33</value>
+  </data>
+  <data name="lbl_modulus.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_modulus.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="lbl_modulus.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 146</value>
+  </data>
+  <data name="lbl_modulus.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 13</value>
+  </data>
+  <data name="lbl_modulus.TabIndex" type="System.Int32, mscorlib">
+    <value>51</value>
+  </data>
+  <data name="lbl_modulus.Text" xml:space="preserve">
+    <value>Modulus:</value>
+  </data>
+  <data name="&gt;&gt;lbl_modulus.Name" xml:space="preserve">
+    <value>lbl_modulus</value>
+  </data>
+  <data name="&gt;&gt;lbl_modulus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_modulus.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_modulus.ZOrder" xml:space="preserve">
+    <value>20</value>
+  </data>
+  <data name="drop_modulus.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="drop_modulus.Items" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="drop_modulus.Items1" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="drop_modulus.Items2" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="drop_modulus.Items3" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="drop_modulus.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 143</value>
+  </data>
+  <data name="drop_modulus.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 21</value>
+  </data>
+  <data name="drop_modulus.TabIndex" type="System.Int32, mscorlib">
+    <value>52</value>
+  </data>
+  <data name="&gt;&gt;drop_modulus.Name" xml:space="preserve">
+    <value>drop_modulus</value>
+  </data>
+  <data name="&gt;&gt;drop_modulus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;drop_modulus.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;drop_modulus.ZOrder" xml:space="preserve">
+    <value>21</value>
+  </data>
+  <data name="txt_displayWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 170</value>
+  </data>
+  <data name="txt_displayWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="txt_displayWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>53</value>
+  </data>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="txt_displayWidth.ToolTip" xml:space="preserve">
+    <value>Display Width - Press "Enter" after entering a new value.</value>
+  </data>
+  <data name="&gt;&gt;txt_displayWidth.Name" xml:space="preserve">
+    <value>txt_displayWidth</value>
+  </data>
+  <data name="&gt;&gt;txt_displayWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txt_displayWidth.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txt_displayWidth.ZOrder" xml:space="preserve">
+    <value>19</value>
+  </data>
+  <data name="lbl_displayWidth.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_displayWidth.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="lbl_displayWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 173</value>
+  </data>
+  <data name="lbl_displayWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>90, 13</value>
+  </data>
+  <data name="lbl_displayWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>54</value>
+  </data>
+  <data name="lbl_displayWidth.Text" xml:space="preserve">
+    <value>Display Width:</value>
+  </data>
+  <data name="&gt;&gt;lbl_displayWidth.Name" xml:space="preserve">
+    <value>lbl_displayWidth</value>
+  </data>
+  <data name="&gt;&gt;lbl_displayWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_displayWidth.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_displayWidth.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="lbl_parWidth.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_parWidth.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="lbl_parWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 199</value>
+  </data>
+  <data name="lbl_parWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 13</value>
+  </data>
+  <data name="lbl_parWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
+  <data name="lbl_parWidth.Text" xml:space="preserve">
+    <value>PAR Width:</value>
+  </data>
+  <data name="&gt;&gt;lbl_parWidth.Name" xml:space="preserve">
+    <value>lbl_parWidth</value>
+  </data>
+  <data name="&gt;&gt;lbl_parWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_parWidth.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_parWidth.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="txt_parWidth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 196</value>
+  </data>
+  <data name="txt_parWidth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="txt_parWidth.TabIndex" type="System.Int32, mscorlib">
+    <value>55</value>
+  </data>
+  <data name="txt_parWidth.ToolTip" xml:space="preserve">
+    <value>PAR Width - Press "Enter" after entering a new value.
+</value>
+  </data>
+  <data name="&gt;&gt;txt_parWidth.Name" xml:space="preserve">
+    <value>txt_parWidth</value>
+  </data>
+  <data name="&gt;&gt;txt_parWidth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txt_parWidth.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txt_parWidth.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="lbl_parHeight.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_parHeight.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="lbl_parHeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 225</value>
+  </data>
+  <data name="lbl_parHeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 13</value>
+  </data>
+  <data name="lbl_parHeight.TabIndex" type="System.Int32, mscorlib">
+    <value>58</value>
+  </data>
+  <data name="lbl_parHeight.Text" xml:space="preserve">
+    <value>PAR Height:</value>
+  </data>
+  <data name="&gt;&gt;lbl_parHeight.Name" xml:space="preserve">
+    <value>lbl_parHeight</value>
+  </data>
+  <data name="&gt;&gt;lbl_parHeight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_parHeight.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_parHeight.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="txt_parHeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>110, 222</value>
+  </data>
+  <data name="txt_parHeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 20</value>
+  </data>
+  <data name="txt_parHeight.TabIndex" type="System.Int32, mscorlib">
+    <value>57</value>
+  </data>
+  <data name="txt_parHeight.ToolTip" xml:space="preserve">
+    <value>PAR Height - Press "Enter" after entering a new value.
+</value>
+  </data>
+  <data name="&gt;&gt;txt_parHeight.Name" xml:space="preserve">
+    <value>txt_parHeight</value>
+  </data>
+  <data name="&gt;&gt;txt_parHeight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txt_parHeight.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;txt_parHeight.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="check_KeepAR.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="check_KeepAR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 85</value>
+  </data>
+  <data name="check_KeepAR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>115, 17</value>
+  </data>
+  <data name="check_KeepAR.TabIndex" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
+  <data name="check_KeepAR.Text" xml:space="preserve">
+    <value>Keep Aspect Ratio</value>
+  </data>
+  <data name="&gt;&gt;check_KeepAR.Name" xml:space="preserve">
+    <value>check_KeepAR</value>
+  </data>
+  <data name="&gt;&gt;check_KeepAR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;check_KeepAR.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;check_KeepAR.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="check_customCrop.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="check_customCrop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>387, 57</value>
+  </data>
+  <data name="check_customCrop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 17</value>
+  </data>
+  <data name="check_customCrop.TabIndex" type="System.Int32, mscorlib">
+    <value>70</value>
+  </data>
+  <data name="check_customCrop.Text" xml:space="preserve">
+    <value>Custom:</value>
+  </data>
+  <data name="&gt;&gt;check_customCrop.Name" xml:space="preserve">
+    <value>check_customCrop</value>
+  </data>
+  <data name="&gt;&gt;check_customCrop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;check_customCrop.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;check_customCrop.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="check_autoCrop.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="check_autoCrop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>387, 33</value>
+  </data>
+  <data name="check_autoCrop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 17</value>
+  </data>
+  <data name="check_autoCrop.TabIndex" type="System.Int32, mscorlib">
+    <value>69</value>
+  </data>
+  <data name="check_autoCrop.Text" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="&gt;&gt;check_autoCrop.Name" xml:space="preserve">
+    <value>check_autoCrop</value>
+  </data>
+  <data name="&gt;&gt;check_autoCrop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;check_autoCrop.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;check_autoCrop.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="crop_bottom.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="crop_bottom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>467, 146</value>
+  </data>
+  <data name="crop_bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
+  <data name="crop_bottom.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="&gt;&gt;crop_bottom.Name" xml:space="preserve">
+    <value>crop_bottom</value>
+  </data>
+  <data name="&gt;&gt;crop_bottom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;crop_bottom.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;crop_bottom.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="crop_top.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="crop_top.Location" type="System.Drawing.Point, System.Drawing">
+    <value>467, 100</value>
+  </data>
+  <data name="crop_top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
+  <data name="crop_top.TabIndex" type="System.Int32, mscorlib">
+    <value>64</value>
+  </data>
+  <data name="&gt;&gt;crop_top.Name" xml:space="preserve">
+    <value>crop_top</value>
+  </data>
+  <data name="&gt;&gt;crop_top.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;crop_top.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;crop_top.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="crop_left.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="crop_left.Location" type="System.Drawing.Point, System.Drawing">
+    <value>416, 122</value>
+  </data>
+  <data name="crop_left.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
+  <data name="crop_left.TabIndex" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="&gt;&gt;crop_left.Name" xml:space="preserve">
+    <value>crop_left</value>
+  </data>
+  <data name="&gt;&gt;crop_left.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;crop_left.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;crop_left.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="crop_right.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="crop_right.Location" type="System.Drawing.Point, System.Drawing">
+    <value>518, 122</value>
+  </data>
+  <data name="crop_right.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 20</value>
+  </data>
   <data name="crop_right.TabIndex" type="System.Int32, mscorlib">
     <value>65</value>
+  </data>
+  <data name="&gt;&gt;crop_right.Name" xml:space="preserve">
+    <value>crop_right</value>
+  </data>
+  <data name="&gt;&gt;crop_right.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;crop_right.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;crop_right.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="label8.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label8.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt, style=Bold</value>
+  </data>
+  <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>384, 13</value>
+  </data>
+  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>37, 13</value>
+  </data>
+  <data name="label8.TabIndex" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <data name="label8.Text" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
+  </data>
+  <data name="&gt;&gt;label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="Label53.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label53.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="Label53.Location" type="System.Drawing.Point, System.Drawing">
+    <value>465, 170</value>
+  </data>
+  <data name="Label53.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 13</value>
+  </data>
+  <data name="Label53.TabIndex" type="System.Int32, mscorlib">
+    <value>68</value>
+  </data>
+  <data name="Label53.Text" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="&gt;&gt;Label53.Name" xml:space="preserve">
+    <value>Label53</value>
+  </data>
+  <data name="&gt;&gt;Label53.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label53.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label53.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="Label52.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label52.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="Label52.Location" type="System.Drawing.Point, System.Drawing">
+    <value>474, 85</value>
+  </data>
+  <data name="Label52.Size" type="System.Drawing.Size, System.Drawing">
+    <value>28, 13</value>
+  </data>
+  <data name="Label52.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="Label52.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="&gt;&gt;Label52.Name" xml:space="preserve">
+    <value>Label52</value>
+  </data>
+  <data name="&gt;&gt;Label52.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;Label52.Parent" xml:space="preserve">
     <value>$this</value>
@@ -1089,107 +961,139 @@
   <data name="&gt;&gt;Label52.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <data name="label7.TabIndex" type="System.Int32, mscorlib">
-    <value>40</value>
-  </data>
-  <data name="check_customCrop.AutoSize" type="System.Boolean, mscorlib">
+  <data name="Label51.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="drp_anamorphic.Items" xml:space="preserve">
-    <value>None</value>
+  <data name="Label51.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
   </data>
-  <data name="&gt;&gt;crop_left.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="Label51.Location" type="System.Drawing.Point, System.Drawing">
+    <value>561, 124</value>
   </data>
-  <data name="lbl_anamprohicLbl.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;text_width.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label51.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="txt_parWidth.TabIndex" type="System.Int32, mscorlib">
-    <value>55</value>
-  </data>
-  <data name="&gt;&gt;Label51.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="txt_parWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>110, 196</value>
-  </data>
-  <data name="lbl_Aspect.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 6.75pt</value>
-  </data>
-  <data name="lbl_Aspect.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label15.Location" type="System.Drawing.Point, System.Drawing">
-    <value>384, 124</value>
-  </data>
-  <data name="&gt;&gt;txt_displayWidth.ZOrder" xml:space="preserve">
-    <value>19</value>
-  </data>
-  <data name="label8.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label52.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 85</value>
-  </data>
-  <data name="lbl_displayWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 13</value>
-  </data>
-  <data name="&gt;&gt;check_customCrop.Name" xml:space="preserve">
-    <value>check_customCrop</value>
-  </data>
-  <data name="txt_parHeight.ToolTip" xml:space="preserve">
-    <value>PAR Height - Press "Enter" after entering a new value.
-</value>
-  </data>
-  <data name="&gt;&gt;Label53.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="check_autoCrop.Text" xml:space="preserve">
-    <value>Automatic</value>
+  <data name="Label51.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 13</value>
   </data>
   <data name="Label51.TabIndex" type="System.Int32, mscorlib">
     <value>66</value>
   </data>
-  <data name="&gt;&gt;text_height.ZOrder" xml:space="preserve">
-    <value>22</value>
+  <data name="Label51.Text" xml:space="preserve">
+    <value>Right</value>
   </data>
-  <data name="label26.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt, style=Bold</value>
+  <data name="&gt;&gt;Label51.Name" xml:space="preserve">
+    <value>Label51</value>
+  </data>
+  <data name="&gt;&gt;Label51.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label51.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label51.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="Label15.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="Label15.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 8.25pt</value>
+  </data>
+  <data name="Label15.Location" type="System.Drawing.Point, System.Drawing">
+    <value>384, 124</value>
+  </data>
+  <data name="Label15.Size" type="System.Drawing.Size, System.Drawing">
+    <value>28, 13</value>
+  </data>
+  <data name="Label15.TabIndex" type="System.Int32, mscorlib">
+    <value>61</value>
+  </data>
+  <data name="Label15.Text" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="&gt;&gt;Label15.Name" xml:space="preserve">
+    <value>Label15</value>
+  </data>
+  <data name="&gt;&gt;Label15.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Label15.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Label15.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="lbl_anamorphic.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_anamorphic.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Verdana, 6.75pt</value>
+  </data>
+  <data name="lbl_anamorphic.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 250</value>
+  </data>
+  <data name="lbl_anamorphic.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 12</value>
+  </data>
+  <data name="lbl_anamorphic.TabIndex" type="System.Int32, mscorlib">
+    <value>74</value>
+  </data>
+  <data name="lbl_anamorphic.Text" xml:space="preserve">
+    <value>Select a Title</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamorphic.Name" xml:space="preserve">
+    <value>lbl_anamorphic</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamorphic.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamorphic.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamorphic.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lbl_anamprohicLbl.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="lbl_anamprohicLbl.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 249</value>
   </data>
-  <data name="&gt;&gt;Label91.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="crop_left.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
-  </data>
-  <data name="&gt;&gt;txt_parHeight.ZOrder" xml:space="preserve">
-    <value>15</value>
-  </data>
   <data name="lbl_anamprohicLbl.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 13</value>
   </data>
-  <data name="text_height.TabIndex" type="System.Int32, mscorlib">
-    <value>50</value>
+  <data name="lbl_anamprohicLbl.TabIndex" type="System.Int32, mscorlib">
+    <value>73</value>
   </data>
-  <data name="label4.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="lbl_anamprohicLbl.Text" xml:space="preserve">
+    <value>Anamorphic:</value>
   </data>
-  <data name="text_width.TabIndex" type="System.Int32, mscorlib">
-    <value>49</value>
+  <data name="&gt;&gt;lbl_anamprohicLbl.Name" xml:space="preserve">
+    <value>lbl_anamprohicLbl</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamprohicLbl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamprohicLbl.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;lbl_anamprohicLbl.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>666, 279</value>
+  </data>
+  <data name="&gt;&gt;toolTip.Name" xml:space="preserve">
+    <value>toolTip</value>
+  </data>
+  <data name="&gt;&gt;toolTip.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>PictureSettings</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
