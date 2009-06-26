@@ -31,6 +31,7 @@ namespace Handbrake
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private Form splash;
+        public string sourcePath;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -209,7 +210,7 @@ namespace Handbrake
                         startScan(fileList[0]);
                     }
                     else
-                        text_source.Text = "Click 'Source' to continue";
+                        lbl_source.Text = "Click 'Source' to continue";
                 }
             }
         }
@@ -540,7 +541,7 @@ namespace Handbrake
             }
             else
             {
-                if (encodeQueue.count() != 0 || (text_source.Text != string.Empty && text_source.Text != "Click 'Source' to continue" && text_destination.Text != string.Empty))
+                if (encodeQueue.count() != 0 || (lbl_source.Text != string.Empty && lbl_source.Text != "Click 'Source' to continue" && text_destination.Text != string.Empty))
                 {
                     String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
 
@@ -552,7 +553,7 @@ namespace Handbrake
                     if (overwrite == DialogResult.Yes)
                     {
                         if (encodeQueue.count() == 0)
-                            encodeQueue.add(query, text_source.Text, text_destination.Text);
+                            encodeQueue.add(query, lbl_source.Text, text_destination.Text);
 
                         queueWindow.setQueue();
                         if (encodeQueue.count() > 1)
@@ -564,14 +565,14 @@ namespace Handbrake
                     }
                     this.Focus();
                 }
-                else if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
+                else if (lbl_source.Text == string.Empty || lbl_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                     MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
 
-            if (text_source.Text == string.Empty || text_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
+            if (lbl_source.Text == string.Empty || lbl_source.Text == "Click 'Source' to continue" || text_destination.Text == string.Empty)
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
@@ -584,11 +585,11 @@ namespace Handbrake
                     DialogResult result = MessageBox.Show("There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                   "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
-                        encodeQueue.add(query, text_source.Text, text_destination.Text);
+                        encodeQueue.add(query, lbl_source.Text, text_destination.Text);
 
                 }
                 else
-                    encodeQueue.add(query, text_source.Text, text_destination.Text);
+                    encodeQueue.add(query, lbl_source.Text, text_destination.Text);
 
                 queueWindow.Show();
             }
@@ -599,7 +600,7 @@ namespace Handbrake
         }
         private void tb_preview_Click(object sender, EventArgs e)
         {
-            if (text_source.Text == "" || text_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
+            if (lbl_source.Text == "" || lbl_source.Text == "Click 'Source' to continue" || text_destination.Text == "")
                 MessageBox.Show("No source OR destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
@@ -664,7 +665,7 @@ namespace Handbrake
             // Set the last action to scan. 
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
-            text_source.Text = "";
+            lbl_source.Text = "";
 
             if (DVD_Open.ShowDialog() == DialogResult.OK)
             {
@@ -676,22 +677,23 @@ namespace Handbrake
                 {
                     if (filename != "")
                     {
+                        lbl_source.Text = Path.GetFullPath(filename);
                         setupGUIforScan(filename);
                         startScan(filename);
                     }
                     else
-                        text_source.Text = "Click 'Source' to continue";
+                        lbl_source.Text = "Click 'Source' to continue";
                 }
             }
             else
-                text_source.Text = "Click 'Source' to continue";
+                lbl_source.Text = "Click 'Source' to continue";
         }
         private void btn_file_source_Click(object sender, EventArgs e)
         {
             // Set the last action to scan. 
             // This is used for tracking which file to load in the activity window
             lastAction = "scan";
-            text_source.Text = "";
+            lbl_source.Text = "";
 
             if (ISO_Open.ShowDialog() == DialogResult.OK)
             {
@@ -704,15 +706,16 @@ namespace Handbrake
                 {
                     if (filename != "")
                     {
+                        lbl_source.Text = Path.GetFileName(filename);
                         setupGUIforScan(filename);
                         startScan(filename);
                     }
                     else
-                        text_source.Text = "Click 'Source' to continue";
+                        lbl_source.Text = "Click 'Source' to continue";
                 }
             }
             else
-                text_source.Text = "Click 'Source' to continue";
+                lbl_source.Text = "Click 'Source' to continue";
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
@@ -727,6 +730,7 @@ namespace Handbrake
             {
                 string[] path = mnu_dvd_drive.Text.Split(' ');
                 String filename = path[0];
+                lbl_source.Text = Path.GetFullPath(filename);
                 setupGUIforScan(filename);
                 startScan(filename);
             }
@@ -799,7 +803,7 @@ namespace Handbrake
             // Run the autoName & chapterNaming functions
             if (Properties.Settings.Default.autoNaming)
             {
-                string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, lbl_source.Text, text_destination.Text, drop_format.SelectedIndex);
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
@@ -843,7 +847,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
-                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, lbl_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
             // Disable chapter markers if only 1 chapter is selected.
             if (c_start == c_end)
@@ -874,7 +878,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
-                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, text_source.Text, text_destination.Text, drop_format.SelectedIndex);
+                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, lbl_source.Text, text_destination.Text, drop_format.SelectedIndex);
 
             // Add more rows to the Chapter menu if needed.
             if (Check_ChapterMarkers.Checked)
@@ -1211,8 +1215,7 @@ namespace Handbrake
         private static int scanProcessID { get; set; }
         private void setupGUIforScan(String filename)
         {
-            text_source.Text = filename;
-
+            sourcePath = filename;
             foreach (Control ctrl in Controls)
             {
                 if (!(ctrl is StatusStrip || ctrl is MenuStrip || ctrl is ToolStrip))
@@ -1220,7 +1223,7 @@ namespace Handbrake
             }
             lbl_encode.Visible = true;
             lbl_encode.Text = "Scanning ...";
-            gb_source.Text = "Source: Scanning ...";
+            //gb_source.Text = "Source: Scanning ...";
             btn_source.Enabled = false;
             btn_start.Enabled = false;
             btn_showQueue.Enabled = false;
@@ -1320,7 +1323,7 @@ namespace Handbrake
                     drp_dvdtitle.SelectedItem = Main.selectLongestTitle(drp_dvdtitle);
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
-                if (text_source.Text.ToLower().Contains(".iso") || text_source.Text.ToLower().Contains("VIDEO_TS"))
+                if (lbl_source.Text.ToLower().Contains(".iso") || lbl_source.Text.ToLower().Contains("VIDEO_TS"))
                     Check_ChapterMarkers.Enabled = true;
                 else
                 {
@@ -1349,7 +1352,7 @@ namespace Handbrake
                 if (InvokeRequired)
                     BeginInvoke(new UpdateWindowHandler(enableGUI));
                 lbl_encode.Text = "Scan Completed";
-                gb_source.Text = "Source";
+                //gb_source.Text = "Source";
                 foreach (Control ctrl in Controls)
                     ctrl.Enabled = true;
                 btn_start.Enabled = true;
@@ -1398,7 +1401,7 @@ namespace Handbrake
             lbl_duration.Text = "Select a Title";
             PictureSettings.lbl_src_res.Text = "Select a Title";
             PictureSettings.lbl_Aspect.Text = "Select a Title";
-            text_source.Text = "Click 'Source' to continue";
+            lbl_source.Text = "Click 'Source' to continue";
             text_destination.Text = "";
             thisDVD = null;
             selectedTitle = null;

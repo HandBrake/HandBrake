@@ -58,6 +58,8 @@ namespace Handbrake
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
+            this.btn_viewLogs = new System.Windows.Forms.Button();
+            this.btn_clearLogs = new System.Windows.Forms.Button();
             this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
             this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -73,6 +75,8 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.label31 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.numeric_updateCheckDays = new System.Windows.Forms.NumericUpDown();
             this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
             this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
@@ -119,8 +123,6 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label31 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -136,7 +138,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(430, 382);
+            this.btn_close.Location = new System.Drawing.Point(437, 382);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -173,7 +175,7 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 55);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(490, 321);
+            this.tab_options.Size = new System.Drawing.Size(497, 321);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
@@ -194,7 +196,7 @@ namespace Handbrake
             this.tab_general.Controls.Add(this.drp_completeOption);
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
-            this.tab_general.Size = new System.Drawing.Size(482, 295);
+            this.tab_general.Size = new System.Drawing.Size(489, 295);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
@@ -356,7 +358,7 @@ namespace Handbrake
             this.tab_picture.Controls.Add(this.label29);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
-            this.tab_picture.Size = new System.Drawing.Size(482, 295);
+            this.tab_picture.Size = new System.Drawing.Size(489, 295);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -396,6 +398,8 @@ namespace Handbrake
             // 
             // tab_cli
             // 
+            this.tab_cli.Controls.Add(this.btn_viewLogs);
+            this.tab_cli.Controls.Add(this.btn_clearLogs);
             this.tab_cli.Controls.Add(this.check_logsInSpecifiedLocation);
             this.tab_cli.Controls.Add(this.cb_logVerboseLvl);
             this.tab_cli.Controls.Add(this.label3);
@@ -412,20 +416,44 @@ namespace Handbrake
             this.tab_cli.Controls.Add(this.Label4);
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
-            this.tab_cli.Size = new System.Drawing.Size(482, 295);
+            this.tab_cli.Size = new System.Drawing.Size(489, 295);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
+            // 
+            // btn_viewLogs
+            // 
+            this.btn_viewLogs.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_viewLogs.Location = new System.Drawing.Point(71, 238);
+            this.btn_viewLogs.Name = "btn_viewLogs";
+            this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
+            this.btn_viewLogs.TabIndex = 89;
+            this.btn_viewLogs.Text = "View Log Directory";
+            this.btn_viewLogs.UseVisualStyleBackColor = true;
+            this.btn_viewLogs.Click += new System.EventHandler(this.btn_viewLogs_Click);
+            // 
+            // btn_clearLogs
+            // 
+            this.btn_clearLogs.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_clearLogs.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_clearLogs.Location = new System.Drawing.Point(216, 238);
+            this.btn_clearLogs.Name = "btn_clearLogs";
+            this.btn_clearLogs.Size = new System.Drawing.Size(135, 23);
+            this.btn_clearLogs.TabIndex = 88;
+            this.btn_clearLogs.Text = "Clear Log History";
+            this.btn_clearLogs.UseVisualStyleBackColor = true;
+            this.btn_clearLogs.Click += new System.EventHandler(this.btn_clearLogs_Click);
             // 
             // check_logsInSpecifiedLocation
             // 
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(71, 201);
+            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(71, 187);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(363, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
-            this.check_logsInSpecifiedLocation.Text = "Put individual encode logs in a specified location:";
+            this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
             this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
             this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
@@ -439,7 +467,7 @@ namespace Handbrake
             "0",
             "1",
             "2"});
-            this.cb_logVerboseLvl.Location = new System.Drawing.Point(198, 133);
+            this.cb_logVerboseLvl.Location = new System.Drawing.Point(198, 119);
             this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
             this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
             this.cb_logVerboseLvl.TabIndex = 86;
@@ -451,7 +479,7 @@ namespace Handbrake
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(68, 136);
+            this.label3.Location = new System.Drawing.Point(68, 122);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(124, 13);
             this.label3.TabIndex = 85;
@@ -461,11 +489,11 @@ namespace Handbrake
             // 
             this.check_saveLogWithVideo.AutoSize = true;
             this.check_saveLogWithVideo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_saveLogWithVideo.Location = new System.Drawing.Point(71, 178);
+            this.check_saveLogWithVideo.Location = new System.Drawing.Point(71, 164);
             this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
-            this.check_saveLogWithVideo.Size = new System.Drawing.Size(349, 17);
+            this.check_saveLogWithVideo.Size = new System.Drawing.Size(406, 17);
             this.check_saveLogWithVideo.TabIndex = 83;
-            this.check_saveLogWithVideo.Text = "Put individual encode logs in the same location as movie";
+            this.check_saveLogWithVideo.Text = "Put a copy of individual encode logs in the same location as movie";
             this.ToolTip.SetToolTip(this.check_saveLogWithVideo, "Place a copy of the encode log in the same folder as the encoded movie.");
             this.check_saveLogWithVideo.UseVisualStyleBackColor = true;
             this.check_saveLogWithVideo.CheckedChanged += new System.EventHandler(this.check_saveLogWithVideo_CheckedChanged);
@@ -475,7 +503,7 @@ namespace Handbrake
             this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_saveLog.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_saveLog.Location = new System.Drawing.Point(343, 225);
+            this.btn_saveLog.Location = new System.Drawing.Point(343, 211);
             this.btn_saveLog.Name = "btn_saveLog";
             this.btn_saveLog.Size = new System.Drawing.Size(68, 22);
             this.btn_saveLog.TabIndex = 82;
@@ -487,7 +515,7 @@ namespace Handbrake
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(68, 228);
+            this.label14.Location = new System.Drawing.Point(68, 214);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(61, 13);
             this.label14.TabIndex = 81;
@@ -495,7 +523,7 @@ namespace Handbrake
             // 
             // text_logPath
             // 
-            this.text_logPath.Location = new System.Drawing.Point(135, 225);
+            this.text_logPath.Location = new System.Drawing.Point(135, 211);
             this.text_logPath.Name = "text_logPath";
             this.text_logPath.Size = new System.Drawing.Size(202, 21);
             this.text_logPath.TabIndex = 80;
@@ -506,7 +534,7 @@ namespace Handbrake
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(12, 136);
+            this.label9.Location = new System.Drawing.Point(12, 122);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(41, 13);
             this.label9.TabIndex = 77;
@@ -620,10 +648,29 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(482, 295);
+            this.tab_advanced.Size = new System.Drawing.Size(489, 295);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(73, 168);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(241, 13);
+            this.label31.TabIndex = 96;
+            this.label31.Text = "Number of days between update checks:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(6, 168);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(64, 13);
+            this.label15.TabIndex = 95;
+            this.label15.Text = "Updates:";
             // 
             // numeric_updateCheckDays
             // 
@@ -710,11 +757,11 @@ namespace Handbrake
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(38, 247);
+            this.label32.Location = new System.Drawing.Point(34, 248);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(32, 13);
+            this.label32.Size = new System.Drawing.Size(36, 13);
             this.label32.TabIndex = 89;
-            this.label32.Text = "CLI:";
+            this.label32.Text = "Dvd:";
             // 
             // label30
             // 
@@ -1163,28 +1210,9 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(6, 168);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(64, 13);
-            this.label15.TabIndex = 95;
-            this.label15.Text = "Updates:";
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(73, 168);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(241, 13);
-            this.label31.TabIndex = 96;
-            this.label31.Text = "Number of days between update checks:";
-            // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(514, 413);
+            this.ClientSize = new System.Drawing.Size(521, 413);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.tab_options);
@@ -1300,5 +1328,7 @@ namespace Handbrake
         private System.Windows.Forms.NumericUpDown numeric_updateCheckDays;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Button btn_viewLogs;
+        private System.Windows.Forms.Button btn_clearLogs;
     }
 }

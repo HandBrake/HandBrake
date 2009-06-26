@@ -6,6 +6,7 @@
 
 using System;
 using System.Windows.Forms;
+using Handbrake.Functions;
 
 namespace Handbrake
 {
@@ -229,6 +230,22 @@ namespace Handbrake
             Properties.Settings.Default.saveLogPath = text_logPath.Text;
         }
 
+        private void btn_viewLogs_Click(object sender, EventArgs e)
+        {
+            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            string windir = Environment.GetEnvironmentVariable("WINDIR");
+            System.Diagnostics.Process prc = new System.Diagnostics.Process();
+            prc.StartInfo.FileName = windir + @"\explorer.exe";
+            prc.StartInfo.Arguments = logDir;
+            prc.Start();
+        }
+
+        private void btn_clearLogs_Click(object sender, EventArgs e)
+        {
+            Main.clearLogs();
+            MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+        }
         #endregion
 
         #region Advanced

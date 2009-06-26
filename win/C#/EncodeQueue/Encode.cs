@@ -162,9 +162,8 @@ namespace Handbrake.EncodeQueue
                 string tempLogFile = Path.Combine(logDir, "last_encode_log.txt");
 
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
-                String[] destName = destination.Split('\\');
-                string destinationFile = destName[destName.Length - 1];
-                string encodeLogFile = DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + " " + destinationFile + ".txt";
+                String destinationFile = Path.GetFileName(destination);
+                string encodeLogFile = destinationFile + " " + DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + ".txt";
 
                 // Make sure the log directory exists.
                 if (!Directory.Exists(logDir))

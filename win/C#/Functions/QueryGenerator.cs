@@ -24,8 +24,8 @@ namespace Handbrake.Functions
             // Source tab
             string query = "";
 
-            if ((mainWindow.text_source.Text != "") && (mainWindow.text_source.Text.Trim() != "Click 'Source' to continue"))
-                query = " -i " + '"' + mainWindow.text_source.Text + '"';
+            if ((mainWindow.sourcePath != "") && (mainWindow.sourcePath.Trim() != "Click 'Source' to continue"))
+                query = " -i " + '"' + mainWindow.sourcePath + '"';
 
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
@@ -68,8 +68,8 @@ namespace Handbrake.Functions
             // Source tab
             string query = "";
 
-            if ((mainWindow.text_source.Text != "") && (mainWindow.text_source.Text.Trim() != "Click 'Source' to continue"))
-                query = " -i " + '"' + mainWindow.text_source.Text + '"';
+            if ((mainWindow.sourcePath != "") && (mainWindow.sourcePath.Trim() != "Click 'Source' to continue"))
+                query = " -i " + '"' + mainWindow.sourcePath + '"';
 
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {

@@ -19,7 +19,7 @@ namespace Handbrake.Presets
         List<Preset> presets = new List<Preset>();
         List<Preset> user_presets = new List<Preset>();
         private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Preset>));
-        String userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
+        string userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
         string hbPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
 
         /// <summary>

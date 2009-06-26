@@ -350,5 +350,25 @@ namespace Handbrake.Functions
             return -1;
         }
 
+        /// <summary>
+        ///  Clear all the encode log files.
+        /// </summary>
+        public static void clearLogs()
+        {
+            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            if (Directory.Exists(logDir))
+            {
+                DirectoryInfo info = new DirectoryInfo(logDir);
+                FileInfo[] logFiles = info.GetFiles("*.txt");
+                foreach (FileInfo file in logFiles)
+                {
+                    if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") && !file.Name.Contains("tmp_appReadable_log.txt"))
+                    {
+                        File.Delete(file.FullName);
+                    }
+                }
+            }
+        }
+
     }
 }
