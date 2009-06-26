@@ -123,7 +123,7 @@
     NSString *dateForLogTitle = [NSString stringWithFormat:@"%02d-%02d-%02d %02d-%02d-%02d",now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,now->tm_hour, now->tm_min, now->tm_sec]; 
     
     /* Assemble the new log file name as YY-MM-DD HH-MM-SS mymoviename.txt */
-    NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",dateForLogTitle,[[outputFileForEncode lastPathComponent] stringByDeletingPathExtension]];
+    NSString *outputDateFileName = [NSString stringWithFormat:@"%@ %@.txt",[[outputFileForEncode lastPathComponent] stringByDeletingPathExtension],dateForLogTitle];
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"EncodeLogLocation"]) // if we are putting it in the same directory with the movie
     {
         
