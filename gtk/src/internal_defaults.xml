@@ -127,6 +127,8 @@
 		<integer>15</integer>
 		<key>LoggingLevel</key>
 		<string>1</string>
+		<key>LogLongevity</key>
+		<string>immortal</string>
 		<key>nocheckvquality</key>
 		<false />
 		<key>use_dvdnav</key>

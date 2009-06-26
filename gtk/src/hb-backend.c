@@ -120,6 +120,19 @@ combo_opts_t logging_opts =
 	d_logging_opts
 };
 
+static options_map_t d_log_longevity_opts[] =
+{
+	{"Week",     "week",     7, "7"},
+	{"Month",    "month",    30, "30"},
+	{"Year",     "year",     365, "365"},
+	{"Immortal", "immortal", 366, "366"},
+};
+combo_opts_t log_longevity_opts =
+{
+	sizeof(d_log_longevity_opts)/sizeof(options_map_t),
+	d_log_longevity_opts
+};
+
 static options_map_t d_appcast_update_opts[] =
 {
 	{"Never", "never", 0, "never"},
@@ -348,6 +361,7 @@ combo_name_map_t combo_name_map[] =
 	{"PicturePAR", &par_opts},
 	{"PictureModulus", &alignment_opts},
 	{"LoggingLevel", &logging_opts},
+	{"LogLongevity", &log_longevity_opts},
 	{"check_updates", &appcast_update_opts},
 	{"VideoQualityGranularity", &vqual_granularity_opts},
 	{"FileFormat", &container_opts},
@@ -2250,6 +2264,7 @@ ghb_update_ui_combo_box(
 		generic_opts_set(ud->builder, "PicturePAR", &par_opts);
 		generic_opts_set(ud->builder, "PictureModulus", &alignment_opts);
 		generic_opts_set(ud->builder, "LoggingLevel", &logging_opts);
+		generic_opts_set(ud->builder, "LogLongevity", &log_longevity_opts);
 		generic_opts_set(ud->builder, "check_updates", &appcast_update_opts);
 		generic_opts_set(ud->builder, "FileFormat", &container_opts);
 		generic_opts_set(ud->builder, "PictureDeinterlace", &deint_opts);

@@ -3970,6 +3970,42 @@ no-dct-decimate=0:cabac=1</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment63">
+                                    <property name="visible">True</property>
+                                    <property name="left_padding">21</property>
+                                    <child>
+                                      <object class="GtkHBox" id="hbox83">
+                                        <property name="visible">True</property>
+                                        <property name="spacing">4</property>
+                                        <child>
+                                          <object class="GtkComboBox" id="LogLongevity">
+                                            <property name="visible">True</property>
+                                            <signal name="changed" handler="pref_changed_cb"/>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="labela1">
+                                            <property name="visible">True</property>
+                                            <property name="xalign">0</property>
+                                            <property name="label" translatable="yes">Activity Log Longevity</property>
+                                          </object>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>
