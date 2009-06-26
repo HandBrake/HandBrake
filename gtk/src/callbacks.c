@@ -1885,10 +1885,11 @@ queue_scan(signal_user_data_t *ud, GValue *js)
 	{
 		*pos = 0;
 	}
-	log_path = g_strdup_printf("%s/%d-%02d-%02d %02d-%02d-%02d %s.log",
+	log_path = g_strdup_printf("%s/%s %d-%02d-%02d %02d-%02d-%02d.log",
 		dest_dir,
+		basename,
 		now->tm_year + 1900, now->tm_mon + 1, now->tm_mday,
-		now->tm_hour, now->tm_min, now->tm_sec, basename);
+		now->tm_hour, now->tm_min, now->tm_sec);
 	g_free(basename);
 	g_free(dest_dir);
 	if (ud->job_activity_log)
