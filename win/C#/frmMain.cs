@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
@@ -1048,7 +1049,11 @@ namespace Handbrake
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
 
-                    double multiplier = 1.0 / Properties.Settings.Default.x264cqstep;
+                    double divider;
+                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+                    double.TryParse(Properties.Settings.Default.x264cqstep.ToString(culture), out divider);
+
+                    double multiplier = 1.0 / divider;
                     double value = slider_videoQuality.Value*multiplier;
                     
                     switch (Properties.Settings.Default.x264cqstep.ToString())
@@ -1114,7 +1119,9 @@ namespace Handbrake
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
-                    double divided = Properties.Settings.Default.x264cqstep;
+                    double divided;
+                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+                    double.TryParse(Properties.Settings.Default.x264cqstep.ToString(culture), out divided);
                     rfValue = 51.0 - slider_videoQuality.Value * divided;
                     max = slider_videoQuality.Maximum * divided;
                     min = slider_videoQuality.Minimum;

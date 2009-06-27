@@ -179,7 +179,9 @@ namespace Handbrake.Functions
                         int.TryParse(val.ToString(), out value);
                     }
 
-                    mainWindow.slider_videoQuality.Value = value;
+                    int safevalue;
+                    int.TryParse(value.ToString(culture), out safevalue);
+                    mainWindow.slider_videoQuality.Value = safevalue;
                 }
                 else
                 {
