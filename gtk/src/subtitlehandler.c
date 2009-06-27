@@ -130,6 +130,7 @@ ghb_add_subtitle(signal_user_data_t *ud, GValue *settings)
 	gint count;
 	gboolean burned;
 	const gchar *track;
+	const gchar *lang;
 	gint tt, source;
 	
 	g_debug("ghb_add_subtitle ()");
@@ -138,6 +139,9 @@ ghb_add_subtitle(signal_user_data_t *ud, GValue *settings)
 	// when a different title is selected.
 	track = ghb_settings_combo_option(settings, "SubtitleTrack");
 	ghb_settings_set_string(settings, "SubtitleTrackDescription", track);
+
+	lang = ghb_settings_combo_string(settings, "SubtitleTrack");
+	ghb_settings_set_string(settings, "SubtitleLanguage", lang);
 
 	tt = ghb_settings_get_int(settings, "SubtitleTrack");
 	source = ghb_subtitle_track_source(ud, tt);
