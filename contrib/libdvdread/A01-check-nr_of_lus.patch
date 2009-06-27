@@ -1,0 +1,17 @@
+diff -Naur libdvdread.orig/src/ifo_read.c libdvdread/src/ifo_read.c
+--- libdvdread.orig/src/ifo_read.c	2009-01-08 14:57:10.000000000 -0800
++++ libdvdread/src/ifo_read.c	2009-06-27 13:22:27.940241400 -0700
+@@ -1914,6 +1914,13 @@
+   CHECK_VALUE(pgci_ut->nr_of_lus < 100); /* ?? 3-4 ? */
+   CHECK_VALUE((uint32_t)pgci_ut->nr_of_lus * PGCI_LU_SIZE < pgci_ut->last_byte);
+ 
++  if (pgci_ut->nr_of_lus == 0 || pgci_ut->nr_of_lus >= 100)
++  {
++    free(pgci_ut);
++    ifofile->pgci_ut = 0;
++    return 0;
++  }
++
+   info_length = pgci_ut->nr_of_lus * PGCI_LU_SIZE;
+   data = malloc(info_length);
+   if(!data) {
