@@ -584,10 +584,10 @@
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
-          <object class="GtkVBox" id="vbox1">
+          <object class="GtkVBox" id="vbox14">
             <property name="visible">True</property>
             <child>
-              <object class="GtkVBox" id="vbox2">
+              <object class="GtkVBox" id="vbox15">
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkFrame" id="frame1">
@@ -601,7 +601,7 @@
                         <property name="top_padding">6</property>
                         <property name="bottom_padding">6</property>
                         <child>
-                          <object class="GtkVBox" id="vbox3">
+                          <object class="GtkVBox" id="vbox16">
                             <property name="visible">True</property>
                             <child>
                               <object class="GtkHBox" id="hbox54">
@@ -629,7 +629,7 @@
                                 <property name="visible">True</property>
                                 <property name="spacing">4</property>
                                 <child>
-                                  <object class="GtkLabel" id="label3">
+                                  <object class="GtkLabel" id="label20">
                                     <property name="visible">True</property>
                                     <property name="label" translatable="yes">Title</property>
                                   </object>
@@ -832,7 +832,7 @@
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">GTK_SHADOW_NONE</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment3">
+                      <object class="GtkAlignment" id="alignment44">
                         <property name="visible">True</property>
                         <property name="left_padding">12</property>
                         <property name="top_padding">6</property>
@@ -1165,7 +1165,7 @@
                             <property name="label_xalign">0</property>
                             <property name="shadow_type">GTK_SHADOW_NONE</property>
                             <child>
-                              <object class="GtkAlignment" id="alignment5">
+                              <object class="GtkAlignment" id="alignment52">
                                 <property name="visible">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="top_padding">6</property>
@@ -1543,7 +1543,7 @@
 
                     <property name="spacing">48</property>
                     <child>
-                      <object class="GtkAlignment" id="alignment10">
+                      <object class="GtkAlignment" id="alignment14">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="top_padding">48</property>
@@ -2000,7 +2000,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label39">
+                                  <object class="GtkLabel" id="label24">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="label" translatable="yes">Mix</property>
@@ -3392,7 +3392,7 @@ no-dct-decimate=0:cabac=1</property>
                 <property name="visible">True</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkNotebook" id="notebook1">
+                  <object class="GtkNotebook" id="notebook2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="show-border">False</property>
@@ -3617,7 +3617,7 @@ no-dct-decimate=0:cabac=1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment7">
+                          <object class="GtkAlignment" id="alignment64">
                             <property name="visible">True</property>
                             <property name="top_padding">6</property>
                             <property name="bottom_padding">6</property>
@@ -3650,7 +3650,7 @@ no-dct-decimate=0:cabac=1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox6">
+                      <object class="GtkVBox" id="vbox18">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <child>
@@ -3883,7 +3883,7 @@ no-dct-decimate=0:cabac=1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment1">
+                          <object class="GtkAlignment" id="alignment17">
                             <property name="visible">True</property>
                             <property name="top_padding">6</property>
                             <property name="bottom_padding">6</property>
@@ -3962,7 +3962,7 @@ no-dct-decimate=0:cabac=1</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="labela1">
+                                          <object class="GtkLabel" id="labela2">
                                             <property name="visible">True</property>
                                             <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Activity Log Longevity</property>
@@ -3988,7 +3988,7 @@ no-dct-decimate=0:cabac=1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkAlignment" id="alignment4">
+                          <object class="GtkAlignment" id="alignment49">
                             <property name="visible">True</property>
                             <property name="top_padding">6</property>
                             <property name="bottom_padding">6</property>
@@ -4059,7 +4059,7 @@ no-dct-decimate=0:cabac=1</property>
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="label4">
+                      <object class="GtkLabel" id="label36">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Advanced</property>
                       </object>
@@ -4081,7 +4081,7 @@ no-dct-decimate=0:cabac=1</property>
           </packing>
         </child>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area6">
+          <object class="GtkHButtonBox" id="dialog-action_area5">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
@@ -4860,7 +4860,7 @@ the required multiple.</property>
                         <property name="left_padding">12</property>
                         <property name="right_padding">2</property>
                         <child>
-                          <object class="GtkVBox" id="vbox7">
+                          <object class="GtkVBox" id="vbox30">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">2</property>
@@ -6033,7 +6033,7 @@ libx264 authors:
     <property name="skip_pager_hint">True</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox6">
+      <object class="GtkVBox" id="dialog-vbox8">
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
@@ -6146,7 +6146,7 @@ libx264 authors:
           </packing>
         </child>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area6">
+          <object class="GtkHButtonBox" id="dialog-action_area8">
             <property name="visible">True</property>
             <property name="layout_style">end</property>
             <child>
@@ -6194,7 +6194,7 @@ libx264 authors:
     <property name="has_separator">False</property>
     <signal handler="chooser_file_selected_cb" name="selection-changed"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox6">
+      <object class="GtkVBox" id="dialog-vbox9">
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
@@ -6268,7 +6268,7 @@ libx264 authors:
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkAlignment" id="alignment2">
+                  <object class="GtkAlignment" id="alignment42">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="xscale">0</property>
