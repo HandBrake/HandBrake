@@ -222,12 +222,10 @@ namespace Handbrake.Functions
                         query += " -q " + value.ToString(new CultureInfo("en-US"));
                         break;
                     case "H.264 (x264)":
-                        double divided;
                         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                        double.TryParse(Properties.Settings.Default.x264cqstep.ToString(culture), out divided);
-                        value = 51 - mainWindow.slider_videoQuality.Value * divided;
+                        value = 51 - mainWindow.slider_videoQuality.Value * Properties.Settings.Default.x264cqstep;
                         value = Math.Round(value, 2);
-                        query += " -q " + value.ToString(new CultureInfo("en-US"));
+                        query += " -q " + value.ToString(culture);
                         break;
                     case "VP3 (Theora)":
                         value = mainWindow.slider_videoQuality.Value;

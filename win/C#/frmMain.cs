@@ -1049,14 +1049,11 @@ namespace Handbrake
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
 
-                    double divider;
                     CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                    double.TryParse(Properties.Settings.Default.x264cqstep.ToString(culture), out divider);
-
-                    double multiplier = 1.0 / divider;
+                    double multiplier = 1.0 / Properties.Settings.Default.x264cqstep;
                     double value = slider_videoQuality.Value*multiplier;
-                    
-                    switch (Properties.Settings.Default.x264cqstep.ToString())
+
+                    switch (Properties.Settings.Default.x264cqstep.ToString(culture))
                     {
                         case "0.20":
                             slider_videoQuality.Maximum = 255;
@@ -1119,11 +1116,8 @@ namespace Handbrake
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
-                    double divided;
-                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                    double.TryParse(Properties.Settings.Default.x264cqstep.ToString(culture), out divided);
-                    rfValue = 51.0 - slider_videoQuality.Value * divided;
-                    max = slider_videoQuality.Maximum * divided;
+                    rfValue = 51.0 - slider_videoQuality.Value * Properties.Settings.Default.x264cqstep;
+                    max = slider_videoQuality.Maximum * Properties.Settings.Default.x264cqstep;
                     min = slider_videoQuality.Minimum;
                     val = ((max - min) - (rfValue - min)) / (max - min);
                     rfValue = Math.Round(rfValue, 2);
@@ -1573,6 +1567,7 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
+
 
         // This is the END of the road ****************************************
     }

@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.Globalization;
 using System.Windows.Forms;
 using Handbrake.Functions;
 
@@ -119,7 +120,8 @@ namespace Handbrake
             numeric_updateCheckDays.Value = Properties.Settings.Default.daysBetweenUpdateCheck;
 
             // x264 step
-            drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep.ToString();
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+            drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep.ToString(culture);
 
             // Use Experimental dvdnav
             if (Properties.Settings.Default.dvdnav)

@@ -159,8 +159,6 @@ namespace Handbrake.Functions
                 if (presetQuery.VideoEncoder == "H.264 (x264)")
                 {
                     int value;
-                    System.Globalization.CultureInfo culture = System.Globalization.CultureInfo.CreateSpecificCulture("en-US");
-
                     double x264step = Properties.Settings.Default.x264cqstep;
                     double presetValue = presetQuery.VideoQuality;
 
@@ -178,10 +176,7 @@ namespace Handbrake.Functions
                         double val = Math.Round(calculated, 0);
                         int.TryParse(val.ToString(), out value);
                     }
-
-                    int safevalue;
-                    int.TryParse(value.ToString(culture), out safevalue);
-                    mainWindow.slider_videoQuality.Value = safevalue;
+                    mainWindow.slider_videoQuality.Value = value;
                 }
                 else
                 {
