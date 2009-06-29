@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Handbrake.Parsing;
@@ -23,6 +22,8 @@ namespace Handbrake.Controls
         private Boolean heightChangeGuard;
         private Boolean looseAnamorphicHeightGuard;
         private Boolean heightModJumpGaurd;
+
+        public event EventHandler PictureSettingsChanged;
 
         // Window Setup
         public PictureSettings()
@@ -112,7 +113,9 @@ namespace Handbrake.Controls
                     customAnamorphic(text_width);
                     break;
             }
-                
+            // A Picture Setting has changed so raise a PictureSettingsChanged event.
+            if (this.PictureSettingsChanged != null)
+                this.PictureSettingsChanged(this, new EventArgs());   
         }
         private void text_height_ValueChanged(object sender, EventArgs e)
         {
@@ -160,6 +163,10 @@ namespace Handbrake.Controls
             heightChangeGuard = false;
             looseAnamorphicHeightGuard = false;
             heightModJumpGaurd = false;
+
+            // A Picture Setting has changed so raise a PictureSettingsChanged event.
+            if (this.PictureSettingsChanged != null)
+                this.PictureSettingsChanged(this, new EventArgs());   
         }
         private void check_KeepAR_CheckedChanged(object sender, EventArgs e)
         {
@@ -254,6 +261,10 @@ namespace Handbrake.Controls
 
                     break;
             }
+
+            // A Picture Setting has changed so raise a PictureSettingsChanged event.
+            if (this.PictureSettingsChanged != null)
+                this.PictureSettingsChanged(this, new EventArgs());   
         }
 
         // Custom Anamorphic Controls

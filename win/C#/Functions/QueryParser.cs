@@ -222,7 +222,7 @@ namespace Handbrake.Functions
                     thisQuery.CropBottom = actCropValues[1];
                     thisQuery.CropLeft = actCropValues[2];
                     thisQuery.CropRight = actCropValues[3];
-                }
+                } 
 
                 if (strictAnamorphic.Success)
                     thisQuery.AnamorphicMode = 1;

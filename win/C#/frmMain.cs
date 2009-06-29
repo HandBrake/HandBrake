@@ -27,7 +27,7 @@ namespace Handbrake
         QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking. *********************************
-        private Title selectedTitle;
+        public Title selectedTitle;
         private DVD thisDVD;
         private frmQueue queueWindow;
         private frmPreview qtpreview;
@@ -177,6 +177,9 @@ namespace Handbrake
         // Encoding Events for setting up the GUI
         private void events()
         {
+            // Handle Widget changes when preset is selected.
+            registerPresetEventHandler();
+
             // Handle Window Resize
             if (Properties.Settings.Default.MainWindowMinimize)
                 this.Resize += new EventHandler(frmMain_Resize);
@@ -189,6 +192,68 @@ namespace Handbrake
             // Handle a file being draged onto the GUI.
             this.DragEnter += new DragEventHandler(frmMain_DragEnter);
             this.DragDrop += new DragEventHandler(frmMain_DragDrop);
+        }
+
+        // Change the preset label to custom when a user changes a setting. Don't want to give the impression that users can change settings and still be using a preset
+        public void registerPresetEventHandler()
+        {
+            // Output Settings
+            drop_format.SelectedIndexChanged += new EventHandler(changePresetLabel);
+            check_largeFile.CheckedChanged += new EventHandler(changePresetLabel);
+            check_iPodAtom.CheckedChanged += new EventHandler(changePresetLabel);
+            check_optimiseMP4.CheckedChanged += new EventHandler(changePresetLabel);
+
+            // Picture Settings
+            PictureSettings.PictureSettingsChanged += new EventHandler(changePresetLabel);
+
+            // Filter Settings
+            Filters.FilterSettingsChanged += new EventHandler(changePresetLabel);
+
+            // Video Tab
+            drp_videoEncoder.SelectedIndexChanged += new EventHandler(changePresetLabel);
+            check_2PassEncode.CheckedChanged += new EventHandler(changePresetLabel);
+            check_turbo.CheckedChanged += new EventHandler(changePresetLabel);
+            text_filesize.TextChanged += new EventHandler(changePresetLabel);
+            text_bitrate.TextChanged += new EventHandler(changePresetLabel);
+            slider_videoQuality.ValueChanged += new EventHandler(changePresetLabel);
+
+            // Audio Panel
+            AudioSettings.AudioListChanged += new EventHandler(changePresetLabel);
+
+            // Advanced Tab
+            x264Panel.rtf_x264Query.TextChanged += new EventHandler(changePresetLabel);
+        }
+        public void unRegisterPresetEventHandler()
+        {
+            // Output Settings 
+            drop_format.SelectedIndexChanged -= new EventHandler(changePresetLabel);
+            check_largeFile.CheckedChanged -= new EventHandler(changePresetLabel);
+            check_iPodAtom.CheckedChanged -= new EventHandler(changePresetLabel);
+            check_optimiseMP4.CheckedChanged -= new EventHandler(changePresetLabel);
+
+            // Picture Settings
+            PictureSettings.PictureSettingsChanged -= new EventHandler(changePresetLabel);
+
+            // Filter Settings
+            Filters.FilterSettingsChanged -= new EventHandler(changePresetLabel);
+
+            // Video Tab
+            drp_videoEncoder.SelectedIndexChanged -=  new EventHandler(changePresetLabel);
+            check_2PassEncode.CheckedChanged -=  new EventHandler(changePresetLabel);
+            check_turbo.CheckedChanged -=  new EventHandler(changePresetLabel);
+            text_filesize.TextChanged -=  new EventHandler(changePresetLabel);
+            text_bitrate.TextChanged -=  new EventHandler(changePresetLabel);
+            slider_videoQuality.ValueChanged -=  new EventHandler(changePresetLabel);
+
+            // Audio Panel
+            AudioSettings.AudioListChanged -=  new EventHandler(changePresetLabel);
+
+            // Advanced Tab
+            x264Panel.rtf_x264Query.TextChanged -=  new EventHandler(changePresetLabel); 
+        }
+        private void changePresetLabel(object sender, EventArgs e)
+        {
+            groupBox_output.Text = "Output Settings (Preset: Custom)";
         }
 
         private static void frmMain_DragEnter(object sender, DragEventArgs e)
@@ -717,6 +782,7 @@ namespace Handbrake
             }
             else
                 lbl_source.Text = "Click 'Source' to continue";
+
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
@@ -749,6 +815,7 @@ namespace Handbrake
         }
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
+            unRegisterPresetEventHandler();
             // Reset some values on the form
             PictureSettings.lbl_Aspect.Text = "Select a Title";
             //lbl_RecomendedCrop.Text = "Select a Title";
@@ -827,6 +894,8 @@ namespace Handbrake
             // Hack to force the redraw of the scrollbars which don't resize properly when the control is disabled.
             data_chpt.Columns[0].Width = 166;
             data_chpt.Columns[0].Width = 165;
+
+            registerPresetEventHandler();
         }
         private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1505,7 +1574,7 @@ namespace Handbrake
         {
             if (presetHandler.checkIfPresetsAreOutOfDate())
                 if (!Properties.Settings.Default.presetNotification)
-                    MessageBox.Show(this,
+                    MessageBox.Show(splash,
                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -1567,7 +1636,6 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
-
 
         // This is the END of the road ****************************************
     }

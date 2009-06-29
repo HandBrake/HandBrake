@@ -39,6 +39,7 @@ namespace Handbrake
             this.rtf_actLog = new System.Windows.Forms.RichTextBox();
             this.rightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_copy_log = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_openLogFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -49,7 +50,6 @@ namespace Handbrake
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_slb = new System.Windows.Forms.ToolStripStatusLabel();
             this.txt_log = new System.Windows.Forms.ToolStripStatusLabel();
-            this.mnu_openLogFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.rightClickMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -74,7 +74,7 @@ namespace Handbrake
             this.mnu_copy_log,
             this.mnu_openLogFolder});
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(247, 70);
+            this.rightClickMenu.Size = new System.Drawing.Size(247, 48);
             // 
             // mnu_copy_log
             // 
@@ -83,6 +83,14 @@ namespace Handbrake
             this.mnu_copy_log.Size = new System.Drawing.Size(246, 22);
             this.mnu_copy_log.Text = "Copy";
             this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
+            // 
+            // mnu_openLogFolder
+            // 
+            this.mnu_openLogFolder.Image = global::Handbrake.Properties.Resources.folder;
+            this.mnu_openLogFolder.Name = "mnu_openLogFolder";
+            this.mnu_openLogFolder.Size = new System.Drawing.Size(246, 22);
+            this.mnu_openLogFolder.Text = "Open Individual Log File Directory";
+            this.mnu_openLogFolder.Click += new System.EventHandler(this.mnu_openLogFolder_Click);
             // 
             // ToolTip
             // 
@@ -96,7 +104,7 @@ namespace Handbrake
             this.btn_copy});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip1.Size = new System.Drawing.Size(471, 25);
             this.toolStrip1.TabIndex = 96;
             this.toolStrip1.Text = "toolStrip1";
@@ -173,14 +181,6 @@ namespace Handbrake
             this.txt_log.Name = "txt_log";
             this.txt_log.Size = new System.Drawing.Size(74, 17);
             this.txt_log.Text = "{selected log}";
-            // 
-            // mnu_openLogFolder
-            // 
-            this.mnu_openLogFolder.Image = global::Handbrake.Properties.Resources.folder;
-            this.mnu_openLogFolder.Name = "mnu_openLogFolder";
-            this.mnu_openLogFolder.Size = new System.Drawing.Size(246, 22);
-            this.mnu_openLogFolder.Text = "Open Individual Log File Directory";
-            this.mnu_openLogFolder.Click += new System.EventHandler(this.mnu_openLogFolder_Click);
             // 
             // frmActivityWindow
             // 

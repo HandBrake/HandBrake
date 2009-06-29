@@ -11,6 +11,7 @@ namespace Handbrake.Controls
 {
     public partial class AudioPanel : UserControl
     {
+        public event EventHandler AudioListChanged;
         public AudioPanel()
         {
             InitializeComponent();
@@ -131,6 +132,10 @@ namespace Handbrake.Controls
             newTrack.SubItems.Add(lbl_drc.Text);
             lv_audioList.Items.Add(newTrack);
 
+            // The Audio List has changed to raise the event.
+            if (this.AudioListChanged != null)
+                this.AudioListChanged(this, new EventArgs());
+
             // Select the newly added track and select the control       
             lv_audioList.Items[lv_audioList.Items.Count - 1].Selected = true;
             lv_audioList.Select();
@@ -184,6 +189,10 @@ namespace Handbrake.Controls
             // Remove the Item and reselect the control if the following conditions are met.
             if (lv_audioList.SelectedItems.Count != 0)
             {
+                // The Audio List is about to change so raise the event.
+                if (this.AudioListChanged != null)
+                    this.AudioListChanged(this, new EventArgs());
+
                 // Record the current selected index.
                 int currentPosition = lv_audioList.SelectedIndices[0];
 
@@ -252,10 +261,14 @@ namespace Handbrake.Controls
         public void addTrackForPreset(ListViewItem item)
         {
             lv_audioList.Items.Add(item);
+            if (this.AudioListChanged != null)
+                this.AudioListChanged(this, new EventArgs());
         }
         public void clearAudioList()
         {
             lv_audioList.Items.Clear();
+            if (this.AudioListChanged != null)
+                this.AudioListChanged(this, new EventArgs());
         }
         public int getNewID()
         {

@@ -67,14 +67,12 @@ namespace Handbrake.Functions
             #endregion
 
             #region Picture
-            mainWindow.PictureSettings.check_autoCrop.Checked = true;
-            if (presetQuery.CropBottom == "0" && presetQuery.CropTop == "0")
-                if (presetQuery.CropLeft == "0" && presetQuery.CropRight == "0")
-                    mainWindow.PictureSettings.check_customCrop.Checked = true;
-
+            
             if (pictureSettings) // only Load picture settings if the perset requires it
             {
-                if (presetQuery.CropTop != null)
+                mainWindow.PictureSettings.check_autoCrop.Checked = true;
+        
+                if (presetQuery.CropValues != null)
                 {
                     int top, bottom, left, right;
                     int.TryParse(presetQuery.CropTop, out top);
@@ -98,9 +96,20 @@ namespace Handbrake.Functions
             if (presetQuery.Width != 0)
                 mainWindow.PictureSettings.text_width.Value = presetQuery.Width;
             else if (presetQuery.MaxWidth == 0)
-                mainWindow.PictureSettings.text_width.Value = 0;
+            {
+                if (mainWindow.selectedTitle != null)
+                    if (mainWindow.selectedTitle.Resolution.Width != 0)
+                    {
+                        mainWindow.PictureSettings.text_width.Value = mainWindow.selectedTitle.Resolution.Width;
+                        if (presetQuery.Height == 0 && presetQuery.MaxHeight == 0)
+                            mainWindow.PictureSettings.check_KeepAR.Checked = true;
+                    }
+                    else
+                        mainWindow.PictureSettings.text_width.Value = 0;
+            }
 
-            mainWindow.PictureSettings.text_height.Value = presetQuery.Height != 0 ? presetQuery.Height : 0;
+            if (presetQuery.Height != 0)
+                mainWindow.PictureSettings.text_height.Value = presetQuery.Height;
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
