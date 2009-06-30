@@ -530,6 +530,200 @@ static int MP4Init( hb_mux_object_t * m )
     return 0;
 }
 
+typedef struct stylerecord_s {
+    enum style_s {ITALIC, BOLD, UNDERLINE} style;
+    uint16_t start;
+    uint16_t stop;
+    struct stylerecord_s *next;
+} stylerecord;
+
+static void hb_makestylerecord( stylerecord **stack, 
+                                enum style_s style, int start )
+{
+    stylerecord *record = calloc( sizeof( stylerecord ), 1 );
+
+    if( record ) 
+    {
+        record->style = style;
+        record->start = start;
+        record->next = *stack;
+        *stack = record;
+    }
+}
+
+static void hb_makestyleatom( stylerecord *record, uint8_t *style)
+{
+    uint8_t face = 1;
+    hb_log("Made style '%s' from %d to %d\n", 
+           record->style == ITALIC ? "Italic" : record->style == BOLD ? "Bold" : "Underline", record->start, record->stop);
+    
+    switch( record->style )
+    {
+    case ITALIC:
+        face = 2;
+        break;
+    case BOLD:
+        face = 1;
+        break;
+    case UNDERLINE:
+        face = 4;
+        break;
+    default:
+        face = 2;
+        break;
+    }
+
+    style[0] = (record->start >> 8) & 0xff; // startChar
+    style[1] = record->start & 0xff;
+    style[2] = (record->stop >> 8) & 0xff;   // endChar
+    style[3] = record->stop & 0xff;
+    style[4] = (1 >> 8) & 0xff;    // font-ID
+    style[5] = 1 & 0xff;
+    style[6] = face;   // face-style-flags: 1 bold; 2 italic; 4 underline
+    style[7] = 24;      // font-size
+    style[8] = 255;     // r
+    style[9] = 255;     // g
+    style[10] = 255;    // b
+    style[11] = 255;    // a
+ 
+}
+
+/*
+ * Copy the input to output removing markup and adding markup to the style
+ * atom where appropriate.
+ */
+static void hb_muxmp4_process_subtitle_style( uint8_t *input,
+                                              uint8_t *output,
+                                              uint8_t *style, uint16_t *stylesize )
+{
+    uint8_t *reader = input;
+    uint8_t *writer = output;
+    uint8_t stylecount = 0;
+
+    stylerecord *stylestack = NULL;
+    
+    while(*reader != '\0') {
+        if (*reader == '<') {
+            /*
+             * possible markup, peek at the next chr
+             */
+            switch(*(reader+1)) {
+            case 'i':
+                if (*(reader+2) == '>') {
+                    reader += 3;
+                    hb_makestylerecord(&stylestack, ITALIC, writer-output);
+                } else {
+                    *writer++ = *reader++;
+                }
+                break;
+            case 'b':
+                if (*(reader+2) == '>') {
+                    reader += 3; 
+                    hb_makestylerecord(&stylestack, BOLD, writer-output);
+                } else {
+                    *writer++ = *reader++;  
+                }
+                break;
+            case 'u': 
+                if (*(reader+2) == '>') {
+                    reader += 3;
+                    hb_makestylerecord(&stylestack, UNDERLINE, writer-output);
+                } else {
+                    *writer++ = *reader++;
+                }
+                break;
+            case '/':
+                switch(*(reader+2)) {
+                case 'i':
+                    if (*(reader+3) == '>') {
+                        if (stylestack && stylestack->style == ITALIC) {
+                            uint8_t style_record[12];
+                            stylestack->stop = writer - output;
+                            hb_makestyleatom(stylestack, style_record);
+
+                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
+                            stylecount++;
+
+                            stylestack = stylestack->next;
+                        } else {
+                            hb_error("Mismatched Subtitle markup '%s'", input);
+                        }
+                        reader += 4;
+                    } else {
+                        *writer++ = *reader++;
+                    }
+                    break;
+                case 'b':
+                    if (*(reader+3) == '>') {
+                        if (stylestack && stylestack->style == BOLD) {
+                            uint8_t style_record[12];
+                            stylestack->stop = writer - output;
+                            hb_makestyleatom(stylestack, style_record);
+
+                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
+                            stylecount++;
+
+                            stylestack = stylestack->next;
+                        } else {
+                            hb_error("Mismatched Subtitle markup '%s'", input);
+                        }
+
+                        reader += 4;
+                    } else {
+                        *writer++ = *reader++;
+                    }
+                    break;
+                case 'u': 
+                    if (*(reader+3) == '>') {
+                        if (stylestack && stylestack->style == UNDERLINE) {
+                            uint8_t style_record[12];
+                            stylestack->stop = writer - output;
+                            hb_makestyleatom(stylestack, style_record);
+
+                            memcpy(style + 10 + (12 * stylecount), style_record, 12);
+                            stylecount++;
+
+                            stylestack = stylestack->next;
+                        } else {
+                            hb_error("Mismatched Subtitle markup '%s'", input);
+                        }
+                        reader += 4;
+                    } else {
+                        *writer++ = *reader++;
+                    }
+                    break;
+                default:
+                    *writer++ = *reader++;
+                    break;
+                }
+                break;
+            default:
+                *writer++ = *reader++;
+                break;
+            }
+        } else {
+            *writer++ = *reader++;
+        }
+    }
+    *writer = '\0';
+
+    if( stylecount )
+    {
+        *stylesize = 10 + ( stylecount * 12 );
+
+        memcpy( style + 4, "styl", 4);
+
+        style[0] = 0;
+        style[1] = 0;
+        style[2] = (*stylesize >> 8) & 0xff;
+        style[3] = *stylesize & 0xff;
+        style[8] = (stylecount >> 8) & 0xff;
+        style[9] = stylecount & 0xff;
+
+    }
+
+}
+
 static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                    hb_buffer_t * buf )
 {
@@ -688,17 +882,40 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                 } 
                 mux_data->sum_dur += buf->start - mux_data->sum_dur;
             }
+            uint8_t styleatom[2048];;
+            uint16_t stylesize = 0;
+            uint8_t buffer[2048];
+            uint16_t buffersize = 0;
+            uint8_t output[2048];
+
+            *buffer = '\0';
+
+            /*
+             * Copy the subtitle into buffer stripping markup and creating
+             * style atoms for them.
+             */
+            hb_muxmp4_process_subtitle_style( buf->data,
+                                              buffer,
+                                              styleatom, &stylesize );
+
+            buffersize = strlen((char*)buffer);
+
+            hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
+                        (float)buf->start / 90000, buf->start, buf->stop, 
+                        (buf->stop - buf->start), buffer);
+
+            hb_log("MuxMP4: sub len: %d, style_len %d", buffersize, stylesize);
 
             /* Write the subtitle sample */
-            uint8_t buffer[2048];
-            memcpy( buffer + 2, buf->data, buf->size );
-            buffer[0] = ( buf->size >> 8 ) & 0xff;
-            buffer[1] = buf->size & 0xff;
+            memcpy( output + 2, buffer, buffersize );
+            memcpy( output + 2 + buffersize, styleatom, stylesize);
+            output[0] = ( buffersize >> 8 ) & 0xff;
+            output[1] = buffersize & 0xff;
 
             if( !MP4WriteSample( m->file,
                                  mux_data->track,
-                                 buffer,
-                                 buf->size + 2,
+                                 output,
+                                 buffersize + stylesize + 2,
                                  buf->stop - buf->start,
                                  0,
                                  1 ))
@@ -708,8 +925,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
 
             mux_data->sum_dur += (buf->stop - buf->start);
-            hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s", (float)buf->start / 90000, buf->start, buf->stop, 
-                   (buf->stop - buf->start), buf->data);
             hb_deep_log(3, "MuxMP4:Total time elapsed:%"PRId64, mux_data->sum_dur);
         }
     }
