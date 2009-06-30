@@ -554,7 +554,7 @@ static void hb_makestylerecord( stylerecord **stack,
 static void hb_makestyleatom( stylerecord *record, uint8_t *style)
 {
     uint8_t face = 1;
-    hb_deep_log(3, "Made style '%s' from %d to %d\n", 
+    hb_deep_log(3, "Made style '%s' from %d to %d", 
            record->style == ITALIC ? "Italic" : record->style == BOLD ? "Bold" : "Underline", record->start, record->stop);
     
     switch( record->style )
@@ -599,8 +599,8 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
     uint8_t *reader = input;
     uint8_t *writer = output;
     uint8_t stylecount = 0;
-
     stylerecord *stylestack = NULL;
+    stylerecord *oldrecord = NULL;
     
     while(*reader != '\0') {
         if (*reader == '<') {
@@ -644,7 +644,9 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
                             stylecount++;
 
+                            oldrecord = stylestack;
                             stylestack = stylestack->next;
+                            free(oldrecord);
                         } else {
                             hb_error("Mismatched Subtitle markup '%s'", input);
                         }
@@ -662,8 +664,9 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
 
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
                             stylecount++;
-
+                            oldrecord = stylestack;
                             stylestack = stylestack->next;
+                            free(oldrecord);
                         } else {
                             hb_error("Mismatched Subtitle markup '%s'", input);
                         }
@@ -683,7 +686,9 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
                             stylecount++;
 
+                            oldrecord = stylestack;
                             stylestack = stylestack->next;
+                            free(oldrecord);
                         } else {
                             hb_error("Mismatched Subtitle markup '%s'", input);
                         }
@@ -903,8 +908,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             hb_deep_log(3, "MuxMP4:Sub:%fs:%"PRId64":%"PRId64":%"PRId64": %s",
                         (float)buf->start / 90000, buf->start, buf->stop, 
                         (buf->stop - buf->start), buffer);
-
-            hb_log("MuxMP4: sub len: %d, style_len %d", buffersize, stylesize);
 
             /* Write the subtitle sample */
             memcpy( output + 2, buffer, buffersize );
