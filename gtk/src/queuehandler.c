@@ -737,6 +737,7 @@ queue_add(signal_user_data_t *ud)
 	ghb_array_append(ud->queue, settings);
 	add_to_queue_list(ud, settings, NULL);
 	ghb_save_queue(ud->queue);
+	ghb_update_pending(ud);
 
 	return TRUE;
 }
@@ -801,6 +802,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 	{	
 		gtk_tree_path_free (treepath);
 	}
+	ghb_update_pending(ud);
 }
 
 static gint
@@ -1029,6 +1031,19 @@ ghb_queue_buttons_grey(signal_user_data_t *ud, gboolean working)
 
 	widget = GHB_WIDGET (ud->builder, "queue_start1");
 	gtk_widget_set_sensitive (widget, !working && (title_ok || queue_count));
+	if (working)
+	{
+		gtk_widget_hide (widget);
+		widget = GHB_WIDGET (ud->builder, "queue_stop1");
+		gtk_widget_show (widget);
+	}
+	else
+	{
+		widget = GHB_WIDGET (ud->builder, "queue_stop1");
+		gtk_widget_hide (widget);
+		widget = GHB_WIDGET (ud->builder, "queue_start1");
+		gtk_widget_show (widget);
+	}
 	widget = GHB_WIDGET (ud->builder, "queue_start2");
 	gtk_widget_set_sensitive (widget, !working && (title_ok || queue_count));
 	action = GHB_ACTION (ud->builder, "queue_start_menu");

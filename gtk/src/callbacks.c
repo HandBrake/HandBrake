@@ -857,6 +857,20 @@ source_dialog_extra_widgets(
 extern GValue *ghb_queue_edit_settings;
 static gchar *last_scan_file = NULL;
 
+static void 
+show_scan_progress(signal_user_data_t *ud)
+{
+	GtkProgressBar *progress;
+	GtkLabel *label;
+
+	progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "scan_prog"));
+	gtk_progress_bar_set_fraction (progress, 0);
+	gtk_widget_show(GTK_WIDGET(progress));
+
+	label = GTK_LABEL(GHB_WIDGET(ud->builder, "source_title"));
+	gtk_label_set_text( label, "Scanning ..." );
+}
+
 void
 ghb_do_scan(
 	signal_user_data_t *ud, 
@@ -892,14 +906,13 @@ ghb_do_scan(
 		ghb_settings_set_string(ud->settings, "source", filename);
 		if (update_source_label(ud, filename))
 		{
-			GtkProgressBar *progress;
-			progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "progressbar"));
 			gchar *path;
-			path = ghb_settings_get_string( ud->settings, "source");
-			gtk_progress_bar_set_fraction (progress, 0);
-			gtk_progress_bar_set_text (progress, "Scanning ...");
-			prune_logs(ud);
 			gint preview_count;
+
+			show_scan_progress(ud);
+			path = ghb_settings_get_string( ud->settings, "source");
+			prune_logs(ud);
+
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
 			ghb_backend_scan(path, titlenum, preview_count);
 			g_free(path);
@@ -2017,6 +2030,42 @@ queue_scan(signal_user_data_t *ud, GValue *js)
 	g_free(path);
 }
 
+static gint
+queue_pending_count(GValue *queue)
+{
+	gint nn, ii, count;
+	GValue *js;
+	gint status;
+
+	nn = 0;
+	count = ghb_array_len(queue);
+	for (ii = 0; ii < count; ii++)
+	{
+
+		js = ghb_array_get_nth(queue, ii);
+		status = ghb_settings_get_int(js, "job_status");
+		if (status == GHB_QUEUE_PENDING)
+		{
+			nn++;
+		}
+	}
+	return nn;
+}
+
+void
+ghb_update_pending(signal_user_data_t *ud)
+{
+	GtkLabel *label;
+	gint pending;
+	gchar *str;
+
+	label = GTK_LABEL(GHB_WIDGET(ud->builder, "pending_status"));
+	pending = queue_pending_count(ud->queue);
+	str = g_strdup_printf("%d encode(s) pending in the queue", pending);
+	gtk_label_set_text(label, str);
+	g_free(str);
+}
+
 GValue* 
 ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 {
@@ -2024,8 +2073,12 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 	gint count, ii, jj;
 	GValue *js;
 	gint status;
+	GtkWidget *prog;
 
 	g_debug("start_next_job");
+	prog = GHB_WIDGET(ud->builder, "progressbar");
+	gtk_widget_show(prog);
+
 	count = ghb_array_len(ud->queue);
 	if (find_first)
 	{	// Start the first pending item in the queue
@@ -2040,6 +2093,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 				current = ii;
 				ghb_inhibit_gpm();
 				queue_scan(ud, js);
+				ghb_update_pending(ud);
 				return js;
 			}
 		}
@@ -2064,6 +2118,7 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 					current = jj;
 					ghb_inhibit_gpm();
 					queue_scan(ud, js);
+					ghb_update_pending(ud);
 					return js;
 				}
 			}
@@ -2080,12 +2135,15 @@ ghb_start_next_job(signal_user_data_t *ud, gboolean find_first)
 			current = ii;
 			ghb_inhibit_gpm();
 			queue_scan(ud, js);
+			ghb_update_pending(ud);
 			return js;
 		}
 	}
 	// Nothing found
 	ghb_uninhibit_gpm();
 	ghb_notify_done(ud);
+	ghb_update_pending(ud);
+	gtk_widget_hide(prog);
 	return NULL;
 }
 
@@ -2119,25 +2177,35 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 	gint qcount;
 	gint index;
 	GValue *js;
+	gboolean subtitle_scan = FALSE;
 
-	if (status->job_count > 1)
-	{
-		task_str = g_strdup_printf("pass %d of %d, ", 
-			status->job_cur, status->job_count);
-	}
-	else
-	{
-		task_str = g_strdup("");
-	}
 	qcount = ghb_array_len(ud->queue);
 	if (qcount > 1)
 	{
 		index = find_queue_job(ud->queue, status->unique_id, &js);
 		job_str = g_strdup_printf("job %d of %d, ", index+1, qcount);
+		subtitle_scan = ghb_settings_get_boolean(js, "subtitle_scan");
 	}
 	else
 	{
 		job_str = g_strdup("");
+	}
+	if (status->job_count > 1)
+	{
+		if (status->job_cur == 1 && subtitle_scan)
+		{
+			task_str = g_strdup_printf("pass %d (subtitle scan) of %d, ", 
+				status->job_cur, status->job_count);
+		}
+		else
+		{
+			task_str = g_strdup_printf("pass %d of %d, ", 
+				status->job_cur, status->job_count);
+		}
+	}
+	else
+	{
+		task_str = g_strdup("");
 	}
 	if(status->seconds > -1)
 	{
@@ -2167,6 +2235,7 @@ ghb_backend_events(signal_user_data_t *ud)
 	ghb_status_t status;
 	gchar *status_str;
 	GtkProgressBar *progress;
+	GtkLabel       *work_status;
 	gint titleindex;
 	GValue *js;
 	gint index;
@@ -2179,6 +2248,7 @@ ghb_backend_events(signal_user_data_t *ud)
 	ghb_track_status();
 	ghb_get_status(&status);
 	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
+	work_status = GTK_LABEL(GHB_WIDGET (ud->builder, "work_status"));
 	if (status.scan.state == GHB_STATE_IDLE && 
 		status.queue.state == GHB_STATE_IDLE)
 	{
@@ -2194,6 +2264,12 @@ ghb_backend_events(signal_user_data_t *ud)
 	// Then handle the status of the queue
 	if (status.scan.state & GHB_STATE_SCANNING)
 	{
+		GtkProgressBar *scan_prog;
+		GtkLabel *label;
+
+		scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
+		label = GTK_LABEL(GHB_WIDGET (ud->builder, "source_title"));
+
 		if (status.scan.title_cur == 0)
 		{
 			status_str = g_strdup ("Scanning...");
@@ -2203,20 +2279,26 @@ ghb_backend_events(signal_user_data_t *ud)
 			status_str = g_strdup_printf ("Scanning title %d of %d...", 
 							  status.scan.title_cur, status.scan.title_count );
 		}
-		gtk_progress_bar_set_text (progress, status_str);
+		gtk_label_set_text (label, status_str);
 		g_free(status_str);
 		if (status.scan.title_count > 0)
 		{
-			gtk_progress_bar_set_fraction (progress, 
+			gtk_progress_bar_set_fraction (scan_prog, 
 				(gdouble)status.scan.title_cur / status.scan.title_count);
 		}
 	}
 	else if (status.scan.state & GHB_STATE_SCANDONE)
 	{
-		status_str = g_strdup_printf ("Scan done"); 
-		gtk_progress_bar_set_text (progress, status_str);
-		g_free(status_str);
-		gtk_progress_bar_set_fraction (progress, 1.0);
+		gchar *source;
+		GtkProgressBar *scan_prog;
+		GtkLabel *label;
+
+		source = ghb_settings_get_string(ud->settings, "source");
+		update_source_label(ud, source);
+
+		scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
+		gtk_progress_bar_set_fraction (scan_prog, 1.0);
+		gtk_widget_hide(GTK_WIDGET(scan_prog));
 
 		ghb_title_info_t tinfo;
 			
@@ -2224,13 +2306,11 @@ ghb_backend_events(signal_user_data_t *ud)
 		titleindex = ghb_longest_title();
 		ghb_ui_update(ud, "title", ghb_int64_value(titleindex));
 
+		label = GTK_LABEL(GHB_WIDGET (ud->builder, "source_title"));
 		// Are there really any titles.
 		if (!ghb_get_title_info(&tinfo, titleindex))
 		{
-			GtkProgressBar *progress;
-			progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-			gtk_progress_bar_set_fraction (progress, 0);
-			gtk_progress_bar_set_text (progress, "No Source");
+			gtk_label_set_text(label, "None");
 		}
 		ghb_clear_scan_state(GHB_STATE_SCANDONE);
 		ghb_queue_buttons_grey(ud, work_started);
@@ -2249,116 +2329,7 @@ ghb_backend_events(signal_user_data_t *ud)
 			ghb_queue_edit_settings = NULL;
 		}
 	}
-	else if (status.queue.state & GHB_STATE_SCANNING)
-	{
-		status_str = g_strdup_printf ("Scanning ...");
-		gtk_progress_bar_set_text (progress, status_str);
-		g_free(status_str);
-		gtk_progress_bar_set_fraction (progress, 0);
-	}
-	else if (status.queue.state & GHB_STATE_SCANDONE)
-	{
-		ghb_clear_queue_state(GHB_STATE_SCANDONE);
-		usleep(2000000);
-		submit_job(ud->current_job);
-	}
-	else if (status.queue.state & GHB_STATE_PAUSED)
-	{
-		status_str = g_strdup_printf ("Paused"); 
-		gtk_progress_bar_set_text (progress, status_str);
-		g_free(status_str);
-	}
-	else if (status.queue.state & GHB_STATE_WORKING)
-	{
-		status_str = working_status_string(ud, &status.queue);
-		gtk_progress_bar_set_text (progress, status_str);
-		gtk_progress_bar_set_fraction (progress, status.queue.progress);
-		g_free(status_str);
-	}
-	else if (status.queue.state & GHB_STATE_WORKDONE)
-	{
-		gint qstatus;
 
-		work_started = FALSE;
-		ghb_queue_buttons_grey(ud, FALSE);
-		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
-		treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-		store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-		if (ud->cancel_encode)
-			status.queue.error = GHB_ERROR_CANCELED;
-		switch( status.queue.error )
-		{
-			case GHB_ERROR_NONE:
-				gtk_progress_bar_set_text( progress, "Rip done!" );
-				qstatus = GHB_QUEUE_DONE;
-				if (js != NULL)
-				{
-					gchar *path = g_strdup_printf ("%d", index);
-					if (gtk_tree_model_get_iter_from_string(
-							GTK_TREE_MODEL(store), &iter, path))
-					{
-						gtk_tree_store_set(store, &iter, 0, "hb-complete", -1);
-					}
-					g_free(path);
-				}
-				break;
-			case GHB_ERROR_CANCELED:
-				gtk_progress_bar_set_text( progress, "Rip canceled." );
-				qstatus = GHB_QUEUE_CANCELED;
-				if (js != NULL)
-				{
-					gchar *path = g_strdup_printf ("%d", index);
-					if (gtk_tree_model_get_iter_from_string(
-							GTK_TREE_MODEL(store), &iter, path))
-					{
-						gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
-					}
-					g_free(path);
-				}
-				break;
-			default:
-				gtk_progress_bar_set_text( progress, "Rip failed.");
-				qstatus = GHB_QUEUE_CANCELED;
-				if (js != NULL)
-				{
-					gchar *path = g_strdup_printf ("%d", index);
-					if (gtk_tree_model_get_iter_from_string(
-							GTK_TREE_MODEL(store), &iter, path))
-					{
-						gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
-					}
-					g_free(path);
-				}
-		}
-		gtk_progress_bar_set_fraction (progress, 1.0);
-		ghb_clear_queue_state(GHB_STATE_WORKDONE);
-		if (ud->job_activity_log)
-			g_io_channel_unref(ud->job_activity_log);
-		ud->job_activity_log = NULL;
-		if (!ud->cancel_encode)
-		{
-			ud->current_job = ghb_start_next_job(ud, FALSE);
-		}
-		else
-		{
-			ghb_uninhibit_gpm();
-			ud->current_job = NULL;
-		}
-		if (js)
-			ghb_settings_set_int(js, "job_status", qstatus);
-		ghb_save_queue(ud->queue);
-		ud->cancel_encode = FALSE;
-#if !GTK_CHECK_VERSION(2, 16, 0)
-		GtkStatusIcon *si;
-
-		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
-		gtk_status_icon_set_tooltip(si, "HandBrake");
-#endif
-	}
-	else if (status.queue.state & GHB_STATE_MUXING)
-	{
-		gtk_progress_bar_set_text(progress, "Muxing: this may take awhile...");
-	}
 	if (status.queue.state & GHB_STATE_SCANNING)
 	{
 		// This needs to be in scanning and working since scanning
@@ -2368,8 +2339,21 @@ ghb_backend_events(signal_user_data_t *ud)
 			work_started = TRUE;
 			ghb_queue_buttons_grey(ud, TRUE);
 		}
+		gtk_label_set_text (work_status, "Scanning ...");
+		gtk_progress_bar_set_fraction (progress, 0);
 	}
-	if (status.queue.state & GHB_STATE_WORKING)
+	else if (status.queue.state & GHB_STATE_SCANDONE)
+	{
+		ghb_clear_queue_state(GHB_STATE_SCANDONE);
+		usleep(2000000);
+		submit_job(ud->current_job);
+		ghb_update_pending(ud);
+	}
+	else if (status.queue.state & GHB_STATE_PAUSED)
+	{
+		gtk_label_set_text (work_status, "Paused");
+	}
+	else if (status.queue.state & GHB_STATE_WORKING)
 	{
 		// This needs to be in scanning and working since scanning
 		// happens fast enough that it can be missed
@@ -2406,8 +2390,96 @@ ghb_backend_events(signal_user_data_t *ud)
 		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
 		gtk_status_icon_set_tooltip(si, status_str);
 #endif
+		gtk_label_set_text (work_status, status_str);
+		gtk_progress_bar_set_fraction (progress, status.queue.progress);
 		g_free(status_str);
 	}
+	else if (status.queue.state & GHB_STATE_WORKDONE)
+	{
+		gint qstatus;
+
+		work_started = FALSE;
+		ghb_queue_buttons_grey(ud, FALSE);
+		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+		treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+		store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
+		if (ud->cancel_encode)
+			status.queue.error = GHB_ERROR_CANCELED;
+		switch( status.queue.error )
+		{
+			case GHB_ERROR_NONE:
+				gtk_label_set_text (work_status, "Rip Done!");
+				qstatus = GHB_QUEUE_DONE;
+				if (js != NULL)
+				{
+					gchar *path = g_strdup_printf ("%d", index);
+					if (gtk_tree_model_get_iter_from_string(
+							GTK_TREE_MODEL(store), &iter, path))
+					{
+						gtk_tree_store_set(store, &iter, 0, "hb-complete", -1);
+					}
+					g_free(path);
+				}
+				break;
+			case GHB_ERROR_CANCELED:
+				gtk_label_set_text (work_status, "Rip Canceled.");
+				qstatus = GHB_QUEUE_CANCELED;
+				if (js != NULL)
+				{
+					gchar *path = g_strdup_printf ("%d", index);
+					if (gtk_tree_model_get_iter_from_string(
+							GTK_TREE_MODEL(store), &iter, path))
+					{
+						gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
+					}
+					g_free(path);
+				}
+				break;
+			default:
+				gtk_label_set_text (work_status, "Rip Failed.");
+				qstatus = GHB_QUEUE_CANCELED;
+				if (js != NULL)
+				{
+					gchar *path = g_strdup_printf ("%d", index);
+					if (gtk_tree_model_get_iter_from_string(
+							GTK_TREE_MODEL(store), &iter, path))
+					{
+						gtk_tree_store_set(store, &iter, 0, "hb-canceled", -1);
+					}
+					g_free(path);
+				}
+		}
+		gtk_progress_bar_set_fraction (progress, 1.0);
+		ghb_clear_queue_state(GHB_STATE_WORKDONE);
+		if (ud->job_activity_log)
+			g_io_channel_unref(ud->job_activity_log);
+		ud->job_activity_log = NULL;
+		if (!ud->cancel_encode)
+		{
+			ud->current_job = ghb_start_next_job(ud, FALSE);
+		}
+		else
+		{
+			ghb_uninhibit_gpm();
+			ud->current_job = NULL;
+			gtk_widget_hide(GTK_WIDGET(progress));
+		}
+		if (js)
+			ghb_settings_set_int(js, "job_status", qstatus);
+		ghb_save_queue(ud->queue);
+		ud->cancel_encode = FALSE;
+#if !GTK_CHECK_VERSION(2, 16, 0)
+		GtkStatusIcon *si;
+
+		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+		gtk_status_icon_set_tooltip(si, "HandBrake");
+#endif
+	}
+	else if (status.queue.state & GHB_STATE_MUXING)
+	{
+		gtk_label_set_text (work_status, "Muxing: This may take a while...");
+	}
+
 	if (status.scan.state & GHB_STATE_WORKING)
 	{
 		GtkProgressBar *live_progress;
@@ -3263,10 +3335,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 			if (ud->current_dvd_device != NULL &&
 				strcmp(device, ud->current_dvd_device) == 0)
 			{
-				GtkProgressBar *progress;
-				progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-				gtk_progress_bar_set_text (progress, "Scanning ...");
-				gtk_progress_bar_set_fraction (progress, 0);
+				show_scan_progress(ud);
 				update_source_label(ud, device);
 				gint preview_count;
 				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
@@ -3366,10 +3435,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	}
 	if (g_drive_has_media(gd))
 	{
-		GtkProgressBar *progress;
-		progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
-		gtk_progress_bar_set_text (progress, "Scanning ...");
-		gtk_progress_bar_set_fraction (progress, 0);
+		show_scan_progress(ud);
 		update_source_label(ud, device);
 		gint preview_count;
 		preview_count = ghb_settings_get_int(ud->settings, "preview_count");

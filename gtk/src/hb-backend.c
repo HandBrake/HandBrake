@@ -4187,6 +4187,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	gint subtitle;
 	gboolean force, burned, def, one_burned = FALSE;
 	
+	ghb_settings_set_boolean(js, "subtitle_scan", FALSE);
 	subtitle_list = ghb_settings_get_value(js, "subtitle_list");
 	count = ghb_array_len(subtitle_list);
 	for (ii = 0; ii < count; ii++)
@@ -4251,6 +4252,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			job->select_subtitle_config.force = force;
 			job->select_subtitle_config.default_track = def;
 			job->indepth_scan = 1;
+			ghb_settings_set_boolean(js, "subtitle_scan", TRUE);
 		}
 		else if (subtitle >= 0)
 		{
