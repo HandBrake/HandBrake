@@ -554,7 +554,7 @@ static void hb_makestylerecord( stylerecord **stack,
 static void hb_makestyleatom( stylerecord *record, uint8_t *style)
 {
     uint8_t face = 1;
-    hb_log("Made style '%s' from %d to %d\n", 
+    hb_deep_log(3, "Made style '%s' from %d to %d\n", 
            record->style == ITALIC ? "Italic" : record->style == BOLD ? "Bold" : "Underline", record->start, record->stop);
     
     switch( record->style )
