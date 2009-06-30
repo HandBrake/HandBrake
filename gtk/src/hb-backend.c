@@ -383,6 +383,43 @@ combo_name_map_t combo_name_map[] =
 	{NULL, NULL}
 };
 
+const gchar *srt_codeset_table[] =
+{
+	"ANSI_X3.4-1968",
+	"ANSI_X3.4-1986",
+	"ANSI_X3.4",
+	"ANSI_X3.110-1983",
+	"ANSI_X3.110",
+	"ASCII",
+	"ECMA-114",
+	"ECMA-118",
+	"ECMA-128",
+	"ECMA-CYRILLIC",
+	"IEC_P27-1",
+	"ISO-8859-1",
+	"ISO-8859-2",
+	"ISO-8859-3",
+	"ISO-8859-4",
+	"ISO-8859-5",
+	"ISO-8859-6",
+	"ISO-8859-7",
+	"ISO-8859-8",
+	"ISO-8859-9",
+	"ISO-8859-9E",
+	"ISO-8859-10",
+	"ISO-8859-11",
+	"ISO-8859-13",
+	"ISO-8859-14",
+	"ISO-8859-15",
+	"ISO-8859-16",
+	"UTF-7",
+	"UTF-8",
+	"UTF-16",
+	"UTF-32",
+	NULL
+};
+#define	SRT_TABLE_SIZE (sizeof(srt_codeset_table)/ sizeof(char*)-1)
+
 #if 0
 typedef struct iso639_lang_t
 {
@@ -1035,7 +1072,7 @@ ghb_subtitle_track_source(signal_user_data_t *ud, gint track)
 	gint titleindex;
 
 	if (track == -2)
-		return CC608SUB;
+		return SRTSUB;
 	if (track < 0)
 		return VOBSUB;
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
@@ -1070,7 +1107,7 @@ ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 
 	if (track == -2)
 	{
-		name = "Text";
+		name = "SRT";
 		goto done;
 	}
 	if (track == -1)
@@ -1107,8 +1144,10 @@ ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 				break;
 			case CC708SUB:
 			case CC608SUB:
-			case SRTSUB:
 				name = "Text";
+				break;
+			case SRTSUB:
+				name = "SRT";
 				break;
 			default:
 				break;
@@ -1525,6 +1564,33 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 						   4, hb_audio_mixdowns[ii].internal_name, 
 						   -1);
 	}
+}
+
+static void
+srt_codeset_opts_set(GtkBuilder *builder, const gchar *name)
+{
+	GtkTreeIter iter;
+	GtkListStore *store;
+	gint ii;
+	
+	g_debug("srt_codeset_opts_set ()\n");
+	store = get_combo_box_store(builder, name);
+	gtk_list_store_clear(store);
+	for (ii = 0; ii < SRT_TABLE_SIZE; ii++)
+	{
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, 
+						   0, srt_codeset_table[ii],
+						   1, TRUE, 
+						   2, srt_codeset_table[ii],
+						   3, (gdouble)ii, 
+						   4, srt_codeset_table[ii],
+						   -1);
+	}
+	GtkComboBoxEntry *cbe;
+
+	cbe = GTK_COMBO_BOX_ENTRY(GHB_WIDGET(builder, name));
+	//gtk_combo_box_entry_set_text_column(cbe, 0);
 }
 
 static void
@@ -2139,6 +2205,8 @@ ghb_lookup_combo_int(const gchar *name, const GValue *gval)
 		return lookup_video_rate_int(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_int(gval);
+	else if (strcmp(name, "SrtLanguage") == 0)
+		return lookup_audio_lang_int(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_int(gval);
 	else
@@ -2162,6 +2230,8 @@ ghb_lookup_combo_double(const gchar *name, const GValue *gval)
 		return lookup_video_rate_int(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_int(gval);
+	else if (strcmp(name, "SrtLanguage") == 0)
+		return lookup_audio_lang_int(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_int(gval);
 	else
@@ -2185,6 +2255,8 @@ ghb_lookup_combo_option(const gchar *name, const GValue *gval)
 		return lookup_video_rate_option(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_option(gval);
+	else if (strcmp(name, "SrtLanguage") == 0)
+		return lookup_audio_lang_option(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_option(gval);
 	else
@@ -2208,6 +2280,8 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
 		return lookup_video_rate_option(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
 		return lookup_mix_option(gval);
+	else if (strcmp(name, "SrtLanguage") == 0)
+		return lookup_audio_lang_option(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
 		return lookup_audio_lang_option(gval);
 	else
@@ -2255,7 +2329,9 @@ ghb_update_ui_combo_box(
 		audio_samplerate_opts_set(ud->builder, "AudioSamplerate", hb_audio_rates, hb_audio_rates_count);
 		video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		mix_opts_set(ud->builder, "AudioMixdown");
+		language_opts_set(ud->builder, "SrtLanguage");
 		language_opts_set(ud->builder, "PreferredLanguage");
+		srt_codeset_opts_set(ud->builder, "SrtCodeset");
 		title_opts_set(ud->builder, "title");
 		audio_track_opts_set(ud->builder, "AudioTrack", user_data);
 		subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
@@ -2290,8 +2366,12 @@ ghb_update_ui_combo_box(
 			video_rate_opts_set(ud->builder, "VideoFramerate", hb_video_rates, hb_video_rates_count);
 		else if (strcmp(name, "AudioMixdown") == 0)
 			mix_opts_set(ud->builder, "AudioMixdown");
+		else if (strcmp(name, "SrtLanguage") == 0)
+			language_opts_set(ud->builder, "SrtLanguage");
 		else if (strcmp(name, "PreferredLanguage") == 0)
 			language_opts_set(ud->builder, "PreferredLanguage");
+		else if (strcmp(name, "SrtCodeset") == 0)
+			srt_codeset_opts_set(ud->builder, "SrtCodeset");
 		else if (strcmp(name, "title") == 0)
 			title_opts_set(ud->builder, "title");
 		else if (strcmp(name, "SubtitleTrack") == 0)
@@ -2316,7 +2396,9 @@ init_ui_combo_boxes(GtkBuilder *builder)
 	init_combo_box(builder, "AudioSamplerate");
 	init_combo_box(builder, "VideoFramerate");
 	init_combo_box(builder, "AudioMixdown");
+	init_combo_box(builder, "SrtLanguage");
 	init_combo_box(builder, "PreferredLanguage");
+	init_combo_box(builder, "SrtCodeset");
 	init_combo_box(builder, "title");
 	init_combo_box(builder, "AudioTrack");
 	for (ii = 0; combo_name_map[ii].name != NULL; ii++)
@@ -3423,7 +3505,7 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
 
 	const GValue *slist, *settings;
-	gint count, ii, track, source;
+	gint count, ii, source;
 	gboolean burned, one_burned = FALSE;
 
 	slist = ghb_settings_get_value(ud->settings, "subtitle_list");
@@ -3431,9 +3513,8 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		settings = ghb_array_get_nth(slist, ii);
-		track = ghb_settings_combo_int(settings, "SubtitleTrack");
+		source = ghb_settings_get_int(settings, "SubtitleSource");
 		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
-		source = ghb_subtitle_track_source(ud, track);
 		if (burned && one_burned)
 		{
 			// MP4 can only handle burned vobsubs.  make sure there isn't
@@ -3462,13 +3543,35 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 			"Your chosen container does not support soft bitmap subtitles.\n\n"
 				"You should change your subtitle selections.\n"
 				"If you continue, some subtitles will be lost.");
-			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
+			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, 
+				"Cancel", "Continue"))
 			{
 				g_free(message);
 				return FALSE;
 			}
 			g_free(message);
 			break;
+		}
+		if (source == SRTSUB)
+		{
+			gchar *filename;
+
+			filename = ghb_settings_get_string(settings, "SrtFile");
+			if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+			{
+				message = g_strdup_printf(
+				"Srt file does not exist or not a regular file.\n\n"
+					"You should choose a valid file.\n"
+					"If you continue, this subtitle will be ignored.");
+				if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, 
+					"Cancel", "Continue"))
+				{
+					g_free(message);
+					return FALSE;
+				}
+				g_free(message);
+				break;
+			}
 		}
 	}
 	return TRUE;
@@ -4089,14 +4192,43 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	for (ii = 0; ii < count; ii++)
 	{
 		GValue *ssettings;
+		gint source;
 
 		ssettings = ghb_array_get_nth(subtitle_list, ii);
 
-		subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
 		force = ghb_settings_get_boolean(ssettings, "SubtitleForced");
 		burned = ghb_settings_get_boolean(ssettings, "SubtitleBurned");
 		def = ghb_settings_get_boolean(ssettings, "SubtitleDefaultTrack");
+		source = ghb_settings_get_int(ssettings, "SubtitleSource");
 
+		if (source == SRTSUB)
+		{
+    		hb_subtitle_config_t sub_config;
+			gchar *filename, *lang, *code;
+
+			filename = ghb_settings_get_string(ssettings, "SrtFile");
+			if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+			{
+				continue;
+			}
+			sub_config.offset = ghb_settings_get_int(ssettings, "SrtOffset");
+			lang = ghb_settings_get_string(ssettings, "SrtLanguage");
+			code = ghb_settings_get_string(ssettings, "SrtCodeset");
+			strncpy(sub_config.src_filename, filename, 128);
+			strncpy(sub_config.src_codeset, code, 40);
+			sub_config.force = 0;
+			sub_config.dest = PASSTHRUSUB;
+			sub_config.default_track = def;
+
+			hb_srt_add( job, &sub_config, lang);
+
+			g_free(filename);
+			g_free(lang);
+			g_free(code);
+			continue;
+		}
+
+		subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
 		if (subtitle == -1)
 		{
 			if (!burned && job->mux == HB_MUX_MKV)

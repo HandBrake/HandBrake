@@ -98,6 +98,14 @@
 		<false />
 		<key>vquality_type_target</key>
 		<false />
+		<key>SrtLanguage</key>
+		<string>und</string>
+		<key>SrtCodeset</key>
+		<string>ISO-8859-1</string>
+		<key>SrtFile</key>
+		<string></string>
+		<key>SrtOffset</key>
+		<integer>0</integer>
 	</dict>
 	<key>Preferences</key>
 	<dict>
@@ -171,6 +179,8 @@
 		<true />
 		<key>WhenComplete</key>
 		<string>notify</string>
+		<key>SrtDir</key>
+		<string></string>
 	</dict>
 	<key>XlatPresets</key>
 	<dict>

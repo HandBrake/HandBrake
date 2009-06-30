@@ -742,7 +742,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
 G_MODULE_EXPORT void
 chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 {
-	const gchar *name = gtk_file_chooser_get_filename (dialog);
+	gchar *name = gtk_file_chooser_get_filename (dialog);
 	GtkTreeModel *store;
 	GtkTreeIter iter;
 	const gchar *device;
@@ -768,6 +768,8 @@ chooser_file_selected_cb(GtkFileChooser *dialog, signal_user_data_t *ud)
 		gtk_combo_box_set_active_iter (combo, &iter);
 	else
 		gtk_combo_box_set_active (combo, 0);
+
+	g_free(name);
 }
 
 G_MODULE_EXPORT void
@@ -779,13 +781,16 @@ dvd_device_changed_cb(GtkComboBox *combo, signal_user_data_t *ud)
 	ii = gtk_combo_box_get_active (combo);
 	if (ii > 0)
 	{
-		const gchar *device, *name;
+		const gchar *device;
+		gchar *name;
 
 		dialog = GHB_WIDGET(ud->builder, "source_dialog");
 		device = gtk_combo_box_get_active_text (combo);
 		name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(dialog));
 		if (name == NULL || strcmp(name, device) != 0)
 			gtk_file_chooser_select_filename (GTK_FILE_CHOOSER(dialog), device);
+		if (name != NULL)
+			g_free(name);
 	}
 }
 
@@ -959,7 +964,7 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 	gtk_widget_hide(dialog);
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		char *filename;
+		gchar *filename;
 
 		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if (filename != NULL)

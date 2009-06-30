@@ -241,6 +241,14 @@
     <property name="page_size">0</property>
     <property name="value">0</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment31">
+    <property name="upper">30000</property>
+    <property name="lower">-30000</property>
+    <property name="page_increment">100</property>
+    <property name="step_increment">10</property>
+    <property name="page_size">0</property>
+    <property name="value">0</property>
+  </object>
   <object class="GtkAdjustment" id="preview_progress_adj">
     <property name="upper">100</property>
     <property name="lower">0</property>
@@ -255,6 +263,16 @@
     <property name="step_increment">5</property>
     <property name="page_size">0</property>
     <property name="value">10</property>
+  </object>
+  <object class="GtkImage" id="subtitle_add_image">
+    <property name="visible">True</property>
+    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="stock">gtk-add</property>
+  </object>
+  <object class="GtkImage" id="srt_add_image">
+    <property name="visible">True</property>
+    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="stock">gtk-add</property>
   </object>
   <object class="GtkUIManager" id="uimanager1">
     <child>
@@ -2157,17 +2175,29 @@ audio-volume-medium</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
                                     <property name="relief">GTK_RELIEF_NONE</property>
+                                    <property name="label">Subtitle</property>
+                                    <property name="image">subtitle_add_image</property>
                                     <signal handler="subtitle_add_clicked_cb" name="clicked"/>
-                                    <child>
-                                      <object class="GtkImage" id="image9">
-                                        <property name="visible">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="stock">gtk-add</property>
-                                      </object>
-                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="srt_add">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
+                                    <property name="relief">GTK_RELIEF_NONE</property>
+                                    <property name="label">External SRT</property>
+                                    <property name="image">srt_add_image</property>
+                                    <signal handler="srt_add_clicked_cb" name="clicked"/>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -2189,33 +2219,181 @@ audio-volume-medium</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkAlignment" id="alignment48">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="xscale">0</property>
-                                    <property name="yscale">0</property>
-                                    <property name="xalign">1</property>
-                                    <child>
-                                      <object class="GtkComboBox" id="SubtitleTrack">
-                                        <property name="width_request">215</property>
-                                        <property name="visible">True</property>
-                                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <signal handler="subtitle_track_changed_cb" name="changed"/>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkTable" id="table5">
+                                <property name="height_request">45</property>
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="n_rows">2</property>
+                                <property name="n_columns">5</property>
+                                <property name="column-spacing">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="subtitle_track_label">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes">Track</property>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="right_attach">1</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="srt_lang_label">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes">Language</property>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="srt_code_label">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes">Character Code</property>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="srt_file_label">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes">File</property>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="srt_offset_label">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="label" translatable="yes">Offset (ms)</property>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options">GTK_FILL</property>
+                                    <property name="left_attach">4</property>
+                                    <property name="right_attach">5</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="SubtitleTrack">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <signal handler="subtitle_track_changed_cb" name="changed"/>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                    <property name="left_attach">0</property>
+                                    <property name="right_attach">1</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="SrtLanguage">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <signal handler="srt_lang_changed_cb" name="changed"/>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBoxEntry" id="SrtCodeset">
+                                    <property name="width_request">150</property>
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <signal handler="srt_changed_cb" name="changed"/>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkFileChooserButton" id="SrtFile">
+                                    <property name="visible">True</property>
+                                    <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
+                                    <property name="title" translatable="yes">Srt File</property>
+                                    <signal name="selection_changed" handler="srt_file_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL|GTK_EXPAND</property>
+                                    <property name="y_options"></property>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="SrtOffset">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Adjust the offset in milliseconds between video and SRT timestamps</property>
+                                    <property name="adjustment">adjustment31</property>
+                                    <signal handler="srt_changed_cb" name="value_changed"/>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options">GTK_FILL</property>
+                                    <property name="y_options"></property>
+                                    <property name="left_attach">4</property>
+                                    <property name="right_attach">5</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                             <child>
@@ -2235,7 +2413,7 @@ audio-volume-medium</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                               </packing>
                             </child>
                           </object>

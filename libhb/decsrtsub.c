@@ -304,7 +304,6 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_in = NULL;
         *buf_out = out;
     } else {
-        printf("\nSRT Done\n");
         *buf_out = NULL;
         return HB_WORK_OK;
     }

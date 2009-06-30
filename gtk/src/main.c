@@ -404,12 +404,16 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	selection = gtk_tree_view_get_selection (treeview);
 	// 6 columns in model.  5 are visible, the other 1 is for storing
 	// values that I need
-	// Track, force, burn, default, type, track short
-	treestore = gtk_list_store_new(6, 
+	// Track, force, burn, default, type, srt offset, track short, source
+	// force visible, burn visible, offset visible
+	treestore = gtk_list_store_new(11, 
 									G_TYPE_STRING,
 									G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
 									G_TYPE_BOOLEAN, G_TYPE_STRING,  
-									G_TYPE_STRING);
+									G_TYPE_INT,     G_TYPE_STRING,
+									G_TYPE_INT,
+									G_TYPE_BOOLEAN, G_TYPE_BOOLEAN,
+									G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
 	cell = gtk_cell_renderer_text_new();
@@ -421,14 +425,14 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 
 	cell = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
-									_("Forced Only"), cell, "active", 1, NULL);
+			_("Forced Only"), cell, "active", 1, "visible", 8, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_forced_toggled_cb, ud);
 
 	cell = gtk_cell_renderer_toggle_new();
 	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(cell), TRUE);
 	column = gtk_tree_view_column_new_with_attributes(
-				_("Burned In"), cell, "active", 2, NULL);
+			_("Burned In"), cell, "active", 2, "visible", 9, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	g_signal_connect(cell, "toggled", subtitle_burned_toggled_cb, ud);
 
@@ -442,6 +446,12 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Type"), cell, "text", 4, NULL);
+	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
+	gtk_tree_view_column_set_min_width (column, 240);
+
+	cell = gtk_cell_renderer_text_new();
+	column = gtk_tree_view_column_new_with_attributes(
+			_("Srt Offset"), cell, "text", 5, "visible", 10, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
 

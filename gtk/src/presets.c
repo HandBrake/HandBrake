@@ -1392,6 +1392,8 @@ ghb_prefs_load(signal_user_data_t *ud)
 		}
 		ghb_dict_insert(dict, 
 			g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
+		ghb_dict_insert(dict, 
+			g_strdup("SrtDir"), ghb_value_dup(ghb_string_value(dir)));
 #if defined(_WIN32)
 		gchar *source;
 
@@ -3064,7 +3066,7 @@ update_subtitle_presets(signal_user_data_t *ud)
 	g_debug("update_subtitle_presets");
 	const GValue *subtitle_list, *subtitle;
 	GValue *slist, *dict;
-	gint count, ii;
+	gint count, ii, source;
 
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
 	slist = ghb_array_value_new(8);
@@ -3072,10 +3074,14 @@ update_subtitle_presets(signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		subtitle = ghb_array_get_nth(subtitle_list, ii);
-		dict = ghb_value_dup(subtitle);
-		ghb_array_append(slist, dict);
+		source = ghb_settings_get_int(subtitle, "SubtitleSource");
+		if (source != SRTSUB)
+		{
+			dict = ghb_value_dup(subtitle);
+			ghb_array_append(slist, dict);
+		}
 	}
-	ghb_settings_set_value(ud->settings, "SubtitleList", slist);
+	ghb_settings_take_value(ud->settings, "SubtitleList", slist);
 }
 
 void

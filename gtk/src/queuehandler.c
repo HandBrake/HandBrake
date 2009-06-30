@@ -456,6 +456,24 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 				def   ? " (Default)":""
 			);
 		}
+		else
+		{
+			gint offset;
+			gchar *filename, *basename, *code;
+
+			offset = ghb_settings_get_int(settings, "SrtOffset");
+			filename = ghb_settings_get_string(settings, "SrtFile");
+			basename = g_path_get_basename(filename);
+			code = ghb_settings_get_string(settings, "SrtCodeset");
+			g_string_append_printf(str,
+				"<small> %s (%s), %s, Offset (ms) %d%s</small>",
+			 	track, code, basename, offset,
+				def   ? " (Default)":""
+			);
+			g_free(filename);
+			g_free(basename);
+			g_free(code);
+		}
 		if (ii < count-1)
 			g_string_append_printf(str, "\n");
 		g_free(track);
