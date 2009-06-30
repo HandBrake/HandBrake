@@ -967,20 +967,25 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [NSString stringWithFormat:@"Chapter %d", [[item objectForKey:@"ChapterStart"] intValue]] :
         [NSString stringWithFormat:@"Chapters %d through %d", [[item objectForKey:@"ChapterStart"] intValue], [[item objectForKey:@"ChapterEnd"] intValue]];
         
-        NSString * passesString;
+        NSString * passesString = @"";
+        /* check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan */
+        if ([item objectForKey:@"SubtitleList"] && [[[[item objectForKey:@"SubtitleList"] objectAtIndex:0] objectForKey:@"subtitleSourceTrackNum"] intValue] == 1)
+        {
+          passesString = [passesString stringByAppendingString:@"1 Foreign Language Search Pass - "];
+        }
         if ([[item objectForKey:@"VideoTwoPass"] intValue] == 0)
         {
-            passesString = [NSString stringWithFormat:@"1 Video Pass"];
+            passesString = [passesString stringByAppendingString:@"1 Video Pass"];
         }
         else
         {
             if ([[item objectForKey:@"VideoTurboTwoPass"] intValue] == 1)
             {
-                passesString = [NSString stringWithFormat:@"2 Video Passes Turbo"];
+                passesString = [passesString stringByAppendingString:@"2 Video Passes First Turbo"];
             }
             else
             {
-                passesString = [NSString stringWithFormat:@"2 Video Passes"];
+                passesString = [passesString stringByAppendingString:@"2 Video Passes"];
             }
         }
         

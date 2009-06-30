@@ -719,7 +719,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	if( checkScanCount > currentScanCount )
 	{
 		currentScanCount = checkScanCount;
-        [self writeToActivityLog:"currentScanCount received from fQueueEncodeLibhb"];
 	}
     
     //hb_state_t s;
@@ -759,8 +758,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         case HB_STATE_WORKING:
         {
             NSMutableString * string;
+            NSString * pass_desc;
 			/* Update text field */
-			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: pass %d of %d, %.2f %%", @"" ), p.job_cur, p.job_count, 100.0 * p.progress];
+            if (p.job_cur == 1 && p.job_count > 1)
+            {
+                if ([[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SubtitleList"] && [[[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex]objectForKey:@"SubtitleList"] objectAtIndex:0] objectForKey:@"subtitleSourceTrackNum"] intValue] == 1)
+                {
+                    pass_desc = @"(subtitle scan)";   
+                }
+                else
+                {
+                    pass_desc = @"";
+                }
+            }
+            else
+            {
+                pass_desc = @"";
+            }
+            
+			string = [NSMutableString stringWithFormat: NSLocalizedString( @"Encoding: pass %d %@ of %d, %.2f %%", @"" ), p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
             
 			if( p.seconds > -1 )
             {
