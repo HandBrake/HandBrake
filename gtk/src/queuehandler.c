@@ -1017,47 +1017,108 @@ queue_drag_cb(
 }
 
 void
-ghb_queue_buttons_grey(signal_user_data_t *ud, gboolean working)
+ghb_queue_buttons_grey(signal_user_data_t *ud)
 {
 	GtkWidget *widget;
 	GtkAction *action;
 	gint queue_count;
 	gint titleindex;
-	gboolean title_ok;
+	gint queue_state, scan_state;
+	gboolean show_start, show_stop, paused;
 
 	queue_count = ghb_array_len(ud->queue);
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
-	title_ok = (titleindex >= 0);
+
+	queue_state = ghb_get_queue_state();
+	scan_state = ghb_get_scan_state();
+
+	show_stop = queue_state & 
+				(GHB_STATE_WORKING | GHB_STATE_SCANNING | GHB_STATE_MUXING);
+	show_start = !(scan_state & GHB_STATE_SCANNING) && 
+					(titleindex >= 0 || queue_count > 0);
+
+
+	paused = queue_state & GHB_STATE_PAUSED;
 
 	widget = GHB_WIDGET (ud->builder, "queue_start1");
-	gtk_widget_set_sensitive (widget, !working && (title_ok || queue_count));
-	if (working)
+	if (show_stop)
 	{
-		gtk_widget_hide (widget);
-		widget = GHB_WIDGET (ud->builder, "queue_stop1");
-		gtk_widget_show (widget);
+		gtk_widget_set_sensitive (widget, TRUE);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Stop");
 	}
 	else
 	{
-		widget = GHB_WIDGET (ud->builder, "queue_stop1");
-		gtk_widget_hide (widget);
-		widget = GHB_WIDGET (ud->builder, "queue_start1");
-		gtk_widget_show (widget);
+		gtk_widget_set_sensitive (widget, show_start);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Start");
 	}
 	widget = GHB_WIDGET (ud->builder, "queue_start2");
-	gtk_widget_set_sensitive (widget, !working && (title_ok || queue_count));
-	action = GHB_ACTION (ud->builder, "queue_start_menu");
-	gtk_action_set_sensitive (action, !working && (title_ok || queue_count));
+	if (show_stop)
+	{
+		gtk_widget_set_sensitive (widget, TRUE);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Stop");
+	}
+	else
+	{
+		gtk_widget_set_sensitive (widget, show_start);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Start");
+	}
 	widget = GHB_WIDGET (ud->builder, "queue_pause1");
-	gtk_widget_set_sensitive (widget, working);
+	if (paused)
+	{
+		gtk_widget_set_sensitive (widget, show_stop);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Resume");
+	}
+	else
+	{
+		gtk_widget_set_sensitive (widget, show_stop);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Pause");
+	}
 	widget = GHB_WIDGET (ud->builder, "queue_pause2");
-	gtk_widget_set_sensitive (widget, working);
+	if (paused)
+	{
+		gtk_widget_set_sensitive (widget, show_stop);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-play");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Resume");
+	}
+	else
+	{
+		gtk_widget_set_sensitive (widget, show_stop);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Pause");
+	}
+
+	action = GHB_ACTION (ud->builder, "queue_start_menu");
+	if (show_stop)
+	{
+		gtk_action_set_sensitive (action, TRUE);
+		gtk_action_set_icon_name(action, "hb-stop");
+		gtk_action_set_label(action, "S_top Queue");
+	}
+	else
+	{
+		gtk_action_set_sensitive (action, show_start);
+		gtk_action_set_icon_name(action, "hb-play");
+		gtk_action_set_label(action, "_Start Queue");
+	}
 	action = GHB_ACTION (ud->builder, "queue_pause_menu");
-	gtk_action_set_sensitive (action, working);
-	widget = GHB_WIDGET (ud->builder, "queue_stop");
-	gtk_widget_set_sensitive (widget, working);
-	action = GHB_ACTION (ud->builder, "queue_stop_menu");
-	gtk_action_set_sensitive (action, working);
+	if (paused)
+	{
+		gtk_action_set_sensitive (action, show_start);
+		gtk_action_set_icon_name(action, "hb-play");
+		gtk_action_set_label(action, "_Resume Queue");
+	}
+	else
+	{
+		gtk_action_set_sensitive (action, show_stop);
+		gtk_action_set_icon_name(action, "hb-pause");
+		gtk_action_set_label(action, "_Pause Queue");
+	}
 }
 
 G_MODULE_EXPORT void
@@ -1084,6 +1145,14 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gint status;
 	gint state;
 
+	state = ghb_get_queue_state();
+	if (state & (GHB_STATE_WORKING | GHB_STATE_SCANNING | GHB_STATE_MUXING))
+	{
+		ud->cancel_encode = TRUE;
+		ghb_cancel_encode(NULL);
+		return;
+	}
+
 	count = ghb_array_len(ud->queue);
 	for (ii = 0; ii < count; ii++)
 	{
@@ -1103,19 +1172,11 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		if (!queue_add(ud))
 			return;
 	}
-	state = ghb_get_queue_state();
 	if (state == GHB_STATE_IDLE)
 	{
 		// Add the first pending queue item and start
 		ud->current_job = ghb_start_next_job(ud, TRUE);
 	}
-}
-
-G_MODULE_EXPORT void
-queue_stop_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-	ud->cancel_encode = TRUE;
-	ghb_cancel_encode(NULL);
 }
 
 G_MODULE_EXPORT void
@@ -1182,7 +1243,7 @@ ghb_reload_queue(signal_user_data_t *ud)
 				ghb_settings_set_int(settings, "job_status", GHB_QUEUE_PENDING);
 				add_to_queue_list(ud, settings, NULL);
 			}
-			ghb_queue_buttons_grey(ud, FALSE);
+			ghb_queue_buttons_grey(ud);
 		}
 		else
 		{

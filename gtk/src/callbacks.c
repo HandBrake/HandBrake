@@ -2242,11 +2242,18 @@ ghb_backend_events(signal_user_data_t *ud)
 	GtkTreeView *treeview;
 	GtkTreeStore *store;
 	GtkTreeIter iter;
-	static gint working = 0;
-	static gboolean work_started = FALSE;
+	static gint prev_scan_state = 0;
+	static gint prev_queue_state = 0;
 	
 	ghb_track_status();
 	ghb_get_status(&status);
+	if (prev_scan_state != status.scan.state ||
+		prev_queue_state != status.queue.state)
+	{
+		ghb_queue_buttons_grey(ud);
+		prev_scan_state = status.scan.state;
+		prev_queue_state = status.queue.state;
+	}
 	progress = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "progressbar"));
 	work_status = GTK_LABEL(GHB_WIDGET (ud->builder, "work_status"));
 	if (status.scan.state == GHB_STATE_IDLE && 
@@ -2313,7 +2320,6 @@ ghb_backend_events(signal_user_data_t *ud)
 			gtk_label_set_text(label, "None");
 		}
 		ghb_clear_scan_state(GHB_STATE_SCANDONE);
-		ghb_queue_buttons_grey(ud, work_started);
 		if (ghb_queue_edit_settings)
 		{
 			gint jstatus;
@@ -2334,11 +2340,6 @@ ghb_backend_events(signal_user_data_t *ud)
 	{
 		// This needs to be in scanning and working since scanning
 		// happens fast enough that it can be missed
-		if (!work_started)
-		{
-			work_started = TRUE;
-			ghb_queue_buttons_grey(ud, TRUE);
-		}
 		gtk_label_set_text (work_status, "Scanning ...");
 		gtk_progress_bar_set_fraction (progress, 0);
 	}
@@ -2355,13 +2356,10 @@ ghb_backend_events(signal_user_data_t *ud)
 	}
 	else if (status.queue.state & GHB_STATE_WORKING)
 	{
+		static gint working = 0;
+
 		// This needs to be in scanning and working since scanning
 		// happens fast enough that it can be missed
-		if (!work_started)
-		{
-			work_started = TRUE;
-			ghb_queue_buttons_grey(ud, TRUE);
-		}
 		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
 		if (status.queue.unique_id != 0 && index >= 0)
 		{
@@ -2398,8 +2396,6 @@ ghb_backend_events(signal_user_data_t *ud)
 	{
 		gint qstatus;
 
-		work_started = FALSE;
-		ghb_queue_buttons_grey(ud, FALSE);
 		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
 		treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 		store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));

@@ -4491,11 +4491,13 @@ ghb_pause_queue()
 
     if( s.state == HB_STATE_PAUSED )
     {
-        hb_resume( h_queue );
+		hb_status.queue.state &= ~GHB_STATE_PAUSED;
+		hb_resume( h_queue );
     }
     else
     {
-        hb_pause( h_queue );
+		hb_status.queue.state |= GHB_STATE_PAUSED;
+		hb_pause( h_queue );
     }
 }
 

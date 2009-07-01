@@ -355,15 +355,6 @@
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="queue_stop_menu">
-            <property name="sensitive">False</property>
-            <property name="icon-name">hb-stop</property>
-            <property name="name">queue_stop_menu</property>
-            <property name="label" translatable="yes">S_top Queue</property>
-            <signal handler="queue_stop_clicked_cb" name="activate"/>
-          </object>
-        </child>
-        <child>
           <object class="GtkAction" id="menuitem3">
             <property name="name">menuitem3</property>
             <property name="label" translatable="yes">_View</property>
@@ -447,7 +438,6 @@
           <menuitem action="queue_add_menu"/>
           <menuitem action="queue_start_menu"/>
           <menuitem action="queue_pause_menu"/>
-          <menuitem action="queue_stop_menu"/>
         </menu>
         <menu action="menuitem3">
           <menuitem action="hbfd"/>
@@ -519,20 +509,6 @@
                 <property name="label" translatable="yes">Start</property>
                 <property name="icon_name">hb-play</property>
                 <signal handler="queue_start_clicked_cb" name="clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="queue_stop1">
-                <property name="visible">False</property>
-                <property name="sensitive">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="tooltip-text" translatable="yes">Stop Encoding</property>
-                <property name="label" translatable="yes">Stop</property>
-                <property name="icon_name">hb-stop</property>
-                <signal handler="queue_stop_clicked_cb" name="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -4752,19 +4728,6 @@ no-dct-decimate=0:cabac=1</property>
                 <property name="label" translatable="yes">Pause</property>
                 <property name="icon_name">hb-pause</property>
                 <signal handler="queue_pause_clicked_cb" name="clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="queue_stop">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Stop</property>
-                <property name="icon_name">hb-stop</property>
-                <signal handler="queue_stop_clicked_cb" name="clicked"/>
               </object>
               <packing>
                 <property name="expand">False</property>
