@@ -3144,10 +3144,8 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 			width = ((double)height * crop_width / crop_height) + 0.5;
 		job->width = width;
 		job->height = height;
-		if (max_width) 
-			job->maxWidth = max_width;
-		if (max_height) 
-			job->maxHeight = max_height;
+		job->maxWidth = max_width;
+		job->maxHeight = max_height;
 		job->crop[0] = crop[0];	job->crop[1] = crop[1];
 		job->crop[2] = crop[2];	job->crop[3] = crop[3];
 		if (job->anamorphic.mode == 3 && !keep_aspect)
