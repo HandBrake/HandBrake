@@ -62,23 +62,33 @@ namespace Handbrake
         }
         private void btn_playQT_Click(object sender, EventArgs e)
         {
-            lbl_status.Visible = true;
-            try
+            if (mainWindow.text_destination.Text.Contains(".mkv"))
             {
-                QTControl.URL = "";
-                if (File.Exists(currently_playing))
-                    File.Delete(currently_playing);
+                MessageBox.Show(this,
+                                "The QuickTime Control does not support MKV files, It is recommended you use VLC option instead.",
+                                "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            catch (Exception)
+            else
             {
-                MessageBox.Show(this, "Unable to delete previous preview file. You may need to restart the application.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                lbl_status.Visible = true;
+                try
+                {
+                    QTControl.URL = "";
+                    if (File.Exists(currently_playing))
+                        File.Delete(currently_playing);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(this, "Unable to delete previous preview file. You may need to restart the application.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
-            btn_playQT.Enabled = false;
-            btn_playVLC.Enabled = false;
-            lbl_status.Text = "Encoding Sample for (QT) ...";
-            String query = hb_common_func.generatePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
-            ThreadPool.QueueUserWorkItem(procMonitor, query);
+                btn_playQT.Enabled = false;
+                btn_playVLC.Enabled = false;
+                lbl_status.Text = "Encoding Sample for (QT) ...";
+                String query = hb_common_func.generatePreviewQuery(mainWindow, cb_duration.Text, cb_preview.Text);
+
+                ThreadPool.QueueUserWorkItem(procMonitor, query);
+            }
         }
         private void procMonitor(object state)
         {
@@ -116,7 +126,7 @@ namespace Handbrake
 
                 // Get the sample filename
                 if (mainWindow.text_destination.Text != "")
-                    currently_playing = mainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").Replace(".mkv", "_sample.mkv");;
+                    currently_playing = mainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").Replace(".mkv", "_sample.mkv"); ;
 
                 // Play back in QT or VLC
                 if (playerSelection == "QT")
@@ -163,7 +173,7 @@ namespace Handbrake
                         lbl_status.Text = "VLC will now launch.";
                     }
                     else
-                        MessageBox.Show(this, "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in the program options is correct.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(this, "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\") ", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 else
                     MessageBox.Show(this, "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -184,9 +194,9 @@ namespace Handbrake
                     BeginInvoke(new UpdateUIHandler(OpenMovie));
                     return;
                 }
-                QTControl.Sizing = QTSizingModeEnum.qtControlFitsMovie;
                 QTControl.URL = currently_playing;
-                QTControl.Sizing = QTSizingModeEnum.qtMovieFitsControl;
+                QTControl.SetSizing(QTSizingModeEnum.qtControlFitsMovie, true);
+                QTControl.URL = currently_playing;
                 QTControl.Show();
 
                 this.ClientSize = QTControl.Size;

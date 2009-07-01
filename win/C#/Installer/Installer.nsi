@@ -8,7 +8,7 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Handbrake"
-!define PRODUCT_VERSION "0.9.4"
+!define PRODUCT_VERSION "SVN 2592 Snapshot"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -55,7 +55,7 @@ Function .onInit
   Call GetDotNETVersion
   Pop $0
   ${If} $0 == "not found"
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed. $\r$\n You can download .Net Framework 3.5 from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
+    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed. $\r$\n You can download .Net Framework 2.0 redistributable from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
     Abort
   ${EndIf}
 
@@ -63,7 +63,7 @@ Function .onInit
 
   ${VersionCompare} $0 "2.0" $1
   ${If} $1 == 2
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v3.5 or newer is required. You have $0. $\r$\n You can download .Net Framework 3.5 from the Microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
+    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v2.0 or newer is required. You have $0. $\r$\n You can download .Net Framework 2.0 redistributable from the Microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
     Abort
   ${EndIf}
 FunctionEnd
@@ -103,7 +103,6 @@ Section "Handbrake" SEC01
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
   File "doc\AUTHORS"
-  File "doc\BUILD"
   File "doc\COPYING"
   File "doc\CREDITS"
   File "doc\NEWS"
@@ -146,7 +145,6 @@ Section Uninstall
   Delete "$INSTDIR\Handbrake.exe"
   Delete "$INSTDIR\Handbrake.exe.config"
   Delete "$INSTDIR\doc\AUTHORS"
-  Delete "$INSTDIR\doc\BUILD"
   Delete "$INSTDIR\doc\COPYING"
   Delete "$INSTDIR\doc\CREDITS"
   Delete "$INSTDIR\doc\NEWS"
