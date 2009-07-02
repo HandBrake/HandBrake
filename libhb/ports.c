@@ -270,7 +270,9 @@ struct hb_thread_s
 static uint64_t hb_thread_to_integer( const hb_thread_t* t )
 {
 #if defined( USE_PTHREAD )
-    #if defined( _WIN32 ) || defined( __MINGW32__ )
+    #if defined( SYS_CYGWIN )
+        return (uint64_t)t->thread;
+    #elif defined( _WIN32 ) || defined( __MINGW32__ )
         return (uint64_t)(ptrdiff_t)t->thread.p;
     #elif defined( SYS_DARWIN )
         return (unsigned long)t->thread;
