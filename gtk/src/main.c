@@ -822,6 +822,21 @@ main (int argc, char *argv[])
 	gtk_status_icon_set_tooltip(si, "HandBrake");
 #endif
 
+	// Ugly hack to keep subtitle table from bouncing around as I change
+	// which set of controls are visible
+	GtkRequisition req;
+	GtkWidget *widget;
+	gint height;
+	
+	widget = GHB_WIDGET(ud->builder, "SrtCodeset");
+	gtk_widget_size_request( widget, &req );
+	height = req.height;
+	widget = GHB_WIDGET(ud->builder, "srt_code_label");
+	gtk_widget_size_request( widget, &req );
+	height += req.height;
+	widget = GHB_WIDGET(ud->builder, "subtitle_table");
+	gtk_widget_set_size_request(widget, -1, height);
+	
 	// Everything should be go-to-go.  Lets rock!
 
 	gtk_main ();
