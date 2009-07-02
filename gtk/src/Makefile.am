@@ -5,7 +5,7 @@ HB_LIBS= \
 	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdnav -ldvdread \
 	-lfaac -lmp3lame -lmpeg2 -lvorbis -lvorbisenc -logg -lsamplerate \
 	-lx264 -lmp4v2 -lswscale -ltheora -lfaad -lz \
-	-lbz2 -liberty -lpthread -ldl
+	-lbz2 -liberty -lpthreadGC2
 else
 HB_LIBS= \
 	-lhb -la52 -lmkv -lavformat -lavcodec -lavutil -ldca -ldvdnav -ldvdread \
