@@ -2180,11 +2180,14 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 	gboolean subtitle_scan = FALSE;
 
 	qcount = ghb_array_len(ud->queue);
+	index = find_queue_job(ud->queue, status->unique_id, &js);
+	if (js != NULL)
+	{
+		subtitle_scan = ghb_settings_get_boolean(js, "subtitle_scan");
+	}
 	if (qcount > 1)
 	{
-		index = find_queue_job(ud->queue, status->unique_id, &js);
 		job_str = g_strdup_printf("job %d of %d, ", index+1, qcount);
-		subtitle_scan = ghb_settings_get_boolean(js, "subtitle_scan");
 	}
 	else
 	{

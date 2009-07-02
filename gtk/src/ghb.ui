@@ -2216,7 +2216,7 @@ audio-volume-medium</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
                                     <property name="relief">GTK_RELIEF_NONE</property>
-                                    <property name="label">External SRT</property>
+                                    <property name="label">Import SRT</property>
                                     <property name="image">srt_add_image</property>
                                     <signal handler="srt_add_clicked_cb" name="clicked"/>
                                   </object>
