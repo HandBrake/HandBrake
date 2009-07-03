@@ -19,12 +19,12 @@ $(PKG.gui.rpm) $(PKG.cli.rpm):
 
 $(PKG.gui.deb): | $(dir $(PKG.gui.deb))
 $(PKG.gui.deb):
-	-rm $(BUILD/)debian
-	ln -s $(PKG.debian) $(BUILD/)debian
-	fakeroot $(MAKE) -f debian/rules clean
-	$(MAKE) BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure -f debian/rules build
+	-rm $(SRC/)debian
+	ln -s $(PWD)/$(PKG.debian) $(SRC/)debian
+	fakeroot $(MAKE) -C $(SRC/) -f debian/rules clean
+	$(MAKE) BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure -C $(SRC/) -f debian/rules build
 	echo $(PKG.out/)
-	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.version)" BUILDDIR=$(BUILD) CONFIGURE=$(SRC/)configure PKGDESTDIR=$(PKG.out/) -f debian/rules binary
+	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.version)" BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure PKGDESTDIR=$(PWD)/$(PKG.out/) -C $(SRC/) -f debian/rules binary
 	$(MV.exe) $(PKG.gui.tmp.deb) $(PKG.gui.deb)
 
 $(PKG.cli.deb): | $(dir $(PKG.cli.deb))
