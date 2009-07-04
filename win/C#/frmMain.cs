@@ -36,7 +36,6 @@ namespace Handbrake
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
-        private delegate void UpdateStatusChanger();
 
         // Applicaiton Startup ************************************************
 
@@ -72,8 +71,7 @@ namespace Handbrake
                     lblStatus.Text = "Checking for updates ...";
                     Application.DoEvents();
 
-                    Thread updateCheckThread = new Thread(startupUpdateCheck);
-                    updateCheckThread.Start();
+                    Main.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false);
                 }
             }
 
@@ -131,29 +129,34 @@ namespace Handbrake
             queueRecovery();
         }
 
-        // Startup Functions   
-        private void startupUpdateCheck()
+        private void UpdateCheckDone(IAsyncResult result)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => UpdateCheckDone(result)));
+                return;
+            }
+
+            UpdateCheckInformation info;
+
             try
             {
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new UpdateStatusChanger(startupUpdateCheck));
-                    return;
-                }
+                info = Main.EndCheckForUpdates(result);
 
-                Boolean update = Main.updateCheck(false);
-                if (update)
+                if (info.NewVersionAvailable)
                 {
-                    frmUpdater updateWindow = new frmUpdater();
-                    updateWindow.Show();
+                    frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
+                    updateWindow.ShowDialog();
                 }
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                MessageBox.Show(splash, "Unable to perform update check. If this problem persists, you can turn of update checking in the program options. \nError Information: \n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if ((bool)result.AsyncState)
+                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        // Startup Functions   
         private void queueRecovery()
         {
             if (Main.check_queue_recovery())
@@ -393,19 +396,46 @@ namespace Handbrake
         }
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
-            Boolean update = Main.updateCheck(true);
-            if (update)
+            Main.BeginCheckForUpdates(new AsyncCallback(updateCheckDoneMenu), false);
+        }
+        private void updateCheckDoneMenu(IAsyncResult result)
+        {
+            // Make sure it's running on the calling thread
+            if (InvokeRequired)
             {
-                frmUpdater updateWindow = new frmUpdater();
-                updateWindow.Show();
+                Invoke(new MethodInvoker(() => updateCheckDoneMenu(result)));
+                return;
             }
-            else
-                MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            UpdateCheckInformation info;
+
+            try
+            {
+                // Get the information about the new build, if any, and close the window
+                info = Main.EndCheckForUpdates(result);
+                lbl_updateCheck.Visible = true;
+                if (info.NewVersionAvailable && info.BuildInformation != null)
+                {
+                    frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
+                    updateWindow.ShowDialog();
+                }
+                else
+                    MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                lbl_updateCheck.Visible = false;
+                return;
+            }
+            catch (Exception ex)
+            {
+                if ((bool)result.AsyncState)
+                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void mnu_about_Click(object sender, EventArgs e)
         {
-            Form About = new frmAbout();
-            About.ShowDialog();
+            using (frmAbout About = new frmAbout())
+            {
+                About.ShowDialog();
+            }
         }
         #endregion
 

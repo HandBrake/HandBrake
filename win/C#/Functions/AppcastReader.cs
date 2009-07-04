@@ -7,6 +7,7 @@
 using System;
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Handbrake.Functions
 {
@@ -15,15 +16,15 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get the build information from the required appcasts. Run before accessing the public vars.
         /// </summary>
-        public void getInfo()
+        public void getInfo(string input)
         {
             // Get the correct Appcast and set input.
-            XmlNode nodeItem = Properties.Settings.Default.hb_build.ToString().EndsWith("1") ? readRss(new XmlTextReader(Properties.Settings.Default.appcast_unstable)) : readRss(new XmlTextReader(Properties.Settings.Default.appcast));
-            string input = nodeItem.InnerXml;
+            XmlNode nodeItem = readRss(new XmlTextReader(new StringReader(input)));
+            string result = nodeItem.InnerXml;
 
             // Regular Expressions
-            Match ver = Regex.Match(input, @"sparkle:version=""([0-9]*)\""");
-            Match verShort = Regex.Match(input, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+            Match ver = Regex.Match(result, @"sparkle:version=""([0-9]*)\""");
+            Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
 
             build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
             version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");

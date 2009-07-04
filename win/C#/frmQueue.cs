@@ -22,21 +22,21 @@ namespace Handbrake
             InitializeComponent();
 
             this.queue = q;
-            queue.OnEncodeStart += new EventHandler(queue_OnEncodeStart);
-            queue.OnQueueFinished += new EventHandler(queue_OnQueueFinished);
-            queue.OnPaused += new EventHandler(queue_OnPaused);
+            queue.OnEncodeStart += new EventHandler(queueOnEncodeStart);
+            queue.OnQueueFinished += new EventHandler(queueOnQueueFinished);
+            queue.OnPaused += new EventHandler(queueOnPaused);
         }
-        void queue_OnPaused(object sender, EventArgs e)
+        void queueOnPaused(object sender, EventArgs e)
         {
             setUIEncodeFinished();
             updateUIElements();
         }
-        void queue_OnQueueFinished(object sender, EventArgs e)
+        void queueOnQueueFinished(object sender, EventArgs e)
         {
             setUIEncodeFinished();
             resetQueue(); // Reset the Queue Window
         }
-        void queue_OnEncodeStart(object sender, EventArgs e)
+        void queueOnEncodeStart(object sender, EventArgs e)
         {
             setUIEncodeStarted(); // make sure the UI is set correctly
             setCurrentEncodeInformation();
@@ -56,7 +56,7 @@ namespace Handbrake
         /// </summary>
         public new void Show()
         {
-            Show(true);
+           Show(true);
         }
 
         /// <summary>
@@ -67,7 +67,8 @@ namespace Handbrake
         {
             if (doSetQueue) setQueue();
             base.Show();
-            Activate();
+
+            //Activate();
         }
 
         // Start and Stop Controls

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Threading;
 using Handbrake.EncodeQueue;
+using System.Net;
 
 namespace Handbrake.Functions
 {
@@ -189,40 +190,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Checks for updates and returns true if an update is available.
-        /// </summary>
-        /// <param name="debug">Turns on debug mode. Don't use on program startup</param>
-        /// <returns>Boolean True = Update available</returns>
-        public static Boolean updateCheck(Boolean debug)
-        {
-            try
-            {
-                AppcastReader rssRead = new AppcastReader();
-                rssRead.getInfo(); // Initializes the class.
-                string build = rssRead.build;
-
-                int latest = int.Parse(build);
-                int current = Properties.Settings.Default.hb_build;
-                int skip = Properties.Settings.Default.skipversion;
-
-                if (latest == skip)
-                    return false;
-
-                Properties.Settings.Default.lastUpdateCheckDate = DateTime.Now;
-                Properties.Settings.Default.Save();
-
-                Boolean update = (latest > current);
-                return update;
-            }
-            catch (Exception exc)
-            {
-                if (debug)
-                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Get's HandBrakes version data from the CLI.
         /// </summary>
         /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
@@ -370,5 +337,92 @@ namespace Handbrake.Functions
             }
         }
 
+        /// <summary>
+        /// Begins checking for an update to HandBrake.
+        /// </summary>
+        /// <param name="callback">The method that will be called when the check is finished.</param>
+        /// <param name="debug">Whether or not to execute this in debug mode.</param>
+        public static void BeginCheckForUpdates(AsyncCallback callback, bool debug)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+            {
+                try
+                {
+                    // Is this a stable or unstable build?
+                    string url = Properties.Settings.Default.hb_build.ToString().EndsWith("1") ? Properties.Settings.Default.appcast_unstable : Properties.Settings.Default.appcast;
+
+                    // Initialize variables
+                    WebRequest request = WebRequest.Create(url);
+                    WebResponse response = request.GetResponse();
+                    AppcastReader reader = new AppcastReader();
+
+                    // Get the data, convert it to a string, and parse it into the AppcastReader
+                    reader.getInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
+
+                    // Further parse the information
+                    string build = reader.build;
+
+                    int latest = int.Parse(build);
+                    int current = Properties.Settings.Default.hb_build;
+                    int skip = Properties.Settings.Default.skipversion;
+
+                    // If the user wanted to skip this version, don't report the update
+                    if (latest == skip)
+                    {
+                        UpdateCheckInformation info = new UpdateCheckInformation() { NewVersionAvailable = false, BuildInformation = null };
+                        callback(new UpdateCheckResult(debug, info));
+                        return;
+                    }
+
+                    // Set when the last update was
+                    Properties.Settings.Default.lastUpdateCheckDate = DateTime.Now;
+                    Properties.Settings.Default.Save();
+
+                    UpdateCheckInformation info2 = new UpdateCheckInformation() { NewVersionAvailable = latest > current, BuildInformation = reader };
+                    callback(new UpdateCheckResult(debug, info2));
+                }
+                catch (Exception exc)
+                {
+                    callback(new UpdateCheckResult(debug, new UpdateCheckInformation() { Error = exc }));
+                }
+            }));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static UpdateCheckInformation EndCheckForUpdates(IAsyncResult result)
+        {
+            UpdateCheckResult checkResult = (UpdateCheckResult)result;
+            return checkResult.Result;
+        }
+
+        /// <summary>
+        /// Used in EndUpdateCheck() for update checking and the IAsyncResult design pattern.
+        /// </summary>
+        private class UpdateCheckResult : IAsyncResult
+        {
+            public UpdateCheckResult(object asyncState, UpdateCheckInformation info)
+            {
+                AsyncState = asyncState;
+                Result = info;
+            }
+
+            /// <summary>
+            /// Gets whether the check was executed in debug mode.
+            /// </summary>
+            public object AsyncState { get; private set; }
+
+            /// <summary>
+            /// Gets the result of the update check.
+            /// </summary>
+            public UpdateCheckInformation Result { get; private set; }
+
+            public WaitHandle AsyncWaitHandle { get { throw new NotImplementedException(); } }
+            public bool CompletedSynchronously { get { throw new NotImplementedException(); } }
+            public bool IsCompleted { get { throw new NotImplementedException(); } }
+        }
     }
 }

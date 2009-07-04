@@ -12,12 +12,12 @@ namespace Handbrake
 {
     public partial class frmUpdater : Form
     {
-        AppcastReader appcast = new AppcastReader();
-        public frmUpdater()
+        AppcastReader appcast;
+        public frmUpdater(AppcastReader reader)
         {
             InitializeComponent();
 
-            appcast.getInfo(); // Initializes the appcast
+            appcast = reader;
             getRss();
             setVersions();
         }
@@ -37,7 +37,7 @@ namespace Handbrake
         private void btn_installUpdate_Click(object sender, EventArgs e)
         {
             frmDownload download = new frmDownload(appcast.downloadFile);
-            download.Show();
+            download.ShowDialog();
             this.Close();
         }
 

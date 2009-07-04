@@ -698,6 +698,7 @@ namespace Handbrake.Controls
             // x264Panel
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.slider_psytrellis);
             this.Controls.Add(this.lbl_psytrellis);
             this.Controls.Add(this.lbl_psyrd);

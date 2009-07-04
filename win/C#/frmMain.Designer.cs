@@ -158,6 +158,7 @@ namespace Handbrake
             this.lbl_source = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox_output = new System.Windows.Forms.Label();
+            this.lbl_updateCheck = new System.Windows.Forms.ToolStripStatusLabel();
             this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Filters = new Handbrake.Controls.Filters();
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
@@ -793,6 +794,7 @@ namespace Handbrake
             // Label47
             // 
             this.Label47.AutoSize = true;
+            this.Label47.BackColor = System.Drawing.Color.Transparent;
             this.Label47.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Label47.ForeColor = System.Drawing.Color.Black;
             this.Label47.Location = new System.Drawing.Point(13, 39);
@@ -859,17 +861,19 @@ namespace Handbrake
             // radio_cq
             // 
             this.radio_cq.AutoSize = true;
+            this.radio_cq.BackColor = System.Drawing.Color.Transparent;
             this.radio_cq.Location = new System.Drawing.Point(336, 97);
             this.radio_cq.Name = "radio_cq";
             this.radio_cq.Size = new System.Drawing.Size(125, 17);
             this.radio_cq.TabIndex = 18;
             this.radio_cq.Text = "Constant Quality:";
-            this.radio_cq.UseVisualStyleBackColor = true;
+            this.radio_cq.UseVisualStyleBackColor = false;
             this.radio_cq.CheckedChanged += new System.EventHandler(this.radio_cq_CheckedChanged);
             // 
             // radio_avgBitrate
             // 
             this.radio_avgBitrate.AutoSize = true;
+            this.radio_avgBitrate.BackColor = System.Drawing.Color.Transparent;
             this.radio_avgBitrate.Checked = true;
             this.radio_avgBitrate.Location = new System.Drawing.Point(336, 64);
             this.radio_avgBitrate.Name = "radio_avgBitrate";
@@ -877,18 +881,19 @@ namespace Handbrake
             this.radio_avgBitrate.TabIndex = 17;
             this.radio_avgBitrate.TabStop = true;
             this.radio_avgBitrate.Text = "Avg Bitrate (kbps):";
-            this.radio_avgBitrate.UseVisualStyleBackColor = true;
+            this.radio_avgBitrate.UseVisualStyleBackColor = false;
             this.radio_avgBitrate.CheckedChanged += new System.EventHandler(this.radio_avgBitrate_CheckedChanged);
             // 
             // radio_targetFilesize
             // 
             this.radio_targetFilesize.AutoSize = true;
+            this.radio_targetFilesize.BackColor = System.Drawing.Color.Transparent;
             this.radio_targetFilesize.Location = new System.Drawing.Point(336, 37);
             this.radio_targetFilesize.Name = "radio_targetFilesize";
             this.radio_targetFilesize.Size = new System.Drawing.Size(126, 17);
             this.radio_targetFilesize.TabIndex = 16;
             this.radio_targetFilesize.Text = "Target Size (MB):";
-            this.radio_targetFilesize.UseVisualStyleBackColor = true;
+            this.radio_targetFilesize.UseVisualStyleBackColor = false;
             this.radio_targetFilesize.CheckedChanged += new System.EventHandler(this.radio_targetFilesize_CheckedChanged);
             // 
             // label25
@@ -1370,10 +1375,12 @@ namespace Handbrake
             // StatusStrip
             // 
             this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lbl_encode});
+            this.lbl_encode,
+            this.lbl_updateCheck});
             this.StatusStrip.Location = new System.Drawing.Point(0, 599);
             this.StatusStrip.Name = "StatusStrip";
             this.StatusStrip.Size = new System.Drawing.Size(1000, 22);
+            this.StatusStrip.SizingGrip = false;
             this.StatusStrip.TabIndex = 7;
             this.StatusStrip.Text = "statusStrip1";
             // 
@@ -1434,6 +1441,16 @@ namespace Handbrake
             this.groupBox_output.TabIndex = 47;
             this.groupBox_output.Text = "Output Settings: (Preset: None)";
             // 
+            // lbl_updateCheck
+            // 
+            this.lbl_updateCheck.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_updateCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lbl_updateCheck.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_updateCheck.Name = "lbl_updateCheck";
+            this.lbl_updateCheck.Size = new System.Drawing.Size(139, 17);
+            this.lbl_updateCheck.Text = "Checking for Updates ...";
+            this.lbl_updateCheck.Visible = false;
+            // 
             // PictureSettings
             // 
             this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
@@ -1468,6 +1485,7 @@ namespace Handbrake
             // 
             // x264Panel
             // 
+            this.x264Panel.BackColor = System.Drawing.Color.Transparent;
             this.x264Panel.Location = new System.Drawing.Point(0, 0);
             this.x264Panel.Name = "x264Panel";
             this.x264Panel.Size = new System.Drawing.Size(720, 306);
@@ -1509,7 +1527,9 @@ namespace Handbrake
             this.Controls.Add(this.frmMainMenu);
             this.Controls.Add(this.StatusStrip);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HandBrake";
@@ -1668,6 +1688,7 @@ namespace Handbrake
         internal Label lbl_source;
         private Label label4;
         internal Label groupBox_output;
+        private ToolStripStatusLabel lbl_updateCheck;
 
  
     }
