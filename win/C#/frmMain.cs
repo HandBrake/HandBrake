@@ -1243,7 +1243,8 @@ namespace Handbrake
         {
             if (Check_ChapterMarkers.Checked)
             {
-                drop_format.SelectedIndex = 1;
+                if (drop_format.SelectedIndex != 2) 
+                    drop_format.SelectedIndex = 1;
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
                 DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
@@ -1252,7 +1253,8 @@ namespace Handbrake
             }
             else
             {
-                drop_format.SelectedIndex = 0;
+                if (drop_format.SelectedIndex != 2) 
+                    drop_format.SelectedIndex = 0;
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
             }
