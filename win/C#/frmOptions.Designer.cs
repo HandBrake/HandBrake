@@ -40,6 +40,7 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
+            this.check_m4v = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
@@ -77,7 +78,6 @@ namespace Handbrake
             this.tab_advanced = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.numeric_updateCheckDays = new System.Windows.Forms.NumericUpDown();
             this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
             this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
@@ -123,13 +123,12 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.check_m4v = new System.Windows.Forms.CheckBox();
+            this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tab_advanced.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numeric_updateCheckDays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -202,6 +201,19 @@ namespace Handbrake
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
+            // 
+            // check_m4v
+            // 
+            this.check_m4v.AutoSize = true;
+            this.check_m4v.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_m4v.Location = new System.Drawing.Point(114, 247);
+            this.check_m4v.Name = "check_m4v";
+            this.check_m4v.Size = new System.Drawing.Size(334, 17);
+            this.check_m4v.TabIndex = 82;
+            this.check_m4v.Text = "Use iPod/iTunes friendly (.m4v) file extension for MP4";
+            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
+            this.check_m4v.UseVisualStyleBackColor = true;
+            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
             // 
             // label7
             // 
@@ -632,9 +644,9 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.drop_updateCheckDays);
             this.tab_advanced.Controls.Add(this.label31);
             this.tab_advanced.Controls.Add(this.label15);
-            this.tab_advanced.Controls.Add(this.numeric_updateCheckDays);
             this.tab_advanced.Controls.Add(this.check_trayStatusAlerts);
             this.tab_advanced.Controls.Add(this.check_inGuiStatus);
             this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
@@ -673,29 +685,6 @@ namespace Handbrake
             this.label15.Size = new System.Drawing.Size(64, 13);
             this.label15.TabIndex = 95;
             this.label15.Text = "Updates:";
-            // 
-            // numeric_updateCheckDays
-            // 
-            this.numeric_updateCheckDays.Location = new System.Drawing.Point(323, 166);
-            this.numeric_updateCheckDays.Maximum = new decimal(new int[] {
-            31,
-            0,
-            0,
-            0});
-            this.numeric_updateCheckDays.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numeric_updateCheckDays.Name = "numeric_updateCheckDays";
-            this.numeric_updateCheckDays.Size = new System.Drawing.Size(50, 21);
-            this.numeric_updateCheckDays.TabIndex = 94;
-            this.numeric_updateCheckDays.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numeric_updateCheckDays.ValueChanged += new System.EventHandler(this.numeric_updateCheckDays_ValueChanged);
             // 
             // check_trayStatusAlerts
             // 
@@ -1212,18 +1201,22 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // check_m4v
+            // drop_updateCheckDays
             // 
-            this.check_m4v.AutoSize = true;
-            this.check_m4v.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_m4v.Location = new System.Drawing.Point(114, 247);
-            this.check_m4v.Name = "check_m4v";
-            this.check_m4v.Size = new System.Drawing.Size(334, 17);
-            this.check_m4v.TabIndex = 82;
-            this.check_m4v.Text = "Use iPod/iTunes friendly (.m4v) file extension for MP4";
-            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
-            this.check_m4v.UseVisualStyleBackColor = true;
-            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
+            this.drop_updateCheckDays.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_updateCheckDays.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.drop_updateCheckDays.FormattingEnabled = true;
+            this.drop_updateCheckDays.Items.AddRange(new object[] {
+            "Daily",
+            "Weekly",
+            "Monthly"});
+            this.drop_updateCheckDays.Location = new System.Drawing.Point(323, 165);
+            this.drop_updateCheckDays.Name = "drop_updateCheckDays";
+            this.drop_updateCheckDays.Size = new System.Drawing.Size(85, 21);
+            this.drop_updateCheckDays.TabIndex = 97;
+            this.ToolTip.SetToolTip(this.drop_updateCheckDays, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
+                    "n Automatic.");
+            this.drop_updateCheckDays.SelectedIndexChanged += new System.EventHandler(this.drop_updateCheckDays_SelectedIndexChanged);
             // 
             // frmOptions
             // 
@@ -1249,7 +1242,6 @@ namespace Handbrake
             this.tab_cli.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numeric_updateCheckDays)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1340,11 +1332,11 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_disablePresetNotification;
         internal System.Windows.Forms.CheckBox check_inGuiStatus;
         internal System.Windows.Forms.CheckBox check_trayStatusAlerts;
-        private System.Windows.Forms.NumericUpDown numeric_updateCheckDays;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button btn_viewLogs;
         private System.Windows.Forms.Button btn_clearLogs;
         internal System.Windows.Forms.CheckBox check_m4v;
+        internal System.Windows.Forms.ComboBox drop_updateCheckDays;
     }
 }

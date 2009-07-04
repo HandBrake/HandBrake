@@ -121,7 +121,18 @@ namespace Handbrake
                 check_inGuiStatus.CheckState = CheckState.Checked;
 
             // Days between update checks
-            numeric_updateCheckDays.Value = Properties.Settings.Default.daysBetweenUpdateCheck;
+            switch (Properties.Settings.Default.daysBetweenUpdateCheck)
+            {
+                case 1:
+                    drop_updateCheckDays.SelectedIndex = 0;
+                    break;
+                case 7:
+                    drop_updateCheckDays.SelectedIndex = 1;
+                    break;
+                case 30:
+                    drop_updateCheckDays.SelectedIndex = 2;
+                    break;
+            }
 
             // x264 step
             CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
@@ -295,9 +306,20 @@ namespace Handbrake
             Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.Checked;
         }
 
-        private void numeric_updateCheckDays_ValueChanged(object sender, EventArgs e)
+        private void drop_updateCheckDays_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.daysBetweenUpdateCheck = (int)numeric_updateCheckDays.Value;
+            switch (drop_updateCheckDays.SelectedIndex)
+            {
+                case 0:
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 1;
+                    break;
+                case 1:
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 7;
+                    break;
+                case 2:
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 30;
+                    break;
+            }
         }
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)
@@ -330,6 +352,8 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
+        
 
     }
 }
