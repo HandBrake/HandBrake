@@ -45,14 +45,9 @@ namespace Handbrake.Functions
 
             if (presetQuery.Format != null)
             {
-                if (presetQuery.Format == "mp4")
+                if (presetQuery.Format == "mp4" || presetQuery.Format == "m4v")
                     mainWindow.drop_format.SelectedIndex = 0;
-                else if (presetQuery.Format == "m4v")
-                    mainWindow.drop_format.SelectedIndex = 1;
                 else if (presetQuery.Format == "mkv")
-                    mainWindow.drop_format.SelectedIndex = 2;
-
-                if (presetQuery.ChapterMarkers && presetQuery.Format == "mp4")
                     mainWindow.drop_format.SelectedIndex = 1;
             }
 

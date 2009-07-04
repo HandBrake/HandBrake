@@ -153,12 +153,12 @@ namespace Handbrake
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbl_updateCheck = new System.Windows.Forms.ToolStripStatusLabel();
             this.hbproc = new System.Diagnostics.Process();
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_source = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox_output = new System.Windows.Forms.Label();
-            this.lbl_updateCheck = new System.Windows.Forms.ToolStripStatusLabel();
             this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Filters = new Handbrake.Controls.Filters();
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
@@ -204,7 +204,7 @@ namespace Handbrake
             // 
             // DVD_Save
             // 
-            this.DVD_Save.Filter = "mp4|*.mp4|m4v|*.m4v|mkv|*.mkv";
+            this.DVD_Save.Filter = "mp4|*.mp4|mkv|*.mkv";
             this.DVD_Save.SupportMultiDottedExtensions = true;
             // 
             // File_Save
@@ -484,7 +484,6 @@ namespace Handbrake
             this.drop_format.FormattingEnabled = true;
             this.drop_format.Items.AddRange(new object[] {
             "MP4 File",
-            "M4V File",
             "MKV File"});
             this.drop_format.Location = new System.Drawing.Point(78, 215);
             this.drop_format.Name = "drop_format";
@@ -1391,6 +1390,16 @@ namespace Handbrake
             this.lbl_encode.Size = new System.Drawing.Size(31, 17);
             this.lbl_encode.Text = "{0}";
             // 
+            // lbl_updateCheck
+            // 
+            this.lbl_updateCheck.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_updateCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lbl_updateCheck.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_updateCheck.Name = "lbl_updateCheck";
+            this.lbl_updateCheck.Size = new System.Drawing.Size(139, 17);
+            this.lbl_updateCheck.Text = "Checking for Updates ...";
+            this.lbl_updateCheck.Visible = false;
+            // 
             // hbproc
             // 
             this.hbproc.StartInfo.Domain = "";
@@ -1440,16 +1449,6 @@ namespace Handbrake
             this.groupBox_output.Size = new System.Drawing.Size(210, 13);
             this.groupBox_output.TabIndex = 47;
             this.groupBox_output.Text = "Output Settings: (Preset: None)";
-            // 
-            // lbl_updateCheck
-            // 
-            this.lbl_updateCheck.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_updateCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.lbl_updateCheck.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_updateCheck.Name = "lbl_updateCheck";
-            this.lbl_updateCheck.Size = new System.Drawing.Size(139, 17);
-            this.lbl_updateCheck.Text = "Checking for Updates ...";
-            this.lbl_updateCheck.Visible = false;
             // 
             // PictureSettings
             // 

@@ -123,6 +123,7 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
+            this.check_m4v = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -180,6 +181,7 @@ namespace Handbrake
             // 
             // tab_general
             // 
+            this.tab_general.Controls.Add(this.check_m4v);
             this.tab_general.Controls.Add(this.label7);
             this.tab_general.Controls.Add(this.label5);
             this.tab_general.Controls.Add(this.txt_autoNameFormat);
@@ -1210,6 +1212,19 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
+            // check_m4v
+            // 
+            this.check_m4v.AutoSize = true;
+            this.check_m4v.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.check_m4v.Location = new System.Drawing.Point(114, 247);
+            this.check_m4v.Name = "check_m4v";
+            this.check_m4v.Size = new System.Drawing.Size(334, 17);
+            this.check_m4v.TabIndex = 82;
+            this.check_m4v.Text = "Use iPod/iTunes friendly (.m4v) file extension for MP4";
+            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
+            this.check_m4v.UseVisualStyleBackColor = true;
+            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
+            // 
             // frmOptions
             // 
             this.ClientSize = new System.Drawing.Size(521, 413);
@@ -1330,5 +1345,6 @@ namespace Handbrake
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button btn_viewLogs;
         private System.Windows.Forms.Button btn_clearLogs;
+        internal System.Windows.Forms.CheckBox check_m4v;
     }
 }

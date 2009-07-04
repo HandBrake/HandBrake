@@ -393,5 +393,17 @@ namespace Handbrake.Properties {
                 this["daysBetweenUpdateCheck"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useM4v {
+            get {
+                return ((bool)(this["useM4v"]));
+            }
+            set {
+                this["useM4v"] = value;
+            }
+        }
     }
 }

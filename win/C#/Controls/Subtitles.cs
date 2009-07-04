@@ -17,7 +17,7 @@ namespace Handbrake.Controls
         {
             fileContainer = value;
             Boolean trigger = false;
-            if (fileContainer != 2)
+            if (fileContainer != 1)
                 foreach (ListViewItem item in lv_subList.Items)
                 {
                     if (item.SubItems[1].Text.Contains("Bitmap"))

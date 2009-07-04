@@ -1024,8 +1024,6 @@ namespace Handbrake
                 DVD_Save.FilterIndex = 1;
             else if (drop_format.SelectedIndex.Equals(1))
                 DVD_Save.FilterIndex = 2;
-            else if (drop_format.SelectedIndex.Equals(2))
-                DVD_Save.FilterIndex = 3;
 
             if (DVD_Save.ShowDialog() == DialogResult.OK)
             {
@@ -1038,13 +1036,12 @@ namespace Handbrake
                     {
                         case 1:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
-                                DVD_Save.FileName += ".mp4";
+                                if (Properties.Settings.Default.useM4v)
+                                    DVD_Save.FileName += ".m4v";
+                                else
+                                    DVD_Save.FileName += ".mp4";
                             break;
                         case 2:
-                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".m4v", StringComparison.InvariantCultureIgnoreCase))
-                                DVD_Save.FileName += ".m4v";
-                            break;
-                        case 3:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
                                 DVD_Save.FileName += ".mkv";
                             break;
@@ -1055,20 +1052,18 @@ namespace Handbrake
                     text_destination.Text = DVD_Save.FileName;
 
                     // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
-                    if (Check_ChapterMarkers.Checked)
-                        drop_format.SelectedIndex = 1;
+                    if (Check_ChapterMarkers.Checked && DVD_Save.FilterIndex != 2)
+                        setExtension(".m4v");
                 }
             }
         }
         private void text_destination_TextChanged(object sender, EventArgs e)
         {
             string path = text_destination.Text;
-            if (path.EndsWith(".mp4"))
+            if (path.EndsWith(".mp4") || path.EndsWith(".m4v"))
                 drop_format.SelectedIndex = 0;
-            else if (path.EndsWith(".m4v"))
-                drop_format.SelectedIndex = 1;
             else if (path.EndsWith(".mkv"))
-                drop_format.SelectedIndex = 2;
+                drop_format.SelectedIndex = 1;
         }
 
         // Output Settings
@@ -1077,12 +1072,12 @@ namespace Handbrake
             switch (drop_format.SelectedIndex)
             {
                 case 0:
-                    setExtension(".mp4");
+                    if (Properties.Settings.Default.useM4v)
+                        setExtension(".m4v");
+                    else
+                        setExtension(".mp4");
                     break;
                 case 1:
-                    setExtension(".m4v");
-                    break;
-                case 2:
                     setExtension(".mkv");
                     break;
             }
@@ -1273,8 +1268,8 @@ namespace Handbrake
         {
             if (Check_ChapterMarkers.Checked)
             {
-                if (drop_format.SelectedIndex != 2) 
-                    drop_format.SelectedIndex = 1;
+                if (drop_format.SelectedIndex != 1) 
+                    setExtension(".m4v");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
                 DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
@@ -1283,8 +1278,8 @@ namespace Handbrake
             }
             else
             {
-                if (drop_format.SelectedIndex != 2) 
-                    drop_format.SelectedIndex = 0;
+                if (drop_format.SelectedIndex != 1 && !Properties.Settings.Default.useM4v)
+                    setExtension(".mp4");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
             }

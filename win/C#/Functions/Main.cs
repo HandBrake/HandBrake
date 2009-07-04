@@ -162,10 +162,13 @@ namespace Handbrake.Functions
 
                 // Add the appropriate file extension
                 if (format == 0)
-                    destination_filename += ".mp4";
+                {
+                    if (Properties.Settings.Default.useM4v)
+                        destination_filename += ".m4v";
+                    else
+                        destination_filename += ".mp4";
+                }
                 else if (format == 1)
-                    destination_filename += ".m4v";
-                else if (format == 2)
                     destination_filename += ".mkv";
 
                 // Now work out the path where the file will be stored.

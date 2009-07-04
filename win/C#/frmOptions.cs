@@ -38,7 +38,7 @@ namespace Handbrake
 
             // On Encode Completeion Action
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
-            
+
             // Enable auto naming feature.
             if (Properties.Settings.Default.autoNaming)
                 check_autoNaming.CheckState = CheckState.Checked;
@@ -50,6 +50,10 @@ namespace Handbrake
 
             // Store auto name format
             txt_autoNameFormat.Text = Properties.Settings.Default.autoNameFormat;
+
+            // Use iPod/iTunes friendly .m4v extension for MP4 files.
+            if (Properties.Settings.Default.useM4v)
+                check_m4v.CheckState = CheckState.Checked;
 
             // #############################
             // Picture Tab
@@ -173,6 +177,11 @@ namespace Handbrake
             }
             else
                 Properties.Settings.Default.autoNamePath = text_an_path.Text;
+        }
+
+        private void check_m4v_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.useM4v = check_m4v.Checked;
         }
         #endregion
 
@@ -313,7 +322,7 @@ namespace Handbrake
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.dvdnav = check_dvdnav.Checked;
-        } 
+        }
         #endregion
 
         private void btn_close_Click(object sender, EventArgs e)
@@ -321,5 +330,6 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
     }
 }
