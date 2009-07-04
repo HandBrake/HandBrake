@@ -76,8 +76,6 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
-            this.label31 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
             this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
             this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
@@ -138,7 +136,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(437, 382);
+            this.btn_close.Location = new System.Drawing.Point(437, 389);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -159,7 +157,7 @@ namespace Handbrake
             "Lock System",
             "Log Off",
             "Quit HandBrake"});
-            this.drp_completeOption.Location = new System.Drawing.Point(114, 100);
+            this.drp_completeOption.Location = new System.Drawing.Point(114, 126);
             this.drp_completeOption.Name = "drp_completeOption";
             this.drp_completeOption.Size = new System.Drawing.Size(166, 21);
             this.drp_completeOption.TabIndex = 43;
@@ -175,11 +173,12 @@ namespace Handbrake
             this.tab_options.Location = new System.Drawing.Point(12, 55);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(497, 321);
+            this.tab_options.Size = new System.Drawing.Size(497, 328);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
             // 
+            this.tab_general.Controls.Add(this.drop_updateCheckDays);
             this.tab_general.Controls.Add(this.check_m4v);
             this.tab_general.Controls.Add(this.label7);
             this.tab_general.Controls.Add(this.label5);
@@ -197,7 +196,7 @@ namespace Handbrake
             this.tab_general.Controls.Add(this.drp_completeOption);
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
-            this.tab_general.Size = new System.Drawing.Size(489, 295);
+            this.tab_general.Size = new System.Drawing.Size(489, 302);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
@@ -206,7 +205,7 @@ namespace Handbrake
             // 
             this.check_m4v.AutoSize = true;
             this.check_m4v.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_m4v.Location = new System.Drawing.Point(114, 247);
+            this.check_m4v.Location = new System.Drawing.Point(114, 273);
             this.check_m4v.Name = "check_m4v";
             this.check_m4v.Size = new System.Drawing.Size(334, 17);
             this.check_m4v.TabIndex = 82;
@@ -219,7 +218,7 @@ namespace Handbrake
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(197, 222);
+            this.label7.Location = new System.Drawing.Point(197, 248);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(242, 12);
             this.label7.TabIndex = 81;
@@ -229,7 +228,7 @@ namespace Handbrake
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(111, 201);
+            this.label5.Location = new System.Drawing.Point(111, 227);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 13);
             this.label5.TabIndex = 80;
@@ -237,7 +236,7 @@ namespace Handbrake
             // 
             // txt_autoNameFormat
             // 
-            this.txt_autoNameFormat.Location = new System.Drawing.Point(199, 198);
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(199, 224);
             this.txt_autoNameFormat.Name = "txt_autoNameFormat";
             this.txt_autoNameFormat.Size = new System.Drawing.Size(255, 21);
             this.txt_autoNameFormat.TabIndex = 79;
@@ -251,7 +250,7 @@ namespace Handbrake
             this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_browse.Location = new System.Drawing.Point(386, 171);
+            this.btn_browse.Location = new System.Drawing.Point(386, 197);
             this.btn_browse.Name = "btn_browse";
             this.btn_browse.Size = new System.Drawing.Size(68, 22);
             this.btn_browse.TabIndex = 78;
@@ -263,7 +262,7 @@ namespace Handbrake
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(111, 174);
+            this.label10.Location = new System.Drawing.Point(111, 200);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(82, 13);
             this.label10.TabIndex = 77;
@@ -271,7 +270,7 @@ namespace Handbrake
             // 
             // text_an_path
             // 
-            this.text_an_path.Location = new System.Drawing.Point(199, 171);
+            this.text_an_path.Location = new System.Drawing.Point(199, 197);
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(181, 21);
             this.text_an_path.TabIndex = 76;
@@ -282,7 +281,7 @@ namespace Handbrake
             // 
             this.check_autoNaming.AutoSize = true;
             this.check_autoNaming.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_autoNaming.Location = new System.Drawing.Point(114, 148);
+            this.check_autoNaming.Location = new System.Drawing.Point(114, 174);
             this.check_autoNaming.Name = "check_autoNaming";
             this.check_autoNaming.Size = new System.Drawing.Size(206, 17);
             this.check_autoNaming.TabIndex = 72;
@@ -295,7 +294,7 @@ namespace Handbrake
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(10, 149);
+            this.label13.Location = new System.Drawing.Point(10, 175);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(86, 13);
             this.label13.TabIndex = 71;
@@ -306,7 +305,7 @@ namespace Handbrake
             this.check_tooltip.AutoSize = true;
             this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
             this.check_tooltip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_tooltip.Location = new System.Drawing.Point(114, 41);
+            this.check_tooltip.Location = new System.Drawing.Point(114, 67);
             this.check_tooltip.Name = "check_tooltip";
             this.check_tooltip.Size = new System.Drawing.Size(135, 17);
             this.check_tooltip.TabIndex = 70;
@@ -335,7 +334,7 @@ namespace Handbrake
             this.check_userDefaultSettings.AutoSize = true;
             this.check_userDefaultSettings.BackColor = System.Drawing.Color.Transparent;
             this.check_userDefaultSettings.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_userDefaultSettings.Location = new System.Drawing.Point(114, 64);
+            this.check_userDefaultSettings.Location = new System.Drawing.Point(114, 90);
             this.check_userDefaultSettings.Name = "check_userDefaultSettings";
             this.check_userDefaultSettings.Size = new System.Drawing.Size(158, 17);
             this.check_userDefaultSettings.TabIndex = 69;
@@ -359,7 +358,7 @@ namespace Handbrake
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 103);
+            this.label2.Location = new System.Drawing.Point(12, 129);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 13);
             this.label2.TabIndex = 54;
@@ -372,7 +371,7 @@ namespace Handbrake
             this.tab_picture.Controls.Add(this.label29);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
-            this.tab_picture.Size = new System.Drawing.Size(489, 295);
+            this.tab_picture.Size = new System.Drawing.Size(489, 302);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -430,7 +429,7 @@ namespace Handbrake
             this.tab_cli.Controls.Add(this.Label4);
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
-            this.tab_cli.Size = new System.Drawing.Size(489, 295);
+            this.tab_cli.Size = new System.Drawing.Size(489, 302);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
@@ -644,9 +643,6 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
-            this.tab_advanced.Controls.Add(this.drop_updateCheckDays);
-            this.tab_advanced.Controls.Add(this.label31);
-            this.tab_advanced.Controls.Add(this.label15);
             this.tab_advanced.Controls.Add(this.check_trayStatusAlerts);
             this.tab_advanced.Controls.Add(this.check_inGuiStatus);
             this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
@@ -662,29 +658,10 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(489, 295);
+            this.tab_advanced.Size = new System.Drawing.Size(489, 302);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
-            // 
-            // label31
-            // 
-            this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(73, 168);
-            this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(241, 13);
-            this.label31.TabIndex = 96;
-            this.label31.Text = "Number of days between update checks:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(6, 168);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(64, 13);
-            this.label15.TabIndex = 95;
-            this.label15.Text = "Updates:";
             // 
             // check_trayStatusAlerts
             // 
@@ -736,7 +713,7 @@ namespace Handbrake
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.check_dvdnav.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_dvdnav.Location = new System.Drawing.Point(76, 247);
+            this.check_dvdnav.Location = new System.Drawing.Point(76, 212);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(297, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -748,7 +725,7 @@ namespace Handbrake
             // 
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(34, 248);
+            this.label32.Location = new System.Drawing.Point(34, 213);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(36, 13);
             this.label32.TabIndex = 89;
@@ -757,7 +734,7 @@ namespace Handbrake
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(73, 205);
+            this.label30.Location = new System.Drawing.Point(73, 170);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(230, 13);
             this.label30.TabIndex = 87;
@@ -773,7 +750,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(323, 202);
+            this.drop_x264step.Location = new System.Drawing.Point(323, 167);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -785,7 +762,7 @@ namespace Handbrake
             // 
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(27, 205);
+            this.label28.Location = new System.Drawing.Point(27, 170);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(43, 13);
             this.label28.TabIndex = 85;
@@ -1210,7 +1187,7 @@ namespace Handbrake
             "Daily",
             "Weekly",
             "Monthly"});
-            this.drop_updateCheckDays.Location = new System.Drawing.Point(323, 165);
+            this.drop_updateCheckDays.Location = new System.Drawing.Point(134, 40);
             this.drop_updateCheckDays.Name = "drop_updateCheckDays";
             this.drop_updateCheckDays.Size = new System.Drawing.Size(85, 21);
             this.drop_updateCheckDays.TabIndex = 97;
@@ -1220,7 +1197,7 @@ namespace Handbrake
             // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(521, 413);
+            this.ClientSize = new System.Drawing.Size(521, 418);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.tab_options);
@@ -1332,8 +1309,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_disablePresetNotification;
         internal System.Windows.Forms.CheckBox check_inGuiStatus;
         internal System.Windows.Forms.CheckBox check_trayStatusAlerts;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button btn_viewLogs;
         private System.Windows.Forms.Button btn_clearLogs;
         internal System.Windows.Forms.CheckBox check_m4v;

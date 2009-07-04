@@ -126,9 +126,6 @@
   <metadata name="DVD_Save.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>556, 15</value>
   </metadata>
-  <metadata name="File_Save.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>664, 15</value>
-  </metadata>
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>18, 15</value>
   </metadata>
@@ -953,4 +950,7 @@ Note: Do not change any of the chapter numbers!</value>
         AAD6AQAA4AEAAMABAACAAQAAgAEAAMBBAADAYQAAjGEAAIRhAADc+wAA3/8AAA==
 </value>
   </data>
+  <metadata name="File_Save.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>664, 15</value>
+  </metadata>
 </root>

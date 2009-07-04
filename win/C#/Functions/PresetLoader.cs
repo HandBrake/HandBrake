@@ -62,11 +62,11 @@ namespace Handbrake.Functions
             #endregion
 
             #region Picture
-            
+
             if (pictureSettings) // only Load picture settings if the perset requires it
             {
                 mainWindow.PictureSettings.check_autoCrop.Checked = true;
-        
+
                 if (presetQuery.CropValues != null)
                 {
                     int top, bottom, left, right;
@@ -83,25 +83,19 @@ namespace Handbrake.Functions
                 }
             }
 
+            // Set the anamorphic mode 0,1,2,3
+            mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
+
+            // Aspect Ratio
+            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
+
             // Reset maxWidth and MaxHeight to 0
             mainWindow.PictureSettings.maxWidth = 0;
             mainWindow.PictureSettings.maxHeight = 0;
-
-            // Set the width and height
+                
+            // Set the Width and height as Required.
             if (presetQuery.Width != 0)
                 mainWindow.PictureSettings.text_width.Value = presetQuery.Width;
-            else if (presetQuery.MaxWidth == 0)
-            {
-                if (mainWindow.selectedTitle != null)
-                    if (mainWindow.selectedTitle.Resolution.Width != 0)
-                    {
-                        mainWindow.PictureSettings.text_width.Value = mainWindow.selectedTitle.Resolution.Width;
-                        if (presetQuery.Height == 0 && presetQuery.MaxHeight == 0)
-                            mainWindow.PictureSettings.check_KeepAR.Checked = true;
-                    }
-                    else
-                        mainWindow.PictureSettings.text_width.Value = 0;
-            }
 
             if (presetQuery.Height != 0)
                 mainWindow.PictureSettings.text_height.Value = presetQuery.Height;
@@ -118,13 +112,20 @@ namespace Handbrake.Functions
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight;
                 mainWindow.PictureSettings.maxHeight = presetQuery.MaxHeight;
             }
+
+            // Case where both height and max height are 0 - For built-in presets
+            if (presetQuery.MaxHeight == 0 && presetQuery.Height == 0)
+                mainWindow.PictureSettings.text_height.Value = 0;
+
+            if (presetQuery.MaxWidth == 0 && presetQuery.Width == 0)
+                if (mainWindow.selectedTitle != null && mainWindow.selectedTitle.Resolution.Width != 0)
+                    mainWindow.PictureSettings.text_width.Value = mainWindow.selectedTitle.Resolution.Width;
+
             mainWindow.PictureSettings.setMax();
 
-            // Set the anamorphic mode 0,1,2,3
-            mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
+            
 
             // Custom Anamorphic Controls
-            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
             mainWindow.PictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
             mainWindow.PictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
             mainWindow.PictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();

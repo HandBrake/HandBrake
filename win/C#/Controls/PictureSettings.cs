@@ -8,7 +8,7 @@ namespace Handbrake.Controls
     // TODO
     // - Tie in the cropping controls.
     // - Cleanup this code. It's a bit messy.
-    
+
     public partial class PictureSettings : UserControl
     {
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
@@ -56,7 +56,7 @@ namespace Handbrake.Controls
             else if (drp_anamorphic.SelectedIndex == 1 || drp_anamorphic.SelectedIndex == 3)
             {
                 heightModJumpGaurd = true;
-                text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
             }
             else if (drp_anamorphic.SelectedIndex == 2)
             {
@@ -86,9 +86,10 @@ namespace Handbrake.Controls
         // Basic Picture Setting Controls
         private void text_width_ValueChanged(object sender, EventArgs e)
         {
+
             maxWidth = 0;
             setMax();
-            
+
             // Get the Modulus
             int mod;
             int.TryParse(drop_modulus.SelectedItem.ToString(), out mod);
@@ -115,7 +116,8 @@ namespace Handbrake.Controls
             }
             // A Picture Setting has changed so raise a PictureSettingsChanged event.
             if (this.PictureSettingsChanged != null)
-                this.PictureSettingsChanged(this, new EventArgs());   
+                this.PictureSettingsChanged(this, new EventArgs());
+
         }
         private void text_height_ValueChanged(object sender, EventArgs e)
         {
@@ -166,7 +168,7 @@ namespace Handbrake.Controls
 
             // A Picture Setting has changed so raise a PictureSettingsChanged event.
             if (this.PictureSettingsChanged != null)
-                this.PictureSettingsChanged(this, new EventArgs());   
+                this.PictureSettingsChanged(this, new EventArgs());
         }
         private void check_KeepAR_CheckedChanged(object sender, EventArgs e)
         {
@@ -196,12 +198,13 @@ namespace Handbrake.Controls
                     check_KeepAR.CheckState = CheckState.Checked;
                     check_KeepAR.Enabled = true;
                     disableCustomAnaControls();
+                    check_KeepAR.Enabled = true;
                     if (selectedTitle != null)
                     {
-                        text_width.Value = selectedTitle.Resolution.Width;
-                        text_height.Value = selectedTitle.Resolution.Height;
+                        text_width.Value = maxWidth != 0 ? maxWidth : selectedTitle.Resolution.Width;
+                        text_height.Value = maxHeight != 0 ? maxHeight : selectedTitle.Resolution.Height;
+                        setMax();
                     }
-                    check_KeepAR.Enabled = true;
                     lbl_anamorphic.Text = "";
                     lbl_anamprohicLbl.Visible = false;
                     break;
@@ -209,8 +212,10 @@ namespace Handbrake.Controls
                     if (selectedTitle != null)
                     {
                         heightModJumpGaurd = true;
-                        text_width.Value = selectedTitle.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
-                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                        text_width.Value = selectedTitle.Resolution.Width - (int)crop_left.Value -
+                                           (int)crop_right.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value -
+                                            (int)crop_bottom.Value;
                     }
                     text_height.Enabled = false;
                     text_width.Enabled = false;
@@ -229,7 +234,8 @@ namespace Handbrake.Controls
                     {
                         heightModJumpGaurd = true;
                         text_width.Value = selectedTitle.Resolution.Width;
-                        text_height.Value = selectedTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value -
+                                            (int)crop_bottom.Value;
                     }
                     lbl_anamorphic.Text = looseAnamorphic();
                     lbl_anamprohicLbl.Visible = true;
@@ -246,13 +252,15 @@ namespace Handbrake.Controls
                     {
                         heightModJumpGaurd = true;
                         widthVal = selectedTitle.Resolution.Width;
-                        text_width.Value = selectedTitle.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
-                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                        text_width.Value = selectedTitle.Resolution.Width - (int)crop_left.Value -
+                                           (int)crop_right.Value;
+                        text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value -
+                                            (int)crop_bottom.Value;
                         txt_parWidth.Text = selectedTitle.ParVal.Width.ToString();
                         txt_parHeight.Text = selectedTitle.ParVal.Height.ToString();
                         txt_displayWidth.Text = displayWidth().ToString(Culture);
                     }
-   
+
                     darValue = calculateDar();
 
                     check_KeepAR.CheckState = CheckState.Checked;
@@ -264,7 +272,8 @@ namespace Handbrake.Controls
 
             // A Picture Setting has changed so raise a PictureSettingsChanged event.
             if (this.PictureSettingsChanged != null)
-                this.PictureSettingsChanged(this, new EventArgs());   
+                this.PictureSettingsChanged(this, new EventArgs());
+
         }
 
         // Custom Anamorphic Controls
@@ -283,7 +292,7 @@ namespace Handbrake.Controls
             if (e.KeyCode == Keys.Enter)
                 customAnamorphic(txt_parWidth);
         }
-        
+
         // Cropping Controls
         private void check_autoCrop_CheckedChanged(object sender, EventArgs e)
         {
@@ -418,7 +427,7 @@ namespace Handbrake.Controls
                         txt_displayWidth.Text = getDisplayWidthKeepDar().ToString(Culture);  //Changes DISPLAY WIDTH to keep DAR
                         txt_parWidth.Text = txt_displayWidth.Text;
                         txt_parHeight.Text = cropped_width.ToString();
-                        break; 
+                        break;
                     case "text_width":
                         txt_parWidth.Text = txt_displayWidth.Text;
                         txt_parHeight.Text = cropped_width.ToString();
@@ -626,13 +635,13 @@ namespace Handbrake.Controls
                 {
                     // Crop_Width = Title->Width - crop_Left - crop_right
                     // Crop_Height = Title->Height - crop_top - crop_bottom
-                    double crop_width = selectedTitle.Resolution.Width - (double) crop_left.Value -
-                                        (double) crop_right.Value;
-                    double crop_height = selectedTitle.Resolution.Height - (double) crop_top.Value -
-                                         (double) crop_bottom.Value;
+                    double crop_width = selectedTitle.Resolution.Width - (double)crop_left.Value -
+                                        (double)crop_right.Value;
+                    double crop_height = selectedTitle.Resolution.Height - (double)crop_top.Value -
+                                         (double)crop_bottom.Value;
 
-                    double new_height = (width*selectedTitle.Resolution.Width*ah*crop_height)/
-                                        (selectedTitle.Resolution.Height*aw*crop_width);
+                    double new_height = (width * selectedTitle.Resolution.Width * ah * crop_height) /
+                                        (selectedTitle.Resolution.Height * aw * crop_width);
 
                     new_height = drp_anamorphic.SelectedIndex == 3 ? getModulusAuto(int.Parse(drop_modulus.SelectedItem.ToString()), new_height) : getModulusAuto(16, new_height);
 
@@ -712,7 +721,7 @@ namespace Handbrake.Controls
 
                 // Calculate storage Aspect and cache it for reuse
                 if (storageAspect == 0)
-                    storageAspect = (double)actualWidth / source_cropped_height;               
+                    storageAspect = (double)actualWidth / source_cropped_height;
 
                 // Calculate the new height based on the input cropped width
                 double hcalc = (actualWidth / storageAspect) + 0.5;
@@ -729,12 +738,12 @@ namespace Handbrake.Controls
                 double displayWidth = (actualWidth * parW / parH);
 
                 // Now correct DisplayWidth to maintain Aspect ratio.  ActualHeight was mod16'd and thus AR is slightly different than the worked out displayWidths
-                return Math.Truncate(displayWidth) + "x" + newHeight;  
+                return Math.Truncate(displayWidth) + "x" + newHeight;
             }
             return "Select a Title";
 
         }
-        
+
         // GUI
         private void disableCustomAnaControls()
         {

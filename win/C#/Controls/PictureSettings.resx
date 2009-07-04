@@ -725,7 +725,7 @@
     <value>True</value>
   </data>
   <data name="check_customCrop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>387, 57</value>
+    <value>399, 57</value>
   </data>
   <data name="check_customCrop.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 17</value>
@@ -752,7 +752,7 @@
     <value>True</value>
   </data>
   <data name="check_autoCrop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>387, 33</value>
+    <value>399, 33</value>
   </data>
   <data name="check_autoCrop.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 17</value>
@@ -779,7 +779,7 @@
     <value>False</value>
   </data>
   <data name="crop_bottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>467, 146</value>
+    <value>479, 146</value>
   </data>
   <data name="crop_bottom.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 20</value>
@@ -803,7 +803,7 @@
     <value>False</value>
   </data>
   <data name="crop_top.Location" type="System.Drawing.Point, System.Drawing">
-    <value>467, 100</value>
+    <value>479, 100</value>
   </data>
   <data name="crop_top.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 20</value>
@@ -827,7 +827,7 @@
     <value>False</value>
   </data>
   <data name="crop_left.Location" type="System.Drawing.Point, System.Drawing">
-    <value>416, 122</value>
+    <value>428, 122</value>
   </data>
   <data name="crop_left.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 20</value>
@@ -851,7 +851,7 @@
     <value>False</value>
   </data>
   <data name="crop_right.Location" type="System.Drawing.Point, System.Drawing">
-    <value>518, 122</value>
+    <value>530, 122</value>
   </data>
   <data name="crop_right.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 20</value>
@@ -878,7 +878,7 @@
     <value>Verdana, 8.25pt, style=Bold</value>
   </data>
   <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>384, 13</value>
+    <value>396, 13</value>
   </data>
   <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
     <value>37, 13</value>
@@ -908,7 +908,7 @@
     <value>Verdana, 8.25pt</value>
   </data>
   <data name="Label53.Location" type="System.Drawing.Point, System.Drawing">
-    <value>465, 170</value>
+    <value>477, 170</value>
   </data>
   <data name="Label53.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 13</value>
@@ -938,7 +938,7 @@
     <value>Verdana, 8.25pt</value>
   </data>
   <data name="Label52.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 85</value>
+    <value>486, 85</value>
   </data>
   <data name="Label52.Size" type="System.Drawing.Size, System.Drawing">
     <value>28, 13</value>
@@ -968,7 +968,7 @@
     <value>Verdana, 8.25pt</value>
   </data>
   <data name="Label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>561, 124</value>
+    <value>573, 124</value>
   </data>
   <data name="Label51.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -998,7 +998,7 @@
     <value>Verdana, 8.25pt</value>
   </data>
   <data name="Label15.Location" type="System.Drawing.Point, System.Drawing">
-    <value>384, 124</value>
+    <value>396, 124</value>
   </data>
   <data name="Label15.Size" type="System.Drawing.Size, System.Drawing">
     <value>28, 13</value>
