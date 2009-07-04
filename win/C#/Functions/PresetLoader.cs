@@ -123,14 +123,11 @@ namespace Handbrake.Functions
 
             mainWindow.PictureSettings.setMax();
 
-            
-
             // Custom Anamorphic Controls
             mainWindow.PictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
             mainWindow.PictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
             mainWindow.PictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
             mainWindow.PictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
-
 
             #endregion
 

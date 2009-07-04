@@ -193,12 +193,8 @@ namespace Handbrake.Controls
             switch (drp_anamorphic.SelectedIndex)
             {
                 case 0: // None
-                    text_height.Enabled = true;
-                    text_width.Enabled = true;
                     check_KeepAR.CheckState = CheckState.Checked;
-                    check_KeepAR.Enabled = true;
-                    disableCustomAnaControls();
-                    check_KeepAR.Enabled = true;
+                    anamorphicWidgetContoller(0);
                     if (selectedTitle != null)
                     {
                         text_width.Value = maxWidth != 0 ? maxWidth : selectedTitle.Resolution.Width;
@@ -206,7 +202,6 @@ namespace Handbrake.Controls
                         setMax();
                     }
                     lbl_anamorphic.Text = "";
-                    lbl_anamprohicLbl.Visible = false;
                     break;
                 case 1: // Strict
                     if (selectedTitle != null)
@@ -217,19 +212,13 @@ namespace Handbrake.Controls
                         text_height.Value = selectedTitle.Resolution.Height - (int)crop_top.Value -
                                             (int)crop_bottom.Value;
                     }
-                    text_height.Enabled = false;
-                    text_width.Enabled = false;
+                    anamorphicWidgetContoller(1);
                     check_KeepAR.CheckState = CheckState.Unchecked;
-                    check_KeepAR.Enabled = false;
-                    disableCustomAnaControls();
                     lbl_anamorphic.Text = strictAnamorphic();
-                    lbl_anamprohicLbl.Visible = true;
                     break;
                 case 2: // Loose
-                    disableCustomAnaControls();
+                    anamorphicWidgetContoller(2);
                     storageAspect = 0;
-                    text_height.Enabled = false;
-                    text_width.Enabled = true;
                     if (selectedTitle != null)
                     {
                         heightModJumpGaurd = true;
@@ -238,14 +227,9 @@ namespace Handbrake.Controls
                                             (int)crop_bottom.Value;
                     }
                     lbl_anamorphic.Text = looseAnamorphic();
-                    lbl_anamprohicLbl.Visible = true;
                     break;
                 case 3: // Custom
-
-                    // Display Elements
-                    enableCustomAnaControls();
-                    text_height.Enabled = true;
-                    text_width.Enabled = true;
+                    anamorphicWidgetContoller(3);  // Display Elements
 
                     // Actual Work  
                     if (selectedTitle != null)
@@ -262,18 +246,13 @@ namespace Handbrake.Controls
                     }
 
                     darValue = calculateDar();
-
                     check_KeepAR.CheckState = CheckState.Checked;
-                    check_KeepAR.Enabled = true;
-                    lbl_anamprohicLbl.Visible = true;
-
                     break;
             }
 
             // A Picture Setting has changed so raise a PictureSettingsChanged event.
             if (this.PictureSettingsChanged != null)
                 this.PictureSettingsChanged(this, new EventArgs());
-
         }
 
         // Custom Anamorphic Controls
@@ -584,7 +563,7 @@ namespace Handbrake.Controls
 
             return newValue;
         }
-        private int getResolutionJump(int mod, decimal value, Boolean up)
+        private static int getResolutionJump(int mod, decimal value, Boolean up)
         {
             if (up)
                 while ((value % mod) != 0)
@@ -595,7 +574,7 @@ namespace Handbrake.Controls
 
             return (int)value;
         }
-        private double getModulusAuto(int mod, double value)
+        private static double getModulusAuto(int mod, double value)
         {
             int modDiv2 = mod / 2;
 
@@ -696,7 +675,6 @@ namespace Handbrake.Controls
         // Calculate Resolution for Anamorphic functions
         private string strictAnamorphic()
         {
-            // TODO Make sure cropping is Mod2
             if (selectedTitle != null)
             {
                 // Calculate the Actual Height
@@ -730,7 +708,7 @@ namespace Handbrake.Controls
 
                 if (newHeight < 64)
                     newHeight = 64;
-                text_height.Value = (decimal)newHeight;   // BUG Out of Range Exception with Width too low here.
+                text_height.Value = (decimal)newHeight; 
 
                 // Calculate the anamorphic width
                 double parW = newHeight * source_display_width / source_cropped_height;
@@ -741,35 +719,66 @@ namespace Handbrake.Controls
                 return Math.Truncate(displayWidth) + "x" + newHeight;
             }
             return "Select a Title";
-
         }
 
-        // GUI
-        private void disableCustomAnaControls()
+        // Function to control the enable / disable property of the display controls.
+        private void anamorphicWidgetContoller(int mode)
         {
-            // Disable Custom Anamorphic Stuff
-            lbl_modulus.Visible = false;
-            lbl_displayWidth.Visible = false;
-            lbl_parWidth.Visible = false;
-            lbl_parHeight.Visible = false;
-            drop_modulus.Visible = false;
-            txt_displayWidth.Visible = false;
-            txt_parWidth.Visible = false;
-            txt_parHeight.Visible = false;
-            check_KeepAR.Enabled = false;
-        }
-        private void enableCustomAnaControls()
-        {
-            // Disable Custom Anamorphic Stuff
-            lbl_modulus.Visible = true;
-            lbl_displayWidth.Visible = true;
-            lbl_parWidth.Visible = true;
-            lbl_parHeight.Visible = true;
-            drop_modulus.Visible = true;
-            txt_displayWidth.Visible = true;
-            txt_parWidth.Visible = true;
-            txt_parHeight.Visible = true;
-            check_KeepAR.Enabled = true;
+
+            switch (mode)
+            {
+                case 0: // None
+                    text_height.Enabled = true;
+                    text_width.Enabled = true;
+                    check_KeepAR.Enabled = true;
+                    lbl_anamprohicLbl.Visible = false;
+                    break;
+                case 1: // Strict
+                    text_height.Enabled = false;
+                    text_width.Enabled = false;
+                    check_KeepAR.Enabled = false;
+                    lbl_anamprohicLbl.Visible = true;
+                    break;
+                case 2: // Loose
+                    text_height.Enabled = false;
+                    text_width.Enabled = true;
+                    check_KeepAR.Enabled = false;
+                    lbl_anamprohicLbl.Visible = true;
+                    break;
+                case 3: // Custom
+                    text_height.Enabled = true;
+                    text_width.Enabled = true;
+                    check_KeepAR.Enabled = true;
+                    // Labels
+                    lbl_anamprohicLbl.Visible = true;
+                    lbl_modulus.Visible = true;
+                    lbl_displayWidth.Visible = true;
+                    lbl_parWidth.Visible = true;
+                    lbl_parHeight.Visible = true;
+                    // Controls
+                    drop_modulus.Visible = true;
+                    txt_displayWidth.Visible = true;
+                    txt_parWidth.Visible = true;
+                    txt_parHeight.Visible = true;
+                    break;
+            }
+
+            // Disable All the custom anamorphic controls if not required.
+            if (mode != 3)
+            {
+                // Labels
+                lbl_modulus.Visible = false;
+                lbl_displayWidth.Visible = false;
+                lbl_parWidth.Visible = false;
+                lbl_parHeight.Visible = false;
+
+                // Controls
+                drop_modulus.Visible = false;
+                txt_displayWidth.Visible = false;
+                txt_parWidth.Visible = false;
+                txt_parHeight.Visible = false;
+
+            }
         }
 
     }
