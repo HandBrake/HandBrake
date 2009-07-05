@@ -1291,16 +1291,18 @@ namespace Handbrake
             // 
             // lbl_encode
             // 
+            this.lbl_encode.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_encode.Name = "lbl_encode";
-            this.lbl_encode.Size = new System.Drawing.Size(23, 17);
+            this.lbl_encode.Size = new System.Drawing.Size(28, 17);
             this.lbl_encode.Text = "{0}";
             // 
             // lbl_updateCheck
             // 
             this.lbl_updateCheck.BackColor = System.Drawing.Color.Transparent;
             this.lbl_updateCheck.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.lbl_updateCheck.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_updateCheck.Name = "lbl_updateCheck";
-            this.lbl_updateCheck.Size = new System.Drawing.Size(125, 17);
+            this.lbl_updateCheck.Size = new System.Drawing.Size(139, 17);
             this.lbl_updateCheck.Text = "Checking for Updates ...";
             this.lbl_updateCheck.Visible = false;
             // 
@@ -1556,7 +1558,6 @@ namespace Handbrake
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1000, 582);
             this.Controls.Add(this.labelStaticSource);
             this.Controls.Add(this.labelSource);
@@ -1573,7 +1574,6 @@ namespace Handbrake
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HandBrake";

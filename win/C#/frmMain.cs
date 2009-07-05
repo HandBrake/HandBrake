@@ -389,6 +389,7 @@ namespace Handbrake
         }
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
+            lbl_updateCheck.Visible = true;
             Main.BeginCheckForUpdates(new AsyncCallback(updateCheckDoneMenu), false);
         }
         private void updateCheckDoneMenu(IAsyncResult result)
@@ -399,14 +400,12 @@ namespace Handbrake
                 Invoke(new MethodInvoker(() => updateCheckDoneMenu(result)));
                 return;
             }
-
             UpdateCheckInformation info;
-
             try
             {
                 // Get the information about the new build, if any, and close the window
                 info = Main.EndCheckForUpdates(result);
-                lbl_updateCheck.Visible = true;
+                
                 if (info.NewVersionAvailable && info.BuildInformation != null)
                 {
                     frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
