@@ -93,20 +93,18 @@ namespace Handbrake.Controls
             // lbl_psytrellis
             // 
             this.lbl_psytrellis.AutoSize = true;
-            this.lbl_psytrellis.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_psytrellis.Location = new System.Drawing.Point(319, 198);
+            this.lbl_psytrellis.Location = new System.Drawing.Point(328, 198);
             this.lbl_psytrellis.Name = "lbl_psytrellis";
-            this.lbl_psytrellis.Size = new System.Drawing.Size(111, 12);
+            this.lbl_psytrellis.Size = new System.Drawing.Size(102, 13);
             this.lbl_psytrellis.TabIndex = 85;
             this.lbl_psytrellis.Text = "Psychovisual Trellis:";
             // 
             // lbl_psyrd
             // 
             this.lbl_psyrd.AutoSize = true;
-            this.lbl_psyrd.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_psyrd.Location = new System.Drawing.Point(275, 164);
+            this.lbl_psyrd.Location = new System.Drawing.Point(283, 164);
             this.lbl_psyrd.Name = "lbl_psyrd";
-            this.lbl_psyrd.Size = new System.Drawing.Size(155, 12);
+            this.lbl_psyrd.Size = new System.Drawing.Size(147, 13);
             this.lbl_psyrd.TabIndex = 84;
             this.lbl_psyrd.Text = "Psychovisual Rate Distortion:";
             // 
@@ -122,10 +120,9 @@ namespace Handbrake.Controls
             // lbl_adaptBFrames
             // 
             this.lbl_adaptBFrames.AutoSize = true;
-            this.lbl_adaptBFrames.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_adaptBFrames.Location = new System.Drawing.Point(17, 124);
+            this.lbl_adaptBFrames.Location = new System.Drawing.Point(21, 124);
             this.lbl_adaptBFrames.Name = "lbl_adaptBFrames";
-            this.lbl_adaptBFrames.Size = new System.Drawing.Size(106, 12);
+            this.lbl_adaptBFrames.Size = new System.Drawing.Size(102, 13);
             this.lbl_adaptBFrames.TabIndex = 81;
             this.lbl_adaptBFrames.Text = "Adaptive B-Frames:";
             // 
@@ -149,16 +146,16 @@ namespace Handbrake.Controls
             // 
             this.label43.AutoSize = true;
             this.label43.BackColor = System.Drawing.Color.Transparent;
-            this.label43.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label43.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label43.Location = new System.Drawing.Point(13, 13);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(165, 13);
+            this.label43.Size = new System.Drawing.Size(144, 13);
             this.label43.TabIndex = 49;
             this.label43.Text = "Advanced H.264 Options";
             // 
             // btn_reset
             // 
-            this.btn_reset.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_reset.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_reset.ForeColor = System.Drawing.Color.DarkOrange;
             this.btn_reset.Location = new System.Drawing.Point(13, 229);
             this.btn_reset.Name = "btn_reset";
@@ -184,11 +181,10 @@ namespace Handbrake.Controls
             this.check_Cabac.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.check_Cabac.Checked = true;
             this.check_Cabac.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.check_Cabac.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_Cabac.Location = new System.Drawing.Point(273, 128);
+            this.check_Cabac.Location = new System.Drawing.Point(277, 129);
             this.check_Cabac.Name = "check_Cabac";
             this.check_Cabac.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_Cabac.Size = new System.Drawing.Size(147, 16);
+            this.check_Cabac.Size = new System.Drawing.Size(141, 17);
             this.check_Cabac.TabIndex = 78;
             this.check_Cabac.Text = "CABAC Entropy Coding:";
             this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -200,11 +196,10 @@ namespace Handbrake.Controls
             // 
             this.check_noDCTDecimate.AutoSize = true;
             this.check_noDCTDecimate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_noDCTDecimate.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_noDCTDecimate.Location = new System.Drawing.Point(592, 40);
+            this.check_noDCTDecimate.Location = new System.Drawing.Point(597, 41);
             this.check_noDCTDecimate.Name = "check_noDCTDecimate";
             this.check_noDCTDecimate.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_noDCTDecimate.Size = new System.Drawing.Size(121, 16);
+            this.check_noDCTDecimate.Size = new System.Drawing.Size(114, 17);
             this.check_noDCTDecimate.TabIndex = 77;
             this.check_noDCTDecimate.Text = "No DCT-Decimate:";
             this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -216,11 +211,10 @@ namespace Handbrake.Controls
             // 
             this.check_noFastPSkip.AutoSize = true;
             this.check_noFastPSkip.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_noFastPSkip.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_noFastPSkip.Location = new System.Drawing.Point(608, 19);
+            this.check_noFastPSkip.Location = new System.Drawing.Point(611, 18);
             this.check_noFastPSkip.Name = "check_noFastPSkip";
             this.check_noFastPSkip.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_noFastPSkip.Size = new System.Drawing.Size(106, 16);
+            this.check_noFastPSkip.Size = new System.Drawing.Size(100, 17);
             this.check_noFastPSkip.TabIndex = 76;
             this.check_noFastPSkip.Text = "No Fast-P-Skip:";
             this.check_noFastPSkip.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -232,10 +226,9 @@ namespace Handbrake.Controls
             // lbl_trellis
             // 
             this.lbl_trellis.AutoSize = true;
-            this.lbl_trellis.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_trellis.Location = new System.Drawing.Point(421, 130);
             this.lbl_trellis.Name = "lbl_trellis";
-            this.lbl_trellis.Size = new System.Drawing.Size(41, 12);
+            this.lbl_trellis.Size = new System.Drawing.Size(38, 13);
             this.lbl_trellis.TabIndex = 67;
             this.lbl_trellis.Text = "Trellis:";
             // 
@@ -274,9 +267,9 @@ namespace Handbrake.Controls
             "4",
             "5",
             "6"});
-            this.drop_deblockBeta.Location = new System.Drawing.Point(642, 95);
+            this.drop_deblockBeta.Location = new System.Drawing.Point(643, 95);
             this.drop_deblockBeta.Name = "drop_deblockBeta";
-            this.drop_deblockBeta.Size = new System.Drawing.Size(69, 21);
+            this.drop_deblockBeta.Size = new System.Drawing.Size(68, 21);
             this.drop_deblockBeta.TabIndex = 74;
             this.ToolTip.SetToolTip(this.drop_deblockBeta, resources.GetString("drop_deblockBeta.ToolTip"));
             this.drop_deblockBeta.SelectedIndexChanged += new System.EventHandler(this.drop_deblockBeta_SelectedIndexChanged);
@@ -284,10 +277,9 @@ namespace Handbrake.Controls
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label41.Location = new System.Drawing.Point(575, 72);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(65, 12);
+            this.label41.Size = new System.Drawing.Size(62, 13);
             this.label41.TabIndex = 66;
             this.label41.Text = "Deblocking:";
             // 
@@ -348,11 +340,10 @@ namespace Handbrake.Controls
             // 
             this.check_8x8DCT.AutoSize = true;
             this.check_8x8DCT.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_8x8DCT.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_8x8DCT.Location = new System.Drawing.Point(492, 100);
+            this.check_8x8DCT.Location = new System.Drawing.Point(492, 101);
             this.check_8x8DCT.Name = "check_8x8DCT";
             this.check_8x8DCT.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_8x8DCT.Size = new System.Drawing.Size(74, 16);
+            this.check_8x8DCT.Size = new System.Drawing.Size(71, 17);
             this.check_8x8DCT.TabIndex = 72;
             this.check_8x8DCT.Text = "8x8 DCT:";
             this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -363,10 +354,9 @@ namespace Handbrake.Controls
             // label45
             // 
             this.label45.AutoSize = true;
-            this.label45.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label45.Location = new System.Drawing.Point(364, 102);
+            this.label45.Location = new System.Drawing.Point(367, 102);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(53, 12);
+            this.label45.Size = new System.Drawing.Size(50, 13);
             this.label45.TabIndex = 64;
             this.label45.Text = "Analysis:";
             // 
@@ -388,10 +378,9 @@ namespace Handbrake.Controls
             // label48
             // 
             this.label48.AutoSize = true;
-            this.label48.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label48.Location = new System.Drawing.Point(271, 45);
+            this.label48.Location = new System.Drawing.Point(279, 45);
             this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(146, 12);
+            this.label48.Size = new System.Drawing.Size(138, 13);
             this.label48.TabIndex = 62;
             this.label48.Text = "Subpixel Motion Estimation:";
             // 
@@ -421,10 +410,9 @@ namespace Handbrake.Controls
             // lbl_merange
             // 
             this.lbl_merange.AutoSize = true;
-            this.lbl_merange.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_merange.Location = new System.Drawing.Point(283, 71);
+            this.lbl_merange.Location = new System.Drawing.Point(288, 71);
             this.lbl_merange.Name = "lbl_merange";
-            this.lbl_merange.Size = new System.Drawing.Size(134, 12);
+            this.lbl_merange.Size = new System.Drawing.Size(129, 13);
             this.lbl_merange.TabIndex = 61;
             this.lbl_merange.Text = "Motion Estimation Range:";
             // 
@@ -505,10 +493,9 @@ namespace Handbrake.Controls
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label54.Location = new System.Drawing.Point(277, 19);
+            this.label54.Location = new System.Drawing.Point(283, 19);
             this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(140, 12);
+            this.label54.Size = new System.Drawing.Size(134, 13);
             this.label54.TabIndex = 60;
             this.label54.Text = "Motion Estimation Method:";
             // 
@@ -535,11 +522,10 @@ namespace Handbrake.Controls
             // 
             this.check_pyrmidalBFrames.AutoSize = true;
             this.check_pyrmidalBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_pyrmidalBFrames.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(12, 194);
+            this.check_pyrmidalBFrames.Location = new System.Drawing.Point(17, 194);
             this.check_pyrmidalBFrames.Name = "check_pyrmidalBFrames";
             this.check_pyrmidalBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(130, 16);
+            this.check_pyrmidalBFrames.Size = new System.Drawing.Size(124, 17);
             this.check_pyrmidalBFrames.TabIndex = 59;
             this.check_pyrmidalBFrames.Text = "Pyramidal B-Frames:";
             this.ToolTip.SetToolTip(this.check_pyrmidalBFrames, resources.GetString("check_pyrmidalBFrames.ToolTip"));
@@ -550,11 +536,10 @@ namespace Handbrake.Controls
             // 
             this.check_weightedBFrames.AutoSize = true;
             this.check_weightedBFrames.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_weightedBFrames.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_weightedBFrames.Location = new System.Drawing.Point(16, 173);
+            this.check_weightedBFrames.Location = new System.Drawing.Point(17, 173);
             this.check_weightedBFrames.Name = "check_weightedBFrames";
             this.check_weightedBFrames.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_weightedBFrames.Size = new System.Drawing.Size(126, 16);
+            this.check_weightedBFrames.Size = new System.Drawing.Size(124, 17);
             this.check_weightedBFrames.TabIndex = 58;
             this.check_weightedBFrames.Text = "Weighted B-Frames:";
             this.ToolTip.SetToolTip(this.check_weightedBFrames, resources.GetString("check_weightedBFrames.ToolTip"));
@@ -564,10 +549,9 @@ namespace Handbrake.Controls
             // lbl_direct_prediction
             // 
             this.lbl_direct_prediction.AutoSize = true;
-            this.lbl_direct_prediction.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_direct_prediction.Location = new System.Drawing.Point(29, 150);
+            this.lbl_direct_prediction.Location = new System.Drawing.Point(34, 150);
             this.lbl_direct_prediction.Name = "lbl_direct_prediction";
-            this.lbl_direct_prediction.Size = new System.Drawing.Size(94, 12);
+            this.lbl_direct_prediction.Size = new System.Drawing.Size(89, 13);
             this.lbl_direct_prediction.TabIndex = 53;
             this.lbl_direct_prediction.Text = "Direct Prediction:";
             // 
@@ -591,10 +575,9 @@ namespace Handbrake.Controls
             // label62
             // 
             this.label62.AutoSize = true;
-            this.label62.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label62.Location = new System.Drawing.Point(65, 98);
+            this.label62.Location = new System.Drawing.Point(67, 98);
             this.label62.Name = "label62";
-            this.label62.Size = new System.Drawing.Size(58, 12);
+            this.label62.Size = new System.Drawing.Size(56, 13);
             this.label62.TabIndex = 52;
             this.label62.Text = "B-Frames:";
             // 
@@ -633,10 +616,9 @@ namespace Handbrake.Controls
             // label64
             // 
             this.label64.AutoSize = true;
-            this.label64.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label64.Location = new System.Drawing.Point(24, 45);
             this.label64.Name = "label64";
-            this.label64.Size = new System.Drawing.Size(99, 12);
+            this.label64.Size = new System.Drawing.Size(99, 13);
             this.label64.TabIndex = 50;
             this.label64.Text = "Reference Frames:";
             // 
@@ -676,11 +658,10 @@ namespace Handbrake.Controls
             // 
             this.check_mixedReferences.AutoSize = true;
             this.check_mixedReferences.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.check_mixedReferences.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_mixedReferences.Location = new System.Drawing.Point(25, 68);
             this.check_mixedReferences.Name = "check_mixedReferences";
             this.check_mixedReferences.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.check_mixedReferences.Size = new System.Drawing.Size(117, 16);
+            this.check_mixedReferences.Size = new System.Drawing.Size(116, 17);
             this.check_mixedReferences.TabIndex = 55;
             this.check_mixedReferences.Text = "Mixed References:";
             this.check_mixedReferences.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -737,6 +718,7 @@ namespace Handbrake.Controls
             this.Controls.Add(this.label64);
             this.Controls.Add(this.drop_refFrames);
             this.Controls.Add(this.check_mixedReferences);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "x264Panel";
             this.Size = new System.Drawing.Size(720, 306);
             ((System.ComponentModel.ISupportInitialize)(this.slider_psytrellis)).EndInit();

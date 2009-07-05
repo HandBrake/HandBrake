@@ -169,7 +169,7 @@ namespace Handbrake.Controls
             // btn_RemoveAudioTrack
             // 
             this.btn_RemoveAudioTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_RemoveAudioTrack.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_RemoveAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RemoveAudioTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_RemoveAudioTrack.Location = new System.Drawing.Point(133, 268);
             this.btn_RemoveAudioTrack.Name = "btn_RemoveAudioTrack";
@@ -182,7 +182,7 @@ namespace Handbrake.Controls
             // btn_addAudioTrack
             // 
             this.btn_addAudioTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_addAudioTrack.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addAudioTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_addAudioTrack.Location = new System.Drawing.Point(16, 268);
             this.btn_addAudioTrack.Name = "btn_addAudioTrack";
@@ -196,10 +196,9 @@ namespace Handbrake.Controls
             // 
             this.lbl_drc.AutoSize = true;
             this.lbl_drc.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_drc.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_drc.Location = new System.Drawing.Point(658, 37);
             this.lbl_drc.Name = "lbl_drc";
-            this.lbl_drc.Size = new System.Drawing.Size(14, 13);
+            this.lbl_drc.Size = new System.Drawing.Size(13, 13);
             this.lbl_drc.TabIndex = 62;
             this.lbl_drc.Text = "0";
             // 
@@ -207,10 +206,9 @@ namespace Handbrake.Controls
             // 
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Transparent;
-            this.label16.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.Location = new System.Drawing.Point(607, 17);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(28, 12);
+            this.label16.Size = new System.Drawing.Size(28, 13);
             this.label16.TabIndex = 61;
             this.label16.Text = "DRC";
             // 
@@ -230,10 +228,10 @@ namespace Handbrake.Controls
             // 
             this.label68.AutoSize = true;
             this.label68.BackColor = System.Drawing.Color.Transparent;
-            this.label68.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label68.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label68.Location = new System.Drawing.Point(13, 13);
             this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(92, 13);
+            this.label68.Size = new System.Drawing.Size(80, 13);
             this.label68.TabIndex = 49;
             this.label68.Text = "Audio Tracks";
             // 
@@ -241,10 +239,9 @@ namespace Handbrake.Controls
             // 
             this.label67.AutoSize = true;
             this.label67.BackColor = System.Drawing.Color.Transparent;
-            this.label67.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label67.Location = new System.Drawing.Point(463, 17);
             this.label67.Name = "label67";
-            this.label67.Size = new System.Drawing.Size(62, 12);
+            this.label67.Size = new System.Drawing.Size(61, 13);
             this.label67.TabIndex = 57;
             this.label67.Text = "Samplerate";
             // 
@@ -252,10 +249,9 @@ namespace Handbrake.Controls
             // 
             this.label66.AutoSize = true;
             this.label66.BackColor = System.Drawing.Color.Transparent;
-            this.label66.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label66.Location = new System.Drawing.Point(538, 17);
             this.label66.Name = "label66";
-            this.label66.Size = new System.Drawing.Size(39, 12);
+            this.label66.Size = new System.Drawing.Size(39, 13);
             this.label66.TabIndex = 59;
             this.label66.Text = "Bitrate";
             // 
@@ -263,10 +259,9 @@ namespace Handbrake.Controls
             // 
             this.label65.AutoSize = true;
             this.label65.BackColor = System.Drawing.Color.Transparent;
-            this.label65.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label65.Location = new System.Drawing.Point(234, 17);
             this.label65.Name = "label65";
-            this.label65.Size = new System.Drawing.Size(69, 12);
+            this.label65.Size = new System.Drawing.Size(67, 13);
             this.label65.TabIndex = 53;
             this.label65.Text = "Audio Codec";
             // 
@@ -274,16 +269,14 @@ namespace Handbrake.Controls
             // 
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.Transparent;
-            this.label14.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.Location = new System.Drawing.Point(368, 17);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(48, 12);
+            this.label14.Size = new System.Drawing.Size(49, 13);
             this.label14.TabIndex = 55;
             this.label14.Text = "Mixdown";
             // 
             // drp_audenc_1
             // 
-            this.drp_audenc_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audenc_1.FormattingEnabled = true;
             this.drp_audenc_1.Items.AddRange(new object[] {
             "AAC (faac)",
@@ -292,7 +285,7 @@ namespace Handbrake.Controls
             "AC3 Passthru"});
             this.drp_audenc_1.Location = new System.Drawing.Point(215, 34);
             this.drp_audenc_1.Name = "drp_audenc_1";
-            this.drp_audenc_1.Size = new System.Drawing.Size(111, 20);
+            this.drp_audenc_1.Size = new System.Drawing.Size(111, 21);
             this.drp_audenc_1.TabIndex = 52;
             this.drp_audenc_1.Text = "AAC (faac)";
             this.drp_audenc_1.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_1_SelectedIndexChanged);
@@ -301,16 +294,14 @@ namespace Handbrake.Controls
             // 
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.Location = new System.Drawing.Point(86, 17);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(40, 12);
+            this.label27.Size = new System.Drawing.Size(40, 13);
             this.label27.TabIndex = 51;
             this.label27.Text = "Source";
             // 
             // drp_audmix_1
             // 
-            this.drp_audmix_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audmix_1.FormattingEnabled = true;
             this.drp_audmix_1.Items.AddRange(new object[] {
             "Automatic",
@@ -321,27 +312,25 @@ namespace Handbrake.Controls
             "6 Channel Discrete"});
             this.drp_audmix_1.Location = new System.Drawing.Point(332, 34);
             this.drp_audmix_1.Name = "drp_audmix_1";
-            this.drp_audmix_1.Size = new System.Drawing.Size(129, 20);
+            this.drp_audmix_1.Size = new System.Drawing.Size(129, 21);
             this.drp_audmix_1.TabIndex = 54;
             this.drp_audmix_1.Text = "Automatic";
             this.drp_audmix_1.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_1_SelectedIndexChanged);
             // 
             // drp_track1Audio
             // 
-            this.drp_track1Audio.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_track1Audio.FormattingEnabled = true;
             this.drp_track1Audio.Items.AddRange(new object[] {
             "Automatic"});
             this.drp_track1Audio.Location = new System.Drawing.Point(15, 35);
             this.drp_track1Audio.Name = "drp_track1Audio";
-            this.drp_track1Audio.Size = new System.Drawing.Size(194, 20);
+            this.drp_track1Audio.Size = new System.Drawing.Size(194, 21);
             this.drp_track1Audio.TabIndex = 50;
             this.drp_track1Audio.Text = "Automatic";
             this.drp_track1Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track1Audio_SelectedIndexChanged);
             // 
             // drp_audbit_1
             // 
-            this.drp_audbit_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audbit_1.FormattingEnabled = true;
             this.drp_audbit_1.Items.AddRange(new object[] {
             "32",
@@ -356,14 +345,13 @@ namespace Handbrake.Controls
             "160"});
             this.drp_audbit_1.Location = new System.Drawing.Point(525, 34);
             this.drp_audbit_1.Name = "drp_audbit_1";
-            this.drp_audbit_1.Size = new System.Drawing.Size(70, 20);
+            this.drp_audbit_1.Size = new System.Drawing.Size(70, 21);
             this.drp_audbit_1.TabIndex = 58;
             this.drp_audbit_1.Text = "160";
             this.drp_audbit_1.SelectedIndexChanged += new System.EventHandler(this.drp_audbit_1_SelectedIndexChanged);
             // 
             // drp_audsr_1
             // 
-            this.drp_audsr_1.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_audsr_1.FormattingEnabled = true;
             this.drp_audsr_1.Items.AddRange(new object[] {
             "Auto",
@@ -374,7 +362,7 @@ namespace Handbrake.Controls
             "22.05"});
             this.drp_audsr_1.Location = new System.Drawing.Point(467, 34);
             this.drp_audsr_1.Name = "drp_audsr_1";
-            this.drp_audsr_1.Size = new System.Drawing.Size(55, 20);
+            this.drp_audsr_1.Size = new System.Drawing.Size(55, 21);
             this.drp_audsr_1.TabIndex = 56;
             this.drp_audsr_1.Text = "Auto";
             this.drp_audsr_1.SelectedIndexChanged += new System.EventHandler(this.drp_audsr_1_SelectedIndexChanged);
@@ -395,7 +383,6 @@ namespace Handbrake.Controls
             this.AudioTrackGroup.Controls.Add(this.label65);
             this.AudioTrackGroup.Controls.Add(this.label67);
             this.AudioTrackGroup.Controls.Add(this.label66);
-            this.AudioTrackGroup.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AudioTrackGroup.ForeColor = System.Drawing.Color.Black;
             this.AudioTrackGroup.Location = new System.Drawing.Point(16, 32);
             this.AudioTrackGroup.Name = "AudioTrackGroup";
@@ -419,6 +406,7 @@ namespace Handbrake.Controls
             this.Controls.Add(this.btn_RemoveAudioTrack);
             this.Controls.Add(this.btn_addAudioTrack);
             this.Controls.Add(this.label68);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AudioPanel";
             this.Size = new System.Drawing.Size(720, 310);
             this.audioMenu.ResumeLayout(false);

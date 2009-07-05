@@ -76,6 +76,15 @@ namespace Handbrake.Presets
         }
 
         /// <summary>
+        /// Remove all built in presets;
+        /// </summary>
+        public void removeBuiltInPresets()
+        {
+            presets.Clear();
+            updatePresetsFile();
+        }
+
+        /// <summary>
         /// Save changes to a given preset in the user preset list.
         /// </summary>
         /// <param name="presetName">String, The name of the new preset</param>

@@ -52,7 +52,7 @@
             // 
             this.text_customDT.Location = new System.Drawing.Point(288, 32);
             this.text_customDT.Name = "text_customDT";
-            this.text_customDT.Size = new System.Drawing.Size(115, 20);
+            this.text_customDT.Size = new System.Drawing.Size(115, 21);
             this.text_customDT.TabIndex = 47;
             this.text_customDT.Visible = false;
             // 
@@ -60,17 +60,15 @@
             // 
             this.label18.AutoSize = true;
             this.label18.BackColor = System.Drawing.Color.Transparent;
-            this.label18.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label18.Location = new System.Drawing.Point(13, 35);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(72, 13);
+            this.label18.Size = new System.Drawing.Size(61, 13);
             this.label18.TabIndex = 46;
             this.label18.Text = "Detelecine:";
             // 
             // drop_detelecine
             // 
             this.drop_detelecine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_detelecine.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_detelecine.FormattingEnabled = true;
             this.drop_detelecine.Items.AddRange(new object[] {
             "Off",
@@ -86,7 +84,7 @@
             // 
             this.text_customDC.Location = new System.Drawing.Point(288, 59);
             this.text_customDC.Name = "text_customDC";
-            this.text_customDC.Size = new System.Drawing.Size(115, 20);
+            this.text_customDC.Size = new System.Drawing.Size(115, 21);
             this.text_customDC.TabIndex = 50;
             this.text_customDC.Visible = false;
             // 
@@ -94,17 +92,15 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(13, 62);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 49;
             this.label1.Text = "Decomb:";
             // 
             // drop_decomb
             // 
             this.drop_decomb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_decomb.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_decomb.FormattingEnabled = true;
             this.drop_decomb.Items.AddRange(new object[] {
             "Off",
@@ -120,7 +116,7 @@
             // 
             this.text_customDI.Location = new System.Drawing.Point(288, 86);
             this.text_customDI.Name = "text_customDI";
-            this.text_customDI.Size = new System.Drawing.Size(115, 20);
+            this.text_customDI.Size = new System.Drawing.Size(115, 21);
             this.text_customDI.TabIndex = 53;
             this.text_customDI.Visible = false;
             // 
@@ -128,17 +124,15 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(13, 89);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 13);
+            this.label2.Size = new System.Drawing.Size(65, 13);
             this.label2.TabIndex = 52;
             this.label2.Text = "Deinterlace:";
             // 
             // drop_deinterlace
             // 
             this.drop_deinterlace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_deinterlace.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_deinterlace.FormattingEnabled = true;
             this.drop_deinterlace.Items.AddRange(new object[] {
             "None",
@@ -156,7 +150,7 @@
             // 
             this.text_customDN.Location = new System.Drawing.Point(288, 113);
             this.text_customDN.Name = "text_customDN";
-            this.text_customDN.Size = new System.Drawing.Size(115, 20);
+            this.text_customDN.Size = new System.Drawing.Size(115, 21);
             this.text_customDN.TabIndex = 56;
             this.text_customDN.Visible = false;
             // 
@@ -164,17 +158,15 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(13, 116);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 13);
+            this.label3.Size = new System.Drawing.Size(49, 13);
             this.label3.TabIndex = 55;
             this.label3.Text = "Denoise:";
             // 
             // drop_denoise
             // 
             this.drop_denoise.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_denoise.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_denoise.FormattingEnabled = true;
             this.drop_denoise.Items.AddRange(new object[] {
             "None",
@@ -203,10 +195,9 @@
             // 
             this.check_grayscale.AutoSize = true;
             this.check_grayscale.BackColor = System.Drawing.Color.Transparent;
-            this.check_grayscale.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.check_grayscale.Location = new System.Drawing.Point(121, 191);
             this.check_grayscale.Name = "check_grayscale";
-            this.check_grayscale.Size = new System.Drawing.Size(138, 17);
+            this.check_grayscale.Size = new System.Drawing.Size(119, 17);
             this.check_grayscale.TabIndex = 57;
             this.check_grayscale.Text = "Grayscale Encoding";
             this.check_grayscale.UseVisualStyleBackColor = false;
@@ -215,10 +206,9 @@
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.Location = new System.Drawing.Point(13, 147);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(58, 13);
+            this.label8.Size = new System.Drawing.Size(48, 13);
             this.label8.TabIndex = 60;
             this.label8.Text = "Deblock:";
             // 
@@ -226,10 +216,9 @@
             // 
             this.lbl_deblockVal.AutoSize = true;
             this.lbl_deblockVal.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_deblockVal.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_deblockVal.Location = new System.Drawing.Point(301, 147);
             this.lbl_deblockVal.Name = "lbl_deblockVal";
-            this.lbl_deblockVal.Size = new System.Drawing.Size(24, 13);
+            this.lbl_deblockVal.Size = new System.Drawing.Size(23, 13);
             this.lbl_deblockVal.TabIndex = 59;
             this.lbl_deblockVal.Text = "Off";
             // 
@@ -237,10 +226,10 @@
             // 
             this.label68.AutoSize = true;
             this.label68.BackColor = System.Drawing.Color.Transparent;
-            this.label68.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label68.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label68.Location = new System.Drawing.Point(13, 13);
             this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(49, 13);
+            this.label68.Size = new System.Drawing.Size(42, 13);
             this.label68.TabIndex = 61;
             this.label68.Text = "Filters";
             // 
@@ -265,6 +254,7 @@
             this.Controls.Add(this.text_customDT);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.drop_detelecine);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Filters";
             this.Size = new System.Drawing.Size(592, 270);
             ((System.ComponentModel.ISupportInitialize)(this.slider_deblock)).EndInit();

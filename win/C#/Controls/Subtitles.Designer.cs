@@ -43,12 +43,12 @@
             this.forced = new System.Windows.Forms.ColumnHeader();
             this.burned = new System.Windows.Forms.ColumnHeader();
             this.defaultTrack = new System.Windows.Forms.ColumnHeader();
-            this.label68 = new System.Windows.Forms.Label();
             this.subMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_moveup = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_movedown = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.label68 = new System.Windows.Forms.Label();
             this.AudioTrackGroup.SuspendLayout();
             this.subMenu.SuspendLayout();
             this.SuspendLayout();
@@ -56,11 +56,10 @@
             // drp_subtitleTracks
             // 
             this.drp_subtitleTracks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_subtitleTracks.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_subtitleTracks.FormattingEnabled = true;
             this.drp_subtitleTracks.Location = new System.Drawing.Point(57, 20);
             this.drp_subtitleTracks.Name = "drp_subtitleTracks";
-            this.drp_subtitleTracks.Size = new System.Drawing.Size(194, 20);
+            this.drp_subtitleTracks.Size = new System.Drawing.Size(194, 21);
             this.drp_subtitleTracks.TabIndex = 50;
             this.drp_subtitleTracks.SelectedIndexChanged += new System.EventHandler(this.drp_subtitleTracks_SelectedIndexChanged);
             // 
@@ -72,7 +71,6 @@
             this.AudioTrackGroup.Controls.Add(this.check_burned);
             this.AudioTrackGroup.Controls.Add(this.check_forced);
             this.AudioTrackGroup.Controls.Add(this.drp_subtitleTracks);
-            this.AudioTrackGroup.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AudioTrackGroup.ForeColor = System.Drawing.Color.Black;
             this.AudioTrackGroup.Location = new System.Drawing.Point(16, 32);
             this.AudioTrackGroup.Name = "AudioTrackGroup";
@@ -84,20 +82,18 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(6, 22);
+            this.label1.Location = new System.Drawing.Point(6, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 13);
+            this.label1.Size = new System.Drawing.Size(37, 13);
             this.label1.TabIndex = 72;
             this.label1.Text = "Track:";
             // 
             // check_default
             // 
             this.check_default.AutoSize = true;
-            this.check_default.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_default.Location = new System.Drawing.Point(446, 21);
+            this.check_default.Location = new System.Drawing.Point(426, 22);
             this.check_default.Name = "check_default";
-            this.check_default.Size = new System.Drawing.Size(67, 17);
+            this.check_default.Size = new System.Drawing.Size(61, 17);
             this.check_default.TabIndex = 71;
             this.check_default.Text = "Default";
             this.check_default.UseVisualStyleBackColor = true;
@@ -106,10 +102,9 @@
             // check_burned
             // 
             this.check_burned.AutoSize = true;
-            this.check_burned.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_burned.Location = new System.Drawing.Point(357, 21);
+            this.check_burned.Location = new System.Drawing.Point(347, 22);
             this.check_burned.Name = "check_burned";
-            this.check_burned.Size = new System.Drawing.Size(83, 17);
+            this.check_burned.Size = new System.Drawing.Size(73, 17);
             this.check_burned.TabIndex = 70;
             this.check_burned.Text = "Burned In";
             this.check_burned.UseVisualStyleBackColor = true;
@@ -118,10 +113,9 @@
             // check_forced
             // 
             this.check_forced.AutoSize = true;
-            this.check_forced.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_forced.Location = new System.Drawing.Point(257, 21);
+            this.check_forced.Location = new System.Drawing.Point(257, 22);
             this.check_forced.Name = "check_forced";
-            this.check_forced.Size = new System.Drawing.Size(94, 17);
+            this.check_forced.Size = new System.Drawing.Size(84, 17);
             this.check_forced.TabIndex = 69;
             this.check_forced.Text = "Forced Only";
             this.check_forced.UseVisualStyleBackColor = true;
@@ -130,7 +124,7 @@
             // btn_addSubTrack
             // 
             this.btn_addSubTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_addSubTrack.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_addSubTrack.Location = new System.Drawing.Point(16, 274);
             this.btn_addSubTrack.Name = "btn_addSubTrack";
@@ -143,7 +137,7 @@
             // btn_RemoveSubTrack
             // 
             this.btn_RemoveSubTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_RemoveSubTrack.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_RemoveSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RemoveSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.btn_RemoveSubTrack.Location = new System.Drawing.Point(133, 274);
             this.btn_RemoveSubTrack.Name = "btn_RemoveSubTrack";
@@ -200,17 +194,6 @@
             this.defaultTrack.Text = "Default";
             this.defaultTrack.Width = 100;
             // 
-            // label68
-            // 
-            this.label68.AutoSize = true;
-            this.label68.BackColor = System.Drawing.Color.Transparent;
-            this.label68.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label68.Location = new System.Drawing.Point(13, 13);
-            this.label68.Name = "label68";
-            this.label68.Size = new System.Drawing.Size(64, 13);
-            this.label68.TabIndex = 67;
-            this.label68.Text = "Subtitles";
-            // 
             // subMenu
             // 
             this.subMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -248,6 +231,17 @@
             this.mnu_remove.Text = "Remove";
             this.mnu_remove.Click += new System.EventHandler(this.mnu_remove_Click);
             // 
+            // label68
+            // 
+            this.label68.AutoSize = true;
+            this.label68.BackColor = System.Drawing.Color.Transparent;
+            this.label68.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label68.Location = new System.Drawing.Point(13, 13);
+            this.label68.Name = "label68";
+            this.label68.Size = new System.Drawing.Size(57, 13);
+            this.label68.TabIndex = 67;
+            this.label68.Text = "Subtitles";
+            // 
             // Subtitles
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -257,6 +251,7 @@
             this.Controls.Add(this.lv_subList);
             this.Controls.Add(this.label68);
             this.Controls.Add(this.btn_addSubTrack);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Subtitles";
             this.Size = new System.Drawing.Size(719, 300);
             this.AudioTrackGroup.ResumeLayout(false);

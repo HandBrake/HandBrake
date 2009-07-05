@@ -235,7 +235,7 @@ namespace Handbrake.Functions
             mainWindow.x264Panel.x264Query = presetQuery.H264Query;
 
             // Set the preset name
-            mainWindow.groupBox_output.Text = "Output Settings (Preset: " + name + ")";
+            mainWindow.labelPreset.Text = "Output Settings (Preset: " + name + ")";
             #endregion
         }
     }

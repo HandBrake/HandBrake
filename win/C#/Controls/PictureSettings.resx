@@ -118,11 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="text_height.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="text_height.Location" type="System.Drawing.Point, System.Drawing">
     <value>206, 59</value>
   </data>
   <data name="text_height.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 20</value>
+    <value>64, 21</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="text_height.TabIndex" type="System.Int32, mscorlib">
@@ -140,11 +143,14 @@
   <data name="&gt;&gt;text_height.ZOrder" xml:space="preserve">
     <value>22</value>
   </data>
+  <data name="text_width.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="text_width.Location" type="System.Drawing.Point, System.Drawing">
     <value>68, 59</value>
   </data>
   <data name="text_width.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 20</value>
+    <value>64, 21</value>
   </data>
   <data name="text_width.TabIndex" type="System.Int32, mscorlib">
     <value>49</value>
@@ -165,13 +171,13 @@
     <value>True</value>
   </data>
   <data name="label4.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
     <value>152, 63</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 13</value>
+    <value>42, 13</value>
   </data>
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>48</value>
@@ -194,11 +200,14 @@
   <data name="lbl_max.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="lbl_max.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="lbl_max.Location" type="System.Drawing.Point, System.Drawing">
     <value>279, 61</value>
   </data>
   <data name="lbl_max.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 13</value>
+    <value>37, 13</value>
   </data>
   <data name="lbl_max.TabIndex" type="System.Int32, mscorlib">
     <value>47</value>
@@ -222,13 +231,13 @@
     <value>True</value>
   </data>
   <data name="lbl_src_res.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 6.75pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_src_res.Location" type="System.Drawing.Point, System.Drawing">
     <value>66, 36</value>
   </data>
   <data name="lbl_src_res.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 12</value>
+    <value>68, 13</value>
   </data>
   <data name="lbl_src_res.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
@@ -250,6 +259,9 @@
   </data>
   <data name="label7.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="label7.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="label7.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 35</value>
@@ -279,13 +291,13 @@
     <value>True</value>
   </data>
   <data name="label6.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="label6.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 119</value>
   </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 13</value>
+    <value>67, 13</value>
   </data>
   <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
@@ -306,7 +318,7 @@
     <value>28</value>
   </data>
   <data name="drp_anamorphic.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="drp_anamorphic.Items" xml:space="preserve">
     <value>None</value>
@@ -345,13 +357,13 @@
     <value>True</value>
   </data>
   <data name="label26.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt, style=Bold</value>
+    <value>Tahoma, 8.25pt, style=Bold</value>
   </data>
   <data name="label26.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 13</value>
   </data>
   <data name="label26.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 13</value>
+    <value>30, 13</value>
   </data>
   <data name="label26.TabIndex" type="System.Int32, mscorlib">
     <value>39</value>
@@ -375,13 +387,13 @@
     <value>True</value>
   </data>
   <data name="lbl_Aspect.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 6.75pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_Aspect.Location" type="System.Drawing.Point, System.Drawing">
     <value>241, 36</value>
   </data>
   <data name="lbl_Aspect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 12</value>
+    <value>68, 13</value>
   </data>
   <data name="lbl_Aspect.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
@@ -405,13 +417,13 @@
     <value>True</value>
   </data>
   <data name="Label91.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="Label91.Location" type="System.Drawing.Point, System.Drawing">
     <value>152, 35</value>
   </data>
   <data name="Label91.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 13</value>
+    <value>72, 13</value>
   </data>
   <data name="Label91.TabIndex" type="System.Int32, mscorlib">
     <value>42</value>
@@ -435,13 +447,13 @@
     <value>True</value>
   </data>
   <data name="Label55.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="Label55.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 63</value>
   </data>
   <data name="Label55.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 13</value>
+    <value>39, 13</value>
   </data>
   <data name="Label55.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -465,13 +477,13 @@
     <value>True</value>
   </data>
   <data name="lbl_modulus.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_modulus.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 146</value>
   </data>
   <data name="lbl_modulus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 13</value>
+    <value>50, 13</value>
   </data>
   <data name="lbl_modulus.TabIndex" type="System.Int32, mscorlib">
     <value>51</value>
@@ -492,7 +504,7 @@
     <value>20</value>
   </data>
   <data name="drop_modulus.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="drop_modulus.Items" xml:space="preserve">
     <value>16</value>
@@ -527,11 +539,14 @@
   <data name="&gt;&gt;drop_modulus.ZOrder" xml:space="preserve">
     <value>21</value>
   </data>
+  <data name="txt_displayWidth.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="txt_displayWidth.Location" type="System.Drawing.Point, System.Drawing">
     <value>110, 170</value>
   </data>
   <data name="txt_displayWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>100, 21</value>
   </data>
   <data name="txt_displayWidth.TabIndex" type="System.Int32, mscorlib">
     <value>53</value>
@@ -558,13 +573,13 @@
     <value>True</value>
   </data>
   <data name="lbl_displayWidth.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_displayWidth.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 173</value>
   </data>
   <data name="lbl_displayWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 13</value>
+    <value>76, 13</value>
   </data>
   <data name="lbl_displayWidth.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
@@ -588,13 +603,13 @@
     <value>True</value>
   </data>
   <data name="lbl_parWidth.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_parWidth.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 199</value>
   </data>
   <data name="lbl_parWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 13</value>
+    <value>62, 13</value>
   </data>
   <data name="lbl_parWidth.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -614,11 +629,14 @@
   <data name="&gt;&gt;lbl_parWidth.ZOrder" xml:space="preserve">
     <value>16</value>
   </data>
+  <data name="txt_parWidth.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="txt_parWidth.Location" type="System.Drawing.Point, System.Drawing">
     <value>110, 196</value>
   </data>
   <data name="txt_parWidth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>100, 21</value>
   </data>
   <data name="txt_parWidth.TabIndex" type="System.Int32, mscorlib">
     <value>55</value>
@@ -643,13 +661,13 @@
     <value>True</value>
   </data>
   <data name="lbl_parHeight.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_parHeight.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 225</value>
   </data>
   <data name="lbl_parHeight.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 13</value>
+    <value>65, 13</value>
   </data>
   <data name="lbl_parHeight.TabIndex" type="System.Int32, mscorlib">
     <value>58</value>
@@ -669,11 +687,14 @@
   <data name="&gt;&gt;lbl_parHeight.ZOrder" xml:space="preserve">
     <value>14</value>
   </data>
+  <data name="txt_parHeight.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="txt_parHeight.Location" type="System.Drawing.Point, System.Drawing">
     <value>110, 222</value>
   </data>
   <data name="txt_parHeight.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 20</value>
+    <value>100, 21</value>
   </data>
   <data name="txt_parHeight.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
@@ -697,11 +718,14 @@
   <data name="check_KeepAR.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="check_KeepAR.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="check_KeepAR.Location" type="System.Drawing.Point, System.Drawing">
     <value>68, 85</value>
   </data>
   <data name="check_KeepAR.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 17</value>
+    <value>114, 17</value>
   </data>
   <data name="check_KeepAR.TabIndex" type="System.Int32, mscorlib">
     <value>59</value>
@@ -724,11 +748,14 @@
   <data name="check_customCrop.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="check_customCrop.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="check_customCrop.Location" type="System.Drawing.Point, System.Drawing">
     <value>399, 57</value>
   </data>
   <data name="check_customCrop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 17</value>
+    <value>65, 17</value>
   </data>
   <data name="check_customCrop.TabIndex" type="System.Int32, mscorlib">
     <value>70</value>
@@ -751,11 +778,14 @@
   <data name="check_autoCrop.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="check_autoCrop.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="check_autoCrop.Location" type="System.Drawing.Point, System.Drawing">
     <value>399, 33</value>
   </data>
   <data name="check_autoCrop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 17</value>
+    <value>73, 17</value>
   </data>
   <data name="check_autoCrop.TabIndex" type="System.Int32, mscorlib">
     <value>69</value>
@@ -778,11 +808,14 @@
   <data name="crop_bottom.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="crop_bottom.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="crop_bottom.Location" type="System.Drawing.Point, System.Drawing">
     <value>479, 146</value>
   </data>
   <data name="crop_bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
+    <value>44, 21</value>
   </data>
   <data name="crop_bottom.TabIndex" type="System.Int32, mscorlib">
     <value>67</value>
@@ -802,11 +835,14 @@
   <data name="crop_top.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="crop_top.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="crop_top.Location" type="System.Drawing.Point, System.Drawing">
     <value>479, 100</value>
   </data>
   <data name="crop_top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
+    <value>44, 21</value>
   </data>
   <data name="crop_top.TabIndex" type="System.Int32, mscorlib">
     <value>64</value>
@@ -826,11 +862,14 @@
   <data name="crop_left.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="crop_left.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="crop_left.Location" type="System.Drawing.Point, System.Drawing">
     <value>428, 122</value>
   </data>
   <data name="crop_left.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
+    <value>44, 21</value>
   </data>
   <data name="crop_left.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -850,11 +889,14 @@
   <data name="crop_right.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
+  <data name="crop_right.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="crop_right.Location" type="System.Drawing.Point, System.Drawing">
     <value>530, 122</value>
   </data>
   <data name="crop_right.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 20</value>
+    <value>44, 21</value>
   </data>
   <data name="crop_right.TabIndex" type="System.Int32, mscorlib">
     <value>65</value>
@@ -875,13 +917,13 @@
     <value>True</value>
   </data>
   <data name="label8.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt, style=Bold</value>
+    <value>Tahoma, 8.25pt, style=Bold</value>
   </data>
   <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
     <value>396, 13</value>
   </data>
   <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 13</value>
+    <value>33, 13</value>
   </data>
   <data name="label8.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -905,13 +947,13 @@
     <value>True</value>
   </data>
   <data name="Label53.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="Label53.Location" type="System.Drawing.Point, System.Drawing">
     <value>477, 170</value>
   </data>
   <data name="Label53.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 13</value>
+    <value>41, 13</value>
   </data>
   <data name="Label53.TabIndex" type="System.Int32, mscorlib">
     <value>68</value>
@@ -935,13 +977,13 @@
     <value>True</value>
   </data>
   <data name="Label52.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="Label52.Location" type="System.Drawing.Point, System.Drawing">
     <value>486, 85</value>
   </data>
   <data name="Label52.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 13</value>
+    <value>25, 13</value>
   </data>
   <data name="Label52.TabIndex" type="System.Int32, mscorlib">
     <value>63</value>
@@ -965,13 +1007,13 @@
     <value>True</value>
   </data>
   <data name="Label51.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="Label51.Location" type="System.Drawing.Point, System.Drawing">
-    <value>573, 124</value>
+    <value>580, 124</value>
   </data>
   <data name="Label51.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 13</value>
+    <value>32, 13</value>
   </data>
   <data name="Label51.TabIndex" type="System.Int32, mscorlib">
     <value>66</value>
@@ -995,13 +1037,13 @@
     <value>True</value>
   </data>
   <data name="Label15.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 8.25pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="Label15.Location" type="System.Drawing.Point, System.Drawing">
     <value>396, 124</value>
   </data>
   <data name="Label15.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 13</value>
+    <value>26, 13</value>
   </data>
   <data name="Label15.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -1025,13 +1067,13 @@
     <value>True</value>
   </data>
   <data name="lbl_anamorphic.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Verdana, 6.75pt</value>
+    <value>Tahoma, 8.25pt</value>
   </data>
   <data name="lbl_anamorphic.Location" type="System.Drawing.Point, System.Drawing">
     <value>108, 250</value>
   </data>
   <data name="lbl_anamorphic.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 12</value>
+    <value>68, 13</value>
   </data>
   <data name="lbl_anamorphic.TabIndex" type="System.Int32, mscorlib">
     <value>74</value>
@@ -1054,11 +1096,14 @@
   <data name="lbl_anamprohicLbl.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="lbl_anamprohicLbl.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="lbl_anamprohicLbl.Location" type="System.Drawing.Point, System.Drawing">
     <value>14, 249</value>
   </data>
   <data name="lbl_anamprohicLbl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 13</value>
+    <value>67, 13</value>
   </data>
   <data name="lbl_anamprohicLbl.TabIndex" type="System.Int32, mscorlib">
     <value>73</value>
@@ -1081,6 +1126,9 @@
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Tahoma, 8.25pt</value>
+  </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>666, 279</value>
   </data>

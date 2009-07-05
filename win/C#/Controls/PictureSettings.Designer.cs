@@ -399,8 +399,8 @@ namespace Handbrake.Controls
             this.Controls.Add(this.lbl_Aspect);
             this.Controls.Add(this.Label91);
             this.Controls.Add(this.Label55);
-            this.Name = "PictureSettings";
             resources.ApplyResources(this, "$this");
+            this.Name = "PictureSettings";
             ((System.ComponentModel.ISupportInitialize)(this.text_height)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.text_width)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.crop_bottom)).EndInit();
