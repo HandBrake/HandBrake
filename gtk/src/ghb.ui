@@ -3659,7 +3659,6 @@ no-dct-decimate=0:cabac=1</property>
                     <child>
                       <object class="GtkVBox" id="vbox42">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkAlignment" id="alignment60">
                             <property name="visible">True</property>
@@ -3748,7 +3747,6 @@ no-dct-decimate=0:cabac=1</property>
                             <child>
                               <object class="GtkVBox" id="vbox5">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkCheckButton" id="use_source_name">
                                     <property name="label" translatable="yes">Use automatic naming (uses DVD name)</property>
@@ -3770,7 +3768,6 @@ no-dct-decimate=0:cabac=1</property>
                                     <child>
                                       <object class="GtkVBox" id="vbox29">
                                         <property name="visible">True</property>
-                                        <property name="orientation">vertical</property>
                                         <child>
                                           <object class="GtkCheckButton" id="chapters_in_destination">
                                             <property name="label" translatable="yes">Add chapters to destination name</property>
@@ -3912,7 +3909,6 @@ no-dct-decimate=0:cabac=1</property>
                     <child>
                       <object class="GtkVBox" id="vbox18">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkAlignment" id="alignment61">
                             <property name="visible">True</property>
@@ -3924,7 +3920,6 @@ no-dct-decimate=0:cabac=1</property>
                             <child>
                               <object class="GtkVBox" id="vbox7">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkHBox" id="hbox81">
                                     <property name="visible">True</property>
@@ -3967,7 +3962,6 @@ no-dct-decimate=0:cabac=1</property>
                                       <object class="GtkVBox" id="vbox49">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="orientation">vertical</property>
                                         <child>
                                           <object class="GtkRadioButton" id="AudioDUB">
                                             <property name="label" translatable="yes">DUB Foreign language audio</property>
@@ -4048,7 +4042,6 @@ no-dct-decimate=0:cabac=1</property>
                     <child>
                       <object class="GtkVBox" id="vbox1">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkAlignment" id="alignment3">
                             <property name="visible">True</property>
@@ -4058,7 +4051,6 @@ no-dct-decimate=0:cabac=1</property>
                             <child>
                               <object class="GtkVBox" id="vbox3">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkCheckButton" id="constant_rate_factor">
                                     <property name="label" translatable="yes">Use CRF (Instead of CQP) for Constant Quality encodes</property>
@@ -4151,7 +4143,6 @@ no-dct-decimate=0:cabac=1</property>
                             <child>
                               <object class="GtkVBox" id="vbox2">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkCheckButton" id="EncodeLogLocation">
                                     <property name="label" translatable="yes">Put individual encode logs in same location as movie</property>
@@ -4278,7 +4269,6 @@ no-dct-decimate=0:cabac=1</property>
                             <child>
                               <object class="GtkVBox" id="vbox4">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <child>
                                   <object class="GtkCheckButton" id="allow_tweaks">
                                     <property name="label" translatable="yes">Allow Tweaks</property>

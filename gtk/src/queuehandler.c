@@ -1105,31 +1105,67 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	if (show_stop)
 	{
 		gtk_action_set_sensitive (action, TRUE);
+#if GTK_CHECK_VERSION(2, 16, 0)
 		gtk_action_set_icon_name(action, "hb-stop");
 		gtk_action_set_label(action, "S_top Queue");
 		gtk_action_set_tooltip(action, "Stop Encoding");
+#else
+		g_object_set_property(G_OBJECT(action), "icon-name", 
+											ghb_string_value("hb-stop"));
+		g_object_set_property(G_OBJECT(action), "label",
+											ghb_string_value("S_top Queue"));
+		g_object_set_property(G_OBJECT(action), "tooltip",
+											ghb_string_value("Stop Encoding"));
+#endif
 	}
 	else
 	{
 		gtk_action_set_sensitive (action, show_start);
+#if GTK_CHECK_VERSION(2, 16, 0)
 		gtk_action_set_icon_name(action, "hb-play");
 		gtk_action_set_label(action, "_Start Queue");
 		gtk_action_set_tooltip(action, "Start Encoding");
+#else
+		g_object_set_property(G_OBJECT(action), "icon-name", 
+											ghb_string_value("hb-play"));
+		g_object_set_property(G_OBJECT(action), "label",
+											ghb_string_value("_Start Queue"));
+		g_object_set_property(G_OBJECT(action), "tooltip",
+											ghb_string_value("Start Encoding"));
+#endif
 	}
 	action = GHB_ACTION (ud->builder, "queue_pause_menu");
 	if (paused)
 	{
 		gtk_action_set_sensitive (action, show_start);
+#if GTK_CHECK_VERSION(2, 16, 0)
 		gtk_action_set_icon_name(action, "hb-play");
 		gtk_action_set_label(action, "_Resume Queue");
 		gtk_action_set_tooltip(action, "Resume Encoding");
+#else
+		g_object_set_property(G_OBJECT(action), "icon-name", 
+										ghb_string_value("hb-play"));
+		g_object_set_property(G_OBJECT(action), "label",
+										ghb_string_value("_Resume Queue"));
+		g_object_set_property(G_OBJECT(action), "tooltip",
+										ghb_string_value("Resume Encoding"));
+#endif
 	}
 	else
 	{
 		gtk_action_set_sensitive (action, show_stop);
+#if GTK_CHECK_VERSION(2, 16, 0)
 		gtk_action_set_icon_name(action, "hb-pause");
 		gtk_action_set_label(action, "_Pause Queue");
 		gtk_action_set_tooltip(action, "Pause Encoding");
+#else
+		g_object_set_property(G_OBJECT(action), "icon-name", 
+										ghb_string_value("hb-pause"));
+		g_object_set_property(G_OBJECT(action), "label",
+										ghb_string_value("_Pause Queue"));
+		g_object_set_property(G_OBJECT(action), "tooltip",
+										ghb_string_value("Pause Encoding"));
+#endif
 	}
 }
 
