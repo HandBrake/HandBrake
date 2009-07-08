@@ -494,7 +494,7 @@ int renderWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         /* In order to make sure we have continuous time stamps, store
            the current frame's duration as starting when the last one stopped. */
         pv->last_start[0] = pv->last_stop[1];
-        pv->last_stop[0] = pv->last_start[0] + (in->stop - in->start);
+        pv->last_stop[0] = pv->last_start[0] + (buf_tmp_in->stop - buf_tmp_in->start);
     }
 
     /* Apply subtitles */
