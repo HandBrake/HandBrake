@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Handbrake.Functions;
-using System.IO;
 
 namespace Handbrake.Controls
 {
     public partial class Subtitles : UserControl
     {
-
-        IDictionary<string, string> LangMap = new Dictionary<string, string>();
+        readonly IDictionary<string, string> LangMap = new Dictionary<string, string>();
 
         public Subtitles()
         {
@@ -23,12 +21,12 @@ namespace Handbrake.Controls
             srt_lang.SelectedIndex = 40;
         }
 
-        private int fileContainer;
+        private int FileContainer;
         public void setContainer(int value)
         {
-            fileContainer = value;
+            FileContainer = value;
             Boolean trigger = false;
-            if (fileContainer != 1)
+            if (FileContainer != 1)
                 foreach (ListViewItem item in lv_subList.Items)
                 {
                     if (item.SubItems[1].Text.Contains("Bitmap"))
@@ -66,7 +64,7 @@ namespace Handbrake.Controls
             }
 
             Boolean addTrack = true;
-            if (fileContainer == 0)
+            if (FileContainer == 0)
             {
                 burnedVal = "Yes";  // MP4 must have bitmap subs burned in.
 
@@ -250,6 +248,13 @@ namespace Handbrake.Controls
         private void srt_browse_Click(object sender, EventArgs e)
         {
             openFileDialog.ShowDialog();
+
+            // Update an item in the  list if required.
+            if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
+            {
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[5].Text = openFileDialog.FileName;
+                lv_subList.Select();
+            }
         }
 
         // Right Click Menu
