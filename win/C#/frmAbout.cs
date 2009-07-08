@@ -14,13 +14,14 @@ namespace Handbrake
         public frmAbout()
         {
             InitializeComponent();
-            Version.Text = Properties.Settings.Default.hb_version;
-            lbl_build.Text = Properties.Settings.Default.hb_build.ToString();
+            lbl_HBBuild.Text = Properties.Settings.Default.hb_version + "  " + Properties.Settings.Default.hb_build;
         }
 
         private void btn_close_Click(object sender, EventArgs e)
         {
             this.Close();
         }
+
+  
     }
 }

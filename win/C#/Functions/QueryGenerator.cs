@@ -185,7 +185,7 @@ namespace Handbrake.Functions
             #endregion
 
             #region Filters
-            query += mainWindow.Filters.getCLIQuery;           
+            query += mainWindow.Filters.getCLIQuery;
             #endregion
 
             #region Video Settings Tab
@@ -383,72 +383,111 @@ namespace Handbrake.Functions
             #endregion
 
             #region Subtitles Tab
-
             if (mainWindow.Subtitles.lv_subList.Items.Count != 0) // If we have subtitle tracks
             {
-                // Find --subtitle <string>
-                query += " --subtitle ";
-                String subtitleTracks = "";
-                String itemToAdd;
+                IDictionary<string, string> langMap = Main.mapLanguages();
+
+                // BitMap and CC's
+                string subtitleTracks = String.Empty;
+                string subtitleForced = String.Empty;
+                string subtitleBurn = String.Empty;
+                string subtitleDefault = String.Empty;
+
+                // SRT
+                string srtFile = String.Empty; 
+                string srtCodeset = String.Empty;
+                string srtOffset = String.Empty; 
+                string srtLang = String.Empty; 
+
                 foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
                 {
-                    if (item.SubItems[1].Text.Contains("Foreign Audio Search"))
-                        itemToAdd = "scan";
-                    else
+                    string itemToAdd, trackID;
+
+                    if (item.SubItems.Count != 5) // We have an SRT file
                     {
-                        string[] tempSub = item.SubItems[1].Text.Split(' ');
-                        itemToAdd = tempSub[0];
+                        string[] trackData = item.SubItems[1].Text.Split(',');
+                        if (trackData != null)
+                        {
+                            string charCode = trackData[1].Replace("(", "").Replace(")", "").Trim();
+                            string realLangCode = langMap[trackData[0].Trim()];
+
+                            srtLang += srtLang == "" ? realLangCode : "," + realLangCode;
+                            srtCodeset += srtCodeset == "" ? charCode : "," + charCode;
+                        }
+
+                        itemToAdd = item.SubItems[5].Text;
+                        srtFile += srtFile == "" ? itemToAdd : "," + itemToAdd;
+
+                        itemToAdd = item.SubItems[6].Text;
+                        srtOffset += srtOffset == "" ? itemToAdd : "," + itemToAdd;
                     }
+                    else // We have Bitmap or CC
+                    {
+                        string[] tempSub;
+        
+                        // Find --subtitle <string>
+                        if (item.SubItems[1].Text.Contains("Foreign Audio Search"))
+                            itemToAdd = "scan";
+                        else
+                        {
+                            tempSub = item.SubItems[1].Text.Split(' ');
+                            itemToAdd = tempSub[0];
+                        }
 
-                    subtitleTracks += subtitleTracks == "" ? itemToAdd : "," + itemToAdd;
+                        subtitleTracks += subtitleTracks == "" ? itemToAdd : "," + itemToAdd;
+
+                        // Find --subtitle-forced
+                        itemToAdd = "";
+                        tempSub = item.SubItems[1].Text.Split(' ');
+                        trackID = tempSub[0];
+
+                        if (item.SubItems[2].Text == "Yes")
+                            itemToAdd = trackID;
+
+                        if (itemToAdd != "")
+                            subtitleForced += subtitleForced == "" ? itemToAdd : "," + itemToAdd;
+
+                        // Find --subtitle-burn and --subtitle-default
+                        tempSub = item.SubItems[1].Text.Split(' ');
+                        trackID = tempSub[0];
+
+                        if (trackID.Trim() == "Foreign")
+                            trackID = "scan";
+
+                        if (item.SubItems[3].Text == "Yes") // burn
+                            subtitleBurn = trackID;
+
+                        if (item.SubItems[4].Text == "Yes") // default
+                            subtitleDefault = trackID;
+                    }
                 }
-                query += subtitleTracks;
 
-
-                // Find --subtitle-forced
-                String forcedTrack = "";
-                foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
+                // Build The CLI Subtitles Query
+                if (subtitleTracks != "")
                 {
-                    itemToAdd = "";
-                    string[] tempSub = item.SubItems[1].Text.Split(' ');
-                    string trackID = tempSub[0];
+                    query += " --subtitle " + subtitleTracks;
 
-                    if (item.SubItems[2].Text == "Yes")
-                        itemToAdd = trackID;
-
-                    if (itemToAdd != "")
-                        forcedTrack += forcedTrack == "" ? itemToAdd : "," + itemToAdd;
+                    if (subtitleForced != "")
+                        query += " --subtitle-forced " + subtitleForced;
+                    if (subtitleBurn != "")
+                        query += " --subtitle-burn " + subtitleBurn;
+                    if (subtitleDefault != "")
+                        query += " --subtitle-default " + subtitleDefault;
                 }
-                if (forcedTrack != "")
-                    query += " --subtitle-forced " + forcedTrack;
 
-
-                // Find --subtitle-burn and --subtitle-default
-                String burned = "";
-                String defaultTrack = "";
-                foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
+                if (srtFile != "") // SRTs
                 {
-                    string[] tempSub = item.SubItems[1].Text.Split(' ');
-                    string trackID = tempSub[0];
+                    query += " --srt-file " + srtFile;
 
-                    if (trackID.Trim() == "Foreign")
-                        trackID = "scan";
-
-                    if (item.SubItems[3].Text == "Yes") // Burned
-                        burned = trackID;
-
-                    if (item.SubItems[4].Text == "Yes") // Burned
-                        defaultTrack = trackID;
-
+                    if (srtCodeset != "")
+                        query += " --srt-codeset " + srtCodeset;
+                    if (srtOffset != "")
+                        query += " --srt-offset " + srtOffset;
+                    if (srtLang != "")
+                        query += " --srt-lang " + srtLang;
                 }
-                if (burned != "")
-                    query += " --subtitle-burn " + burned;
-
-                if (defaultTrack != "")
-                    query += " --subtitle-default " + defaultTrack;
 
             }
-
             #endregion
 
             #region Chapter Markers

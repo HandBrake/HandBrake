@@ -1,15 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Handbrake.Functions;
+using System.IO;
 
 namespace Handbrake.Controls
 {
     public partial class Subtitles : UserControl
     {
 
+        IDictionary<string, string> LangMap = new Dictionary<string, string>();
+
         public Subtitles()
         {
             InitializeComponent();
 
+            LangMap = Main.mapLanguages();
+            foreach (string key in LangMap.Keys)
+                srt_lang.Items.Add(key);
+
+            srt_charcode.SelectedIndex = 28;
+            srt_lang.SelectedIndex = 40;
         }
 
         private int fileContainer;
@@ -55,22 +66,28 @@ namespace Handbrake.Controls
             }
 
             Boolean addTrack = true;
-            if (fileContainer == 0 || fileContainer == 1)
+            if (fileContainer == 0)
             {
                 burnedVal = "Yes";  // MP4 must have bitmap subs burned in.
 
                 // Make sure we only have 1 bitmap track.
-                if (drp_subtitleTracks.SelectedItem.ToString().Contains("Bitmap"))
-                    foreach (ListViewItem item in lv_subList.Items)
-                    {
-                        if (item.SubItems[1].Text.Contains("Bitmap"))
+                if (drp_subtitleTracks.SelectedItem != null)
+                {
+                    if (drp_subtitleTracks.SelectedItem.ToString().Contains("Bitmap"))
+                        foreach (ListViewItem item in lv_subList.Items)
                         {
-                            MessageBox.Show(this,
-                                            "More than one vobsub is not supported in mp4... Your first vobsub track will now be used.",
-                                            "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            addTrack = false;
+                            if (item.SubItems[1].Text.Contains("Bitmap"))
+                            {
+                                MessageBox.Show(this,
+                                                "More than one vobsub is not supported in mp4... Your first vobsub track will now be used.",
+                                                "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                addTrack = false;
+                            }
                         }
-                    }
+                }
+                else
+                    addTrack = false;
+
             }
 
             // Add the track if allowed.
@@ -86,6 +103,23 @@ namespace Handbrake.Controls
                 lv_subList.Items.Add(newTrack);
             }
         }
+        private void btn_srtAdd_Click(object sender, EventArgs e)
+        {
+            ListViewItem newTrack = new ListViewItem(getNewID().ToString());
+
+            newTrack.SubItems.Add(srt_lang.SelectedItem + ", (" + srt_charcode.SelectedItem + ")");
+            newTrack.SubItems.Add("No");
+            newTrack.SubItems.Add("No");
+            newTrack.SubItems.Add("No");
+            if (openFileDialog.FileName != null)
+                newTrack.SubItems.Add(openFileDialog.FileName);
+            else
+                newTrack.SubItems.Add("None");
+
+            newTrack.SubItems.Add(srt_offset.Value.ToString());
+
+            lv_subList.Items.Add(newTrack);
+        }
         private void btn_RemoveSubTrack_Click(object sender, EventArgs e)
         {
             removeTrack();
@@ -95,36 +129,48 @@ namespace Handbrake.Controls
             // Set the dropdown controls based on the selected item in the List.
             if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
             {
-                // Reset the checkboxes
-                check_forced.CheckState = CheckState.Unchecked;
-                check_burned.CheckState = CheckState.Unchecked;
-                check_default.CheckState = CheckState.Unchecked;
-
-                // Setup the controls
-                int c = 0;
-                foreach (var item in drp_subtitleTracks.Items)
+                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems.Count != 5)  // We have an SRT
                 {
-                    if (item.ToString() == lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text)
-                        drp_subtitleTracks.SelectedIndex = c;
-                    c++;
+                    string[] trackData = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text.Split(',');
+                    string charCode = trackData[1].Replace("(", "").Replace(")", "");
+                    srt_lang.SelectedItem = trackData[0];
+                    srt_charcode.SelectedItem = charCode.Trim();
+
+                    int offsetVal;
+                    int.TryParse(lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[6].Text, out offsetVal);
+                    srt_offset.Value = offsetVal;
+
+                    SRTGroup.Text = "Selected Track: " + lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
+                    SubTitlesGroup.Text = "Selected Track: None";
                 }
-                drp_subtitleTracks.SelectedItem = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1];
+                else  // We have Bitmap/CC
+                {
+                    // Setup the controls
+                    int c = 0;
+                    foreach (var item in drp_subtitleTracks.Items)
+                    {
+                        if (item.ToString() == lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text)
+                            drp_subtitleTracks.SelectedIndex = c;
+                        c++;
+                    }
+                    drp_subtitleTracks.SelectedItem = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1];
 
-                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[2].Text == "Yes")
-                    check_forced.CheckState = CheckState.Checked;
+                    check_forced.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[2].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;
+                    check_burned.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;  
+                    check_default.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[4].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;
 
-                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text == "Yes")
-                    check_burned.CheckState = CheckState.Checked;
-
-                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[4].Text == "Yes")
-                    check_default.CheckState = CheckState.Checked;
-
-                AudioTrackGroup.Text = "Selected Track: " + lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
+                    SubTitlesGroup.Text = "Selected Track: " + lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
+                    SRTGroup.Text = "Selected Track: None";
+                }
             }
             else
-                AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
+            {
+                SubTitlesGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
+                SRTGroup.Text = "Selected Track: None (Click \"Add External SRT\" to add) ";
+            }
         }
 
+        // Bitmap / CC Controls
         private void drp_subtitleTracks_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Update an item in the  list if required.
@@ -167,7 +213,45 @@ namespace Handbrake.Controls
                 lv_subList.Select();
             }
         }
-        
+
+        // SRT Controls
+        private void srt_offset_ValueChanged(object sender, EventArgs e)
+        {
+            // Update an item in the  list if required.
+            if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
+            {
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[6].Text = srt_offset.Value.ToString();
+                lv_subList.Select();
+            }
+        }
+        private void srt_charcode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Update an item in the  list if required.
+            if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
+            {
+                string[] trackData = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text.Split(',');
+
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text = trackData[0].Trim() + ", (" + srt_charcode.SelectedItem + ")";
+                lv_subList.Select();
+            }
+        }
+        private void srt_lang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Update an item in the  list if required.
+            if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
+            {
+                string[] trackData = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text.Split(',');
+                string charCode = trackData[1].Replace("(", "").Replace(")", "").Trim();
+
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text = srt_lang.SelectedItem + ", (" + charCode + ")";
+                lv_subList.Select();
+            }
+        }
+        private void srt_browse_Click(object sender, EventArgs e)
+        {
+            openFileDialog.ShowDialog();
+        }
+
         // Right Click Menu
         private void mnu_moveup_Click(object sender, EventArgs e)
         {
@@ -265,5 +349,6 @@ namespace Handbrake.Controls
                 i++;
             }
         }
+
     }
 }
