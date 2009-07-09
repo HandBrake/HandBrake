@@ -2415,15 +2415,14 @@ static void ShowPresets()
     printf("\n>\n");
 }
 
-static char** str_split( char *str, char *delem )
+static char** str_split( char *str, char delem )
 {
-    char *  token;
-    char *  copy_str;
     char *  pos;
+    char *  end;
     char ** ret;
     int     count, i;
 
-    if ( str == NULL || delem == NULL || str[0] == 0 )
+    if ( str == NULL || str[0] == 0 )
     {
         ret = malloc( sizeof(char*) );
         *ret = NULL;
@@ -2433,24 +2432,23 @@ static char** str_split( char *str, char *delem )
     // Find number of elements in the string
     count = 1;
     pos = str;
-    while ( ( pos = strstr( pos+1, delem ) ) != NULL )
+    while ( ( pos = strchr( pos, delem ) ) != NULL )
     {
-        if ( *(pos+1) != 0 )
-            count++;
+        count++;
+        pos++;
     }
+
     ret = calloc( ( count + 1 ), sizeof(char*) );
 
-    copy_str = strdup( str );
-    token = strtok( copy_str, delem );
-
-    i = 0;
-    while( token != NULL && i < count )
+    pos = str;
+    for ( i = 0; i < count - 1; i++ )
     {
-        ret[i] = strdup( token );
-        token = strtok(NULL, ",");
-        i++;
+        end = strchr( pos, delem );
+        ret[i] = strndup(pos, end - pos);
+        pos = end + 1;
     }
-    free( copy_str );
+    ret[i] = strdup(pos);
+
     return ret;
 }
 
@@ -2562,7 +2560,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UFN:e:E:2dD:7895gOw:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UF::N:e:E:2dD:7895gOw:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2698,10 +2696,10 @@ static int ParseOptions( int argc, char ** argv )
                 }
                 break;
             case 's':
-                subtracks = str_split( optarg, "," );
+                subtracks = str_split( optarg, ',' );
                 break;
             case 'F':
-                subforce = str_split( optarg, "," );
+                subforce = str_split( optarg, ',' );
                 break;
             case SUB_BURNED:
                 if( optarg != NULL )
@@ -2730,16 +2728,16 @@ static int ParseOptions( int argc, char ** argv )
                 native_dub = 1;
                 break;
             case SRT_FILE:
-                srtfile = str_split( optarg, "," );
+                srtfile = str_split( optarg, ',' );
                 break;
             case SRT_CODESET:
-                srtcodeset = str_split( optarg, "," );
+                srtcodeset = str_split( optarg, ',' );
                 break;
             case SRT_OFFSET:
-                srtoffset = str_split( optarg, "," );
+                srtoffset = str_split( optarg, ',' );
                 break;
             case SRT_LANG:
-                srtlang = str_split( optarg, "," );
+                srtlang = str_split( optarg, ',' );
                 break;
             case '2':
                 twoPass = 1;
