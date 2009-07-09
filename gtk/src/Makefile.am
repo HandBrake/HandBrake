@@ -129,10 +129,10 @@ resources.plist: create_resources resources.list $(icons_dep) internal_defaults.
 
 ghbcellrenderertext.c: marshalers.h
 
-marshalers.h: marshalers.list
+$(srcdir)/marshalers.h: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal $(srcdir)/marshalers.list --header > $(srcdir)/marshalers.h
 
-marshalers.c: marshalers.list
+$(srcdir)/marshalers.c: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal $(srcdir)/marshalers.list --body > $(srcdir)/marshalers.c
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(DESTDIR)/$(datadir)/icons/hicolor
