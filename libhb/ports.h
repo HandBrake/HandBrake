@@ -19,6 +19,11 @@ int      hb_get_cpu_count();
 /* Everything from now is only used internally and hidden to the UI */
 
 /************************************************************************
+ * DVD utils
+ ***********************************************************************/
+int hb_dvd_region(char *device, int *region_mask);
+
+/************************************************************************
  * Files utils
  ***********************************************************************/
 void hb_get_tempory_directory( hb_handle_t * h, char path[512] );

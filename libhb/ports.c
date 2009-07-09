@@ -54,6 +54,16 @@
 #include <netinet/in.h>
 #endif
 
+#if defined( SYS_LINUX )
+#include <linux/cdrom.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#elif defined( SYS_OPENBSD )
+#include <sys/dvdio.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#endif
+
 #include <stddef.h>
 
 #include "hb.h"
@@ -81,6 +91,33 @@ int gettimeofday( struct timeval * tv, struct timezone * tz )
 }
 #endif
 */
+
+int hb_dvd_region(char *device, int *region_mask)
+{
+#if defined( DVD_LU_SEND_RPC_STATE ) && defined( DVD_AUTH )
+    struct stat  st;
+    dvd_authinfo ai;
+    int          fd, ret;
+
+    fd = open( device, O_RDONLY );
+    if ( fd < 0 )
+        return -1;
+    if ( fstat( fd, &st ) < 0 )
+        return -1;
+    if ( !( S_ISBLK( st.st_mode ) || S_ISCHR( st.st_mode ) ) )
+        return -1;
+
+    ai.type = DVD_LU_SEND_RPC_STATE;
+    ret = ioctl(fd, DVD_AUTH, &ai);
+    if ( ret < 0 )
+        return ret;
+
+    *region_mask = ai.lrpcs.region_mask;
+    return 0;
+#else
+    return -1;
+#endif
+}
 
 uint64_t hb_get_date()
 {

@@ -87,9 +87,20 @@ hb_dvd_t * hb_dvdread_init( char * path )
 {
     hb_dvd_t * e;
     hb_dvdread_t * d;
+    int region_mask;
 
     e = calloc( sizeof( hb_dvd_t ), 1 );
     d = &(e->dvdread);
+
+	/* Log DVD drive region code */
+    if ( hb_dvd_region( path, &region_mask ) == 0 )
+    {
+        hb_log( "dvd: Region mask 0x%02x", region_mask );
+        if ( region_mask == 0xFF )
+        {
+            hb_log( "dvd: Warning, DVD device has no region set" );
+        }
+    }
 
     /* Open device */
     if( !( d->reader = DVDOpen( path ) ) )
