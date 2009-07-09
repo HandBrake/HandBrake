@@ -3163,9 +3163,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 				job->anamorphic.dar_width = 
 					ghb_settings_get_int(ud->settings, 
 										"PictureDisplayWidth");
-				job->anamorphic.dar_height =
-					ghb_settings_get_int(ud->settings, 
-										"PictureDisplayHeight");
+				job->anamorphic.dar_height = height;
 			}
 		}
 		else
