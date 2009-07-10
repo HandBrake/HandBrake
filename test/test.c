@@ -2415,6 +2415,17 @@ static void ShowPresets()
     printf("\n>\n");
 }
 
+static char * hb_strndup( char * str, int len )
+{
+	char * res;
+	int str_len = strlen( str );
+
+	res = malloc( len > str_len ? str_len + 1 : len + 1 );
+	strncpy( res, str, len );
+	res[len] = '\0';
+	return res;
+}
+
 static char** str_split( char *str, char delem )
 {
     char *  pos;
@@ -2444,7 +2455,7 @@ static char** str_split( char *str, char delem )
     for ( i = 0; i < count - 1; i++ )
     {
         end = strchr( pos, delem );
-        ret[i] = strndup(pos, end - pos);
+        ret[i] = hb_strndup(pos, end - pos);
         pos = end + 1;
     }
     ret[i] = strdup(pos);
