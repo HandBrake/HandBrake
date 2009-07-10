@@ -853,7 +853,7 @@ namespace Handbrake
             {
                 selectedTitle = drp_dvdtitle.SelectedItem as Title;
                 lbl_duration.Text = selectedTitle.Duration.ToString();
-                PictureSettings.setComponentsAfterScan(selectedTitle);  // Setup Picture Settings Tab Control
+                PictureSettings.Source = selectedTitle;  // Setup Picture Settings Tab Control
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();

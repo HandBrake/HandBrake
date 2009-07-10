@@ -18,7 +18,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SignManifests>false</SignManifests>
     <PublishUrl>publish\</PublishUrl>
@@ -121,7 +121,7 @@
     <Compile Include="Controls\PictureSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\PictureSettings.Designer.cs">
+    <Compile Include="Controls\PictureSettings.designer.cs">
       <DependentUpon>PictureSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Subtitles.cs">

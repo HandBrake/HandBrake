@@ -88,10 +88,6 @@ namespace Handbrake.Functions
 
             // Aspect Ratio
             mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
-
-            // Reset maxWidth and MaxHeight to 0
-            mainWindow.PictureSettings.maxWidth = 0;
-            mainWindow.PictureSettings.maxHeight = 0;
                 
             // Set the Width and height as Required.
             if (presetQuery.Width != 0)
@@ -104,13 +100,13 @@ namespace Handbrake.Functions
             if (presetQuery.MaxWidth != 0)
             {
                 mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth;
-                mainWindow.PictureSettings.maxWidth = presetQuery.MaxWidth;
+                mainWindow.PictureSettings.MaximumWidth = presetQuery.MaxWidth;
             }
 
             if (presetQuery.MaxHeight != 0)
             {
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight;
-                mainWindow.PictureSettings.maxHeight = presetQuery.MaxHeight;
+                mainWindow.PictureSettings.MaximumHeight = presetQuery.MaxHeight;
             }
 
             // Case where both height and max height are 0 - For built-in presets
@@ -124,10 +120,10 @@ namespace Handbrake.Functions
             mainWindow.PictureSettings.setMax();
 
             // Custom Anamorphic Controls
-            mainWindow.PictureSettings.txt_displayWidth.Text = presetQuery.displayWidthValue.ToString();
-            mainWindow.PictureSettings.txt_parWidth.Text = presetQuery.pixelAspectWidth.ToString();
-            mainWindow.PictureSettings.txt_parHeight.Text = presetQuery.pixelAspectHeight.ToString();
-            mainWindow.PictureSettings.drop_modulus.SelectedItem = presetQuery.AnamorphicModulus;
+            mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.displayWidthValue.ToString();
+            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.pixelAspectWidth.ToString();
+            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.pixelAspectHeight.ToString();
+            mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.AnamorphicModulus;
 
             #endregion
 

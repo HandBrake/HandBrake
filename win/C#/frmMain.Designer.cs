@@ -40,7 +40,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -388,9 +388,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle2;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -896,11 +896,21 @@ namespace Handbrake
             // 
             // PictureSettings
             // 
-            this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
-            this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.PictureSettings.CroppingValues = new int[] {
+        0,
+        0,
+        0,
+        0};
+            this.PictureSettings.DisplayResolution = new System.Drawing.Size(0, 0);
+            this.PictureSettings.Enabled = false;
+            this.PictureSettings.EncodeHeight = 0;
+            this.PictureSettings.EncodeWidth = 0;
+            this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PictureSettings.Location = new System.Drawing.Point(0, 0);
+            this.PictureSettings.MaximumHeight = 2560;
+            this.PictureSettings.MaximumWidth = 2560;
             this.PictureSettings.Name = "PictureSettings";
-            this.PictureSettings.Size = new System.Drawing.Size(713, 310);
+            this.PictureSettings.Size = new System.Drawing.Size(666, 279);
             this.PictureSettings.TabIndex = 0;
             // 
             // Check_ChapterMarkers
@@ -1719,7 +1729,6 @@ namespace Handbrake
         private System.Diagnostics.Process hbproc;
         private TabPage tab_subtitles;
         internal Handbrake.Controls.AudioPanel AudioSettings;
-        internal Handbrake.Controls.PictureSettings PictureSettings;
         internal Handbrake.Controls.Subtitles Subtitles;
         internal Handbrake.Controls.Filters Filters;
         private ToolStripStatusLabel lbl_updateCheck;
@@ -1742,6 +1751,7 @@ namespace Handbrake
         private Label labelSource;
         private Label labelStaticSource;
         internal Label labelPreset;
+        internal Handbrake.Controls.PictureSettings PictureSettings;
 
  
     }

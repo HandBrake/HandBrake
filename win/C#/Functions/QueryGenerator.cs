@@ -119,7 +119,7 @@ namespace Handbrake.Functions
             #region Picture Settings Tab
 
             // Use MaxWidth for built-in presets and width for user settings.
-            if (mainWindow.PictureSettings.maxWidth == 0)
+            if (mainWindow.PictureSettings.MaximumWidth == 0)
             {
 
                 if (mainWindow.PictureSettings.text_width.Text != "")
@@ -133,7 +133,7 @@ namespace Handbrake.Functions
             }
 
             // Use MaxHeight for built-in presets and height for user settings.
-            if (mainWindow.PictureSettings.maxHeight == 0)
+            if (mainWindow.PictureSettings.MaximumHeight == 0)
             {
                 if (mainWindow.PictureSettings.text_height.Text != "0")
                     if (mainWindow.PictureSettings.text_height.Text != "")
@@ -175,11 +175,11 @@ namespace Handbrake.Functions
                     break;
                 case 3:
                     query += " --custom-anamorphic ";
-                    query += " --display-width " + mainWindow.PictureSettings.txt_displayWidth.Text + " ";
+                    query += " --display-width " + mainWindow.PictureSettings.updownDisplayWidth.Text + " ";
                     if (mainWindow.PictureSettings.check_KeepAR.Checked)
                         query += " --keep-display-aspect ";
-                    if (mainWindow.PictureSettings.txt_parWidth.Text != "" && mainWindow.PictureSettings.txt_parHeight.Text != "")
-                        query += " --pixel-aspect " + mainWindow.PictureSettings.txt_parWidth.Text + ":" + mainWindow.PictureSettings.txt_parHeight.Text + " ";
+                    if (mainWindow.PictureSettings.updownParWidth.Text != "" && mainWindow.PictureSettings.updownParHeight.Text != "")
+                        query += " --pixel-aspect " + mainWindow.PictureSettings.updownParWidth.Text + ":" + mainWindow.PictureSettings.updownParHeight.Text + " ";
                     break;
             }
             #endregion
