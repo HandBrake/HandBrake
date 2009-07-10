@@ -459,6 +459,57 @@
       <column type="gchararray"/>
     </columns>
   </object>
+
+  <object class="GtkMenu" id="presets_menu">
+    <child>
+      <object class="GtkImageMenuItem" id="presets_save">
+        <property name="label">gtk-save</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="presets_save_clicked_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="presets_remove">
+        <property name="label">gtk-delete</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="presets_remove_clicked_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="preset_export">
+        <property name="label" translatable="yes">_Export</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="image">image1</property>
+        <property name="use_stock">False</property>
+        <signal name="activate" handler="preset_export_clicked_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="preset_import">
+        <property name="label" translatable="yes">_Import</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="image">image5</property>
+        <property name="use_stock">False</property>
+        <signal name="activate" handler="preset_import_clicked_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="presets_restore">
+        <property name="label">gtk-refresh</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="presets_restore_clicked_cb"/>
+      </object>
+    </child>
+  </object>
+
   <object class="GtkWindow" id="hb_window">
     <property name="visible">True</property>
     <property name="resizable">False</property>
@@ -3472,105 +3523,50 @@ no-dct-decimate=0:cabac=1</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkVBox" id="vbox31">
+                      <object class="GtkToolbar" id="presets_toolbar">
+                        <property name="icon-size">2</property>
                         <property name="visible">True</property>
+                        <property name="toolbar_style">both-horiz</property>
+                        <property name="show_arrow">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
-                          <object class="GtkHBox" id="hbox29">
+                          <object class="GtkToolButton" id="presets_default">
                             <property name="visible">True</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <child>
-                              <object class="GtkButton" id="presets_save">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip-text" translatable="yes">Save current settings as new preset</property>
-                                <property name="relief">GTK_RELIEF_NONE</property>
-                                <signal handler="presets_save_clicked_cb" name="clicked"/>
-                                <child>
-                                  <object class="GtkImage" id="image5">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="stock">gtk-add</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="presets_remove">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip-text" translatable="yes">Remove the selected preset</property>
-                                <property name="relief">GTK_RELIEF_NONE</property>
-                                <signal handler="presets_remove_clicked_cb" name="clicked"/>
-                                <child>
-                                  <object class="GtkImage" id="image6">
-                                    <property name="visible">True</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="stock">gtk-remove</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label78">
-                                <property name="width_request">41</property>
-                                <property name="visible">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="presets_default">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip-text" translatable="yes">Make the current preset the default.</property>
-                                <property name="relief">GTK_RELIEF_NONE</property>
-                                <signal handler="presets_default_clicked_cb" name="clicked"/>
-                                <child>
-                                  <object class="GtkImage" id="image1">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-apply</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="presets_restore">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="tooltip-text" translatable="yes">Reload HandBrakes standard presets</property>
-                                <property name="relief">GTK_RELIEF_NONE</property>
-                                <signal handler="presets_restore_clicked_cb" name="clicked"/>
-                                <child>
-                                  <object class="GtkImage" id="image7">
-                                    <property name="visible">True</property>
-                                    <property name="stock">gtk-refresh</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="position">4</property>
-                              </packing>
-                            </child>
+                            <property name="sensitive">True</property>
+                            <property name="is_important">True</property>
+                            <property name="label" translatable="yes">Default</property>
+                            <property name="tooltip-text" translatable="yes">Make the current preset the default.</property>
+                            <property name="icon_name">gtk-apply</property>
+                            <signal handler="presets_default_clicked_cb" name="clicked"/>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparatorToolItem" id="toolbutton2">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="presets_menu_button">
+                            <property name="visible">True</property>
+                            <property name="sensitive">True</property>
+                            <property name="is_important">True</property>
+                            <property name="label" translatable="yes">_Options</property>
+                            <property name="use_underline">True</property>
+                            <property name="tooltip-text" translatable="yes">Preset Options</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="icon_name">gtk-execute</property>
+                            <signal handler="presets_menu_clicked_cb" name="clicked"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
@@ -6593,5 +6589,13 @@ libx264 authors:
       <action-widget response="-6">source_cancel</action-widget>
       <action-widget response="-3">source_ok</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="stock">gtk-save-as</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="stock">gtk-open</property>
   </object>
 </interface>

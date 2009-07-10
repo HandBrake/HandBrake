@@ -517,6 +517,37 @@ presets_clear_default(GValue *presets)
 	}
 }
 
+static void
+presets_customize(GValue *presets)
+{
+	gint count, ii;
+
+	count = ghb_array_len(presets);
+	for (ii = 0; ii < count; ii++)
+	{
+		GValue *dict;
+		gboolean folder;
+		gint ptype;
+
+		dict = ghb_array_get_nth(presets, ii);
+
+		ptype = ghb_value_int(preset_dict_get_value(dict, "Type"));
+		if (ptype != PRESETS_CUSTOM)
+		{
+			ghb_dict_insert(dict, g_strdup("Type"), 
+						ghb_int64_value_new(PRESETS_CUSTOM));
+		}
+		folder = ghb_value_boolean(preset_dict_get_value(dict, "Folder"));
+		if (folder)
+		{
+			GValue *nested;
+
+			nested = ghb_dict_lookup(dict, "ChildrenArray");
+			presets_customize(nested);
+		}
+	}
+}
+
 static gint*
 presets_find_default2(GValue *presets, gint *len)
 {
@@ -1385,13 +1416,23 @@ ghb_prefs_load(signal_user_data_t *ud)
 		{
 			ghb_dict_insert(dict, g_strdup(key), ghb_value_dup(gval));
 		}
-		const gchar *dir = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
+
+		const gchar *dir = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+		if (dir == NULL)
+		{
+			dir = ".";
+		}
+		ghb_dict_insert(dict, 
+			g_strdup("ExportDirectory"), ghb_value_dup(ghb_string_value(dir)));
+
+		dir = g_get_user_special_dir (G_USER_DIRECTORY_VIDEOS);
 		if (dir == NULL)
 		{
 			dir = ".";
 		}
 		ghb_dict_insert(dict, 
 			g_strdup("destination_dir"), ghb_value_dup(ghb_string_value(dir)));
+
 		ghb_dict_insert(dict, 
 			g_strdup("SrtDir"), ghb_value_dup(ghb_string_value(dir)));
 #if defined(_WIN32)
@@ -3112,6 +3153,212 @@ enforce_preset_type(signal_user_data_t *ud, const GValue *path)
 		gtk_widget_set_sensitive(folder, TRUE);
 		gtk_widget_set_sensitive(normal, TRUE);
 	}
+}
+
+G_MODULE_EXPORT void
+presets_menu_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkMenu *menu;
+
+	menu = GTK_MENU(GHB_WIDGET(ud->builder, "presets_menu"));
+	gtk_menu_popup(menu, NULL, NULL, NULL, NULL, 1, 
+					gtk_get_current_event_time());
+}
+
+G_MODULE_EXPORT void
+preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+	GtkResponseType response;
+	gchar *exportDir;
+	gchar *filename;
+	GtkFileFilter *filter;
+
+	g_debug("preset_import_clicked_cb ()");
+
+	dialog = gtk_file_chooser_dialog_new("Export Preset", NULL,
+				GTK_FILE_CHOOSER_ACTION_OPEN,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				NULL);
+
+	filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, "All (*)");
+	gtk_file_filter_add_pattern(filter, "*");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+	filter = gtk_file_filter_new();
+	gtk_file_filter_set_name(filter, "Presets (*.plist)");
+	gtk_file_filter_add_pattern(filter, "*.plist");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+	exportDir = ghb_settings_get_string(ud->settings, "ExportDirectory");
+	if (exportDir == NULL || exportDir[0] == '\0')
+	{
+		exportDir = g_strdup(".");
+	}
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
+	g_free(exportDir);
+
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		GValue *dict, *array;
+		gchar  *dir;
+		gint count, ii;
+
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		// import the preset
+		if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+		{
+			gtk_widget_destroy(dialog);
+			g_free(filename);
+			return;
+		}
+		array = ghb_plist_parse_file(filename);
+		g_free(filename);
+
+		import_xlat_presets(array);
+		presets_clear_default(array);
+		presets_customize(array);
+
+		count = ghb_array_len(array);
+		for (ii = 0; ii < count; ii++)
+		{
+			GValue *path, *name;
+			gint *indices, len;
+			gint index = 1;
+
+			dict = ghb_array_get_nth(array, ii);
+			path = ghb_array_value_new(1);
+			name = ghb_value_dup(ghb_dict_lookup(dict, "PresetName"));
+			ghb_array_append(path, name);
+			indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
+			// Modify the preset name till we make it unique
+			while (indices != NULL)
+			{
+				gchar *str = ghb_value_string(name);
+
+				ghb_value_free(path);
+				g_free(indices);
+
+				str = g_strdup_printf("%s %d", str, index);
+				path = ghb_array_value_new(1);
+				name = ghb_string_value_new(str);
+				ghb_array_append(path, name);
+				g_free(str);
+
+				index++;
+				indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
+			}
+			ghb_dict_insert(dict, g_strdup("PresetName"), ghb_value_dup(name));
+			indices = presets_find_pos(path, PRESETS_CUSTOM, &len);
+			ghb_presets_insert(presetsPlist, ghb_value_dup(dict), indices, len);
+			presets_list_insert(ud, indices, len);
+			ghb_value_free(path);
+		}
+		ghb_value_free(array);
+
+		exportDir = ghb_settings_get_string(ud->settings, "ExportDirectory");
+		dir = g_path_get_dirname(filename);
+		if (strcmp(dir, exportDir) != 0)
+		{
+			ghb_settings_set_string(ud->settings, "ExportDirectory", dir);
+			ghb_pref_save(ud->settings, "ExportDirectory");
+		}
+		g_free(exportDir);
+		g_free(dir);
+	}
+	gtk_widget_destroy(dialog);
+}
+
+G_MODULE_EXPORT void
+preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+	GtkResponseType response;
+	GValue *preset;
+	const gchar *name = "";
+	gint count, *indices, len;
+	gchar *exportDir;
+	gchar *filename;
+
+	g_debug("preset_export_clicked_cb ()");
+	preset = ghb_settings_get_value (ud->settings, "preset_selection");
+	if (preset == NULL)
+		return;
+
+	count = ghb_array_len(preset);
+	if (count <= 0)
+		return;
+
+	name = g_value_get_string(ghb_array_get_nth(preset, count-1));
+
+	dialog = gtk_file_chooser_dialog_new("Export Preset", NULL,
+				GTK_FILE_CHOOSER_ACTION_SAVE,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				NULL);
+
+	exportDir = ghb_settings_get_string(ud->settings, "ExportDirectory");
+	if (exportDir == NULL || exportDir[0] == '\0')
+	{
+		exportDir = g_strdup(".");
+	}
+	filename = g_strdup_printf("%s.plist", name);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
+	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), filename);
+	g_free(filename);
+	g_free(exportDir);
+
+	indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
+	if (indices == NULL)
+		return;
+
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
+	if (response == GTK_RESPONSE_ACCEPT)
+	{
+		GValue *export, *dict, *array;
+		FILE *file;
+		gchar  *dir;
+
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+
+		// export the preset
+		dict = presets_get_dict(presetsPlist, indices, len);
+
+		export = ghb_value_dup(dict);
+		array = ghb_array_value_new(1);
+		ghb_array_append(array, export);
+		presets_clear_default(array);
+		presets_customize(array);
+		export_xlat_presets(array);
+
+		file = g_fopen(filename, "w");
+		if (file != NULL)
+		{
+			ghb_plist_write(file, array);
+			fclose(file);
+		}
+		ghb_value_free(array);
+
+		exportDir = ghb_settings_get_string(ud->settings, "ExportDirectory");
+		dir = g_path_get_dirname(filename);
+		if (strcmp(dir, exportDir) != 0)
+		{
+			ghb_settings_set_string(ud->settings, "ExportDirectory", dir);
+			ghb_pref_save(ud->settings, "ExportDirectory");
+		}
+		g_free(exportDir);
+		g_free(dir);
+		g_free(filename);
+	}
+	gtk_widget_destroy(dialog);
+	g_free(indices);
 }
 
 G_MODULE_EXPORT void

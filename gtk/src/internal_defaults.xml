@@ -125,6 +125,8 @@
 		<false />
 		<key>default_source</key>
 		<string>/dev/dvd</string>
+		<key>ExportDirectory</key>
+		<string></string>
 		<key>destination_dir</key>
 		<string></string>
 		<key>hbfd</key>
