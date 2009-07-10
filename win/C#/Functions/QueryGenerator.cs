@@ -121,7 +121,6 @@ namespace Handbrake.Functions
             // Use MaxWidth for built-in presets and width for user settings.
             if (mainWindow.PictureSettings.MaximumWidth == 0)
             {
-
                 if (mainWindow.PictureSettings.text_width.Text != "")
                     if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
                         query += " -w " + mainWindow.PictureSettings.text_width.Text;
@@ -129,6 +128,7 @@ namespace Handbrake.Functions
             else
             {
                 if (mainWindow.PictureSettings.text_width.Text != "")
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1)
                     query += " -X " + mainWindow.PictureSettings.text_width.Text;
             }
 
@@ -143,7 +143,8 @@ namespace Handbrake.Functions
             else
             {
                 if (mainWindow.PictureSettings.text_height.Text != "")
-                    query += " -Y " + mainWindow.PictureSettings.text_height.Text;
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
+                        query += " -Y " + mainWindow.PictureSettings.text_height.Text;
             }
 
             string cropTop = mainWindow.PictureSettings.crop_top.Text;
