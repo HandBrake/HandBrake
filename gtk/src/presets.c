@@ -1565,6 +1565,7 @@ ghb_presets_list_init(
 						   	2, def ? 2 : 0,
 						   	3, color, 
 							4, description,
+							5, type == PRESETS_BUILTIN ? 0 : 1,
 						   	-1);
 		if (def && piter)
 		{
@@ -1608,7 +1609,8 @@ static void
 presets_list_update_item(
 	signal_user_data_t *ud, 
 	gint *indices,
-	gint len)
+	gint len,
+	gboolean recurse)
 {
 	GtkTreeView *treeview;
 	GtkTreeStore *store;
@@ -1642,8 +1644,9 @@ presets_list_update_item(
 					   	2, def ? 2 : 0,
 					   	3, color,
 						4, description,
+						5, type == PRESETS_BUILTIN ? 0 : 1,
 					   	-1);
-	if (folder)
+	if (recurse && folder)
 	{
 		ghb_presets_list_init(ud, indices, len);
 	}
@@ -1706,6 +1709,7 @@ presets_list_insert(
 					   	2, def ? 2 : 0,
 					   	3, color,
 						4, description,
+						5, type == PRESETS_BUILTIN ? 0 : 1,
 					   	-1);
 	if (folder)
 	{
@@ -2954,7 +2958,7 @@ settings_save(signal_user_data_t *ud, const GValue *path)
 			ghb_dict_insert(dict, g_strdup("Default"), 
 							ghb_boolean_value_new(FALSE));
 		}
-		presets_list_update_item(ud, indices, len);
+		presets_list_update_item(ud, indices, len, FALSE);
 	}
 	else
 	{
@@ -3000,7 +3004,9 @@ folder_save(signal_user_data_t *ud, const GValue *path)
 		ghb_dict_insert(dict, g_strdup("PresetDescription"), 
 			ghb_value_dup(preset_dict_get_value(
 				ud->settings, "PresetDescription")));
+		presets_list_update_item(ud, indices, len, FALSE);
 		g_free(indices);
+		store_presets();
 		return;
 	}
 	else
@@ -3123,36 +3129,6 @@ update_subtitle_presets(signal_user_data_t *ud)
 		}
 	}
 	ghb_settings_take_value(ud->settings, "SubtitleList", slist);
-}
-
-void
-enforce_preset_type(signal_user_data_t *ud, const GValue *path)
-{
-	gint *indices, len;
-	GtkWidget *normal, *folder;
-	gboolean fold;
-
-	normal = GHB_WIDGET(ud->builder, "preset_type_normal");
-	folder = GHB_WIDGET(ud->builder, "preset_type_folder");
-	indices = ghb_preset_indices_from_path(presetsPlist, path, &len);
-	if (indices)
-	{
-		fold = ghb_presets_get_folder(presetsPlist, indices, len);
-		if (fold)
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(folder), 
-									TRUE);
-		else
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(normal), 
-									TRUE);
-		gtk_widget_set_sensitive(folder,  fold);
-		gtk_widget_set_sensitive(normal,  !fold);
-		g_free(indices);
-	}
-	else
-	{
-		gtk_widget_set_sensitive(folder, TRUE);
-		gtk_widget_set_sensitive(normal, TRUE);
-	}
 }
 
 G_MODULE_EXPORT void
@@ -3362,6 +3338,71 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+presets_new_folder_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+{
+	GtkWidget *dialog;
+	GtkEntry *entry;
+	GtkTextView *desc;
+	GtkResponseType response;
+	GValue *preset, *dict;
+	const gchar *name = "";
+	const gchar *description = "";
+	gint count, *indices, len;
+
+	g_debug("presets_save_clicked_cb ()");
+	preset = ghb_settings_get_value (ud->settings, "preset_selection");
+
+	count = ghb_array_len(preset);
+	if (count > 0)
+		name = g_value_get_string(ghb_array_get_nth(preset, count-1));
+	else
+		count = 1;
+
+	indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
+	dict = presets_get_dict(presetsPlist, indices, len);
+	if (dict != NULL)
+	{
+		description = g_value_get_string(
+							ghb_dict_lookup(dict, "PresetDescription"));
+		ghb_ui_update(ud, "PresetDescription", ghb_string_value(description));
+	}
+
+	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
+	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
+	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
+	gtk_entry_set_text(entry, name);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_hide(dialog);
+	if (response == GTK_RESPONSE_OK)
+	{
+		// save the preset
+		const gchar *name = gtk_entry_get_text(entry);
+		GValue *dest;
+
+		if (count > MAX_NESTED_PRESET-1)
+			count = MAX_NESTED_PRESET-1;
+
+		dest = ghb_array_value_new(MAX_NESTED_PRESET);
+		if (indices != NULL)
+		{
+			gint ptype;
+
+			ptype = ghb_presets_get_type(presetsPlist, indices, len);
+			if (ptype == PRESETS_CUSTOM)
+			{
+				ghb_array_copy(dest, preset, count-1);
+			}
+		}
+		ghb_array_append(dest, ghb_string_value_new(name));
+		ghb_widget_to_setting(ud->settings, GTK_WIDGET(desc));
+		folder_save(ud, dest);
+		ghb_value_free(dest);
+	}
+	if (indices != NULL)
+		g_free(indices);
+}
+
+G_MODULE_EXPORT void
 presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *dialog;
@@ -3380,12 +3421,11 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		name = g_value_get_string(ghb_array_get_nth(preset, count-1));
 	else
 		count = 1;
-	// Clear the description
+
 	desc = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetDescription"));
 	dialog = GHB_WIDGET(ud->builder, "preset_save_dialog");
 	entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
 	gtk_entry_set_text(entry, name);
-	enforce_preset_type(ud, preset);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_hide(dialog);
 	if (response == GTK_RESPONSE_OK)
@@ -3394,13 +3434,6 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		const gchar *name = gtk_entry_get_text(entry);
 		GValue *dest;
 
-		if (ghb_settings_get_boolean(ud->settings, "preset_type_folder"))
-		{
-			if (count > MAX_NESTED_PRESET-1)
-			{
-				count = MAX_NESTED_PRESET-1;
-			}
-		}
 		dest = ghb_array_value_new(MAX_NESTED_PRESET);
 		indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
 		if (indices)
@@ -3412,21 +3445,16 @@ presets_save_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			{
 				ghb_array_copy(dest, preset, count-1);
 			}
+			g_free(indices);
 		}
 		ghb_array_append(dest, ghb_string_value_new(name));
 
 		ghb_widget_to_setting(ud->settings, GTK_WIDGET(desc));
-		if (ghb_settings_get_boolean(ud->settings, "preset_type_folder"))
-		{
-			folder_save(ud, dest);
-		}
-		else
-		{
-			// Construct the audio settings presets from the current audio list
-			update_audio_presets(ud);
-			update_subtitle_presets(ud);
-			settings_save(ud, dest);
-		}
+
+		// Construct the audio settings presets from the current audio list
+		update_audio_presets(ud);
+		update_subtitle_presets(ud);
+		settings_save(ud, dest);
 		ghb_value_free(dest);
 	}
 }
@@ -3435,22 +3463,6 @@ G_MODULE_EXPORT void
 preset_type_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-}
-
-G_MODULE_EXPORT void
-preset_name_changed_cb(GtkWidget *entry, signal_user_data_t *ud)
-{
-	gchar *name;
-	GValue *preset, *dest;
-	gint count;
-
-	preset = ghb_settings_get_value (ud->settings, "preset_selection");
-	name = ghb_widget_string(entry);
-	dest = ghb_value_dup(preset);
-	count = ghb_array_len(dest);
-	ghb_array_replace(dest, count-1, ghb_string_value_new(name));
-	enforce_preset_type(ud, dest);
-	ghb_value_free(dest);
 }
 
 G_MODULE_EXPORT void
@@ -3772,7 +3784,7 @@ presets_drag_cb(
 			dstpath = gtk_tree_model_get_path (dstmodel, &iter);
 			dst_indices = gtk_tree_path_get_indices(dstpath);
 			dst_len = gtk_tree_path_get_depth(dstpath);
-			presets_list_update_item(ud, dst_indices, dst_len);
+			presets_list_update_item(ud, dst_indices, dst_len, TRUE);
 			gtk_tree_path_free(dstpath);
 
 			store_presets();
@@ -4015,5 +4027,36 @@ presets_default_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 		}
 		g_free(indices);
 	}
+}
+
+G_MODULE_EXPORT void
+preset_edited_cb(
+	GtkCellRendererText *cell, 
+	gchar *path, 
+	gchar *text, 
+	signal_user_data_t *ud)
+{
+	GtkTreePath *treepath;
+	GtkTreeStore *store;
+	GtkTreeView *treeview;
+	GtkTreeIter iter;
+	gint *indices, len;
+	GValue *dict;
+	
+	g_debug("preset_edited_cb ()");
+	g_debug("path (%s)", path);
+	g_debug("text (%s)", text);
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+	store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
+	treepath = gtk_tree_path_new_from_string (path);
+	indices = gtk_tree_path_get_indices(treepath);
+	len = gtk_tree_path_get_depth(treepath);
+	gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
+	gtk_tree_store_set(store, &iter, 0, text, -1);
+
+	dict = presets_get_dict(presetsPlist, indices, len);
+	ghb_dict_insert(dict, g_strdup("PresetName"), ghb_string_value_new(text));
+	store_presets();
+	gtk_tree_path_free (treepath);
 }
 

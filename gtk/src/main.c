@@ -467,6 +467,7 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 extern G_MODULE_EXPORT void presets_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void presets_drag_cb(void);
 extern G_MODULE_EXPORT void presets_drag_motion_cb(void);
+extern G_MODULE_EXPORT void preset_edited_cb(void);
 extern void presets_row_expanded_cb(void);
 
 // Create and bind the tree model to the tree view for the preset list
@@ -487,13 +488,17 @@ bind_presets_tree_model (signal_user_data_t *ud)
 	g_debug("bind_presets_tree_model ()\n");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET (ud->builder, "presets_list"));
 	selection = gtk_tree_view_get_selection (treeview);
-	treestore = gtk_tree_store_new(5, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, 
-								   G_TYPE_STRING, G_TYPE_STRING);
+	treestore = gtk_tree_store_new(6, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT, 
+								  G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(_("Preset Name"), cell, 
-					"text", 0, "weight", 1, "style", 2, "foreground", 3, NULL);
+		"text", 0, "weight", 1, "style", 2, 
+		"foreground", 3, "editable", 5, NULL);
+
+	g_signal_connect(cell, "edited", preset_edited_cb, ud);
+
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_set_tooltip_column (treeview, 4);

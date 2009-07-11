@@ -26,10 +26,6 @@
 		<array>
 			<string>Normal</string>
 		</array>
-		<key>preset_type_folder</key>
-		<false />
-		<key>preset_type_normal</key>
-		<true />
 		<key>PictureDisplayWidth</key>
 		<integer>720</integer>
 		<key>PictureDisplayHeight</key>

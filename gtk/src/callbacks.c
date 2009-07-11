@@ -1886,6 +1886,22 @@ ghb_message_dialog(GtkMessageType type, const gchar *message, const gchar *no, c
 	return TRUE;
 }
 
+void
+ghb_error_dialog(GtkMessageType type, const gchar *message, const gchar *cancel)
+{
+	GtkWidget *dialog;
+	GtkResponseType response;
+			
+	// Toss up a warning dialog
+	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+							type, GTK_BUTTONS_NONE,
+							"%s", message);
+	gtk_dialog_add_buttons( GTK_DIALOG(dialog), 
+						   cancel, GTK_RESPONSE_CANCEL, NULL);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy (dialog);
+}
+
 gboolean
 ghb_cancel_encode(const gchar *extra_msg)
 {

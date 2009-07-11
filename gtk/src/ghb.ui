@@ -462,8 +462,19 @@
 
   <object class="GtkMenu" id="presets_menu">
     <child>
+      <object class="GtkImageMenuItem" id="presets_new_folder">
+        <property name="label" translatable="yes">New _Folder</property>
+        <property name="use-underline">True</property>
+        <property name="visible">True</property>
+        <property name="use_stock">True</property>
+        <property name="image">image11</property>
+        <signal name="activate" handler="presets_new_folder_clicked_cb"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkImageMenuItem" id="presets_save">
-        <property name="label">gtk-save</property>
+        <property name="label">_Save Preset</property>
+        <property name="image">image12</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
@@ -484,7 +495,7 @@
         <property name="label" translatable="yes">_Export</property>
         <property name="use-underline">True</property>
         <property name="visible">True</property>
-        <property name="image">image1</property>
+        <property name="image">image13</property>
         <property name="use_stock">False</property>
         <signal name="activate" handler="preset_export_clicked_cb"/>
       </object>
@@ -494,14 +505,15 @@
         <property name="label" translatable="yes">_Import</property>
         <property name="use-underline">True</property>
         <property name="visible">True</property>
-        <property name="image">image5</property>
+        <property name="image">image14</property>
         <property name="use_stock">False</property>
         <signal name="activate" handler="preset_import_clicked_cb"/>
       </object>
     </child>
     <child>
       <object class="GtkImageMenuItem" id="presets_restore">
-        <property name="label">gtk-refresh</property>
+        <property name="label" translatable="yes">_Update Built-in Presets</property>
+        <property name="image">image15</property>
         <property name="visible">True</property>
         <property name="use_underline">True</property>
         <property name="use_stock">True</property>
@@ -4498,7 +4510,6 @@ no-dct-decimate=0:cabac=1</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">30</property>
                     <property name="truncate_multiline">True</property>
-                    <signal handler="preset_name_changed_cb" name="changed"/>
                   </object>
                   <packing>
                     <property name="position">1</property>
@@ -4547,43 +4558,6 @@ no-dct-decimate=0:cabac=1</property>
               <packing>
                 <property name="padding">2</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkHBox" id="hbox43">
-                <property name="visible">True</property>
-                <child>
-                  <object class="GtkRadioButton" id="preset_type_folder">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Folder</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="preset_type_changed_cb"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="preset_type_normal">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Preset</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">preset_type_folder</property>
-                    <signal name="toggled" handler="preset_type_changed_cb"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -6590,12 +6564,24 @@ libx264 authors:
       <action-widget response="-3">source_ok</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkImage" id="image1">
+  <object class="GtkImage" id="image11">
+    <property name="visible">True</property>
+    <property name="stock">gtk-new</property>
+  </object>
+  <object class="GtkImage" id="image12">
+    <property name="visible">True</property>
+    <property name="stock">gtk-save</property>
+  </object>
+  <object class="GtkImage" id="image13">
     <property name="visible">True</property>
     <property name="stock">gtk-save-as</property>
   </object>
-  <object class="GtkImage" id="image5">
+  <object class="GtkImage" id="image14">
     <property name="visible">True</property>
     <property name="stock">gtk-open</property>
+  </object>
+  <object class="GtkImage" id="image15">
+    <property name="visible">True</property>
+    <property name="stock">gtk-refresh</property>
   </object>
 </interface>

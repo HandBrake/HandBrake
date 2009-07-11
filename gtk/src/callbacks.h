@@ -45,6 +45,8 @@ void ghb_hal_init(void);
 gboolean ghb_message_dialog(
 	GtkMessageType type, const gchar *message, 
 	const gchar *no, const gchar *yes);
+void ghb_error_dialog(
+	GtkMessageType type, const gchar *message, const gchar *cancel);
 void ghb_init_dep_map(void);
 gboolean ghb_cancel_encode(const gchar *extra_msg);
 GValue* ghb_start_next_job(signal_user_data_t *ud, gboolean find_first);
