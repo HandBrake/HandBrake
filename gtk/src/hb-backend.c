@@ -3378,7 +3378,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 	gint index;
 	gchar *message;
 
-	// deinte 4
+	// deinte
 	index = ghb_settings_combo_int(ud->settings, "PictureDeinterlace");
 	if (index == 1)
 	{
@@ -3412,12 +3412,12 @@ ghb_validate_filters(signal_user_data_t *ud)
 		}
 		g_free(str);
 	}
-	// decomb 4
+	// decomb
 	index = ghb_settings_combo_int(ud->settings, "PictureDecomb");
 	if (index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDecombCustom");
-		if (!ghb_validate_filter_string(str, 7))
+		if (!ghb_validate_filter_string(str, 15))
 		{
 			message = g_strdup_printf(
 						"Invalid Decomb Settings:\n\n%s\n",
@@ -3429,7 +3429,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 		}
 		g_free(str);
 	}
-	// denois 4
+	// denois
 	index = ghb_settings_combo_int(ud->settings, "PictureDenoise");
 	if (index == 1)
 	{
