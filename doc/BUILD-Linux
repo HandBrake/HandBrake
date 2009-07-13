@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn2591 (2009062101) on Linux
+Guide to Building HandBrake svn2688 (2009071301) on Linux
 *********************************************************
 
 Table of Contents
@@ -79,17 +79,21 @@ intend to disable building the GUI with `configure --disable-gtk' you
 will not need many of these packages installed:
 
 Ubuntu 8.10 packages:
-   * build-essential
+   * subversion (cli/gui)
 
-   * autoconf (gui)
+   * yasm (cli/gui)
+
+   * build-essential (cli/gui)
+
+   * autoconf (cli/gui)
+
+   * libtool (cli/gui)
+
+   * zlib1g-dev (cli/gui)
+
+   * libbz2-dev (cli/gui)
 
    * intltool (gui)
-
-   * libtool (gui)
-
-   * zlib1g-dev (gui)
-
-   * libbz2-dev
 
    * libglib2.0-dev (gui)
 
@@ -111,7 +115,7 @@ Ubuntu 8.10 packages:
 
 To install these packages:
      sudo apt-get install subversion yasm build-essential \
-     autoconf intltool libtool zlib1g-dev libbz2-dev libglib2.0-dev \
+     autoconf libtool zlib1g-dev libbz2-dev intltool libglib2.0-dev \
      libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
      libwebkit-dev libnotify-dev libgstreamer0.10-dev \
      libgstreamer-plugins-base0.10-dev
@@ -130,9 +134,11 @@ To install these package groups:
      "X Software Development" "GNOME Software Development"
 
 Additional Fedora 10 packages:
-   * zlib-devel (gui)
+   * yasm (cli/gui)
 
-   * bzip2-devel
+   * zlib-devel (cli/gui)
+
+   * bzip2-devel (cli/gui)
 
    * dbus-glib-devel (gui)
 
@@ -157,7 +163,7 @@ To install these packages:
 This chapter is for building from a terminal/shell environment in as
 few commands as possible. Upon completion of the following commands you
 should have a fresh build of HandBrake. Further instructions are
-available beginning with *Note overview:: which describes procedures
+available beginning with *note overview:: which describes procedures
 suitable for repeating builds. This chapter should be skipped by those
 seeking more than a minimalist build.
 
@@ -536,7 +542,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2591
-     date:   2009-06-21 13:15:04 -0400
+     rev:    2688
+     date:   2009-07-12 22:47:33 -0700
      type:   developer
 
