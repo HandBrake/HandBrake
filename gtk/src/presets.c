@@ -4040,12 +4040,28 @@ preset_edited_cb(
 	GtkTreeStore *store;
 	GtkTreeView *treeview;
 	GtkTreeIter iter;
-	gint *indices, len;
+	gint *indices, len, count;
 	GValue *dict;
+	GValue *preset, *dest;
 	
 	g_debug("preset_edited_cb ()");
 	g_debug("path (%s)", path);
 	g_debug("text (%s)", text);
+
+	preset = ghb_settings_get_value (ud->settings, "preset_selection");
+	dest = ghb_array_value_new(MAX_NESTED_PRESET);
+	count = ghb_array_len(preset);
+	ghb_array_copy(dest, preset, count-1);
+	ghb_array_append(dest, ghb_string_value_new(text));
+	indices = ghb_preset_indices_from_path(presetsPlist, dest, &len);
+	ghb_value_free(dest);
+	if (indices != NULL)
+	{
+		// Already exists
+		g_free(indices);
+		return;
+	}
+
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
 	store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
 	treepath = gtk_tree_path_new_from_string (path);
