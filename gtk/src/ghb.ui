@@ -462,6 +462,16 @@
 
   <object class="GtkMenu" id="presets_menu">
     <child>
+      <object class="GtkImageMenuItem" id="presets_default">
+        <property name="label">_Make Default</property>
+        <property name="image">image12</property>
+        <property name="visible">True</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="presets_default_clicked_cb"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkImageMenuItem" id="presets_new_folder">
         <property name="label" translatable="yes">New _Folder</property>
         <property name="use-underline">True</property>
@@ -469,25 +479,6 @@
         <property name="use_stock">True</property>
         <property name="image">image11</property>
         <signal name="activate" handler="presets_new_folder_clicked_cb"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="presets_save">
-        <property name="label">_Save Preset</property>
-        <property name="image">image12</property>
-        <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <signal name="activate" handler="presets_save_clicked_cb"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="presets_remove">
-        <property name="label">gtk-delete</property>
-        <property name="visible">True</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <signal name="activate" handler="presets_remove_clicked_cb"/>
       </object>
     </child>
     <child>
@@ -3542,14 +3533,26 @@ no-dct-decimate=0:cabac=1</property>
                         <property name="show_arrow">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
-                          <object class="GtkToolButton" id="presets_default">
+                          <object class="GtkToolButton" id="presets_save">
                             <property name="visible">True</property>
                             <property name="sensitive">True</property>
                             <property name="is_important">True</property>
-                            <property name="label" translatable="yes">Default</property>
-                            <property name="tooltip-text" translatable="yes">Make the current preset the default.</property>
-                            <property name="icon_name">gtk-apply</property>
-                            <signal handler="presets_default_clicked_cb" name="clicked"/>
+                            <property name="tooltip-text" translatable="yes">Save current settings to new preset.</property>
+                            <property name="icon_name">gtk-save</property>
+                            <signal name="clicked" handler="presets_save_clicked_cb"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="presets_remove">
+                            <property name="visible">True</property>
+                            <property name="sensitive">True</property>
+                            <property name="is_important">True</property>
+                            <property name="tooltip-text" translatable="yes">Delete the currently selected preset.</property>
+                            <property name="icon_name">gtk-delete</property>
+                            <signal name="clicked" handler="presets_remove_clicked_cb"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6570,7 +6573,7 @@ libx264 authors:
   </object>
   <object class="GtkImage" id="image12">
     <property name="visible">True</property>
-    <property name="stock">gtk-save</property>
+    <property name="stock">gtk-apply</property>
   </object>
   <object class="GtkImage" id="image13">
     <property name="visible">True</property>

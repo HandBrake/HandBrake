@@ -3152,7 +3152,7 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
 	g_debug("preset_import_clicked_cb ()");
 
-	dialog = gtk_file_chooser_dialog_new("Export Preset", NULL,
+	dialog = gtk_file_chooser_dialog_new("Import Preset", NULL,
 				GTK_FILE_CHOOSER_ACTION_OPEN,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
