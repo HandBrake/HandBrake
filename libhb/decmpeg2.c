@@ -26,6 +26,8 @@
 #define TB_PROG 128
 #define TBT_PROG 256
 
+#define NTAGS 8
+
 /**********************************************************************
  * hb_libmpeg2_t
  *********************************************************************/
@@ -42,11 +44,18 @@ typedef struct hb_libmpeg2_s
     int                  got_iframe;        /* set when we get our first iframe */
     int                  look_for_iframe;   /* need an iframe to add chap break */
     int                  look_for_break;    /* need gop start to add chap break */
+    int                  cur_tag;           /* index of current tag */
     uint32_t             nframes;           /* number of frames we've decoded */
     int64_t              last_pts;
+    int64_t              first_pts;
     int cadence[12];
     int flag;
     hb_list_t          * list_subtitle;
+    hb_buffer_t        * last_cc1_buf;
+    struct {
+        int64_t          start;             // start time of this frame
+        hb_buffer_t    * cc_buf;            // captions for this frame
+    } tags[NTAGS];
 } hb_libmpeg2_t;
 
 /**********************************************************************
@@ -61,44 +70,76 @@ static hb_libmpeg2_t * hb_libmpeg2_init()
     m->libmpeg2 = mpeg2_init();
     m->info     = mpeg2_info( m->libmpeg2 );
     m->last_pts = -1;
+    m->first_pts = -1;
+
+    int i;
+    for ( i = 0; i < NTAGS; ++i )
+    {
+        m->tags[i].start = -1;
+    }
 
     return m;
 }
 
-static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
+// send cc_buf to the CC decoder(s)
+static void cc_send_to_decoder( hb_libmpeg2_t *m, hb_buffer_t *cc_buf )
 {
-    uint8_t cc_valid = (*cc_block & 4) >>2;
-    uint8_t cc_type = *cc_block & 3;
-    hb_buffer_t *cc_buf;
-    int i;
-    hb_subtitle_t * subtitle;
-    
-    if( !m->job )
-    {
-        /*
-         * Ignore CC decoding during scanning.
-         */
-        return;
-    }
+    hb_subtitle_t *subtitle;
 
-    if (cc_valid || cc_type==3)
+    // if there's more than one decoder for the captions send a copy
+    // of the buffer to all but the last. Then send the buffer to
+    // the last one (usually there's just one decoder so the 'while' is skipped).
+    int i = 0, n = hb_list_count( m->list_subtitle );
+    while ( --n > 0 )
     {
-        switch (cc_type)
-        {
+        // make a copy of the buf then forward it to the decoder
+        hb_buffer_t *cpy = hb_buffer_init( cc_buf->size );
+        hb_buffer_copy_settings( cpy, cc_buf );
+        memcpy( cpy->data, cc_buf->data, cc_buf->size );
+
+        subtitle = hb_list_item( m->list_subtitle, i++ );
+        hb_fifo_push( subtitle->fifo_in, cpy );
+    }
+    subtitle = hb_list_item( m->list_subtitle, i );
+    hb_fifo_push( subtitle->fifo_in, cc_buf );
+}
+
+static void hb_mpeg2_cc( hb_libmpeg2_t *m, const uint8_t *cc_block )
+{
+    uint8_t cc_hdr = *cc_block;
+    
+    if ( ( cc_hdr & 0x4 ) == 0 )
+        // not valid - ignore
+        return;
+
+    switch (cc_hdr & 3)
+    {
         case 0:
             // CC1 stream
-            for (i = 0; i < hb_list_count( m->list_subtitle ); i++)
+            if ( ( cc_block[1] & 0x7f ) == 0 && ( cc_block[2] & 0x7f ) == 0 )
+                // just padding - ignore
+                return;
+
+            if ( m->last_cc1_buf )
             {
-                subtitle = hb_list_item( m->list_subtitle, i );
-                cc_buf = hb_buffer_init( 2 );
-                if( cc_buf )
-                {
-                    cc_buf->start = m->last_pts;
-                    memcpy( cc_buf->data, cc_block+1, 2 );
-                    hb_fifo_push( subtitle->fifo_in, cc_buf );
-                }
+                // new data from the same time as last call - add to buffer
+                int len = m->last_cc1_buf->size;
+                hb_buffer_realloc( m->last_cc1_buf, len + 2 );
+                memcpy( m->last_cc1_buf->data + len, cc_block+1, 2 );
+                m->last_cc1_buf->size = len + 2;
+                return;
             }
+
+            // allocate a new buffer and copy the caption data into it.
+            // (we don't send it yet because we don't know what timestamp to use).
+            hb_buffer_t *cc_buf = hb_buffer_init( 2 );
+            if( !cc_buf )
+                return;
+
+            memcpy( cc_buf->data, cc_block+1, 2 );
+            m->last_cc1_buf = cc_buf;
             break;
+#ifdef notyet
         case 1:
             // CC2 stream
             //process608( cc_block+1, 2, &m->cc608 );
@@ -107,23 +148,111 @@ static void hb_mpeg2_cc( hb_libmpeg2_t * m, uint8_t *cc_block )
             // DTVCC packet data
             // Fall through
         case 3: //EIA-708
-        {
-            uint8_t temp[4];
-            temp[0]=cc_valid;
-            temp[1]=cc_type;
-            temp[2]=cc_block[1];
-            temp[3]=cc_block[2];
-            //do_708 ((const unsigned char *) temp, 4);
-        }
-        break;
+            {
+                uint8_t temp[4];
+                temp[0]=cc_valid;
+                temp[1]=cc_type;
+                temp[2]=cc_block[1];
+                temp[3]=cc_block[2];
+                do_708 ((const unsigned char *) temp, 4);
+            }
+            break;
+#endif
         default:
             break;
-        } 
     } 
+} 
+
+static inline int have_captions( const uint8_t *user_data, uint32_t len )
+{
+    return len >= 6 && 
+           ( ( user_data[0] == 0x43 && user_data[1] == 0x43 ) ||
+             ( user_data[0] == 0x47 && user_data[1] == 0x41 &&
+               user_data[2] == 0x39 && user_data[3] == 0x34 &&
+               user_data[4] == 3 && (user_data[5] & 0x40) ) );
+}
+
+static void do_one_dvd_cc( hb_libmpeg2_t *m, const uint8_t *header, int field1 )
+{
+    uint8_t data[3];
+
+    data[0] = ( header[0] == 0xff && 0 == field1 )? 0x04 : 0x05;
+    data[1] = header[1];
+    data[2] = header[2];
+    hb_mpeg2_cc( m, data );
+
+    data[0] = ( header[3] == 0xff && 1 == field1 )? 0x04 : 0x05;
+    data[1] = header[4];
+    data[2] = header[5];
+    hb_mpeg2_cc( m, data );
+}
+
+// extract all the captions in the current frame and send them downstream
+// to the decoder.
+//
+// (this routine should only be called if there are captions in the current
+// frame. I.e., only if a call to 'have_captions' returns true.)
+static void extract_mpeg2_captions( hb_libmpeg2_t *m )
+{
+    const uint8_t *user_data = m->info->user_data;
+    int dvd_captions = user_data[0] == 0x43;
+    int capcount, field1packet = 0;
+    const uint8_t *header = &user_data[4];
+    if ( !dvd_captions )
+    {
+        // ATSC encapsulated captions - header starts one byte later
+        // and has an extra unused byte following it.
+        capcount = header[1] & 0x1f;
+        header += 3;
+    }
     else
     {
-        hb_log("Ignoring invalid CC block");
+        // DVD captions
+        if ( ( header[0] & 0x80 ) == 0x00 ) 
+            field1packet=1; /* expect Field 1 second */
+        capcount=(header[0] & 0x1e) / 2;
+        header++;
     }
+
+    int i;
+    for( i=0; i<capcount; i++ )
+    {
+        if ( !dvd_captions )
+        {
+            hb_mpeg2_cc( m, header );
+            header += 3;
+        }
+        else
+        {
+            do_one_dvd_cc( m, header, field1packet );
+            header += 6;
+        }
+    }
+    if ( dvd_captions )
+    {
+        // Deal with extra closed captions some DVDs have.
+        while( header[0]==0xfe || header[0]==0xff )
+        {
+            do_one_dvd_cc( m, header, field1packet );
+            header += 6;
+        }   
+    }   
+}
+
+static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
+{
+    m->cur_tag = ( m->cur_tag + 1 ) & (NTAGS-1);
+    if ( m->tags[m->cur_tag].start >= 0 || m->tags[m->cur_tag].cc_buf )
+    {
+        if ( m->tags[m->cur_tag].start < 0 ||
+             ( m->got_iframe && m->tags[m->cur_tag].start >= m->first_pts ) )
+            hb_log("mpeg2 tag botch: pts %lld, tag pts %lld buf 0x%p",
+                   buf_es->start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
+        if ( m->tags[m->cur_tag].cc_buf )
+            hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
+    }
+    m->tags[m->cur_tag].start = buf_es->start;
+    mpeg2_tag_picture( m->libmpeg2, m->cur_tag, 0 );
 }
 
 static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
@@ -137,6 +266,7 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     }
     int dst_wh = dst_w * dst_h;
     hb_buffer_t *buf  = hb_video_buffer_init( dst_w, dst_h );
+    buf->start = -1;
 
     if ( dst_w != width || dst_h != height )
     {
@@ -199,13 +329,11 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
     if ( buf_es->size )
     {
         /* Feed libmpeg2 */
-        if( buf_es->start > -1 )
+        if( buf_es->start >= 0 )
         {
-            mpeg2_tag_picture( m->libmpeg2, buf_es->start >> 32,
-                               buf_es->start & 0xFFFFFFFF );
+            next_tag( m, buf_es );
         }
-        mpeg2_buffer( m->libmpeg2, buf_es->data,
-                      buf_es->data + buf_es->size );
+        mpeg2_buffer( m->libmpeg2, buf_es->data, buf_es->data + buf_es->size );
     }
 
     for( ;; )
@@ -216,7 +344,32 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             /* Require some more data */
             break;
         }
-        else if( state == STATE_SEQUENCE )
+
+        // if the user requested captions, process
+        // any captions found in the current frame.
+        if ( m->list_subtitle && m->last_pts >= 0 &&
+             have_captions( m->info->user_data, m->info->user_data_len ) )
+        {
+            extract_mpeg2_captions( m );
+            // if we don't have a tag for the captions, make one
+            if ( m->last_cc1_buf && m->tags[m->cur_tag].cc_buf != m->last_cc1_buf )
+            {
+                if (m->tags[m->cur_tag].cc_buf)
+                {
+                    hb_log("mpeg2 tag botch2: pts %lld, tag pts %lld buf 0x%p",
+                           buf_es->start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
+                    hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
+                }
+                // see if we already made a tag for the timestamp. If so we
+                // can just use it, otherwise make a new tag.
+                if (m->tags[m->cur_tag].start < 0)
+                {
+                    next_tag( m, buf_es );
+                }
+                m->tags[m->cur_tag].cc_buf = m->last_cc1_buf;
+            }
+        }
+        if( state == STATE_SEQUENCE )
         {
             if( !( m->width && m->height && m->rate ) )
             {
@@ -247,7 +400,9 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         else if( ( state == STATE_SLICE || state == STATE_END ) &&
                  m->info->display_fbuf )
         {
-            if( ( m->info->display_picture->flags &
+            m->last_cc1_buf = NULL;
+
+            if( !m->got_iframe && ( m->info->display_picture->flags &
                   PIC_MASK_CODING_TYPE ) == PIC_FLAG_CODING_TYPE_I )
             {
                 // we got an iframe so we can start decoding video now
@@ -263,13 +418,16 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                                       m->info->display_fbuf->buf[2] );
                 buf->sequence = buf_es->sequence;
 
+                hb_buffer_t *cc_buf = NULL;
                 if( m->info->display_picture->flags & PIC_FLAG_TAGS )
                 {
-                    buf->start =
-                        ( (uint64_t) m->info->display_picture->tag << 32 ) |
-                        ( (uint64_t) m->info->display_picture->tag2 );
+                    int t = m->info->display_picture->tag;
+                    buf->start = m->tags[t].start;
+                    cc_buf = m->tags[t].cc_buf;
+                    m->tags[t].start = -1;
+                    m->tags[t].cc_buf = NULL;
                 }
-                else if( m->last_pts > -1 )
+                if( buf->start < 0 && m->last_pts >= 0 )
                 {
                     /* For some reason nb_fields is sometimes 1 while it
                        should be 2 */
@@ -277,11 +435,18 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                         MAX( 2, m->info->display_picture->nb_fields ) *
                         m->info->sequence->frame_period / 600;
                 }
-                else
+                if ( buf->start >= 0 )
                 {
-                    buf->start = -1;
+                    m->last_pts = buf->start;
                 }
-                m->last_pts = buf->start;
+
+                // if we were accumulating captions we now know the timestamp
+                // so ship them to the decoder.
+                if ( cc_buf )
+                {
+                    cc_buf->start = m->last_pts;
+                    cc_send_to_decoder( m, cc_buf );
+                }
 
                 if( m->look_for_iframe && ( m->info->display_picture->flags &
                       PIC_MASK_CODING_TYPE ) == PIC_FLAG_CODING_TYPE_I )
@@ -301,14 +466,19 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     }
                     hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64,
                             chap_name, buf->new_chap, m->nframes, buf->start );
-                } else if ( m->nframes == 0 && m->job &&
-                            hb_list_item( m->job->title->list_chapter,
-                                          m->job->chapter_start - 1 ) )
+                }
+                else if ( m->nframes == 0 )
                 {
-                    hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
-                                                     m->job->chapter_start - 1 );
-                    hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64, c->title,
-                            m->job->chapter_start, m->nframes, buf->start );
+                    // this is the first frame returned by the decoder
+                    m->first_pts = buf->start;
+                    if ( m->job && hb_list_item( m->job->title->list_chapter,
+                                                 m->job->chapter_start - 1 ) )
+                    {
+                        hb_chapter_t * c = hb_list_item( m->job->title->list_chapter,
+                                                         m->job->chapter_start - 1 );
+                        hb_log( "mpeg2: \"%s\" (%d) at frame %u time %"PRId64,
+                                c->title, m->job->chapter_start, m->nframes, buf->start );
+                    }
                 }
                 ++m->nframes;
 
@@ -410,128 +580,57 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
         }
 
         /*
-         * Look for Closed Captions if scanning (!job) or if closed captions have been requested.
+         * Add closed captions to the title if we are scanning (no job).
          *
-         * Send them on to the closed caption decoder if requested and found.
+         * Just because we don't add this doesn't mean that there aren't any when 
+         * we scan, just that noone said anything. So you should be able to add
+         * closed captions some other way (See decmpeg2Init() for alternative
+         * approach of assuming that there are always CC, which is probably
+         * safer - however I want to leave the autodetect in here for now to
+         * see how it goes).
          */
-        if( ( !m->job || hb_list_count( m->list_subtitle) ) &&
-            ( m->info->user_data_len != 0 &&
-              m->info->user_data[0] == 0x43 &&
-              m->info->user_data[1] == 0x43 ) ) 
+        if( !m->job && m->title &&
+            have_captions( m->info->user_data, m->info->user_data_len ) )
         {
-            int i, j;
-            const uint8_t *header = &m->info->user_data[4];
-            uint8_t pattern=header[0] & 0x80;
-            int field1packet = 0; /* expect Field 1 first */
-            if (pattern==0x00) 
-                field1packet=1; /* expect Field 1 second */
-            int capcount=(header[0] & 0x1e) / 2;
-            header++;
+            hb_subtitle_t *subtitle;
+            int i = 0;
             
-            /*
-             * Add closed captions to the title if we are scanning (no job).
-             *
-             * Just because we don't add this doesn't mean that there aren't any when 
-             * we scan, just that noone said anything. So you should be able to add
-             * closed captions some other way (See decmpeg2Init() for alternative
-             * approach of assuming that there are always CC, which is probably
-             * safer - however I want to leave the autodetect in here for now to
-             * see how it goes).
-             */
-            if( !m->job && m->title )
+            while ( ( subtitle = hb_list_item( m->title->list_subtitle, i++ ) ) )
             {
-                hb_subtitle_t * subtitle;
-                int found = 0;
-                int i;
-                
-                for( i = 0; i < hb_list_count( m->title->list_subtitle ); i++ )
+                /*
+                 * Let's call them 608 subs for now even if they aren't,
+                 * since they are the only types we grok.
+                 */
+                if( subtitle->source == CC608SUB ) 
                 {
-                    subtitle = hb_list_item( m->title->list_subtitle, i);
-                    /*
-                     * Let's call them 608 subs for now even if they aren't, since they 
-                     * are the only types we grok.
-                     */
-                    if( subtitle && subtitle->source == CC608SUB ) 
-                    {
-                        found = 1;
-                        break;
-                    }
-                }
-                
-                if( !found )
-                {
-                    subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
-                    subtitle->track = 0;
-                    subtitle->id = 0x0;
-                    snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
-                    /*
-                     * The language of the subtitles will be the same as the first audio
-                     * track, i.e. the same as the video.
-                     */
-                    hb_audio_t *audio = hb_list_item( m->title->list_audio, 0 );
-                    if( audio )
-                    {
-                        snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), 
-                                  audio->config.lang.iso639_2);
-                    } else {
-                        snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
-                    }
-                    subtitle->format = TEXTSUB;
-                    subtitle->source = CC608SUB;
-                    subtitle->config.dest   = PASSTHRUSUB;
-                    subtitle->type = 5; 
-                    
-                    hb_list_add( m->title->list_subtitle, subtitle );
+                    break;
                 }
             }
-
-            for( i=0; i<capcount; i++ )
+            
+            if( ! subtitle )
             {
-                for( j=0; j<2; j++ )
+                subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
+                subtitle->track = 0;
+                subtitle->id = 0;
+                subtitle->format = TEXTSUB;
+                subtitle->source = CC608SUB;
+                subtitle->config.dest = PASSTHRUSUB;
+                subtitle->type = 5; 
+                snprintf( subtitle->lang, sizeof( subtitle->lang ), "Closed Captions");
+                /*
+                 * The language of the subtitles will be the same as the first audio
+                 * track, i.e. the same as the video.
+                 */
+                hb_audio_t *audio = hb_list_item( m->title->list_audio, 0 );
+                if( audio )
                 {
-                    uint8_t data[3];
-                    data[0] = header[0];
-                    data[1] = header[1];
-                    data[2] = header[2];
-                    header += 3;
-                    /* Field 1 and 2 data can be in either order,
-                       with marker bytes of \xff and \xfe
-                       Since markers can be repeated, use pattern as well */
-                    if( data[0] == 0xff && j == field1packet )
-                    {
-                        data[0] = 0x04; // Field 1
-                    }   
-                    else
-                    {
-                        data[0] = 0x05; // Field 2
-                    }
-                    hb_mpeg2_cc( m, data );
+                    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), 
+                              audio->config.lang.iso639_2);
+                } else {
+                    snprintf( subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "und");
                 }
+                hb_list_add( m->title->list_subtitle, subtitle );
             }
-            // Deal with extra closed captions some DVD have.
-            while( header[0]==0xfe || header[0]==0xff )
-            {
-                for( j=0; j<2; j++ )
-                {
-                    uint8_t data[3];
-                    data[0] = header[0];
-                    data[1] = header[1];
-                    data[2] = header[2];
-                    header += 3;
-                    /* Field 1 and 2 data can be in either order,
-                       with marker bytes of \xff and \xfe
-                       Since markers can be repeated, use pattern as well */
-                    if( data[0] == 0xff && j == field1packet )
-                    {
-                        data[0] = 0x04; // Field 1
-                    }   
-                    else
-                    {
-                        data[0] = 0x05; // Field 2
-                    } 
-                    hb_mpeg2_cc( m, data );
-                }
-            }   
         }
     }
     return 1;
@@ -547,6 +646,13 @@ static void hb_libmpeg2_close( hb_libmpeg2_t ** _m )
     hb_libmpeg2_t * m = *_m;
 
     mpeg2_close( m->libmpeg2 );
+
+    int i;
+    for ( i = 0; i < NTAGS; ++i )
+    {
+        if ( m->tags[i].cc_buf )
+            hb_buffer_close( &m->tags[i].cc_buf );
+    }
 
     free( m );
     *_m = NULL;
@@ -588,21 +694,23 @@ static int decmpeg2Init( hb_work_object_t * w, hb_job_t * job )
      * If not scanning, then are we supposed to extract Closed Captions
      * and send them to the decoder? 
      */
-    pv->libmpeg2->list_subtitle = hb_list_init();
-    if( job )
+    if( job && hb_list_count( job->list_subtitle ) > 0 )
     {
-        hb_subtitle_t * subtitle;
-        int i;
+        hb_subtitle_t *subtitle;
+        int i = 0;
         
         for( i = 0; i < hb_list_count( job->list_subtitle ); i++ )
+        while ( ( subtitle = hb_list_item( job->list_subtitle, i++ ) ) != NULL )
         {
-            subtitle = hb_list_item( job->list_subtitle, i);
-            if( subtitle && subtitle->source == CC608SUB ) 
+            if( subtitle->source == CC608SUB ) 
             {
+                if ( ! pv->libmpeg2->list_subtitle )
+                {
+                    pv->libmpeg2->list_subtitle = hb_list_init();
+                }
                 hb_list_add(pv->libmpeg2->list_subtitle, subtitle);
             }
         }
-
     }
 
     return 0;
@@ -641,24 +749,22 @@ static int decmpeg2Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if ( (*buf_in)->size == 0 )
     {
-        int i;
-
         hb_list_add( pv->list, *buf_in );
         *buf_in = NULL;
         status = HB_WORK_DONE;
+
         /*
-         * Let the Closed Captions know that it is the end of the data.
+         * Purge any pending caption buffer then let the Closed Captions decoder
+         * know that it is the end of the data.
          */
-        for (i = 0; i < hb_list_count( pv->libmpeg2->list_subtitle ); i++)
+        if ( pv->libmpeg2->list_subtitle )
         {
-            hb_subtitle_t * subtitle;
-            hb_buffer_t *buf_eof = hb_buffer_init( 0 );
-            
-            subtitle = hb_list_item( pv->libmpeg2->list_subtitle, i );
-            if( buf_eof )
+            if ( pv->libmpeg2->last_cc1_buf )
             {
-                hb_fifo_push( subtitle->fifo_in, buf_eof );
+                cc_send_to_decoder( pv->libmpeg2, pv->libmpeg2->last_cc1_buf );
+                pv->libmpeg2->last_cc1_buf = NULL;
             }
+            cc_send_to_decoder( pv->libmpeg2, hb_buffer_init( 0 ) );
         }
     }
 
@@ -695,8 +801,15 @@ static void decmpeg2Close( hb_work_object_t * w )
     {
         hb_log( "mpeg2 done: %d frames", pv->libmpeg2->nframes );
     }
+    if ( pv->libmpeg2->last_cc1_buf )
+    {
+        hb_buffer_close( &pv->libmpeg2->last_cc1_buf );
+    }
     hb_list_close( &pv->list );
-    hb_list_close( &pv->libmpeg2->list_subtitle );
+    if ( pv->libmpeg2->list_subtitle )
+    {
+        hb_list_close( &pv->libmpeg2->list_subtitle );
+    }
     hb_libmpeg2_close( &pv->libmpeg2 );
     free( pv );
 }
