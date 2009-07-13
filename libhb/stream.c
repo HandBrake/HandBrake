@@ -89,7 +89,7 @@ typedef enum {
 } hb_stream_type_t;
 
 #define kMaxNumberVideoPIDS 1
-#define kMaxNumberAudioPIDS 15
+#define kMaxNumberAudioPIDS 31
 #define kMaxNumberDecodeStreams (kMaxNumberVideoPIDS+kMaxNumberAudioPIDS)
 #define kMaxNumberPMTStreams 32
 
@@ -1700,6 +1700,10 @@ static void decode_element_descriptors(hb_stream_t* stream, int esindx,
 
             case 10:    // ISO_639_language descriptor
                 stream->a52_info[esindx].lang_code = lang_to_code(lang_for_code2((const char *)&dp[2]));
+                break;
+
+            case 0x6a:  // DVB AC-3 descriptor
+                stream->ts_stream_type[esindx+1] = 0x81;
                 break;
 
             default:
