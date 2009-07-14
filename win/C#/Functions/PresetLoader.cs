@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Handbrake.Functions
@@ -82,7 +83,7 @@ namespace Handbrake.Functions
                     mainWindow.PictureSettings.crop_right.Value = right;
                 }
             }
-
+            
             // Set the anamorphic mode 0,1,2,3
             mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
@@ -98,16 +99,12 @@ namespace Handbrake.Functions
 
             // Max Width/Height override Width/Height
             if (presetQuery.MaxWidth != 0)
-            {
                 mainWindow.PictureSettings.text_width.Value = presetQuery.MaxWidth;
-                mainWindow.PictureSettings.MaximumWidth = presetQuery.MaxWidth;
-            }
 
             if (presetQuery.MaxHeight != 0)
-            {
                 mainWindow.PictureSettings.text_height.Value = presetQuery.MaxHeight;
-                mainWindow.PictureSettings.MaximumHeight = presetQuery.MaxHeight;
-            }
+
+            mainWindow.PictureSettings.PresetMaximumResolution = new Size(presetQuery.MaxWidth, presetQuery.MaxHeight);
 
             // Case where both height and max height are 0 - For built-in presets
             if (presetQuery.MaxHeight == 0 && presetQuery.Height == 0)
@@ -116,8 +113,6 @@ namespace Handbrake.Functions
             if (presetQuery.MaxWidth == 0 && presetQuery.Width == 0)
                 if (mainWindow.selectedTitle != null && mainWindow.selectedTitle.Resolution.Width != 0)
                     mainWindow.PictureSettings.text_width.Value = mainWindow.selectedTitle.Resolution.Width;
-
-            mainWindow.PictureSettings.setMax();
 
             // Custom Anamorphic Controls
             mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.displayWidthValue.ToString();

@@ -896,19 +896,8 @@ namespace Handbrake
             // 
             // PictureSettings
             // 
-            this.PictureSettings.CroppingValues = new int[] {
-        0,
-        0,
-        0,
-        0};
-            this.PictureSettings.DisplayResolution = new System.Drawing.Size(0, 0);
             this.PictureSettings.Enabled = false;
-            this.PictureSettings.EncodeHeight = 0;
-            this.PictureSettings.EncodeWidth = 0;
             this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PictureSettings.Location = new System.Drawing.Point(0, 0);
-            this.PictureSettings.MaximumHeight = 2560;
-            this.PictureSettings.MaximumWidth = 2560;
             this.PictureSettings.Name = "PictureSettings";
             this.PictureSettings.Size = new System.Drawing.Size(666, 279);
             this.PictureSettings.TabIndex = 0;

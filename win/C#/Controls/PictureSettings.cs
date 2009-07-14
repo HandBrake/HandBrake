@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using Handbrake.Parsing;
 
@@ -8,12 +9,12 @@ namespace Handbrake.Controls
 {
     public partial class PictureSettings : UserControl
     {
-        private bool _preventChangingWidth, _preventChangingHeight;
-        private int _maxWidth, _maxHeight, _lastEncodeWidth, _lastEncodeHeight;
-        private double _anamorphicRatio, _displayRatio;
-        private Title _title;
-        private double storageAspect;
+        private readonly CultureInfo Culture = new CultureInfo("en-US", false);
         public event EventHandler PictureSettingsChanged;
+
+        private Boolean preventChangingWidth, preventChangingHeight;
+        private int _PresetMaximumWidth, _PresetMaximumHeight;
+        private Title _SourceTitle;
 
         public PictureSettings()
         {
@@ -30,156 +31,259 @@ namespace Handbrake.Controls
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Title Source
         {
-            get { return _title; }
+            get { return _SourceTitle; }
             set
             {
-                _title = value;
-                _displayRatio = ((double)_title.Resolution.Width * _title.ParVal.Width / _title.ParVal.Height) / _title.Resolution.Height;
+                _SourceTitle = value;
+                Enabled = _SourceTitle != null;
 
-                Enabled = _title != null;
+                // Set the Aspect Ratio
+                lbl_Aspect.Text = _SourceTitle.AspectRatio.ToString(Culture);
+                lbl_src_res.Text = _SourceTitle.Resolution.Width + " x " + _SourceTitle.Resolution.Height;
 
-                MaximumWidth = _title.Resolution.Width;
-                MaximumHeight = _title.Resolution.Height;
+                // Set the Recommended Cropping values
+                crop_top.Value = GetCropMod2Clean(_SourceTitle.AutoCropDimensions[0]);
+                crop_bottom.Value = GetCropMod2Clean(_SourceTitle.AutoCropDimensions[1]);
+                crop_left.Value = GetCropMod2Clean(_SourceTitle.AutoCropDimensions[2]);
+                crop_right.Value = GetCropMod2Clean(_SourceTitle.AutoCropDimensions[3]);
 
-                updownParWidth.Value = _title.ParVal.Width;
-                updownParHeight.Value = _title.ParVal.Height;
+                // Set the Resolution Boxes
+                text_width.Value = _SourceTitle.Resolution.Width;
 
-                // Set the source resolution
-                lbl_src_res.Text = Source.Resolution.Width + " x " + Source.Resolution.Height;
-
-                // Set ratios
-                _anamorphicRatio = (double)Source.Resolution.Width / Source.Resolution.Height;
-
-                // Set the encode width and height
-                EncodeWidth = _title.Resolution.Width;
-                EncodeHeight = _title.Resolution.Height;
-
-                _lastEncodeWidth = _title.Resolution.Width;
-                _lastEncodeHeight = _title.Resolution.Height;
-
-                // Set cropping
-                CroppingValues = _title.AutoCropDimensions;
-
-                lbl_Aspect.Text = _title.AspectRatio.ToString();
-
-                UpdateAnamorphicValue();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the resolution of the displayed video.
-        /// </summary>
-        public Size DisplayResolution { get; set; }
-
-        public int EncodeWidth { get { return (int)text_width.Value; } set { text_width.Value = value; } }
-
-        public int EncodeHeight { get { return (int)text_height.Value; } set { text_height.Value = value; } }
-
-        public int[] CroppingValues
-        {
-            get
-            {
-                return new int[4]
+                if (drp_anamorphic.SelectedIndex == 0)
                 {
-                    (int)crop_top.Value,
-                    (int)crop_bottom.Value,
-                    (int)crop_left.Value,
-                    (int)crop_right.Value
-                };
-            }
-            set
-            {
-                if (value.Length != 4)
+                    int width = _SourceTitle.Resolution.Width;
+
+                    double crop_width = _SourceTitle.Resolution.Width - (double)crop_left.Value - (double)crop_right.Value;
+                    double crop_height = _SourceTitle.Resolution.Height - (double)crop_top.Value - (double)crop_bottom.Value;
+                    double newHeight = (width * _SourceTitle.Resolution.Width * sourceAspect.Height * crop_height) / (_SourceTitle.Resolution.Height * sourceAspect.Width * crop_width);
+                    text_height.Value = (decimal)GetModulusValue(newHeight);
+                }
+                else
                 {
-                    throw new ArgumentException("The cropping values given must have a length of 4.");
+                    text_height.Value = _SourceTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                    labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
                 }
 
-                crop_top.Value = value[0];
-                crop_bottom.Value = value[1];
-                crop_left.Value = value[2];
-                crop_right.Value = value[3];
+                updownParWidth.Value = _SourceTitle.ParVal.Width;
+                updownParHeight.Value = _SourceTitle.ParVal.Height;
+                updownDisplayWidth.Value = calculateAnamorphicSizes().Width;
+
             }
         }
 
         /// <summary>
-        /// Gets or sets the maximum allowable width of the encoded video.
+        /// Gets or sets the maximum allowable size for the encoded resolution. Set a value to
+        /// "0" if the maximum does not matter.
         /// </summary>
-        public int MaximumWidth
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Size PresetMaximumResolution
         {
-            get { return _maxWidth; }
+            get { return new Size(_PresetMaximumWidth, _PresetMaximumHeight); }
             set
             {
-                _maxWidth = value > 0 ? value : (Source != null ? Source.Resolution.Width : 2560);
+                _PresetMaximumWidth = value.Width;
+                _PresetMaximumHeight = value.Height;
+
+                if (value.Width != 0 && value.Height != 0)
+                    lbl_max.Text = "Max Width / Height";
+                else if (value.Width != 0)
+                    lbl_max.Text = "Max Width";
+                else if (value.Height != 0)
+                    lbl_max.Text = "Max Height";
+                else
+                    lbl_max.Text = "";
             }
         }
 
-        /// <summary>
-        /// Gets or sets the maximum allowable height of the encoded video.
-        /// </summary>
-        public int MaximumHeight
+        // Picture Controls
+        private void text_width_ValueChanged(object sender, EventArgs e)
         {
-            get { return _maxHeight; }
-            set
-            {
-                _maxHeight = value > 0 ? value : (Source != null ? Source.Resolution.Height : 2560);
-            }
-        }      
-
-        public void setMax()
-        {
-
-        }
-
-        /// <summary>
-        /// Updates the anamorphic value shown as the display width.
-        /// </summary>
-        private void UpdateAnamorphicValue()
-        {
-            if (_title == null || _title.ParVal.IsEmpty)
+            if (preventChangingWidth)
                 return;
 
-            // Set globally useful values
-            double width;
-            double par;
+            // Make sure the new value doesn't exceed the maximum
+            if (Source != null)
+                if (text_width.Value > Source.Resolution.Width)
+                    text_width.Value = Source.Resolution.Width;
 
             switch (drp_anamorphic.SelectedIndex)
             {
-                case 2:
-                    int actualWidth = (int)text_width.Value - (int)crop_left.Value - (int)crop_right.Value;
-                    int source_display_width = Source.Resolution.Width * Source.ParVal.Width / Source.ParVal.Height;
-                    int source_cropped_height = Source.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
-                    par = ((double) text_height.Value*source_display_width/source_cropped_height)/actualWidth;
-                    width = (actualWidth * par);
-                    width = Math.Truncate(width);
+                case 0:
+                    if (check_KeepAR.Checked && Source != null)
+                    {
+                        preventChangingHeight = true;
+
+                        int width = (int)text_width.Value;
+
+                        double crop_width = Source.Resolution.Width - (double)crop_left.Value - (double)crop_right.Value;
+                        double crop_height = Source.Resolution.Height - (double)crop_top.Value - (double)crop_bottom.Value;
+                        double newHeight = (width * Source.Resolution.Width * sourceAspect.Height * crop_height) /
+                                           (Source.Resolution.Height * sourceAspect.Width * crop_width);
+                        text_height.Value = (decimal)GetModulusValue(newHeight);
+
+                        preventChangingHeight = false;
+                    }
                     break;
                 default:
-                    {
-                        if (drp_anamorphic.SelectedIndex == 1) // Strict
-                            par = (double)Source.ParVal.Width / Source.ParVal.Height;
-                        else // Custom
-                            par = (double)updownParWidth.Value / (double)updownParHeight.Value;
-
-                        // Store the latest DAR
-                        double rawWidth = (double)text_width.Value * par;
-                        _displayRatio = rawWidth / (double)text_height.Value;
-
-                        width = (int)Math.Round(rawWidth);
-                        break;
-                    }
+                    labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
+                    break;
             }
 
-            labelDisplaySize.Text = width + " x " + text_height.Value;
+            preventChangingWidth = false;
+        }
+        private void text_height_ValueChanged(object sender, EventArgs e)
+        {
+            if (preventChangingHeight)
+                return;
 
-            updownDisplayWidth.Value = (decimal)width;
-            updownParWidth.Value = (decimal)width;
-            updownParHeight.Value = text_width.Value;
+            if (Source != null)
+                if (text_height.Value > Source.Resolution.Height)
+                    text_height.Value = Source.Resolution.Height;
+
+            switch (drp_anamorphic.SelectedIndex)
+            {
+                case 0:
+                    if (check_KeepAR.Checked && Source != null)
+                    {
+                        preventChangingWidth = true;
+
+                        double crop_width = Source.Resolution.Width - (double)crop_left.Value - (double)crop_right.Value;
+                        double crop_height = Source.Resolution.Height - (double)crop_top.Value - (double)crop_bottom.Value;
+
+                        double new_width = ((double)text_height.Value * Source.Resolution.Height * sourceAspect.Width * crop_width) /
+                                            (Source.Resolution.Width * sourceAspect.Height * crop_height);
+
+                        text_width.Value = (decimal)GetModulusValue(new_width);
+
+                        preventChangingWidth = false;
+                    }
+                    break;
+                default:
+                    labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
+                    break;
+            }
+
+            preventChangingHeight = false;
+        }
+        private void check_KeepAR_CheckedChanged(object sender, EventArgs e)
+        {
+            //Force TextWidth to recalc height
+            if (check_KeepAR.Checked)
+                text_width_ValueChanged(this, new EventArgs());
+
+            // Disable the Custom Anamorphic Par Controls if checked.
+            if (drp_anamorphic.SelectedIndex == 3)
+            {
+                updownParWidth.Enabled = !check_KeepAR.Checked;
+                updownParHeight.Enabled = !check_KeepAR.Checked;
+            }
+
+            // Raise the Picture Settings Changed Event
+            if (PictureSettingsChanged != null)
+                PictureSettingsChanged(this, new EventArgs());
         }
 
-        /// <summary>
-        /// Sets the visibility of the advanced anamorphic options.
-        /// </summary>
-        /// <param name="value">Whether or not the options should be visible.</param>
-        private void SetCustomAnamorphicOptionsVisible(bool visible)
+        // Anamorphic Controls
+        private void drp_anamorphic_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (drp_anamorphic.SelectedIndex)
+            {
+                case 0:
+                    text_width.Enabled = true;
+                    text_height.Enabled = true;
+                    check_KeepAR.Enabled = true;
+
+                    setCustomAnamorphicOptionsVisible(false);
+                    labelStaticDisplaySize.Visible = false;
+                    labelDisplaySize.Visible = false;
+
+                    check_KeepAR.Checked = true;
+                    drp_modulus.SelectedIndex = 0;
+
+                    if (check_KeepAR.Checked)
+                        text_width_ValueChanged(this, new EventArgs());
+                    // Don't update display size if we're not using anamorphic
+                    return;
+                case 1:
+                    text_width.Enabled = false;
+                    text_height.Enabled = false;
+                    check_KeepAR.Enabled = false;
+
+                    setCustomAnamorphicOptionsVisible(false);
+                    labelStaticDisplaySize.Visible = true;
+                    labelDisplaySize.Visible = true;
+                    drp_modulus.SelectedIndex = 0;
+
+                    check_KeepAR.Checked = true;
+                    break;
+                case 2:
+                    text_width.Enabled = true;
+                    text_height.Enabled = false;
+                    check_KeepAR.Enabled = false;
+
+                    setCustomAnamorphicOptionsVisible(false);
+                    labelStaticDisplaySize.Visible = true;
+                    labelDisplaySize.Visible = true;
+                    drp_modulus.SelectedIndex = 0;
+
+                    check_KeepAR.Checked = true;
+                    break;
+                case 3:
+                    text_width.Enabled = true;
+                    text_height.Enabled = true;
+                    check_KeepAR.Enabled = true;
+
+                    setCustomAnamorphicOptionsVisible(true);
+                    labelStaticDisplaySize.Visible = true;
+                    labelDisplaySize.Visible = true;
+
+                    check_KeepAR.Checked = true;
+                    break;
+            }
+
+            labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
+
+            if (check_KeepAR.Checked)
+                text_width_ValueChanged(this, new EventArgs());
+
+            if (PictureSettingsChanged != null)
+                PictureSettingsChanged(this, new EventArgs());
+        }
+        private void drp_modulus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            preventChangingWidth = true;
+            preventChangingHeight = true;
+
+            text_width.Value = (decimal)GetModulusValue((double)text_width.Value);
+            text_height.Value = (decimal)GetModulusValue((double)text_height.Value);
+
+            preventChangingWidth = false;
+            preventChangingHeight = false;
+
+            text_width.Increment = int.Parse(drp_modulus.SelectedItem.ToString());
+            text_height.Increment = int.Parse(drp_modulus.SelectedItem.ToString());
+
+            if (PictureSettingsChanged != null)
+                PictureSettingsChanged(this, new EventArgs());
+        }
+
+        // Cropping Controls
+        private void check_autoCrop_CheckedChanged(object sender, EventArgs e)
+        {
+            crop_top.Enabled = check_customCrop.Checked;
+            crop_bottom.Enabled = check_customCrop.Checked;
+            crop_left.Enabled = check_customCrop.Checked;
+            crop_right.Enabled = check_customCrop.Checked;
+        }
+        private void crop_ValueChanged(object sender, EventArgs e)
+        {
+            text_width_ValueChanged(this, new EventArgs());
+        }
+
+        // GUI Functions
+        private void setCustomAnamorphicOptionsVisible(bool visible)
         {
             lbl_modulus.Visible = visible;
             lbl_displayWidth.Visible = visible;
@@ -192,280 +296,101 @@ namespace Handbrake.Controls
             updownParHeight.Visible = visible;
         }
 
-        /// <summary>
-        /// Gets the normalized value from one given by the user that is divisible by the number
-        /// set in <see cref="_modulus"/>.
-        /// </summary>
-        /// <param name="value">The value to normalize</param>
-        /// <returns>A number that is divisible by <see cref="_modulus"/>.</returns>
-        /// <remarks>
-        /// The way that some video codecs, such as x264, compress video is by creating "macroblocks" 
-        /// that are seperated into defined squares, often 16x16 pixels. Because of this, if the width 
-        /// and height of the encoded video are not each divisible by the modulus defined, video quality
-        /// will suffer. This method takes the supplied value and normalizes it to the nearest mutliple
-        /// of <see cref="_modulus"/>.
-        /// </remarks>
-        private int GetModulusValue(int value)
+        // Calculation Functions
+        private Size sourceAspect
+        {
+            get
+            {
+                if (Source != null)
+                {
+                    if (Source.AspectRatio == 1.78F)
+                        return new Size(16, 9);
+                    if (Source.AspectRatio == 1.33F)
+                        return new Size(4, 3);
+                }
+                return new Size(0, 0);
+            }
+        }
+        private Size calculateAnamorphicSizes()
+        {
+            if (Source != null)
+            {
+                /* Set up some variables to make the math easier to follow. */
+                int cropped_width = Source.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
+                int cropped_height = Source.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                double storage_aspect = (double)cropped_width / cropped_height;
+
+                /* Figure out what width the source would display at. */
+                double source_display_width = (double)cropped_width * Source.ParVal.Width / Source.ParVal.Height;
+
+                /*
+                     3 different ways of deciding output dimensions:
+                      - 1: Strict anamorphic, preserve source dimensions
+                      - 2: Loose anamorphic, round to mod16 and preserve storage aspect ratio
+                      - 3: Power user anamorphic, specify everything
+                  */
+                double width, height;
+                switch (drp_anamorphic.SelectedIndex)
+                {
+                    case 1:
+                        /* Strict anamorphic */
+                        double displayWidth = ((double)cropped_width * Source.ParVal.Width / Source.ParVal.Height);
+                        displayWidth = Math.Round(displayWidth, 0);
+                        Size output = new Size((int)displayWidth, cropped_height);
+                        return output;
+                    case 2:
+                        /* "Loose" anamorphic.
+                            - Uses mod16-compliant dimensions,
+                            - Allows users to set the width
+                        */
+                        width = (int)text_width.Value - (int)crop_left.Value - (int)crop_right.Value;
+                        width = GetModulusValue(width); /* Time to get picture width that divide cleanly.*/
+
+                        height = (width / storage_aspect) + 0.5;
+                        height = GetModulusValue(height); /* Time to get picture height that divide cleanly.*/
+
+                        /* The film AR is the source's display width / cropped source height.
+                           The output display width is the output height * film AR.
+                           The output PAR is the output display width / output storage width. */
+                        double pixel_aspect_width = height * source_display_width / cropped_height;
+                        double pixel_aspect_height = width;
+
+                        double disWidthLoose = (width * pixel_aspect_width / pixel_aspect_height);
+                        return new Size((int)disWidthLoose, (int)height);
+                    case 3:
+
+                        // Get the User Interface Values
+                        double UIdisplayWidth;
+                        double.TryParse(updownDisplayWidth.Text, out UIdisplayWidth);
+
+                        /* Anamorphic 3: Power User Jamboree - Set everything based on specified values */
+                        height = GetModulusValue((double)text_height.Value);
+
+                        if (check_KeepAR.Checked)
+                            return new Size((int)Math.Truncate(UIdisplayWidth), (int)height);
+
+                        return new Size((int)Math.Truncate(UIdisplayWidth), (int)height);
+                }
+            }
+
+            // Return a default value of 0,0 to indicate failure
+            return new Size(0, 0);
+        }
+        private double GetModulusValue(double value)
         {
             int mod = int.Parse(drp_modulus.SelectedItem.ToString());
-            int remainder = value % mod;
+            double remainder = value % mod;
 
             if (remainder == 0)
                 return value;
 
-            return remainder >= mod / 2 ? value + (mod - remainder) : value - remainder;
+            return remainder >= ((double)mod / 2) ? value + (mod - remainder) : value - remainder;
         }
-
-        private void ApplyStrictAnamorphic()
+        private static int GetCropMod2Clean(int value)
         {
-            if (_anamorphicRatio == 0)
-                return;
-
-            _preventChangingWidth = true;
-            _preventChangingHeight = true;
-
-            text_width.Value = _title.Resolution.Width;
-            text_height.Value = _title.Resolution.Height;
-
-            _preventChangingWidth = false;
-            _preventChangingHeight = false;
-        }
-
-        /// <summary>
-        /// Loosely anamorphs encode width and height values.
-        /// </summary>
-        private void ApplyLooseAnamorphic()
-        {
-            // Prevents DivideByZeroExceptions
-            if (_anamorphicRatio == 0)
-                return;
-
-            int actualWidth = (int)text_width.Value - (int)crop_left.Value - (int)crop_right.Value;
-            int source_cropped_height = Source.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
-
-            if (storageAspect == 0)
-                storageAspect = (double)actualWidth / source_cropped_height;
-            double hcalc = (actualWidth / storageAspect) + 0.5;
-            double newHeight = GetModulusValue((int)hcalc);
-
-            text_width.Value = GetModulusValue((int)text_width.Value);
-            text_height.Value = (decimal)newHeight;
-
-            UpdateAnamorphicValue();
-        }
-
-        /// <summary>
-        /// Anamorphs encode width and height based on the custom options specified.
-        /// </summary>
-        private void ApplyCustomAnamorphic(Control ctrlUpdated)
-        {
-            // Make sure the PAR values are set correctly
-            if (updownParWidth.Value == 0)
-                updownParWidth.Value = Source.ParVal.Width;
-            if (updownParHeight.Value == 0)
-                updownParHeight.Value = Source.ParVal.Height;
-
-            // Set various values
-            int parWidth = (int)updownParWidth.Value;
-            int parHeight = (int)updownParHeight.Value;
-
-            if (!check_KeepAR.Checked)
-            {
-                switch (ctrlUpdated.Name)
-                {
-                    case "text_width":
-                    case "updownParWidth":
-                    case "updownParHeight":
-                        updownDisplayWidth.Value = Math.Round(text_width.Value * parWidth / parHeight);
-                        break;
-                    case "updownDisplayWidth":
-                        updownParWidth.Value = updownDisplayWidth.Value;
-                        updownParHeight.Value = text_width.Value;
-                        break;
-                }
-            }
-            else
-            {
-                switch (ctrlUpdated.Name)
-                {
-                    case "updownDisplayWidth":
-                        _preventChangingHeight = true;
-
-                        text_height.Value = GetModulusValue((int)((double)updownDisplayWidth.Value / _displayRatio));
-
-                        _preventChangingHeight = false;
-                        goto case "text_width";
-                    case "text_height":
-                        updownDisplayWidth.Value = GetModulusValue((int)((double)text_width.Value * _anamorphicRatio * _displayRatio));
-                        goto case "text_width";
-                    case "text_width":
-                        updownParWidth.Value = updownDisplayWidth.Value;
-                        updownParHeight.Value = text_width.Value;
-                        break;
-                }
-            }
-        }
-
-
-
-        private void text_width_ValueChanged(object sender, EventArgs e)
-        {
-            if (_preventChangingWidth)
-                return;
-
-            _preventChangingWidth = true;
-
-            if (text_width.Value > MaximumWidth)
-            {
-                text_width.Value = MaximumWidth;
-            }
-
-            switch (drp_anamorphic.SelectedIndex)
-            {
-                case 0:
-                    if (check_KeepAR.Checked)
-                    {
-                        _preventChangingHeight = true;
-
-                        decimal newHeight = text_width.Value / (decimal)_anamorphicRatio;
-                        text_height.Value = newHeight > MaximumHeight ? MaximumHeight : newHeight;
-
-                        _preventChangingHeight = false;
-                    }
-                    break;
-                case 1:
-                    ApplyStrictAnamorphic();
-                    break;
-                case 2:
-                    ApplyLooseAnamorphic();
-                    break;
-                case 3:
-                    ApplyCustomAnamorphic((Control)sender);
-                    break;
-            }
-
-            _preventChangingWidth = false;
-        }
-
-        private void text_height_ValueChanged(object sender, EventArgs e)
-        {
-            if (_preventChangingHeight)
-                return;
-
-            _preventChangingHeight = true;
-
-            if (text_height.Value > MaximumHeight)
-            {
-                text_height.Value = MaximumHeight;
-            }
-
-            switch (drp_anamorphic.SelectedIndex)
-            {
-                case 0:
-                    if (check_KeepAR.Checked)
-                    {
-                        _preventChangingWidth = true;
-
-                        decimal newWidth = text_height.Value * (decimal)_anamorphicRatio;
-                        text_width.Value = newWidth > MaximumWidth ? MaximumWidth : newWidth;
-
-                        _preventChangingWidth = false;
-                    }
-                    break;
-                case 3:
-                    ApplyCustomAnamorphic((Control)sender);
-                    break;
-            }
-
-            _preventChangingHeight = false;
-        }
-
-        private void drp_anamorphic_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (drp_anamorphic.SelectedIndex)
-            {
-                case 0:
-                    text_width.Enabled = true;
-                    text_height.Enabled = true;
-                    check_KeepAR.Enabled = true;
-
-                    SetCustomAnamorphicOptionsVisible(false);
-                    labelStaticDisplaySize.Visible = false;
-                    labelDisplaySize.Visible = false;
-
-                    check_KeepAR.Checked = true;
-                    break;
-                case 1:
-                    text_width.Enabled = false;
-                    text_height.Enabled = false;
-                    check_KeepAR.Enabled = false;
-
-                    SetCustomAnamorphicOptionsVisible(false);
-                    labelStaticDisplaySize.Visible = true;
-                    labelDisplaySize.Visible = true;
-
-                    check_KeepAR.Checked = true;
-                    break;
-                case 2:
-                    text_width.Enabled = true;
-                    text_height.Enabled = false;
-                    check_KeepAR.Enabled = false;
-
-                    SetCustomAnamorphicOptionsVisible(false);
-                    labelStaticDisplaySize.Visible = true;
-                    labelDisplaySize.Visible = true;
-
-                    check_KeepAR.Checked = true;
-                    break;
-                case 3:
-                    text_width.Enabled = true;
-                    text_height.Enabled = true;
-                    check_KeepAR.Enabled = true;
-
-                    SetCustomAnamorphicOptionsVisible(true);
-                    labelStaticDisplaySize.Visible = true;
-                    labelDisplaySize.Visible = true;
-
-                    check_KeepAR.Checked = true;
-                    break;
-            }
-
-            UpdateAnamorphicValue();
-        }
-
-        private void check_KeepAR_CheckedChanged(object sender, EventArgs e)
-        {
-            if (drp_anamorphic.SelectedIndex != 3)
-            {
-                if (check_KeepAR.Checked)
-                {
-                    text_width_ValueChanged(this, new EventArgs());
-                }
-            }
-            else
-            {
-                updownParWidth.Enabled = !check_KeepAR.Checked;
-                updownParHeight.Enabled = !check_KeepAR.Checked;
-            }
-        }
-
-        private void crop_ValueChanged(object sender, EventArgs e)
-        {
-            text_width_ValueChanged(this, new EventArgs());
-        }
-
-        private void check_autoCrop_CheckedChanged(object sender, EventArgs e)
-        {
-            crop_top.Enabled = check_customCrop.Checked;
-            crop_bottom.Enabled = check_customCrop.Checked;
-            crop_left.Enabled = check_customCrop.Checked;
-            crop_right.Enabled = check_customCrop.Checked;
-        }
-
-        private void drp_modulus_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            text_width.Increment = int.Parse(drp_modulus.SelectedItem.ToString());
-            text_height.Increment = int.Parse(drp_modulus.SelectedItem.ToString());
+            int remainder = value % 2;
+            if (remainder == 0) return value;
+            return (value + remainder);
         }
     }
 }

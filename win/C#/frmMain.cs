@@ -207,7 +207,7 @@ namespace Handbrake
             check_optimiseMP4.CheckedChanged += new EventHandler(changePresetLabel);
 
             // Picture Settings
-            PictureSettings.PictureSettingsChanged += new EventHandler(changePresetLabel);
+            //PictureSettings.PictureSettingsChanged += new EventHandler(changePresetLabel);
 
             // Filter Settings
             Filters.FilterSettingsChanged += new EventHandler(changePresetLabel);
@@ -235,7 +235,7 @@ namespace Handbrake
             check_optimiseMP4.CheckedChanged -= new EventHandler(changePresetLabel);
 
             // Picture Settings
-            PictureSettings.PictureSettingsChanged -= new EventHandler(changePresetLabel);
+            //PictureSettings.PictureSettingsChanged -= new EventHandler(changePresetLabel);
 
             // Filter Settings
             Filters.FilterSettingsChanged -= new EventHandler(changePresetLabel);
@@ -629,7 +629,7 @@ namespace Handbrake
             }
             else
             {
-                if (encodeQueue.count() != 0 || (!string.IsNullOrEmpty(sourcePath) && string.IsNullOrEmpty(text_destination.Text)))
+                if (encodeQueue.count() != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
                     String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
 

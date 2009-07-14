@@ -119,30 +119,30 @@ namespace Handbrake.Functions
             #region Picture Settings Tab
 
             // Use MaxWidth for built-in presets and width for user settings.
-            if (mainWindow.PictureSettings.MaximumWidth == 0)
+            if (mainWindow.PictureSettings.PresetMaximumResolution.Width == 0)
             {
-                if (mainWindow.PictureSettings.text_width.Text != "")
+                if (mainWindow.PictureSettings.text_width.Value != 0)
                     if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
                         query += " -w " + mainWindow.PictureSettings.text_width.Text;
             }
             else
             {
-                if (mainWindow.PictureSettings.text_width.Text != "")
+                if (mainWindow.PictureSettings.text_width.Value != 0)
                     if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1)
                     query += " -X " + mainWindow.PictureSettings.text_width.Text;
             }
 
             // Use MaxHeight for built-in presets and height for user settings.
-            if (mainWindow.PictureSettings.MaximumHeight == 0)
+            if (mainWindow.PictureSettings.PresetMaximumResolution.Height == 0)
             {
-                if (mainWindow.PictureSettings.text_height.Text != "0")
+                if (mainWindow.PictureSettings.text_height.Value != 0)
                     if (mainWindow.PictureSettings.text_height.Text != "")
                         if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
                             query += " -l " + mainWindow.PictureSettings.text_height.Text;
             }
             else
             {
-                if (mainWindow.PictureSettings.text_height.Text != "")
+                if (mainWindow.PictureSettings.text_height.Value != 0)
                     if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
                         query += " -Y " + mainWindow.PictureSettings.text_height.Text;
             }
