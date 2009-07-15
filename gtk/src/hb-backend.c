@@ -415,7 +415,11 @@ const gchar *srt_codeset_table[] =
 	"UTF-7",
 	"UTF-8",
 	"UTF-16",
+	"UTF-16LE",
+	"UTF-16BE",
 	"UTF-32",
+	"UTF-32LE",
+	"UTF-32BE",
 	NULL
 };
 #define	SRT_TABLE_SIZE (sizeof(srt_codeset_table)/ sizeof(char*)-1)
