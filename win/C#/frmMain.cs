@@ -367,6 +367,15 @@ namespace Handbrake
         {
             loadNormalPreset();
         }
+        private void mnu_importMacPreset_Click(object sender, EventArgs e)
+        {
+            Import imp = new Import();
+            if (openPreset.ShowDialog() == DialogResult.OK)
+            {
+                QueryParser parsed = imp.importMacPreset(openPreset.FileName);
+                PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+            }
+        }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
             Form preset = new frmAddPreset(this, queryGen.generateTheQuery(this), presetHandler);
@@ -1705,7 +1714,6 @@ namespace Handbrake
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
         #endregion
-
 
         // This is the END of the road ****************************************
     }

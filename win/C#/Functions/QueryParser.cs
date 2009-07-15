@@ -18,70 +18,71 @@ namespace Handbrake.Functions
 
         #region Varibles
 
-        #region Source
-        public int DVDTitle { get; private set; }
-        public int DVDChapterStart { get; private set; }
-        public int DVDChapterFinish { get; private set; }
-        #endregion
+        // Source
+        public int DVDTitle { get; set; }
+        public int DVDChapterStart { get; set; }
+        public int DVDChapterFinish { get; set; }
 
-        #region Output Settings
-        public string Format { get; private set; }
-        public Boolean LargeMP4 { get; private set; }
-        public Boolean IpodAtom { get; private set; }
-        public Boolean OptimizeMP4 { get; private set; }
-        #endregion
+        // Output Settings
+        public string Format { get; set; }
+        public Boolean LargeMP4 { get; set; }
+        public Boolean IpodAtom { get; set; }
+        public Boolean OptimizeMP4 { get; set; }
 
-        #region Picture Settings
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public int MaxWidth { get; private set; }
-        public int MaxHeight { get; private set; }
-        public string CropValues { get; private set; }
-        public string CropTop { get; private set; }
-        public string CropBottom { get; private set; }
-        public string CropLeft { get; private set; }
-        public string CropRight { get; private set; }
-        public int AnamorphicMode { get; private set; }
-        public Boolean keepDisplayAsect { get; private set; }
-        public double displayWidthValue { get; private set; }
-        public int pixelAspectWidth { get; private set; }
-        public int pixelAspectHeight { get; private set; }
-        public int AnamorphicModulus { get; private set; }
-        #endregion
+        // Picture Settings
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
+        public string CropValues { get; set; }
+        public string CropTop { get; set; }
+        public string CropBottom { get; set; }
+        public string CropLeft { get; set; }
+        public string CropRight { get; set; }
+        public int AnamorphicMode { get; set; }
+        public Boolean keepDisplayAsect { get; set; }
+        public double displayWidthValue { get; set; }
+        public int pixelAspectWidth { get; set; }
+        public int pixelAspectHeight { get; set; }
+        public int AnamorphicModulus { get; set; }
 
-        #region Video Filters
-        public string DeTelecine { get; private set; }
-        public int DeBlock { get; private set; }
-        public string DeInterlace { get; private set; }
-        public string DeNoise { get; private set; }
-        public string Decomb { get; private set; }
-        #endregion
+        // Video Filters
+        public string DeTelecine { get; set; }
+        public int DeBlock { get; set; }
+        public string DeInterlace { get; set; }
+        public string DeNoise { get; set; }
+        public string Decomb { get; set; }
 
-        #region Video Settings
-        public string VideoEncoder { get; private set; }
-        public Boolean Grayscale { get; private set; }
-        public Boolean TwoPass { get; private set; }
-        public Boolean TurboFirstPass { get; private set; }
-        public string VideoFramerate { get; private set; }
-        public string AverageVideoBitrate { get; private set; }
-        public string VideoTargetSize { get; private set; }
-        public float VideoQuality { get; private set; }
-        #endregion
+        // Video Settings
+        public string VideoEncoder { get; set; }
+        public Boolean Grayscale { get; set; }
+        public Boolean TwoPass { get; set; }
+        public Boolean TurboFirstPass { get; set; }
+        public string VideoFramerate { get; set; }
+        public string AverageVideoBitrate { get; set; }
+        public string VideoTargetSize { get; set; }
+        public float VideoQuality { get; set; }
 
-        #region Audio Settings
-        public ArrayList AudioInformation { get; private set; }
-        public string Subtitles { get; private set; }
-        public Boolean ForcedSubtitles { get; private set; }
-        #endregion
+        // Audio Settings
+        public ArrayList AudioInformation { get; set; }
+        public string Subtitles { get; set; }
+        public Boolean ForcedSubtitles { get; set; }
 
-        #region Chapter Markers
-        public Boolean ChapterMarkers { get; private set; }
-        #endregion
+        // Chapter Markers
+        public Boolean ChapterMarkers { get; set; }
 
-        #region Other
-        public string H264Query { get; private set; }
-        public Boolean Verbose { get; private set; }
-        #endregion
+        // Other
+        public string H264Query { get; set; }
+        public Boolean Verbose { get; set; }
+
+        // Preset Information
+        public int PresetBuildNumber { get; set; }
+        public string PresetDescription { get; set; }
+        public string PresetName { get; set; }
+        public string Type { get; set; }
+        public Boolean UsesMaxPictureSettings { get; set; }
+        public Boolean UsesPictureFilters { get; set; }
+        public Boolean UsesPictureSettings { get; set; }
 
         #endregion
 
@@ -204,7 +205,7 @@ namespace Handbrake.Functions
 
                 if (width.Success)
                     thisQuery.Width = int.Parse(width.Groups[0].Value.Replace("-w ", ""));
-                                                              
+
                 if (height.Success)
                     thisQuery.Height = int.Parse(height.Groups[0].Value.Replace("-l ", ""));
 
@@ -222,7 +223,7 @@ namespace Handbrake.Functions
                     thisQuery.CropBottom = actCropValues[1];
                     thisQuery.CropLeft = actCropValues[2];
                     thisQuery.CropRight = actCropValues[3];
-                } 
+                }
 
                 if (strictAnamorphic.Success)
                     thisQuery.AnamorphicMode = 1;
