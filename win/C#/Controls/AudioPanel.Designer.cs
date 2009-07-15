@@ -137,19 +137,19 @@ namespace Handbrake.Controls
             this.toolStripSeparator2,
             this.audioList_remove});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(142, 76);
+            this.audioMenu.Size = new System.Drawing.Size(139, 76);
             // 
             // audioList_moveup
             // 
             this.audioList_moveup.Name = "audioList_moveup";
-            this.audioList_moveup.Size = new System.Drawing.Size(141, 22);
+            this.audioList_moveup.Size = new System.Drawing.Size(138, 22);
             this.audioList_moveup.Text = "Move Up";
             this.audioList_moveup.Click += new System.EventHandler(this.audioList_moveup_Click);
             // 
             // audioList_movedown
             // 
             this.audioList_movedown.Name = "audioList_movedown";
-            this.audioList_movedown.Size = new System.Drawing.Size(141, 22);
+            this.audioList_movedown.Size = new System.Drawing.Size(138, 22);
             this.audioList_movedown.Text = "Move Down";
             this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.audioList_movedown.Click += new System.EventHandler(this.audioList_movedown_Click);
@@ -157,12 +157,12 @@ namespace Handbrake.Controls
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(135, 6);
             // 
             // audioList_remove
             // 
             this.audioList_remove.Name = "audioList_remove";
-            this.audioList_remove.Size = new System.Drawing.Size(141, 22);
+            this.audioList_remove.Size = new System.Drawing.Size(138, 22);
             this.audioList_remove.Text = "Remove";
             this.audioList_remove.Click += new System.EventHandler(this.audioList_remove_Click);
             // 
@@ -277,6 +277,7 @@ namespace Handbrake.Controls
             // 
             // drp_audenc_1
             // 
+            this.drp_audenc_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_audenc_1.FormattingEnabled = true;
             this.drp_audenc_1.Items.AddRange(new object[] {
             "AAC (faac)",
@@ -287,7 +288,6 @@ namespace Handbrake.Controls
             this.drp_audenc_1.Name = "drp_audenc_1";
             this.drp_audenc_1.Size = new System.Drawing.Size(111, 21);
             this.drp_audenc_1.TabIndex = 52;
-            this.drp_audenc_1.Text = "AAC (faac)";
             this.drp_audenc_1.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_1_SelectedIndexChanged);
             // 
             // label27
@@ -302,6 +302,7 @@ namespace Handbrake.Controls
             // 
             // drp_audmix_1
             // 
+            this.drp_audmix_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_audmix_1.FormattingEnabled = true;
             this.drp_audmix_1.Items.AddRange(new object[] {
             "Automatic",
@@ -314,11 +315,11 @@ namespace Handbrake.Controls
             this.drp_audmix_1.Name = "drp_audmix_1";
             this.drp_audmix_1.Size = new System.Drawing.Size(129, 21);
             this.drp_audmix_1.TabIndex = 54;
-            this.drp_audmix_1.Text = "Automatic";
             this.drp_audmix_1.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_1_SelectedIndexChanged);
             // 
             // drp_track1Audio
             // 
+            this.drp_track1Audio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_track1Audio.FormattingEnabled = true;
             this.drp_track1Audio.Items.AddRange(new object[] {
             "Automatic"});
@@ -326,11 +327,11 @@ namespace Handbrake.Controls
             this.drp_track1Audio.Name = "drp_track1Audio";
             this.drp_track1Audio.Size = new System.Drawing.Size(194, 21);
             this.drp_track1Audio.TabIndex = 50;
-            this.drp_track1Audio.Text = "Automatic";
             this.drp_track1Audio.SelectedIndexChanged += new System.EventHandler(this.drp_track1Audio_SelectedIndexChanged);
             // 
             // drp_audbit_1
             // 
+            this.drp_audbit_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_audbit_1.FormattingEnabled = true;
             this.drp_audbit_1.Items.AddRange(new object[] {
             "32",
@@ -347,11 +348,11 @@ namespace Handbrake.Controls
             this.drp_audbit_1.Name = "drp_audbit_1";
             this.drp_audbit_1.Size = new System.Drawing.Size(70, 21);
             this.drp_audbit_1.TabIndex = 58;
-            this.drp_audbit_1.Text = "160";
             this.drp_audbit_1.SelectedIndexChanged += new System.EventHandler(this.drp_audbit_1_SelectedIndexChanged);
             // 
             // drp_audsr_1
             // 
+            this.drp_audsr_1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_audsr_1.FormattingEnabled = true;
             this.drp_audsr_1.Items.AddRange(new object[] {
             "Auto",
@@ -364,7 +365,6 @@ namespace Handbrake.Controls
             this.drp_audsr_1.Name = "drp_audsr_1";
             this.drp_audsr_1.Size = new System.Drawing.Size(55, 21);
             this.drp_audsr_1.TabIndex = 56;
-            this.drp_audsr_1.Text = "Auto";
             this.drp_audsr_1.SelectedIndexChanged += new System.EventHandler(this.drp_audsr_1_SelectedIndexChanged);
             // 
             // AudioTrackGroup

@@ -112,6 +112,9 @@ namespace Handbrake
             if (Properties.Settings.Default.QueryEditorTab)
                 check_queryEditorTab.CheckState = CheckState.Checked;
 
+            // Prompt on inconsistant queries
+            check_promptOnUnmatchingQueries.Checked = Properties.Settings.Default.PromptOnUnmatchingQueries;
+
             // Preset update notification
             if (Properties.Settings.Default.presetNotification)
                 check_disablePresetNotification.CheckState = CheckState.Checked;
@@ -284,6 +287,7 @@ namespace Handbrake
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.MainWindowMinimize = check_mainMinimize.Checked;
+            check_trayStatusAlerts.Enabled = check_mainMinimize.Checked;
         }
 
         private void check_trayStatusAlerts_CheckedChanged(object sender, EventArgs e)
@@ -294,6 +298,12 @@ namespace Handbrake
         private void check_queryEditorTab_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.QueryEditorTab = check_queryEditorTab.Checked;
+            check_promptOnUnmatchingQueries.Enabled = check_queryEditorTab.Checked;
+        }
+
+        private void check_promptOnUnmatchingQueries_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.PromptOnUnmatchingQueries = check_promptOnUnmatchingQueries.Checked;
         }
 
         private void check_disablePresetNotification_CheckedChanged(object sender, EventArgs e)
@@ -352,8 +362,5 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
-
-        
-
     }
 }

@@ -68,9 +68,9 @@ namespace Handbrake
             rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
             rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
             rtf_actLog.AppendText("#########################################\n\n");
-            if (encodeQueue.isEncoding && encodeQueue.lastQueueItem.Query != String.Empty)
+            if (encodeQueue.IsEncoding && encodeQueue.LastEncode.Query != String.Empty)
             {
-                rtf_actLog.AppendText("### CLI Query: " + encodeQueue.lastQueueItem.Query + "\n\n");
+                rtf_actLog.AppendText("### CLI Query: " + encodeQueue.LastEncode.Query + "\n\n");
                 rtf_actLog.AppendText("#########################################\n\n");
             }
         }
@@ -114,7 +114,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if (encodeQueue.isEncoding || mainWin.isScanning)
+                    if (encodeQueue.IsEncoding || mainWin.isScanning)
                         updateTextFromThread();
                     else
                     {

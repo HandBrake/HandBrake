@@ -40,54 +40,60 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
-            this.check_m4v = new System.Windows.Forms.CheckBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
-            this.btn_browse = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
-            this.text_an_path = new System.Windows.Forms.TextBox();
-            this.check_autoNaming = new System.Windows.Forms.CheckBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.check_tooltip = new System.Windows.Forms.CheckBox();
-            this.check_updateCheck = new System.Windows.Forms.CheckBox();
-            this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.check_updateCheck = new System.Windows.Forms.CheckBox();
+            this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.btn_browse = new System.Windows.Forms.Button();
+            this.check_tooltip = new System.Windows.Forms.CheckBox();
+            this.text_an_path = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
+            this.check_autoNaming = new System.Windows.Forms.CheckBox();
+            this.check_m4v = new System.Windows.Forms.CheckBox();
             this.tab_picture = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label29 = new System.Windows.Forms.Label();
             this.btn_vlcPath = new System.Windows.Forms.Button();
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
-            this.label29 = new System.Windows.Forms.Label();
             this.tab_cli = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.check_cli_minimized = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btn_saveLog = new System.Windows.Forms.Button();
+            this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.Label11 = new System.Windows.Forms.Label();
+            this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
+            this.Label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.text_logPath = new System.Windows.Forms.TextBox();
+            this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
+            this.drp_Priority = new System.Windows.Forms.ComboBox();
+            this.drp_processors = new System.Windows.Forms.ComboBox();
             this.btn_viewLogs = new System.Windows.Forms.Button();
             this.btn_clearLogs = new System.Windows.Forms.Button();
-            this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
-            this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
-            this.btn_saveLog = new System.Windows.Forms.Button();
-            this.label14 = new System.Windows.Forms.Label();
-            this.text_logPath = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.check_cli_minimized = new System.Windows.Forms.CheckBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.drp_Priority = new System.Windows.Forms.ComboBox();
-            this.Label11 = new System.Windows.Forms.Label();
-            this.drp_processors = new System.Windows.Forms.ComboBox();
-            this.Label4 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
-            this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
-            this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
-            this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.check_promptOnUnmatchingQueries = new System.Windows.Forms.CheckBox();
             this.check_dvdnav = new System.Windows.Forms.CheckBox();
+            this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.label30 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.drop_x264step = new System.Windows.Forms.ComboBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.btn_drive_detect = new System.Windows.Forms.CheckBox();
+            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
             this.label28 = new System.Windows.Forms.Label();
             this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
-            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
-            this.btn_drive_detect = new System.Windows.Forms.CheckBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
+            this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
@@ -121,22 +127,28 @@ namespace Handbrake
             this.label26 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
-            this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
+            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tab_picture.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.tab_cli.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.tab_advanced.SuspendLayout();
+            this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_close
             // 
+            this.btn_close.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_close.BackColor = System.Drawing.SystemColors.ControlLight;
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(437, 389);
+            this.btn_close.Location = new System.Drawing.Point(519, 378);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -146,18 +158,19 @@ namespace Handbrake
             // 
             // drp_completeOption
             // 
+            this.drp_completeOption.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel1.SetColumnSpan(this.drp_completeOption, 4);
             this.drp_completeOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_completeOption.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_completeOption.FormattingEnabled = true;
             this.drp_completeOption.Items.AddRange(new object[] {
-            "Do Nothing",
+            "Do nothing",
             "Shutdown",
             "Suspend",
             "Hibernate",
-            "Lock System",
-            "Log Off",
+            "Lock system",
+            "Log off",
             "Quit HandBrake"});
-            this.drp_completeOption.Location = new System.Drawing.Point(114, 126);
+            this.drp_completeOption.Location = new System.Drawing.Point(106, 119);
             this.drp_completeOption.Name = "drp_completeOption";
             this.drp_completeOption.Size = new System.Drawing.Size(166, 21);
             this.drp_completeOption.TabIndex = 43;
@@ -166,162 +179,131 @@ namespace Handbrake
             // 
             // tab_options
             // 
+            this.tableLayoutPanel5.SetColumnSpan(this.tab_options, 2);
             this.tab_options.Controls.Add(this.tab_general);
             this.tab_options.Controls.Add(this.tab_picture);
             this.tab_options.Controls.Add(this.tab_cli);
             this.tab_options.Controls.Add(this.tab_advanced);
-            this.tab_options.Location = new System.Drawing.Point(12, 55);
+            this.tab_options.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tab_options.Location = new System.Drawing.Point(3, 38);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(497, 328);
+            this.tab_options.Size = new System.Drawing.Size(588, 332);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
             // 
-            this.tab_general.Controls.Add(this.drop_updateCheckDays);
-            this.tab_general.Controls.Add(this.check_m4v);
-            this.tab_general.Controls.Add(this.label7);
-            this.tab_general.Controls.Add(this.label5);
-            this.tab_general.Controls.Add(this.txt_autoNameFormat);
-            this.tab_general.Controls.Add(this.btn_browse);
-            this.tab_general.Controls.Add(this.label10);
-            this.tab_general.Controls.Add(this.text_an_path);
-            this.tab_general.Controls.Add(this.check_autoNaming);
-            this.tab_general.Controls.Add(this.label13);
-            this.tab_general.Controls.Add(this.check_tooltip);
-            this.tab_general.Controls.Add(this.check_updateCheck);
-            this.tab_general.Controls.Add(this.check_userDefaultSettings);
-            this.tab_general.Controls.Add(this.label1);
-            this.tab_general.Controls.Add(this.label2);
-            this.tab_general.Controls.Add(this.drp_completeOption);
+            this.tab_general.Controls.Add(this.tableLayoutPanel1);
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
-            this.tab_general.Size = new System.Drawing.Size(489, 302);
+            this.tab_general.Padding = new System.Windows.Forms.Padding(10);
+            this.tab_general.Size = new System.Drawing.Size(580, 306);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
             // 
-            // check_m4v
+            // tableLayoutPanel1
             // 
-            this.check_m4v.AutoSize = true;
-            this.check_m4v.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_m4v.Location = new System.Drawing.Point(114, 273);
-            this.check_m4v.Name = "check_m4v";
-            this.check_m4v.Size = new System.Drawing.Size(334, 17);
-            this.check_m4v.TabIndex = 82;
-            this.check_m4v.Text = "Use iPod/iTunes friendly (.m4v) file extension for MP4";
-            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
-            this.check_m4v.UseVisualStyleBackColor = true;
-            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.ColumnCount = 6;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.drop_updateCheckDays, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 4, 12);
+            this.tableLayoutPanel1.Controls.Add(this.check_updateCheck, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.txt_autoNameFormat, 4, 11);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 2, 11);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label13, 0, 9);
+            this.tableLayoutPanel1.Controls.Add(this.btn_browse, 5, 10);
+            this.tableLayoutPanel1.Controls.Add(this.check_tooltip, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.text_an_path, 4, 10);
+            this.tableLayoutPanel1.Controls.Add(this.label10, 2, 10);
+            this.tableLayoutPanel1.Controls.Add(this.check_userDefaultSettings, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.drp_completeOption, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.check_autoNaming, 2, 9);
+            this.tableLayoutPanel1.Controls.Add(this.check_m4v, 2, 13);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 10);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 15;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel1.TabIndex = 98;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(14, 5);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label1.Name = "label1";
+            this.tableLayoutPanel1.SetRowSpan(this.label1, 2);
+            this.label1.Size = new System.Drawing.Size(66, 13);
+            this.label1.TabIndex = 67;
+            this.label1.Text = "At Launch:";
+            // 
+            // drop_updateCheckDays
+            // 
+            this.drop_updateCheckDays.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel1.SetColumnSpan(this.drop_updateCheckDays, 3);
+            this.drop_updateCheckDays.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_updateCheckDays.FormattingEnabled = true;
+            this.drop_updateCheckDays.Items.AddRange(new object[] {
+            "Daily",
+            "Weekly",
+            "Monthly"});
+            this.drop_updateCheckDays.Location = new System.Drawing.Point(126, 26);
+            this.drop_updateCheckDays.Name = "drop_updateCheckDays";
+            this.drop_updateCheckDays.Size = new System.Drawing.Size(97, 21);
+            this.drop_updateCheckDays.TabIndex = 97;
+            this.ToolTip.SetToolTip(this.drop_updateCheckDays, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
+                    "n Automatic.");
+            this.drop_updateCheckDays.SelectedIndexChanged += new System.EventHandler(this.drop_updateCheckDays_SelectedIndexChanged);
             // 
             // label7
             // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Verdana", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(197, 248);
+            this.tableLayoutPanel1.SetColumnSpan(this.label7, 2);
+            this.label7.Location = new System.Drawing.Point(183, 245);
+            this.label7.Margin = new System.Windows.Forms.Padding(3);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(242, 12);
+            this.label7.Size = new System.Drawing.Size(225, 13);
             this.label7.TabIndex = 81;
             this.label7.Text = "Available Options: {source} {title} {chapters}";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(111, 227);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 13);
-            this.label5.TabIndex = 80;
-            this.label5.Text = "Format:";
-            // 
-            // txt_autoNameFormat
-            // 
-            this.txt_autoNameFormat.Location = new System.Drawing.Point(199, 224);
-            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
-            this.txt_autoNameFormat.Size = new System.Drawing.Size(255, 21);
-            this.txt_autoNameFormat.TabIndex = 79;
-            this.ToolTip.SetToolTip(this.txt_autoNameFormat, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
-                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
-                    "sources values.");
-            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
-            // 
-            // btn_browse
-            // 
-            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_browse.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_browse.Location = new System.Drawing.Point(386, 197);
-            this.btn_browse.Name = "btn_browse";
-            this.btn_browse.Size = new System.Drawing.Size(68, 22);
-            this.btn_browse.TabIndex = 78;
-            this.btn_browse.Text = "Browse";
-            this.btn_browse.UseVisualStyleBackColor = true;
-            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(111, 200);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(82, 13);
-            this.label10.TabIndex = 77;
-            this.label10.Text = "Default Path:";
-            // 
-            // text_an_path
-            // 
-            this.text_an_path.Location = new System.Drawing.Point(199, 197);
-            this.text_an_path.Name = "text_an_path";
-            this.text_an_path.Size = new System.Drawing.Size(181, 21);
-            this.text_an_path.TabIndex = 76;
-            this.ToolTip.SetToolTip(this.text_an_path, "The default location where auto named files are stored.");
-            this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
-            // 
-            // check_autoNaming
-            // 
-            this.check_autoNaming.AutoSize = true;
-            this.check_autoNaming.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_autoNaming.Location = new System.Drawing.Point(114, 174);
-            this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(206, 17);
-            this.check_autoNaming.TabIndex = 72;
-            this.check_autoNaming.Text = "Automatically name output files";
-            this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
-            this.check_autoNaming.UseVisualStyleBackColor = true;
-            this.check_autoNaming.CheckedChanged += new System.EventHandler(this.check_autoNaming_CheckedChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(10, 175);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(86, 13);
-            this.label13.TabIndex = 71;
-            this.label13.Text = "Output files:";
-            // 
-            // check_tooltip
-            // 
-            this.check_tooltip.AutoSize = true;
-            this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
-            this.check_tooltip.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_tooltip.Location = new System.Drawing.Point(114, 67);
-            this.check_tooltip.Name = "check_tooltip";
-            this.check_tooltip.Size = new System.Drawing.Size(135, 17);
-            this.check_tooltip.TabIndex = 70;
-            this.check_tooltip.Text = "Enable GUI tooltips";
-            this.ToolTip.SetToolTip(this.check_tooltip, "Enable the built in tooltips for gui controls. (Requires Restart)");
-            this.check_tooltip.UseVisualStyleBackColor = false;
-            this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
-            // 
             // check_updateCheck
             // 
+            this.check_updateCheck.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_updateCheck.AutoSize = true;
             this.check_updateCheck.BackColor = System.Drawing.Color.Transparent;
-            this.check_updateCheck.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_updateCheck.Location = new System.Drawing.Point(114, 18);
+            this.tableLayoutPanel1.SetColumnSpan(this.check_updateCheck, 4);
+            this.check_updateCheck.Location = new System.Drawing.Point(106, 3);
             this.check_updateCheck.Name = "check_updateCheck";
-            this.check_updateCheck.Size = new System.Drawing.Size(131, 17);
+            this.check_updateCheck.Size = new System.Drawing.Size(114, 17);
             this.check_updateCheck.TabIndex = 68;
             this.check_updateCheck.Text = "Check for updates";
             this.ToolTip.SetToolTip(this.check_updateCheck, "Enables the built in update checker. This check is performed when the application" +
@@ -329,59 +311,199 @@ namespace Handbrake
             this.check_updateCheck.UseVisualStyleBackColor = false;
             this.check_updateCheck.CheckedChanged += new System.EventHandler(this.check_updateCheck_CheckedChanged);
             // 
+            // txt_autoNameFormat
+            // 
+            this.txt_autoNameFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.SetColumnSpan(this.txt_autoNameFormat, 2);
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(183, 218);
+            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
+            this.txt_autoNameFormat.Size = new System.Drawing.Size(374, 21);
+            this.txt_autoNameFormat.TabIndex = 79;
+            this.ToolTip.SetToolTip(this.txt_autoNameFormat, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
+                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
+                    "sources values.");
+            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label5.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label5, 2);
+            this.label5.Location = new System.Drawing.Point(106, 222);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 13);
+            this.label5.TabIndex = 80;
+            this.label5.Text = "Format:";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(6, 123);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.TabIndex = 54;
+            this.label2.Text = "When Done:";
+            // 
+            // label13
+            // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(3, 168);
+            this.label13.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label13.Name = "label13";
+            this.tableLayoutPanel1.SetRowSpan(this.label13, 2);
+            this.label13.Size = new System.Drawing.Size(77, 13);
+            this.label13.TabIndex = 71;
+            this.label13.Text = "Output Files:";
+            // 
+            // btn_browse
+            // 
+            this.btn_browse.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_browse.Location = new System.Drawing.Point(482, 189);
+            this.btn_browse.Name = "btn_browse";
+            this.btn_browse.Size = new System.Drawing.Size(75, 23);
+            this.btn_browse.TabIndex = 78;
+            this.btn_browse.Text = "Browse";
+            this.btn_browse.UseVisualStyleBackColor = true;
+            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
+            // 
+            // check_tooltip
+            // 
+            this.check_tooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_tooltip.AutoSize = true;
+            this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel1.SetColumnSpan(this.check_tooltip, 4);
+            this.check_tooltip.Location = new System.Drawing.Point(106, 53);
+            this.check_tooltip.Name = "check_tooltip";
+            this.check_tooltip.Size = new System.Drawing.Size(117, 17);
+            this.check_tooltip.TabIndex = 70;
+            this.check_tooltip.Text = "Enable GUI tooltips";
+            this.ToolTip.SetToolTip(this.check_tooltip, "Enable the built in tooltips for gui controls. (Requires Restart)");
+            this.check_tooltip.UseVisualStyleBackColor = false;
+            this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
+            // 
+            // text_an_path
+            // 
+            this.text_an_path.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_an_path.Location = new System.Drawing.Point(183, 190);
+            this.text_an_path.Name = "text_an_path";
+            this.text_an_path.Size = new System.Drawing.Size(293, 21);
+            this.text_an_path.TabIndex = 76;
+            this.ToolTip.SetToolTip(this.text_an_path, "The default location where auto named files are stored.");
+            this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
+            // 
+            // label10
+            // 
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label10.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label10, 2);
+            this.label10.Location = new System.Drawing.Point(106, 194);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 13);
+            this.label10.TabIndex = 77;
+            this.label10.Text = "Default Path:";
+            // 
             // check_userDefaultSettings
             // 
+            this.check_userDefaultSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_userDefaultSettings.AutoSize = true;
             this.check_userDefaultSettings.BackColor = System.Drawing.Color.Transparent;
-            this.check_userDefaultSettings.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_userDefaultSettings.Location = new System.Drawing.Point(114, 90);
+            this.tableLayoutPanel1.SetColumnSpan(this.check_userDefaultSettings, 4);
+            this.check_userDefaultSettings.Location = new System.Drawing.Point(106, 76);
             this.check_userDefaultSettings.Name = "check_userDefaultSettings";
-            this.check_userDefaultSettings.Size = new System.Drawing.Size(158, 17);
+            this.check_userDefaultSettings.Size = new System.Drawing.Size(137, 17);
             this.check_userDefaultSettings.TabIndex = 69;
             this.check_userDefaultSettings.Text = "Load my default preset";
             this.ToolTip.SetToolTip(this.check_userDefaultSettings, "Loads the users default settings rather than the Normal preset.");
             this.check_userDefaultSettings.UseVisualStyleBackColor = false;
             this.check_userDefaultSettings.CheckedChanged += new System.EventHandler(this.check_userDefaultSettings_CheckedChanged);
             // 
-            // label1
+            // check_autoNaming
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(21, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
-            this.label1.TabIndex = 67;
-            this.label1.Text = "At Launch:";
+            this.check_autoNaming.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_autoNaming.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.check_autoNaming, 4);
+            this.check_autoNaming.Location = new System.Drawing.Point(106, 166);
+            this.check_autoNaming.Name = "check_autoNaming";
+            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
+            this.check_autoNaming.TabIndex = 72;
+            this.check_autoNaming.Text = "Automatically name output files";
+            this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
+            this.check_autoNaming.UseVisualStyleBackColor = true;
+            this.check_autoNaming.CheckedChanged += new System.EventHandler(this.check_autoNaming_CheckedChanged);
             // 
-            // label2
+            // check_m4v
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(12, 129);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 13);
-            this.label2.TabIndex = 54;
-            this.label2.Text = "When Done:";
+            this.check_m4v.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_m4v.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.check_m4v, 4);
+            this.check_m4v.Location = new System.Drawing.Point(106, 264);
+            this.check_m4v.Name = "check_m4v";
+            this.check_m4v.Size = new System.Drawing.Size(283, 17);
+            this.check_m4v.TabIndex = 82;
+            this.check_m4v.Text = "Use iPod/iTunes friendly file extension (.m4v) for MP4";
+            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
+            this.check_m4v.UseVisualStyleBackColor = true;
+            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
             // 
             // tab_picture
             // 
-            this.tab_picture.Controls.Add(this.btn_vlcPath);
-            this.tab_picture.Controls.Add(this.txt_vlcPath);
-            this.tab_picture.Controls.Add(this.label29);
+            this.tab_picture.Controls.Add(this.tableLayoutPanel2);
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
-            this.tab_picture.Size = new System.Drawing.Size(489, 302);
+            this.tab_picture.Padding = new System.Windows.Forms.Padding(10);
+            this.tab_picture.Size = new System.Drawing.Size(580, 306);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.AutoSize = true;
+            this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.label29, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btn_vlcPath, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.txt_vlcPath, 2, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel2.TabIndex = 84;
+            // 
+            // label29
+            // 
+            this.label29.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(3, 5);
+            this.label29.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label29.Name = "label29";
+            this.tableLayoutPanel2.SetRowSpan(this.label29, 2);
+            this.label29.Size = new System.Drawing.Size(59, 13);
+            this.label29.TabIndex = 79;
+            this.label29.Text = "VLC Path:";
+            // 
             // btn_vlcPath
             // 
+            this.btn_vlcPath.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_vlcPath.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_vlcPath.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_vlcPath.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_vlcPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_vlcPath.Location = new System.Drawing.Point(398, 15);
+            this.btn_vlcPath.Location = new System.Drawing.Point(489, 3);
             this.btn_vlcPath.Name = "btn_vlcPath";
             this.btn_vlcPath.Size = new System.Drawing.Size(68, 22);
             this.btn_vlcPath.TabIndex = 83;
@@ -391,195 +513,229 @@ namespace Handbrake
             // 
             // txt_vlcPath
             // 
-            this.txt_vlcPath.Location = new System.Drawing.Point(98, 15);
+            this.txt_vlcPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_vlcPath.Location = new System.Drawing.Point(88, 3);
             this.txt_vlcPath.Name = "txt_vlcPath";
-            this.txt_vlcPath.Size = new System.Drawing.Size(294, 21);
+            this.txt_vlcPath.Size = new System.Drawing.Size(395, 21);
             this.txt_vlcPath.TabIndex = 81;
             this.ToolTip.SetToolTip(this.txt_vlcPath, "The path where VLC is installed on this system.\r\nThis is used for the video previ" +
                     "ew feature.");
             this.txt_vlcPath.TextChanged += new System.EventHandler(this.txt_vlcPath_TextChanged);
             // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label29.Location = new System.Drawing.Point(17, 20);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(67, 13);
-            this.label29.TabIndex = 79;
-            this.label29.Text = "VLC Path:";
-            // 
             // tab_cli
             // 
-            this.tab_cli.Controls.Add(this.btn_viewLogs);
-            this.tab_cli.Controls.Add(this.btn_clearLogs);
-            this.tab_cli.Controls.Add(this.check_logsInSpecifiedLocation);
-            this.tab_cli.Controls.Add(this.cb_logVerboseLvl);
-            this.tab_cli.Controls.Add(this.label3);
-            this.tab_cli.Controls.Add(this.check_saveLogWithVideo);
-            this.tab_cli.Controls.Add(this.btn_saveLog);
-            this.tab_cli.Controls.Add(this.label14);
-            this.tab_cli.Controls.Add(this.text_logPath);
-            this.tab_cli.Controls.Add(this.label9);
-            this.tab_cli.Controls.Add(this.check_cli_minimized);
-            this.tab_cli.Controls.Add(this.label12);
-            this.tab_cli.Controls.Add(this.drp_Priority);
-            this.tab_cli.Controls.Add(this.Label11);
-            this.tab_cli.Controls.Add(this.drp_processors);
-            this.tab_cli.Controls.Add(this.Label4);
+            this.tab_cli.Controls.Add(this.tableLayoutPanel3);
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
-            this.tab_cli.Size = new System.Drawing.Size(489, 302);
+            this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
+            this.tab_cli.Size = new System.Drawing.Size(580, 306);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
             // 
-            // btn_viewLogs
+            // tableLayoutPanel3
             // 
-            this.btn_viewLogs.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_viewLogs.Location = new System.Drawing.Point(71, 238);
-            this.btn_viewLogs.Name = "btn_viewLogs";
-            this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
-            this.btn_viewLogs.TabIndex = 89;
-            this.btn_viewLogs.Text = "View Log Directory";
-            this.btn_viewLogs.UseVisualStyleBackColor = true;
-            this.btn_viewLogs.Click += new System.EventHandler(this.btn_viewLogs_Click);
+            this.tableLayoutPanel3.AutoSize = true;
+            this.tableLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel3.ColumnCount = 7;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel3.Controls.Add(this.label12, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.check_cli_minimized, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this.label9, 0, 4);
+            this.tableLayoutPanel3.Controls.Add(this.btn_saveLog, 6, 7);
+            this.tableLayoutPanel3.Controls.Add(this.check_logsInSpecifiedLocation, 2, 6);
+            this.tableLayoutPanel3.Controls.Add(this.label14, 2, 7);
+            this.tableLayoutPanel3.Controls.Add(this.Label11, 2, 1);
+            this.tableLayoutPanel3.Controls.Add(this.check_saveLogWithVideo, 2, 5);
+            this.tableLayoutPanel3.Controls.Add(this.Label4, 2, 2);
+            this.tableLayoutPanel3.Controls.Add(this.label3, 2, 4);
+            this.tableLayoutPanel3.Controls.Add(this.text_logPath, 3, 7);
+            this.tableLayoutPanel3.Controls.Add(this.cb_logVerboseLvl, 3, 4);
+            this.tableLayoutPanel3.Controls.Add(this.drp_Priority, 3, 2);
+            this.tableLayoutPanel3.Controls.Add(this.drp_processors, 3, 1);
+            this.tableLayoutPanel3.Controls.Add(this.btn_viewLogs, 2, 8);
+            this.tableLayoutPanel3.Controls.Add(this.btn_clearLogs, 4, 8);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 10);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 10;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel3.TabIndex = 62;
             // 
-            // btn_clearLogs
+            // label12
             // 
-            this.btn_clearLogs.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_clearLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_clearLogs.Location = new System.Drawing.Point(216, 238);
-            this.btn_clearLogs.Name = "btn_clearLogs";
-            this.btn_clearLogs.Size = new System.Drawing.Size(135, 23);
-            this.btn_clearLogs.TabIndex = 88;
-            this.btn_clearLogs.Text = "Clear Log History";
-            this.btn_clearLogs.UseVisualStyleBackColor = true;
-            this.btn_clearLogs.Click += new System.EventHandler(this.btn_clearLogs_Click);
-            // 
-            // check_logsInSpecifiedLocation
-            // 
-            this.check_logsInSpecifiedLocation.AutoSize = true;
-            this.check_logsInSpecifiedLocation.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(71, 187);
-            this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(363, 17);
-            this.check_logsInSpecifiedLocation.TabIndex = 87;
-            this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
-            this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
-            this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
-            this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
-            // 
-            // cb_logVerboseLvl
-            // 
-            this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_logVerboseLvl.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cb_logVerboseLvl.FormattingEnabled = true;
-            this.cb_logVerboseLvl.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2"});
-            this.cb_logVerboseLvl.Location = new System.Drawing.Point(198, 119);
-            this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
-            this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
-            this.cb_logVerboseLvl.TabIndex = 86;
-            this.ToolTip.SetToolTip(this.cb_logVerboseLvl, "Activity Log Verbosity Level");
-            this.cb_logVerboseLvl.SelectedIndexChanged += new System.EventHandler(this.cb_logVerboseLvl_SelectedIndexChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(68, 122);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(124, 13);
-            this.label3.TabIndex = 85;
-            this.label3.Text = "Log Verbosity Level:";
-            // 
-            // check_saveLogWithVideo
-            // 
-            this.check_saveLogWithVideo.AutoSize = true;
-            this.check_saveLogWithVideo.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_saveLogWithVideo.Location = new System.Drawing.Point(71, 164);
-            this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
-            this.check_saveLogWithVideo.Size = new System.Drawing.Size(406, 17);
-            this.check_saveLogWithVideo.TabIndex = 83;
-            this.check_saveLogWithVideo.Text = "Put a copy of individual encode logs in the same location as movie";
-            this.ToolTip.SetToolTip(this.check_saveLogWithVideo, "Place a copy of the encode log in the same folder as the encoded movie.");
-            this.check_saveLogWithVideo.UseVisualStyleBackColor = true;
-            this.check_saveLogWithVideo.CheckedChanged += new System.EventHandler(this.check_saveLogWithVideo_CheckedChanged);
-            // 
-            // btn_saveLog
-            // 
-            this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_saveLog.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_saveLog.Location = new System.Drawing.Point(343, 211);
-            this.btn_saveLog.Name = "btn_saveLog";
-            this.btn_saveLog.Size = new System.Drawing.Size(68, 22);
-            this.btn_saveLog.TabIndex = 82;
-            this.btn_saveLog.Text = "Browse";
-            this.btn_saveLog.UseVisualStyleBackColor = true;
-            this.btn_saveLog.Click += new System.EventHandler(this.btn_saveLog_Click);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(68, 214);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(61, 13);
-            this.label14.TabIndex = 81;
-            this.label14.Text = "Log Path:";
-            // 
-            // text_logPath
-            // 
-            this.text_logPath.Location = new System.Drawing.Point(135, 211);
-            this.text_logPath.Name = "text_logPath";
-            this.text_logPath.Size = new System.Drawing.Size(202, 21);
-            this.text_logPath.TabIndex = 80;
-            this.ToolTip.SetToolTip(this.text_logPath, "The default location where auto named files are stored.");
-            this.text_logPath.TextChanged += new System.EventHandler(this.text_logPath_TextChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(12, 122);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(41, 13);
-            this.label9.TabIndex = 77;
-            this.label9.Text = "Logs:";
+            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(11, 5);
+            this.label12.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label12.Name = "label12";
+            this.tableLayoutPanel3.SetRowSpan(this.label12, 2);
+            this.label12.Size = new System.Drawing.Size(28, 13);
+            this.label12.TabIndex = 75;
+            this.label12.Text = "CLI:";
             // 
             // check_cli_minimized
             // 
+            this.check_cli_minimized.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_cli_minimized.AutoSize = true;
-            this.check_cli_minimized.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_cli_minimized.Location = new System.Drawing.Point(71, 18);
+            this.tableLayoutPanel3.SetColumnSpan(this.check_cli_minimized, 5);
+            this.check_cli_minimized.Location = new System.Drawing.Point(65, 3);
             this.check_cli_minimized.Name = "check_cli_minimized";
-            this.check_cli_minimized.Size = new System.Drawing.Size(162, 17);
+            this.check_cli_minimized.Size = new System.Drawing.Size(137, 17);
             this.check_cli_minimized.TabIndex = 76;
             this.check_cli_minimized.Text = "Start window minimized";
             this.ToolTip.SetToolTip(this.check_cli_minimized, "Starts a CLI window minimized.");
             this.check_cli_minimized.UseVisualStyleBackColor = true;
             this.check_cli_minimized.CheckedChanged += new System.EventHandler(this.check_cli_minimized_CheckedChanged);
             // 
-            // label12
+            // label9
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(21, 19);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(32, 13);
-            this.label12.TabIndex = 75;
-            this.label12.Text = "CLI:";
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(3, 102);
+            this.label9.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label9.Name = "label9";
+            this.tableLayoutPanel3.SetRowSpan(this.label9, 2);
+            this.label9.Size = new System.Drawing.Size(36, 13);
+            this.label9.TabIndex = 77;
+            this.label9.Text = "Logs:";
+            // 
+            // btn_saveLog
+            // 
+            this.btn_saveLog.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_saveLog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_saveLog.Location = new System.Drawing.Point(480, 173);
+            this.btn_saveLog.Name = "btn_saveLog";
+            this.btn_saveLog.Size = new System.Drawing.Size(77, 22);
+            this.btn_saveLog.TabIndex = 82;
+            this.btn_saveLog.Text = "Browse";
+            this.btn_saveLog.UseVisualStyleBackColor = true;
+            this.btn_saveLog.Click += new System.EventHandler(this.btn_saveLog_Click);
+            // 
+            // check_logsInSpecifiedLocation
+            // 
+            this.check_logsInSpecifiedLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_logsInSpecifiedLocation.AutoSize = true;
+            this.tableLayoutPanel3.SetColumnSpan(this.check_logsInSpecifiedLocation, 5);
+            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(65, 150);
+            this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.TabIndex = 87;
+            this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
+            this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
+            this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
+            this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
+            // 
+            // label14
+            // 
+            this.label14.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(65, 177);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(53, 13);
+            this.label14.TabIndex = 81;
+            this.label14.Text = "Log Path:";
+            // 
+            // Label11
+            // 
+            this.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Label11.AutoSize = true;
+            this.Label11.BackColor = System.Drawing.Color.Transparent;
+            this.Label11.Location = new System.Drawing.Point(65, 30);
+            this.Label11.Name = "Label11";
+            this.Label11.Size = new System.Drawing.Size(87, 13);
+            this.Label11.TabIndex = 40;
+            this.Label11.Text = "Processor cores:";
+            // 
+            // check_saveLogWithVideo
+            // 
+            this.check_saveLogWithVideo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_saveLogWithVideo.AutoSize = true;
+            this.tableLayoutPanel3.SetColumnSpan(this.check_saveLogWithVideo, 5);
+            this.check_saveLogWithVideo.Location = new System.Drawing.Point(65, 127);
+            this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
+            this.check_saveLogWithVideo.Size = new System.Drawing.Size(382, 17);
+            this.check_saveLogWithVideo.TabIndex = 83;
+            this.check_saveLogWithVideo.Text = "Put a copy of individual encode logs in the same location as encoded video";
+            this.ToolTip.SetToolTip(this.check_saveLogWithVideo, "Place a copy of the encode log in the same folder as the encoded movie.");
+            this.check_saveLogWithVideo.UseVisualStyleBackColor = true;
+            this.check_saveLogWithVideo.CheckedChanged += new System.EventHandler(this.check_saveLogWithVideo_CheckedChanged);
+            // 
+            // Label4
+            // 
+            this.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Label4.AutoSize = true;
+            this.Label4.BackColor = System.Drawing.Color.Transparent;
+            this.Label4.Location = new System.Drawing.Point(65, 57);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(70, 13);
+            this.Label4.TabIndex = 42;
+            this.Label4.Text = "Priority level:";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Location = new System.Drawing.Point(65, 104);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(101, 13);
+            this.label3.TabIndex = 85;
+            this.label3.Text = "Log verbosity level:";
+            // 
+            // text_logPath
+            // 
+            this.text_logPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel3.SetColumnSpan(this.text_logPath, 3);
+            this.text_logPath.Location = new System.Drawing.Point(172, 173);
+            this.text_logPath.Name = "text_logPath";
+            this.text_logPath.Size = new System.Drawing.Size(302, 21);
+            this.text_logPath.TabIndex = 80;
+            this.ToolTip.SetToolTip(this.text_logPath, "The default location where auto named files are stored.");
+            this.text_logPath.TextChanged += new System.EventHandler(this.text_logPath_TextChanged);
+            // 
+            // cb_logVerboseLvl
+            // 
+            this.cb_logVerboseLvl.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel3.SetColumnSpan(this.cb_logVerboseLvl, 4);
+            this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_logVerboseLvl.FormattingEnabled = true;
+            this.cb_logVerboseLvl.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2"});
+            this.cb_logVerboseLvl.Location = new System.Drawing.Point(172, 100);
+            this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
+            this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
+            this.cb_logVerboseLvl.TabIndex = 86;
+            this.ToolTip.SetToolTip(this.cb_logVerboseLvl, "Activity Log Verbosity Level");
+            this.cb_logVerboseLvl.SelectedIndexChanged += new System.EventHandler(this.cb_logVerboseLvl_SelectedIndexChanged);
             // 
             // drp_Priority
             // 
+            this.drp_Priority.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel3.SetColumnSpan(this.drp_Priority, 4);
             this.drp_Priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_Priority.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_Priority.FormattingEnabled = true;
             this.drp_Priority.Items.AddRange(new object[] {
             "Realtime",
@@ -588,7 +744,7 @@ namespace Handbrake
             "Normal",
             "Below Normal",
             "Low"});
-            this.drp_Priority.Location = new System.Drawing.Point(198, 75);
+            this.drp_Priority.Location = new System.Drawing.Point(172, 53);
             this.drp_Priority.Name = "drp_Priority";
             this.drp_Priority.Size = new System.Drawing.Size(111, 21);
             this.drp_Priority.TabIndex = 43;
@@ -596,21 +752,11 @@ namespace Handbrake
                     "w Normal if you wish to use your system whilst encoding with HandBrake.\r\n");
             this.drp_Priority.SelectedIndexChanged += new System.EventHandler(this.drp_Priority_SelectedIndexChanged);
             // 
-            // Label11
-            // 
-            this.Label11.AutoSize = true;
-            this.Label11.BackColor = System.Drawing.Color.Transparent;
-            this.Label11.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label11.Location = new System.Drawing.Point(68, 48);
-            this.Label11.Name = "Label11";
-            this.Label11.Size = new System.Drawing.Size(103, 13);
-            this.Label11.TabIndex = 40;
-            this.Label11.Text = "Processor cores:";
-            // 
             // drp_processors
             // 
+            this.drp_processors.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel3.SetColumnSpan(this.drp_processors, 4);
             this.drp_processors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_processors.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drp_processors.FormattingEnabled = true;
             this.drp_processors.Items.AddRange(new object[] {
             "Automatic",
@@ -622,7 +768,7 @@ namespace Handbrake
             "6",
             "7",
             "8"});
-            this.drp_processors.Location = new System.Drawing.Point(198, 48);
+            this.drp_processors.Location = new System.Drawing.Point(172, 26);
             this.drp_processors.Name = "drp_processors";
             this.drp_processors.Size = new System.Drawing.Size(111, 21);
             this.drp_processors.TabIndex = 41;
@@ -630,47 +776,122 @@ namespace Handbrake
                     "n Automatic.");
             this.drp_processors.SelectedIndexChanged += new System.EventHandler(this.drp_processors_SelectedIndexChanged);
             // 
-            // Label4
+            // btn_viewLogs
             // 
-            this.Label4.AutoSize = true;
-            this.Label4.BackColor = System.Drawing.Color.Transparent;
-            this.Label4.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(68, 75);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(84, 13);
-            this.Label4.TabIndex = 42;
-            this.Label4.Text = "Priority level:";
+            this.btn_viewLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tableLayoutPanel3.SetColumnSpan(this.btn_viewLogs, 2);
+            this.btn_viewLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_viewLogs.Location = new System.Drawing.Point(65, 201);
+            this.btn_viewLogs.Name = "btn_viewLogs";
+            this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
+            this.btn_viewLogs.TabIndex = 89;
+            this.btn_viewLogs.Text = "View Log Directory";
+            this.btn_viewLogs.UseVisualStyleBackColor = true;
+            this.btn_viewLogs.Click += new System.EventHandler(this.btn_viewLogs_Click);
+            // 
+            // btn_clearLogs
+            // 
+            this.btn_clearLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_clearLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_clearLogs.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_clearLogs.Location = new System.Drawing.Point(210, 201);
+            this.btn_clearLogs.Name = "btn_clearLogs";
+            this.btn_clearLogs.Size = new System.Drawing.Size(135, 23);
+            this.btn_clearLogs.TabIndex = 88;
+            this.btn_clearLogs.Text = "Clear Log History";
+            this.btn_clearLogs.UseVisualStyleBackColor = true;
+            this.btn_clearLogs.Click += new System.EventHandler(this.btn_clearLogs_Click);
             // 
             // tab_advanced
             // 
-            this.tab_advanced.Controls.Add(this.check_trayStatusAlerts);
-            this.tab_advanced.Controls.Add(this.check_inGuiStatus);
-            this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
-            this.tab_advanced.Controls.Add(this.check_dvdnav);
-            this.tab_advanced.Controls.Add(this.label32);
-            this.tab_advanced.Controls.Add(this.label30);
-            this.tab_advanced.Controls.Add(this.drop_x264step);
-            this.tab_advanced.Controls.Add(this.label28);
-            this.tab_advanced.Controls.Add(this.check_queryEditorTab);
-            this.tab_advanced.Controls.Add(this.check_mainMinimize);
-            this.tab_advanced.Controls.Add(this.btn_drive_detect);
-            this.tab_advanced.Controls.Add(this.label6);
+            this.tab_advanced.Controls.Add(this.tableLayoutPanel4);
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
-            this.tab_advanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_advanced.Size = new System.Drawing.Size(489, 302);
+            this.tab_advanced.Padding = new System.Windows.Forms.Padding(10);
+            this.tab_advanced.Size = new System.Drawing.Size(580, 306);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // tableLayoutPanel4
+            // 
+            this.tableLayoutPanel4.AutoSize = true;
+            this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel4.ColumnCount = 6;
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel4.Controls.Add(this.check_promptOnUnmatchingQueries, 3, 4);
+            this.tableLayoutPanel4.Controls.Add(this.check_dvdnav, 2, 10);
+            this.tableLayoutPanel4.Controls.Add(this.check_trayStatusAlerts, 3, 2);
+            this.tableLayoutPanel4.Controls.Add(this.label32, 0, 10);
+            this.tableLayoutPanel4.Controls.Add(this.label6, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.drop_x264step, 4, 8);
+            this.tableLayoutPanel4.Controls.Add(this.label30, 2, 8);
+            this.tableLayoutPanel4.Controls.Add(this.btn_drive_detect, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.check_mainMinimize, 2, 1);
+            this.tableLayoutPanel4.Controls.Add(this.label28, 0, 8);
+            this.tableLayoutPanel4.Controls.Add(this.check_queryEditorTab, 2, 3);
+            this.tableLayoutPanel4.Controls.Add(this.check_disablePresetNotification, 2, 5);
+            this.tableLayoutPanel4.Controls.Add(this.check_inGuiStatus, 2, 6);
+            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 10);
+            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+            this.tableLayoutPanel4.RowCount = 12;
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel4.TabIndex = 62;
+            // 
+            // check_promptOnUnmatchingQueries
+            // 
+            this.check_promptOnUnmatchingQueries.AutoSize = true;
+            this.tableLayoutPanel4.SetColumnSpan(this.check_promptOnUnmatchingQueries, 3);
+            this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(87, 95);
+            this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
+            this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
+            this.check_promptOnUnmatchingQueries.TabIndex = 63;
+            this.check_promptOnUnmatchingQueries.Text = "Prompt when a manual query does not match GUI settings";
+            this.check_promptOnUnmatchingQueries.UseVisualStyleBackColor = true;
+            this.check_promptOnUnmatchingQueries.CheckedChanged += new System.EventHandler(this.check_promptOnUnmatchingQueries_CheckedChanged);
+            // 
+            // check_dvdnav
+            // 
+            this.check_dvdnav.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_dvdnav.AutoSize = true;
+            this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel4.SetColumnSpan(this.check_dvdnav, 4);
+            this.check_dvdnav.Location = new System.Drawing.Point(67, 231);
+            this.check_dvdnav.Name = "check_dvdnav";
+            this.check_dvdnav.Size = new System.Drawing.Size(250, 17);
+            this.check_dvdnav.TabIndex = 90;
+            this.check_dvdnav.Text = "Use libdvdnav (instead of libdvdread) for DVDs";
+            this.check_dvdnav.UseVisualStyleBackColor = false;
+            this.check_dvdnav.CheckedChanged += new System.EventHandler(this.check_dvdnav_CheckedChanged);
+            // 
             // check_trayStatusAlerts
             // 
+            this.check_trayStatusAlerts.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_trayStatusAlerts.AutoSize = true;
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
-            this.check_trayStatusAlerts.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_trayStatusAlerts.Location = new System.Drawing.Point(97, 64);
+            this.tableLayoutPanel4.SetColumnSpan(this.check_trayStatusAlerts, 3);
+            this.check_trayStatusAlerts.Location = new System.Drawing.Point(87, 49);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(352, 17);
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
             this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
             this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
@@ -679,78 +900,41 @@ namespace Handbrake
             this.check_trayStatusAlerts.UseVisualStyleBackColor = false;
             this.check_trayStatusAlerts.CheckedChanged += new System.EventHandler(this.check_trayStatusAlerts_CheckedChanged);
             // 
-            // check_inGuiStatus
-            // 
-            this.check_inGuiStatus.AutoSize = true;
-            this.check_inGuiStatus.BackColor = System.Drawing.Color.Transparent;
-            this.check_inGuiStatus.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_inGuiStatus.Location = new System.Drawing.Point(76, 133);
-            this.check_inGuiStatus.Name = "check_inGuiStatus";
-            this.check_inGuiStatus.Size = new System.Drawing.Size(281, 17);
-            this.check_inGuiStatus.TabIndex = 92;
-            this.check_inGuiStatus.Text = "Enable in-GUI Encode status. (Experimental)";
-            this.ToolTip.SetToolTip(this.check_inGuiStatus, "Displays the CLI status in the GUI windows instead of the CLI window.");
-            this.check_inGuiStatus.UseVisualStyleBackColor = false;
-            this.check_inGuiStatus.CheckedChanged += new System.EventHandler(this.check_inGuiStatus_CheckedChanged);
-            // 
-            // check_disablePresetNotification
-            // 
-            this.check_disablePresetNotification.AutoSize = true;
-            this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
-            this.check_disablePresetNotification.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_disablePresetNotification.Location = new System.Drawing.Point(76, 110);
-            this.check_disablePresetNotification.Name = "check_disablePresetNotification";
-            this.check_disablePresetNotification.Size = new System.Drawing.Size(261, 17);
-            this.check_disablePresetNotification.TabIndex = 91;
-            this.check_disablePresetNotification.Text = "Disable Built-in preset update notification";
-            this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
-                    " of HandBrake is installed.");
-            this.check_disablePresetNotification.UseVisualStyleBackColor = false;
-            this.check_disablePresetNotification.CheckedChanged += new System.EventHandler(this.check_disablePresetNotification_CheckedChanged);
-            // 
-            // check_dvdnav
-            // 
-            this.check_dvdnav.AutoSize = true;
-            this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
-            this.check_dvdnav.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_dvdnav.Location = new System.Drawing.Point(76, 212);
-            this.check_dvdnav.Name = "check_dvdnav";
-            this.check_dvdnav.Size = new System.Drawing.Size(297, 17);
-            this.check_dvdnav.TabIndex = 90;
-            this.check_dvdnav.Text = "Use Libdvdnav (instead of libdvdread) for dvd\'s";
-            this.check_dvdnav.UseVisualStyleBackColor = false;
-            this.check_dvdnav.CheckedChanged += new System.EventHandler(this.check_dvdnav_CheckedChanged);
-            // 
             // label32
             // 
+            this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label32.AutoSize = true;
-            this.label32.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(34, 213);
+            this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label32.Location = new System.Drawing.Point(8, 233);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(36, 13);
+            this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 89;
-            this.label32.Text = "Dvd:";
+            this.label32.Text = "DVD:";
             // 
-            // label30
+            // label6
             // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(73, 170);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(230, 13);
-            this.label30.TabIndex = 87;
-            this.label30.Text = "Constant Quality fractional granularity:\r\n";
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(10, 5);
+            this.label6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label6.Name = "label6";
+            this.tableLayoutPanel4.SetRowSpan(this.label6, 2);
+            this.label6.Size = new System.Drawing.Size(31, 13);
+            this.label6.TabIndex = 71;
+            this.label6.Text = "GUI:";
             // 
             // drop_x264step
             // 
+            this.tableLayoutPanel4.SetColumnSpan(this.drop_x264step, 2);
             this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_x264step.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.drop_x264step.FormattingEnabled = true;
             this.drop_x264step.Items.AddRange(new object[] {
             "1.0",
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(323, 167);
+            this.drop_x264step.Location = new System.Drawing.Point(266, 184);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -758,85 +942,123 @@ namespace Handbrake
                     "n Automatic.");
             this.drop_x264step.SelectedIndexChanged += new System.EventHandler(this.x264step_SelectedIndexChanged);
             // 
-            // label28
+            // label30
             // 
-            this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(27, 170);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(43, 13);
-            this.label28.TabIndex = 85;
-            this.label28.Text = "x264:";
+            this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label30.AutoSize = true;
+            this.tableLayoutPanel4.SetColumnSpan(this.label30, 2);
+            this.label30.Location = new System.Drawing.Point(67, 188);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(193, 13);
+            this.label30.TabIndex = 87;
+            this.label30.Text = "Constant quality fractional granularity:\r\n";
             // 
-            // check_queryEditorTab
+            // btn_drive_detect
             // 
-            this.check_queryEditorTab.AutoSize = true;
-            this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
-            this.check_queryEditorTab.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_queryEditorTab.Location = new System.Drawing.Point(76, 87);
-            this.check_queryEditorTab.Name = "check_queryEditorTab";
-            this.check_queryEditorTab.Size = new System.Drawing.Size(175, 17);
-            this.check_queryEditorTab.TabIndex = 84;
-            this.check_queryEditorTab.Text = "Enable \"Query Editor\" Tab";
-            this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
-                    " effect.");
-            this.check_queryEditorTab.UseVisualStyleBackColor = false;
-            this.check_queryEditorTab.CheckedChanged += new System.EventHandler(this.check_queryEditorTab_CheckedChanged);
+            this.btn_drive_detect.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_drive_detect.AutoSize = true;
+            this.tableLayoutPanel4.SetColumnSpan(this.btn_drive_detect, 4);
+            this.btn_drive_detect.Location = new System.Drawing.Point(67, 3);
+            this.btn_drive_detect.Name = "btn_drive_detect";
+            this.btn_drive_detect.Size = new System.Drawing.Size(326, 17);
+            this.btn_drive_detect.TabIndex = 72;
+            this.btn_drive_detect.Text = "Enable DVD drive detection in \"Source\" button dropdown menu";
+            this.ToolTip.SetToolTip(this.btn_drive_detect, "Enables the Source button\'s ability to detect DVD\'s.\r\nIf this option is enabled, " +
+                    "DVD\'s will be listed in the source menu.");
+            this.btn_drive_detect.UseVisualStyleBackColor = true;
+            this.btn_drive_detect.CheckedChanged += new System.EventHandler(this.btn_drive_detect_CheckedChanged);
             // 
             // check_mainMinimize
             // 
+            this.check_mainMinimize.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_mainMinimize.AutoSize = true;
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
-            this.check_mainMinimize.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.check_mainMinimize.Location = new System.Drawing.Point(76, 41);
+            this.tableLayoutPanel4.SetColumnSpan(this.check_mainMinimize, 4);
+            this.check_mainMinimize.Location = new System.Drawing.Point(67, 26);
             this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(286, 17);
+            this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
             this.check_mainMinimize.TabIndex = 82;
-            this.check_mainMinimize.Text = "Minimize to System Tray rather than task bar";
+            this.check_mainMinimize.Text = "Minimize to system tray";
             this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
                     " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
                     "");
             this.check_mainMinimize.UseVisualStyleBackColor = false;
             this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
             // 
-            // btn_drive_detect
+            // label28
             // 
-            this.btn_drive_detect.AutoSize = true;
-            this.btn_drive_detect.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_drive_detect.Location = new System.Drawing.Point(76, 18);
-            this.btn_drive_detect.Name = "btn_drive_detect";
-            this.btn_drive_detect.Size = new System.Drawing.Size(383, 17);
-            this.btn_drive_detect.TabIndex = 72;
-            this.btn_drive_detect.Text = "Enable Drive Detection in the \"Source\" button dropdown menu";
-            this.ToolTip.SetToolTip(this.btn_drive_detect, "Enables the Source button\'s ability to detect DVD\'s.\r\nIf this option is enabled, " +
-                    "DVD\'s will be listed in the source menu.");
-            this.btn_drive_detect.UseVisualStyleBackColor = true;
-            this.btn_drive_detect.CheckedChanged += new System.EventHandler(this.btn_drive_detect_CheckedChanged);
+            this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(3, 188);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(38, 13);
+            this.label28.TabIndex = 85;
+            this.label28.Text = "x264:";
             // 
-            // label6
+            // check_queryEditorTab
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(35, 19);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(35, 13);
-            this.label6.TabIndex = 71;
-            this.label6.Text = "GUI:";
+            this.check_queryEditorTab.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_queryEditorTab.AutoSize = true;
+            this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel4.SetColumnSpan(this.check_queryEditorTab, 4);
+            this.check_queryEditorTab.Location = new System.Drawing.Point(67, 72);
+            this.check_queryEditorTab.Name = "check_queryEditorTab";
+            this.check_queryEditorTab.Size = new System.Drawing.Size(149, 17);
+            this.check_queryEditorTab.TabIndex = 84;
+            this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab";
+            this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
+                    " effect.");
+            this.check_queryEditorTab.UseVisualStyleBackColor = false;
+            this.check_queryEditorTab.CheckedChanged += new System.EventHandler(this.check_queryEditorTab_CheckedChanged);
+            // 
+            // check_disablePresetNotification
+            // 
+            this.check_disablePresetNotification.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_disablePresetNotification.AutoSize = true;
+            this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel4.SetColumnSpan(this.check_disablePresetNotification, 4);
+            this.check_disablePresetNotification.Location = new System.Drawing.Point(67, 118);
+            this.check_disablePresetNotification.Name = "check_disablePresetNotification";
+            this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
+            this.check_disablePresetNotification.TabIndex = 91;
+            this.check_disablePresetNotification.Text = "Disable built-in preset update notification";
+            this.ToolTip.SetToolTip(this.check_disablePresetNotification, "Disables the notification you recieve when presets are updated when a new version" +
+                    " of HandBrake is installed.");
+            this.check_disablePresetNotification.UseVisualStyleBackColor = false;
+            this.check_disablePresetNotification.CheckedChanged += new System.EventHandler(this.check_disablePresetNotification_CheckedChanged);
+            // 
+            // check_inGuiStatus
+            // 
+            this.check_inGuiStatus.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_inGuiStatus.AutoSize = true;
+            this.check_inGuiStatus.BackColor = System.Drawing.Color.Transparent;
+            this.tableLayoutPanel4.SetColumnSpan(this.check_inGuiStatus, 4);
+            this.check_inGuiStatus.Location = new System.Drawing.Point(67, 141);
+            this.check_inGuiStatus.Name = "check_inGuiStatus";
+            this.check_inGuiStatus.Size = new System.Drawing.Size(235, 17);
+            this.check_inGuiStatus.TabIndex = 92;
+            this.check_inGuiStatus.Text = "Enable in-GUI encode status (experimental)";
+            this.ToolTip.SetToolTip(this.check_inGuiStatus, "Displays the CLI status in the GUI windows instead of the CLI window.");
+            this.check_inGuiStatus.UseVisualStyleBackColor = false;
+            this.check_inGuiStatus.CheckedChanged += new System.EventHandler(this.check_inGuiStatus_CheckedChanged);
             // 
             // label8
             // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(50, 24);
+            this.label8.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(41, 11);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(131, 13);
+            this.label8.Size = new System.Drawing.Size(115, 13);
             this.label8.TabIndex = 61;
             this.label8.Text = "HandBrake Options";
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::Handbrake.Properties.Resources.General_Preferences;
-            this.pictureBox2.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox2.Location = new System.Drawing.Point(3, 0);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(32, 32);
             this.pictureBox2.TabIndex = 60;
@@ -1178,48 +1400,66 @@ namespace Handbrake
             this.openFile_vlc.DefaultExt = "exe";
             this.openFile_vlc.Filter = "exe|*.exe";
             // 
-            // drop_updateCheckDays
+            // tableLayoutPanel5
             // 
-            this.drop_updateCheckDays.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_updateCheckDays.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.drop_updateCheckDays.FormattingEnabled = true;
-            this.drop_updateCheckDays.Items.AddRange(new object[] {
-            "Daily",
-            "Weekly",
-            "Monthly"});
-            this.drop_updateCheckDays.Location = new System.Drawing.Point(134, 40);
-            this.drop_updateCheckDays.Name = "drop_updateCheckDays";
-            this.drop_updateCheckDays.Size = new System.Drawing.Size(85, 21);
-            this.drop_updateCheckDays.TabIndex = 97;
-            this.ToolTip.SetToolTip(this.drop_updateCheckDays, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-                    "n Automatic.");
-            this.drop_updateCheckDays.SelectedIndexChanged += new System.EventHandler(this.drop_updateCheckDays_SelectedIndexChanged);
+            this.tableLayoutPanel5.AutoSize = true;
+            this.tableLayoutPanel5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel5.Controls.Add(this.pictureBox2, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.btn_close, 1, 2);
+            this.tableLayoutPanel5.Controls.Add(this.label8, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.tab_options, 0, 1);
+            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 3;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 405);
+            this.tableLayoutPanel5.TabIndex = 62;
             // 
             // frmOptions
             // 
-            this.ClientSize = new System.Drawing.Size(521, 418);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.tab_options);
-            this.Controls.Add(this.btn_close);
-            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(618, 429);
+            this.Controls.Add(this.tableLayoutPanel5);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmOptions";
+            this.Padding = new System.Windows.Forms.Padding(12);
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Options";
+            this.Text = "HandBrake Options";
             this.tab_options.ResumeLayout(false);
             this.tab_general.ResumeLayout(false);
             this.tab_general.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tab_picture.ResumeLayout(false);
             this.tab_picture.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.tab_cli.ResumeLayout(false);
             this.tab_cli.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
+            this.tableLayoutPanel4.ResumeLayout(false);
+            this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.tableLayoutPanel5.ResumeLayout(false);
+            this.tableLayoutPanel5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1236,10 +1476,8 @@ namespace Handbrake
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TabPage tab_general;
         private System.Windows.Forms.FolderBrowserDialog pathFinder;
-        internal System.Windows.Forms.ComboBox drp_Priority;
         internal System.Windows.Forms.Label Label11;
         internal System.Windows.Forms.Label Label4;
-        internal System.Windows.Forms.ComboBox drp_processors;
         internal System.Windows.Forms.CheckBox check_tooltip;
         internal System.Windows.Forms.CheckBox check_updateCheck;
         internal System.Windows.Forms.CheckBox check_userDefaultSettings;
@@ -1313,5 +1551,13 @@ namespace Handbrake
         private System.Windows.Forms.Button btn_clearLogs;
         internal System.Windows.Forms.CheckBox check_m4v;
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        internal System.Windows.Forms.ComboBox drp_processors;
+        internal System.Windows.Forms.ComboBox drp_Priority;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.CheckBox check_promptOnUnmatchingQueries;
     }
 }

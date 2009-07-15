@@ -38,7 +38,6 @@ namespace Handbrake.EncodeQueue
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
-
                 }
                 if (Properties.Settings.Default.cli_minimized)
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
@@ -127,7 +126,7 @@ namespace Handbrake.EncodeQueue
             }
         }
 
-        /// <summary>
+        /// <summar>
         /// Append the CLI query to the start of the log file.
         /// </summary>
         /// <param name="query"></param>
@@ -136,7 +135,7 @@ namespace Handbrake.EncodeQueue
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logPath = Path.Combine(logDir, "last_encode_log.txt");
 
-            StreamReader reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read));
+            StreamReader reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read, FileShare.Read));
             String log = reader.ReadToEnd();
             reader.Close();
 

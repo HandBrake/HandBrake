@@ -649,9 +649,9 @@ namespace Handbrake.Controls
             this.drop_refFrames.Name = "drop_refFrames";
             this.drop_refFrames.Size = new System.Drawing.Size(121, 21);
             this.drop_refFrames.TabIndex = 54;
-            this.ToolTip.SetToolTip(this.drop_refFrames, "Sane values are 1-6. \r\nThe more you add, the higher the quality - but the slower " +
-                    "the encode. Be careful...too many and QuickTime struggle to play the video back." +
-                    "");
+            this.ToolTip.SetToolTip(this.drop_refFrames, "Sane values are 1-6. \r\nThe more you add, the higher the quality, but the slower t" +
+                    "he encode. Be careful... too many and QuickTime struggles to play the video back" +
+                    ".");
             this.drop_refFrames.SelectedIndexChanged += new System.EventHandler(this.drop_refFrames_SelectedIndexChanged);
             // 
             // check_mixedReferences

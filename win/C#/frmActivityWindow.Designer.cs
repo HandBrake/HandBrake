@@ -64,7 +64,7 @@ namespace Handbrake
             this.rtf_actLog.Location = new System.Drawing.Point(0, 25);
             this.rtf_actLog.Name = "rtf_actLog";
             this.rtf_actLog.ReadOnly = true;
-            this.rtf_actLog.Size = new System.Drawing.Size(471, 530);
+            this.rtf_actLog.Size = new System.Drawing.Size(404, 530);
             this.rtf_actLog.TabIndex = 29;
             this.rtf_actLog.Text = "";
             // 
@@ -74,13 +74,13 @@ namespace Handbrake
             this.mnu_copy_log,
             this.mnu_openLogFolder});
             this.rightClickMenu.Name = "rightClickMenu";
-            this.rightClickMenu.Size = new System.Drawing.Size(247, 48);
+            this.rightClickMenu.Size = new System.Drawing.Size(254, 48);
             // 
             // mnu_copy_log
             // 
             this.mnu_copy_log.Image = global::Handbrake.Properties.Resources.copy;
             this.mnu_copy_log.Name = "mnu_copy_log";
-            this.mnu_copy_log.Size = new System.Drawing.Size(246, 22);
+            this.mnu_copy_log.Size = new System.Drawing.Size(253, 22);
             this.mnu_copy_log.Text = "Copy";
             this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
             // 
@@ -88,7 +88,7 @@ namespace Handbrake
             // 
             this.mnu_openLogFolder.Image = global::Handbrake.Properties.Resources.folder;
             this.mnu_openLogFolder.Name = "mnu_openLogFolder";
-            this.mnu_openLogFolder.Size = new System.Drawing.Size(246, 22);
+            this.mnu_openLogFolder.Size = new System.Drawing.Size(253, 22);
             this.mnu_openLogFolder.Text = "Open Individual Log File Directory";
             this.mnu_openLogFolder.Click += new System.EventHandler(this.mnu_openLogFolder_Click);
             // 
@@ -105,7 +105,7 @@ namespace Handbrake
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(471, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(404, 25);
             this.toolStrip1.TabIndex = 96;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -119,14 +119,14 @@ namespace Handbrake
             this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(85, 22);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(90, 22);
             this.toolStripDropDownButton1.Text = "Select Log";
             // 
             // btn_encode_log
             // 
             this.btn_encode_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btn_encode_log.Name = "btn_encode_log";
-            this.btn_encode_log.Size = new System.Drawing.Size(140, 22);
+            this.btn_encode_log.Size = new System.Drawing.Size(152, 22);
             this.btn_encode_log.Text = "Encode Log";
             this.btn_encode_log.Click += new System.EventHandler(this.btn_encode_log_Click);
             // 
@@ -134,7 +134,7 @@ namespace Handbrake
             // 
             this.btn_scan_log.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.btn_scan_log.Name = "btn_scan_log";
-            this.btn_scan_log.Size = new System.Drawing.Size(140, 22);
+            this.btn_scan_log.Size = new System.Drawing.Size(152, 22);
             this.btn_scan_log.Text = "Scan Log";
             this.btn_scan_log.Click += new System.EventHandler(this.btn_scan_log_Click);
             // 
@@ -144,7 +144,7 @@ namespace Handbrake
             this.btn_copy.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_copy.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_copy.Name = "btn_copy";
-            this.btn_copy.Size = new System.Drawing.Size(111, 22);
+            this.btn_copy.Size = new System.Drawing.Size(122, 22);
             this.btn_copy.Text = "Copy to clipboard";
             this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
             // 
@@ -153,7 +153,7 @@ namespace Handbrake
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 25);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(471, 552);
+            this.panel1.Size = new System.Drawing.Size(404, 552);
             this.panel1.TabIndex = 97;
             // 
             // statusStrip1
@@ -163,36 +163,37 @@ namespace Handbrake
             this.txt_log});
             this.statusStrip1.Location = new System.Drawing.Point(0, 555);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(471, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(404, 22);
             this.statusStrip1.TabIndex = 98;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // lbl_slb
             // 
             this.lbl_slb.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_slb.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_slb.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_slb.Name = "lbl_slb";
-            this.lbl_slb.Size = new System.Drawing.Size(94, 17);
+            this.lbl_slb.Size = new System.Drawing.Size(85, 17);
             this.lbl_slb.Text = "Selected Log: ";
             // 
             // txt_log
             // 
             this.txt_log.BackColor = System.Drawing.Color.Transparent;
             this.txt_log.Name = "txt_log";
-            this.txt_log.Size = new System.Drawing.Size(74, 17);
+            this.txt_log.Size = new System.Drawing.Size(78, 17);
             this.txt_log.Text = "{selected log}";
             // 
             // frmActivityWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(471, 577);
+            this.ClientSize = new System.Drawing.Size(404, 577);
             this.Controls.Add(this.rtf_actLog);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
-            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

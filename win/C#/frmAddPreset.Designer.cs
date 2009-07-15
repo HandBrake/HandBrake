@@ -43,35 +43,39 @@ namespace Handbrake
             this.check_pictureSettings = new System.Windows.Forms.CheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.label1 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lbl_name
             // 
+            this.lbl_name.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lbl_name.AutoSize = true;
-            this.lbl_name.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_name.Location = new System.Drawing.Point(14, 20);
+            this.lbl_name.Location = new System.Drawing.Point(3, 7);
             this.lbl_name.Name = "lbl_name";
-            this.lbl_name.Size = new System.Drawing.Size(89, 13);
+            this.lbl_name.Size = new System.Drawing.Size(75, 13);
             this.lbl_name.TabIndex = 1;
             this.lbl_name.Text = "Preset Name: ";
             // 
             // txt_preset_name
             // 
-            this.txt_preset_name.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt_preset_name.Location = new System.Drawing.Point(109, 17);
+            this.txt_preset_name.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.SetColumnSpan(this.txt_preset_name, 2);
+            this.txt_preset_name.Location = new System.Drawing.Point(84, 3);
             this.txt_preset_name.Name = "txt_preset_name";
-            this.txt_preset_name.Size = new System.Drawing.Size(241, 21);
+            this.txt_preset_name.Size = new System.Drawing.Size(208, 21);
             this.txt_preset_name.TabIndex = 0;
             // 
             // btn_add
             // 
+            this.btn_add.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_add.BackColor = System.Drawing.Color.Transparent;
             this.btn_add.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_add.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_add.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_add.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_add.Location = new System.Drawing.Point(209, 109);
+            this.btn_add.Location = new System.Drawing.Point(172, 72);
             this.btn_add.Name = "btn_add";
-            this.btn_add.Size = new System.Drawing.Size(66, 22);
+            this.btn_add.Size = new System.Drawing.Size(57, 22);
             this.btn_add.TabIndex = 2;
             this.btn_add.Text = "Add";
             this.btn_add.UseVisualStyleBackColor = false;
@@ -81,11 +85,11 @@ namespace Handbrake
             // 
             this.btn_cancel.BackColor = System.Drawing.Color.Transparent;
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_cancel.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_cancel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_cancel.Location = new System.Drawing.Point(281, 109);
+            this.btn_cancel.Location = new System.Drawing.Point(235, 72);
             this.btn_cancel.Name = "btn_cancel";
-            this.btn_cancel.Size = new System.Drawing.Size(66, 22);
+            this.btn_cancel.Size = new System.Drawing.Size(57, 22);
             this.btn_cancel.TabIndex = 3;
             this.btn_cancel.Text = "Cancel";
             this.btn_cancel.UseVisualStyleBackColor = false;
@@ -93,10 +97,12 @@ namespace Handbrake
             // 
             // check_pictureSettings
             // 
+            this.check_pictureSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_pictureSettings.AutoSize = true;
-            this.check_pictureSettings.Location = new System.Drawing.Point(109, 44);
+            this.tableLayoutPanel1.SetColumnSpan(this.check_pictureSettings, 2);
+            this.check_pictureSettings.Location = new System.Drawing.Point(84, 30);
             this.check_pictureSettings.Name = "check_pictureSettings";
-            this.check_pictureSettings.Size = new System.Drawing.Size(155, 17);
+            this.check_pictureSettings.Size = new System.Drawing.Size(132, 17);
             this.check_pictureSettings.TabIndex = 1;
             this.check_pictureSettings.Text = "Store Cropping Values";
             this.toolTip.SetToolTip(this.check_pictureSettings, "Save Picture Width/Height and Crop Values");
@@ -104,34 +110,64 @@ namespace Handbrake
             // 
             // label1
             // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(106, 64);
+            this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
+            this.label1.Location = new System.Drawing.Point(84, 53);
+            this.label1.Margin = new System.Windows.Forms.Padding(3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(236, 13);
+            this.label1.Size = new System.Drawing.Size(200, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Note: Subtitles are not stored in presets";
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.lbl_name, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btn_cancel, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.btn_add, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.txt_preset_name, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.check_pictureSettings, 1, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(9, 9);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(295, 125);
+            this.tableLayoutPanel1.TabIndex = 5;
+            // 
             // frmAddPreset
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 143);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.check_pictureSettings);
-            this.Controls.Add(this.btn_cancel);
-            this.Controls.Add(this.btn_add);
-            this.Controls.Add(this.txt_preset_name);
-            this.Controls.Add(this.lbl_name);
-            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(313, 143);
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmAddPreset";
+            this.Padding = new System.Windows.Forms.Padding(9);
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Preset";
             this.TopMost = true;
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -146,5 +182,6 @@ namespace Handbrake
         private System.Windows.Forms.CheckBox check_pictureSettings;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

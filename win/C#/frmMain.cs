@@ -164,7 +164,7 @@ namespace Handbrake
                 DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
-                    encodeQueue.recoverQueue("hb_queue_recovery.xml"); // Start Recovery
+                    encodeQueue.LoadQueueFromFile("hb_queue_recovery.xml"); // Start Recovery
                 else
                 {
                     // Remove the Queue recovery file if the user doesn't want to recovery the last queue.
@@ -188,9 +188,9 @@ namespace Handbrake
                 this.Resize += new EventHandler(frmMain_Resize);
 
             // Handle Encode Start / Finish / Pause
-            encodeQueue.OnEncodeEnded += new EventHandler(encodeEnded);
-            encodeQueue.OnPaused += new EventHandler(encodePaused);
-            encodeQueue.OnEncodeStart += new EventHandler(encodeStarted);
+            encodeQueue.CurrentJobCompleted += new EventHandler(encodeEnded);
+            encodeQueue.QueuePauseRequested += new EventHandler(encodePaused);
+            encodeQueue.NewJobStarted += new EventHandler(encodeStarted);
 
             // Handle a file being draged onto the GUI.
             this.DragEnter += new DragEventHandler(frmMain_DragEnter);
@@ -617,7 +617,7 @@ namespace Handbrake
                 if (result == DialogResult.Yes)
                 {
                     // Pause The Queue
-                    encodeQueue.pauseEncodeQueue();
+                    encodeQueue.RequestPause();
 
                     // Allow the CLI to exit cleanly
                     Win32.SetForegroundWindow((int)encodeQueue.encodeHandler.processHandle);
@@ -629,9 +629,44 @@ namespace Handbrake
             }
             else
             {
-                if (encodeQueue.count() != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
+                if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
-                    String query = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
+                    string generatedQuery = queryGen.generateTheQuery(this);
+                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
+                    string query = string.Empty;
+
+                    // Check to make sure the generated query matches the GUI settings
+                    if (Properties.Settings.Default.PromptOnUnmatchingQueries && !string.IsNullOrEmpty(specifiedQuery) && generatedQuery != specifiedQuery)
+                    {
+                        DialogResult result = MessageBox.Show("The query under the \"Query Editor\" tab " +
+                            "does not match the current GUI settings. Because the manual query takes " +
+                            "priority over the GUI, your recently updated settings will not be taken " +
+                            "into account when encoding this job." + Environment.NewLine + Environment.NewLine +
+                            "Do you want to replace the manual query with the GUI-generated query?",
+                            "Manual Query does not Match GUI",
+                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk,
+                            MessageBoxDefaultButton.Button3);
+
+                        switch (result)
+                        {
+                            case DialogResult.Yes:
+                                // Replace the manual query with the generated one
+                                query = generatedQuery;
+                                rtf_query.Text = generatedQuery;
+                                break;
+                            case DialogResult.No:
+                                // Use the manual query
+                                query = specifiedQuery;
+                                break;
+                            case DialogResult.Cancel:
+                                // Don't start the encode
+                                return;
+                        }
+                    }
+                    else
+                    {
+                        query = generatedQuery;
+                    }
 
                     DialogResult overwrite = DialogResult.Yes;
                     if (text_destination.Text != "")
@@ -640,15 +675,15 @@ namespace Handbrake
 
                     if (overwrite == DialogResult.Yes)
                     {
-                        if (encodeQueue.count() == 0)
-                            encodeQueue.add(query, sourcePath, text_destination.Text);
+                        if (encodeQueue.Count == 0)
+                            encodeQueue.AddJob(query, sourcePath, text_destination.Text);
 
                         queueWindow.setQueue();
-                        if (encodeQueue.count() > 1)
+                        if (encodeQueue.Count > 1)
                             queueWindow.Show(false);
 
                         setEncodeStarted(); // Encode is running, so setup the GUI appropriately
-                        encodeQueue.startEncode(); // Start The Queue Encoding Process
+                        encodeQueue.StartEncodeQueue(); // Start The Queue Encoding Process
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
                     }
                     this.Focus();
@@ -667,16 +702,16 @@ namespace Handbrake
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
-                if (encodeQueue.checkDestinationPath(text_destination.Text))
+                if (encodeQueue.CheckForDestinationDuplicate(text_destination.Text))
                 {
                     DialogResult result = MessageBox.Show("There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                   "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
-                        encodeQueue.add(query, sourcePath, text_destination.Text);
+                        encodeQueue.AddJob(query, sourcePath, text_destination.Text);
 
                 }
                 else
-                    encodeQueue.add(query, sourcePath, text_destination.Text);
+                    encodeQueue.AddJob(query, sourcePath, text_destination.Text);
 
                 queueWindow.Show();
             }
@@ -1630,7 +1665,7 @@ namespace Handbrake
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-            if ((encodeQueue.isEncoding) && (!encodeQueue.isPaused) && (encodeQueue.count() > 0))
+            if ((encodeQueue.IsEncoding) && (!encodeQueue.PauseRequested) && (encodeQueue.Count > 0))
             {
                 DialogResult result = MessageBox.Show("HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
                     "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);

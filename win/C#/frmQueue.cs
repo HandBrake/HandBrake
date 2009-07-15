@@ -9,22 +9,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Handbrake.EncodeQueue;
+using System.Collections.ObjectModel;
 
 namespace Handbrake
 {
     public partial class frmQueue : Form
     {
         private delegate void UpdateHandler();
-        QueueHandler queue;
+        private QueueHandler queue;
 
         public frmQueue(QueueHandler q)
         {
             InitializeComponent();
 
             this.queue = q;
-            queue.OnEncodeStart += new EventHandler(queueOnEncodeStart);
-            queue.OnQueueFinished += new EventHandler(queueOnQueueFinished);
-            queue.OnPaused += new EventHandler(queueOnPaused);
+            queue.NewJobStarted += new EventHandler(queueOnEncodeStart);
+            queue.QueueCompleted += new EventHandler(queueOnQueueFinished);
+            queue.QueuePauseRequested += new EventHandler(queueOnPaused);
         }
         void queueOnPaused(object sender, EventArgs e)
         {
@@ -74,19 +75,19 @@ namespace Handbrake
         // Start and Stop Controls
         private void btn_encode_Click(object sender, EventArgs e)
         {
-            if (queue.isPaused)
+            if (queue.PauseRequested)
             {
                 setUIEncodeStarted();
                 MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            if (!queue.isEncodeStarted)
-                queue.startEncode();
+            if (!queue.IsEncoding)
+                queue.StartEncodeQueue();
 
         }
         private void btn_pause_Click(object sender, EventArgs e)
         {
-            queue.pauseEncodeQueue();
+            queue.RequestPause();
             setUIEncodeFinished();
             resetQueue();
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -141,7 +142,7 @@ namespace Handbrake
             }
 
             list_queue.Items.Clear();
-            List<Job> theQueue = queue.getQueue();
+            ReadOnlyCollection<Job> theQueue = queue.CurrentQueue;
             foreach (Job queue_item in theQueue)
             {
                 string q_item = queue_item.Query;
@@ -203,9 +204,9 @@ namespace Handbrake
                 }
 
                 // found query is a global varible
-                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.lastQueueItem.Query);
-                lbl_source.Text = queue.lastQueueItem.Source;
-                lbl_dest.Text = queue.lastQueueItem.Destination;
+                Functions.QueryParser parsed = Functions.QueryParser.Parse(queue.LastEncode.Query);
+                lbl_source.Text = queue.LastEncode.Source;
+                lbl_dest.Text = queue.LastEncode.Destination;
 
                 lbl_title.Text = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
 
@@ -254,7 +255,7 @@ namespace Handbrake
 
                 // Remove each selected item
                 foreach (int selectedIndex in selectedIndices)
-                    queue.remove(selectedIndex);
+                    queue.RemoveJob(selectedIndex);
 
                 updateUIElements();
 
@@ -308,7 +309,7 @@ namespace Handbrake
 
                 // Move up each selected item
                 foreach (int selectedIndex in selectedIndices)
-                    queue.moveUp(selectedIndex);
+                    queue.MoveUp(selectedIndex);
 
                 updateUIElements();
 
@@ -336,7 +337,7 @@ namespace Handbrake
 
                 // Move down each selected item
                 foreach (int selectedIndex in selectedIndices)
-                    queue.moveDown(selectedIndex);
+                    queue.MoveDown(selectedIndex);
 
                 updateUIElements();
 
@@ -356,7 +357,7 @@ namespace Handbrake
             SaveFile.Filter = "Batch|.bat";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
-                queue.writeBatchScript(SaveFile.FileName);
+                queue.WriteBatchScriptToFile(SaveFile.FileName);
         }
         private void mnu_export_Click(object sender, EventArgs e)
         {
@@ -364,21 +365,21 @@ namespace Handbrake
             SaveFile.Filter = "HandBrake Queue|*.queue";
             SaveFile.ShowDialog();
             if (SaveFile.FileName != String.Empty)
-                queue.updateQueueRecoveryFile(SaveFile.FileName);
+                queue.WriteQueueStateToFile(SaveFile.FileName);
         }
         private void mnu_import_Click(object sender, EventArgs e)
         {
             OpenFile.FileName = "";
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
-                queue.recoverQueue(OpenFile.FileName);
+                queue.LoadQueueFromFile(OpenFile.FileName);
             updateUIElements();
         }
         private void mnu_readd_Click(object sender, EventArgs e)
         {
-            if (queue.lastQueueItem != null)
+            if (!queue.LastEncode.IsEmpty)
             {
-                queue.add(queue.lastQueueItem.Query, queue.lastQueueItem.Source, queue.lastQueueItem.Destination);
+                queue.AddJob(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination);
                 updateUIElements();
             }
         }

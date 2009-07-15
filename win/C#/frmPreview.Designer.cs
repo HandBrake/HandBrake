@@ -68,7 +68,7 @@
             // 
             this.lbl_preview.BackColor = System.Drawing.Color.Transparent;
             this.lbl_preview.Name = "lbl_preview";
-            this.lbl_preview.Size = new System.Drawing.Size(89, 22);
+            this.lbl_preview.Size = new System.Drawing.Size(91, 22);
             this.lbl_preview.Text = "Start at Preview:";
             // 
             // cb_preview
@@ -95,7 +95,7 @@
             // 
             this.toolStripLabel2.BackColor = System.Drawing.Color.Transparent;
             this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(98, 22);
+            this.toolStripLabel2.Size = new System.Drawing.Size(107, 22);
             this.toolStripLabel2.Text = "Duration (seconds)";
             // 
             // cb_duration
@@ -127,7 +127,7 @@
             this.btn_playQT.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_playQT.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_playQT.Name = "btn_playQT";
-            this.btn_playQT.Size = new System.Drawing.Size(89, 22);
+            this.btn_playQT.Size = new System.Drawing.Size(96, 22);
             this.btn_playQT.Text = "Play with QT";
             this.btn_playQT.Click += new System.EventHandler(this.btn_playQT_Click);
             // 
@@ -137,7 +137,7 @@
             this.btn_playVLC.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_playVLC.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_playVLC.Name = "btn_playVLC";
-            this.btn_playVLC.Size = new System.Drawing.Size(93, 22);
+            this.btn_playVLC.Size = new System.Drawing.Size(101, 22);
             this.btn_playVLC.Text = "Play with VLC";
             this.btn_playVLC.Click += new System.EventHandler(this.btn_playVLC_Click);
             // 
@@ -183,6 +183,7 @@
             this.ClientSize = new System.Drawing.Size(772, 506);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolBar);
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmPreview";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

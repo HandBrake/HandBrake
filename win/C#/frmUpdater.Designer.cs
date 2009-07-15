@@ -63,20 +63,19 @@ namespace Handbrake
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(82, 12);
+            this.label1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(84, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(305, 16);
+            this.label1.Size = new System.Drawing.Size(273, 16);
             this.label1.TabIndex = 25;
             this.label1.Text = "A New Version of Handbrake is available!";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(82, 49);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(208, 13);
+            this.label6.Size = new System.Drawing.Size(175, 13);
             this.label6.TabIndex = 30;
             this.label6.Text = "Would you like to download it now?";
             // 
@@ -131,10 +130,10 @@ namespace Handbrake
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(82, 84);
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(84, 87);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(103, 13);
+            this.label3.Size = new System.Drawing.Size(90, 13);
             this.label3.TabIndex = 57;
             this.label3.Text = "Release Notes:";
             // 
@@ -151,10 +150,9 @@ namespace Handbrake
             // lbl_update_text
             // 
             this.lbl_update_text.AutoSize = true;
-            this.lbl_update_text.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_update_text.Location = new System.Drawing.Point(82, 34);
+            this.lbl_update_text.Location = new System.Drawing.Point(84, 36);
             this.lbl_update_text.Name = "lbl_update_text";
-            this.lbl_update_text.Size = new System.Drawing.Size(489, 13);
+            this.lbl_update_text.Size = new System.Drawing.Size(409, 13);
             this.lbl_update_text.TabIndex = 58;
             this.lbl_update_text.Text = "HandBrake {0.0.0} (000000000) is now available. (You have: {0.0.0} (000000000))";
             // 

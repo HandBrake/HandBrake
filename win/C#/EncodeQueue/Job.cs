@@ -6,26 +6,34 @@
 
 namespace Handbrake.EncodeQueue
 {
-    public class Job
+    public struct Job
     {
         /// <summary>
-        /// Get or Set the job id.
+        /// Gets or sets the job ID.
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// Get or Set the query string.
+        /// Gets or sets the query string.
         /// </summary>
         public string Query { get; set; }
 
         /// <summary>
-        /// Get or set the source file of encoding
+        /// Gets or sets the source file of encoding.
         /// </summary>
         public string Source { get; set; }
 
         /// <summary>
-        /// Get or set the destination for the file to be encoded.
+        /// Gets or sets the destination for the file to be encoded.
         /// </summary>
         public string Destination { get; set; }
+
+        /// <summary>
+        /// Gets whether or not this instance is empty.
+        /// </summary>
+        public bool IsEmpty
+        {
+            get { return Id == 0 && string.IsNullOrEmpty(Query) && string.IsNullOrEmpty(Source) && string.IsNullOrEmpty(Destination); }
+        }
     }
 }
