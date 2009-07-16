@@ -646,7 +646,7 @@ resolve_drive_name(gchar *filename)
 }
 
 static gboolean
-update_source_label(signal_user_data_t *ud, const gchar *source)
+update_source_label(signal_user_data_t *ud, const gchar *source, gboolean update_dest)
 {
 	gchar *label = NULL;
 	gint len;
@@ -727,7 +727,8 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
 		gtk_label_set_text (GTK_LABEL(widget), label);
 		ghb_settings_set_string(ud->settings, "volume_label", label);
 		g_free(label);
-		set_destination(ud);
+		if (update_dest)
+			set_destination(ud);
 	}
 	else
 	{
@@ -904,7 +905,7 @@ ghb_do_scan(
 	{
 		last_scan_file = g_strdup(filename);
 		ghb_settings_set_string(ud->settings, "source", filename);
-		if (update_source_label(ud, filename))
+		if (update_source_label(ud, filename, TRUE))
 		{
 			gchar *path;
 			gint preview_count;
@@ -2320,7 +2321,7 @@ ghb_backend_events(signal_user_data_t *ud)
 		GtkLabel *label;
 
 		source = ghb_settings_get_string(ud->settings, "source");
-		update_source_label(ud, source);
+		update_source_label(ud, source, FALSE);
 
 		scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
 		gtk_progress_bar_set_fraction (scan_prog, 1.0);
@@ -3355,7 +3356,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 				strcmp(device, ud->current_dvd_device) == 0)
 			{
 				show_scan_progress(ud);
-				update_source_label(ud, device);
+				update_source_label(ud, device, TRUE);
 				gint preview_count;
 				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
 				ghb_backend_scan(device, 0, preview_count);
@@ -3455,7 +3456,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	if (g_drive_has_media(gd))
 	{
 		show_scan_progress(ud);
-		update_source_label(ud, device);
+		update_source_label(ud, device, TRUE);
 		gint preview_count;
 		preview_count = ghb_settings_get_int(ud->settings, "preview_count");
 		ghb_backend_scan(device, 0, preview_count);
