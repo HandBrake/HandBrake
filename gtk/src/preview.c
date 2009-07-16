@@ -714,9 +714,14 @@ ghb_set_preview_image(signal_user_data_t *ud)
 	g_free(text);
 	
 	g_debug("preview %d x %d", preview_width, preview_height);
-	target_height = MIN(ud->preview->button_height, 128);
+	target_height = MIN(ud->preview->button_height, 200);
 	height = target_height;
 	width = preview_width * height / preview_height;
+	if (width > 400)
+	{
+		width = 400;
+		height = preview_height * width / preview_width;
+	}
 
 	if ((height >= 16) && (width >= 16))
 	{

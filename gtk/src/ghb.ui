@@ -1514,26 +1514,19 @@
                     <child>
                       <object class="GtkAlignment" id="alignment56">
                         <property name="visible">True</property>
-                        <property name="right_padding">10</property>
+                        <property name="right_padding">12</property>
+                        <property name="top_padding">12</property>
 
                     <child>
                       <object class="GtkVBox" id="vbox9">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <child>
-                          <object class="GtkLabel" id="label73">
-                            <property name="visible">True</property>
-                          </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
 
                         <child>
                           <object class="GtkFrame" id="frame8">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
-                            <property name="shadow_type">etched-in</property>
+                            <property name="shadow_type">none</property>
                             <child>
                               <object class="GtkAlignment" id="alignment19">
                                 <property name="visible">True</property>
@@ -1542,8 +1535,8 @@
                                 <property name="right_padding">4</property>
                                 <child>
                                   <object class="GtkImage" id="preview_button_image">
-                                    <property name="width_request">240</property>
-                                    <property name="height_request">120</property>
+                                    <property name="width_request">400</property>
+                                    <property name="height_request">200</property>
                                     <property name="visible">True</property>
                                     <property name="icon_name">hb-icon</property>
                                     <property name="icon-size">6</property>
@@ -1552,13 +1545,6 @@
                                 </child>
                               </object>
                             </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label21">
-                                <property name="visible">True</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                            </child>
-
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1567,6 +1553,11 @@
                           </packing>
                         </child>
 
+                    <child>
+                      <object class="GtkAlignment" id="alignment57">
+                        <property name="visible">True</property>
+                        <property name="xscale">0</property>
+                        <property name="yscale">0</property>
                         <child>
                           <object class="GtkHBox" id="hbox7">
                             <property name="visible">True</property>
@@ -1578,7 +1569,7 @@
                                 <property name="justify">right</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -1591,26 +1582,22 @@
                                 <property name="label" translatable="yes">--</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
 
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">2</property>
-                          </packing>
                         </child>
-                        <child>
-                          <object class="GtkLabel" id="label8">
-                            <property name="visible">True</property>
-                          </object>
-                          <packing>
-                            <property name="position">3</property>
-                          </packing>
-                        </child>
+
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+
                       </object>
                     </child>
 
