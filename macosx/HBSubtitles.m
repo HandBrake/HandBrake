@@ -783,17 +783,7 @@ container = newContainer;
         
         if ([[aTableColumn identifier] isEqualToString:@"forced"])
         {
-            if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
-            {
-            [aCell setState:0];
-            [[subtitleArray objectAtIndex:rowIndex] setObject:0 forKey:@"subtitleTrackForced"];
-            [aCell setEnabled:NO]; 
-            }
-            else
-            {
-            [aCell setEnabled:YES];
             [aCell setState:[[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleTrackForced"] intValue]];
-            }
         }
         else if ([[aTableColumn identifier] isEqualToString:@"burned"])
         {
