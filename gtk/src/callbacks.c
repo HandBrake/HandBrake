@@ -2628,7 +2628,7 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 	signal_user_data_t *ud = (signal_user_data_t*)data;
 
 	status = g_io_channel_read_line (source, &text, &length, NULL, &gerror);
-	if (text != NULL)
+	if (text != NULL && length > 0 && text[length-1] != 0)
 	{
 		GdkWindow *window;
 		gint width, height;
