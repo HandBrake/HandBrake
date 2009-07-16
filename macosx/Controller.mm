@@ -2924,6 +2924,24 @@ bool one_burned = FALSE;
                 
                 subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
                 
+                /* if we are getting the subtitles from an external srt file */
+                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
+                {
+                    hb_subtitle_config_t sub_config;
+                    
+                    sub_config.offset = [[tempObject objectForKey:@"subtitleTrackSrtOffset"] intValue];
+                    
+                    /* we need to srncpy file path and char code */
+                    strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 128);
+                    strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 40);
+                    
+                    sub_config.force = 0;
+                    sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    sub_config.default_track = def;
+                    
+                    hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
+                }
+                
                 if (subt != NULL)
                 {
                     [self writeToActivityLog: "Setting Subtitle: %s", subt];
@@ -3439,6 +3457,27 @@ bool one_burned = FALSE;
                 hb_subtitle_t * subt;
                 
                 subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
+                
+                /* if we are getting the subtitles from an external srt file */
+                if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
+                {
+                    hb_subtitle_config_t sub_config;
+                    
+                    sub_config.offset = [[tempObject objectForKey:@"subtitleTrackSrtOffset"] intValue];
+                    
+                    /* we need to srncpy file name and codeset */
+                    //sub_config.src_filename = [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String];
+                    strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 128);
+                    //sub_config.src_codeset = [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String];
+                    strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 40);
+                    
+                    sub_config.force = 0;
+                    sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    sub_config.default_track = def;
+                    
+                    hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
+                }
+                
                 
                 if (subt != NULL)
                 {
@@ -5660,6 +5699,51 @@ the user is using "Custom" settings by determining the sender*/
     //[self customSettingUsed: sender];
 }
 
+#pragma mark -
+
+- (IBAction) browseImportSrtFile: (id) sender
+{
+
+    NSOpenPanel * panel;
+	
+    panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection: NO];
+    [panel setCanChooseFiles: YES];
+    [panel setCanChooseDirectories: NO ];
+    NSString * sourceDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSrtImportDirectory"])
+	{
+		sourceDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSrtImportDirectory"];
+	}
+	else
+	{
+		sourceDirectory = @"~/Desktop";
+		sourceDirectory = [sourceDirectory stringByExpandingTildeInPath];
+	}
+    /* we open up the browse srt sheet here and call for browseImportSrtFileDone after the sheet is closed */
+    NSArray *fileTypes = [NSArray arrayWithObjects:@"plist", @"srt", nil];
+    [panel beginSheetForDirectory: sourceDirectory file: nil types: fileTypes
+                   modalForWindow: fWindow modalDelegate: self
+                   didEndSelector: @selector( browseImportSrtFileDone:returnCode:contextInfo: )
+                      contextInfo: sender];
+}
+
+- (void) browseImportSrtFileDone: (NSSavePanel *) sheet
+                     returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSOKButton )
+    {
+        NSString *importSrtDirectory = [[sheet filename] stringByDeletingLastPathComponent];
+        NSString *importSrtFilePath = [sheet filename];
+        [[NSUserDefaults standardUserDefaults] setObject:importSrtDirectory forKey:@"LastSrtImportDirectory"];
+        
+        /* now pass the string off to fSubtitlesDelegate to add the srt file to the dropdown */
+        [fSubtitlesDelegate createSubtitleSrtTrack:importSrtFilePath];
+        
+        [fSubtitlesTable reloadData];
+        
+    }
+}                                           
 
 #pragma mark -
 #pragma mark Open New Windows

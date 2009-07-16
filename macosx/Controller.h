@@ -139,7 +139,7 @@ BOOL                        fIsDragging;
     
     IBOutlet NSTableView         * fSubtitlesTable;
 	HBSubtitles                  * fSubtitlesDelegate;
-    //NSMutableArray               * subtitleArray;
+    IBOutlet NSButton            * fBrowseSrtFileButton;
     
 	
     /* Audio box */
@@ -304,10 +304,14 @@ BOOL                        fIsDragging;
                  returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 - (IBAction) videoMatrixChanged: (id) sender;
+
 - (IBAction) qualitySliderChanged: (id) sender;
 - (void) setupQualitySlider;
 
 - (IBAction) audioDRCSliderChanged: (id) sender;
+- (IBAction) browseImportSrtFile: (id) sender;
+- (void) browseImportSrtFileDone: (NSSavePanel *) sheet
+                     returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 - (IBAction) showPicturePanel: (id) sender;
 - (void) picturePanelFullScreen;

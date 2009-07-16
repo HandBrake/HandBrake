@@ -7,11 +7,20 @@
 #import <Cocoa/Cocoa.h>
 #include "hb.h"
 
+
+
+
 @interface HBSubtitles : NSObject {
 hb_title_t                   *fTitle;
 
-NSMutableArray               *subtitleArray;
+NSMutableArray               *subtitleArray; // contains the output subtitle track info
+NSMutableArray               *subtitleSourceArray;// contains the source subtitle track info
+NSMutableArray               *languagesArray; // array of languages taken from lang.c
+int                           languagesArrayDefIndex;
+NSMutableArray               *charCodeArray; // array of character codes
+int                           charCodeArrayDefIndex;
 int                           container;
+
 }
 
 // Trigger a refresh of data
@@ -21,6 +30,8 @@ int                           container;
 - (void)addSubtitleTrack;
 - (NSDictionary *)createSubtitleTrack;
 - (NSMutableArray*) getSubtitleArray: (NSMutableArray *) subtitlesArray ;
+// Add an srt file
+- (void)createSubtitleSrtTrack:(NSString *)filePath;
 
 - (void)containerChanged:(int) newContainer;
 
