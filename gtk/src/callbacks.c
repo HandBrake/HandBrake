@@ -2078,7 +2078,7 @@ ghb_update_pending(signal_user_data_t *ud)
 
 	label = GTK_LABEL(GHB_WIDGET(ud->builder, "pending_status"));
 	pending = queue_pending_count(ud->queue);
-	str = g_strdup_printf("%d encode(s) pending in the queue", pending);
+	str = g_strdup_printf("%d encode(s) pending", pending);
 	gtk_label_set_text(label, str);
 	g_free(str);
 }
