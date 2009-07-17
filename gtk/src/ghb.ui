@@ -4016,15 +4016,23 @@ no-dct-decimate=0:cabac=1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkHBox" id="hbox63">
+                          <object class="GtkAlignment" id="alignment61">
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="spacing">4</property>
+                            <property name="yscale">0</property>
+                            <property name="left_padding">12</property>
+                            <property name="top_padding">6</property>
+                            <property name="bottom_padding">6</property>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
+                              <object class="GtkCheckButton" id="AddCC">
+                                <property name="label" translatable="yes">Add Closed Captions when available</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="active">False</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="pref_changed_cb"/>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -4040,7 +4048,7 @@ no-dct-decimate=0:cabac=1</property>
                     <child type="tab">
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Audio</property>
+                        <property name="label" translatable="yes">Audio/Subtitles</property>
                       </object>
                       <packing>
                         <property name="position">1</property>

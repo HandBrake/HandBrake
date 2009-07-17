@@ -31,6 +31,7 @@
 #include "settings.h"
 #include "callbacks.h"
 #include "subtitlehandler.h"
+#include "audiohandler.h"
 #include "x264handler.h"
 #include "preview.h"
 #include "values.h"
@@ -1162,6 +1163,42 @@ done:
 	return name;
 }
 
+gchar*
+ghb_subtitle_track_lang(signal_user_data_t *ud, gint track)
+{
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	if (titleindex < 0)
+		goto fail;
+	if (track == -1)
+		return ghb_get_user_audio_lang(ud, titleindex, 0);
+	if (track < 0)
+		goto fail;
+
+	hb_list_t  * list;
+	hb_title_t * title;
+	hb_subtitle_t * sub;
+	
+	if (h_scan == NULL)
+		goto fail;
+
+	list = hb_get_titles( h_scan );
+	if( !hb_list_count( list ) )
+	{
+		/* No valid title, stop right there */
+		goto fail;
+	}
+	title = hb_list_item( list, titleindex );
+	if (title == NULL) 	// Bad titleindex
+		goto fail;
+	sub = hb_list_item( title->list_subtitle, track);
+	if (sub != NULL)
+	   	return g_strdup(sub->iso639_2);
+
+fail:
+	return g_strdup("und");
+}
 
 gint
 ghb_get_title_number(gint titleindex)
@@ -2107,6 +2144,32 @@ ghb_find_pref_subtitle_track(const gchar *lang)
 		if (strcmp(lang, subtitle_opts.map[ii].svalue) == 0)
 		{
 			return subtitle_opts.map[ii].ivalue;
+		}
+	}
+	return -2;
+}
+
+gint
+ghb_find_cc_track(gint titleindex)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+	hb_subtitle_t * subtitle;
+	gint count, ii;
+	
+	g_debug("ghb_find_cc_track ()\n");
+	if (h_scan == NULL) return -2;
+	list = hb_get_titles( h_scan );
+	title = (hb_title_t*)hb_list_item( list, titleindex );
+	if (title != NULL)
+	{
+		count = hb_list_count( title->list_subtitle );
+		// Try to find an item that matches the preferred language
+		for (ii = 0; ii < count; ii++)
+		{
+       		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
+			if (subtitle->source == CC608SUB || subtitle->source == CC708SUB)
+				return ii;
 		}
 	}
 	return -2;

@@ -264,6 +264,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 	gchar *lang, *pref_lang = NULL;
 	gchar *audio_lang;
 	gint foreign_lang_index = -1;
+	gboolean found_cc = FALSE;
 
 	const GValue *pref_subtitle;
 	GValue *subtitle;
@@ -313,9 +314,12 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each language.
 		track = ghb_find_subtitle_track(titleindex, lang, track_indices);
+		g_free(lang);
 		if (track >= -1)
 		{
+			gint source;
 			GValue *dup = ghb_value_dup(subtitle);
+			lang = ghb_subtitle_track_lang(ud, track);
 			ghb_settings_set_int(dup, "SubtitleTrack", track);
 			if (foreign_lang_index < 0 && pref_lang != NULL &&
 				strcmp(lang, pref_lang) == 0)
@@ -326,6 +330,9 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 				ghb_settings_take_value(dup, "SubtitleDefaultTrack", 
 								ghb_boolean_value_new(TRUE));
 			}
+			source = ghb_subtitle_track_source(ud, track);
+			if (source == CC608SUB || source == CC708SUB)
+				found_cc = TRUE;
 			ghb_add_subtitle(ud, dup);
 			jj++;
 		}
@@ -333,6 +340,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 	}
 	if (foreign_lang_index < 0 && pref_lang != NULL)
 	{
+		// Subtitle for foreign language audio not added yet
 		GValue *settings;
 		gboolean burn;
 
@@ -368,6 +376,27 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		if (def)
 			ghb_subtitle_exclusive_default(ud, foreign_lang_index);
 		ghb_log("adding subtitle for foreign language audio: %s", audio_lang);
+	}
+	if (ghb_settings_get_boolean(ud->settings, "AddCC") && !found_cc)
+	{
+		// Subtitle for foreign language audio not added yet
+		GValue *settings;
+
+		track = ghb_find_cc_track(titleindex);
+		if (track >= 0)
+		{
+			settings = ghb_dict_value_new();
+			ghb_settings_set_int(settings, "SubtitleTrack", track);
+			ghb_settings_take_value(settings, "SubtitleForced", 
+							ghb_boolean_value_new(FALSE));
+			ghb_settings_take_value(settings, "SubtitleBurned", 
+							ghb_boolean_value_new(FALSE));
+			ghb_settings_take_value(settings, "SubtitleDefaultTrack", 
+							ghb_boolean_value_new(FALSE));
+
+			ghb_add_subtitle(ud, settings);
+			ghb_log("adding Closed Captions: %s", audio_lang);
+		}
 	}
 	if (pref_lang != NULL)
 		g_free(pref_lang);

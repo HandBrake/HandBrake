@@ -105,6 +105,8 @@
 	</dict>
 	<key>Preferences</key>
 	<dict>
+		<key>AddCC</key>
+		<false />
 		<key>EncodeLogLocation</key>
 		<false />
 		<key>show_status</key>
