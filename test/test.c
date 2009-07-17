@@ -76,6 +76,7 @@ static char ** srtfile     = NULL;
 static char ** srtcodeset  = NULL;
 static char ** srtoffset   = NULL;
 static char ** srtlang     = NULL;
+static int     srtdefault  = -1;
 static int    subtitle_scan = 0;
 static int    width       = 0;
 static int    height      = 0;
@@ -1821,8 +1822,9 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         lang = srtlang[i];
                     }
+                    sub_config.default_track = 
+                           ( srtdefault != -1 ) && ( srtdefault == i + 1 );
                     sub_config.force = 0;
-                    sub_config.default_track = 0;
                     strncpy( sub_config.src_filename, srtfile[i], 128);
                     strncpy( sub_config.src_codeset, codeset, 40);
                     sub_config.offset = offset;
@@ -2345,7 +2347,7 @@ static void ShowHelp()
     "        --subtitle-burn     \"Burn\" the selected subtitle into the video track\n"
     "          <number>          If \"number\" is omitted, the first trac is burned.\n"
     "        --subtitle-default  Flag the selected subtitle as the default subtitle\n"
-    "          <number>          to be displayed upon playback.  Settings no default\n"
+    "          <number>          to be displayed upon playback.  Setting no default\n"
     "                            means no subtitle will be automatically displayed\n"
     "                            If \"number\" is omitted, the first trac is default.\n"
     "    -N, --native-language   Specifiy the your language preference. When the first\n"
@@ -2371,6 +2373,11 @@ static void ShowHelp()
     "        --srt-lang <string> Language as an iso639-2 code fra, eng, spa et cetera)\n"
     "                            for the SRT file(s) separated by commas. If not specified\n"
     "                            then 'und' is used.\n"
+    "        --srt-default       Flag the selected srt as the default subtitle\n"
+    "          <number>          to be displayed upon playback.  Setting no default\n"
+    "                            means no subtitle will be automatically displayed\n"
+    "                            If \"number\" is omitted, the first srt is default.\n"
+    "                            \"number\" is an 1 based index into the srt-file list\n"
     "\n"
 
 
@@ -2485,6 +2492,7 @@ static int ParseOptions( int argc, char ** argv )
     #define SRT_CODESET         270
     #define SRT_OFFSET          271
     #define SRT_LANG            272
+    #define SRT_DEFAULT         273
     
     for( ;; )
     {
@@ -2519,6 +2527,7 @@ static int ParseOptions( int argc, char ** argv )
             { "srt-codeset", required_argument, NULL, SRT_CODESET },
             { "srt-offset",  required_argument, NULL, SRT_OFFSET },
             { "srt-lang",    required_argument, NULL, SRT_LANG },
+            { "srt-default",    optional_argument, NULL, SRT_DEFAULT },
             { "native-language", required_argument, NULL,'N' },
             { "native-dub",  no_argument,       NULL,    NATIVE_DUB },
             { "encoder",     required_argument, NULL,    'e' },
@@ -2749,6 +2758,16 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case SRT_LANG:
                 srtlang = str_split( optarg, ',' );
+                break;
+            case SRT_DEFAULT:
+                if( optarg != NULL )
+                {
+                    srtdefault = atoi( optarg );
+                }
+                else
+                {
+                    srtdefault = 1 ;
+                }
                 break;
             case '2':
                 twoPass = 1;
