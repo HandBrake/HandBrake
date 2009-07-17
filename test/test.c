@@ -410,12 +410,19 @@ static void PrintTitleInfo( hb_title_t * title )
         audio = hb_list_audio_config_item( title->list_audio, i );
         if( ( audio->in.codec == HB_ACODEC_AC3 ) || ( audio->in.codec == HB_ACODEC_DCA) )
         {
-            fprintf( stderr, "    + %d, %s, %dHz, %dbps\n", i + 1,
-                     audio->lang.description, audio->in.samplerate, audio->in.bitrate );
+            fprintf( stderr, "    + %d, %s (iso639-2: %s), %dHz, %dbps\n", 
+                     i + 1,
+                     audio->lang.description, 
+                     audio->lang.iso639_2,
+                     audio->in.samplerate, 
+                     audio->in.bitrate );
         }
         else
         {
-            fprintf( stderr, "    + %d, %s\n", i + 1, audio->lang.description );
+            fprintf( stderr, "    + %d, %s (iso639-2: %s)\n", 
+                     i + 1, 
+                     audio->lang.iso639_2,
+                     audio->lang.description );
         }
     }
     fprintf( stderr, "  + subtitle tracks:\n" );
