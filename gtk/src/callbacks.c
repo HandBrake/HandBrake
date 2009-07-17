@@ -2618,7 +2618,7 @@ G_MODULE_EXPORT gboolean
 ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 {
 	gchar *text = NULL;
-	gsize length;
+	gsize length, outlength;
 	GtkTextView *textview;
 	GtkTextBuffer *buffer;
 	GtkTextIter iter;
@@ -2629,7 +2629,11 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 	signal_user_data_t *ud = (signal_user_data_t*)data;
 
 	status = g_io_channel_read_line (source, &text, &length, NULL, &gerror);
-	if (text != NULL && length > 0 && text[length-1] != 0)
+	// Trim nils from end of text, they cause g_io_channel_write_chars to
+	// fail with an assertion that aborts
+	while (length > 0 && text[length-1] == 0)
+		length--;
+	if (text != NULL && length > 0)
 	{
 		GdkWindow *window;
 		gint width, height;
@@ -2673,7 +2677,7 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 		text[length-1] = '\r';
 #endif
 		g_io_channel_write_chars (ud->activity_log, text, 
-								length, &length, NULL);
+								length, &outlength, NULL);
 #if defined(_WIN32)
 		g_io_channel_write_chars (ud->activity_log, "\n", 
 								one, &one, NULL);
@@ -2682,15 +2686,17 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 		if (ud->job_activity_log)
 		{
 			g_io_channel_write_chars (ud->job_activity_log, text, 
-									length, &length, NULL);
+									length, &outlength, NULL);
 #if defined(_WIN32)
 			g_io_channel_write_chars (ud->activity_log, "\n", 
-									one, &one, NULL);
+									one, &outlength, NULL);
 #endif
 			g_io_channel_flush(ud->job_activity_log, NULL);
 		}
-		g_free(text);
 	}
+	if (text != NULL)
+		g_free(text);
+
 	if (status != G_IO_STATUS_NORMAL)
 	{
 		// This should never happen, but if it does I would get into an
