@@ -290,7 +290,7 @@
                 if (subtitle->format == PICTURESUB)
                 {
                     trackTypeString = @"- (Bitmap)";
-                    isPictureSub = 0;
+                    isPictureSub = 1;
                 }
                 else
                 {
