@@ -37,7 +37,6 @@ namespace Handbrake.Presets
                 updateUserPresetsFile();
                 return true;
             }
-            MessageBox.Show("Sorry, that preset name already exists. Please choose another!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
 

@@ -37,6 +37,10 @@ namespace Handbrake
 
                 //frmMainWindow.loadPresetPanel();
                 this.Close();
+            } 
+            else
+            {
+                MessageBox.Show("Sorry, that preset name already exists. Please choose another!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

@@ -65,6 +65,7 @@
             this.srt_lang = new System.Windows.Forms.ComboBox();
             this.btn_srtAdd = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.check_default_srt = new System.Windows.Forms.CheckBox();
             this.SubTitlesGroup.SuspendLayout();
             this.subMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -311,6 +312,7 @@
             // SRTGroup
             // 
             this.SRTGroup.BackColor = System.Drawing.Color.Transparent;
+            this.SRTGroup.Controls.Add(this.check_default_srt);
             this.SRTGroup.Controls.Add(this.srt_offset);
             this.SRTGroup.Controls.Add(this.label5);
             this.SRTGroup.Controls.Add(this.srt_browse);
@@ -338,7 +340,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(486, 23);
+            this.label5.Location = new System.Drawing.Point(555, 23);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(27, 13);
             this.label5.TabIndex = 78;
@@ -349,9 +351,9 @@
             this.srt_browse.BackColor = System.Drawing.Color.Transparent;
             this.srt_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.srt_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.srt_browse.Location = new System.Drawing.Point(519, 18);
+            this.srt_browse.Location = new System.Drawing.Point(588, 18);
             this.srt_browse.Name = "srt_browse";
-            this.srt_browse.Size = new System.Drawing.Size(111, 23);
+            this.srt_browse.Size = new System.Drawing.Size(67, 23);
             this.srt_browse.TabIndex = 77;
             this.srt_browse.Text = "Browse";
             this.srt_browse.UseVisualStyleBackColor = false;
@@ -454,6 +456,17 @@
             this.openFileDialog.DefaultExt = "srt";
             this.openFileDialog.Filter = "SRT Files |*.srt";
             // 
+            // check_default_srt
+            // 
+            this.check_default_srt.AutoSize = true;
+            this.check_default_srt.Location = new System.Drawing.Point(470, 22);
+            this.check_default_srt.Name = "check_default_srt";
+            this.check_default_srt.Size = new System.Drawing.Size(61, 17);
+            this.check_default_srt.TabIndex = 80;
+            this.check_default_srt.Text = "Default";
+            this.check_default_srt.UseVisualStyleBackColor = true;
+            this.check_default_srt.CheckedChanged += new System.EventHandler(this.check_default_srt_CheckedChanged);
+            // 
             // Subtitles
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -519,5 +532,6 @@
         internal System.Windows.Forms.ComboBox srt_lang;
         private System.Windows.Forms.NumericUpDown srt_offset;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.CheckBox check_default_srt;
     }
 }

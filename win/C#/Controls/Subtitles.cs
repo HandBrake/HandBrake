@@ -103,12 +103,19 @@ namespace Handbrake.Controls
         }
         private void btn_srtAdd_Click(object sender, EventArgs e)
         {
+            string defaultSub = "No";
+            if (check_default_srt.Checked)
+            {
+                defaultSub = "Yes";
+                setNoDefault();
+            }
+
             ListViewItem newTrack = new ListViewItem(getNewID().ToString());
 
             newTrack.SubItems.Add(srt_lang.SelectedItem + ", (" + srt_charcode.SelectedItem + ")");
             newTrack.SubItems.Add("No");
             newTrack.SubItems.Add("No");
-            newTrack.SubItems.Add("No");
+            newTrack.SubItems.Add(defaultSub);
             if (openFileDialog.FileName != null)
                 newTrack.SubItems.Add(openFileDialog.FileName);
             else
@@ -138,6 +145,8 @@ namespace Handbrake.Controls
                     int.TryParse(lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[6].Text, out offsetVal);
                     srt_offset.Value = offsetVal;
 
+                    check_default_srt.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[4].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;
+
                     SRTGroup.Text = "Selected Track: " + lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
                     SubTitlesGroup.Text = "Selected Track: None";
                 }
@@ -154,7 +163,7 @@ namespace Handbrake.Controls
                     drp_subtitleTracks.SelectedItem = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1];
 
                     check_forced.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[2].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;
-                    check_burned.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;  
+                    check_burned.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;
                     check_default.CheckState = lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[4].Text == "Yes" ? CheckState.Checked : CheckState.Unchecked;
 
                     SubTitlesGroup.Text = "Selected Track: " + lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text;
@@ -208,6 +217,18 @@ namespace Handbrake.Controls
                     setNoDefault();
 
                 lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[4].Text = check_default.Checked ? "Yes" : "No";
+                lv_subList.Select();
+            }
+        }
+        private void check_default_srt_CheckedChanged(object sender, EventArgs e)
+        {
+            // Update an item in the  list if required.
+            if (lv_subList.Items.Count != 0 && lv_subList.SelectedIndices.Count != 0)
+            {
+                if (check_default_srt.Checked) // Make sure we only have 1 default track
+                    setNoDefault();
+
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[4].Text = check_default_srt.Checked ? "Yes" : "No";
                 lv_subList.Select();
             }
         }

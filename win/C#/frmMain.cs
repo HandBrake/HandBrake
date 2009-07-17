@@ -373,7 +373,28 @@ namespace Handbrake
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 QueryParser parsed = imp.importMacPreset(openPreset.FileName);
-                PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                if (presetHandler.checkIfUserPresetExists(parsed.PresetName + " (Imported)"))
+                {
+                    DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?", 
+                                                           MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.generateTheQuery(this),
+                                                   parsed.UsesPictureSettings);
+                    }
+                }
+                else
+                {
+                    PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                    presetHandler.addPreset(parsed.PresetName, queryGen.generateTheQuery(this), parsed.UsesPictureSettings);
+
+                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.generateTheQuery(this), parsed.UsesPictureSettings))
+                    {
+                        TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
+                        treeView_presets.Nodes.Add(preset_treeview);
+                    }
+                }
             }
         }
         private void btn_new_preset_Click(object sender, EventArgs e)

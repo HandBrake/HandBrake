@@ -28,7 +28,7 @@ namespace Handbrake.Functions
                 if (mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
                     query = " -i " + '"' + mainWindow.sourcePath + '"';
 
-            if (mainWindow.drp_dvdtitle.Text != "Automatic")
+            if (mainWindow.drp_dvdtitle.Text != "")
             {
                 string[] titleInfo = mainWindow.drp_dvdtitle.Text.Split(' ');
                 query += " -t " + titleInfo[0];
@@ -38,11 +38,11 @@ namespace Handbrake.Functions
                 if (mainWindow.drop_angle.Items.Count != 0)
                     query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
-            if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "Auto")
+            if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "")
                 query += " -c " + mainWindow.drop_chapterStart.Text;
             else if (mainWindow.drop_chapterStart.Text == "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
                 query += " -c " + "0-" + mainWindow.drop_chapterFinish.Text;
-            else if (mainWindow.drop_chapterStart.Text != "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
+            else if (mainWindow.drop_chapterStart.Text != "Auto" && mainWindow.drop_chapterFinish.Text != "Auto" && mainWindow.drop_chapterStart.Text != "")
                 query += " -c " + mainWindow.drop_chapterStart.Text + "-" + mainWindow.drop_chapterFinish.Text;
 
             // Destination tab
@@ -398,7 +398,9 @@ namespace Handbrake.Functions
                 string srtFile = String.Empty; 
                 string srtCodeset = String.Empty;
                 string srtOffset = String.Empty; 
-                string srtLang = String.Empty; 
+                string srtLang = String.Empty;
+                string srtDefault = String.Empty;
+                int srtCount = 0;
 
                 foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
                 {
@@ -406,6 +408,7 @@ namespace Handbrake.Functions
 
                     if (item.SubItems.Count != 5) // We have an SRT file
                     {
+                        srtCount++; // SRT track id.
                         string[] trackData = item.SubItems[1].Text.Split(',');
                         if (trackData != null)
                         {
@@ -415,7 +418,9 @@ namespace Handbrake.Functions
                             srtLang += srtLang == "" ? realLangCode : "," + realLangCode;
                             srtCodeset += srtCodeset == "" ? charCode : "," + charCode;
                         }
-
+                        if (item.SubItems[4].Text == "Yes") // default
+                            srtDefault = srtCount.ToString();
+                            
                         itemToAdd = item.SubItems[5].Text;
                         srtFile += srtFile == "" ? itemToAdd : "," + itemToAdd;
 
@@ -486,6 +491,8 @@ namespace Handbrake.Functions
                         query += " --srt-offset " + srtOffset;
                     if (srtLang != "")
                         query += " --srt-lang " + srtLang;
+                    if (srtDefault != "")
+                        query += " --subtitle-default " + srtDefault;
                 }
 
             }
