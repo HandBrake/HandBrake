@@ -1905,7 +1905,14 @@ export_lang_xlat2(GValue *lin_val)
 	{
 		if (strcmp(str, ghb_language_table[ii].iso639_2) == 0)
 		{
-			gval = ghb_string_value_new(ghb_language_table[ii].eng_name);
+			const gchar *lang;
+
+			if (ghb_language_table[ii].native_name[0] != 0)
+				lang = ghb_language_table[ii].native_name;
+			else
+				lang = ghb_language_table[ii].eng_name;
+
+			gval = ghb_string_value_new(lang);
 			g_free(str);
 			return gval;
 		}
@@ -1951,7 +1958,8 @@ import_lang_xlat2(GValue *mac_val)
 	str = ghb_value_string(mac_val);
 	for (ii = 0; ghb_language_table[ii].eng_name; ii++)
 	{
-		if (strcmp(str, ghb_language_table[ii].eng_name) == 0)
+		if ((strcmp(str, ghb_language_table[ii].eng_name) == 0) ||
+			(strcmp(str, ghb_language_table[ii].native_name) == 0))
 		{
 			gval = ghb_string_value_new(ghb_language_table[ii].iso639_2);
 			g_free(str);

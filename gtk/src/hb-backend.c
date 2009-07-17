@@ -475,21 +475,20 @@ const iso639_lang_t ghb_language_table[] =
 	{ "Cree", "", "cr", "cre" },
 	{ "Czech", "", "cs", "ces", "cze" },
 	{ "Danish", "Dansk", "da", "dan" },
+	{ "German", "Deutsch", "de", "deu", "ger" },
 	{ "Divehi", "", "dv", "div" },
-	{ "Dutch", "Nederlands", "nl", "nld", "dut" },
 	{ "Dzongkha", "", "dz", "dzo" },
 	{ "English", "English", "en", "eng" },
+	{ "Spanish", "Espanol", "es", "spa" },
 	{ "Esperanto", "", "eo", "epo" },
 	{ "Estonian", "", "et", "est" },
 	{ "Ewe", "", "ee", "ewe" },
 	{ "Faroese", "", "fo", "fao" },
 	{ "Fijian", "", "fj", "fij" },
-	{ "Finnish", "Suomi", "fi", "fin" },
 	{ "French", "Francais", "fr", "fra", "fre" },
 	{ "Western Frisian", "", "fy", "fry" },
 	{ "Fulah", "", "ff", "ful" },
 	{ "Georgian", "", "ka", "kat", "geo" },
-	{ "German", "Deutsch", "de", "deu", "ger" },
 	{ "Gaelic (Scots)", "", "gd", "gla" },
 	{ "Irish", "", "ga", "gle" },
 	{ "Galician", "", "gl", "glg" },
@@ -503,10 +502,10 @@ const iso639_lang_t ghb_language_table[] =
 	{ "Herero", "", "hz", "her" },
 	{ "Hindi", "", "hi", "hin" },
 	{ "Hiri Motu", "", "ho", "hmo" },
-	{ "Hungarian", "Magyar", "hu", "hun" },
+	{ "Croatian", "Hrvatski", "hr", "hrv", "scr" },
 	{ "Igbo", "", "ig", "ibo" },
-	{ "Icelandic", "Islenska", "is", "isl", "ice" },
 	{ "Ido", "", "io", "ido" },
+	{ "Icelandic", "Islenska", "is", "isl", "ice" },
 	{ "Sichuan Yi", "", "ii", "iii" },
 	{ "Inuktitut", "", "iu", "iku" },
 	{ "Interlingue", "", "ie", "ile" },
@@ -540,6 +539,7 @@ const iso639_lang_t ghb_language_table[] =
 	{ "Luba-Katanga", "", "lu", "lub" },
 	{ "Ganda", "", "lg", "lug" },
 	{ "Macedonian", "", "mk", "mkd", "mac" },
+	{ "Hungarian", "Magyar", "hu", "hun" },
 	{ "Marshallese", "", "mh", "mah" },
 	{ "Malayalam", "", "ml", "mal" },
 	{ "Maori", "", "mi", "mri", "mao" },
@@ -551,13 +551,14 @@ const iso639_lang_t ghb_language_table[] =
 	{ "Mongolian", "", "mn", "mon" },
 	{ "Nauru", "", "na", "nau" },
 	{ "Navajo", "", "nv", "nav" },
+	{ "Dutch", "Nederlands", "nl", "nld", "dut" },
 	{ "Ndebele, South", "", "nr", "nbl" },
 	{ "Ndebele, North", "", "nd", "nde" },
 	{ "Ndonga", "", "ng", "ndo" },
 	{ "Nepali", "", "ne", "nep" },
+	{ "Norwegian", "Norsk", "no", "nor" },
 	{ "Norwegian Nynorsk", "", "nn", "nno" },
 	{ "Norwegian Bokmål", "", "nb", "nob" },
-	{ "Norwegian", "Norsk", "no", "nor" },
 	{ "Chichewa; Nyanja", "", "ny", "nya" },
 	{ "Occitan", "", "oc", "oci" },
 	{ "Ojibwa", "", "oj", "oji" },
@@ -578,7 +579,6 @@ const iso639_lang_t ghb_language_table[] =
 	{ "Sango", "", "sg", "sag" },
 	{ "Sanskrit", "", "sa", "san" },
 	{ "Serbian", "", "sr", "srp", "scc" },
-	{ "Croatian", "Hrvatski", "hr", "hrv", "scr" },
 	{ "Sinhala", "", "si", "sin" },
 	{ "Slovak", "", "sk", "slk", "slo" },
 	{ "Slovenian", "", "sl", "slv" },
@@ -588,10 +588,10 @@ const iso639_lang_t ghb_language_table[] =
 	{ "Sindhi", "", "sd", "snd" },
 	{ "Somali", "", "so", "som" },
 	{ "Sotho, Southern", "", "st", "sot" },
-	{ "Spanish", "Espanol", "es", "spa" },
 	{ "Sardinian", "", "sc", "srd" },
 	{ "Swati", "", "ss", "ssw" },
 	{ "Sundanese", "", "su", "sun" },
+	{ "Finnish", "Suomi", "fi", "fin" },
 	{ "Swahili", "", "sw", "swa" },
 	{ "Swedish", "Svenska", "sv", "swe" },
 	{ "Tahitian", "", "ty", "tah" },
@@ -1005,7 +1005,10 @@ lookup_audio_lang_option(const GValue *rate)
 	{
 		if (strcmp(ghb_language_table[ii].iso639_2, str) == 0)
 		{
-			result = ghb_language_table[ii].eng_name;
+			if (ghb_language_table[ii].native_name[0] != 0)
+				result = ghb_language_table[ii].native_name;
+			else
+				result = ghb_language_table[ii].eng_name;
 			break;
 		}
 	}
@@ -1646,9 +1649,16 @@ language_opts_set(GtkBuilder *builder, const gchar *name)
 	gtk_list_store_clear(store);
 	for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
 	{
+		const gchar *lang;
+
+		if (ghb_language_table[ii].native_name[0] != 0)
+			lang = ghb_language_table[ii].native_name;
+		else
+			lang = ghb_language_table[ii].eng_name;
+		
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
-						   0, ghb_language_table[ii].eng_name, 
+						   0, lang,
 						   1, TRUE, 
 						   2, ghb_language_table[ii].iso639_2, 
 						   3, (gdouble)ii, 
@@ -1908,13 +1918,20 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		index_str_init(LANG_TABLE_SIZE-1);
 		for (ii = 0; ii < LANG_TABLE_SIZE; ii++)
 		{
-			subtitle_opts.map[ii+1].option = ghb_language_table[ii].eng_name;
+			const gchar *lang;
+
+			if (ghb_language_table[ii].native_name[0] != 0)
+				lang = ghb_language_table[ii].native_name;
+			else
+				lang = ghb_language_table[ii].eng_name;
+
+			subtitle_opts.map[ii+1].option = lang;
 			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
 			subtitle_opts.map[ii+1].ivalue = ii;
 			subtitle_opts.map[ii+1].svalue = ghb_language_table[ii].iso639_2;
 			gtk_list_store_append(store, &iter);
 			gtk_list_store_set(store, &iter, 
-					0, ghb_language_table[ii].eng_name, 
+					0, lang,
 					1, TRUE, 
 					2, index_str[ii],
 					3, (gdouble)ii, 
