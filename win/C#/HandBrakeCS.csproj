@@ -297,6 +297,7 @@
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="EncodeQueue\Job.cs" />
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />

@@ -22,6 +22,10 @@ namespace Handbrake.Controls
         }
 
         private int FileContainer;
+        public void setSubtitleTrackAuto()
+        {
+            //TODO
+        }
         public void setContainer(int value)
         {
             FileContainer = value;

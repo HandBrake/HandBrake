@@ -101,5 +101,11 @@
     <Setting Name="PromptOnUnmatchingQueries" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="NativeLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Any</Value>
+    </Setting>
+    <Setting Name="DubAudio" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

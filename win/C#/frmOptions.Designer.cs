@@ -61,6 +61,8 @@ namespace Handbrake
             this.label29 = new System.Windows.Forms.Label();
             this.btn_vlcPath = new System.Windows.Forms.Button();
             this.txt_vlcPath = new System.Windows.Forms.TextBox();
+            this.tab_audio_sub = new System.Windows.Forms.TabPage();
+            this.drop_preferredLang = new System.Windows.Forms.ComboBox();
             this.tab_cli = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label12 = new System.Windows.Forms.Label();
@@ -128,11 +130,16 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.label15 = new System.Windows.Forms.Label();
+            this.radio_dub = new System.Windows.Forms.RadioButton();
+            this.radio_foreignAndSubs = new System.Windows.Forms.RadioButton();
+            this.label31 = new System.Windows.Forms.Label();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tab_picture.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tab_audio_sub.SuspendLayout();
             this.tab_cli.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tab_advanced.SuspendLayout();
@@ -182,6 +189,7 @@ namespace Handbrake
             this.tableLayoutPanel5.SetColumnSpan(this.tab_options, 2);
             this.tab_options.Controls.Add(this.tab_general);
             this.tab_options.Controls.Add(this.tab_picture);
+            this.tab_options.Controls.Add(this.tab_audio_sub);
             this.tab_options.Controls.Add(this.tab_cli);
             this.tab_options.Controls.Add(this.tab_advanced);
             this.tab_options.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -521,6 +529,33 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.txt_vlcPath, "The path where VLC is installed on this system.\r\nThis is used for the video previ" +
                     "ew feature.");
             this.txt_vlcPath.TextChanged += new System.EventHandler(this.txt_vlcPath_TextChanged);
+            // 
+            // tab_audio_sub
+            // 
+            this.tab_audio_sub.Controls.Add(this.label31);
+            this.tab_audio_sub.Controls.Add(this.label15);
+            this.tab_audio_sub.Controls.Add(this.radio_foreignAndSubs);
+            this.tab_audio_sub.Controls.Add(this.drop_preferredLang);
+            this.tab_audio_sub.Controls.Add(this.radio_dub);
+            this.tab_audio_sub.Location = new System.Drawing.Point(4, 22);
+            this.tab_audio_sub.Name = "tab_audio_sub";
+            this.tab_audio_sub.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_audio_sub.Size = new System.Drawing.Size(580, 306);
+            this.tab_audio_sub.TabIndex = 6;
+            this.tab_audio_sub.Text = "Audio / Subtitles";
+            this.tab_audio_sub.UseVisualStyleBackColor = true;
+            // 
+            // drop_preferredLang
+            // 
+            this.drop_preferredLang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_preferredLang.FormattingEnabled = true;
+            this.drop_preferredLang.Location = new System.Drawing.Point(200, 16);
+            this.drop_preferredLang.Name = "drop_preferredLang";
+            this.drop_preferredLang.Size = new System.Drawing.Size(118, 21);
+            this.drop_preferredLang.TabIndex = 87;
+            this.ToolTip.SetToolTip(this.drop_preferredLang, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
+                    "n Automatic.");
+            this.drop_preferredLang.SelectedIndexChanged += new System.EventHandler(this.drop_preferredLang_SelectedIndexChanged);
             // 
             // tab_cli
             // 
@@ -1421,6 +1456,51 @@ namespace Handbrake
             this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 405);
             this.tableLayoutPanel5.TabIndex = 62;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(87, 19);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(107, 13);
+            this.label15.TabIndex = 88;
+            this.label15.Text = "Preferred Language:";
+            // 
+            // radio_dub
+            // 
+            this.radio_dub.AutoSize = true;
+            this.radio_dub.Location = new System.Drawing.Point(200, 53);
+            this.radio_dub.Name = "radio_dub";
+            this.radio_dub.Size = new System.Drawing.Size(164, 17);
+            this.radio_dub.TabIndex = 89;
+            this.radio_dub.TabStop = true;
+            this.radio_dub.Text = "DUB Foreign Language Audio";
+            this.radio_dub.UseVisualStyleBackColor = true;
+            this.radio_dub.CheckedChanged += new System.EventHandler(this.radio_dub_CheckedChanged);
+            // 
+            // radio_foreignAndSubs
+            // 
+            this.radio_foreignAndSubs.AutoSize = true;
+            this.radio_foreignAndSubs.Location = new System.Drawing.Point(200, 76);
+            this.radio_foreignAndSubs.Name = "radio_foreignAndSubs";
+            this.radio_foreignAndSubs.Size = new System.Drawing.Size(241, 17);
+            this.radio_foreignAndSubs.TabIndex = 90;
+            this.radio_foreignAndSubs.TabStop = true;
+            this.radio_foreignAndSubs.Text = "Use foreign language audio and add subtitles";
+            this.radio_foreignAndSubs.UseVisualStyleBackColor = true;
+            this.radio_foreignAndSubs.CheckedChanged += new System.EventHandler(this.radio_foreignAndSubs_CheckedChanged);
+            // 
+            // label31
+            // 
+            this.label31.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label31.Location = new System.Drawing.Point(16, 19);
+            this.label31.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(52, 13);
+            this.label31.TabIndex = 91;
+            this.label31.Text = "Actions:";
+            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1449,6 +1529,8 @@ namespace Handbrake
             this.tab_picture.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
+            this.tab_audio_sub.ResumeLayout(false);
+            this.tab_audio_sub.PerformLayout();
             this.tab_cli.ResumeLayout(false);
             this.tab_cli.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -1559,5 +1641,11 @@ namespace Handbrake
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.CheckBox check_promptOnUnmatchingQueries;
+        private System.Windows.Forms.TabPage tab_audio_sub;
+        internal System.Windows.Forms.ComboBox drop_preferredLang;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.RadioButton radio_foreignAndSubs;
+        private System.Windows.Forms.RadioButton radio_dub;
+        private System.Windows.Forms.Label label15;
     }
 }

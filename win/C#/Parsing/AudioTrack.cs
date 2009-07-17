@@ -22,6 +22,7 @@ namespace Handbrake.Parsing
         private string m_language;
         private string m_subFormat;
         private int m_trackNumber;
+        private string m_iso639_2;
 
         /// <summary>
         /// The track number of this Audio Track
@@ -71,6 +72,11 @@ namespace Handbrake.Parsing
             get { return m_bitrate; }
         }
 
+        public string ISO639_2
+        {
+            get { return m_iso639_2;  }
+        }
+
         /// <summary>
         /// Override of the ToString method to make this object easier to use in the UI
         /// </summary>
@@ -86,34 +92,29 @@ namespace Handbrake.Parsing
         public static AudioTrack Parse(StringReader output)
         {
             String audio_track = output.ReadLine();
-            Match m = Regex.Match(audio_track,
-                                  @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\) \((.*)\), ([0-9]*)Hz, ([0-9]*)bps");
-            Match y = Regex.Match(audio_track, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\)");
-            if (m.Success)
+            Match m = Regex.Match(audio_track, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\) \((.*)\)");
+            Match track = Regex.Match(audio_track, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\)"); // ID and Language
+            Match iso639_2 = Regex.Match(audio_track, @"iso639-2: ([a-zA-Z]*)\)");
+            Match samplerate = Regex.Match(audio_track, @"([0-9]*)Hz");
+            Match bitrate = Regex.Match(audio_track, @"([0-9]*)bps");
+
+            string subformat = m.Groups[4].Value.Trim().Contains("iso639") ? null : m.Groups[4].Value;
+
+            if (track.Success)
             {
                 var thisTrack = new AudioTrack
-                                    {
-                                        m_trackNumber = int.Parse(m.Groups[1].Value.Trim()),
-                                        m_language = m.Groups[2].Value,
-                                        m_format = m.Groups[3].Value,
-                                        m_subFormat = m.Groups[4].Value,
-                                        m_frequency = int.Parse(m.Groups[5].Value.Trim()),
-                                        m_bitrate = int.Parse(m.Groups[6].Value.Trim())
-                                    };
-                return thisTrack;
+                {
+                    m_trackNumber = int.Parse(track.Groups[1].Value.Trim()),
+                    m_language = track.Groups[2].Value,
+                    m_format = m.Groups[3].Value,
+                    m_subFormat = subformat,
+                    m_frequency = int.Parse(samplerate.Groups[0].Value.Replace("Hz","").Trim()),
+                    m_bitrate = int.Parse(bitrate.Groups[0].Value.Replace("bps","").Trim()),
+                    m_iso639_2 = iso639_2.Value.Replace("iso639-2: ", "").Replace(")", "")
+                };
+                return thisTrack; 
             }
-            
-            if (y.Success)
-            {
-                var thisTrack = new AudioTrack
-                                    {
-                                        m_trackNumber = int.Parse(y.Groups[1].Value.Trim()),
-                                        m_language = y.Groups[2].Value,
-                                        m_format = y.Groups[3].Value
-                                    };
-                return thisTrack;
-            }
-            
+          
             return null;
         }
 

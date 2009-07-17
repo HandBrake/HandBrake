@@ -227,7 +227,29 @@ namespace Handbrake.Controls
             drp_audioTrack.Items.Add("Automatic");
             drp_audioTrack.Items.Add("None");
             drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-            drp_audioTrack.SelectedIndex = 0;
+
+            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
+            if (Properties.Settings.Default.NativeLanguage == "Any")
+                drp_audioTrack.SelectedIndex = 0;
+            else
+            {
+                if (Properties.Settings.Default.DubAudio) // "Dub Foreign language audio" 
+                {
+                    int i = 0;
+                    foreach (object item in drp_audioTrack.Items)
+                    {
+                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                            drp_audioTrack.SelectedIndex = i;
+
+                        i++;
+                    }
+
+                    foreach (ListViewItem item in lv_audioList.Items)
+                        item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();     
+                }
+                else
+                    drp_audioTrack.SelectedIndex = 0; // "Use Foreign language audio and Subtitles"
+            }
             drp_audioMix.SelectedIndex = 0;
         }
         public ListView getAudioPanel()

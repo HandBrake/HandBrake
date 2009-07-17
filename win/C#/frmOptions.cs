@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Handbrake.Functions;
@@ -16,6 +17,9 @@ namespace Handbrake
         public frmOptions()
         {
             InitializeComponent();
+            IDictionary<string, string> langList = Main.mapLanguages();
+            foreach (string item in langList.Keys)
+                drop_preferredLang.Items.Add(item);
 
             // #############################
             // General
@@ -61,6 +65,18 @@ namespace Handbrake
 
             // VLC Path
             txt_vlcPath.Text = Properties.Settings.Default.VLC_Path;
+
+            // #############################
+            // Audio and Subtitles Tab
+            // #############################
+
+            drop_preferredLang.SelectedItem = Properties.Settings.Default.NativeLanguage;
+
+            if (Properties.Settings.Default.DubAudio)
+                radio_dub.Checked = true;
+            else
+                radio_foreignAndSubs.Checked = true;
+
 
             // #############################
             // CLI
@@ -210,6 +226,23 @@ namespace Handbrake
         {
             Properties.Settings.Default.VLC_Path = txt_vlcPath.Text;
         }
+        #endregion
+
+        #region Audio and Subtitles
+        private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
+        }
+        private void radio_dub_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_dub.Checked)
+                Properties.Settings.Default.DubAudio = true;
+        }
+        private void radio_foreignAndSubs_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radio_foreignAndSubs.Checked)
+                Properties.Settings.Default.DubAudio = false;
+        }       
         #endregion
 
         #region CLI
@@ -362,5 +395,6 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
     }
 }
