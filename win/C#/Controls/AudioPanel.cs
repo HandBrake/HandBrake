@@ -18,7 +18,7 @@ namespace Handbrake.Controls
             InitializeComponent();
             drp_audioMix.SelectedIndex = 0;
         }
-        
+
         // Audio Track Options
         private void drp_audioTrack_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -239,7 +239,10 @@ namespace Handbrake.Controls
                     foreach (object item in drp_audioTrack.Items)
                     {
                         if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                        {
                             drp_audioTrack.SelectedIndex = i;
+                            break;
+                        }
 
                         i++;
                     }
@@ -335,7 +338,7 @@ namespace Handbrake.Controls
                     drp_audioBitrate.Items.Add("384");
                 else
                     drp_audioBitrate.Items.Remove("384");
-            } 
+            }
             else
             {
                 drp_audioBitrate.Items.Remove("192");
