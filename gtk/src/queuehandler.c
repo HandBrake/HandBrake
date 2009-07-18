@@ -1196,8 +1196,8 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	state = ghb_get_queue_state();
 	if (state & (GHB_STATE_WORKING | GHB_STATE_SCANNING | GHB_STATE_MUXING))
 	{
-		ud->cancel_encode = TRUE;
-		ghb_cancel_encode(NULL);
+		if (ghb_cancel_encode(NULL))
+			ud->cancel_encode = TRUE;
 		return;
 	}
 
