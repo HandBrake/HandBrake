@@ -24,7 +24,23 @@ namespace Handbrake.Controls
         private int FileContainer;
         public void setSubtitleTrackAuto()
         {
-            //TODO
+            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
+            if (Properties.Settings.Default.NativeLanguage != "Any")
+            {
+                if (!Properties.Settings.Default.DubAudio) // We need to add a subtitle track if this is false.
+                {
+                    int i = 0;
+                    foreach (object item in drp_subtitleTracks.Items)
+                    {
+                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                            drp_subtitleTracks.SelectedIndex = i;
+
+                        i++;
+                    }
+
+                    btn_addSubTrack_Click(this, new EventArgs());
+                }
+            }
         }
         public void setContainer(int value)
         {

@@ -244,8 +244,16 @@ namespace Handbrake.Controls
                         i++;
                     }
 
-                    foreach (ListViewItem item in lv_audioList.Items)
-                        item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();     
+                    if (drp_audioTrack.SelectedItem != null)
+                        foreach (ListViewItem item in lv_audioList.Items)
+                            item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
+                    else
+                    {
+                        drp_audioTrack.SelectedIndex = 0;
+                        if (drp_audioTrack.SelectedItem != null)
+                            foreach (ListViewItem item in lv_audioList.Items)
+                                item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
+                    }
                 }
                 else
                     drp_audioTrack.SelectedIndex = 0; // "Use Foreign language audio and Subtitles"
