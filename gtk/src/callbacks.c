@@ -2175,6 +2175,9 @@ find_queue_job(GValue *queue, gint unique_id, GValue **job)
 	
 	*job = NULL;
 	g_debug("find_queue_job");
+	if (unique_id == 0)  // Invalid Id
+		return -1;
+
 	count = ghb_array_len(queue);
 	for (ii = 0; ii < count; ii++)
 	{
