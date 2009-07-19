@@ -654,6 +654,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source, gboolean update
 	gchar *start;
 	gchar *filename = g_strdup(source);
 	
+	g_debug("update_source_label()");
 	len = strlen(filename);
 	if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
@@ -879,6 +880,7 @@ ghb_do_scan(
 	gint titlenum, 
 	gboolean force)
 {
+	g_debug("ghb_do_scan()");
 	if (!force && last_scan_file != NULL &&
 		strcmp(last_scan_file, filename) == 0)
 	{
@@ -3381,6 +3383,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 			{
 				ghb_hb_cleanup(TRUE);
 				prune_logs(ud);
+				ghb_settings_set_string(ud->settings, "source", "/dev/null");
 				ghb_backend_scan("/dev/null", 0, 1);
 			}
 		}
@@ -3471,6 +3474,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	{
 		ghb_hb_cleanup(TRUE);
 		prune_logs(ud);
+		ghb_settings_set_string(ud->settings, "source", "/dev/null");
 		ghb_backend_scan("/dev/null", 0, 1);
 	}
 }
