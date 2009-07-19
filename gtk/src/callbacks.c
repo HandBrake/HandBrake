@@ -3360,7 +3360,8 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 		if (ins_count == 2)
 		{
 			g_thread_create((GThreadFunc)ghb_cache_volnames, ud, FALSE, NULL);
-			if (ud->current_dvd_device != NULL &&
+			if (ghb_settings_get_boolean(ud->settings, "AutoScan") &&
+				ud->current_dvd_device != NULL &&
 				strcmp(device, ud->current_dvd_device) == 0)
 			{
 				show_scan_progress(ud);
@@ -3464,11 +3465,14 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	}
 	if (g_drive_has_media(gd))
 	{
-		show_scan_progress(ud);
-		update_source_label(ud, device, TRUE);
-		gint preview_count;
-		preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-		ghb_backend_scan(device, 0, preview_count);
+		if (ghb_settings_get_boolean(ud->settings, "AutoScan"))
+		{
+			show_scan_progress(ud);
+			update_source_label(ud, device, TRUE);
+			gint preview_count;
+			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+			ghb_backend_scan(device, 0, preview_count);
+		}
 	}
 	else
 	{

@@ -105,6 +105,8 @@
 	</dict>
 	<key>Preferences</key>
 	<dict>
+		<key>AutoScan</key>
+		<false />
 		<key>AddCC</key>
 		<false />
 		<key>EncodeLogLocation</key>
