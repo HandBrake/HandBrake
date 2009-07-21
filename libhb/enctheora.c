@@ -161,7 +161,7 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     ycbcr[1].data = ycbcr[0].data + (ycbcr[0].stride * job->height);
     ycbcr[2].data = ycbcr[1].data + (ycbcr[1].stride * ((job->height+1)/2));
 
-    th_encode_ycbcr_in( pv->ctx, &ycbcr );
+    th_encode_ycbcr_in( pv->ctx, ycbcr );
 
     th_encode_packetout( pv->ctx, 0, &op );
 
