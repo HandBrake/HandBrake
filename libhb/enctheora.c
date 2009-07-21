@@ -3,7 +3,8 @@
    It may be used under the terms of the GNU General Public License. */
 
 #include "hb.h"
-#include "theora/theora.h"
+#include "theora/codec.h"
+#include "theora/theoraenc.h"
 
 int  enctheoraInit( hb_work_object_t *, hb_job_t * );
 int  enctheoraWork( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );
@@ -22,7 +23,7 @@ struct hb_work_private_s
 {
     hb_job_t * job;
 
-    theora_state theora;
+    th_enc_ctx * ctx;
 };
 
 int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
@@ -32,14 +33,18 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
 
-    theora_info ti;
-    theora_comment tc;
+    th_info ti;
+    th_comment tc;
     ogg_packet op;
-    theora_info_init( &ti );
+    th_info_init( &ti );
 
-    ti.width = ti.frame_width = job->width;
-    ti.height = ti.frame_height = job->height;
-    ti.offset_x = ti.offset_y = 0;
+    /* Frame width and height need to be multiples of 16 */
+    ti.pic_width = job->width;
+    ti.pic_height = job->height;
+    ti.frame_width = (job->width + 0xf) & ~0xf;
+    ti.frame_height = (job->height + 0xf) & ~0xf;
+    ti.pic_x = ti.pic_y = 0;
+
     ti.fps_numerator = job->vrate;
     ti.fps_denominator = job->vrate_base;
     if( job->anamorphic.mode )
@@ -51,22 +56,11 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     {
         ti.aspect_numerator = ti.aspect_denominator = 1;
     }
-    ti.colorspace = OC_CS_UNSPECIFIED;
-    ti.pixelformat = OC_PF_420;
-    ti.keyframe_auto_p = 1;
-    ti.keyframe_frequency = (job->vrate / job->vrate_base) + 1;
-    ti.keyframe_frequency_force = (10 * job->vrate / job->vrate_base) + 1;
-    /* From encoder_example.c */
-    ti.quick_p = 1;
-    ti.dropframes_p = 0;
-    ti.keyframe_auto_threshold = 80;
-    ti.keyframe_mindistance = 8;
-    ti.noise_sensitivity = 1;
-    ti.sharpness = 0;
+    ti.colorspace = TH_CS_UNSPECIFIED;
+    ti.pixel_fmt = TH_PF_420;
     if (job->vquality < 0.0)
     {
         ti.target_bitrate = job->vbitrate * 1000;
-        ti.keyframe_data_target_bitrate = job->vbitrate * 1000 * 1.5;
         ti.quality = 0;
     }
     else
@@ -83,22 +77,23 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    theora_encode_init( &pv->theora, &ti );
-    theora_info_clear( &ti );
+    pv->ctx = th_encode_alloc( &ti );
 
-    theora_encode_header( &pv->theora, &op );
+    th_comment_init( &tc );
+
+    th_encode_flushheader( pv->ctx, &tc, &op );
     memcpy(w->config->theora.headers[0], &op, sizeof(op));
     memcpy(w->config->theora.headers[0] + sizeof(op), op.packet, op.bytes );
 
-    theora_comment_init(&tc);
-    theora_encode_comment(&tc,&op);
+    th_encode_flushheader( pv->ctx, &tc, &op );
     memcpy(w->config->theora.headers[1], &op, sizeof(op));
     memcpy(w->config->theora.headers[1] + sizeof(op), op.packet, op.bytes );
-    free(op.packet);
 
-    theora_encode_tables(&pv->theora, &op);
+    th_encode_flushheader( pv->ctx, &tc, &op );
     memcpy(w->config->theora.headers[2], &op, sizeof(op));
     memcpy(w->config->theora.headers[2] + sizeof(op), op.packet, op.bytes );
+
+    th_comment_clear( &tc );
 
     return 0;
 }
@@ -111,7 +106,8 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 void enctheoraClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    /* TODO: Free alloc'd */
+
+    th_encode_free( pv->ctx );
 
     free( pv );
     w->private_data = NULL;
@@ -128,14 +124,16 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv = w->private_data;
     hb_job_t * job = pv->job;
     hb_buffer_t * in = *buf_in, * buf;
-    yuv_buffer yuv;
+    th_ycbcr_buffer ycbcr;
     ogg_packet op;
+
+    int frame_width, frame_height;
 
     if ( in->size <= 0 )
     {
         // EOF on input - send it downstream & say we're done.
         // XXX may need to flush packets via a call to
-        //  theora_encode_packetout(&pv->theora, 1, &op);
+        //  th_encode_packetout( pv->ctx, 1, &op );
         // but we don't have a timestamp to put on those packets so we
         // drop them for now.
         *buf_out = in;
@@ -144,28 +142,33 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     memset(&op, 0, sizeof(op));
-    memset(&yuv, 0, sizeof(yuv));
+    memset(&ycbcr, 0, sizeof(ycbcr));
 
-    yuv.y_width = job->width;
-    yuv.y_height = job->height;
-    yuv.y_stride = job->width;
+    frame_width = (job->width + 0xf) & ~0xf;
+    frame_height = (job->height + 0xf) & ~0xf;
 
-    yuv.uv_width = (job->width + 1) / 2;
-    yuv.uv_height = (job->height + 1) / 2;
-    yuv.uv_stride = yuv.uv_width;
+    // Y
+    ycbcr[0].width = frame_width;
+    ycbcr[0].height = frame_height;
+    ycbcr[0].stride = job->width;
 
-    yuv.y = in->data;
-    yuv.u = in->data + job->width * job->height;
-    yuv.v = in->data + ( job->width * job->height ) + ( yuv.uv_width * yuv.uv_height );
+    // CbCr decimated by factor of 2 in both width and height
+    ycbcr[1].width  = ycbcr[2].width  = (frame_width + 1) / 2;
+    ycbcr[1].height = ycbcr[2].height = (frame_height + 1) / 2;
+    ycbcr[1].stride = ycbcr[2].stride = (job->width + 1) / 2;
 
-    theora_encode_YUVin(&pv->theora, &yuv);
+    ycbcr[0].data = in->data;
+    ycbcr[1].data = ycbcr[0].data + (ycbcr[0].stride * job->height);
+    ycbcr[2].data = ycbcr[1].data + (ycbcr[1].stride * ((job->height+1)/2));
 
-    theora_encode_packetout(&pv->theora, 0, &op);
+    th_encode_ycbcr_in( pv->ctx, &ycbcr );
+
+    th_encode_packetout( pv->ctx, 0, &op );
 
     buf = hb_buffer_init( op.bytes + sizeof(op) );
     memcpy(buf->data, &op, sizeof(op));
     memcpy(buf->data + sizeof(op), op.packet, op.bytes);
-    buf->frametype = ( theora_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;
+    buf->frametype = ( th_packet_iskeyframe(&op) ) ? HB_FRAME_KEY : HB_FRAME_REF;
     buf->start = in->start;
     buf->stop  = in->stop;
 
