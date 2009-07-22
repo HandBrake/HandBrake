@@ -362,7 +362,8 @@ void correct_framerate( hb_job_t * job )
     interjob->vrate_base = job->vrate_base;
 
     real_frames = interjob->frame_count - interjob->render_dropped;
-    job->vrate = job->vrate_base * ( real_frames / ( interjob->total_time / 90000 ) );
+
+    job->vrate = job->vrate_base * ( (double)real_frames * 90000 / interjob->total_time );
 }
 
 
