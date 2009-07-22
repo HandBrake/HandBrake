@@ -48,16 +48,12 @@ namespace Handbrake.Controls
                 crop_right.Value = GetCropMod2Clean(_SourceTitle.AutoCropDimensions[3]);
 
                 // Set the Resolution Boxes
-                text_width.Value = _SourceTitle.Resolution.Width;
-
                 if (drp_anamorphic.SelectedIndex == 0)
                 {
-                    int width = _SourceTitle.Resolution.Width;
-
-                    double crop_width = _SourceTitle.Resolution.Width - (double)crop_left.Value - (double)crop_right.Value;
-                    double crop_height = _SourceTitle.Resolution.Height - (double)crop_top.Value - (double)crop_bottom.Value;
-                    double newHeight = (width * _SourceTitle.Resolution.Width * sourceAspect.Height * crop_height) / (_SourceTitle.Resolution.Height * sourceAspect.Width * crop_width);
-                    text_height.Value = (decimal)GetModulusValue(newHeight);
+                    if (text_width.Value == 0) // Only update the values if the fields don't already have values.
+                        text_width.Value = _SourceTitle.Resolution.Width;
+   
+                    check_KeepAR.Checked = true; // Forces Resolution to be correct.
                 }
                 else
                 {
@@ -68,7 +64,6 @@ namespace Handbrake.Controls
                 updownParWidth.Value = _SourceTitle.ParVal.Width;
                 updownParHeight.Value = _SourceTitle.ParVal.Height;
                 updownDisplayWidth.Value = calculateAnamorphicSizes().Width;
-
             }
         }
 
