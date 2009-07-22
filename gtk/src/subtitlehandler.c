@@ -335,8 +335,8 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 				found_cc = TRUE;
 			ghb_add_subtitle(ud, dup);
 			jj++;
+			g_free(lang);
 		}
-		g_free(lang);
 	}
 	if (foreign_lang_index < 0 && pref_lang != NULL)
 	{
