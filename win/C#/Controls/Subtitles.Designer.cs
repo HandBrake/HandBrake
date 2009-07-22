@@ -189,7 +189,7 @@
             this.lv_subList.Name = "lv_subList";
             this.lv_subList.Size = new System.Drawing.Size(688, 131);
             this.lv_subList.TabIndex = 70;
-            this.lv_subList.UseCompatibleStateImageBehavior = false;
+            //this.lv_subList.UseCompatibleStateImageBehavior = false;
             this.lv_subList.View = System.Windows.Forms.View.Details;
             this.lv_subList.SelectedIndexChanged += new System.EventHandler(this.lb_subList_SelectedIndexChanged);
             // 

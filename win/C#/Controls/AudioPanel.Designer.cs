@@ -91,7 +91,7 @@ namespace Handbrake.Controls
             this.lv_audioList.Name = "lv_audioList";
             this.lv_audioList.Size = new System.Drawing.Size(689, 147);
             this.lv_audioList.TabIndex = 65;
-            this.lv_audioList.UseCompatibleStateImageBehavior = false;
+            //this.lv_audioList.UseCompatibleStateImageBehavior = false;
             this.lv_audioList.View = System.Windows.Forms.View.Details;
             this.lv_audioList.SelectedIndexChanged += new System.EventHandler(this.lv_audioList_SelectedIndexChanged);
             // 
