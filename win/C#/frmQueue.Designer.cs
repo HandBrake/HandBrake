@@ -76,10 +76,10 @@ namespace Handbrake
             this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
             this.OpenFile = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip1.SuspendLayout();
             this.mnu_queue.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -194,6 +194,7 @@ namespace Handbrake
             // lbl_dest
             // 
             this.lbl_dest.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.lbl_dest, 6);
             this.lbl_dest.Location = new System.Drawing.Point(108, 36);
             this.lbl_dest.Name = "lbl_dest";
             this.lbl_dest.Size = new System.Drawing.Size(11, 13);
@@ -204,6 +205,7 @@ namespace Handbrake
             // lbl_source
             // 
             this.lbl_source.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.lbl_source, 6);
             this.lbl_source.Location = new System.Drawing.Point(108, 23);
             this.lbl_source.Name = "lbl_source";
             this.lbl_source.Size = new System.Drawing.Size(11, 13);
@@ -466,30 +468,6 @@ namespace Handbrake
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 74;
             // 
-            // panel3
-            // 
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(13, 219);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(761, 15);
-            this.panel3.TabIndex = 77;
-            // 
-            // panel2
-            // 
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel2.Location = new System.Drawing.Point(774, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(13, 234);
-            this.panel2.TabIndex = 76;
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(13, 234);
-            this.panel1.TabIndex = 75;
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.AutoSize = true;
@@ -524,6 +502,30 @@ namespace Handbrake
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(762, 77);
             this.tableLayoutPanel1.TabIndex = 71;
+            // 
+            // panel3
+            // 
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel3.Location = new System.Drawing.Point(13, 219);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(761, 15);
+            this.panel3.TabIndex = 77;
+            // 
+            // panel2
+            // 
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(774, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(13, 234);
+            this.panel2.TabIndex = 76;
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(13, 234);
+            this.panel1.TabIndex = 75;
             // 
             // frmQueue
             // 
