@@ -57,6 +57,7 @@ namespace Handbrake.Controls
                 }
                 else
                 {
+                    text_width.Value = _SourceTitle.Resolution.Width;
                     text_height.Value = _SourceTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
                 }
