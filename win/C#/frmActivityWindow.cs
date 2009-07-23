@@ -20,7 +20,7 @@ namespace Handbrake
         delegate void SetTextCallback(string text);
         String read_file;
         Thread monitor;
-        QueueHandler encodeQueue;
+        EncodeAndQueueHandler encodeQueue;
         int position;  // Position in the arraylist reached by the current log output in the rtf box.
         string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
         private frmMain mainWin;
@@ -28,16 +28,15 @@ namespace Handbrake
         /// <summary>
         /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
         /// </summary>
-        public frmActivityWindow(string file, QueueHandler eh, frmMain mw)
+        public frmActivityWindow(string file, EncodeAndQueueHandler eh, frmMain mw)
         {
             InitializeComponent();
 
             rtf_actLog.Text = string.Empty;
             encodeQueue = eh;
-            read_file = file;
             position = 0;
             mainWin = mw;
-            
+
             // When the window closes, we want to abort the monitor thread.
             this.Disposed += new EventHandler(forceQuit);
 
@@ -45,12 +44,30 @@ namespace Handbrake
             displayLogHeader();
 
             if (file == "last_scan_log.txt")
-                txt_log.Text = "Scan Log";
-            else if (file == "last_encode_log.txt")
-                txt_log.Text = "Encode Log";
+                setLogView(true);
+            else
+                setLogView(false);
 
             // Start a new thread which will montior and keep the log window up to date if required/
             startLogThread(read_file);
+        }
+
+        /// <summary>
+        /// Set the file which the log window is viewing.
+        /// </summary>
+        /// <param name="scan"></param>
+        public void setLogView(Boolean scan)
+        {
+            if (scan)
+            {
+                txt_log.Text = "Scan Log";
+                read_file = "last_scan_log.txt";
+            }
+            else
+            {
+                read_file = "last_encode_log.txt";
+                txt_log.Text = "Encode Log";
+            }
         }
 
         /// <summary>
@@ -68,7 +85,7 @@ namespace Handbrake
             rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
             rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
             rtf_actLog.AppendText("#########################################\n\n");
-            if (encodeQueue.IsEncoding && encodeQueue.LastEncode.Query != String.Empty)
+            if (encodeQueue.isEncoding && encodeQueue.LastEncode.Query != String.Empty)
             {
                 rtf_actLog.AppendText("### CLI Query: " + encodeQueue.LastEncode.Query + "\n\n");
                 rtf_actLog.AppendText("#########################################\n\n");
@@ -114,7 +131,7 @@ namespace Handbrake
                 updateTextFromThread();
                 while (true)
                 {
-                    if (encodeQueue.IsEncoding || mainWin.isScanning)
+                    if (encodeQueue.isEncoding || mainWin.isScanning)
                         updateTextFromThread();
                     else
                     {
@@ -304,7 +321,7 @@ namespace Handbrake
         #endregion
 
         #region System Information
-        
+
 
         /// <summary>
         /// Returns the total physical ram in a system

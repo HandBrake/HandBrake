@@ -15,7 +15,7 @@ namespace Handbrake
     {
 
         QueryGenerator hb_common_func = new QueryGenerator();
-        Encode process = new Encode();
+        EncodeAndQueueHandler process = new EncodeAndQueueHandler();
         private delegate void UpdateUIHandler();
         String currently_playing = "";
         readonly frmMain mainWindow;

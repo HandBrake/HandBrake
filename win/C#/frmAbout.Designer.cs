@@ -39,7 +39,7 @@ namespace Handbrake
             this.label1 = new System.Windows.Forms.Label();
             this.lbl_HBBuild = new System.Windows.Forms.Label();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_close = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -72,7 +72,7 @@ namespace Handbrake
             this.lbl_HBBuild.Location = new System.Drawing.Point(125, 33);
             this.lbl_HBBuild.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
             this.lbl_HBBuild.Name = "lbl_HBBuild";
-            this.lbl_HBBuild.Size = new System.Drawing.Size(152, 13);
+            this.lbl_HBBuild.Size = new System.Drawing.Size(224, 13);
             this.lbl_HBBuild.TabIndex = 32;
             this.lbl_HBBuild.Text = "{Version}";
             this.lbl_HBBuild.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -90,24 +90,25 @@ namespace Handbrake
             this.PictureBox1.TabIndex = 33;
             this.PictureBox1.TabStop = false;
             // 
-            // button1
+            // btn_close
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(274, 82);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 35;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btn_close.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btn_close.Location = new System.Drawing.Point(274, 82);
+            this.btn_close.Name = "btn_close";
+            this.btn_close.Size = new System.Drawing.Size(75, 23);
+            this.btn_close.TabIndex = 35;
+            this.btn_close.Text = "OK";
+            this.btn_close.UseVisualStyleBackColor = true;
+            this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
             // frmAbout
             // 
-            this.AcceptButton = this.button1;
+            this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button1;
+            this.CancelButton = this.btn_close;
             this.ClientSize = new System.Drawing.Size(363, 117);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_close);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PictureBox1);
             this.Controls.Add(this.lbl_HBBuild);
@@ -134,6 +135,6 @@ namespace Handbrake
         internal System.Windows.Forms.Label label1;
         internal System.Windows.Forms.Label lbl_HBBuild;
         internal System.Windows.Forms.PictureBox PictureBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_close;
     }
 }

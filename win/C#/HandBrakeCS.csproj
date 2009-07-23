@@ -198,9 +198,8 @@
     <Compile Include="Presets\Import.cs" />
     <Compile Include="Presets\preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="EncodeQueue\QueueHandler.cs" />
+    <Compile Include="EncodeQueue\EncodeAndQueueHandler.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
-    <Compile Include="EncodeQueue\Encode.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
     <Compile Include="Parsing\Chapter.cs" />

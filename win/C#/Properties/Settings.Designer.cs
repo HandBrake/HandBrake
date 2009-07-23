@@ -441,5 +441,17 @@ namespace Handbrake.Properties {
                 this["DubAudio"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string hb_platform {
+            get {
+                return ((string)(this["hb_platform"]));
+            }
+            set {
+                this["hb_platform"] = value;
+            }
+        }
     }
 }

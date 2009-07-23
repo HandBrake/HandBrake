@@ -16,9 +16,9 @@ namespace Handbrake
     public partial class frmQueue : Form
     {
         private delegate void UpdateHandler();
-        private QueueHandler queue;
+        private EncodeAndQueueHandler queue;
 
-        public frmQueue(QueueHandler q)
+        public frmQueue(EncodeAndQueueHandler q)
         {
             InitializeComponent();
 
@@ -81,7 +81,7 @@ namespace Handbrake
                 MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            if (!queue.IsEncoding)
+            if (!queue.isEncoding)
                 queue.StartEncodeQueue();
 
         }

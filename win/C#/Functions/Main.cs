@@ -25,122 +25,75 @@ namespace Handbrake.Functions
         /// <summary>
         /// Calculate the duration of the selected title and chapters
         /// </summary>
-        public static TimeSpan calculateDuration(string chapter_start, string chapter_end, Parsing.Title selectedTitle)
+        public static TimeSpan calculateDuration(int chapterStart, int chapterEnd, Parsing.Title selectedTitle)
         {
-            TimeSpan Duration = TimeSpan.FromSeconds(0.0);
-
-            // Get the durations between the 2 chapter points and add them together.
-            if (chapter_start != "Auto" && chapter_end != "Auto")
+            TimeSpan duration = TimeSpan.FromSeconds(0.0);
+            chapterStart++; chapterEnd++;
+            if (chapterStart != 0 && chapterEnd != 0 && chapterEnd <= selectedTitle.Chapters.Count)
             {
-                int start_chapter, end_chapter;
-                int.TryParse(chapter_start, out start_chapter);
-                int.TryParse(chapter_end, out end_chapter);
-
-                int position = start_chapter - 1;
-
-                if (start_chapter <= end_chapter)
-                {
-                    if (end_chapter > selectedTitle.Chapters.Count)
-                        end_chapter = selectedTitle.Chapters.Count;
-
-                    while (position != end_chapter)
-                    {
-                        TimeSpan dur = selectedTitle.Chapters[position].Duration;
-                        Duration = Duration + dur;
-                        position++;
-                    }
-                }
+                for (int i = chapterStart; i <= chapterEnd; i++)
+                    duration += selectedTitle.Chapters[i - 1].Duration;
             }
-            return Duration;
+
+            return duration;
         }
 
         /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
         /// </summary>
-        public static Parsing.Title selectLongestTitle(ComboBox drp_dvdtitle)
+        public static Parsing.Title selectLongestTitle(Parsing.DVD thisDvd)
         {
-            int current_largest = 0;
-            Parsing.Title title2Select;
+            TimeSpan longestDurationFound = TimeSpan.FromSeconds(0.0);
+            Parsing.Title returnTitle = null;
 
-            // Check if there are titles in the DVD title dropdown menu and make sure, it's not just "Automatic"
-            if (drp_dvdtitle.Items[0].ToString() != "Automatic")
-                title2Select = (Parsing.Title)drp_dvdtitle.Items[0];
-            else
-                title2Select = null;
-
-            // So, If there are titles in the DVD Title dropdown menu, lets select the longest.
-            if (title2Select != null)
+            foreach (Parsing.Title item in thisDvd.Titles)
             {
-                foreach (Parsing.Title x in drp_dvdtitle.Items)
+                if (item.Duration > longestDurationFound)
                 {
-                    string title = x.ToString();
-                    if (title != "Automatic")
-                    {
-                        string[] y = title.Split(' ');
-                        string time = y[1].Replace("(", "").Replace(")", "");
-                        string[] z = time.Split(':');
-
-                        int hours = int.Parse(z[0]) * 60 * 60;
-                        int minutes = int.Parse(z[1]) * 60;
-                        int seconds = int.Parse(z[2]);
-                        int total_sec = hours + minutes + seconds;
-
-                        if (current_largest == 0)
-                        {
-                            current_largest = hours + minutes + seconds;
-                            title2Select = x;
-                        }
-                        else
-                        {
-                            if (total_sec > current_largest)
-                            {
-                                current_largest = total_sec;
-                                title2Select = x;
-                            }
-                        }
-                    }
+                    returnTitle = item;
+                    longestDurationFound = item.Duration;
                 }
             }
-            return title2Select;
+            return returnTitle;
         }
 
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
-        public static DataGridView chapterNaming(DataGridView data_chpt, string chapter_end)
+        public static DataGridView chapterNaming(DataGridView dataChpt, string chapterEnd)
         {
             int i = 0, finish = 0;
 
-            if (chapter_end != "Auto")
-                int.TryParse(chapter_end, out finish);
+            if (chapterEnd != "Auto")
+                int.TryParse(chapterEnd, out finish);
 
             while (i < finish)
             {
-                int n = data_chpt.Rows.Add();
-                data_chpt.Rows[n].Cells[0].Value = (i + 1);
-                data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
-                data_chpt.Rows[n].Cells[0].ValueType = typeof(int);
-                data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
+                int n = dataChpt.Rows.Add();
+                dataChpt.Rows[n].Cells[0].Value = (i + 1);
+                dataChpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
+                dataChpt.Rows[n].Cells[0].ValueType = typeof(int);
+                dataChpt.Rows[n].Cells[1].ValueType = typeof(string);
                 i++;
             }
 
-            return data_chpt;
+            return dataChpt;
         }
 
         /// <summary>
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string autoName(ComboBox drp_dvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
+        public static string autoName(ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
         {
             string AutoNamePath = string.Empty;
-            if (drp_dvdtitle.Text != "Automatic")
+            if (drpDvdtitle.Text != "Automatic")
             {
                 // Get the Source Name 
                 string sourceName = Path.GetFileNameWithoutExtension(source);
 
                 // Get the Selected Title Number
-                string[] titlesplit = drp_dvdtitle.Text.Split(' ');
+                string[] titlesplit = drpDvdtitle.Text.Split(' ');
                 string dvdTitle = titlesplit[0].Replace("Automatic", "");
 
                 // Get the Chapter Start and Chapter End Numbers
@@ -151,25 +104,25 @@ namespace Handbrake.Functions
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
 
                 // Get the destination filename.
-                string destination_filename;
+                string destinationFilename;
                 if (Properties.Settings.Default.autoNameFormat != "")
                 {
-                    destination_filename = Properties.Settings.Default.autoNameFormat;
-                    destination_filename = destination_filename.Replace("{source}", sourceName).Replace("{title}", dvdTitle).Replace("{chapters}", combinedChapterTag);
+                    destinationFilename = Properties.Settings.Default.autoNameFormat;
+                    destinationFilename = destinationFilename.Replace("{source}", sourceName).Replace("{title}", dvdTitle).Replace("{chapters}", combinedChapterTag);
                 }
                 else
-                    destination_filename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
+                    destinationFilename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
 
                 // Add the appropriate file extension
                 if (format == 0)
                 {
                     if (Properties.Settings.Default.useM4v)
-                        destination_filename += ".m4v";
+                        destinationFilename += ".m4v";
                     else
-                        destination_filename += ".mp4";
+                        destinationFilename += ".mp4";
                 }
                 else if (format == 1)
-                    destination_filename += ".mkv";
+                    destinationFilename += ".mkv";
 
                 // Now work out the path where the file will be stored.
                 // First case: If the destination box doesn't already contain a path, make one.
@@ -177,14 +130,14 @@ namespace Handbrake.Functions
                 {
                     // If there is an auto name path, use it...
                     if (Properties.Settings.Default.autoNamePath.Trim() != "" && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
-                        AutoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destination_filename);
+                        AutoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destinationFilename);
                     else // ...otherwise, output to the source directory
                         AutoNamePath = null;
                 }
                 else // Otherwise, use the path that is already there.
                 {
                     // Use the path and change the file extension to match the previous destination
-                    AutoNamePath = Path.Combine(Path.GetDirectoryName(dest), destination_filename);
+                    AutoNamePath = Path.Combine(Path.GetDirectoryName(dest), destinationFilename);
                     AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(dest));
                 }
             }
@@ -222,6 +175,7 @@ namespace Handbrake.Functions
                 {
                     line = stdOutput.ReadLine() ?? "";
                     Match m = Regex.Match(line, @"HandBrake ([0-9.]*)(svn[0-9M]*) \([0-9]*\)");
+                    Match platform = Regex.Match(line, @"- ([A-Za-z0-9\s ]*) -");
 
                     if (m.Success)
                     {
@@ -231,6 +185,9 @@ namespace Handbrake.Functions
                         Properties.Settings.Default.hb_build = int.Parse(arr[1]);
                         Properties.Settings.Default.hb_version = arr[0];
                     }
+                    if (platform.Success)
+                        Properties.Settings.Default.hb_platform = platform.Value.Replace("-", "").Trim();
+
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
                     {
                         Process cli = Process.GetProcessById(cliProcess.Id);
@@ -286,34 +243,36 @@ namespace Handbrake.Functions
             // avoiding any previous instances of HandBrakeCLI.exe in before.
             // Kill the current process.
 
-            Process[] hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
+            DateTime startTime = DateTime.Now;
+            TimeSpan duration;
 
-            // Another hack. We maybe need to wait a few seconds for HandBrakeCLI to launch
-            if (hbProcesses.Length == 0)
+            Process[] hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
+            while (hbProcesses.Length == 0)
             {
-                Thread.Sleep(2000);
                 hbProcesses = Process.GetProcessesByName("HandBrakeCLI");
+                duration = DateTime.Now - startTime;
+                if (duration.Seconds > 5 && hbProcesses.Length == 0) // Make sure we don't wait forever if the process doesn't start
+                    return -1;
             }
 
             Process hbProcess = null;
-            if (hbProcesses.Length > 0)
-                foreach (Process process in hbProcesses)
+            foreach (Process process in hbProcesses)
+            {
+                Boolean found = false;
+                // Check if the current CLI instance was running before we started the current one
+                foreach (Process bprocess in before)
                 {
-                    Boolean found = false;
-                    // Check if the current CLI instance was running before we started the current one
-                    foreach (Process bprocess in before)
-                    {
-                        if (process.Id == bprocess.Id)
-                            found = true;
-                    }
-
-                    // If it wasn't running before, we found the process we want.
-                    if (!found)
-                    {
-                        hbProcess = process;
-                        break;
-                    }
+                    if (process.Id == bprocess.Id)
+                        found = true;
                 }
+
+                // If it wasn't running before, we found the process we want.
+                if (!found)
+                {
+                    hbProcess = process;
+                    break;
+                }
+            }
             if (hbProcess != null)
                 return hbProcess.Id;
 
@@ -333,9 +292,7 @@ namespace Handbrake.Functions
                 foreach (FileInfo file in logFiles)
                 {
                     if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") && !file.Name.Contains("tmp_appReadable_log.txt"))
-                    {
                         File.Delete(file.FullName);
-                    }
                 }
             }
         }

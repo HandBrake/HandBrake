@@ -22,7 +22,7 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects *************
-        QueueHandler encodeQueue = new QueueHandler();
+        EncodeAndQueueHandler encodeQueue = new EncodeAndQueueHandler();
         PresetsHandler presetHandler = new PresetsHandler();
         QueryGenerator queryGen = new QueryGenerator();
 
@@ -650,7 +650,7 @@ namespace Handbrake
                     encodeQueue.RequestPause();
 
                     // Allow the CLI to exit cleanly
-                    Win32.SetForegroundWindow((int)encodeQueue.encodeHandler.processHandle);
+                    Win32.SetForegroundWindow((int)encodeQueue.processHandle);
                     SendKeys.Send("^C");
 
                     // Update the GUI
@@ -1004,7 +1004,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = c_start.ToString();
             }
 
-            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
+            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle).ToString();
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
@@ -1035,7 +1035,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = c_start.ToString();
             }
 
-            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.Text, drop_chapterFinish.Text, selectedTitle).ToString();
+            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle).ToString();
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
@@ -1469,7 +1469,7 @@ namespace Handbrake
 
                 // Now select the longest title
                 if (thisDVD.Titles.Count != 0)
-                    drp_dvdtitle.SelectedItem = Main.selectLongestTitle(drp_dvdtitle);
+                    drp_dvdtitle.SelectedItem = Main.selectLongestTitle(thisDVD);
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 if (sourcePath.ToLower().Contains(".iso") || sourcePath.ToLower().Contains("VIDEO_TS"))
@@ -1696,7 +1696,7 @@ namespace Handbrake
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-            if ((encodeQueue.IsEncoding) && (!encodeQueue.PauseRequested) && (encodeQueue.Count > 0))
+            if ((encodeQueue.isEncoding) && (!encodeQueue.PauseRequested) && (encodeQueue.Count > 0))
             {
                 DialogResult result = MessageBox.Show("HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
                     "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -1713,7 +1713,7 @@ namespace Handbrake
         {
             try
             {
-                Parser encode = new Parser(encodeQueue.encodeHandler.hbProcess.StandardOutput.BaseStream);
+                Parser encode = new Parser(encodeQueue.hbProcess.StandardOutput.BaseStream);
                 encode.OnEncodeProgress += encodeOnEncodeProgress;
                 while (!encode.EndOfStream)
                 {
