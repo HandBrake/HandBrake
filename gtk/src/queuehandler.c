@@ -783,7 +783,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
 		if (status == GHB_QUEUE_RUNNING)
 		{
 			// Ask if wants to stop encode.
-			if (!ghb_cancel_encode(NULL))
+			if (!ghb_cancel_encode2(ud, NULL))
 			{
 				return;
 			}
@@ -1196,8 +1196,8 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	state = ghb_get_queue_state();
 	if (state & (GHB_STATE_WORKING | GHB_STATE_SCANNING | GHB_STATE_MUXING))
 	{
-		if (ghb_cancel_encode(NULL))
-			ud->cancel_encode = TRUE;
+		ghb_cancel_encode(ud, "You are currently encoding.  "
+								"What would you like to do?");
 		return;
 	}
 
@@ -1345,7 +1345,7 @@ queue_key_press_cb(
 		if (status == GHB_QUEUE_RUNNING)
 		{
 			// Ask if wants to stop encode.
-			if (!ghb_cancel_encode(NULL))
+			if (!ghb_cancel_encode2(ud, NULL))
 			{
 				return TRUE;
 			}

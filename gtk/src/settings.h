@@ -36,6 +36,14 @@ enum
 	GHB_STATE_MUXING 	= 0x40,
 };
 
+enum
+{
+	GHB_CANCEL_NONE,
+	GHB_CANCEL_ALL,
+	GHB_CANCEL_CURRENT,
+	GHB_CANCEL_FINISH
+};
+
 typedef struct preview_s preview_t;
 
 typedef struct
@@ -43,7 +51,7 @@ typedef struct
 	gchar *current_dvd_device;
 	gboolean debug;
 	gboolean dont_clear_presets;
-	gboolean cancel_encode;
+	gint cancel_encode;
 	GtkBuilder *builder;
 	GValue *settings;
 	GValue *queue;

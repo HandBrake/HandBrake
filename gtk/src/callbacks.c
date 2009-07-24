@@ -284,7 +284,7 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 	g_debug("on_quit1_activate ()");
 	if (state & GHB_STATE_WORKING)
 	{
-		if (ghb_cancel_encode("Closing HandBrake will terminate encoding.\n"))
+		if (ghb_cancel_encode2(ud, "Closing HandBrake will terminate encoding.\n"))
 		{
 			ghb_hb_cleanup(FALSE);
 			prune_logs(ud);
@@ -1218,7 +1218,7 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 	g_debug("window_delete_event_cb ()");
 	if (state & GHB_STATE_WORKING)
 	{
-		if (ghb_cancel_encode("Closing HandBrake will terminate encoding.\n"))
+		if (ghb_cancel_encode2(ud, "Closing HandBrake will terminate encoding.\n"))
 		{
 			ghb_hb_cleanup(FALSE);
 			prune_logs(ud);
@@ -1905,8 +1905,8 @@ ghb_error_dialog(GtkMessageType type, const gchar *message, const gchar *cancel)
 	gtk_widget_destroy (dialog);
 }
 
-gboolean
-ghb_cancel_encode(const gchar *extra_msg)
+void
+ghb_cancel_encode(signal_user_data_t *ud, const gchar *extra_msg)
 {
 	GtkWidget *dialog;
 	GtkResponseType response;
@@ -1918,13 +1918,62 @@ ghb_cancel_encode(const gchar *extra_msg)
 				"%sYour movie will be lost if you don't continue encoding.",
 				extra_msg);
 	gtk_dialog_add_buttons( GTK_DIALOG(dialog), 
-						   "Continue Encoding", GTK_RESPONSE_NO,
-						   "Stop Encoding", GTK_RESPONSE_YES, NULL);
+						   "Cancel Current and Stop", 1,
+						   "Cancel Current, Start Next", 2,
+						   "Finish Current, then Stop", 3,
+						   "Continue Encoding", 4,
+						   NULL);
 	response = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy (dialog);
-	if (response == GTK_RESPONSE_NO) return FALSE;
-	ghb_stop_queue();
-	return TRUE;
+	switch (response)
+	{
+		case 1:
+			ghb_stop_queue();
+			ud->cancel_encode = GHB_CANCEL_ALL;
+			break;
+		case 2:
+			ghb_stop_queue();
+			ud->cancel_encode = GHB_CANCEL_CURRENT;
+			break;
+		case 3:
+			ud->cancel_encode = GHB_CANCEL_FINISH;
+			break;
+		case 4:
+		default:
+			ud->cancel_encode = GHB_CANCEL_NONE;
+			break;
+	}
+}
+
+gboolean
+ghb_cancel_encode2(signal_user_data_t *ud, const gchar *extra_msg)
+{
+	GtkWidget *dialog;
+	GtkResponseType response;
+	
+	if (extra_msg == NULL) extra_msg = "";
+	// Toss up a warning dialog
+	dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
+				GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
+				"%sYour movie will be lost if you don't continue encoding.",
+				extra_msg);
+	gtk_dialog_add_buttons( GTK_DIALOG(dialog), 
+						   "Cancel Current and Stop", 1,
+						   "Continue Encoding", 4,
+						   NULL);
+	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy (dialog);
+	switch (response)
+	{
+		case 1:
+			ghb_stop_queue();
+			ud->cancel_encode = GHB_CANCEL_ALL;
+			return TRUE;
+		case 4:
+		default:
+			break;
+	}
+	return FALSE;
 }
 
 static void
@@ -2424,7 +2473,8 @@ ghb_backend_events(signal_user_data_t *ud)
 		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
 		treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
 		store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
-		if (ud->cancel_encode)
+		if (ud->cancel_encode == GHB_CANCEL_ALL || 
+			ud->cancel_encode == GHB_CANCEL_CURRENT)
 			status.queue.error = GHB_ERROR_CANCELED;
 		switch( status.queue.error )
 		{
@@ -2475,7 +2525,8 @@ ghb_backend_events(signal_user_data_t *ud)
 		if (ud->job_activity_log)
 			g_io_channel_unref(ud->job_activity_log);
 		ud->job_activity_log = NULL;
-		if (!ud->cancel_encode)
+		if (ud->cancel_encode != GHB_CANCEL_ALL &&
+			ud->cancel_encode != GHB_CANCEL_FINISH)
 		{
 			ud->current_job = ghb_start_next_job(ud, FALSE);
 		}
@@ -2488,7 +2539,7 @@ ghb_backend_events(signal_user_data_t *ud)
 		if (js)
 			ghb_settings_set_int(js, "job_status", qstatus);
 		ghb_save_queue(ud->queue);
-		ud->cancel_encode = FALSE;
+		ud->cancel_encode = GHB_CANCEL_NONE;
 #if !GTK_CHECK_VERSION(2, 16, 0)
 		GtkStatusIcon *si;
 
