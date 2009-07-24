@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
@@ -17,31 +18,21 @@ namespace Handbrake
 {
     public partial class frmActivityWindow : Form
     {
-        delegate void SetTextCallback(string text);
-        String read_file;
-        Thread monitor;
-        EncodeAndQueueHandler encodeQueue;
-        int position;  // Position in the arraylist reached by the current log output in the rtf box.
-        string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+        private delegate void SetTextCallback(string text);
+        private String read_file;
+        private Thread monitor;
+        private EncodeAndQueueHandler encodeQueue;
+        private int position;  // Position in the arraylist reached by the current log output in the rtf box.
+        private string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
         private frmMain mainWin;
+        private Boolean lastUpdate;
 
-        /// <summary>
-        /// This window should be used to display the RAW output of the handbrake CLI which is produced during an encode.
-        /// </summary>
         public frmActivityWindow(string file, EncodeAndQueueHandler eh, frmMain mw)
         {
             InitializeComponent();
 
-            rtf_actLog.Text = string.Empty;
             encodeQueue = eh;
-            position = 0;
             mainWin = mw;
-
-            // When the window closes, we want to abort the monitor thread.
-            this.Disposed += new EventHandler(forceQuit);
-
-            // Print the Log header in the Rich text box.
-            displayLogHeader();
 
             if (file == "last_scan_log.txt")
                 setLogView(true);
@@ -53,11 +44,17 @@ namespace Handbrake
         }
 
         /// <summary>
-        /// Set the file which the log window is viewing.
+        /// Set the view which the Log window displays.
+        /// Scan = true;
+        /// Encode = false;
         /// </summary>
-        /// <param name="scan"></param>
+        /// <param name="scan">Boolean. Scan = true</param>
         public void setLogView(Boolean scan)
         {
+            position = 0;
+            rtf_actLog.Text = String.Empty;
+            displayLogHeader();
+
             if (scan)
             {
                 txt_log.Text = "Scan Log";
@@ -68,11 +65,8 @@ namespace Handbrake
                 read_file = "last_encode_log.txt";
                 txt_log.Text = "Encode Log";
             }
+            lastUpdate = false;
         }
-
-        /// <summary>
-        /// Displays the Log header
-        /// </summary>
         private void displayLogHeader()
         {
             // Add a header to the log file indicating that it's from the Windows GUI and display the windows version
@@ -91,11 +85,6 @@ namespace Handbrake
                 rtf_actLog.AppendText("#########################################\n\n");
             }
         }
-
-        /// <summary>
-        /// Starts a new thread which runs the autoUpdate function.
-        /// </summary>
-        /// <param name="file"> File which will be used to populate the Rich text box.</param>
         private void startLogThread(string file)
         {
             try
@@ -103,9 +92,7 @@ namespace Handbrake
                 string logFile = Path.Combine(logDir, file);
                 if (File.Exists(logFile))
                 {
-                    // Start a new thread to run the autoUpdate process
-                    monitor = new Thread(autoUpdate);
-                    monitor.IsBackground = true;
+                    monitor = new Thread(autoUpdate) { IsBackground = true };
                     monitor.Start();
                 }
                 else
@@ -117,48 +104,36 @@ namespace Handbrake
                 MessageBox.Show("startLogThread(): Exception: \n" + exc);
             }
         }
-
-        /// <summary>
-        /// Updates the log window with any new data which is in the log file.
-        /// This is done every 5 seconds.
-        /// </summary>
-        /// <param name="state"></param>
         private void autoUpdate(object state)
         {
             try
             {
-                Boolean lastUpdate = false;
+                lastUpdate = false;
                 updateTextFromThread();
                 while (true)
                 {
-                    if (encodeQueue.isEncoding || mainWin.isScanning)
-                        updateTextFromThread();
-                    else
+                    if (IsHandleCreated)
                     {
-                        // The encode may just have stoped, so, refresh the log one more time before restarting it.
-                        if (lastUpdate == false)
+                        if (encodeQueue.isEncoding || mainWin.isScanning)
                             updateTextFromThread();
+                        else
+                        {
+                            // The encode may just have stoped, so, refresh the log one more time before restarting it.
+                            if (lastUpdate == false)
+                                updateTextFromThread();
 
-                        lastUpdate = true; // Prevents the log window from being updated when there is no encode going.
-                        position = 0; // There is no encoding, so reset the log position counter to 0 so it can be reused
+                            lastUpdate = true; // Prevents the log window from being updated when there is no encode going.
+                            position = 0; // There is no encoding, so reset the log position counter to 0 so it can be reused
+                        }
                     }
-                    Thread.Sleep(5000);
+                    Thread.Sleep(1000);
                 }
-            }
-            catch (ThreadAbortException)
-            {
-                // Do Nothing. This is needed since we run thread.abort(). 
-                // Should probably find a better way of making this work at some point.
             }
             catch (Exception exc)
             {
                 MessageBox.Show("autoUpdate(): Exception: \n" + exc);
             }
         }
-
-        /// <summary>
-        /// Finds any new text in the log file and calls a funciton to display this new text.
-        /// </summary>
         private void updateTextFromThread()
         {
             try
@@ -174,26 +149,17 @@ namespace Handbrake
                 MessageBox.Show("updateTextFromThread(): Exception: \n" + exc);
             }
         }
-
-        /// <summary>
-        /// Updates the rich text box with anything in the string text.
-        /// </summary>
-        /// <param name="text"></param>
         private void SetText(string text)
         {
             try
             {
-                // InvokeRequired required compares the thread ID of the
-                // calling thread to the thread ID of the creating thread.
-                // If these threads are different, it returns true.
-                if (IsHandleCreated) // Make sure the windows has a handle before doing anything
+                if (IsHandleCreated)
                 {
                     if (rtf_actLog.InvokeRequired)
                     {
-                        SetTextCallback d = new SetTextCallback(SetText);
-                        Invoke(d, new object[] { text });
-                    }
-                    else
+                        IAsyncResult invoked = BeginInvoke(new SetTextCallback(SetText), new object[] {text});
+                        EndInvoke(invoked);
+                    } else 
                         rtf_actLog.AppendText(text);
                 }
             }
@@ -202,11 +168,6 @@ namespace Handbrake
                 MessageBox.Show("SetText(): Exception: \n" + exc);
             }
         }
-
-        /// <summary>
-        /// Read the log file, and store the data in a List.
-        /// </summary>
-        /// <returns></returns>
         private String readFile()
         {
             String appendText = String.Empty;
@@ -249,24 +210,14 @@ namespace Handbrake
             return null;
         }
 
-        /// <summary>
-        /// Kills the montior thead when the window is disposed of.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void forceQuit(object sender, EventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            if (monitor != null)
-            {
-                while (monitor.IsAlive)
-                    monitor.Abort();
-            }
-
-            this.Close();
+            e.Cancel = true;
+            this.Hide();
+            base.OnClosing(e);
         }
 
         #region User Interface
-
         private void mnu_copy_log_Click(object sender, EventArgs e)
         {
             if (rtf_actLog.SelectedText != "")
@@ -292,37 +243,15 @@ namespace Handbrake
         }
         private void btn_scan_log_Click(object sender, EventArgs e)
         {
-            // Switch to the scan log.
-
-            if (monitor != null)
-                monitor.Abort();
-
-            rtf_actLog.Clear();
-            read_file = "last_scan_log.txt";
-            displayLogHeader();
-            startLogThread(read_file);
-            txt_log.Text = "Scan Log";
+            setLogView(true);
         }
         private void btn_encode_log_Click(object sender, EventArgs e)
         {
-            // Switch to the encode log
-
-            if (monitor != null)
-                monitor.Abort();
-
-            rtf_actLog.Clear();
-            read_file = "last_encode_log.txt";
-            position = 0;
-            displayLogHeader();
-            startLogThread(read_file);
-            txt_log.Text = "Encode Log";
+            setLogView(false);
         }
-
         #endregion
 
         #region System Information
-
-
         /// <summary>
         /// Returns the total physical ram in a system
         /// </summary>
@@ -357,7 +286,6 @@ namespace Handbrake
         {
             return Screen.PrimaryScreen;
         }
-
         #endregion
 
     }

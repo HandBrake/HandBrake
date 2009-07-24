@@ -31,8 +31,10 @@ namespace Handbrake
         private DVD thisDVD;
         private frmQueue queueWindow;
         private frmPreview qtpreview;
+        private frmActivityWindow ActivityWindow;
         private Form splash;
         public string sourcePath;
+        private string lastAction;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -713,6 +715,7 @@ namespace Handbrake
                             queueWindow.Show(false);
 
                         setEncodeStarted(); // Encode is running, so setup the GUI appropriately
+                        ActivityWindow.setLogView(false);
                         encodeQueue.StartEncodeQueue(); // Start The Queue Encoding Process
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
                     }
@@ -773,8 +776,9 @@ namespace Handbrake
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
-
-            frmActivityWindow ActivityWindow = new frmActivityWindow(file, encodeQueue, this);
+            if (ActivityWindow == null)
+                ActivityWindow = new frmActivityWindow(file, encodeQueue, this);
+            
             ActivityWindow.Show();
         }
         #endregion
@@ -1386,6 +1390,7 @@ namespace Handbrake
             {
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Scanning...";
+                ActivityWindow.setLogView(true);
                 isScanning = true;
                 ThreadPool.QueueUserWorkItem(scanProcess, filename);
             }
@@ -1680,12 +1685,7 @@ namespace Handbrake
 
             presetHandler.getPresetPanel(ref treeView_presets);
             treeView_presets.Update();
-        }
-
-        /// <summary>
-        /// Either Encode or Scan was last performed.
-        /// </summary>
-        public string lastAction { get; set; }
+        }       
         #endregion
 
         #region Overrides
