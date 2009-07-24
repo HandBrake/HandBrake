@@ -103,12 +103,19 @@ int hb_dvd_region(char *device, int *region_mask)
     if ( fd < 0 )
         return -1;
     if ( fstat( fd, &st ) < 0 )
+	{
+        close( fd );
         return -1;
+	}
     if ( !( S_ISBLK( st.st_mode ) || S_ISCHR( st.st_mode ) ) )
+	{
+        close( fd );
         return -1;
+	}
 
     ai.type = DVD_LU_SEND_RPC_STATE;
     ret = ioctl(fd, DVD_AUTH, &ai);
+    close( fd );
     if ( ret < 0 )
         return ret;
 
