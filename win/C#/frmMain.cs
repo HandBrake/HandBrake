@@ -715,7 +715,8 @@ namespace Handbrake
                             queueWindow.Show(false);
 
                         setEncodeStarted(); // Encode is running, so setup the GUI appropriately
-                        ActivityWindow.setLogView(false);
+                        if (ActivityWindow != null)
+                            ActivityWindow.setLogView(false);
                         encodeQueue.StartEncodeQueue(); // Start The Queue Encoding Process
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
                     }
@@ -1390,7 +1391,8 @@ namespace Handbrake
             {
                 lbl_encode.Visible = true;
                 lbl_encode.Text = "Scanning...";
-                ActivityWindow.setLogView(true);
+                if (ActivityWindow != null)
+                    ActivityWindow.setLogView(true);
                 isScanning = true;
                 ThreadPool.QueueUserWorkItem(scanProcess, filename);
             }
