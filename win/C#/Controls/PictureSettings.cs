@@ -7,12 +7,33 @@ using Handbrake.Parsing;
 
 namespace Handbrake.Controls
 {
+
+    //  TODO Custom Anamorphic
+    /*  NOT KEEPING DISPLAY ASPECT   == [Complete]
+       
+        KEEPING DISPLAY ASPECT RATIO == [TODO]
+        DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
+        Disable editing: PIXEL WIDTH, PIXEL HEIGHT
+        Changing DISPLAY WIDTH:
+            Changes HEIGHT to keep DAR
+            Changes PIXEL WIDTH to new DISPLAY WIDTH
+            Changes PIXEL HEIGHT to STORAGE WIDTH
+        Changing HEIGHT
+            Changes DISPLAY WIDTH to keep DAR
+            Changes PIXEL WIDTH to new DISPLAY WIDTH
+            Changes PIXEL HEIGHT to STORAGE WIDTH
+        Changing STORAGE_WIDTH:
+            Changes PIXEL WIDTH to DISPLAY WIDTH
+            Changes PIXEL HEIGHT to new STORAGE WIDTH
+     * */
+
+
     public partial class PictureSettings : UserControl
     {
         private readonly CultureInfo Culture = new CultureInfo("en-US", false);
         public event EventHandler PictureSettingsChanged;
 
-        private Boolean preventChangingWidth, preventChangingHeight;
+        private Boolean preventChangingWidth, preventChangingHeight, preventChangingCustom, preventChangingDisplayWidth;
         private int _PresetMaximumWidth, _PresetMaximumHeight;
         private Title _SourceTitle;
 
@@ -52,7 +73,7 @@ namespace Handbrake.Controls
                 {
                     if (text_width.Value == 0) // Only update the values if the fields don't already have values.
                         text_width.Value = _SourceTitle.Resolution.Width;
-   
+
                     check_KeepAR.Checked = true; // Forces Resolution to be correct.
                 }
                 else
@@ -62,9 +83,9 @@ namespace Handbrake.Controls
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
                 }
 
+                updownDisplayWidth.Value = calculateAnamorphicSizes().Width;
                 updownParWidth.Value = _SourceTitle.ParVal.Width;
                 updownParHeight.Value = _SourceTitle.ParVal.Height;
-                updownDisplayWidth.Value = calculateAnamorphicSizes().Width;
             }
         }
 
@@ -122,6 +143,19 @@ namespace Handbrake.Controls
                         preventChangingHeight = false;
                     }
                     break;
+                case 3:
+                    if (check_KeepAR.CheckState == CheckState.Unchecked && Source != null)
+                    {
+                        if (preventChangingCustom)
+                            break;
+
+                        preventChangingDisplayWidth = true; 
+                        updownDisplayWidth.Value = text_width.Value * updownParWidth.Value / updownParHeight.Value;
+                        preventChangingDisplayWidth = false;
+
+                        labelDisplaySize.Text = Math.Truncate(updownDisplayWidth.Value) + "x" + text_height.Value;
+                    }
+                    break;
                 default:
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
                     break;
@@ -156,6 +190,9 @@ namespace Handbrake.Controls
                         preventChangingWidth = false;
                     }
                     break;
+                case 3:
+                    labelDisplaySize.Text = Math.Truncate(updownDisplayWidth.Value) + "x" + text_height.Value;
+                    break;
                 default:
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
                     break;
@@ -179,6 +216,16 @@ namespace Handbrake.Controls
             // Raise the Picture Settings Changed Event
             if (PictureSettingsChanged != null)
                 PictureSettingsChanged(this, new EventArgs());
+        }
+        private void updownDisplayWidth_ValueChanged(object sender, EventArgs e)
+        {
+            if (preventChangingDisplayWidth == false)
+            {
+                preventChangingCustom = true;
+                updownParWidth.Value = updownDisplayWidth.Value;
+                updownParHeight.Value = text_width.Value;
+                preventChangingCustom = false;
+            }
         }
 
         // Anamorphic Controls

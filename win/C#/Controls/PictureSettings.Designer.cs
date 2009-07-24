@@ -471,6 +471,7 @@ namespace Handbrake.Controls
             this.updownParHeight.Name = "updownParHeight";
             this.updownParHeight.Size = new System.Drawing.Size(53, 21);
             this.updownParHeight.TabIndex = 112;
+            this.updownParHeight.ValueChanged += new System.EventHandler(this.text_width_ValueChanged);
             // 
             // label6
             // 
@@ -534,6 +535,7 @@ namespace Handbrake.Controls
             this.updownParWidth.Name = "updownParWidth";
             this.updownParWidth.Size = new System.Drawing.Size(53, 21);
             this.updownParWidth.TabIndex = 111;
+            this.updownParWidth.ValueChanged += new System.EventHandler(this.text_width_ValueChanged);
             // 
             // drp_anamorphic
             // 
@@ -574,6 +576,7 @@ namespace Handbrake.Controls
             this.updownDisplayWidth.Name = "updownDisplayWidth";
             this.updownDisplayWidth.Size = new System.Drawing.Size(53, 21);
             this.updownDisplayWidth.TabIndex = 110;
+            this.updownDisplayWidth.ValueChanged += new System.EventHandler(this.updownDisplayWidth_ValueChanged);
             // 
             // lbl_modulus
             // 
