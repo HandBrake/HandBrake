@@ -421,8 +421,8 @@ static void PrintTitleInfo( hb_title_t * title )
         {
             fprintf( stderr, "    + %d, %s (iso639-2: %s)\n", 
                      i + 1, 
-                     audio->lang.iso639_2,
-                     audio->lang.description );
+                     audio->lang.description,
+                     audio->lang.iso639_2 );
         }
     }
     fprintf( stderr, "  + subtitle tracks:\n" );
