@@ -129,7 +129,7 @@ namespace Handbrake.Functions
             {
                 if (mainWindow.PictureSettings.text_width.Value != 0)
                     if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1)
-                    query += " -X " + mainWindow.PictureSettings.text_width.Text;
+                        query += " -X " + mainWindow.PictureSettings.text_width.Text;
             }
 
             // Use MaxHeight for built-in presets and height for user settings.
@@ -179,8 +179,10 @@ namespace Handbrake.Functions
                     query += " --display-width " + mainWindow.PictureSettings.updownDisplayWidth.Text + " ";
                     if (mainWindow.PictureSettings.check_KeepAR.Checked)
                         query += " --keep-display-aspect ";
-                    if (mainWindow.PictureSettings.updownParWidth.Text != "" && mainWindow.PictureSettings.updownParHeight.Text != "")
-                        query += " --pixel-aspect " + mainWindow.PictureSettings.updownParWidth.Text + ":" + mainWindow.PictureSettings.updownParHeight.Text + " ";
+
+                    if (!mainWindow.PictureSettings.check_KeepAR.Checked)
+                        if (mainWindow.PictureSettings.updownParWidth.Text != "" && mainWindow.PictureSettings.updownParHeight.Text != "")
+                            query += " --pixel-aspect " + mainWindow.PictureSettings.updownParWidth.Text + ":" + mainWindow.PictureSettings.updownParHeight.Text + " ";
                     break;
             }
             #endregion
@@ -395,9 +397,9 @@ namespace Handbrake.Functions
                 string subtitleDefault = String.Empty;
 
                 // SRT
-                string srtFile = String.Empty; 
+                string srtFile = String.Empty;
                 string srtCodeset = String.Empty;
-                string srtOffset = String.Empty; 
+                string srtOffset = String.Empty;
                 string srtLang = String.Empty;
                 string srtDefault = String.Empty;
                 int srtCount = 0;
@@ -420,7 +422,7 @@ namespace Handbrake.Functions
                         }
                         if (item.SubItems[4].Text == "Yes") // default
                             srtDefault = srtCount.ToString();
-                            
+
                         itemToAdd = item.SubItems[5].Text;
                         srtFile += srtFile == "" ? itemToAdd : "," + itemToAdd;
 
@@ -430,7 +432,7 @@ namespace Handbrake.Functions
                     else // We have Bitmap or CC
                     {
                         string[] tempSub;
-        
+
                         // Find --subtitle <string>
                         if (item.SubItems[1].Text.Contains("Foreign Audio Search"))
                             itemToAdd = "scan";
