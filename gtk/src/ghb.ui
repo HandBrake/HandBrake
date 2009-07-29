@@ -284,17 +284,17 @@
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="source1">
+          <object class="GtkAction" id="source_action">
             <property name="stock_id">gtk-open</property>
-            <property name="name">source1</property>
+            <property name="name">source_action</property>
             <property name="label">_Source</property>
             <signal handler="source_button_clicked_cb" name="activate"/>
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="source_single">
+          <object class="GtkAction" id="source_single_action">
             <property name="icon-name">gtk-open</property>
-            <property name="name">source_single</property>
+            <property name="name">source_single_action</property>
             <property name="label">Single _Title</property>
             <signal handler="single_title_source_cb" name="activate"/>
           </object>
@@ -426,8 +426,8 @@
     <ui>
       <menubar name="menubar1">
         <menu action="menuitem1">
-          <menuitem action="source1"/>
-          <menuitem action="source_single"/>
+          <menuitem action="source_action"/>
+          <menuitem action="source_single_action"/>
           <menuitem action="destination1"/>
           <separator/>
           <menuitem action="preferences"/>
@@ -542,7 +542,7 @@
             <property name="visible">True</property>
             <property name="icon_size">5</property>
             <child>
-              <object class="GtkToolButton" id="toolbutton1">
+              <object class="GtkToolButton" id="sourcetoolbutton">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Choose Video Source</property>

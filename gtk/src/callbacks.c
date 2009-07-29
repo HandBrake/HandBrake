@@ -873,6 +873,30 @@ show_scan_progress(signal_user_data_t *ud)
 	gtk_label_set_text( label, "Scanning ..." );
 }
 
+static void
+start_scan(
+	signal_user_data_t *ud, 
+	const gchar *path, 
+	gint titlenum, 
+	gint preview_count)
+{
+	GtkWidget *widget;
+	GtkAction *action;
+	ghb_status_t status;
+
+	ghb_get_status(&status);
+	if (status.scan.state != GHB_STATE_IDLE)
+		return;
+
+	widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
+	gtk_widget_set_sensitive(widget, FALSE);
+	action = GHB_ACTION(ud->builder, "source_action");
+	gtk_action_set_sensitive(action, FALSE);
+	action = GHB_ACTION(ud->builder, "source_single_action");
+	gtk_action_set_sensitive(action, FALSE);
+	ghb_backend_scan(path, titlenum, preview_count);
+}
+
 void
 ghb_do_scan(
 	signal_user_data_t *ud, 
@@ -917,7 +941,7 @@ ghb_do_scan(
 			prune_logs(ud);
 
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-			ghb_backend_scan(path, titlenum, preview_count);
+			start_scan(ud, path, titlenum, preview_count);
 			g_free(path);
 		}
 		else
@@ -2374,6 +2398,16 @@ ghb_backend_events(signal_user_data_t *ud)
 		GtkProgressBar *scan_prog;
 		GtkLabel *label;
 
+		GtkWidget *widget;
+		GtkAction *action;
+
+		widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
+		gtk_widget_set_sensitive(widget, TRUE);
+		action = GHB_ACTION(ud->builder, "source_action");
+		gtk_action_set_sensitive(action, TRUE);
+		action = GHB_ACTION(ud->builder, "source_single_action");
+		gtk_action_set_sensitive(action, TRUE);
+
 		source = ghb_settings_get_string(ud->settings, "source");
 		update_source_label(ud, source, FALSE);
 
@@ -3422,7 +3456,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 				update_source_label(ud, device, TRUE);
 				gint preview_count;
 				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-				ghb_backend_scan(device, 0, preview_count);
+				start_scan(ud, device, 0, preview_count);
 			}
 		}
 	}
@@ -3439,7 +3473,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 				ghb_hb_cleanup(TRUE);
 				prune_logs(ud);
 				ghb_settings_set_string(ud->settings, "source", "/dev/null");
-				ghb_backend_scan("/dev/null", 0, 1);
+				start_scan(ud, "/dev/null", 0, 1);
 			}
 		}
 	}
@@ -3525,7 +3559,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			update_source_label(ud, device, TRUE);
 			gint preview_count;
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-			ghb_backend_scan(device, 0, preview_count);
+			start_scan(ud, device, 0, preview_count);
 		}
 	}
 	else
@@ -3533,7 +3567,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 		ghb_hb_cleanup(TRUE);
 		prune_logs(ud);
 		ghb_settings_set_string(ud->settings, "source", "/dev/null");
-		ghb_backend_scan("/dev/null", 0, 1);
+		start_scan(ud, "/dev/null", 0, 1);
 	}
 }
 #endif
