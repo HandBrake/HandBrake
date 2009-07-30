@@ -106,35 +106,8 @@ static void ScanFunc( void * _data )
         int j;
         hb_state_t state;
         hb_audio_t * audio;
-        hb_title_t * title_tmp = NULL;
 
         title = hb_list_item( data->list_title, i );
-
-        /* I've seen a DVD with strictly identical titles. Check this
-           here and ignore it if redundant */
-        for( j = 0; j < i; j++ )
-        {
-            title_tmp = hb_list_item( data->list_title, j );
-            if( title->vts         == title_tmp->vts &&
-                title->block_start == title_tmp->block_start &&
-                title->block_end   == title_tmp->block_end &&
-                title->block_count == title_tmp->block_count )
-            {
-                break;
-            }
-            else
-            {
-                title_tmp = NULL;
-            }
-        }
-        if( title_tmp )
-        {
-            hb_log( "scan: title %d is duplicate with title %d",
-                    title->index, title_tmp->index );
-            hb_list_rem( data->list_title, title );
-            free( title );      /* This _will_ leak! */
-            continue;
-        }
 
 #define p state.param.scanning
         /* Update the UI */
