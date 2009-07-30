@@ -7,27 +7,6 @@ using Handbrake.Parsing;
 
 namespace Handbrake.Controls
 {
-
-    //  TODO Custom Anamorphic
-    /*  NOT KEEPING DISPLAY ASPECT   == [Complete]
-       
-        KEEPING DISPLAY ASPECT RATIO == [TODO]
-        DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
-        Disable editing: PIXEL WIDTH, PIXEL HEIGHT
-        Changing DISPLAY WIDTH:
-            Changes HEIGHT to keep DAR
-            Changes PIXEL WIDTH to new DISPLAY WIDTH
-            Changes PIXEL HEIGHT to STORAGE WIDTH
-        Changing HEIGHT
-            Changes DISPLAY WIDTH to keep DAR
-            Changes PIXEL WIDTH to new DISPLAY WIDTH
-            Changes PIXEL HEIGHT to STORAGE WIDTH
-        Changing STORAGE_WIDTH:
-            Changes PIXEL WIDTH to DISPLAY WIDTH
-            Changes PIXEL HEIGHT to new STORAGE WIDTH
-     * */
-
-
     public partial class PictureSettings : UserControl
     {
         private readonly CultureInfo Culture = new CultureInfo("en-US", false);
@@ -35,6 +14,7 @@ namespace Handbrake.Controls
 
         private Boolean preventChangingWidth, preventChangingHeight, preventChangingCustom, preventChangingDisplayWidth;
         private int _PresetMaximumWidth, _PresetMaximumHeight;
+        private double cachedDar;
         private Title _SourceTitle;
 
         public PictureSettings()
@@ -86,6 +66,7 @@ namespace Handbrake.Controls
                 updownDisplayWidth.Value = calculateAnamorphicSizes().Width;
                 updownParWidth.Value = _SourceTitle.ParVal.Width;
                 updownParHeight.Value = _SourceTitle.ParVal.Height;
+                cachedDar = (double)updownDisplayWidth.Value / (double)text_height.Value;
             }
         }
 
@@ -155,6 +136,12 @@ namespace Handbrake.Controls
 
                         labelDisplaySize.Text = Math.Truncate(updownDisplayWidth.Value) + "x" + text_height.Value;
                     }
+
+                    if (check_KeepAR.CheckState == CheckState.Checked && Source != null)
+                    {
+                        updownParWidth.Value = updownDisplayWidth.Value;
+                        updownParHeight.Value = text_width.Value;
+                    }
                     break;
                 default:
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
@@ -192,6 +179,27 @@ namespace Handbrake.Controls
                     break;
                 case 3:
                     labelDisplaySize.Text = Math.Truncate(updownDisplayWidth.Value) + "x" + text_height.Value;
+
+                    if (check_KeepAR.CheckState == CheckState.Checked && Source != null)
+                    {
+                        // - Changes DISPLAY WIDTH to keep DAR
+                        // - Changes PIXEL WIDTH to new DISPLAY WIDTH
+                        // - Changes PIXEL HEIGHT to STORAGE WIDTH
+                        // DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
+
+                        double rawCalculatedDisplayWidth = (double)text_height.Value * cachedDar;
+
+                        preventChangingDisplayWidth = true; // Start Guards
+                        preventChangingWidth = true;
+
+                        updownDisplayWidth.Value = (decimal)rawCalculatedDisplayWidth;
+                        updownParWidth.Value = updownDisplayWidth.Value;
+                        updownParHeight.Value = text_width.Value;
+
+                        preventChangingWidth = false; // Reset Guards
+                        preventChangingDisplayWidth = false;
+                    }
+
                     break;
                 default:
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
@@ -226,6 +234,29 @@ namespace Handbrake.Controls
                 updownParHeight.Value = text_width.Value;
                 preventChangingCustom = false;
             }
+
+            if (preventChangingDisplayWidth == false  && check_KeepAR.CheckState == CheckState.Checked)
+            {
+                // - Changes HEIGHT to keep DAR
+                // - Changes PIXEL WIDTH to new DISPLAY WIDTH
+                // - Changes PIXEL HEIGHT to STORAGE WIDTH
+                // DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
+
+                // Calculate new Height Value
+                int modulus = 16;
+                int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus);
+
+                int rawCalculatedHeight = (int) ((int)updownDisplayWidth.Value/cachedDar);
+                int modulusHeight = rawCalculatedHeight - (rawCalculatedHeight % modulus);
+
+                // Update value
+                preventChangingHeight = true;
+                text_height.Value = (decimal)modulusHeight;
+                updownParWidth.Value = updownDisplayWidth.Value;
+                updownParHeight.Value = text_width.Value;
+                preventChangingHeight = false;  
+            }
+           
         }
 
         // Anamorphic Controls

@@ -1710,7 +1710,6 @@ namespace Handbrake
         #endregion
 
         #region In-GUI Encode Status (Experimental)
-
         private void encodeMonitorThread()
         {
             try
@@ -1718,13 +1717,11 @@ namespace Handbrake
                 Parser encode = new Parser(encodeQueue.hbProcess.StandardOutput.BaseStream);
                 encode.OnEncodeProgress += encodeOnEncodeProgress;
                 while (!encode.EndOfStream)
-                {
                     encode.readEncodeStatus();
-                }
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void encodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
