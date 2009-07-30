@@ -298,6 +298,7 @@
     <Compile Include="EncodeQueue\Job.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Changelog.html" />
     <Content Include="handbrakepineapple.ico" />
     <None Include="Resources\logo64.png" />
     <None Include="Resources\logo128.png" />

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ChangeLog</title>
+</head>
+
+<body>
+Windows Platform Specific Changlog.<br />
+
+    <h3>Major Changes</h3>
+
+    - Video Preview window using QuickTime or VLC. (5 to 60 second preview clips) <br />
+    - Re-designed audio tab. Now uses a List and allows for >4 audio channels.<br />
+    - Improved Picture Settings tab (Uses Numeric Controls and includes Modulus based increments and resolution calculation)<br />
+    - Minimise to system tray is now optional with the ability to turn off balloon tip notifications.<br />
+    - Picture settings can now be stored in presets. (Optional setting)<br />
+    - Built-in Presets now automatically update when a change is detected.<br />
+    - Preset XML data files are now stored in the users application data folder which allows for each system account user can have their own presets.<br />
+    - Users can "update" their own presets. (Rather than delete & re-create)<br />
+    - Improved control over how logs are stored. Logs are now kept in the Application data folder for each user. <br />
+    - The Main window and the Queue "Start/Stop" buttons are now linked. Start on the main window starts the Queue. They are no longer separate.<br />
+
+
+
+    <h3>Minor Improvements / Changes</h3>
+    - Resizable queue Window<br />
+    - Scanning a source no longer uses a separate popup window. Scanning simply disables the main window, and displays the status much like the MacGUI<br />
+    - Queue recovery now uses an XML file.<br />
+    - Improvements in the Main Window.<br />
+    	<p style="padding-left:20px; margin:0px;">
+		* Source text box no longer editable. Prevents users changing the source without a rescan.<br />
+	    * Minor changes in the Destination Browse dialog to improve usability.<br />
+	    * Design improvements. Removed smaller fonts where possible. Fixed a few design inconsistencies.<br />
+	    * Warn before stopping a job. Cleanly exits the CLI.<br />
+	    * Selecting a preset which is already selected, will reset all settings to that preset.<br />
+	    * Option to hide query editor tab.<br />
+	    * File overwrite alert for destination files<br />
+        </p>
+    - "Open Individual log file directory" option added to right click menu for Activity log window.<br />
+    - Faster reloading of the activity log window log files.<br />
+    - Ability to "Re-Add" the currently encoding job back onto the end of the queue (Allows cancellation of job for future encoding)<br />
+    - Removed RAM limitation on start-up. Seems next to no-one is trying to run this on Windows 95 anymore.<br />
+    - CLI status can now be displayed in-GUI instead of the CLI readout. (Experimental)<br />
+    - Misc Typo's<br />
+
+
+
+    <h3>Fixed</h3>
+    - Source and Destination fields unpopulated on queue in certain conditions.<br />
+    - Several bugs in the way x264 widgets are handled with custom x264 strings.<br />
+    - Fixed a null pointer exception after scan if all presets had been deleted.<br />
+    - Fixed a few issues with the Chapter Markers tab<br />
+    - Fixed HandBrake GUI would Hang if the CLI stopped responding during start-up. Automatically recovers after 10 second time limit.<br />
+    - Universal input. (AAC Decoding in Mp4 files, Some WMV files)<br />
+    - Many other fixes<br />
+</body>
+</html>

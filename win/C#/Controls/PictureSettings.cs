@@ -219,7 +219,7 @@ namespace Handbrake.Controls
         }
         private void updownDisplayWidth_ValueChanged(object sender, EventArgs e)
         {
-            if (preventChangingDisplayWidth == false)
+            if (preventChangingDisplayWidth == false && check_KeepAR.CheckState == CheckState.Unchecked)
             {
                 preventChangingCustom = true;
                 updownParWidth.Value = updownDisplayWidth.Value;
