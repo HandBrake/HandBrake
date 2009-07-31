@@ -393,7 +393,7 @@ get_direct_dvd_volume_name(const gchar *drive)
 	gchar *result = NULL;
 	gchar vname[51], fsname[51];
 
-	if (GetVolumeInformation(drive, vname, 50, NULL, NULL, NULL, fsname, 51))
+	if (GetVolumeInformation(drive, vname, 50, NULL, NULL, NULL, fsname, 50))
 	{
 		result = g_strdup_printf("%s", vname);
 	}
@@ -656,7 +656,6 @@ update_source_label(signal_user_data_t *ud, const gchar *source, gboolean update
 	
 	g_debug("update_source_label()");
 	len = strlen(filename);
-	if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 	{
 		// Skip dos drive letters
@@ -671,6 +670,7 @@ update_source_label(signal_user_data_t *ud, const gchar *source, gboolean update
 		}
 		else
 		{
+			if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
 			if (start != NULL)
 				start++;
 			else
