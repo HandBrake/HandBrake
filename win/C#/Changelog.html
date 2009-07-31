@@ -8,7 +8,29 @@
 <body>
 Windows Platform Specific Changlog.<br />
 
-    <h3>Major Changes</h3>
+    <h2>Changes since Snapshot 1 - SVN2592</h2>
+    
+    <h4>Major Changes</h4>
+    - Added support for Sparkle for Windows.<br />
+    - Import MacGUI presets.<br />
+    - External SRT supported added.<br />
+    
+    <h4>Minor Improvements / Changes</h4>
+    - Some UI layout changes / improvements<br />
+    - Added new options: preferred language, "Dub Foreign language audio" and "Use Foreign language audio and Subtitles"<br />
+    - Remove M4v from format dropdown and add new option "Use iPod/iTunes friendly (.m4v) file extension for MP4<br />
+    
+    
+    <h4>Fixed</h4>
+    - Re-written the Picture Settings Panel code so it should now work alot better.<br />
+    - Issue where the GUI would error if the encode was stoped too quickly.<br />
+    - Numerous other fixes including: Quality slider resetting to 0 and other settings lost when a title change occurs.<br />
+    - Fixes some scaling / quality issues with QuickTime preview. Also added a possible fix for QT not working on 64bit systems.<br />
+    
+    
+    
+    <h2>Changes since 0.9.3</h2>
+    <h4>Major Changes</h4>
 
     - Video Preview window using QuickTime or VLC. (5 to 60 second preview clips) <br />
     - Re-designed audio tab. Now uses a List and allows for >4 audio channels.<br />
@@ -21,9 +43,7 @@ Windows Platform Specific Changlog.<br />
     - Improved control over how logs are stored. Logs are now kept in the Application data folder for each user. <br />
     - The Main window and the Queue "Start/Stop" buttons are now linked. Start on the main window starts the Queue. They are no longer separate.<br />
 
-
-
-    <h3>Minor Improvements / Changes</h3>
+    <h4>Minor Improvements / Changes</h4>
     - Resizable queue Window<br />
     - Scanning a source no longer uses a separate popup window. Scanning simply disables the main window, and displays the status much like the MacGUI<br />
     - Queue recovery now uses an XML file.<br />
@@ -44,9 +64,7 @@ Windows Platform Specific Changlog.<br />
     - CLI status can now be displayed in-GUI instead of the CLI readout. (Experimental)<br />
     - Misc Typo's<br />
 
-
-
-    <h3>Fixed</h3>
+    <h4>Fixed</h4>
     - Source and Destination fields unpopulated on queue in certain conditions.<br />
     - Several bugs in the way x264 widgets are handled with custom x264 strings.<br />
     - Fixed a null pointer exception after scan if all presets had been deleted.<br />

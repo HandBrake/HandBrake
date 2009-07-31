@@ -91,6 +91,16 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libraries\Growl.Connector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Growl.CoreLibrary, Version=2.0.0.0, Culture=neutral, PublicKeyToken=13e59d82e007b064, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libraries\Growl.CoreLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationCore, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86" />
     <Reference Include="PresentationFramework, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -190,6 +200,7 @@
     <Compile Include="frmUpdater.designer.cs">
       <DependentUpon>frmUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="Functions\GrowlCommunicator.cs" />
     <Compile Include="Functions\PresetLoader.cs" />
     <Compile Include="Functions\QueryGenerator.cs" />
     <Compile Include="Functions\Main.cs" />

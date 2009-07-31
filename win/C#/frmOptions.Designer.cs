@@ -176,6 +176,7 @@ namespace Handbrake
             "Hibernate",
             "Lock system",
             "Log off",
+            "Growl Notification",
             "Quit HandBrake"});
             this.drp_completeOption.Location = new System.Drawing.Point(106, 119);
             this.drp_completeOption.Name = "drp_completeOption";

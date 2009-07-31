@@ -119,6 +119,9 @@ namespace Handbrake
             if (Properties.Settings.Default.tooltipEnable)
                 ToolTip.Active = true;
 
+            // Register with Growl (if not using Growl for the encoding completion action, this wont hurt anything)
+            GrowlCommunicator.Register();
+
             //Finished Loading
             lblStatus.Text = "Loading Complete!";
             Application.DoEvents();
@@ -1440,7 +1443,7 @@ namespace Handbrake
                             dvdInfoPath);
                     }
 
-                    using (StreamReader sr = new StreamReader(dvdInfoPath))
+                    using (StreamReader sr = new StreamReader("scanlog.txt"))
                     {
                         thisDVD = DVD.Parse(sr);
                         sr.Close();

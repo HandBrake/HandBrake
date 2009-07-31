@@ -99,6 +99,8 @@ namespace Handbrake.Parsing
             Match bitrate = Regex.Match(audio_track, @"([0-9]*)bps");
 
             string subformat = m.Groups[4].Value.Trim().Contains("iso639") ? null : m.Groups[4].Value;
+            string samplerateVal = samplerate.Success ? samplerate.Groups[0].Value.Replace("Hz", "").Trim() : "0";
+            string bitrateVal = bitrate.Success ? bitrate.Groups[0].Value.Replace("bps", "").Trim() : "0";
 
             if (track.Success)
             {
@@ -108,8 +110,8 @@ namespace Handbrake.Parsing
                     m_language = track.Groups[2].Value,
                     m_format = m.Groups[3].Value,
                     m_subFormat = subformat,
-                    m_frequency = int.Parse(samplerate.Groups[0].Value.Replace("Hz","").Trim()),
-                    m_bitrate = int.Parse(bitrate.Groups[0].Value.Replace("bps","").Trim()),
+                    m_frequency = int.Parse(samplerateVal),
+                    m_bitrate = int.Parse(bitrateVal),
                     m_iso639_2 = iso639_2.Value.Replace("iso639-2: ", "").Replace(")", "")
                 };
                 return thisTrack; 

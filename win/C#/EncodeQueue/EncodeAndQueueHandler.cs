@@ -448,6 +448,9 @@ namespace Handbrake.EncodeQueue
                 case "Lock System":
                     Win32.LockWorkStation();
                     break;
+                case "Growl Notification":
+                    GrowlCommunicator.Notify();
+                    break;
                 case "Quit HandBrake":
                     Application.Exit();
                     break;
