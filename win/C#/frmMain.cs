@@ -1443,7 +1443,7 @@ namespace Handbrake
                             dvdInfoPath);
                     }
 
-                    using (StreamReader sr = new StreamReader("scanlog.txt"))
+                    using (StreamReader sr = new StreamReader(dvdInfoPath))
                     {
                         thisDVD = DVD.Parse(sr);
                         sr.Close();
