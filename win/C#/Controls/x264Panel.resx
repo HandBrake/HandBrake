@@ -120,6 +120,9 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="slider_psyrd.ToolTip" xml:space="preserve">
     <value>Psychovisual Rate Distortion Optimization sure is a mouthful, isn't it? Basically, it means x264 tries to retain detail, for better quality to the human eye, 
 as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise.</value>
@@ -202,8 +205,9 @@ If you want to create a high profile H.264 video (which is less compatible with 
     <value>This setting is finer-grained than the motion estimation settings above. Instead of dealing with whole pixels, it deals with 4 fractional pixels, or quarter pixels (qpel). 
 Higher levels increase quality by further refining the motion prediction for these quarter pixels, but take longer to encode.
 
-The default, 6, turns on a feature called rate distortion optimization, including psychovisual enhancements. 
-7 enables that rate distortion for B-frames. 8 refines those decisions for I and P frames, and 9 adds on refinement for B-frames as well.</value>
+Level 6, turns on a feature called rate distortion optimization, including psychovisual enhancements. 
+7, the default, enables that rate distortion for B-frames.
+8 refines those decisions for I and P frames, and 9 adds on refinement for B-frames as well.</value>
   </data>
   <data name="drop_MotionEstimationRange.ToolTip" xml:space="preserve">
     <value>This range is the radius, in pixels, x264 should use for motion estimation searches. 
@@ -232,7 +236,9 @@ Logically, to reference an earlier B-frame, you must tell x264 to use at least 2
   </data>
   <data name="check_weightedBFrames.ToolTip" xml:space="preserve">
     <value>Sometimes x264 will base a B-frame's motion compensation on frames both before and after. 
-With weighted B-frames, the amount of influence each frame has is related to its distance from the frame being encoded, instead of both having equal influence.</value>
+With weighted B-frames, the amount of influence each frame has is related to its distance from the frame being encoded, 
+instead of both having equal influence. 
+The AppleTV can have issues with this.</value>
   </data>
   <data name="drop_directPrediction.ToolTip" xml:space="preserve">
     <value>Direct prediction tells x264 what method to use when guessing motion for certain parts of a B-frame. 

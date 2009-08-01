@@ -138,13 +138,13 @@ namespace Handbrake.Controls
         /// </summary>
         public void reset2Defaults()
         {
-            check_8x8DCT.CheckState = CheckState.Unchecked;
+            check_8x8DCT.CheckState = CheckState.Checked;
             check_Cabac.CheckState = CheckState.Checked;
-            check_mixedReferences.CheckState = CheckState.Unchecked;
+            check_mixedReferences.CheckState = CheckState.Checked;
             check_noDCTDecimate.CheckState = CheckState.Unchecked;
             check_noFastPSkip.CheckState = CheckState.Unchecked;
             check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
-            check_weightedBFrames.CheckState = CheckState.Unchecked;
+            check_weightedBFrames.CheckState = CheckState.Checked;
             drop_analysis.SelectedIndex = 0;
             drop_bFrames.SelectedIndex = 0;
             drop_deblockAlpha.SelectedIndex = 0;
@@ -877,7 +877,7 @@ namespace Handbrake.Controls
             switch(sender)
             {
                 case "bframes":
-                    if (drop_bFrames.SelectedIndex < 2)
+                    if (drop_bFrames.SelectedIndex >0 && drop_bFrames.SelectedIndex < 2  )
                     {
                         /* If the b-frame widget is at 0 or 1, the user has chosen
                            not to use b-frames at all. So disable the options
@@ -945,7 +945,7 @@ namespace Handbrake.Controls
                         check_8x8DCT.Visible = true;
                 break;
                 case "ref":
-                    if (drop_refFrames.SelectedIndex < 3)
+                    if (drop_refFrames.SelectedIndex > 0 && drop_refFrames.SelectedIndex < 3)
                     {
                         check_mixedReferences.Visible = false;
                         if (sender != "mixed-refs")
@@ -992,7 +992,7 @@ namespace Handbrake.Controls
                     }
                 break;
                 case "trellis":        // subme
-                    if (drop_trellis.SelectedIndex < 2)
+                    if (drop_trellis.SelectedIndex > 0 && drop_trellis.SelectedIndex < 2 )
                     {
                         slider_psytrellis.Visible = false;
                         slider_psytrellis.Value = 0;

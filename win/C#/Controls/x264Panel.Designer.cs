@@ -237,7 +237,7 @@ namespace Handbrake.Controls
             this.drop_trellis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_trellis.FormattingEnabled = true;
             this.drop_trellis.Items.AddRange(new object[] {
-            "Default (0)",
+            "Default (1)",
             "0",
             "1",
             "2"});
@@ -389,7 +389,7 @@ namespace Handbrake.Controls
             this.drop_subpixelMotionEstimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_subpixelMotionEstimation.FormattingEnabled = true;
             this.drop_subpixelMotionEstimation.Items.AddRange(new object[] {
-            "Default (6)",
+            "Default (7)",
             "0",
             "1",
             "2",
@@ -586,7 +586,7 @@ namespace Handbrake.Controls
             this.drop_bFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_bFrames.FormattingEnabled = true;
             this.drop_bFrames.Items.AddRange(new object[] {
-            "Default (0)",
+            "Default (3)",
             "0",
             "1",
             "2",
@@ -608,9 +608,9 @@ namespace Handbrake.Controls
             this.drop_bFrames.Name = "drop_bFrames";
             this.drop_bFrames.Size = new System.Drawing.Size(121, 21);
             this.drop_bFrames.TabIndex = 56;
-            this.ToolTip.SetToolTip(this.drop_bFrames, "Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack" +
-                    " in more quality at the same bitrate.\r\nUse more of them with animated material: " +
-                    "9-16.");
+            this.ToolTip.SetToolTip(this.drop_bFrames, "Sane values are 1-6. \r\nB-Frames are smaller than other frames, so they let you pa" +
+                    "ck in more quality at the same bitrate. \r\nUse more of them with animated materia" +
+                    "l.");
             this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.drop_bFrames_SelectedIndexChanged);
             // 
             // label64
@@ -627,7 +627,7 @@ namespace Handbrake.Controls
             this.drop_refFrames.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_refFrames.FormattingEnabled = true;
             this.drop_refFrames.Items.AddRange(new object[] {
-            "Default (1)",
+            "Default (3)",
             "0",
             "1",
             "2",
