@@ -619,7 +619,7 @@ static int HandleEvents( hb_handle_t * h )
                     maxWidth = 720;
                     if( !x264opts )
                     {
-                        x264opts = strdup("cabac=0:ref=2:mixed-refs=1:me=umh");
+                        x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6");
                     }
                     anamorphic_mode = 2;
                     job->chapter_markers = 1;
@@ -661,7 +661,7 @@ static int HandleEvents( hb_handle_t * h )
                     maxWidth = 320;
                     if( !x264opts )
                     {
-                        x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1");
+                        x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
                 }
@@ -702,7 +702,7 @@ static int HandleEvents( hb_handle_t * h )
                     maxWidth = 480;
                     if( !x264opts )
                     {
-                        x264opts = strdup("cabac=0:ref=2:mixed-refs:me=umh");
+                        x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
                 }
@@ -744,7 +744,7 @@ static int HandleEvents( hb_handle_t * h )
                     maxWidth = 960;
                     if( !x264opts )
                     {
-                        x264opts = strdup("cabac=0:ref=2:mixed-refs=1:bframes=3:me=umh:subme=7:b-adapt=2:8x8dct=1");
+                        x264opts = strdup("cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0");
                     }
                     anamorphic_mode = 2;
                     job->chapter_markers = 1;
@@ -785,7 +785,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !x264opts )
                     {
-                        x264opts = strdup("ref=2:bframes=2:me=umh");
+                        x264opts = strdup("ref=2:bframes=2:me=umh:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0");
                     }
                     anamorphic_mode = 1;
                     job->chapter_markers = 1;
@@ -826,7 +826,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !x264opts )
                     {
-                        x264opts = strdup("ref=3:mixed-refs:bframes=3:weightb:b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:8x8dct");
+                        x264opts = strdup("b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:trellis=0");
                     }
                     detelecine = 1;
                     decomb = 1;
@@ -902,7 +902,7 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     if( !x264opts )
                     {
-                        x264opts = strdup("bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0");
+                        x264opts = strdup("ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0");
                     }
                     anamorphic_mode = 1;
                     job->chapter_markers = 1;
@@ -944,7 +944,7 @@ static int HandleEvents( hb_handle_t * h )
                     maxWidth = 480;
                     if( !x264opts )
                     {
-                        x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0");
+                        x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
                 }
@@ -985,7 +985,7 @@ static int HandleEvents( hb_handle_t * h )
                     maxWidth = 640;
                     if( !x264opts )
                     {
-                        x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0");
+                        x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
                 }
@@ -2398,21 +2398,21 @@ static void ShowPresets()
 {
     printf("\n< Apple\n");
 
-    printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:mixed-refs=1:me=umh\n");
+    printf("\n   + Universal:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -X 720 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6\n");
 
-    printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1\n");
+    printf("\n   + iPod:  -e x264  -b 700 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 320 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0\n");
 
-    printf("\n   + iPhone & iPod Touch:  -e x264  -q 20.0 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 480 -m -x cabac=0:ref=2:mixed-refs:me=umh\n");
+    printf("\n   + iPhone & iPod Touch:  -e x264  -q 20.0 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 480 -m -x cabac=0:ref=2:me=umh:bframes=0:subme=6:8x8dct=0:trellis=0\n");
 
-    printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:mixed-refs=1:bframes=3:me=umh:subme=7:b-adapt=2:8x8dct=1\n");
+    printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0\n");
 
     printf("\n>\n");
 
     printf("\n< Regular\n");
 
-    printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 --strict-anamorphic -m -x ref=2:bframes=2:me=umh\n");
+    printf("\n   + Normal:  -e x264  -q 20.0 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 --strict-anamorphic -m -x ref=2:bframes=2:me=umh:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0\n");
 
-    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb --loose-anamorphic -m -x ref=3:mixed-refs:bframes=3:weightb:b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:8x8dct\n");
+    printf("\n   + High Profile:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 --detelecine --decomb --loose-anamorphic -m -x b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:trellis=0\n");
 
     printf("\n>\n");
 
@@ -2420,11 +2420,11 @@ static void ShowPresets()
 
     printf("\n   + Classic:  -b 1000 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4\n");
 
-    printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 --strict-anamorphic -m -x bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0\n");
+    printf("\n   + AppleTV Legacy:  -e x264  -b 2500 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 --strict-anamorphic -m -x ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0\n");
 
-    printf("\n   + iPhone Legacy:  -e x264  -b 960 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0\n");
+    printf("\n   + iPhone Legacy:  -e x264  -b 960 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 480 -m -x level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:subme=6:8x8dct=0:trellis=0\n");
 
-    printf("\n   + iPod Legacy:  -e x264  -b 1500 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0\n");
+    printf("\n   + iPod Legacy:  -e x264  -b 1500 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0\n");
 
     printf("\n>\n");
 }

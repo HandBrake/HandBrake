@@ -86,7 +86,11 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
 
     x264_param_default( &param );
-
+    
+    /* Enable metrics */
+    param.analyse.b_psnr = 1;
+    param.analyse.b_ssim = 1;
+    
     param.i_threads    = ( hb_get_cpu_count() * 3 / 2 );
     param.i_width      = job->width;
     param.i_height     = job->height;

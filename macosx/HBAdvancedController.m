@@ -109,19 +109,19 @@
     /*B-Frames fX264optBframesPopUp*/
     int i;
     [fX264optBframesPopUp removeAllItems];
-    [fX264optBframesPopUp addItemWithTitle:@"Default (0)"];
+    [fX264optBframesPopUp addItemWithTitle:@"Default (3)"];
     for (i=0; i<17;i++)
     {
         [fX264optBframesPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
     toolTip =
-        @"Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material: 9-16.";
+        @"Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material.";
     [fX264optBframesPopUp setToolTip: toolTip];
     [fX264optBframesLabel setToolTip: toolTip];
     
     /*Reference Frames fX264optRefPopUp*/
     [fX264optRefPopUp removeAllItems];
-    [fX264optRefPopUp addItemWithTitle:@"Default (1)"];
+    [fX264optRefPopUp addItemWithTitle:@"Default (3)"];
     for (i=0; i<17;i++)
     {
         [fX264optRefPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
@@ -147,19 +147,19 @@
     
     /*Sub Me fX264optSubmePopUp*/
     [fX264optSubmePopUp removeAllItems];
-    [fX264optSubmePopUp addItemWithTitle:@"Default (6)"];
+    [fX264optSubmePopUp addItemWithTitle:@"Default (7)"];
     for (i=0; i<10;i++)
     {
         [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
     toolTip =
-        @"This setting is finer-grained than the motion estimation settings above. Instead of dealing with whole pixels, it deals with 4 fractional pixels, or quarter pixels (qpel). Higher levels increase quality by further refining the motion prediction for these quarter pixels, but take longer to encode.\n\nThe default, 6, turns on a feature called rate distortion optimization, including psychovisual enhancements. 7 enables that rate distortion for B-frames. 8 refines those decisions for I and P frames, and 9 adds on refinement for B-frames as well.";
+        @"This setting is finer-grained than the motion estimation settings above. Instead of dealing with whole pixels, it deals with 4 fractional pixels, or quarter pixels (qpel). Higher levels increase quality by further refining the motion prediction for these quarter pixels, but take longer to encode.\n\nLevel 6, turns on a feature called rate distortion optimization, including psychovisual enhancements. 7, the default, enables that rate distortion for B-frames. 8 refines those decisions for I and P frames, and 9 adds on refinement for B-frames as well.";
     [fX264optSubmePopUp setToolTip: toolTip];
     [fX264optSubmeLabel setToolTip: toolTip];
     
     /*Trellis fX264optTrellisPopUp*/
     [fX264optTrellisPopUp removeAllItems];
-    [fX264optTrellisPopUp addItemWithTitle:@"Default (0)"];
+    [fX264optTrellisPopUp addItemWithTitle:@"Default (1)"];
     for (i=0; i<3;i++)
     {
         [fX264optTrellisPopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
@@ -171,7 +171,7 @@
     [fX264optTrellisLabel setToolTip: toolTip];
     
     /*Mixed-references fX264optMixedRefsSwitch BOOLEAN*/
-    [fX264optMixedRefsSwitch setState:0];
+    [fX264optMixedRefsSwitch setState:1];
     [fX264optMixedRefsSwitch setWantsLayer:YES];
     toolTip =
         @"With this on, different references can be used for different parts of each 16x16 pixel macroblock, increasing quality.";
@@ -204,10 +204,10 @@
     [fX264optMERangeLabel setToolTip: toolTip];
     
     /*Weighted B-Frame Prediction fX264optWeightBSwitch BOOLEAN*/
-    [fX264optWeightBSwitch setState:0];
+    [fX264optWeightBSwitch setState:1];
     [fX264optWeightBSwitch setWantsLayer:YES];
     toolTip =
-        @"Sometimes x264 will base a B-frame's motion compensation on frames both before and after. With weighted B-frames, the amount of influence each frame has is related to its distance from the frame being encoded, instead of both having equal influence.";
+        @"Sometimes x264 will base a B-frame's motion compensation on frames both before and after. With weighted B-frames, the amount of influence each frame has is related to its distance from the frame being encoded, instead of both having equal influence. The AppleTV can have issues with this.";
     [fX264optWeightBSwitch setToolTip: toolTip];
     [fX264optWeightBLabel setToolTip: toolTip];
     
@@ -277,7 +277,7 @@
     [fX264optAnalyseLabel setToolTip: toolTip];
 
     /* 8x8 DCT fX264op8x8dctSwitch */
-    [fX264opt8x8dctSwitch setState:0];
+    [fX264opt8x8dctSwitch setState:1];
     [fX264opt8x8dctSwitch setWantsLayer:YES];
     toolTip =
         @"Checking this box lets x264 break key frames down into 8x8 blocks of pixels for analysis. This is a high profile feature of H.264, which makes it less compatible. It should slightly decrease bitrate or improve quality. Turn it on whenever possible.";
@@ -483,7 +483,8 @@
     
     if( sender == fX264optBframesPopUp || sender == nil || sender == fDisplayX264Options )
     {
-        if ( [fX264optBframesPopUp indexOfSelectedItem ] < 2)
+        if ( [fX264optBframesPopUp indexOfSelectedItem ] > 0 &&
+             [fX264optBframesPopUp indexOfSelectedItem ] < 2)
         {
             /* If the b-frame widget is at 0 or 1, the user has chosen
                not to use b-frames at all. So disable the options
@@ -629,7 +630,8 @@
     
     if( sender == fX264optRefPopUp || sender == nil || sender == fDisplayX264Options )
     {
-        if ( [fX264optRefPopUp indexOfSelectedItem] < 3)
+        if ( [fX264optRefPopUp indexOfSelectedItem] > 0 &&
+             [fX264optRefPopUp indexOfSelectedItem] < 3 )
         {
             if( [fX264optMixedRefsSwitch isHidden] == false )
             {
@@ -714,7 +716,7 @@
                 [[fX264optPsyRDLabel animator] setHidden:NO];
             }
 
-            if( [fX264optTrellisPopUp indexOfSelectedItem] >= 2 && [fX264optCabacSwitch state] == true && [fX264optPsyTrellisSlider isHidden] == true )
+            if( ( [fX264optTrellisPopUp indexOfSelectedItem] == 0 || [fX264optTrellisPopUp indexOfSelectedItem] >= 2 ) && [fX264optCabacSwitch state] == true && [fX264optPsyTrellisSlider isHidden] == true )
             {
                 [[fX264optPsyTrellisSlider animator] setHidden:NO];
                 [[fX264optPsyTrellisLabel animator] setHidden:NO];
@@ -724,7 +726,7 @@
     
     if( sender == fX264optTrellisPopUp || sender == nil || sender == fDisplayX264Options )
     {
-        if( [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
+        if( [fX264optTrellisPopUp indexOfSelectedItem] > 0 && [fX264optTrellisPopUp indexOfSelectedItem] < 2 )
         {
             if( [fX264optPsyTrellisSlider isHidden] == false )
             {
@@ -1079,7 +1081,7 @@
         }
     }
     
-    else if /*Boolean Switches*/ ([optName isEqualToString:@"mixed-refs"] || [optName isEqualToString:@"weightb"] ||  [optName isEqualToString:@"b-pyramid"] || [optName isEqualToString:@"no-fast-pskip"] || [optName isEqualToString:@"no-dct-decimate"] || [optName isEqualToString:@"8x8dct"] )
+    else if /*Boolean Switches*/ ( [optName isEqualToString:@"b-pyramid"] || [optName isEqualToString:@"no-fast-pskip"] || [optName isEqualToString:@"no-dct-decimate"] )
     {
         /* Here is where we take care of the boolean options that work overtly:
            no-dct-decimate being on means no-dct-decimate=1, etc. Some options
@@ -1097,10 +1099,10 @@
         }
     }
     
-    else if ([optName isEqualToString:@"cabac"])
+    else if ( [optName isEqualToString:@"8x8dct"] || [optName isEqualToString:@"weightb"] || [optName isEqualToString:@"mixed-refs"] || [optName isEqualToString:@"cabac"] )
     {
-        /* CABAC is odd, in that it defaults to being on. That means
-           it only needs to be included in the string when turned off. */
+        /* These options default to being on. That means they
+           only need to be included in the string when turned off. */
         if ([sender state] == 1)
         {
             /* It's true so don't include it. */
@@ -1108,7 +1110,7 @@
         }
         else
         {
-            /* Otherwise, include cabac=0 in the string to enable CAVLC. */
+            /* Otherwise, include cabac=0, etc, in the string. */
             thisOpt = [NSString stringWithFormat:@"%@=%d",optName,0];
         }
     }
