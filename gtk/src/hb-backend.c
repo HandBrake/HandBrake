@@ -300,6 +300,7 @@ static options_map_t d_subme_opts[] =
 	{"7", "7", 7, "7"},
 	{"8", "8", 8, "8"},
 	{"9", "9", 9, "9"},
+	{"10", "10", 10, "10"},
 };
 combo_opts_t subme_opts =
 {

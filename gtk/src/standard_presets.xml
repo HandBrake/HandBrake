@@ -104,7 +104,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>cabac=0:ref=2:mixed-refs=1:me=umh</string>
+				<string>cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -191,7 +191,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1</string>
+				<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -278,7 +278,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>cabac=0:ref=2:mixed-refs:me=umh</string>
+				<string>cabac=0:ref=2:me=umh:bframes=0:subme=6:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -379,7 +379,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>cabac=0:ref=2:mixed-refs=1:bframes=3:me=umh:subme=7:b-adapt=2:8x8dct=1</string>
+				<string>cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0</string>
 			</dict>
 		</array>
 		<key>Default</key>
@@ -387,7 +387,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009060401</integer>
+		<integer>2009073001</integer>
 		<key>PresetName</key>
 		<string>Apple</string>
 		<key>Type</key>
@@ -481,7 +481,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>ref=2:bframes=2:me=umh</string>
+				<string>ref=2:bframes=2:me=umh:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -582,7 +582,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>ref=3:mixed-refs:bframes=3:weightb:b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:8x8dct</string>
+				<string>b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:trellis=0</string>
 			</dict>
 		</array>
 		<key>Default</key>
@@ -590,7 +590,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009060401</integer>
+		<integer>2009073001</integer>
 		<key>PresetName</key>
 		<string>Regular</string>
 		<key>Type</key>
@@ -783,7 +783,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>bframes=3:ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0</string>
+				<string>ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -870,7 +870,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0</string>
+				<string>level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:subme=6:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -957,7 +957,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0</string>
+				<string>level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0</string>
 			</dict>
 		</array>
 		<key>Default</key>
@@ -965,7 +965,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009060401</integer>
+		<integer>2009073001</integer>
 		<key>PresetName</key>
 		<string>Legacy</string>
 		<key>Type</key>
@@ -973,4 +973,3 @@
 	</dict>
 </array>
 </plist>
-
