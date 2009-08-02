@@ -80,6 +80,40 @@ namespace Handbrake.Functions
             return dataChpt;
         }
 
+        public static DataGridView importChapterNames(DataGridView dataChpt, string filename)
+        {
+            IDictionary<int, string> chapterMap = new Dictionary<int, string>();
+            try
+            {
+                StreamReader sr = new StreamReader(filename);
+                string csv = sr.ReadLine();
+                while (csv != null)
+                {
+                    if (csv.Trim() != "")
+                    {
+                        string[] contents = csv.Split(',');
+                        int chapter;
+                        int.TryParse(contents[0], out chapter);
+                        chapterMap.Add(chapter, contents[1]);
+                    }
+                    csv = sr.ReadLine();
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            foreach (DataGridViewRow item in dataChpt.Rows)
+            {
+                string name;
+                chapterMap.TryGetValue((int)item.Cells[0].Value, out name);
+                item.Cells[1].Value = name ?? "Chapter " + item.Cells[0].Value;
+            }
+
+            return dataChpt;
+        }
+
         /// <summary>
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters

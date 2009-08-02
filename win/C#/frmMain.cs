@@ -1341,6 +1341,7 @@ namespace Handbrake
                     setExtension(".m4v");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
+                btn_importChapters.Enabled = true;
                 DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
                 if (chapterGridView != null)
                     data_chpt = chapterGridView;
@@ -1351,6 +1352,17 @@ namespace Handbrake
                     setExtension(".mp4");
                 data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
+                btn_importChapters.Enabled = false;
+            }
+        }
+        private void btn_importChapters_Click(object sender, EventArgs e)
+        {
+            if (File_ChapterImport.ShowDialog() == DialogResult.OK)
+            {
+                String filename = File_ChapterImport.FileName;
+                DataGridView imported = Main.importChapterNames(data_chpt, filename);
+                if (imported != null)
+                    data_chpt = imported;
             }
         }
 

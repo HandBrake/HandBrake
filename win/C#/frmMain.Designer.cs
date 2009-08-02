@@ -40,7 +40,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -82,6 +82,7 @@ namespace Handbrake
             this.mnu_delete_preset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_new_preset = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_importMacPreset = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_SelectDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_user_guide = new System.Windows.Forms.ToolStripMenuItem();
@@ -163,13 +164,14 @@ namespace Handbrake
             this.labelSource = new System.Windows.Forms.Label();
             this.labelStaticSource = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.mnu_importMacPreset = new System.Windows.Forms.ToolStripMenuItem();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
+            this.btn_importChapters = new System.Windows.Forms.Button();
             this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Filters = new Handbrake.Controls.Filters();
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.Subtitles = new Handbrake.Controls.Subtitles();
             this.x264Panel = new Handbrake.Controls.x264Panel();
+            this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -392,9 +394,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle3.Format = "N0";
-            dataGridViewCellStyle3.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -624,6 +626,13 @@ namespace Handbrake
             this.btn_new_preset.Size = new System.Drawing.Size(194, 22);
             this.btn_new_preset.Text = "New Preset";
             this.btn_new_preset.Click += new System.EventHandler(this.btn_new_preset_Click);
+            // 
+            // mnu_importMacPreset
+            // 
+            this.mnu_importMacPreset.Name = "mnu_importMacPreset";
+            this.mnu_importMacPreset.Size = new System.Drawing.Size(194, 22);
+            this.mnu_importMacPreset.Text = "Import";
+            this.mnu_importMacPreset.Click += new System.EventHandler(this.mnu_importMacPreset_Click);
             // 
             // mnu_SelectDefault
             // 
@@ -943,6 +952,7 @@ namespace Handbrake
             // tab_chapters
             // 
             this.tab_chapters.BackColor = System.Drawing.Color.Transparent;
+            this.tab_chapters.Controls.Add(this.btn_importChapters);
             this.tab_chapters.Controls.Add(this.label31);
             this.tab_chapters.Controls.Add(this.data_chpt);
             this.tab_chapters.Controls.Add(this.Check_ChapterMarkers);
@@ -1340,6 +1350,7 @@ namespace Handbrake
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(723, 29);
             this.tableLayoutPanel2.TabIndex = 50;
             // 
@@ -1525,17 +1536,23 @@ namespace Handbrake
             this.flowLayoutPanel1.Size = new System.Drawing.Size(195, 13);
             this.flowLayoutPanel1.TabIndex = 55;
             // 
-            // mnu_importMacPreset
-            // 
-            this.mnu_importMacPreset.Name = "mnu_importMacPreset";
-            this.mnu_importMacPreset.Size = new System.Drawing.Size(194, 22);
-            this.mnu_importMacPreset.Text = "Import";
-            this.mnu_importMacPreset.Click += new System.EventHandler(this.mnu_importMacPreset_Click);
-            // 
             // openPreset
             // 
             this.openPreset.DefaultExt = "plist";
             this.openPreset.Filter = "Plist Files|*.plist";
+            // 
+            // btn_importChapters
+            // 
+            this.btn_importChapters.AutoSize = true;
+            this.btn_importChapters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_importChapters.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_importChapters.Location = new System.Drawing.Point(625, 26);
+            this.btn_importChapters.Name = "btn_importChapters";
+            this.btn_importChapters.Size = new System.Drawing.Size(75, 23);
+            this.btn_importChapters.TabIndex = 14;
+            this.btn_importChapters.Text = "Import";
+            this.btn_importChapters.UseVisualStyleBackColor = true;
+            this.btn_importChapters.Click += new System.EventHandler(this.btn_importChapters_Click);
             // 
             // PictureSettings
             // 
@@ -1583,6 +1600,10 @@ namespace Handbrake
             this.x264Panel.Size = new System.Drawing.Size(720, 306);
             this.x264Panel.TabIndex = 0;
             this.x264Panel.x264Query = "";
+            // 
+            // File_ChapterImport
+            // 
+            this.File_ChapterImport.Filter = "CSV Files|*.csv";
             // 
             // frmMain
             // 
@@ -1777,5 +1798,7 @@ namespace Handbrake
         private FlowLayoutPanel flowLayoutPanel1;
         private ToolStripMenuItem mnu_importMacPreset;
         private OpenFileDialog openPreset;
+        private Button btn_importChapters;
+        private OpenFileDialog File_ChapterImport;
     }
 }

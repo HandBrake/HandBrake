@@ -55,6 +55,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.SRTGroup = new System.Windows.Forms.GroupBox();
+            this.check_default_srt = new System.Windows.Forms.CheckBox();
             this.srt_offset = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.srt_browse = new System.Windows.Forms.Button();
@@ -65,7 +66,7 @@
             this.srt_lang = new System.Windows.Forms.ComboBox();
             this.btn_srtAdd = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.check_default_srt = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.SubTitlesGroup.SuspendLayout();
             this.subMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -189,7 +190,7 @@
             this.lv_subList.Name = "lv_subList";
             this.lv_subList.Size = new System.Drawing.Size(688, 131);
             this.lv_subList.TabIndex = 70;
-            //this.lv_subList.UseCompatibleStateImageBehavior = false;
+            this.lv_subList.UseCompatibleStateImageBehavior = false;
             this.lv_subList.View = System.Windows.Forms.View.Details;
             this.lv_subList.SelectedIndexChanged += new System.EventHandler(this.lb_subList_SelectedIndexChanged);
             // 
@@ -312,6 +313,7 @@
             // SRTGroup
             // 
             this.SRTGroup.BackColor = System.Drawing.Color.Transparent;
+            this.SRTGroup.Controls.Add(this.label6);
             this.SRTGroup.Controls.Add(this.check_default_srt);
             this.SRTGroup.Controls.Add(this.srt_offset);
             this.SRTGroup.Controls.Add(this.label5);
@@ -329,9 +331,30 @@
             this.SRTGroup.TabStop = false;
             this.SRTGroup.Text = "Selected Track: New Track";
             // 
+            // check_default_srt
+            // 
+            this.check_default_srt.AutoSize = true;
+            this.check_default_srt.Location = new System.Drawing.Point(491, 22);
+            this.check_default_srt.Name = "check_default_srt";
+            this.check_default_srt.Size = new System.Drawing.Size(61, 17);
+            this.check_default_srt.TabIndex = 80;
+            this.check_default_srt.Text = "Default";
+            this.check_default_srt.UseVisualStyleBackColor = true;
+            this.check_default_srt.CheckedChanged += new System.EventHandler(this.check_default_srt_CheckedChanged);
+            // 
             // srt_offset
             // 
+            this.srt_offset.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.srt_offset.Location = new System.Drawing.Point(402, 20);
+            this.srt_offset.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
             this.srt_offset.Name = "srt_offset";
             this.srt_offset.Size = new System.Drawing.Size(58, 21);
             this.srt_offset.TabIndex = 79;
@@ -456,16 +479,14 @@
             this.openFileDialog.DefaultExt = "srt";
             this.openFileDialog.Filter = "SRT Files |*.srt";
             // 
-            // check_default_srt
+            // label6
             // 
-            this.check_default_srt.AutoSize = true;
-            this.check_default_srt.Location = new System.Drawing.Point(470, 22);
-            this.check_default_srt.Name = "check_default_srt";
-            this.check_default_srt.Size = new System.Drawing.Size(61, 17);
-            this.check_default_srt.TabIndex = 80;
-            this.check_default_srt.Text = "Default";
-            this.check_default_srt.UseVisualStyleBackColor = true;
-            this.check_default_srt.CheckedChanged += new System.EventHandler(this.check_default_srt_CheckedChanged);
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(466, 23);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(20, 13);
+            this.label6.TabIndex = 81;
+            this.label6.Text = "ms";
             // 
             // Subtitles
             // 
@@ -533,5 +554,6 @@
         private System.Windows.Forms.NumericUpDown srt_offset;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.CheckBox check_default_srt;
+        private System.Windows.Forms.Label label6;
     }
 }
