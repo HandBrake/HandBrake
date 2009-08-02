@@ -681,7 +681,7 @@ int get_char_in_utf_8 (unsigned char *buffer, unsigned char c) // Returns number
             *buffer=0x27;			
             return 1;
         case 0x97: // inverted exclamation mark
-            *buffer=0xc1;
+            *buffer=0xc2;
             *(buffer+1)=0xa1;
             return 2;
         case 0x98: // asterisk
