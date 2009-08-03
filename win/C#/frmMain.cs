@@ -286,10 +286,7 @@ namespace Handbrake
                 else
                 {
                     if (fileList[0] != "")
-                    {
-                        setupGUIforScan(fileList[0]);
                         startScan(fileList[0]);
-                    }
                     else
                         UpdateSourceLabel();
                 }
@@ -380,21 +377,21 @@ namespace Handbrake
                 QueryParser parsed = imp.importMacPreset(openPreset.FileName);
                 if (presetHandler.checkIfUserPresetExists(parsed.PresetName + " (Imported)"))
                 {
-                    DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?", 
+                    DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?",
                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.generateTheQuery(this),
+                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null),
                                                    parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
                     PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.addPreset(parsed.PresetName, queryGen.generateTheQuery(this), parsed.UsesPictureSettings);
+                    presetHandler.addPreset(parsed.PresetName, queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
 
-                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.generateTheQuery(this), parsed.UsesPictureSettings))
+                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
                         treeView_presets.Nodes.Add(preset_treeview);
@@ -404,7 +401,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, queryGen.generateTheQuery(this), presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.generateCLIQuery(this, 0, null), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -440,7 +437,7 @@ namespace Handbrake
             {
                 // Get the information about the new build, if any, and close the window
                 info = Main.EndCheckForUpdates(result);
-                
+
                 if (info.NewVersionAvailable && info.BuildInformation != null)
                 {
                     frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
@@ -666,8 +663,8 @@ namespace Handbrake
             {
                 if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
-                    string generatedQuery = queryGen.generateTheQuery(this);
-                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateTheQuery(this);
+                    string generatedQuery = queryGen.generateCLIQuery(this, 0, null);
+                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateCLIQuery(this, 0, null);
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
@@ -735,7 +732,7 @@ namespace Handbrake
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query = queryGen.generateTheQuery(this);
+                String query = queryGen.generateCLIQuery(this, 0, null);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -782,7 +779,7 @@ namespace Handbrake
             String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
             if (ActivityWindow == null)
                 ActivityWindow = new frmActivityWindow(file, encodeQueue, this);
-            
+
             ActivityWindow.Show();
         }
         #endregion
@@ -819,92 +816,57 @@ namespace Handbrake
         //Source
         private void btn_dvd_source_Click(object sender, EventArgs e)
         {
-            // Enable the creation of chapter markers.
-            Check_ChapterMarkers.Enabled = true;
-
-            // Set the last action to scan. 
-            // This is used for tracking which file to load in the activity window
-            lastAction = "scan";
-            sourcePath = string.Empty;
-
             if (DVD_Open.ShowDialog() == DialogResult.OK)
-            {
-                String filename = DVD_Open.SelectedPath;
-
-                if (filename.StartsWith("\\"))
-                {
-                    MessageBox.Show(
-                        "Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer",
-                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    UpdateSourceLabel();
-                }
-                else
-                {
-                    if (filename != "")
-                    {
-                        sourcePath = Path.GetFullPath(filename);
-                        setupGUIforScan(filename);
-                        startScan(filename);
-                    } else
-                        UpdateSourceLabel();
-                }
-            }
+                selectSource(DVD_Open.SelectedPath, 1);
             else
                 UpdateSourceLabel();
         }
         private void btn_file_source_Click(object sender, EventArgs e)
         {
-            // Set the last action to scan. 
-            // This is used for tracking which file to load in the activity window
-            lastAction = "scan";
-            sourcePath = string.Empty;
-
             if (ISO_Open.ShowDialog() == DialogResult.OK)
-            {
-                String filename = ISO_Open.FileName;
-                if (filename.StartsWith("\\"))
-                    MessageBox.Show(
-                        "Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer",
-                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                else
-                {
-                    if (filename != "")
-                    {
-                        sourcePath = Path.GetFileName(filename);
-                        setupGUIforScan(filename);
-                        startScan(filename);
-                    } else
-                        UpdateSourceLabel();
-                }
-            }
-            UpdateSourceLabel();
+                selectSource(ISO_Open.FileName, 2);
+            else
+                UpdateSourceLabel();
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
-            // Enable the creation of chapter markers.
+            if (!mnu_dvd_drive.Text.Contains("VIDEO_TS")) return;
+            string[] path = mnu_dvd_drive.Text.Split(' ');
+            selectSource(path[0], 3);
+        }
+        private void selectSource(string file, int type)
+        {
             Check_ChapterMarkers.Enabled = true;
-
-            // Set the last action to scan. 
-            // This is used for tracking which file to load in the activity window
             lastAction = "scan";
             sourcePath = string.Empty;
 
-            if (mnu_dvd_drive.Text.Contains("VIDEO_TS"))
+            if (file == string.Empty) // Must have a file or path
             {
-                string[] path = mnu_dvd_drive.Text.Split(' ');
-                String filename = path[0];
-                sourcePath = Path.GetFullPath(filename);
-                setupGUIforScan(filename);
-                startScan(filename);
+                UpdateSourceLabel();
+                return;
             }
 
-            // If there are no titles in the dropdown menu then the scan has obviously failed. Display an error message explaining to the user.
-            if (drp_dvdtitle.Items.Count == 0)
-                MessageBox.Show("No Title(s) found. Please make sure you have selected a valid, non-copy protected source.\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            if (file.StartsWith("\\")) // NO UNC Paths
+            {
+                MessageBox.Show(
+                    "Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                UpdateSourceLabel();
+                return;
+            }
 
-            UpdateSourceLabel();
-
-            lbl_encode.Text = "";
+            switch (type) // Start the scan
+            {
+                case 1: // btn_dvd_source_Click()
+                case 3: // mnu_dvd_drive_Click()
+                    sourcePath = Path.GetFullPath(file);
+                    startScan(file);
+                    break;
+                case 2: // btn_file_source_Click()
+                    sourcePath = Path.GetFileName(file);
+                    startScan(file);
+                    break;
+            }
         }
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -914,9 +876,8 @@ namespace Handbrake
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             unRegisterPresetEventHandler();
-            // Reset some values on the form
-            PictureSettings.lbl_Aspect.Text = "Select a Title";
-            //lbl_RecomendedCrop.Text = "Select a Title";
+
+            PictureSettings.lbl_Aspect.Text = "Select a Title"; // Reset some values on the form
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
 
@@ -996,22 +957,51 @@ namespace Handbrake
 
             registerPresetEventHandler();
         }
-        private void drop_chapterStart_SelectedIndexChanged(object sender, EventArgs e)
+        private void chapersChanged(object sender, EventArgs e)
         {
-            int c_start, c_end;
+            Control ctl = (Control) sender;
+            int chapterStart, chapterEnd;
+            int.TryParse(drop_chapterStart.Text, out chapterStart);
+            int.TryParse(drop_chapterFinish.Text, out chapterEnd);
 
-            if (drop_chapterFinish.Text == "Auto" && drop_chapterFinish.Items.Count != 0)
-                drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count - 1;
-
-            int.TryParse(drop_chapterStart.Text, out c_start);
-            int.TryParse(drop_chapterFinish.Text, out c_end);
-
-            if (c_end != 0)
+            switch (ctl.Name)
             {
-                if (c_start > c_end)
-                    drop_chapterFinish.Text = c_start.ToString();
+                case "drop_chapterStart":
+                    if (drop_chapterFinish.SelectedIndex == -1 && drop_chapterFinish.Items.Count != 0)
+                        drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count - 1;
+
+                    if (chapterEnd != 0)
+                        if (chapterStart > chapterEnd)
+                            drop_chapterFinish.Text = chapterStart.ToString();
+                    break;
+                case "drop_chapterFinish":
+                    if (drop_chapterStart.Items.Count >= 1 && drop_chapterStart.SelectedIndex == -1)
+                        drop_chapterStart.SelectedIndex = 0;
+
+                    if (chapterStart != 0)
+                        if (chapterEnd < chapterStart)
+                            drop_chapterFinish.Text = chapterStart.ToString();
+
+                    // Add more rows to the Chapter menu if needed.
+                    if (Check_ChapterMarkers.Checked)
+                    {
+                        int i = data_chpt.Rows.Count, finish = 0;
+                        int.TryParse(drop_chapterFinish.Text, out finish);
+
+                        while (i < finish)
+                        {
+                            int n = data_chpt.Rows.Add();
+                            data_chpt.Rows[n].Cells[0].Value = (i + 1);
+                            data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
+                            data_chpt.Rows[n].Cells[0].ValueType = typeof(int);
+                            data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
+                            i++;
+                        }
+                    }
+                    break;
             }
 
+            // Update the Duration
             lbl_duration.Text = Main.calculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle).ToString();
 
             // Run the Autonaming function
@@ -1019,63 +1009,13 @@ namespace Handbrake
                 text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex);
 
             // Disable chapter markers if only 1 chapter is selected.
-            if (c_start == c_end)
+            if (chapterStart == chapterEnd)
             {
                 Check_ChapterMarkers.Checked = false;
                 Check_ChapterMarkers.Enabled = false;
             }
             else
-                Check_ChapterMarkers.Enabled = true;
-        }
-        private void drop_chapterFinish_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int c_start, c_end;
-
-            if (drop_chapterStart.Text == "Auto" && drop_chapterStart.Items.Count >= 1)
-                drop_chapterStart.SelectedIndex = 1;
-
-            int.TryParse(drop_chapterStart.Text, out c_start);
-            int.TryParse(drop_chapterFinish.Text, out c_end);
-
-            if (c_start != 0)
-            {
-                if (c_end < c_start)
-                    drop_chapterFinish.Text = c_start.ToString();
-            }
-
-            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle).ToString();
-
-            // Run the Autonaming function
-            if (Properties.Settings.Default.autoNaming)
-                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex);
-
-            // Add more rows to the Chapter menu if needed.
-            if (Check_ChapterMarkers.Checked)
-            {
-                int i = data_chpt.Rows.Count, finish = 0;
-
-                if (drop_chapterFinish.Text != "Auto")
-                    int.TryParse(drop_chapterFinish.Text, out finish);
-
-                while (i < finish)
-                {
-                    int n = data_chpt.Rows.Add();
-                    data_chpt.Rows[n].Cells[0].Value = (i + 1);
-                    data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
-                    data_chpt.Rows[n].Cells[0].ValueType = typeof(int);
-                    data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
-                    i++;
-                }
-            }
-
-            // Disable chapter markers if only 1 chapter is selected.
-            if (c_start == c_end)
-            {
-                Check_ChapterMarkers.Checked = false;
-                Check_ChapterMarkers.Enabled = false;
-            }
-            else
-                Check_ChapterMarkers.Enabled = true;
+                Check_ChapterMarkers.Enabled = true;  
         }
 
         //Destination
@@ -1369,7 +1309,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = queryGen.generateTheQuery(this);
+            rtf_query.Text = queryGen.generateCLIQuery(this, 0, null);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {
@@ -1382,8 +1322,9 @@ namespace Handbrake
         #region Source Scan
         public Boolean isScanning { get; set; }
         private static int scanProcessID { get; set; }
-        private void setupGUIforScan(String filename)
+        private void startScan(String filename)
         {
+            // Setup the GUI components for the scan.
             sourcePath = filename;
             foreach (Control ctrl in Controls)
             {
@@ -1392,24 +1333,20 @@ namespace Handbrake
             }
             lbl_encode.Visible = true;
             lbl_encode.Text = "Scanning ...";
-            //gb_source.Text = "Source: Scanning ...";
             btn_source.Enabled = false;
             btn_start.Enabled = false;
             btn_showQueue.Enabled = false;
             btn_add2Queue.Enabled = false;
             tb_preview.Enabled = false;
             mnu_killCLI.Visible = true;
-        }
-        private void startScan(String filename)
-        {
+
+            // Start hte Scan Thread
             try
             {
-                lbl_encode.Visible = true;
-                lbl_encode.Text = "Scanning...";
                 if (ActivityWindow != null)
                     ActivityWindow.setLogView(true);
                 isScanning = true;
-                ThreadPool.QueueUserWorkItem(scanProcess, filename);
+                ThreadPool.QueueUserWorkItem(scanProcess);
             }
             catch (Exception exc)
             {
@@ -1420,7 +1357,6 @@ namespace Handbrake
         {
             try
             {
-                string inputFile = (string)state;
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
                 string dvdInfoPath = Path.Combine(logDir, "last_scan_log.txt");
@@ -1432,7 +1368,7 @@ namespace Handbrake
                 String dvdnav = string.Empty;
                 if (Properties.Settings.Default.dvdnav)
                     dvdnav = " --dvdnav";
-                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 {2} -v >""{3}"" 2>&1""", handbrakeCLIPath, inputFile, dvdnav, dvdInfoPath);
+                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 {2} -v >""{3}"" 2>&1""", handbrakeCLIPath, sourcePath, dvdnav, dvdInfoPath);
 
                 ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
 
@@ -1449,11 +1385,8 @@ namespace Handbrake
                 if (cleanExit) // If 0 exit code, CLI exited cleanly.
                 {
                     if (!File.Exists(dvdInfoPath))
-                    {
-                        throw new Exception(
-                            "Unable to retrieve the DVD Info. last_scan_log.txt is missing. \nExpected location of last_scan_log.txt: \n" +
-                            dvdInfoPath);
-                    }
+                        throw new Exception("Unable to retrieve the DVD Info. last_scan_log.txt is missing. \nExpected location of last_scan_log.txt: \n"
+                                            + dvdInfoPath);
 
                     using (StreamReader sr = new StreamReader(dvdInfoPath))
                     {
@@ -1485,9 +1418,6 @@ namespace Handbrake
                 drp_dvdtitle.Items.Clear();
                 if (thisDVD.Titles.Count != 0)
                     drp_dvdtitle.Items.AddRange(thisDVD.Titles.ToArray());
-                drp_dvdtitle.Text = "Automatic";
-                drop_chapterFinish.Text = "Auto";
-                drop_chapterStart.Text = "Auto";
 
                 // Now select the longest title
                 if (thisDVD.Titles.Count != 0)
@@ -1507,7 +1437,7 @@ namespace Handbrake
                 if (drp_dvdtitle.Items.Count == 0)
                 {
                     MessageBox.Show(
-                        "No Title(s) found. \n\nYour Source may be copy protected, badly mastered or a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).",
+                        "No Title(s) found. \n\nYour Source may be copy protected, badly mastered or in a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     sourcePath = string.Empty;
                 }
@@ -1529,7 +1459,6 @@ namespace Handbrake
                 if (InvokeRequired)
                     BeginInvoke(new UpdateWindowHandler(enableGUI));
                 lbl_encode.Text = "Scan Completed";
-                //gb_source.Text = "Source";
                 foreach (Control ctrl in Controls)
                     ctrl.Enabled = true;
                 btn_start.Enabled = true;
@@ -1570,26 +1499,21 @@ namespace Handbrake
         private void resetGUI()
         {
             drp_dvdtitle.Items.Clear();
-            drp_dvdtitle.Text = "Automatic";
             drop_chapterStart.Items.Clear();
-            drop_chapterStart.Text = "Auto";
             drop_chapterFinish.Items.Clear();
-            drop_chapterFinish.Text = "Auto";
             lbl_duration.Text = "Select a Title";
             PictureSettings.lbl_src_res.Text = "Select a Title";
             PictureSettings.lbl_Aspect.Text = "Select a Title";
-            sourcePath = "Source";
-            text_destination.Text = "";
+            sourcePath = String.Empty;
+            text_destination.Text = String.Empty;
             thisDVD = null;
             selectedTitle = null;
             isScanning = false;
         }
-
         private void UpdateSourceLabel()
         {
             labelSource.Text = string.IsNullOrEmpty(sourcePath) ? "Select \"Source\" to continue." : Path.GetFileName(sourcePath);
         }
-
         #endregion
 
         #region GUI
@@ -1652,14 +1576,13 @@ namespace Handbrake
         #endregion
 
         #region DVD Drive Detection
-        private delegate void ProgressUpdateHandler();
         private void getDriveInfoThread()
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new ProgressUpdateHandler(getDriveInfoThread));
+                    BeginInvoke(new UpdateWindowHandler(getDriveInfoThread));
                     return;
                 }
 
@@ -1702,7 +1625,7 @@ namespace Handbrake
 
             presetHandler.getPresetPanel(ref treeView_presets);
             treeView_presets.Update();
-        }       
+        }
         #endregion
 
         #region Overrides

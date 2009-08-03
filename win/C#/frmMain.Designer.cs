@@ -463,7 +463,7 @@ namespace Handbrake
             this.drop_chapterFinish.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterFinish.TabIndex = 10;
             this.ToolTip.SetToolTip(this.drop_chapterFinish, "Select the chapter range you would like to enocde. (default: All Chapters)");
-            this.drop_chapterFinish.SelectedIndexChanged += new System.EventHandler(this.drop_chapterFinish_SelectedIndexChanged);
+            this.drop_chapterFinish.SelectedIndexChanged += new System.EventHandler(this.chapersChanged);
             // 
             // drop_chapterStart
             // 
@@ -474,7 +474,7 @@ namespace Handbrake
             this.drop_chapterStart.Size = new System.Drawing.Size(69, 21);
             this.drop_chapterStart.TabIndex = 9;
             this.ToolTip.SetToolTip(this.drop_chapterStart, "Select the chapter range you would like to enocde. (default: All Chapters)");
-            this.drop_chapterStart.SelectedIndexChanged += new System.EventHandler(this.drop_chapterStart_SelectedIndexChanged);
+            this.drop_chapterStart.SelectedIndexChanged += new System.EventHandler(this.chapersChanged);
             // 
             // drop_angle
             // 

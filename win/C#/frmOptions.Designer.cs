@@ -1018,7 +1018,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(266, 184);
+            this.drop_x264step.Location = new System.Drawing.Point(358, 184);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -1033,9 +1033,9 @@ namespace Handbrake
             this.tableLayoutPanel4.SetColumnSpan(this.label30, 2);
             this.label30.Location = new System.Drawing.Point(67, 188);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(193, 13);
+            this.label30.Size = new System.Drawing.Size(285, 13);
             this.label30.TabIndex = 87;
-            this.label30.Text = "Constant quality fractional granularity:\r\n";
+            this.label30.Text = "Constant quality fractional granularity (Requires Restart):\r\n";
             // 
             // btn_drive_detect
             // 
@@ -1088,9 +1088,9 @@ namespace Handbrake
             this.tableLayoutPanel4.SetColumnSpan(this.check_queryEditorTab, 4);
             this.check_queryEditorTab.Location = new System.Drawing.Point(67, 72);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
-            this.check_queryEditorTab.Size = new System.Drawing.Size(149, 17);
+            this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
             this.check_queryEditorTab.TabIndex = 84;
-            this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab";
+            this.check_queryEditorTab.Text = "Enable \"Query Editor\" tab (Requires Restart)";
             this.ToolTip.SetToolTip(this.check_queryEditorTab, "Enables the Query Editor tab on the main window. Requires program restart to take" +
                     " effect.");
             this.check_queryEditorTab.UseVisualStyleBackColor = false;

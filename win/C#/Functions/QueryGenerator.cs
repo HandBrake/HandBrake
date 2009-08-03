@@ -15,13 +15,14 @@ namespace Handbrake.Functions
     class QueryGenerator
     {
         /// <summary>
-        /// Generates a CLI query based on the GUI widgets.
+        /// Generates a full CLI query for either encoding or previe encoeds if duration and preview are defined.
         /// </summary>
         /// <param name="mainWindow"></param>
-        /// <returns>The CLI String</returns>
-        public string generateTheQuery(frmMain mainWindow)
+        /// <param name="duration"></param>
+        /// <param name="preview"></param>
+        /// <returns></returns>
+        public string generateCLIQuery(frmMain mainWindow, int duration, string preview)
         {
-            // Source tab
             string query = "";
 
             if (!string.IsNullOrEmpty(mainWindow.sourcePath))
@@ -38,58 +39,30 @@ namespace Handbrake.Functions
                 if (mainWindow.drop_angle.Items.Count != 0)
                     query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
-            if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "")
-                query += " -c " + mainWindow.drop_chapterStart.Text;
-            else if (mainWindow.drop_chapterStart.Text == "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
-                query += " -c " + "0-" + mainWindow.drop_chapterFinish.Text;
-            else if (mainWindow.drop_chapterStart.Text != "Auto" && mainWindow.drop_chapterFinish.Text != "Auto" && mainWindow.drop_chapterStart.Text != "")
-                query += " -c " + mainWindow.drop_chapterStart.Text + "-" + mainWindow.drop_chapterFinish.Text;
 
-            // Destination tab
-            if (mainWindow.text_destination.Text != "")
-                query += " -o " + '"' + mainWindow.text_destination.Text + '"';
-
-            query += generateTabbedComponentsQuery(mainWindow);
-            return query;
-        }
-
-        /// <summary>
-        /// Generates a CLI query for the preview function.
-        /// This basically forces a shortened version of the encdode.
-        /// </summary>
-        /// <param name="mainWindow"></param>
-        /// <param name="duration">Duration</param>
-        /// <param name="preview">Start at preview</param>
-        /// <returns>Returns a CLI query String.</returns>
-        public string generatePreviewQuery(frmMain mainWindow, string duration, string preview)
-        {
-            int seconds;
-            int.TryParse(duration, out seconds);
-
-            // Source tab
-            string query = "";
-
-            if (!string.IsNullOrEmpty(mainWindow.sourcePath))
-                if (mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
-                    query = " -i " + '"' + mainWindow.sourcePath + '"';
-
-            if (mainWindow.drp_dvdtitle.Text != "Automatic")
+            if (duration != 0 && preview != null) // Preivew Query
             {
-                string[] titleInfo = mainWindow.drp_dvdtitle.Text.Split(' ');
-                query += " -t " + titleInfo[0];
+                query += " --start-at-preview " + preview;
+                query += " --stop-at duration:" + duration + " ";
+
+                if (mainWindow.text_destination.Text != "")
+                    query += " -o " + '"' + mainWindow.text_destination.Text.Replace(".m", "_sample.m") + '"';
+            }
+            else // Non Preview Query
+            {
+                if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "")
+                    query += " -c " + mainWindow.drop_chapterStart.Text;
+                else if (mainWindow.drop_chapterStart.Text == "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
+                    query += " -c " + "0-" + mainWindow.drop_chapterFinish.Text;
+                else if (mainWindow.drop_chapterStart.Text != "Auto" && mainWindow.drop_chapterFinish.Text != "Auto" && mainWindow.drop_chapterStart.Text != "")
+                    query += " -c " + mainWindow.drop_chapterStart.Text + "-" + mainWindow.drop_chapterFinish.Text;
+
+                if (mainWindow.text_destination.Text != "")
+                    query += " -o " + '"' + mainWindow.text_destination.Text + '"';
             }
 
-            if (mainWindow.drop_angle.SelectedIndex != 0)
-                query += " --angle " + mainWindow.drop_angle.SelectedItem;
-
-            query += " --start-at-preview " + preview;
-            query += " --stop-at duration:" + duration + " ";
-
-            // Destination tab
-            if (mainWindow.text_destination.Text != "")
-                query += " -o " + '"' + mainWindow.text_destination.Text.Replace(".m", "_sample.m") + '"';
-
             query += generateTabbedComponentsQuery(mainWindow);
+
             return query;
         }
 
@@ -606,7 +579,6 @@ namespace Handbrake.Functions
                 file.Close();
                 file.Dispose();
                 return true;
-
             }
             catch (Exception exc)
             {
