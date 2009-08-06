@@ -599,21 +599,17 @@ set_destination(signal_user_data_t *ud)
 static gchar*
 get_file_label(const gchar *filename)
 {
-	static gchar *containers[] = 
-		{".vob", ".mpg", ".m2ts", ".mkv", ".mp4", ".m4v", ".avi", ".ogm", NULL};
-	gchar *base;
-	gint ii;
+	gchar *base, *pos, *end;
 
 	base = g_path_get_basename(filename);
-	for (ii = 0; containers[ii] != NULL; ii++)
+	pos = strrchr(base, '.');
+	if (pos != NULL)
 	{
-		if (g_str_has_suffix(base, containers[ii]))
-		{
-			gchar *pos;
-			pos = strrchr(base, '.');
+		// If the last '.' is within 4 chars of end of name, assume
+		// there is an extension we want to strip.
+		end = &base[strlen(base) - 1];
+		if (end - pos <= 4)
 			*pos = 0;
-			break;
-		}
 	}
 	return base;
 }
