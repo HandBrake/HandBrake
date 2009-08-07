@@ -49,10 +49,11 @@ transcoder, available for MacOS X, Linux and Windows.
 
 %install
 #rm -rf $RPM_BUILD_ROOT
-#make -C build PREFIX=$RPM_BUILD_ROOT PREFIX/=$RPM_BUILD_ROOT/ install
+# I don't want to rebuild the world, so just install what I've prebuilt
+make -C $RPM_BUILD_ROOT/../.. PREFIX=$RPM_BUILD_ROOT/usr PREFIX/=$RPM_BUILD_ROOT/usr/ install
 
 ## blow away stuff we don't want
-/bin/rm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
+/bin/rm -f $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache
 
 %clean
 rm -rf $RPM_BUILD_ROOT
