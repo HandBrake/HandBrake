@@ -28,6 +28,6 @@
 #include "settings.h"
 
 void ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options);
-gint ghb_lookup_badapt(gchar *options);
+gint ghb_lookup_badapt(const gchar *options);
 
 #endif // _X264HANDLER_H_

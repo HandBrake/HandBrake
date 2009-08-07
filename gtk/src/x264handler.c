@@ -119,6 +119,7 @@ x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 
 enum
 {
+	X264_OPT_NONE,
 	X264_OPT_DEBLOCK,
 	X264_OPT_PSY,
 	X264_OPT_INT,
@@ -146,6 +147,7 @@ static gchar *x264_bpyramid_syns[] = {"b-pyramid", "b_pyramid", NULL};
 static gchar *x264_me_syns[] = {"me", NULL};
 static gchar *x264_merange_syns[] = {"merange", "me-range", "me_range", NULL};
 static gchar *x264_subme_syns[] = {"subme", "subq", NULL};
+static gchar *x264_aqmode_syns[] = {"aq-mode", NULL};
 static gchar *x264_analyse_syns[] = {"analyse", "partitions", NULL};
 static gchar *x264_8x8dct_syns[] = {"8x8dct", NULL};
 static gchar *x264_deblock_syns[] = {"deblock", "filter", NULL};
@@ -180,6 +182,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
 	{x264_merange_syns, "x264_merange", "16", X264_OPT_INT},
 	{x264_subme_syns, "x264_subme", "7", X264_OPT_COMBO},
+	{x264_aqmode_syns, "x264_aqmode", "1", X264_OPT_NONE},
 	{x264_analyse_syns, "x264_analyse", "some", X264_OPT_COMBO},
 	{x264_8x8dct_syns, "x264_8x8dct", "1", X264_OPT_BOOL},
 	{x264_deblock_syns, "x264_deblock_alpha", "0,0", X264_OPT_DEBLOCK},
@@ -680,7 +683,7 @@ x264_lookup_value(gchar **opts, gchar **opt_syns)
 }
 
 gint
-ghb_lookup_badapt(gchar *options)
+ghb_lookup_badapt(const gchar *options)
 {
 	gint ret = 0;
 	gchar *result;
@@ -692,6 +695,28 @@ ghb_lookup_badapt(gchar *options)
 	split = g_strsplit(options, ":", -1);
 
 	result = x264_lookup_value(split, x264_badapt_syns);
+	g_strfreev(split);
+	if (result != NULL)
+	{
+		ret = g_strtod(result, NULL);
+		g_free(result);
+	}
+	return ret;
+}
+
+gint
+ghb_lookup_aqmode(const gchar *options)
+{
+	gint ret = 0;
+	gchar *result;
+	gchar **split;
+	
+	if (options == NULL)
+		options = "";
+
+	split = g_strsplit(options, ":", -1);
+
+	result = x264_lookup_value(split, x264_aqmode_syns);
 	g_strfreev(split);
 	if (result != NULL)
 	{
@@ -716,17 +741,17 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	{
 		x264_remove_opt(split, x264_psy_syns);
 	}
+	gint trell = ghb_settings_combo_int(ud->settings, "x264_trellis");
 	if (subme == 10)
 	{
-		gdouble psy_rd = ghb_settings_get_double(ud->settings, "x264_psy_rd");
-		if (psy_rd == 0.0)
+		gint aqmode = ghb_lookup_aqmode(options);
+		if (trell != 2 || aqmode == 0)
 		{
 			gint pos = x264_find_opt(split, x264_subme_syns);
 			g_free(split[pos]);
 			split[pos] = g_strdup_printf("subme=9");
 		}
 	}
-	gint trell = ghb_settings_combo_int(ud->settings, "x264_trellis");
 	if (trell < 1)
 	{
 		gint psy;
