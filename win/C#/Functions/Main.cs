@@ -80,6 +80,12 @@ namespace Handbrake.Functions
             return dataChpt;
         }
 
+        /// <summary>
+        /// Import a CSV file which contains Chapter Names
+        /// </summary>
+        /// <param name="dataChpt"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static DataGridView importChapterNames(DataGridView dataChpt, string filename)
         {
             IDictionary<int, string> chapterMap = new Dictionary<int, string>();
@@ -241,7 +247,7 @@ namespace Handbrake.Functions
         /// If it does, it means the last queue did not complete before HandBrake closed.
         /// So, return a boolean if true. 
         /// </summary>
-        public static Boolean check_queue_recovery()
+        public static Boolean checkQueueRecovery()
         {
             try
             {

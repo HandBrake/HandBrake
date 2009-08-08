@@ -164,7 +164,7 @@ namespace Handbrake
         // Startup Functions   
         private void queueRecovery()
         {
-            if (Main.check_queue_recovery())
+            if (Main.checkQueueRecovery())
             {
                 DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
