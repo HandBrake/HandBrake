@@ -404,7 +404,8 @@ namespace Handbrake
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(293, 21);
             this.text_an_path.TabIndex = 76;
-            this.ToolTip.SetToolTip(this.text_an_path, "The default location where auto named files are stored.");
+            this.ToolTip.SetToolTip(this.text_an_path, "This is the default location where your encoded files will be stored if \"Automati" +
+                    "cally name output files\" is enabled.");
             this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
             // 
             // label10

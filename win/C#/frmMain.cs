@@ -157,7 +157,7 @@ namespace Handbrake
             catch (Exception ex)
             {
                 if ((bool)result.AsyncState)
-                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -279,7 +279,7 @@ namespace Handbrake
                 if (fileList[0].StartsWith("\\"))
                 {
                     MessageBox.Show(
-                        "Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer",
+                        "Sorry, HandBrake does not support UNC file paths. \nTry mounting the network share as a network drive in My Computer",
                         "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     UpdateSourceLabel();
                 }
@@ -451,7 +451,7 @@ namespace Handbrake
             catch (Exception ex)
             {
                 if ((bool)result.AsyncState)
-                    MessageBox.Show("Unable to check for updates, Please try again later. \n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void mnu_about_Click(object sender, EventArgs e)
@@ -935,7 +935,7 @@ namespace Handbrake
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
-                    MessageBox.Show("You currently have automatic file naming enabled for the destination box, but you do not have a default direcotry set. You should set this in the program options (see Tools Menu)", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a default direcotry set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             data_chpt.Rows.Clear();
