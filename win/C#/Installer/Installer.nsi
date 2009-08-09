@@ -8,7 +8,8 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Handbrake"
-!define PRODUCT_VERSION "SVN 2592 Snapshot"
+!define PRODUCT_VERSION "SVN 2754 Snapshot"
+!define PRODUCT_VERSION_NUMBER "svn2754"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -44,7 +45,7 @@ SetCompressor lzma
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Handbrake-Setup.exe"
+OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI_CLI.exe"
 
 !include WordFunc.nsh
 !insertmacro VersionCompare
@@ -96,6 +97,9 @@ Section "Handbrake" SEC01
   File "Interop.QTOLibrary.dll"
   File "Interop.QTOControlLib.dll"
   File "AxInterop.QTOControlLib.dll"
+  File "Growl.Connector.dll"
+  File "Growl.CoreLibrary.dll"
+  File "libgcc_s_sjlj-1.dll"
   File "HandBrakeCLI.exe"
   File "Handbrake.exe.config"
   File "handbrakepineapple.ico"
@@ -144,6 +148,9 @@ Section Uninstall
   Delete "$INSTDIR\handbrakepineapple.ico"
   Delete "$INSTDIR\Handbrake.exe"
   Delete "$INSTDIR\Handbrake.exe.config"
+  Delete "$INSTDIR\Growl.Connector.dll"
+  Delete "$INSTDIR\Growl.CoreLibrary.dll"
+  Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\COPYING"
   Delete "$INSTDIR\doc\CREDITS"
