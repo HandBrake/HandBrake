@@ -136,6 +136,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                 param.i_level_idc );
     }
 
+    /* B-frames are on by default.*/
+    job->areBframes = 1;
+    
     /*
        	This section passes the string x264opts to libx264 for parsing into
         parameter names and values.
@@ -184,7 +187,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                barfs.  So, check if the x264opts aren't using B-frames, and
                when they aren't, set the boolean job->areBframes as false.
              */
-            job->areBframes = 1;
             if( !( strcmp( name, "bframes" ) ) )
             {
                 if( atoi( value ) == 0 )
