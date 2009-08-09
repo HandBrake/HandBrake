@@ -181,15 +181,15 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                When B-frames are enabled, the max frame count increments
                by 1 (regardless of the number of B-frames). If you don't
                change the duration of the video track when you mux, libmp4
-               barfs.  So, check if the x264opts are using B-frames, and
-               when they are, set the boolean job->areBframes as true.
+               barfs.  So, check if the x264opts aren't using B-frames, and
+               when they aren't, set the boolean job->areBframes as false.
              */
-
+            job->areBframes = 1;
             if( !( strcmp( name, "bframes" ) ) )
             {
-                if( atoi( value ) > 0 )
+                if( atoi( value ) == 0 )
                 {
-                    job->areBframes = 1;
+                    job->areBframes = 0;
                 }
             }
 
