@@ -2900,9 +2900,10 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     if ( buf->id == stream->ffmpeg_video_id && buf->start >= stream->chapter_end )
     {
         hb_chapter_t *chapter = hb_list_item( stream->title->list_chapter,
-                                              ++stream->chapter );
+                                              stream->chapter+1 );
         if( chapter )
         {
+            stream->chapter++;
             stream->chapter_end += chapter->duration;
             buf->new_chap = stream->chapter + 1;
             hb_deep_log( 2, "ffmpeg_read starting chapter %i at %"PRId64,
