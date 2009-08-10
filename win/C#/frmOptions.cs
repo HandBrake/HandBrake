@@ -14,9 +14,13 @@ namespace Handbrake
 {
     public partial class frmOptions : Form
     {
-        public frmOptions()
+        private frmMain mainWindow;
+
+        public frmOptions(frmMain mw)
         {
             InitializeComponent();
+            mainWindow = mw;
+
             IDictionary<string, string> langList = Main.mapLanguages();
             foreach (string item in langList.Keys)
                 drop_preferredLang.Items.Add(item);
@@ -155,7 +159,8 @@ namespace Handbrake
 
             // x264 step
             CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-            drop_x264step.SelectedItem = Properties.Settings.Default.x264cqstep.ToString(culture);
+            string test = Properties.Settings.Default.x264cqstep.ToString(culture);
+            drop_x264step.SelectedItem = test;
 
             // Use Experimental dvdnav
             if (Properties.Settings.Default.dvdnav)
@@ -370,18 +375,19 @@ namespace Handbrake
             switch (drop_x264step.SelectedIndex)
             {
                 case 0:
-                    Properties.Settings.Default.x264cqstep = 1.0;
+                    Properties.Settings.Default.x264cqstep = "1.0";
                     break;
                 case 1:
-                    Properties.Settings.Default.x264cqstep = 0.50;
+                    Properties.Settings.Default.x264cqstep = "0.50";
                     break;
                 case 2:
-                    Properties.Settings.Default.x264cqstep = 0.25;
+                    Properties.Settings.Default.x264cqstep = "0.25";
                     break;
                 case 3:
-                    Properties.Settings.Default.x264cqstep = 0.20;
+                    Properties.Settings.Default.x264cqstep = "0.20";
                     break;
             }
+            mainWindow.setQualityFromSlider();
         }
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)

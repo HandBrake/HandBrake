@@ -343,7 +343,7 @@ namespace Handbrake
         }
         private void mnu_options_Click(object sender, EventArgs e)
         {
-            Form options = new frmOptions();
+            Form options = new frmOptions(this);
             options.ShowDialog();
         }
         #endregion
@@ -1153,7 +1153,9 @@ namespace Handbrake
                     slider_videoQuality.TickFrequency = 1;
 
                     CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                    double multiplier = 1.0 / Properties.Settings.Default.x264cqstep;
+                    double cqStep;
+                    double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
+                    double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
 
                     switch (Properties.Settings.Default.x264cqstep.ToString(culture))
@@ -1165,7 +1167,7 @@ namespace Handbrake
                             slider_videoQuality.Maximum = 204;
                             break;
                         case "0.50":
-                            slider_videoQuality.Maximum = 40;
+                            slider_videoQuality.Maximum = 102;
                             break;
                         case "1.0":
                             slider_videoQuality.Maximum = 51;
@@ -1207,8 +1209,58 @@ namespace Handbrake
                 check_iPodAtom.Checked = false;
             }
         }
+        private string _cachedCqStep = Properties.Settings.Default.x264cqstep;   
+        /// <summary>
+        /// Update the CQ slider for x264 for a new CQ step. This is set from option
+        /// </summary>
+        public void setQualityFromSlider()
+        {
+            // Work out the current RF value.
+            double cqStep;
+            double.TryParse(_cachedCqStep, out cqStep);
+            double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
+            
+            // Change the maximum value for the slider
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+            switch (Properties.Settings.Default.x264cqstep.ToString(culture))
+            {
+                case "0.20":
+                    slider_videoQuality.Maximum = 255;
+                    break;
+                case "0.25":
+                    slider_videoQuality.Maximum = 204;
+                    break;
+                case "0.50":
+                    slider_videoQuality.Maximum = 102;
+                    break;
+                case "1.0":
+                    slider_videoQuality.Maximum = 51;
+                    break;
+                default:
+                    slider_videoQuality.Maximum = 51;
+                    break;
+            }
+
+            // Reset the CQ slider to RF0
+            slider_videoQuality.Value = slider_videoQuality.Maximum;
+
+            // Reset the CQ slider back to the previous value as close as possible
+            double cqStepNew;
+            double.TryParse(Properties.Settings.Default.x264cqstep, out cqStepNew);
+            double rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
+            while (rfValueCurrent < rfValue)
+            {
+                slider_videoQuality.Value--;
+                rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
+            }
+
+            // Cache the CQ step for the next calculation
+            _cachedCqStep = Properties.Settings.Default.x264cqstep;
+        }
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
+            double cqStep;
+            double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
@@ -1219,8 +1271,8 @@ namespace Handbrake
                     SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
-                    rfValue = 51.0 - slider_videoQuality.Value * Properties.Settings.Default.x264cqstep;
-                    max = slider_videoQuality.Maximum * Properties.Settings.Default.x264cqstep;
+                    rfValue = 51.0 - slider_videoQuality.Value * cqStep;
+                    max = slider_videoQuality.Maximum * cqStep;
                     min = slider_videoQuality.Minimum;
                     val = ((max - min) - (rfValue - min)) / (max - min);
                     rfValue = Math.Round(rfValue, 2);

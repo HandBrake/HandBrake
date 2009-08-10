@@ -1019,7 +1019,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(358, 184);
+            this.drop_x264step.Location = new System.Drawing.Point(262, 184);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -1034,9 +1034,9 @@ namespace Handbrake
             this.tableLayoutPanel4.SetColumnSpan(this.label30, 2);
             this.label30.Location = new System.Drawing.Point(67, 188);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(285, 13);
+            this.label30.Size = new System.Drawing.Size(189, 13);
             this.label30.TabIndex = 87;
-            this.label30.Text = "Constant quality fractional granularity (Requires Restart):\r\n";
+            this.label30.Text = "Constant quality fractional granularity";
             // 
             // btn_drive_detect
             // 

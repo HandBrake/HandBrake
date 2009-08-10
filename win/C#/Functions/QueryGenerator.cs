@@ -192,6 +192,9 @@ namespace Handbrake.Functions
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {
+                double cqStep;
+                double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
+
                 double value;
                 switch (mainWindow.drp_videoEncoder.Text)
                 {
@@ -201,7 +204,7 @@ namespace Handbrake.Functions
                         break;
                     case "H.264 (x264)":
                         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                        value = 51 - mainWindow.slider_videoQuality.Value * Properties.Settings.Default.x264cqstep;
+                        value = 51 - mainWindow.slider_videoQuality.Value * cqStep;
                         value = Math.Round(value, 2);
                         query += " -q " + value.ToString(culture);
                         break;

@@ -151,8 +151,10 @@ namespace Handbrake.Functions
                 mainWindow.radio_cq.Checked = true;
                 if (presetQuery.VideoEncoder == "H.264 (x264)")
                 {
+                    double cqStep;
+                    double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
                     int value;
-                    double x264step = Properties.Settings.Default.x264cqstep;
+                    double x264step = cqStep;
                     double presetValue = presetQuery.VideoQuality;
 
                     double x = 51 / x264step;
@@ -169,7 +171,8 @@ namespace Handbrake.Functions
                         double val = Math.Round(calculated, 0);
                         int.TryParse(val.ToString(), out value);
                     }
-                    mainWindow.slider_videoQuality.Value = value;
+                    if (value < mainWindow.slider_videoQuality.Maximum)
+                        mainWindow.slider_videoQuality.Value = value;
                 }
                 else
                 {
