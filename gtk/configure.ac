@@ -69,14 +69,14 @@ AM_PROG_LIBTOOL
 case $host in
   *-*-mingw*)
     if test "x$w32_gst" = "xyes" ; then
-		GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage webkit-1.0"
+		GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage"
 	else
         GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gio-2.0"
 	fi
 	mingw_flag=yes
     ;;
   *)
-	GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage webkit-1.0 libnotify"
+	GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage libnotify"
 	mingw_flag=no
     ;;
 esac
@@ -84,6 +84,17 @@ esac
 if test "x$w32_gst" = "xyes" -o  "x$mingw_flag" != "xyes" ; then
 	CXXFLAGS="$CXXFLAGS -D_ENABLE_GST"
 	CFLAGS="$CFLAGS -D_ENABLE_GST"
+fi
+
+PKG_CHECK_MODULES(OldWebKitGtk, WebKitGtk, old_webkit=yes, old_webkit=no)
+if test "x$old_webkit" = "xyes" ; then
+	if test "x$mingw_flag" = "xno" ; then
+		GHB_PACKAGES="$GHB_PACKAGES WebKitGtk"
+		CXXFLAGS="$CXXFLAGS -D_OLD_WEBKIT"
+		CFLAGS="$CFLAGS -D_OLD_WEBKIT"
+	fi
+else
+	GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
 fi
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])

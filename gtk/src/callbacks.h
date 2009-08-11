@@ -56,8 +56,8 @@ void ghb_do_scan( signal_user_data_t *ud, const gchar *filename,
 	gint titlenum, gboolean force);
 void ghb_log(gchar *log, ...);
 gpointer ghb_check_update(signal_user_data_t *ud);
-void ghb_uninhibit_gpm(void);
-void ghb_inhibit_gpm(void);
+void ghb_uninhibit_gsm(void);
+void ghb_inhibit_gsm(signal_user_data_t *ud);
 #if defined(_WIN32)
 void wm_drive_changed(MSG *msg, signal_user_data_t *ud);
 #endif
