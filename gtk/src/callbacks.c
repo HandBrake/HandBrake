@@ -67,8 +67,8 @@ static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
 void ghb_notify_done(signal_user_data_t *ud);
 gpointer ghb_check_update(signal_user_data_t *ud);
-static gboolean ghb_can_shutdown_gpm();
-static void ghb_shutdown_gpm();
+static gboolean ghb_can_shutdown_gsm();
+static void ghb_shutdown_gsm();
 static gboolean ghb_can_suspend_gpm();
 static void ghb_suspend_gpm();
 static gboolean appcast_busy = FALSE;
@@ -1819,7 +1819,7 @@ shutdown_cb(countdown_t *cd)
 	cd->timeout--;
 	if (cd->timeout == 0)
 	{
-		ghb_shutdown_gpm();
+		ghb_shutdown_gsm();
 		gtk_main_quit();
 		return FALSE;
 	}
@@ -4556,7 +4556,7 @@ ghb_notify_done(signal_user_data_t *ud)
 
 	if (ghb_settings_combo_int(ud->settings, "WhenComplete") == 3)
 	{
-		if (ghb_can_shutdown_gpm())
+		if (ghb_can_shutdown_gsm())
 		{
 			ghb_countdown_dialog(GTK_MESSAGE_WARNING, 
 				"Your encode is complete.",
