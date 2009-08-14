@@ -94,7 +94,9 @@ if test "x$old_webkit" = "xyes" ; then
 		CFLAGS="$CFLAGS -D_OLD_WEBKIT"
 	fi
 else
-	GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
+	if test "x$mingw_flag" = "xno" ; then
+		GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
+	fi
 fi
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
