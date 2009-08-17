@@ -149,7 +149,7 @@ uninstall-local:
 		fi; \
 		rm -f $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
-	@-if test -n "$(DESTDIR)/$(datadir)"; then \
+	@-if test -d "$(DESTDIR)/$(datadir)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
 	else \
@@ -171,7 +171,7 @@ install-data-local:
 		mkdir -p $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/; \
 		$(INSTALL_DATA) $(srcdir)/$$icon $(DESTDIR)/$(datadir)/icons/hicolor/$$SIZE/apps/$$FILE; \
 	done
-	@-if test -n "$(DESTDIR)/$(datadir)"; then \
+	@-if test -d "$(DESTDIR)/$(datadir)"; then \
 		echo "Updating Gtk icon cache."; \
 		$(gtk_update_icon_cache); \
 	else \
