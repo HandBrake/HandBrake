@@ -127,7 +127,7 @@ widget.deps: widgetdeps
 resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget.deps widget_reverse.deps
 	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist
 
-ghbcellrenderertext.c: marshalers.h
+ghbcellrenderertext.$(OBJEXT): marshalers.h
 
 $(srcdir)/marshalers.h: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal $(srcdir)/marshalers.list --header > $(srcdir)/marshalers.h
