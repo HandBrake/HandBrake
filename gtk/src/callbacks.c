@@ -3457,6 +3457,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 				update_source_label(ud, device, TRUE);
 				gint preview_count;
 				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+				ghb_settings_set_string(ud->settings, "source", device);
 				start_scan(ud, device, 0, preview_count);
 			}
 		}
@@ -3560,6 +3561,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			update_source_label(ud, device, TRUE);
 			gint preview_count;
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
+			ghb_settings_set_string(ud->settings, "source", device);
 			start_scan(ud, device, 0, preview_count);
 		}
 	}
