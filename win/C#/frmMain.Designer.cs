@@ -113,6 +113,7 @@ namespace Handbrake
             this.tab_filters = new System.Windows.Forms.TabPage();
             this.tab_subtitles = new System.Windows.Forms.TabPage();
             this.tab_chapters = new System.Windows.Forms.TabPage();
+            this.btn_importChapters = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
             this.tab_query = new System.Windows.Forms.TabPage();
@@ -165,13 +166,12 @@ namespace Handbrake
             this.labelStaticSource = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
-            this.btn_importChapters = new System.Windows.Forms.Button();
+            this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
             this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Filters = new Handbrake.Controls.Filters();
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.Subtitles = new Handbrake.Controls.Subtitles();
             this.x264Panel = new Handbrake.Controls.x264Panel();
-            this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -529,7 +529,7 @@ namespace Handbrake
             // mnu_killCLI
             // 
             this.mnu_killCLI.Name = "mnu_killCLI";
-            this.mnu_killCLI.Size = new System.Drawing.Size(143, 22);
+            this.mnu_killCLI.Size = new System.Drawing.Size(152, 22);
             this.mnu_killCLI.Text = "Cancel Scan";
             this.mnu_killCLI.Visible = false;
             this.mnu_killCLI.Click += new System.EventHandler(this.mnu_killCLI_Click);
@@ -537,7 +537,7 @@ namespace Handbrake
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(143, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -962,6 +962,19 @@ namespace Handbrake
             this.tab_chapters.TabIndex = 6;
             this.tab_chapters.Text = "Chapters";
             this.tab_chapters.UseVisualStyleBackColor = true;
+            // 
+            // btn_importChapters
+            // 
+            this.btn_importChapters.AutoSize = true;
+            this.btn_importChapters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_importChapters.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_importChapters.Location = new System.Drawing.Point(625, 26);
+            this.btn_importChapters.Name = "btn_importChapters";
+            this.btn_importChapters.Size = new System.Drawing.Size(75, 23);
+            this.btn_importChapters.TabIndex = 14;
+            this.btn_importChapters.Text = "Import";
+            this.btn_importChapters.UseVisualStyleBackColor = true;
+            this.btn_importChapters.Click += new System.EventHandler(this.btn_importChapters_Click);
             // 
             // label31
             // 
@@ -1541,18 +1554,9 @@ namespace Handbrake
             this.openPreset.DefaultExt = "plist";
             this.openPreset.Filter = "Plist Files|*.plist";
             // 
-            // btn_importChapters
+            // File_ChapterImport
             // 
-            this.btn_importChapters.AutoSize = true;
-            this.btn_importChapters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_importChapters.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_importChapters.Location = new System.Drawing.Point(625, 26);
-            this.btn_importChapters.Name = "btn_importChapters";
-            this.btn_importChapters.Size = new System.Drawing.Size(75, 23);
-            this.btn_importChapters.TabIndex = 14;
-            this.btn_importChapters.Text = "Import";
-            this.btn_importChapters.UseVisualStyleBackColor = true;
-            this.btn_importChapters.Click += new System.EventHandler(this.btn_importChapters_Click);
+            this.File_ChapterImport.Filter = "CSV Files|*.csv";
             // 
             // PictureSettings
             // 
@@ -1600,10 +1604,6 @@ namespace Handbrake
             this.x264Panel.Size = new System.Drawing.Size(720, 306);
             this.x264Panel.TabIndex = 0;
             this.x264Panel.x264Query = "";
-            // 
-            // File_ChapterImport
-            // 
-            this.File_ChapterImport.Filter = "CSV Files|*.csv";
             // 
             // frmMain
             // 

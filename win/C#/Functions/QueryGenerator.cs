@@ -489,7 +489,7 @@ namespace Handbrake.Functions
             string[] titlesplit = source_title.Split(' ');
             source_title = titlesplit[0];
 
-            if (mainWindow.Check_ChapterMarkers.Checked)
+            if (mainWindow.Check_ChapterMarkers.Checked && mainWindow.Check_ChapterMarkers.Enabled)
             {
                 if (dest_name.Trim() != String.Empty)
                 {

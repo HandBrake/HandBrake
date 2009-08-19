@@ -86,10 +86,10 @@ namespace Handbrake.Controls
             this.lv_audioList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lv_audioList.HideSelection = false;
             this.lv_audioList.LabelWrap = false;
-            this.lv_audioList.Location = new System.Drawing.Point(16, 115);
+            this.lv_audioList.Location = new System.Drawing.Point(16, 150);
             this.lv_audioList.MultiSelect = false;
             this.lv_audioList.Name = "lv_audioList";
-            this.lv_audioList.Size = new System.Drawing.Size(689, 147);
+            this.lv_audioList.Size = new System.Drawing.Size(689, 153);
             this.lv_audioList.TabIndex = 65;
             this.lv_audioList.UseCompatibleStateImageBehavior = false;
             this.lv_audioList.View = System.Windows.Forms.View.Details;
@@ -171,9 +171,9 @@ namespace Handbrake.Controls
             this.btn_RemoveAudioTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_RemoveAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RemoveAudioTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_RemoveAudioTrack.Location = new System.Drawing.Point(133, 268);
+            this.btn_RemoveAudioTrack.Location = new System.Drawing.Point(99, 38);
             this.btn_RemoveAudioTrack.Name = "btn_RemoveAudioTrack";
-            this.btn_RemoveAudioTrack.Size = new System.Drawing.Size(111, 23);
+            this.btn_RemoveAudioTrack.Size = new System.Drawing.Size(71, 23);
             this.btn_RemoveAudioTrack.TabIndex = 64;
             this.btn_RemoveAudioTrack.Text = "Remove";
             this.btn_RemoveAudioTrack.UseVisualStyleBackColor = false;
@@ -184,9 +184,9 @@ namespace Handbrake.Controls
             this.btn_addAudioTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_addAudioTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addAudioTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addAudioTrack.Location = new System.Drawing.Point(16, 268);
+            this.btn_addAudioTrack.Location = new System.Drawing.Point(16, 38);
             this.btn_addAudioTrack.Name = "btn_addAudioTrack";
-            this.btn_addAudioTrack.Size = new System.Drawing.Size(111, 23);
+            this.btn_addAudioTrack.Size = new System.Drawing.Size(77, 23);
             this.btn_addAudioTrack.TabIndex = 63;
             this.btn_addAudioTrack.Text = "Add Track";
             this.btn_addAudioTrack.UseVisualStyleBackColor = false;
@@ -384,7 +384,7 @@ namespace Handbrake.Controls
             this.AudioTrackGroup.Controls.Add(this.label67);
             this.AudioTrackGroup.Controls.Add(this.label66);
             this.AudioTrackGroup.ForeColor = System.Drawing.Color.Black;
-            this.AudioTrackGroup.Location = new System.Drawing.Point(16, 32);
+            this.AudioTrackGroup.Location = new System.Drawing.Point(16, 67);
             this.AudioTrackGroup.Name = "AudioTrackGroup";
             this.AudioTrackGroup.Size = new System.Drawing.Size(689, 77);
             this.AudioTrackGroup.TabIndex = 66;
@@ -401,11 +401,11 @@ namespace Handbrake.Controls
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.AudioTrackGroup);
-            this.Controls.Add(this.lv_audioList);
-            this.Controls.Add(this.btn_RemoveAudioTrack);
-            this.Controls.Add(this.btn_addAudioTrack);
             this.Controls.Add(this.label68);
+            this.Controls.Add(this.btn_addAudioTrack);
+            this.Controls.Add(this.lv_audioList);
+            this.Controls.Add(this.AudioTrackGroup);
+            this.Controls.Add(this.btn_RemoveAudioTrack);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "AudioPanel";
             this.Size = new System.Drawing.Size(720, 310);

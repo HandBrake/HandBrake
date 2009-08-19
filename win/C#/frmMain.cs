@@ -1011,11 +1011,14 @@ namespace Handbrake
             // Disable chapter markers if only 1 chapter is selected.
             if (chapterStart == chapterEnd)
             {
-                Check_ChapterMarkers.Checked = false;
+                btn_importChapters.Enabled = false;
                 Check_ChapterMarkers.Enabled = false;
             }
             else
-                Check_ChapterMarkers.Enabled = true;  
+            {
+                btn_importChapters.Enabled = true;
+                Check_ChapterMarkers.Enabled = true;
+            }
         }
 
         //Destination

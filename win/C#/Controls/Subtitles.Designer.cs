@@ -55,6 +55,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.SRTGroup = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.check_default_srt = new System.Windows.Forms.CheckBox();
             this.srt_offset = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -66,7 +67,6 @@
             this.srt_lang = new System.Windows.Forms.ComboBox();
             this.btn_srtAdd = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.label6 = new System.Windows.Forms.Label();
             this.SubTitlesGroup.SuspendLayout();
             this.subMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -149,9 +149,9 @@
             this.btn_addSubTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_addSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addSubTrack.Location = new System.Drawing.Point(16, 274);
+            this.btn_addSubTrack.Location = new System.Drawing.Point(15, 39);
             this.btn_addSubTrack.Name = "btn_addSubTrack";
-            this.btn_addSubTrack.Size = new System.Drawing.Size(111, 23);
+            this.btn_addSubTrack.Size = new System.Drawing.Size(78, 23);
             this.btn_addSubTrack.TabIndex = 68;
             this.btn_addSubTrack.Text = "Add Track";
             this.btn_addSubTrack.UseVisualStyleBackColor = false;
@@ -162,9 +162,9 @@
             this.btn_RemoveSubTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_RemoveSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RemoveSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(263, 274);
+            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(229, 39);
             this.btn_RemoveSubTrack.Name = "btn_RemoveSubTrack";
-            this.btn_RemoveSubTrack.Size = new System.Drawing.Size(111, 23);
+            this.btn_RemoveSubTrack.Size = new System.Drawing.Size(73, 23);
             this.btn_RemoveSubTrack.TabIndex = 69;
             this.btn_RemoveSubTrack.Text = "Remove";
             this.btn_RemoveSubTrack.UseVisualStyleBackColor = false;
@@ -185,10 +185,10 @@
             this.lv_subList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lv_subList.HideSelection = false;
             this.lv_subList.LabelWrap = false;
-            this.lv_subList.Location = new System.Drawing.Point(17, 137);
+            this.lv_subList.Location = new System.Drawing.Point(16, 169);
             this.lv_subList.MultiSelect = false;
             this.lv_subList.Name = "lv_subList";
-            this.lv_subList.Size = new System.Drawing.Size(688, 131);
+            this.lv_subList.Size = new System.Drawing.Size(688, 114);
             this.lv_subList.TabIndex = 70;
             this.lv_subList.UseCompatibleStateImageBehavior = false;
             this.lv_subList.View = System.Windows.Forms.View.Details;
@@ -281,7 +281,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(16, 39);
+            this.tabControl1.Location = new System.Drawing.Point(15, 71);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(689, 92);
@@ -330,6 +330,15 @@
             this.SRTGroup.TabIndex = 72;
             this.SRTGroup.TabStop = false;
             this.SRTGroup.Text = "Selected Track: New Track";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(466, 23);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(20, 13);
+            this.label6.TabIndex = 81;
+            this.label6.Text = "ms";
             // 
             // check_default_srt
             // 
@@ -466,7 +475,7 @@
             this.btn_srtAdd.BackColor = System.Drawing.Color.Transparent;
             this.btn_srtAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_srtAdd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_srtAdd.Location = new System.Drawing.Point(133, 274);
+            this.btn_srtAdd.Location = new System.Drawing.Point(99, 39);
             this.btn_srtAdd.Name = "btn_srtAdd";
             this.btn_srtAdd.Size = new System.Drawing.Size(124, 23);
             this.btn_srtAdd.TabIndex = 73;
@@ -479,24 +488,15 @@
             this.openFileDialog.DefaultExt = "srt";
             this.openFileDialog.Filter = "SRT Files |*.srt";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(466, 23);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(20, 13);
-            this.label6.TabIndex = 81;
-            this.label6.Text = "ms";
-            // 
             // Subtitles
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.btn_srtAdd);
-            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btn_RemoveSubTrack);
-            this.Controls.Add(this.lv_subList);
             this.Controls.Add(this.label68);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.lv_subList);
             this.Controls.Add(this.btn_addSubTrack);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Subtitles";

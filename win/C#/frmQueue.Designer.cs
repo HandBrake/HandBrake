@@ -351,7 +351,7 @@ namespace Handbrake
             this.list_queue.Name = "list_queue";
             this.list_queue.Size = new System.Drawing.Size(761, 219);
             this.list_queue.TabIndex = 72;
-            //this.list_queue.UseCompatibleStateImageBehavior = false;
+            this.list_queue.UseCompatibleStateImageBehavior = false;
             this.list_queue.View = System.Windows.Forms.View.Details;
             this.list_queue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.list_queue_deleteKey);
             // 
