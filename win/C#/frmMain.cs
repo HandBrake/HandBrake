@@ -1011,13 +1011,18 @@ namespace Handbrake
             // Disable chapter markers if only 1 chapter is selected.
             if (chapterStart == chapterEnd)
             {
-                btn_importChapters.Enabled = false;
                 Check_ChapterMarkers.Enabled = false;
+                btn_importChapters.Enabled = false;
+                data_chpt.Enabled = false;
             }
             else
             {
-                btn_importChapters.Enabled = true;
                 Check_ChapterMarkers.Enabled = true;
+                if (Check_ChapterMarkers.Checked)
+                {
+                    btn_importChapters.Enabled = true;
+                    data_chpt.Enabled = true;
+                }
             }
         }
 
@@ -1334,18 +1339,13 @@ namespace Handbrake
             {
                 if (drop_format.SelectedIndex != 1)
                     setExtension(".m4v");
-                data_chpt.Rows.Clear();
                 data_chpt.Enabled = true;
                 btn_importChapters.Enabled = true;
-                DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
-                if (chapterGridView != null)
-                    data_chpt = chapterGridView;
             }
             else
             {
                 if (drop_format.SelectedIndex != 1 && !Properties.Settings.Default.useM4v)
                     setExtension(".mp4");
-                data_chpt.Rows.Clear();
                 data_chpt.Enabled = false;
                 btn_importChapters.Enabled = false;
             }
@@ -1358,6 +1358,15 @@ namespace Handbrake
                 DataGridView imported = Main.importChapterNames(data_chpt, filename);
                 if (imported != null)
                     data_chpt = imported;
+            }
+        }
+        private void mnu_resetChapters_Click(object sender, EventArgs e)
+        {
+            data_chpt.Rows.Clear();
+            DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
+            if (chapterGridView != null)
+            {
+                data_chpt = chapterGridView;
             }
         }
 

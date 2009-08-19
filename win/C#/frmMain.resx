@@ -135,6 +135,9 @@
   <metadata name="name.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="ChaptersMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>935, 54</value>
+  </metadata>
   <data name="data_chpt.ToolTip" xml:space="preserve">
     <value>Here you can name each chapter that the encoded video will contain.
 Make sure you have selected a "Title" from the "Source" box above otherwise 

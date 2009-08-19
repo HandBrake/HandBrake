@@ -172,6 +172,8 @@ namespace Handbrake
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.Subtitles = new Handbrake.Controls.Subtitles();
             this.x264Panel = new Handbrake.Controls.x264Panel();
+            this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -197,6 +199,7 @@ namespace Handbrake
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.ChaptersMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIconMenu
@@ -384,6 +387,7 @@ namespace Handbrake
             this.data_chpt.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.number,
             this.name});
+            this.data_chpt.ContextMenuStrip = this.ChaptersMenu;
             this.data_chpt.Location = new System.Drawing.Point(16, 55);
             this.data_chpt.MultiSelect = false;
             this.data_chpt.Name = "data_chpt";
@@ -529,7 +533,7 @@ namespace Handbrake
             // mnu_killCLI
             // 
             this.mnu_killCLI.Name = "mnu_killCLI";
-            this.mnu_killCLI.Size = new System.Drawing.Size(152, 22);
+            this.mnu_killCLI.Size = new System.Drawing.Size(143, 22);
             this.mnu_killCLI.Text = "Cancel Scan";
             this.mnu_killCLI.Visible = false;
             this.mnu_killCLI.Click += new System.EventHandler(this.mnu_killCLI_Click);
@@ -537,7 +541,7 @@ namespace Handbrake
             // mnu_exit
             // 
             this.mnu_exit.Name = "mnu_exit";
-            this.mnu_exit.Size = new System.Drawing.Size(152, 22);
+            this.mnu_exit.Size = new System.Drawing.Size(143, 22);
             this.mnu_exit.Text = "E&xit";
             this.mnu_exit.Click += new System.EventHandler(this.mnu_exit_Click);
             // 
@@ -1605,6 +1609,21 @@ namespace Handbrake
             this.x264Panel.TabIndex = 0;
             this.x264Panel.x264Query = "";
             // 
+            // ChaptersMenu
+            // 
+            this.ChaptersMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_resetChapters});
+            this.ChaptersMenu.Name = "presets_menu";
+            this.ChaptersMenu.Size = new System.Drawing.Size(191, 26);
+            this.ChaptersMenu.Text = ";";
+            // 
+            // mnu_resetChapters
+            // 
+            this.mnu_resetChapters.Name = "mnu_resetChapters";
+            this.mnu_resetChapters.Size = new System.Drawing.Size(190, 22);
+            this.mnu_resetChapters.Text = "Reset Chapter Names";
+            this.mnu_resetChapters.Click += new System.EventHandler(this.mnu_resetChapters_Click);
+            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -1662,6 +1681,7 @@ namespace Handbrake
             this.tableLayoutPanel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.ChaptersMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1800,5 +1820,7 @@ namespace Handbrake
         private OpenFileDialog openPreset;
         private Button btn_importChapters;
         private OpenFileDialog File_ChapterImport;
+        private ContextMenuStrip ChaptersMenu;
+        private ToolStripMenuItem mnu_resetChapters;
     }
 }
