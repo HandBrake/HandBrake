@@ -739,7 +739,6 @@
                                 </child>
                                 <child>
                                   <object class="GtkComboBox" id="title">
-                                    <property name="width_request">150</property>
                                     <property name="visible">True</property>
                                     <property name="has_frame">False</property>
                                     <signal handler="title_changed_cb" name="changed"/>
@@ -5826,7 +5825,6 @@ the required multiple.</property>
     <child>
       <object class="GtkEventBox" id="preview_event_box">
         <property name="visible">True</property>
-        <property name="width-request">500</property>
         <property name="app-paintable">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK</property>
         <signal name="enter-notify-event" handler="hud_enter_cb"/>
