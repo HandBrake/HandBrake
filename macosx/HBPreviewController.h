@@ -76,7 +76,6 @@
 - (BOOL)acceptsMouseMovedEvents;
 - (void) displayPreview;
 
-- (void) showHideHudControls;
 - (IBAction) SettingsChanged: (id) sender;
 - (IBAction) pictureSliderChanged: (id) sender;
 - (IBAction)showPictureSettings:(id)sender;

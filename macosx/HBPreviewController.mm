@@ -7,6 +7,13 @@
 #import "HBPreviewController.h"
 #import "Controller.h"
 
+@implementation QTMovieView ( HBQTkitExt )
+- (void) mouseMoved:(NSEvent *)theEvent
+{
+    [super mouseMoved:theEvent];
+}
+@end
+
 @interface PreviewController (Private)
 
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize;
@@ -86,23 +93,16 @@
     /* Setup our layers for core animation */
     [fPictureViewArea setWantsLayer:YES];
     [fPictureView setWantsLayer:YES];
-    
-    [fMovieView setWantsLayer:YES];
-    
+
     [fCancelPreviewMovieButton setWantsLayer:YES];
     [fMovieCreationProgressIndicator setWantsLayer:YES];
-    
+
     [fPictureControlBox setWantsLayer:YES];
-    [fPictureSlider setWantsLayer:YES];
-    [fFullScreenToggleButton setWantsLayer:YES];
-    [fPictureSettingsToggleButton setWantsLayer:YES];
-    [fScaleToScreenToggleButton setWantsLayer:YES];
-    [fCreatePreviewMovieButton setWantsLayer:YES];
-    
     [fEncodingControlBox setWantsLayer:YES];
-    
-    [fShowPreviewMovieButton setWantsLayer:YES];
-    
+	[fMovieView setWantsLayer:YES];
+	[fMovieView setHidden:YES];
+    [fMovieView setDelegate:self];
+
     /* Since the xib has everything off center for easy acess
      * we align our views and windows here we an align to anything
      * since it will actually change later upon source load, but
@@ -118,7 +118,7 @@
 }
 - (BOOL)acceptsMouseMovedEvents
 {
-return YES;
+    return YES;
 }
 
 - (void)windowWillClose:(NSNotification *)aNotification
@@ -135,6 +135,7 @@ return YES;
     [fPictureView setHidden:NO];
     [fMovieView pause:nil];
     [fMovieView setHidden:YES];
+	[fMovieView setMovie:nil];
     
     isFullScreen = NO;
     hudTimerSeconds = 0;
@@ -229,6 +230,7 @@ return YES;
      */
     [fMovieView pause:nil];
     [fMovieView setHidden:YES];
+	[fMovieView setMovie:nil];
     [fMovieCreationProgressIndicator stopAnimation: nil];
     [fMovieCreationProgressIndicator setHidden: YES];
     
@@ -388,6 +390,7 @@ return YES;
     [fPictureView setHidden:NO];
     [fMovieView pause:nil];
     [fMovieView setHidden:YES];
+	[fMovieView setMovie:nil];
     [fEncodingControlBox setHidden: YES];
     
     int newPicture = [fPictureSlider intValue];
@@ -405,7 +408,6 @@ return YES;
     
     if ([fPreviewWindow isVisible])
     {
-        
         [fPreviewWindow close];
         
     }
@@ -437,38 +439,38 @@ return YES;
 - (void) mouseMoved:(NSEvent *)theEvent
 {
     [super mouseMoved:theEvent];
+    NSPoint mouseLoc = [theEvent locationInWindow];
     
-    if (isEncoding == NO)
-    {    
-        if (hudTimerSeconds == 0)
+    /* Test for mouse location to show/hide hud controls */
+    if( isEncoding == NO ) {
+        if( NSPointInRect( mouseLoc, [fPictureControlBox frame] ) )
         {
-            hudTimerSeconds ++;
+            [[fPictureControlBox animator] setHidden: NO];
+            [self stopHudTimer];
+        }
+		else if( NSPointInRect( mouseLoc, [fPictureViewArea frame] ) )
+        {
+            [[fPictureControlBox animator] setHidden: NO];
             [self startHudTimer];
         }
-        
-        if (hudTimerSeconds > 20)
-        {
-            
-            
-            [self stopHudTimer];
-            [self showHideHudControls];
-        }
-        
-    }
+        else
+            [[fPictureControlBox animator] setHidden: YES];
+	}
 }
 
 - (void) startHudTimer
 {
-    if (!fHudTimer)
-    {
-        fHudTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hudTimerFired:) userInfo:nil repeats:YES];
-        [fHudTimer retain];
-    }
+	if( fHudTimer ) {
+		[fHudTimer invalidate];
+		[fHudTimer release];
+	}
+    fHudTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(hudTimerFired:) userInfo:nil repeats:YES];
+    [fHudTimer retain];
 }
 
 - (void) stopHudTimer
 {
-    if (fHudTimer)
+    if( fHudTimer )
     {
         [fHudTimer invalidate];
         [fHudTimer release];
@@ -479,73 +481,12 @@ return YES;
 
 - (void) hudTimerFired: (NSTimer*)theTimer
 {
-    hudTimerSeconds ++;
-    [self showHideHudControls];
-
-}
-
-- (void) showHideHudControls
-{
-    /* Test for mouse location to show/hide hud controls */
-    NSPoint    mouseLoc;
-    NSRect     targetFrame;
-    NSRect     controlBoxFrame;
-    targetFrame = [fPictureViewArea frame];
-    controlBoxFrame = [fPictureControlBox frame];
-    
-    if (isFullScreen)
-    {
-        mouseLoc = [fFullScreenWindow mouseLocationOutsideOfEventStream];
-        [fScaleToScreenToggleButton setHidden:NO];
-    }
-    else
-    {
-        mouseLoc = [fPreviewWindow mouseLocationOutsideOfEventStream];
-        [fScaleToScreenToggleButton setHidden:YES];
-    }
-    
-    /* if the pointer is inside the picture view areas but not
-     * in the controlbox, check the hudTimerSeconds to see if
-     * its in the allowable time span
-     */
-    if ( hudTimerSeconds > 0 && hudTimerSeconds < 20)
-    {
-        
-        if (isEncoding == NO)
-        {
-            if (NSPointInRect (mouseLoc, controlBoxFrame))
-            {
-                /* Mouse is over the preview area so show hud controls so just
-                 * reset the timer to keep the control box visible
-                */
-                [fPictureControlBox setHidden: NO];
-                hudTimerSeconds = 1;
-                return;
-            }
-            /* Re-verify we are within the target frame */
-            if (NSPointInRect (mouseLoc, targetFrame))
-            {
-                /* Mouse is over the preview area so show hud controls */
-                [[fPictureControlBox animator] setHidden: NO];
-                /* increment our timer by one */
-                hudTimerSeconds ++;
-            }
-            else
-            {
-                [[fPictureControlBox animator] setHidden: YES];
-                [self stopHudTimer];
-            }
-        }
-        
-    }
-    else
-    {
+    hudTimerSeconds++;
+    if( hudTimerSeconds >= 10 ) {
         [[fPictureControlBox animator] setHidden: YES];
         [self stopHudTimer];
     }
-    
 }
-
 
 #pragma mark Fullscreen Mode
 
@@ -863,6 +804,7 @@ return YES;
         [fPictureView setHidden:NO];
         [fMovieView pause:nil];
         [fMovieView setHidden:YES];
+		[fMovieView setMovie:nil];
         [fPictureSlider setHidden:NO];
         isEncoding = NO;
         
@@ -1090,53 +1032,56 @@ return YES;
      * we retain the gray cropping border  we have already established
      * with the still previews
      */
-    [fMovieView setHidden:NO];
-    
-    /* Load the new movie into fMovieView */
-    QTMovie * aMovie;
-    NSRect movieBounds;
-    if (path)
-    {
-        [fMovieView setControllerVisible: YES];
-        /* let's make sure there is no movie currently set */
-        [fMovieView setMovie:nil];
-        
-        aMovie = [QTMovie movieWithFile:path error:nil];
 
+    /* Load the new movie into fMovieView */
+    if (path) {
+		QTMovie * aMovie;
+		NSError	 *outError;
+		NSURL *movieUrl = [NSURL fileURLWithPath:path];
+		NSDictionary *movieAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+										 movieUrl, QTMovieURLAttribute,
+										 [NSNumber numberWithBool:NO], QTMovieAskUnresolvedDataRefsAttribute,
+										 [NSNumber numberWithBool:NO], @"QTMovieOpenAsyncOKAttribute",
+										 QTMovieApertureModeClean, QTMovieApertureModeAttribute,
+										 nil];
+
+        aMovie = [[[QTMovie alloc] initWithAttributes:movieAttributes error:&outError] autorelease];
+
+		if (!aMovie) {
+			NSLog(@"Unable to open movie");
+		}
+
+		NSRect movieBounds;
         /* we get some size information from the preview movie */
         NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
         movieBounds = [fMovieView movieBounds];
         movieBounds.size.height = movieSize.height;
 
-        if ([fMovieView isControllerVisible])
-            movieBounds.size.height += [fMovieView controllerBarHeight];
-        /* since for whatever the reason I cannot seem to get the [fMovieView controllerBarHeight]
-         * For now just use 15 for additional height as it seems to line up well
-         */
-        movieBounds.size.height += 15;
+        if ([fMovieView isControllerVisible]) {
+            float controllerBarHeight = [fMovieView controllerBarHeight];
+            if ( controllerBarHeight != 0 ) //Check if QTKit return a real value or not.
+                movieBounds.size.height += controllerBarHeight;
+            else
+                movieBounds.size.height += 15;
+        }
 
         movieBounds.size.width = movieSize.width;
 
         /* We need to find out if the preview movie needs to be scaled down so
          * that it doesn't overflow our available viewing container (just like for image
          * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
-        if( ((int)movieBounds.size.height) > [fPictureViewArea frame].size.height || scaleToScreen == YES)
+        if( (movieBounds.size.height) > [fPictureViewArea frame].size.height || scaleToScreen == YES )
         {
             /* The preview movie would be larger than the available viewing area
              * in the preview movie, so we go ahead and scale it down to the same size
              * as the still preview  or we readjust our window to allow for the added height if need be
              */
-            NSSize displaySize = NSMakeSize( (float)movieBounds.size.width, (float)movieBounds.size.height );
+            NSSize displaySize = NSMakeSize( ( CGFloat ) movieBounds.size.width, ( CGFloat ) movieBounds.size.height );
             NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-            if( [self viewNeedsToResizeToSize:viewSize] )
-            {
-                
+            if( [self viewNeedsToResizeToSize:viewSize] ) {
                 [self resizeSheetForViewSize:viewSize];
                 [self setViewSize:viewSize];
-                
             }
-            
-            [fMovieView setPreservesAspectRatio:YES];
             [fMovieView setFrameSize:viewSize];
         }
         else
@@ -1144,48 +1089,39 @@ return YES;
             /* Since the preview movie is smaller than the available viewing area
              * we can go ahead and use the preview movies native size */
             [fMovieView setFrameSize:movieBounds.size];
-
         }
-        
 
-        
+		//lets reposition the movie if need be
 
-        // lets reposition the movie if need be
-        
         NSPoint origin = [fPictureViewArea frame].origin;
-        origin.x += trunc(([fPictureViewArea frame].size.width -
-                           [fMovieView frame].size.width) / 2.0);
+        origin.x += trunc( ( [fPictureViewArea frame].size.width -
+                            [fMovieView frame].size.width ) / 2.0 );
         /* We need to detect whether or not we are currently less than the available height.*/
-        if (movieBounds.size.height < [fPictureView frame].size.height)
+        if( movieBounds.size.height < [fPictureView frame].size.height )
         {
-        /* If we are, we are adding 15 to the height to allow for the controller bar so
-         * we need to subtract half of that for the origin.y to get the controller bar
-         * below the movie to it lines up vertically with where our still preview was
-         */
-        origin.y += trunc((([fPictureViewArea frame].size.height -
-                            [fMovieView frame].size.height) / 2.0) - 7.5);
+			/* If we are, we are adding 15 to the height to allow for the controller bar so
+			 * we need to subtract half of that for the origin.y to get the controller bar
+			 * below the movie to it lines up vertically with where our still preview was
+			 */
+			origin.y += trunc( ( ( [fPictureViewArea frame].size.height -
+                                  [fMovieView frame].size.height ) / 2.0 ) - 7.5 );
         }
         else
         {
-        /* if we are >= to the height of the picture view area, the controller bar
-         * gets taken care of with picture resizing, so we do not want to offset the height
-         */
-        origin.y += trunc(([fPictureViewArea frame].size.height -
-                            [fMovieView frame].size.height) / 2.0);
+			/* if we are >= to the height of the picture view area, the controller bar
+			 * gets taken care of with picture resizing, so we do not want to offset the height
+			 */
+			origin.y += trunc( ( [fPictureViewArea frame].size.height -
+                                 [fMovieView frame].size.height ) / 2.0 );
         }
-        [fMovieView setFrameOrigin:origin]; 
-        
+        [fMovieView setFrameOrigin:origin];
         [fMovieView setMovie:aMovie];
-        /// to actually play the movie
+        [fMovieView setHidden:NO];
+        // to actually play the movie
         [fMovieView play:aMovie];
     }
-    else
-    {
-        aMovie = nil;
-    }       
     isEncoding = NO;
 }
-
 
 @end
 
@@ -1378,40 +1314,21 @@ return YES;
         }
         
     }
-    
+
     [fPictureView setFrameSize:viewSize];
-    
-        // center it vertically and horizontally
+
+    // center it vertically and horizontally
     NSPoint origin = [fPictureViewArea frame].origin;
     origin.y += ([fPictureViewArea frame].size.height -
                  [fPictureView frame].size.height) / 2.0;
     
     origin.x += ([fPictureViewArea frame].size.width -
                  [fPictureView frame].size.width) / 2.0; 
+
+    origin.x = floor( origin.x );
+    origin.y = floor( origin.y );
     
     [fPictureView setFrameOrigin:origin];
-    
-    NSPoint controlboxorigin = [fPictureView frame].origin;
-    
-    /* for now, put the origin.y 100 above the bottom of the fPictureView */
-    controlboxorigin.y += 100;
-    
-    controlboxorigin.x += ([fPictureViewArea frame].size.width -
-                           [fPictureControlBox frame].size.width) / 2.0;
-    
-    
-    /* origin should be rounded to integer otherwise font/antialiasing
-     * may be blurry.
-     */
-    controlboxorigin.x = floor( controlboxorigin.x );
-    controlboxorigin.y = floor( controlboxorigin.y );
-    
-    /* requires that thefPictureControlBox and the fEncodingControlBox
-     * are the same width to line up.
-     */
-    [fPictureControlBox setFrameOrigin:controlboxorigin];
-    [fEncodingControlBox setFrameOrigin:controlboxorigin];
-    
 }
 
 
