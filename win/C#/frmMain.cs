@@ -371,33 +371,7 @@ namespace Handbrake
         }
         private void mnu_importMacPreset_Click(object sender, EventArgs e)
         {
-            Import imp = new Import();
-            if (openPreset.ShowDialog() == DialogResult.OK)
-            {
-                QueryParser parsed = imp.importMacPreset(openPreset.FileName);
-                if (presetHandler.checkIfUserPresetExists(parsed.PresetName + " (Imported)"))
-                {
-                    DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?",
-                                                           MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes)
-                    {
-                        PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null),
-                                                   parsed.UsesPictureSettings);
-                    }
-                }
-                else
-                {
-                    PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.addPreset(parsed.PresetName, queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
-
-                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
-                    {
-                        TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
-                        treeView_presets.Nodes.Add(preset_treeview);
-                    }
-                }
-            }
+            importPreset();
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
@@ -472,6 +446,10 @@ namespace Handbrake
         private void pmnu_collapse_Click(object sender, EventArgs e)
         {
             treeView_presets.CollapseAll();
+        }
+        private void pmnu_import_Click(object sender, EventArgs e)
+        {
+            importPreset();
         }
         private void pmnu_saveChanges_Click(object sender, EventArgs e)
         {
@@ -623,6 +601,36 @@ namespace Handbrake
                 {
                     if (node.Text.Equals("Normal"))
                         treeView_presets.SelectedNode = treeView_presets.Nodes[treenode.Index].Nodes[0];
+                }
+            }
+        }
+        private void importPreset()
+        {
+            Import imp = new Import();
+            if (openPreset.ShowDialog() == DialogResult.OK)
+            {
+                QueryParser parsed = imp.importMacPreset(openPreset.FileName);
+                if (presetHandler.checkIfUserPresetExists(parsed.PresetName + " (Imported)"))
+                {
+                    DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?",
+                                                           MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null),
+                                                   parsed.UsesPictureSettings);
+                    }
+                }
+                else
+                {
+                    PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                    presetHandler.addPreset(parsed.PresetName, queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
+
+                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
+                    {
+                        TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
+                        treeView_presets.Nodes.Add(preset_treeview);
+                    }
                 }
             }
         }

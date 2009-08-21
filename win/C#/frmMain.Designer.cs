@@ -167,13 +167,15 @@ namespace Handbrake
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
+            this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Filters = new Handbrake.Controls.Filters();
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.Subtitles = new Handbrake.Controls.Subtitles();
             this.x264Panel = new Handbrake.Controls.x264Panel();
-            this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
+            this.pmnu_import = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -1128,10 +1130,12 @@ namespace Handbrake
             this.pmnu_expandAll,
             this.pmnu_collapse,
             this.sep1,
+            this.pmnu_import,
+            this.toolStripSeparator2,
             this.pmnu_saveChanges,
             this.pmnu_delete});
             this.presets_menu.Name = "presets_menu";
-            this.presets_menu.Size = new System.Drawing.Size(155, 98);
+            this.presets_menu.Size = new System.Drawing.Size(155, 148);
             this.presets_menu.Text = ";";
             this.presets_menu.Opening += new System.ComponentModel.CancelEventHandler(this.presets_menu_Opening);
             // 
@@ -1562,6 +1566,21 @@ namespace Handbrake
             // 
             this.File_ChapterImport.Filter = "CSV Files|*.csv";
             // 
+            // ChaptersMenu
+            // 
+            this.ChaptersMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_resetChapters});
+            this.ChaptersMenu.Name = "presets_menu";
+            this.ChaptersMenu.Size = new System.Drawing.Size(191, 26);
+            this.ChaptersMenu.Text = ";";
+            // 
+            // mnu_resetChapters
+            // 
+            this.mnu_resetChapters.Name = "mnu_resetChapters";
+            this.mnu_resetChapters.Size = new System.Drawing.Size(190, 22);
+            this.mnu_resetChapters.Text = "Reset Chapter Names";
+            this.mnu_resetChapters.Click += new System.EventHandler(this.mnu_resetChapters_Click);
+            // 
             // PictureSettings
             // 
             this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
@@ -1609,20 +1628,17 @@ namespace Handbrake
             this.x264Panel.TabIndex = 0;
             this.x264Panel.x264Query = "";
             // 
-            // ChaptersMenu
+            // pmnu_import
             // 
-            this.ChaptersMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_resetChapters});
-            this.ChaptersMenu.Name = "presets_menu";
-            this.ChaptersMenu.Size = new System.Drawing.Size(191, 26);
-            this.ChaptersMenu.Text = ";";
+            this.pmnu_import.Name = "pmnu_import";
+            this.pmnu_import.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_import.Text = "Import";
+            this.pmnu_import.Click += new System.EventHandler(this.pmnu_import_Click);
             // 
-            // mnu_resetChapters
+            // toolStripSeparator2
             // 
-            this.mnu_resetChapters.Name = "mnu_resetChapters";
-            this.mnu_resetChapters.Size = new System.Drawing.Size(190, 22);
-            this.mnu_resetChapters.Text = "Reset Chapter Names";
-            this.mnu_resetChapters.Click += new System.EventHandler(this.mnu_resetChapters_Click);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
             // 
             // frmMain
             // 
@@ -1822,5 +1838,7 @@ namespace Handbrake
         private OpenFileDialog File_ChapterImport;
         private ContextMenuStrip ChaptersMenu;
         private ToolStripMenuItem mnu_resetChapters;
+        private ToolStripMenuItem pmnu_import;
+        private ToolStripSeparator toolStripSeparator2;
     }
 }

@@ -58,8 +58,12 @@ namespace Handbrake.Controls
                 }
                 else
                 {
-                    text_width.Value = _SourceTitle.Resolution.Width;
-                    text_height.Value = _SourceTitle.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                    if (text_width.Value == 0 && text_height.Value ==0)// Only update the values if the fields don't already have values.
+                    { 
+                        text_width.Value = _SourceTitle.Resolution.Width;
+                        text_height.Value = _SourceTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                    }
+
                     labelDisplaySize.Text = calculateAnamorphicSizes().Width + "x" + calculateAnamorphicSizes().Height;
                 }
 
@@ -130,7 +134,7 @@ namespace Handbrake.Controls
                         if (preventChangingCustom)
                             break;
 
-                        preventChangingDisplayWidth = true; 
+                        preventChangingDisplayWidth = true;
                         updownDisplayWidth.Value = text_width.Value * updownParWidth.Value / updownParHeight.Value;
                         preventChangingDisplayWidth = false;
 
@@ -235,7 +239,7 @@ namespace Handbrake.Controls
                 preventChangingCustom = false;
             }
 
-            if (preventChangingDisplayWidth == false  && check_KeepAR.CheckState == CheckState.Checked)
+            if (preventChangingDisplayWidth == false && check_KeepAR.CheckState == CheckState.Checked)
             {
                 // - Changes HEIGHT to keep DAR
                 // - Changes PIXEL WIDTH to new DISPLAY WIDTH
@@ -246,7 +250,7 @@ namespace Handbrake.Controls
                 int modulus = 16;
                 int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus);
 
-                int rawCalculatedHeight = (int) ((int)updownDisplayWidth.Value/cachedDar);
+                int rawCalculatedHeight = (int)((int)updownDisplayWidth.Value / cachedDar);
                 int modulusHeight = rawCalculatedHeight - (rawCalculatedHeight % modulus);
 
                 // Update value
@@ -254,9 +258,9 @@ namespace Handbrake.Controls
                 text_height.Value = (decimal)modulusHeight;
                 updownParWidth.Value = updownDisplayWidth.Value;
                 updownParHeight.Value = text_width.Value;
-                preventChangingHeight = false;  
+                preventChangingHeight = false;
             }
-           
+
         }
 
         // Anamorphic Controls

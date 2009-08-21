@@ -149,7 +149,7 @@
             this.btn_addSubTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_addSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_addSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addSubTrack.Location = new System.Drawing.Point(15, 39);
+            this.btn_addSubTrack.Location = new System.Drawing.Point(16, 38);
             this.btn_addSubTrack.Name = "btn_addSubTrack";
             this.btn_addSubTrack.Size = new System.Drawing.Size(78, 23);
             this.btn_addSubTrack.TabIndex = 68;
@@ -162,7 +162,7 @@
             this.btn_RemoveSubTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_RemoveSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RemoveSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(229, 39);
+            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(230, 38);
             this.btn_RemoveSubTrack.Name = "btn_RemoveSubTrack";
             this.btn_RemoveSubTrack.Size = new System.Drawing.Size(73, 23);
             this.btn_RemoveSubTrack.TabIndex = 69;
@@ -475,7 +475,7 @@
             this.btn_srtAdd.BackColor = System.Drawing.Color.Transparent;
             this.btn_srtAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_srtAdd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_srtAdd.Location = new System.Drawing.Point(99, 39);
+            this.btn_srtAdd.Location = new System.Drawing.Point(100, 38);
             this.btn_srtAdd.Name = "btn_srtAdd";
             this.btn_srtAdd.Size = new System.Drawing.Size(124, 23);
             this.btn_srtAdd.TabIndex = 73;
