@@ -36,5 +36,6 @@ void ghb_add_subtitle(
 	signal_user_data_t *ud, GValue *settings);
 void ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings);
 void ghb_subtitle_prune(signal_user_data_t *ud);
+gboolean ghb_soft_in_subtitle_list(GValue *subtitle_list);
 
 #endif // _SUBTITLEHANDLER_H_

@@ -603,6 +603,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	{
 		gtk_widget_set_sensitive(xwidget, FALSE);
 	}
+	ghb_update_destination_extension(ud);
 }
 
 G_MODULE_EXPORT void

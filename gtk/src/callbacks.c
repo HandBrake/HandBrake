@@ -522,21 +522,18 @@ get_extension(signal_user_data_t *ud)
 	int container;
 	const gchar *extension = "error";
 	GValue *audio_list;
+	GValue *subtitle_list;
 
 	container = ghb_settings_combo_int(ud->settings, "FileFormat");
 	if (container == HB_MUX_MP4)
 	{
 		extension = "mp4";
 		audio_list = ghb_settings_get_value(ud->settings, "audio_list");
-		if (ghb_ac3_in_audio_list (audio_list))
-		{
-			extension = "m4v";
-		}
-		else if (ghb_settings_get_boolean(ud->settings, "ChapterMarkers"))
-		{
-			extension = "m4v";
-		}
-		else if (ghb_settings_get_boolean(ud->settings, "UseM4v"))
+		subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
+		if (ghb_ac3_in_audio_list(audio_list) ||
+			ghb_soft_in_subtitle_list(subtitle_list) ||
+			ghb_settings_get_boolean(ud->settings, "ChapterMarkers") ||
+			ghb_settings_get_boolean(ud->settings, "UseM4v"))
 		{
 			extension = "m4v";
 		}

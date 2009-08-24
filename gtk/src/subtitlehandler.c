@@ -59,6 +59,24 @@ mustBurn(signal_user_data_t *ud, gint track)
 	return FALSE;
 }
 
+gboolean
+ghb_soft_in_subtitle_list(GValue *subtitle_list)
+{
+	gint count, ii;
+	GValue *settings;
+
+	count = ghb_array_len(subtitle_list);
+	for (ii = 0; ii < count; ii++)
+	{
+		settings = ghb_array_get_nth(subtitle_list, ii);
+		if (!ghb_settings_get_boolean(settings, "SubtitleBurned"))
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
 void
 ghb_subtitle_exclusive_burn(signal_user_data_t *ud, gint index)
 {
@@ -167,6 +185,7 @@ ghb_add_srt(signal_user_data_t *ud, GValue *settings)
 		widget = GHB_WIDGET (ud->builder, "srt_add");
 		gtk_widget_set_sensitive(widget, FALSE);
 	}
+	ghb_update_destination_extension(ud);
 	ghb_live_reset(ud);
 }
 
@@ -225,6 +244,7 @@ ghb_add_subtitle(signal_user_data_t *ud, GValue *settings)
 		widget = GHB_WIDGET (ud->builder, "srt_add");
 		gtk_widget_set_sensitive(widget, FALSE);
 	}
+	ghb_update_destination_extension(ud);
 	ghb_live_reset(ud);
 }
 
@@ -563,6 +583,7 @@ subtitle_burned_toggled_cb(
 	// Unburn the rest
 	if (active)
 		ghb_subtitle_exclusive_burn(ud, row);
+	ghb_update_destination_extension(ud);
 	ghb_live_reset(ud);
 }
 
