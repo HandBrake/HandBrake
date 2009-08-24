@@ -50,7 +50,7 @@ transcoder, available for MacOS X, Linux and Windows.
 %install
 #rm -rf $RPM_BUILD_ROOT
 # I don't want to rebuild the world, so just install what I've prebuilt
-make -C $RPM_BUILD_ROOT/../.. PREFIX=$RPM_BUILD_ROOT/usr PREFIX/=$RPM_BUILD_ROOT/usr/ install
+make -C $RPM_BUILD_ROOT/../.. DESTDIR=$RPM_BUILD_ROOT install
 
 ## blow away stuff we don't want
 /bin/rm -f $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/icon-theme.cache

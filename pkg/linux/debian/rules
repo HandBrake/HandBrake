@@ -43,7 +43,7 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_installdirs
-	$(MAKE) -C $(BUILDDIR) PREFIX=$(CURDIR)/debian/tmp/usr PREFIX/=$(CURDIR)/debian/tmp/usr/ install
+	$(MAKE) -C $(BUILDDIR) DESTDIR=$(CURDIR)/debian/tmp install
 
 # Build architecture-independent files here.
 binary-indep: build install

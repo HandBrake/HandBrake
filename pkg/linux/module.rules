@@ -12,7 +12,6 @@ $(PKG.gui.rpm) $(PKG.cli.rpm):
 	$(CP.exe) $(GTK.src/)ghb.spec $(RPM.out/)SPECS
 	$(CP.exe) $(PKG.src.tar.bz2) $(RPM.out/)SOURCES
 	$(TAR.exe) -xf $(PKG.src.tar.bz2) -C $(RPM.out/)BUILD
-#	fakeroot $(MAKE) PREFIX=$(RPMROOT.out/)usr PREFIX/=$(RPMROOT.out/)usr/ install
 	rpmbuild --define="version $(HB.version)" --define="_topdir $(PWD)/$(RPM.out)" --buildroot $(RPMROOT.out) -ba $(GTK.src/)ghb.spec
 	$(CP.exe) $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-cli-$(HB.version)*.rpm $(PKG.cli.rpm)
 	$(CP.exe) $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-gui-$(HB.version)*.rpm $(PKG.gui.rpm)

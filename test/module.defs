@@ -14,7 +14,7 @@ TEST.libs = $(LIBHB.a) $(foreach n, \
         ogg samplerate swscale theora vorbis vorbisenc x264, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
-TEST.install.exe = $(PREFIX/)bin/$(notdir $(TEST.exe))
+TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 
 ifeq (1,$(LIBICONV.enabled))
     TEST.libs += $(CONTRIB.build/)lib/libiconv.a
