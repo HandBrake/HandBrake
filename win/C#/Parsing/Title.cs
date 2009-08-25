@@ -175,8 +175,6 @@ namespace Handbrake.Parsing
                             @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
             //size: 720x576, pixel aspect: 16/15, display aspect: 1.33, 25.000 fps
 
-
-
             if (m.Success)
             {
                 thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));

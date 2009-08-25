@@ -124,7 +124,7 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string autoName(ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format)
+        public static string autoName(ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
         {
             string AutoNamePath = string.Empty;
             if (drpDvdtitle.Text != "Automatic")
@@ -156,7 +156,7 @@ namespace Handbrake.Functions
                 // Add the appropriate file extension
                 if (format == 0)
                 {
-                    if (Properties.Settings.Default.useM4v)
+                    if (Properties.Settings.Default.useM4v || chapters)
                         destinationFilename += ".m4v";
                     else
                         destinationFilename += ".mp4";

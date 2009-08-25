@@ -69,12 +69,12 @@ namespace Handbrake
                 DateTime lastCheck = Properties.Settings.Default.lastUpdateCheckDate;
                 TimeSpan elapsed = now.Subtract(lastCheck);
                 if (elapsed.TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
-                {
+               {
                     lblStatus.Text = "Checking for updates ...";
                     Application.DoEvents();
 
                     Main.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false);
-                }
+               }
             }
 
             // Setup the GUI components
@@ -939,7 +939,7 @@ namespace Handbrake
             // Run the autoName & chapterNaming functions
             if (Properties.Settings.Default.autoNaming)
             {
-                string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex);
+                string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex, Check_ChapterMarkers.Checked);
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
@@ -1014,7 +1014,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
-                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex);
+                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex, Check_ChapterMarkers.Checked);
 
             // Disable chapter markers if only 1 chapter is selected.
             if (chapterStart == chapterEnd)

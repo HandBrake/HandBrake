@@ -8,28 +8,41 @@
 <body>
 Windows Platform Specific Changlog.<br />
 
-    <h2>Changes since Snapshot 1 - SVN2592</h2>
+    <h2>Changes Since Snapshot 2 - SVN2773</h2> <!-- Snapshot 3 (upcoming) -->
     
-    <h4>Major Changes</h4>
+    <h4>New Features</h4>
+    
+    <h4>Minor Improvements / Changes</h4>
+
+    <h4>Fixed</h4>
+    - Fix several issues with Picture Settings panel related to aspect ration and resolution calculation. <br />
+    - Fix issue where file extension could be mp4 when chapters is enabled. Problem in the autoname function.<br />
+    - Fix a regex error in the appcast reader and make it more robust to errors.<br /><br />
+ 
+  
+    <h2>Changes since Snapshot 1 - SVN2592</h2> <!-- Snapshot 2 -->
+    
+    <h4>New Features</h4>
     - Added support for Growl for Windows.<br />
     - Import MacGUI presets.<br />
     - External SRT supported added.<br />
+    - Added new options: preferred language, "Dub Foreign language audio" and "Use Foreign language audio and Subtitles"<br />
+    - Import Chapter Markers from csv file <br />
     
     <h4>Minor Improvements / Changes</h4>
     - Some UI layout changes / improvements<br />
-    - Added new options: preferred language, "Dub Foreign language audio" and "Use Foreign language audio and Subtitles"<br />
     - Remove M4v from format dropdown and add new option "Use iPod/iTunes friendly (.m4v) file extension for MP4<br />
-    - Chapter Markers tab now resets far less often. It should retain chapter names after being disabled / re-enabled <br />
-    - Chapter Markers tab now as import functionality. It can now import a csv file <br />
     
     <h4>Fixed</h4>
-    - Re-written the Picture Settings Panel code so it should now work a lot better.<br />
-    - Issue where the GUI would error if the encode was stopped  too quickly.<br />
-    - Numerous other fixes including: Quality slider resetting to 0 and other settings lost when a title change occurs.<br />
-    - Fixes some scaling / quality issues with QuickTime preview. Also added a possible fix for QT not working on 64bit systems.<br />
-    - Chaning the x264 Quality granularity now longer requires an application restart to work correctly <br />
+    - Picture Settings now works correctly (including Custom Anamorphic).<br />
+    - Error message when cancelling an encode within 2 seconds of it starting.<br />
+    - Quality slider resetting to 0 and other settings lost when a title change occurs.<br />
+    - Fixes some scaling / quality issues with QuickTime preview. 
+    - Possible fix for QT not working on 64bit systems.<br />
+    - Chaning the x264 Quality granularity no longer requires a restart to work correctly <br />
+    - Chapter Markers tab now resets far less often. It should retain chapter names after being disabled / re-enabled <br />
     
-    <h2>Changes since 0.9.3</h2>
+    <h2>Changes since 0.9.3</h2> <!-- Snapshot 1 -->
     
     <h4>Major Changes</h4>
 

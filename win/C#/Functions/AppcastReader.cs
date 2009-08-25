@@ -18,18 +18,24 @@ namespace Handbrake.Functions
         /// </summary>
         public void getInfo(string input)
         {
-            // Get the correct Appcast and set input.
-            XmlNode nodeItem = readRss(new XmlTextReader(new StringReader(input)));
-            string result = nodeItem.InnerXml;
+            try
+            {
+                // Get the correct Appcast and set input.
+                XmlNode nodeItem = readRss(new XmlTextReader(new StringReader(input)));
+                string result = nodeItem.InnerXml;
 
-            // Regular Expressions
-            Match ver = Regex.Match(result, @"sparkle:version=""([0-9]*)\""");
-            Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""([0-9].[0-9].[0-9]*)\""");
+                // Regular Expressions
+                Match ver = Regex.Match(result, @"sparkle:version=""([0-9]*)\""");
+                Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""(([svn]*)([0-9.\s]*))\""");
 
-            build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
-            version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-            downloadFile = nodeItem["windows"].InnerText;
-            descriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
+                build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
+                version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+                downloadFile = nodeItem["windows"].InnerText;
+                descriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
+            } catch( Exception)
+            {
+                // Ignore Error.
+            }
         }
 
         /// <summary>
