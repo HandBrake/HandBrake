@@ -166,10 +166,10 @@ namespace Handbrake.Controls
                     drop_detelecine.SelectedIndex = 0;
                     break;
                 case "Default":
-                    drop_detelecine.SelectedIndex = 1;
+                    drop_detelecine.SelectedIndex = 2;
                     break;
                 default:
-                    drop_detelecine.SelectedIndex = 2;
+                    drop_detelecine.SelectedIndex = 1;
                     text_customDT.Text = value;
                     text_customDT.Visible = true;
                     break;
@@ -181,20 +181,20 @@ namespace Handbrake.Controls
             text_customDN.Visible = false;
             switch (value)
             {
-                case "None":
+                case "Off":
                     drop_denoise.SelectedIndex = 0;
                     break;
                 case "Weak":
-                    drop_denoise.SelectedIndex = 1;
-                    break;
-                case "Medium":
                     drop_denoise.SelectedIndex = 2;
                     break;
-                case "Strong":
+                case "Medium":
                     drop_denoise.SelectedIndex = 3;
                     break;
-                default:
+                case "Strong":
                     drop_denoise.SelectedIndex = 4;
+                    break;
+                default:
+                    drop_denoise.SelectedIndex = 1;
                     text_customDN.Text = value;
                     text_customDN.Visible = true;
                     break;
@@ -207,21 +207,21 @@ namespace Handbrake.Controls
             switch (value)
             {
 
-                case "None":
+                case "Off":
                     drop_deinterlace.SelectedIndex = 0;
                     break;
                 case "Fast":
-                    drop_deinterlace.SelectedIndex = 1;
-                    break;
-                case "Slow":
                     drop_deinterlace.SelectedIndex = 2;
                     break;
-                case "Slower":
+                case "Slow":
                     drop_deinterlace.SelectedIndex = 3;
+                    break;
+                case "Slower":
+                    drop_deinterlace.SelectedIndex = 4;
 
                     break;
                 default:
-                    drop_deinterlace.SelectedIndex = 4;
+                    drop_deinterlace.SelectedIndex = 1;
                     text_customDI.Text = value;
                     text_customDI.Visible = true;
                     break;
@@ -237,10 +237,10 @@ namespace Handbrake.Controls
                     drop_decomb.SelectedIndex = 0;
                     break;
                 case "Default":
-                    drop_decomb.SelectedIndex = 1;
+                    drop_decomb.SelectedIndex = 2;
                     break;
                 default:
-                    drop_decomb.SelectedIndex = 2;
+                    drop_decomb.SelectedIndex = 1;
                     text_customDC.Text = value;
                     text_customDC.Visible = true;
                     break;

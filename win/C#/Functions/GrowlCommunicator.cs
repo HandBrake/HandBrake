@@ -36,8 +36,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Notification shown upon completion of encoding
         /// </summary>
-        public static NotificationType EncodingComplete;
-
+        public static NotificationType EncodeOrQueueCompleted = new NotificationType("EncodeOrQueue", "HandBrake Status");
 
         /// <summary>
         /// Checks to see if Growl is currently running on the local machine.
@@ -62,20 +61,16 @@ namespace Handbrake.Functions
         public static void Register()
         {
             Initialize();
-
-            growl.Register(application, new NotificationType[] { EncodingComplete });
+            growl.Register(application, new NotificationType[] { EncodeOrQueueCompleted });
         }
 
         /// <summary>
         /// Sends a notification to Growl. (Since Handbrake currently only supports one type of notification with
         /// static text, this is a shortcut method).
         /// </summary>
-        public static void Notify()
+        public static void Notify(string title, string text)
         {
-            string title = "Encoding Complete";
-            string text = "Put down that cocktail...\nyour Handbrake encode is done.";
-            Notification notification = new Notification(application.Name, EncodingComplete.Name, String.Empty, title, text);
-
+            Notification notification = new Notification(application.Name, EncodeOrQueueCompleted.Name, String.Empty, title, text);
             growl.Notify(notification);
         }
 
@@ -107,8 +102,6 @@ namespace Handbrake.Functions
 
                 application = new Application("Handbrake");
                 application.Icon = global::Handbrake.Properties.Resources.logo64;
-
-                EncodingComplete = new NotificationType("Encoding Complete");
             }
         }
     }

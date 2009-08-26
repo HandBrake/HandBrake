@@ -58,6 +58,8 @@ namespace Handbrake
             this.data_chpt = new System.Windows.Forms.DataGridView();
             this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_addPreset = new System.Windows.Forms.Button();
             this.btn_removePreset = new System.Windows.Forms.Button();
             this.drop_format = new System.Windows.Forms.ComboBox();
@@ -129,6 +131,8 @@ namespace Handbrake
             this.pmnu_expandAll = new System.Windows.Forms.ToolStripMenuItem();
             this.pmnu_collapse = new System.Windows.Forms.ToolStripMenuItem();
             this.sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.pmnu_import = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.pmnu_saveChanges = new System.Windows.Forms.ToolStripMenuItem();
             this.pmnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -167,19 +171,16 @@ namespace Handbrake
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
-            this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Filters = new Handbrake.Controls.Filters();
             this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.Subtitles = new Handbrake.Controls.Subtitles();
             this.x264Panel = new Handbrake.Controls.x264Panel();
-            this.pmnu_import = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).BeginInit();
+            this.ChaptersMenu.SuspendLayout();
             this.frmMainMenu.SuspendLayout();
             this.tab_audio.SuspendLayout();
             this.tab_video.SuspendLayout();
@@ -201,7 +202,6 @@ namespace Handbrake
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.ChaptersMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIconMenu
@@ -221,7 +221,7 @@ namespace Handbrake
             // 
             // DVD_Save
             // 
-            this.DVD_Save.Filter = "mp4|*.mp4|mkv|*.mkv";
+            this.DVD_Save.Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv";
             this.DVD_Save.SupportMultiDottedExtensions = true;
             // 
             // ToolTip
@@ -415,6 +415,21 @@ namespace Handbrake
             this.name.HeaderText = "Chapter Name";
             this.name.Name = "name";
             this.name.Width = 480;
+            // 
+            // ChaptersMenu
+            // 
+            this.ChaptersMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_resetChapters});
+            this.ChaptersMenu.Name = "presets_menu";
+            this.ChaptersMenu.Size = new System.Drawing.Size(191, 26);
+            this.ChaptersMenu.Text = ";";
+            // 
+            // mnu_resetChapters
+            // 
+            this.mnu_resetChapters.Name = "mnu_resetChapters";
+            this.mnu_resetChapters.Size = new System.Drawing.Size(190, 22);
+            this.mnu_resetChapters.Text = "Reset Chapter Names";
+            this.mnu_resetChapters.Click += new System.EventHandler(this.mnu_resetChapters_Click);
             // 
             // btn_addPreset
             // 
@@ -1135,7 +1150,7 @@ namespace Handbrake
             this.pmnu_saveChanges,
             this.pmnu_delete});
             this.presets_menu.Name = "presets_menu";
-            this.presets_menu.Size = new System.Drawing.Size(155, 148);
+            this.presets_menu.Size = new System.Drawing.Size(155, 126);
             this.presets_menu.Text = ";";
             this.presets_menu.Opening += new System.ComponentModel.CancelEventHandler(this.presets_menu_Opening);
             // 
@@ -1157,6 +1172,18 @@ namespace Handbrake
             // 
             this.sep1.Name = "sep1";
             this.sep1.Size = new System.Drawing.Size(151, 6);
+            // 
+            // pmnu_import
+            // 
+            this.pmnu_import.Name = "pmnu_import";
+            this.pmnu_import.Size = new System.Drawing.Size(154, 22);
+            this.pmnu_import.Text = "Import";
+            this.pmnu_import.Click += new System.EventHandler(this.pmnu_import_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
             // 
             // pmnu_saveChanges
             // 
@@ -1566,21 +1593,6 @@ namespace Handbrake
             // 
             this.File_ChapterImport.Filter = "CSV Files|*.csv";
             // 
-            // ChaptersMenu
-            // 
-            this.ChaptersMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_resetChapters});
-            this.ChaptersMenu.Name = "presets_menu";
-            this.ChaptersMenu.Size = new System.Drawing.Size(191, 26);
-            this.ChaptersMenu.Text = ";";
-            // 
-            // mnu_resetChapters
-            // 
-            this.mnu_resetChapters.Name = "mnu_resetChapters";
-            this.mnu_resetChapters.Size = new System.Drawing.Size(190, 22);
-            this.mnu_resetChapters.Text = "Reset Chapter Names";
-            this.mnu_resetChapters.Click += new System.EventHandler(this.mnu_resetChapters_Click);
-            // 
             // PictureSettings
             // 
             this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
@@ -1628,18 +1640,6 @@ namespace Handbrake
             this.x264Panel.TabIndex = 0;
             this.x264Panel.x264Query = "";
             // 
-            // pmnu_import
-            // 
-            this.pmnu_import.Name = "pmnu_import";
-            this.pmnu_import.Size = new System.Drawing.Size(154, 22);
-            this.pmnu_import.Text = "Import";
-            this.pmnu_import.Click += new System.EventHandler(this.pmnu_import_Click);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
-            // 
             // frmMain
             // 
             this.AllowDrop = true;
@@ -1666,6 +1666,7 @@ namespace Handbrake
             notifyIconMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).EndInit();
+            this.ChaptersMenu.ResumeLayout(false);
             this.frmMainMenu.ResumeLayout(false);
             this.frmMainMenu.PerformLayout();
             this.tab_audio.ResumeLayout(false);
@@ -1697,7 +1698,6 @@ namespace Handbrake
             this.tableLayoutPanel1.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            this.ChaptersMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

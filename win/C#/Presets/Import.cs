@@ -133,7 +133,7 @@ namespace Handbrake.Presets
                         break;
                     case "PictureDecomb":
                         queryParsed.Decomb = "Off";
-                        if (value == "1") queryParsed.Decomb = "Default";
+                        if (value == "2") queryParsed.Decomb = "Default";
                         break;
                     case "PictureDecombCustom":
                         if (value != "")
@@ -148,13 +148,13 @@ namespace Handbrake.Presets
                             case "0":
                                 queryParsed.DeInterlace = "None";
                                 break;
-                            case "1":
+                            case "2":
                                 queryParsed.DeInterlace = "Fast";
                                 break;
-                            case "2":
+                            case "3":
                                 queryParsed.DeInterlace = "Slow";
                                 break;
-                            case "3":
+                            case "4":
                                 queryParsed.DeInterlace = "Slowest";
                                 break;
                         }
@@ -169,13 +169,13 @@ namespace Handbrake.Presets
                             case "0":
                                 queryParsed.DeNoise = "None";
                                 break;
-                            case "1":
+                            case "2":
                                 queryParsed.DeNoise = "Weak";
                                 break;
-                            case "2":
+                            case "3":
                                 queryParsed.DeNoise = "Medium";
                                 break;
-                            case "3":
+                            case "4":
                                 queryParsed.DeNoise = "Strong";
                                 break;
                         }

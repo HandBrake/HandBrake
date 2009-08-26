@@ -101,7 +101,7 @@ namespace Handbrake
                 MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                process.runCli((string)state);
+                process.RunCli((string)state);
                 if (process.hbProcess != null)
                 {
                     process.hbProcess.WaitForExit();

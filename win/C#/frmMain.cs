@@ -186,7 +186,7 @@ namespace Handbrake
         private void events()
         {
             // Handle Widget changes when preset is selected.
-            registerPresetEventHandler();
+            RegisterPresetEventHandler();
 
             // Handle Window Resize
             if (Properties.Settings.Default.MainWindowMinimize)
@@ -203,7 +203,7 @@ namespace Handbrake
         }
 
         // Change the preset label to custom when a user changes a setting. Don't want to give the impression that users can change settings and still be using a preset
-        public void registerPresetEventHandler()
+        private void RegisterPresetEventHandler()
         {
             // Output Settings
             drop_format.SelectedIndexChanged += new EventHandler(changePresetLabel);
@@ -231,7 +231,7 @@ namespace Handbrake
             // Advanced Tab
             x264Panel.rtf_x264Query.TextChanged += new EventHandler(changePresetLabel);
         }
-        public void unRegisterPresetEventHandler()
+        private void UnRegisterPresetEventHandler()
         {
             // Output Settings 
             drop_format.SelectedIndexChanged -= new EventHandler(changePresetLabel);
@@ -883,7 +883,7 @@ namespace Handbrake
         }
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            unRegisterPresetEventHandler();
+            UnRegisterPresetEventHandler();
 
             PictureSettings.lbl_Aspect.Text = "Select a Title"; // Reset some values on the form
             drop_chapterStart.Items.Clear();
@@ -963,7 +963,7 @@ namespace Handbrake
             data_chpt.Columns[0].Width = 166;
             data_chpt.Columns[0].Width = 165;
 
-            registerPresetEventHandler();
+            RegisterPresetEventHandler();
         }
         private void chapersChanged(object sender, EventArgs e)
         {
@@ -1062,13 +1062,13 @@ namespace Handbrake
                         case 1:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
                                 if (Properties.Settings.Default.useM4v)
-                                    DVD_Save.FileName += ".m4v";
+                                    DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv",".m4v");
                                 else
-                                    DVD_Save.FileName += ".mp4";
+                                    DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
                             break;
                         case 2:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
-                                DVD_Save.FileName += ".mkv";
+                                DVD_Save.FileName = DVD_Save.FileName .Replace(".mp4", ".mkv").Replace(".m4v",".mkv");
                             break;
                         default:
                             //do nothing  

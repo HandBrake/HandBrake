@@ -40,7 +40,6 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -100,6 +99,8 @@ namespace Handbrake
             this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
             this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
+            this.tab_debug = new System.Windows.Forms.TabPage();
+            this.check_disableResCalc = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pathFinder = new System.Windows.Forms.FolderBrowserDialog();
@@ -134,9 +135,10 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.check_GrowlQueue = new System.Windows.Forms.CheckBox();
+            this.check_growlEncode = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.tab_picture.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tab_audio_sub.SuspendLayout();
@@ -144,6 +146,7 @@ namespace Handbrake
             this.tableLayoutPanel3.SuspendLayout();
             this.tab_advanced.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
+            this.tab_debug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
@@ -155,7 +158,7 @@ namespace Handbrake
             this.btn_close.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_close.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_close.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_close.Location = new System.Drawing.Point(519, 378);
+            this.btn_close.Location = new System.Drawing.Point(519, 404);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(72, 22);
             this.btn_close.TabIndex = 53;
@@ -166,7 +169,6 @@ namespace Handbrake
             // drp_completeOption
             // 
             this.drp_completeOption.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel1.SetColumnSpan(this.drp_completeOption, 4);
             this.drp_completeOption.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_completeOption.FormattingEnabled = true;
             this.drp_completeOption.Items.AddRange(new object[] {
@@ -176,9 +178,8 @@ namespace Handbrake
             "Hibernate",
             "Lock system",
             "Log off",
-            "Growl Notification",
             "Quit HandBrake"});
-            this.drp_completeOption.Location = new System.Drawing.Point(106, 119);
+            this.drp_completeOption.Location = new System.Drawing.Point(108, 119);
             this.drp_completeOption.Name = "drp_completeOption";
             this.drp_completeOption.Size = new System.Drawing.Size(166, 21);
             this.drp_completeOption.TabIndex = 43;
@@ -193,72 +194,41 @@ namespace Handbrake
             this.tab_options.Controls.Add(this.tab_audio_sub);
             this.tab_options.Controls.Add(this.tab_cli);
             this.tab_options.Controls.Add(this.tab_advanced);
+            this.tab_options.Controls.Add(this.tab_debug);
             this.tab_options.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab_options.Location = new System.Drawing.Point(3, 38);
             this.tab_options.Name = "tab_options";
             this.tab_options.SelectedIndex = 0;
-            this.tab_options.Size = new System.Drawing.Size(588, 332);
+            this.tab_options.Size = new System.Drawing.Size(588, 360);
             this.tab_options.TabIndex = 58;
             // 
             // tab_general
             // 
-            this.tab_general.Controls.Add(this.tableLayoutPanel1);
+            this.tab_general.Controls.Add(this.check_growlEncode);
+            this.tab_general.Controls.Add(this.check_GrowlQueue);
+            this.tab_general.Controls.Add(this.check_m4v);
+            this.tab_general.Controls.Add(this.label1);
+            this.tab_general.Controls.Add(this.label7);
+            this.tab_general.Controls.Add(this.drp_completeOption);
+            this.tab_general.Controls.Add(this.drop_updateCheckDays);
+            this.tab_general.Controls.Add(this.check_autoNaming);
+            this.tab_general.Controls.Add(this.txt_autoNameFormat);
+            this.tab_general.Controls.Add(this.check_userDefaultSettings);
+            this.tab_general.Controls.Add(this.check_tooltip);
+            this.tab_general.Controls.Add(this.label5);
+            this.tab_general.Controls.Add(this.check_updateCheck);
+            this.tab_general.Controls.Add(this.label10);
+            this.tab_general.Controls.Add(this.btn_browse);
+            this.tab_general.Controls.Add(this.label2);
+            this.tab_general.Controls.Add(this.label13);
+            this.tab_general.Controls.Add(this.text_an_path);
             this.tab_general.Location = new System.Drawing.Point(4, 22);
             this.tab_general.Name = "tab_general";
             this.tab_general.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_general.Size = new System.Drawing.Size(580, 306);
+            this.tab_general.Size = new System.Drawing.Size(580, 334);
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.AutoSize = true;
-            this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel1.ColumnCount = 6;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.drop_updateCheckDays, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label7, 4, 12);
-            this.tableLayoutPanel1.Controls.Add(this.check_updateCheck, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.txt_autoNameFormat, 4, 11);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 2, 11);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.label13, 0, 9);
-            this.tableLayoutPanel1.Controls.Add(this.btn_browse, 5, 10);
-            this.tableLayoutPanel1.Controls.Add(this.check_tooltip, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.text_an_path, 4, 10);
-            this.tableLayoutPanel1.Controls.Add(this.label10, 2, 10);
-            this.tableLayoutPanel1.Controls.Add(this.check_userDefaultSettings, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.drp_completeOption, 2, 6);
-            this.tableLayoutPanel1.Controls.Add(this.check_autoNaming, 2, 9);
-            this.tableLayoutPanel1.Controls.Add(this.check_m4v, 2, 13);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(10, 10);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 15;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(560, 286);
-            this.tableLayoutPanel1.TabIndex = 98;
             // 
             // label1
             // 
@@ -266,10 +236,9 @@ namespace Handbrake
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(14, 5);
+            this.label1.Location = new System.Drawing.Point(15, 15);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label1.Name = "label1";
-            this.tableLayoutPanel1.SetRowSpan(this.label1, 2);
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 67;
             this.label1.Text = "At Launch:";
@@ -277,14 +246,13 @@ namespace Handbrake
             // drop_updateCheckDays
             // 
             this.drop_updateCheckDays.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel1.SetColumnSpan(this.drop_updateCheckDays, 3);
             this.drop_updateCheckDays.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_updateCheckDays.FormattingEnabled = true;
             this.drop_updateCheckDays.Items.AddRange(new object[] {
             "Daily",
             "Weekly",
             "Monthly"});
-            this.drop_updateCheckDays.Location = new System.Drawing.Point(126, 26);
+            this.drop_updateCheckDays.Location = new System.Drawing.Point(127, 35);
             this.drop_updateCheckDays.Name = "drop_updateCheckDays";
             this.drop_updateCheckDays.Size = new System.Drawing.Size(97, 21);
             this.drop_updateCheckDays.TabIndex = 97;
@@ -296,8 +264,7 @@ namespace Handbrake
             // 
             this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label7.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label7, 2);
-            this.label7.Location = new System.Drawing.Point(183, 245);
+            this.label7.Location = new System.Drawing.Point(179, 284);
             this.label7.Margin = new System.Windows.Forms.Padding(3);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(225, 13);
@@ -309,8 +276,7 @@ namespace Handbrake
             this.check_updateCheck.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_updateCheck.AutoSize = true;
             this.check_updateCheck.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel1.SetColumnSpan(this.check_updateCheck, 4);
-            this.check_updateCheck.Location = new System.Drawing.Point(106, 3);
+            this.check_updateCheck.Location = new System.Drawing.Point(108, 14);
             this.check_updateCheck.Name = "check_updateCheck";
             this.check_updateCheck.Size = new System.Drawing.Size(114, 17);
             this.check_updateCheck.TabIndex = 68;
@@ -323,10 +289,9 @@ namespace Handbrake
             // txt_autoNameFormat
             // 
             this.txt_autoNameFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.txt_autoNameFormat, 2);
-            this.txt_autoNameFormat.Location = new System.Drawing.Point(183, 218);
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(182, 257);
             this.txt_autoNameFormat.Name = "txt_autoNameFormat";
-            this.txt_autoNameFormat.Size = new System.Drawing.Size(374, 21);
+            this.txt_autoNameFormat.Size = new System.Drawing.Size(349, 21);
             this.txt_autoNameFormat.TabIndex = 79;
             this.ToolTip.SetToolTip(this.txt_autoNameFormat, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
                     "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
@@ -337,8 +302,7 @@ namespace Handbrake
             // 
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label5.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label5, 2);
-            this.label5.Location = new System.Drawing.Point(106, 222);
+            this.label5.Location = new System.Drawing.Point(105, 260);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 80;
@@ -349,7 +313,7 @@ namespace Handbrake
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(6, 123);
+            this.label2.Location = new System.Drawing.Point(7, 122);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 13);
             this.label2.TabIndex = 54;
@@ -360,10 +324,9 @@ namespace Handbrake
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(3, 168);
+            this.label13.Location = new System.Drawing.Point(4, 188);
             this.label13.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label13.Name = "label13";
-            this.tableLayoutPanel1.SetRowSpan(this.label13, 2);
             this.label13.Size = new System.Drawing.Size(77, 13);
             this.label13.TabIndex = 71;
             this.label13.Text = "Output Files:";
@@ -374,7 +337,7 @@ namespace Handbrake
             this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_browse.Location = new System.Drawing.Point(482, 189);
+            this.btn_browse.Location = new System.Drawing.Point(456, 228);
             this.btn_browse.Name = "btn_browse";
             this.btn_browse.Size = new System.Drawing.Size(75, 23);
             this.btn_browse.TabIndex = 78;
@@ -387,8 +350,7 @@ namespace Handbrake
             this.check_tooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_tooltip.AutoSize = true;
             this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel1.SetColumnSpan(this.check_tooltip, 4);
-            this.check_tooltip.Location = new System.Drawing.Point(106, 53);
+            this.check_tooltip.Location = new System.Drawing.Point(108, 62);
             this.check_tooltip.Name = "check_tooltip";
             this.check_tooltip.Size = new System.Drawing.Size(117, 17);
             this.check_tooltip.TabIndex = 70;
@@ -400,9 +362,9 @@ namespace Handbrake
             // text_an_path
             // 
             this.text_an_path.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.text_an_path.Location = new System.Drawing.Point(183, 190);
+            this.text_an_path.Location = new System.Drawing.Point(182, 230);
             this.text_an_path.Name = "text_an_path";
-            this.text_an_path.Size = new System.Drawing.Size(293, 21);
+            this.text_an_path.Size = new System.Drawing.Size(253, 21);
             this.text_an_path.TabIndex = 76;
             this.ToolTip.SetToolTip(this.text_an_path, "This is the default location where your encoded files will be stored if \"Automati" +
                     "cally name output files\" is enabled.");
@@ -412,8 +374,7 @@ namespace Handbrake
             // 
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label10.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label10, 2);
-            this.label10.Location = new System.Drawing.Point(106, 194);
+            this.label10.Location = new System.Drawing.Point(105, 233);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(71, 13);
             this.label10.TabIndex = 77;
@@ -424,8 +385,7 @@ namespace Handbrake
             this.check_userDefaultSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_userDefaultSettings.AutoSize = true;
             this.check_userDefaultSettings.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel1.SetColumnSpan(this.check_userDefaultSettings, 4);
-            this.check_userDefaultSettings.Location = new System.Drawing.Point(106, 76);
+            this.check_userDefaultSettings.Location = new System.Drawing.Point(108, 85);
             this.check_userDefaultSettings.Name = "check_userDefaultSettings";
             this.check_userDefaultSettings.Size = new System.Drawing.Size(137, 17);
             this.check_userDefaultSettings.TabIndex = 69;
@@ -438,8 +398,7 @@ namespace Handbrake
             // 
             this.check_autoNaming.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_autoNaming.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.check_autoNaming, 4);
-            this.check_autoNaming.Location = new System.Drawing.Point(106, 166);
+            this.check_autoNaming.Location = new System.Drawing.Point(108, 198);
             this.check_autoNaming.Name = "check_autoNaming";
             this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
             this.check_autoNaming.TabIndex = 72;
@@ -452,8 +411,7 @@ namespace Handbrake
             // 
             this.check_m4v.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_m4v.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.check_m4v, 4);
-            this.check_m4v.Location = new System.Drawing.Point(106, 264);
+            this.check_m4v.Location = new System.Drawing.Point(108, 303);
             this.check_m4v.Name = "check_m4v";
             this.check_m4v.Size = new System.Drawing.Size(283, 17);
             this.check_m4v.TabIndex = 82;
@@ -468,7 +426,7 @@ namespace Handbrake
             this.tab_picture.Location = new System.Drawing.Point(4, 22);
             this.tab_picture.Name = "tab_picture";
             this.tab_picture.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_picture.Size = new System.Drawing.Size(580, 306);
+            this.tab_picture.Size = new System.Drawing.Size(580, 334);
             this.tab_picture.TabIndex = 5;
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
@@ -485,13 +443,12 @@ namespace Handbrake
             this.tableLayoutPanel2.Controls.Add(this.label29, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btn_vlcPath, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.txt_vlcPath, 2, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(560, 28);
             this.tableLayoutPanel2.TabIndex = 84;
             // 
             // label29
@@ -542,7 +499,7 @@ namespace Handbrake
             this.tab_audio_sub.Location = new System.Drawing.Point(4, 22);
             this.tab_audio_sub.Name = "tab_audio_sub";
             this.tab_audio_sub.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_audio_sub.Size = new System.Drawing.Size(580, 306);
+            this.tab_audio_sub.Size = new System.Drawing.Size(580, 334);
             this.tab_audio_sub.TabIndex = 6;
             this.tab_audio_sub.Text = "Audio / Subtitles";
             this.tab_audio_sub.UseVisualStyleBackColor = true;
@@ -613,7 +570,7 @@ namespace Handbrake
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
             this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_cli.Size = new System.Drawing.Size(580, 306);
+            this.tab_cli.Size = new System.Drawing.Size(580, 334);
             this.tab_cli.TabIndex = 2;
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
@@ -646,7 +603,6 @@ namespace Handbrake
             this.tableLayoutPanel3.Controls.Add(this.drp_processors, 3, 1);
             this.tableLayoutPanel3.Controls.Add(this.btn_viewLogs, 2, 8);
             this.tableLayoutPanel3.Controls.Add(this.btn_clearLogs, 4, 8);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 10;
@@ -660,7 +616,7 @@ namespace Handbrake
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(560, 227);
             this.tableLayoutPanel3.TabIndex = 62;
             // 
             // label12
@@ -894,7 +850,7 @@ namespace Handbrake
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(10);
-            this.tab_advanced.Size = new System.Drawing.Size(580, 306);
+            this.tab_advanced.Size = new System.Drawing.Size(580, 334);
             this.tab_advanced.TabIndex = 4;
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
@@ -923,7 +879,6 @@ namespace Handbrake
             this.tableLayoutPanel4.Controls.Add(this.check_queryEditorTab, 2, 3);
             this.tableLayoutPanel4.Controls.Add(this.check_disablePresetNotification, 2, 5);
             this.tableLayoutPanel4.Controls.Add(this.check_inGuiStatus, 2, 6);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 12;
@@ -939,7 +894,7 @@ namespace Handbrake
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(560, 286);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(396, 251);
             this.tableLayoutPanel4.TabIndex = 62;
             // 
             // check_promptOnUnmatchingQueries
@@ -1127,6 +1082,29 @@ namespace Handbrake
             this.ToolTip.SetToolTip(this.check_inGuiStatus, "Displays the CLI status in the GUI windows instead of the CLI window.");
             this.check_inGuiStatus.UseVisualStyleBackColor = false;
             this.check_inGuiStatus.CheckedChanged += new System.EventHandler(this.check_inGuiStatus_CheckedChanged);
+            // 
+            // tab_debug
+            // 
+            this.tab_debug.Controls.Add(this.check_disableResCalc);
+            this.tab_debug.Location = new System.Drawing.Point(4, 22);
+            this.tab_debug.Name = "tab_debug";
+            this.tab_debug.Padding = new System.Windows.Forms.Padding(3);
+            this.tab_debug.Size = new System.Drawing.Size(580, 334);
+            this.tab_debug.TabIndex = 7;
+            this.tab_debug.Text = "Debug";
+            this.tab_debug.UseVisualStyleBackColor = true;
+            // 
+            // check_disableResCalc
+            // 
+            this.check_disableResCalc.AutoSize = true;
+            this.check_disableResCalc.Location = new System.Drawing.Point(13, 15);
+            this.check_disableResCalc.Name = "check_disableResCalc";
+            this.check_disableResCalc.Size = new System.Drawing.Size(327, 17);
+            this.check_disableResCalc.TabIndex = 0;
+            this.check_disableResCalc.Text = "Disable Resolution Calculation for \"None\" and \"Custom\" modes.";
+            this.ToolTip.SetToolTip(this.check_disableResCalc, resources.GetString("check_disableResCalc.ToolTip"));
+            this.check_disableResCalc.UseVisualStyleBackColor = true;
+            this.check_disableResCalc.CheckedChanged += new System.EventHandler(this.check_disableResCalc_CheckedChanged);
             // 
             // label8
             // 
@@ -1496,15 +1474,42 @@ namespace Handbrake
             this.tableLayoutPanel5.Controls.Add(this.btn_close, 1, 2);
             this.tableLayoutPanel5.Controls.Add(this.label8, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.tab_options, 0, 1);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 3;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 405);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
             this.tableLayoutPanel5.TabIndex = 62;
+            // 
+            // check_GrowlQueue
+            // 
+            this.check_GrowlQueue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_GrowlQueue.AutoSize = true;
+            this.check_GrowlQueue.BackColor = System.Drawing.Color.Transparent;
+            this.check_GrowlQueue.Location = new System.Drawing.Point(108, 146);
+            this.check_GrowlQueue.Name = "check_GrowlQueue";
+            this.check_GrowlQueue.Size = new System.Drawing.Size(168, 17);
+            this.check_GrowlQueue.TabIndex = 98;
+            this.check_GrowlQueue.Text = "Growl after Queue Completes";
+            this.ToolTip.SetToolTip(this.check_GrowlQueue, "Growl for Windows");
+            this.check_GrowlQueue.UseVisualStyleBackColor = false;
+            this.check_GrowlQueue.CheckedChanged += new System.EventHandler(this.check_GrowlQueue_CheckedChanged);
+            // 
+            // check_growlEncode
+            // 
+            this.check_growlEncode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_growlEncode.AutoSize = true;
+            this.check_growlEncode.BackColor = System.Drawing.Color.Transparent;
+            this.check_growlEncode.Location = new System.Drawing.Point(282, 146);
+            this.check_growlEncode.Name = "check_growlEncode";
+            this.check_growlEncode.Size = new System.Drawing.Size(171, 17);
+            this.check_growlEncode.TabIndex = 99;
+            this.check_growlEncode.Text = "Growl after Encode Completes";
+            this.ToolTip.SetToolTip(this.check_growlEncode, "Growl for Windows");
+            this.check_growlEncode.UseVisualStyleBackColor = false;
+            this.check_growlEncode.CheckedChanged += new System.EventHandler(this.check_growlEncode_CheckedChanged);
             // 
             // frmOptions
             // 
@@ -1512,7 +1517,7 @@ namespace Handbrake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(618, 429);
+            this.ClientSize = new System.Drawing.Size(627, 488);
             this.Controls.Add(this.tableLayoutPanel5);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1528,8 +1533,6 @@ namespace Handbrake
             this.tab_options.ResumeLayout(false);
             this.tab_general.ResumeLayout(false);
             this.tab_general.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.tab_picture.ResumeLayout(false);
             this.tab_picture.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -1544,6 +1547,8 @@ namespace Handbrake
             this.tab_advanced.PerformLayout();
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel4.PerformLayout();
+            this.tab_debug.ResumeLayout(false);
+            this.tab_debug.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
@@ -1573,7 +1578,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox btn_drive_detect;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label13;
-        internal System.Windows.Forms.Button btn_browse;
         internal System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox text_an_path;
         internal System.Windows.Forms.CheckBox check_autoNaming;
@@ -1638,7 +1642,6 @@ namespace Handbrake
         private System.Windows.Forms.Button btn_clearLogs;
         internal System.Windows.Forms.CheckBox check_m4v;
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         internal System.Windows.Forms.ComboBox drp_processors;
@@ -1652,5 +1655,10 @@ namespace Handbrake
         private System.Windows.Forms.RadioButton radio_foreignAndSubs;
         private System.Windows.Forms.RadioButton radio_dub;
         private System.Windows.Forms.Label label15;
+        internal System.Windows.Forms.Button btn_browse;
+        private System.Windows.Forms.TabPage tab_debug;
+        private System.Windows.Forms.CheckBox check_disableResCalc;
+        internal System.Windows.Forms.CheckBox check_growlEncode;
+        internal System.Windows.Forms.CheckBox check_GrowlQueue;
     }
 }

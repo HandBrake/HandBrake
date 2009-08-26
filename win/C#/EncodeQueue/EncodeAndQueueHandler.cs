@@ -76,7 +76,6 @@ namespace Handbrake.EncodeQueue
             get { return queue.Count; }
         }
 
-
         /// <summary>
         /// Adds an item to the queue.
         /// </summary>
@@ -299,7 +298,7 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public void EndEncodeJob()
         {
-            closeCLI();
+            CloseCLI();
         }
 
         private void startProcess(object state)
@@ -310,20 +309,24 @@ namespace Handbrake.EncodeQueue
                 string query = GetNextJob().Query;
                 WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
-                runCli(query);
+                RunCli(query);
 
                 if (NewJobStarted != null)
                     NewJobStarted(this, new EventArgs());
 
                 hbProcess.WaitForExit();
 
-                addCLIQueryToLog(query);
-                copyLog(LastEncode.Destination);
+                AddCLIQueryToLog(query);
+                CopyLog(LastEncode.Destination);
 
                 hbProcess.Close();
                 hbProcess.Dispose();
-
+                
                 isEncoding = false;
+
+                //Growl
+                if (Properties.Settings.Default.growlEncode)
+                    GrowlCommunicator.Notify("Encode Completed", "Put down that cocktail...\nyour Handbrake encode is done.");
 
                 if (CurrentJobCompleted != null)
                     CurrentJobCompleted(this, new EventArgs());
@@ -338,7 +341,7 @@ namespace Handbrake.EncodeQueue
                 QueueCompleted(this, new EventArgs());
 
             // After the encode is done, we may want to shutdown, suspend etc.
-            afterEncodeAction();
+            AfterEncodeAction();
         }
 
         #endregion
@@ -354,7 +357,7 @@ namespace Handbrake.EncodeQueue
         /// Execute a HandBrakeCLI process.
         /// </summary>
         /// <param name="query">The CLI Query</param>
-        public void runCli(string query)
+        public void RunCli(string query)
         {
             try
             {
@@ -417,7 +420,7 @@ namespace Handbrake.EncodeQueue
         /// <summary>
         /// Kill the CLI process
         /// </summary>
-        public void closeCLI()
+        private void CloseCLI()
         {
             hbProcess.Kill();
             isEncoding = false;
@@ -426,10 +429,15 @@ namespace Handbrake.EncodeQueue
         /// <summary>
         /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
         /// </summary>
-        public void afterEncodeAction()
+        private void AfterEncodeAction()
         {
             isEncoding = false;
             currentQuery = String.Empty;
+
+            //Growl
+            if (Properties.Settings.Default.growlQueue)
+                GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
+
             // Do something whent he encode ends.
             switch (Properties.Settings.Default.CompletionOption)
             {
@@ -448,9 +456,6 @@ namespace Handbrake.EncodeQueue
                 case "Lock System":
                     Win32.LockWorkStation();
                     break;
-                case "Growl Notification":
-                    GrowlCommunicator.Notify();
-                    break;
                 case "Quit HandBrake":
                     Application.Exit();
                     break;
@@ -463,7 +468,7 @@ namespace Handbrake.EncodeQueue
         /// Append the CLI query to the start of the log file.
         /// </summary>
         /// <param name="query"></param>
-        public void addCLIQueryToLog(string query)
+        private static void AddCLIQueryToLog(string query)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logPath = Path.Combine(logDir, "last_encode_log.txt");
@@ -486,7 +491,7 @@ namespace Handbrake.EncodeQueue
         /// if this feature is enabled in options.
         /// </summary>
         /// <param name="destination"></param>
-        public void copyLog(string destination)
+        private static void CopyLog(string destination)
         {
             try
             {

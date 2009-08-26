@@ -453,5 +453,41 @@ namespace Handbrake.Properties {
                 this["hb_platform"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool disableResCalc {
+            get {
+                return ((bool)(this["disableResCalc"]));
+            }
+            set {
+                this["disableResCalc"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool growlQueue {
+            get {
+                return ((bool)(this["growlQueue"]));
+            }
+            set {
+                this["growlQueue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool growlEncode {
+            get {
+                return ((bool)(this["growlEncode"]));
+            }
+            set {
+                this["growlEncode"] = value;
+            }
+        }
     }
 }

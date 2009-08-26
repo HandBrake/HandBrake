@@ -80,8 +80,8 @@
             this.drop_detelecine.FormattingEnabled = true;
             this.drop_detelecine.Items.AddRange(new object[] {
             "Off",
-            "Default",
-            "Custom"});
+            "Custom",
+            "Default"});
             this.drop_detelecine.Location = new System.Drawing.Point(71, 3);
             this.drop_detelecine.Name = "drop_detelecine";
             this.drop_detelecine.Size = new System.Drawing.Size(174, 21);
@@ -118,8 +118,8 @@
             this.drop_decomb.FormattingEnabled = true;
             this.drop_decomb.Items.AddRange(new object[] {
             "Off",
-            "Default",
-            "Custom"});
+            "Custom",
+            "Default"});
             this.drop_decomb.Location = new System.Drawing.Point(71, 30);
             this.drop_decomb.Name = "drop_decomb";
             this.drop_decomb.Size = new System.Drawing.Size(174, 21);
@@ -155,11 +155,11 @@
             this.drop_deinterlace.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_deinterlace.FormattingEnabled = true;
             this.drop_deinterlace.Items.AddRange(new object[] {
-            "None",
+            "Off",
+            "Custom",
             "Fast",
             "Slow",
-            "Slower",
-            "Custom"});
+            "Slower"});
             this.drop_deinterlace.Location = new System.Drawing.Point(71, 57);
             this.drop_deinterlace.Name = "drop_deinterlace";
             this.drop_deinterlace.Size = new System.Drawing.Size(174, 21);
@@ -195,11 +195,11 @@
             this.drop_denoise.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_denoise.FormattingEnabled = true;
             this.drop_denoise.Items.AddRange(new object[] {
-            "None",
+            "Off",
+            "Custom",
             "Weak",
             "Medium",
-            "Strong",
-            "Custom"});
+            "Strong"});
             this.drop_denoise.Location = new System.Drawing.Point(71, 84);
             this.drop_denoise.Name = "drop_denoise";
             this.drop_denoise.Size = new System.Drawing.Size(174, 21);

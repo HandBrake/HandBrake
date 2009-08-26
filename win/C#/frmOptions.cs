@@ -47,6 +47,13 @@ namespace Handbrake
             // On Encode Completeion Action
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
 
+            // Growl.
+            if (Properties.Settings.Default.growlEncode)
+                check_growlEncode.CheckState = CheckState.Checked;
+
+            if (Properties.Settings.Default.growlQueue)
+                check_GrowlQueue.CheckState = CheckState.Checked;
+
             // Enable auto naming feature.
             if (Properties.Settings.Default.autoNaming)
                 check_autoNaming.CheckState = CheckState.Checked;
@@ -165,6 +172,12 @@ namespace Handbrake
             // Use Experimental dvdnav
             if (Properties.Settings.Default.dvdnav)
                 check_dvdnav.CheckState = CheckState.Checked;
+
+            // #############################
+            // Debug
+            // #############################
+            if (Properties.Settings.Default.disableResCalc)
+                check_disableResCalc.Checked = true;
         }
 
         #region General
@@ -185,6 +198,16 @@ namespace Handbrake
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
+        }
+
+        private void check_GrowlQueue_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.growlQueue = check_GrowlQueue.Checked;
+        }
+
+        private void check_growlEncode_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.growlEncode = check_growlEncode.Checked;
         }
 
         private void check_autoNaming_CheckedChanged(object sender, EventArgs e)
@@ -396,11 +419,17 @@ namespace Handbrake
         }
         #endregion
 
+        #region Debug
+        private void check_disableResCalc_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.disableResCalc = check_disableResCalc.Checked;
+        }
+        #endregion
+
         private void btn_close_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
-
     }
 }
