@@ -1855,7 +1855,7 @@ value_map_t mix_xlat[] =
 
 value_map_t deint_xlat[] =
 {
-	{"0", "none"},
+	{"0", "off"},
 	{"1", "custom"},
 	{"2", "fast"},
 	{"3", "slow"},
@@ -1865,7 +1865,7 @@ value_map_t deint_xlat[] =
 
 value_map_t denoise_xlat[] =
 {
-	{"0", "none"},
+	{"0", "off"},
 	{"1", "custom"},
 	{"2", "weak"},
 	{"3", "medium"},
@@ -1875,7 +1875,7 @@ value_map_t denoise_xlat[] =
 
 value_map_t detel_xlat[] =
 {
-	{"0", "none"},
+	{"0", "off"},
 	{"1", "custom"},
 	{"2", "default"},
 	{NULL, NULL}
@@ -1883,7 +1883,7 @@ value_map_t detel_xlat[] =
 
 value_map_t decomb_xlat[] =
 {
-	{"0", "none"},
+	{"0", "off"},
 	{"1", "custom"},
 	{"2", "default"},
 	{NULL, NULL}

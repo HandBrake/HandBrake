@@ -173,7 +173,7 @@ combo_opts_t container_opts =
 
 static options_map_t d_detel_opts[] =
 {
-	{"None",   "none",   0, ""},
+	{"Off",    "off",   0, ""},
 	{"Custom", "custom", 1, ""},
 	{"Default","default",2, NULL},
 };
@@ -185,7 +185,7 @@ combo_opts_t detel_opts =
 
 static options_map_t d_decomb_opts[] =
 {
-	{"None",   "none",   0, ""},
+	{"Off",    "off",   0, ""},
 	{"Custom", "custom", 1, ""},
 	{"Default","default",2, NULL},
 };
@@ -197,7 +197,7 @@ combo_opts_t decomb_opts =
 
 static options_map_t d_deint_opts[] =
 {
-	{"None",   "none",   0, ""},
+	{"Off",    "off",   0, ""},
 	{"Custom", "custom", 1, ""},
 	{"Fast",   "fast",   2, "-1:-1:-1:0:1"},
 	{"Slow",   "slow",   3, "2:-1:-1:0:1"},
@@ -211,7 +211,7 @@ combo_opts_t deint_opts =
 
 static options_map_t d_denoise_opts[] =
 {
-	{"None",   "none",   0, ""},
+	{"Off",    "off",   0, ""},
 	{"Custom", "custom", 1, ""},
 	{"Weak",   "weak",   2, "2:1:2:3"},
 	{"Medium", "medium", 3, "3:2:2:3"},
@@ -3382,9 +3382,17 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 		job->anamorphic.modulus = 2;
 	}
 
-	gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
-	gint decomb = ghb_settings_combo_int(settings, "PictureDecomb");
-	job->deinterlace = (!decomb && deint == 0) ? 0 : 1;
+	gboolean decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
+	if (decomb_deint)
+	{
+		gint decomb = ghb_settings_combo_int(settings, "PictureDecomb");
+		job->deinterlace = (decomb == 0) ? 0 : 1;
+	}
+	else
+	{
+		gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
+		job->deinterlace = (deint == 0) ? 0 : 1;
+	}
 
 	gboolean keep_aspect;
 	keep_aspect = ghb_settings_get_boolean(settings, "PictureKeepRatio");
@@ -3463,9 +3471,10 @@ ghb_validate_filters(signal_user_data_t *ud)
 	gint index;
 	gchar *message;
 
+	gboolean decomb_deint = ghb_settings_get_boolean(ud->settings, "PictureDecombDeinterlace");
 	// deinte
 	index = ghb_settings_combo_int(ud->settings, "PictureDeinterlace");
-	if (index == 1)
+	if (!decomb_deint && index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDeinterlaceCustom");
 		if (!ghb_validate_filter_string(str, 4))
@@ -3499,7 +3508,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 	}
 	// decomb
 	index = ghb_settings_combo_int(ud->settings, "PictureDecomb");
-	if (index == 1)
+	if (decomb_deint && index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDecombCustom");
 		if (!ghb_validate_filter_string(str, 15))
@@ -4016,9 +4025,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	job->crop[3] = ghb_settings_get_int(js, "PictureRightCrop");
 
 	
+	gboolean decomb_deint = ghb_settings_get_boolean(js, "PictureDecombDeinterlace");
 	gint decomb = ghb_settings_combo_int(js, "PictureDecomb");
 	gint deint = ghb_settings_combo_int(js, "PictureDeinterlace");
-	if (!decomb)
+	if (!decomb_deint)
 		job->deinterlace = (deint != 0) ? 1 : 0;
 	else
 		job->deinterlace = 0;
@@ -4064,7 +4074,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		hb_filter_detelecine.settings = detel_str;
 		hb_list_add( job->filters, &hb_filter_detelecine );
 	}
-	if ( decomb )
+	if ( decomb_deint && decomb )
 	{
 		if (decomb != 1)
 		{

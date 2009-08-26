@@ -5630,7 +5630,7 @@ the required multiple.</property>
                             <child>
                               <object class="GtkTable" id="table10">
                                 <property name="visible">True</property>
-                                <property name="n_rows">6</property>
+                                <property name="n_rows">7</property>
                                 <property name="n_columns">2</property>
                                 <property name="column_spacing">5</property>
 
@@ -5674,14 +5674,45 @@ the required multiple.</property>
                                 </child>
 
                                 <child>
-                                  <object class="GtkLabel" id="label56">
+                                  <object class="GtkRadioButton" id="PictureDecombDeinterlace">
+                                    <property name="label" translatable="yes">Decomb</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="setting_widget_changed_cb"/>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="PictureDeinterlaceDecomb">
+                                    <property name="label" translatable="yes">Deinterlace</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">PictureDecombDeinterlace</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="PictureDecombLabel">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Decomb:</property>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">2</property>
-                                    <property name="bottom_attach">3</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -5692,8 +5723,8 @@ the required multiple.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">2</property>
-                                    <property name="bottom_attach">3</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                   </packing>
@@ -5709,22 +5740,22 @@ the required multiple.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
+                                    <property name="top_attach">4</property>
+                                    <property name="bottom_attach">5</property>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                   </packing>
                                 </child>
 
                                 <child>
-                                  <object class="GtkLabel" id="label31">
+                                  <object class="GtkLabel" id="PictureDeinterlaceLabel">
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="label" translatable="yes">Deinterlace:</property>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">4</property>
-                                    <property name="bottom_attach">5</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -5735,8 +5766,8 @@ the required multiple.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">4</property>
-                                    <property name="bottom_attach">5</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                   </packing>
@@ -5752,8 +5783,8 @@ the required multiple.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">5</property>
-                                    <property name="bottom_attach">6</property>
+                                    <property name="top_attach">6</property>
+                                    <property name="bottom_attach">7</property>
                                     <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                   </packing>

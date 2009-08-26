@@ -283,8 +283,10 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		 source_width, source_height, width, height, aspect_desc);
 
 	gint decomb, detel;
+	gboolean decomb_deint;
 	gboolean filters = FALSE;
 
+	decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
 	decomb = ghb_settings_combo_int(settings, "PictureDecomb");
 	g_string_append_printf(str, "<b>Filters:</b><small>");
 	detel = ghb_settings_combo_int(settings, "PictureDetelecine");
@@ -300,7 +302,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		}
 		filters = TRUE;
 	}
-	if (decomb)
+	if (decomb_deint && decomb)
 	{
 		g_string_append_printf(str, " - Decomb");
 		if (decomb == 1)
@@ -312,7 +314,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		}
 		filters = TRUE;
 	}
-	else
+	else if (!decomb_deint)
 	{
 		gint deint = ghb_settings_combo_int(settings, "PictureDeinterlace");
 		if (deint)

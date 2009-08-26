@@ -219,8 +219,10 @@
 		<integer>16</integer>
 		<key>PictureDeblock</key>
 		<integer>0</integer>
+		<key>PictureDecombDeinterlace</key>
+		<true />
 		<key>PictureDecomb</key>
-		<string>none</string>
+		<string>off</string>
 		<key>PictureDecombCustom</key>
 		<string></string>
 		<key>Default</key>
@@ -234,15 +236,15 @@
 		<key>PictureTopCrop</key>
 		<integer>0</integer>
 		<key>PictureDeinterlace</key>
-		<string>none</string>
+		<string>off</string>
 		<key>PictureDeinterlaceCustom</key>
 		<string></string>
 		<key>PictureDenoise</key>
-		<string>none</string>
+		<string>off</string>
 		<key>PictureDenoiseCustom</key>
 		<string></string>
 		<key>PictureDetelecine</key>
-		<string>none</string>
+		<string>off</string>
 		<key>PictureDetelecineCustom</key>
 		<string></string>
 		<key>PicturePAR</key>

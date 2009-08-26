@@ -387,7 +387,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009073001</integer>
+		<integer>2009082501</integer>
 		<key>PresetName</key>
 		<string>Apple</string>
 		<key>Type</key>
@@ -528,13 +528,15 @@
 				<key>PictureDeblock</key>
 				<integer>0</integer>
 				<key>PictureDecomb</key>
+				<integer>2</integer>
+				<key>PictureDecombDeinterlace</key>
 				<integer>1</integer>
 				<key>PictureDeinterlace</key>
 				<integer>0</integer>
 				<key>PictureDenoise</key>
 				<integer>0</integer>
 				<key>PictureDetelecine</key>
-				<integer>1</integer>
+				<integer>2</integer>
 				<key>PictureHeight</key>
 				<integer>0</integer>
 				<key>PictureKeepRatio</key>
@@ -590,7 +592,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009073001</integer>
+		<integer>2009082501</integer>
 		<key>PresetName</key>
 		<string>Regular</string>
 		<key>Type</key>
@@ -965,7 +967,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009073001</integer>
+		<integer>2009082501</integer>
 		<key>PresetName</key>
 		<string>Legacy</string>
 		<key>Type</key>
