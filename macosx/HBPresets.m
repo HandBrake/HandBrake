@@ -636,11 +636,12 @@
 
     /* Explicitly set the filters for built-in presets */
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureFilters"];
+    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDecombDeinterlace"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeinterlace"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDenoise"];
     [preset setObject:[NSNumber numberWithInt:0] forKey:@"PictureDeblock"];
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDetelecine"];
-    [preset setObject:[NSNumber numberWithInt:1] forKey:@"PictureDecomb"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"PictureDetelecine"];
+    [preset setObject:[NSNumber numberWithInt:2] forKey:@"PictureDecomb"];
 
     /* Set crop settings here */
     /* The Auto Crop Matrix in the Picture Window autodetects differences in crop settings */

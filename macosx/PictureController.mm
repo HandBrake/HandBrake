@@ -1133,36 +1133,37 @@ are maintained across different sources */
 	/* we use a popup to show the detelecine settings */
 	[fDetelecinePopUp removeAllItems];
     [fDetelecinePopUp addItemWithTitle: @"Off"];
-    [fDetelecinePopUp addItemWithTitle: @"Default"];
     [fDetelecinePopUp addItemWithTitle: @"Custom"];
+    [fDetelecinePopUp addItemWithTitle: @"Default"];
     [fDetelecinePopUp selectItemAtIndex: fPictureFilterSettings.detelecine];
     
     [self modeDecombDeinterlaceSliderChanged:nil];
     /* we use a popup to show the decomb settings */
 	[fDecombPopUp removeAllItems];
     [fDecombPopUp addItemWithTitle: @"Off"];
-    [fDecombPopUp addItemWithTitle: @"Default"];
     [fDecombPopUp addItemWithTitle: @"Custom"];
+    [fDecombPopUp addItemWithTitle: @"Default"];
+    
     [fDecombPopUp selectItemAtIndex: fPictureFilterSettings.decomb];
     
     /* we use a popup to show the deinterlace settings */
 	[fDeinterlacePopUp removeAllItems];
-    [fDeinterlacePopUp addItemWithTitle: @"None"];
+    [fDeinterlacePopUp addItemWithTitle: @"Off"];
+    [fDeinterlacePopUp addItemWithTitle: @"Custom"];
     [fDeinterlacePopUp addItemWithTitle: @"Fast"];
     [fDeinterlacePopUp addItemWithTitle: @"Slow"];
 	[fDeinterlacePopUp addItemWithTitle: @"Slower"];
-    [fDeinterlacePopUp addItemWithTitle: @"Custom"];
     
 	/* Set deinterlaces level according to the integer in the main window */
 	[fDeinterlacePopUp selectItemAtIndex: fPictureFilterSettings.deinterlace];
 
 	/* we use a popup to show the denoise settings */
 	[fDenoisePopUp removeAllItems];
-    [fDenoisePopUp addItemWithTitle: @"None"];
+    [fDenoisePopUp addItemWithTitle: @"Off"];
+    [fDenoisePopUp addItemWithTitle: @"Custom"];
     [fDenoisePopUp addItemWithTitle: @"Weak"];
 	[fDenoisePopUp addItemWithTitle: @"Medium"];
     [fDenoisePopUp addItemWithTitle: @"Strong"];
-    [fDenoisePopUp addItemWithTitle: @"Custom"];
 	/* Set denoises level according to the integer in the main window */
 	[fDenoisePopUp selectItemAtIndex: fPictureFilterSettings.denoise];
     

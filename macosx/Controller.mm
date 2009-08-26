@@ -3087,28 +3087,32 @@ bool one_burned = FALSE;
 	/* Detelecine */
     if ([fPictureController detelecine] == 1)
     {
-        hb_list_add( job->filters, &hb_filter_detelecine );
-    }
-    if ([fPictureController detelecine] == 2)
-    {
         /* use a custom detelecine string */
         hb_filter_detelecine.settings = (char *) [[fPictureController detelecineCustomString] UTF8String];
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
+    if ([fPictureController detelecine] == 2)
+    {
+        /* Default */
+        hb_list_add( job->filters, &hb_filter_detelecine );
+    }
+    
+    
+    
     if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        if ([fPictureController decomb] == 1)
-        {
-            /* Run old deinterlacer fd by default */
-            //hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
-            hb_list_add( job->filters, &hb_filter_decomb );
-        }
         /* we add the custom string if present */
-        if ([fPictureController decomb] == 2)
+        if ([fPictureController decomb] == 1)
         {
             /* use a custom decomb string */
             hb_filter_decomb.settings = (char *) [[fPictureController decombCustomString] UTF8String];
+            hb_list_add( job->filters, &hb_filter_decomb );
+        }
+        if ([fPictureController decomb] == 2)
+        {
+            /* Run old deinterlacer fd by default */
+            //hb_filter_decomb.settings = (char *) [[fPicSettingDecomb stringValue] UTF8String];
             hb_list_add( job->filters, &hb_filter_decomb );
         }
     }
@@ -3118,52 +3122,54 @@ bool one_burned = FALSE;
         /* Deinterlace */
         if ([fPictureController deinterlace] == 1)
         {
+            /* we add the custom string if present */
+            hb_filter_deinterlace.settings = (char *) [[fPictureController deinterlaceCustomString] UTF8String];
+            hb_list_add( job->filters, &hb_filter_deinterlace );            
+        }
+        else if ([fPictureController deinterlace] == 2)
+        {
             /* Run old deinterlacer fd by default */
             hb_filter_deinterlace.settings = "-1"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );
         }
-        else if ([fPictureController deinterlace] == 2)
+        else if ([fPictureController deinterlace] == 3)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
             hb_filter_deinterlace.settings = "2"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
-        else if ([fPictureController deinterlace] == 3)
+        else if ([fPictureController deinterlace] == 4)
         {
             /* Yadif (with spatial deinterlacing) */
             hb_filter_deinterlace.settings = "0"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
-        else if ([fPictureController deinterlace] == 4)
-        {
-            /* we add the custom string if present */
-            hb_filter_deinterlace.settings = (char *) [[fPictureController deinterlaceCustomString] UTF8String];
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
-        }
+        
 	}
     
     /* Denoise */
-	if ([fPictureController denoise] == 1) // Weak in popup
-	{
-		hb_filter_denoise.settings = "2:1:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
-	}
-	else if ([fPictureController denoise] == 2) // Medium in popup
-	{
-		hb_filter_denoise.settings = "3:2:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
-	}
-	else if ([fPictureController denoise] == 3) // Strong in popup
-	{
-		hb_filter_denoise.settings = "7:7:5:5"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
-	}
-    else if ([fPictureController denoise] == 4) // custom in popup
+	if ([fPictureController denoise] == 1) // custom in popup
 	{
 		/* we add the custom string if present */
         hb_filter_denoise.settings = (char *) [[fPictureController denoiseCustomString] UTF8String]; 
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
+    else if ([fPictureController denoise] == 2) // Weak in popup
+	{
+		hb_filter_denoise.settings = "2:1:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([fPictureController denoise] == 3) // Medium in popup
+	{
+		hb_filter_denoise.settings = "3:2:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([fPictureController denoise] == 4) // Strong in popup
+	{
+		hb_filter_denoise.settings = "7:7:5:5"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+    
     
     /* Deblock  (uses pp7 default) */
     /* NOTE: even though there is a valid deblock setting of 0 for the filter, for 
@@ -3604,29 +3610,29 @@ bool one_burned = FALSE;
     /* Detelecine */
     if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
     {
-        //if ([queueToApply objectForKey:@"PictureDetelecineCustom"])
+        /* use a custom detelecine string */
+        hb_filter_detelecine.settings = (char *) [[queueToApply objectForKey:@"PictureDetelecineCustom"] UTF8String];
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
     if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 2)
     {
-        /* use a custom detelecine string */
-        hb_filter_detelecine.settings = (char *) [[queueToApply objectForKey:@"PictureDetelecineCustom"] UTF8String];
+        /* Use libhb's default values */
         hb_list_add( job->filters, &hb_filter_detelecine );
     }
     
     if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
     {
         /* Decomb */
-        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
-        {
-            /* Run old deinterlacer fd by default */
-            hb_list_add( job->filters, &hb_filter_decomb );
-        }
         /* we add the custom string if present */
-        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
+        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
         {
             /* use a custom decomb string */
             hb_filter_decomb.settings = (char *) [[queueToApply objectForKey:@"PictureDecombCustom"] UTF8String];
+            hb_list_add( job->filters, &hb_filter_decomb );
+        }
+        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 2)
+        {
+            /* Use libhb default */
             hb_list_add( job->filters, &hb_filter_decomb );
         }
         
@@ -3637,53 +3643,54 @@ bool one_burned = FALSE;
         /* Deinterlace */
         if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 1)
         {
+            /* we add the custom string if present */
+            hb_filter_deinterlace.settings = (char *) [[queueToApply objectForKey:@"PictureDeinterlaceCustom"] UTF8String];
+            hb_list_add( job->filters, &hb_filter_deinterlace );            
+        }
+        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 2)
+        {
             /* Run old deinterlacer fd by default */
             hb_filter_deinterlace.settings = "-1"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );
         }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 2)
+        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 3)
         {
             /* Yadif mode 0 (without spatial deinterlacing.) */
             hb_filter_deinterlace.settings = "2"; 
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 3)
+        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 4)
         {
             /* Yadif (with spatial deinterlacing) */
             hb_filter_deinterlace.settings = "0"; 
-            hb_list_add( job->filters, &hb_filter_deinterlace );            
-        }
-        else if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 4)
-        {
-            /* we add the custom string if present */
-            hb_filter_deinterlace.settings = (char *) [[queueToApply objectForKey:@"PictureDeinterlaceCustom"] UTF8String];
             hb_list_add( job->filters, &hb_filter_deinterlace );            
         }
         
         
     }
     /* Denoise */
-	if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 1) // Weak in popup
-	{
-		hb_filter_denoise.settings = "2:1:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
-	}
-	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 2) // Medium in popup
-	{
-		hb_filter_denoise.settings = "3:2:2:3"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
-	}
-	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 3) // Strong in popup
-	{
-		hb_filter_denoise.settings = "7:7:5:5"; 
-        hb_list_add( job->filters, &hb_filter_denoise );	
-	}
-    else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 4) // Custom in popup
+	if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 1) // Custom in popup
 	{
 		/* we add the custom string if present */
         hb_filter_denoise.settings = (char *) [[queueToApply objectForKey:@"PictureDenoiseCustom"] UTF8String];
         hb_list_add( job->filters, &hb_filter_denoise );	
 	}
+    else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 2) // Weak in popup
+	{
+		hb_filter_denoise.settings = "2:1:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 3) // Medium in popup
+	{
+		hb_filter_denoise.settings = "3:2:2:3"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+	else if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 4) // Strong in popup
+	{
+		hb_filter_denoise.settings = "7:7:5:5"; 
+        hb_list_add( job->filters, &hb_filter_denoise );	
+	}
+    
     
     /* Deblock  (uses pp7 default) */
     /* NOTE: even though there is a valid deblock setting of 0 for the filter, for 
@@ -3836,12 +3843,10 @@ bool one_burned = FALSE;
          otherwise, just rip the queue */
         if(fPendingCount == 0)
         {
-            [self writeToActivityLog: "Rip: No pending jobs, so sending this one to doAddToQueue"];
             [self doAddToQueue];
         }
         
         /* go right to processing the new queue encode */
-        [self writeToActivityLog: "Rip: Going right to performNewQueueScan"];
         [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]]; 
         
     }
@@ -4714,11 +4719,11 @@ the user is using "Custom" settings by determining the sender*/
     NSString *videoFilters;
     videoFilters = @"";
     /* Detelecine */
-    if ([fPictureController detelecine] == 1) 
+    if ([fPictureController detelecine] == 2) 
     {
         videoFilters = [videoFilters stringByAppendingString:@" - Detelecine (Default)"];
     }
-    else if ([fPictureController detelecine] == 2) 
+    else if ([fPictureController detelecine] == 1) 
     {
         videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[fPictureController detelecineCustomString]]];
     }
@@ -4727,11 +4732,11 @@ the user is using "Custom" settings by determining the sender*/
     if ([fPictureController useDecomb] == 1)
     {
         /* Decomb */
-        if ([fPictureController decomb] == 1)
+        if ([fPictureController decomb] == 2)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Decomb (Default)"];
         }
-        else if ([fPictureController decomb] == 2)
+        else if ([fPictureController decomb] == 1)
         {
             videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[fPictureController decombCustomString]]];
         }
@@ -4748,19 +4753,19 @@ the user is using "Custom" settings by determining the sender*/
             fTitle->job->deinterlace  = 0;
         }
         
-        if ([fPictureController deinterlace] == 1)
+        if ([fPictureController deinterlace] == 2)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Fast)"];
         }
-        else if ([fPictureController deinterlace] == 2)
+        else if ([fPictureController deinterlace] == 3)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slow)"];
         }
-        else if ([fPictureController deinterlace] == 3)
+        else if ([fPictureController deinterlace] == 4)
         {
             videoFilters = [videoFilters stringByAppendingString:@" - Deinterlace (Slower)"];
         }
-        else if ([fPictureController deinterlace] == 4)
+        else if ([fPictureController deinterlace] == 1)
         {
             videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[fPictureController deinterlaceCustomString]]];
         }
@@ -4768,19 +4773,19 @@ the user is using "Custom" settings by determining the sender*/
     
     
     /* Denoise */
-	if ([fPictureController denoise] == 1)
+	if ([fPictureController denoise] == 2)
 	{
 		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Weak)"];
     }
-	else if ([fPictureController denoise] == 2)
+	else if ([fPictureController denoise] == 3)
 	{
 		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Medium)"];
     }
-	else if ([fPictureController denoise] == 3)
+	else if ([fPictureController denoise] == 4)
 	{
 		videoFilters = [videoFilters stringByAppendingString:@" - Denoise (Strong)"];
 	}
-    else if ([fPictureController denoise] == 4)
+    else if ([fPictureController denoise] == 1)
 	{
 		videoFilters = [videoFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[fPictureController denoiseCustomString]]];
 	}
@@ -6616,7 +6621,7 @@ return YES;
                     [fPictureController setDecomb:[[chosenPreset objectForKey:@"PictureDecomb"] intValue]];
                     
                     /* if we are using "Custom" in the decomb setting, also set the custom string*/
-                    if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 2)
+                    if ([[chosenPreset objectForKey:@"PictureDecomb"] intValue] == 1)
                     {
                         [fPictureController setDecombCustomString:[chosenPreset objectForKey:@"PictureDecombCustom"]];    
                     }
@@ -6631,7 +6636,7 @@ return YES;
                     [fPictureController setUseDecomb:0];
                     [fPictureController setDeinterlace:[[chosenPreset objectForKey:@"PictureDeinterlace"] intValue]];
                     /* if we are using "Custom" in the deinterlace setting, also set the custom string*/
-                    if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 4)
+                    if ([[chosenPreset objectForKey:@"PictureDeinterlace"] intValue] == 1)
                     {
                         [fPictureController setDeinterlaceCustomString:[chosenPreset objectForKey:@"PictureDeinterlaceCustom"]];    
                     }
@@ -6644,7 +6649,7 @@ return YES;
             {
                 [fPictureController setDetelecine:[[chosenPreset objectForKey:@"PictureDetelecine"] intValue]];
                 /* if we are using "Custom" in the detelecine setting, also set the custom string*/
-                if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 2)
+                if ([[chosenPreset objectForKey:@"PictureDetelecine"] intValue] == 1)
                 {
                     [fPictureController setDetelecineCustomString:[chosenPreset objectForKey:@"PictureDetelecineCustom"]];    
                 }
@@ -6659,7 +6664,7 @@ return YES;
             {
                 [fPictureController setDenoise:[[chosenPreset objectForKey:@"PictureDenoise"] intValue]];
                 /* if we are using "Custom" in the denoise setting, also set the custom string*/
-                if ([[chosenPreset objectForKey:@"PictureDenoise"] intValue] == 4)
+                if ([[chosenPreset objectForKey:@"PictureDenoise"] intValue] == 1)
                 {
                     [fPictureController setDenoiseCustomString:[chosenPreset objectForKey:@"PictureDenoiseCustom"]];    
                 }

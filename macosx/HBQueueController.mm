@@ -1160,12 +1160,12 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         if( [[item objectForKey:@"PictureDetelecine"] intValue] == 1)
         {
             pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:@" - Detelecine (Default)"];
+            pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[item objectForKey:@"PictureDetelecineCustom"]]];
         }
         else if( [[item objectForKey:@"PictureDetelecine"] intValue] == 2)
         {
             pictureFiltersPresent = YES;
-            pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Detelecine (%@)",[item objectForKey:@"PictureDetelecineCustom"]]];
+            pictureFilters = [pictureFilters stringByAppendingString:@" - Detelecine (Default)"];
         }
         
         if( [[item objectForKey:@"PictureDecombDeinterlace"] intValue] == 1)
@@ -1176,12 +1176,12 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                 if( [[item objectForKey:@"PictureDecomb"] intValue] == 1)
                 {
                     pictureFiltersPresent = YES;
-                    pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Default)"];
+                    pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[item objectForKey:@"PictureDecombCustom"]]];
                 }
-                if( [[item objectForKey:@"PictureDecomb"] intValue] == 2)
+                else if( [[item objectForKey:@"PictureDecomb"] intValue] == 2)
                 {
                     pictureFiltersPresent = YES;
-                    pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Decomb (%@)",[item objectForKey:@"PictureDecombCustom"]]];
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Decomb (Default)"];
                 }
             }
         }
@@ -1192,19 +1192,19 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                 pictureFiltersPresent = YES;
                 if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 1)
                 {
-                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Fast)"];
+                    pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[item objectForKey:@"PictureDeinterlaceCustom"]]];            
                 }
                 else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 2)
                 {
-                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slow)"];           
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Fast)"];
                 }
                 else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 3)
                 {
-                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slower)"];            
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slow)"];           
                 }
                 else if ([[item objectForKey:@"PictureDeinterlace"] intValue] == 4)
                 {
-                    pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Deinterlace (%@)",[item objectForKey:@"PictureDeinterlaceCustom"]]];            
+                    pictureFilters = [pictureFilters stringByAppendingString:@" - Deinterlace (Slower)"];            
                 }
                 
             }
@@ -1214,19 +1214,19 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
             pictureFiltersPresent = YES;
             if ([[item objectForKey:@"PictureDenoise"] intValue] == 1)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Weak)"];
+                pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[item objectForKey:@"PictureDenoiseCustom"]]];            
             }
             else if ([[item objectForKey:@"PictureDenoise"] intValue] == 2)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Medium)"];           
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Weak)"];
             }
             else if ([[item objectForKey:@"PictureDenoise"] intValue] == 3)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Strong)"];            
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Medium)"];           
             }
             else if ([[item objectForKey:@"PictureDenoise"] intValue] == 4)
             {
-                pictureFilters = [pictureFilters stringByAppendingString:[NSString stringWithFormat:@" - Denoise (%@)",[item objectForKey:@"PictureDenoiseCustom"]]];            
+                pictureFilters = [pictureFilters stringByAppendingString:@" - Denoise (Strong)"];            
             }
             
         }
