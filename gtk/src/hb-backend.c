@@ -3957,6 +3957,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	job   = title->job;
 	if (job == NULL) return;
 
+	job->angle = ghb_settings_get_int(js, "angle");
 	job->start_at_preview = ghb_settings_get_int(js, "start_frame") + 1;
 	if (job->start_at_preview)
 	{
