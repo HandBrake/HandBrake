@@ -121,7 +121,6 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     input.mBitsPerChannel = 32;
 
     bzero( &output, sizeof( AudioStreamBasicDescription ) );
-    output.mSampleRate = ( Float64 ) audio->config.out.samplerate;
     output.mFormatID = kAudioFormatMPEG4AAC;
     output.mChannelsPerFrame = pv->nchannels;
     // let CoreAudio decide the rest...
