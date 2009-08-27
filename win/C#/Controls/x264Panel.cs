@@ -26,7 +26,7 @@ namespace Handbrake.Controls
             get { return rtf_x264Query.Text; }
             set { rtf_x264Query.Text = value; }
         }
-        public void setToolTipActive(Boolean active)
+        private void setToolTipActive(Boolean active)
         {
             ToolTip.Active = active;
         }
@@ -409,7 +409,7 @@ namespace Handbrake.Controls
                                     drop_analysis.SelectedItem = "All";
                                 continue;
                             case "8x8dct":
-                                check_8x8DCT.CheckState = CheckState.Checked;
+                                check_8x8DCT.CheckState = optValue == "1" ? CheckState.Checked : CheckState.Unchecked;
                                 continue;
                             case "cabac":
                                 check_Cabac.CheckState = CheckState.Unchecked;
@@ -535,7 +535,7 @@ namespace Handbrake.Controls
                             }
                         }
                         else if (optNameToChange.Equals("mixed-refs"))
-                            thisOpt = check_mixedReferences.CheckState == CheckState.Checked ? "mixed-refs=1" : "";
+                            thisOpt = check_mixedReferences.CheckState == CheckState.Checked ? "mixed-refs=1" : "mixed-refs=0";
                         else if (optNameToChange.Equals("weightb"))
                             thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? "weightb=1" : "";
                         else if (optNameToChange.Equals("b-pyramid"))
@@ -545,7 +545,7 @@ namespace Handbrake.Controls
                         else if (optNameToChange.Equals("no-dct-decimate"))
                             thisOpt = check_noDCTDecimate.CheckState == CheckState.Checked ? "no-dct-decimate=1" : "";
                         else if (optNameToChange.Equals("8x8dct"))
-                            thisOpt = check_8x8DCT.CheckState == CheckState.Checked ? "8x8dct=1" : "";
+                            thisOpt = check_8x8DCT.CheckState == CheckState.Checked ? "8x8dct=1" : "8x8dct=0";
                         else if (optNameToChange.Equals("cabac"))
                             thisOpt = check_Cabac.CheckState == CheckState.Checked ? "" : "cabac=0";
                         else if (optNameToChange.Equals("me"))
@@ -802,6 +802,8 @@ namespace Handbrake.Controls
             {
                 if (check_mixedReferences.CheckState == CheckState.Checked)
                     query = query + colon + "mixed-refs=1";
+                else
+                    query = query + colon + "mixed-refs=0";
             }
             else if (optNameToChange.Equals("weightb"))
             {
