@@ -62,8 +62,7 @@
     IBOutlet NSProgressIndicator    * fMovieCreationProgressIndicator;
     hb_handle_t                     * fPreviewLibhb;           // private libhb for creating previews
     NSTimer                         * fLibhbTimer;             // timer for retrieving state from libhb
-    IBOutlet NSTextField            * fPreviewMovieStatusField;
-    BOOL                              play_movie; // flag used to determine whether or not to automatically play the movie when done.   
+    IBOutlet NSTextField            * fPreviewMovieStatusField; 
     IBOutlet QTMovieView            * fMovieView;
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
 }

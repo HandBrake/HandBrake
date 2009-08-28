@@ -123,12 +123,9 @@
 
 - (void)windowWillClose:(NSNotification *)aNotification
 {
-    
-    
     /* Upon Closing the picture window, we make sure we clean up any
      * preview movie that might be playing
      */
-    play_movie = NO;
     hb_stop( fPreviewLibhb );
     isEncoding = NO;
     // Show the picture view
@@ -136,7 +133,7 @@
     [fMovieView pause:nil];
     [fMovieView setHidden:YES];
 	[fMovieView setMovie:nil];
-    
+
     isFullScreen = NO;
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
@@ -144,7 +141,6 @@
 
 - (BOOL)windowShouldClose:(id)fPictureWindow
 {
-     
      return YES;
 }
 
@@ -404,12 +400,9 @@
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title
 {
-    //[self SetTitle:title];
-    
     if ([fPreviewWindow isVisible])
     {
         [fPreviewWindow close];
-        
     }
     else
     {
@@ -418,9 +411,7 @@
         [fPreviewWindow setAcceptsMouseMovedEvents:YES];
         isFullScreen = NO;
         scaleToScreen = NO;
-        hudTimerSeconds = 0;
         [self pictureSliderChanged:nil];
-        [self startHudTimer];
     }
     
 }
@@ -798,8 +789,6 @@
     
     if(sender == fCancelPreviewMovieButton && (s.state == HB_STATE_WORKING || s.state == HB_STATE_PAUSED))
 	{
-        
-        play_movie = NO;
         hb_stop( fPreviewLibhb );
         [fPictureView setHidden:NO];
         [fMovieView pause:nil];
@@ -906,9 +895,7 @@
     [fPreviewMovieStatusField setHidden: NO];
     
     isEncoding = YES;
-    
-    play_movie = YES;
-    
+
     /* Let fPreviewLibhb do the job */
     hb_start( fPreviewLibhb );
 	
@@ -1007,21 +994,14 @@
             isEncoding = NO;
             /* we make sure the picture slider and preview match */
             [self pictureSliderChanged:nil];
-            
-            
+
             // Show the movie view
-            if (play_movie)
-            {
             [self showMoviePreview:fPreviewMoviePath];
-            }
-            
             [fCreatePreviewMovieButton setTitle: @"Live Preview"];
-            
-            
+
             break;
         }
     }
-	
 }
 
 - (IBAction) showMoviePreview: (NSString *) path
@@ -1041,6 +1021,8 @@
 		NSDictionary *movieAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
 										 movieUrl, QTMovieURLAttribute,
 										 [NSNumber numberWithBool:NO], QTMovieAskUnresolvedDataRefsAttribute,
+										 [NSNumber numberWithBool:YES], @"QTMovieOpenForPlaybackAttribute",
+										 [NSNumber numberWithBool:NO], @"QTMovieOpenAsyncRequiredAttribute",								
 										 [NSNumber numberWithBool:NO], @"QTMovieOpenAsyncOKAttribute",
 										 QTMovieApertureModeClean, QTMovieApertureModeAttribute,
 										 nil];
@@ -1050,75 +1032,76 @@
 		if (!aMovie) {
 			NSLog(@"Unable to open movie");
 		}
-
-		NSRect movieBounds;
-        /* we get some size information from the preview movie */
-        NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
-        movieBounds = [fMovieView movieBounds];
-        movieBounds.size.height = movieSize.height;
-
-        if ([fMovieView isControllerVisible]) {
-            float controllerBarHeight = [fMovieView controllerBarHeight];
-            if ( controllerBarHeight != 0 ) //Check if QTKit return a real value or not.
-                movieBounds.size.height += controllerBarHeight;
-            else
-                movieBounds.size.height += 15;
-        }
-
-        movieBounds.size.width = movieSize.width;
-
-        /* We need to find out if the preview movie needs to be scaled down so
-         * that it doesn't overflow our available viewing container (just like for image
-         * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
-        if( (movieBounds.size.height) > [fPictureViewArea frame].size.height || scaleToScreen == YES )
-        {
-            /* The preview movie would be larger than the available viewing area
-             * in the preview movie, so we go ahead and scale it down to the same size
-             * as the still preview  or we readjust our window to allow for the added height if need be
-             */
-            NSSize displaySize = NSMakeSize( ( CGFloat ) movieBounds.size.width, ( CGFloat ) movieBounds.size.height );
-            NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-            if( [self viewNeedsToResizeToSize:viewSize] ) {
-                [self resizeSheetForViewSize:viewSize];
-                [self setViewSize:viewSize];
+        else {
+            NSRect movieBounds;
+            /* we get some size information from the preview movie */
+            NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
+            movieBounds = [fMovieView movieBounds];
+            movieBounds.size.height = movieSize.height;
+            
+            if ([fMovieView isControllerVisible]) {
+                CGFloat controllerBarHeight = [fMovieView controllerBarHeight];
+                if ( controllerBarHeight != 0 ) //Check if QTKit return a real value or not.
+                    movieBounds.size.height += controllerBarHeight;
+                else
+                    movieBounds.size.height += 15;
             }
-            [fMovieView setFrameSize:viewSize];
+            
+            movieBounds.size.width = movieSize.width;
+            
+            /* We need to find out if the preview movie needs to be scaled down so
+             * that it doesn't overflow our available viewing container (just like for image
+             * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
+            if( (movieBounds.size.height) > [fPictureViewArea frame].size.height || scaleToScreen == YES )
+            {
+                /* The preview movie would be larger than the available viewing area
+                 * in the preview movie, so we go ahead and scale it down to the same size
+                 * as the still preview  or we readjust our window to allow for the added height if need be
+                 */
+                NSSize displaySize = NSMakeSize( ( CGFloat ) movieBounds.size.width, ( CGFloat ) movieBounds.size.height );
+                NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+                if( [self viewNeedsToResizeToSize:viewSize] ) {
+                    [self resizeSheetForViewSize:viewSize];
+                    [self setViewSize:viewSize];
+                }
+                [fMovieView setFrameSize:viewSize];
+            }
+            else
+            {
+                /* Since the preview movie is smaller than the available viewing area
+                 * we can go ahead and use the preview movies native size */
+                [fMovieView setFrameSize:movieBounds.size];
+            }
+            
+            //lets reposition the movie if need be
+            
+            NSPoint origin = [fPictureViewArea frame].origin;
+            origin.x += trunc( ( [fPictureViewArea frame].size.width -
+                                [fMovieView frame].size.width ) / 2.0 );
+            /* We need to detect whether or not we are currently less than the available height.*/
+            if( movieBounds.size.height < [fPictureView frame].size.height )
+            {
+                /* If we are, we are adding 15 to the height to allow for the controller bar so
+                 * we need to subtract half of that for the origin.y to get the controller bar
+                 * below the movie to it lines up vertically with where our still preview was
+                 */
+                origin.y += trunc( ( ( [fPictureViewArea frame].size.height -
+                                      [fMovieView frame].size.height ) / 2.0 ) - 7.5 );
+            }
+            else
+            {
+                /* if we are >= to the height of the picture view area, the controller bar
+                 * gets taken care of with picture resizing, so we do not want to offset the height
+                 */
+                origin.y += trunc( ( [fPictureViewArea frame].size.height -
+                                    [fMovieView frame].size.height ) / 2.0 );
+            }
+            [fMovieView setFrameOrigin:origin];
+            [fMovieView setMovie:aMovie];
+            [fMovieView setHidden:NO];
+            // to actually play the movie
+            [fMovieView play:aMovie];
         }
-        else
-        {
-            /* Since the preview movie is smaller than the available viewing area
-             * we can go ahead and use the preview movies native size */
-            [fMovieView setFrameSize:movieBounds.size];
-        }
-
-		//lets reposition the movie if need be
-
-        NSPoint origin = [fPictureViewArea frame].origin;
-        origin.x += trunc( ( [fPictureViewArea frame].size.width -
-                            [fMovieView frame].size.width ) / 2.0 );
-        /* We need to detect whether or not we are currently less than the available height.*/
-        if( movieBounds.size.height < [fPictureView frame].size.height )
-        {
-			/* If we are, we are adding 15 to the height to allow for the controller bar so
-			 * we need to subtract half of that for the origin.y to get the controller bar
-			 * below the movie to it lines up vertically with where our still preview was
-			 */
-			origin.y += trunc( ( ( [fPictureViewArea frame].size.height -
-                                  [fMovieView frame].size.height ) / 2.0 ) - 7.5 );
-        }
-        else
-        {
-			/* if we are >= to the height of the picture view area, the controller bar
-			 * gets taken care of with picture resizing, so we do not want to offset the height
-			 */
-			origin.y += trunc( ( [fPictureViewArea frame].size.height -
-                                 [fMovieView frame].size.height ) / 2.0 );
-        }
-        [fMovieView setFrameOrigin:origin];
-        [fMovieView setMovie:aMovie];
-        [fMovieView setHidden:NO];
-        // to actually play the movie
-        [fMovieView play:aMovie];
     }
     isEncoding = NO;
 }
