@@ -461,7 +461,7 @@ namespace Handbrake.Functions
 
                 if (srtFile != "") // SRTs
                 {
-                    query += " --srt-file " + srtFile;
+                    query += " --srt-file " + "\"" + srtFile + "\"";
 
                     if (srtCodeset != "")
                         query += " --srt-codeset " + srtCodeset;
