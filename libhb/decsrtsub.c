@@ -261,7 +261,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 
         hb_deep_log( 3, "SRT Start time %"PRId64", stop time %"PRId64, pv->start_time, pv->stop_time);
 
-        pv->iconv_context = iconv_open( "utf8", pv->subtitle->config.src_codeset );
+        pv->iconv_context = iconv_open( "utf-8", pv->subtitle->config.src_codeset );
 
 
         if( pv->iconv_context == (iconv_t) -1 )
