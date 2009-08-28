@@ -926,7 +926,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
 
                 // Populate the Audio Channels Dropdown
-                AudioSettings.setTrackList(selectedTitle);
+                AudioSettings.SetTrackList(selectedTitle);
 
                 // Populate the Subtitles dropdown
                 Subtitles.drp_subtitleTracks.Items.Clear();
@@ -939,7 +939,7 @@ namespace Handbrake
             // Run the autoName & chapterNaming functions
             if (Properties.Settings.Default.autoNaming)
             {
-                string autoPath = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex, Check_ChapterMarkers.Checked);
+                string autoPath = Main.autoName(this);
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
@@ -1014,7 +1014,7 @@ namespace Handbrake
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
-                text_destination.Text = Main.autoName(drp_dvdtitle, drop_chapterStart.Text, drop_chapterFinish.Text, sourcePath, text_destination.Text, drop_format.SelectedIndex, Check_ChapterMarkers.Checked);
+                text_destination.Text = Main.autoName(this);
 
             // Disable chapter markers if only 1 chapter is selected.
             if (chapterStart == chapterEnd)
@@ -1097,7 +1097,7 @@ namespace Handbrake
             switch (drop_format.SelectedIndex)
             {
                 case 0:
-                    if (Properties.Settings.Default.useM4v)
+                    if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V())
                         setExtension(".m4v");
                     else
                         setExtension(".mp4");
@@ -1107,7 +1107,7 @@ namespace Handbrake
                     break;
             }
 
-            AudioSettings.setAudioByContainer(drop_format.Text);
+            AudioSettings.SetContainer(drop_format.Text);
             Subtitles.setContainer(drop_format.SelectedIndex);
 
             if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))

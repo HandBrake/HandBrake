@@ -205,12 +205,12 @@ namespace Handbrake.Functions
 
             #region Audio
             // Clear the audio listing
-            mainWindow.AudioSettings.clearAudioList();
+            mainWindow.AudioSettings.ClearAudioList();
 
             if (presetQuery.AudioInformation != null)
                 foreach (AudioTrack track in presetQuery.AudioInformation)
                 {
-                    ListViewItem newTrack = new ListViewItem(mainWindow.AudioSettings.getNewID().ToString());
+                    ListViewItem newTrack = new ListViewItem(mainWindow.AudioSettings.GetNewID().ToString());
 
                     newTrack.SubItems.Add("Automatic");
                     newTrack.SubItems.Add(track.Encoder);
@@ -221,7 +221,7 @@ namespace Handbrake.Functions
                     else
                         newTrack.SubItems.Add(track.Bitrate);
                     newTrack.SubItems.Add(track.DRC);
-                    mainWindow.AudioSettings.addTrackForPreset(newTrack);
+                    mainWindow.AudioSettings.AddTrackForPreset(newTrack);
                 }
             #endregion
 

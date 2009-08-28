@@ -130,7 +130,7 @@ namespace Handbrake.Controls
                 value = ((tb_drc.Value - 1) / 10.0) + 1;
 
             // Create a new row for the Audio list based on the currently selected items in the dropdown.
-            ListViewItem newTrack = new ListViewItem(getNewID().ToString());
+            ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
             newTrack.SubItems.Add(drp_audioTrack.Text);
             newTrack.SubItems.Add(drp_audioEncoder.Text);
             newTrack.SubItems.Add(drp_audioMix.Text);
@@ -149,7 +149,7 @@ namespace Handbrake.Controls
         }
         private void btn_RemoveAudioTrack_Click(object sender, EventArgs e)
         {
-            removeAudioTrack();
+            RemoveAudioTrack();
         }
 
         // Audio List Menu
@@ -189,9 +189,9 @@ namespace Handbrake.Controls
         }
         private void audioList_remove_Click(object sender, EventArgs e)
         {
-            removeAudioTrack();
+            RemoveAudioTrack();
         }
-        private void removeAudioTrack()
+        private void RemoveAudioTrack()
         {
             // Remove the Item and reselect the control if the following conditions are met.
             if (lv_audioList.SelectedItems.Count != 0)
@@ -221,7 +221,7 @@ namespace Handbrake.Controls
         }
 
         // Public Functions
-        public void setTrackList(Parsing.Title selectedTitle)
+        public void SetTrackList(Parsing.Title selectedTitle)
         {
             drp_audioTrack.Items.Clear();
             drp_audioTrack.Items.Add("Automatic");
@@ -263,20 +263,22 @@ namespace Handbrake.Controls
             }
             drp_audioMix.SelectedIndex = 0;
         }
-        public ListView getAudioPanel()
+        public ListView GetAudioPanel()
         {
             return lv_audioList;
         }
-        public void setAudioByContainer(String path)
+        public void SetContainer(String path)
         {
+            string oldval = drp_audioEncoder.Text;
             if ((path.Contains("MP4")) || (path.Contains("M4V")))
             {
-                string oldval = drp_audioEncoder.Text;
                 drp_audioEncoder.Items.Clear();
                 drp_audioEncoder.Items.Add("AAC (faac)");
                 drp_audioEncoder.Items.Add("AC3 Passthru");
                 if ((oldval != "AAC (faac)") && (oldval != "AC3 Passthru"))
                     drp_audioEncoder.SelectedIndex = 0;
+                else
+                    drp_audioEncoder.SelectedItem = oldval;
 
             }
             else if (path.Contains("MKV"))
@@ -287,6 +289,7 @@ namespace Handbrake.Controls
                 drp_audioEncoder.Items.Add("AC3 Passthru");
                 drp_audioEncoder.Items.Add("DTS Passthru");
                 drp_audioEncoder.Items.Add("Vorbis (vorbis)");
+                drp_audioEncoder.SelectedItem = oldval;
 
                 if (drp_audioEncoder.Text == string.Empty)
                     drp_audioEncoder.SelectedIndex = 0;
@@ -299,21 +302,30 @@ namespace Handbrake.Controls
                     row.SubItems[2].Text = drp_audioEncoder.Items[0].ToString();
             }
         }
-        public void addTrackForPreset(ListViewItem item)
+        public void AddTrackForPreset(ListViewItem item)
         {
             lv_audioList.Items.Add(item);
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
         }
-        public void clearAudioList()
+        public void ClearAudioList()
         {
             lv_audioList.Items.Clear();
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
         }
-        public int getNewID()
+        public int GetNewID()
         {
             return lv_audioList.Items.Count + 1;
+        }
+        public Boolean RequiresM4V()
+        {
+            foreach (ListViewItem item in lv_audioList.Items)
+            {
+                if (item.SubItems[2].Text.Contains("AC3"))
+                    return true;
+            }
+            return false;
         }
 
         // Helper Functions 

@@ -22,6 +22,8 @@ namespace Handbrake.Controls
         }
 
         private int FileContainer;
+
+        // Public Functions
         public void setSubtitleTrackAuto()
         {
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
@@ -56,6 +58,18 @@ namespace Handbrake.Controls
                         trigger = true;
                     }
                 }
+        }
+        public Boolean RequiresM4V()
+        {
+            foreach (ListViewItem item in lv_subList.Items)
+            {
+                if (!string.IsNullOrEmpty(item.SubItems[5].Text))
+                    return true;
+
+                if (item.SubItems[1].Text.Contains("(Text)"))
+                    return true;
+            }
+            return false;
         }
 
         // Controls

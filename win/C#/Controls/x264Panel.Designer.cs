@@ -88,7 +88,7 @@ namespace Handbrake.Controls
             this.ToolTip.SetToolTip(this.slider_psytrellis, "Psychovisual Trellis tries to retain more sharpness and detail, but can cause art" +
                     "ifacting. \r\nIt is considered experimental, which is why it\'s off by default. Goo" +
                     "d values are 0.1 to 0.2.");
-            this.slider_psytrellis.Scroll += new System.EventHandler(this.slider_psytrellis_Scroll);
+            this.slider_psytrellis.Scroll += new System.EventHandler(this.widgetControlChanged);
             // 
             // lbl_psytrellis
             // 
@@ -115,7 +115,7 @@ namespace Handbrake.Controls
             this.slider_psyrd.Size = new System.Drawing.Size(131, 45);
             this.slider_psyrd.TabIndex = 83;
             this.ToolTip.SetToolTip(this.slider_psyrd, resources.GetString("slider_psyrd.ToolTip"));
-            this.slider_psyrd.Scroll += new System.EventHandler(this.slider_psyrd_Scroll);
+            this.slider_psyrd.Scroll += new System.EventHandler(this.widgetControlChanged);
             // 
             // lbl_adaptBFrames
             // 
@@ -140,7 +140,7 @@ namespace Handbrake.Controls
             this.drop_adaptBFrames.Size = new System.Drawing.Size(121, 21);
             this.drop_adaptBFrames.TabIndex = 82;
             this.ToolTip.SetToolTip(this.drop_adaptBFrames, resources.GetString("drop_adaptBFrames.ToolTip"));
-            this.drop_adaptBFrames.SelectedIndexChanged += new System.EventHandler(this.drop_adaptBFrames_SelectedIndexChanged);
+            this.drop_adaptBFrames.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label43
             // 
@@ -190,7 +190,7 @@ namespace Handbrake.Controls
             this.check_Cabac.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ToolTip.SetToolTip(this.check_Cabac, resources.GetString("check_Cabac.ToolTip"));
             this.check_Cabac.UseVisualStyleBackColor = true;
-            this.check_Cabac.CheckedChanged += new System.EventHandler(this.check_Cabac_CheckedChanged);
+            this.check_Cabac.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // check_noDCTDecimate
             // 
@@ -205,7 +205,7 @@ namespace Handbrake.Controls
             this.check_noDCTDecimate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ToolTip.SetToolTip(this.check_noDCTDecimate, resources.GetString("check_noDCTDecimate.ToolTip"));
             this.check_noDCTDecimate.UseVisualStyleBackColor = true;
-            this.check_noDCTDecimate.CheckedChanged += new System.EventHandler(this.check_noDCTDecimate_CheckedChanged);
+            this.check_noDCTDecimate.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // check_noFastPSkip
             // 
@@ -221,7 +221,7 @@ namespace Handbrake.Controls
             this.ToolTip.SetToolTip(this.check_noFastPSkip, "This can help with blocking on solid colors like blue skies, but it also slows do" +
                     "wn the encode.");
             this.check_noFastPSkip.UseVisualStyleBackColor = true;
-            this.check_noFastPSkip.CheckedChanged += new System.EventHandler(this.check_noFastPSkip_CheckedChanged);
+            this.check_noFastPSkip.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // lbl_trellis
             // 
@@ -246,7 +246,7 @@ namespace Handbrake.Controls
             this.drop_trellis.Size = new System.Drawing.Size(94, 21);
             this.drop_trellis.TabIndex = 75;
             this.ToolTip.SetToolTip(this.drop_trellis, resources.GetString("drop_trellis.ToolTip"));
-            this.drop_trellis.SelectedIndexChanged += new System.EventHandler(this.drop_trellis_SelectedIndexChanged);
+            this.drop_trellis.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // drop_deblockBeta
             // 
@@ -272,7 +272,7 @@ namespace Handbrake.Controls
             this.drop_deblockBeta.Size = new System.Drawing.Size(68, 21);
             this.drop_deblockBeta.TabIndex = 74;
             this.ToolTip.SetToolTip(this.drop_deblockBeta, resources.GetString("drop_deblockBeta.ToolTip"));
-            this.drop_deblockBeta.SelectedIndexChanged += new System.EventHandler(this.drop_deblockBeta_SelectedIndexChanged);
+            this.drop_deblockBeta.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label41
             // 
@@ -307,7 +307,7 @@ namespace Handbrake.Controls
             this.drop_deblockAlpha.Size = new System.Drawing.Size(68, 21);
             this.drop_deblockAlpha.TabIndex = 73;
             this.ToolTip.SetToolTip(this.drop_deblockAlpha, resources.GetString("drop_deblockAlpha.ToolTip"));
-            this.drop_deblockAlpha.SelectedIndexChanged += new System.EventHandler(this.drop_deblockAlpha_SelectedIndexChanged);
+            this.drop_deblockAlpha.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // panel3
             // 
@@ -349,7 +349,7 @@ namespace Handbrake.Controls
             this.check_8x8DCT.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.ToolTip.SetToolTip(this.check_8x8DCT, resources.GetString("check_8x8DCT.ToolTip"));
             this.check_8x8DCT.UseVisualStyleBackColor = true;
-            this.check_8x8DCT.CheckedChanged += new System.EventHandler(this.check_8x8DCT_CheckedChanged);
+            this.check_8x8DCT.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label45
             // 
@@ -373,7 +373,7 @@ namespace Handbrake.Controls
             this.drop_analysis.Size = new System.Drawing.Size(63, 21);
             this.drop_analysis.TabIndex = 71;
             this.ToolTip.SetToolTip(this.drop_analysis, resources.GetString("drop_analysis.ToolTip"));
-            this.drop_analysis.SelectedIndexChanged += new System.EventHandler(this.drop_analysis_SelectedIndexChanged);
+            this.drop_analysis.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label48
             // 
@@ -405,7 +405,7 @@ namespace Handbrake.Controls
             this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 21);
             this.drop_subpixelMotionEstimation.TabIndex = 70;
             this.ToolTip.SetToolTip(this.drop_subpixelMotionEstimation, resources.GetString("drop_subpixelMotionEstimation.ToolTip"));
-            this.drop_subpixelMotionEstimation.SelectedIndexChanged += new System.EventHandler(this.drop_subpixelMotionEstimation_SelectedIndexChanged);
+            this.drop_subpixelMotionEstimation.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // lbl_merange
             // 
@@ -488,7 +488,7 @@ namespace Handbrake.Controls
             this.drop_MotionEstimationRange.Size = new System.Drawing.Size(139, 21);
             this.drop_MotionEstimationRange.TabIndex = 69;
             this.ToolTip.SetToolTip(this.drop_MotionEstimationRange, resources.GetString("drop_MotionEstimationRange.ToolTip"));
-            this.drop_MotionEstimationRange.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationRange_SelectedIndexChanged);
+            this.drop_MotionEstimationRange.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label54
             // 
@@ -516,7 +516,7 @@ namespace Handbrake.Controls
             this.drop_MotionEstimationMethod.Size = new System.Drawing.Size(139, 21);
             this.drop_MotionEstimationMethod.TabIndex = 68;
             this.ToolTip.SetToolTip(this.drop_MotionEstimationMethod, resources.GetString("drop_MotionEstimationMethod.ToolTip"));
-            this.drop_MotionEstimationMethod.SelectedIndexChanged += new System.EventHandler(this.drop_MotionEstimationMethod_SelectedIndexChanged);
+            this.drop_MotionEstimationMethod.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // check_pyrmidalBFrames
             // 
@@ -530,7 +530,7 @@ namespace Handbrake.Controls
             this.check_pyrmidalBFrames.Text = "Pyramidal B-Frames:";
             this.ToolTip.SetToolTip(this.check_pyrmidalBFrames, resources.GetString("check_pyrmidalBFrames.ToolTip"));
             this.check_pyrmidalBFrames.UseVisualStyleBackColor = true;
-            this.check_pyrmidalBFrames.CheckedChanged += new System.EventHandler(this.check_pyrmidalBFrames_CheckedChanged);
+            this.check_pyrmidalBFrames.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // check_weightedBFrames
             // 
@@ -544,7 +544,7 @@ namespace Handbrake.Controls
             this.check_weightedBFrames.Text = "Weighted B-Frames:";
             this.ToolTip.SetToolTip(this.check_weightedBFrames, resources.GetString("check_weightedBFrames.ToolTip"));
             this.check_weightedBFrames.UseVisualStyleBackColor = true;
-            this.check_weightedBFrames.CheckedChanged += new System.EventHandler(this.check_weightedBFrames_CheckedChanged);
+            this.check_weightedBFrames.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // lbl_direct_prediction
             // 
@@ -570,7 +570,7 @@ namespace Handbrake.Controls
             this.drop_directPrediction.Size = new System.Drawing.Size(121, 21);
             this.drop_directPrediction.TabIndex = 57;
             this.ToolTip.SetToolTip(this.drop_directPrediction, resources.GetString("drop_directPrediction.ToolTip"));
-            this.drop_directPrediction.SelectedIndexChanged += new System.EventHandler(this.drop_directPrediction_SelectedIndexChanged);
+            this.drop_directPrediction.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label62
             // 
@@ -611,7 +611,7 @@ namespace Handbrake.Controls
             this.ToolTip.SetToolTip(this.drop_bFrames, "Sane values are 1-6. \r\nB-Frames are smaller than other frames, so they let you pa" +
                     "ck in more quality at the same bitrate. \r\nUse more of them with animated materia" +
                     "l.");
-            this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.drop_bFrames_SelectedIndexChanged);
+            this.drop_bFrames.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // label64
             // 
@@ -652,7 +652,7 @@ namespace Handbrake.Controls
             this.ToolTip.SetToolTip(this.drop_refFrames, "Sane values are 1-6. \r\nThe more you add, the higher the quality, but the slower t" +
                     "he encode. Be careful... too many and QuickTime struggles to play the video back" +
                     ".");
-            this.drop_refFrames.SelectedIndexChanged += new System.EventHandler(this.drop_refFrames_SelectedIndexChanged);
+            this.drop_refFrames.SelectedIndexChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // check_mixedReferences
             // 
@@ -668,7 +668,7 @@ namespace Handbrake.Controls
             this.ToolTip.SetToolTip(this.check_mixedReferences, "With this on, different references can be used for different parts of each 16x16 " +
                     "pixel macroblock, increasing quality.");
             this.check_mixedReferences.UseVisualStyleBackColor = true;
-            this.check_mixedReferences.CheckedChanged += new System.EventHandler(this.check_mixedReferences_CheckedChanged);
+            this.check_mixedReferences.CheckedChanged += new System.EventHandler(this.widgetControlChanged);
             // 
             // ToolTip
             // 

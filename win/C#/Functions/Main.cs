@@ -124,21 +124,21 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string autoName(ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
+        public static string autoName(frmMain mainWindow ) //ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
         {
             string AutoNamePath = string.Empty;
-            if (drpDvdtitle.Text != "Automatic")
+            if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
                 // Get the Source Name 
-                string sourceName = Path.GetFileNameWithoutExtension(source);
+                string sourceName = Path.GetFileNameWithoutExtension(mainWindow.sourcePath);
 
                 // Get the Selected Title Number
-                string[] titlesplit = drpDvdtitle.Text.Split(' ');
+                string[] titlesplit = mainWindow.drp_dvdtitle.Text.Split(' ');
                 string dvdTitle = titlesplit[0].Replace("Automatic", "");
 
                 // Get the Chapter Start and Chapter End Numbers
-                string chapterStart = chapter_start.Replace("Auto", "");
-                string chapterFinish = chatper_end.Replace("Auto", "");
+                string chapterStart = mainWindow.drop_chapterStart.Text.Replace("Auto", "");
+                string chapterFinish = mainWindow.drop_chapterFinish.Text.Replace("Auto", "");
                 string combinedChapterTag = chapterStart;
                 if (chapterFinish != chapterStart && chapterFinish != "")
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
@@ -154,19 +154,19 @@ namespace Handbrake.Functions
                     destinationFilename = sourceName + "_T" + dvdTitle + "_C" + combinedChapterTag;
 
                 // Add the appropriate file extension
-                if (format == 0)
+                if (mainWindow.drop_format.SelectedIndex == 0)
                 {
-                    if (Properties.Settings.Default.useM4v || chapters)
+                    if (Properties.Settings.Default.useM4v || mainWindow.Check_ChapterMarkers.Checked || mainWindow.AudioSettings.RequiresM4V() || mainWindow.Subtitles.RequiresM4V())
                         destinationFilename += ".m4v";
                     else
                         destinationFilename += ".mp4";
                 }
-                else if (format == 1)
+                else if (mainWindow.drop_format.SelectedIndex == 1)
                     destinationFilename += ".mkv";
 
                 // Now work out the path where the file will be stored.
                 // First case: If the destination box doesn't already contain a path, make one.
-                if (!dest.Contains(Path.DirectorySeparatorChar.ToString()))
+                if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // If there is an auto name path, use it...
                     if (Properties.Settings.Default.autoNamePath.Trim() != "" && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
@@ -177,8 +177,8 @@ namespace Handbrake.Functions
                 else // Otherwise, use the path that is already there.
                 {
                     // Use the path and change the file extension to match the previous destination
-                    AutoNamePath = Path.Combine(Path.GetDirectoryName(dest), destinationFilename);
-                    AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(dest));
+                    AutoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
+                    AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
                 }
             }
 

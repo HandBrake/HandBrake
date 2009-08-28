@@ -16,7 +16,7 @@ namespace Handbrake.Controls
             InitializeComponent();
 
             if (Properties.Settings.Default.tooltipEnable)
-                setToolTipActive(true);
+                ToolTip.Active = true;
 
             reset2Defaults();
         }
@@ -26,91 +26,76 @@ namespace Handbrake.Controls
             get { return rtf_x264Query.Text; }
             set { rtf_x264Query.Text = value; }
         }
-        private void setToolTipActive(Boolean active)
-        {
-            ToolTip.Active = active;
-        }
 
-        #region Controls Changed
-        private void drop_refFrames_SelectedIndexChanged(object sender, EventArgs e)
+        private void widgetControlChanged(object sender, EventArgs e)
         {
-            on_x264_WidgetChange("ref");
-        }
-        private void check_mixedReferences_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("mixed-refs");
-        }
-        private void drop_bFrames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("bframes");
-        }
-        private void drop_directPrediction_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("direct");
-        }
-        private void check_weightedBFrames_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("weightb");
-        }
-        private void check_pyrmidalBFrames_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("b-pyramid");
-        }
-        private void drop_MotionEstimationMethod_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("me");
-        }
-        private void drop_MotionEstimationRange_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("merange");
-        }
-        private void drop_subpixelMotionEstimation_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("subq");
-        }
-        private void drop_analysis_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("analyse");
-        }
-        private void check_8x8DCT_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("8x8dct");
-        }
-        private void drop_deblockAlpha_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("deblock");
-        }
-        private void drop_deblockBeta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("deblock");
-        }
-        private void drop_trellis_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("trellis");
-        }
-        private void check_noFastPSkip_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("no-fast-pskip");
-        }
-        private void check_noDCTDecimate_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("no-dct-decimate");
-        }
-        private void check_Cabac_CheckedChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("cabac");
-        }
-        private void slider_psyrd_Scroll(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("psy-rd");
-        }
-        private void slider_psytrellis_Scroll(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("psy-rd");
-        }
-        private void drop_adaptBFrames_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            on_x264_WidgetChange("b-adapt");
+            Control changedControlName = (Control) sender;
+            string controlName = "";
+
+            switch (changedControlName.Name.Trim())
+            {
+                case "drop_refFrames":
+                    controlName = "ref";
+                    break;
+                case "check_mixedReferences":
+                    controlName = "mixed-refs";
+                    break;
+                case "drop_bFrames":
+                    controlName = "bframes";
+                    break;
+                case "drop_directPrediction":
+                    controlName = "direct";
+                    break;
+                case "check_weightedBFrames":
+                    controlName = "weightb";
+                    break;
+                case "check_pyrmidalBFrames":
+                    controlName = "b-pyramid";
+                    break;
+                case "drop_MotionEstimationMethod":
+                    controlName = "me";
+                    break;
+                case "drop_MotionEstimationRange":
+                    controlName = "merange";
+                    break;
+                case "drop_subpixelMotionEstimation":
+                    controlName = "subq";
+                    break;
+                case "drop_analysis":
+                    controlName = "analyse";
+                    break;
+                case "check_8x8DCT":
+                    controlName = "8x8dct";
+                    break;
+                case "drop_deblockAlpha":
+                    controlName = "deblock";
+                    break;
+                case "drop_deblockBeta":
+                    controlName = "deblock";
+                    break;
+                case "drop_trellis":
+                    controlName = "trellis";
+                    break;
+                case "check_noFastPSkip":
+                    controlName = "no-fast-pskip";
+                    break;
+                case "check_noDCTDecimate":
+                    controlName = "no-dct-decimate";
+                    break;
+                case "check_Cabac":
+                    controlName = "cabac";
+                    break;
+                case "slider_psyrd":
+                    controlName = "psy-rd";
+                    break;
+                case "slider_psytrellis":
+                    controlName = "psy-rd";
+                    break;
+                case "drop_adaptBFrames":
+                    controlName = "b-adapt";
+                    break;
+            }
+            on_x264_WidgetChange(controlName);
         }
         private void rtf_x264Query_TextChanged(object sender, EventArgs e)
         {
@@ -131,8 +116,7 @@ namespace Handbrake.Controls
             rtf_x264Query.Text = "";
             reset2Defaults();
         }
-        #endregion
-
+        
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
         /// </summary>
