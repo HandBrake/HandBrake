@@ -261,7 +261,7 @@ namespace Handbrake.Functions
                         thisQuery.Decomb = decombValue.ToString().Replace("--decomb=", "").Replace("\"", "");
                 }
 
-                thisQuery.DeInterlace = "None";
+                thisQuery.DeInterlace = "Off";
                 if (deinterlace.Success)
                 {
                     thisQuery.DeInterlace = deinterlace.ToString().Replace("--deinterlace=", "").Replace("\"", "");
@@ -269,7 +269,7 @@ namespace Handbrake.Functions
                     thisQuery.DeInterlace = thisQuery.DeInterlace.Replace("slowest", "Slowest");
                 }
 
-                thisQuery.DeNoise = "None";
+                thisQuery.DeNoise = "Off";
                 if (denoise.Success)
                 {
                     thisQuery.DeNoise = denoise.ToString().Replace("--denoise=", "").Replace("\"", "");
