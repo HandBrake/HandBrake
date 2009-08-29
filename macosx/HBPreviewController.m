@@ -731,9 +731,10 @@
 
     UInt32 * src = (UInt32 *)buffer;
     UInt32 * dst = (UInt32 *)[imgrep bitmapData];
-    for (int r = 0; r < dstHeight; r++)
+    int r, c;
+    for (r = 0; r < dstHeight; r++)
     {
-        for (int c = 0; c < dstWidth; c++)
+        for (c = 0; c < dstWidth; c++)
 #if TARGET_RT_LITTLE_ENDIAN
             *dst++ = Endian32_Swap(*src++);
 #else
@@ -927,7 +928,7 @@
     
 }
 
-- (void) libhbStateChanged: (hb_state_t &)state
+- (void) libhbStateChanged: (hb_state_t)state
 {
     switch( state.state )
     {

@@ -96,7 +96,7 @@
 - (void) stopReceivingLibhbNotifications;
 
 - (IBAction) createMoviePreview: (id) sender;
-- (void) libhbStateChanged: (hb_state_t &) state;
+- (void) libhbStateChanged: (hb_state_t ) state;
 - (IBAction) showMoviePreview: (NSString *) path;
 - (IBAction) previewDurationPopUpChanged: (id) sender;
 

@@ -31,7 +31,7 @@
 		4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		4DD93F9A082036E8008E1322 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; settings = {ATTRIBUTES = (); }; };
 		4DD93F9B082036E8008E1322 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.mm */; };
-		4DD93F9E082036E8008E1322 /* HBPreviewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FD382073D19CE00E46515 /* HBPreviewController.mm */; };
+		4DD93F9E082036E8008E1322 /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FD382073D19CE00E46515 /* HBPreviewController.m */; };
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
 		4DD93FA4082036E8008E1322 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */; };
@@ -156,7 +156,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4D1FD381073D19CE00E46515 /* HBPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = HBPreviewController.h; sourceTree = "<group>"; };
-		4D1FD382073D19CE00E46515 /* HBPreviewController.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = HBPreviewController.mm; sourceTree = "<group>"; };
+		4D1FD382073D19CE00E46515 /* HBPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = HBPreviewController.m; sourceTree = "<group>"; };
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		4DF3C8CB052889CD00A80101 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
@@ -348,8 +348,8 @@
 				A2BEA5FA0F2A1ED1001CE7A1 /* PictureController.mm */,
 				A22C85EA0D05D35000C10E36 /* HBPresets.h */,
 				A22C85EB0D05D35000C10E36 /* HBPresets.m */,
-				4D1FD382073D19CE00E46515 /* HBPreviewController.mm */,
 				4D1FD381073D19CE00E46515 /* HBPreviewController.h */,
+				4D1FD382073D19CE00E46515 /* HBPreviewController.m */,
 				4DF3C8CB052889CD00A80101 /* Controller.h */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
 				593034EA0BBA39A100172349 /* ChapterTitles.m */,
@@ -611,7 +611,7 @@
 				59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */,
 				4DD93F9A082036E8008E1322 /* main.mm in Sources */,
 				4DD93F9B082036E8008E1322 /* Controller.mm in Sources */,
-				4DD93F9E082036E8008E1322 /* HBPreviewController.mm in Sources */,
+				4DD93F9E082036E8008E1322 /* HBPreviewController.m in Sources */,
 				A2A1EC3A0C76C58400827E0D /* HBDVDDetector.m in Sources */,
 				253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */,
 				253886180BFE0C160064E995 /* HBOutputPanelController.m in Sources */,
