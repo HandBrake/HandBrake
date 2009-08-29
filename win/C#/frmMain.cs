@@ -103,7 +103,7 @@ namespace Handbrake
                         // Send the query from the file to the Query Parser class, then load the preset
                         QueryParser presetQuery = QueryParser.Parse(query);
                         PresetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
-
+                     
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
@@ -1175,16 +1175,16 @@ namespace Handbrake
 
                     switch (Properties.Settings.Default.x264cqstep.ToString(culture))
                     {
-                        case "0.20":
+                        case "0.2":
                             slider_videoQuality.Maximum = 255;
                             break;
                         case "0.25":
                             slider_videoQuality.Maximum = 204;
                             break;
-                        case "0.50":
+                        case "0.5":
                             slider_videoQuality.Maximum = 102;
                             break;
-                        case "1.0":
+                        case "1":
                             slider_videoQuality.Maximum = 51;
                             break;
                         default:
