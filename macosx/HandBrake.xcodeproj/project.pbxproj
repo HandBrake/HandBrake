@@ -30,7 +30,7 @@
 		4DD93F92082036E8008E1322 /* HBPreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D1FD381073D19CE00E46515 /* HBPreviewController.h */; };
 		4DD93F97082036E8008E1322 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		4DD93F9A082036E8008E1322 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.mm */; settings = {ATTRIBUTES = (); }; };
-		4DD93F9B082036E8008E1322 /* Controller.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.mm */; };
+		4DD93F9B082036E8008E1322 /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DF3C8CC052889CD00A80101 /* Controller.m */; };
 		4DD93F9E082036E8008E1322 /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1FD382073D19CE00E46515 /* HBPreviewController.m */; };
 		4DD93FA2082036E8008E1322 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DD93FA3082036E8008E1322 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DEB2024052B055F00C39CA9 /* IOKit.framework */; };
@@ -160,7 +160,7 @@
 		4DDE9724052B7B2B00C39CA9 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		4DEB2024052B055F00C39CA9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		4DF3C8CB052889CD00A80101 /* Controller.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
-		4DF3C8CC052889CD00A80101 /* Controller.mm */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.objcpp; path = Controller.mm; sourceTree = "<group>"; };
+		4DF3C8CC052889CD00A80101 /* Controller.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Controller.m; sourceTree = "<group>"; };
 		526FBC760B4CA8F40064E04C /* test.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = test.c; path = ../test/test.c; sourceTree = SOURCE_ROOT; };
 		593034E90BBA39A100172349 /* ChapterTitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChapterTitles.h; sourceTree = "<group>"; };
 		593034EA0BBA39A100172349 /* ChapterTitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChapterTitles.m; sourceTree = "<group>"; };
@@ -343,14 +343,14 @@
 			children = (
 				A2D18AA50FD81C50003C997B /* HBSubtitles.h */,
 				A2D18AA60FD81C50003C997B /* HBSubtitles.m */,
-				4DF3C8CC052889CD00A80101 /* Controller.mm */,
+				4DF3C8CB052889CD00A80101 /* Controller.h */,
+				4DF3C8CC052889CD00A80101 /* Controller.m */,
 				A2BEA5F90F2A1ED1001CE7A1 /* PictureController.h */,
 				A2BEA5FA0F2A1ED1001CE7A1 /* PictureController.mm */,
 				A22C85EA0D05D35000C10E36 /* HBPresets.h */,
 				A22C85EB0D05D35000C10E36 /* HBPresets.m */,
 				4D1FD381073D19CE00E46515 /* HBPreviewController.h */,
 				4D1FD382073D19CE00E46515 /* HBPreviewController.m */,
-				4DF3C8CB052889CD00A80101 /* Controller.h */,
 				593034E90BBA39A100172349 /* ChapterTitles.h */,
 				593034EA0BBA39A100172349 /* ChapterTitles.m */,
 				A2A1EC300C76C35E00827E0D /* HBDVDDetector.h */,
@@ -610,7 +610,7 @@
 			files = (
 				59CBD2650BBB4D1B004A3BE3 /* ChapterTitles.m in Sources */,
 				4DD93F9A082036E8008E1322 /* main.mm in Sources */,
-				4DD93F9B082036E8008E1322 /* Controller.mm in Sources */,
+				4DD93F9B082036E8008E1322 /* Controller.m in Sources */,
 				4DD93F9E082036E8008E1322 /* HBPreviewController.m in Sources */,
 				A2A1EC3A0C76C58400827E0D /* HBDVDDetector.m in Sources */,
 				253886020BFE0A5B0064E995 /* HBOutputRedirect.m in Sources */,
@@ -779,6 +779,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -901,6 +902,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1023,6 +1025,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1145,6 +1148,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -1269,6 +1273,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1394,6 +1399,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1519,6 +1525,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1644,6 +1651,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1892,6 +1900,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1922,6 +1931,7 @@
 				EXTERNAL_METHOD = xcode;
 				EXTERNAL_SRC = ..;
 				FRAMEWORK_SEARCH_PATHS = "$(EXTERNAL_SRC)/macosx";
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;

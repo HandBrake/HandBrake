@@ -2886,11 +2886,11 @@ bool one_burned = FALSE;
                 {
                     if (burned != 1 && job->mux == HB_MUX_MKV)
                     {
-                        job->select_subtitle_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                        job->select_subtitle_config.dest = PASSTHRUSUB;
                     }
                     else
                     {
-                        job->select_subtitle_config.dest = hb_subtitle_config_s::RENDERSUB;
+                        job->select_subtitle_config.dest = RENDERSUB;
                     }
                     
                     job->select_subtitle_config.force = force;
@@ -2936,7 +2936,7 @@ bool one_burned = FALSE;
                     strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 40);
                     
                     sub_config.force = 0;
-                    sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    sub_config.dest = PASSTHRUSUB;
                     sub_config.default_track = def;
                     
                     hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
@@ -2949,17 +2949,17 @@ bool one_burned = FALSE;
                     hb_subtitle_config_t sub_config = subt->config;
                     
                     if (!burned && job->mux == HB_MUX_MKV && 
-                        subt->format == hb_subtitle_s::PICTURESUB)
+                        subt->format == PICTURESUB)
                     {
-                        sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                        sub_config.dest = PASSTHRUSUB;
                     }
                     else if (!burned && job->mux == HB_MUX_MP4 && 
-                             subt->format == hb_subtitle_s::PICTURESUB)
+                             subt->format == PICTURESUB)
                     {
                         // Skip any non-burned vobsubs when output is mp4
                         continue;
                     }
-                    else if ( burned && subt->format == hb_subtitle_s::PICTURESUB )
+                    else if ( burned && subt->format == PICTURESUB )
                     {
                         // Only allow one subtitle to be burned into the video
                         if (one_burned)
@@ -3427,11 +3427,11 @@ bool one_burned = FALSE;
                 {
                     if (burned != 1 && job->mux == HB_MUX_MKV)
                     {
-                        job->select_subtitle_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                        job->select_subtitle_config.dest = PASSTHRUSUB;
                     }
                     else
                     {
-                        job->select_subtitle_config.dest = hb_subtitle_config_s::RENDERSUB;
+                        job->select_subtitle_config.dest = RENDERSUB;
                     }
                     
                     job->select_subtitle_config.force = force;
@@ -3478,7 +3478,7 @@ bool one_burned = FALSE;
                     strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 40);
                     
                     sub_config.force = 0;
-                    sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                    sub_config.dest = PASSTHRUSUB;
                     sub_config.default_track = def;
                     
                     hb_srt_add( job, &sub_config, [[tempObject objectForKey:@"subtitleTrackSrtLanguageIso3"] UTF8String]);
@@ -3492,17 +3492,17 @@ bool one_burned = FALSE;
                     hb_subtitle_config_t sub_config = subt->config;
                     
                     if (!burned && job->mux == HB_MUX_MKV && 
-                        subt->format == hb_subtitle_s::PICTURESUB)
+                        subt->format == PICTURESUB)
                     {
-                        sub_config.dest = hb_subtitle_config_s::PASSTHRUSUB;
+                        sub_config.dest = PASSTHRUSUB;
                     }
                     else if (!burned && job->mux == HB_MUX_MP4 && 
-                             subt->format == hb_subtitle_s::PICTURESUB)
+                             subt->format == PICTURESUB)
                     {
                         // Skip any non-burned vobsubs when output is mp4
                         continue;
                     }
-                    else if ( burned && subt->format == hb_subtitle_s::PICTURESUB )
+                    else if ( burned && subt->format == PICTURESUB )
                     {
                         // Only allow one subtitle to be burned into the video
                         if (one_burned)
