@@ -1169,8 +1169,7 @@ namespace Handbrake
                     slider_videoQuality.TickFrequency = 1;
 
                     CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                    double cqStep;
-                    double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
+                    double cqStep = Properties.Settings.Default.x264cqstep;
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
 
@@ -1225,31 +1224,29 @@ namespace Handbrake
                 check_iPodAtom.Checked = false;
             }
         }
-        private string _cachedCqStep = Properties.Settings.Default.x264cqstep;   
+        private double _cachedCqStep = Properties.Settings.Default.x264cqstep;   
         /// <summary>
         /// Update the CQ slider for x264 for a new CQ step. This is set from option
         /// </summary>
         public void setQualityFromSlider()
         {
             // Work out the current RF value.
-            double cqStep;
-            double.TryParse(_cachedCqStep, out cqStep);
+            double cqStep = _cachedCqStep;
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
             
             // Change the maximum value for the slider
-            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-            switch (Properties.Settings.Default.x264cqstep.ToString(culture))
+            switch (Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US")))
             {
-                case "0.20":
+                case "0.2":
                     slider_videoQuality.Maximum = 255;
                     break;
                 case "0.25":
                     slider_videoQuality.Maximum = 204;
                     break;
-                case "0.50":
+                case "0.5":
                     slider_videoQuality.Maximum = 102;
                     break;
-                case "1.0":
+                case "1":
                     slider_videoQuality.Maximum = 51;
                     break;
                 default:
@@ -1261,8 +1258,7 @@ namespace Handbrake
             slider_videoQuality.Value = slider_videoQuality.Maximum;
 
             // Reset the CQ slider back to the previous value as close as possible
-            double cqStepNew;
-            double.TryParse(Properties.Settings.Default.x264cqstep, out cqStepNew);
+            double cqStepNew = Properties.Settings.Default.x264cqstep;
             double rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
             while (rfValueCurrent < rfValue)
             {
@@ -1275,8 +1271,7 @@ namespace Handbrake
         }
         private void slider_videoQuality_Scroll(object sender, EventArgs e)
         {
-            double cqStep;
-            double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
+            double cqStep = Properties.Settings.Default.x264cqstep;
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
@@ -1284,7 +1279,7 @@ namespace Handbrake
                     double max = slider_videoQuality.Maximum;
                     double min = slider_videoQuality.Minimum;
                     double val = ((max - min) - (rfValue - min)) / (max - min);
-                    SliderValue.Text = Math.Round((val * 100), 2) + "% QP:" + (32 - slider_videoQuality.Value);
+                    SliderValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "% QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
                     rfValue = 51.0 - slider_videoQuality.Value * cqStep;
@@ -1292,12 +1287,12 @@ namespace Handbrake
                     min = slider_videoQuality.Minimum;
                     val = ((max - min) - (rfValue - min)) / (max - min);
                     rfValue = Math.Round(rfValue, 2);
-                    SliderValue.Text = Math.Round((val * 100), 2) + "% RF:" + rfValue;
+                    SliderValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "% RF:" + rfValue.ToString(new CultureInfo("en-US"));
                     break;
                 case "VP3 (Theora)":
                     rfValue = slider_videoQuality.Value;
                     double value = rfValue / 63;
-                    SliderValue.Text = Math.Round((value * 100), 2) + "% QP:" + slider_videoQuality.Value;
+                    SliderValue.Text = Math.Round((value * 100), 2).ToString(new CultureInfo("en-US")) + "% QP:" + slider_videoQuality.Value;
                     break;
             }
         }

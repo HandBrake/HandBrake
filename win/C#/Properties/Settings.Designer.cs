@@ -302,9 +302,9 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
-        public string x264cqstep {
+        public double x264cqstep {
             get {
-                return ((string)(this["x264cqstep"]));
+                return ((double)(this["x264cqstep"]));
             }
             set {
                 this["x264cqstep"] = value;

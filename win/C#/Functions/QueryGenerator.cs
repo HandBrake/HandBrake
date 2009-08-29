@@ -192,9 +192,7 @@ namespace Handbrake.Functions
             // Video Quality Setting
             if (mainWindow.radio_cq.Checked)
             {
-                double cqStep;
-                double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
-
+                double cqStep = Properties.Settings.Default.x264cqstep;
                 double value;
                 switch (mainWindow.drp_videoEncoder.Text)
                 {

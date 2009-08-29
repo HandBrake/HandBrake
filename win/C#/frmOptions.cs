@@ -165,9 +165,22 @@ namespace Handbrake
             }
 
             // x264 step
-            CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-            string test = Properties.Settings.Default.x264cqstep.ToString(culture);
-            drop_x264step.SelectedItem = test;
+            string step = Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US"));
+            switch (step)
+            {
+                case "1":
+                    drop_x264step.SelectedIndex = 0;
+                    break;
+                case "0.5":
+                    drop_x264step.SelectedIndex = 1;
+                    break;
+                case "0.25":
+                    drop_x264step.SelectedIndex = 2;
+                    break;
+                case "0.2":
+                    drop_x264step.SelectedIndex = 3;
+                    break;
+            }
 
             // Use Experimental dvdnav
             if (Properties.Settings.Default.dvdnav)
@@ -398,16 +411,16 @@ namespace Handbrake
             switch (drop_x264step.SelectedIndex)
             {
                 case 0:
-                    Properties.Settings.Default.x264cqstep = "1.0";
+                    Properties.Settings.Default.x264cqstep = 1.0;
                     break;
                 case 1:
-                    Properties.Settings.Default.x264cqstep = "0.50";
+                    Properties.Settings.Default.x264cqstep = 0.50;
                     break;
                 case 2:
-                    Properties.Settings.Default.x264cqstep = "0.25";
+                    Properties.Settings.Default.x264cqstep = 0.25;
                     break;
                 case 3:
-                    Properties.Settings.Default.x264cqstep = "0.20";
+                    Properties.Settings.Default.x264cqstep = 0.20;
                     break;
             }
             mainWindow.setQualityFromSlider();

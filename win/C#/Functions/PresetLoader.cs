@@ -151,8 +151,7 @@ namespace Handbrake.Functions
                 mainWindow.radio_cq.Checked = true;
                 if (presetQuery.VideoEncoder == "H.264 (x264)")
                 {
-                    double cqStep;
-                    double.TryParse(Properties.Settings.Default.x264cqstep, out cqStep);
+                    double cqStep = Properties.Settings.Default.x264cqstep;
                     int value;
                     double x264step = cqStep;
                     double presetValue = presetQuery.VideoQuality;
@@ -183,7 +182,6 @@ namespace Handbrake.Functions
             }
 
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
-
 
             mainWindow.drp_videoFramerate.Text = presetQuery.VideoFramerate;
 
