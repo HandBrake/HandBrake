@@ -29,6 +29,7 @@ struct hb_work_private_s
     hb_list_t *list;
     unsigned long isamples, isamplesiz, omaxpacket, nchannels;
     uint64_t pts, ibytes;
+    Float64 osamplerate;
 };
 
 #define MP4ESDescrTag                   0x03
@@ -122,6 +123,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
 
     bzero( &output, sizeof( AudioStreamBasicDescription ) );
     output.mFormatID = kAudioFormatMPEG4AAC;
+    output.mSampleRate = ( Float64 ) audio->config.out.samplerate;
     output.mChannelsPerFrame = pv->nchannels;
     // let CoreAudio decide the rest...
 
@@ -129,9 +131,19 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
     err = AudioConverterNew( &input, &output, &pv->converter );
     if( err != noErr)
     {
-        hb_log( "Error creating an AudioConverter err=%"PRId64" %"PRIu64, (int64_t)err, (uint64_t)output.mBytesPerFrame );
-        *job->die = 1;
-        return 0;
+        // Retry without the samplerate
+        bzero( &output, sizeof( AudioStreamBasicDescription ) );
+        output.mFormatID = kAudioFormatMPEG4AAC;
+        output.mChannelsPerFrame = pv->nchannels;
+
+        err = AudioConverterNew( &input, &output, &pv->converter );
+
+        if( err != noErr)
+        {
+            hb_log( "Error creating an AudioConverter err=%"PRId64" %"PRIu64, (int64_t)err, (uint64_t)output.mBytesPerFrame );
+            *job->die = 1;
+            return 0;
+        }
     }
 
     if( audio->config.out.mixdown == HB_AMIXDOWN_6CH && audio->config.in.codec == HB_ACODEC_AC3 )
@@ -183,8 +195,9 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
                                &tmpsiz, &output );
 
     // set sizes
-    pv->isamplesiz = input.mBytesPerPacket;
-    pv->isamples   = output.mFramesPerPacket;
+    pv->isamplesiz  = input.mBytesPerPacket;
+    pv->isamples    = output.mFramesPerPacket;
+    pv->osamplerate = output.mSampleRate;
 
     // get maximum output size
     AudioConverterGetProperty( pv->converter,
@@ -298,7 +311,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
         return NULL;
 
     obuf->start = pv->pts;
-    pv->pts += 90000LL * pv->isamples / w->audio->config.out.samplerate;
+    pv->pts += 90000LL * pv->isamples / pv->osamplerate;
     obuf->stop  = pv->pts;
     obuf->size  = odesc.mDataByteSize;
     obuf->frametype = HB_FRAME_AUDIO;
