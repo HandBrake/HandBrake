@@ -21,7 +21,7 @@ namespace Handbrake.Functions
         /// <param name="duration"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public string generateCLIQuery(frmMain mainWindow, int duration, string preview)
+        public string GenerateCLIQuery(frmMain mainWindow, int duration, string preview)
         {
             string query = "";
 
@@ -61,7 +61,7 @@ namespace Handbrake.Functions
                     query += " -o " + '"' + mainWindow.text_destination.Text + '"';
             }
 
-            query += generateTabbedComponentsQuery(mainWindow);
+            query += GenerateTabbedComponentsQuery(mainWindow);
 
             return query;
         }
@@ -71,7 +71,7 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="mainWindow"></param>
         /// <returns></returns>
-        public static string generateTabbedComponentsQuery(frmMain mainWindow)
+        public static string GenerateTabbedComponentsQuery(frmMain mainWindow)
         {
             string query = "";
 

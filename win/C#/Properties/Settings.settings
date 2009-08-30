@@ -96,7 +96,7 @@
       <Value Profile="(Default)">7</Value>
     </Setting>
     <Setting Name="useM4v" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="PromptOnUnmatchingQueries" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

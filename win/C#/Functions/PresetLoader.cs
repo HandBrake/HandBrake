@@ -47,9 +47,19 @@ namespace Handbrake.Functions
             if (presetQuery.Format != null)
             {
                 if (presetQuery.Format == "mp4" || presetQuery.Format == "m4v")
-                    mainWindow.drop_format.SelectedIndex = 0;
+                {
+                    if (mainWindow.drop_format.SelectedIndex == 0)
+                        mainWindow.SetExtension(".mp4");
+                    else 
+                        mainWindow.drop_format.SelectedIndex = 0;
+                }
                 else if (presetQuery.Format == "mkv")
-                    mainWindow.drop_format.SelectedIndex = 1;
+                {
+                    if(mainWindow.drop_format.SelectedIndex == 1)
+                        mainWindow.SetExtension(".mkv");
+                    else
+                        mainWindow.drop_format.SelectedIndex = 1;
+                }
             }
 
             mainWindow.check_iPodAtom.CheckState = presetQuery.IpodAtom ? CheckState.Checked : CheckState.Unchecked;

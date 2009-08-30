@@ -59,7 +59,7 @@ namespace Handbrake
             lbl_status.Text = "Encoding Sample for (VLC) ...";
             int duration;
             int.TryParse(cb_duration.Text, out duration);
-            String query = hb_common_func.generateCLIQuery(mainWindow, duration, cb_preview.Text);
+            String query = hb_common_func.GenerateCLIQuery(mainWindow, duration, cb_preview.Text);
             ThreadPool.QueueUserWorkItem(procMonitor, query);
         }
         private void btn_playQT_Click(object sender, EventArgs e)
@@ -89,7 +89,7 @@ namespace Handbrake
                 lbl_status.Text = "Encoding Sample for (QT) ...";
                 int duration;
                 int.TryParse(cb_duration.Text, out duration);
-                String query = hb_common_func.generateCLIQuery(mainWindow, duration, cb_preview.Text);
+                String query = hb_common_func.GenerateCLIQuery(mainWindow, duration, cb_preview.Text);
 
                 ThreadPool.QueueUserWorkItem(procMonitor, query);
             }

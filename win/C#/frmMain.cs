@@ -69,12 +69,12 @@ namespace Handbrake
                 DateTime lastCheck = Properties.Settings.Default.lastUpdateCheckDate;
                 TimeSpan elapsed = now.Subtract(lastCheck);
                 if (elapsed.TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
-               {
+                {
                     lblStatus.Text = "Checking for updates ...";
                     Application.DoEvents();
 
                     Main.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false);
-               }
+                }
             }
 
             // Setup the GUI components
@@ -103,7 +103,7 @@ namespace Handbrake
                         // Send the query from the file to the Query Parser class, then load the preset
                         QueryParser presetQuery = QueryParser.Parse(query);
                         PresetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
-                     
+
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
@@ -375,7 +375,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, queryGen.generateCLIQuery(this, 0, null), presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.GenerateCLIQuery(this, 0, null), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -455,9 +455,9 @@ namespace Handbrake
         {
             DialogResult result = MessageBox.Show("Do you wish to include picture settings when updating the preset: " + treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
-                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.generateTabbedComponentsQuery(this), true);
+                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.GenerateTabbedComponentsQuery(this), true);
             else if (result == DialogResult.No)
-                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.generateTabbedComponentsQuery(this), false);
+                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.GenerateTabbedComponentsQuery(this), false);
         }
         private void pmnu_delete_click(object sender, EventArgs e)
         {
@@ -484,7 +484,7 @@ namespace Handbrake
         // Presets Management
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, QueryGenerator.generateTabbedComponentsQuery(this), presetHandler);
+            Form preset = new frmAddPreset(this, QueryGenerator.GenerateTabbedComponentsQuery(this), presetHandler);
             preset.ShowDialog();
         }
         private void btn_removePreset_Click(object sender, EventArgs e)
@@ -617,16 +617,16 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null),
+                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null),
                                                    parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
                     PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.addPreset(parsed.PresetName, queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
+                    presetHandler.addPreset(parsed.PresetName, queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
 
-                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.generateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
+                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
                         treeView_presets.Nodes.Add(preset_treeview);
@@ -671,8 +671,8 @@ namespace Handbrake
             {
                 if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
-                    string generatedQuery = queryGen.generateCLIQuery(this, 0, null);
-                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.generateCLIQuery(this, 0, null);
+                    string generatedQuery = queryGen.GenerateCLIQuery(this, 0, null);
+                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.GenerateCLIQuery(this, 0, null);
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
@@ -740,7 +740,7 @@ namespace Handbrake
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query = queryGen.generateCLIQuery(this, 0, null);
+                String query = queryGen.GenerateCLIQuery(this, 0, null);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -967,7 +967,7 @@ namespace Handbrake
         }
         private void chapersChanged(object sender, EventArgs e)
         {
-            Control ctl = (Control) sender;
+            Control ctl = (Control)sender;
             int chapterStart, chapterEnd;
             int.TryParse(drop_chapterStart.Text, out chapterStart);
             int.TryParse(drop_chapterFinish.Text, out chapterEnd);
@@ -1062,13 +1062,13 @@ namespace Handbrake
                         case 1:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
                                 if (Properties.Settings.Default.useM4v)
-                                    DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv",".m4v");
+                                    DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
                                 else
                                     DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
                             break;
                         case 2:
                             if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
-                                DVD_Save.FileName = DVD_Save.FileName .Replace(".mp4", ".mkv").Replace(".m4v",".mkv");
+                                DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
                             break;
                         default:
                             //do nothing  
@@ -1078,7 +1078,7 @@ namespace Handbrake
 
                     // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
                     if (Check_ChapterMarkers.Checked && DVD_Save.FilterIndex != 2)
-                        setExtension(".m4v");
+                        SetExtension(".m4v");
                 }
             }
         }
@@ -1098,19 +1098,19 @@ namespace Handbrake
             {
                 case 0:
                     if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V())
-                        setExtension(".m4v");
+                        SetExtension(".m4v");
                     else
-                        setExtension(".mp4");
+                        SetExtension(".mp4");
                     break;
                 case 1:
-                    setExtension(".mkv");
+                    SetExtension(".mkv");
                     break;
             }
 
             AudioSettings.SetContainer(drop_format.Text);
             Subtitles.setContainer(drop_format.SelectedIndex);
 
-            if ((drop_format.Text.Contains("MP4")) || (drop_format.Text.Contains("M4V")))
+            if (drop_format.Text.Contains("MP4"))
             {
                 if (drp_videoEncoder.Items.Contains("VP3 (Theora)"))
                 {
@@ -1121,8 +1121,14 @@ namespace Handbrake
             else if (drop_format.Text.Contains("MKV"))
                 drp_videoEncoder.Items.Add("VP3 (Theora)");
         }
-        private void setExtension(string newExtension)
+        public void SetExtension(string newExtension)
         {
+            if (newExtension == ".mp4" || newExtension == ".m4v")
+                if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V())
+                    newExtension = ".m4v" ;
+                else
+                    newExtension = ".mp4";
+
             text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
             text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
             text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
@@ -1224,7 +1230,7 @@ namespace Handbrake
                 check_iPodAtom.Checked = false;
             }
         }
-        private double _cachedCqStep = Properties.Settings.Default.x264cqstep;   
+        private double _cachedCqStep = Properties.Settings.Default.x264cqstep;
         /// <summary>
         /// Update the CQ slider for x264 for a new CQ step. This is set from option
         /// </summary>
@@ -1233,7 +1239,7 @@ namespace Handbrake
             // Work out the current RF value.
             double cqStep = _cachedCqStep;
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
-            
+
             // Change the maximum value for the slider
             switch (Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US")))
             {
@@ -1341,14 +1347,14 @@ namespace Handbrake
             if (Check_ChapterMarkers.Checked)
             {
                 if (drop_format.SelectedIndex != 1)
-                    setExtension(".m4v");
+                    SetExtension(".m4v");
                 data_chpt.Enabled = true;
                 btn_importChapters.Enabled = true;
             }
             else
             {
                 if (drop_format.SelectedIndex != 1 && !Properties.Settings.Default.useM4v)
-                    setExtension(".mp4");
+                    SetExtension(".mp4");
                 data_chpt.Enabled = false;
                 btn_importChapters.Enabled = false;
             }
@@ -1376,7 +1382,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = queryGen.generateCLIQuery(this, 0, null);
+            rtf_query.Text = queryGen.GenerateCLIQuery(this, 0, null);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {
