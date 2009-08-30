@@ -162,7 +162,7 @@
 		<key>show_preview</key>
 		<true />
 		<key>UseM4v</key>
-		<false />
+		<true />
 		<key>use_source_name</key>
 		<true />
 		<key>update_skip_version</key>
