@@ -2190,7 +2190,7 @@ static void ShowHelp()
 
     "### Destination Options------------------------------------------------------\n\n"
     "    -o, --output <string>   Set output file name\n"
-    "    -f, --format <string>   Set output format (avi/mp4/ogm/mkv, default:\n"
+    "    -f, --format <string>   Set output format (mp4/mkv, default:\n"
     "                            autodetected from file name)\n"
     "    -m, --markers           Add chapter markers (mp4 and mkv output formats only)\n"
     "    -4, --large-file        Use 64-bit mp4 files that can hold more than\n"
@@ -3053,12 +3053,7 @@ static int CheckOptions( int argc, char ** argv )
             char * p = strrchr( output, '.' );
 
             /* autodetect */
-            if( p && !strcasecmp( p, ".avi" ) )
-            {
-                mux = HB_MUX_AVI;
-                default_acodec = HB_ACODEC_LAME;
-            }
-            else if( p && ( !strcasecmp( p, ".mp4" )  ||
+            if( p && ( !strcasecmp( p, ".mp4" )  ||
                             !strcasecmp( p, ".m4v" ) ) )
             {
                 if ( h264_30 == 1 )
@@ -3066,12 +3061,6 @@ static int CheckOptions( int argc, char ** argv )
                 else
                     mux = HB_MUX_MP4;
                 default_acodec = HB_ACODEC_FAAC;
-            }
-            else if( p && ( !strcasecmp( p, ".ogm" ) ||
-                            !strcasecmp( p, ".ogg" ) ) )
-            {
-                mux = HB_MUX_OGM;
-                default_acodec = HB_ACODEC_VORBIS;
             }
             else if( p && !strcasecmp(p, ".mkv" ) )
             {
@@ -3085,11 +3074,6 @@ static int CheckOptions( int argc, char ** argv )
                 return 0;
             }
         }
-        else if( !strcasecmp( format, "avi" ) )
-        {
-            mux = HB_MUX_AVI;
-            default_acodec = HB_ACODEC_LAME;
-        }
         else if( !strcasecmp( format, "mp4" ) ||
                  !strcasecmp( format, "m4v" ) )
         {
@@ -3099,12 +3083,6 @@ static int CheckOptions( int argc, char ** argv )
                 mux = HB_MUX_MP4;
             default_acodec = HB_ACODEC_FAAC;
         }
-        else if( !strcasecmp( format, "ogm" ) ||
-                 !strcasecmp( format, "ogg" ) )
-        {
-            mux = HB_MUX_OGM;
-            default_acodec = HB_ACODEC_VORBIS;
-        }
         else if( !strcasecmp( format, "mkv" ) )
         {
             mux = HB_MUX_MKV;
@@ -3113,7 +3091,7 @@ static int CheckOptions( int argc, char ** argv )
         else
         {
             fprintf( stderr, "Invalid output format (%s). Possible "
-                     "choices are avi, mp4, m4v, ogm, ogg and mkv\n.", format );
+                     "choices are mp4, m4v and mkv\n.", format );
             return 1;
         }
     }
