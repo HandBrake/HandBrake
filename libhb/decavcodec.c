@@ -919,13 +919,22 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
             info->rate_base *= context->ticks_per_frame;
         }
         
-        /* Sometimes there's no pixel aspect set in the source. In that case,
-           assume a 1:1 PAR. Otherwise, preserve the source PAR.             */
-        info->pixel_aspect_width = context->sample_aspect_ratio.num ?
-                                        context->sample_aspect_ratio.num : 1;
-        info->pixel_aspect_height = context->sample_aspect_ratio.den ?
-                                        context->sample_aspect_ratio.den : 1;
+        info->pixel_aspect_width = context->sample_aspect_ratio.num;
+        info->pixel_aspect_height = context->sample_aspect_ratio.den;
 
+        /* Sometimes there's no pixel aspect set in the source ffmpeg context
+         * which appears to come from the video stream. In that case,
+         * try the pixel aspect in AVStream (which appears to come from
+         * the container). Else assume a 1:1 PAR. */
+        if ( info->pixel_aspect_width == 0 ||
+             info->pixel_aspect_height == 0 )
+        {
+            AVStream *st = hb_ffmpeg_avstream( w->codec_param );
+            info->pixel_aspect_width = st->sample_aspect_ratio.num ?
+                                        st->sample_aspect_ratio.num : 1;
+            info->pixel_aspect_height = st->sample_aspect_ratio.den ?
+                                        st->sample_aspect_ratio.den : 1;
+        }
         /* ffmpeg returns the Pixel Aspect Ratio (PAR). Handbrake wants the
          * Display Aspect Ratio so we convert by scaling by the Storage
          * Aspect Ratio (w/h). We do the calc in floating point to get the
