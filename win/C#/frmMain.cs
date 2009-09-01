@@ -88,7 +88,7 @@ namespace Handbrake
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
 
             // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultSettings && Properties.Settings.Default.defaultPreset != "")
+            if (Properties.Settings.Default.defaultPreset != "")
             {
                 if (presetHandler.getPreset(Properties.Settings.Default.defaultPreset) != null)
                 {
@@ -639,14 +639,9 @@ namespace Handbrake
         #region ToolStrip
         private void btn_source_Click(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.drive_detection)
-            {
-                mnu_dvd_drive.Visible = true;
-                Thread driveInfoThread = new Thread(getDriveInfoThread);
-                driveInfoThread.Start();
-            }
-            else
-                mnu_dvd_drive.Visible = false;
+            mnu_dvd_drive.Visible = true;
+            Thread driveInfoThread = new Thread(getDriveInfoThread);
+            driveInfoThread.Start();
         }
         private void btn_start_Click(object sender, EventArgs e)
         {
@@ -1125,7 +1120,7 @@ namespace Handbrake
         {
             if (newExtension == ".mp4" || newExtension == ".m4v")
                 if (Properties.Settings.Default.useM4v || Check_ChapterMarkers.Checked || AudioSettings.RequiresM4V() || Subtitles.RequiresM4V())
-                    newExtension = ".m4v" ;
+                    newExtension = ".m4v";
                 else
                     newExtension = ".mp4";
 
@@ -1400,10 +1395,9 @@ namespace Handbrake
             // Setup the GUI components for the scan.
             sourcePath = filename;
             foreach (Control ctrl in Controls)
-            {
                 if (!(ctrl is StatusStrip || ctrl is MenuStrip || ctrl is ToolStrip))
                     ctrl.Enabled = false;
-            }
+
             lbl_encode.Visible = true;
             lbl_encode.Text = "Scanning ...";
             btn_source.Enabled = false;

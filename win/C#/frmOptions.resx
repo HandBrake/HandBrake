@@ -120,6 +120,9 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 18</value>
   </metadata>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>132, 18</value>
+  </metadata>
   <data name="check_disableResCalc.ToolTip" xml:space="preserve">
     <value>If the new Picture Settings panel is causing you problems, enable this option.
 It disables some of the resolution calcuation code for None and Custom modes.

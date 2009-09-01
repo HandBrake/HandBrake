@@ -50,18 +50,6 @@ namespace Handbrake.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool defaultSettings {
-            get {
-                return ((bool)(this["defaultSettings"]));
-            }
-            set {
-                this["defaultSettings"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool updateStatus {
             get {
                 return ((bool)(this["updateStatus"]));
@@ -188,18 +176,6 @@ namespace Handbrake.Properties {
             }
             set {
                 this["appcast_unstable"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool drive_detection {
-            get {
-                return ((bool)(this["drive_detection"]));
-            }
-            set {
-                this["drive_detection"] = value;
             }
         }
         

@@ -40,21 +40,22 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
+            this.check_growlEncode = new System.Windows.Forms.CheckBox();
+            this.check_GrowlQueue = new System.Windows.Forms.CheckBox();
+            this.check_m4v = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.check_updateCheck = new System.Windows.Forms.CheckBox();
+            this.drop_updateCheckDays = new System.Windows.Forms.ComboBox();
+            this.check_autoNaming = new System.Windows.Forms.CheckBox();
             this.txt_autoNameFormat = new System.Windows.Forms.TextBox();
+            this.check_tooltip = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.check_updateCheck = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btn_browse = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.btn_browse = new System.Windows.Forms.Button();
-            this.check_tooltip = new System.Windows.Forms.CheckBox();
             this.text_an_path = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.check_userDefaultSettings = new System.Windows.Forms.CheckBox();
-            this.check_autoNaming = new System.Windows.Forms.CheckBox();
-            this.check_m4v = new System.Windows.Forms.CheckBox();
             this.tab_picture = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label29 = new System.Windows.Forms.Label();
@@ -93,7 +94,6 @@ namespace Handbrake
             this.label6 = new System.Windows.Forms.Label();
             this.drop_x264step = new System.Windows.Forms.ComboBox();
             this.label30 = new System.Windows.Forms.Label();
-            this.btn_drive_detect = new System.Windows.Forms.CheckBox();
             this.check_mainMinimize = new System.Windows.Forms.CheckBox();
             this.label28 = new System.Windows.Forms.Label();
             this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
@@ -135,8 +135,6 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.check_GrowlQueue = new System.Windows.Forms.CheckBox();
-            this.check_growlEncode = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -179,7 +177,7 @@ namespace Handbrake
             "Lock system",
             "Log off",
             "Quit HandBrake"});
-            this.drp_completeOption.Location = new System.Drawing.Point(108, 119);
+            this.drp_completeOption.Location = new System.Drawing.Point(108, 95);
             this.drp_completeOption.Name = "drp_completeOption";
             this.drp_completeOption.Size = new System.Drawing.Size(166, 21);
             this.drp_completeOption.TabIndex = 43;
@@ -213,7 +211,6 @@ namespace Handbrake
             this.tab_general.Controls.Add(this.drop_updateCheckDays);
             this.tab_general.Controls.Add(this.check_autoNaming);
             this.tab_general.Controls.Add(this.txt_autoNameFormat);
-            this.tab_general.Controls.Add(this.check_userDefaultSettings);
             this.tab_general.Controls.Add(this.check_tooltip);
             this.tab_general.Controls.Add(this.label5);
             this.tab_general.Controls.Add(this.check_updateCheck);
@@ -230,6 +227,47 @@ namespace Handbrake
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
             // 
+            // check_growlEncode
+            // 
+            this.check_growlEncode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_growlEncode.AutoSize = true;
+            this.check_growlEncode.BackColor = System.Drawing.Color.Transparent;
+            this.check_growlEncode.Location = new System.Drawing.Point(282, 122);
+            this.check_growlEncode.Name = "check_growlEncode";
+            this.check_growlEncode.Size = new System.Drawing.Size(171, 17);
+            this.check_growlEncode.TabIndex = 99;
+            this.check_growlEncode.Text = "Growl after Encode Completes";
+            this.ToolTip.SetToolTip(this.check_growlEncode, "Growl for Windows");
+            this.check_growlEncode.UseVisualStyleBackColor = false;
+            this.check_growlEncode.CheckedChanged += new System.EventHandler(this.check_growlEncode_CheckedChanged);
+            // 
+            // check_GrowlQueue
+            // 
+            this.check_GrowlQueue.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_GrowlQueue.AutoSize = true;
+            this.check_GrowlQueue.BackColor = System.Drawing.Color.Transparent;
+            this.check_GrowlQueue.Location = new System.Drawing.Point(108, 122);
+            this.check_GrowlQueue.Name = "check_GrowlQueue";
+            this.check_GrowlQueue.Size = new System.Drawing.Size(168, 17);
+            this.check_GrowlQueue.TabIndex = 98;
+            this.check_GrowlQueue.Text = "Growl after Queue Completes";
+            this.ToolTip.SetToolTip(this.check_GrowlQueue, "Growl for Windows");
+            this.check_GrowlQueue.UseVisualStyleBackColor = false;
+            this.check_GrowlQueue.CheckedChanged += new System.EventHandler(this.check_GrowlQueue_CheckedChanged);
+            // 
+            // check_m4v
+            // 
+            this.check_m4v.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_m4v.AutoSize = true;
+            this.check_m4v.Location = new System.Drawing.Point(108, 279);
+            this.check_m4v.Name = "check_m4v";
+            this.check_m4v.Size = new System.Drawing.Size(283, 17);
+            this.check_m4v.TabIndex = 82;
+            this.check_m4v.Text = "Use iPod/iTunes friendly file extension (.m4v) for MP4";
+            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
+            this.check_m4v.UseVisualStyleBackColor = true;
+            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
+            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -242,6 +280,17 @@ namespace Handbrake
             this.label1.Size = new System.Drawing.Size(66, 13);
             this.label1.TabIndex = 67;
             this.label1.Text = "At Launch:";
+            // 
+            // label7
+            // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(179, 260);
+            this.label7.Margin = new System.Windows.Forms.Padding(3);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(225, 13);
+            this.label7.TabIndex = 81;
+            this.label7.Text = "Available Options: {source} {title} {chapters}";
             // 
             // drop_updateCheckDays
             // 
@@ -260,16 +309,54 @@ namespace Handbrake
                     "n Automatic.");
             this.drop_updateCheckDays.SelectedIndexChanged += new System.EventHandler(this.drop_updateCheckDays_SelectedIndexChanged);
             // 
-            // label7
+            // check_autoNaming
             // 
-            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(179, 284);
-            this.label7.Margin = new System.Windows.Forms.Padding(3);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(225, 13);
-            this.label7.TabIndex = 81;
-            this.label7.Text = "Available Options: {source} {title} {chapters}";
+            this.check_autoNaming.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_autoNaming.AutoSize = true;
+            this.check_autoNaming.Location = new System.Drawing.Point(108, 174);
+            this.check_autoNaming.Name = "check_autoNaming";
+            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
+            this.check_autoNaming.TabIndex = 72;
+            this.check_autoNaming.Text = "Automatically name output files";
+            this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
+            this.check_autoNaming.UseVisualStyleBackColor = true;
+            this.check_autoNaming.CheckedChanged += new System.EventHandler(this.check_autoNaming_CheckedChanged);
+            // 
+            // txt_autoNameFormat
+            // 
+            this.txt_autoNameFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_autoNameFormat.Location = new System.Drawing.Point(182, 233);
+            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
+            this.txt_autoNameFormat.Size = new System.Drawing.Size(349, 21);
+            this.txt_autoNameFormat.TabIndex = 79;
+            this.ToolTip.SetToolTip(this.txt_autoNameFormat, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
+                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
+                    "sources values.");
+            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
+            // 
+            // check_tooltip
+            // 
+            this.check_tooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_tooltip.AutoSize = true;
+            this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
+            this.check_tooltip.Location = new System.Drawing.Point(108, 62);
+            this.check_tooltip.Name = "check_tooltip";
+            this.check_tooltip.Size = new System.Drawing.Size(117, 17);
+            this.check_tooltip.TabIndex = 70;
+            this.check_tooltip.Text = "Enable GUI tooltips";
+            this.ToolTip.SetToolTip(this.check_tooltip, "Enable the built in tooltips for gui controls. (Requires Restart)");
+            this.check_tooltip.UseVisualStyleBackColor = false;
+            this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(105, 236);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 13);
+            this.label5.TabIndex = 80;
+            this.label5.Text = "Format:";
             // 
             // check_updateCheck
             // 
@@ -286,34 +373,36 @@ namespace Handbrake
             this.check_updateCheck.UseVisualStyleBackColor = false;
             this.check_updateCheck.CheckedChanged += new System.EventHandler(this.check_updateCheck_CheckedChanged);
             // 
-            // txt_autoNameFormat
+            // label10
             // 
-            this.txt_autoNameFormat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_autoNameFormat.Location = new System.Drawing.Point(182, 257);
-            this.txt_autoNameFormat.Name = "txt_autoNameFormat";
-            this.txt_autoNameFormat.Size = new System.Drawing.Size(349, 21);
-            this.txt_autoNameFormat.TabIndex = 79;
-            this.ToolTip.SetToolTip(this.txt_autoNameFormat, "Define the format of the automatically named file.\r\ne.g  {source}_{title}_some-te" +
-                    "xt\r\n{source} {title} {chapters} will be automatically substituted for the input " +
-                    "sources values.");
-            this.txt_autoNameFormat.TextChanged += new System.EventHandler(this.txt_autoNameFormat_TextChanged);
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(105, 209);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(71, 13);
+            this.label10.TabIndex = 77;
+            this.label10.Text = "Default Path:";
             // 
-            // label5
+            // btn_browse
             // 
-            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(105, 260);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(45, 13);
-            this.label5.TabIndex = 80;
-            this.label5.Text = "Format:";
+            this.btn_browse.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_browse.Location = new System.Drawing.Point(456, 204);
+            this.btn_browse.Name = "btn_browse";
+            this.btn_browse.Size = new System.Drawing.Size(75, 23);
+            this.btn_browse.TabIndex = 78;
+            this.btn_browse.Text = "Browse";
+            this.btn_browse.UseVisualStyleBackColor = true;
+            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
             // 
             // label2
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(7, 122);
+            this.label2.Location = new System.Drawing.Point(7, 98);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(74, 13);
             this.label2.TabIndex = 54;
@@ -324,101 +413,23 @@ namespace Handbrake
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(4, 188);
+            this.label13.Location = new System.Drawing.Point(4, 164);
             this.label13.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(77, 13);
             this.label13.TabIndex = 71;
             this.label13.Text = "Output Files:";
             // 
-            // btn_browse
-            // 
-            this.btn_browse.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btn_browse.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_browse.Location = new System.Drawing.Point(456, 228);
-            this.btn_browse.Name = "btn_browse";
-            this.btn_browse.Size = new System.Drawing.Size(75, 23);
-            this.btn_browse.TabIndex = 78;
-            this.btn_browse.Text = "Browse";
-            this.btn_browse.UseVisualStyleBackColor = true;
-            this.btn_browse.Click += new System.EventHandler(this.btn_browse_Click);
-            // 
-            // check_tooltip
-            // 
-            this.check_tooltip.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_tooltip.AutoSize = true;
-            this.check_tooltip.BackColor = System.Drawing.Color.Transparent;
-            this.check_tooltip.Location = new System.Drawing.Point(108, 62);
-            this.check_tooltip.Name = "check_tooltip";
-            this.check_tooltip.Size = new System.Drawing.Size(117, 17);
-            this.check_tooltip.TabIndex = 70;
-            this.check_tooltip.Text = "Enable GUI tooltips";
-            this.ToolTip.SetToolTip(this.check_tooltip, "Enable the built in tooltips for gui controls. (Requires Restart)");
-            this.check_tooltip.UseVisualStyleBackColor = false;
-            this.check_tooltip.CheckedChanged += new System.EventHandler(this.check_tooltip_CheckedChanged);
-            // 
             // text_an_path
             // 
             this.text_an_path.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.text_an_path.Location = new System.Drawing.Point(182, 230);
+            this.text_an_path.Location = new System.Drawing.Point(182, 206);
             this.text_an_path.Name = "text_an_path";
             this.text_an_path.Size = new System.Drawing.Size(253, 21);
             this.text_an_path.TabIndex = 76;
             this.ToolTip.SetToolTip(this.text_an_path, "This is the default location where your encoded files will be stored if \"Automati" +
                     "cally name output files\" is enabled.");
             this.text_an_path.TextChanged += new System.EventHandler(this.text_an_path_TextChanged);
-            // 
-            // label10
-            // 
-            this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(105, 233);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(71, 13);
-            this.label10.TabIndex = 77;
-            this.label10.Text = "Default Path:";
-            // 
-            // check_userDefaultSettings
-            // 
-            this.check_userDefaultSettings.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_userDefaultSettings.AutoSize = true;
-            this.check_userDefaultSettings.BackColor = System.Drawing.Color.Transparent;
-            this.check_userDefaultSettings.Location = new System.Drawing.Point(108, 85);
-            this.check_userDefaultSettings.Name = "check_userDefaultSettings";
-            this.check_userDefaultSettings.Size = new System.Drawing.Size(137, 17);
-            this.check_userDefaultSettings.TabIndex = 69;
-            this.check_userDefaultSettings.Text = "Load my default preset";
-            this.ToolTip.SetToolTip(this.check_userDefaultSettings, "Loads the users default settings rather than the Normal preset.");
-            this.check_userDefaultSettings.UseVisualStyleBackColor = false;
-            this.check_userDefaultSettings.CheckedChanged += new System.EventHandler(this.check_userDefaultSettings_CheckedChanged);
-            // 
-            // check_autoNaming
-            // 
-            this.check_autoNaming.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_autoNaming.AutoSize = true;
-            this.check_autoNaming.Location = new System.Drawing.Point(108, 198);
-            this.check_autoNaming.Name = "check_autoNaming";
-            this.check_autoNaming.Size = new System.Drawing.Size(176, 17);
-            this.check_autoNaming.TabIndex = 72;
-            this.check_autoNaming.Text = "Automatically name output files";
-            this.ToolTip.SetToolTip(this.check_autoNaming, "Automatically name output files");
-            this.check_autoNaming.UseVisualStyleBackColor = true;
-            this.check_autoNaming.CheckedChanged += new System.EventHandler(this.check_autoNaming_CheckedChanged);
-            // 
-            // check_m4v
-            // 
-            this.check_m4v.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_m4v.AutoSize = true;
-            this.check_m4v.Location = new System.Drawing.Point(108, 303);
-            this.check_m4v.Name = "check_m4v";
-            this.check_m4v.Size = new System.Drawing.Size(283, 17);
-            this.check_m4v.TabIndex = 82;
-            this.check_m4v.Text = "Use iPod/iTunes friendly file extension (.m4v) for MP4";
-            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
-            this.check_m4v.UseVisualStyleBackColor = true;
-            this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
             // 
             // tab_picture
             // 
@@ -592,7 +603,6 @@ namespace Handbrake
             this.tableLayoutPanel3.Controls.Add(this.label9, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.btn_saveLog, 6, 7);
             this.tableLayoutPanel3.Controls.Add(this.check_logsInSpecifiedLocation, 2, 6);
-            this.tableLayoutPanel3.Controls.Add(this.label14, 2, 7);
             this.tableLayoutPanel3.Controls.Add(this.Label11, 2, 1);
             this.tableLayoutPanel3.Controls.Add(this.check_saveLogWithVideo, 2, 5);
             this.tableLayoutPanel3.Controls.Add(this.Label4, 2, 2);
@@ -603,6 +613,7 @@ namespace Handbrake
             this.tableLayoutPanel3.Controls.Add(this.drp_processors, 3, 1);
             this.tableLayoutPanel3.Controls.Add(this.btn_viewLogs, 2, 8);
             this.tableLayoutPanel3.Controls.Add(this.btn_clearLogs, 4, 8);
+            this.tableLayoutPanel3.Controls.Add(this.label14, 2, 7);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 10);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 10;
@@ -873,7 +884,6 @@ namespace Handbrake
             this.tableLayoutPanel4.Controls.Add(this.label6, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.drop_x264step, 4, 8);
             this.tableLayoutPanel4.Controls.Add(this.label30, 2, 8);
-            this.tableLayoutPanel4.Controls.Add(this.btn_drive_detect, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.check_mainMinimize, 2, 1);
             this.tableLayoutPanel4.Controls.Add(this.label28, 0, 8);
             this.tableLayoutPanel4.Controls.Add(this.check_queryEditorTab, 2, 3);
@@ -894,14 +904,14 @@ namespace Handbrake
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(396, 251);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(395, 228);
             this.tableLayoutPanel4.TabIndex = 62;
             // 
             // check_promptOnUnmatchingQueries
             // 
             this.check_promptOnUnmatchingQueries.AutoSize = true;
             this.tableLayoutPanel4.SetColumnSpan(this.check_promptOnUnmatchingQueries, 3);
-            this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(87, 95);
+            this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(87, 72);
             this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
             this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
             this.check_promptOnUnmatchingQueries.TabIndex = 63;
@@ -915,7 +925,7 @@ namespace Handbrake
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel4.SetColumnSpan(this.check_dvdnav, 4);
-            this.check_dvdnav.Location = new System.Drawing.Point(67, 231);
+            this.check_dvdnav.Location = new System.Drawing.Point(67, 208);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(250, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -929,7 +939,7 @@ namespace Handbrake
             this.check_trayStatusAlerts.AutoSize = true;
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel4.SetColumnSpan(this.check_trayStatusAlerts, 3);
-            this.check_trayStatusAlerts.Location = new System.Drawing.Point(87, 49);
+            this.check_trayStatusAlerts.Location = new System.Drawing.Point(87, 26);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
             this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
@@ -945,7 +955,7 @@ namespace Handbrake
             this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(8, 233);
+            this.label32.Location = new System.Drawing.Point(8, 210);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 89;
@@ -974,7 +984,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(262, 184);
+            this.drop_x264step.Location = new System.Drawing.Point(262, 161);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -987,26 +997,11 @@ namespace Handbrake
             this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label30.AutoSize = true;
             this.tableLayoutPanel4.SetColumnSpan(this.label30, 2);
-            this.label30.Location = new System.Drawing.Point(67, 188);
+            this.label30.Location = new System.Drawing.Point(67, 165);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(189, 13);
             this.label30.TabIndex = 87;
             this.label30.Text = "Constant quality fractional granularity";
-            // 
-            // btn_drive_detect
-            // 
-            this.btn_drive_detect.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btn_drive_detect.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.btn_drive_detect, 4);
-            this.btn_drive_detect.Location = new System.Drawing.Point(67, 3);
-            this.btn_drive_detect.Name = "btn_drive_detect";
-            this.btn_drive_detect.Size = new System.Drawing.Size(326, 17);
-            this.btn_drive_detect.TabIndex = 72;
-            this.btn_drive_detect.Text = "Enable DVD drive detection in \"Source\" button dropdown menu";
-            this.ToolTip.SetToolTip(this.btn_drive_detect, "Enables the Source button\'s ability to detect DVD\'s.\r\nIf this option is enabled, " +
-                    "DVD\'s will be listed in the source menu.");
-            this.btn_drive_detect.UseVisualStyleBackColor = true;
-            this.btn_drive_detect.CheckedChanged += new System.EventHandler(this.btn_drive_detect_CheckedChanged);
             // 
             // check_mainMinimize
             // 
@@ -1014,7 +1009,7 @@ namespace Handbrake
             this.check_mainMinimize.AutoSize = true;
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel4.SetColumnSpan(this.check_mainMinimize, 4);
-            this.check_mainMinimize.Location = new System.Drawing.Point(67, 26);
+            this.check_mainMinimize.Location = new System.Drawing.Point(67, 3);
             this.check_mainMinimize.Name = "check_mainMinimize";
             this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
             this.check_mainMinimize.TabIndex = 82;
@@ -1030,7 +1025,7 @@ namespace Handbrake
             this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(3, 188);
+            this.label28.Location = new System.Drawing.Point(3, 165);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(38, 13);
             this.label28.TabIndex = 85;
@@ -1042,7 +1037,7 @@ namespace Handbrake
             this.check_queryEditorTab.AutoSize = true;
             this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel4.SetColumnSpan(this.check_queryEditorTab, 4);
-            this.check_queryEditorTab.Location = new System.Drawing.Point(67, 72);
+            this.check_queryEditorTab.Location = new System.Drawing.Point(67, 49);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
             this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
             this.check_queryEditorTab.TabIndex = 84;
@@ -1058,7 +1053,7 @@ namespace Handbrake
             this.check_disablePresetNotification.AutoSize = true;
             this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel4.SetColumnSpan(this.check_disablePresetNotification, 4);
-            this.check_disablePresetNotification.Location = new System.Drawing.Point(67, 118);
+            this.check_disablePresetNotification.Location = new System.Drawing.Point(67, 95);
             this.check_disablePresetNotification.Name = "check_disablePresetNotification";
             this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
             this.check_disablePresetNotification.TabIndex = 91;
@@ -1074,7 +1069,7 @@ namespace Handbrake
             this.check_inGuiStatus.AutoSize = true;
             this.check_inGuiStatus.BackColor = System.Drawing.Color.Transparent;
             this.tableLayoutPanel4.SetColumnSpan(this.check_inGuiStatus, 4);
-            this.check_inGuiStatus.Location = new System.Drawing.Point(67, 141);
+            this.check_inGuiStatus.Location = new System.Drawing.Point(67, 118);
             this.check_inGuiStatus.Name = "check_inGuiStatus";
             this.check_inGuiStatus.Size = new System.Drawing.Size(235, 17);
             this.check_inGuiStatus.TabIndex = 92;
@@ -1483,41 +1478,13 @@ namespace Handbrake
             this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
             this.tableLayoutPanel5.TabIndex = 62;
             // 
-            // check_GrowlQueue
-            // 
-            this.check_GrowlQueue.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_GrowlQueue.AutoSize = true;
-            this.check_GrowlQueue.BackColor = System.Drawing.Color.Transparent;
-            this.check_GrowlQueue.Location = new System.Drawing.Point(108, 146);
-            this.check_GrowlQueue.Name = "check_GrowlQueue";
-            this.check_GrowlQueue.Size = new System.Drawing.Size(168, 17);
-            this.check_GrowlQueue.TabIndex = 98;
-            this.check_GrowlQueue.Text = "Growl after Queue Completes";
-            this.ToolTip.SetToolTip(this.check_GrowlQueue, "Growl for Windows");
-            this.check_GrowlQueue.UseVisualStyleBackColor = false;
-            this.check_GrowlQueue.CheckedChanged += new System.EventHandler(this.check_GrowlQueue_CheckedChanged);
-            // 
-            // check_growlEncode
-            // 
-            this.check_growlEncode.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_growlEncode.AutoSize = true;
-            this.check_growlEncode.BackColor = System.Drawing.Color.Transparent;
-            this.check_growlEncode.Location = new System.Drawing.Point(282, 146);
-            this.check_growlEncode.Name = "check_growlEncode";
-            this.check_growlEncode.Size = new System.Drawing.Size(171, 17);
-            this.check_growlEncode.TabIndex = 99;
-            this.check_growlEncode.Text = "Growl after Encode Completes";
-            this.ToolTip.SetToolTip(this.check_growlEncode, "Growl for Windows");
-            this.check_growlEncode.UseVisualStyleBackColor = false;
-            this.check_growlEncode.CheckedChanged += new System.EventHandler(this.check_growlEncode_CheckedChanged);
-            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(627, 488);
+            this.ClientSize = new System.Drawing.Size(627, 456);
             this.Controls.Add(this.tableLayoutPanel5);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -1572,10 +1539,8 @@ namespace Handbrake
         internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.CheckBox check_tooltip;
         internal System.Windows.Forms.CheckBox check_updateCheck;
-        internal System.Windows.Forms.CheckBox check_userDefaultSettings;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabPage tab_advanced;
-        internal System.Windows.Forms.CheckBox btn_drive_detect;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label13;
         internal System.Windows.Forms.Label label10;

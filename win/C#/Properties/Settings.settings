@@ -8,9 +8,6 @@
     <Setting Name="Processors" Type="System.String" Scope="User">
       <Value Profile="(Default)">Automatic</Value>
     </Setting>
-    <Setting Name="defaultSettings" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="updateStatus" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -43,9 +40,6 @@
     </Setting>
     <Setting Name="appcast_unstable" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://handbrake.fr/appcast_unstable.xml</Value>
-    </Setting>
-    <Setting Name="drive_detection" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="cli_minimized" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

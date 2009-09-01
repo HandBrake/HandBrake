@@ -40,10 +40,6 @@ namespace Handbrake
             if (Properties.Settings.Default.updateStatus)
                 check_updateCheck.CheckState = CheckState.Checked;
 
-            // enable loading of default user settings.
-            if (Properties.Settings.Default.defaultSettings)
-                check_userDefaultSettings.CheckState = CheckState.Checked;
-
             // On Encode Completeion Action
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
 
@@ -123,10 +119,6 @@ namespace Handbrake
             // Advanced
             // #############################
 
-            // Enable GUI DVD Drive detection code
-            if (Properties.Settings.Default.drive_detection)
-                btn_drive_detect.CheckState = CheckState.Checked;
-
             // Minimise to Tray
             if (Properties.Settings.Default.trayIconAlerts)
                 check_trayStatusAlerts.CheckState = CheckState.Checked;
@@ -199,15 +191,11 @@ namespace Handbrake
             Properties.Settings.Default.updateStatus = check_updateCheck.Checked;
         }
 
-        private void check_userDefaultSettings_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.defaultSettings = check_userDefaultSettings.Checked;
-        }
-
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.tooltipEnable = check_tooltip.Checked;
         }
+
         private void drp_completeOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.CompletionOption = drp_completeOption.Text;
@@ -353,10 +341,6 @@ namespace Handbrake
         #endregion
 
         #region Advanced
-        private void btn_drive_detect_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.drive_detection = btn_drive_detect.Checked;
-        }
 
         private void check_mainMinimize_CheckedChanged(object sender, EventArgs e)
         {
