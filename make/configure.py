@@ -1299,7 +1299,7 @@ try:
         select.doc_add( doc )
 
     doc.addBlank()
-    if arch.mode.mode != arch.mode.default:
+    if build.match( '*-*-darwin*' ):
         doc.add( 'GCC.archs', arch.mode.mode )
     else:
         doc.add( 'GCC.archs', '' )
