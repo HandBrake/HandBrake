@@ -657,7 +657,9 @@ update_source_label(signal_user_data_t *ud, const gchar *source, gboolean update
 	if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 	{
 		// Skip dos drive letters
+#if defined(_WIN32)
 		start = strchr(filename, ':');
+#endif
 		label = resolve_drive_name(filename);
 		if (label != NULL)
 		{
