@@ -756,6 +756,7 @@ namespace Handbrake
         private void btn_showQueue_Click(object sender, EventArgs e)
         {
             queueWindow.Show();
+            queueWindow.Activate();
         }
         private void tb_preview_Click(object sender, EventArgs e)
         {
@@ -938,7 +939,7 @@ namespace Handbrake
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
-                    MessageBox.Show("You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a default direcotry set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             data_chpt.Rows.Clear();

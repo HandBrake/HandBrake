@@ -19,35 +19,16 @@ namespace Handbrake
         [STAThread]
         static void Main()
         {
-            // Check the system meets the system requirements.
-            Boolean launch = true;
-            try
+            Screen scr = Screen.PrimaryScreen;
+            if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 620))
+                MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n" + "Your screen is running at: " + scr.Bounds.Width + "x" + scr.Bounds.Height + " \nScreen resolution is too Low. Must be 1024x720 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
             {
-                // Make sure the screen resolution is not below 1024x768
-                Screen scr = Screen.PrimaryScreen;
-                if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 720))
-                {
-                    MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n" + "Your screen is running at: " + scr.Bounds.Width + "x" + scr.Bounds.Height + " \nScreen resolution is too Low. Must be 1024x720 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    launch = false;
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("frmMain.cs - systemCheck() " + exc);
-            }
-
-            // Either Launch or Close the Application
-            if (launch)
-            {
-                string appDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake";
-                if (!Directory.Exists(appDir))
-                    Directory.CreateDirectory(appDir);
-
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\logs");
                 if (!Directory.Exists(logDir))
                     Directory.CreateDirectory(logDir);
 
-                if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml"))
+                if (!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\presets.xml")))
                 {
                     PresetsHandler x = new PresetsHandler();
                     x.updateBuiltInPresets();
@@ -57,8 +38,6 @@ namespace Handbrake
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain());
             }
-            else
-                Application.Exit();
         }
     }
 
