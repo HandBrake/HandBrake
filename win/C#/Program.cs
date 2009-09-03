@@ -31,7 +31,7 @@ namespace Handbrake
                 if (!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\presets.xml")))
                 {
                     PresetsHandler x = new PresetsHandler();
-                    x.updateBuiltInPresets();
+                    x.UpdateBuiltInPresets();
                 }
 
                 Application.EnableVisualStyles();

@@ -30,7 +30,7 @@ namespace Handbrake
             if (check_pictureSettings.Checked)
                 pictureSettings = true;
 
-            if (presetCode.addPreset(txt_preset_name.Text.Trim(), query, pictureSettings))
+            if (presetCode.Add(txt_preset_name.Text.Trim(), query, pictureSettings))
             {
                 TreeNode preset_treeview = new TreeNode(txt_preset_name.Text.Trim()) { ForeColor = Color.Black };
                 frmMainWindow.treeView_presets.Nodes.Add(preset_treeview);

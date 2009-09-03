@@ -11,19 +11,9 @@ namespace Handbrake.Presets
     public class Preset
     {
         /// <summary>
-        /// Get or Set the preset's level. This indicated if it is a root or child node
-        /// </summary>
-        public int Level { get; set; }
-
-        /// <summary>
         /// Get or Set the category which the preset resides under
         /// </summary>
         public string Category { get; set; }
-
-        /// <summary>
-        /// Get or Set the top level category for the preset.
-        /// </summary>
-        public string TopCategory { get; set; }
 
         /// <summary>
         /// Get or Set the preset name

@@ -90,10 +90,10 @@ namespace Handbrake
             // Load the user's default settings or Normal Preset
             if (Properties.Settings.Default.defaultPreset != "")
             {
-                if (presetHandler.getPreset(Properties.Settings.Default.defaultPreset) != null)
+                if (presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
                 {
-                    string query = presetHandler.getPreset(Properties.Settings.Default.defaultPreset).Query;
-                    Boolean loadPictureSettings = presetHandler.getPreset(Properties.Settings.Default.defaultPreset).PictureSettings;
+                    string query = presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).Query;
+                    Boolean loadPictureSettings = presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).PictureSettings;
 
                     if (query != null)
                     {
@@ -351,7 +351,7 @@ namespace Handbrake
         #region Presets Menu
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
-            presetHandler.updateBuiltInPresets();
+            presetHandler.UpdateBuiltInPresets();
             loadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -362,7 +362,7 @@ namespace Handbrake
         }
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
-            presetHandler.removeBuiltInPresets();
+            presetHandler.RemoveBuiltInPresets();
             loadPresetPanel(); // Reload the preset panel
         }
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
@@ -455,15 +455,15 @@ namespace Handbrake
         {
             DialogResult result = MessageBox.Show("Do you wish to include picture settings when updating the preset: " + treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
-                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.GenerateTabbedComponentsQuery(this), true);
+                presetHandler.Update(treeView_presets.SelectedNode.Text, QueryGenerator.GenerateTabbedComponentsQuery(this), true);
             else if (result == DialogResult.No)
-                presetHandler.updatePreset(treeView_presets.SelectedNode.Text, QueryGenerator.GenerateTabbedComponentsQuery(this), false);
+                presetHandler.Update(treeView_presets.SelectedNode.Text, QueryGenerator.GenerateTabbedComponentsQuery(this), false);
         }
         private void pmnu_delete_click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
             {
-                presetHandler.remove(treeView_presets.SelectedNode.Text);
+                presetHandler.Remove(treeView_presets.SelectedNode.Text);
                 treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
             }
             treeView_presets.Select();
@@ -475,7 +475,7 @@ namespace Handbrake
 
             // Now enable the save menu if the selected preset is a user preset
             if (treeView_presets.SelectedNode != null)
-                if (presetHandler.checkIfUserPresetExists(treeView_presets.SelectedNode.Text))
+                if (presetHandler.CheckIfUserPresetExists(treeView_presets.SelectedNode.Text))
                     pmnu_saveChanges.Enabled = true;
 
             treeView_presets.Select();
@@ -494,7 +494,7 @@ namespace Handbrake
             {
                 if (treeView_presets.SelectedNode != null)
                 {
-                    presetHandler.remove(treeView_presets.SelectedNode.Text);
+                    presetHandler.Remove(treeView_presets.SelectedNode.Text);
                     treeView_presets.Nodes.Remove(treeView_presets.SelectedNode);
                 }
             }
@@ -542,7 +542,7 @@ namespace Handbrake
                 if (result == DialogResult.Yes)
                 {
                     if (treeView_presets.SelectedNode != null)
-                        presetHandler.remove(treeView_presets.SelectedNode.Text);
+                        presetHandler.Remove(treeView_presets.SelectedNode.Text);
 
                     // Remember each nodes expanded status so we can reload it
                     List<Boolean> nodeStatus = new List<Boolean>();
@@ -570,10 +570,10 @@ namespace Handbrake
             {
                 // Ok, so, we've selected a preset. Now we want to load it.
                 string presetName = treeView_presets.SelectedNode.Text;
-                if (presetHandler.getPreset(presetName) != null)
+                if (presetHandler.GetPreset(presetName) != null)
                 {
-                    string query = presetHandler.getPreset(presetName).Query;
-                    Boolean loadPictureSettings = presetHandler.getPreset(presetName).PictureSettings;
+                    string query = presetHandler.GetPreset(presetName).Query;
+                    Boolean loadPictureSettings = presetHandler.GetPreset(presetName).PictureSettings;
 
                     if (query != null)
                     {
@@ -610,23 +610,23 @@ namespace Handbrake
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 QueryParser parsed = imp.importMacPreset(openPreset.FileName);
-                if (presetHandler.checkIfUserPresetExists(parsed.PresetName + " (Imported)"))
+                if (presetHandler.CheckIfPresetsAreOutOfDate(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?",
                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.updatePreset(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null),
+                        presetHandler.Update(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null),
                                                    parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
                     PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.addPreset(parsed.PresetName, queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
+                    presetHandler.Add(parsed.PresetName, queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
 
-                    if (presetHandler.addPreset(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
+                    if (presetHandler.Add(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
                         treeView_presets.Nodes.Add(preset_treeview);
@@ -1685,13 +1685,13 @@ namespace Handbrake
         /// </summary>
         public void loadPresetPanel()
         {
-            if (presetHandler.checkIfPresetsAreOutOfDate())
+            if (presetHandler.CheckIfPresetsAreOutOfDate())
                 if (!Properties.Settings.Default.presetNotification)
                     MessageBox.Show(splash,
                     "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            presetHandler.getPresetPanel(ref treeView_presets);
+            presetHandler.GetPresetPanel(ref treeView_presets);
             treeView_presets.Update();
         }
         #endregion
