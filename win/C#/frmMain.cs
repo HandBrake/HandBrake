@@ -610,7 +610,7 @@ namespace Handbrake
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
                 QueryParser parsed = imp.importMacPreset(openPreset.FileName);
-                if (presetHandler.CheckIfPresetsAreOutOfDate(parsed.PresetName + " (Imported)"))
+                if (presetHandler.CheckIfUserPresetExists(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?",
                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
