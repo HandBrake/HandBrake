@@ -12,8 +12,8 @@ X264.CONFIGURE.extra = --disable-mp4-output
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     X264.CONFIGURE.extra += --enable-pthread --cross-prefix=$(BUILD.spec)-
-    X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs ?extra)"
-    X264.CONFIGURE.env.LDFLAGS = LDFLAGS=-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)
+    X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
+    X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
 else
     X264.CONFIGURE.extra += --enable-pthread
 endif

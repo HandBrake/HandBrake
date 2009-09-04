@@ -8,6 +8,10 @@ GCC.ML      = 1
 GCC.H       = 0
 GCC.W       = all
 GCC.archs   =
+GCC.sysroot =
+GCC.ldsysroot =
+GCC.minver  =
+GCC.ldminver=
 GCC.vis     = 0
 GCC.pic     = 0
 GCC.g       = none
@@ -40,6 +44,10 @@ GCC.args.ML        = -fmessage-length=0
 GCC.args.H         = -H
 GCC.args.W         = -W$(1)
 GCC.args.archs     = -arch $(1)
+GCC.args.sysroot   = --sysroot=$(1)
+GCC.args.ldsysroot = -syslibroot $(1)
+GCC.args.minver    = -mmacosx-version-min=$(1)
+GCC.args.ldminver  = -macosx_version_min $(1)
 GCC.args.vis       = -fvisibility=hidden
 GCC.args.pic       = -fPIC
 GCC.args.g.none    = -g0
@@ -82,6 +90,10 @@ define import.GCC
     $(1).GCC.H       = $$(GCC.H) 
     $(1).GCC.W       = $$(GCC.W)
     $(1).GCC.archs   = $$(GCC.archs)
+    $(1).GCC.sysroot = $$(GCC.sysroot)
+    $(1).GCC.ldsysroot = $$(GCC.ldsysroot)
+    $(1).GCC.minver  = $$(GCC.minver)
+    $(1).GCC.ldminver = $$(GCC.ldminver)
     $(1).GCC.vis     = $$(GCC.vis)
     $(1).GCC.pic     = $$(GCC.pic)
     $(1).GCC.g       = $$(GCC.g)
@@ -114,6 +126,10 @@ define import.GCC
     $(1).GCC.args.H         = $$(GCC.args.H)
     $(1).GCC.args.W         = $$(GCC.args.W)
     $(1).GCC.args.archs     = $$(GCC.args.archs)
+    $(1).GCC.args.sysroot   = $$(GCC.args.sysroot)
+    $(1).GCC.args.ldsysroot = $$(GCC.args.ldsysroot)
+    $(1).GCC.args.minver    = $$(GCC.args.minver)
+    $(1).GCC.args.ldminver  = $$(GCC.args.ldminver)
     $(1).GCC.args.vis       = $$(GCC.args.vis)
     $(1).GCC.args.pic       = $$(GCC.args.pic)
     $(1).GCC.args.g.none    = $$(GCC.args.g.none)
@@ -149,19 +165,19 @@ define import.GCC
     $(1).GCC.o = -o $$(3)
 
     # FUNCTION: C precompiled headers
-    $(1).GCC.H_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.h_o *D *I !c !o
+    $(1).GCC.H_O.args = !gcc ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.h_o *D *I !c !o
     $(1).GCC.H_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.H_O.args),$$(1),$$(2))
 
     # FUNCTION: C compile source
-    $(1).GCC.C_O.args = !gcc ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.c_o *D *I !c !o
+    $(1).GCC.C_O.args = !gcc ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.c_o *D *I !c !o
     $(1).GCC.C_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.C_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ precompile headers
-    $(1).GCC.HPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.hpp_o *D *I !c !o
+    $(1).GCC.HPP_O.args = !gxx ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.hpp_o *D *I !c !o
     $(1).GCC.HPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.HPP_O.args),$$(1),$$(2))
 
     # FUNCTION: C++ compile source
-    $(1).GCC.CPP_O.args = !gxx ?pipe ?ML ?H *W *archs ?vis ?pic .g .O ?extra ?extra.cpp_o *D *I !c !o
+    $(1).GCC.CPP_O.args = !gxx ?pipe ?ML ?H *W *archs *sysroot *minver ?vis ?pic .g .O ?extra ?extra.cpp_o *D *I !c !o
     $(1).GCC.CPP_O = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.CPP_O.args),$$(1),$$(2))
 
     ###########################################################################
@@ -169,18 +185,18 @@ define import.GCC
     $(1).GCC.i = $$(4)
 
     # FUNCTION: C link dynamic-lib
-    $(1).GCC.DYLIB.args = !gcc ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB.args = !gcc ?pipe ?strip ?dylib ?extra.dylib ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB.args),$$(1),$$(2))
 
     # FUNCTION: C link executable
-    $(1).GCC.EXE.args = !gcc ?pipe ?strip ?extra.exe ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE.args = !gcc ?pipe ?strip ?extra.exe ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.EXE = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE.args),$$(1),$$(2))
 
     # FUNCTION: C++ link dynamic-lib
-    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.DYLIB++.args = !gxx ?pipe ?strip ?dylib ?extra.dylib++ ?ML *W *arch *sysroot *minvers ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.DYLIB++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.DYLIB++.args),$$(1),$$(2))
 
     # FUNCTION: C++ link executable
-    $(1).GCC.EXE++.args = !gxx ?pipe ?strip ?extra.exe++ ?ML *W *archs ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
+    $(1).GCC.EXE++.args = !gxx ?pipe ?strip ?extra.exe++ ?ML *W *archs *sysroot *minver ?vis ?pic .g .O ?extra *D *I !o ?muldefs ?start !i *F *f *L *l *i !a ?end
     $(1).GCC.EXE++ = $$(call fn.ARGS,$(1).GCC,$$($(1).GCC.EXE++.args),$$(1),$$(2))
 endef

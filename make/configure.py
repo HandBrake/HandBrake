@@ -199,6 +199,15 @@ class Configure( object ):
         self.src_dir    = os.path.normpath( options.src )
         self.build_dir  = os.path.normpath( options.build )
         self.prefix_dir = os.path.normpath( options.prefix )
+        if options.sysroot != None:
+                self.sysroot_dir = os.path.normpath( options.sysroot )
+        else:
+                self.sysroot_dir = ""
+
+        if options.minver != None:
+                self.minver = options.minver
+        else:
+                self.minver = ""
 
         ## special case if src == build: add build subdir
         if os.path.abspath( self.src_dir ) == os.path.abspath( self.build_dir ):
@@ -943,6 +952,9 @@ def createCLI():
 
     ## add install options
     grp = OptionGroup( cli, 'Directory Locations' )
+    h = IfHost( 'specify sysroot (e.g. for Leopard builds from Snow Leapard)', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--sysroot', default=None, action='store', metavar='DIR',
+        help=h )
     grp.add_option( '--src', default=cfg.src_dir, action='store', metavar='DIR',
         help='specify top-level source dir [%s]' % (cfg.src_dir) )
     grp.add_option( '--build', default=cfg.build_dir, action='store', metavar='DIR',
@@ -986,6 +998,9 @@ def createCLI():
     arch.mode.cli_add_option( grp, '--arch' )
     grp.add_option( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
+    h = IfHost( 'Min OS X Version', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--minver', default=None, action='store', metavar='VER',
+        help=h )
     cli.add_option_group( grp )
 
     ## add tool locations
@@ -1301,8 +1316,14 @@ try:
     doc.addBlank()
     if build.match( '*-*-darwin*' ):
         doc.add( 'GCC.archs', arch.mode.mode )
+        doc.add( 'GCC.sysroot', cfg.sysroot_dir )
+        doc.add( 'GCC.minver', cfg.minver )
     else:
         doc.add( 'GCC.archs', '' )
+        doc.add( 'GCC.sysroot', '' )
+        doc.add( 'GCC.minver', '' )
+    doc.add( 'GCC.ldsysroot', '$(GCC.sysroot)' )
+    doc.add( 'GCC.ldminver', '$(GCC.minver)' )
     doc.add( 'GCC.g', debugMode.mode )
     doc.add( 'GCC.O', optimizeMode.mode )
 

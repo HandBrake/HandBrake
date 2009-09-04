@@ -4,8 +4,8 @@ $(eval $(call import.CONTRIB.defs,MP4V2))
 MP4V2.FETCH.url = http://download.m0k.org/handbrake/contrib/mp4v2-trunk-r355.tar.bz2
 
 ## propagate more flags
-MP4V2.CONFIGURE.env.CFLAGS = CFLAGS="$(call fn.ARGS,MP4V2.GCC,*archs *D .g .O)"
-MP4V2.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,MP4V2.GCC,*archs *D .g .O)"
+MP4V2.CONFIGURE.env.CFLAGS = CFLAGS="$(call fn.ARGS,MP4V2.GCC,*archs *sysroot *minver *D .g .O)"
+MP4V2.CONFIGURE.env.CXXFLAGS = CXXFLAGS="$(call fn.ARGS,MP4V2.GCC,*archs *sysroot *minver *D .g .O)"
 
 ## save some build-time by disabling utils
 MP4V2.CONFIGURE.extra += --disable-util

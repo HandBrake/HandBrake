@@ -23,8 +23,8 @@ FFMPEG.CONFIGURE.extra = \
     --enable-muxer=ipod \
     --enable-zlib \
     --cc="$(FFMPEG.GCC.gcc)" \
-    --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
-    --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
+    --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)" \
+    --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
 ifeq (0-cygwin,$(BUILD.cross)-$(BUILD.system))

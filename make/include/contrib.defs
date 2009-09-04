@@ -83,11 +83,11 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.args = !sete @dir !bootstrap !env !exe @host @prefix !deps !shared !static !extra
 
     $(1).CONFIGURE.env.CC       = CC=$$($(1).GCC.gcc)
-    $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs ?extra)"
+    $(1).CONFIGURE.env.CFLAGS   = CFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
     $(1).CONFIGURE.env.CXX      = CXX=$$($(1).GCC.gxx)
-    $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs ?extra)"
-    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs ?extra)"
-    $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs)"
+    $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
+    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra)"
+    $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="$$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver)"
 
     $(1).CONFIGURE.env.args = !CC !CFLAGS !CXX !CXXFLAGS !CPPFLAGS !LDFLAGS
     $(1).CONFIGURE.env = $$(call fn.ARGS,$(1).CONFIGURE.env,$$($(1).CONFIGURE.env.args))
