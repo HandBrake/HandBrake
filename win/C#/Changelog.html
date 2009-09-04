@@ -14,17 +14,22 @@ Windows Platform Specific Changlog.<br />
     None <br />
     
     <h4>Minor Improvements / Changes</h4>
-    - Updated Growl to 2.0.0.20 from 2.0.0.19
-    - Added 2 new options. "Growl when queue completes" and "Growl when encode completes"
-    - Added 1 new option. "Disable Resolution Calculation for "None" and "Custom" modes."
+    - Updated Growl to 2.0.0.20 from 2.0.0.19<br />
+    - Added 2 new options. "Growl when queue completes" and "Growl when encode completes"<br />
+    - Added 1 new option. "Disable Resolution Calculation for "None" and "Custom" modes."<br />
+    - Removed "Enable DVD drive detection..." and "Load my default preset" preferences<br />
+    - Set m4v as default enabled.<br />
 
     <h4>Fixed</h4>
-    - Fix several issues with Picture Settings panel related to aspect ration and resolution calculation. <br />
-    - Fix issue where file extension could be mp4 when chapters is enabled. Problem in the autoname function.<br />
-    - Fix a regex error in the appcast reader and make it more robust to errors.<br />
-    - Fix issue with the destination File box double appending the file extension<br />
-    - Fix issue changing file format causing the audio encoder dropdown to be set to ""<br />
-    - Fix an issue with autoName function and format dropdown with regards to AC3 in the audio list. Also, CC or SRT<br />
+    - Several issues with Picture Settings panel related to aspect ration and resolution calculation. <br />
+    - Issue where file extension could be mp4 when chapters is enabled. Problem in the autoname function.<br />
+    - A regex error in the appcast reader and make it more robust to errors.<br />
+    - Issue with the destination File box double appending the file extension<br />
+    - Issue changing file format causing the audio encoder dropdown to be set to ""<br />
+    - An issue with autoName function and format dropdown with regards to AC3 in the audio list. Also, CC or SRT<br />
+    - A culture issue with the Video Quality slider. Should now work correctly for systems which represent floats as 1,25 instead of 1.25<br />
+    - Issue with SRT filepaths not being quoted.<br />
+    - An issue with 8x8dct not saving correctly in presets<br />
 
     
     <h4>Backend / Not important changes</h4>

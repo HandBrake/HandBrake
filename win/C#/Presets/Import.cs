@@ -146,7 +146,7 @@ namespace Handbrake.Presets
                         switch (value)
                         {
                             case "0":
-                                queryParsed.DeInterlace = "None";
+                                queryParsed.DeInterlace = "Off";
                                 break;
                             case "2":
                                 queryParsed.DeInterlace = "Fast";
@@ -167,7 +167,7 @@ namespace Handbrake.Presets
                         switch (value)
                         {
                             case "0":
-                                queryParsed.DeNoise = "None";
+                                queryParsed.DeNoise = "Off";
                                 break;
                             case "2":
                                 queryParsed.DeNoise = "Weak";
