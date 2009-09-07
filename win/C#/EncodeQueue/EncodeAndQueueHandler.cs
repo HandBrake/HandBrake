@@ -336,6 +336,7 @@ namespace Handbrake.EncodeQueue
                     Thread.Sleep(5000);
                 }
             }
+            LastEncode = new Job();
 
             if (QueueCompleted != null)
                 QueueCompleted(this, new EventArgs());
@@ -361,6 +362,8 @@ namespace Handbrake.EncodeQueue
         {
             try
             {
+                isEncoding = true;
+
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs", "last_encode_log.txt");
                 string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
@@ -376,8 +379,7 @@ namespace Handbrake.EncodeQueue
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 hbProcess = Process.Start(cliStart);
-                processID = Main.getCliProcess(before);
-                isEncoding = true;
+                processID = Main.getCliProcess(before); 
                 currentQuery = query;
                 if (hbProcess != null)
                     processHandle = hbProcess.MainWindowHandle; // Set the process Handle
@@ -414,7 +416,6 @@ namespace Handbrake.EncodeQueue
             {
                 MessageBox.Show("It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\n   Detailed Error Information: error occured in runCli()\n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         /// <summary>
