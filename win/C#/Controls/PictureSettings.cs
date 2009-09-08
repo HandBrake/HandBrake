@@ -67,10 +67,15 @@ namespace Handbrake.Controls
                     labelDisplaySize.Text = CalculateAnamorphicSizes().Width + "x" + CalculateAnamorphicSizes().Height;
                 }
 
-                updownDisplayWidth.Value = CalculateAnamorphicSizes().Width;
+                //updownDisplayWidth.Value = CalculateAnamorphicSizes().Width;
                 updownParWidth.Value = _sourceTitle.ParVal.Width;
                 updownParHeight.Value = _sourceTitle.ParVal.Height;
-                _cachedDar = (double)updownDisplayWidth.Value / (double)text_height.Value;
+                //_cachedDar = (double)updownDisplayWidth.Value / (double)text_height.Value;
+
+
+                Size croppedDar = CalculateAnamorphicSizes();
+                _cachedDar = (double) croppedDar.Width/croppedDar.Height;
+                updownDisplayWidth.Value = croppedDar.Width;
             }
         }
 
@@ -263,8 +268,9 @@ namespace Handbrake.Controls
                 // DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
 
                 // Calculate new Height Value
-                int modulus = 16;
-                int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus);
+                int modulus;
+                if(!int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus))
+                    modulus = 16;
 
                 int rawCalculatedHeight = (int)((int)updownDisplayWidth.Value / _cachedDar);
                 int modulusHeight = rawCalculatedHeight - (rawCalculatedHeight % modulus);
