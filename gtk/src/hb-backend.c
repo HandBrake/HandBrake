@@ -3667,6 +3667,63 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	return TRUE;
 }
 
+gint
+ghb_select_audio_codec(signal_user_data_t *ud, gint track)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+	hb_audio_config_t *audio;
+
+	if (h_scan == NULL) return -1;
+	list = hb_get_titles( h_scan );
+	if( !hb_list_count( list ) )
+	{
+		return -1;
+	}
+
+	gint titleindex;
+
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
+    title = hb_list_item( list, titleindex );
+	if (title == NULL) return -1;
+
+	gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+
+	if (track < 0 || track >= hb_list_count(title->list_audio))
+		return -1;
+
+	audio = (hb_audio_config_t *) hb_list_audio_config_item(
+									title->list_audio, track );
+	if (mux == HB_MUX_MP4)
+	{
+		if (audio->in.codec == HB_ACODEC_AC3)
+			return audio->in.codec;
+		else
+			return HB_ACODEC_FAAC;
+	}
+	else
+	{
+		if (audio->in.codec == HB_ACODEC_AC3 || audio->in.codec == HB_ACODEC_DCA)
+			return audio->in.codec;
+		else
+			return HB_ACODEC_LAME;
+	}
+}
+
+const gchar*
+ghb_select_audio_codec_str(signal_user_data_t *ud, gint track)
+{
+	gint acodec, ii;
+
+	acodec = ghb_select_audio_codec(ud, track);
+	for (ii = 0; ii < acodec_opts.count; ii++)
+	{
+		if (acodec_opts.map[ii].ivalue == acodec)
+			return acodec_opts.map[ii].option;
+	}
+	return "Unknown";
+}
+
 gboolean
 ghb_validate_audio(signal_user_data_t *ud)
 {
@@ -4168,9 +4225,10 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 		if ((job->mux == HB_MUX_MP4) && 
 			((audio.out.codec & HB_ACODEC_LAME) ||
+			(audio.out.codec & HB_ACODEC_DCA) ||
 			(audio.out.codec & HB_ACODEC_VORBIS)))
 		{
-			// mp4/mp3|vorbis combination is not supported.
+			// mp4/mp3|dts|vorbis combination is not supported.
 			audio.out.codec = HB_ACODEC_FAAC;
 		}
         audio.out.dynamic_range_compression = 

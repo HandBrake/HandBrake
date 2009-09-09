@@ -170,5 +170,7 @@ gdouble ghb_lookup_combo_double(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_option(const gchar *name, const GValue *gval);
 const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
+gint ghb_select_audio_codec(signal_user_data_t *ud, gint track);
+const gchar* ghb_select_audio_codec_str(signal_user_data_t *ud, gint track);
 
 #endif // _HBBACKEND_H_
