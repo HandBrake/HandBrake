@@ -823,14 +823,14 @@ namespace Handbrake
         private void btn_dvd_source_Click(object sender, EventArgs e)
         {
             if (DVD_Open.ShowDialog() == DialogResult.OK)
-                selectSource(DVD_Open.SelectedPath, 1);
+                selectSource(DVD_Open.SelectedPath);
             else
                 UpdateSourceLabel();
         }
         private void btn_file_source_Click(object sender, EventArgs e)
         {
             if (ISO_Open.ShowDialog() == DialogResult.OK)
-                selectSource(ISO_Open.FileName, 2);
+                selectSource(ISO_Open.FileName);
             else
                 UpdateSourceLabel();
         }
@@ -838,9 +838,9 @@ namespace Handbrake
         {
             if (!mnu_dvd_drive.Text.Contains("VIDEO_TS")) return;
             string[] path = mnu_dvd_drive.Text.Split(' ');
-            selectSource(path[0], 3);
+            selectSource(path[0]);
         }
-        private void selectSource(string file, int type)
+        private void selectSource(string file)
         {
             Check_ChapterMarkers.Enabled = true;
             lastAction = "scan";
