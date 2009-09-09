@@ -723,7 +723,7 @@ namespace Handbrake
 
                         if (ActivityWindow != null)
                             ActivityWindow.SetLogView(false);
-                        
+
                     }
                     this.Focus();
                 }
@@ -861,18 +861,8 @@ namespace Handbrake
                 return;
             }
 
-            switch (type) // Start the scan
-            {
-                case 1: // btn_dvd_source_Click()
-                case 3: // mnu_dvd_drive_Click()
-                    sourcePath = Path.GetFullPath(file);
-                    startScan(file);
-                    break;
-                case 2: // btn_file_source_Click()
-                    sourcePath = Path.GetFileName(file);
-                    startScan(file);
-                    break;
-            }
+            sourcePath = Path.GetFileName(file);
+            startScan(file);
         }
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -1127,9 +1117,8 @@ namespace Handbrake
                 else
                     newExtension = ".mp4";
 
-            text_destination.Text = text_destination.Text.Replace(".mp4", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".m4v", newExtension);
-            text_destination.Text = text_destination.Text.Replace(".mkv", newExtension);
+            if (Path.HasExtension(newExtension))
+                text_destination.Text = Path.ChangeExtension(text_destination.Text, newExtension);
         }
 
         //Video Tab

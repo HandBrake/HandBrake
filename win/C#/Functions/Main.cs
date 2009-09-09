@@ -124,7 +124,7 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string autoName(frmMain mainWindow ) //ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
+        public static string autoName(frmMain mainWindow) //ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
         {
             string AutoNamePath = string.Empty;
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
@@ -178,7 +178,9 @@ namespace Handbrake.Functions
                 {
                     // Use the path and change the file extension to match the previous destination
                     AutoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
-                    AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
+
+                    if (Path.HasExtension(mainWindow.text_destination.Text))
+                        AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
                 }
             }
 
