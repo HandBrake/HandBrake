@@ -52,7 +52,10 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		{
 			gint br = ainfo.bitrate / 1000;
 			// Set the values for bitrate and samplerate to the input rates
-			ghb_set_passthru_bitrate_opts (ud->builder, br);
+			if (br >= 8)
+				ghb_set_passthru_bitrate_opts (ud->builder, br);
+			else
+				br = 160;
 			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
 			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
@@ -192,6 +195,7 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 					titleindex, track, acodec_code, mix_code);
 				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
 			}
+			ghb_adjust_audio_rate_combos(ud);
 			ghb_ui_update(ud, "AudioTrackDRCSlider", drc);
 		}
 	}
@@ -497,7 +501,6 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 		s_drc = g_strdup("Off");
 	else
 		s_drc = g_strdup_printf("%.1f", drc);
-
 
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 

@@ -237,12 +237,12 @@ combo_opts_t vcodec_opts =
 
 static options_map_t d_acodec_opts[] =
 {
-	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC, "faac"},
-	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME, "lame"},
+	{"AAC (faac)",      "faac",   HB_ACODEC_FAAC,   "faac"},
+	{"MP3 (lame)",      "lame",   HB_ACODEC_LAME,   "lame"},
 	{"Vorbis",          "vorbis", HB_ACODEC_VORBIS, "vorbis"},
-	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3, "ac3"},
-	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA, "dts"},
-	{"Auto Pass-Thru", "auto",    HB_ACODEC_DCA|HB_ACODEC_AC3, "auto"},
+	{"AC3 (pass-thru)", "ac3",    HB_ACODEC_AC3,    "ac3"},
+	{"DTS (pass-thru)", "dts",    HB_ACODEC_DCA,    "dts"},
+	{"Choose For Me",   "auto",   HB_ACODEC_MASK,   "auto"},
 };
 combo_opts_t acodec_opts =
 {
@@ -1348,16 +1348,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
 		grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
 	}
-	else if (container == HB_MUX_AVI)
-	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FAAC, TRUE);
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
-		grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
-	}
-	else if (container == HB_MUX_OGM)
-	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FAAC, TRUE);
-	}
 
 	gboolean allow_mono = TRUE;
 	gboolean allow_stereo = TRUE;
@@ -1368,7 +1358,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	{
 		allow_mono =
 			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec != HB_ACODEC_LAME);
+			(acodec & ~HB_ACODEC_LAME);
 		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -1379,7 +1369,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch =
 			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec != HB_ACODEC_LAME) &&
+			(acodec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 	}
@@ -1388,6 +1378,14 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_DOLBY, !allow_dolby);
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_DOLBYPLII, !allow_dpl2);
 	grey_combo_box_item(builder, "AudioMixdown", HB_AMIXDOWN_6CH, !allow_6ch);
+}
+
+gint
+ghb_get_best_audio_bitrate(gint acodec, gint br)
+{
+	if ((acodec & HB_ACODEC_FAAC) && br > 160)
+		br = 160;
+	return br;
 }
 
 gint
@@ -1410,7 +1408,7 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 	{
 		allow_mono =
 			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec != HB_ACODEC_LAME);
+			(acodec & ~HB_ACODEC_LAME);
 		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -1421,7 +1419,7 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch =
 			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec != HB_ACODEC_LAME) &&
+			(acodec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 	}
@@ -2599,6 +2597,9 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 	gchar *str;
 	
 	g_debug("audio_rate_opts_add ()\n");
+
+	if (rate < 8) return;
+
 	store = get_combo_box_store(builder, name);
 	if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
 	{
@@ -3551,12 +3552,11 @@ ghb_validate_video(signal_user_data_t *ud)
 
 	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
 	vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
-	if ((mux == HB_MUX_MP4 || mux == HB_MUX_AVI) && 
-		(vcodec == HB_VCODEC_THEORA))
+	if ((mux == HB_MUX_MP4) && (vcodec == HB_VCODEC_THEORA))
 	{
-		// mp4|avi/theora combination is not supported.
+		// mp4/theora combination is not supported.
 		message = g_strdup_printf(
-					"Theora is not supported in the MP4 and AVI containers.\n\n"
+					"Theora is not supported in the MP4 container.\n\n"
 					"You should choose a different video codec or container.\n"
 					"If you continue, FFMPEG will be chosen for you.");
 		if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, "Cancel", "Continue"))
@@ -3704,6 +3704,9 @@ ghb_validate_audio(signal_user_data_t *ud)
 		asettings = ghb_array_get_nth(audio_list, ii);
 		gint track = ghb_settings_combo_int(asettings, "AudioTrack");
 		gint codec = ghb_settings_combo_int(asettings, "AudioEncoder");
+		if (codec == HB_ACODEC_MASK)
+			continue;
+
         taudio = (hb_audio_config_t *) hb_list_audio_config_item(
 											title->list_audio, track );
 		if (!(taudio->in.codec & codec) && 
@@ -3720,7 +3723,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 				return FALSE;
 			}
 			g_free(message);
-			if (mux == HB_MUX_AVI)
+			if (mux == HB_MUX_MKV)
 			{
 				codec = HB_ACODEC_LAME;
 			}
@@ -3753,41 +3756,6 @@ ghb_validate_audio(signal_user_data_t *ud)
 				codec = HB_ACODEC_FAAC;
 			}
 		}
-		else if (mux == HB_MUX_AVI)
-		{
-			mux_s = "AVI";
-			// avi/faac|vorbis combination is not supported.
-			if (codec == HB_ACODEC_FAAC)
-			{
-				a_unsup = "FAAC";
-				codec = HB_ACODEC_LAME;
-			}
-			if (codec == HB_ACODEC_VORBIS)
-			{
-				a_unsup = "Vorbis";
-				codec = HB_ACODEC_LAME;
-			}
-		}
-		else if (mux == HB_MUX_OGM)
-		{
-			mux_s = "OGM";
-			// avi/faac|vorbis combination is not supported.
-			if (codec == HB_ACODEC_FAAC)
-			{
-				a_unsup = "FAAC";
-				codec = HB_ACODEC_VORBIS;
-			}
-			if (codec == HB_ACODEC_AC3)
-			{
-				a_unsup = "AC-3";
-				codec = HB_ACODEC_VORBIS;
-			}
-			if (codec == HB_ACODEC_DCA)
-			{
-				a_unsup = "DTS";
-				codec = HB_ACODEC_VORBIS;
-			}
-		}
 		if (a_unsup)
 		{
 			message = g_strdup_printf(
@@ -3811,7 +3779,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gboolean allow_6ch = TRUE;
 		allow_mono =
 			(taudio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(codec != HB_ACODEC_LAME);
+			(codec & ~HB_ACODEC_LAME);
 		gint layout = taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -3822,7 +3790,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch =
 			(taudio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(codec != HB_ACODEC_LAME) &&
+			(codec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 
@@ -4123,10 +4091,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	job->height = ghb_settings_get_int(js, "scale_height");
 
 	job->vcodec = ghb_settings_combo_int(js, "VideoEncoder");
-	if ((job->mux == HB_MUX_MP4 || job->mux == HB_MUX_AVI) && 
-		(job->vcodec == HB_VCODEC_THEORA))
+	if ((job->mux == HB_MUX_MP4 ) && (job->vcodec == HB_VCODEC_THEORA))
 	{
-		// mp4|avi/theora combination is not supported.
+		// mp4/theora combination is not supported.
 		job->vcodec = HB_VCODEC_FFMPEG;
 	}
 	if ((job->vcodec == HB_VCODEC_X264) && (job->mux == HB_MUX_MP4))
@@ -4160,16 +4127,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		job->cfr = 1;
 	}
 
-	// AVI container does not support variable frame rate.
-	// OGM supports variable frame rate, but bases all timing on
-	// DTS, which breaks when b-frames are used since it is
-	// impossible to reconstruct PTS from DTS when the framerate
-	// is variable.  
-	if (job->mux == HB_MUX_AVI || job->mux == HB_MUX_OGM)
-	{
-		job->cfr = 1;
-	}
-
 	const GValue *audio_list;
 	gint count, ii;
 	gint tcount = 0;
@@ -4191,10 +4148,11 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 									title->list_audio, audio.in.track );
 		if (audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
 		{
-			if (!(taudio->in.codec & audio.out.codec))
+			if (!(taudio->in.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
 			{
-				// Not supported.  AC3 is passthrough only, so input must be AC3
-				if (job->mux == HB_MUX_AVI)
+				// Not supported.  
+				// AC3/DTS is passthrough only, so input must be AC3/DTS
+				if (job->mux == HB_MUX_MKV)
 				{
 					audio.out.codec = HB_ACODEC_LAME;
 				}
@@ -4209,26 +4167,11 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			}
 		}
 		if ((job->mux == HB_MUX_MP4) && 
-			((audio.out.codec == HB_ACODEC_LAME) ||
-			(audio.out.codec == HB_ACODEC_VORBIS)))
+			((audio.out.codec & HB_ACODEC_LAME) ||
+			(audio.out.codec & HB_ACODEC_VORBIS)))
 		{
 			// mp4/mp3|vorbis combination is not supported.
 			audio.out.codec = HB_ACODEC_FAAC;
-		}
-		if ((job->mux == HB_MUX_AVI) && 
-			((audio.out.codec == HB_ACODEC_FAAC) ||
-			(audio.out.codec == HB_ACODEC_VORBIS)))
-		{
-			// avi/faac|vorbis combination is not supported.
-			audio.out.codec = HB_ACODEC_LAME;
-		}
-		if ((job->mux == HB_MUX_OGM) && 
-			((audio.out.codec == HB_ACODEC_FAAC) ||
-			(audio.out.codec == HB_ACODEC_AC3) ||
-			(audio.out.codec == HB_ACODEC_DCA)))
-		{
-			// ogm/faac|ac3 combination is not supported.
-			audio.out.codec = HB_ACODEC_VORBIS;
 		}
         audio.out.dynamic_range_compression = 
 			ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
@@ -4236,7 +4179,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
         	audio.out.dynamic_range_compression = 0.0;
 
 		// It would be better if this were done in libhb for us, but its not yet.
-		if (audio.out.codec == HB_ACODEC_AC3 || audio.out.codec == HB_ACODEC_DCA)
+		if (audio.out.codec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
 		{
 			audio.out.mixdown = 0;
 		}
@@ -4248,6 +4191,8 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				audio.in.track, audio.out.codec, audio.out.mixdown);
 			audio.out.bitrate = 
 				ghb_settings_combo_int(asettings, "AudioBitrate");
+			audio.out.bitrate = ghb_get_best_audio_bitrate(
+				audio.out.codec, audio.out.bitrate);
 			gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = taudio->in.samplerate;
