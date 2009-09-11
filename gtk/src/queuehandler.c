@@ -1407,6 +1407,10 @@ queue_edit_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			// Remove the corresponding item from the queue list
 			ghb_array_remove(ud->queue, row);
 		}
+		else
+		{
+			ghb_queue_edit_settings = ghb_value_dup(ghb_queue_edit_settings);
+		}
 		gchar *source;
 		source = ghb_settings_get_string(ghb_queue_edit_settings, "source");
 		ghb_do_scan(ud, source, 0, FALSE);

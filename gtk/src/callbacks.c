@@ -62,6 +62,7 @@
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
 
+static void reset_chapter_list(signal_user_data_t *ud, GValue *settings);
 static void update_chapter_list(signal_user_data_t *ud);
 static GList* dvd_device_list();
 static void prune_logs(signal_user_data_t *ud);
@@ -912,16 +913,11 @@ ghb_do_scan(
 	{
 		if (ghb_queue_edit_settings)
 		{
-			gint jstatus;
-
-			jstatus = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
 			ghb_settings_to_ui(ud, ghb_queue_edit_settings);
 			ghb_set_audio(ud, ghb_queue_edit_settings);
 			ghb_reset_subtitles(ud, ghb_queue_edit_settings);
-			if (jstatus == GHB_QUEUE_PENDING)
-			{
-				ghb_value_free(ghb_queue_edit_settings);
-			}
+			reset_chapter_list(ud, ghb_queue_edit_settings);
+			ghb_value_free(ghb_queue_edit_settings);
 			ghb_queue_edit_settings = NULL;
 		}
 		return;
@@ -2433,16 +2429,11 @@ ghb_backend_events(signal_user_data_t *ud)
 		ghb_clear_scan_state(GHB_STATE_SCANDONE);
 		if (ghb_queue_edit_settings)
 		{
-			gint jstatus;
-
-			jstatus = ghb_settings_get_int(ghb_queue_edit_settings, "job_status");
 			ghb_settings_to_ui(ud, ghb_queue_edit_settings);
 			ghb_set_audio(ud, ghb_queue_edit_settings);
 			ghb_reset_subtitles(ud, ghb_queue_edit_settings);
-			if (jstatus == GHB_QUEUE_PENDING)
-			{
-				ghb_value_free(ghb_queue_edit_settings);
-			}
+			reset_chapter_list(ud, ghb_queue_edit_settings);
+			ghb_value_free(ghb_queue_edit_settings);
 			ghb_queue_edit_settings = NULL;
 		}
 	}
@@ -2974,6 +2965,83 @@ show_presets_toggled_cb(GtkWidget *action, signal_user_data_t *ud)
 		gtk_window_resize(hb_window, 16, 16);
 	}
 	ghb_pref_save(ud->settings, "show_presets");
+}
+
+static void
+reset_chapter_list(signal_user_data_t *ud, GValue *settings)
+{
+	GtkTreeView *treeview;
+	GtkTreeIter iter;
+	GtkListStore *store;
+	gboolean done;
+	GValue *chapters;
+	gint titleindex, ii;
+	gint count;
+	
+	g_debug("reset_chapter_list ()");
+	chapters = ghb_value_dup(ghb_settings_get_value(settings, "chapter_list"));
+	count = ghb_array_len(chapters);
+	ghb_settings_set_value(ud->settings, "chapter_list", chapters);
+	titleindex = ghb_settings_combo_int(ud->settings, "title");
+	
+	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
+	store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
+	ii = 0;
+	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
+	{
+		do
+		{
+
+			if (ii < count)
+			{
+				gchar *chapter, *duration;
+				gint hh, mm, ss;
+
+				// Update row with settings data
+				g_debug("Updating row");
+				chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
+				ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+				duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+				gtk_list_store_set(store, &iter, 
+					0, ii+1,
+					1, duration,
+					2, chapter,
+					3, TRUE,
+					-1);
+				g_free(chapter);
+				g_free(duration);
+				ii++;
+				done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
+			}
+			else
+			{
+				// No more settings data, remove row
+				g_debug("Removing row");
+				done = !gtk_list_store_remove(store, &iter);
+			}
+		} while (!done);
+	}
+	while (ii < count)
+	{
+		gchar *chapter, *duration;
+		gint hh, mm, ss;
+
+		// Additional settings, add row
+		g_debug("Adding row");
+		chapter = ghb_value_string(ghb_array_get_nth(chapters, ii));
+		ghb_get_chapter_duration(titleindex, ii, &hh, &mm, &ss);
+		duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, 
+			0, ii+1,
+			1, duration,
+			2, chapter,
+			3, TRUE,
+			-1);
+		g_free(chapter);
+		g_free(duration);
+		ii++;
+	}
 }
 
 static void
