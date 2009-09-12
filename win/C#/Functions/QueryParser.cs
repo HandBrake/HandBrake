@@ -240,10 +240,10 @@ namespace Handbrake.Functions
                     thisQuery.displayWidthValue = double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", ""));
 
                 if (pixelAspect.Success)
-                    thisQuery.pixelAspectWidth = int.Parse(pixelAspect.Groups[0].Value.Replace("--pixel-aspect ", ""));
+                    thisQuery.pixelAspectWidth = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", ""));
 
-                if (pixelAspect.Success)
-                    thisQuery.pixelAspectHeight = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", ""));
+                if (pixelAspect.Success && pixelAspect.Groups.Count >=3)
+                    thisQuery.pixelAspectHeight = int.Parse(pixelAspect.Groups[2].Value.Replace("--pixel-aspect ", ""));
 
                 if (modulus.Success)
                     thisQuery.AnamorphicModulus = int.Parse(modulus.Groups[0].Value.Replace("--modulus ", ""));
