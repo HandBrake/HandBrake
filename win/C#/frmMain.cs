@@ -752,6 +752,8 @@ namespace Handbrake
                 else
                     encodeQueue.AddJob(query, sourcePath, text_destination.Text);
 
+                lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
+
                 queueWindow.Show();
             }
         }
@@ -1622,7 +1624,7 @@ namespace Handbrake
                 }
 
                 lbl_encode.Visible = true;
-                lbl_encode.Text = "Encoding in Progress";
+                lbl_encode.Text = "Encoding with " + encodeQueue.Count + " encode(s) pending";
                 btn_start.Text = "Stop";
                 btn_start.ToolTipText = "Stop the encoding process.";
                 btn_start.Image = Properties.Resources.stop;
