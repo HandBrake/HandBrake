@@ -120,9 +120,13 @@
   <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 18</value>
   </metadata>
-  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 18</value>
-  </metadata>
+  <data name="check_m4v.ToolTip" xml:space="preserve">
+    <value>Use .m4v instead of .mp4 for MP4 files
+
+Chapter Markers, AC3 Audio and SRT Subtitles will require the m4v extension if you are using QuickTime for playback.
+When this option is disabled, Chapter Markers, AC3 audio and SRT subtitiles will still automatically change the file extension to m4v.
+</value>
+  </data>
   <data name="check_disableResCalc.ToolTip" xml:space="preserve">
     <value>If the new Picture Settings panel is causing you problems, enable this option.
 It disables some of the resolution calcuation code for None and Custom modes.

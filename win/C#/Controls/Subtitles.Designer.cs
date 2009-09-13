@@ -490,7 +490,7 @@
             // 
             // Subtitles
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.btn_srtAdd);
             this.Controls.Add(this.btn_RemoveSubTrack);

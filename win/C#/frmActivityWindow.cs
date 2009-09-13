@@ -24,6 +24,7 @@ namespace Handbrake
         private int _position;  // Position in the arraylist reached by the current log output in the rtf box.
         private readonly frmMain _mainWin;
         private Boolean _lastUpdate;
+        private Boolean fileNotFoundQuickFix;
 
         public frmActivityWindow(string file, EncodeAndQueueHandler eh, frmMain mw)
         {
@@ -175,7 +176,13 @@ namespace Handbrake
                 if (File.Exists(logFile))
                     File.Copy(logFile, logFile2);
                 else
+                {
+                    if (fileNotFoundQuickFix)
+                        return "";
+                    fileNotFoundQuickFix = true;
                     return "\n\n\nERROR: The log file could not be found. \nMaybe you cleared your system's tempory folder or maybe you just havn't run an encode yet. \nTried to find the log file in: " + logFile;
+                }
+                   
 
                 // Open the copied log file for reading
                 StreamReader sr = new StreamReader(logFile2);

@@ -74,7 +74,6 @@ namespace Handbrake
             this.label9 = new System.Windows.Forms.Label();
             this.btn_saveLog = new System.Windows.Forms.Button();
             this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
-            this.label14 = new System.Windows.Forms.Label();
             this.Label11 = new System.Windows.Forms.Label();
             this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
             this.Label4 = new System.Windows.Forms.Label();
@@ -85,6 +84,7 @@ namespace Handbrake
             this.drp_processors = new System.Windows.Forms.ComboBox();
             this.btn_viewLogs = new System.Windows.Forms.Button();
             this.btn_clearLogs = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.check_promptOnUnmatchingQueries = new System.Windows.Forms.CheckBox();
@@ -237,7 +237,8 @@ namespace Handbrake
             this.check_growlEncode.Size = new System.Drawing.Size(171, 17);
             this.check_growlEncode.TabIndex = 99;
             this.check_growlEncode.Text = "Growl after Encode Completes";
-            this.ToolTip.SetToolTip(this.check_growlEncode, "Growl for Windows");
+            this.ToolTip.SetToolTip(this.check_growlEncode, "If you have \"Growl for Windows\" installed, you can use this feature to see growl " +
+                    "alerts on your desktop.");
             this.check_growlEncode.UseVisualStyleBackColor = false;
             this.check_growlEncode.CheckedChanged += new System.EventHandler(this.check_growlEncode_CheckedChanged);
             // 
@@ -251,7 +252,8 @@ namespace Handbrake
             this.check_GrowlQueue.Size = new System.Drawing.Size(168, 17);
             this.check_GrowlQueue.TabIndex = 98;
             this.check_GrowlQueue.Text = "Growl after Queue Completes";
-            this.ToolTip.SetToolTip(this.check_GrowlQueue, "Growl for Windows");
+            this.ToolTip.SetToolTip(this.check_GrowlQueue, "If you have \"Growl for Windows\" installed, you can use this feature to see growl " +
+                    "alerts on your desktop.");
             this.check_GrowlQueue.UseVisualStyleBackColor = false;
             this.check_GrowlQueue.CheckedChanged += new System.EventHandler(this.check_GrowlQueue_CheckedChanged);
             // 
@@ -261,10 +263,11 @@ namespace Handbrake
             this.check_m4v.AutoSize = true;
             this.check_m4v.Location = new System.Drawing.Point(108, 279);
             this.check_m4v.Name = "check_m4v";
-            this.check_m4v.Size = new System.Drawing.Size(283, 17);
+            this.check_m4v.Size = new System.Drawing.Size(423, 17);
             this.check_m4v.TabIndex = 82;
-            this.check_m4v.Text = "Use iPod/iTunes friendly file extension (.m4v) for MP4";
-            this.ToolTip.SetToolTip(this.check_m4v, "Use .m4v instead of .mp4 for MP4 files");
+            this.check_m4v.Text = "Use iPod/iTunes friendly file extension (.m4v) for MP4 (See tooltip for more deta" +
+                "ils)";
+            this.ToolTip.SetToolTip(this.check_m4v, resources.GetString("check_m4v.ToolTip"));
             this.check_m4v.UseVisualStyleBackColor = true;
             this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
             // 
@@ -305,8 +308,7 @@ namespace Handbrake
             this.drop_updateCheckDays.Name = "drop_updateCheckDays";
             this.drop_updateCheckDays.Size = new System.Drawing.Size(97, 21);
             this.drop_updateCheckDays.TabIndex = 97;
-            this.ToolTip.SetToolTip(this.drop_updateCheckDays, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-                    "n Automatic.");
+            this.ToolTip.SetToolTip(this.drop_updateCheckDays, "Check for updates: Daily, Weekly or Monthly\r\nDefault: Weekly");
             this.drop_updateCheckDays.SelectedIndexChanged += new System.EventHandler(this.drop_updateCheckDays_SelectedIndexChanged);
             // 
             // check_autoNaming
@@ -698,16 +700,6 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
             this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
             // 
-            // label14
-            // 
-            this.label14.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(65, 177);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(53, 13);
-            this.label14.TabIndex = 81;
-            this.label14.Text = "Log Path:";
-            // 
             // Label11
             // 
             this.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -854,6 +846,16 @@ namespace Handbrake
             this.btn_clearLogs.Text = "Clear Log History";
             this.btn_clearLogs.UseVisualStyleBackColor = true;
             this.btn_clearLogs.Click += new System.EventHandler(this.btn_clearLogs_Click);
+            // 
+            // label14
+            // 
+            this.label14.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(65, 177);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(53, 13);
+            this.label14.TabIndex = 81;
+            this.label14.Text = "Log Path:";
             // 
             // tab_advanced
             // 
@@ -1126,6 +1128,9 @@ namespace Handbrake
             // 
             this.ToolTip.Active = false;
             this.ToolTip.AutomaticDelay = 1000;
+            this.ToolTip.AutoPopDelay = 15000;
+            this.ToolTip.InitialDelay = 1000;
+            this.ToolTip.ReshowDelay = 200;
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Tooltip";
             // 

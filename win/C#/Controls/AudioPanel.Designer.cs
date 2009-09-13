@@ -399,7 +399,7 @@ namespace Handbrake.Controls
             // 
             // AudioPanel
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.label68);
             this.Controls.Add(this.btn_addAudioTrack);
