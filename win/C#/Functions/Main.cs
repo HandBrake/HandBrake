@@ -197,6 +197,15 @@ namespace Handbrake.Functions
 
             // 0 = SVN Build / Version
             // 1 = Build Date
+
+            DateTime lastModified = File.GetLastWriteTime("HandBrakeCLI.exe");
+
+
+            if (Properties.Settings.Default.cliLastModified == lastModified && Properties.Settings.Default.hb_build != 0)
+                return;
+
+            Properties.Settings.Default.cliLastModified = lastModified;
+            
             Process cliProcess = new Process();
             ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u")
                                                 {
@@ -237,6 +246,7 @@ namespace Handbrake.Functions
                             cli.Kill();
                     }
                 }
+                Properties.Settings.Default.Save();
             }
             catch (Exception e)
             {

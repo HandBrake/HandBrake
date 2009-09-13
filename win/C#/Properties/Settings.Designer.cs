@@ -465,5 +465,16 @@ namespace Handbrake.Properties {
                 this["growlEncode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime cliLastModified {
+            get {
+                return ((global::System.DateTime)(this["cliLastModified"]));
+            }
+            set {
+                this["cliLastModified"] = value;
+            }
+        }
     }
 }
