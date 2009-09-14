@@ -1382,7 +1382,8 @@ static int HandleEvents( hb_handle_t * h )
                 }
             }
 
-            if( hb_list_count(audios) == 0 )
+            if( hb_list_count(audios) == 0 &&
+                hb_list_count(job->title->list_audio) > 0 )
             {        
                 /* Create a new audio track with default settings */
                 audio = calloc(1, sizeof(*audio));

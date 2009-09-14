@@ -421,12 +421,6 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
         hb_list_add( title->list_audio, audio );
     }
 
-    if( !hb_list_count( title->list_audio ) )
-    {
-        hb_log( "scan: ignoring title (no audio track)" );
-        goto fail;
-    }
-
     memcpy( title->palette,
             vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
             16 * sizeof( uint32_t ) );
