@@ -130,7 +130,7 @@ namespace Handbrake.Functions
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
                 // Get the Source Name 
-                string sourceName = Path.GetFileNameWithoutExtension(mainWindow.sourcePath);
+                string sourceName = mainWindow.SourceName;
 
                 // Get the Selected Title Number
                 string[] titlesplit = mainWindow.drp_dvdtitle.Text.Split(' ');

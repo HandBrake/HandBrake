@@ -35,6 +35,9 @@ namespace Handbrake
         private Form splash;
         public string sourcePath;
         private string lastAction;
+        private SourceType selectedSourceType;
+        private string dvdDrivePath;
+        private string dvdDriveLabel;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -177,6 +180,21 @@ namespace Handbrake
                     if (File.Exists(queuePath))
                         File.Delete(queuePath);
                 }
+            }
+        }
+        #endregion
+
+        #region Properties
+        public string SourceName
+        {
+            get
+            {
+                if (this.selectedSourceType == SourceType.DvdDrive)
+                {
+                    return this.dvdDriveLabel;
+                }
+
+                return Path.GetFileNameWithoutExtension(this.sourcePath);
             }
         }
         #endregion
@@ -825,22 +843,28 @@ namespace Handbrake
         private void btn_dvd_source_Click(object sender, EventArgs e)
         {
             if (DVD_Open.ShowDialog() == DialogResult.OK)
+            {
+                this.selectedSourceType = SourceType.Folder;
                 selectSource(DVD_Open.SelectedPath);
+            }
             else
                 UpdateSourceLabel();
         }
         private void btn_file_source_Click(object sender, EventArgs e)
         {
             if (ISO_Open.ShowDialog() == DialogResult.OK)
+            {
+                this.selectedSourceType = SourceType.VideoFile;
                 selectSource(ISO_Open.FileName);
+            }
             else
                 UpdateSourceLabel();
         }
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
-            if (!mnu_dvd_drive.Text.Contains("VIDEO_TS")) return;
-            string[] path = mnu_dvd_drive.Text.Split(' ');
-            selectSource(path[0]);
+            if (this.dvdDrivePath == null) return;
+            this.selectedSourceType = SourceType.DvdDrive;
+            selectSource(this.dvdDrivePath);
         }
         private void selectSource(string file)
         {
@@ -1573,7 +1597,7 @@ namespace Handbrake
         }
         private void UpdateSourceLabel()
         {
-            labelSource.Text = string.IsNullOrEmpty(sourcePath) ? "Select \"Source\" to continue." : Path.GetFileName(sourcePath);
+            labelSource.Text = string.IsNullOrEmpty(sourcePath) ? "Select \"Source\" to continue." : this.SourceName;
         }
         #endregion
 
@@ -1655,7 +1679,9 @@ namespace Handbrake
                     {
                         if (File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
                         {
-                            mnu_dvd_drive.Text = curDrive.RootDirectory + "VIDEO_TS (" + curDrive.VolumeLabel + ")";
+                            this.dvdDrivePath = curDrive.RootDirectory + "VIDEO_TS";
+                            this.dvdDriveLabel = curDrive.VolumeLabel;
+                            mnu_dvd_drive.Text = this.dvdDrivePath + " (" + this.dvdDriveLabel + ")";
                             foundDrive = true;
                             break;
                         }
@@ -1732,6 +1758,16 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
+        }
+        #endregion
+
+        #region enum
+        private enum SourceType
+        {
+            None = 0,
+            Folder,
+            DvdDrive,
+            VideoFile
         }
         #endregion
 
