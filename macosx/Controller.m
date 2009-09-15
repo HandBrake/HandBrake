@@ -1398,7 +1398,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                      browsedSourceDisplayName = [[[path stringByDeletingPathExtension] lastPathComponent] retain];
                     NSString *mpgname;
                     int n = [[path stringByAppendingString: @"/"]
-                             completePathIntoString: &mpgname caseSensitive: NO
+                             completePathIntoString: &mpgname caseSensitive: YES
                              matchesIntoArray: nil
                              filterTypes: [NSArray arrayWithObject: @"mpg"]];
                     if (n > 0)
