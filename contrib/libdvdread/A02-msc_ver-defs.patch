@@ -1,0 +1,85 @@
+diff -Naur libdvdread.orig/src/dvd_reader.c libdvdread/src/dvd_reader.c
+--- libdvdread.orig/src/dvd_reader.c	2009-03-13 18:28:21.000000000 -0700
++++ libdvdread/src/dvd_reader.c	2009-09-15 10:15:25.201548319 -0700
+@@ -36,6 +36,7 @@
+ 
+ /* misc win32 helpers */
+ #ifdef WIN32
++#include <windows.h>
+ #ifndef HAVE_GETTIMEOFDAY
+ /* replacement gettimeofday implementation */
+ #include <sys/timeb.h>
+@@ -335,7 +336,7 @@
+   char *dev_name = NULL;
+   char *path;
+ 
+-#ifdef _MSC_VER
++#ifdef _WIN32
+       int len;
+ #endif
+ 
+@@ -349,7 +350,7 @@
+   /* Try to open libdvdcss or fall back to standard functions */
+   have_css = dvdinput_setup();
+ 
+-#ifdef _MSC_VER
++#ifdef _WIN32
+   /* Strip off the trailing \ if it is not a drive */
+   len = strlen(path);
+   if ((len > 1) &&
+@@ -447,6 +448,14 @@
+       }
+     }
+ 
++#ifdef _WIN32
++    if( strlen( path_copy ) > TITLES_MAX ) {
++      if( !strcasecmp( &(path_copy[ strlen( path_copy ) - TITLES_MAX ]),
++                       "\\video_ts" ) ) {
++        path_copy[ strlen( path_copy ) - (TITLES_MAX-1) ] = '\0';
++      }
++    }
++#else
+     if( strlen( path_copy ) > TITLES_MAX ) {
+       if( !strcasecmp( &(path_copy[ strlen( path_copy ) - TITLES_MAX ]),
+                        "/video_ts" ) ) {
+@@ -458,6 +467,7 @@
+       path_copy[0] = '/';
+       path_copy[1] = '\0';
+     }
++#endif
+ 
+ #if defined(SYS_BSD)
+     if( ( fe = getfsfile( path_copy ) ) ) {
+@@ -508,11 +518,14 @@
+       }
+       fclose( mntfile );
+     }
+-#elif defined(_MSC_VER) || defined(__OS2__)
+-    auth_drive = DVDOpenImageFile( path, have_css );
++#elif defined(_WIN32) || defined(__OS2__)
++    if( GetDriveType( path_copy ) == DRIVE_CDROM ) {
++      path_copy[2] = '\0';
++      auth_drive = DVDOpenImageFile( path_copy, have_css );
++    }
+ #endif
+ 
+-#if !defined(_MSC_VER) && !defined(__OS2__)
++#if !defined(_WIN32) && !defined(__OS2__)
+     if( !dev_name ) {
+       fprintf( stderr, "libdvdread: Couldn't find device name.\n" );
+     } else if( !auth_drive ) {
+diff -Naur libdvdread.orig/src/dvdread_internal.h libdvdread/src/dvdread_internal.h
+--- libdvdread.orig/src/dvdread_internal.h	2008-10-03 13:11:30.000000000 -0700
++++ libdvdread/src/dvdread_internal.h	2009-09-15 09:44:01.788301485 -0700
+@@ -19,9 +19,9 @@
+ #ifndef LIBDVDREAD_DVDREAD_INTERNAL_H
+ #define LIBDVDREAD_DVDREAD_INTERNAL_H
+ 
+-#ifdef _MSC_VER
++#ifdef _WIN32
+ #include <unistd.h>
+-#endif /* _MSC_VER */
++#endif /* _WIN32 */
+ 
+ #define CHECK_VALUE(arg)                                                \
+   if(!(arg)) {                                                          \
