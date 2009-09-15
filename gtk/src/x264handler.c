@@ -154,6 +154,7 @@ static gchar *x264_deblock_syns[] = {"deblock", "filter", NULL};
 static gchar *x264_trellis_syns[] = {"trellis", NULL};
 static gchar *x264_pskip_syns[] = {"no-fast-pskip", "no_fast_pskip", NULL};
 static gchar *x264_psy_syns[] = {"psy-rd", "psy_rd", NULL};
+static gchar *x264_mbtree_syns[] = {"mbtree", NULL};
 static gchar *x264_decimate_syns[] = 
 	{"no-dct-decimate", "no_dct_decimate", NULL};
 static gchar *x264_cabac_syns[] = {"cabac", NULL};
@@ -192,6 +193,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_decimate_syns, "x264_no_dct_decimate", "0", X264_OPT_BOOL},
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
 	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
+	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_BOOL},
 	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
 };
 #define X264_OPT_MAP_SIZE (sizeof(x264_opt_map)/sizeof(struct x264_opt_map_s))
@@ -736,6 +738,11 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	gint ii;
 
 	// Fix up option dependencies
+	gboolean mbtree = ghb_settings_get_boolean(ud->settings, "x264_mbtree");
+	if (mbtree)
+	{
+		x264_remove_opt(split, x264_bpyramid_syns);
+	}
 	gint subme = ghb_settings_combo_int(ud->settings, "x264_subme");
 	if (subme < 6)
 	{

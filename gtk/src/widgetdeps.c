@@ -72,6 +72,7 @@ static dependency_t dep_map[] =
 	{"x264_subme", "x264_psy_trell", "<6", TRUE, FALSE},
 	{"x264_cabac", "x264_psy_trell", "TRUE", FALSE, FALSE},
 	{"x264_trellis", "x264_psy_trell", "0", TRUE, FALSE},
+	{"x264_mbtree", "x264_bpyramid", "FALSE", FALSE, FALSE},
 	{"ChapterMarkers", "chapters_list", "TRUE", FALSE, FALSE},
 	{"use_source_name", "chapters_in_destination", "TRUE", FALSE, FALSE},
 	{"use_source_name", "title_no_in_destination", "TRUE", FALSE, FALSE},
