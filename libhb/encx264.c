@@ -87,6 +87,51 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     x264_param_default( &param );
     
+    /* Temporarily default mbtree to off for baseline,
+       overridable through x264 option strings. */
+    if( job->x264opts != NULL && *job->x264opts != '\0' )
+    {
+        char *x264opts, *x264opts_start;
+    
+        x264opts = x264opts_start = strdup(job->x264opts);
+    
+        while( x264opts_start && *x264opts )
+        {
+            char *name = x264opts;
+            char *value;
+            int ret;
+    
+            x264opts += strcspn( x264opts, ":" );
+            if( *x264opts )
+            {
+                *x264opts = 0;
+                x264opts++;
+            }
+    
+            value = strchr( name, '=' );
+            if( value )
+            {
+                *value = 0;
+                value++;
+            }
+    
+            /*
+               When B-frames are enabled, the max frame count increments
+               by 1 (regardless of the number of B-frames). If you don't
+               change the duration of the video track when you mux, libmp4
+               barfs.  So, check if the x264opts aren't using B-frames, and
+               when they aren't, set the boolean job->areBframes as false.
+             */
+            if( !( strcmp( name, "bframes" ) ) )
+            {
+                if( atoi( value ) == 0 )
+                {
+                    param.rc.b_mb_tree = 0;
+                }
+            }
+        }
+    }
+    
     /* Enable metrics */
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;
