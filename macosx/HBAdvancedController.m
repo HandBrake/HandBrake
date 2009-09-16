@@ -398,7 +398,7 @@
     }
     
     /* Change the option string to reflect the new standardized option string */
-    [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];
+    [fDisplayX264Options setStringValue:changedOptString];
 }
 
 /**
@@ -1332,7 +1332,7 @@
         }
         
         /* Change the dislayed option string to reflect the new modified settings */
-        [fDisplayX264Options setStringValue:[NSString stringWithFormat:changedOptString]];    
+        [fDisplayX264Options setStringValue:changedOptString];    
     }
     else // if none exists, add it to the string
     {
