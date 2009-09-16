@@ -123,7 +123,7 @@
         return nil;
     }
 
-    return [NSString stringWithCString:(const char *)volumeParms.vMDeviceID];
+    return [NSString stringWithUTF8String:(const char *)volumeParms.vMDeviceID];
 }
 
 

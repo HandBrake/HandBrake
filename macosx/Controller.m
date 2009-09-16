@@ -427,25 +427,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 	[fVidRatePopUp addItemWithTitle: NSLocalizedString( @"Same as source", @"" )];
     for( int i = 0; i < hb_video_rates_count; i++ )
     {
-        if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
+        if ([[NSString stringWithUTF8String: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.3f",23.976]])
 		{
 			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-                                             [NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Film)"]];
+                                             [NSString stringWithUTF8String: hb_video_rates[i].string], @" (NTSC Film)"]];
 		}
-		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
+		else if ([[NSString stringWithUTF8String: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%d",25]])
 		{
 			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-                                             [NSString stringWithCString: hb_video_rates[i].string], @" (PAL Film/Video)"]];
+                                             [NSString stringWithUTF8String: hb_video_rates[i].string], @" (PAL Film/Video)"]];
 		}
-		else if ([[NSString stringWithCString: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
+		else if ([[NSString stringWithUTF8String: hb_video_rates[i].string] isEqualToString: [NSString stringWithFormat: @"%.2f",29.97]])
 		{
 			[fVidRatePopUp addItemWithTitle:[NSString stringWithFormat: @"%@%@",
-                                             [NSString stringWithCString: hb_video_rates[i].string], @" (NTSC Video)"]];
+                                             [NSString stringWithUTF8String: hb_video_rates[i].string], @" (NTSC Video)"]];
 		}
 		else
 		{
 			[fVidRatePopUp addItemWithTitle:
-             [NSString stringWithCString: hb_video_rates[i].string]];
+             [NSString stringWithUTF8String: hb_video_rates[i].string]];
 		}
     }
     [fVidRatePopUp selectItemAtIndex: 0];
@@ -458,7 +458,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     for( int i = 0; i < hb_audio_bitrates_count; i++ )
     {
         [fAudTrack1BitratePopUp addItemWithTitle:
-         [NSString stringWithCString: hb_audio_bitrates[i].string]];
+         [NSString stringWithUTF8String: hb_audio_bitrates[i].string]];
         
     }
     [fAudTrack1BitratePopUp selectItemAtIndex: hb_audio_bitrates_default];
@@ -468,7 +468,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     for( int i = 0; i < hb_audio_rates_count; i++ )
     {
         [fAudTrack1RatePopUp addItemWithTitle:
-         [NSString stringWithCString: hb_audio_rates[i].string]];
+         [NSString stringWithUTF8String: hb_audio_rates[i].string]];
     }
     [fAudTrack1RatePopUp selectItemAtIndex: hb_audio_rates_default];
 	
@@ -5002,7 +5002,7 @@ the user is using "Custom" settings by determining the sender*/
     {
         audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, i );
         [[sender menu] addItemWithTitle:
-            [NSString stringWithCString: audio->lang.description]
+            [NSString stringWithUTF8String: audio->lang.description]
             action: NULL keyEquivalent: @""];
     }
     [sender selectItemAtIndex: 0];
@@ -5268,14 +5268,14 @@ the user is using "Custom" settings by determining the sender*/
             {
                 
             NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                 [NSString stringWithCString: "AC3 Passthru"]
+                 [NSString stringWithUTF8String: "AC3 Passthru"]
                                                action: NULL keyEquivalent: @""];
              [menuItem setTag: HB_ACODEC_AC3];   
             }
             else if (audio->in.codec == HB_ACODEC_DCA && acodec == HB_ACODEC_DCA)
             {
             NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                 [NSString stringWithCString: "DTS Passthru"]
+                 [NSString stringWithUTF8String: "DTS Passthru"]
                                                action: NULL keyEquivalent: @""];
              [menuItem setTag: HB_ACODEC_DCA]; 
             }
@@ -5297,7 +5297,7 @@ the user is using "Custom" settings by determining the sender*/
                 if (audioCodecsSupportMono == 1)
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[0].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[0].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[0].amixdown];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
@@ -5310,7 +5310,7 @@ the user is using "Custom" settings by determining the sender*/
                 if ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO)
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[1].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[1].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[1].amixdown];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[1].amixdown;
@@ -5321,7 +5321,7 @@ the user is using "Custom" settings by determining the sender*/
                 if (layout == HB_INPUT_CH_LAYOUT_3F1R || layout == HB_INPUT_CH_LAYOUT_3F2R || layout == HB_INPUT_CH_LAYOUT_DOLBY)
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[2].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[2].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[2].amixdown];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[2].amixdown;
@@ -5332,7 +5332,7 @@ the user is using "Custom" settings by determining the sender*/
                 if (layout == HB_INPUT_CH_LAYOUT_3F2R)
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[3].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[3].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[3].amixdown];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[3].amixdown;
@@ -5343,7 +5343,7 @@ the user is using "Custom" settings by determining the sender*/
                 if (audioCodecsSupport6Ch == 1 && layout == HB_INPUT_CH_LAYOUT_3F2R && (audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE))
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[4].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[4].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: hb_audio_mixdowns[4].amixdown];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[4].amixdown;
@@ -5354,7 +5354,7 @@ the user is using "Custom" settings by determining the sender*/
                 if (audio->in.codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3) 
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: HB_ACODEC_AC3];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
@@ -5365,7 +5365,7 @@ the user is using "Custom" settings by determining the sender*/
                 if (audio->in.codec == HB_ACODEC_DCA && acodec == HB_ACODEC_DCA) 
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithCString: hb_audio_mixdowns[5].human_readable_name]
+                                            [NSString stringWithUTF8String: hb_audio_mixdowns[5].human_readable_name]
                                                                           action: NULL keyEquivalent: @""];
                     [menuItem setTag: HB_ACODEC_DCA];
                     if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[5].amixdown;
@@ -5595,7 +5595,7 @@ the user is using "Custom" settings by determining the sender*/
             {
                 /* add a new menuitem for this bitrate */
                 NSMenuItem *menuItem = [[bitratePopUp menu] addItemWithTitle:
-                                        [NSString stringWithCString: hb_audio_bitrates[i].string]
+                                        [NSString stringWithUTF8String: hb_audio_bitrates[i].string]
                                                                       action: NULL keyEquivalent: @""];
                 /* set its tag to be the actual bitrate as an integer, so we can retrieve it later */
                 [menuItem setTag: hb_audio_bitrates[i].rate];
@@ -5622,7 +5622,7 @@ the user is using "Custom" settings by determining the sender*/
     for( int i = 0; i < hb_audio_rates_count; i++ )
     {
         NSMenuItem *menuItem = [[sampleratePopUp menu] addItemWithTitle:
-                                [NSString stringWithCString: hb_audio_rates[i].string]
+                                [NSString stringWithUTF8String: hb_audio_rates[i].string]
                                                                  action: NULL keyEquivalent: @""];
         [menuItem setTag: hb_audio_rates[i].rate];
     }
