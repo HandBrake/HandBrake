@@ -138,7 +138,9 @@
         if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
         {
             [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
-                                                       attributes:nil];
+                                            withIntermediateDirectories:NO
+                                            attributes:nil
+                                            error:nil];
         }
         outputLogFileForEncode = [[NSString stringWithFormat:@"%@/%@",encodeLogDirectory,outputDateFileName] retain];   
     }
@@ -257,7 +259,9 @@
     if( ![[NSFileManager defaultManager] fileExistsAtPath:encodeLogDirectory] )
     {
         [[NSFileManager defaultManager] createDirectoryAtPath:encodeLogDirectory
-                                                   attributes:nil];
+                                            withIntermediateDirectories:NO
+                                            attributes:nil
+                                            error:nil];
     }
     
     NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"Finder\" to open (POSIX file \"", encodeLogDirectory, @"\")"]];
