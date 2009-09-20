@@ -644,6 +644,23 @@ hb_net_t * hb_net_open( char * address, int port )
     struct sockaddr_in   sock;
     struct hostent     * host;
 
+#ifdef SYS_MINGW
+    WSADATA wsaData;
+    int iResult, winsock_init = 0;
+
+    // Initialize Winsock
+    if (!winsock_init)
+    {
+        iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+        if (iResult != 0)
+        {
+            hb_log("WSAStartup failed: %d", iResult);
+            return NULL;
+        }
+        winsock_init = 1;
+    }
+#endif
+
     /* TODO: find out why this doesn't work on Win32 */
     if( !( host = gethostbyname( address ) ) )
     {
