@@ -51,7 +51,7 @@ binary-indep: build install
 	dh_testroot
 	dh_installchangelogs -i
 	dh_installdocs -i
-	dh_install -i
+	dh_install --sourcedir=debian/tmp -i
 	dh_icons -i
 	dh_desktop -i
 	dh_link -i
@@ -66,7 +66,7 @@ binary-indep: build install
 binary-arch: build install
 	dh_testdir
 	dh_testroot
-	dh_install -a
+	dh_install --sourcedir=debian/tmp -a
 	dh_installchangelogs -a
 	dh_installdocs -a
 	dh_installexamples -a

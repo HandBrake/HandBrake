@@ -2,7 +2,7 @@ Source: handbrake
 Section: graphics
 Priority: optional
 Maintainer: John Stebbins <jstebbins.hb@gmail.com>
-Build-Depends: debhelper (>= 7), autotools-dev, libtool, libgtkhtml3.14-dev, libhal-storage-dev, intltool, autoconf, yasm (>= 0.7.0), libbz2-dev, zlib1g-dev
+Build-Depends: debhelper (>= 6), autotools-dev, libtool, libgtkhtml3.14-dev, libhal-storage-dev, intltool, autoconf, yasm (>= 0.7.0), libbz2-dev, zlib1g-dev
 Standards-Version: 3.7.3
 Homepage: http://www.handbrake.fr/
 
