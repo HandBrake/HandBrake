@@ -333,17 +333,22 @@ static void ReaderFunc( void * _r )
             hb_list_rem( list, buf );
             fifos = GetFifoForId( r->job, buf->id );
 
-            if ( ! r->saw_video )
+            if ( fifos && ! r->saw_video )
             {
-                /* The first video packet defines 'time zero' so discard
-                   data until we get a video packet with a PTS & DTS */
-                if ( buf->id == r->title->video_id && buf->start != -1 &&
-                     buf->renderOffset != -1 )
+                // The first data packet with a PTS from an audio or video stream
+                // that we're decoding defines 'time zero'. Discard packets until
+                // we get one.
+                if ( buf->start != -1 && buf->renderOffset != -1 &&
+                     ( buf->id == r->title->video_id || is_audio( r, buf->id ) ) )
                 {
                     // force a new scr offset computation
                     r->scr_changes = r->demux.scr_changes - 1;
+                    // create a stream state if we don't have one so the
+                    // offset will get computed correctly.
+                    id_to_st( r, buf );
                     r->saw_video = 1;
-                    hb_log( "reader: first SCR %"PRId64, r->demux.last_scr );
+                    hb_log( "reader: first SCR %"PRId64" id %d DTS %"PRId64,
+                            r->demux.last_scr, buf->id, buf->renderOffset );
                 }
                 else
                 {
