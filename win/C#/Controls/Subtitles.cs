@@ -63,7 +63,7 @@ namespace Handbrake.Controls
         {
             foreach (ListViewItem item in lv_subList.Items)
             {
-                if (!string.IsNullOrEmpty(item.SubItems[5].Text))
+                if (item.SubItems.Count != 5)
                     return true;
 
                 if (item.SubItems[1].Text.Contains("(Text)"))
