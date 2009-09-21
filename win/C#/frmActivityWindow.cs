@@ -33,6 +33,8 @@ namespace Handbrake
             _encodeQueue = eh;
             _mainWin = mw;
 
+            fileNotFoundQuickFix = false;
+
             if (file == "last_scan_log.txt")
                 SetLogView(true);
             else
@@ -174,7 +176,7 @@ namespace Handbrake
 
                 // Copy the log file.
                 if (File.Exists(logFile))
-                    File.Copy(logFile, logFile2);
+                    File.Copy(logFile, logFile2, true);
                 else
                 {
                     if (fileNotFoundQuickFix)
@@ -183,8 +185,6 @@ namespace Handbrake
                     return "\n\n\nERROR: The log file could not be found. \nMaybe you cleared your system's tempory folder or maybe you just havn't run an encode yet. \nTried to find the log file in: " + logFile;
                 }
                    
-
-                // Open the copied log file for reading
                 StreamReader sr = new StreamReader(logFile2);
                 string line;
                 int i = 1;
@@ -204,9 +204,8 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Error in ReadFile() \n Unable to read the log file.\n You may have to restart HandBrake.\n  Error Information: \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return "Error in ReadFile() \n Unable to read the log file.\n You may have to restart HandBrake. Will try reading the file again in a few seconds... \n  Error Information: \n\n" + exc;
             }
-            return null;
         }
 
         protected override void OnClosing(CancelEventArgs e)
