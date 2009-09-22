@@ -73,11 +73,9 @@ namespace Handbrake.Functions
             #endregion
 
             #region Picture
-
+            mainWindow.PictureSettings.check_autoCrop.Checked = true;
             if (pictureSettings) // only Load picture settings if the perset requires it
             {
-                mainWindow.PictureSettings.check_autoCrop.Checked = true;
-
                 if (presetQuery.CropValues != null)
                 {
                     int top, bottom, left, right;
