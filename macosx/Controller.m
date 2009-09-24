@@ -1515,34 +1515,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     if( [detector isVideoDVD] )
     {
+        int hb_arch;
+#if defined( __LP64__ )
+        /* we are 64 bit */
+        hb_arch = 64;
+#else
+        /* we are 32 bit */
+        hb_arch = 32;
+#endif 
+        
+        
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
         
-#if defined( __LP64__ )
-        /* If we are 64 bit, we cannot read encrypted dvd's as vlc is 32 bit only */
-        cancelScanDecrypt = 1;
-        [self writeToActivityLog: "64 bit mode cannot read dvd's, scan cancelled"];
-        /*On Screen Notification*/
-        int status;
-        NSBeep();
-        status = NSRunAlertPanel(@"64-bit HandBrake cannot read encrypted dvds!",@"", @"Cancel Scan", @"Attempt Scan Anyway", nil);
-        [NSApp requestUserAttention:NSCriticalRequest];
-        
-        if (status == NSAlertDefaultReturn)
-        {
-            /* User chose to cancel the scan */
-            [self writeToActivityLog: "cannot open physical dvd , scan cancelled"];
-            cancelScanDecrypt = 1;
-        }
-        else
-        {
-            [self writeToActivityLog: "user overrode 64-bit warning trying to open physical dvd without decryption"];
-            cancelScanDecrypt = 0;
-        }
-
-#else
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
         NSString *vlcPath = @"/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib";
         NSFileManager * fileManager = [NSFileManager defaultManager];
@@ -1558,7 +1545,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if (status == NSAlertDefaultReturn)
             {
                 /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/"]];
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/vlc/download-macosx.html"]];
             }
             else if (status == NSAlertAlternateReturn)
             {
@@ -1578,7 +1565,110 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
         }
-#endif 
+        /* test for architecture of the vlc app */
+        NSArray *vlc_architecturesArray = [[NSBundle bundleWithPath:@"/Applications/VLC.app"] executableArchitectures];
+        BOOL vlcIntel32bit = NO;
+        BOOL vlcIntel64bit = NO;
+        BOOL vlcPPC32bit = NO;
+        BOOL vlcPPC64bit = NO;
+        /* check the available architectures for vlc and note accordingly */
+        NSEnumerator *enumerator = [vlc_architecturesArray objectEnumerator];
+        id tempObject;
+        while (tempObject = [enumerator nextObject])
+        {
+            
+            if ([tempObject intValue] == NSBundleExecutableArchitectureI386)
+            {
+                vlcIntel32bit = YES;   
+            }
+            if ([tempObject intValue] == NSBundleExecutableArchitectureX86_64)
+            {
+                vlcIntel64bit = YES;   
+            }
+            if ([tempObject intValue] == NSBundleExecutableArchitecturePPC)
+            {
+                vlcPPC32bit = YES;   
+            }
+            if ([tempObject intValue] == NSBundleExecutableArchitecturePPC64)
+            {
+                vlcPPC64bit = YES;   
+            }
+            
+        }
+        /* Write vlc architecture findings to activity window */
+        if (vlcIntel32bit)
+        {
+            [self writeToActivityLog: " 32-Bit VLC app found for decrypting physical dvd"];
+        }
+        if (vlcIntel64bit)
+        {
+            [self writeToActivityLog: " 64-Bit VLC app found for decrypting physical dvd"];
+        }
+        
+        
+        
+        if (hb_arch == 64 && !vlcIntel64bit && cancelScanDecrypt != 1)
+        {
+            
+            /* we are 64 bit */
+            
+            /* Appropriate VLC not found, so cancel */
+            cancelScanDecrypt = 1;
+            [self writeToActivityLog: "This version of HandBrake is 64 bit, 64 bit version of vlc not found, scan cancelled"];
+            /*On Screen Notification*/
+            int status;
+            NSBeep();
+            status = NSRunAlertPanel(@"This version of HandBrake is 64 bit, VLC found but not 64 bit!",@"", @"Cancel Scan", @"Attempt Scan Anyway", @"Get 64 bit VLC", nil);
+            [NSApp requestUserAttention:NSCriticalRequest];
+            
+            if (status == NSAlertDefaultReturn)
+            {
+                /* User chose to cancel the scan */
+                [self writeToActivityLog: "cannot open physical dvd VLC found but not 64 bit, scan cancelled"];
+                cancelScanDecrypt = 1;
+            }
+            else if (status == NSAlertDefaultReturn)
+            {
+                [self writeToActivityLog: "user overrode 64-bit warning trying to open physical dvd without proper decryption"];
+                cancelScanDecrypt = 0;
+            }
+            else
+            {
+                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/vlc/download-macosx.html"]];
+            }
+            
+        }    
+        else if (hb_arch == 32 && !vlcIntel32bit && cancelScanDecrypt != 1)
+        {
+            /* we are 32 bit */
+            /* Appropriate VLC not found, so cancel */
+            cancelScanDecrypt = 1;
+            [self writeToActivityLog: "This version of HandBrake is 32 bit, 32 bit version of vlc not found, scan cancelled"];
+            /*On Screen Notification*/
+            int status;
+            NSBeep();
+            status = NSRunAlertPanel(@"This version of HandBrake is 32 bit, VLC found but not 32 bit!",@"", @"Cancel Scan", @"Attempt Scan Anyway", @"Get 32 bit VLC", nil);
+            [NSApp requestUserAttention:NSCriticalRequest];
+            
+            if (status == NSAlertDefaultReturn)
+            {
+                /* User chose to cancel the scan */
+                [self writeToActivityLog: "cannot open physical dvd VLC found but not 32 bit, scan cancelled"];
+                cancelScanDecrypt = 1;
+            }
+            else if (status == NSAlertDefaultReturn)
+            {
+                [self writeToActivityLog: "user overrode 32-bit warning trying to open physical dvd without proper decryption"];
+                cancelScanDecrypt = 0;
+            }
+            else
+            {
+                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
+                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/vlc/download-macosx.html"]];
+            }
+            
+        } 
     }
     
     if (cancelScanDecrypt == 0)
