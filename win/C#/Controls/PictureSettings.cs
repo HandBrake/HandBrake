@@ -489,5 +489,13 @@ namespace Handbrake.Controls
             if (remainder == 0) return value;
             return (value + remainder);
         }
+
+        // Hidden UI feature to drop the MaxWidth / Height with the MaxWidth/Height label is double clicked
+        private void lbl_max_DoubleClick(object sender, EventArgs e)
+        {
+            PresetMaximumResolution = new Size(0,0);
+            if (PictureSettingsChanged != null)
+                PictureSettingsChanged(this, new EventArgs());
+        }
     }
 }

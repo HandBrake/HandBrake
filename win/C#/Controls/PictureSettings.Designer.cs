@@ -386,6 +386,7 @@ namespace Handbrake.Controls
             this.lbl_max.Size = new System.Drawing.Size(15, 13);
             this.lbl_max.TabIndex = 83;
             this.lbl_max.Text = "--";
+            this.lbl_max.DoubleClick += new System.EventHandler(this.lbl_max_DoubleClick);
             // 
             // label4
             // 
