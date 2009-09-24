@@ -30,7 +30,7 @@ FFMPEG.CONFIGURE.extra = \
 ifeq (0-cygwin,$(BUILD.cross)-$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --enable-pthreads --enable-memalign-hack
     FFMPEG.GCC.args.extra = -fno-common
-else ifeq (1-darwin,$(BUILD.cross)-$(BUILD.system))
+else ifeq (darwin,$(BUILD.system))
     ## section for darwin-archs
     FFMPEG.CONFIGURE.extra += --enable-pthreads --enable-cross-compile --arch=$(BUILD.machine)
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))

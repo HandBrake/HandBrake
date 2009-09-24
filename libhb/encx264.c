@@ -75,7 +75,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_param_t       param;
     x264_nal_t       * nal;
     int                nal_count;
-    int                nal_size;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -99,7 +98,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         {
             char *name = x264opts;
             char *value;
-            int ret;
     
             x264opts += strcspn( x264opts, ":" );
             if( *x264opts )
@@ -141,6 +139,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_height     = job->height;
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
+
+    /* Disable annexb. Inserts size into nal header instead of start code */
+    param.b_annexb     = 0;
 
     /* Set min:max key intervals ratio to 1:10 of fps.
      * This section is skipped if fps=25 (default).
@@ -377,12 +378,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_encoder_headers( pv->x264, &nal, &nal_count );
 
     /* Sequence Parameter Set */
-    x264_nal_encode( w->config->h264.sps, &nal_size, 0, &nal[1] );
-    w->config->h264.sps_length = nal_size;
+    memcpy(w->config->h264.sps, nal[1].p_payload + 4, nal[1].i_payload - 4);
+    w->config->h264.sps_length = nal[1].i_payload - 4;
 
     /* Picture Parameter Set */
-    x264_nal_encode( w->config->h264.pps, &nal_size, 0, &nal[2] );
-    w->config->h264.pps_length = nal_size;
+    memcpy(w->config->h264.pps, nal[2].p_payload + 4, nal[2].i_payload - 4);
+    w->config->h264.pps_length = nal[2].i_payload - 4;
 
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
@@ -494,8 +495,8 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     int i;
     for( i = 0; i < i_nal; i++ )
     {
-        int data = buf->alloc - buf->size;
-        int size = x264_nal_encode( buf->data + buf->size, &data, 1, &nal[i] );
+        int size = nal[i].i_payload;
+        memcpy(buf->data + buf->size, nal[i].p_payload, size);
         if( size < 1 )
         {
             continue;
@@ -527,12 +528,6 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
             default:
                 break;
         }
-
-        /* H.264 in mp4 (stolen from mp4creator) */
-        buf->data[buf->size+0] = ( ( size - 4 ) >> 24 ) & 0xFF;
-        buf->data[buf->size+1] = ( ( size - 4 ) >> 16 ) & 0xFF;
-        buf->data[buf->size+2] = ( ( size - 4 ) >>  8 ) & 0xFF;
-        buf->data[buf->size+3] = ( ( size - 4 ) >>  0 ) & 0xFF;
 
         /* Decide what type of frame we have. */
         switch( pic_out->i_type )
