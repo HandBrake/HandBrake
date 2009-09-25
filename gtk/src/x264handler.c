@@ -20,6 +20,7 @@
 #include "hb-backend.h"
 #include "x264handler.h"
 
+gint ghb_lookup_bframes(const gchar *options);
 static void x264_opt_update(signal_user_data_t *ud, GtkWidget *widget);
 static gchar* sanitize_x264opts(signal_user_data_t *ud, const gchar *options);
 
@@ -432,7 +433,20 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 	{
 		if (!x264_opt_map[jj].found)
 		{
-			gchar *val = strdup(x264_opt_map[jj].def_val);
+			gchar *val;
+
+			if (x264_opt_map[jj].opt_syns == x264_mbtree_syns)
+			{
+				int bframes = ghb_lookup_bframes(options);
+				if (bframes > 0)
+					val = strdup("1");
+				else
+					val = strdup("0");
+			}
+			else
+			{
+				val = strdup(x264_opt_map[jj].def_val);
+			}
 			switch(x264_opt_map[jj].type)
 			{
 			case X264_OPT_INT:
@@ -728,6 +742,28 @@ ghb_lookup_aqmode(const gchar *options)
 	return ret;
 }
 
+gint
+ghb_lookup_bframes(const gchar *options)
+{
+	gint ret = 0;
+	gchar *result;
+	gchar **split;
+	
+	if (options == NULL)
+		options = "";
+
+	split = g_strsplit(options, ":", -1);
+
+	result = x264_lookup_value(split, x264_bframes_syns);
+	g_strfreev(split);
+	if (result != NULL)
+	{
+		ret = g_strtod(result, NULL);
+		g_free(result);
+	}
+	return ret;
+}
+
 // Construct the x264 options string
 // The result is allocated, so someone must free it at some point.
 static gchar*
@@ -811,7 +847,15 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 		{
 			val = "1";
 		}
-		const gchar *def_val = x264_opt_get_default(opt);
+		const gchar *def_val;
+		if (find_syn_match(opt, x264_mbtree_syns) >= 0 && bframes == 0)
+		{
+			def_val = "0";
+		}
+		else
+		{
+			def_val = x264_opt_get_default(opt);
+		}
 		if (strcmp(val, def_val) == 0)
 		{
 			// Matches the default, so remove it
