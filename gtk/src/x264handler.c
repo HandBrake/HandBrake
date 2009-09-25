@@ -194,7 +194,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_decimate_syns, "x264_no_dct_decimate", "0", X264_OPT_BOOL},
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
 	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
-	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_BOOL},
+	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_NONE},
 	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
 };
 #define X264_OPT_MAP_SIZE (sizeof(x264_opt_map)/sizeof(struct x264_opt_map_s))
@@ -433,20 +433,7 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 	{
 		if (!x264_opt_map[jj].found)
 		{
-			gchar *val;
-
-			if (x264_opt_map[jj].opt_syns == x264_mbtree_syns)
-			{
-				int bframes = ghb_lookup_bframes(options);
-				if (bframes > 0)
-					val = strdup("1");
-				else
-					val = strdup("0");
-			}
-			else
-			{
-				val = strdup(x264_opt_map[jj].def_val);
-			}
+			gchar *val = strdup(x264_opt_map[jj].def_val);
 			switch(x264_opt_map[jj].type)
 			{
 			case X264_OPT_INT:
@@ -764,6 +751,28 @@ ghb_lookup_bframes(const gchar *options)
 	return ret;
 }
 
+gint
+ghb_lookup_mbtree(const gchar *options)
+{
+	gint ret = ghb_lookup_bframes(options) != 0;
+	gchar *result;
+	gchar **split;
+	
+	if (options == NULL)
+		options = "";
+
+	split = g_strsplit(options, ":", -1);
+
+	result = x264_lookup_value(split, x264_mbtree_syns);
+	g_strfreev(split);
+	if (result != NULL)
+	{
+		ret = g_strtod(result, NULL);
+		g_free(result);
+	}
+	return ret;
+}
+
 // Construct the x264 options string
 // The result is allocated, so someone must free it at some point.
 static gchar*
@@ -774,7 +783,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	gint ii;
 
 	// Fix up option dependencies
-	gboolean mbtree = ghb_settings_get_boolean(ud->settings, "x264_mbtree");
+	gboolean mbtree = ghb_lookup_mbtree(options);
 	if (mbtree)
 	{
 		x264_remove_opt(split, x264_bpyramid_syns);
