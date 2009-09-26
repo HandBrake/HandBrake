@@ -1245,9 +1245,8 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 	GtkTreeView  *tv;
 	GtkTreeModel *tm;
 	GtkTreeIter   ti;
-	GValue *subtitle_list, *settings;
-	gint count, ii, track;
-	gboolean burned;
+	GValue *subtitle_list;
+	gint count, ii;
 	gint first_track = 0, one_burned = 0;
 
 	subtitle_list = ghb_settings_get_value(ud->settings, "subtitle_list");
@@ -1260,19 +1259,27 @@ ghb_subtitle_prune(signal_user_data_t *ud)
 	tm = gtk_tree_view_get_model(tv);
 	for (ii = count-1; ii >= 0; ii--)
 	{
+		gint source, track;
+		gboolean burned;
+		GValue *settings;
+
 		settings = ghb_array_get_nth(subtitle_list, ii);
 		burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
-		track = ghb_settings_combo_int(settings, "SubtitleTrack");
-		if (!burned && mustBurn(ud, track))
+		source = ghb_settings_get_int(settings, "SubtitleSource");
+		if (source == VOBSUB)
 		{
-			gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
-			gtk_list_store_remove (GTK_LIST_STORE(tm), &ti);
-			ghb_array_remove(subtitle_list, ii);
-		}
-		if (burned)
-		{
-			first_track = ii;
-			one_burned++;
+			track = ghb_settings_combo_int(settings, "SubtitleTrack");
+			if (!burned && mustBurn(ud, track))
+			{
+				gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
+				gtk_list_store_remove (GTK_LIST_STORE(tm), &ti);
+				ghb_array_remove(subtitle_list, ii);
+			}
+			if (burned)
+			{
+				first_track = ii;
+				one_burned++;
+			}
 		}
 	}
 	if (one_burned)
