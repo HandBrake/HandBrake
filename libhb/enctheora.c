@@ -21,17 +21,38 @@ hb_work_object_t hb_enctheora =
 
 struct hb_work_private_s
 {
-    hb_job_t * job;
+    hb_job_t    * job;
 
-    th_enc_ctx * ctx;
+    th_enc_ctx    * ctx;
+
+    FILE          * file;
+    unsigned char   stat_buf[80];
+    int             stat_read;
+    int             stat_fill;
 };
 
 int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
 {
+    int keyframe_frequency, log_keyframe, ret;
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
 
     pv->job = job;
+
+    if( job->pass != 0 && job->pass != -1 )
+    {
+        char filename[1024];
+        memset( filename, 0, 1024 );
+        hb_get_tempory_filename( job->h, filename, "theroa.log" );
+        if ( job->pass == 1 )
+        {
+            pv->file = fopen( filename, "wb" );
+        }
+        else
+        {
+            pv->file = fopen( filename, "rb" );
+        }
+    }
 
     th_info ti;
     th_comment tc;
@@ -77,7 +98,94 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
+    if ( job->pass == 2 && !job->cfr )
+    {
+        /* Even though the framerate might be different due to VFR,
+           we still want the same keyframe intervals as the 1st pass,
+           so the 1st pass stats won't conflict on frame decisions.    */
+        hb_interjob_t * interjob = hb_interjob_get( job->h );
+        keyframe_frequency = ( 10 * interjob->vrate / interjob->vrate_base ) + 1;
+    }
+    else
+    {
+        int fps = job->vrate / job->vrate_base;
+
+        /* adjust +1 when fps has remainder to bump
+           { 23.976, 29.976, 59.94 } to { 24, 30, 60 } */
+        if (job->vrate % job->vrate_base)
+            fps += 1;
+
+        keyframe_frequency = fps * 10;
+    }
+    int tmp = keyframe_frequency - 1;
+    for (log_keyframe = 0; tmp; log_keyframe++)
+        tmp >>= 1;
+        
+    hb_log("theora: keyint: %i", keyframe_frequency);
+
+    ti.keyframe_granule_shift = log_keyframe;
+
     pv->ctx = th_encode_alloc( &ti );
+    th_info_clear( &ti );
+
+    ret = th_encode_ctl(pv->ctx, TH_ENCCTL_SET_KEYFRAME_FREQUENCY_FORCE,
+                        &keyframe_frequency, sizeof(keyframe_frequency));
+    if( ret < 0 )
+    {
+        hb_log("theora: Could not set keyframe interval to %d", keyframe_frequency);
+    }
+
+    /* Set "soft target" rate control which improves quality at the
+     * expense of solid bitrate caps */
+    int arg = TH_RATECTL_CAP_UNDERFLOW;
+    ret = th_encode_ctl(pv->ctx, TH_ENCCTL_SET_RATE_FLAGS, &arg, sizeof(arg));
+    if( ret < 0 )
+    {
+        hb_log("theora: Could not set soft ratecontrol");
+    }
+    if( job->pass != 0 && job->pass != -1 )
+    {
+        arg = keyframe_frequency * 7 >> 1;
+        ret = th_encode_ctl(pv->ctx, TH_ENCCTL_SET_RATE_BUFFER, &arg, sizeof(arg));
+        if( ret < 0 )
+        {
+            hb_log("theora: Could not set rate control buffer");
+        }
+    }
+
+    if( job->pass == 1 )
+    {
+        unsigned char *buffer;
+        int bytes;
+        bytes = th_encode_ctl(pv->ctx, TH_ENCCTL_2PASS_OUT, &buffer, sizeof(buffer));
+        if( bytes < 0 )
+        {
+            hb_error("Could not set up the first pass of two-pass mode.\n");
+            hb_error("Did you remember to specify an estimated bitrate?\n");
+            return 1;
+        }
+        if( fwrite( buffer, 1, bytes, pv->file ) < bytes )
+        {
+            hb_error("Unable to write to two-pass data file.\n");
+            return 1;
+        }
+        fflush( pv->file );
+    }
+    if( job->pass == 2 )
+    {
+        /* Enable the second pass here.
+         * We make this call just to set the encoder into 2-pass mode, because
+         * by default enabling two-pass sets the buffer delay to the whole file
+         * (because there's no way to explicitly request that behavior).
+         * If we waited until we were actually encoding, it would overwite our
+         * settings.*/
+        hb_log("enctheora: init 2nd pass");
+        if( th_encode_ctl( pv->ctx, TH_ENCCTL_2PASS_IN, NULL, 0) < 0)
+        {
+            hb_log("theora: Could not set up the second pass of two-pass mode.");
+            return 1;
+        }
+    }
 
     th_comment_init( &tc );
 
@@ -109,6 +217,10 @@ void enctheoraClose( hb_work_object_t * w )
 
     th_encode_free( pv->ctx );
 
+    if( pv->file )
+    {
+        fclose( pv->file );
+    }
     free( pv );
     w->private_data = NULL;
 }
@@ -138,9 +250,82 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         // drop them for now.
         *buf_out = in;
         *buf_in = NULL;
-       return HB_WORK_DONE;
+        th_encode_packetout( pv->ctx, 1, &op );
+        if( job->pass == 1 )
+        {
+            unsigned char *buffer;
+            int bytes;
+
+            bytes = th_encode_ctl(pv->ctx, TH_ENCCTL_2PASS_OUT, 
+                                  &buffer, sizeof(buffer));
+            if( bytes < 0 )
+            {
+                fprintf(stderr,"Could not read two-pass data from encoder.\n");
+                return HB_WORK_DONE;
+            }
+            fseek( pv->file, 0, SEEK_SET );
+            if( fwrite( buffer, 1, bytes, pv->file ) < bytes)
+            {
+                fprintf(stderr,"Unable to write to two-pass data file.\n");
+                return HB_WORK_DONE;
+            }
+            fflush( pv->file );
+        }
+        return HB_WORK_DONE;
     }
 
+    if( job->pass == 2 )
+    {
+        for(;;)
+        {
+            int bytes, size, ret;
+            /*Ask the encoder how many bytes it would like.*/
+            bytes = th_encode_ctl( pv->ctx, TH_ENCCTL_2PASS_IN, NULL, 0 );
+            if( bytes < 0 )
+            {
+                hb_error("Error requesting stats size in second pass.");
+                *job->die = 1;
+                return HB_WORK_DONE;
+            }
+
+            /*If it's got enough, stop.*/
+            if( bytes == 0 ) break;
+
+            /*Read in some more bytes, if necessary.*/
+            if( bytes > pv->stat_fill - pv->stat_read )
+                size = bytes - (pv->stat_fill - pv->stat_read);
+            else
+                size = 0;
+            if( size > 80 - pv->stat_fill )
+                size = 80 - pv->stat_fill;
+            if( size > 0 &&
+                fread( pv->stat_buf+pv->stat_fill, 1, size, pv->file ) < size )
+            {
+                hb_error("Could not read frame data from two-pass data file!");
+                *job->die = 1;
+                return HB_WORK_DONE;
+            }
+            pv->stat_fill += size;
+
+            /*And pass them off.*/
+            if( bytes > pv->stat_fill - pv->stat_read )
+                bytes = pv->stat_fill - pv->stat_read;
+            ret = th_encode_ctl( pv->ctx, TH_ENCCTL_2PASS_IN, 
+                                 pv->stat_buf+pv->stat_read, bytes);
+            if( ret < 0 )
+            {
+                hb_error("Error submitting pass data in second pass.");
+                *job->die = 1;
+                return HB_WORK_DONE;
+            }
+            /*If the encoder consumed the whole buffer, reset it.*/
+            if( ret >= pv->stat_fill - pv->stat_read )
+                pv->stat_read = pv->stat_fill = 0;
+            /*Otherwise remember how much it used.*/
+            else 
+                pv->stat_read += ret;
+        }
+    }
     memset(&op, 0, sizeof(op));
     memset(&ycbcr, 0, sizeof(ycbcr));
 
@@ -163,6 +348,27 @@ int enctheoraWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     th_encode_ycbcr_in( pv->ctx, ycbcr );
 
+    if( job->pass == 1 )
+    {
+        unsigned char *buffer;
+        int bytes;
+
+        bytes = th_encode_ctl(pv->ctx, TH_ENCCTL_2PASS_OUT, 
+                              &buffer, sizeof(buffer));
+        if( bytes < 0 )
+        {
+            fprintf(stderr,"Could not read two-pass data from encoder.\n");
+            *job->die = 1;
+            return HB_WORK_DONE;
+        }
+        if( fwrite( buffer, 1, bytes, pv->file ) < bytes)
+        {
+            fprintf(stderr,"Unable to write to two-pass data file.\n");
+            *job->die = 1;
+            return HB_WORK_DONE;
+        }
+        fflush( pv->file );
+    }
     th_encode_packetout( pv->ctx, 0, &op );
 
     buf = hb_buffer_init( op.bytes + sizeof(op) );
