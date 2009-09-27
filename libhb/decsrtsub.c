@@ -249,14 +249,17 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
                 retval = 0;
             }
         }
-        chapter = hb_list_item( title->list_chapter, i - 1 );
-
-        if( chapter )
+        pv->stop_time = pv->start_time;
+        for( i = job->chapter_start; i <= job->chapter_end; ++i )
         {
-            pv->stop_time = pv->start_time + chapter->duration;
-        } else {
-            hb_error( "Could not locate chapter %d for SRT stop time", i );
-            retval = 0;
+            chapter = hb_list_item( title->list_chapter, i - 1 );
+            if( chapter )
+            {
+                pv->stop_time += chapter->duration;
+            } else {
+                hb_error( "Could not locate chapter %d for SRT start time", i );
+                retval = 0;
+            }
         }
 
         hb_deep_log( 3, "SRT Start time %"PRId64", stop time %"PRId64, pv->start_time, pv->stop_time);
