@@ -698,7 +698,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                     if (*(reader+3) == '>') {
                         if (stylestack && stylestack->style == BOLD) {
                             uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count - 1;
+                            stylestack->stop = writer - output - utf8_count;
                             hb_makestyleatom(stylestack, style_record);
 
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
@@ -719,7 +719,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                     if (*(reader+3) == '>') {
                         if (stylestack && stylestack->style == UNDERLINE) {
                             uint8_t style_record[12];
-                            stylestack->stop = writer - output - utf8_count - 1;
+                            stylestack->stop = writer - output - utf8_count;
                             hb_makestyleatom(stylestack, style_record);
 
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
