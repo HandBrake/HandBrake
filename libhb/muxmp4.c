@@ -599,10 +599,21 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
     uint8_t *reader = input;
     uint8_t *writer = output;
     uint8_t stylecount = 0;
+    uint16_t utf8_count = 0;         // utf8 count from start of subtitle
     stylerecord *stylestack = NULL;
     stylerecord *oldrecord = NULL;
     
     while(*reader != '\0') {
+        if( ( *reader & 0xc0 ) == 0x80 ) 
+        {
+            /*
+             * Track the utf8_count when doing markup so that we get the tx3g stops
+             * based on UTF8 chr counts rather than bytes.
+             */
+            utf8_count++;
+            hb_deep_log( 3, "MuxMP4: Counted %d UTF-8 chrs within subtitle so far", 
+                             utf8_count);
+        }
         if (*reader == '<') {
             /*
              * possible markup, peek at the next chr
@@ -611,7 +622,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
             case 'i':
                 if (*(reader+2) == '>') {
                     reader += 3;
-                    hb_makestylerecord(&stylestack, ITALIC, writer-output);
+                    hb_makestylerecord(&stylestack, ITALIC, (writer - output - utf8_count));
                 } else {
                     *writer++ = *reader++;
                 }
@@ -619,7 +630,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
             case 'b':
                 if (*(reader+2) == '>') {
                     reader += 3; 
-                    hb_makestylerecord(&stylestack, BOLD, writer-output);
+                    hb_makestylerecord(&stylestack, BOLD, (writer - output - utf8_count));
                 } else {
                     *writer++ = *reader++;  
                 }
@@ -627,7 +638,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
             case 'u': 
                 if (*(reader+2) == '>') {
                     reader += 3;
-                    hb_makestylerecord(&stylestack, UNDERLINE, writer-output);
+                    hb_makestylerecord(&stylestack, UNDERLINE, (writer - output - utf8_count));
                 } else {
                     *writer++ = *reader++;
                 }
@@ -636,9 +647,37 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                 switch(*(reader+2)) {
                 case 'i':
                     if (*(reader+3) == '>') {
+                        /*
+                         * Check whether we then immediately start more markup of the same type, if so then
+                         * lets not close it now and instead continue this markup.
+                         */
+                        if ((*(reader+4) && *(reader+4) == '<') &&
+                            (*(reader+5) && *(reader+5) == 'i') &&
+                            (*(reader+6) && *(reader+6) == '>')) {
+                            /*
+                             * Opening italics right after, so don't close off these italics.
+                             */
+                            hb_deep_log(3, "Joining two sets of italics");
+                            reader += (4 + 3);
+                            continue;
+                        }
+
+
+                        if ((*(reader+4) && *(reader+4) == ' ') && 
+                            (*(reader+5) && *(reader+5) == '<') &&
+                            (*(reader+6) && *(reader+6) == 'i') &&
+                            (*(reader+7) && *(reader+7) == '>')) {
+                            /*
+                             * Opening italics right after, so don't close off these italics.
+                             */
+                            hb_deep_log(3, "Joining two sets of italics (plus space)");
+                            reader += (4 + 4);
+                            *writer++ = ' ';
+                            continue;
+                        }
                         if (stylestack && stylestack->style == ITALIC) {
                             uint8_t style_record[12];
-                            stylestack->stop = writer - output;
+                            stylestack->stop = writer - output - utf8_count;
                             hb_makestyleatom(stylestack, style_record);
 
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
@@ -659,7 +698,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                     if (*(reader+3) == '>') {
                         if (stylestack && stylestack->style == BOLD) {
                             uint8_t style_record[12];
-                            stylestack->stop = writer - output;
+                            stylestack->stop = writer - output - utf8_count - 1;
                             hb_makestyleatom(stylestack, style_record);
 
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
@@ -680,7 +719,7 @@ static void hb_muxmp4_process_subtitle_style( uint8_t *input,
                     if (*(reader+3) == '>') {
                         if (stylestack && stylestack->style == UNDERLINE) {
                             uint8_t style_record[12];
-                            stylestack->stop = writer - output;
+                            stylestack->stop = writer - output - utf8_count - 1;
                             hb_makestyleatom(stylestack, style_record);
 
                             memcpy(style + 10 + (12 * stylecount), style_record, 12);
@@ -928,7 +967,6 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
 
             mux_data->sum_dur += (buf->stop - buf->start);
-            hb_deep_log(3, "MuxMP4:Total time elapsed:%"PRId64, mux_data->sum_dur);
         }
     }
     else
