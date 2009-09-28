@@ -21,7 +21,7 @@ namespace Handbrake
         {
             Screen scr = Screen.PrimaryScreen;
             if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 620))
-                MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n" + "Your screen is running at: " + scr.Bounds.Width + "x" + scr.Bounds.Height + " \nScreen resolution is too Low. Must be 1024x720 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Your system does not meet the minimum requirements for HandBrake. \n" + "Your screen is running at: " + scr.Bounds.Width + "x" + scr.Bounds.Height + " \nScreen resolution is too Low. Must be 1024x620 or greater", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
             {
                 string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\logs");
