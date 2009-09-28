@@ -780,7 +780,6 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		gint tt, source;
 
 		ghb_widget_to_setting(settings, widget);
-		subtitle_list_refresh_selected(ud);
 		track = ghb_settings_combo_option(settings, "SubtitleTrack");
 		ghb_settings_set_string(settings, "SubtitleTrackDescription", track);
 		tt = ghb_settings_get_int(settings, "SubtitleTrack");
@@ -788,6 +787,7 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		ghb_settings_set_int(settings, "SubtitleSource", source);
 		lang = ghb_settings_combo_string(settings, "SubtitleTrack");
 		ghb_settings_set_string(settings, "SubtitleLanguage", lang);
+		subtitle_list_refresh_selected(ud);
 		ghb_live_reset(ud);
 	}
 	ghb_live_reset(ud);
