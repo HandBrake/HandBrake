@@ -194,8 +194,8 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_decimate_syns, "x264_no_dct_decimate", "0", X264_OPT_BOOL},
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
 	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
-	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_NONE},
 	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
+	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_NONE},
 };
 #define X264_OPT_MAP_SIZE (sizeof(x264_opt_map)/sizeof(struct x264_opt_map_s))
 
