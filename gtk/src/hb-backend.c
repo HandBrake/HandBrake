@@ -2195,6 +2195,7 @@ gint
 ghb_find_subtitle_track(
 	gint titleindex, 
 	const gchar *lang, 
+	gint source,
 	GHashTable *track_indices)
 {
 	hb_list_t  * list;
@@ -2217,6 +2218,21 @@ ghb_find_subtitle_track(
 		{
 			used = g_malloc0(count * sizeof(gboolean));
 			g_hash_table_insert(track_indices, g_strdup(lang), used);
+		}
+		// Try to find an item that matches the preferred language and source
+		for (ii = 0; ii < count; ii++)
+		{
+			if (used[ii])
+				continue;
+
+       		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
+			if (source == subtitle->source &&
+				((strcmp(lang, subtitle->iso639_2) == 0) ||
+				 (strcmp(lang, "und") == 0)))
+			{
+				used[ii] = TRUE;
+				return ii;
+			}
 		}
 		// Try to find an item that matches the preferred language
 		for (ii = 0; ii < count; ii++)

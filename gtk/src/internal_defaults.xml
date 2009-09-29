@@ -303,6 +303,8 @@
 				<string>und</string>
 				<key>SubtitleForced</key>
 				<true />
+				<key>SubtitleSource</key>
+				<integer>0</integer>
 				<key>SubtitleBurned</key>
 				<true />
 				<key>SubtitleDefaultTrack</key>
