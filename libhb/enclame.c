@@ -28,6 +28,7 @@ struct hb_work_private_s
     /* LAME handle */
     lame_global_flags * lame;
 
+    int             done;
     unsigned long   input_samples;
     unsigned long   output_bytes;
     uint8_t       * buf;
@@ -138,14 +139,33 @@ int enclameWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                  hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
+    hb_buffer_t * in = *buf_in;
     hb_buffer_t * buf;
 
     if ( (*buf_in)->size <= 0 )
     {
         /* EOF on input - send it downstream & say we're done */
-        *buf_out = *buf_in;
-        *buf_in = NULL;
-       return HB_WORK_DONE;
+        if ( pv->done )
+        {
+            *buf_out = *buf_in;
+            *buf_in = NULL;
+            return HB_WORK_DONE;
+        }
+        else
+        {
+            pv->done = 1;
+            hb_fifo_push( w->fifo_in, in);
+            *buf_in = NULL;
+
+            buf = hb_buffer_init( pv->output_bytes );
+            buf->size = lame_encode_flush( pv->lame, buf->data, LAME_MAXMP3BUFFER );
+            if( buf->size <= 0 )
+            {
+                hb_buffer_close( &buf );
+            }
+            *buf_out = buf;
+            return HB_WORK_OK;
+        }
     }
 
     hb_list_add( pv->list, *buf_in );
