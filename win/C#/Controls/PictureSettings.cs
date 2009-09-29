@@ -453,6 +453,8 @@ namespace Handbrake.Controls
                         double pixel_aspect_height = width;
 
                         double disWidthLoose = (width * pixel_aspect_width / pixel_aspect_height);
+                        if (double.IsNaN(disWidthLoose))
+                            disWidthLoose = 0;
                         return new Size((int)disWidthLoose, (int)height);
                     case 3:
 
