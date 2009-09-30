@@ -613,7 +613,7 @@
               <object class="GtkToggleToolButton" id="show_picture">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
+                <property name="tooltip-text" translatable="yes">Open Picture Settings and Preview window.  Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                 <property name="label" translatable="yes">Picture Settings</property>
                 <property name="icon_name">hb-picture</property>
                 <signal name="toggled" handler="picture_settings_clicked_cb"/>
@@ -741,6 +741,7 @@
                                   <object class="GtkComboBox" id="title">
                                     <property name="visible">True</property>
                                     <property name="has_frame">False</property>
+                                    <property name="tooltip-text" translatable="yes">Set the title to encode. By default the longest title is chosen.  This is often the feature title of a DVD.</property>
                                     <signal handler="title_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -774,6 +775,7 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-text" translatable="yes">Set the first chapter to encode.</property>
                                             <property name="adjustment">adjustment1</property>
                                             <signal handler="start_chapter_changed_cb" name="value_changed"/>
                                           </object>
@@ -798,6 +800,7 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-text" translatable="yes">Set the last chapter to encode.</property>
                                             <property name="adjustment">adjustment2</property>
                                             <signal handler="end_chapter_changed_cb" name="value_changed"/>
                                           </object>
@@ -842,6 +845,7 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-text" translatable="yes">For multi-angle DVD's, select the desired angle to encode.</property>
                                             <property name="adjustment">adjustment27</property>
                                             <signal name="value_changed" handler="setting_widget_changed_cb"/>
                                           </object>
@@ -942,6 +946,7 @@
                                     <property name="visible">True</property>
                                     <property name="action">GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER</property>
                                     <property name="title" translatable="yes">Destination Directory</property>
+                                    <property name="tooltip-text" translatable="yes">Destination directory for your encode.</property>
                                     <signal name="selection_changed" handler="dest_dir_set_cb"/>
                                   </object>
                                   <packing>
@@ -957,6 +962,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="width_chars">40</property>
+                                    <property name="tooltip-text" translatable="yes">Destination filename for your encode.</property>
                                     <signal name="changed" handler="dest_file_changed_cb"/>
                                     <signal name="grab_focus" handler="destination_grab_cb" after="yes"/>
                                     <accelerator key="d" signal="grab-focus" modifiers="GDK_MOD1_MASK"/>
@@ -1005,6 +1011,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="FileFormat">
                                         <property name="visible">True</property>
+                                        <property name="tooltip-text" translatable="yes">Format to mux encoded tracks to.</property>
                                         <signal name="changed" handler="container_changed_cb"/>
                                       </object>
                                       <packing>
@@ -1025,6 +1032,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Add iPod Atom needed by some older iPods.</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb"/>
@@ -1042,6 +1050,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Optimize the layout of the MP4 file for progressive download.  This allows a player to initiate playback before downloading the entire file.</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="http_opt_changed_cb"/>
@@ -1059,6 +1068,9 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-markup" translatable="yes">Allow 64 bit MP4 file which can be over 4GB.
+
+&lt;b&gt;Caution:&lt;/b&gt; This option may break device compatibility.</property>
                                     <property name="xalign">0</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb"/>
@@ -1660,6 +1672,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="VideoEncoder">
                                         <property name="visible">True</property>
+                                        <property name="tooltip-text" translatable="yes">Avaliable video encoders.</property>
                                         <signal handler="vcodec_changed_cb" name="changed"/>
                                       </object>
                                     </child>
@@ -1700,6 +1713,7 @@
                                       <object class="GtkComboBox" id="VideoFramerate">
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">Output framerate.  'Same as source' is recomended. If your source video has a variable framerate, 'Same as source' will preserve it.</property>
                                         <signal handler="setting_widget_changed_cb" name="changed"/>
                                       </object>
                                     </child>
@@ -1720,6 +1734,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Perform 2 Pass Encoding.  'Bitrate' or 'Target Size' options are prerequisites. During the 1st pass, statistics about the video are collected.  Then in the second pass, those statistics are used to make bitrate allocation decisions.</property>
                                 <property name="label" translatable="yes">2-Pass Encoding</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="setting_widget_changed_cb" name="toggled"/>
@@ -1739,6 +1754,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">During the 1st pass of a 2 pass encode, use settings that speed things along.</property>
                                     <property name="label" translatable="yes">Turbo First Pass</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
@@ -1777,6 +1793,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time.  But the average over a long duration will be the value set here.  If you need to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</property>
                                     <property name="label" translatable="yes">Bitrate (kbps):    </property>
                                     <property name="draw_indicator">True</property>
                                     <signal handler="setting_widget_changed_cb" name="toggled"/>
@@ -1796,6 +1813,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">Set the average bitrate. The instantaneous bitrate can be much higher or lower at any point in time.  But the average over a long duration will be the value set here.  If you need to limit instantaneous bitrate, look into x264 vbv-bufsize and vbv-maxrate.</property>
                                         <property name="adjustment">adjustment3</property>
                                         <signal handler="setting_widget_changed_cb" name="value_changed"/>
                                       </object>
@@ -1820,6 +1838,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the desired final size of the output file. This uses the known duration of the video to calculate the bitrate that will be required to achieve the desired size.</property>
                                     <property name="label" translatable="yes">Target Size (MB):</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">vquality_type_bitrate</property>
@@ -1840,6 +1859,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="tooltip-text" translatable="yes">Set the desired final size of the output file. This uses the known duration of the video to calculate the bitrate that will be required to achieve the desired size.</property>
                                         <property name="adjustment">adjustment4</property>
                                         <signal handler="target_size_changed_cb" name="value_changed"/>
                                       </object>
@@ -1864,6 +1884,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the desired quality factor. The encoder targets a certain quality.  The scale used by each video encoder is different.  
+
+x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.
+
+FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
                                     <property name="label" translatable="yes">Constant Quality:</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
@@ -1885,6 +1910,11 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Set the desired quality factor. The encoder targets a certain quality.  The scale used by each video encoder is different.  
+
+x264's scale is logarithmic and lower values coorespond to higher quality.  So small decreases in value will result in progressively larger increases in the resulting file size.  A value of 0 means lossless and will result in a file size that is larger than the original source, unless the source was also lossless.
+
+FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossless mode.</property>
                                 <property name="adjustment">adjustment5</property>
                                 <property name="digits">3</property>
                                 <property name="value_pos">GTK_POS_BOTTOM</property>
@@ -1997,6 +2027,7 @@
                                     <property name="width_request">215</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">List of audio tracks available from your source.</property>
                                     <signal handler="audio_track_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2008,6 +2039,7 @@
                                   <object class="GtkComboBox" id="AudioEncoder">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the audio codec to encode this track with.</property>
                                     <signal handler="audio_codec_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2022,6 +2054,7 @@
                                   <object class="GtkComboBox" id="AudioSamplerate">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the sample rate of the output audio track.</property>
                                     <signal handler="audio_widget_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2110,6 +2143,7 @@
                                   <object class="GtkComboBox" id="AudioMixdown">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the mixdown of the output audio track.</property>
                                     <signal handler="audio_mix_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2130,6 +2164,9 @@ audio-volume-low
 audio-volume-medium</property>
                                     <property name="adjustment">adjustment28</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Dynamic Range Compression:&lt;/b&gt; Adjust the dynamic range of the output audio track. 
+
+For source audio that has a wide dynamic range (very loud and very soft sequences), DRC allows you to 'compress' the range by making loud sections softer and soft sections louder.</property>
                                     <signal handler="drc_widget_changed_cb" name="value_changed"/>
                                   </object>
                                   <packing>
@@ -2159,6 +2196,7 @@ audio-volume-medium</property>
                                   <object class="GtkComboBox" id="AudioBitrate">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the bitrate to encode this track with.</property>
                                     <signal handler="audio_widget_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2238,7 +2276,7 @@ audio-volume-medium</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
+                                    <property name="tooltip-text" translatable="yes">Add new subtitle to the list</property>
                                     <property name="relief">GTK_RELIEF_NONE</property>
                                     <property name="label">Subtitle</property>
                                     <property name="image">subtitle_add_image</property>
@@ -2254,7 +2292,7 @@ audio-volume-medium</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Add new audio settings to the list</property>
+                                    <property name="tooltip-text" translatable="yes">Add new SRT subtitle to the list</property>
                                     <property name="relief">GTK_RELIEF_NONE</property>
                                     <property name="label">Import SRT</property>
                                     <property name="image">srt_add_image</property>
@@ -2271,7 +2309,7 @@ audio-volume-medium</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="tooltip-text" translatable="yes">Remove the selected audio settings</property>
+                                    <property name="tooltip-text" translatable="yes">Remove the selected subtitle settings</property>
                                     <property name="relief">GTK_RELIEF_NONE</property>
                                     <signal handler="subtitle_remove_clicked_cb" name="clicked"/>
                                     <child>
@@ -2378,6 +2416,7 @@ audio-volume-medium</property>
                                   <object class="GtkComboBox" id="SubtitleTrack">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">List of subtitle tracks available from your source.</property>
                                     <signal handler="subtitle_track_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2393,6 +2432,7 @@ audio-volume-medium</property>
                                   <object class="GtkComboBox" id="SrtLanguage">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the language of this subtitle. This value will be used by players in subtitle menus.</property>
                                     <signal handler="srt_lang_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2409,6 +2449,7 @@ audio-volume-medium</property>
                                     <property name="width_request">150</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Set the character code used by the SRT file you are importing. SRTs come in all flavours of character sets.  We translate the character set to UTF-8. The source's character code is needed in order to perform this translation.</property>
                                     <signal handler="srt_changed_cb" name="changed"/>
                                   </object>
                                   <packing>
@@ -2425,6 +2466,7 @@ audio-volume-medium</property>
                                     <property name="visible">True</property>
                                     <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
                                     <property name="title" translatable="yes">Srt File</property>
+                                    <property name="tooltip-text" translatable="yes">Select the SRT file to import.</property>
                                     <signal name="selection_changed" handler="srt_file_changed_cb"/>
                                   </object>
                                   <packing>
@@ -2631,7 +2673,7 @@ audio-volume-medium</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">Sane values are 1-6. B-Frames are smaller than other frames, so they let you pack in more quality at the same bitrate. Use more of them with animated material: 9-16.</property>
+                                            <property name="tooltip-text" translatable="yes">B-Frames cost little in speed, unless you are using b-adapt=2 (optimal). So you generally want to choose a high value. 16 isn't unreasonable.</property>
                                             <property name="adjustment">adjustment9</property>
                                             <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
@@ -2665,7 +2707,7 @@ audio-volume-medium</property>
                                           <object class="GtkComboBox" id="x264_direct">
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">This option can improve compression efficiency. </property>
+                                            <property name="tooltip-text" translatable="yes">Set prediction mode for 'direct' motion vectors. This option improves compression efficiency.</property>
                                             <signal handler="x264_widget_changed_cb" name="changed"/>
                                           </object>
                                         </child>
@@ -2700,7 +2742,14 @@ audio-volume-medium</property>
                                           <object class="GtkComboBox" id="x264_b_adapt">
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">This option can improve compression efficiency. </property>
+                                            <property name="tooltip-markup" translatable="yes">This setting controls how x264 decides between 
+placing a P or B-frame.
+&lt;small&gt;
+Off		- Pick B-frames always
+Fast		- Speed slightly increases with higher B-frames setting
+Optimal	- Speed significantly decreases with higher B-frames setting
+&lt;/small&gt;
+This option can improve compression efficiency. Use 'Optimal' if you can afford the time.</property>
                                             <signal handler="x264_widget_changed_cb" name="changed"/>
                                           </object>
                                         </child>
@@ -2891,7 +2940,7 @@ no-dct-decimate=0:cabac=1</property>
                                           <object class="GtkComboBox" id="x264_me">
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">This sets the shape of the area x264 searches when estimating motion. Your choices are a diamond, a hexagon, a more complex hexagonal shape, or searching the entire frame. You are best off using Uneven Multi-Hexagonal searching.</property>
+                                            <property name="tooltip-text" translatable="yes">This sets the search pattern x264 uses when estimating motion. Uneven Multi-Hexagonal provides some benefit over Hex with a modest hit in speed. Exhaustive and Hadamard Exhaustive are very slow and generally not useful for everyday encoding.</property>
                                             <signal handler="x264_me_changed_cb" name="changed"/>
                                           </object>
                                         </child>
@@ -2932,7 +2981,7 @@ no-dct-decimate=0:cabac=1</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">This range is the radius, in pixels, x264 should use for motion estimation searches. It only has an effect when you use Uneven Multi-Hexagonal or Exhaustive searching. 24, 32, and 64 are good values.</property>
+                                            <property name="tooltip-text" translatable="yes">The radius, in pixels, x264 should use for motion estimation searches. Higher values can be useful on HiDef or high-motion footage.</property>
                                             <property name="adjustment">adjustment10</property>
                                             <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
@@ -2973,7 +3022,18 @@ no-dct-decimate=0:cabac=1</property>
                                           <object class="GtkComboBox" id="x264_subme">
                                             <property name="visible">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">Determines how motion estimation decisions are made. 1 is lowest quality and fastest. 9 is highest quality and slowest.  5 or 6 are commonly used values.</property>
+                                            <property name="tooltip-markup" translatable="yes">Determines how motion estimation decisions are made. Higher numbers provide greater compression efficiency and are slower.
+&lt;small&gt;
+1	- QPel SAD 1 iteration
+2	- QPel SATD 2 iterations
+3	- HPel on MB then QPel
+4	- Always QPel
+5	- Multi QPel + bime
+6	- RD on I/P frames
+7	- RD on all frames
+8	- RD refinement on I/P frames
+9	- RD refinement on all frames
+10	- QP-RD (requires trellis=2 and aq-mode > 0) &lt;/small&gt;</property>
                                             <signal handler="x264_widget_changed_cb" name="changed"/>
                                           </object>
                                         </child>
@@ -3018,7 +3078,7 @@ no-dct-decimate=0:cabac=1</property>
                                                 <property name="visible">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="tooltip-text" translatable="yes">Determines which macroblock partitions are analyzed.
-"Some" is p8x8, b8x8, i8x8, i4x4.</property>
+"Some" is recommended.  "All" is slow and generally not useful.</property>
                                                 <signal handler="x264_widget_changed_cb" name="changed"/>
                                               </object>
                                             </child>
@@ -3039,7 +3099,7 @@ no-dct-decimate=0:cabac=1</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                                <property name="tooltip-text" translatable="yes">High profile feature. Breaks picture into 8x8 blocks for analysis. Improves coding efficiency.</property>
+                                                <property name="tooltip-text" translatable="yes">Enables the intelligent adaptive use of 8x8 transforms in I-frames. Improves coding efficiency.</property>
                                                 <property name="label" translatable="yes">8x8dct</property>
                                                 <property name="active">True</property>
                                                 <property name="draw_indicator">True</property>
@@ -3118,7 +3178,9 @@ no-dct-decimate=0:cabac=1</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">Deblocking filter. Alpha: determines the strength of the deblocking action.</property>
+                                            <property name="tooltip-markup" translatable="yes">Controls the loop filter which is part of the H.264 standard.
+
+&lt;b&gt;Alpha:&lt;/b&gt; determines the strength of the deblocking action. Higher values will produce stronger 'blurring'.</property>
                                             <property name="adjustment">adjustment11</property>
                                             <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
@@ -3132,7 +3194,9 @@ no-dct-decimate=0:cabac=1</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="tooltip-text" translatable="yes">Deblocking filter. Beta: determines when something is a block. Higher values increase sensitivity and will flag more blocks.</property>
+                                            <property name="tooltip-markup" translatable="yes">Controls the loop filter which is part of the H.264 standard. 
+
+&lt;b&gt;Beta:&lt;/b&gt; determines when something is a block. Higher values increase sensitivity and will flag more blocks.</property>
                                             <property name="adjustment">adjustment12</property>
                                             <signal handler="x264_widget_changed_cb" name="value_changed"/>
                                           </object>
@@ -3195,7 +3259,7 @@ no-dct-decimate=0:cabac=1</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip-text" translatable="yes">Only use this with constant quality encoding. It increases quality but also bitrate/file size.</property>
+                                        <property name="tooltip-text" translatable="yes">Disables coefficient thresholding on P-frames. Only use this with constant quality encoding. It increases quality but also bitrate/file size.</property>
                                         <property name="label" translatable="yes">No DCT Decimate</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
@@ -3210,7 +3274,7 @@ no-dct-decimate=0:cabac=1</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="tooltip-text" translatable="yes">Context Adaptive Binary Arithmetic Coding. Improves encoding efficiency at the expense of playback/decoding efficiency. </property>
+                                        <property name="tooltip-text" translatable="yes">Context Adaptive Binary Arithmetic Coding. Improves compression efficiency at the expense of playback/decoding efficiency. Use CABAC unless your decoder really sucks.</property>
                                         <property name="label" translatable="yes">CABAC Entropy Encoding</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
@@ -3243,6 +3307,8 @@ no-dct-decimate=0:cabac=1</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-text" translatable="yes">Sets the strength of Psy-RDO.
+Requires subme >= 6.</property>
                                             <property name="adjustment">adjustment22</property>
                                             <property name="restrict_to_fill_level">False</property>
                                             <property name="value_pos">GTK_POS_RIGHT</property>
@@ -3271,6 +3337,8 @@ no-dct-decimate=0:cabac=1</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                            <property name="tooltip-text" translatable="yes">Sets the strength of Psy-Trellis.
+Requires subme >= 6 and trellis >= 1.</property>
                                             <property name="adjustment">adjustment23</property>
                                             <property name="restrict_to_fill_level">False</property>
                                             <property name="value_pos">GTK_POS_RIGHT</property>
@@ -3335,6 +3403,7 @@ no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="tooltip-text" translatable="yes">Add chapter markers to output file.</property>
                             <property name="label" translatable="yes">Chapter Markers</property>
                             <property name="draw_indicator">True</property>
                             <signal handler="chapter_markers_changed_cb" name="toggled"/>
@@ -4882,6 +4951,7 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Left Crop</property>
                                 <property name="adjustment">adjustment13</property>
                                 <signal name="value_changed" handler="crop_changed_cb"/>
                               </object>
@@ -4898,6 +4968,7 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Top Crop</property>
                                 <property name="adjustment">adjustment14</property>
                                 <signal name="value_changed" handler="crop_changed_cb"/>
                               </object>
@@ -4914,6 +4985,7 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Bottom Crop</property>
                                 <property name="adjustment">adjustment15</property>
                                 <signal name="value_changed" handler="crop_changed_cb"/>
                               </object>
@@ -4930,6 +5002,7 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Right Crop</property>
                                 <property name="adjustment">adjustment16</property>
                                 <signal name="value_changed" handler="crop_changed_cb"/>
                               </object>
@@ -4948,6 +5021,7 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">Automatically crop black borders around edges of the video.</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="scale_changed_cb"/>
                               </object>
@@ -4966,9 +5040,9 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="tooltip_text">When picture settings require that the image 
 dimensions be rounded to some multiple number
 of pixels. This setting will crop a few extra pixels
-instead of doing exact cropping and scaling to
+instead of doing exact cropping and then scaling to
 the required multiple.</property>
-                                <property name="label" translatable="yes">Loose crop</property>
+                                <property name="label" translatable="yes">Loose Crop</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="scale_changed_cb"/>
                               </object>
@@ -5122,6 +5196,7 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">This is the width that the video will be stored at.  The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
                                     <property name="adjustment">adjustment17</property>
                                     <property name="snap_to_ticks">True</property>
                                     <signal name="value_changed" handler="scale_width_changed_cb"/>
@@ -5147,6 +5222,7 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">This is the height that the video will be stored at.  The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
                                     <property name="adjustment">adjustment18</property>
                                     <signal name="value_changed" handler="scale_height_changed_cb"/>
                                   </object>
@@ -5171,6 +5247,7 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip-text" translatable="yes">If enabled, select the 'optimal' storage resolution.  This will be the resolution that most closely matches the source resolution after cropping.</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="scale_changed_cb"/>
                                   </object>
@@ -5204,6 +5281,14 @@ the required multiple.</property>
                                   <object class="GtkComboBox" id="PicturePAR">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-markup" translatable="yes">&lt;b&gt;Anamorphic Modes:&lt;/b&gt;
+&lt;small&gt;&lt;tt&gt;
+None   - Force pixel aspect ration to 1:1.
+Loose  - Align dimensions to chosen 'Alignment' value 
+         and pick pixel aspect ratio that preserves the
+         original display aspect ratio
+Strict - Keep original source dimensions and pixel 
+         aspect ratio&lt;/tt&gt;&lt;/small&gt;</property>
                                     <signal name="changed" handler="scale_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5237,6 +5322,9 @@ the required multiple.</property>
                                   <object class="GtkComboBox" id="PictureModulus">
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Align storage dimensions to multiples of this value.
+
+Encoders are most effecient when the video dimensions are aligned to some specific value (usually 16). Setting this to some other value will result in slightly larger file size.</property>
                                     <signal name="changed" handler="scale_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5309,6 +5397,7 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">This is the display width. It is the result of scaling the storage dimensions by the pixel aspect.</property>
                                     <property name="adjustment">adjustment25</property>
                                     <property name="snap_to_ticks">True</property>
                                     <signal name="value_changed" handler="display_width_changed_cb"/>
@@ -5369,6 +5458,7 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Pixel aspect defines the shape of the pixels. A 1:1 ratio defines a square pixel.  Other values define rectangular shapes. Players will scale the image in order to achieve the specified aspect.</property>
                                     <property name="adjustment">adjustment29</property>
                                     <property name="snap_to_ticks">True</property>
                                     <signal name="value_changed" handler="par_changed_cb"/>
@@ -5394,6 +5484,7 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">Pixel aspect defines the shape of the pixels. A 1:1 ratio defines a square pixel.  Other values define rectangular shapes. Players will scale the image in order to achieve the specified aspect.</property>
                                     <property name="adjustment">adjustment30</property>
                                     <signal name="value_changed" handler="par_changed_cb"/>
                                   </object>
@@ -5415,6 +5506,7 @@ the required multiple.</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">If enabled, the original display aspect of the source will be maintained.</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="scale_changed_cb"/>
@@ -5514,6 +5606,7 @@ the required multiple.</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip-text" translatable="yes">If enabled, filter colour components out of video.</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="setting_widget_changed_cb"/>
                               </object>
@@ -5549,6 +5642,7 @@ the required multiple.</property>
                                     <property name="adjustment">adjustment20</property>
                                     <property name="digits">0</property>
                                     <property name="value_pos">right</property>
+                                    <property name="tooltip-text" translatable="yes">The deblocking filter removes a common type of compression artifact. If your source exhibits 'blockiness', this filter may help clean it up.</property>
                                     <signal name="value_changed" handler="setting_widget_changed_cb"/>
                                     <signal name="format_value" handler="format_deblock_cb"/>
                                   </object>
@@ -5573,6 +5667,7 @@ the required multiple.</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">The denoise filter is a low pass filter that removes noise. Film grain and other types of high frequency noise are difficult to compress. Using this filter on such sources can result in smaller file sizes.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5646,6 +5741,7 @@ the required multiple.</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">This filter removes 'combing' artifacts that are the result of telecining. Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5679,6 +5775,11 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Choose decomb or deinterlace filter options.
+
+The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.
+
+The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation.</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="setting_widget_changed_cb"/>
@@ -5694,6 +5795,11 @@ the required multiple.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip-text" translatable="yes">Choose decomb or deinterlace filter options.
+
+The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.
+
+The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation.</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">PictureDecombDeinterlace</property>
                                   </object>
@@ -5720,6 +5826,7 @@ the required multiple.</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">The decomb filter selectively deinterlaces frames that appear to be interlaced.  This will preserve quality in frames that are not interlaced.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5763,6 +5870,7 @@ the required multiple.</property>
                                     <property name="width_request">100</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="tooltip-text" translatable="yes">The classic deinterlace filter is applied to all frames. Frames that are not interlaced will suffer some quality degradation.</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5879,6 +5987,7 @@ the required multiple.</property>
                     <property name="adjustment">adjustment19</property>
                     <property name="digits">0</property>
                     <property name="value_pos">bottom</property>
+                    <property name="tooltip-text" translatable="yes">Select preview frames.</property>
                     <signal name="value_changed" handler="preview_frame_value_changed_cb"/>
                   </object>
                   <packing>
@@ -5897,6 +6006,7 @@ the required multiple.</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="relief">none</property>
+                        <property name="tooltip-text" translatable="yes">Encode and play a short sequence of video starting from the current preview position.</property>
                         <signal name="clicked" handler="live_preview_start_cb"/>
                         <child>
                           <object class="GtkImage" id="live_preview_play_image">
@@ -5989,6 +6099,7 @@ the required multiple.</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">adjustment21</property>
                             <property name="numeric">True</property>
+                            <property name="tooltip-text" translatable="yes">Set the duration of the live preview in seconds.</property>
                             <signal name="value_changed" handler="preview_duration_changed_cb"/>
                           </object>
                           <packing>
@@ -6031,7 +6142,7 @@ the required multiple.</property>
                       <object class="GtkButton" id="settings_button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip-text" translatable="yes">Open Picture Settings</property>
+                        <property name="tooltip-text" translatable="yes">Open Picture Settings and Preview window.  Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                         <property name="label" translatable="yes">Settings</property>
                         <signal handler="picture_settings_alt2_clicked_cb" name="clicked"/>
                       </object>

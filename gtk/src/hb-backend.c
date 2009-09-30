@@ -226,8 +226,8 @@ combo_opts_t denoise_opts =
 static options_map_t d_vcodec_opts[] =
 {
 	{"H.264 (x264)",    "x264",   HB_VCODEC_X264, ""},
-	{"MPEG-4 (FFMPEG)", "ffmpeg", HB_VCODEC_FFMPEG, ""},
-	{"Theora",          "theora", HB_VCODEC_THEORA, ""},
+	{"MPEG-4 (FFmpeg)", "ffmpeg", HB_VCODEC_FFMPEG, ""},
+	{"VP3 (Theora)",    "theora", HB_VCODEC_THEORA, ""},
 };
 combo_opts_t vcodec_opts =
 {
