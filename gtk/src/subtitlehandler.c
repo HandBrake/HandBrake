@@ -329,14 +329,18 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		gint source;
+		gboolean force, burn;
 
 		subtitle = ghb_array_get_nth(pref_subtitle, ii);
 		lang = ghb_settings_get_string(subtitle, "SubtitleLanguage");
 		source = ghb_settings_get_int(subtitle, "SubtitleSource");
+		burn = ghb_settings_get_boolean(subtitle, "SubtitleBurned");
+		force = ghb_settings_get_boolean(subtitle, "SubtitleForced");
 		// If there are multiple subtitles using the same language, then
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each language.
-		track = ghb_find_subtitle_track(titleindex, lang, source, track_indices);
+		track = ghb_find_subtitle_track(titleindex, lang, burn, 
+										force, source, track_indices);
 		g_free(lang);
 		if (track >= -1)
 		{
@@ -366,7 +370,7 @@ ghb_set_pref_subtitle(gint titleindex, signal_user_data_t *ud)
 		GValue *settings;
 		gboolean burn;
 
-		track = ghb_find_subtitle_track(titleindex, pref_lang, VOBSUB, track_indices);
+		track = ghb_find_subtitle_track(titleindex, pref_lang, FALSE, FALSE, VOBSUB, track_indices);
 		if (track >= -1)
 		{
 			burn = mustBurn(ud, track);

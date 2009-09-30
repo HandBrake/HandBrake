@@ -2193,10 +2193,12 @@ ghb_find_cc_track(gint titleindex)
 
 gint
 ghb_find_subtitle_track(
-	gint titleindex, 
-	const gchar *lang, 
-	gint source,
-	GHashTable *track_indices)
+	gint          titleindex, 
+	const gchar * lang, 
+	gboolean      burn,
+	gboolean      force,
+	gint          source,
+	GHashTable  * track_indices)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
@@ -2241,8 +2243,9 @@ ghb_find_subtitle_track(
 				continue;
 
        		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-			if ((strcmp(lang, subtitle->iso639_2) == 0) ||
-				(strcmp(lang, "und") == 0))
+			if (((burn || force) && (subtitle->source == VOBSUB)) &&
+				((strcmp(lang, subtitle->iso639_2) == 0) ||
+				 (strcmp(lang, "und") == 0)))
 			{
 				used[ii] = TRUE;
 				return ii;

@@ -143,7 +143,8 @@ gint ghb_find_audio_track(
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_pref_subtitle_track(const gchar *lang);
 gint ghb_find_subtitle_track(
-	gint titleindex, const gchar *lang, gint source, GHashTable *track_indices);
+	gint titleindex, const gchar *lang, gboolean burn, 
+	gboolean force, gint source, GHashTable *track_indices);
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_find_cc_track(gint titleindex);
 gint ghb_longest_title(void);
