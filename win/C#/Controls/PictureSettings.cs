@@ -340,7 +340,10 @@ namespace Handbrake.Controls
                     labelDisplaySize.Visible = true;
 
                     check_KeepAR.Checked = true;
+                    updownParWidth.Enabled = !check_KeepAR.Checked;
+                    updownParHeight.Enabled = !check_KeepAR.Checked;
                     break;
+
             }
 
             labelDisplaySize.Text = CalculateAnamorphicSizes().Width + "x" + CalculateAnamorphicSizes().Height;

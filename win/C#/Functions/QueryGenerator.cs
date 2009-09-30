@@ -149,7 +149,13 @@ namespace Handbrake.Functions
                     break;
                 case 3:
                     query += " --custom-anamorphic ";
-                    query += " --display-width " + mainWindow.PictureSettings.updownDisplayWidth.Text + " ";
+
+                    if (mainWindow.PictureSettings.drp_modulus.SelectedIndex != 0)
+                        query += " --modulus " + mainWindow.PictureSettings.drp_modulus.SelectedItem;
+
+                    if (mainWindow.PictureSettings.check_KeepAR.Checked)
+                        query += " --display-width " + mainWindow.PictureSettings.updownDisplayWidth.Text + " ";
+
                     if (mainWindow.PictureSettings.check_KeepAR.Checked)
                         query += " --keep-display-aspect ";
 
