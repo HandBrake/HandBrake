@@ -37,7 +37,7 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		x264_opt_update(ud, widget);
 		ignore_options_update = FALSE;
 	}
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 }
 
@@ -53,7 +53,7 @@ x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		x264_opt_update(ud, widget);
 		ignore_options_update = FALSE;
 	}
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	widget = GHB_WIDGET(ud->builder, "x264_merange");
 	me = ghb_settings_combo_int(ud->settings, "x264_me");
@@ -121,6 +121,8 @@ x264_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
 enum
 {
 	X264_OPT_NONE,
+	X264_OPT_BOOL_NONE,
+	X264_OPT_INT_NONE,
 	X264_OPT_DEBLOCK,
 	X264_OPT_PSY,
 	X264_OPT_INT,
@@ -184,7 +186,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
 	{x264_merange_syns, "x264_merange", "16", X264_OPT_INT},
 	{x264_subme_syns, "x264_subme", "7", X264_OPT_COMBO},
-	{x264_aqmode_syns, "x264_aqmode", "1", X264_OPT_NONE},
+	{x264_aqmode_syns, "x264_aqmode", "1", X264_OPT_INT_NONE},
 	{x264_analyse_syns, "x264_analyse", "some", X264_OPT_COMBO},
 	{x264_8x8dct_syns, "x264_8x8dct", "1", X264_OPT_BOOL},
 	{x264_deblock_syns, "x264_deblock_alpha", "0,0", X264_OPT_DEBLOCK},
@@ -195,7 +197,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
 	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
 	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
-	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_NONE},
+	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_BOOL_NONE},
 };
 #define X264_OPT_MAP_SIZE (sizeof(x264_opt_map)/sizeof(struct x264_opt_map_s))
 
@@ -221,6 +223,17 @@ x264_update_int(signal_user_data_t *ud, const gchar *name, const gchar *val)
 	if (val == NULL) return;
 	ival = g_strtod (val, NULL);
 	ghb_ui_update(ud, name, ghb_int64_value(ival));
+}
+
+static void
+x264_update_int_setting(signal_user_data_t *ud, const gchar *name, const gchar *val)
+{
+	gint ival;
+
+	if (val == NULL) return;
+	ival = g_strtod (val, NULL);
+	ghb_settings_set_value(ud->settings, name, ghb_int64_value(ival));
+	ghb_check_dependency(ud, NULL, name);
 }
 
 static gchar *true_str[] =
@@ -250,6 +263,17 @@ x264_update_bool(signal_user_data_t *ud, const gchar *name, const gchar *val)
 		ghb_ui_update(ud, name, ghb_boolean_value(1));
 	else
 		ghb_ui_update(ud, name, ghb_boolean_value(str_is_true(val)));
+}
+
+static void
+x264_update_bool_setting(signal_user_data_t *ud, const gchar *name, const gchar *val)
+{
+	if (val == NULL)
+		ghb_settings_set_value(ud->settings, name, ghb_boolean_value(1));
+	else
+		ghb_settings_set_value(ud->settings, name, ghb_boolean_value(str_is_true(val)));
+
+	ghb_check_dependency(ud, NULL, name);
 }
 
 static void
@@ -422,6 +446,12 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 					x264_opt_map[jj+1].found = TRUE;
 					x264_update_psy(ud, val);
 					break;
+				case X264_OPT_BOOL_NONE:
+					x264_update_bool_setting(ud, x264_opt_map[jj].name, val);
+					break;
+				case X264_OPT_INT_NONE:
+					x264_update_int_setting(ud, x264_opt_map[jj].name, val);
+					break;
 				}
 				break;
 			}
@@ -450,6 +480,12 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 				break;
 			case X264_OPT_PSY:
 				x264_update_psy(ud, val);
+				break;
+			case X264_OPT_BOOL_NONE:
+				x264_update_bool_setting(ud, x264_opt_map[jj].name, val);
+				break;
+			case X264_OPT_INT_NONE:
+				x264_update_int_setting(ud, x264_opt_map[jj].name, val);
 				break;
 			}
 			x264_opt_map[jj].found = TRUE;

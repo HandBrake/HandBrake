@@ -114,8 +114,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
 		widget_name = ghb_value_string(ghb_array_get_nth(data, 0));
 		widget = GHB_WIDGET(ud->builder, widget_name);
 		dep_object = gtk_builder_get_object(ud->builder, name);
-		g_free(widget_name);
-		if (!GTK_WIDGET_SENSITIVE(widget))
+		if (widget != NULL && !GTK_WIDGET_SENSITIVE(widget))
 			continue;
 		if (dep_object == NULL)
 		{
@@ -138,7 +137,7 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
 			if (widget)
 				value = ghb_widget_string(widget);
 			else
-				value = ghb_settings_get_string(ud->settings, name);
+				value = ghb_settings_get_string(ud->settings, widget_name);
 			while (values && values[jj])
 			{
 				if (values[jj][0] == '>')
@@ -177,12 +176,16 @@ dep_check(signal_user_data_t *ud, const gchar *name, gboolean *out_hide)
 			g_strfreev (values);
 			g_free(value);
 		}
+		g_free(widget_name);
 	}
 	return result;
 }
 
 void
-ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget)
+ghb_check_dependency(
+	signal_user_data_t *ud, 
+	GtkWidget *widget, 
+	const char *alt_name)
 {
 	GObject *dep_object;
 	const gchar *name;
@@ -191,11 +194,16 @@ ghb_check_dependency(signal_user_data_t *ud, GtkWidget *widget)
 	gchar *dep_name;
 	GType type;
 
-	type = GTK_WIDGET_TYPE(widget);
-	if (type == GTK_TYPE_COMBO_BOX || type == GTK_TYPE_COMBO_BOX_ENTRY)
-		if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
+	if (widget != NULL)
+	{
+		type = GTK_WIDGET_TYPE(widget);
+		if (type == GTK_TYPE_COMBO_BOX || type == GTK_TYPE_COMBO_BOX_ENTRY)
+			if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
+		name = gtk_widget_get_name(widget);
+	}
+	else
+		name = alt_name;
 
-	name = gtk_widget_get_name(widget);
 	g_debug("ghb_check_dependency () %s", name);
 
 	if (dep_map == NULL) return;
@@ -1266,7 +1274,7 @@ container_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("container_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	update_acodec_combo(ud);
 	ghb_update_destination_extension(ud);
 	ghb_clear_presets_selection(ud);
@@ -1406,7 +1414,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	
 	g_debug("title_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
@@ -1448,7 +1456,7 @@ G_MODULE_EXPORT void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 }
@@ -1457,7 +1465,7 @@ G_MODULE_EXPORT void
 chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	ghb_update_destination_extension(ud);
@@ -1467,7 +1475,7 @@ G_MODULE_EXPORT void
 vquality_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 
@@ -1491,7 +1499,7 @@ G_MODULE_EXPORT void
 http_opt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	// AC3 is not allowed when Web optimized
@@ -1506,7 +1514,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gint digits;
 
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
@@ -1523,7 +1531,7 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	const gchar *name = gtk_widget_get_name(widget);
 	g_debug("target_size_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (ghb_settings_get_boolean(ud->settings, "vquality_type_target"))
@@ -1547,7 +1555,7 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	end = ghb_settings_get_int(ud->settings, "end_chapter");
 	if (start > end)
 		ghb_ui_update(ud, "end_chapter", ghb_int_value(start));
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
 	{
 		set_destination(ud);
@@ -1577,7 +1585,7 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	end = ghb_settings_get_int(ud->settings, "end_chapter");
 	if (start > end)
 		ghb_ui_update(ud, "start_chapter", ghb_int_value(end));
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
 	{
 		set_destination(ud);
@@ -1600,7 +1608,7 @@ scale_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_width_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_WIDTH);
@@ -1620,7 +1628,7 @@ scale_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_height_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
 		ghb_set_scale (ud, GHB_PIC_KEEP_HEIGHT);
@@ -1643,7 +1651,7 @@ crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	
 	g_debug("crop_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
 		ghb_set_scale (ud, 0);
@@ -1681,7 +1689,7 @@ display_width_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("display_width_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
@@ -1695,7 +1703,7 @@ display_height_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("display_height_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
@@ -1709,7 +1717,7 @@ par_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("par_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
@@ -1723,7 +1731,7 @@ scale_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("scale_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_clear_presets_selection(ud);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
@@ -1765,7 +1773,7 @@ show_crop_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("show_crop_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_live_reset(ud);
 	if (GTK_WIDGET_SENSITIVE(widget))
 		ghb_set_scale (ud, 0);
@@ -3281,7 +3289,7 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("pref_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
 }
@@ -3291,7 +3299,7 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("use_m4v_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
 	ghb_update_destination_extension(ud);
@@ -3302,7 +3310,7 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("show_status_cb");
 	ghb_widget_to_setting (ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
 
@@ -3318,7 +3326,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("vqual_granularity_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);

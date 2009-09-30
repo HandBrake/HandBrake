@@ -777,7 +777,7 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *settings;
 
 	g_debug("subtitle_track_changed_cb ()");
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_widget_to_setting(ud->settings, widget);
 	settings = ghb_selected_subtitle_settings(ud);
 	if (settings != NULL)
@@ -805,7 +805,7 @@ srt_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *settings;
 
 	g_debug("srt_changed_cb ()");
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_widget_to_setting(ud->settings, widget);
 	settings = ghb_selected_subtitle_settings(ud);
 	if (settings != NULL)
@@ -823,7 +823,7 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *settings;
 
 	g_debug("srt_changed_cb ()");
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_widget_to_setting(ud->settings, widget);
 	settings = ghb_selected_subtitle_settings(ud);
 	if (settings != NULL)
@@ -857,7 +857,7 @@ srt_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *settings;
 
 	g_debug("srt_lang_changed_cb ()");
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_widget_to_setting(ud->settings, widget);
 	settings = ghb_selected_subtitle_settings(ud);
 	if (settings != NULL)

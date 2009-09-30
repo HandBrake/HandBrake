@@ -347,7 +347,7 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	}
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_grey_combo_options (ud->builder);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	prev_acodec = acodec_code;
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
@@ -366,7 +366,7 @@ audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	g_debug("audio_track_changed_cb ()");
 	ghb_adjust_audio_rate_combos(ud);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_grey_combo_options(ud->builder);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
@@ -388,7 +388,7 @@ audio_mix_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 	g_debug("audio_mix_changed_cb ()");
 	ghb_adjust_audio_rate_combos(ud);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
@@ -404,7 +404,7 @@ audio_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	GValue *asettings;
 
 	g_debug("audio_widget_changed_cb ()");
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
@@ -430,7 +430,7 @@ drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
 		drc = g_strdup_printf("%.1f", val);
 	gtk_label_set_text(label, drc);
 	g_free(drc);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	asettings = get_selected_asettings(ud);
 	if (asettings != NULL)
 	{
@@ -450,7 +450,7 @@ subtitle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	const gchar *name = gtk_widget_get_name(widget);
 	g_debug("subtitle_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	ghb_live_reset(ud);
 }
 

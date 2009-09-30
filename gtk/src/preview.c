@@ -850,7 +850,7 @@ preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 							GTK_TOGGLE_BUTTON(xwidget)));
 	}
 	ghb_widget_to_setting (ud->settings, xwidget);
-	ghb_check_dependency(ud, xwidget);
+	ghb_check_dependency(ud, xwidget, NULL);
 	const gchar *name = gtk_widget_get_name(xwidget);
 	ghb_pref_save(ud->settings, name);
 }
@@ -914,7 +914,7 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 
 	g_debug("fullscreen_clicked_cb()");
 	ghb_widget_to_setting (ud->settings, toggle);
-	ghb_check_dependency(ud, toggle);
+	ghb_check_dependency(ud, toggle, NULL);
 	const gchar *name = gtk_widget_get_name(toggle);
 	ghb_pref_save(ud->settings, name);
 
@@ -1051,7 +1051,7 @@ preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("preview_duration_changed_cb ()");
 	ghb_live_reset(ud);
 	ghb_widget_to_setting (ud->settings, widget);
-	ghb_check_dependency(ud, widget);
+	ghb_check_dependency(ud, widget, NULL);
 	const gchar *name = gtk_widget_get_name(widget);
 	ghb_pref_save(ud->settings, name);
 }
