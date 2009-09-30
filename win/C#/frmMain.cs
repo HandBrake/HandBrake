@@ -729,7 +729,7 @@ namespace Handbrake
                     if (overwrite == DialogResult.Yes)
                     {
                         if (encodeQueue.Count == 0)
-                            encodeQueue.AddJob(query, sourcePath, text_destination.Text);
+                            encodeQueue.AddJob(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
 
                         queueWindow.setQueue();
                         if (encodeQueue.Count > 1)
@@ -764,11 +764,11 @@ namespace Handbrake
                     DialogResult result = MessageBox.Show("There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                   "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
-                        encodeQueue.AddJob(query, sourcePath, text_destination.Text);
+                        encodeQueue.AddJob(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
 
                 }
                 else
-                    encodeQueue.AddJob(query, sourcePath, text_destination.Text);
+                    encodeQueue.AddJob(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
 
                 lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
@@ -805,6 +805,8 @@ namespace Handbrake
             String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
             if (ActivityWindow == null)
                 ActivityWindow = new frmActivityWindow(file, encodeQueue, this);
+
+            ActivityWindow.SetLogView(!encodeQueue.isEncoding);
 
             ActivityWindow.Show();
         }

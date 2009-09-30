@@ -379,7 +379,7 @@ namespace Handbrake
         {
             if (!queue.LastEncode.IsEmpty)
             {
-                queue.AddJob(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination);
+                queue.AddJob(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination, queue.LastEncode.CustomQuery);
                 updateUIElements();
             }
         }

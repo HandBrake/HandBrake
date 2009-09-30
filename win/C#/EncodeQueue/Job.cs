@@ -4,6 +4,8 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
+using System;
+
 namespace Handbrake.EncodeQueue
 {
     public struct Job
@@ -17,6 +19,11 @@ namespace Handbrake.EncodeQueue
         /// Gets or sets the query string.
         /// </summary>
         public string Query { get; set; }
+
+        /// <summary>
+        /// record if this is a user or GUI generated query
+        /// </summary>
+        public Boolean CustomQuery { get; set; }
 
         /// <summary>
         /// Gets or sets the source file of encoding.

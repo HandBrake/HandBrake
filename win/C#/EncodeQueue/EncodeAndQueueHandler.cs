@@ -82,9 +82,10 @@ namespace Handbrake.EncodeQueue
         /// <param name="query">The query that will be passed to the HandBrake CLI.</param>
         /// <param name="source">The location of the source video.</param>
         /// <param name="destination">The location where the encoded video will be.</param>
-        public void AddJob(string query, string source, string destination)
+        /// <param name="customJob"></param>
+        public void AddJob(string query, string source, string destination, bool customJob)
         {
-            Job newJob = new Job { Id = nextJobId++, Query = query, Source = source, Destination = destination };
+            Job newJob = new Job { Id = nextJobId++, Query = query, Source = source, Destination = destination, CustomQuery = customJob };
 
             queue.Add(newJob);
             WriteQueueStateToFile("hb_queue_recovery.xml");
@@ -306,7 +307,8 @@ namespace Handbrake.EncodeQueue
             // Run through each item on the queue
             while (this.Count != 0)
             {
-                string query = GetNextJob().Query;
+                Job encJob = GetNextJob();
+                string query = encJob.Query;
                 WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
                 RunCli(query);
@@ -316,7 +318,7 @@ namespace Handbrake.EncodeQueue
 
                 hbProcess.WaitForExit();
 
-                AddCLIQueryToLog(query);
+                AddCLIQueryToLog(encJob);
                 CopyLog(LastEncode.Destination);
 
                 hbProcess.Close();
@@ -469,7 +471,7 @@ namespace Handbrake.EncodeQueue
         /// Append the CLI query to the start of the log file.
         /// </summary>
         /// <param name="query"></param>
-        private static void AddCLIQueryToLog(string query)
+        private static void AddCLIQueryToLog(Job encJob)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string logPath = Path.Combine(logDir, "last_encode_log.txt");
@@ -480,7 +482,8 @@ namespace Handbrake.EncodeQueue
 
             StreamWriter writer = new StreamWriter(File.Create(logPath));
 
-            writer.Write("### CLI Query: " + query + "\n\n");
+            writer.Write("### CLI Query: " + encJob.Query + "\n\n");
+            writer.Write("### User Query: " + encJob.CustomQuery + "\n\n");
             writer.Write("#########################################\n\n");
             writer.WriteLine(log);
             writer.Flush();

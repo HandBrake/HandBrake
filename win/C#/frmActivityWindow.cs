@@ -74,11 +74,6 @@ namespace Handbrake
             rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
             rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
             rtf_actLog.AppendText("#########################################\n\n");
-            if ((!_encodeQueue.LastEncode.IsEmpty) && _encodeQueue.LastEncode.Query != String.Empty)
-            {
-                rtf_actLog.AppendText("### CLI Query: " + _encodeQueue.LastEncode.Query + "\n\n");
-                rtf_actLog.AppendText("#########################################\n\n");
-            }
 
             // Seutp the log file
             if (scan)
@@ -90,6 +85,13 @@ namespace Handbrake
             {
                 _readFile = "last_encode_log.txt";
                 txt_log.Text = "Encode Log";
+                if (_encodeQueue.isEncoding)
+                    if ((!_encodeQueue.LastEncode.IsEmpty) && _encodeQueue.LastEncode.Query != String.Empty)
+                    {
+                        rtf_actLog.AppendText("### CLI Query: " + _encodeQueue.LastEncode.Query + "\n");
+                        rtf_actLog.AppendText("### Custom Query: " + _encodeQueue.LastEncode.CustomQuery + "\n\n");
+                        rtf_actLog.AppendText("#########################################\n\n");
+                    }
             }
             _lastUpdate = false;
         }
@@ -184,7 +186,7 @@ namespace Handbrake
                     fileNotFoundQuickFix = true;
                     return "\n\n\nERROR: The log file could not be found. \nMaybe you cleared your system's tempory folder or maybe you just havn't run an encode yet. \nTried to find the log file in: " + logFile;
                 }
-                   
+
                 StreamReader sr = new StreamReader(logFile2);
                 string line;
                 int i = 1;
