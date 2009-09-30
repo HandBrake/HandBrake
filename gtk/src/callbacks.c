@@ -2723,6 +2723,7 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 		gint width, height;
 		gint x, y;
 		gboolean bottom = FALSE;
+		gchar *utf8_text;
 
 		textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
 		buffer = gtk_text_view_get_buffer (textview);
@@ -2748,34 +2749,40 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 			bottom = TRUE;
 		}
 		gtk_text_buffer_get_end_iter(buffer, &iter);
-		gtk_text_buffer_insert(buffer, &iter, text, -1);
-		if (bottom)
+		utf8_text = g_convert_with_fallback(text, -1, "UTF-8", "ISO-8859-1",
+											"?", NULL, &length, NULL);
+		if (utf8_text != NULL)
 		{
-			gtk_text_buffer_get_end_iter(buffer, &iter);
-			mark = gtk_text_buffer_create_mark(buffer, NULL, &iter, FALSE);
-			gtk_text_view_scroll_mark_onscreen(textview, mark);
-			gtk_text_buffer_delete_mark(buffer, mark);
-		}
+			gtk_text_buffer_insert(buffer, &iter, utf8_text, -1);
+			if (bottom)
+			{
+				gtk_text_buffer_get_end_iter(buffer, &iter);
+				mark = gtk_text_buffer_create_mark(buffer, NULL, &iter, FALSE);
+				gtk_text_view_scroll_mark_onscreen(textview, mark);
+				gtk_text_buffer_delete_mark(buffer, mark);
+			}
 #if defined(_WIN32)
-		gsize one = 1;
-		text[length-1] = '\r';
+			gsize one = 1;
+			utf8_text[length-1] = '\r';
 #endif
-		g_io_channel_write_chars (ud->activity_log, text, 
-								length, &outlength, NULL);
-#if defined(_WIN32)
-		g_io_channel_write_chars (ud->activity_log, "\n", 
-								one, &one, NULL);
-#endif
-		g_io_channel_flush(ud->activity_log, NULL);
-		if (ud->job_activity_log)
-		{
-			g_io_channel_write_chars (ud->job_activity_log, text, 
+			g_io_channel_write_chars (ud->activity_log, utf8_text, 
 									length, &outlength, NULL);
 #if defined(_WIN32)
 			g_io_channel_write_chars (ud->activity_log, "\n", 
-									one, &outlength, NULL);
+									one, &one, NULL);
 #endif
-			g_io_channel_flush(ud->job_activity_log, NULL);
+			g_io_channel_flush(ud->activity_log, NULL);
+			if (ud->job_activity_log)
+			{
+				g_io_channel_write_chars (ud->job_activity_log, utf8_text, 
+										length, &outlength, NULL);
+#if defined(_WIN32)
+				g_io_channel_write_chars (ud->activity_log, "\n", 
+										one, &outlength, NULL);
+#endif
+				g_io_channel_flush(ud->job_activity_log, NULL);
+			}
+			g_free(utf8_text);
 		}
 	}
 	if (text != NULL)
