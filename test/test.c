@@ -30,7 +30,7 @@
 #endif
 
 /* Options */
-static int    debug       = HB_DEBUG_NONE;
+static int    debug       = HB_DEBUG_ALL;
 static int    update      = 0;
 static int    dvdnav      = 0;
 static char * input       = NULL;
