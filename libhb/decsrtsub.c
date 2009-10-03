@@ -25,6 +25,7 @@ typedef struct srt_entry_s {
     long offset, duration;
     long start, stop;
     char text[1024];
+    int  pos;
 } srt_entry_t;
 
 /*
@@ -32,8 +33,14 @@ typedef struct srt_entry_s {
  */
 struct hb_work_private_s
 {
-    hb_job_t *job;
-    FILE *file;
+    hb_job_t * job;
+    FILE     * file;
+    char       buf[1024];
+    int        pos;
+    int        end;
+    char       utf8_buf[2048];
+    int        utf8_pos;
+    int        utf8_end;
     unsigned long current_time;
     unsigned long number_of_entries;
     unsigned long current_state;
@@ -60,12 +67,107 @@ static struct start_and_end read_time_from_string( const char* timeString )
     return result;
 }
 
+static int utf8_fill( hb_work_private_t * pv )
+{
+    int bytes, conversion = 0;
+    size_t out_size;
+
+    /* Align utf8 data to beginning of the buffer so that we can
+     * fill the buffer to its maximum */
+    memmove( pv->utf8_buf, pv->utf8_buf + pv->utf8_pos, pv->utf8_end - pv->utf8_pos );
+    pv->utf8_end -= pv->utf8_pos;
+    pv->utf8_pos = 0;
+    out_size = 2048 - pv->utf8_end;
+    while( out_size )
+    {
+        char *p, *q;
+        size_t in_size, retval;
+
+        if( pv->end == pv->pos )
+        {
+            bytes = fread( pv->buf, 1, 1024, pv->file );
+            pv->pos = 0;
+            pv->end = bytes;
+            if( bytes == 0 )
+                return 0;
+        }
+
+        p = pv->buf + pv->pos;
+        q = pv->utf8_buf + pv->utf8_end;
+        in_size = pv->end - pv->pos;
+
+        retval = iconv( pv->iconv_context, &p, &in_size, &q, &out_size);
+        if( q != pv->utf8_buf + pv->utf8_pos )
+            conversion = 1;
+
+        pv->utf8_end = q - pv->utf8_buf;
+        pv->pos = p - pv->buf;
+
+        if( ( retval == -1 ) && ( errno == EINVAL ) )
+        {
+            /* Incomplete multibyte sequence, read more data */
+            memmove( pv->buf, p, pv->end - pv->pos );
+            pv->end -= pv->pos;
+            pv->pos = 0;
+            bytes = fread( pv->buf + pv->end, 1, 1024 - pv->end, pv->file );
+            if( bytes == 0 )
+            {
+                if( !conversion )
+                    return 0;
+                else
+                    return 1;
+            }
+            pv->end += bytes;
+        } else if ( ( retval == -1 ) && ( errno == EILSEQ ) )
+        {
+            hb_error( "Invalid byte for codeset in input, discard byte" );
+            /* Try the next byte of the input */
+            pv->pos++;
+        } else if ( ( retval == -1 ) && ( errno == E2BIG ) )
+        {
+            /* buffer full */
+            return conversion;
+        }
+    }
+    return 1;
+}
+
+static int get_line( hb_work_private_t * pv, char *buf, int size )
+{
+    int i;
+    char c;
+
+    /* Find newline in converted UTF-8 buffer */
+    for( i = 0; i < size - 1; i++ )
+    {
+        if( pv->utf8_pos >= pv->utf8_end )
+        {
+            if( !utf8_fill( pv ) )
+            {
+                if( i )
+                    return 1;
+                else
+                    return 0;
+            }
+        }
+        c = pv->utf8_buf[pv->utf8_pos++];
+        if( c == '\n' )
+        {
+            buf[i] = '\n';
+            buf[i+1] = '\0';
+            return 1;
+        }
+        buf[i] = c;
+    }
+    buf[0] = '\0';
+    return 1;
+}
+
 /*
  * Read the SRT file and put the entries into the subtitle fifo for all to read
  */
 static hb_buffer_t *srt_read( hb_work_private_t *pv )
 {
-
     char line_buffer[1024];
 
     if( !pv->file )
@@ -73,7 +175,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
         return NULL;
     }
     
-    while( fgets( line_buffer, sizeof( line_buffer ), pv->file ) ) 
+    while( get_line( pv, line_buffer, sizeof( line_buffer ) ) ) 
     {
         switch (pv->current_state)
         {
@@ -94,10 +196,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 	
         case k_state_inEntry:
         {
-            char *p, *q;
-            size_t in_size;
-            size_t out_size;
-            size_t retval;
+            char *q;
+            int  size, len;
 
             // If the current line is empty, we assume this is the
             //	seperation betwene two entries. In case we are wrong,
@@ -107,28 +207,12 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 continue;
             }
             
-
-            for( q = pv->current_entry.text; (q < pv->current_entry.text+1024) && *q; q++);
-            
-            p = line_buffer;
-
-            in_size = strlen(line_buffer);
-            out_size = (pv->current_entry.text+1024) - q;
-
-            retval = iconv( pv->iconv_context, &p, &in_size, &q, &out_size);
-            *q = '\0';
-
-            if( ( retval == -1 ) && ( errno == EINVAL ) )
-            {
-                hb_error( "Invalid shift sequence" );
-            } else if ( ( retval == -1 ) && ( errno == EILSEQ ) )
-            {
-                hb_error( "Invalid byte for codeset in input, %"PRId64" bytes discarded", (int64_t)in_size);
-            } else if ( ( retval == -1 ) && ( errno == E2BIG ) )
-            {
-                hb_error( "Not enough space in output buffer");
-            }
-
+            q = pv->current_entry.text + pv->current_entry.pos;
+            len = strlen( line_buffer );
+            size = MIN(1024 - pv->current_entry.pos - 1, len );
+            memcpy(q, line_buffer, size);
+            pv->current_entry.pos += size;
+            pv->current_entry.text[pv->current_entry.pos] = '\0';
             break;				
         }
 	
@@ -140,7 +224,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             /*
              * Is this really new next entry begin?
              */
-            if (potential_entry_number == pv->number_of_entries + 1) {
+            if (potential_entry_number == pv->number_of_entries + 1) 
+            {
                 /*
                  * We found the next entry - or a really rare error condition
                  */
@@ -190,7 +275,9 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                     return buffer;
                 }
                 continue;
-            } else {
+            } 
+            else 
+            {
                 /*
                  * Well.. looks like we are in the wrong mode.. lets add the
                  * newline we misinterpreted...
