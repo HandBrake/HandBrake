@@ -822,7 +822,7 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	GValue *settings;
 
-	g_debug("srt_changed_cb ()");
+	g_debug("srt_file_changed_cb ()");
 	ghb_check_dependency(ud, widget, NULL);
 	ghb_widget_to_setting(ud->settings, widget);
 	settings = ghb_selected_subtitle_settings(ud);
@@ -1312,8 +1312,14 @@ ghb_reset_subtitles(signal_user_data_t *ud, GValue *settings)
 	count = ghb_array_len(slist);
 	for (ii = 0; ii < count; ii++)
 	{
+		int source;
+
 		subtitle = ghb_value_dup(ghb_array_get_nth(slist, ii));
-		ghb_add_subtitle(ud, subtitle);
+		source = ghb_settings_get_int(subtitle, "SubtitleSource");
+		if (source == SRTSUB)
+			ghb_add_srt(ud, subtitle);
+		else
+			ghb_add_subtitle(ud, subtitle);
 	}
 }
 

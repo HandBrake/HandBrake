@@ -630,7 +630,16 @@ update_widget(GtkWidget *widget, const GValue *value)
 		}
 		else
 		{
-			if (!g_file_test(str, G_FILE_TEST_IS_DIR))
+			if (g_file_test(str, G_FILE_TEST_IS_DIR))
+			{
+				gtk_file_chooser_set_current_folder(
+					GTK_FILE_CHOOSER(widget), str);
+			}
+			else if (g_file_test(str, G_FILE_TEST_EXISTS))
+			{
+				gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(widget), str);
+			}
+			else
 			{
 				gchar *dirname;
 
@@ -638,11 +647,6 @@ update_widget(GtkWidget *widget, const GValue *value)
 				gtk_file_chooser_set_current_folder(
 					GTK_FILE_CHOOSER(widget), dirname);
 				g_free(dirname);
-			}
-			else
-			{
-				gtk_file_chooser_set_current_folder(
-					GTK_FILE_CHOOSER(widget), str);
 			}
 		}
 	}
