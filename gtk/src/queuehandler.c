@@ -1277,6 +1277,8 @@ ghb_reload_queue(signal_user_data_t *ud)
 		{
 			GtkWidget *widget = GHB_WIDGET (ud->builder, "queue_window");
 			gtk_widget_show (widget);
+			widget = GHB_WIDGET (ud->builder, "show_queue");
+			gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), TRUE);
 
 			ud->queue = queue;
 			// First get rid of any old items we don't want
