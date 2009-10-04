@@ -1354,11 +1354,12 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gboolean allow_dolby = TRUE;
 	gboolean allow_dpl2 = TRUE;
 	gboolean allow_6ch = TRUE;
+	allow_mono = acodec & ~HB_ACODEC_LAME;
+	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (audio)
 	{
-		allow_mono =
-			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec & ~HB_ACODEC_LAME);
+		allow_mono = allow_mono &&
+			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA));
 		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -1367,9 +1368,8 @@ ghb_grey_combo_options(GtkBuilder *builder)
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) || 
 			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
-		allow_6ch =
+		allow_6ch = allow_6ch &&
 			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 	}
@@ -1381,10 +1381,14 @@ ghb_grey_combo_options(GtkBuilder *builder)
 }
 
 gint
-ghb_get_best_audio_bitrate(gint acodec, gint br)
+ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels)
 {
-	if ((acodec & HB_ACODEC_FAAC) && br > 160)
-		br = 160;
+	if (acodec & HB_ACODEC_FAAC)
+	{
+    	int maxbr = channels * 80;
+		if (br > maxbr)
+			br = maxbr;
+	}
 	return br;
 }
 
@@ -4262,19 +4266,29 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		}
 		else
 		{
+			int channels;
+
 			audio.out.mixdown = ghb_settings_combo_int(asettings, "AudioMixdown");
+			if (audio.out.mixdown == HB_AMIXDOWN_MONO)
+				channels = 1;
+			else if (audio.out.mixdown == HB_AMIXDOWN_6CH)
+				channels = 6;
+			else
+				channels = 2;
+
 			// Make sure the mixdown is valid and pick a new one if not.
 			audio.out.mixdown = ghb_get_best_mix(titleindex, 
 				audio.in.track, audio.out.codec, audio.out.mixdown);
 			audio.out.bitrate = 
 				ghb_settings_combo_int(asettings, "AudioBitrate");
-			audio.out.bitrate = ghb_get_best_audio_bitrate(
-				audio.out.codec, audio.out.bitrate);
 			gint srate = ghb_settings_combo_int(asettings, "AudioSamplerate");
 			if (srate == 0)	// 0 is same as source
 				audio.out.samplerate = taudio->in.samplerate;
 			else
 				audio.out.samplerate = srate;
+
+			audio.out.bitrate = ghb_get_best_audio_bitrate(
+				audio.out.codec, audio.out.bitrate, channels);
 		}
 
 		// Add it to the jobs audio list

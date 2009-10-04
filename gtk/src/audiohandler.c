@@ -68,17 +68,22 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		}
 		ghb_ui_update(ud, "AudioTrackDRCSlider", ghb_double_value(0));
 	}
-	else if (acodec == HB_ACODEC_FAAC && mix != HB_AMIXDOWN_6CH)
+	else if (acodec == HB_ACODEC_FAAC)
 	{
-		gint br;
+		gint br, last;
+
+		if (mix == HB_AMIXDOWN_6CH)
+			last = 448;
+		else
+			last = 160;
 
 		widget = GHB_WIDGET(ud->builder, "AudioBitrate");
 		gval = ghb_widget_value(widget);
 		br = ghb_lookup_combo_int("AudioBitrate", gval);
 		ghb_value_free(gval);
-		if (br > 160)
-			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(160));
-		ghb_set_default_bitrate_opts (ud->builder, 160);
+		if (br > last)
+			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(last));
+		ghb_set_default_bitrate_opts (ud->builder, last);
 	}
 	else
 	{
