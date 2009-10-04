@@ -949,6 +949,7 @@ namespace Handbrake
                 Subtitles.drp_subtitleTracks.Items.Add("Foreign Audio Search (Bitmap)");
                 Subtitles.drp_subtitleTracks.Items.AddRange(selectedTitle.Subtitles.ToArray());
                 Subtitles.drp_subtitleTracks.SelectedIndex = 0;
+                Subtitles.Clear();
                 Subtitles.setSubtitleTrackAuto();
             }
 

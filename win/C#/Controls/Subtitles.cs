@@ -24,6 +24,10 @@ namespace Handbrake.Controls
         private int FileContainer;
 
         // Public Functions
+        public void Clear()
+        {
+            lv_subList.Items.Clear();
+        }
         public void setSubtitleTrackAuto()
         {
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
