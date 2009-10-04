@@ -6139,11 +6139,11 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="settings_button">
+                      <object class="GtkToggleButton" id="hide_settings">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip-text" translatable="yes">Open Picture Settings and Preview window.  Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
-                        <property name="label" translatable="yes">Settings</property>
+                        <property name="tooltip-text" translatable="yes">Hide the picture settings window while leaving the preview visible.</property>
+                        <property name="label" translatable="yes">Hide Settings</property>
                         <signal handler="picture_settings_alt2_clicked_cb" name="clicked"/>
                       </object>
                       <packing>

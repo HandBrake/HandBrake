@@ -858,18 +858,21 @@ preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 picture_settings_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
-	GtkWidget *widget;
-	gboolean active;
+	GtkWidget *widget, *toggle;
+	gboolean active, hide_settings;
 	gint x, y;
 
 	g_debug("picture_settings_clicked_cb()");
+	toggle = GHB_WIDGET (ud->builder, "hide_settings");
+	hide_settings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle));
+
 	widget = GHB_WIDGET (ud->builder, "settings_window");
 	active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget));
 	x = ghb_settings_get_int(ud->settings, "settings_x");
 	y = ghb_settings_get_int(ud->settings, "settings_y");
 	if (x >= 0 && y >= 0)
 		gtk_window_move(GTK_WINDOW(widget), x, y);
-	set_visible(widget, active);
+	set_visible(widget, active && !hide_settings);
 	if (ghb_settings_get_boolean(ud->settings, "show_preview"))
 	{
 		widget = GHB_WIDGET (ud->builder, "preview_window");
@@ -945,43 +948,25 @@ picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gboolean active;
 	gint signal_id;
 	gint handler_id = 0;
+	GtkWidget *window;
 
 	g_debug("picture_settings_alt2_clicked_cb()");
-	toggle = GHB_WIDGET (ud->builder, "show_picture");
-	active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(toggle));
-	if (active)
+	toggle = GHB_WIDGET (ud->builder, "hide_settings");
+	active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(toggle));
+	window = GHB_WIDGET(ud->builder, "settings_window");
+	if (!active)
 	{
-		// I don't want deleting the settings window to also remove the
-		// preview window, but changing the toggle will do this, so temporarily
-		// ignore the toggled signal
-		signal_id = g_signal_lookup("toggled", GTK_TYPE_TOGGLE_TOOL_BUTTON);
-		if (signal_id > 0)
-		{
-			// Valid signal id found.  This should always succeed.
-			handler_id = g_signal_handler_find((gpointer)toggle, 
-												G_SIGNAL_MATCH_ID, 
-												signal_id, 0, 0, 0, 0);
-			if (handler_id > 0)
-			{
-				// This should also always succeed
-				g_signal_handler_block ((gpointer)toggle, handler_id);
-			}
-		}
+		gtk_button_set_label(GTK_BUTTON(toggle), "Hide Settings");
+		gtk_widget_set_tooltip_text(toggle, 
+			"Hide the picture settings window while "
+			"leaving the preview visible.");
+		gtk_widget_show(window);
 	}
-
-	GtkWidget *widget = GHB_WIDGET (ud->builder, "settings_window");
-	gint x, y;
-
-	x = ghb_settings_get_int(ud->settings, "settings_x");
-	y = ghb_settings_get_int(ud->settings, "settings_y");
-	if (x >= 0 && y >= 0)
-		gtk_window_move(GTK_WINDOW(widget), x, y);
-	set_visible(widget, !active);
-	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(toggle), !active);
-
-	if (handler_id > 0)
+	else
 	{
-		g_signal_handler_unblock ((gpointer)toggle, handler_id);
+		gtk_button_set_label(GTK_BUTTON(toggle), "Show Settings");
+		gtk_widget_set_tooltip_text(toggle, "Show picture settings.");
+		gtk_widget_hide(window);
 	}
 }
 
@@ -1004,7 +989,8 @@ preview_window_delete_cb(
 	signal_user_data_t *ud)
 {
 	live_preview_stop(ud);
-	gtk_widget_hide(widget);
+	widget = GHB_WIDGET (ud->builder, "show_picture");
+	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
 	return TRUE;
 }
 
@@ -1014,34 +1000,10 @@ settings_window_delete_cb(
 	GdkEvent *event, 
 	signal_user_data_t *ud)
 {
-	gint signal_id;
-	gint handler_id = 0;
-
-	gtk_widget_hide(widget);
+	live_preview_stop(ud);
 	widget = GHB_WIDGET (ud->builder, "show_picture");
-
-	// I don't want deleting the settings window to also remove the
-	// preview window, but changing the toggle will do this, so temporarily
-	// ignore the toggled signal
-	signal_id = g_signal_lookup("toggled", GTK_TYPE_TOGGLE_TOOL_BUTTON);
-	if (signal_id > 0)
-	{
-		// Valid signal id found.  This should always succeed.
-		handler_id = g_signal_handler_find((gpointer)widget, G_SIGNAL_MATCH_ID, 
-											signal_id, 0, 0, 0, 0);
-		if (handler_id > 0)
-		{
-			// This should also always succeed
-			g_signal_handler_block ((gpointer)widget, handler_id);
-		}
-	}
-
 	gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(widget), FALSE);
 
-	if (handler_id > 0)
-	{
-		g_signal_handler_unblock ((gpointer)widget, handler_id);
-	}
 	return TRUE;
 }
 
@@ -1148,7 +1110,7 @@ ghb_curved_rect_mask(gint width, gint height, gint radius)
 	double w, h;
 
 	if (!width || !height)
-    	return NULL;
+		return NULL;
 
 	shape = (GdkDrawable *)gdk_pixmap_new (NULL, width, height, 1);
 
