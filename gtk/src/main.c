@@ -697,6 +697,21 @@ main (int argc, char *argv[])
 	ghb_hal_init();
 #endif
 
+	if (!ghb_lock_file("queue_lock"))
+	{
+    	const gchar *markup =
+        	N_("<b><big>Another instance of HandBrake is already running.</big></b>\n"
+        	"\n"
+        	"Only one instance of HandBrake may run.\n");
+        GtkWidget *dialog = gtk_message_dialog_new_with_markup(NULL,
+            GTK_DIALOG_MODAL,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_CLOSE,
+            _(markup));
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+        exit(EXIT_FAILURE);
+	}
 	ud = g_malloc0(sizeof(signal_user_data_t));
 	ud->debug = ghb_debug;
 	g_log_set_handler (NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);

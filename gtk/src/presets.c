@@ -11,6 +11,10 @@
  * any later version.
  * 
  */
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <glib.h>
 #include <glib-object.h>
 #include <glib/gstdio.h>
@@ -1110,6 +1114,24 @@ load_plist(const gchar *name)
 	g_free(config);
 	g_free(path);
 	return plist;
+}
+
+gboolean
+ghb_lock_file(const gchar *name)
+{
+	gchar *config, *path;
+	int fd, lock = 0;
+
+	config = ghb_get_user_config_dir(NULL);
+	path = g_strdup_printf ("%s/%s", config, name);
+	fd = open(path, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
+	if (fd >= 0)
+		lock = lockf(fd, F_TLOCK, 0);
+	if (lock)
+		close(fd);
+	g_free(config);
+	g_free(path);
+	return !lock;
 }
 
 static void

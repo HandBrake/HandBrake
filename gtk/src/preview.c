@@ -946,8 +946,6 @@ picture_settings_alt2_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	GtkWidget *toggle;
 	gboolean active;
-	gint signal_id;
-	gint handler_id = 0;
 	GtkWidget *window;
 
 	g_debug("picture_settings_alt2_clicked_cb()");
