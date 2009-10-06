@@ -2775,7 +2775,7 @@ static int ffmpeg_is_keyframe( hb_stream_t *stream )
             // we do it ourselves here. The decoder gets messed up if it
             // doesn't get a SEQ header first so we consider that to be a key frame.
             pkt = stream->ffmpeg_pkt->data;
-            if ( pkt[0] && pkt[1] && pkt[2] == 1 && pkt[3] == 0x0f )
+            if ( !pkt[0] && !pkt[1] && pkt[2] == 1 && pkt[3] == 0x0f )
                 return 1;
 
             return 0;
