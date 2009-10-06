@@ -36,6 +36,10 @@
 		<integer>0</integer>
 		<key>show_crop</key>
 		<false />
+		<key>hide_settings</key>
+		<false />
+		<key>show_picture</key>
+		<false />
 		<key>single_title</key>
 		<integer>1</integer>
 		<key>start_chapter</key>

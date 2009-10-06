@@ -1450,6 +1450,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		set_destination(ud);
 	}
+	ghb_preview_set_visible(ud);
 }
 
 G_MODULE_EXPORT void

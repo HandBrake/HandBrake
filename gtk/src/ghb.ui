@@ -4728,7 +4728,7 @@ Requires subme >= 6 and trellis >= 1.</property>
             <property name="shadow_type">GTK_SHADOW_IN</property>
             <child>
               <object class="GtkTextView" id="activity_view">
-                <property name="width_request">400</property>
+                <property name="width_request">500</property>
                 <property name="height_request">500</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
