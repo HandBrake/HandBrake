@@ -4715,6 +4715,7 @@ Requires subme >= 6 and trellis >= 1.</property>
             <property name="visible">True</property>
           </object>
           <packing>
+            <property name="padding">5</property>
             <property name="expand">False</property>
             <property name="position">1</property>
           </packing>
@@ -4728,8 +4729,8 @@ Requires subme >= 6 and trellis >= 1.</property>
             <property name="shadow_type">GTK_SHADOW_IN</property>
             <child>
               <object class="GtkTextView" id="activity_view">
-                <property name="width_request">500</property>
-                <property name="height_request">500</property>
+                <property name="width_request">600</property>
+                <property name="height_request">600</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>

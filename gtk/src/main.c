@@ -523,7 +523,7 @@ IoRedirect(signal_user_data_t *ud)
 {
 	GIOChannel *channel;
 	gint pfd[2];
-	gchar *config, *path;
+	gchar *config, *path, *str;
 
 	// I'm opening a pipe and attaching the writer end to stderr
 	// The reader end will be polled by main event loop and I'll get
@@ -539,7 +539,9 @@ IoRedirect(signal_user_data_t *ud)
 	path = g_strdup_printf("%s/%s", config, "Activity.log");
 	ud->activity_log = g_io_channel_new_file (path, "w", NULL);
 	ud->job_activity_log = NULL;
-	ghb_ui_update(ud, "activity_location", ghb_string_value(path));
+	str = g_strdup_printf("<big><b>%s</b></big>", path);
+	ghb_ui_update(ud, "activity_location", ghb_string_value(str));
+	g_free(str);
 	g_free(path);
 	g_free(config);
 	// Set encoding to raw.

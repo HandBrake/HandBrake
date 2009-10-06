@@ -625,7 +625,7 @@ update_widget(GtkWidget *widget, const GValue *value)
 	}
 	else if (type == GTK_TYPE_LABEL)
 	{
-		gtk_label_set_text (GTK_LABEL(widget), str);
+		gtk_label_set_markup (GTK_LABEL(widget), str);
 	}
 	else if (type == GTK_TYPE_FILE_CHOOSER_BUTTON)
 	{
