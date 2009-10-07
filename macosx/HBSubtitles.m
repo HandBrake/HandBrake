@@ -366,6 +366,7 @@
     [newSubtitleSourceTrack setObject:displayname forKey:@"sourceTrackName"];
     /* Subtitle Source track type (Source, Srt, etc.) */
     [newSubtitleSourceTrack setObject:@"SRT" forKey:@"sourceTrackType"];
+    [newSubtitleSourceTrack setObject:@"SRT" forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source track type */
     [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
     /* Subtitle Source track popup isPictureSub */ 
@@ -390,6 +391,9 @@
     {
         [newSubtitleSrtTrack setObject:[NSNumber numberWithInt:[subtitleSourceArray count]] forKey:@"subtitleSourceTrackNum"];
     }
+    
+    [newSubtitleSrtTrack setObject:@"SRT" forKey:@"sourceTrackType"];
+    [newSubtitleSrtTrack setObject:@"SRT" forKey:@"subtitleSourceTrackType"];
     /* Subtitle Source track popup language */
     [newSubtitleSrtTrack setObject:displayname forKey:@"subtitleSourceTrackName"];
     /* Subtitle Source track popup isPictureSub */
