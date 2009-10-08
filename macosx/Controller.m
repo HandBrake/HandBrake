@@ -1098,6 +1098,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     if (fHandle)
     {
         hb_state_t s;
+        
+        hb_get_state( fHandle, &s );
+        if (s.state == HB_STATE_SCANNING && ([ident isEqualToString: StartEncodingIdentifier] || [ident isEqualToString: AddToQueueIdentifier]))
+            return NO;
+        
         hb_get_state2( fQueueEncodeLibhb, &s );
         
         if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING)
