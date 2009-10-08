@@ -1773,7 +1773,6 @@ namespace Handbrake
             VideoFile
         }
         #endregion
-
         // This is the END of the road ****************************************
     }
 }

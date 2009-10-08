@@ -383,7 +383,6 @@ namespace Handbrake.Controls
             this.AudioTrackGroup.Controls.Add(this.label65);
             this.AudioTrackGroup.Controls.Add(this.label67);
             this.AudioTrackGroup.Controls.Add(this.label66);
-            this.AudioTrackGroup.ForeColor = System.Drawing.Color.Black;
             this.AudioTrackGroup.Location = new System.Drawing.Point(16, 67);
             this.AudioTrackGroup.Name = "AudioTrackGroup";
             this.AudioTrackGroup.Size = new System.Drawing.Size(689, 77);

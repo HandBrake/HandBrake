@@ -94,7 +94,6 @@
             this.SubTitlesGroup.Controls.Add(this.check_burned);
             this.SubTitlesGroup.Controls.Add(this.check_forced);
             this.SubTitlesGroup.Controls.Add(this.drp_subtitleTracks);
-            this.SubTitlesGroup.ForeColor = System.Drawing.Color.Black;
             this.SubTitlesGroup.Location = new System.Drawing.Point(6, 6);
             this.SubTitlesGroup.Name = "SubTitlesGroup";
             this.SubTitlesGroup.Size = new System.Drawing.Size(669, 50);
@@ -323,7 +322,6 @@
             this.SRTGroup.Controls.Add(this.srt_charcode);
             this.SRTGroup.Controls.Add(this.label2);
             this.SRTGroup.Controls.Add(this.srt_lang);
-            this.SRTGroup.ForeColor = System.Drawing.Color.Black;
             this.SRTGroup.Location = new System.Drawing.Point(6, 6);
             this.SRTGroup.Name = "SRTGroup";
             this.SRTGroup.Size = new System.Drawing.Size(669, 50);
