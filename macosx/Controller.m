@@ -6359,6 +6359,16 @@ return YES;
         /* First we check to see if we are using the current audio track layout based on AudioList array */
         if ([chosenPreset objectForKey:@"AudioList"])
         {
+            
+            /* pointer to this track's mixdown, codec, sample rate and bitrate NSPopUpButton's */
+            NSPopUpButton * trackLangPopUp = nil;
+            NSPopUpButton * mixdownPopUp = nil;
+            NSPopUpButton * audiocodecPopUp = nil;
+            NSPopUpButton * sampleratePopUp = nil;
+            NSPopUpButton * bitratePopUp = nil;
+            NSSlider      * drcSlider = nil;
+            
+            
             /* Populate the audio widgets based on the contents of the AudioList array */
             int i = 0;
             NSEnumerator *enumerator = [[chosenPreset objectForKey:@"AudioList"] objectEnumerator];
@@ -6368,74 +6378,105 @@ return YES;
                 i++;
                 if( i == 1 )
                 {
-                    if ([fAudLang1PopUp indexOfSelectedItem] == 0)
-                    {
-                        [fAudLang1PopUp selectItemAtIndex: 1];
-                    }
-                    [self audioTrackPopUpChanged: fAudLang1PopUp];
-                    [fAudTrack1CodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
-                    /* check our pref for core audio and use it in place of faac if applicable */
-                    if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                        [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
-                    {
-                        [fAudTrack1CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                    }                    
-                    
-                    [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-                    [fAudTrack1MixPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
-                    /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                     * mixdown*/
-                    if  ([fAudTrack1MixPopUp selectedItem] == nil)
-                    {
-                        [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-                    }
-                    [fAudTrack1RatePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioSamplerate"]];
-                    /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                    if (![[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
-                    {
-                        [fAudTrack1BitratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioBitrate"]];
-                    }
-                    [fAudTrack1DrcSlider setFloatValue:[[tempObject objectForKey:@"AudioTrackDRCSlider"] floatValue]];
-                    [self audioDRCSliderChanged: fAudTrack1DrcSlider];
+                    trackLangPopUp = fAudLang1PopUp;
+                    mixdownPopUp = fAudTrack1MixPopUp;
+                    audiocodecPopUp = fAudTrack1CodecPopUp;
+                    sampleratePopUp = fAudTrack1RatePopUp;
+                    bitratePopUp = fAudTrack1BitratePopUp;
+                    drcSlider = fAudTrack1DrcSlider;
                 }
-                
                 if( i == 2 )
                 {
-                    
-                    if ([fAudLang2PopUp indexOfSelectedItem] == 0)
-                    {
-                        [fAudLang2PopUp selectItemAtIndex: 1];
-                    }
-                    [self audioTrackPopUpChanged: fAudLang2PopUp];
-                    [fAudTrack2CodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
-                    /* check our pref for core audio and use it in place of faac if applicable */
-                    if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
-                        [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
-                    {
-                        [fAudTrack2CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
-                    }
-                    [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-                    [fAudTrack2MixPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
-                    /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-                     * mixdown*/
-                    if  ([fAudTrack2MixPopUp selectedItem] == nil)
-                    {
-                        [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-                    }
-                    [fAudTrack2RatePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioSamplerate"]];
-                    /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-                    if (![[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
-                    {
-                        [fAudTrack2BitratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioBitrate"]];
-                    }
-                    [fAudTrack2DrcSlider setFloatValue:[[tempObject objectForKey:@"AudioTrackDRCSlider"] floatValue]];
-                    [self audioDRCSliderChanged: fAudTrack2DrcSlider];
-                    
+                    trackLangPopUp = fAudLang2PopUp;
+                    mixdownPopUp = fAudTrack2MixPopUp;
+                    audiocodecPopUp = fAudTrack2CodecPopUp;
+                    sampleratePopUp = fAudTrack2RatePopUp;
+                    bitratePopUp = fAudTrack2BitratePopUp;
+                    drcSlider = fAudTrack2DrcSlider;
+                }
+                if( i == 3 )
+                {
+                    trackLangPopUp = fAudLang3PopUp;
+                    mixdownPopUp = fAudTrack3MixPopUp;
+                    audiocodecPopUp = fAudTrack3CodecPopUp;
+                    sampleratePopUp = fAudTrack3RatePopUp;
+                    bitratePopUp = fAudTrack3BitratePopUp;
+                    drcSlider = fAudTrack3DrcSlider;
+                }
+                if( i == 4 )
+                {
+                    trackLangPopUp = fAudLang4PopUp;
+                    mixdownPopUp = fAudTrack4MixPopUp;
+                    audiocodecPopUp = fAudTrack4CodecPopUp;
+                    sampleratePopUp = fAudTrack4RatePopUp;
+                    bitratePopUp = fAudTrack4BitratePopUp;
+                    drcSlider = fAudTrack4DrcSlider;
                 }
                 
+                
+                if ([trackLangPopUp indexOfSelectedItem] == 0)
+                {
+                    [trackLangPopUp selectItemAtIndex: 1];
+                }
+                [self audioTrackPopUpChanged: trackLangPopUp];
+                [audiocodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
+                /* check our pref for core audio and use it in place of faac if applicable */
+                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                    [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
+                {
+                    [audiocodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
+                }                    
+                
+                [self audioTrackPopUpChanged: audiocodecPopUp];
+                [mixdownPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
+                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
+                 * mixdown*/
+                if  ([mixdownPopUp selectedItem] == nil)
+                {
+                    [self audioTrackPopUpChanged: audiocodecPopUp];
+                }
+                [sampleratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioSamplerate"]];
+                /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
+                if (![[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
+                {
+                    [bitratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioBitrate"]];
+                }
+                [drcSlider setFloatValue:[[tempObject objectForKey:@"AudioTrackDRCSlider"] floatValue]];
+                [self audioDRCSliderChanged: drcSlider];
+                
+                
+                /* If we are any track greater than 1 check to make sure we have a matching source codec is using ac3 passthru or dts passthru,
+                 * if not we will set the track to "None". Track 1 is allowed to mixdown to a suitable DPL2 mix if we cannot passthru */
+                
+                if( i > 1 )
+                {
+                    /* Check to see if the preset asks for a passhthru track (AC3 or DTS) and verify there is a matching source track if not, set the track to "None". */
+                    if (([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"] || [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"])  && [trackLangPopUp indexOfSelectedItem] != 0)
+                    {
+                        hb_audio_config_t * audio;
+                        /* get the audio source audio codec */
+                        audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [trackLangPopUp indexOfSelectedItem] - 1 );
+                        if ([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"] && audio->in.codec != HB_ACODEC_AC3 ||
+                            [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"] && audio->in.codec != HB_ACODEC_DCA )
+                        {
+                            /* We have a preset using ac3 passthru but no ac3 source audio, so set the track to "None" and bail */
+                            if ([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
+                            {
+                                [self writeToActivityLog: "Preset calls for AC3 Pass thru ..."];
+                            }
+                            if ([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"])
+                            {
+                                [self writeToActivityLog: "Preset calls for DTS Pass thru ..."];
+                            }
+                            [self writeToActivityLog: "No matching source codec, setting track  %d to None", i];
+                            [trackLangPopUp selectItemAtIndex: 0];
+                            [self audioTrackPopUpChanged: trackLangPopUp]; 
+                        }   
+                    }
+                }
             }
             
-             /* We now cleanup any extra audio tracks that may have been previously set if we need to */
+            /* We now cleanup any extra audio tracks that may have been previously set if we need to */
             
             if (i < 4)
             {
@@ -6489,6 +6530,7 @@ return YES;
                 [fAudTrack1DrcSlider setFloatValue:[[chosenPreset objectForKey:@"Audio1TrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: fAudTrack1DrcSlider];
             }
+            
             if ([chosenPreset objectForKey:@"Audio2Track"] > 0)
             {
                 if ([fAudLang2PopUp indexOfSelectedItem] == 0)
