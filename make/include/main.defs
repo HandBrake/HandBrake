@@ -40,6 +40,10 @@ ifneq (,$(filter $(BUILD.system),cygwin mingw))
     MODULES += contrib/zlib
 endif
 
+ifneq (,$(filter $(BUILD.system),solaris))
+    MODULES += contrib/libiconv
+endif
+
 ## these must come after contrib since some contrib modules are optional
 MODULES += libhb
 
