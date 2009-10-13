@@ -48,7 +48,7 @@
         @"YES",              @"UseCoreAudio",
         @"NO",              @"DefaultMpegName",
         @"YES",             @"DefaultCrf",
-        @"NO",              @"UseDvdNav",
+        @"YES",              @"UseDvdNav",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
         desktopDirectory,   @"LastDestinationDirectory",
