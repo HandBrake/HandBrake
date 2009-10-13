@@ -148,7 +148,7 @@
 		<key>nocheckvquality</key>
 		<false />
 		<key>use_dvdnav</key>
-		<false />
+		<true />
 		<key>reduce_hd_preview</key>
 		<true />
 		<key>preview_count</key>
