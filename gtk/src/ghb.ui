@@ -4136,57 +4136,31 @@ Requires subme >= 6 and trellis >= 1.</property>
                               <object class="GtkVBox" id="vbox3">
                                 <property name="visible">True</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="constant_rate_factor">
-                                    <property name="label" translatable="yes">Use CRF (Instead of CQP) for Constant Quality encodes</property>
+                                  <object class="GtkHBox" id="hbox6">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                    <signal name="toggled" handler="pref_changed_cb"/>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkAlignment" id="alignment59">
-                                    <property name="visible">True</property>
-                                    <property name="left_padding">22</property>
+                                    <property name="spacing">4</property>
                                     <child>
-                                      <object class="GtkHBox" id="hbox6">
+                                      <object class="GtkComboBox" id="VideoQualityGranularity">
+                                        <property name="width_request">55</property>
                                         <property name="visible">True</property>
-                                        <property name="spacing">4</property>
-                                        <child>
-                                          <object class="GtkComboBox" id="VideoQualityGranularity">
-                                            <property name="width_request">55</property>
-                                            <property name="visible">True</property>
-                                            <signal name="changed" handler="vqual_granularity_changed_cb"/>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label85">
-                                            <property name="visible">True</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Constant Quality fractional granularity</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
+                                        <signal name="changed" handler="vqual_granularity_changed_cb"/>
                                       </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label85">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Constant Quality fractional granularity</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>

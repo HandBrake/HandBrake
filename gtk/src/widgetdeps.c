@@ -31,7 +31,6 @@ static dependency_t dep_map[] =
 	{"vquality_type_bitrate", "VideoAvgBitrate", "TRUE", FALSE, FALSE},
 	{"vquality_type_target", "VideoTargetSize", "TRUE", FALSE, FALSE},
 	{"vquality_type_constant", "VideoQualitySlider", "TRUE", FALSE, FALSE},
-	{"vquality_type_constant", "constant_rate_factor", "TRUE", FALSE, FALSE},
 	{"vquality_type_constant", "VideoTwoPass", "TRUE", TRUE, FALSE},
 	{"vquality_type_constant", "VideoTurboTwoPass", "TRUE", TRUE, FALSE},
 	{"VideoTwoPass", "VideoTurboTwoPass", "TRUE", FALSE, FALSE},

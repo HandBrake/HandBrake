@@ -4361,13 +4361,8 @@ format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 	{
 		case HB_VCODEC_X264:
 		{
-			gboolean crf;
-			crf = ghb_settings_get_boolean(ud->settings, "constant_rate_factor");
 			percent = 100. * (51 - val) / 51.;
-			if (crf)
-				return g_strdup_printf("RF: %.4g (%.0f%%)", val, percent);
-			else
-				return g_strdup_printf("QP: %.4g (%.0f%%)", val, percent);
+			return g_strdup_printf("RF: %.4g (%.0f%%)", val, percent);
 		} break;
 
 		case HB_VCODEC_FFMPEG:
