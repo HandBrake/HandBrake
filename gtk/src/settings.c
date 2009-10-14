@@ -631,7 +631,12 @@ update_widget(GtkWidget *widget, const GValue *value)
 	{
 		GtkFileChooserAction act;
 		act = gtk_file_chooser_get_action(GTK_FILE_CHOOSER(widget));
-		if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+		if (str[0] == 0)
+		{
+			// Do nothing
+			;
+		}
+		else if (act == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
 			act == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 		{
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(widget), str);
