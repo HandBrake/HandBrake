@@ -89,7 +89,12 @@ static int utf8_fill( hb_work_private_t * pv )
             pv->pos = 0;
             pv->end = bytes;
             if( bytes == 0 )
-                return 0;
+            {
+                if( conversion )
+                    return 1;
+                else
+                    return 0;
+            }
         }
 
         p = pv->buf + pv->pos;
