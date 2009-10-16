@@ -111,7 +111,7 @@ namespace Handbrake.Controls
                 SubtitleInfo track = SubList[lv_subList.SelectedIndices[0]];
 
                 int c = 0;
-                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[1].Text.ToLower().Contains(".srt"))  // We have an SRT
+                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.ToLower().Contains(".srt"))  // We have an SRT
                 {
                     foreach (var item in drp_subtitleTracks.Items)
                     {
