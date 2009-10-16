@@ -950,7 +950,7 @@ namespace Handbrake
                 Subtitles.drp_subtitleTracks.Items.AddRange(selectedTitle.Subtitles.ToArray());
                 Subtitles.drp_subtitleTracks.SelectedIndex = 0;
                 Subtitles.Clear();
-                Subtitles.setSubtitleTrackAuto();
+                Subtitles.SetSubtitleTrackAuto();
             }
 
             // Run the autoName & chapterNaming functions
@@ -1125,7 +1125,7 @@ namespace Handbrake
             }
 
             AudioSettings.SetContainer(drop_format.Text);
-            Subtitles.setContainer(drop_format.SelectedIndex);
+            Subtitles.SetContainer(drop_format.SelectedIndex);
 
             if (drop_format.Text.Contains("MP4"))
             {
@@ -1773,6 +1773,7 @@ namespace Handbrake
             VideoFile
         }
         #endregion
+
         // This is the END of the road ****************************************
     }
 }

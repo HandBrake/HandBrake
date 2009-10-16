@@ -29,139 +29,65 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.drp_subtitleTracks = new System.Windows.Forms.ComboBox();
-            this.SubTitlesGroup = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.check_default = new System.Windows.Forms.CheckBox();
-            this.check_burned = new System.Windows.Forms.CheckBox();
-            this.check_forced = new System.Windows.Forms.CheckBox();
-            this.btn_addSubTrack = new System.Windows.Forms.Button();
+            this.btn_addTrack = new System.Windows.Forms.Button();
             this.btn_RemoveSubTrack = new System.Windows.Forms.Button();
             this.lv_subList = new System.Windows.Forms.ListView();
-            this.id = new System.Windows.Forms.ColumnHeader();
             this.col_Source = new System.Windows.Forms.ColumnHeader();
-            this.forced = new System.Windows.Forms.ColumnHeader();
-            this.burned = new System.Windows.Forms.ColumnHeader();
-            this.defaultTrack = new System.Windows.Forms.ColumnHeader();
-            this.type = new System.Windows.Forms.ColumnHeader();
-            this.srtOffset = new System.Windows.Forms.ColumnHeader();
+            this.col_forced = new System.Windows.Forms.ColumnHeader();
+            this.col_burned = new System.Windows.Forms.ColumnHeader();
+            this.col_defaultTrack = new System.Windows.Forms.ColumnHeader();
+            this.col_srtLang = new System.Windows.Forms.ColumnHeader();
+            this.col_srtChar = new System.Windows.Forms.ColumnHeader();
+            this.col_srtOffset = new System.Windows.Forms.ColumnHeader();
             this.subMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_moveup = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_movedown = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.label68 = new System.Windows.Forms.Label();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.SRTGroup = new System.Windows.Forms.GroupBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.check_default_srt = new System.Windows.Forms.CheckBox();
-            this.srt_offset = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.srt_browse = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.srt_charcode = new System.Windows.Forms.ComboBox();
+            this.SubGroupBox = new System.Windows.Forms.GroupBox();
+            this.drp_subtitleTracks = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.srt_offset = new System.Windows.Forms.NumericUpDown();
             this.srt_lang = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.srt_charcode = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.check_forced = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.check_default = new System.Windows.Forms.CheckBox();
+            this.check_burned = new System.Windows.Forms.CheckBox();
             this.btn_srtAdd = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.SubTitlesGroup.SuspendLayout();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.subMenu.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.SRTGroup.SuspendLayout();
+            this.SubGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.srt_offset)).BeginInit();
             this.SuspendLayout();
             // 
-            // drp_subtitleTracks
+            // btn_addTrack
             // 
-            this.drp_subtitleTracks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_subtitleTracks.FormattingEnabled = true;
-            this.drp_subtitleTracks.Location = new System.Drawing.Point(57, 20);
-            this.drp_subtitleTracks.Name = "drp_subtitleTracks";
-            this.drp_subtitleTracks.Size = new System.Drawing.Size(194, 21);
-            this.drp_subtitleTracks.TabIndex = 50;
-            this.drp_subtitleTracks.SelectedIndexChanged += new System.EventHandler(this.drp_subtitleTracks_SelectedIndexChanged);
-            // 
-            // SubTitlesGroup
-            // 
-            this.SubTitlesGroup.BackColor = System.Drawing.Color.Transparent;
-            this.SubTitlesGroup.Controls.Add(this.label1);
-            this.SubTitlesGroup.Controls.Add(this.check_default);
-            this.SubTitlesGroup.Controls.Add(this.check_burned);
-            this.SubTitlesGroup.Controls.Add(this.check_forced);
-            this.SubTitlesGroup.Controls.Add(this.drp_subtitleTracks);
-            this.SubTitlesGroup.Location = new System.Drawing.Point(6, 6);
-            this.SubTitlesGroup.Name = "SubTitlesGroup";
-            this.SubTitlesGroup.Size = new System.Drawing.Size(669, 50);
-            this.SubTitlesGroup.TabIndex = 71;
-            this.SubTitlesGroup.TabStop = false;
-            this.SubTitlesGroup.Text = "Selected Track: New Track";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(37, 13);
-            this.label1.TabIndex = 72;
-            this.label1.Text = "Track:";
-            // 
-            // check_default
-            // 
-            this.check_default.AutoSize = true;
-            this.check_default.Location = new System.Drawing.Point(426, 22);
-            this.check_default.Name = "check_default";
-            this.check_default.Size = new System.Drawing.Size(61, 17);
-            this.check_default.TabIndex = 71;
-            this.check_default.Text = "Default";
-            this.check_default.UseVisualStyleBackColor = true;
-            this.check_default.CheckedChanged += new System.EventHandler(this.check_default_CheckedChanged);
-            // 
-            // check_burned
-            // 
-            this.check_burned.AutoSize = true;
-            this.check_burned.Location = new System.Drawing.Point(347, 22);
-            this.check_burned.Name = "check_burned";
-            this.check_burned.Size = new System.Drawing.Size(73, 17);
-            this.check_burned.TabIndex = 70;
-            this.check_burned.Text = "Burned In";
-            this.check_burned.UseVisualStyleBackColor = true;
-            this.check_burned.CheckedChanged += new System.EventHandler(this.check_burned_CheckedChanged);
-            // 
-            // check_forced
-            // 
-            this.check_forced.AutoSize = true;
-            this.check_forced.Location = new System.Drawing.Point(257, 22);
-            this.check_forced.Name = "check_forced";
-            this.check_forced.Size = new System.Drawing.Size(84, 17);
-            this.check_forced.TabIndex = 69;
-            this.check_forced.Text = "Forced Only";
-            this.check_forced.UseVisualStyleBackColor = true;
-            this.check_forced.CheckedChanged += new System.EventHandler(this.check_forced_CheckedChanged);
-            // 
-            // btn_addSubTrack
-            // 
-            this.btn_addSubTrack.BackColor = System.Drawing.Color.Transparent;
-            this.btn_addSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_addSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_addSubTrack.Location = new System.Drawing.Point(16, 38);
-            this.btn_addSubTrack.Name = "btn_addSubTrack";
-            this.btn_addSubTrack.Size = new System.Drawing.Size(78, 23);
-            this.btn_addSubTrack.TabIndex = 68;
-            this.btn_addSubTrack.Text = "Add Track";
-            this.btn_addSubTrack.UseVisualStyleBackColor = false;
-            this.btn_addSubTrack.Click += new System.EventHandler(this.btn_addSubTrack_Click);
+            this.btn_addTrack.BackColor = System.Drawing.Color.Transparent;
+            this.btn_addTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_addTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_addTrack.Location = new System.Drawing.Point(16, 38);
+            this.btn_addTrack.Name = "btn_addTrack";
+            this.btn_addTrack.Size = new System.Drawing.Size(57, 23);
+            this.btn_addTrack.TabIndex = 68;
+            this.btn_addTrack.Text = "Add";
+            this.toolTip.SetToolTip(this.btn_addTrack, "Add a new subtitle track to the list below");
+            this.btn_addTrack.UseVisualStyleBackColor = false;
+            this.btn_addTrack.Click += new System.EventHandler(this.btn_addSubTrack_Click);
             // 
             // btn_RemoveSubTrack
             // 
             this.btn_RemoveSubTrack.BackColor = System.Drawing.Color.Transparent;
             this.btn_RemoveSubTrack.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_RemoveSubTrack.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(230, 38);
+            this.btn_RemoveSubTrack.Location = new System.Drawing.Point(79, 38);
             this.btn_RemoveSubTrack.Name = "btn_RemoveSubTrack";
             this.btn_RemoveSubTrack.Size = new System.Drawing.Size(73, 23);
             this.btn_RemoveSubTrack.TabIndex = 69;
@@ -172,61 +98,60 @@
             // lv_subList
             // 
             this.lv_subList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.id,
             this.col_Source,
-            this.forced,
-            this.burned,
-            this.defaultTrack,
-            this.type,
-            this.srtOffset});
+            this.col_forced,
+            this.col_burned,
+            this.col_defaultTrack,
+            this.col_srtLang,
+            this.col_srtChar,
+            this.col_srtOffset});
             this.lv_subList.ContextMenuStrip = this.subMenu;
             this.lv_subList.FullRowSelect = true;
             this.lv_subList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lv_subList.HideSelection = false;
             this.lv_subList.LabelWrap = false;
-            this.lv_subList.Location = new System.Drawing.Point(16, 169);
+            this.lv_subList.Location = new System.Drawing.Point(16, 146);
             this.lv_subList.MultiSelect = false;
             this.lv_subList.Name = "lv_subList";
-            this.lv_subList.Size = new System.Drawing.Size(688, 114);
+            this.lv_subList.Size = new System.Drawing.Size(688, 137);
             this.lv_subList.TabIndex = 70;
             this.lv_subList.UseCompatibleStateImageBehavior = false;
             this.lv_subList.View = System.Windows.Forms.View.Details;
             this.lv_subList.SelectedIndexChanged += new System.EventHandler(this.lb_subList_SelectedIndexChanged);
             // 
-            // id
-            // 
-            this.id.Text = "Track ID";
-            this.id.Width = 65;
-            // 
             // col_Source
             // 
             this.col_Source.Text = "Track";
-            this.col_Source.Width = 150;
+            this.col_Source.Width = 139;
             // 
-            // forced
+            // col_forced
             // 
-            this.forced.Text = "Forced Only";
-            this.forced.Width = 88;
+            this.col_forced.Text = "Forced Only";
+            this.col_forced.Width = 74;
             // 
-            // burned
+            // col_burned
             // 
-            this.burned.Text = "Burned In";
-            this.burned.Width = 100;
+            this.col_burned.Text = "Burned In";
+            this.col_burned.Width = 64;
             // 
-            // defaultTrack
+            // col_defaultTrack
             // 
-            this.defaultTrack.Text = "Default";
-            this.defaultTrack.Width = 100;
+            this.col_defaultTrack.Text = "Default";
+            this.col_defaultTrack.Width = 56;
             // 
-            // type
+            // col_srtLang
             // 
-            this.type.Text = "Type";
-            this.type.Width = 110;
+            this.col_srtLang.Text = "Srt Lang";
             // 
-            // srtOffset
+            // col_srtChar
             // 
-            this.srtOffset.Text = "Srt Offset";
-            this.srtOffset.Width = 70;
+            this.col_srtChar.Text = "Srt CharCode";
+            this.col_srtChar.Width = 110;
+            // 
+            // col_srtOffset
+            // 
+            this.col_srtOffset.Text = "Srt Offset";
+            this.col_srtOffset.Width = 70;
             // 
             // subMenu
             // 
@@ -276,87 +201,76 @@
             this.label68.TabIndex = 67;
             this.label68.Text = "Subtitles";
             // 
-            // tabControl1
+            // SubGroupBox
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(15, 71);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(689, 92);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 72;
+            this.SubGroupBox.BackColor = System.Drawing.Color.Transparent;
+            this.SubGroupBox.Controls.Add(this.drp_subtitleTracks);
+            this.SubGroupBox.Controls.Add(this.label10);
+            this.SubGroupBox.Controls.Add(this.label9);
+            this.SubGroupBox.Controls.Add(this.label2);
+            this.SubGroupBox.Controls.Add(this.srt_offset);
+            this.SubGroupBox.Controls.Add(this.srt_lang);
+            this.SubGroupBox.Controls.Add(this.label8);
+            this.SubGroupBox.Controls.Add(this.srt_charcode);
+            this.SubGroupBox.Controls.Add(this.label4);
+            this.SubGroupBox.Controls.Add(this.check_forced);
+            this.SubGroupBox.Controls.Add(this.label7);
+            this.SubGroupBox.Controls.Add(this.label3);
+            this.SubGroupBox.Controls.Add(this.check_default);
+            this.SubGroupBox.Controls.Add(this.check_burned);
+            this.SubGroupBox.Location = new System.Drawing.Point(16, 67);
+            this.SubGroupBox.Name = "SubGroupBox";
+            this.SubGroupBox.Size = new System.Drawing.Size(688, 73);
+            this.SubGroupBox.TabIndex = 72;
+            this.SubGroupBox.TabStop = false;
+            this.SubGroupBox.Text = "Selected Track: New Track";
             // 
-            // tabPage1
+            // drp_subtitleTracks
             // 
-            this.tabPage1.Controls.Add(this.SubTitlesGroup);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(681, 66);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Subtitles";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.drp_subtitleTracks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_subtitleTracks.FormattingEnabled = true;
+            this.drp_subtitleTracks.Location = new System.Drawing.Point(6, 35);
+            this.drp_subtitleTracks.Name = "drp_subtitleTracks";
+            this.drp_subtitleTracks.Size = new System.Drawing.Size(164, 21);
+            this.drp_subtitleTracks.TabIndex = 74;
+            this.drp_subtitleTracks.SelectedIndexChanged += new System.EventHandler(this.drp_subtitleTracks_SelectedIndexChanged);
             // 
-            // tabPage2
+            // label10
             // 
-            this.tabPage2.Controls.Add(this.SRTGroup);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(681, 66);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "External SRT";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(308, 19);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(42, 13);
+            this.label10.TabIndex = 81;
+            this.label10.Text = "Default";
             // 
-            // SRTGroup
+            // label9
             // 
-            this.SRTGroup.BackColor = System.Drawing.Color.Transparent;
-            this.SRTGroup.Controls.Add(this.label6);
-            this.SRTGroup.Controls.Add(this.check_default_srt);
-            this.SRTGroup.Controls.Add(this.srt_offset);
-            this.SRTGroup.Controls.Add(this.label5);
-            this.SRTGroup.Controls.Add(this.srt_browse);
-            this.SRTGroup.Controls.Add(this.label4);
-            this.SRTGroup.Controls.Add(this.label3);
-            this.SRTGroup.Controls.Add(this.srt_charcode);
-            this.SRTGroup.Controls.Add(this.label2);
-            this.SRTGroup.Controls.Add(this.srt_lang);
-            this.SRTGroup.Location = new System.Drawing.Point(6, 6);
-            this.SRTGroup.Name = "SRTGroup";
-            this.SRTGroup.Size = new System.Drawing.Size(669, 50);
-            this.SRTGroup.TabIndex = 72;
-            this.SRTGroup.TabStop = false;
-            this.SRTGroup.Text = "Selected Track: New Track";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(248, 19);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(54, 13);
+            this.label9.TabIndex = 80;
+            this.label9.Text = "Burned In";
             // 
-            // label6
+            // label2
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(466, 23);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(20, 13);
-            this.label6.TabIndex = 81;
-            this.label6.Text = "ms";
-            // 
-            // check_default_srt
-            // 
-            this.check_default_srt.AutoSize = true;
-            this.check_default_srt.Location = new System.Drawing.Point(491, 22);
-            this.check_default_srt.Name = "check_default_srt";
-            this.check_default_srt.Size = new System.Drawing.Size(61, 17);
-            this.check_default_srt.TabIndex = 80;
-            this.check_default_srt.Text = "Default";
-            this.check_default_srt.UseVisualStyleBackColor = true;
-            this.check_default_srt.CheckedChanged += new System.EventHandler(this.check_default_srt_CheckedChanged);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(371, 19);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.TabIndex = 72;
+            this.label2.Text = "Srt Language";
             // 
             // srt_offset
             // 
+            this.srt_offset.Enabled = false;
             this.srt_offset.Increment = new decimal(new int[] {
             10,
             0,
             0,
             0});
-            this.srt_offset.Location = new System.Drawing.Point(402, 20);
+            this.srt_offset.Location = new System.Drawing.Point(549, 35);
             this.srt_offset.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -367,49 +281,30 @@
             this.srt_offset.TabIndex = 79;
             this.srt_offset.ValueChanged += new System.EventHandler(this.srt_offset_ValueChanged);
             // 
-            // label5
+            // srt_lang
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(555, 23);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(27, 13);
-            this.label5.TabIndex = 78;
-            this.label5.Text = "File:";
+            this.srt_lang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.srt_lang.Enabled = false;
+            this.srt_lang.FormattingEnabled = true;
+            this.srt_lang.Location = new System.Drawing.Point(356, 35);
+            this.srt_lang.Name = "srt_lang";
+            this.srt_lang.Size = new System.Drawing.Size(103, 21);
+            this.srt_lang.TabIndex = 50;
+            this.srt_lang.SelectedIndexChanged += new System.EventHandler(this.srt_lang_SelectedIndexChanged);
             // 
-            // srt_browse
+            // label8
             // 
-            this.srt_browse.BackColor = System.Drawing.Color.Transparent;
-            this.srt_browse.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.srt_browse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.srt_browse.Location = new System.Drawing.Point(588, 18);
-            this.srt_browse.Name = "srt_browse";
-            this.srt_browse.Size = new System.Drawing.Size(67, 23);
-            this.srt_browse.TabIndex = 77;
-            this.srt_browse.Text = "Browse";
-            this.srt_browse.UseVisualStyleBackColor = false;
-            this.srt_browse.Click += new System.EventHandler(this.srt_browse_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(354, 23);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(42, 13);
-            this.label4.TabIndex = 76;
-            this.label4.Text = "Offset:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(202, 23);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(62, 13);
-            this.label3.TabIndex = 74;
-            this.label3.Text = "Char Code:";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(177, 19);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(65, 13);
+            this.label8.TabIndex = 79;
+            this.label8.Text = "Forced Only";
             // 
             // srt_charcode
             // 
             this.srt_charcode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.srt_charcode.Enabled = false;
             this.srt_charcode.FormattingEnabled = true;
             this.srt_charcode.Items.AddRange(new object[] {
             "ANSI_X3.4-1968",
@@ -443,41 +338,80 @@
             "UTF-8",
             "UTF-16",
             "UTF-32"});
-            this.srt_charcode.Location = new System.Drawing.Point(270, 20);
+            this.srt_charcode.Location = new System.Drawing.Point(465, 35);
             this.srt_charcode.Name = "srt_charcode";
             this.srt_charcode.Size = new System.Drawing.Size(78, 21);
             this.srt_charcode.TabIndex = 73;
             this.srt_charcode.SelectedIndexChanged += new System.EventHandler(this.srt_charcode_SelectedIndexChanged);
             // 
-            // label2
+            // label4
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 23);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 13);
-            this.label2.TabIndex = 72;
-            this.label2.Text = "Language:";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(548, 19);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(62, 13);
+            this.label4.TabIndex = 76;
+            this.label4.Text = "Offset (ms)";
             // 
-            // srt_lang
+            // check_forced
             // 
-            this.srt_lang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.srt_lang.FormattingEnabled = true;
-            this.srt_lang.Location = new System.Drawing.Point(70, 20);
-            this.srt_lang.Name = "srt_lang";
-            this.srt_lang.Size = new System.Drawing.Size(126, 21);
-            this.srt_lang.TabIndex = 50;
-            this.srt_lang.SelectedIndexChanged += new System.EventHandler(this.srt_lang_SelectedIndexChanged);
+            this.check_forced.AutoSize = true;
+            this.check_forced.Location = new System.Drawing.Point(199, 38);
+            this.check_forced.Name = "check_forced";
+            this.check_forced.Size = new System.Drawing.Size(15, 14);
+            this.check_forced.TabIndex = 75;
+            this.check_forced.UseVisualStyleBackColor = true;
+            this.check_forced.CheckedChanged += new System.EventHandler(this.check_forced_CheckedChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(69, 19);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(37, 13);
+            this.label7.TabIndex = 78;
+            this.label7.Text = "Track:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(471, 19);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(58, 13);
+            this.label3.TabIndex = 74;
+            this.label3.Text = "Char Code";
+            // 
+            // check_default
+            // 
+            this.check_default.AutoSize = true;
+            this.check_default.Location = new System.Drawing.Point(320, 38);
+            this.check_default.Name = "check_default";
+            this.check_default.Size = new System.Drawing.Size(15, 14);
+            this.check_default.TabIndex = 77;
+            this.check_default.UseVisualStyleBackColor = true;
+            this.check_default.CheckedChanged += new System.EventHandler(this.check_default_CheckedChanged);
+            // 
+            // check_burned
+            // 
+            this.check_burned.AutoSize = true;
+            this.check_burned.Location = new System.Drawing.Point(260, 38);
+            this.check_burned.Name = "check_burned";
+            this.check_burned.Size = new System.Drawing.Size(15, 14);
+            this.check_burned.TabIndex = 76;
+            this.check_burned.UseVisualStyleBackColor = true;
+            this.check_burned.CheckedChanged += new System.EventHandler(this.check_burned_CheckedChanged);
             // 
             // btn_srtAdd
             // 
             this.btn_srtAdd.BackColor = System.Drawing.Color.Transparent;
             this.btn_srtAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_srtAdd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_srtAdd.Location = new System.Drawing.Point(100, 38);
+            this.btn_srtAdd.Location = new System.Drawing.Point(158, 38);
             this.btn_srtAdd.Name = "btn_srtAdd";
-            this.btn_srtAdd.Size = new System.Drawing.Size(124, 23);
+            this.btn_srtAdd.Size = new System.Drawing.Size(88, 23);
             this.btn_srtAdd.TabIndex = 73;
-            this.btn_srtAdd.Text = "Add External SRT";
+            this.btn_srtAdd.Text = "Import SRT";
+            this.toolTip.SetToolTip(this.btn_srtAdd, "Add a new SRT file to the \"track\" dropdown menu.");
             this.btn_srtAdd.UseVisualStyleBackColor = false;
             this.btn_srtAdd.Click += new System.EventHandler(this.btn_srtAdd_Click);
             // 
@@ -490,23 +424,18 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.btn_srtAdd);
-            this.Controls.Add(this.btn_RemoveSubTrack);
+            this.Controls.Add(this.SubGroupBox);
+            this.Controls.Add(this.btn_addTrack);
             this.Controls.Add(this.label68);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.btn_RemoveSubTrack);
             this.Controls.Add(this.lv_subList);
-            this.Controls.Add(this.btn_addSubTrack);
+            this.Controls.Add(this.btn_srtAdd);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Subtitles";
             this.Size = new System.Drawing.Size(719, 300);
-            this.SubTitlesGroup.ResumeLayout(false);
-            this.SubTitlesGroup.PerformLayout();
             this.subMenu.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.SRTGroup.ResumeLayout(false);
-            this.SRTGroup.PerformLayout();
+            this.SubGroupBox.ResumeLayout(false);
+            this.SubGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.srt_offset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -515,35 +444,23 @@
 
         #endregion
 
-        internal System.Windows.Forms.ComboBox drp_subtitleTracks;
-        private System.Windows.Forms.GroupBox SubTitlesGroup;
         private System.Windows.Forms.Button btn_RemoveSubTrack;
-        private System.Windows.Forms.Button btn_addSubTrack;
+        private System.Windows.Forms.Button btn_addTrack;
         internal System.Windows.Forms.ListView lv_subList;
-        private System.Windows.Forms.ColumnHeader id;
         private System.Windows.Forms.ColumnHeader col_Source;
-        private System.Windows.Forms.ColumnHeader forced;
-        private System.Windows.Forms.ColumnHeader burned;
+        private System.Windows.Forms.ColumnHeader col_forced;
+        private System.Windows.Forms.ColumnHeader col_burned;
         internal System.Windows.Forms.Label label68;
-        private System.Windows.Forms.ColumnHeader defaultTrack;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox check_default;
-        private System.Windows.Forms.CheckBox check_burned;
-        private System.Windows.Forms.CheckBox check_forced;
+        private System.Windows.Forms.ColumnHeader col_defaultTrack;
         private System.Windows.Forms.ContextMenuStrip subMenu;
         private System.Windows.Forms.ToolStripMenuItem mnu_moveup;
         private System.Windows.Forms.ToolStripMenuItem mnu_movedown;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mnu_remove;
-        internal System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btn_srtAdd;
-        private System.Windows.Forms.ColumnHeader type;
-        private System.Windows.Forms.ColumnHeader srtOffset;
-        private System.Windows.Forms.GroupBox SRTGroup;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button srt_browse;
+        private System.Windows.Forms.ColumnHeader col_srtChar;
+        private System.Windows.Forms.ColumnHeader col_srtOffset;
+        private System.Windows.Forms.GroupBox SubGroupBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         internal System.Windows.Forms.ComboBox srt_charcode;
@@ -551,7 +468,15 @@
         internal System.Windows.Forms.ComboBox srt_lang;
         private System.Windows.Forms.NumericUpDown srt_offset;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.CheckBox check_default_srt;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox check_default;
+        private System.Windows.Forms.CheckBox check_burned;
+        private System.Windows.Forms.CheckBox check_forced;
+        internal System.Windows.Forms.ComboBox drp_subtitleTracks;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ColumnHeader col_srtLang;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

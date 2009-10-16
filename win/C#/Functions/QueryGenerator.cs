@@ -384,29 +384,26 @@ namespace Handbrake.Functions
                 string srtDefault = String.Empty;
                 int srtCount = 0;
 
-                foreach (ListViewItem item in mainWindow.Subtitles.lv_subList.Items)
+                List<Controls.SubtitleInfo> SubList = mainWindow.Subtitles.GetSubtitleInfoList();
+
+                foreach (var item in SubList)
                 {
                     string itemToAdd, trackID;
 
-                    if (item.SubItems.Count != 5) // We have an SRT file
+                    if (item.SrtPath != "-") // We have an SRT file
                     {
                         srtCount++; // SRT track id.
-                        string[] trackData = item.SubItems[1].Text.Split(',');
-                        if (trackData != null)
-                        {
-                            string charCode = trackData[1].Replace("(", "").Replace(")", "").Trim();
-                            string realLangCode = langMap[trackData[0].Trim()];
 
-                            srtLang += srtLang == "" ? realLangCode : "," + realLangCode;
-                            srtCodeset += srtCodeset == "" ? charCode : "," + charCode;
-                        }
-                        if (item.SubItems[4].Text == "Yes") // default
+                        srtLang += srtLang == "" ? langMap[item.SrtLang] : "," + langMap[item.SrtLang];
+                        srtCodeset += srtCodeset == "" ? item.SrtCharCode : "," + item.SrtCharCode;
+
+                        if (item.Default == "Yes") // default
                             srtDefault = srtCount.ToString();
 
-                        itemToAdd = item.SubItems[5].Text;
+                        itemToAdd = item.SrtPath;
                         srtFile += srtFile == "" ? itemToAdd : "," + itemToAdd;
 
-                        itemToAdd = item.SubItems[6].Text;
+                        itemToAdd = item.SrtOffset.ToString();
                         srtOffset += srtOffset == "" ? itemToAdd : "," + itemToAdd;
                     }
                     else // We have Bitmap or CC
@@ -414,11 +411,11 @@ namespace Handbrake.Functions
                         string[] tempSub;
 
                         // Find --subtitle <string>
-                        if (item.SubItems[1].Text.Contains("Foreign Audio Search"))
+                        if (item.Track.Contains("Foreign Audio Search"))
                             itemToAdd = "scan";
                         else
                         {
-                            tempSub = item.SubItems[1].Text.Split(' ');
+                            tempSub = item.Track.Split(' ');
                             itemToAdd = tempSub[0];
                         }
 
@@ -426,26 +423,25 @@ namespace Handbrake.Functions
 
                         // Find --subtitle-forced
                         itemToAdd = "";
-                        tempSub = item.SubItems[1].Text.Split(' ');
+                        tempSub = item.Track.Split(' ');
                         trackID = tempSub[0];
 
-                        if (item.SubItems[2].Text == "Yes")
+                        if (item.Forced == "Yes")
                             itemToAdd = trackID;
 
                         if (itemToAdd != "")
                             subtitleForced += subtitleForced == "" ? itemToAdd : "," + itemToAdd;
 
                         // Find --subtitle-burn and --subtitle-default
-                        tempSub = item.SubItems[1].Text.Split(' ');
                         trackID = tempSub[0];
 
                         if (trackID.Trim() == "Foreign")
                             trackID = "scan";
 
-                        if (item.SubItems[3].Text == "Yes") // burn
+                        if (item.Burned == "Yes") // burn
                             subtitleBurn = trackID;
 
-                        if (item.SubItems[4].Text == "Yes") // default
+                        if (item.Default == "Yes") // default
                             subtitleDefault = trackID;
                     }
                 }
