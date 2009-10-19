@@ -3369,12 +3369,7 @@ bool one_burned = FALSE;
             job->ipod_atom = 0;
         }
 		
-		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
-         Currently only used with Constant Quality setting*/
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [[queueToApply objectForKey:@"VideoQualityType"] intValue] == 2)
-		{
-	        job->crf = 1;
-		}
+		
 		/* Below Sends x264 options to the core library if x264 is selected*/
 		/* Lets use this as per Nyx, Thanks Nyx!*/
 		job->x264opts = (char *)calloc(1024, 1); /* Fixme, this just leaks */

@@ -47,7 +47,6 @@
         @"English",         @"DefaultLanguage",
         @"YES",              @"UseCoreAudio",
         @"NO",              @"DefaultMpegName",
-        @"YES",             @"DefaultCrf",
         @"YES",              @"UseDvdNav",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
