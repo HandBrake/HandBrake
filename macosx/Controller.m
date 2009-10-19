@@ -2870,12 +2870,6 @@ fWorkingCount = 0;
     
 	if( job->vcodec & HB_VCODEC_X264 )
     {
-		/* Set this flag to switch from Constant Quantizer(default) to Constant Rate Factor Thanks jbrjake
-         Currently only used with Constant Quality setting*/
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0 && [fVidQualityMatrix selectedRow] == 2)
-		{
-	        job->crf = 1;
-		}
 		
 		/* Below Sends x264 options to the core library if x264 is selected*/
 		/* Lets use this as per Nyx, Thanks Nyx!*/
@@ -4569,7 +4563,7 @@ the user is using "Custom" settings by determining the sender*/
      * so that we can choose a new similar value on the new slider scale */
     float previousMaxValue = [fVidQualitySlider maxValue];
     float previousPercentOfSliderScale = [fVidQualitySlider floatValue] / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1);
-    NSString * qpRFLabelString = @"QP:";
+    NSString * qpRFLabelString = @"RF:";
     /* x264 0-51 */
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
     {
@@ -4578,10 +4572,6 @@ the user is using "Custom" settings by determining the sender*/
         /* As x264 allows for qp/rf values that are fractional, we get the value from the preferences */
         int fractionalGranularity = 1 / [[NSUserDefaults standardUserDefaults] floatForKey:@"x264CqSliderFractional"];
         [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultCrf"] > 0)
-        {
-            qpRFLabelString = @"RF:";
-        }
     }
     /* ffmpeg  1-31 */
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_FFMPEG )
