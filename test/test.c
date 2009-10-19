@@ -99,7 +99,6 @@ static int    chapter_start = 0;
 static int    chapter_end   = 0;
 static int    chapter_markers = 0;
 static char * marker_file   = NULL;
-static int	  crf			= 1;
 static char	  *x264opts		= NULL;
 static char	  *x264opts2 	= NULL;
 static int	  maxHeight		= 0;
@@ -591,7 +590,6 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->crf = 1;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -674,7 +672,6 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->crf = 1;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -716,7 +713,6 @@ static int HandleEvents( hb_handle_t * h )
                     job->largeFileSize = 1;
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->crf = 1;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -758,7 +754,6 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->crf = 1;
                     if( !atracks )
                     {
                         atracks = strdup("1");
@@ -799,7 +794,6 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     vcodec = HB_VCODEC_X264;
                     job->vquality = 20.0;
-                    job->crf = 1;
                     if( !atracks )
                     {
                         atracks = strdup("1,1");
@@ -1937,11 +1931,6 @@ static int HandleEvents( hb_handle_t * h )
 
             job->file = strdup( output );
 
-            if( crf )
-            {
-                job->crf = 1;
-            }
-            
             if( color_matrix )
             {
                 job->color_matrix = color_matrix;
@@ -2208,7 +2197,6 @@ static void ShowHelp()
     "                            same style as mencoder:\n"
     "                            option1=value1:option2=value2\n"
     "    -q, --quality <float>   Set video quality (0.0..1.0)\n"
-    "    -Q, --cqp               Use with -q for CQP instead of CRF\n"
     "    -S, --size <MB>         Set target size\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
@@ -2565,7 +2553,6 @@ static int ParseOptions( int argc, char ** argv )
             { "ab",          required_argument, NULL,    'B' },
             { "rate",        required_argument, NULL,    'r' },
             { "arate",       required_argument, NULL,    'R' },
-            { "cqp",         no_argument,       NULL,    'Q' },
             { "x264opts",    required_argument, NULL,    'x' },
             { "turbo",       no_argument,       NULL,    'T' },
             { "maxHeight",   required_argument, NULL,    'Y' },
@@ -2588,7 +2575,7 @@ static int ParseOptions( int argc, char ** argv )
         int c;
 
 		c = getopt_long( argc, argv,
-						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UF::N:e:E:2dD:7895gOw:l:n:b:q:S:B:r:R:Qx:TY:X:Z:z",
+						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UF::N:e:E:2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -2962,9 +2949,6 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     abitrates = strdup( optarg );
                 }
-                break;
-            case 'Q':
-                crf = 0;
                 break;
             case 'x':
                 x264opts = strdup( optarg );

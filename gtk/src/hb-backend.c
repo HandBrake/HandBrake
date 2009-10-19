@@ -4309,7 +4309,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 	dest_str = ghb_settings_get_string(js, "destination");
 	job->file = dest_str;
-	job->crf = 1;
 
 	const GValue *subtitle_list;
 	gint subtitle;

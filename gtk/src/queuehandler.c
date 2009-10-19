@@ -256,7 +256,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		vqvalue = ghb_settings_get_double(settings, "VideoQualitySlider");
 		vq_desc = "Constant Quality:";
 		vqstr = g_strdup_printf("%d", (gint)vqvalue);
-		vq_units = "(crf)";
+		vq_units = "(RF)";
 	}
 	fps = ghb_settings_get_string(settings, "VideoFramerate");
 	if (strcmp("source", fps) == 0)

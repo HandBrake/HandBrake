@@ -209,7 +209,6 @@ struct hb_job_s
          cfr:               0 (vfr), 1 (cfr), 2 (pfr) [see render.c]
          pass:              0, 1 or 2 (or -1 for scan)
          h264_level:        vestigial boolean to decide if we're encoding for iPod
-         crf:               boolean for whether to use constant rate factor with x264
          x264opts:          string of extra x264 options
          areBframes:        boolean to note if b-frames are included in x264opts */
 #define HB_VCODEC_MASK   0x0000FF
@@ -227,7 +226,6 @@ struct hb_job_s
     int             pass;
     int             h264_13;
     int             h264_level;
-    int             crf;
     char            *x264opts;
     int             areBframes;
     int             color_matrix;
