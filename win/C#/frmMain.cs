@@ -692,10 +692,10 @@ namespace Handbrake
                     if (Properties.Settings.Default.PromptOnUnmatchingQueries && !string.IsNullOrEmpty(specifiedQuery) && generatedQuery != specifiedQuery)
                     {
                         DialogResult result = MessageBox.Show("The query under the \"Query Editor\" tab " +
-                            "does not match the current GUI settings. Because the manual query takes " +
+                            "does not match the current GUI settings.\n\nBecause the manual query takes " +
                             "priority over the GUI, your recently updated settings will not be taken " +
                             "into account when encoding this job." + Environment.NewLine + Environment.NewLine +
-                            "Do you want to replace the manual query with the GUI-generated query?",
+                            "Do you want to replace the manual query with the updated GUI-generated query?",
                             "Manual Query does not Match GUI",
                             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk,
                             MessageBoxDefaultButton.Button3);
@@ -718,7 +718,7 @@ namespace Handbrake
                     }
                     else
                     {
-                        query = generatedQuery;
+                        query = specifiedQuery;
                     }
 
                     DialogResult overwrite = DialogResult.Yes;
