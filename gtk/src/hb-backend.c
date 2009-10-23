@@ -3114,7 +3114,12 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	if (busy) return;
 	busy = TRUE;
 
-	
+	if (!ud->dont_clear_presets && (keep_width || keep_height))
+	{
+		ghb_settings_set_int(ud->settings, "PictureWidth", 0);
+		ghb_settings_set_int(ud->settings, "PictureHeight", 0);
+	}
+
 	// First configure widgets
 	mod = ghb_settings_combo_int(ud->settings, "PictureModulus");
 	pic_par = ghb_settings_combo_int(ud->settings, "PicturePAR");
@@ -3250,7 +3255,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		job->anamorphic.dar_height = 0;
 
 		if (keep_height && pic_par == 2)
-			width = ((double)height * crop_width / crop_height) + 0.5;
+			width = ((double)height * crop_width / crop_height) + mod / 2;
 		job->width = width;
 		job->height = height;
 		job->maxWidth = max_width;
