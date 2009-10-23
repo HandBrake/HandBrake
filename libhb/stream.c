@@ -114,6 +114,7 @@ struct hb_stream_s
     int     ts_pos[kMaxNumberDecodeStreams];
     int8_t  ts_skipbad[kMaxNumberDecodeStreams];
     int8_t  ts_streamcont[kMaxNumberDecodeStreams];
+    uint8_t ts_pkt_summary[kMaxNumberDecodeStreams][8];
 
     hb_buffer_t *fwrite_buf;      /* PS buffer (set by hb_ts_stream_decode) */
 
@@ -2274,11 +2275,31 @@ static int hb_ts_stream_decode( hb_stream_t *stream, hb_buffer_t *obuf )
             int continuity = (buf[3] & 0xF);
             if ( continuity == stream->ts_streamcont[curstream] )
             {
-                // we got a duplicate packet (usually used to introduce
-                // a PCR when one is needed). The only thing that can
-                // change in the dup is the PCR which we grabbed above
-                // so ignore the rest.
-                continue;
+                // Spliced transport streams can have duplicate 
+                // continuity counts at the splice boundary.
+                // Test to see if the packet is really a duplicate
+                // by comparing packet summaries to see if they
+                // match.
+                uint8_t summary[8];
+
+                summary[0] = adaption;
+                summary[1] = adapt_len;
+                if (adapt_len + 4 + 6 + 9 <= 188)
+                {
+                    memcpy(&summary[2], buf+4+adapt_len+9, 6);
+                }
+                else
+                {
+                    memset(&summary[2], 0, 6);
+                }
+                if ( memcmp( summary, stream->ts_pkt_summary[curstream], 8 ) == 0 )
+                {
+                    // we got a duplicate packet (usually used to introduce
+                    // a PCR when one is needed). The only thing that can
+                    // change in the dup is the PCR which we grabbed above
+                    // so ignore the rest.
+                    continue;
+                }
             }
             if ( !start && (stream->ts_streamcont[curstream] != -1) &&
                  !stream->ts_skipbad[curstream] &&
@@ -2288,10 +2309,26 @@ static int hb_ts_stream_decode( hb_stream_t *stream, hb_buffer_t *obuf )
                         (int)continuity,
                         (stream->ts_streamcont[curstream] + 1) & 0xf );
                 stream->ts_streamcont[curstream] = continuity;
-				continue;
-			}
-			stream->ts_streamcont[curstream] = continuity;
-		}
+                continue;
+            }
+            stream->ts_streamcont[curstream] = continuity;
+
+            // Save a summary of this packet for later duplicate
+            // testing.  The summary includes some header information
+            // and payload bytes.  Should be enough to detect 
+            // non-duplicates.
+            stream->ts_pkt_summary[curstream][0] = adaption;
+            stream->ts_pkt_summary[curstream][1] = adapt_len;
+            if (adapt_len + 4 + 6 + 9 <= 188)
+            {
+                memcpy(&stream->ts_pkt_summary[curstream][2], 
+                        buf+4+adapt_len+9, 6);
+            }
+            else
+            {
+                memset(&stream->ts_pkt_summary[curstream][2], 0, 6);
+            }
+        }
 
         /* If we get here the packet is valid - process its data */
 

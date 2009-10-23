@@ -141,7 +141,10 @@ static stream_timing_t *id_to_st( hb_reader_t *r, const hb_buffer_t *buf )
         }
         st->id = buf->id;
         st->average = 30.*90.;
-        st->last = buf->renderOffset - st->average;
+        if ( r->saw_video )
+            st->last = buf->renderOffset - st->average;
+        else
+            st->last = -st->average;
         if ( ( st->is_audio = is_audio( r, buf->id ) ) != 0 )
         {
             r->saw_audio = 1;
