@@ -2154,6 +2154,8 @@ fWorkingCount = 0;
     /* if we are custom anamorphic, store the exact storage, par and display dims */
     if (fTitle->job->anamorphic.mode == 3)
     {
+        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.modulus] forKey:@"PicturePARModulus"];
+        
         [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PicturePARStorageWidth"];
         [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PicturePARStorageHeight"];
         
@@ -3396,6 +3398,8 @@ bool one_burned = FALSE;
         /* insert our custom values here for capuj */
         job->width = [[queueToApply objectForKey:@"PicturePARStorageWidth"]  intValue];
         job->height = [[queueToApply objectForKey:@"PicturePARStorageHeight"]  intValue];
+        
+        job->anamorphic.modulus = [[queueToApply objectForKey:@"PicturePARModulus"] intValue];
         
         job->anamorphic.par_width = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
         job->anamorphic.par_height = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
