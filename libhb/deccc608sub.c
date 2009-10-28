@@ -1637,7 +1637,8 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
             } else {
                 if (line == 2) {
                     wb->enc_buffer_used += encode_line (wb->enc_buffer+wb->enc_buffer_used,
-                                                        (unsigned char *) " ");
+                                                        (unsigned char *) "\n");
+                    line = 3;
                 } else {
                     wb->enc_buffer_used += encode_line (wb->enc_buffer+wb->enc_buffer_used,
                                                         (unsigned char *) " "); 

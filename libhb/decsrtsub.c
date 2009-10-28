@@ -237,7 +237,8 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 if( *pv->current_entry.text )
                 {
                     long length;
-                    char *p;
+                    char *p, *q;
+                    int  line = 1;
                     uint64_t start_time = ( pv->current_entry.start + 
                                             pv->subtitle->config.offset ) * 90;
                     uint64_t stop_time = ( pv->current_entry.stop + 
@@ -254,13 +255,32 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
 
                     length = strlen( pv->current_entry.text );
 
-                    for( p = pv->current_entry.text; *p; p++)
+                    for( q = p = pv->current_entry.text; *p; p++)
                     {
-                        if( *p == '\n' || *p == '\r' )
+                        if( *p == '\n' )
                         {
-                            *p = ' ';
+                            if ( line == 1 )
+                            {
+                                *q = *p;
+                                line = 2;
+                            }
+                            else
+                            {
+                                *q = ' ';
+                            }
+                            q++;
+                        }
+                        else if( *p != '\r' )
+                        {
+                            *q = *p;
+                            q++;
+                        }
+                        else
+                        {
+                            length--;
                         }
                     }
+                    *q = '\0';
 
                     buffer = hb_buffer_init( length + 1 );
 
