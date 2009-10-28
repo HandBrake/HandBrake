@@ -1119,6 +1119,7 @@ load_plist(const gchar *name)
 gboolean
 ghb_lock_file(const gchar *name)
 {
+#if !defined(_WIN32)
 	gchar *config, *path;
 	int fd, lock = 0;
 
@@ -1132,6 +1133,9 @@ ghb_lock_file(const gchar *name)
 	g_free(config);
 	g_free(path);
 	return !lock;
+#else
+	return 1;
+#endif
 }
 
 static void
