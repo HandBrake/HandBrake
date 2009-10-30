@@ -541,6 +541,7 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <property name="icon_size">5</property>
+            <property name="toolbar_style">both</property>
             <child>
               <object class="GtkToolButton" id="sourcetoolbutton">
                 <property name="visible">True</property>
