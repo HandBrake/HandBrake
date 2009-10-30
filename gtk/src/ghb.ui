@@ -4741,6 +4741,7 @@ Requires subme >= 6 and trellis >= 1.</property>
         <child>
           <object class="GtkToolbar" id="queue_toolbar">
             <property name="visible">True</property>
+            <property name="toolbar_style">both</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
               <object class="GtkToolButton" id="queue_start2">
