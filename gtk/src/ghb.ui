@@ -541,10 +541,10 @@
           <object class="GtkToolbar" id="toolbar1">
             <property name="visible">True</property>
             <property name="icon_size">5</property>
-            <property name="toolbar_style">both</property>
             <child>
               <object class="GtkToolButton" id="sourcetoolbutton">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Choose Video Source</property>
                 <property name="label" translatable="yes">Source</property>
@@ -558,6 +558,7 @@
             <child>
               <object class="GtkToolButton" id="queue_start1">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Start Encoding</property>
@@ -572,6 +573,7 @@
             <child>
               <object class="GtkToolButton" id="queue_pause1">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Pause Encoding</property>
@@ -586,6 +588,7 @@
             <child>
               <object class="GtkToolButton" id="queue_add">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Add to Queue</property>
@@ -600,6 +603,7 @@
             <child>
               <object class="GtkToggleToolButton" id="show_queue">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Show Queue</property>
                 <property name="label" translatable="yes">Show Queue</property>
@@ -613,6 +617,7 @@
             <child>
               <object class="GtkToggleToolButton" id="show_picture">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Open Picture Settings and Preview window.  Here you can adjust cropping, resolution, aspect ratio, and filters.</property>
                 <property name="label" translatable="yes">Picture Settings</property>
@@ -626,6 +631,7 @@
             <child>
               <object class="GtkToggleToolButton" id="show_activity">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="tooltip-text" translatable="yes">Show Activity Window</property>
                 <property name="label" translatable="yes">Activity Window</property>
@@ -3585,14 +3591,15 @@ Requires subme >= 6 and trellis >= 1.</property>
                       <object class="GtkToolbar" id="presets_toolbar">
                         <property name="icon-size">2</property>
                         <property name="visible">True</property>
-                        <property name="toolbar_style">both-horiz</property>
                         <property name="show_arrow">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
                           <object class="GtkToolButton" id="presets_save">
                             <property name="visible">True</property>
                             <property name="sensitive">True</property>
-                            <property name="is_important">True</property>
+                            <property name="is_important">False</property>
+                            <property name="label" translatable="yes">_Save</property>
+                            <property name="use_underline">True</property>
                             <property name="tooltip-text" translatable="yes">Save current settings to new preset.</property>
                             <property name="icon_name">gtk-save</property>
                             <signal name="clicked" handler="presets_save_clicked_cb"/>
@@ -3605,7 +3612,9 @@ Requires subme >= 6 and trellis >= 1.</property>
                           <object class="GtkToolButton" id="presets_remove">
                             <property name="visible">True</property>
                             <property name="sensitive">True</property>
-                            <property name="is_important">True</property>
+                            <property name="is_important">False</property>
+                            <property name="label" translatable="yes">_Delete</property>
+                            <property name="use_underline">True</property>
                             <property name="tooltip-text" translatable="yes">Delete the currently selected preset.</property>
                             <property name="icon_name">gtk-delete</property>
                             <signal name="clicked" handler="presets_remove_clicked_cb"/>
@@ -4741,12 +4750,12 @@ Requires subme >= 6 and trellis >= 1.</property>
         <child>
           <object class="GtkToolbar" id="queue_toolbar">
             <property name="visible">True</property>
-            <property name="toolbar_style">both</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
               <object class="GtkToolButton" id="queue_start2">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
+                <property name="is_important">True</property>
                 <property name="label" translatable="yes">Start</property>
                 <property name="icon_name">hb-play</property>
                 <signal handler="queue_start_clicked_cb" name="clicked"/>
@@ -4758,6 +4767,7 @@ Requires subme >= 6 and trellis >= 1.</property>
             <child>
               <object class="GtkToolButton" id="queue_pause2">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Pause</property>
@@ -4771,6 +4781,7 @@ Requires subme >= 6 and trellis >= 1.</property>
             <child>
               <object class="GtkToolButton" id="queue_edit">
                 <property name="visible">True</property>
+                <property name="is_important">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">Edit</property>
