@@ -18,8 +18,11 @@ Appended for EEDI2:
     Magnitude thresh : Variance thresh : Laplacian thresh : Dilation thresh :
     Erosion thresh : Noise thresh : Max search distance : Post-processing
 
+Plus:
+    Parity
+    
 Defaults:
-    7:2:6:9:80:16:16:10:20:20:4:2:50:24:1
+    7:2:6:9:80:16:16:10:20:20:4:2:50:24:-1
 *****/
 
 #define MODE_YADIF       1 // Use yadif
