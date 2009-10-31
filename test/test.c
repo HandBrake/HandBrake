@@ -32,7 +32,7 @@
 /* Options */
 static int    debug       = HB_DEBUG_ALL;
 static int    update      = 0;
-static int    dvdnav      = 0;
+static int    dvdnav      = 1;
 static char * input       = NULL;
 static char * output      = NULL;
 static char * format      = NULL;
@@ -2158,7 +2158,8 @@ static void ShowHelp()
     "                            if the preset name has spaces, surround it with\n"
     "                            double quotation marks\n"
     "    -z, --preset-list       See a list of available built-in presets\n"
-    "        --dvdnav            Use dvdnav (Experimental)\n"
+    "        --no-dvdnav         Do not use dvdnav for reading DVDs\n"
+    "                            (experimental, enabled by default for testing)\n"
     "\n"
 
     "### Source Options-----------------------------------------------------------\n\n"
@@ -2499,7 +2500,7 @@ static int ParseOptions( int argc, char ** argv )
             { "update",      no_argument,       NULL,    'u' },
             { "verbose",     optional_argument, NULL,    'v' },
             { "cpu",         required_argument, NULL,    'C' },
-            { "dvdnav",      no_argument,       NULL,    DVDNAV },
+            { "no-dvdnav",      no_argument,       NULL,    DVDNAV },
 
             { "format",      required_argument, NULL,    'f' },
             { "input",       required_argument, NULL,    'i' },
@@ -2616,7 +2617,7 @@ static int ParseOptions( int argc, char ** argv )
                 ShowPresets();
                 exit ( 0 );
             case DVDNAV:
-                dvdnav = 1;
+                dvdnav = 0;
                 break;
 
             case 'f':
