@@ -60,6 +60,7 @@ struct pullup_context
     int metric_plane;
     int strict_breaks;
     int strict_pairs;
+    int parity;
     /* Internal data */
     struct pullup_field *first, *last, *head;
     struct pullup_buffer *buffers;
@@ -838,16 +839,18 @@ hb_filter_private_t * hb_detelecine_init( int pix_fmt,
     ctx->junk_top  = ctx->junk_bottom = 4;
     ctx->strict_breaks = -1;
     ctx->metric_plane  = 0;
-
+    ctx->parity = -1;
+    
     if( settings )
     {
-        sscanf( settings, "%d:%d:%d:%d:%d:%d",
+        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d",
                 &ctx->junk_left,
                 &ctx->junk_right,
                 &ctx->junk_top,
                 &ctx->junk_bottom,
                 &ctx->strict_breaks,
-                &ctx->metric_plane );
+                &ctx->metric_plane,
+                &ctx->parity );
     }
 
     ctx->format = PULLUP_FMT_Y;
@@ -947,11 +950,24 @@ int hb_detelecine_work( const hb_buffer_t * buf_in,
     memcpy( buf->planes[2], pv->pic_in.data[2],
             pv->width[2] * pv->height[2] * sizeof(uint8_t) );
 
-    /* Submit buffer fields based on buffer flags */
+    /* Submit buffer fields based on buffer flags.
+       Detelecine assumes BFF when the TFF flag isn't present. */
     int parity = 1;
     if( buf_in->flags & PIC_FLAG_TOP_FIELD_FIRST )
     {
+        /* Source signals TFF */
         parity = 0;
+    }
+    else if( ctx->parity == 0 )
+    {
+        /* Many non-MPEG-2 sources lack parity flags even though
+           they are TFF, so this allow users to override. */
+        parity = 0;
+    }
+    if( ctx->parity == 1 )
+    {
+        /* Override autodetected parity with BFF */
+        parity = 1;
     }
     pullup_submit_field( ctx, buf, parity );
     pullup_submit_field( ctx, buf, parity^1 );

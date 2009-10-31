@@ -1644,7 +1644,7 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
 
     if( settings )
     {
-        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
+        sscanf( settings, "%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d:%d",
                 &pv->mode,
                 &pv->spatial_metric,
                 &pv->motion_threshold,
@@ -1659,7 +1659,8 @@ hb_filter_private_t * hb_decomb_init( int pix_fmt,
                 &pv->erosion_threshold,
                 &pv->noise_threshold,
                 &pv->maximum_search_distance,
-                &pv->post_processing );
+                &pv->post_processing,
+                &pv->parity );
     }
     
     pv->cpu_count = hb_get_cpu_count();
