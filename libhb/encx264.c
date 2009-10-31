@@ -255,6 +255,14 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                 {
                     job->areBframes = 2;
                 }
+                if( value == NULL || !strcmp( value, "1" ) )
+                {
+                    value = "normal";
+                }
+                else if( !strcmp( value, "0" ) )
+                {
+                    value = "none";
+                }
             }
 
             /* Here's where the strings are passed to libx264 for parsing. */
