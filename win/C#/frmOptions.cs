@@ -175,7 +175,7 @@ namespace Handbrake
             }
 
             // Use Experimental dvdnav
-            if (Properties.Settings.Default.dvdnav)
+            if (Properties.Settings.Default.noDvdNav)
                 check_dvdnav.CheckState = CheckState.Checked;
 
             // #############################
@@ -412,7 +412,7 @@ namespace Handbrake
 
         private void check_dvdnav_CheckedChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.dvdnav = check_dvdnav.Checked;
+            Properties.Settings.Default.noDvdNav = check_dvdnav.Checked;
         }
         #endregion
 

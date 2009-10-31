@@ -929,9 +929,9 @@ namespace Handbrake
             this.tableLayoutPanel4.SetColumnSpan(this.check_dvdnav, 4);
             this.check_dvdnav.Location = new System.Drawing.Point(67, 208);
             this.check_dvdnav.Name = "check_dvdnav";
-            this.check_dvdnav.Size = new System.Drawing.Size(250, 17);
+            this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
             this.check_dvdnav.TabIndex = 90;
-            this.check_dvdnav.Text = "Use libdvdnav (instead of libdvdread) for DVDs";
+            this.check_dvdnav.Text = "Disable LibDVDNav. (libdvdread will be used instead)";
             this.check_dvdnav.UseVisualStyleBackColor = false;
             this.check_dvdnav.CheckedChanged += new System.EventHandler(this.check_dvdnav_CheckedChanged);
             // 

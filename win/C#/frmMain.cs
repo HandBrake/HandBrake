@@ -915,7 +915,7 @@ namespace Handbrake
 
                 // Populate the Angles dropdown
                 drop_angle.Items.Clear();
-                if (Properties.Settings.Default.dvdnav)
+                if (!Properties.Settings.Default.noDvdNav)
                 {
                     drop_angle.Visible = true;
                     lbl_angle.Visible = true;
@@ -1454,8 +1454,8 @@ namespace Handbrake
                     File.Delete(dvdInfoPath);
 
                 String dvdnav = string.Empty;
-                if (Properties.Settings.Default.dvdnav)
-                    dvdnav = " --dvdnav";
+                if (Properties.Settings.Default.noDvdNav)
+                    dvdnav = " --no-dvdnav";
                 string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 {2} -v >""{3}"" 2>&1""", handbrakeCLIPath, sourcePath, dvdnav, dvdInfoPath);
 
                 ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
