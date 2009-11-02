@@ -4567,7 +4567,7 @@ the user is using "Custom" settings by determining the sender*/
      * so that we can choose a new similar value on the new slider scale */
     float previousMaxValue = [fVidQualitySlider maxValue];
     float previousPercentOfSliderScale = [fVidQualitySlider floatValue] / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue] + 1);
-    NSString * qpRFLabelString = @"RF:";
+    NSString * qpRFLabelString = @"QP:";
     /* x264 0-51 */
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_X264)
     {
@@ -4576,6 +4576,7 @@ the user is using "Custom" settings by determining the sender*/
         /* As x264 allows for qp/rf values that are fractional, we get the value from the preferences */
         int fractionalGranularity = 1 / [[NSUserDefaults standardUserDefaults] floatForKey:@"x264CqSliderFractional"];
         [fVidQualitySlider setNumberOfTickMarks:(([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * fractionalGranularity) + 1];
+        qpRFLabelString = @"RF:";
     }
     /* ffmpeg  1-31 */
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_FFMPEG )
