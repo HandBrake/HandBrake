@@ -420,8 +420,8 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Track"), cell, "text", 0, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	gtk_tree_view_column_set_min_width (column, 210);
-	gtk_tree_view_column_set_max_width (column, 210);
+	gtk_tree_view_column_set_min_width (column, 190);
+	gtk_tree_view_column_set_max_width (column, 190);
 
 	cell = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
@@ -447,8 +447,8 @@ bind_subtitle_tree_model (signal_user_data_t *ud)
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Type"), cell, "text", 4, NULL);
 	gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	gtk_tree_view_column_set_min_width (column, 240);
-	gtk_tree_view_column_set_max_width (column, 240);
+	gtk_tree_view_column_set_min_width (column, 190);
+	gtk_tree_view_column_set_max_width (column, 190);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
