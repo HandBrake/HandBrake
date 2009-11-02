@@ -2031,7 +2031,7 @@ FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                                 <property name="n_columns">7</property>
                                 <child>
                                   <object class="GtkComboBox" id="AudioTrack">
-                                    <property name="width_request">215</property>
+                                    <property name="width_request">180</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip-text" translatable="yes">List of audio tracks available from your source.</property>
@@ -2211,6 +2211,7 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                                     <property name="right_attach">3</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                               </object>

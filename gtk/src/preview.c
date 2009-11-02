@@ -156,7 +156,11 @@ ghb_preview_init(signal_user_data_t *ud)
 	GstBus *bus;
 	GstElement *xover;
 
+#if !defined(_WIN32)
 	ud->preview->xid = GDK_DRAWABLE_XID(ud->preview->view->window);
+#else
+	ud->preview->xid = GDK_WINDOW_HWND(ud->preview->view->window);
+#endif
 	ud->preview->play = gst_element_factory_make("playbin", "play");
 	//xover = gst_element_factory_make("xvimagesink", "xover");
 	//xover = gst_element_factory_make("ximagesink", "xover");
@@ -209,8 +213,13 @@ create_window(GstBus *bus, GstMessage *msg, gpointer data)
 	{
 		if (!gst_structure_has_name(msg->structure, "prepare-xwindow-id"))
 			return GST_BUS_PASS;
+#if !defined(_WIN32)
 		gst_x_overlay_set_xwindow_id(
 			GST_X_OVERLAY(GST_MESSAGE_SRC(msg)), preview->xid);
+#else
+		gst_directdraw_sink_set_window_id(
+			GST_X_OVERLAY(GST_MESSAGE_SRC(msg)), preview->xid);
+#endif
 		gst_message_unref(msg);
 		return GST_BUS_DROP;
 	} break;

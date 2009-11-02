@@ -1494,7 +1494,7 @@ init_combo_box(GtkBuilder *builder, const gchar *name)
     	cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
     	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), cell, TRUE);
     	gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), cell,
-      		"text", 0, "sensitive", 1, NULL);
+      		"markup", 0, "sensitive", 1, NULL);
 	}
 	else
 	{ // Combo box entry
@@ -1508,6 +1508,7 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rat
 	GtkTreeIter iter;
 	GtkListStore *store;
 	gint ii;
+	gchar *str;
 	
 	g_debug("audio_samplerate_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
@@ -1515,7 +1516,7 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rat
 	// Add an item for "Same As Source"
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
-					   0, "Same as source", 
+					   0, "<small>Same as source</small>", 
 					   1, TRUE, 
 					   2, "source", 
 					   3, 0.0, 
@@ -1524,13 +1525,15 @@ audio_samplerate_opts_set(GtkBuilder *builder, const gchar *name, hb_rate_t *rat
 	for (ii = 0; ii < count; ii++)
 	{
 		gtk_list_store_append(store, &iter);
+		str = g_strdup_printf("<small>%s</small>", rates[ii].string);
 		gtk_list_store_set(store, &iter, 
-						   0, rates[ii].string, 
+						   0, str,
 						   1, TRUE, 
 						   2, rates[ii].string, 
 						   3, (gdouble)rates[ii].rate, 
 						   4, rates[ii].string, 
 						   -1);
+		g_free(str);
 	}
 }
 
@@ -1588,13 +1591,14 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 	GtkTreeIter iter;
 	GtkListStore *store;
 	gint ii;
+	gchar *str;
 	
 	g_debug("mix_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
-					   0, "None", 
+					   0, "<small>None</small>", 
 					   1, TRUE, 
 					   2, "none", 
 					   3, 0.0, 
@@ -1603,13 +1607,16 @@ mix_opts_set(GtkBuilder *builder, const gchar *name)
 	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
 	{
 		gtk_list_store_append(store, &iter);
+		str = g_strdup_printf("<small>%s</small>",
+			hb_audio_mixdowns[ii].human_readable_name);
 		gtk_list_store_set(store, &iter, 
-						   0, hb_audio_mixdowns[ii].human_readable_name, 
+						   0, str,
 						   1, TRUE, 
 						   2, hb_audio_mixdowns[ii].short_name, 
 						   3, (gdouble)hb_audio_mixdowns[ii].amixdown, 
 						   4, hb_audio_mixdowns[ii].internal_name, 
 						   -1);
+		g_free(str);
 	}
 }
 
@@ -1781,6 +1788,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
     hb_audio_config_t * audio;
 	gint ii;
 	gint count = 0;
+	gchar *str;
 	
 	g_debug("audio_track_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
@@ -1811,7 +1819,7 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 		// No audio. set some default
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
-						   0, "No Audio", 
+						   0, "<small>No Audio</small>", 
 						   1, TRUE, 
 						   2, "none", 
 						   3, -1.0, 
@@ -1828,13 +1836,15 @@ audio_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
 	{
         audio = (hb_audio_config_t *) hb_list_audio_config_item( title->list_audio, ii );
 		gtk_list_store_append(store, &iter);
+		str = g_strdup_printf("<small>%s</small>", audio->lang.description);
 		gtk_list_store_set(store, &iter, 
-						   0, audio->lang.description, 
+						   0, str,
 						   1, TRUE, 
 						   2, index_str[ii], 
 						   3, (gdouble)ii, 
 						   4, index_str[ii], 
 						   -1);
+		g_free(str);
 		audio_track_opts.map[ii].option = audio->lang.description,
 		audio_track_opts.map[ii].shortOpt = index_str[ii];
 		audio_track_opts.map[ii].ivalue = ii;
@@ -2283,6 +2293,33 @@ generic_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
 	}
 }
 
+static void
+small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
+{
+	GtkTreeIter iter;
+	GtkListStore *store;
+	gint ii;
+	gchar *str;
+	
+	g_debug("generic_opts_set ()\n");
+	if (name == NULL || opts == NULL) return;
+	store = get_combo_box_store(builder, name);
+	gtk_list_store_clear(store);
+	for (ii = 0; ii < opts->count; ii++)
+	{
+		gtk_list_store_append(store, &iter);
+		str = g_strdup_printf("<small>%s</small>", opts->map[ii].option);
+		gtk_list_store_set(store, &iter, 
+						   0, str,
+						   1, TRUE, 
+						   2, opts->map[ii].shortOpt, 
+						   3, opts->map[ii].ivalue, 
+						   4, opts->map[ii].svalue, 
+						   -1);
+		g_free(str);
+	}
+}
+
 combo_opts_t*
 find_combo_table(const gchar *name)
 {
@@ -2454,7 +2491,7 @@ ghb_update_ui_combo_box(
 		generic_opts_set(ud->builder, "PictureDecomb", &decomb_opts);
 		generic_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
 		generic_opts_set(ud->builder, "VideoEncoder", &vcodec_opts);
-		generic_opts_set(ud->builder, "AudioEncoder", &acodec_opts);
+		small_opts_set(ud->builder, "AudioEncoder", &acodec_opts);
 		generic_opts_set(ud->builder, "x264_direct", &direct_opts);
 		generic_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
 		generic_opts_set(ud->builder, "x264_me", &me_opts);
@@ -2619,14 +2656,14 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 	GtkListStore *store;
 	gchar *str;
 	
-	g_debug("audio_rate_opts_add ()\n");
+	g_debug("audio_bitrate_opts_add ()\n");
 
 	if (rate < 8) return;
 
 	store = get_combo_box_store(builder, name);
 	if (!find_combo_item_by_int(GTK_TREE_MODEL(store), rate, &iter))
 	{
-		str = g_strdup_printf ("%d", rate);
+		str = g_strdup_printf ("<small>%d</small>", rate);
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
 						   0, str, 
@@ -2683,6 +2720,7 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 	GtkTreeIter iter;
 	GtkListStore *store;
 	gint ii;
+	gchar *str;
 	
 	g_debug("audio_bitrate_opts_set ()\n");
 	store = get_combo_box_store(builder, name);
@@ -2690,13 +2728,16 @@ audio_bitrate_opts_set(GtkBuilder *builder, const gchar *name)
 	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
 	{
 		gtk_list_store_append(store, &iter);
+		str = g_strdup_printf ("<small>%s</small>", 
+			hb_audio_bitrates[ii].string);
 		gtk_list_store_set(store, &iter, 
-						   0, hb_audio_bitrates[ii].string, 
+						   0, str,
 						   1, TRUE, 
 						   2, hb_audio_bitrates[ii].string, 
 						   3, (gdouble)hb_audio_bitrates[ii].rate, 
 						   4, hb_audio_bitrates[ii].string, 
 						   -1);
+		g_free(str);
 	}
 }
 
