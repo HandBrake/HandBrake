@@ -329,6 +329,7 @@ namespace Handbrake.Controls
         public void Clear()
         {
             lv_subList.Items.Clear();
+            SubList.Clear();
         }
         public void SmartClear()
         {
