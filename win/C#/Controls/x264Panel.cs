@@ -349,7 +349,10 @@ namespace Handbrake.Controls
                                 drop_adaptBFrames.SelectedIndex = (badapt + 1);
                                 continue;
                             case "weightb":
-                                check_weightedBFrames.CheckState = CheckState.Checked;
+                                if (optValue != "0")
+                                    check_weightedBFrames.CheckState = CheckState.Checked;
+                                else
+                                    check_weightedBFrames.CheckState = CheckState.Unchecked;
                                 continue;
                             case "b-pyramid":
                                 check_pyrmidalBFrames.CheckState = CheckState.Checked;
@@ -521,7 +524,7 @@ namespace Handbrake.Controls
                         else if (optNameToChange.Equals("mixed-refs"))
                             thisOpt = check_mixedReferences.CheckState == CheckState.Checked ? "mixed-refs=1" : "mixed-refs=0";
                         else if (optNameToChange.Equals("weightb"))
-                            thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? "weightb=1" : "";
+                            thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? "" : "weightb=0";
                         else if (optNameToChange.Equals("b-pyramid"))
                             thisOpt = check_pyrmidalBFrames.CheckState == CheckState.Checked ? "b-pyramid=1" : "";
                         else if (optNameToChange.Equals("no-fast-pskip"))
@@ -791,8 +794,8 @@ namespace Handbrake.Controls
             }
             else if (optNameToChange.Equals("weightb"))
             {
-                if (check_weightedBFrames.CheckState == CheckState.Checked)
-                    query = query + colon + "weightb=1";
+                if (check_weightedBFrames.CheckState != CheckState.Checked)
+                    query = query + colon + "weightb=0";
             }
             else if (optNameToChange.Equals("b-pyramid"))
             {

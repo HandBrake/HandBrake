@@ -263,10 +263,9 @@ namespace Handbrake
             this.check_m4v.AutoSize = true;
             this.check_m4v.Location = new System.Drawing.Point(108, 279);
             this.check_m4v.Name = "check_m4v";
-            this.check_m4v.Size = new System.Drawing.Size(423, 17);
+            this.check_m4v.Size = new System.Drawing.Size(319, 17);
             this.check_m4v.TabIndex = 82;
-            this.check_m4v.Text = "Use iPod/iTunes friendly file extension (.m4v) for MP4 (See tooltip for more deta" +
-                "ils)";
+            this.check_m4v.Text = "Always use iPod/iTunes friendly file extension (.m4v) for MP4";
             this.ToolTip.SetToolTip(this.check_m4v, resources.GetString("check_m4v.ToolTip"));
             this.check_m4v.UseVisualStyleBackColor = true;
             this.check_m4v.CheckedChanged += new System.EventHandler(this.check_m4v_CheckedChanged);
