@@ -483,8 +483,6 @@ static void SyncVideo( hb_work_object_t * w )
                          */
                         if( sub->start < cur->start )
                         {
-                            uint64_t duration;
-                            duration = sub->stop - sub->start;
                             sub = hb_fifo_get( subtitle->fifo_raw );
                             hb_fifo_push( subtitle->fifo_out, sub );
                         } else {
@@ -664,16 +662,8 @@ static void SyncVideo( hb_work_object_t * w )
                         } else {
                             /*
                              * Pass-Through, pop it off of the raw queue, 
-                             * rewrite times and make it available to be 
-                             * reencoded.
                              */
-                            uint64_t sub_duration;
                             sub = hb_fifo_get( subtitle->fifo_raw );
-                            sub_duration = sub->stop - sub->start;
-                            sub->start = cur->start;
-                            buf_tmp = hb_fifo_see( job->fifo_raw );
-                            int64_t duration = buf_tmp->start - cur->start;
-                            sub->stop = sub->start + duration;
                             hb_fifo_push( subtitle->fifo_sync, sub );
                         }
                     } else {

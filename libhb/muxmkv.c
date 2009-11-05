@@ -404,24 +404,24 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     }
     else if ( mux_data->subtitle )
     {
+        uint64_t   duration;
         timecode = buf->start * TIMECODE_SCALE;
         if( mk_startFrame(m->file, mux_data->track) < 0)
         {
             hb_error( "Failed to write frame to output file, Disk Full?" );
             *job->die = 1;
         }
+
+        duration = buf->stop * TIMECODE_SCALE - timecode;
         if( mux_data->sub_format == TEXTSUB )
         {
-            uint64_t   duration;
-
-            duration = buf->stop * TIMECODE_SCALE - timecode;
             mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
             mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         }
         else
         {
             mk_addFrameData(m->file, mux_data->track, buf->data, buf->size);
-            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
+            mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         }
         mk_flushFrame(m->file, mux_data->track);
         return 0;
