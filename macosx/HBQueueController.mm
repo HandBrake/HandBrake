@@ -1023,7 +1023,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio1Samplerate"],
                             [item objectForKey:@"Audio1Bitrate"]];
             
-            if ([[item objectForKey:@"Audio1TrackDRCSlider"] floatValue] > 1.00)
+            if ([[item objectForKey:@"Audio1TrackDRCSlider"] floatValue] > 0.00)
             {
                 audioDetail1 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail1,[item objectForKey:@"Audio1TrackDRCSlider"]];
             }
@@ -1043,7 +1043,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio2Samplerate"],
                             [item objectForKey:@"Audio2Bitrate"]];
             
-            if ([[item objectForKey:@"Audio2TrackDRCSlider"] floatValue] > 1.00)
+            if ([[item objectForKey:@"Audio2TrackDRCSlider"] floatValue] > 0.00)
             {
                 audioDetail2 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail2,[item objectForKey:@"Audio2TrackDRCSlider"]];
             }
@@ -1063,7 +1063,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio3Samplerate"],
                             [item objectForKey:@"Audio3Bitrate"]];
             
-            if ([[item objectForKey:@"Audio3TrackDRCSlider"] floatValue] > 1.00)
+            if ([[item objectForKey:@"Audio3TrackDRCSlider"] floatValue] > 0.00)
             {
                 audioDetail3 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail3,[item objectForKey:@"Audio3TrackDRCSlider"]];
             }
@@ -1083,7 +1083,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
                             [item objectForKey:@"Audio4Samplerate"],
                             [item objectForKey:@"Audio4Bitrate"]];
             
-            if ([[item objectForKey:@"Audio4TrackDRCSlider"] floatValue] > 1.00)
+            if ([[item objectForKey:@"Audio4TrackDRCSlider"] floatValue] > 0.00)
             {
                 audioDetail4 = [NSString stringWithFormat:@"%@, DRC: %@",audioDetail4,[item objectForKey:@"Audio4TrackDRCSlider"]];
             }

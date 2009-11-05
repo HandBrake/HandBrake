@@ -4987,7 +4987,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack1MixPopUp removeAllItems];
         [fAudTrack1RatePopUp removeAllItems];
         [fAudTrack1BitratePopUp removeAllItems];
-        [fAudTrack1DrcSlider setFloatValue: 1.00];
+        [fAudTrack1DrcSlider setFloatValue: 0.00];
         [self audioDRCSliderChanged: fAudTrack1DrcSlider];
     }
     else if ([[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack1MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
@@ -5011,7 +5011,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack2MixPopUp removeAllItems];
         [fAudTrack2RatePopUp removeAllItems];
         [fAudTrack2BitratePopUp removeAllItems];
-        [fAudTrack2DrcSlider setFloatValue: 1.00];
+        [fAudTrack2DrcSlider setFloatValue: 0.00];
         [self audioDRCSliderChanged: fAudTrack2DrcSlider];
     }
     else if ([[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack2MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
@@ -5035,7 +5035,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack3MixPopUp removeAllItems];
         [fAudTrack3RatePopUp removeAllItems];
         [fAudTrack3BitratePopUp removeAllItems];
-        [fAudTrack3DrcSlider setFloatValue: 1.00];
+        [fAudTrack3DrcSlider setFloatValue: 0.00];
         [self audioDRCSliderChanged: fAudTrack3DrcSlider];
     }
     else if ([[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack3MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
@@ -5059,7 +5059,7 @@ the user is using "Custom" settings by determining the sender*/
         [fAudTrack4MixPopUp removeAllItems];
         [fAudTrack4RatePopUp removeAllItems];
         [fAudTrack4BitratePopUp removeAllItems];
-        [fAudTrack4DrcSlider setFloatValue: 1.00];
+        [fAudTrack4DrcSlider setFloatValue: 0.00];
         [self audioDRCSliderChanged: fAudTrack4DrcSlider];
     }
     else if ([[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_AC3 || [[fAudTrack4MixPopUp selectedItem] tag] == HB_ACODEC_DCA)
@@ -5735,7 +5735,7 @@ the user is using "Custom" settings by determining the sender*/
         [bitratePopUp setEnabled: NO];
         [sampleratePopUp setEnabled: NO];
         
-        [drcSlider setFloatValue: 1.00];
+        [drcSlider setFloatValue: 0.00];
         [self audioDRCSliderChanged: drcSlider];
         [drcSlider setEnabled: NO];
         [drcField setEnabled: NO];
