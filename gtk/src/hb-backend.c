@@ -3547,7 +3547,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 	if (!decomb_deint && index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDeinterlaceCustom");
-		if (!ghb_validate_filter_string(str, 4))
+		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
 						"Invalid Deinterlace Settings:\n\n%s\n",
@@ -3564,7 +3564,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 	if (index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDetelecineCustom");
-		if (!ghb_validate_filter_string(str, 6))
+		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
 						"Invalid Detelecine Settings:\n\n%s\n",
@@ -3581,7 +3581,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 	if (decomb_deint && index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDecombCustom");
-		if (!ghb_validate_filter_string(str, 15))
+		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
 						"Invalid Decomb Settings:\n\n%s\n",
@@ -3598,7 +3598,7 @@ ghb_validate_filters(signal_user_data_t *ud)
 	if (index == 1)
 	{
 		str = ghb_settings_get_string(ud->settings, "PictureDenoiseCustom");
-		if (!ghb_validate_filter_string(str, 4))
+		if (!ghb_validate_filter_string(str, -1))
 		{
 			message = g_strdup_printf(
 						"Invalid Denoise Settings:\n\n%s\n",
