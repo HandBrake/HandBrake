@@ -277,6 +277,9 @@ struct hb_job_s
     volatile int  * die;
     volatile int    done;
 
+    uint64_t        st_pause_date;
+    uint64_t        st_paused;
+
     hb_fifo_t     * fifo_mpeg2;   /* MPEG-2 video ES */
     hb_fifo_t     * fifo_raw;     /* Raw pictures */
     hb_fifo_t     * fifo_sync;    /* Raw pictures, framerate corrected */

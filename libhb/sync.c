@@ -973,6 +973,8 @@ static void UpdateState( hb_work_object_t * w )
     if( !pv->count_frames )
     {
         pv->st_first = hb_get_date();
+        pv->job->st_pause_date = -1;
+        pv->job->st_paused = 0;
     }
     pv->count_frames++;
 
@@ -1000,7 +1002,7 @@ static void UpdateState( hb_work_object_t * w )
     {
         int eta;
         p.rate_avg = 1000.0 * (float) pv->st_counts[3] /
-            (float) ( pv->st_dates[3] - pv->st_first );
+            (float) ( pv->st_dates[3] - pv->st_first - pv->job->st_paused);
         eta = (float) ( pv->count_frames_max - pv->st_counts[3] ) /
             p.rate_avg;
         p.hours   = eta / 3600;

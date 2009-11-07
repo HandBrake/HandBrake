@@ -1195,6 +1195,8 @@ void hb_pause( hb_handle_t * h )
         hb_lock( h->pause_lock );
         h->paused = 1;
 
+        hb_current_job( h )->st_pause_date = hb_get_date();
+
         hb_lock( h->state_lock );
         h->state.state = HB_STATE_PAUSED;
         hb_unlock( h->state_lock );
@@ -1209,6 +1211,13 @@ void hb_resume( hb_handle_t * h )
 {
     if( h->paused )
     {
+#define job hb_current_job( h )
+        if( job->st_pause_date != -1 )
+        {
+           job->st_paused += hb_get_date() - job->st_pause_date;
+        }
+#undef job
+
         hb_unlock( h->pause_lock );
         h->paused = 0;
     }
