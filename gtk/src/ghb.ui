@@ -5747,7 +5747,7 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                                   <object class="GtkEntry" id="PictureDetelecineCustom">
                                     <property name="width_chars">8</property>
                                     <property name="tooltip-text" translatable="yes">Custom detelecine filter string format
-	JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane</property>
+	JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
@@ -5832,7 +5832,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                                   <object class="GtkEntry" id="PictureDecombCustom">
                                     <property name="width_chars">8</property>
                                     <property name="tooltip-text" translatable="yes">Custom decomb filter string format
-	Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing</property>
+	Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity</property>
                                     <signal name="changed" handler="setting_widget_changed_cb"/>
                                   </object>
                                   <packing>
