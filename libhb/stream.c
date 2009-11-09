@@ -1695,7 +1695,7 @@ static void decode_element_descriptors(hb_stream_t* stream, int esindx,
         switch (dp[0])
         {
             case 5:    // Registration descriptor
-                stream->ts_format_id[esindx] = (dp[2] << 24) | (dp[3] << 16) |
+                stream->ts_format_id[esindx+1] = (dp[2] << 24) | (dp[3] << 16) |
                                                (dp[4] << 8)  | dp[5];
                 break;
 
@@ -1770,33 +1770,35 @@ int decode_program_map(hb_stream_t* stream)
 
         if ( index_of_pid( elementary_PID, stream ) < 0 )
         {
-            // already have this pid - do nothing
-        }
-        if (stream->ts_number_video_pids == 0 && st2codec[stream_type].kind == V )
-        {
-            stream->ts_video_pids[0] = elementary_PID;
-            stream->ts_stream_type[0] = stream_type;
-            stream->ts_number_video_pids = 1;
-        }
-        else
-        {
-            // Defined audio stream types are 0x81 for AC-3/A52 audio and 0x03
-            // for mpeg audio. But content producers seem to use other
-            // values (0x04 and 0x06 have both been observed) so at this point
-            // we say everything that isn't a video pid is audio then at the end
-            // of hb_stream_title_scan we'll figure out which are really audio
-            // by looking at the PES headers.
-            i = stream->ts_number_audio_pids;
-            if (i < kMaxNumberAudioPIDS)
+            // don't have this pid yet
+            if (stream->ts_number_video_pids == 0 && 
+                st2codec[stream_type].kind == V )
             {
-                stream->ts_audio_pids[i] = elementary_PID;
-                stream->ts_stream_type[1 + i] = stream_type;
-                if (ES_info_length > 0)
+                stream->ts_video_pids[0] = elementary_PID;
+                stream->ts_stream_type[0] = stream_type;
+                stream->ts_number_video_pids = 1;
+            }
+            else
+            {
+                // Defined audio stream types are 0x81 for AC-3/A52 audio 
+                // and 0x03 for mpeg audio. But content producers seem to 
+                // use other values (0x04 and 0x06 have both been observed) 
+                // so at this point we say everything that isn't a video 
+                // pid is audio then at the end of hb_stream_title_scan 
+                // we'll figure out which are really audio by looking at 
+                // the PES headers.
+                i = stream->ts_number_audio_pids;
+                if (i < kMaxNumberAudioPIDS)
                 {
-                    decode_element_descriptors(stream, i, ES_info_buf,
-                                               ES_info_length);
+                    stream->ts_audio_pids[i] = elementary_PID;
+                    stream->ts_stream_type[1 + i] = stream_type;
+                    if (ES_info_length > 0)
+                    {
+                        decode_element_descriptors(stream, i, ES_info_buf,
+                                                ES_info_length);
+                    }
+                    ++stream->ts_number_audio_pids;
                 }
-                ++stream->ts_number_audio_pids;
             }
         }
 
@@ -1805,7 +1807,7 @@ int decode_program_map(hb_stream_t* stream)
         free(ES_info_buf);
 
         if (cur_pos >= section_length - 4 /* stop before the CRC */)
-        done_reading_stream_types = 1;
+            done_reading_stream_types = 1;
     }
 
 	free(descriptor_buf);
