@@ -315,6 +315,69 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
         }
         }
     }
+
+    hb_buffer_t *buffer = NULL;
+    if( *pv->current_entry.text )
+    {
+        long length;
+        char *p, *q;
+        int  line = 1;
+        uint64_t start_time = ( pv->current_entry.start + 
+                                pv->subtitle->config.offset ) * 90;
+        uint64_t stop_time = ( pv->current_entry.stop + 
+                               pv->subtitle->config.offset ) * 90;
+
+        if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
+        {
+            hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
+            memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
+            return NULL;
+        }
+
+        length = strlen( pv->current_entry.text );
+
+        for( q = p = pv->current_entry.text; *p; p++)
+        {
+            if( *p == '\n' )
+            {
+                if ( line == 1 )
+                {
+                    *q = *p;
+                    line = 2;
+                }
+                else
+                {
+                    *q = ' ';
+                }
+                q++;
+            }
+            else if( *p != '\r' )
+            {
+                *q = *p;
+                q++;
+            }
+            else
+            {
+                length--;
+            }
+        }
+        *q = '\0';
+
+        buffer = hb_buffer_init( length + 1 );
+
+        if( buffer )
+        {
+            buffer->start = start_time - pv->start_time;
+            buffer->stop = stop_time - pv->start_time;
+
+            memcpy( buffer->data, pv->current_entry.text, length + 1 );
+        }
+    }
+    memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
+    if( buffer )
+    {
+        return buffer;
+    }
     
     return NULL;
 }
