@@ -86,7 +86,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     x264_param_default( &param );
     
-    /* Temporarily default mbtree to off for baseline,
+    /* Default weightp to off for baseline,
        overridable through x264 option strings. */
     if( job->x264opts != NULL && *job->x264opts != '\0' )
     {
@@ -124,7 +124,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             {
                 if( atoi( value ) == 0 )
                 {
-                    param.rc.b_mb_tree = 0;
+                    param.analyse.i_weighted_pred = X264_WEIGHTP_NONE;
                 }
             }
         }
