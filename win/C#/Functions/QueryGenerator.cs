@@ -351,8 +351,9 @@ namespace Handbrake.Functions
             firstLoop = true; audioItems = ""; // Reset for another pass.
 
             // DRC (-D)
-            foreach (String item in drcs)
+            foreach (var itm in drcs)
             {
+                string item = itm.ToString(new CultureInfo("en-US"));
                 if (firstLoop)
                 {
                     audioItems = item; firstLoop = false;
