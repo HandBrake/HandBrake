@@ -72,7 +72,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gchar *fps, *vcodec_abbr;
 	gint title, start_chapter, end_chapter, width, height;
 	gint source_width, source_height;
-	gboolean pass2, keep_aspect, vqtype, turbo;
+	gboolean pass2 = FALSE, keep_aspect, vqtype, turbo;
 	gint pic_par;
 	gboolean tweaks;
 	gchar *escape;
@@ -86,11 +86,14 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	title = ghb_settings_get_int(settings, "titlenum");
 	start_chapter = ghb_settings_get_int(settings, "start_chapter");
 	end_chapter = ghb_settings_get_int(settings, "end_chapter");
-	pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
 	vol_name = ghb_settings_get_string(settings, "volume_label");
 	dest = ghb_settings_get_string(settings, "destination");
 	basename = g_path_get_basename(dest);
 	escape = g_markup_escape_text(basename, -1);
+
+	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
+	if (!vqtype)
+		pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
 	info = g_strdup_printf 
 	(
 		"<big><b>%s</b></big> "
