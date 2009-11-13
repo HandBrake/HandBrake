@@ -453,11 +453,11 @@ namespace Handbrake.Functions
                     query += " --subtitle " + subtitleTracks;
 
                     if (subtitleForced != "")
-                        query += " --subtitle-forced " + subtitleForced;
+                        query += " --subtitle-forced=" + subtitleForced;
                     if (subtitleBurn != "")
-                        query += " --subtitle-burn " + subtitleBurn;
+                        query += " --subtitle-burn=" + subtitleBurn;
                     if (subtitleDefault != "")
-                        query += " --subtitle-default " + subtitleDefault;
+                        query += " --subtitle-default=" + subtitleDefault;
                 }
 
                 if (srtFile != "") // SRTs
