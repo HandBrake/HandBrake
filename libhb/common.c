@@ -880,6 +880,7 @@ int hb_srt_add( const hb_job_t * job,
 
     subtitle = calloc( 1, sizeof( *subtitle ) );
     
+    subtitle->id = (hb_list_count(job->list_subtitle) << 8) | 0xFF;
     subtitle->format = TEXTSUB;
     subtitle->source = SRTSUB;
 
