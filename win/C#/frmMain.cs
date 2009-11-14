@@ -1514,6 +1514,8 @@ namespace Handbrake
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 if (sourcePath.ToLower().Contains(".iso") || sourcePath.Contains("VIDEO_TS"))
                     Check_ChapterMarkers.Enabled = true;
+                else if (Directory.Exists(Path.Combine(sourcePath, "VIDEO_TS")))
+                    Check_ChapterMarkers.Enabled = true;
                 else
                 {
                     Check_ChapterMarkers.Enabled = false;
