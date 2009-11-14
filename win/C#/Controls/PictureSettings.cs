@@ -379,6 +379,11 @@ namespace Handbrake.Controls
             crop_bottom.Enabled = check_customCrop.Checked;
             crop_left.Enabled = check_customCrop.Checked;
             crop_right.Enabled = check_customCrop.Checked;
+
+            crop_top.Value = Source.AutoCropDimensions[0];
+            crop_bottom.Value = Source.AutoCropDimensions[1];
+            crop_left.Value = Source.AutoCropDimensions[2];
+            crop_right.Value = Source.AutoCropDimensions[3];
         }
         private void crop_ValueChanged(object sender, EventArgs e)
         {
@@ -443,7 +448,7 @@ namespace Handbrake.Controls
                             - Uses mod16-compliant dimensions,
                             - Allows users to set the width
                         */
-                        width = (int)text_width.Value - (int)crop_left.Value - (int)crop_right.Value;
+                        width = (int) text_width.Value;
                         width = GetModulusValue(width); /* Time to get picture width that divide cleanly.*/
 
                         height = (width / storage_aspect) + 0.5;
