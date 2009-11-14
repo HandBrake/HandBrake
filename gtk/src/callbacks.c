@@ -3488,7 +3488,7 @@ dvd_device_list()
 }
 
 #if !defined(_WIN32)
-static LibHalContext *hal_ctx;
+static LibHalContext *hal_ctx = NULL;
 #endif
 
 gboolean
@@ -3498,6 +3498,9 @@ ghb_is_cd(GDrive *gd)
 	gchar *device;
 	LibHalDrive *halDrive;
 	LibHalDriveType dtype;
+
+	if (hal_ctx == NULL)
+		return FALSE;
 
 	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
 	if (device == NULL)
@@ -4213,6 +4216,7 @@ ghb_hal_init()
 		dbus_error_free (&error);
 		libhal_ctx_free (hal_ctx);
 		dbus_g_connection_unref(gconn);
+		hal_ctx = NULL;
 		return;
 	}
 
@@ -4228,6 +4232,7 @@ ghb_hal_init()
 
 		libhal_ctx_shutdown (hal_ctx, NULL);
 		libhal_ctx_free (hal_ctx);
+		hal_ctx = NULL;
 		dbus_g_connection_unref(gconn);
 		return;
 	}
