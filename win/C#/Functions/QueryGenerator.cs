@@ -376,7 +376,7 @@ namespace Handbrake.Functions
                 string subtitleForced = String.Empty;
                 string subtitleBurn = String.Empty;
                 string subtitleDefault = String.Empty;
-
+ 
                 // SRT
                 string srtFile = String.Empty;
                 string srtCodeset = String.Empty;
@@ -471,7 +471,7 @@ namespace Handbrake.Functions
                     if (srtLang != "")
                         query += " --srt-lang " + srtLang;
                     if (srtDefault != "")
-                        query += " --subtitle-default " + srtDefault;
+                        query += " --srt-default=" + srtDefault;
                 }
 
             }

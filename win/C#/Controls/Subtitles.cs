@@ -43,6 +43,14 @@ namespace Handbrake.Controls
                 srtLangVal = srt_lang.SelectedItem.ToString();
                 srtCode = srt_charcode.SelectedItem.ToString();
                 srtOffsetMs = (int)srt_offset.Value;
+                if (defaultSub == "Yes") setNoSrtDefault();
+            } else
+            {
+                if (defaultSub == "Yes") SetNoDefault();
+                if (burnedVal == "Yes") SetNoBurned();
+
+                if (_fileContainer == 0)
+                    burnedVal = "Yes";  // MP4 must have bitmap subs burned in.
             }
 
             if (_fileContainer == 0) // MP4 and M4V file extension
@@ -61,12 +69,6 @@ namespace Handbrake.Controls
                     }
                 }
             }
-
-            if (defaultSub == "Yes") SetNoDefault();
-            if (burnedVal == "Yes") SetNoBurned();
-
-            if (_fileContainer == 0 && !drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
-                burnedVal = "Yes";  // MP4 must have bitmap subs burned in.
 
             string trackName = (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
                                ? srtLangVal + " (" + srtFile + ")"
@@ -165,8 +167,17 @@ namespace Handbrake.Controls
             // Update an item in the  list if required.
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
 
-            lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text = drp_subtitleTracks.SelectedItem.ToString();
-            lv_subList.Select();
+            if (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
+            {
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text = srt_lang.SelectedItem + "(" +
+                    drp_subtitleTracks.SelectedItem + ")";
+                lv_subList.Select();
+            } else
+            {
+                lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text =
+                    drp_subtitleTracks.SelectedItem.ToString();
+                lv_subList.Select();
+            }
 
             SubList[lv_subList.SelectedIndices[0]].Track = drp_subtitleTracks.SelectedItem.ToString(); // Update SubList List<SubtitleInfo>
         }
@@ -196,7 +207,10 @@ namespace Handbrake.Controls
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
 
             if (check_default.Checked) // Make sure we only have 1 default track
-                SetNoDefault();
+                if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.Contains(".srt"))
+                    setNoSrtDefault();
+                else
+                    SetNoDefault();
 
             lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[3].Text = check_default.Checked ? "Yes" : "No";
             lv_subList.Select();
@@ -279,10 +293,30 @@ namespace Handbrake.Controls
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
             {
-                if (item.SubItems[3].Text == "Yes")
+                if (SubList[c].SrtPath == "-")
                 {
-                    item.SubItems[3].Text = "No";
-                    SubList[c].Default = "No";
+                    if (item.SubItems[3].Text == "Yes")
+                    {
+                        item.SubItems[3].Text = "No";
+                        SubList[c].Default = "No";
+                    }     
+                }
+                c++;
+            }
+        }
+
+        private void setNoSrtDefault()
+        {
+            int c = 0;
+            foreach (ListViewItem item in lv_subList.Items)
+            {
+                if (SubList[c].SrtPath != "-")
+                {
+                    if (item.SubItems[3].Text == "Yes")
+                    {
+                        item.SubItems[3].Text = "No";
+                        SubList[c].Default = "No";
+                    }
                 }
                 c++;
             }
