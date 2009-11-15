@@ -4686,6 +4686,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
+    <property name="transient-for">hb_window</property>
     <signal handler="activity_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox37">
@@ -4743,6 +4744,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
+    <property name="transient-for">hb_window</property>
     <signal handler="queue_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox34">
@@ -6161,6 +6163,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="resizable">False</property>
+    <property name="transient-for">hb_window</property>
     <property name="events">GDK_STRUCTURE_MASK | GDK_POINTER_MOTION_MASK</property>
     <signal handler="preview_configure_cb" name="configure-event"/>
     <signal handler="preview_window_delete_cb" name="delete_event"/>
