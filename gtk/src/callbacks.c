@@ -1360,12 +1360,12 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	// Set the limits of cropping.  hb_set_anamorphic_size crashes if
 	// you pass it a cropped width or height == 0.
 	gint bound;
-	bound = tinfo->height / 2 - 2;
+	bound = tinfo->height / 2 - 8;
 	widget = GHB_WIDGET (ud->builder, "PictureTopCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	widget = GHB_WIDGET (ud->builder, "PictureBottomCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
-	bound = tinfo->width / 2 - 2;
+	bound = tinfo->width / 2 - 8;
 	widget = GHB_WIDGET (ud->builder, "PictureLeftCrop");
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, bound);
 	widget = GHB_WIDGET (ud->builder, "PictureRightCrop");
