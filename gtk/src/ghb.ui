@@ -2853,9 +2853,9 @@ This option can improve compression efficiency. Use 'Optimal' if you can afford 
 You can edit these and add additional options.  
 
 Default values will not be shown. The defaults are:
-ref=1:mixed-refs=0:bframes=0:direct=spatial:b-pyramid=0:
-weightb=0:me=hex:merange=16:subme=6:analyse=some:8x8dct=0:
-deblock=0,0:trellis=0:psy-rd=1,0:no-fast-pskip=0:
+ref=3:mixed-refs=1:bframes=3:direct=spatial:b-pyramid=0:
+weightb=1:me=hex:merange=16:subme=7:analyse=some:8x8dct=1:
+deblock=0,0:trellis=1:psy-rd=1,0:no-fast-pskip=0:
 no-dct-decimate=0:cabac=1</property>
                                         <property name="wrap_mode">GTK_WRAP_CHAR</property>
                                         <property name="accepts_tab">False</property>
