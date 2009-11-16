@@ -17,6 +17,7 @@ struct start_and_end {
 enum
 {
     k_state_inEntry,
+    k_state_inEntry_or_new,
     k_state_potential_new_entry,
     k_state_timecode,
 };
@@ -43,6 +44,7 @@ struct hb_work_private_s
     int        utf8_end;
     unsigned long current_time;
     unsigned long number_of_entries;
+    unsigned long last_entry_number;
     unsigned long current_state;
     srt_entry_t current_entry;
     iconv_t *iconv_context;
@@ -51,20 +53,27 @@ struct hb_work_private_s
     uint64_t stop_time;               // In HB time
 };
 
-static struct start_and_end read_time_from_string( const char* timeString ) 
+static int 
+read_time_from_string( const char* timeString, struct start_and_end *result )
 {
     // for ex. 00:00:15,248 --> 00:00:16,545
     
     long houres1, minutes1, seconds1, milliseconds1,
-	houres2, minutes2, seconds2, milliseconds2;
+         houres2, minutes2, seconds2, milliseconds2;
+    int scanned;
     
-    sscanf(timeString, "%ld:%ld:%ld,%ld --> %ld:%ld:%ld,%ld\n",	&houres1, &minutes1, &seconds1, &milliseconds1,
-           &houres2, &minutes2, &seconds2, &milliseconds2);
-    
-    struct start_and_end result = {
-        milliseconds1 + seconds1*1000 + minutes1*60*1000 + houres1*60*60*1000,
-        milliseconds2 + seconds2*1000 + minutes2*60*1000 + houres2*60*60*1000};
-    return result;
+    scanned = sscanf(timeString, "%ld:%ld:%ld,%ld --> %ld:%ld:%ld,%ld\n",
+                    &houres1, &minutes1, &seconds1, &milliseconds1,
+                    &houres2, &minutes2, &seconds2, &milliseconds2);
+    if (scanned != 8)
+    {
+        return 0;
+    }
+    result->start =
+        milliseconds1 + seconds1*1000 + minutes1*60*1000 + houres1*60*60*1000;
+    result->end =
+        milliseconds2 + seconds2*1000 + minutes2*60*1000 + houres2*60*60*1000;
+    return 1;
 }
 
 static int utf8_fill( hb_work_private_t * pv )
@@ -174,19 +183,30 @@ static int get_line( hb_work_private_t * pv, char *buf, int size )
 static hb_buffer_t *srt_read( hb_work_private_t *pv )
 {
     char line_buffer[1024];
+    int reprocess = 0, resync = 0;
 
     if( !pv->file )
     {
         return NULL;
     }
     
-    while( get_line( pv, line_buffer, sizeof( line_buffer ) ) ) 
+    while( reprocess || get_line( pv, line_buffer, sizeof( line_buffer ) ) ) 
     {
+        reprocess = 0;
         switch (pv->current_state)
         {
         case k_state_timecode:
         {
-            struct start_and_end timing = read_time_from_string( line_buffer );
+            struct start_and_end timing;
+            int result;
+
+            result = read_time_from_string( line_buffer, &timing );
+            if (!result)
+            {
+                resync = 1;
+                pv->current_state = k_state_potential_new_entry;
+                continue;
+            }
             pv->current_entry.duration = timing.end - timing.start;
             pv->current_entry.offset = timing.start - pv->current_time;
             
@@ -196,9 +216,36 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             pv->current_entry.stop = timing.end;
 
             pv->current_state = k_state_inEntry;
-            continue;				
+            continue;
         }
-	
+
+        case k_state_inEntry_or_new:
+        {
+            char *endpoint;
+            long entry_number;
+            /*
+             * Is this really new next entry begin?
+             */
+            entry_number = strtol(line_buffer, &endpoint, 10);
+            if (endpoint == line_buffer ||
+                (endpoint && *endpoint != '\n' && *endpoint != '\r'))
+            {
+                /*
+                 * Doesn't resemble an entry number
+                 * must still be in an entry
+                 */
+                if (!resync)
+                {
+                    reprocess = 1;
+                    pv->current_state = k_state_inEntry;
+                }
+                continue;
+            }
+            reprocess = 1;
+            pv->current_state = k_state_potential_new_entry;
+            break;
+        }
+
         case k_state_inEntry:
         {
             char *q;
@@ -218,101 +265,114 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             memcpy(q, line_buffer, size);
             pv->current_entry.pos += size;
             pv->current_entry.text[pv->current_entry.pos] = '\0';
-            break;				
+            break;
         }
-	
+
         case k_state_potential_new_entry:
         {
-            const char endpoint[] = "\0";
-            const unsigned long potential_entry_number = strtol(line_buffer, (char**)&endpoint, 10);
+            char *endpoint;
+            long entry_number;
             hb_buffer_t *buffer = NULL;
             /*
              * Is this really new next entry begin?
              */
-            if (potential_entry_number == pv->number_of_entries + 1) 
-            {
-                /*
-                 * We found the next entry - or a really rare error condition
-                 */
-                if( *pv->current_entry.text )
-                {
-                    long length;
-                    char *p, *q;
-                    int  line = 1;
-                    uint64_t start_time = ( pv->current_entry.start + 
-                                            pv->subtitle->config.offset ) * 90;
-                    uint64_t stop_time = ( pv->current_entry.stop + 
-                                           pv->subtitle->config.offset ) * 90;
-
-                    if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
-                    {
-                        hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
-                        memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
-                        ++(pv->number_of_entries);
-                        pv->current_state = k_state_timecode;
-                        continue;
-                    }
-
-                    length = strlen( pv->current_entry.text );
-
-                    for( q = p = pv->current_entry.text; *p; p++)
-                    {
-                        if( *p == '\n' )
-                        {
-                            if ( line == 1 )
-                            {
-                                *q = *p;
-                                line = 2;
-                            }
-                            else
-                            {
-                                *q = ' ';
-                            }
-                            q++;
-                        }
-                        else if( *p != '\r' )
-                        {
-                            *q = *p;
-                            q++;
-                        }
-                        else
-                        {
-                            length--;
-                        }
-                    }
-                    *q = '\0';
-
-                    buffer = hb_buffer_init( length + 1 );
-
-                    if( buffer )
-                    {
-                        buffer->start = start_time - pv->start_time;
-                        buffer->stop = stop_time - pv->start_time;
-
-                        memcpy( buffer->data, pv->current_entry.text, length + 1 );
-                    }
-                }
-                memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
-                ++(pv->number_of_entries);
-                pv->current_state = k_state_timecode;
-                if( buffer )
-                {
-                    return buffer;
-                }
-                continue;
-            } 
-            else 
+            entry_number = strtol(line_buffer, &endpoint, 10);
+            if (!resync && (*line_buffer == '\n' || *line_buffer == '\r'))
             {
                 /*
                  * Well.. looks like we are in the wrong mode.. lets add the
                  * newline we misinterpreted...
                  */
                 strncat(pv->current_entry.text, " ", 1024);
-                pv->current_state = k_state_inEntry;
+                pv->current_state = k_state_inEntry_or_new;
+                continue;
             }
-            
-            break;
-        }
+            if (endpoint == line_buffer ||
+                (endpoint && *endpoint != '\n' && *endpoint != '\r'))
+            {
+                /*
+                 * Well.. looks like we are in the wrong mode.. lets add the
+                 * line we misinterpreted...
+                 */
+                if (!resync)
+                {
+                    reprocess = 1;
+                    pv->current_state = k_state_inEntry;
+                }
+                continue;
+            }
+            /*
+             * We found the next entry - or a really rare error condition
+             */
+            pv->last_entry_number = entry_number;
+            resync = 0;
+            if( *pv->current_entry.text )
+            {
+                long length;
+                char *p, *q;
+                int  line = 1;
+                uint64_t start_time = ( pv->current_entry.start + 
+                                        pv->subtitle->config.offset ) * 90;
+                uint64_t stop_time = ( pv->current_entry.stop + 
+                                       pv->subtitle->config.offset ) * 90;
+
+                if( !( start_time > pv->start_time && stop_time < pv->stop_time ) )
+                {
+                    hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
+                    memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
+                    ++(pv->number_of_entries);
+                    pv->current_state = k_state_timecode;
+                    continue;
+                }
+
+                length = strlen( pv->current_entry.text );
+
+                for( q = p = pv->current_entry.text; *p; p++)
+                {
+                    if( *p == '\n' )
+                    {
+                        if ( line == 1 )
+                        {
+                            *q = *p;
+                            line = 2;
+                        }
+                        else
+                        {
+                            *q = ' ';
+                        }
+                        q++;
+                    }
+                    else if( *p != '\r' )
+                    {
+                        *q = *p;
+                        q++;
+                    }
+                    else
+                    {
+                        length--;
+                    }
+                }
+                *q = '\0';
+
+                buffer = hb_buffer_init( length + 1 );
+
+                if( buffer )
+                {
+                    buffer->start = start_time - pv->start_time;
+                    buffer->stop = stop_time - pv->start_time;
+
+                    memcpy( buffer->data, pv->current_entry.text, length + 1 );
+                }
+            }
+            memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
+            ++(pv->number_of_entries);
+            pv->current_state = k_state_timecode;
+            if( buffer )
+            {
+                return buffer;
+            }
+            continue;
+        } 
         }
     }
 
@@ -405,6 +465,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
         
         pv->current_state = k_state_potential_new_entry;
         pv->number_of_entries = 0;
+        pv->last_entry_number = 0;
         pv->current_time = 0;
         pv->subtitle = w->subtitle;
 
