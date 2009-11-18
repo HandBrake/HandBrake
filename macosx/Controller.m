@@ -4451,18 +4451,9 @@ the user is using "Custom" settings by determining the sender*/
         [fAdvancedOptions setHidden:NO];
         [self autoSetM4vExtension: sender];
     }
-    
-    /* We need to set loose anamorphic as available depending on whether or not the ffmpeg encoder
-    is being used as it borks up loose anamorphic .
-    For convenience lets use the titleOfSelected index. Probably should revisit whether or not we want
-    to use the index itself but this is easier */
+
     if (videoEncoder == HB_VCODEC_FFMPEG)
     {
-        if (job->anamorphic.mode == 2)
-        {
-            job->anamorphic.mode = 0;
-        }
-        [fPictureController setAllowLooseAnamorphic:NO];
         /* We set the iPod atom checkbox to disabled and uncheck it as its only for x264 in the mp4
          container. Format is taken care of in formatPopUpChanged method by hiding and unchecking
          anything other than MP4.
@@ -4472,7 +4463,6 @@ the user is using "Custom" settings by determining the sender*/
     }
     else
     {
-        [fPictureController setAllowLooseAnamorphic:YES];
         [fDstMp4iPodFileCheck setEnabled: YES];
     }
     [self setupQualitySlider];

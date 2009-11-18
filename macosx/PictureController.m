@@ -520,10 +520,7 @@
     [fAnamorphicPopUp removeAllItems];
     [fAnamorphicPopUp addItemWithTitle: @"None"];
     [fAnamorphicPopUp addItemWithTitle: @"Strict"];
-    if (allowLooseAnamorphic)
-    {
     [fAnamorphicPopUp addItemWithTitle: @"Loose"];
-    }
     [fAnamorphicPopUp addItemWithTitle: @"Custom"];
     [fAnamorphicPopUp selectItemAtIndex: job->anamorphic.mode];
     
@@ -1103,16 +1100,6 @@
 - (void) setAutoCrop: (BOOL) setting
 {
     autoCrop = setting;
-}
-
-- (BOOL) allowLooseAnamorphic
-{
-    return allowLooseAnamorphic;
-}
-
-- (void) setAllowLooseAnamorphic: (BOOL) setting
-{
-    allowLooseAnamorphic = setting;
 }
 
 - (IBAction)showPreviewPanel: (id)sender forTitle: (hb_title_t *)title
