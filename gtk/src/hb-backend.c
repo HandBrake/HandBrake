@@ -2677,7 +2677,11 @@ audio_bitrate_opts_add(GtkBuilder *builder, const gchar *name, gint rate)
 }
 
 static void
-audio_bitrate_opts_clean(GtkBuilder *builder, const gchar *name, gint last_rate)
+audio_bitrate_opts_clean(
+	GtkBuilder *builder, 
+	const gchar *name, 
+	gint first_rate, 
+	gint last_rate)
 {
 	GtkTreeIter iter;
 	GtkListStore *store;
@@ -2685,6 +2689,7 @@ audio_bitrate_opts_clean(GtkBuilder *builder, const gchar *name, gint last_rate)
 	gboolean done = FALSE;
 	gint ii = 0;
 	guint last = (guint)last_rate;
+	guint first = (guint)first_rate;
 	
 	g_debug("audio_bitrate_opts_clean ()\n");
 	store = get_combo_box_store(builder, name);
@@ -2698,7 +2703,7 @@ audio_bitrate_opts_clean(GtkBuilder *builder, const gchar *name, gint last_rate)
 			{
 				done = !gtk_list_store_remove(store, &iter);
 			}
-			else if (ivalue > last)
+			else if (ivalue < first || ivalue > last)
 			{
 				ii++;
 				gtk_list_store_set(store, &iter, 1, FALSE, -1);
@@ -2748,9 +2753,12 @@ ghb_set_passthru_bitrate_opts(GtkBuilder *builder, gint bitrate)
 }
 
 void
-ghb_set_default_bitrate_opts(GtkBuilder *builder, gint last_rate)
+ghb_set_default_bitrate_opts(
+	GtkBuilder *builder, 
+	gint first_rate, 
+	gint last_rate)
 {
-	audio_bitrate_opts_clean(builder, "AudioBitrate", last_rate);
+	audio_bitrate_opts_clean(builder, "AudioBitrate", first_rate, last_rate);
 }
 
 static ghb_status_t hb_status;

@@ -47,7 +47,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 
 	if (ghb_audio_is_passthru (acodec))
 	{
-		ghb_set_default_bitrate_opts (ud->builder, -1);
+		ghb_set_default_bitrate_opts (ud->builder, 0, -1);
 		if (ghb_get_audio_info (&ainfo, titleindex, audioindex))
 		{
 			gint br = ainfo.bitrate / 1000;
@@ -70,12 +70,13 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	}
 	else if (acodec == HB_ACODEC_FAAC)
 	{
-		gint br, last;
+		gint br, last = 160, first = 0;
 
 		if (mix == HB_AMIXDOWN_6CH)
+		{
+			first = 192;
 			last = 448;
-		else
-			last = 160;
+		}
 
 		widget = GHB_WIDGET(ud->builder, "AudioBitrate");
 		gval = ghb_widget_value(widget);
@@ -83,11 +84,13 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		ghb_value_free(gval);
 		if (br > last)
 			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(last));
-		ghb_set_default_bitrate_opts (ud->builder, last);
+		if (br < first)
+			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(first));
+		ghb_set_default_bitrate_opts (ud->builder, first, last);
 	}
 	else
 	{
-		ghb_set_default_bitrate_opts (ud->builder, -1);
+		ghb_set_default_bitrate_opts (ud->builder, 0, -1);
 	}
 }
 
