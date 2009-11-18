@@ -5599,10 +5599,10 @@ the user is using "Custom" settings by determining the sender*/
             /* check if we have a 6ch discrete conversion in either audio track */
             if ([[mixdownPopUp selectedItem] tag] == HB_AMIXDOWN_6CH)
             {
-                /* FAAC is happy using our min bitrate of 32 kbps, even for 6ch */
-                minbitrate = 32;
-                /* If either mixdown popup includes 6-channel discrete, then allow up to 384 kbps */
-                maxbitrate = 384;
+                /* FAAC has a minimum of 192 kbps for 6-channel discrete */
+                minbitrate = 192;
+                /* If either mixdown popup includes 6-channel discrete, then allow up to 448 kbps */
+                maxbitrate = 448;
                 break;
             }
             else
