@@ -149,19 +149,15 @@ namespace Handbrake.Parsing
             if (!Properties.Settings.Default.noDvdNav)
             {
                 // Get the Angles for the title.
-                m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9,])");
+                m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)
                 {
                     String angleList = m.Value.Replace("+ angle(s) ", "").Trim();
+                    int angleCount;
+                    int.TryParse(angleList, out angleCount);
 
-                    if (angleList.Contains(","))
-                    {
-                        string[] angles = angleList.Split(',');
-                        foreach (string s in angles)
-                            thisTitle.m_angles.Add(s);
-                    }
-                    else
-                        thisTitle.m_angles.Add(m.Value.Replace("+ angle(s) ", "").Trim());
+                    for (int i = 1; i <= angleCount; i++)
+                        thisTitle.m_angles.Add(i.ToString());
                 }
             }
 
