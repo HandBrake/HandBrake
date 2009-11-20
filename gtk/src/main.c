@@ -688,6 +688,8 @@ main (int argc, char *argv[])
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
 	gtk_rc_parse_string(hud_rcstyle);
+	g_type_class_unref(g_type_class_ref(GTK_TYPE_BUTTON));
+	g_object_set(gtk_settings_get_default(), "gtk-button-images", TRUE, NULL);
 #if !defined(_WIN32)
 	notify_init("HandBrake");
 #endif
