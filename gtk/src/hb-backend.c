@@ -2551,7 +2551,7 @@ init_ui_combo_boxes(GtkBuilder *builder)
 }
 	
 static const char * turbo_opts = 
-	"ref=1:subme=1:me=dia:analyse=none:trellis=0:"
+	"ref=1:subme=2:me=dia:analyse=none:trellis=0:"
 	"no-fast-pskip=0:8x8dct=0";
 
 // Construct the x264 options string
