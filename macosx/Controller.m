@@ -3373,7 +3373,7 @@ bool one_burned = FALSE;
 		if( [[queueToApply objectForKey:@"VideoTwoPass"] intValue] == 1 && [[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue] == 1 )
 		{
 			/* pass the "Turbo" string to be appended to the existing x264 opts string into a variable for the first pass */
-			NSString *firstPassOptStringTurbo = @":ref=1:subme=1:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
+			NSString *firstPassOptStringTurbo = @":ref=1:subme=2:me=dia:analyse=none:trellis=0:no-fast-pskip=0:8x8dct=0:weightb=0";
 			/* append the "Turbo" string variable to the existing opts string.
              Note: the "Turbo" string must be appended, not prepended to work properly*/
 			NSString *firstPassOptStringCombined = [[queueToApply objectForKey:@"x264Option"] stringByAppendingString:firstPassOptStringTurbo];
