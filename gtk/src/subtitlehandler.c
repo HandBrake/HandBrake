@@ -552,6 +552,7 @@ subtitle_burned_toggled_cb(
 	GValue *subtitle_list;
 	gint count;
 	GValue *settings;
+	gint source;
 
 	g_debug("burned toggled");
 	tp = gtk_tree_path_new_from_string (path);
@@ -574,12 +575,21 @@ subtitle_burned_toggled_cb(
 		return;
 
 	settings = ghb_array_get_nth(subtitle_list, row);
+	source = ghb_settings_get_int(settings, "SubtitleSource");
+	if (source != VOBSUB)
+		return;
 	if (!active && mustBurn(ud, settings))
 		return;
 
 	ghb_settings_set_boolean(settings, "SubtitleBurned", active);
-
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 2, active, -1);
+
+	if (active)
+	{
+		ghb_settings_set_boolean(settings, "SubtitleDefaultTrack", !active);
+		gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 3, !active, -1);
+	}
+
 	// Unburn the rest
 	if (active)
 		ghb_subtitle_exclusive_burn(ud, row);
@@ -603,6 +613,7 @@ subtitle_default_toggled_cb(
 	GValue *subtitle_list;
 	gint count;
 	GValue *settings;
+	gboolean burned;
 
 	g_debug("default toggled");
 	tp = gtk_tree_path_new_from_string (path);
@@ -625,10 +636,17 @@ subtitle_default_toggled_cb(
 		return;
 
 	settings = ghb_array_get_nth(subtitle_list, row);
+	if (active && mustBurn(ud, settings))
+		return;
 
 	ghb_settings_set_boolean(settings, "SubtitleDefaultTrack", active);
-
 	gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 3, active, -1);
+
+	if (active)
+	{
+		ghb_settings_set_boolean(settings, "SubtitleBurned", !active);
+		gtk_list_store_set(GTK_LIST_STORE(tm), &ti, 2, !active, -1);
+	}
 	// allow only one default
 	ghb_subtitle_exclusive_default(ud, row);
 	ghb_live_reset(ud);
