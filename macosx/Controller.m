@@ -1354,7 +1354,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
          */
         [sheet orderOut: self];
         
-        if (sender == fOpenSourceTitleMMenu)
+        if (sender == fOpenSourceTitleMMenu || [[NSApp currentEvent] modifierFlags] & NSAlternateKeyMask)
         {
             /* We put the chosen source path in the source display text field for the
              * source title selection sheet in which the user specifies the specific title to be
