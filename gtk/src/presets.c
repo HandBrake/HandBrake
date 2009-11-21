@@ -906,6 +906,19 @@ preset_to_ui(signal_user_data_t *ud, GValue *dict)
 	init_settings_from_dict(ud->settings, hidden, dict);
 	init_ui_from_dict(ud, internal, dict);
 	init_ui_from_dict(ud, hidden, dict);
+
+	if (dict != NULL)
+	{
+		GValue *val;
+		gboolean dd;
+
+		val = ghb_dict_lookup(dict, "PictureDecombDeinterlace");
+		if (val != NULL)
+		{
+			dd = ghb_value_boolean(val);
+			ghb_ui_update(ud, "PictureDeinterlaceDecomb", ghb_boolean_value(!dd));
+		}
+	}
 }
 
 void
