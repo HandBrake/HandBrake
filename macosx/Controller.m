@@ -6436,7 +6436,7 @@ return YES;
                         hb_audio_config_t * audio;
                         /* get the audio source audio codec */
                         audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [trackLangPopUp indexOfSelectedItem] - 1 );
-                        if ([[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"] && audio->in.codec != HB_ACODEC_AC3 ||
+                        if (audio != NULL && [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"] && audio->in.codec != HB_ACODEC_AC3 ||
                             [[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"DTS Passthru"] && audio->in.codec != HB_ACODEC_DCA )
                         {
                             /* We have a preset using ac3 passthru but no ac3 source audio, so set the track to "None" and bail */
