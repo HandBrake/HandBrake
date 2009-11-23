@@ -1,5 +1,134 @@
 NEWS file for HandBrake <http://handbrake.fr/>
 
+Changes between 0.9.3 and 0.9.4:
+
+Core:
+
+* New build system, allowing 64-bit binaries (around 10% faster)
+* Soft subtitles and Closed Captions:
+  - DVD Closed Captions
+  - ATSC Closed Captions
+  - SRT subtitle import
+  - Text soft subtitles in MP4 and MKV output
+  - Bitmap soft subtitles in MKV output
+* Better support for DVD inputs:
+  - Uses libdvdnav
+  - DVD angles support
+  - Workaround for libdvdread malloc bomb on invalid PGC entry
+  - DVD drive region detection support in Linux
+  - Handles DVD programs with more than 16 streams
+  - No longer tries to detect and discard duplicate titles when scanning
+  - Libdvdnav patched to perform read error recovery
+  - Libdvdread patched to allow raw device access in Windows
+  - Handles poorly mastered DVDs that had the menus ripped out of them
+* Better support for non-DVD inputs:
+  - Preserves MP4 metadata
+  - TrueHD
+  - DTS-HD demuxing
+  - 8 bit audio
+  - Better handling of transport streams where audio starts first
+  - Better handling of transport streams that have been spliced together, leading to duplicate timestamps
+  - Better VC-1 frame detection
+  - Fixes bug that was causing one sec. of audio to be dropped on many ffmpeg files
+  - Looks harder for aspect ratio info from DV sources
+  - No longer truncates the last (dummy) chapter
+  - Allows specifying field parity for detelecine and decomb
+* Better AV sync
+* Support for sources with no audio
+* DTS passthrough for MKV
+* x264 bumped from r1169 to r1347, which means speed optimizations, new default settings (see r2742 commit comment), the magic of macroblock tree rate control (mbtree), a new CRF curve (meaning you will get different, generally lower bitrates at the same RF, with similar quality metrics), and weighted P-Frames (disabled by default for Baseline encodes and the AppleTV preset). 
+* Better sample interleaving
+* Better, optional deinterlacer for decomb (EEDI2)
+* New mode structure for the decomb filter
+* Variable verbose logging levels
+* Fixed timing for first two frames coming out of filters
+* Libtheora bumped to 1.1.0
+* Improvements to our theora implementation (2 pass encoding + soft target rate control)
+* Caters to Theora's insistence on content having mod16 framing dimensions specified
+* Flushes LAME encoder's final packets
+* Fixed interjob framerate calculation
+* Fixed pthreads regression in cygwin
+* Tweaks for packaging tools
+* Solaris 10 build support
+
+All interfaces:
+
+* Live video preview
+* New subtitle tab
+* New filters and picture settings inspector
+* Custom anamorphic mode
+* Updated Sparkle
+* Custom number of preview images
+* Quality slider now works off actual rate factor/quantizer values instead of percentages
+* Partially updated advanced x264 tab
+* New built-in presets
+* Use libdvdnav by default on DVD sources
+* Removed Constant QP encoding option for x264 (use CRF)
+* Various bug fixes and UI tweaks
+* x264 turbo 1st pass mode now uses subme=2 not subme=1
+
+Mac:
+
+* Core Audio AAC encoding
+* H.264 video source decoding crash fixed
+* Queue displays varying row heights based on encode settings
+* Fixed EyeTV package scanning
+* 64bit / 32 bit VLC detection 
+* Preset import/export
+
+Windows:
+
+* New audio tab
+* AAC audio source decoding bug fixed
+* Tray minimization is now optional
+* Queue can now be started from main window
+* Growl for Windows notification support
+* General UI improvements
+* Preset import
+* Preferred language control for audio dubs and subtitles
+* Fixed file extensions resetting to m4v when enabling chapter markers in mkv
+* Faster updating of GUI elements from CLI data
+* Cleanup / Improved some of the programs options. (Growl, use m4v, drive detection)
+* Numerous fixes in the Picture Settings Panel and CLI Query Handling code.
+* Bug Fixes and Usability improvements.
+
+Linux:
+
+* General UI improvements
+* Inhibits sleep mode while encoding
+* Single title scan
+* Chapter duration display
+* Notifications when encodes complete
+* Tray minimization
+* Full screen preview
+* Preset import/export
+* Preferred language control for audio dubs and subtitles
+* Preferences rearrangement
+* Preference to auto-apply .m4v extension
+* New system tray icon behavior
+* Preference for what to do when encode completes
+* Preference for how often to delete activity logs
+* Preference to disable automatic scanning
+* New Gnome session manager support
+* Improved "auto" audio selection
+* Use .m4v as the default extension for the MPEG-4 container
+* Use .m4v when soft subs are enabled
+* Alternate angle encoding fix
+* Only strips drive letters for Windows builds
+* Show correct audio format info when it's been sanitized for incompatibilities
+* Preserve chapter list modifications made to queued jobs
+* Fixed error when navigating chapter titles with the keyboard
+* Bug Fixes.
+
+CLI:
+
+* Options to handle new subtitle, anamorphic, and preview features
+* --srt-file, --srt-codeset, --srt-offset, --srt-lang, --srt-default
+* --native-dub option lets users request dubbing instead of subs when the audio isn't in their native language
+* Allow encoding sources with no audio without explicitly stating -a none
+* Update checker on MinGW built exe should now work correctly.
+* Matches GUIs' default verbosity level of 1
+
 Changes between 0.9.2 and 0.9.3:
 
 0.9.3 Snapshot 5 -> 0.9.3 Final
