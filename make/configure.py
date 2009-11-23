@@ -630,7 +630,7 @@ class RepoProbe( ShellProbe ):
         if self.uuid == 'b64f7644-9d1e-0410-96f1-a4d463321fa5':
             self.official = 1
             m = re.match( '([^:]+)://([^/]+)/(.+)', self.url )
-            if m and re.match( 'tags/', m.group( 3 )):
+            if m and re.match( '.*tags/.*', m.group( 3 )):
                 self.type = 'release'
             else:
                 self.type = 'developer'
