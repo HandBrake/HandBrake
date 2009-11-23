@@ -167,7 +167,7 @@
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
-    [preset setObject:@"HandBrake's settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and pushes the AppleTV to its limits." forKey:@"PresetDescription"];
+    [preset setObject:@"HandBrake's settings for the AppleTV and 2009's iPhone and iPod Touch lineup. Provides a good balance between quality and file size, and pushes the devices to their limits. Includes Dolby Digital 5.1 AC3 sound for the AppleTV." forKey:@"PresetDescription"];
 
     /* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
@@ -182,7 +182,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
@@ -607,7 +607,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"b-adapt=2:rc-lookahead=50" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
@@ -705,7 +705,7 @@
     [preset setObject:[NSNumber numberWithInt:1] forKey:@"UsesPictureSettings"];
 
     /* Get the New Preset Description from the field in the AddPresetPanel */
-    [preset setObject:@"HandBrake's settings for the iPhone and iPod Touch." forKey:@"PresetDescription"];
+    [preset setObject:@"HandBrake's settings for all iPhones and iPod Touches going back to the original iPhone 2G." forKey:@"PresetDescription"];
 
     /* File Format */
     [preset setObject:@"MP4 file" forKey:@"FileFormat"];
@@ -1093,7 +1093,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String */
-    [preset setObject:@"ref=2:bframes=2:me=umh:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
+    [preset setObject:@"ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
