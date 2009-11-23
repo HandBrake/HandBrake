@@ -349,25 +349,25 @@ bind_audio_tree_model (signal_user_data_t *ud)
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Codec"), cell, "text", 1, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	gtk_tree_view_column_set_min_width (column, 105);
+	gtk_tree_view_column_set_min_width (column, 120);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Bitrate"), cell, "text", 2, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	gtk_tree_view_column_set_min_width (column, 60);
+	gtk_tree_view_column_set_min_width (column, 80);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Sample Rate"), cell, "text", 3, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	gtk_tree_view_column_set_min_width (column, 105);
+	gtk_tree_view_column_set_min_width (column, 115);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(
 									_("Mix"), cell, "text", 4, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-	gtk_tree_view_column_set_min_width (column, 120);
+	gtk_tree_view_column_set_min_width (column, 150);
 
 	cell = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(

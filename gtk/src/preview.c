@@ -142,6 +142,8 @@ ghb_par_scale(signal_user_data_t *ud, gint *width, gint *height, gint par_n, gin
 void
 ghb_preview_init(signal_user_data_t *ud)
 {
+	GtkWidget *widget;
+
 	ud->preview = g_malloc0(sizeof(preview_t));
 	ud->preview->view = GHB_WIDGET(ud->builder, "preview_image");
 	gtk_widget_realize(ud->preview->view);
@@ -151,7 +153,9 @@ ghb_preview_init(signal_user_data_t *ud)
 	ud->preview->pause = TRUE;
 	ud->preview->encode_frame = -1;
 	ud->preview->live_id = -1;
-
+	widget = GHB_WIDGET (ud->builder, "preview_button_image");
+	gtk_widget_get_size_request(widget, &ud->preview->button_width, &ud->preview->button_height);
+	
 #if defined(_ENABLE_GST)
 	GstBus *bus;
 	GstElement *xover;
