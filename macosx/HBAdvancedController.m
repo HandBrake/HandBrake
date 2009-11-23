@@ -295,7 +295,7 @@
     [fX264optPsyRDSlider setMinValue:0.0];
     [fX264optPsyRDSlider setMaxValue:1.0];
     [fX264optPsyRDSlider setTickMarkPosition:NSTickMarkBelow];
-    [fX264optPsyRDSlider setNumberOfTickMarks:10];
+    [fX264optPsyRDSlider setNumberOfTickMarks:11];
     [fX264optPsyRDSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optPsyRDSlider setFloatValue:1.0];
     toolTip =
@@ -307,7 +307,7 @@
     [fX264optPsyTrellisSlider setMinValue:0.0];
     [fX264optPsyTrellisSlider setMaxValue:1.0];
     [fX264optPsyTrellisSlider setTickMarkPosition:NSTickMarkBelow];
-    [fX264optPsyTrellisSlider setNumberOfTickMarks:10];
+    [fX264optPsyTrellisSlider setNumberOfTickMarks:11];
     [fX264optPsyTrellisSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optPsyTrellisSlider setFloatValue:0.0];
     toolTip =
