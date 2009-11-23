@@ -246,7 +246,7 @@
 				<key>PictureWidth</key>
 				<integer>480</integer>
 				<key>PresetDescription</key>
-				<string>HandBrake's settings for the iPhone and iPod Touch.</string>
+				<string>HandBrake's settings for all iPhones and iPod Touches going back to the original iPhone 2G.</string>
 				<key>PresetName</key>
 				<string>iPhone &amp; iPod Touch</string>
 				<key>Subtitles</key>
@@ -349,7 +349,7 @@
 				<key>PictureWidth</key>
 				<integer>960</integer>
 				<key>PresetDescription</key>
-				<string>HandBrake's settings for the AppleTV, including Dolby Digital 5.1 AC3 sound. Provides a good balance between quality and file size, and pushes the AppleTV to its limits.</string>
+				<string>HandBrake's settings for the AppleTV and 2009's iPhone and iPod Touch lineup. Provides a good balance between quality and file size, and pushes the devices to their limits. Includes Dolby Digital 5.1 AC3 sound for the AppleTV.</string>
 				<key>PresetName</key>
 				<string>AppleTV</string>
 				<key>Subtitles</key>
@@ -379,7 +379,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0</string>
+				<string>cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0</string>
 			</dict>
 		</array>
 		<key>Default</key>
@@ -387,7 +387,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009082501</integer>
+		<integer>2009112101</integer>
 		<key>PresetName</key>
 		<string>Apple</string>
 		<key>Type</key>
@@ -481,7 +481,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>ref=2:bframes=2:me=umh:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0</string>
+				<string>ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0</string>
 			</dict>
 			<dict>
 				<key>AudioList</key>
@@ -584,7 +584,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>b-pyramid:b-adapt=2:me=umh:subme=9:analyse=all:trellis=0</string>
+				<string>b-adapt=2:rc-lookahead=50</string>
 			</dict>
 		</array>
 		<key>Default</key>
@@ -592,7 +592,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009082501</integer>
+		<integer>2009112101</integer>
 		<key>PresetName</key>
 		<string>Regular</string>
 		<key>Type</key>
@@ -967,7 +967,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009082501</integer>
+		<integer>2009112101</integer>
 		<key>PresetName</key>
 		<string>Legacy</string>
 		<key>Type</key>
