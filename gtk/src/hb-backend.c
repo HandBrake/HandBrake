@@ -1044,8 +1044,8 @@ lookup_audio_lang_option(const GValue *rate)
 	return result;
 }
 
-static GValue*
-get_acodec_value(gint val)
+GValue*
+ghb_lookup_acodec_value(gint val)
 {
 	GValue *value = NULL;
 	gint ii;
@@ -2034,37 +2034,51 @@ ghb_get_source_audio_lang(gint titleindex, gint track)
 	return lang;
 }
 
+static gboolean*
+get_track_used(gint acodec, GHashTable *track_indices, gint count)
+{
+	gboolean *used;
+
+	used = g_hash_table_lookup(track_indices, &acodec);
+	if (used == NULL)
+	{
+		gint *key;
+
+		used = g_malloc0(count * sizeof(gboolean));
+		key = g_malloc(sizeof(gint));
+		*key = acodec;
+		g_hash_table_insert(track_indices, key, used);
+	}
+	return used;
+}
+
 gint
 ghb_find_audio_track(
 	gint titleindex, 
 	const gchar *lang, 
 	gint acodec,
+	gint fallback_acodec,
 	GHashTable *track_indices)
 {
 	hb_list_t  * list;
 	hb_title_t * title;
-    hb_audio_config_t * audio;
+	hb_audio_config_t * audio;
 	gint ii;
 	gint count = 0;
 	gint track = -1;
 	gint max_chan = 0;
 	gboolean *used;
+	gint try_acodec;
 	
 	g_debug("find_audio_track ()\n");
 	if (h_scan == NULL) return -1;
 	list = hb_get_titles( h_scan );
-    title = (hb_title_t*)hb_list_item( list, titleindex );
+	title = (hb_title_t*)hb_list_item( list, titleindex );
 	if (title != NULL)
 	{
 		count = hb_list_count( title->list_audio );
 	}
 	if (count > 10) count = 10;
-	used = g_hash_table_lookup(track_indices, &acodec);
-	if (used == NULL)
-	{
-		used = g_malloc0(count * sizeof(gboolean));
-		g_hash_table_insert(track_indices, &acodec, used);
-	}
 	// Try to find an item that matches the preferred language and
 	// the passthru codec type
 	if (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
@@ -2073,17 +2087,22 @@ ghb_find_audio_track(
 		{
 			gint channels;
 
+			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+			try_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+			// Is the source track use a passthru capable codec?
+			if (try_acodec == 0)
+				continue;
+			used = get_track_used(try_acodec, track_indices, count);
+			// Has the track already been used with this codec?
 			if (used[ii])
 				continue;
 
-        	audio = (hb_audio_config_t*)hb_list_audio_config_item( 
-													title->list_audio, ii );
 			channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
 													audio->in.channel_layout);
 			// Find a track that is not visually impaired or dirctor's
 			// commentary, and has the highest channel count.
-			if ((audio->in.codec & acodec) &&
-				(audio->lang.type < 2) &&
+			if ((audio->lang.type < 2) &&
 				((strcmp(lang, audio->lang.iso639_2) == 0) ||
 				(strcmp(lang, "und") == 0)))
 			{
@@ -2094,6 +2113,11 @@ ghb_find_audio_track(
 				}
 			}
 		}
+		try_acodec = fallback_acodec;
+	}
+	else
+	{
+		try_acodec = acodec;
 	}
 	if (track > -1)
 	{
@@ -2101,11 +2125,13 @@ ghb_find_audio_track(
 		return track;
 	}
 	// Try to find an item that matches the preferred language
+	used = get_track_used(try_acodec, track_indices, count);
 	for (ii = 0; ii < count; ii++)
 	{
+		// Has the track already been used with this codec?
 		if (used[ii])
 			continue;
-        audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
 		// Find a track that is not visually impaired or dirctor's commentary
 		if ((audio->lang.type < 2) &&
@@ -2129,17 +2155,22 @@ ghb_find_audio_track(
 		{
 			gint channels;
 
+			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+													title->list_audio, ii );
+			try_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+			// Is the source track use a passthru capable codec?
+			if (try_acodec == 0)
+				continue;
+			used = get_track_used(try_acodec, track_indices, count);
+			// Has the track already been used with this codec?
 			if (used[ii])
 				continue;
 
-        	audio = (hb_audio_config_t*)hb_list_audio_config_item( 
-													title->list_audio, ii );
 			channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
 													audio->in.channel_layout);
 			// Find a track that is not visually impaired or dirctor's
 			// commentary, and has the highest channel count.
-			if ((audio->in.codec & acodec) &&
-				(audio->lang.type < 2))
+			if (audio->lang.type < 2)
 			{
 				if (channels > max_chan)
 				{
@@ -2148,6 +2179,11 @@ ghb_find_audio_track(
 				}
 			}
 		}
+		try_acodec = fallback_acodec;
+	}
+	else
+	{
+		try_acodec = acodec;
 	}
 	if (track > -1)
 	{
@@ -2155,11 +2191,13 @@ ghb_find_audio_track(
 		return track;
 	}
 	// Try to fine an item that does not match the preferred language
+	used = get_track_used(try_acodec, track_indices, count);
 	for (ii = 0; ii < count; ii++)
 	{
+		// Has the track already been used with this codec?
 		if (used[ii])
 			continue;
-        audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
 		// Find a track that is not visually impaired or dirctor's commentary
 		if (audio->lang.type < 2)
@@ -2176,8 +2214,9 @@ ghb_find_audio_track(
 	// Last ditch, anything goes
 	for (ii = 0; ii < count; ii++)
 	{
-        audio = (hb_audio_config_t*)hb_list_audio_config_item( 
+		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
+		// Has the track already been used with this codec?
 		if (!used[ii])
 		{
 			track = ii;
@@ -3892,7 +3931,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 			{
 				codec = HB_ACODEC_FAAC;
 			}
-			value = get_acodec_value(codec);
+			value = ghb_lookup_acodec_value(codec);
 			ghb_settings_take_value(asettings, "AudioEncoder", value);
 		}
 		gchar *a_unsup = NULL;
@@ -3929,7 +3968,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 				return FALSE;
 			}
 			g_free(message);
-			value = get_acodec_value(codec);
+			value = ghb_lookup_acodec_value(codec);
 			ghb_settings_take_value(asettings, "AudioEncoder", value);
 		}
 		gint mix = ghb_settings_combo_int (asettings, "AudioMixdown");

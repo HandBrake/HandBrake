@@ -57,15 +57,17 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 			if (ghb_audio_is_passthru (ainfo.codec))
 			{
 				ghb_set_passthru_bitrate_opts (ud->builder, br);
+				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
 			}
 			else
 			{
 				acodec = ghb_select_audio_codec(ud, audioindex);
 				br = ghb_find_closest_audio_bitrate(acodec, br);
+				mix = ghb_get_best_mix( titleindex, audioindex, acodec, 0);
+				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
 			}
 			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
-			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
 		}
 		else
 		{
@@ -101,8 +103,8 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	}
 }
 
-void
-free_audio_index_list(gpointer data)
+static void
+free_audio_hash_key_value(gpointer data)
 {
 	g_free(data);
 }
@@ -125,19 +127,27 @@ ghb_get_user_audio_lang(signal_user_data_t *ud, gint titleindex, gint track)
 void
 ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 {
-	gint acodec_code, mix_code, track;
+	gint fallback_acodec, track;
 	gchar *source_lang = NULL;
 	GtkWidget *button;
 	ghb_audio_info_t ainfo;
 	GHashTable *track_indices;
+	gint mux;
 
 	const GValue *pref_audio;
-	const GValue *audio, *acodec, *bitrate, *rate, *mix, *drc;
+	const GValue *audio, *drc;
+	gint acodec, bitrate, mix;
+	gdouble rate;
 	gint count, ii, list_count;
 	
 	g_debug("set_pref_audio");
+	mux = ghb_settings_combo_int(ud->settings, "FileFormat");
+	if (mux == HB_MUX_MP4)
+		fallback_acodec = HB_ACODEC_FAAC;
+	else
+		fallback_acodec = HB_ACODEC_LAME;
 	track_indices = g_hash_table_new_full(g_int_hash, g_int_equal, 
-											NULL, free_audio_index_list);
+						free_audio_hash_key_value, free_audio_hash_key_value);
 	// Clear the audio list
 	ghb_clear_audio_list(ud);
 	// Find "best" audio based on audio preferences
@@ -156,59 +166,65 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 	for (ii = 0; ii < count; ii++)
 	{
 		audio = ghb_array_get_nth(pref_audio, ii);
-		acodec = ghb_settings_get_value(audio, "AudioEncoder");
-		bitrate = ghb_settings_get_value(audio, "AudioBitrate");
-		rate = ghb_settings_get_value(audio, "AudioSamplerate");
-		mix = ghb_settings_get_value(audio, "AudioMixdown");
+		acodec = ghb_settings_combo_int(audio, "AudioEncoder");
+		bitrate = ghb_settings_combo_int(audio, "AudioBitrate");
+		rate = ghb_settings_combo_double(audio, "AudioSamplerate");
+		mix = ghb_settings_combo_int(audio, "AudioMixdown");
 		drc = ghb_settings_get_value(audio, "AudioTrackDRCSlider");
-		acodec_code = ghb_lookup_combo_int("AudioEncoder", acodec);
+		//acodec_code = ghb_lookup_combo_int("AudioEncoder", acodec);
 		// If there are multiple audios using the same codec, then
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each codec.
 		track = ghb_find_audio_track(titleindex, source_lang, 
-									acodec_code, track_indices);
+								acodec, fallback_acodec, track_indices);
 		// Check to see if:
-		// 1. pref codec is ac3
-		// 2. source codec is not ac3
+		// 1. pref codec is passthru
+		// 2. source codec is not passthru
 		// 3. next pref is enabled
 		if (ghb_get_audio_info (&ainfo, titleindex, track) && 
-			ghb_audio_is_passthru (acodec_code))
+			ghb_audio_is_passthru (acodec))
 		{
-			// HB_ACODEC_* are bit fields.  Treat acodec_code as mask
-			if (!(ainfo.codec & acodec_code))
+			// HB_ACODEC_* are bit fields.  Treat acodec as mask
+			if (!(ainfo.codec & acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
 			{
-				acodec_code = ghb_get_default_acodec();
+				acodec = fallback_acodec;
 				// If there's more audio to process, or we've already
 				// placed one in the list, then we can skip this one
 				if ((ii + 1 < count) || (list_count != 0))
 				{
 					// Skip this audio
-					acodec_code = 0;
+					acodec = 0;
+				}
+				else
+				{
+					bitrate = ainfo.bitrate / 1000;
+					if (bitrate < 8)
+						bitrate = 160;
+					rate = 0;
+					mix = HB_AMIXDOWN_DOLBYPLII;
 				}
 			}
 			else
 			{
-				acodec_code &= ainfo.codec;
+				acodec &= ainfo.codec;
 			}
 		}
 		if (titleindex >= 0 && track < 0)
-			acodec_code = 0;
-		if (acodec_code != 0)
+			acodec = 0;
+		if (acodec != 0)
 		{
 			// Add to audio list
 			g_signal_emit_by_name(button, "clicked", ud);
 			list_count++;
 			ghb_ui_update(ud, "AudioTrack", ghb_int64_value(track));
-			ghb_ui_update(ud, "AudioEncoder", acodec);
-			if (!ghb_audio_is_passthru (acodec_code))
+			ghb_ui_update(ud, "AudioEncoder", ghb_int64_value(acodec));
+			if (!ghb_audio_is_passthru (acodec))
 			{
 				// This gets set autimatically if the codec is passthru
-				ghb_ui_update(ud, "AudioBitrate", bitrate);
-				ghb_ui_update(ud, "AudioSamplerate", rate);
-				mix_code = ghb_lookup_combo_int("AudioMixdown", mix);
-				mix_code = ghb_get_best_mix(
-					titleindex, track, acodec_code, mix_code);
-				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix_code));
+				ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(bitrate));
+				ghb_ui_update(ud, "AudioSamplerate", ghb_double_value(rate));
+				mix = ghb_get_best_mix( titleindex, track, acodec, mix);
+				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
 			}
 			ghb_adjust_audio_rate_combos(ud);
 			ghb_ui_update(ud, "AudioTrackDRCSlider", drc);

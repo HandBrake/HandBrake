@@ -140,7 +140,8 @@ void ghb_update_ui_combo_box(
 	signal_user_data_t *ud, const gchar *name, gint user_data, gboolean all);
 gchar* ghb_get_source_audio_lang(gint titleindex, gint track);
 gint ghb_find_audio_track(
-	gint titleindex, const gchar *lang, gint acodec, GHashTable *track_indices);
+	gint titleindex, const gchar *lang, gint acodec, 
+	gint fallback_acodec, GHashTable *track_indices);
 void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_pref_subtitle_track(const gchar *lang);
 gint ghb_find_subtitle_track(
@@ -175,5 +176,6 @@ gchar* ghb_get_tmp_dir();
 gint ghb_select_audio_codec(signal_user_data_t *ud, gint track);
 const gchar* ghb_select_audio_codec_str(signal_user_data_t *ud, gint track);
 gint ghb_find_closest_audio_bitrate(gint codec, gint rate);
+GValue* ghb_lookup_acodec_value(gint val);
 
 #endif // _HBBACKEND_H_

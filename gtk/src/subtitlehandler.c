@@ -613,7 +613,6 @@ subtitle_default_toggled_cb(
 	GValue *subtitle_list;
 	gint count;
 	GValue *settings;
-	gboolean burned;
 
 	g_debug("default toggled");
 	tp = gtk_tree_path_new_from_string (path);
