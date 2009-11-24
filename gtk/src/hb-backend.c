@@ -3080,7 +3080,6 @@ ghb_get_audio_info(ghb_audio_info_t *ainfo, gint titleindex, gint audioindex)
 	if (audio == NULL) return FALSE; // Bad audioindex
 	ainfo->codec = audio->in.codec;
 	ainfo->bitrate = audio->in.bitrate;
-	ainfo->bitrate = 436000;
 	ainfo->samplerate = audio->in.samplerate;
 	return TRUE;
 }
