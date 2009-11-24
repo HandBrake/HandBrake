@@ -926,6 +926,33 @@ lookup_audio_rate_option(const GValue *rate)
 	return result;
 }
 
+gint
+ghb_find_closest_audio_bitrate(gint codec, gint rate)
+{
+	gint ii;
+	gint low = 32;
+	gint high = 768;
+	gint result;
+
+	if (codec == HB_ACODEC_FAAC)
+		high = 160;
+
+	result = high;
+	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	{
+		if (hb_audio_bitrates[ii].rate < low)
+			continue;
+		if (hb_audio_bitrates[ii].rate > high)
+			break;
+		if (rate <= hb_audio_bitrates[ii].rate)
+		{
+			result = hb_audio_bitrates[ii].rate;
+			break;
+		}
+	}
+	return result;
+}
+
 static gint
 lookup_audio_bitrate_int(const GValue *rate)
 {
@@ -3053,6 +3080,7 @@ ghb_get_audio_info(ghb_audio_info_t *ainfo, gint titleindex, gint audioindex)
 	if (audio == NULL) return FALSE; // Bad audioindex
 	ainfo->codec = audio->in.codec;
 	ainfo->bitrate = audio->in.bitrate;
+	ainfo->bitrate = 436000;
 	ainfo->samplerate = audio->in.samplerate;
 	return TRUE;
 }

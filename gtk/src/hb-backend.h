@@ -174,5 +174,6 @@ const gchar* ghb_lookup_combo_string(const gchar *name, const GValue *gval);
 gchar* ghb_get_tmp_dir();
 gint ghb_select_audio_codec(signal_user_data_t *ud, gint track);
 const gchar* ghb_select_audio_codec_str(signal_user_data_t *ud, gint track);
+gint ghb_find_closest_audio_bitrate(gint codec, gint rate);
 
 #endif // _HBBACKEND_H_

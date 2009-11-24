@@ -52,10 +52,17 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 		{
 			gint br = ainfo.bitrate / 1000;
 			// Set the values for bitrate and samplerate to the input rates
-			if (br >= 8)
-				ghb_set_passthru_bitrate_opts (ud->builder, br);
-			else
+			if (br < 8)
 				br = 160;
+			if (ghb_audio_is_passthru (ainfo.codec))
+			{
+				ghb_set_passthru_bitrate_opts (ud->builder, br);
+			}
+			else
+			{
+				acodec = ghb_select_audio_codec(ud, audioindex);
+				br = ghb_find_closest_audio_bitrate(acodec, br);
+			}
 			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
 			ghb_ui_update(ud, "AudioSamplerate", ghb_int64_value(0));
 			ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
