@@ -613,12 +613,83 @@ void hb_deep_log( hb_debug_level_t level, char * log, ... )
 void hb_error( char * log, ... )
 {
     char        string[181]; /* 180 chars + \0 */
+    char        rep_string[181];
+    static char last_string[181];
+    static int  last_error_count = 0;
+    static uint64_t last_series_error_time = 0;
+    static hb_lock_t *mutex = 0;
     va_list     args;
+    uint64_t time_now;
 
     /* Convert the message to a string */
     va_start( args, log );
     vsnprintf( string, 180, log, args );
     va_end( args );
+
+    if( !mutex )
+    {
+        mutex = hb_lock_init();
+    }
+
+    hb_lock( mutex );
+
+    time_now = hb_get_date();
+
+    if( strcmp( string, last_string) == 0 )
+    {
+        /*
+         * The last error and this one are the same, don't log it
+         * just count it instead, unless it was more than one second
+         * ago.
+         */
+        last_error_count++;
+        if( last_series_error_time + ( 1000 * 1 ) > time_now )
+        {
+            hb_unlock( mutex );
+            return;
+        } 
+    }
+    
+    /*
+     * A new error, or the same one more than 10sec since the last one
+     * did we have any of the same counted up?
+     */
+    if( last_error_count > 0 )
+    {
+        /*
+         * Print out the last error to ensure context for the last 
+         * repeated message.
+         */
+        if( error_handler )
+        {
+            error_handler( last_string );
+        } else {
+            hb_log( "%s", last_string );
+        }
+        
+        if( last_error_count > 1 )
+        {
+            /*
+             * Only print out the repeat message for more than 2 of the
+             * same, since we just printed out two of them already.
+             */
+            snprintf( rep_string, 180, "Last error repeated %d times", 
+                      last_error_count - 1 );
+            
+            if( error_handler )
+            {
+                error_handler( rep_string );
+            } else {
+                hb_log( "%s", rep_string );
+            }
+        }
+        
+        last_error_count = 0;
+    }
+
+    last_series_error_time = time_now;
+
+    strcpy( last_string, string );
 
     /*
      * Got the error in a single string, send it off to be dispatched.
@@ -627,8 +698,10 @@ void hb_error( char * log, ... )
     {
         error_handler( string );
     } else {
-        hb_log( string );
+        hb_log( "%s", string );
     }
+
+    hb_unlock( mutex );
 }
 
 void hb_register_error_handler( hb_error_handler_t * handler )

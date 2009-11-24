@@ -921,7 +921,7 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
         result = dvdnav_get_next_block( d->dvdnav, buf, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
-            hb_log("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
+            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
             return 0;
         }
         switch ( event )
@@ -987,7 +987,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
         result = dvdnav_get_next_block( d->dvdnav, b->data, &event, &len );
         if ( result == DVDNAV_STATUS_ERR )
         {
-            hb_log("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
+            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
             if (dvdnav_sector_search(d->dvdnav, 1, SEEK_CUR) != DVDNAV_STATUS_OK)
             {
                 hb_error( "dvd: dvdnav_sector_search failed - %s",
@@ -997,7 +997,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             error_count++;
             if (error_count > 10)
             {
-                hb_log("dvdnav: Error, too many consecutive read errors");
+                hb_error("dvdnav: Error, too many consecutive read errors");
                 return 0;
             }
             continue;
