@@ -207,7 +207,7 @@ namespace Handbrake.Functions
             Properties.Settings.Default.cliLastModified = lastModified;
             
             Process cliProcess = new Process();
-            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u")
+            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
                                                 {
                                                     UseShellExecute = false,
                                                     RedirectStandardError = true,
@@ -225,7 +225,7 @@ namespace Handbrake.Functions
                 while (!cliProcess.HasExited)
                 {
                     line = stdOutput.ReadLine() ?? "";
-                    Match m = Regex.Match(line, @"HandBrake ([0-9.]*)(svn[0-9M]*) \([0-9]*\)");
+                    Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \([0-9]*\)");
                     Match platform = Regex.Match(line, @"- ([A-Za-z0-9\s ]*) -");
 
                     if (m.Success)
