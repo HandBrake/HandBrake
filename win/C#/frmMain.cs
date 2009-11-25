@@ -952,6 +952,10 @@ namespace Handbrake
                 Subtitles.Clear();
                 Subtitles.SetSubtitleTrackAuto();
             }
+            // Update the source label if we have multiple streams
+            if (selectedTitle != null)
+                if (!string.IsNullOrEmpty(selectedTitle.SourceName))
+                    labelSource.Text = labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
 
             // Run the autoName & chapterNaming functions
             if (Properties.Settings.Default.autoNaming)
@@ -1603,6 +1607,10 @@ namespace Handbrake
         private void UpdateSourceLabel()
         {
             labelSource.Text = string.IsNullOrEmpty(sourcePath) ? "Select \"Source\" to continue." : this.SourceName;
+
+            if (selectedTitle != null)
+                if (!string.IsNullOrEmpty(selectedTitle.SourceName)) // If it's one of multiple source files, make sure we don't use the folder name
+                    labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
         }
         #endregion
 

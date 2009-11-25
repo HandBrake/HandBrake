@@ -25,6 +25,7 @@ namespace Handbrake.Parsing
         private List<String> m_angles = new List<string>();
         private float m_aspectRatio;
         private int[] m_autoCrop;
+        private string source;
         private TimeSpan m_duration;
         private Size m_resolution;
         private int m_titleNumber;
@@ -70,6 +71,11 @@ namespace Handbrake.Parsing
         public int TitleNumber
         {
             get { return m_titleNumber; }
+        }
+
+        public string SourceName
+        {
+            get { return source;  }
         }
 
         /// <summary>
@@ -144,8 +150,12 @@ namespace Handbrake.Parsing
             if (m.Success)
                 thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim());
 
-            output.ReadLine();
-
+            // If we are scanning a groupd of files, we'll want to get the source name.
+            string path = output.ReadLine();
+            m = Regex.Match(path, @"^  \+ stream:");
+            if (m.Success)
+                thisTitle.source = path.Replace("+ stream:", "").Trim();
+ 
             if (!Properties.Settings.Default.noDvdNav)
             {
                 // Get the Angles for the title.
