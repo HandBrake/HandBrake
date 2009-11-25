@@ -97,14 +97,17 @@ static void ScanFunc( void * _data )
     }
     else if ( ( data->batch = hb_batch_init( data->path ) ) )
     {
+        int j = 1;
+
         /* Scan all titles */
         for( i = 0; i < hb_batch_title_count( data->batch ); i++ )
         {
             hb_title_t * title;
 
-            title = hb_batch_title_scan( data->batch, i + 1 );
+            title = hb_batch_title_scan( data->batch, i );
             if ( title != NULL )
             {
+                title->index = j++;
                 hb_list_add( data->list_title, title );
             }
         }
