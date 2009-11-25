@@ -660,7 +660,7 @@ class Project( Action ):
 
         self.vmajor = 0
         self.vminor = 9
-        self.vpoint = 4
+        self.vpoint = 5
 
     def _action( self ):
         ## add architecture to URL only for Mac

@@ -12,13 +12,13 @@ pkg.clean:
 
 $(PKG.src.tar.bz2): | $(dir $(PKG.src.tar.bz2))
 $(PKG.src.tar.bz2): | $(STAGE.out.src/)
-	$(TAR.exe) cjf $@ -C $(STAGE.out.src/) $(HB.name)-$(HB.version)
+	$(TAR.exe) cjf $@ -C $(STAGE.out.src/) $(PKG.basename)
 
 $(STAGE.out.src/):
-	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(HB.name)-$(HB.version)
+	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(PKG.basename)
 	sed 's/\(self.rev.*=.*\)0/\1$(HB.repo.rev)/' \
-	    $@/$(HB.name)-$(HB.version)/make/configure.py > $@/$(HB.name)-$(HB.version)/make/configure.py.tmp
-	$(MV.exe) $@/$(HB.name)-$(HB.version)/make/configure.py.tmp $@/$(HB.name)-$(HB.version)/make/configure.py
+	    $@/$(PKG.basename)/make/configure.py > $@/$(PKG.basename)/make/configure.py.tmp
+	$(MV.exe) $@/$(PKG.basename)/make/configure.py.tmp $@/$(PKG.basename)/make/configure.py
 
 ###############################################################################
 
