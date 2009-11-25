@@ -141,11 +141,6 @@
     <Compile Include="Controls\Filters.Designer.cs">
       <DependentUpon>Filters.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NewTrackSlider.cs">
-    </Compile>
-    <Compile Include="Controls\NewTrackSlider.Designer.cs">
-      <DependentUpon>NewTrackSlider.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PictureSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
