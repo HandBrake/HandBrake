@@ -161,19 +161,19 @@
             this.toolStripSeparator2,
             this.mnu_remove});
             this.subMenu.Name = "audioMenu";
-            this.subMenu.Size = new System.Drawing.Size(142, 76);
+            this.subMenu.Size = new System.Drawing.Size(139, 76);
             // 
             // mnu_moveup
             // 
             this.mnu_moveup.Name = "mnu_moveup";
-            this.mnu_moveup.Size = new System.Drawing.Size(141, 22);
+            this.mnu_moveup.Size = new System.Drawing.Size(138, 22);
             this.mnu_moveup.Text = "Move Up";
             this.mnu_moveup.Click += new System.EventHandler(this.mnu_moveup_Click);
             // 
             // mnu_movedown
             // 
             this.mnu_movedown.Name = "mnu_movedown";
-            this.mnu_movedown.Size = new System.Drawing.Size(141, 22);
+            this.mnu_movedown.Size = new System.Drawing.Size(138, 22);
             this.mnu_movedown.Text = "Move Down";
             this.mnu_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mnu_movedown.Click += new System.EventHandler(this.mnu_movedown_Click);
@@ -181,12 +181,12 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(135, 6);
             // 
             // mnu_remove
             // 
             this.mnu_remove.Name = "mnu_remove";
-            this.mnu_remove.Size = new System.Drawing.Size(141, 22);
+            this.mnu_remove.Size = new System.Drawing.Size(138, 22);
             this.mnu_remove.Text = "Remove";
             this.mnu_remove.Click += new System.EventHandler(this.mnu_remove_Click);
             // 
@@ -276,6 +276,11 @@
             0,
             0,
             0});
+            this.srt_offset.Minimum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            -2147483648});
             this.srt_offset.Name = "srt_offset";
             this.srt_offset.Size = new System.Drawing.Size(58, 21);
             this.srt_offset.TabIndex = 79;
