@@ -1,28 +1,8 @@
-diff -Naur ffmpeg-r19067.orig/libavcodec/h264.c ffmpeg-r19067/libavcodec/h264.c
---- ffmpeg-r19067.orig/libavcodec/h264.c	2009-05-29 20:24:20.000000000 -0400
-+++ ffmpeg-r19067/libavcodec/h264.c	2009-06-01 12:45:16.000000000 -0400
-@@ -3406,7 +3406,7 @@
-          * stream. Need to discard one frame. Prevents overrun of the
-          * short_ref and long_ref buffers.
-          */
--        av_log(h->s.avctx, AV_LOG_ERROR,
-+        av_log(h->s.avctx, AV_LOG_DEBUG,
-                "number of reference frames exceeds max (probably "
-                "corrupt input), discarding one\n");
- 
-@@ -7770,7 +7770,7 @@
- 
-     if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
-         if (avctx->skip_frame >= AVDISCARD_NONREF || s->hurry_up) return 0;
--        av_log(avctx, AV_LOG_ERROR, "no frame!\n");
-+        av_log(avctx, AV_LOG_DEBUG, "no frame!\n");
-         return -1;
-     }
- 
-diff -Naur ffmpeg-r19067.orig/libavcodec/mpegvideo.c ffmpeg-r19067/libavcodec/mpegvideo.c
---- ffmpeg-r19067.orig/libavcodec/mpegvideo.c	2009-05-27 15:55:35.000000000 -0400
-+++ ffmpeg-r19067/libavcodec/mpegvideo.c	2009-06-01 12:45:16.000000000 -0400
-@@ -831,19 +831,18 @@
+Index: libavcodec/mpegvideo.c
+===================================================================
+--- ffmpeg.orig/libavcodec/mpegvideo.c	(revision 20594)
++++ ffmpeg/libavcodec/mpegvideo.c	(working copy)
+@@ -834,19 +834,18 @@
      }
  
      av_log(s->avctx, AV_LOG_FATAL, "Internal error, picture buffer overflow\n");
@@ -54,3 +34,25 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/mpegvideo.c ffmpeg-r19067/libavcodec/mp
  }
  
  static void update_noise_reduction(MpegEncContext *s){
+Index: libavcodec/h264.c
+===================================================================
+--- ffmpeg.orig/libavcodec/h264.c	(revision 20594)
++++ ffmpeg/libavcodec/h264.c	(working copy)
+@@ -3411,7 +3411,7 @@
+          * stream. Need to discard one frame. Prevents overrun of the
+          * short_ref and long_ref buffers.
+          */
+-        av_log(h->s.avctx, AV_LOG_ERROR,
++        av_log(h->s.avctx, AV_LOG_DEBUG,
+                "number of reference frames exceeds max (probably "
+                "corrupt input), discarding one\n");
+ 
+@@ -7786,7 +7786,7 @@
+ 
+     if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
+         if (avctx->skip_frame >= AVDISCARD_NONREF || s->hurry_up) return 0;
+-        av_log(avctx, AV_LOG_ERROR, "no frame!\n");
++        av_log(avctx, AV_LOG_DEBUG, "no frame!\n");
+         return -1;
+     }
+ 

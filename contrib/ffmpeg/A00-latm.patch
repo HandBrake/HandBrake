@@ -1,28 +1,8 @@
-diff -Naur ffmpeg-r19067.orig/libavcodec/Makefile ffmpeg-r19067/libavcodec/Makefile
---- ffmpeg-r19067.orig/libavcodec/Makefile	2009-05-25 18:19:35.000000000 -0400
-+++ ffmpeg-r19067/libavcodec/Makefile	2009-06-01 12:39:48.000000000 -0400
-@@ -382,7 +382,7 @@
- OBJS-$(CONFIG_LIBDIRAC_DECODER)        += libdiracdec.o
- OBJS-$(CONFIG_LIBDIRAC_ENCODER)        += libdiracenc.o libdirac_libschro.o
- OBJS-$(CONFIG_LIBFAAC)                 += libfaac.o
--OBJS-$(CONFIG_LIBFAAD)                 += libfaad.o
-+OBJS-$(CONFIG_LIBFAAD)                 += libfaad.o latmaac.o
- OBJS-$(CONFIG_LIBGSM)                  += libgsm.o
- OBJS-$(CONFIG_LIBMP3LAME)              += libmp3lame.o
- OBJS-$(CONFIG_LIBOPENJPEG)             += libopenjpeg.o
-@@ -395,7 +395,7 @@
- OBJS-$(CONFIG_LIBXVID)                 += libxvidff.o libxvid_rc.o
- 
- # parsers
--OBJS-$(CONFIG_AAC_PARSER)              += aac_parser.o aac_ac3_parser.o mpeg4audio.o
-+OBJS-$(CONFIG_AAC_PARSER)              += aac_parser.o aac_ac3_parser.o mpeg4audio.o latm_parser.o
- OBJS-$(CONFIG_AC3_PARSER)              += ac3_parser.o ac3tab.o aac_ac3_parser.o
- OBJS-$(CONFIG_CAVSVIDEO_PARSER)        += cavs_parser.o
- OBJS-$(CONFIG_DCA_PARSER)              += dca_parser.o
-diff -Naur ffmpeg-r19067.orig/libavcodec/allcodecs.c ffmpeg-r19067/libavcodec/allcodecs.c
---- ffmpeg-r19067.orig/libavcodec/allcodecs.c	2009-05-12 15:56:48.000000000 -0400
-+++ ffmpeg-r19067/libavcodec/allcodecs.c	2009-06-01 12:39:48.000000000 -0400
-@@ -306,6 +306,7 @@
+Index: libavcodec/allcodecs.c
+===================================================================
+--- ffmpeg.orig/libavcodec/allcodecs.c	(revision 20594)
++++ ffmpeg/libavcodec/allcodecs.c	(working copy)
+@@ -314,6 +314,7 @@
      REGISTER_ENCDEC  (LIBDIRAC, libdirac);
      REGISTER_ENCODER (LIBFAAC, libfaac);
      REGISTER_DECODER (LIBFAAD, libfaad);
@@ -30,7 +10,7 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/allcodecs.c ffmpeg-r19067/libavcodec/al
      REGISTER_ENCDEC  (LIBGSM, libgsm);
      REGISTER_ENCDEC  (LIBGSM_MS, libgsm_ms);
      REGISTER_ENCODER (LIBMP3LAME, libmp3lame);
-@@ -319,6 +320,7 @@
+@@ -329,6 +330,7 @@
  
      /* parsers */
      REGISTER_PARSER  (AAC, aac);
@@ -38,10 +18,11 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/allcodecs.c ffmpeg-r19067/libavcodec/al
      REGISTER_PARSER  (AC3, ac3);
      REGISTER_PARSER  (CAVSVIDEO, cavsvideo);
      REGISTER_PARSER  (DCA, dca);
-diff -Naur ffmpeg-r19067.orig/libavcodec/avcodec.h ffmpeg-r19067/libavcodec/avcodec.h
---- ffmpeg-r19067.orig/libavcodec/avcodec.h	2009-05-31 02:51:18.000000000 -0400
-+++ ffmpeg-r19067/libavcodec/avcodec.h	2009-06-01 12:39:48.000000000 -0400
-@@ -271,6 +271,7 @@
+Index: libavcodec/avcodec.h
+===================================================================
+--- ffmpeg.orig/libavcodec/avcodec.h	(revision 20594)
++++ ffmpeg/libavcodec/avcodec.h	(working copy)
+@@ -276,6 +276,7 @@
      CODEC_ID_MP2= 0x15000,
      CODEC_ID_MP3, ///< preferred ID for decoding MPEG audio layer 1, 2 or 3
      CODEC_ID_AAC,
@@ -49,141 +30,32 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/avcodec.h ffmpeg-r19067/libavcodec/avco
      CODEC_ID_AC3,
      CODEC_ID_DTS,
      CODEC_ID_VORBIS,
-diff -Naur ffmpeg-r19067.orig/libavcodec/latm_parser.c ffmpeg-r19067/libavcodec/latm_parser.c
---- ffmpeg-r19067.orig/libavcodec/latm_parser.c	1969-12-31 19:00:00.000000000 -0500
-+++ ffmpeg-r19067/libavcodec/latm_parser.c	2009-06-01 12:39:48.000000000 -0400
-@@ -0,0 +1,128 @@
-+/*
-+ * LATM parser
-+ * Copyright (c) 2008 Paul Kendall <paul@kcbbs.gen.nz>
-+ *
-+ * This file is part of FFmpeg.
-+ *
-+ * FFmpeg is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; either
-+ * version 2.1 of the License, or (at your option) any later version.
-+ *
-+ * FFmpeg is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with FFmpeg; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+/**
-+ * @file latm_parser.c
-+ * LATM parser
-+ */
-+
-+#include "parser.h"
-+
-+#define LATM_HEADER     0x56e000	// 0x2b7 (11 bits)
-+#define LATM_MASK       0xFFE000	// top 11 bits
-+#define LATM_SIZE_MASK  0x001FFF	// bottom 13 bits
-+
-+typedef struct LATMParseContext{
-+    ParseContext pc;
-+    int count;
-+} LATMParseContext;
-+
-+/**
-+ * finds the end of the current frame in the bitstream.
-+ * @return the position of the first byte of the next frame, or -1
-+ */
-+static int latm_find_frame_end(AVCodecParserContext *s1, const uint8_t *buf,
-+                               int buf_size) {
-+    LATMParseContext *s = s1->priv_data;
-+    ParseContext *pc = &s->pc;
-+    int pic_found, i;
-+    uint32_t state;
-+
-+    pic_found = pc->frame_start_found;
-+    state = pc->state;
-+
-+    i = 0;
-+    if(!pic_found){
-+        for(i=0; i<buf_size; i++){
-+            state = (state<<8) | buf[i];
-+            if((state & LATM_MASK) == LATM_HEADER){
-+                i++;
-+                s->count = - i;
-+                pic_found=1;
-+                break;
-+            }
-+        }
-+    }
-+
-+    if(pic_found){
-+        /* EOF considered as end of frame */
-+        if (buf_size == 0)
-+            return 0;
-+        if((state & LATM_SIZE_MASK) - s->count <= buf_size) {
-+            pc->frame_start_found = 0;
-+            pc->state = -1;
-+            return (state & LATM_SIZE_MASK) - s->count;
-+	}
-+    }
-+
-+    s->count += buf_size;
-+    pc->frame_start_found = pic_found;
-+    pc->state = state;
-+    return END_NOT_FOUND;
-+}
-+
-+static int latm_parse(AVCodecParserContext *s1,
-+                           AVCodecContext *avctx,
-+                           const uint8_t **poutbuf, int *poutbuf_size,
-+                           const uint8_t *buf, int buf_size)
-+{
-+    LATMParseContext *s = s1->priv_data;
-+    ParseContext *pc = &s->pc;
-+    int next;
-+
-+    if(s1->flags & PARSER_FLAG_COMPLETE_FRAMES){
-+        next = buf_size;
-+    }else{
-+        next = latm_find_frame_end(s1, buf, buf_size);
-+
-+        if (ff_combine_frame(pc, next, &buf, &buf_size) < 0) {
-+            *poutbuf = NULL;
-+            *poutbuf_size = 0;
-+            return buf_size;
-+        }
-+    }
-+    *poutbuf = buf;
-+    *poutbuf_size = buf_size;
-+    return next;
-+}
-+
-+static int latm_split(AVCodecContext *avctx,
-+                           const uint8_t *buf, int buf_size)
-+{
-+    int i;
-+    uint32_t state= -1;
-+
-+    for(i=0; i<buf_size; i++){
-+        state= (state<<8) | buf[i];
-+        if((state & LATM_MASK) == LATM_HEADER)
-+            return i-2;
-+    }
-+    return 0;
-+}
-+
-+AVCodecParser aac_latm_parser = {
-+    { CODEC_ID_AAC_LATM },
-+    sizeof(LATMParseContext),
-+    NULL,
-+    latm_parse,
-+    ff_parse_close,
-+    latm_split,
-+};
-diff -Naur ffmpeg-r19067.orig/libavcodec/latmaac.c ffmpeg-r19067/libavcodec/latmaac.c
---- ffmpeg-r19067.orig/libavcodec/latmaac.c	1969-12-31 19:00:00.000000000 -0500
-+++ ffmpeg-r19067/libavcodec/latmaac.c	2009-06-01 12:39:48.000000000 -0400
+Index: libavcodec/Makefile
+===================================================================
+--- ffmpeg.orig/libavcodec/Makefile	(revision 20594)
++++ ffmpeg/libavcodec/Makefile	(working copy)
+@@ -474,7 +474,7 @@
+ OBJS-$(CONFIG_LIBDIRAC_DECODER)           += libdiracdec.o
+ OBJS-$(CONFIG_LIBDIRAC_ENCODER)           += libdiracenc.o libdirac_libschro.o
+ OBJS-$(CONFIG_LIBFAAC_ENCODER)            += libfaac.o
+-OBJS-$(CONFIG_LIBFAAD_DECODER)            += libfaad.o
++OBJS-$(CONFIG_LIBFAAD_DECODER)            += libfaad.o latmaac.o
+ OBJS-$(CONFIG_LIBGSM_DECODER)             += libgsm.o
+ OBJS-$(CONFIG_LIBGSM_ENCODER)             += libgsm.o
+ OBJS-$(CONFIG_LIBGSM_MS_DECODER)          += libgsm.o
+@@ -498,7 +498,7 @@
+ 
+ # parsers
+ OBJS-$(CONFIG_AAC_PARSER)              += aac_parser.o aac_ac3_parser.o \
+-                                          mpeg4audio.o
++                                          mpeg4audio.o latm_parser.o
+ OBJS-$(CONFIG_AC3_PARSER)              += ac3_parser.o ac3tab.o \
+                                           aac_ac3_parser.o
+ OBJS-$(CONFIG_CAVSVIDEO_PARSER)        += cavs_parser.o
+Index: libavcodec/latmaac.c
+===================================================================
+--- ffmpeg.orig/libavcodec/latmaac.c	(revision 0)
++++ ffmpeg/libavcodec/latmaac.c	(revision 0)
 @@ -0,0 +1,624 @@
 +/*
 + * copyright (c) 2008 Paul Kendall <paul@kcbbs.gen.nz>
@@ -809,10 +681,178 @@ diff -Naur ffmpeg-r19067.orig/libavcodec/latmaac.c ffmpeg-r19067/libavcodec/latm
 +    .decode = faac_decode_frame,
 +    .long_name = "AAC over LATM",
 +};
-diff -Naur ffmpeg-r19067.orig/libavformat/mpeg.c ffmpeg-r19067/libavformat/mpeg.c
---- ffmpeg-r19067.orig/libavformat/mpeg.c	2009-04-17 14:08:39.000000000 -0400
-+++ ffmpeg-r19067/libavformat/mpeg.c	2009-06-01 12:39:48.000000000 -0400
-@@ -279,7 +279,7 @@
+Index: libavcodec/latm_parser.c
+===================================================================
+--- ffmpeg.orig/libavcodec/latm_parser.c	(revision 0)
++++ ffmpeg/libavcodec/latm_parser.c	(revision 0)
+@@ -0,0 +1,128 @@
++/*
++ * LATM parser
++ * Copyright (c) 2008 Paul Kendall <paul@kcbbs.gen.nz>
++ *
++ * This file is part of FFmpeg.
++ *
++ * FFmpeg is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; either
++ * version 2.1 of the License, or (at your option) any later version.
++ *
++ * FFmpeg is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with FFmpeg; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++/**
++ * @file latm_parser.c
++ * LATM parser
++ */
++
++#include "parser.h"
++
++#define LATM_HEADER     0x56e000	// 0x2b7 (11 bits)
++#define LATM_MASK       0xFFE000	// top 11 bits
++#define LATM_SIZE_MASK  0x001FFF	// bottom 13 bits
++
++typedef struct LATMParseContext{
++    ParseContext pc;
++    int count;
++} LATMParseContext;
++
++/**
++ * finds the end of the current frame in the bitstream.
++ * @return the position of the first byte of the next frame, or -1
++ */
++static int latm_find_frame_end(AVCodecParserContext *s1, const uint8_t *buf,
++                               int buf_size) {
++    LATMParseContext *s = s1->priv_data;
++    ParseContext *pc = &s->pc;
++    int pic_found, i;
++    uint32_t state;
++
++    pic_found = pc->frame_start_found;
++    state = pc->state;
++
++    i = 0;
++    if(!pic_found){
++        for(i=0; i<buf_size; i++){
++            state = (state<<8) | buf[i];
++            if((state & LATM_MASK) == LATM_HEADER){
++                i++;
++                s->count = - i;
++                pic_found=1;
++                break;
++            }
++        }
++    }
++
++    if(pic_found){
++        /* EOF considered as end of frame */
++        if (buf_size == 0)
++            return 0;
++        if((state & LATM_SIZE_MASK) - s->count <= buf_size) {
++            pc->frame_start_found = 0;
++            pc->state = -1;
++            return (state & LATM_SIZE_MASK) - s->count;
++	}
++    }
++
++    s->count += buf_size;
++    pc->frame_start_found = pic_found;
++    pc->state = state;
++    return END_NOT_FOUND;
++}
++
++static int latm_parse(AVCodecParserContext *s1,
++                           AVCodecContext *avctx,
++                           const uint8_t **poutbuf, int *poutbuf_size,
++                           const uint8_t *buf, int buf_size)
++{
++    LATMParseContext *s = s1->priv_data;
++    ParseContext *pc = &s->pc;
++    int next;
++
++    if(s1->flags & PARSER_FLAG_COMPLETE_FRAMES){
++        next = buf_size;
++    }else{
++        next = latm_find_frame_end(s1, buf, buf_size);
++
++        if (ff_combine_frame(pc, next, &buf, &buf_size) < 0) {
++            *poutbuf = NULL;
++            *poutbuf_size = 0;
++            return buf_size;
++        }
++    }
++    *poutbuf = buf;
++    *poutbuf_size = buf_size;
++    return next;
++}
++
++static int latm_split(AVCodecContext *avctx,
++                           const uint8_t *buf, int buf_size)
++{
++    int i;
++    uint32_t state= -1;
++
++    for(i=0; i<buf_size; i++){
++        state= (state<<8) | buf[i];
++        if((state & LATM_MASK) == LATM_HEADER)
++            return i-2;
++    }
++    return 0;
++}
++
++AVCodecParser aac_latm_parser = {
++    { CODEC_ID_AAC_LATM },
++    sizeof(LATMParseContext),
++    NULL,
++    latm_parse,
++    ff_parse_close,
++    latm_split,
++};
+Index: libavformat/mpegts.c
+===================================================================
+--- ffmpeg.orig/libavformat/mpegts.c	(revision 20594)
++++ ffmpeg/libavformat/mpegts.c	(working copy)
+@@ -499,7 +499,7 @@
+     { 0x04, CODEC_TYPE_AUDIO,        CODEC_ID_MP3 },
+     { 0x0f, CODEC_TYPE_AUDIO,        CODEC_ID_AAC },
+     { 0x10, CODEC_TYPE_VIDEO,      CODEC_ID_MPEG4 },
+-    { 0x11, CODEC_TYPE_AUDIO,        CODEC_ID_AAC }, /* LATM syntax */
++    { 0x11, CODEC_TYPE_AUDIO,   CODEC_ID_AAC_LATM }, /* LATM syntax */
+     { 0x1b, CODEC_TYPE_VIDEO,       CODEC_ID_H264 },
+     { 0xd1, CODEC_TYPE_VIDEO,      CODEC_ID_DIRAC },
+     { 0xea, CODEC_TYPE_VIDEO,        CODEC_ID_VC1 },
+@@ -683,7 +683,7 @@
+ 
+                     if ((!pes->st && pes->stream->nb_streams == MAX_STREAMS) ||
+                         (pes->st && pes->st->discard == AVDISCARD_ALL) ||
+-                        code == 0x1be) /* padding_stream */
++                        code == 0x1be || code == 0x1fa) /* padding_stream */
+                         goto skip;
+ 
+                     /* stream not present in PMT */
+Index: libavformat/mpegts.h
+===================================================================
+--- ffmpeg.orig/libavformat/mpegts.h	(revision 20594)
++++ ffmpeg/libavformat/mpegts.h	(working copy)
+@@ -49,6 +49,7 @@
+ #define STREAM_TYPE_PRIVATE_DATA    0x06
+ #define STREAM_TYPE_AUDIO_AAC       0x0f
+ #define STREAM_TYPE_VIDEO_MPEG4     0x10
++#define STREAM_TYPE_AUDIO_AAC_LATM  0x11
+ #define STREAM_TYPE_VIDEO_H264      0x1b
+ #define STREAM_TYPE_VIDEO_VC1       0xea
+ #define STREAM_TYPE_VIDEO_DIRAC     0xd1
+Index: libavformat/mpeg.c
+===================================================================
+--- ffmpeg.orig/libavformat/mpeg.c	(revision 20594)
++++ ffmpeg/libavformat/mpeg.c	(working copy)
+@@ -282,7 +282,7 @@
      /* find matching stream */
      if (!((startcode >= 0x1c0 && startcode <= 0x1df) ||
            (startcode >= 0x1e0 && startcode <= 0x1ef) ||
@@ -821,7 +861,7 @@ diff -Naur ffmpeg-r19067.orig/libavformat/mpeg.c ffmpeg-r19067/libavformat/mpeg.
          goto redo;
      if (ppos) {
          *ppos = url_ftell(s->pb) - 4;
-@@ -446,6 +446,9 @@
+@@ -449,6 +449,9 @@
          } else if(es_type == STREAM_TYPE_AUDIO_AAC){
              codec_id = CODEC_ID_AAC;
              type = CODEC_TYPE_AUDIO;
@@ -831,9 +871,10 @@ diff -Naur ffmpeg-r19067.orig/libavformat/mpeg.c ffmpeg-r19067/libavformat/mpeg.
          } else if(es_type == STREAM_TYPE_VIDEO_MPEG4){
              codec_id = CODEC_ID_MPEG4;
              type = CODEC_TYPE_VIDEO;
-diff -Naur ffmpeg-r19067.orig/libavformat/mpeg.h ffmpeg-r19067/libavformat/mpeg.h
---- ffmpeg-r19067.orig/libavformat/mpeg.h	2009-01-19 10:46:40.000000000 -0500
-+++ ffmpeg-r19067/libavformat/mpeg.h	2009-06-01 12:39:48.000000000 -0400
+Index: libavformat/mpeg.h
+===================================================================
+--- ffmpeg.orig/libavformat/mpeg.h	(revision 20594)
++++ ffmpeg/libavformat/mpeg.h	(working copy)
 @@ -53,6 +53,7 @@
  #define STREAM_TYPE_PRIVATE_DATA    0x06
  #define STREAM_TYPE_AUDIO_AAC       0x0f
@@ -842,34 +883,3 @@ diff -Naur ffmpeg-r19067.orig/libavformat/mpeg.h ffmpeg-r19067/libavformat/mpeg.
  #define STREAM_TYPE_VIDEO_H264      0x1b
  
  #define STREAM_TYPE_AUDIO_AC3       0x81
-diff -Naur ffmpeg-r19067.orig/libavformat/mpegts.c ffmpeg-r19067/libavformat/mpegts.c
---- ffmpeg-r19067.orig/libavformat/mpegts.c	2009-05-31 04:47:40.000000000 -0400
-+++ ffmpeg-r19067/libavformat/mpegts.c	2009-06-01 12:39:48.000000000 -0400
-@@ -495,6 +495,7 @@
-     { 0x04, CODEC_TYPE_AUDIO,        CODEC_ID_MP3 },
-     { 0x0f, CODEC_TYPE_AUDIO,        CODEC_ID_AAC },
-     { 0x10, CODEC_TYPE_VIDEO,      CODEC_ID_MPEG4 },
-+    { 0x11, CODEC_TYPE_AUDIO,   CODEC_ID_AAC_LATM },
-     { 0x1b, CODEC_TYPE_VIDEO,       CODEC_ID_H264 },
-     { 0xd1, CODEC_TYPE_VIDEO,      CODEC_ID_DIRAC },
-     { 0xea, CODEC_TYPE_VIDEO,        CODEC_ID_VC1 },
-@@ -933,7 +934,7 @@
-                     if (pes->st->discard == AVDISCARD_ALL ||
-                         !((code >= 0x1c0 && code <= 0x1df) ||
-                           (code >= 0x1e0 && code <= 0x1ef) ||
--                          (code == 0x1bd) || (code == 0x1fd)))
-+                          (code == 0x1bd) || (code == 0x1fa) || (code == 0x1fd)))
-                         goto skip;
-                     pes->state = MPEGTS_PESHEADER_FILL;
-                     pes->total_size = AV_RB16(pes->header + 4);
-diff -Naur ffmpeg-r19067.orig/libavformat/mpegts.h ffmpeg-r19067/libavformat/mpegts.h
---- ffmpeg-r19067.orig/libavformat/mpegts.h	2009-05-30 23:02:12.000000000 -0400
-+++ ffmpeg-r19067/libavformat/mpegts.h	2009-06-01 12:39:48.000000000 -0400
-@@ -47,6 +47,7 @@
- #define STREAM_TYPE_PRIVATE_DATA    0x06
- #define STREAM_TYPE_AUDIO_AAC       0x0f
- #define STREAM_TYPE_VIDEO_MPEG4     0x10
-+#define STREAM_TYPE_AUDIO_AAC_LATM  0x11
- #define STREAM_TYPE_VIDEO_H264      0x1b
- #define STREAM_TYPE_VIDEO_VC1       0xea
- #define STREAM_TYPE_VIDEO_DIRAC     0xd1
