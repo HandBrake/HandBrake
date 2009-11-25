@@ -28,10 +28,8 @@ namespace Handbrake
             {
                 InitializeComponent();
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show(mw, "It would appear QuickTime 7 is not installed or not accessible. QuickTime preview functionality will be disabled! \n\n Debug Info:\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                btn_playQT.Enabled = false;
                 noQT = true;
             }
             this.mainWindow = mw;
@@ -64,6 +62,11 @@ namespace Handbrake
         }
         private void btn_playQT_Click(object sender, EventArgs e)
         {
+            if (noQT)
+            {
+                MessageBox.Show(this, "It would appear QuickTime 7 is not installed or not accessible. Please (re)install QuickTime.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             if (mainWindow.text_destination.Text.Contains(".mkv"))
             {
                 MessageBox.Show(this,
