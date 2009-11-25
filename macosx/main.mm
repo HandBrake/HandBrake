@@ -25,8 +25,14 @@ void hb_error_handler( const char *errmsg )
 }
 }
 
+extern "C" {
+extern int mm_flags;
+int mm_support();
+}
+
 int main( int argc, const char ** argv )
 {
+    mm_flags = mm_support();
     signal( SIGINT, SigHandler );
     hb_register_error_handler(&hb_error_handler);
     return NSApplicationMain( argc, argv );
