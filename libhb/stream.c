@@ -2049,7 +2049,7 @@ static void hb_ts_stream_find_pids(hb_stream_t *stream)
 			}
 		}
 		// Keep going  until we have a complete set of PIDs
-		if ((stream->ts_number_video_pids > 0) && (stream->ts_number_audio_pids > 0))
+		if (stream->ts_number_video_pids > 0)
 		  break;
 	}
 
