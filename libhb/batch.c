@@ -1,0 +1,128 @@
+/* $Id: dvd.c,v 1.12 2005/11/25 15:05:25 titer Exp $
+
+   This file is part of the HandBrake source code.
+   Homepage: <http://handbrake.fr/>.
+   It may be used under the terms of the GNU General Public License. */
+
+#include "hb.h"
+#include "lang.h"
+
+struct hb_batch_s
+{
+    char      * path;
+    hb_list_t * list_file;
+};
+
+/***********************************************************************
+ * hb_batch_init
+ ***********************************************************************
+ *
+ **********************************************************************/
+hb_batch_t * hb_batch_init( char * path )
+{
+    hb_batch_t    * d;
+    struct stat     sb;
+    DIR           * dir;
+    struct dirent * entry;
+    char          * filename;
+
+    if ( stat( path, &sb ) )
+        return NULL;
+
+    if ( !S_ISDIR( sb.st_mode ) )
+        return NULL;
+
+    dir = opendir( path );
+    if ( dir == NULL )
+        return NULL;
+
+    d = calloc( sizeof( hb_batch_t ), 1 );
+    d->list_file = hb_list_init();
+
+    while ( (entry = readdir( dir ) ) )
+    {
+        filename = hb_strdup_printf( "%s" DIR_SEP_STR "%s", path, entry->d_name );
+        if ( stat( filename, &sb ) )
+        {
+            free( filename );
+            continue;
+        }
+
+        if ( !S_ISREG( sb.st_mode ) )
+        {
+            free( filename );
+            continue;
+        }
+
+        hb_list_add( d->list_file, filename );
+    }
+
+    if ( hb_list_count( d->list_file ) == 0 )
+    {
+        hb_list_close( &d->list_file );
+        free( d );
+        return NULL;
+    }
+
+    d->path = strdup( path );
+
+    return d;
+}
+
+/***********************************************************************
+ * hb_batch_title_count
+ **********************************************************************/
+int hb_batch_title_count( hb_batch_t * d )
+{
+    return hb_list_count( d->list_file );
+}
+
+/***********************************************************************
+ * hb_batch_title_scan
+ **********************************************************************/
+hb_title_t * hb_batch_title_scan( hb_batch_t * d, int t )
+{
+
+    hb_title_t   * title;
+    char         * filename;
+    hb_stream_t  * stream;
+
+    if ( t < 1 )
+        return NULL;
+
+    filename = hb_list_item( d->list_file, t-1 );
+    if ( filename == NULL )
+        return NULL;
+
+    stream = hb_stream_open( filename, 0 );
+    if ( stream == NULL )
+        return NULL;
+
+    title = hb_stream_title_scan( stream );
+    title->index = t;
+    hb_stream_close( &stream );
+
+    return title;
+}
+
+/***********************************************************************
+ * hb_batch_close
+ ***********************************************************************
+ * Closes and frees everything
+ **********************************************************************/
+void hb_batch_close( hb_batch_t ** _d )
+{
+    hb_batch_t * d = *_d;
+    char       * filename;
+
+    while ( ( filename = hb_list_item( d->list_file, 0 ) ) )
+    {
+        hb_list_rem( d->list_file, filename );
+        free( filename );
+    }
+    hb_list_close( &d->list_file );
+    free( d->path );
+    free( d );
+    *_d = NULL;
+}
+

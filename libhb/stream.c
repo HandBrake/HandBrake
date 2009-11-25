@@ -652,6 +652,7 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream)
 
     // 'Barebones Title'
     hb_title_t *aTitle = hb_title_init( stream->path, 0 );
+    aTitle->type = HB_STREAM_TYPE;
     aTitle->index = 1;
 
 	// Copy part of the stream path to the title name
@@ -2702,6 +2703,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
 
     // 'Barebones Title'
     hb_title_t *title = hb_title_init( stream->path, 0 );
+    title->type = HB_STREAM_TYPE;
     title->index = 1;
 
 	// Copy part of the stream path to the title name

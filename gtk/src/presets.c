@@ -1241,7 +1241,7 @@ ghb_prefs_to_ui(signal_user_data_t *ud)
 		ghb_ui_update(ud, "hbfd", ghb_int64_value(0));
 	}
 	gval = ghb_settings_get_value(ud->settings, "default_source");
-	ghb_settings_set_value (ud->settings, "source", gval);
+	ghb_settings_set_value (ud->settings, "scan_source", gval);
 
 	str = ghb_settings_get_string(ud->settings, "destination_dir");
 	ghb_ui_update(ud, "dest_dir", ghb_string_value(str));

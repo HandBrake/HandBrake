@@ -131,9 +131,10 @@ static inline void hb_buffer_swap_copy( hb_buffer_t *src, hb_buffer_t *dst )
  * Threads: update.c, scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
 hb_thread_t * hb_update_init( int * build, char * version );
-hb_thread_t * hb_scan_init( hb_handle_t *, const char * path,
-                            int title_index, hb_list_t * list_title,
-                            int preview_count, int store_previews );
+hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die, 
+                            const char * path, int title_index, 
+                            hb_list_t * list_title, int preview_count, 
+                            int store_previews );
 hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
                             volatile int * die, int * error, hb_job_t ** job );
 hb_thread_t  * hb_reader_init( hb_job_t * );
@@ -164,6 +165,16 @@ extern const hb_muxer_t hb_demux[];
  * decmetadata.c
  **********************************************************************/
 extern void decmetadata( hb_title_t *title );
+
+/***********************************************************************
+ * batch.c
+ **********************************************************************/
+typedef struct hb_batch_s hb_batch_t;
+
+hb_batch_t  * hb_batch_init( char * path );
+void          hb_batch_close( hb_batch_t ** _d );
+int           hb_batch_title_count( hb_batch_t * d );
+hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
 
 /***********************************************************************
  * dvd.c

@@ -194,12 +194,20 @@ static void ReaderFunc( void * _r )
     int            chapter = -1;
     int            chapter_end = r->job->chapter_end;
 
-    if( !( r->dvd = hb_dvd_init( r->title->dvd ) ) )
+    if ( r->title->type == HB_DVD_TYPE )
     {
-        if ( !( r->stream = hb_stream_open( r->title->dvd, r->title ) ) )
-        {
-          return;
-        }
+        if ( !( r->dvd = hb_dvd_init( r->title->path ) ) )
+            return;
+    }
+    else if ( r->title->type == HB_STREAM_TYPE )
+    {
+        if ( !( r->stream = hb_stream_open( r->title->path, r->title ) ) )
+            return;
+    }
+    else
+    {
+        // Unknown type, should never happen
+        return;
     }
 
     if (r->dvd)

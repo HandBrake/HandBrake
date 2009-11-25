@@ -900,7 +900,11 @@ start_scan(
 		return;
 
 	widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
-	gtk_widget_set_sensitive(widget, FALSE);
+	gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
+	gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Stop Scan");
+	gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Stop Scan");
+	//gtk_widget_set_sensitive(widget, FALSE);
+
 	action = GHB_ACTION(ud->builder, "source_action");
 	gtk_action_set_sensitive(action, FALSE);
 	action = GHB_ACTION(ud->builder, "source_single_action");
@@ -936,14 +940,14 @@ ghb_do_scan(
 	if (filename != NULL)
 	{
 		last_scan_file = g_strdup(filename);
-		ghb_settings_set_string(ud->settings, "source", filename);
+		ghb_settings_set_string(ud->settings, "scan_source", filename);
 		if (update_source_label(ud, filename, TRUE))
 		{
 			gchar *path;
 			gint preview_count;
 
 			show_scan_progress(ud);
-			path = ghb_settings_get_string( ud->settings, "source");
+			path = ghb_settings_get_string( ud->settings, "scan_source");
 			prune_logs(ud);
 
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
@@ -964,7 +968,7 @@ update_source_name(gpointer data)
 	GtkWidget *dialog;
 	gchar *sourcename;
 
-	sourcename = ghb_settings_get_string(ud->settings, "source");
+	sourcename = ghb_settings_get_string(ud->settings, "scan_source");
 	dialog = GHB_WIDGET(ud->builder, "source_dialog");
 	gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), sourcename);
 	g_free(sourcename);
@@ -981,7 +985,7 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 	gboolean checkbutton_active;
 
 	g_debug("source_browse_clicked_cb ()");
-	sourcename = ghb_settings_get_string(ud->settings, "source");
+	sourcename = ghb_settings_get_string(ud->settings, "scan_source");
 	checkbutton_active = FALSE;
 	if (g_file_test(sourcename, G_FILE_TEST_IS_DIR))
 	{
@@ -1038,7 +1042,16 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 {
-	do_source_dialog(button, FALSE, ud);
+	ghb_status_t status;
+	ghb_get_status(&status);
+	if (status.scan.state & GHB_STATE_SCANNING)
+	{
+		ghb_backend_scan_stop();
+	}
+	else
+	{
+		do_source_dialog(button, FALSE, ud);
+	}
 }
 
 G_MODULE_EXPORT void
@@ -1053,7 +1066,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 	const gchar *filename;
 	gchar *sourcename;
 
-	sourcename = ghb_settings_get_string(ud->settings, "source");
+	sourcename = ghb_settings_get_string(ud->settings, "scan_source");
 	filename = gtk_action_get_name(action);
 	ghb_do_scan(ud, filename, 0, TRUE);
 	if (strcmp(sourcename, filename) != 0)
@@ -1309,25 +1322,51 @@ get_rate_string(gint rate_base, gint rate)
 	rate_s = g_strdup_printf("%.6g", rate_f);
 	return rate_s;
 }
+
+static void
+update_title_duration(signal_user_data_t *ud)
+{
+	gint ti;
+	gint hh, mm, ss, start, end;
+	gchar *text;
+	GtkWidget *widget;
+
+	ti = ghb_settings_combo_int(ud->settings, "title");
+	widget = GHB_WIDGET (ud->builder, "title_duration");
+
+	start = ghb_settings_get_int(ud->settings, "start_chapter");
+	end = ghb_settings_get_int(ud->settings, "end_chapter");
+	ghb_part_duration(ti, start, end, &hh, &mm, &ss);
+	text = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+	gtk_label_set_text (GTK_LABEL(widget), text);
+	g_free(text);
+}
+
 static void
 show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 {
 	GtkWidget *widget;
 	gchar *text;
 
+	ghb_settings_set_string(ud->settings, "source", tinfo->path);
+	if (tinfo->type == HB_STREAM_TYPE)
+	{
+		GtkWidget *widget = GHB_WIDGET (ud->builder, "source_title");
+		if (tinfo->name != NULL && tinfo->name[0] != 0)
+		{
+			gtk_label_set_text (GTK_LABEL(widget), tinfo->name);
+			ghb_settings_set_string(ud->settings, "volume_label", tinfo->name);
+			set_destination(ud);
+		}
+		else
+		{
+			gchar *label = "No Title Found";
+			gtk_label_set_text (GTK_LABEL(widget), label);
+			ghb_settings_set_string(ud->settings, "volume_label", label);
+		}
+	}
 	ud->dont_clear_presets = TRUE;
-	widget = GHB_WIDGET (ud->builder, "title_duration");
-	if (tinfo->duration != 0)
-	{
-		text = g_strdup_printf ("%02d:%02d:%02d", tinfo->hours, 
-				tinfo->minutes, tinfo->seconds);
-	}
-	else
-	{
-		text = g_strdup_printf ("Unknown");
-	}
-	gtk_label_set_text (GTK_LABEL(widget), text);
-	g_free(text);
+	update_title_duration(ud);
 	widget = GHB_WIDGET (ud->builder, "source_dimensions");
 	text = g_strdup_printf ("%d x %d", tinfo->width, tinfo->height);
 	gtk_label_set_text (GTK_LABEL(widget), text);
@@ -1572,6 +1611,7 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		gtk_widget_show(widget);
 	}
+	update_title_duration(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1602,6 +1642,7 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		gtk_widget_show(widget);
 	}
+	update_title_duration(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2410,13 +2451,16 @@ ghb_backend_events(signal_user_data_t *ud)
 		GtkAction *action;
 
 		widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
-		gtk_widget_set_sensitive(widget, TRUE);
+		gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-source");
+		gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), "Source");
+		gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), "Choose Video Source");
+
 		action = GHB_ACTION(ud->builder, "source_action");
 		gtk_action_set_sensitive(action, TRUE);
 		action = GHB_ACTION(ud->builder, "source_single_action");
 		gtk_action_set_sensitive(action, TRUE);
 
-		source = ghb_settings_get_string(ud->settings, "source");
+		source = ghb_settings_get_string(ud->settings, "scan_source");
 		update_source_label(ud, source, FALSE);
 
 		scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
@@ -3546,7 +3590,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 				update_source_label(ud, device, TRUE);
 				gint preview_count;
 				preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-				ghb_settings_set_string(ud->settings, "source", device);
+				ghb_settings_set_string(ud->settings, "scan_source", device);
 				start_scan(ud, device, 0, preview_count);
 			}
 		}
@@ -3563,7 +3607,7 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
 			{
 				ghb_hb_cleanup(TRUE);
 				prune_logs(ud);
-				ghb_settings_set_string(ud->settings, "source", "/dev/null");
+				ghb_settings_set_string(ud->settings, "scan_source", "/dev/null");
 				start_scan(ud, "/dev/null", 0, 1);
 			}
 		}
@@ -3650,7 +3694,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 			update_source_label(ud, device, TRUE);
 			gint preview_count;
 			preview_count = ghb_settings_get_int(ud->settings, "preview_count");
-			ghb_settings_set_string(ud->settings, "source", device);
+			ghb_settings_set_string(ud->settings, "scan_source", device);
 			start_scan(ud, device, 0, preview_count);
 		}
 	}
@@ -3658,7 +3702,7 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 	{
 		ghb_hb_cleanup(TRUE);
 		prune_logs(ud);
-		ghb_settings_set_string(ud->settings, "source", "/dev/null");
+		ghb_settings_set_string(ud->settings, "scan_source", "/dev/null");
 		start_scan(ud, "/dev/null", 0, 1);
 	}
 }

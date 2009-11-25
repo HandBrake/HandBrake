@@ -38,6 +38,7 @@ struct hb_handle_s
     /* For MacGui active queue
        increments each time the scan thread completes*/
     int            scanCount;
+    volatile int   scan_die;
     
     /* Stash of persistent data between jobs, for stuff
        like correcting frame count and framerate estimates
@@ -379,6 +380,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 {
     hb_title_t * title;
 
+    h->scan_die = 0;
+
     /* Clean up from previous scan */
     hb_remove_previews( h );
     while( ( title = hb_list_item( h->list_title, 0 ) ) )
@@ -388,8 +391,9 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     }
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
-    h->scan_thread = hb_scan_init( h, path, title_index, h->list_title,
-                                   preview_count, store_previews );
+    h->scan_thread = hb_scan_init( h, &h->scan_die, path, title_index, 
+                                   h->list_title, preview_count, 
+                                   store_previews );
 }
 
 /**
@@ -1238,6 +1242,20 @@ void hb_stop( hb_handle_t * h )
 }
 
 /**
+ * Stops the conversion process.
+ * @param h Handle to hb_handle_t.
+ */
+void hb_scan_stop( hb_handle_t * h )
+{
+    h->scan_die = 1;
+
+    h->job_count = hb_count(h);
+    h->job_count_permanent = 0;
+
+    hb_resume( h );
+}
+
+/**
  * Returns the state of the conversion process.
  * @param h Handle to hb_handle_t.
  * @param s Handle to hb_state_t which to copy the state data.
@@ -1340,8 +1358,24 @@ static void thread_func( void * _h )
         {
             hb_thread_close( &h->scan_thread );
 
-            hb_log( "libhb: scan thread found %d valid title(s)",
-                    hb_list_count( h->list_title ) );
+            if ( h->scan_die )
+            {
+                hb_title_t * title;
+
+                hb_remove_previews( h );
+                while( ( title = hb_list_item( h->list_title, 0 ) ) )
+                {
+                    hb_list_rem( h->list_title, title );
+                    hb_title_close( &title );
+                }
+
+                hb_log( "hb_scan: canceled" );
+            }
+            else
+            {
+                hb_log( "libhb: scan thread found %d valid title(s)",
+                        hb_list_count( h->list_title ) );
+            }
             hb_lock( h->state_lock );
             h->state.state = HB_STATE_SCANDONE; //originally state.state
 			hb_unlock( h->state_lock );

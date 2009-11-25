@@ -62,6 +62,10 @@ typedef struct
 
 typedef struct
 {
+	gchar *path;
+	gchar *name;
+	gint index;
+	gint type;
 	gint width;
 	gint height;
 	gint crop[4];
@@ -120,12 +124,14 @@ gint ghb_get_queue_state();
 void ghb_get_status(ghb_status_t *status);
 void ghb_track_status(void);
 void ghb_backend_scan(const gchar *path, gint titleindex, gint preview_count);
+void ghb_backend_scan_stop();
 void ghb_backend_queue_scan(const gchar *path, gint titleindex);
 gboolean ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex);
 void ghb_par_init(signal_user_data_t *ud);
 void ghb_set_scale(signal_user_data_t *ud, gint mode);
 GValue* ghb_get_chapters(gint titleindex);
 void ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss);
+void ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
 gint ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix);
 gboolean ghb_ac3_in_audio_list(const GValue *audio_list);
 gboolean ghb_audio_is_passthru(gint acodec);

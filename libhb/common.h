@@ -501,7 +501,8 @@ struct hb_metadata_s
 
 struct hb_title_s
 {
-    char        dvd[1024];
+    enum { HB_DVD_TYPE, HB_STREAM_TYPE } type;
+    char        path[1024];
     char        name[1024];
     int         index;
     int         vts;
@@ -734,5 +735,7 @@ extern hb_filter_object_t hb_filter_decomb;
 typedef void hb_error_handler_t( const char *errmsg );
 
 extern void hb_register_error_handler( hb_error_handler_t * handler );
+
+char * hb_strdup_printf( char * fmt, ... );
 
 #endif

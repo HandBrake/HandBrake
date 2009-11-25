@@ -42,6 +42,7 @@ void          hb_dvd_set_dvdnav( int enable );
 void          hb_scan( hb_handle_t *, const char * path,
                        int title_index, int preview_count,
                        int store_previews );
+void          hb_scan_stop( hb_handle_t * );
 
 /* hb_get_titles()
    Returns the list of valid titles detected by the latest scan. */

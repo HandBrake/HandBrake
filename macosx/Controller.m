@@ -1100,9 +1100,33 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         hb_state_t s;
         
         hb_get_state( fHandle, &s );
-        if (s.state == HB_STATE_SCANNING && ([ident isEqualToString: StartEncodingIdentifier] || [ident isEqualToString: AddToQueueIdentifier]))
-            return NO;
-        
+        if (s.state == HB_STATE_SCANNING)
+        {
+            
+            if ([ident isEqualToString: ChooseSourceIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Stop"]];
+                [toolbarItem setLabel: @"Cancel Scan"];
+                [toolbarItem setPaletteLabel: @"Cancel Scanning"];
+                [toolbarItem setToolTip: @"Cancel Scanning Source"];
+                return YES;
+            }
+            
+            if ([ident isEqualToString: StartEncodingIdentifier] || [ident isEqualToString: AddToQueueIdentifier])
+                return NO;
+        }
+        else
+        {
+            if ([ident isEqualToString: ChooseSourceIdentifier])
+            {
+                [toolbarItem setImage: [NSImage imageNamed: @"Source"]];
+                [toolbarItem setLabel: @"Source"];
+                [toolbarItem setPaletteLabel: @"Source"];
+                [toolbarItem setToolTip: @"Choose Video Source"];
+                return YES;
+            }
+        }
+
         hb_get_state2( fQueueEncodeLibhb, &s );
         
         if (s.state == HB_STATE_WORKING || s.state == HB_STATE_MUXING)
@@ -1307,6 +1331,16 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 /*Opens the source browse window, called from Open Source widgets */
 - (IBAction) browseSources: (id) sender
 {
+    
+    hb_state_t s;
+    hb_get_state( fHandle, &s );
+    if (s.state == HB_STATE_SCANNING)
+    {
+        [self cancelScanning:nil];
+        return;
+    }
+    
+    
     NSOpenPanel * panel;
 	
     panel = [NSOpenPanel openPanel];
@@ -1368,7 +1402,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             if ([[scanPath lastPathComponent] isEqualToString: @"VIDEO_TS"])
             {
                 /* If VIDEO_TS Folder is chosen, choose its parent folder for the source display name
-                 we have to use the title->dvd value so we get the proper name of the volume if a physical dvd is the source*/
+                 we have to use the title->path value so we get the proper name of the volume if a physical dvd is the source*/
                 displayTitlescanSourceName = [[scanPath stringByDeletingLastPathComponent] lastPathComponent];
             }
             else
@@ -1699,6 +1733,11 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     }
 }
 
+- (IBAction) cancelScanning:(id)sender
+{
+    hb_scan_stop(fHandle);
+}
+
 - (IBAction) showNewScan:(id)sender
 {
     hb_list_t  * list;
@@ -1765,13 +1804,21 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 }
                 
                 [fSrcTitlePopUp addItemWithTitle: [NSString
-                                                   stringWithFormat: @"%d - %02dh%02dm%02ds",
-                                                   title->index, title->hours, title->minutes,
+                                                   stringWithFormat: @"%s %d - %02dh%02dm%02ds",
+                                                   title->name,title->index, title->hours, title->minutes,
                                                    title->seconds]];
             }
             
-            // Select the longuest title
-            [fSrcTitlePopUp selectItemAtIndex: indxpri];
+            /* if we are a stream, select the first title */
+            if (title->type == HB_STREAM_TYPE)
+            {
+                [fSrcTitlePopUp selectItemAtIndex: 0];
+            }
+            else
+            {
+                /* if not then select the longest title (dvd) */
+                [fSrcTitlePopUp selectItemAtIndex: indxpri];
+            }
             [self titlePopUpChanged:nil];
             
             SuccessfulScan = YES;
@@ -2075,7 +2122,7 @@ fWorkingCount = 0;
     [queueFileJob setObject:[NSNumber numberWithInt:2] forKey:@"Status"];
     /* Source and Destination Information */
     
-    [queueFileJob setObject:[NSString stringWithUTF8String: title->dvd] forKey:@"SourcePath"];
+    [queueFileJob setObject:[NSString stringWithUTF8String: title->path] forKey:@"SourcePath"];
     [queueFileJob setObject:[fSrcDVD2Field stringValue] forKey:@"SourceName"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
@@ -4136,6 +4183,22 @@ bool one_burned = FALSE;
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
+    /* If we are a stream type, grok the output file name from title->name upon title change */
+    if (title->type == HB_STREAM_TYPE)
+    {
+        /* we set the default name according to the new title->name */
+        [fDstFile2Field setStringValue: [NSString stringWithFormat:
+                                         @"%@/%@.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
+                                         [NSString stringWithUTF8String: title->name],
+                                         [[fDstFile2Field stringValue] pathExtension]]];
+        /* If we have more than one title and are stream then we have a batch, change the source to read out the parent folder also */
+        if ( hb_list_count( list ) > 1 )
+        {                                  
+            [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
+        }
+    }
+    
+    
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
     if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0 && ( hb_list_count( list ) > 1 ) )
 	{

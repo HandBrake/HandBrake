@@ -7,6 +7,12 @@
 #ifndef HB_PORTS_H
 #define HB_PORTS_H
 
+#if defined(_WIN32)
+#define DIR_SEP_STR "\\"
+#else
+#define DIR_SEP_STR "/"
+#endif
+
 /************************************************************************
  * Utils
  ***********************************************************************/

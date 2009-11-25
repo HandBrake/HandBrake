@@ -378,9 +378,16 @@ static void PrintTitleInfo( hb_title_t * title )
     int i;
 
     fprintf( stderr, "+ title %d:\n", title->index );
-    fprintf( stderr, "  + vts %d, ttn %d, cells %d->%d (%d blocks)\n",
-             title->vts, title->ttn, title->cell_start, title->cell_end,
-             title->block_count );
+    if ( title->type == HB_STREAM_TYPE )
+    {
+        fprintf( stderr, "  + stream: %s\n", title->path );
+    }
+    else if ( title->type == HB_DVD_TYPE )
+    {
+        fprintf( stderr, "  + vts %d, ttn %d, cells %d->%d (%d blocks)\n",
+                title->vts, title->ttn, title->cell_start, title->cell_end,
+                title->block_count );
+    }
     if (dvdnav)
         fprintf( stderr, "  + angle(s) %d\n", title->angle_count );
     fprintf( stderr, "  + duration: %02d:%02d:%02d\n",

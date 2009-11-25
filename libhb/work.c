@@ -125,7 +125,7 @@ void hb_display_job_info( hb_job_t * job )
     hb_log("job configuration:");
     hb_log( " * source");
     
-    hb_log( "   + %s", title->dvd );
+    hb_log( "   + %s", title->path );
 
     hb_log( "   + title %d, chapter(s) %d to %d", title->index,
             job->chapter_start, job->chapter_end );

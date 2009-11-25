@@ -158,6 +158,8 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
     hb_log( "scan: scanning title %d", t );
 
     title = hb_title_init( d->path, t );
+    title->type = HB_DVD_TYPE;
+
     if( DVDUDFVolumeInfo( d->reader, title->name, sizeof( title->name ),
                           unused, sizeof( unused ) ) )
     {

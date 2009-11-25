@@ -1759,14 +1759,32 @@ title_opts_set(GtkBuilder *builder, const gchar *name)
 	for (ii = 0; ii < count; ii++)
 	{
 		title = (hb_title_t*)hb_list_item(list, ii);
-		if (title->duration != 0)
+		if (title->type == HB_STREAM_TYPE)
 		{
-			titles[ii]  = g_strdup_printf ("%d - %02dh%02dm%02ds",
-				title->index, title->hours, title->minutes, title->seconds);
+			if (title->duration != 0)
+			{
+				titles[ii]  = g_strdup_printf ("%d - %02dh%02dm%02ds - %s",
+					title->index, title->hours, title->minutes, title->seconds, 
+					title->name);
+			}
+			else
+			{
+				titles[ii]  = g_strdup_printf ("%d - %s", 
+										title->index, title->name);
+			}
 		}
 		else
 		{
-			titles[ii]  = g_strdup_printf ("%d - Unknown Length", title->index);
+			if (title->duration != 0)
+			{
+				titles[ii]  = g_strdup_printf ("%d - %02dh%02dm%02ds",
+					title->index, title->hours, title->minutes, title->seconds);
+			}
+			else
+			{
+				titles[ii]  = g_strdup_printf ("%d - Unknown Length", 
+										title->index);
+			}
 		}
 		gtk_list_store_append(store, &iter);
 		gtk_list_store_set(store, &iter, 
@@ -2639,6 +2657,44 @@ ghb_build_x264opts_string(GValue *settings)
 }
 
 void
+ghb_part_duration(gint tt, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
+{
+	hb_list_t  * list;
+	hb_title_t * title;
+    hb_chapter_t * chapter;
+	gint count, c;
+	gint64 duration;
+	
+	*hh = *mm = *ss = 0;
+	if (h_scan == NULL) return;
+	list = hb_get_titles( h_scan );
+    title = (hb_title_t*)hb_list_item( list, tt );
+	if (title == NULL) return;
+
+	*hh = title->hours;
+	*mm = title->minutes;
+	*ss = title->seconds;
+
+	count = hb_list_count(title->list_chapter);
+	if (sc > count) sc = count;
+	if (ec > count) ec = count;
+
+	if (sc == 1 && ec == count)
+		return;
+
+	duration = 0;
+	for (c = sc; c <= ec; c++)
+	{
+		chapter = hb_list_item(title->list_chapter, c-1);
+		duration += chapter->duration;
+	}
+
+	*hh =   duration / 90000 / 3600;
+	*mm = ((duration / 90000) % 3600) / 60;
+	*ss =  (duration / 90000) % 60;
+}
+
+void
 ghb_get_chapter_duration(gint ti, gint ii, gint *hh, gint *mm, gint *ss)
 {
 	hb_list_t  * list;
@@ -2851,6 +2907,11 @@ ghb_backend_close()
 {
 	hb_close(&h_queue);
 	hb_close(&h_scan);
+}
+
+void ghb_backend_scan_stop()
+{
+    hb_scan_stop( h_scan );
 }
 
 void
@@ -3085,8 +3146,9 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 		return FALSE;
 	}
 
-    title = hb_list_item( list, titleindex );
+	title = hb_list_item( list, titleindex );
 	if (title == NULL) return FALSE;	// Bad titleindex
+	tinfo->index = titleindex;
 	tinfo->width = title->width;
 	tinfo->height = title->height;
 	memcpy(tinfo->crop, title->crop, 4 * sizeof(int));
@@ -3107,6 +3169,9 @@ ghb_get_title_info(ghb_title_info_t *tinfo, gint titleindex)
 	tinfo->duration = title->duration;
 
 	tinfo->angle_count = title->angle_count;
+	tinfo->path = title->path;
+	tinfo->name = title->name;
+	tinfo->type = title->type;
 	return TRUE;
 }
 

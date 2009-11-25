@@ -279,6 +279,9 @@ BOOL                        fIsDragging;
 - (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
 - (IBAction) showNewScan: (id) sender;
 
+
+- (IBAction) cancelScanning:(id)sender;
+
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
 

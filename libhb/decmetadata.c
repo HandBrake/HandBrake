@@ -13,7 +13,7 @@ static void decmp4metadata( hb_title_t *title )
     MP4FileHandle input_file;
     hb_deep_log( 2, "Got an MP4 input, read the metadata");
 
-    input_file = MP4Read( title->dvd, 0 );
+    input_file = MP4Read( title->path, 0 );
 
     if( input_file != MP4_INVALID_FILE_HANDLE )
     { 

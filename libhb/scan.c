@@ -12,17 +12,19 @@
 
 typedef struct
 {
-    hb_handle_t * h;
+    hb_handle_t  * h;
+    volatile int * die;
 
-    char        * path;
-    int           title_index;
-    hb_list_t   * list_title;
+    char         * path;
+    int            title_index;
+    hb_list_t    * list_title;
 
-    hb_dvd_t    * dvd;
-	hb_stream_t * stream;
+    hb_dvd_t     * dvd;
+    hb_stream_t  * stream;
+    hb_batch_t   * batch;
 	
-    int           preview_count;
-    int           store_previews;
+    int            preview_count;
+    int            store_previews;
 
 } hb_scan_t;
 
@@ -43,13 +45,15 @@ static const char *aspect_to_string( double aspect )
     return arstr;
 }
 
-hb_thread_t * hb_scan_init( hb_handle_t * handle, const char * path,
-                            int title_index, hb_list_t * list_title,
-                            int preview_count, int store_previews )
+hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
+                            const char * path, int title_index, 
+                            hb_list_t * list_title, int preview_count, 
+                            int store_previews )
 {
     hb_scan_t * data = calloc( sizeof( hb_scan_t ), 1 );
 
     data->h            = handle;
+    data->die          = die;
     data->path         = strdup( path );
     data->title_index  = title_index;
     data->list_title   = list_title;
@@ -91,6 +95,20 @@ static void ScanFunc( void * _data )
             }
         }
     }
+    else if ( ( data->batch = hb_batch_init( data->path ) ) )
+    {
+        /* Scan all titles */
+        for( i = 0; i < hb_batch_title_count( data->batch ); i++ )
+        {
+            hb_title_t * title;
+
+            title = hb_batch_title_scan( data->batch, i + 1 );
+            if ( title != NULL )
+            {
+                hb_list_add( data->list_title, title );
+            }
+        }
+    }
     else if ( (data->stream = hb_stream_open( data->path, 0 ) ) != NULL )
     {
         hb_list_add( data->list_title, hb_stream_title_scan( data->stream ) );
@@ -107,6 +125,10 @@ static void ScanFunc( void * _data )
         hb_state_t state;
         hb_audio_t * audio;
 
+        if ( *data->die )
+        {
+			goto finish;
+        }
         title = hb_list_item( data->list_title, i );
 
 #define p state.param.scanning
@@ -202,6 +224,8 @@ static void ScanFunc( void * _data )
         job->mux = HB_MUX_MP4;
     }
 
+finish:
+
     if( data->dvd )
     {
         hb_dvd_close( &data->dvd );
@@ -210,6 +234,10 @@ static void ScanFunc( void * _data )
 	{
 		hb_stream_close(&data->stream);
 	}
+    if( data->batch )
+    {
+        hb_batch_close( &data->batch );
+    }
     free( data->path );
     free( data );
     _data = NULL;
@@ -379,9 +407,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 
     if (data->dvd)
     {
-      hb_dvd_start( data->dvd, title, 1 );
-      title->angle_count = hb_dvd_angle_count( data->dvd );
-      hb_log( "scan: title angle(s) %d", title->angle_count );
+        hb_dvd_start( data->dvd, title, 1 );
+        title->angle_count = hb_dvd_angle_count( data->dvd );
+        hb_log( "scan: title angle(s) %d", title->angle_count );
+    }
+    else if (data->batch)
+    {
+        data->stream = hb_stream_open( title->path, title );
     }
 
     for( i = 0; i < data->preview_count; i++ )
@@ -390,6 +422,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         FILE * file_preview;
         char   filename[1024];
 
+        if ( *data->die )
+        {
+            return 0;
+        }
         if (data->dvd)
         {
           if( !hb_dvd_seek( data->dvd, (float) ( i + 1 ) / ( data->preview_count + 1.0 ) ) )
@@ -661,6 +697,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
 skip_preview:
         if ( vid_buf )
             hb_buffer_close( &vid_buf );
+    }
+
+    if ( data->batch && data->stream )
+    {
+        hb_stream_close( &data->stream );
     }
 
     if ( npreviews )

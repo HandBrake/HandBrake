@@ -714,7 +714,7 @@ void hb_register_error_handler( hb_error_handler_t * handler )
  **********************************************************************
  *
  *********************************************************************/
-hb_title_t * hb_title_init( char * dvd, int index )
+hb_title_t * hb_title_init( char * path, int index )
 {
     hb_title_t * t;
 
@@ -724,7 +724,7 @@ hb_title_t * hb_title_init( char * dvd, int index )
     t->list_audio    = hb_list_init();
     t->list_chapter  = hb_list_init();
     t->list_subtitle = hb_list_init();
-    strcat( t->dvd, dvd );
+    strcat( t->path, path );
     // default to decoding mpeg2
     t->video_id      = 0xE0;
     t->video_codec   = WORK_DECMPEG2;
@@ -973,3 +973,45 @@ int hb_srt_add( const hb_job_t * job,
     }
     return retval;
 }
+
+char * hb_strdup_printf( char * fmt, ... )
+{
+    int       len;
+    va_list   ap;
+    int       size = 256;
+    char    * str;
+    char    * tmp;
+
+    str = malloc( size );
+    if ( str == NULL )
+        return NULL;
+
+    while (1) 
+    {
+        /* Try to print in the allocated space. */
+        va_start( ap, fmt );
+        len = vsnprintf( str, size, fmt, ap );
+        va_end( ap );
+
+        /* If that worked, return the string. */
+        if ( len > -1 && len < size )
+        {
+            return str;
+        }
+
+        /* Else try again with more space. */
+        if ( len > -1 )     /* glibc 2.1 */
+            size = len + 1; /* precisely what is needed */
+        else                /* glibc 2.0 */
+            size *= 2;      /* twice the old size */
+        tmp = realloc( str, size );
+        if ( tmp == NULL )
+        {
+            free( str );
+            return NULL;
+        }
+        else
+            str = tmp;
+    }
+}
+
