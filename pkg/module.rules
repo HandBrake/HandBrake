@@ -12,7 +12,7 @@ pkg.clean:
 
 $(PKG.src.tar.bz2): | $(dir $(PKG.src.tar.bz2))
 $(PKG.src.tar.bz2): | $(STAGE.out.src/)
-	$(TAR.exe) cjf $@ -C $(STAGE.out.src/) .
+	$(TAR.exe) cjf $@ -C $(STAGE.out.src/) $(HB.name)-$(HB.version)
 
 $(STAGE.out.src/):
 	svn export -r$(HB.repo.rev) $(HB.repo.url) $@/$(HB.name)-$(HB.version)
