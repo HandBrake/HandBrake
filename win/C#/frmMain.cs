@@ -28,7 +28,6 @@ namespace Handbrake
 
         // Globals: Mainly used for tracking. *********************************
         public Title selectedTitle;
-        private DVD thisDVD;
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private frmActivityWindow ActivityWindow;
@@ -304,7 +303,7 @@ namespace Handbrake
                 else
                 {
                     if (fileList[0] != "")
-                        startScan(fileList[0]);
+                        StartScan(fileList[0]);
                     else
                         UpdateSourceLabel();
                 }
@@ -339,7 +338,7 @@ namespace Handbrake
         #region File Menu
         private void mnu_killCLI_Click(object sender, EventArgs e)
         {
-            killScan();
+            KillScan();
         }
         private void mnu_exit_Click(object sender, EventArgs e)
         {
@@ -356,7 +355,7 @@ namespace Handbrake
         {
             String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
 
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(file, encodeQueue, this);
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow();
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -740,7 +739,7 @@ namespace Handbrake
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
 
                         if (ActivityWindow != null)
-                            ActivityWindow.SetLogView(false);
+                            ActivityWindow.SetEncodeMode();
 
                     }
                     this.Focus();
@@ -802,11 +801,13 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
             if (ActivityWindow == null)
-                ActivityWindow = new frmActivityWindow(file, encodeQueue, this);
+                ActivityWindow = new frmActivityWindow();
 
-            ActivityWindow.SetLogView(!encodeQueue.isEncoding);
+            if (encodeQueue.isEncoding)
+                ActivityWindow.SetEncodeMode();
+            else
+                ActivityWindow.SetScanMode();
 
             ActivityWindow.Show();
         }
@@ -890,7 +891,7 @@ namespace Handbrake
             }
 
             sourcePath = Path.GetFileName(file);
-            startScan(file);
+            StartScan(file);
         }
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -1414,8 +1415,9 @@ namespace Handbrake
 
         #region Source Scan
         public Boolean isScanning { get; set; }
-        private static int scanProcessID { get; set; }
-        private void startScan(String filename)
+        private Scan SourceScan;
+
+        private void StartScan(String filename)
         {
             // Setup the GUI components for the scan.
             sourcePath = filename;
@@ -1432,79 +1434,52 @@ namespace Handbrake
             tb_preview.Enabled = false;
             mnu_killCLI.Visible = true;
 
-            // Start hte Scan Thread
+            // Start the Scan
             try
             {
-                if (ActivityWindow != null)
-                    ActivityWindow.SetLogView(true);
+                // if (ActivityWindow != null)
+                // ActivityWindow.SetupLogViewer(true);
                 isScanning = true;
-                ThreadPool.QueueUserWorkItem(scanProcess);
+                SourceScan = new Scan();
+                SourceScan.ScanSource(sourcePath);
+                SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
+                SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - startScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmMain.cs - StartScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void scanProcess(object state)
+
+        void SourceScan_ScanStatusChanged(object sender, EventArgs e)
         {
-            try
-            {
-                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-                string dvdInfoPath = Path.Combine(logDir, "last_scan_log.txt");
-
-                // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
-                if (File.Exists(dvdInfoPath))
-                    File.Delete(dvdInfoPath);
-
-                String dvdnav = string.Empty;
-                if (Properties.Settings.Default.noDvdNav)
-                    dvdnav = " --no-dvdnav";
-                string strCmdLine = String.Format(@"cmd /c """"{0}"" -i ""{1}"" -t0 {2} -v >""{3}"" 2>&1""", handbrakeCLIPath, sourcePath, dvdnav, dvdInfoPath);
-
-                ProcessStartInfo hbParseDvd = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
-
-                Boolean cleanExit = true;
-                using (hbproc = Process.Start(hbParseDvd))
-                {
-                    Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
-                    scanProcessID = Main.getCliProcess(before);
-                    hbproc.WaitForExit();
-                    if (hbproc.ExitCode != 0)
-                        cleanExit = false;
-                }
-
-                if (cleanExit) // If 0 exit code, CLI exited cleanly.
-                {
-                    if (!File.Exists(dvdInfoPath))
-                        throw new Exception("Unable to retrieve the DVD Info. last_scan_log.txt is missing. \nExpected location of last_scan_log.txt: \n"
-                                            + dvdInfoPath);
-
-                    using (StreamReader sr = new StreamReader(dvdInfoPath))
-                    {
-                        thisDVD = DVD.Parse(sr);
-                        sr.Close();
-                        sr.Dispose();
-                    }
-
-                    updateUIafterScan();
-                }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("frmMain.cs - scanProcess() " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                enableGUI();
-            }
+            UpdateScanStatusLabel();
         }
-        private void updateUIafterScan()
+        void SourceScan_ScanCompleted(object sender, EventArgs e)
         {
+            UpdateGuiAfterScan();
+        }
+
+        private void UpdateScanStatusLabel()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new UpdateWindowHandler(UpdateScanStatusLabel));
+                return;
+            }
+            lbl_encode.Text = SourceScan.ScanStatus();
+        }
+        private void UpdateGuiAfterScan()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new UpdateWindowHandler(UpdateGuiAfterScan));
+                return;
+            }
+
             try
             {
-                if (InvokeRequired)
-                {
-                    BeginInvoke(new UpdateWindowHandler(updateUIafterScan));
-                    return;
-                }
+                DVD thisDVD = SourceScan.SouceData();
 
                 // Setup some GUI components
                 drp_dvdtitle.Items.Clear();
@@ -1517,8 +1492,6 @@ namespace Handbrake
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 if (sourcePath.ToLower().Contains(".iso") || sourcePath.Contains("VIDEO_TS"))
-                    Check_ChapterMarkers.Enabled = true;
-                else if (Directory.Exists(Path.Combine(sourcePath, "VIDEO_TS")))
                     Check_ChapterMarkers.Enabled = true;
                 else
                 {
@@ -1538,20 +1511,21 @@ namespace Handbrake
                 UpdateSourceLabel();
 
                 // Enable the GUI components and enable any disabled components
-                enableGUI();
+                EnableGUI();
             }
             catch (Exception exc)
             {
                 MessageBox.Show("frmMain.cs - updateUIafterScan " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                enableGUI();
+                EnableGUI();
             }
         }
-        private void enableGUI()
+
+        private void EnableGUI()
         {
             try
             {
                 if (InvokeRequired)
-                    BeginInvoke(new UpdateWindowHandler(enableGUI));
+                    BeginInvoke(new UpdateWindowHandler(EnableGUI));
                 lbl_encode.Text = "Scan Completed";
                 foreach (Control ctrl in Controls)
                     ctrl.Enabled = true;
@@ -1564,33 +1538,28 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - enableGUI() " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("frmMain.cs - EnableGUI() " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void killScan()
+        private void KillScan()
         {
             try
             {
-                enableGUI();
-                resetGUI();
+                SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
+                EnableGUI();
+                ResetGUI();
+                
+                if (SourceScan.ScanProcess() != null)
+                    SourceScan.ScanProcess().Kill();
 
-                Process[] prs = Process.GetProcesses();
-                foreach (Process process in prs)
-                {
-                    if (process.Id == scanProcessID)
-                    {
-                        process.Refresh();
-                        if (!process.HasExited)
-                            process.Kill();
-                    }
-                }
+                lbl_encode.Text = "Scan Cancelled!";
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void resetGUI()
+        private void ResetGUI()
         {
             drp_dvdtitle.Items.Clear();
             drop_chapterStart.Items.Clear();
@@ -1600,7 +1569,6 @@ namespace Handbrake
             PictureSettings.lbl_Aspect.Text = "Select a Title";
             sourcePath = String.Empty;
             text_destination.Text = String.Empty;
-            thisDVD = null;
             selectedTitle = null;
             isScanning = false;
         }

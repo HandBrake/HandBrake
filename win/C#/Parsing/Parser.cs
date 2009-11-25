@@ -91,7 +91,7 @@ namespace Handbrake.Parsing
         {
             string tmp = base.ReadLine();
 
-            m_buffer += tmp;
+            m_buffer += tmp + Environment.NewLine;
             Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
             if (OnReadLine != null)
                 OnReadLine(this, tmp);
@@ -106,7 +106,7 @@ namespace Handbrake.Parsing
         {
             string tmp = base.ReadToEnd();
 
-            m_buffer += tmp;
+            m_buffer += tmp + Environment.NewLine;
             if (OnReadToEnd != null)
                 OnReadToEnd(this, tmp);
 

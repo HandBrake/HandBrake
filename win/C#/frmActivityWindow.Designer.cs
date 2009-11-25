@@ -42,17 +42,13 @@ namespace Handbrake
             this.mnu_openLogFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.dropDownLogSelector = new System.Windows.Forms.ToolStripDropDownButton();
             this.btn_encode_log = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_scan_log = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_copy = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.lbl_slb = new System.Windows.Forms.ToolStripStatusLabel();
-            this.txt_log = new System.Windows.Forms.ToolStripStatusLabel();
             this.rightClickMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // rtf_actLog
@@ -64,7 +60,7 @@ namespace Handbrake
             this.rtf_actLog.Location = new System.Drawing.Point(0, 25);
             this.rtf_actLog.Name = "rtf_actLog";
             this.rtf_actLog.ReadOnly = true;
-            this.rtf_actLog.Size = new System.Drawing.Size(404, 530);
+            this.rtf_actLog.Size = new System.Drawing.Size(404, 552);
             this.rtf_actLog.TabIndex = 29;
             this.rtf_actLog.Text = "";
             // 
@@ -100,7 +96,7 @@ namespace Handbrake
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripDropDownButton1,
+            this.dropDownLogSelector,
             this.btn_copy});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -109,18 +105,18 @@ namespace Handbrake
             this.toolStrip1.TabIndex = 96;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripDropDownButton1
+            // dropDownLogSelector
             // 
-            this.toolStripDropDownButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dropDownLogSelector.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.dropDownLogSelector.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_encode_log,
             this.btn_scan_log});
-            this.toolStripDropDownButton1.Image = global::Handbrake.Properties.Resources.Output_Small;
-            this.toolStripDropDownButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(90, 22);
-            this.toolStripDropDownButton1.Text = "Select Log";
+            this.dropDownLogSelector.Image = global::Handbrake.Properties.Resources.Output_Small;
+            this.dropDownLogSelector.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.dropDownLogSelector.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.dropDownLogSelector.Name = "dropDownLogSelector";
+            this.dropDownLogSelector.Size = new System.Drawing.Size(90, 22);
+            this.dropDownLogSelector.Text = "Select Log";
             // 
             // btn_encode_log
             // 
@@ -156,56 +152,27 @@ namespace Handbrake
             this.panel1.Size = new System.Drawing.Size(404, 552);
             this.panel1.TabIndex = 97;
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lbl_slb,
-            this.txt_log});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 555);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 12, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(404, 22);
-            this.statusStrip1.TabIndex = 98;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // lbl_slb
-            // 
-            this.lbl_slb.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_slb.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_slb.Name = "lbl_slb";
-            this.lbl_slb.Size = new System.Drawing.Size(85, 17);
-            this.lbl_slb.Text = "Selected Log: ";
-            // 
-            // txt_log
-            // 
-            this.txt_log.BackColor = System.Drawing.Color.Transparent;
-            this.txt_log.Name = "txt_log";
-            this.txt_log.Size = new System.Drawing.Size(78, 17);
-            this.txt_log.Text = "{selected log}";
-            // 
-            // frmActivityWindow
+            // NewActivityWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(404, 577);
             this.Controls.Add(this.rtf_actLog);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "frmActivityWindow";
+            this.Name = "NewActivityWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Activity Window";
+            this.Text = "New Activity Window";
+            this.Load += new System.EventHandler(this.NewActivityWindow_Load);
             this.rightClickMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,13 +184,10 @@ namespace Handbrake
         internal System.Windows.Forms.ToolTip ToolTip;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel txt_log;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripDropDownButton dropDownLogSelector;
         private System.Windows.Forms.ToolStripMenuItem btn_encode_log;
         private System.Windows.Forms.ToolStripMenuItem btn_scan_log;
         private System.Windows.Forms.ToolStripButton btn_copy;
-        private System.Windows.Forms.ToolStripStatusLabel lbl_slb;
         private System.Windows.Forms.ContextMenuStrip rightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem mnu_copy_log;
         private System.Windows.Forms.ToolStripMenuItem mnu_openLogFolder;
