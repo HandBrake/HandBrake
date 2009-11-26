@@ -110,6 +110,10 @@ struct hb_work_private_s
     struct SwsContext *sws_context; // if we have to rescale or convert color space
 };
 
+static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size );
+static hb_buffer_t *link_buf_list( hb_work_private_t *pv );
+
+
 static int64_t heap_pop( pts_heap_t *heap )
 {
     int64_t result;
@@ -183,6 +187,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     w->private_data = pv;
 
     pv->job   = job;
+    pv->list  = hb_list_init();
 
     int codec_id = w->codec_param;
     /*XXX*/
@@ -250,17 +255,12 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_buffer_t * in = *buf_in, * buf, * last = NULL;
-    int   pos, len, out_size, i, uncompressed_len;
-    short* bufaligned;
-    uint64_t cur;
-    unsigned char *parser_output_buffer;
-    int parser_output_buffer_len;
+    hb_buffer_t * in = *buf_in;
 
-    if ( (*buf_in)->size <= 0 )
+    if ( in->size <= 0 )
     {
         /* EOF on input stream - send it downstream & say that we're done */
-        *buf_out = *buf_in;
+        *buf_out = in;
         *buf_in = NULL;
         return HB_WORK_DONE;
     }
@@ -273,75 +273,40 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         return HB_WORK_OK;
     }
 
-    cur = ( in->start < 0 )? pv->pts_next : in->start;
-
-    bufaligned = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
-    pos = 0;
-    while( pos < in->size )
+    // if the packet has a timestamp use it 
+    if ( in->start != -1 )
     {
+        pv->pts_next = in->start;
+    }
+
+    int pos, len;
+    for ( pos = 0; pos < in->size; pos += len )
+    {
+        uint8_t *parser_output_buffer;
+        int parser_output_buffer_len;
+        int64_t cur = pv->pts_next;
+
         len = av_parser_parse2( pv->parser, pv->context,
                                 &parser_output_buffer, &parser_output_buffer_len,
                                 in->data + pos, in->size - pos, cur, cur, AV_NOPTS_VALUE );
-        out_size = 0;
-        uncompressed_len = 0;
         if (parser_output_buffer_len)
         {
-            AVPacket avp;
-            av_init_packet( &avp );
-            avp.data = parser_output_buffer;
-            avp.size = parser_output_buffer_len;
-
-            out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
-            uncompressed_len = avcodec_decode_audio3( pv->context, bufaligned, &out_size, &avp );
+            // set the duration on every frame since the stream format can
+            // change (it shouldn't but there's no way to guarantee it).
+            // duration is a scaling factor to go from #bytes in the decoded
+            // frame to frame time (in 90KHz mpeg ticks). 'channels' converts
+            // total samples to per-channel samples. 'sample_rate' converts
+            // per-channel samples to seconds per sample and the 90000
+            // is mpeg ticks per second.
+            if ( pv->context->sample_rate && pv->context->channels )
+            {
+                pv->duration = 90000. /
+                            (double)( pv->context->sample_rate * pv->context->channels );
+            }
+            decodeAudio( pv, parser_output_buffer, parser_output_buffer_len );
         }
-        if( out_size )
-        {
-            short * s16;
-            float * fl32;
-
-            buf = hb_buffer_init( 2 * out_size );
-
-            int sample_size_in_bytes = 2;   // Default to 2 bytes
-            switch (pv->context->sample_fmt)
-            {
-              case SAMPLE_FMT_S16:
-                sample_size_in_bytes = 2;
-                break;
-              /* We should handle other formats here - but that needs additional format conversion work below */
-              /* For now we'll just report the error and try to carry on */
-              default:
-                hb_log("decavcodecWork - Unknown Sample Format from avcodec_decode_audio (%d) !", pv->context->sample_fmt);
-                break;
-            }
-
-            buf->start = cur;
-            buf->stop  = cur + 90000 * ( out_size / (sample_size_in_bytes * pv->context->channels) ) /
-                         pv->context->sample_rate;
-            cur = buf->stop;
-
-            s16  = bufaligned;
-            fl32 = (float *) buf->data;
-            for( i = 0; i < out_size / 2; i++ )
-            {
-                fl32[i] = s16[i];
-            }
-
-            if( last )
-            {
-                last = last->next = buf;
-            }
-            else
-            {
-                *buf_out = last = buf;
-            }
-        }
-
-        pos += len;
     }
-
-    pv->pts_next = cur;
-
-    av_free( bufaligned );
+    *buf_out = link_buf_list( pv );
     return HB_WORK_OK;
 }
 
