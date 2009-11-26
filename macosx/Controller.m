@@ -1539,6 +1539,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     applyQueueToScan = NO;
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
+    BOOL vlcFound = 0;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
     
@@ -1603,6 +1604,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
+            vlcFound = 1;
         }
         /* test for architecture of the vlc app */
         NSArray *vlc_architecturesArray = [[NSBundle bundleWithPath:@"/Applications/VLC.app"] executableArchitectures];
@@ -1646,7 +1648,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         
         
         
-        if (hb_arch == 64 && !vlcIntel64bit && cancelScanDecrypt != 1)
+        if (vlcFound && hb_arch == 64 && !vlcIntel64bit && cancelScanDecrypt != 1)
         {
             
             /* we are 64 bit */
@@ -1666,7 +1668,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self writeToActivityLog: "cannot open physical dvd VLC found but not 64 bit, scan cancelled"];
                 cancelScanDecrypt = 1;
             }
-            else if (status == NSAlertDefaultReturn)
+            else if (status == NSAlertAlternateReturn)
             {
                 [self writeToActivityLog: "user overrode 64-bit warning trying to open physical dvd without proper decryption"];
                 cancelScanDecrypt = 0;
@@ -1678,7 +1680,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             
         }    
-        else if (hb_arch == 32 && !vlcIntel32bit && cancelScanDecrypt != 1)
+        else if (vlcFound && hb_arch == 32 && !vlcIntel32bit && cancelScanDecrypt != 1)
         {
             /* we are 32 bit */
             /* Appropriate VLC not found, so cancel */
@@ -1696,7 +1698,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 [self writeToActivityLog: "cannot open physical dvd VLC found but not 32 bit, scan cancelled"];
                 cancelScanDecrypt = 1;
             }
-            else if (status == NSAlertDefaultReturn)
+            else if (status == NSAlertAlternateReturn)
             {
                 [self writeToActivityLog: "user overrode 32-bit warning trying to open physical dvd without proper decryption"];
                 cancelScanDecrypt = 0;
