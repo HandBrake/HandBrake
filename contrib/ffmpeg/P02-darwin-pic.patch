@@ -1,0 +1,20 @@
+diff -Naur ffmpeg-r20602.orig/configure ffmpeg-r20602/configure
+--- ffmpeg-r20602.orig/configure	2009-11-24 15:17:19.000000000 -0800
++++ ffmpeg-r20602/configure	2009-11-27 12:02:03.659012744 -0800
+@@ -1913,7 +1913,7 @@
+ 
+ enable $arch $subarch
+ enabled spic && enable pic
+-check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable pic
++#check_cpp_condition stdlib.h "defined(__PIC__) || defined(__pic__) || defined(PIC)" && enable pic
+ 
+ # OS specific
+ case $target_os in
+@@ -1982,6 +1982,7 @@
+         FFSERVERLDFLAGS=-Wl,-bind_at_load
+         objformat="macho"
+         enabled x86_64 && objformat="macho64"
++        enabled x86_64 && enable pic
+         enabled_any pic shared ||
+             { check_cflags -mdynamic-no-pic && add_asflags -mdynamic-no-pic; }
+         ;;
