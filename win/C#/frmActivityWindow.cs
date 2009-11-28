@@ -24,6 +24,8 @@ namespace Handbrake
         private static int _position;
         private static string _lastMode;
         private static string _currentMode;
+        private Thread monitor;
+        private Boolean kilLThread;
 
         public frmActivityWindow()
         {
@@ -32,7 +34,9 @@ namespace Handbrake
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
             SetScanMode();
-            Thread monitor = new Thread(LogMonitor);
+            monitor = new Thread(LogMonitor);
+            _position = 0;
+            kilLThread = false;
 
             try
             {
@@ -48,6 +52,9 @@ namespace Handbrake
         {
             while (true)
             {
+                if (!IsHandleCreated || kilLThread) // break out the thread if the window has been disposed.
+                    break;
+
                 // Perform a reset if require.
                 // If we have switched to a different log file, we want to start from the beginning.
                 if (SetLogFile != _lastMode)
@@ -70,7 +77,7 @@ namespace Handbrake
                         break;
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(750);
             }
         }
         private StringBuilder ReadFile(string file)
@@ -197,7 +204,7 @@ namespace Handbrake
             {
                 MessageBox.Show("PrintLogHeader(): Exception: \n" + exc);
             }
-            
+
         }
 
         #region Public
@@ -293,8 +300,10 @@ namespace Handbrake
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            kilLThread = true;
+            monitor.Join();
             e.Cancel = true;
-            this.Hide();
+            this.Dispose();
             base.OnClosing(e);
         }
     }

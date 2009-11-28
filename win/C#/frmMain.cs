@@ -800,7 +800,7 @@ namespace Handbrake
         }
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
-            if (ActivityWindow == null)
+            if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
                 ActivityWindow = new frmActivityWindow();
 
             if (encodeQueue.isEncoding)
