@@ -54,6 +54,7 @@ namespace Handbrake
                 {
                     _position = 0;
                     ClearWindowText();
+                    PrintLogHeader();
                 }
 
                 // Perform the window update
@@ -96,6 +97,7 @@ namespace Handbrake
                     appendText.AppendFormat("Waiting for the log file to be generated ...\n");
                     _position = 0;
                     ClearWindowText();
+                    PrintLogHeader();
                     return appendText;
                 }
 
@@ -165,19 +167,37 @@ namespace Handbrake
                 MessageBox.Show("ClearWindowText(): Exception: \n" + exc);
             }
         }
-
         public void PrintLogHeader()
         {
-            // Print the log header. This function will be re-implimented later. Do not delete.
-            rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
-            rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
-            rtf_actLog.AppendText(String.Format("### CPU: {0} \n", getCpuCount()));
-            rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", TotalPhysicalMemory()));
-            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", screenBounds().Bounds.Width, screenBounds().Bounds.Height));
-            rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
-            rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
-            rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
-            rtf_actLog.AppendText("#########################################\n\n");
+            try
+            {
+                if (IsHandleCreated)
+                {
+                    if (rtf_actLog.InvokeRequired)
+                    {
+                        IAsyncResult invoked = BeginInvoke(new setTextClearCallback(PrintLogHeader));
+                        EndInvoke(invoked);
+                    }
+                    else
+                    {
+                        // Print the log header. This function will be re-implimented later. Do not delete.
+                        rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
+                        rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
+                        rtf_actLog.AppendText(String.Format("### CPU: {0} \n", getCpuCount()));
+                        rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", TotalPhysicalMemory()));
+                        rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", screenBounds().Bounds.Width, screenBounds().Bounds.Height));
+                        rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
+                        rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
+                        rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
+                        rtf_actLog.AppendText("#########################################\n\n");
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("PrintLogHeader(): Exception: \n" + exc);
+            }
+            
         }
 
         #region Public

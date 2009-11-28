@@ -737,11 +737,10 @@ namespace Handbrake
                         setEncodeStarted(); // Encode is running, so setup the GUI appropriately
                         encodeQueue.StartEncodeQueue(); // Start The Queue Encoding Process
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
-
-                        if (ActivityWindow != null)
-                            ActivityWindow.SetEncodeMode();
-
                     }
+                    if (ActivityWindow != null)
+                        ActivityWindow.SetEncodeMode();
+
                     this.Focus();
                 }
                 else if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
@@ -1434,6 +1433,9 @@ namespace Handbrake
             tb_preview.Enabled = false;
             mnu_killCLI.Visible = true;
 
+            if (ActivityWindow != null)
+                ActivityWindow.SetScanMode();
+
             // Start the Scan
             try
             {
@@ -1548,7 +1550,7 @@ namespace Handbrake
                 SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
                 EnableGUI();
                 ResetGUI();
-                
+
                 if (SourceScan.ScanProcess() != null)
                     SourceScan.ScanProcess().Kill();
 
