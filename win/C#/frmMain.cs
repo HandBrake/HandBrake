@@ -809,6 +809,7 @@ namespace Handbrake
                 ActivityWindow.SetScanMode();
 
             ActivityWindow.Show();
+            ActivityWindow.Activate();
         }
         #endregion
 

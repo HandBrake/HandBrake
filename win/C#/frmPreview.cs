@@ -43,7 +43,9 @@ namespace Handbrake
             lbl_status.Visible = true;
             try
             {
-                QTControl.URL = "";
+                if (!noQT)
+                    QTControl.URL = "";
+
                 if (File.Exists(currently_playing))
                     File.Delete(currently_playing);
             }
@@ -172,6 +174,22 @@ namespace Handbrake
             {
                 if (File.Exists(currently_playing))
                 {
+                    // Attempt to find VLC if it doesn't exist in the default set location.
+                    if (!File.Exists(Properties.Settings.Default.VLC_Path))
+                    {
+                        if (File.Exists("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"))
+                        {
+                            Properties.Settings.Default.VLC_Path = "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe";
+                            Properties.Settings.Default.Save(); // Save this new path if it does
+                        }
+                        else
+                        {
+                            MessageBox.Show(this,
+                                            "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\") ",
+                                            "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+
                     if (File.Exists(Properties.Settings.Default.VLC_Path))
                     {
                         String args = "\"" + currently_playing + "\"";
@@ -179,8 +197,7 @@ namespace Handbrake
                         Process.Start(vlc);
                         lbl_status.Text = "VLC will now launch.";
                     }
-                    else
-                        MessageBox.Show(this, "Unable to detect VLC Player. \nPlease make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: \"Tools Menu > Options > Picture Tab\") ", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    
                 }
                 else
                     MessageBox.Show(this, "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
