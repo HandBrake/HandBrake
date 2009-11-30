@@ -968,6 +968,7 @@
                                 <child>
                                   <object class="GtkFileChooserButton" id="dest_dir">
                                     <property name="visible">True</property>
+                                    <property name="local-only">False</property>
                                     <property name="action">GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER</property>
                                     <property name="title" translatable="yes">Destination Directory</property>
                                     <property name="tooltip-text" translatable="yes">Destination directory for your encode.</property>
@@ -2489,6 +2490,7 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                                 <child>
                                   <object class="GtkFileChooserButton" id="SrtFile">
                                     <property name="visible">True</property>
+                                    <property name="local-only">False</property>
                                     <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
                                     <property name="title" translatable="yes">Srt File</property>
                                     <property name="tooltip-text" translatable="yes">Select the SRT file to import.</property>
@@ -6574,6 +6576,7 @@ libx264 authors:
   </object>
   <object class="GtkFileChooserDialog" id="source_dialog">
     <property name="border_width">5</property>
+    <property name="local-only">False</property>
     <property name="modal">True</property>
     <property name="action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
     <property name="type_hint">dialog</property>
