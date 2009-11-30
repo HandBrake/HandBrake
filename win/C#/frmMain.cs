@@ -353,9 +353,7 @@ namespace Handbrake
         }
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            String file = lastAction == "scan" ? "last_scan_log.txt" : "last_encode_log.txt";
-
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow();
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(lastAction);
             dvdInfoWindow.Show();
         }
         private void mnu_options_Click(object sender, EventArgs e)
@@ -801,12 +799,20 @@ namespace Handbrake
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
-                ActivityWindow = new frmActivityWindow();
+                ActivityWindow = new frmActivityWindow(lastAction);
 
-            if (encodeQueue.isEncoding)
-                ActivityWindow.SetEncodeMode();
-            else
-                ActivityWindow.SetScanMode();
+            switch (lastAction)
+            {
+                case "scan":
+                    ActivityWindow.SetScanMode();
+                    break;
+                case "encode":
+                    ActivityWindow.SetEncodeMode();
+                    break;
+                default:
+                    ActivityWindow.SetEncodeMode();
+                    break;
+            }
 
             ActivityWindow.Show();
             ActivityWindow.Activate();

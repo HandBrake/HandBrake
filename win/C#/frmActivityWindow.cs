@@ -27,13 +27,17 @@ namespace Handbrake
         private Thread monitor;
         private Boolean kilLThread;
 
-        public frmActivityWindow()
+        public frmActivityWindow(string mode)
         {
+            if (mode == "scan")
+                SetScanMode();
+            else
+                SetEncodeMode();
+
             InitializeComponent();
         }
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
-            SetScanMode();
             monitor = new Thread(LogMonitor);
             _position = 0;
             kilLThread = false;
@@ -77,7 +81,15 @@ namespace Handbrake
                         break;
                 }
 
-                Thread.Sleep(750);
+                try
+                {
+                    Thread.Sleep(1000);
+                }
+                catch (ThreadInterruptedException)
+                {
+                    // Do Nothnig.
+                }
+
             }
         }
         private StringBuilder ReadFile(string file)
@@ -148,6 +160,9 @@ namespace Handbrake
                     else
                         rtf_actLog.AppendText(text.ToString());
                 }
+            } catch(ThreadInterruptedException)
+            {
+                // Do Nothing
             }
             catch (Exception exc)
             {
@@ -301,6 +316,7 @@ namespace Handbrake
         protected override void OnClosing(CancelEventArgs e)
         {
             kilLThread = true;
+            monitor.Interrupt();
             monitor.Join();
             e.Cancel = true;
             this.Dispose();
