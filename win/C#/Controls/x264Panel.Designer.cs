@@ -81,6 +81,7 @@ namespace Handbrake.Controls
             // 
             // slider_psytrellis
             // 
+            this.slider_psytrellis.BackColor = System.Drawing.SystemColors.Window;
             this.slider_psytrellis.Location = new System.Drawing.Point(436, 194);
             this.slider_psytrellis.Name = "slider_psytrellis";
             this.slider_psytrellis.Size = new System.Drawing.Size(131, 45);
@@ -110,6 +111,7 @@ namespace Handbrake.Controls
             // 
             // slider_psyrd
             // 
+            this.slider_psyrd.BackColor = System.Drawing.SystemColors.Window;
             this.slider_psyrd.Location = new System.Drawing.Point(436, 153);
             this.slider_psyrd.Name = "slider_psyrd";
             this.slider_psyrd.Size = new System.Drawing.Size(131, 45);

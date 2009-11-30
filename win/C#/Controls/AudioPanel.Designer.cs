@@ -137,19 +137,19 @@ namespace Handbrake.Controls
             this.toolStripSeparator2,
             this.audioList_remove});
             this.audioMenu.Name = "audioMenu";
-            this.audioMenu.Size = new System.Drawing.Size(142, 76);
+            this.audioMenu.Size = new System.Drawing.Size(139, 76);
             // 
             // audioList_moveup
             // 
             this.audioList_moveup.Name = "audioList_moveup";
-            this.audioList_moveup.Size = new System.Drawing.Size(141, 22);
+            this.audioList_moveup.Size = new System.Drawing.Size(138, 22);
             this.audioList_moveup.Text = "Move Up";
             this.audioList_moveup.Click += new System.EventHandler(this.audioList_moveup_Click);
             // 
             // audioList_movedown
             // 
             this.audioList_movedown.Name = "audioList_movedown";
-            this.audioList_movedown.Size = new System.Drawing.Size(141, 22);
+            this.audioList_movedown.Size = new System.Drawing.Size(138, 22);
             this.audioList_movedown.Text = "Move Down";
             this.audioList_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.audioList_movedown.Click += new System.EventHandler(this.audioList_movedown_Click);
@@ -157,12 +157,12 @@ namespace Handbrake.Controls
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(135, 6);
             // 
             // audioList_remove
             // 
             this.audioList_remove.Name = "audioList_remove";
-            this.audioList_remove.Size = new System.Drawing.Size(141, 22);
+            this.audioList_remove.Size = new System.Drawing.Size(138, 22);
             this.audioList_remove.Text = "Remove";
             this.audioList_remove.Click += new System.EventHandler(this.audioList_remove_Click);
             // 
@@ -214,6 +214,7 @@ namespace Handbrake.Controls
             // 
             // tb_drc
             // 
+            this.tb_drc.BackColor = System.Drawing.SystemColors.Window;
             this.tb_drc.LargeChange = 0;
             this.tb_drc.Location = new System.Drawing.Point(598, 29);
             this.tb_drc.Margin = new System.Windows.Forms.Padding(0);

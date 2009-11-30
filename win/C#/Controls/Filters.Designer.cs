@@ -210,6 +210,7 @@
             // 
             this.slider_deblock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.slider_deblock.BackColor = System.Drawing.SystemColors.Window;
             this.slider_deblock.Location = new System.Drawing.Point(71, 111);
             this.slider_deblock.Maximum = 15;
             this.slider_deblock.Minimum = 4;
