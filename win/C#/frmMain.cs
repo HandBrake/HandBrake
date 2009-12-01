@@ -1313,7 +1313,7 @@ namespace Handbrake
                     double min = slider_videoQuality.Minimum;
                     double val = ((max - min) - (rfValue - min)) / (max - min);
                     lbl_SliderValue.Text = "QP:" + (32 - slider_videoQuality.Value);
-                    lbl_QualityValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "%";
+                    lbl_qualityValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "%";
                     break;
                 case "H.264 (x264)":
                     rfValue = 51.0 - slider_videoQuality.Value * cqStep;
@@ -1322,13 +1322,13 @@ namespace Handbrake
                     val = ((max - min) - (rfValue - min)) / (max - min);
                     rfValue = Math.Round(rfValue, 2);
                     lbl_SliderValue.Text = "RF:" + rfValue.ToString(new CultureInfo("en-US"));
-                    lbl_QualityValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "%";
+                    lbl_qualityValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "%";
                     break;
                 case "VP3 (Theora)":
                     rfValue = slider_videoQuality.Value;
                     double value = rfValue / 63;
                     lbl_SliderValue.Text = "QP:" + slider_videoQuality.Value;
-                    lbl_QualityValue.Text = Math.Round((value * 100), 2).ToString(new CultureInfo("en-US")) + "%";
+                    lbl_qualityValue.Text = Math.Round((value * 100), 2).ToString(new CultureInfo("en-US")) + "%";
                     break;
             }
         }
