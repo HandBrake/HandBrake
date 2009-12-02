@@ -293,20 +293,10 @@ namespace Handbrake
 
             if (fileList != null)
             {
-                if (fileList[0].StartsWith("\\"))
-                {
-                    MessageBox.Show(
-                        "Sorry, HandBrake does not support UNC file paths. \nTry mounting the network share as a network drive in My Computer",
-                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    UpdateSourceLabel();
-                }
+                if (fileList[0] != "")
+                    StartScan(fileList[0]);
                 else
-                {
-                    if (fileList[0] != "")
-                        StartScan(fileList[0]);
-                    else
-                        UpdateSourceLabel();
-                }
+                    UpdateSourceLabel();
             }
             else
                 UpdateSourceLabel();
@@ -887,15 +877,6 @@ namespace Handbrake
                 return;
             }
 
-            if (file.StartsWith("\\")) // NO UNC Paths
-            {
-                MessageBox.Show(
-                    "Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer",
-                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                UpdateSourceLabel();
-                return;
-            }
-
             sourcePath = Path.GetFileName(file);
             StartScan(file);
         }
@@ -1080,34 +1061,29 @@ namespace Handbrake
 
             if (DVD_Save.ShowDialog() == DialogResult.OK)
             {
-                if (DVD_Save.FileName.StartsWith("\\"))
-                    MessageBox.Show("Sorry, HandBrake does not support UNC file paths. \nTry mounting the share as a network drive in My Computer", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                else
+                // Add a file extension manually, as FileDialog.AddExtension has issues with dots in filenames
+                switch (DVD_Save.FilterIndex)
                 {
-                    // Add a file extension manually, as FileDialog.AddExtension has issues with dots in filenames
-                    switch (DVD_Save.FilterIndex)
-                    {
-                        case 1:
-                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
-                                if (Properties.Settings.Default.useM4v)
-                                    DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
-                                else
-                                    DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
-                            break;
-                        case 2:
-                            if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
-                                DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
-                            break;
-                        default:
-                            //do nothing  
-                            break;
-                    }
-                    text_destination.Text = DVD_Save.FileName;
-
-                    // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
-                    if (Check_ChapterMarkers.Checked && DVD_Save.FilterIndex != 2)
-                        SetExtension(".m4v");
+                    case 1:
+                        if (!Path.GetExtension(DVD_Save.FileName).Equals(".mp4", StringComparison.InvariantCultureIgnoreCase))
+                            if (Properties.Settings.Default.useM4v)
+                                DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
+                            else
+                                DVD_Save.FileName = DVD_Save.FileName.Replace(".m4v", ".mp4").Replace(".mkv", ".mp4");
+                        break;
+                    case 2:
+                        if (!Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
+                            DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
+                        break;
+                    default:
+                        //do nothing  
+                        break;
                 }
+                text_destination.Text = DVD_Save.FileName;
+
+                // Quicktime requires .m4v file for chapter markers to work. If checked, change the extension to .m4v (mp4 and m4v are the same thing)
+                if (Check_ChapterMarkers.Checked && DVD_Save.FilterIndex != 2)
+                    SetExtension(".m4v");
             }
         }
         private void text_destination_TextChanged(object sender, EventArgs e)
