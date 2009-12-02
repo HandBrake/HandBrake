@@ -188,7 +188,7 @@ ghb_preview_init(signal_user_data_t *ud)
 	gst_bus_set_sync_handler(bus, create_window, ud->preview);
 	gst_object_unref(bus);
 #else
-	GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
+	widget = GHB_WIDGET(ud->builder, "live_preview_box");
 	gtk_widget_hide (widget);
 	widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
 	gtk_widget_hide (widget);
