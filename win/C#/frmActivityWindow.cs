@@ -10,7 +10,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
-using Handbrake.EncodeQueue;
 using Handbrake.Functions;
 using Microsoft.Win32;
 
@@ -29,6 +28,8 @@ namespace Handbrake
 
         public frmActivityWindow(string mode)
         {
+            kilLThread = false;
+            _position = 0;
             if (mode == "scan")
                 SetScanMode();
             else
@@ -39,9 +40,7 @@ namespace Handbrake
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
             monitor = new Thread(LogMonitor);
-            _position = 0;
-            kilLThread = false;
-
+            
             try
             {
                 monitor.Start();
@@ -62,11 +61,7 @@ namespace Handbrake
                 // Perform a reset if require.
                 // If we have switched to a different log file, we want to start from the beginning.
                 if (SetLogFile != _lastMode)
-                {
-                    _position = 0;
-                    ClearWindowText();
-                    PrintLogHeader();
-                }
+                    Reset();
 
                 // Perform the window update
                 switch (SetLogFile)
@@ -189,7 +184,7 @@ namespace Handbrake
                 MessageBox.Show("ClearWindowText(): Exception: \n" + exc);
             }
         }
-        public void PrintLogHeader()
+        private void PrintLogHeader()
         {
             try
             {
@@ -221,6 +216,12 @@ namespace Handbrake
             }
 
         }
+        private void Reset()
+        {
+            _position = 0;
+            ClearWindowText();
+            PrintLogHeader();
+        }
 
         #region Public
 
@@ -231,11 +232,13 @@ namespace Handbrake
         }
         public void SetScanMode()
         {
+            Reset();
             SetLogFile = "last_scan_log.txt";
             this.Text = "Activity Window (Scan Log)";
         }
         public void SetEncodeMode()
         {
+            Reset();
             SetLogFile = "last_encode_log.txt";
             this.Text = "Activity Window (Enocde Log)";
         }
