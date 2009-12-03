@@ -58,7 +58,7 @@ namespace Handbrake
             this.progress_download.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.progress_download.Location = new System.Drawing.Point(73, 3);
             this.progress_download.Name = "progress_download";
-            this.progress_download.Size = new System.Drawing.Size(273, 23);
+            this.progress_download.Size = new System.Drawing.Size(277, 23);
             this.progress_download.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progress_download.TabIndex = 9;
             // 
@@ -68,7 +68,7 @@ namespace Handbrake
             this.btn_cancel.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_cancel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_cancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_cancel.Location = new System.Drawing.Point(275, 45);
+            this.btn_cancel.Location = new System.Drawing.Point(279, 46);
             this.btn_cancel.Name = "btn_cancel";
             this.btn_cancel.Size = new System.Drawing.Size(71, 22);
             this.btn_cancel.TabIndex = 26;
@@ -93,7 +93,7 @@ namespace Handbrake
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(349, 70);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(353, 73);
             this.tableLayoutPanel1.TabIndex = 27;
             // 
             // PictureBox1
@@ -112,8 +112,7 @@ namespace Handbrake
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(367, 88);
+            this.ClientSize = new System.Drawing.Size(371, 91);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
