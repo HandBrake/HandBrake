@@ -12,31 +12,31 @@ namespace Handbrake
 {
     public partial class frmUpdater : Form
     {
-        AppcastReader appcast;
+        readonly AppcastReader _appcast;
         public frmUpdater(AppcastReader reader)
         {
             InitializeComponent();
 
-            appcast = reader;
-            getRss();
-            setVersions();
+            _appcast = reader;
+            GetRss();
+            SetVersions();
         }
 
-        private void getRss()
+        private void GetRss()
         {
-            wBrowser.Url = appcast.descriptionUrl;
+            wBrowser.Url = _appcast.descriptionUrl;
         }
 
-        private void setVersions()
+        private void SetVersions()
         {
             string old = "(You have: " + Properties.Settings.Default.hb_version.Trim() + " / " + Properties.Settings.Default.hb_build.ToString().Trim() + ")";
-            string newBuild = appcast.version.Trim() + " (" + appcast.build + ")";
+            string newBuild = _appcast.version.Trim() + " (" + _appcast.build + ")";
             lbl_update_text.Text = "HandBrake " + newBuild + " is now available. " + old;
         }
 
         private void btn_installUpdate_Click(object sender, EventArgs e)
         {
-            frmDownload download = new frmDownload(appcast.downloadFile);
+            frmDownload download = new frmDownload(_appcast.downloadFile);
             download.ShowDialog();
             this.Close();
         }
@@ -48,7 +48,7 @@ namespace Handbrake
 
         private void btn_skip_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.skipversion = int.Parse(appcast.build);
+            Properties.Settings.Default.skipversion = int.Parse(_appcast.build);
             Properties.Settings.Default.Save();
 
             this.Close();

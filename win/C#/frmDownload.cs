@@ -15,31 +15,30 @@ namespace Handbrake
 {
     public partial class frmDownload : Form
     {
-        private readonly Thread downloadThread;
-        private Stream responceStream;
-        private Stream loacalStream;
-        private HttpWebRequest webRequest;
-        private HttpWebResponse webResponse;
-        private static int progress;
-        private delegate void UpdateProgessCallback(Int64 BytesRead, Int64 TotalBytes);
+        private readonly Thread _downloadThread;
+        private Stream _responceStream;
+        private Stream _loacalStream;
+        private HttpWebRequest _webRequest;
+        private HttpWebResponse _webResponse;
+        private static int _progress;
+        private Boolean _killThread;
+        private delegate void UpdateProgessCallback(Int64 bytesRead, Int64 totalBytes);
         private delegate void DownloadCompleteCallback();
         private delegate void DownloadFailedCallback();
 
-        private string file;
 
         public frmDownload(string filename)
         {
             InitializeComponent();
 
-            file = filename;
-            downloadThread = new Thread(Download);
-            downloadThread.Start();
+            _downloadThread = new Thread(Download);
+            _downloadThread.Start(filename);
         }
 
-        private void Download()
+        private void Download(object file)
         {
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-            string hbUpdate = file;
+            string hbUpdate = (string)file;
             WebClient wcDownload = new WebClient();
 
             try
@@ -47,66 +46,60 @@ namespace Handbrake
                 if (File.Exists(tempPath))
                     File.Delete(tempPath);
 
-                webRequest = (HttpWebRequest)WebRequest.Create(hbUpdate);
-                webRequest.Credentials = CredentialCache.DefaultCredentials;
-                webResponse = (HttpWebResponse)webRequest.GetResponse();
-                Int64 fileSize = webResponse.ContentLength;
+                _webRequest = (HttpWebRequest)WebRequest.Create(hbUpdate);
+                _webRequest.Credentials = CredentialCache.DefaultCredentials;
+                _webResponse = (HttpWebResponse)_webRequest.GetResponse();
+                Int64 fileSize = _webResponse.ContentLength;
 
-                responceStream = wcDownload.OpenRead(hbUpdate);
-                loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                _responceStream = wcDownload.OpenRead(hbUpdate);
+                _loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
 
                 int bytesSize;
                 byte[] downBuffer = new byte[2048];
 
                 long flength = 0;
-                while ((bytesSize = responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
+                while ((bytesSize = _responceStream.Read(downBuffer, 0, downBuffer.Length)) > 0)
                 {
-                    loacalStream.Write(downBuffer, 0, bytesSize);
-                    flength = loacalStream.Length;
-                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { loacalStream.Length, fileSize });
+                    if (_killThread)
+                        return;
+                    _loacalStream.Write(downBuffer, 0, bytesSize);
+                    flength = _loacalStream.Length;
+                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { _loacalStream.Length, fileSize });
                 }
 
-                responceStream.Close();
-                loacalStream.Close();
+                _responceStream.Close();
+                _loacalStream.Close();
 
                 if (flength != fileSize)
-                    Invoke(new DownloadFailedCallback(this.downloadFailed));
+                    Invoke(new DownloadFailedCallback(this.DownloadFailed));
                 else
-                    Invoke(new DownloadCompleteCallback(this.downloadComplete));
+                    Invoke(new DownloadCompleteCallback(this.DownloadComplete));
             }
-            catch (Exception)
+            catch
             {
                 // Do Nothing 
             }
         }
 
-        private void UpdateProgress(Int64 BytesRead, Int64 TotalBytes)
+        private void UpdateProgress(Int64 bytesRead, Int64 totalBytes)
         {
-            try
-            {
-                long p = (BytesRead * 100) / TotalBytes;
-                progress = int.Parse(p.ToString());
-                progress_download.Value = progress;
-                lblProgress.Text = (BytesRead / 1024) + "k of " + (TotalBytes / 1024) + "k ";
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Integer Conversion Error On Download \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            long p = (bytesRead * 100) / totalBytes;
+            int.TryParse(p.ToString(), out _progress);
+            progress_download.Value = _progress;
+            lblProgress.Text = (bytesRead / 1024) + "k of " + (totalBytes / 1024) + "k ";
         }
 
-        private void downloadComplete()
+        private void DownloadComplete()
         {
             lblProgress.Text = "Download Complete";
             btn_cancel.Text = "Close";
 
-            string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-            Process.Start(tempPath);
+            Process.Start(Path.Combine(Path.GetTempPath(), "handbrake-setup.exe"));
             this.Close();
             Application.Exit();
         }
 
-        private void downloadFailed()
+        private void DownloadFailed()
         {
             lblProgress.Text = "Download Failed";
             btn_cancel.Text = "Close";
@@ -114,20 +107,12 @@ namespace Handbrake
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
-            try
-            {
-                webResponse.Close();
-                responceStream.Close();
-                loacalStream.Close();
-                downloadThread.Abort();
-                progress_download.Value = 0;
-                lblProgress.Text = "Download Stopped";
-                this.Close();
-            }
-            catch (Exception)
-            {
-                // Do nothing
-            }
+            _killThread = true;
+            lblProgress.Text = "Cancelling ...";
+            if (_webResponse != null) _webResponse.Close();
+            if (_responceStream != null) _responceStream.Close();
+            if (_loacalStream != null) _loacalStream.Close();
+            this.Close();
         }
     }
 }
