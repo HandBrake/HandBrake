@@ -893,14 +893,7 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 			val = "1";
 		}
 		const gchar *def_val;
-		if (find_syn_match(opt, x264_mbtree_syns) >= 0 && bframes == 0)
-		{
-			def_val = "0";
-		}
-		else
-		{
-			def_val = x264_opt_get_default(opt);
-		}
+		def_val = x264_opt_get_default(opt);
 		if (strcmp(val, def_val) == 0)
 		{
 			// Matches the default, so remove it
