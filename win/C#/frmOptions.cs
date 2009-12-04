@@ -36,9 +36,23 @@ namespace Handbrake
                 ToolTip.Active = true;
             }
 
-            // Setup Widgets to match settings.
+            // Update Check
             if (Properties.Settings.Default.updateStatus)
                 check_updateCheck.CheckState = CheckState.Checked;
+
+            // Days between update checks
+            switch (Properties.Settings.Default.daysBetweenUpdateCheck)
+            {
+                case 1:
+                    drop_updateCheckDays.SelectedIndex = 0;
+                    break;
+                case 7:
+                    drop_updateCheckDays.SelectedIndex = 1;
+                    break;
+                case 30:
+                    drop_updateCheckDays.SelectedIndex = 2;
+                    break;
+            }
 
             // On Encode Completeion Action
             drp_completeOption.Text = Properties.Settings.Default.CompletionOption;
@@ -142,19 +156,8 @@ namespace Handbrake
             if (Properties.Settings.Default.enocdeStatusInGui)
                 check_inGuiStatus.CheckState = CheckState.Checked;
 
-            // Days between update checks
-            switch (Properties.Settings.Default.daysBetweenUpdateCheck)
-            {
-                case 1:
-                    drop_updateCheckDays.SelectedIndex = 0;
-                    break;
-                case 7:
-                    drop_updateCheckDays.SelectedIndex = 1;
-                    break;
-                case 30:
-                    drop_updateCheckDays.SelectedIndex = 2;
-                    break;
-            }
+            // Set the preview count
+            drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
 
             // x264 step
             string step = Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US"));
@@ -189,6 +192,22 @@ namespace Handbrake
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.updateStatus = check_updateCheck.Checked;
+        }
+
+        private void drop_updateCheckDays_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (drop_updateCheckDays.SelectedIndex)
+            {
+                case 0:
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 1;
+                    break;
+                case 1:
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 7;
+                    break;
+                case 2:
+                    Properties.Settings.Default.daysBetweenUpdateCheck = 30;
+                    break;
+            }
         }
 
         private void check_tooltip_CheckedChanged(object sender, EventArgs e)
@@ -374,20 +393,10 @@ namespace Handbrake
             Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.Checked;
         }
 
-        private void drop_updateCheckDays_SelectedIndexChanged(object sender, EventArgs e)
+        
+        private void drop_previewScanCount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch (drop_updateCheckDays.SelectedIndex)
-            {
-                case 0:
-                    Properties.Settings.Default.daysBetweenUpdateCheck = 1;
-                    break;
-                case 1:
-                    Properties.Settings.Default.daysBetweenUpdateCheck = 7;
-                    break;
-                case 2:
-                    Properties.Settings.Default.daysBetweenUpdateCheck = 30;
-                    break;
-            }
+            Properties.Settings.Default.previewScanCount = int.Parse(drop_previewScanCount.SelectedItem.ToString());
         }
 
         private void x264step_SelectedIndexChanged(object sender, EventArgs e)

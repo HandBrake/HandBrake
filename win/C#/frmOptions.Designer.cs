@@ -86,7 +86,6 @@ namespace Handbrake
             this.btn_clearLogs = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.check_promptOnUnmatchingQueries = new System.Windows.Forms.CheckBox();
             this.check_dvdnav = new System.Windows.Forms.CheckBox();
             this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
@@ -135,6 +134,8 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.label33 = new System.Windows.Forms.Label();
+            this.drop_previewScanCount = new System.Windows.Forms.ComboBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -143,7 +144,6 @@ namespace Handbrake
             this.tab_cli.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tab_advanced.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
             this.tab_debug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tableLayoutPanel5.SuspendLayout();
@@ -858,7 +858,20 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
-            this.tab_advanced.Controls.Add(this.tableLayoutPanel4);
+            this.tab_advanced.Controls.Add(this.drop_previewScanCount);
+            this.tab_advanced.Controls.Add(this.label33);
+            this.tab_advanced.Controls.Add(this.label6);
+            this.tab_advanced.Controls.Add(this.check_trayStatusAlerts);
+            this.tab_advanced.Controls.Add(this.check_mainMinimize);
+            this.tab_advanced.Controls.Add(this.check_promptOnUnmatchingQueries);
+            this.tab_advanced.Controls.Add(this.check_dvdnav);
+            this.tab_advanced.Controls.Add(this.check_queryEditorTab);
+            this.tab_advanced.Controls.Add(this.label32);
+            this.tab_advanced.Controls.Add(this.drop_x264step);
+            this.tab_advanced.Controls.Add(this.label30);
+            this.tab_advanced.Controls.Add(this.check_disablePresetNotification);
+            this.tab_advanced.Controls.Add(this.label28);
+            this.tab_advanced.Controls.Add(this.check_inGuiStatus);
             this.tab_advanced.Location = new System.Drawing.Point(4, 22);
             this.tab_advanced.Name = "tab_advanced";
             this.tab_advanced.Padding = new System.Windows.Forms.Padding(10);
@@ -867,52 +880,10 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel4
-            // 
-            this.tableLayoutPanel4.AutoSize = true;
-            this.tableLayoutPanel4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel4.ColumnCount = 6;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel4.Controls.Add(this.check_promptOnUnmatchingQueries, 3, 4);
-            this.tableLayoutPanel4.Controls.Add(this.check_dvdnav, 2, 10);
-            this.tableLayoutPanel4.Controls.Add(this.check_trayStatusAlerts, 3, 2);
-            this.tableLayoutPanel4.Controls.Add(this.label32, 0, 10);
-            this.tableLayoutPanel4.Controls.Add(this.label6, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.drop_x264step, 4, 8);
-            this.tableLayoutPanel4.Controls.Add(this.label30, 2, 8);
-            this.tableLayoutPanel4.Controls.Add(this.check_mainMinimize, 2, 1);
-            this.tableLayoutPanel4.Controls.Add(this.label28, 0, 8);
-            this.tableLayoutPanel4.Controls.Add(this.check_queryEditorTab, 2, 3);
-            this.tableLayoutPanel4.Controls.Add(this.check_disablePresetNotification, 2, 5);
-            this.tableLayoutPanel4.Controls.Add(this.check_inGuiStatus, 2, 6);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(10, 10);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 12;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(395, 228);
-            this.tableLayoutPanel4.TabIndex = 62;
-            // 
             // check_promptOnUnmatchingQueries
             // 
             this.check_promptOnUnmatchingQueries.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_promptOnUnmatchingQueries, 3);
-            this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(87, 72);
+            this.check_promptOnUnmatchingQueries.Location = new System.Drawing.Point(100, 83);
             this.check_promptOnUnmatchingQueries.Name = "check_promptOnUnmatchingQueries";
             this.check_promptOnUnmatchingQueries.Size = new System.Drawing.Size(305, 17);
             this.check_promptOnUnmatchingQueries.TabIndex = 63;
@@ -925,8 +896,7 @@ namespace Handbrake
             this.check_dvdnav.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_dvdnav, 4);
-            this.check_dvdnav.Location = new System.Drawing.Point(67, 208);
+            this.check_dvdnav.Location = new System.Drawing.Point(82, 227);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -939,8 +909,7 @@ namespace Handbrake
             this.check_trayStatusAlerts.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_trayStatusAlerts.AutoSize = true;
             this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_trayStatusAlerts, 3);
-            this.check_trayStatusAlerts.Location = new System.Drawing.Point(87, 26);
+            this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
             this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
             this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
             this.check_trayStatusAlerts.TabIndex = 93;
@@ -956,7 +925,7 @@ namespace Handbrake
             this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(8, 210);
+            this.label32.Location = new System.Drawing.Point(13, 228);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 89;
@@ -967,17 +936,15 @@ namespace Handbrake
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(10, 5);
+            this.label6.Location = new System.Drawing.Point(15, 15);
             this.label6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label6.Name = "label6";
-            this.tableLayoutPanel4.SetRowSpan(this.label6, 2);
             this.label6.Size = new System.Drawing.Size(31, 13);
             this.label6.TabIndex = 71;
             this.label6.Text = "GUI:";
             // 
             // drop_x264step
             // 
-            this.tableLayoutPanel4.SetColumnSpan(this.drop_x264step, 2);
             this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drop_x264step.FormattingEnabled = true;
             this.drop_x264step.Items.AddRange(new object[] {
@@ -985,7 +952,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(262, 161);
+            this.drop_x264step.Location = new System.Drawing.Point(273, 190);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -997,8 +964,7 @@ namespace Handbrake
             // 
             this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label30.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.label30, 2);
-            this.label30.Location = new System.Drawing.Point(67, 165);
+            this.label30.Location = new System.Drawing.Point(78, 193);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(189, 13);
             this.label30.TabIndex = 87;
@@ -1009,8 +975,7 @@ namespace Handbrake
             this.check_mainMinimize.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_mainMinimize.AutoSize = true;
             this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_mainMinimize, 4);
-            this.check_mainMinimize.Location = new System.Drawing.Point(67, 3);
+            this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
             this.check_mainMinimize.Name = "check_mainMinimize";
             this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
             this.check_mainMinimize.TabIndex = 82;
@@ -1026,7 +991,7 @@ namespace Handbrake
             this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(3, 165);
+            this.label28.Location = new System.Drawing.Point(8, 193);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(38, 13);
             this.label28.TabIndex = 85;
@@ -1037,8 +1002,7 @@ namespace Handbrake
             this.check_queryEditorTab.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_queryEditorTab.AutoSize = true;
             this.check_queryEditorTab.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_queryEditorTab, 4);
-            this.check_queryEditorTab.Location = new System.Drawing.Point(67, 49);
+            this.check_queryEditorTab.Location = new System.Drawing.Point(81, 60);
             this.check_queryEditorTab.Name = "check_queryEditorTab";
             this.check_queryEditorTab.Size = new System.Drawing.Size(241, 17);
             this.check_queryEditorTab.TabIndex = 84;
@@ -1053,8 +1017,7 @@ namespace Handbrake
             this.check_disablePresetNotification.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_disablePresetNotification.AutoSize = true;
             this.check_disablePresetNotification.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_disablePresetNotification, 4);
-            this.check_disablePresetNotification.Location = new System.Drawing.Point(67, 95);
+            this.check_disablePresetNotification.Location = new System.Drawing.Point(81, 106);
             this.check_disablePresetNotification.Name = "check_disablePresetNotification";
             this.check_disablePresetNotification.Size = new System.Drawing.Size(222, 17);
             this.check_disablePresetNotification.TabIndex = 91;
@@ -1069,8 +1032,7 @@ namespace Handbrake
             this.check_inGuiStatus.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_inGuiStatus.AutoSize = true;
             this.check_inGuiStatus.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel4.SetColumnSpan(this.check_inGuiStatus, 4);
-            this.check_inGuiStatus.Location = new System.Drawing.Point(67, 118);
+            this.check_inGuiStatus.Location = new System.Drawing.Point(81, 129);
             this.check_inGuiStatus.Name = "check_inGuiStatus";
             this.check_inGuiStatus.Size = new System.Drawing.Size(235, 17);
             this.check_inGuiStatus.TabIndex = 92;
@@ -1482,6 +1444,34 @@ namespace Handbrake
             this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
             this.tableLayoutPanel5.TabIndex = 62;
             // 
+            // label33
+            // 
+            this.label33.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(79, 158);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(181, 13);
+            this.label33.TabIndex = 94;
+            this.label33.Text = "Number of picture previews to scan:";
+            // 
+            // drop_previewScanCount
+            // 
+            this.drop_previewScanCount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_previewScanCount.FormattingEnabled = true;
+            this.drop_previewScanCount.Items.AddRange(new object[] {
+            "10",
+            "15",
+            "20",
+            "25",
+            "30"});
+            this.drop_previewScanCount.Location = new System.Drawing.Point(273, 155);
+            this.drop_previewScanCount.Name = "drop_previewScanCount";
+            this.drop_previewScanCount.Size = new System.Drawing.Size(85, 21);
+            this.drop_previewScanCount.TabIndex = 95;
+            this.ToolTip.SetToolTip(this.drop_previewScanCount, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
+                    "n Automatic.");
+            this.drop_previewScanCount.SelectedIndexChanged += new System.EventHandler(this.drop_previewScanCount_SelectedIndexChanged);
+            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1516,8 +1506,6 @@ namespace Handbrake
             this.tableLayoutPanel3.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
             this.tab_debug.ResumeLayout(false);
             this.tab_debug.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -1615,7 +1603,6 @@ namespace Handbrake
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         internal System.Windows.Forms.ComboBox drp_processors;
         internal System.Windows.Forms.ComboBox drp_Priority;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.CheckBox check_promptOnUnmatchingQueries;
         private System.Windows.Forms.TabPage tab_audio_sub;
@@ -1629,5 +1616,7 @@ namespace Handbrake
         private System.Windows.Forms.CheckBox check_disableResCalc;
         internal System.Windows.Forms.CheckBox check_growlEncode;
         internal System.Windows.Forms.CheckBox check_GrowlQueue;
+        internal System.Windows.Forms.ComboBox drop_previewScanCount;
+        private System.Windows.Forms.Label label33;
     }
 }

@@ -42,6 +42,7 @@ namespace Handbrake.Functions
 
             if (duration != 0 && preview != null) // Preivew Query
             {
+                query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
                 query += " --start-at-preview " + preview;
                 query += " --stop-at duration:" + duration + " ";
 
