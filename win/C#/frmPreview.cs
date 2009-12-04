@@ -39,6 +39,7 @@ namespace Handbrake
             cb_preview.Items.Clear();
             for (int i = 1; i <= Properties.Settings.Default.previewScanCount; i++)
                 cb_preview.Items.Add(i.ToString());
+            cb_preview.SelectedIndex = 0;
         }
 
         #region Encode Sample
