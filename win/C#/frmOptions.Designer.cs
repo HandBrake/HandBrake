@@ -86,17 +86,19 @@ namespace Handbrake
             this.btn_clearLogs = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
+            this.drop_previewScanCount = new System.Windows.Forms.ComboBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
+            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
             this.check_promptOnUnmatchingQueries = new System.Windows.Forms.CheckBox();
             this.check_dvdnav = new System.Windows.Forms.CheckBox();
-            this.check_trayStatusAlerts = new System.Windows.Forms.CheckBox();
+            this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
             this.label32 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.drop_x264step = new System.Windows.Forms.ComboBox();
             this.label30 = new System.Windows.Forms.Label();
-            this.check_mainMinimize = new System.Windows.Forms.CheckBox();
-            this.label28 = new System.Windows.Forms.Label();
-            this.check_queryEditorTab = new System.Windows.Forms.CheckBox();
             this.check_disablePresetNotification = new System.Windows.Forms.CheckBox();
+            this.label28 = new System.Windows.Forms.Label();
             this.check_inGuiStatus = new System.Windows.Forms.CheckBox();
             this.tab_debug = new System.Windows.Forms.TabPage();
             this.check_disableResCalc = new System.Windows.Forms.CheckBox();
@@ -134,8 +136,6 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.label33 = new System.Windows.Forms.Label();
-            this.drop_previewScanCount = new System.Windows.Forms.ComboBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
@@ -880,6 +880,78 @@ namespace Handbrake
             this.tab_advanced.Text = "Advanced / Other";
             this.tab_advanced.UseVisualStyleBackColor = true;
             // 
+            // drop_previewScanCount
+            // 
+            this.drop_previewScanCount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_previewScanCount.FormattingEnabled = true;
+            this.drop_previewScanCount.Items.AddRange(new object[] {
+            "10",
+            "15",
+            "20",
+            "25",
+            "30"});
+            this.drop_previewScanCount.Location = new System.Drawing.Point(273, 155);
+            this.drop_previewScanCount.Name = "drop_previewScanCount";
+            this.drop_previewScanCount.Size = new System.Drawing.Size(85, 21);
+            this.drop_previewScanCount.TabIndex = 95;
+            this.ToolTip.SetToolTip(this.drop_previewScanCount, "Allows a greater number of preview frames to be selectable on the \"Preview\" windo" +
+                    "w.");
+            this.drop_previewScanCount.SelectedIndexChanged += new System.EventHandler(this.drop_previewScanCount_SelectedIndexChanged);
+            // 
+            // label33
+            // 
+            this.label33.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(79, 158);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(181, 13);
+            this.label33.TabIndex = 94;
+            this.label33.Text = "Number of picture previews to scan:";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(15, 15);
+            this.label6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(31, 13);
+            this.label6.TabIndex = 71;
+            this.label6.Text = "GUI:";
+            // 
+            // check_trayStatusAlerts
+            // 
+            this.check_trayStatusAlerts.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_trayStatusAlerts.AutoSize = true;
+            this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
+            this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
+            this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
+            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
+            this.check_trayStatusAlerts.TabIndex = 93;
+            this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
+            this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
+                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
+                    "");
+            this.check_trayStatusAlerts.UseVisualStyleBackColor = false;
+            this.check_trayStatusAlerts.CheckedChanged += new System.EventHandler(this.check_trayStatusAlerts_CheckedChanged);
+            // 
+            // check_mainMinimize
+            // 
+            this.check_mainMinimize.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_mainMinimize.AutoSize = true;
+            this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
+            this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
+            this.check_mainMinimize.Name = "check_mainMinimize";
+            this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
+            this.check_mainMinimize.TabIndex = 82;
+            this.check_mainMinimize.Text = "Minimize to system tray";
+            this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
+                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
+                    "");
+            this.check_mainMinimize.UseVisualStyleBackColor = false;
+            this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
+            // 
             // check_promptOnUnmatchingQueries
             // 
             this.check_promptOnUnmatchingQueries.AutoSize = true;
@@ -904,99 +976,6 @@ namespace Handbrake
             this.check_dvdnav.UseVisualStyleBackColor = false;
             this.check_dvdnav.CheckedChanged += new System.EventHandler(this.check_dvdnav_CheckedChanged);
             // 
-            // check_trayStatusAlerts
-            // 
-            this.check_trayStatusAlerts.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_trayStatusAlerts.AutoSize = true;
-            this.check_trayStatusAlerts.BackColor = System.Drawing.Color.Transparent;
-            this.check_trayStatusAlerts.Location = new System.Drawing.Point(81, 37);
-            this.check_trayStatusAlerts.Name = "check_trayStatusAlerts";
-            this.check_trayStatusAlerts.Size = new System.Drawing.Size(296, 17);
-            this.check_trayStatusAlerts.TabIndex = 93;
-            this.check_trayStatusAlerts.Text = "Display status messages from tray icon (balloon popups)";
-            this.ToolTip.SetToolTip(this.check_trayStatusAlerts, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
-                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
-                    "");
-            this.check_trayStatusAlerts.UseVisualStyleBackColor = false;
-            this.check_trayStatusAlerts.CheckedChanged += new System.EventHandler(this.check_trayStatusAlerts_CheckedChanged);
-            // 
-            // label32
-            // 
-            this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label32.AutoSize = true;
-            this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(13, 228);
-            this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(33, 13);
-            this.label32.TabIndex = 89;
-            this.label32.Text = "DVD:";
-            // 
-            // label6
-            // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(15, 15);
-            this.label6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(31, 13);
-            this.label6.TabIndex = 71;
-            this.label6.Text = "GUI:";
-            // 
-            // drop_x264step
-            // 
-            this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_x264step.FormattingEnabled = true;
-            this.drop_x264step.Items.AddRange(new object[] {
-            "1.0",
-            "0.50",
-            "0.25",
-            "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(273, 190);
-            this.drop_x264step.Name = "drop_x264step";
-            this.drop_x264step.Size = new System.Drawing.Size(85, 21);
-            this.drop_x264step.TabIndex = 86;
-            this.ToolTip.SetToolTip(this.drop_x264step, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-                    "n Automatic.");
-            this.drop_x264step.SelectedIndexChanged += new System.EventHandler(this.x264step_SelectedIndexChanged);
-            // 
-            // label30
-            // 
-            this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(78, 193);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(189, 13);
-            this.label30.TabIndex = 87;
-            this.label30.Text = "Constant quality fractional granularity";
-            // 
-            // check_mainMinimize
-            // 
-            this.check_mainMinimize.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_mainMinimize.AutoSize = true;
-            this.check_mainMinimize.BackColor = System.Drawing.Color.Transparent;
-            this.check_mainMinimize.Location = new System.Drawing.Point(81, 14);
-            this.check_mainMinimize.Name = "check_mainMinimize";
-            this.check_mainMinimize.Size = new System.Drawing.Size(138, 17);
-            this.check_mainMinimize.TabIndex = 82;
-            this.check_mainMinimize.Text = "Minimize to system tray";
-            this.ToolTip.SetToolTip(this.check_mainMinimize, "Minimize the window to the system tray rather than the task bar.\r\nThe system tray" +
-                    " icon has encode status notifications.\r\nNote: requires restart to take effect!\r\n" +
-                    "");
-            this.check_mainMinimize.UseVisualStyleBackColor = false;
-            this.check_mainMinimize.CheckedChanged += new System.EventHandler(this.check_mainMinimize_CheckedChanged);
-            // 
-            // label28
-            // 
-            this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(8, 193);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(38, 13);
-            this.label28.TabIndex = 85;
-            this.label28.Text = "x264:";
-            // 
             // check_queryEditorTab
             // 
             this.check_queryEditorTab.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -1012,6 +991,43 @@ namespace Handbrake
             this.check_queryEditorTab.UseVisualStyleBackColor = false;
             this.check_queryEditorTab.CheckedChanged += new System.EventHandler(this.check_queryEditorTab_CheckedChanged);
             // 
+            // label32
+            // 
+            this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label32.Location = new System.Drawing.Point(13, 228);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(33, 13);
+            this.label32.TabIndex = 89;
+            this.label32.Text = "DVD:";
+            // 
+            // drop_x264step
+            // 
+            this.drop_x264step.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drop_x264step.FormattingEnabled = true;
+            this.drop_x264step.Items.AddRange(new object[] {
+            "1.0",
+            "0.50",
+            "0.25",
+            "0.20"});
+            this.drop_x264step.Location = new System.Drawing.Point(273, 190);
+            this.drop_x264step.Name = "drop_x264step";
+            this.drop_x264step.Size = new System.Drawing.Size(85, 21);
+            this.drop_x264step.TabIndex = 86;
+            this.ToolTip.SetToolTip(this.drop_x264step, "Quality Slider Control Granularity for x264 encoding only.");
+            this.drop_x264step.SelectedIndexChanged += new System.EventHandler(this.x264step_SelectedIndexChanged);
+            // 
+            // label30
+            // 
+            this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(78, 193);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(189, 13);
+            this.label30.TabIndex = 87;
+            this.label30.Text = "Constant quality fractional granularity";
+            // 
             // check_disablePresetNotification
             // 
             this.check_disablePresetNotification.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -1026,6 +1042,17 @@ namespace Handbrake
                     " of HandBrake is installed.");
             this.check_disablePresetNotification.UseVisualStyleBackColor = false;
             this.check_disablePresetNotification.CheckedChanged += new System.EventHandler(this.check_disablePresetNotification_CheckedChanged);
+            // 
+            // label28
+            // 
+            this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(8, 193);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(38, 13);
+            this.label28.TabIndex = 85;
+            this.label28.Text = "x264:";
             // 
             // check_inGuiStatus
             // 
@@ -1443,34 +1470,6 @@ namespace Handbrake
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
             this.tableLayoutPanel5.TabIndex = 62;
-            // 
-            // label33
-            // 
-            this.label33.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(79, 158);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(181, 13);
-            this.label33.TabIndex = 94;
-            this.label33.Text = "Number of picture previews to scan:";
-            // 
-            // drop_previewScanCount
-            // 
-            this.drop_previewScanCount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drop_previewScanCount.FormattingEnabled = true;
-            this.drop_previewScanCount.Items.AddRange(new object[] {
-            "10",
-            "15",
-            "20",
-            "25",
-            "30"});
-            this.drop_previewScanCount.Location = new System.Drawing.Point(273, 155);
-            this.drop_previewScanCount.Name = "drop_previewScanCount";
-            this.drop_previewScanCount.Size = new System.Drawing.Size(85, 21);
-            this.drop_previewScanCount.TabIndex = 95;
-            this.ToolTip.SetToolTip(this.drop_previewScanCount, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-                    "n Automatic.");
-            this.drop_previewScanCount.SelectedIndexChanged += new System.EventHandler(this.drop_previewScanCount_SelectedIndexChanged);
             // 
             // frmOptions
             // 
