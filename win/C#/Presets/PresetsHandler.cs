@@ -236,12 +236,12 @@ namespace Handbrake.Presets
         {
             this.LoadPresetData();
             presetPanel.Nodes.Clear();
+            string category = string.Empty;
+            TreeNode rootNode = null;
 
             if (_presets.Count != 0) // Built In Presets
             {
-                string category = string.Empty;
-                TreeNode rootNode = null;
-
+                
                 foreach (Preset preset in _presets)
                 {
                     if (preset.Category != category)
@@ -256,10 +256,20 @@ namespace Handbrake.Presets
                 }
             }
 
+            rootNode = null; category = null;
             foreach (Preset preset in _userPresets) // User Presets
             {
-                TreeNode presetTreeview = new TreeNode(preset.Name) { ForeColor = Color.Black };
-                presetPanel.Nodes.Add(presetTreeview);
+                if (preset.Category != category && preset.Category != null)
+                {
+                    rootNode = new TreeNode(preset.Category) { ForeColor = Color.Black };
+                    presetPanel.Nodes.Add(rootNode);
+                    category = preset.Category;
+                }
+
+                if (preset.Category == category && rootNode != null)
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black });
+                else
+                    presetPanel.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black });
             }
         }
 
