@@ -23,12 +23,12 @@ namespace Handbrake
         private static int _position;
         private static string _lastMode;
         private static string _currentMode;
-        private Thread monitor;
-        private Boolean kilLThread;
+        private Thread _monitor;
+        private Boolean _kilLThread;
 
         public frmActivityWindow(string mode)
         {
-            kilLThread = false;
+            _kilLThread = false;
             _position = 0;
             if (mode == "scan")
                 SetScanMode();
@@ -39,15 +39,15 @@ namespace Handbrake
         }
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
-            monitor = new Thread(LogMonitor);
+            _monitor = new Thread(LogMonitor);
             
             try
             {
-                monitor.Start();
+                _monitor.Start();
             }
             catch (Exception exc)
             {
-                MessageBox.Show(exc.ToString());
+                MessageBox.Show("Unable to monitor HandBrakes log files. Please report this error. If the problem presists, try rebooting your computer.\n\n Debug Informaton:\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -55,7 +55,7 @@ namespace Handbrake
         {
             while (true)
             {
-                if (!IsHandleCreated || kilLThread) // break out the thread if the window has been disposed.
+                if (!IsHandleCreated || _kilLThread) // break out the thread if the window has been disposed.
                     break;
 
                 // Perform a reset if require.
@@ -135,7 +135,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                appendText.AppendFormat("\nERROR: The Log file could not be read. You may need to restart HandBrake! " + exc);
+                appendText.AppendFormat("\n The Log file could not be read. You may need to restart HandBrake! " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 _position = 0;
                 ClearWindowText();
             }
@@ -161,7 +161,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("SetWindowText(): Exception: \n" + exc);
+                MessageBox.Show("Unless you are having problems, you can probably ignore this error. It would not hurt to report this error!\n\nSetWindowText(): Exception: \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         private void ClearWindowText()
@@ -181,7 +181,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("ClearWindowText(): Exception: \n" + exc);
+                MessageBox.Show("Unless you are having problems, you can probably ignore this error. It would not hurt to report this error!\n\nClearWindowText(): Exception: \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         private void PrintLogHeader()
@@ -212,7 +212,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("PrintLogHeader(): Exception: \n" + exc);
+                MessageBox.Show("Unless you are having problems, you can probably ignore this error. It would not hurt to report this error!\n\nPrintLogHeader(): Exception: \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
         }
@@ -318,9 +318,9 @@ namespace Handbrake
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            kilLThread = true;
-            monitor.Interrupt();
-            monitor.Join();
+            _kilLThread = true;
+            _monitor.Interrupt();
+            _monitor.Join();
             e.Cancel = true;
             this.Dispose();
             base.OnClosing(e);

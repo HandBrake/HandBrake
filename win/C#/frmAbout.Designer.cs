@@ -40,6 +40,8 @@ namespace Handbrake
             this.lbl_HBBuild = new System.Windows.Forms.Label();
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.btn_close = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,7 +95,7 @@ namespace Handbrake
             // btn_close
             // 
             this.btn_close.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btn_close.Location = new System.Drawing.Point(274, 82);
+            this.btn_close.Location = new System.Drawing.Point(468, 279);
             this.btn_close.Name = "btn_close";
             this.btn_close.Size = new System.Drawing.Size(75, 23);
             this.btn_close.TabIndex = 35;
@@ -101,13 +103,34 @@ namespace Handbrake
             this.btn_close.UseVisualStyleBackColor = true;
             this.btn_close.Click += new System.EventHandler(this.btn_close_Click);
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(128, 111);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(415, 162);
+            this.richTextBox1.TabIndex = 36;
+            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(125, 92);
+            this.label2.Margin = new System.Windows.Forms.Padding(3);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 37;
+            this.label2.Text = "License:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // frmAbout
             // 
             this.AcceptButton = this.btn_close;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.btn_close;
-            this.ClientSize = new System.Drawing.Size(363, 117);
+            this.ClientSize = new System.Drawing.Size(555, 314);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.btn_close);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PictureBox1);
@@ -136,5 +159,7 @@ namespace Handbrake
         internal System.Windows.Forms.Label lbl_HBBuild;
         internal System.Windows.Forms.PictureBox PictureBox1;
         private System.Windows.Forms.Button btn_close;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        internal System.Windows.Forms.Label label2;
     }
 }

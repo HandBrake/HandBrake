@@ -11,25 +11,34 @@ namespace Handbrake.Presets
     {
         public QueryParser importMacPreset(string filename)
         {
-            if (!File.Exists(filename))
-                return null;
+            try
+            {
+                if (!File.Exists(filename))
+                    return null;
 
-            StreamReader sr = File.OpenText(filename);
-            string fromfile = string.Empty;
-            int fileChar;
-            while ((fileChar = sr.Read()) != -1)
-                fromfile += Convert.ToChar(fileChar);
+                StreamReader sr = File.OpenText(filename);
+                string fromfile = string.Empty;
+                int fileChar;
+                while ((fileChar = sr.Read()) != -1)
+                    fromfile += Convert.ToChar(fileChar);
 
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(fromfile);
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(fromfile);
 
-            XmlNode root = doc;
-            if (!root.HasChildNodes)
+                XmlNode root = doc;
+                if (!root.HasChildNodes)
+                {
+                    MessageBox.Show(
+                        "The Preset file you selected appears to be invlaid or from an older version of HandBrake", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
+            }
+            catch (Exception)
             {
                 MessageBox.Show(
-                    "The Preset file you selected appears to be invlaid or from an older version of HandBrake", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
+                "The Preset file you selected appears to be invlaid or from an older version of HandBrake.\n\n Please note, if you are exporting from the MacGui you may need to rebuild your preset so that it uses the current preset plist format.\n The MacGui does not currently update user presets automatically.", "Error",
+                       MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             // We'll query a query parser object and use it's public var structures to store all the data.
@@ -71,7 +80,7 @@ namespace Handbrake.Presets
                             break;
                     }
                 }
-               AudioInfo.Add(track);
+                AudioInfo.Add(track);
             }
             queryParsed.AudioInformation = AudioInfo;
 

@@ -386,10 +386,6 @@ namespace Handbrake
         #endregion
 
         #region Help Menu
-        private void mnu_handbrake_forums_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://forum.handbrake.fr/");
-        }
         private void mnu_user_guide_Click(object sender, EventArgs e)
         {
             Process.Start("http://trac.handbrake.fr/wiki/HandBrakeGuide");
