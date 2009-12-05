@@ -604,6 +604,35 @@ void hb_cond_wait( hb_cond_t * c, hb_lock_t * lock )
 #endif
 }
 
+void hb_clock_gettime( struct timespec *tp )
+{
+    struct timeval tv;
+    time_t sec;
+
+    sec = time( NULL );
+    gettimeofday( &tv, NULL );
+    tp->tv_sec = tv.tv_sec;
+    tp->tv_nsec = tv.tv_usec * 1000;
+}
+
+void hb_cond_timedwait( hb_cond_t * c, hb_lock_t * lock, int msec )
+{
+#if defined( SYS_BEOS )
+    c->thread = find_thread( NULL );
+    release_sem( lock->sem );
+    suspend_thread( c->thread );
+    acquire_sem( lock->sem );
+    c->thread = -1;
+#elif USE_PTHREAD
+    struct timespec ts;
+    hb_clock_gettime(&ts);
+    ts.tv_nsec += (msec % 1000) * 1000000;
+    ts.tv_sec += msec / 1000 + (ts.tv_nsec / 1000000000);
+    ts.tv_nsec %= 1000000000;
+    pthread_cond_timedwait( &c->cond, &lock->mutex, &ts );
+#endif
+}
+
 void hb_cond_signal( hb_cond_t * c )
 {
 #if defined( SYS_BEOS )

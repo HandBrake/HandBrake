@@ -69,15 +69,7 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
 
 static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 {
-    while( !*r->die && !r->job->done && hb_fifo_is_full( fifo ) )
-    {
-        /*
-         * Loop until the incoming fifo is ready to receive
-         * this buffer.
-         */
-        hb_snooze( 50 );
-    }
-    hb_fifo_push( fifo, buf );
+    hb_fifo_push_wait( fifo, buf );
 }
 
 static int is_audio( hb_reader_t *r, int id )
@@ -466,20 +458,23 @@ static void ReaderFunc( void * _r )
 
   done:
     // send empty buffers downstream to video & audio decoders to signal we're done.
-    push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
-
-    hb_audio_t *audio;
-    for( n = 0; ( audio = hb_list_item( r->job->title->list_audio, n ) ); ++n )
+    if( !*r->die && !r->job->done )
     {
-        if ( audio->priv.fifo_in )
-            push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
-    }
+        push_buf( r, r->job->fifo_mpeg2, hb_buffer_init(0) );
 
-    hb_subtitle_t *subtitle;
-    for( n = 0; ( subtitle = hb_list_item( r->job->title->list_subtitle, n ) ); ++n )
-    {
-        if ( subtitle->fifo_in && subtitle->source == VOBSUB)
-            push_buf( r, subtitle->fifo_in, hb_buffer_init(0) );
+        hb_audio_t *audio;
+        for( n = 0; (audio = hb_list_item( r->job->title->list_audio, n)); ++n )
+        {
+            if ( audio->priv.fifo_in )
+                push_buf( r, audio->priv.fifo_in, hb_buffer_init(0) );
+        }
+
+        hb_subtitle_t *subtitle;
+        for( n = 0; (subtitle = hb_list_item( r->job->title->list_subtitle, n)); ++n )
+        {
+            if ( subtitle->fifo_in && subtitle->source == VOBSUB)
+                push_buf( r, subtitle->fifo_in, hb_buffer_init(0) );
+        }
     }
 
     hb_list_empty( &list );

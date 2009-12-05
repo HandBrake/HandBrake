@@ -720,8 +720,8 @@ int renderInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     /* Setup FIFO queue for subtitle cache */
-    pv->subtitle_queue = hb_fifo_init( 8 );
-    pv->delay_queue = hb_fifo_init( 8 );
+    pv->subtitle_queue = hb_fifo_init( 8, 1 );
+    pv->delay_queue = hb_fifo_init( 8, 1 );
 
     /* VFR IVTC needs a bunch of time-keeping variables to track
       how many frames are dropped, how many are extended, what the

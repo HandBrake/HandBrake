@@ -158,7 +158,8 @@ hb_handle_t * hb_init( int verbose, int update_check )
     h->die         = 0;
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
-    hb_register( &hb_sync );
+    hb_register( &hb_sync_video );
+    hb_register( &hb_sync_audio );
 	hb_register( &hb_decmpeg2 );
 	hb_register( &hb_decvobsub );
     hb_register( &hb_encvobsub );
@@ -178,6 +179,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
 	hb_register( &hb_encfaac );
 	hb_register( &hb_enclame );
 	hb_register( &hb_encvorbis );
+	hb_register( &hb_muxer );
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
 #endif
@@ -255,7 +257,8 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     h->main_thread = hb_thread_init( "libhb", thread_func, h,
                                      HB_NORMAL_PRIORITY );
 
-    hb_register( &hb_sync );
+    hb_register( &hb_sync_video );
+    hb_register( &hb_sync_audio );
 	hb_register( &hb_decmpeg2 );
 	hb_register( &hb_decvobsub );
     hb_register( &hb_encvobsub );
@@ -275,6 +278,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
 	hb_register( &hb_encfaac );
 	hb_register( &hb_enclame );
 	hb_register( &hb_encvorbis );
+	hb_register( &hb_muxer );
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
 #endif

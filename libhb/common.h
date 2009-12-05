@@ -287,7 +287,6 @@ struct hb_job_s
     hb_fifo_t     * fifo_mpeg4;   /* MPEG-4 video ES */
 
     hb_thread_t   * reader;
-    hb_thread_t   * muxer;
 
     hb_list_t     * list_work;
 
@@ -680,7 +679,8 @@ struct hb_work_object_s
 #endif
 };
 
-extern hb_work_object_t hb_sync;
+extern hb_work_object_t hb_sync_video;
+extern hb_work_object_t hb_sync_audio;
 extern hb_work_object_t hb_decmpeg2;
 extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_encvobsub;
@@ -700,6 +700,7 @@ extern hb_work_object_t hb_declpcm;
 extern hb_work_object_t hb_encfaac;
 extern hb_work_object_t hb_enclame;
 extern hb_work_object_t hb_encvorbis;
+extern hb_work_object_t hb_muxer;
 extern hb_work_object_t hb_encca_aac;
 
 #define FILTER_OK      0

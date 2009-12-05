@@ -85,16 +85,20 @@ void          hb_buffer_close( hb_buffer_t ** );
 void          hb_buffer_copy_settings( hb_buffer_t * dst,
                                        const hb_buffer_t * src );
 
-hb_fifo_t   * hb_fifo_init();
+hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 int           hb_fifo_size( hb_fifo_t * );
 int           hb_fifo_is_full( hb_fifo_t * );
 float         hb_fifo_percent_full( hb_fifo_t * f );
 hb_buffer_t * hb_fifo_get( hb_fifo_t * );
+hb_buffer_t * hb_fifo_get_wait( hb_fifo_t * );
 hb_buffer_t * hb_fifo_see( hb_fifo_t * );
+hb_buffer_t * hb_fifo_see_wait( hb_fifo_t * );
 hb_buffer_t * hb_fifo_see2( hb_fifo_t * );
 void          hb_fifo_push( hb_fifo_t *, hb_buffer_t * );
+void          hb_fifo_push_wait( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_push_head( hb_fifo_t *, hb_buffer_t * );
 void          hb_fifo_close( hb_fifo_t ** );
+void          hb_fifo_flush( hb_fifo_t * f );
 
 // this routine gets a buffer for an uncompressed YUV420 video frame
 // with dimensions width x height.
@@ -138,10 +142,15 @@ hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
 hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
                             volatile int * die, int * error, hb_job_t ** job );
 hb_thread_t  * hb_reader_init( hb_job_t * );
-hb_thread_t  * hb_muxer_init( hb_job_t * );
+hb_work_object_t * hb_muxer_init( hb_job_t * );
 hb_work_object_t * hb_get_work( int );
 hb_work_object_t * hb_codec_decoder( int );
 hb_work_object_t * hb_codec_encoder( int );
+
+/***********************************************************************
+ * sync.c
+ **********************************************************************/
+int hb_sync_init( hb_job_t * job );
 
 /***********************************************************************
  * mpegdemux.c
@@ -266,7 +275,8 @@ union hb_esconfig_u
 
 enum
 {
-    WORK_SYNC = 1,
+    WORK_SYNC_VIDEO = 1,
+    WORK_SYNC_AUDIO,
     WORK_DECMPEG2,
     WORK_DECCC608,
     WORK_DECVOBSUB,
@@ -286,7 +296,8 @@ enum
     WORK_ENCFAAC,
     WORK_ENCLAME,
     WORK_ENCVORBIS,
-    WORK_ENC_CA_AAC
+    WORK_ENC_CA_AAC,
+    WORK_MUX
 };
 
 enum

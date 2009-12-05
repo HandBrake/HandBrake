@@ -23,7 +23,10 @@ static void work_func();
 static void do_job( hb_job_t *, int cpu_count );
 static void work_loop( void * );
 
-#define FIFO_CPU_MULT 8
+#define FIFO_LARGE 32
+#define FIFO_LARGE_WAKE 16
+#define FIFO_SMALL 16
+#define FIFO_SMALL_WAKE 15
 
 /**
  * Allocates work object and launches work thread with work_func.
@@ -366,7 +369,6 @@ void correct_framerate( hb_job_t * job )
     job->vrate = job->vrate_base * ( (double)real_frames * 90000 / interjob->total_time );
 }
 
-
 /**
  * Job initialization rountine.
  * Initializes fifos.
@@ -383,6 +385,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_title_t    * title;
     int             i, j;
     hb_work_object_t * w;
+    hb_work_object_t * muxer;
     hb_interjob_t * interjob;
 
     hb_audio_t   * audio;
@@ -459,163 +462,15 @@ static void do_job( hb_job_t * job, int cpu_count )
         job->vrate_base = title->rate_base;
     }
 
-    job->fifo_mpeg2  = hb_fifo_init( 256 );
-    job->fifo_raw    = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-    job->fifo_sync   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-    job->fifo_render = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-    job->fifo_mpeg4  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-
-    /* Synchronization */
-    hb_list_add( job->list_work, ( w = hb_get_work( WORK_SYNC ) ) );
-    w->fifo_in  = NULL;
-    w->fifo_out = NULL;
-
-    /* Video decoder */
-    int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
-    hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );
-    w->codec_param = title->video_codec_param;
-    w->fifo_in  = job->fifo_mpeg2;
-    w->fifo_out = job->fifo_raw;
-
-    /* Video renderer */
-    hb_list_add( job->list_work, ( w = hb_get_work( WORK_RENDER ) ) );
-    w->fifo_in  = job->fifo_sync;
-    w->fifo_out = job->fifo_render;
-
-    if( !job->indepth_scan )
-    {
-
-        /* Video encoder */
-        switch( job->vcodec )
-        {
-        case HB_VCODEC_FFMPEG:
-            w = hb_get_work( WORK_ENCAVCODEC );
-            break;
-        case HB_VCODEC_X264:
-            w = hb_get_work( WORK_ENCX264 );
-            break;
-        case HB_VCODEC_THEORA:
-            w = hb_get_work( WORK_ENCTHEORA );
-            break;
-        }
-        w->fifo_in  = job->fifo_render;
-        w->fifo_out = job->fifo_mpeg4;
-        w->config   = &job->config;
-
-        hb_list_add( job->list_work, w );
-    }
+    job->fifo_mpeg2  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+    job->fifo_raw    = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+    job->fifo_sync   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+    job->fifo_render = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+    job->fifo_mpeg4  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
 
     /*
-     * Look for the scanned subtitle in the existing subtitle list
+     * Audio fifos must be initialized before sync
      */
-    if ( !job->indepth_scan && interjob->select_subtitle &&
-         ( job->pass == 0 || job->pass == 2 ) )
-    {
-        /*
-         * Disable forced subtitles if we didn't find any in the scan
-         * so that we display normal subtitles instead.
-         *
-         * select_subtitle implies that we did a scan.
-         */
-        if( interjob->select_subtitle->config.force && 
-            interjob->select_subtitle->forced_hits == 0 )
-        {
-            interjob->select_subtitle->config.force = 0;
-        }
-        for( i=0; i < hb_list_count(title->list_subtitle); i++ )
-        {
-            subtitle =  hb_list_item( title->list_subtitle, i );
-
-            if( subtitle )
-            {
-                /*
-                * Disable forced subtitles if we didn't find any in the scan
-                * so that we display normal subtitles instead.
-                *
-                * select_subtitle implies that we did a scan.
-                */
-                if( interjob->select_subtitle->id == subtitle->id )
-                {
-                    *subtitle = *(interjob->select_subtitle);
-                    free( interjob->select_subtitle );
-                    interjob->select_subtitle = NULL;
-                }
-            }
-        }
-
-        if( interjob->select_subtitle )
-        {
-            /*
-             * Its not in the existing list
-             *
-             * Must be second pass of a two pass with subtitle scan enabled, so
-             * add the subtitle that we found on the first pass for use in this
-             * pass.
-             */
-            hb_list_add( title->list_subtitle, interjob->select_subtitle );
-            interjob->select_subtitle = NULL;
-        }
-    }
-
-
-    for( i=0; i < hb_list_count(title->list_subtitle); i++ )
-    {
-        subtitle =  hb_list_item( title->list_subtitle, i );
-
-        if( subtitle )
-        {
-            subtitle->fifo_in   = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-            subtitle->fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-            subtitle->fifo_sync = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-            subtitle->fifo_out  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-
-            if( (!job->indepth_scan || job->select_subtitle_config.force) && 
-                subtitle->source == VOBSUB ) {
-                /*
-                 * Don't add threads for subtitles when we are scanning, unless
-                 * looking for forced subtitles.
-                 */
-                w = hb_get_work( WORK_DECVOBSUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
-
-            if( !job->indepth_scan && subtitle->source == CC608SUB )
-            {
-                w = hb_get_work( WORK_DECCC608 );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                hb_list_add( job->list_work, w );
-            }
-
-            if( !job->indepth_scan && subtitle->source == SRTSUB )
-            {
-                w = hb_get_work( WORK_DECSRTSUB );
-                w->fifo_in  = subtitle->fifo_in;
-                w->fifo_out = subtitle->fifo_raw;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
-
-            if( !job->indepth_scan && 
-                subtitle->format == PICTURESUB
-                && subtitle->config.dest == PASSTHRUSUB )
-            {
-                /*
-                 * Passing through a subtitle picture, this will have to
-                 * be rle encoded before muxing.
-                 */
-                w = hb_get_work( WORK_ENCVOBSUB );
-                w->fifo_in  = subtitle->fifo_sync;
-                w->fifo_out = subtitle->fifo_out;
-                w->subtitle = subtitle;
-                hb_list_add( job->list_work, w );
-            }
-        }
-    }
-
     if( !job->indepth_scan )
     {
     // if we are doing passthru, and the input codec is not the same as the output
@@ -819,54 +674,214 @@ static void do_job( hb_job_t * job, int cpu_count )
             audio->priv.config.vorbis.language = audio->config.lang.simple;
 
         /* set up the audio work structures */
-        audio->priv.fifo_in   = hb_fifo_init( 32 );
-        audio->priv.fifo_raw  = hb_fifo_init( FIFO_CPU_MULT * cpu_count );
-        audio->priv.fifo_sync = hb_fifo_init( 32 );
-        audio->priv.fifo_out  = hb_fifo_init( 8 * FIFO_CPU_MULT * cpu_count );
+        audio->priv.fifo_in   = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+        audio->priv.fifo_raw  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+        audio->priv.fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+        audio->priv.fifo_out  = hb_fifo_init( FIFO_LARGE, FIFO_LARGE_WAKE );
+    }
 
+    }
+    /* Synchronization */
+    if( hb_sync_init( job ) )
+    {
+        hb_error( "Failure to initialise sync" );
+        *job->die = 1;
+        goto cleanup;
+    }
 
-        /*
-         * Audio Decoder Thread
-         */
-        if ( ( w = hb_codec_decoder( audio->config.in.codec ) ) == NULL )
+    /* Video decoder */
+    int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
+    hb_list_add( job->list_work, ( w = hb_get_work( vcodec ) ) );
+    w->codec_param = title->video_codec_param;
+    w->fifo_in  = job->fifo_mpeg2;
+    w->fifo_out = job->fifo_raw;
+
+    /* Video renderer */
+    hb_list_add( job->list_work, ( w = hb_get_work( WORK_RENDER ) ) );
+    w->fifo_in  = job->fifo_sync;
+    w->fifo_out = job->fifo_render;
+
+    if( !job->indepth_scan )
+    {
+
+        /* Video encoder */
+        switch( job->vcodec )
         {
-            hb_error("Invalid input codec: %d", audio->config.in.codec);
-            *job->die = 1;
-            goto cleanup;
+        case HB_VCODEC_FFMPEG:
+            w = hb_get_work( WORK_ENCAVCODEC );
+            break;
+        case HB_VCODEC_X264:
+            w = hb_get_work( WORK_ENCX264 );
+            break;
+        case HB_VCODEC_THEORA:
+            w = hb_get_work( WORK_ENCTHEORA );
+            break;
         }
-        w->fifo_in  = audio->priv.fifo_in;
-        w->fifo_out = audio->priv.fifo_raw;
-        w->config   = &audio->priv.config;
-        w->audio    = audio;
-        w->codec_param = audio->config.in.codec_param;
+        w->fifo_in  = job->fifo_render;
+        w->fifo_out = job->fifo_mpeg4;
+        w->config   = &job->config;
 
         hb_list_add( job->list_work, w );
+    }
 
+    /*
+     * Look for the scanned subtitle in the existing subtitle list
+     */
+    if ( !job->indepth_scan && interjob->select_subtitle &&
+         ( job->pass == 0 || job->pass == 2 ) )
+    {
         /*
-         * Audio Encoder Thread
+         * Disable forced subtitles if we didn't find any in the scan
+         * so that we display normal subtitles instead.
+         *
+         * select_subtitle implies that we did a scan.
          */
-        if( audio->config.out.codec != HB_ACODEC_AC3 &&
-            audio->config.out.codec != HB_ACODEC_DCA )
+        if( interjob->select_subtitle->config.force && 
+            interjob->select_subtitle->forced_hits == 0 )
+        {
+            interjob->select_subtitle->config.force = 0;
+        }
+        for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+        {
+            subtitle =  hb_list_item( title->list_subtitle, i );
+
+            if( subtitle )
+            {
+                /*
+                * Disable forced subtitles if we didn't find any in the scan
+                * so that we display normal subtitles instead.
+                *
+                * select_subtitle implies that we did a scan.
+                */
+                if( interjob->select_subtitle->id == subtitle->id )
+                {
+                    *subtitle = *(interjob->select_subtitle);
+                    free( interjob->select_subtitle );
+                    interjob->select_subtitle = NULL;
+                }
+            }
+        }
+
+        if( interjob->select_subtitle )
         {
             /*
-             * Add the encoder thread if not doing AC-3 pass through
+             * Its not in the existing list
+             *
+             * Must be second pass of a two pass with subtitle scan enabled, so
+             * add the subtitle that we found on the first pass for use in this
+             * pass.
              */
-            if ( ( w = hb_codec_encoder( audio->config.out.codec ) ) == NULL )
-            {
-                hb_error("Invalid audio codec: %#x", audio->config.out.codec);
-                w = NULL;
-                *job->die = 1;
-                goto cleanup;
-            }
-            w->fifo_in  = audio->priv.fifo_sync;
-            w->fifo_out = audio->priv.fifo_out;
-            w->config   = &audio->priv.config;
-            w->audio    = audio;
-
-            hb_list_add( job->list_work, w );
+            hb_list_add( title->list_subtitle, interjob->select_subtitle );
+            interjob->select_subtitle = NULL;
         }
     }
 
+
+    for( i=0; i < hb_list_count(title->list_subtitle); i++ )
+    {
+        subtitle =  hb_list_item( title->list_subtitle, i );
+
+        if( subtitle )
+        {
+            subtitle->fifo_in   = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+            subtitle->fifo_raw  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+            subtitle->fifo_sync = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+            subtitle->fifo_out  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
+
+            if( (!job->indepth_scan || job->select_subtitle_config.force) && 
+                subtitle->source == VOBSUB ) {
+                /*
+                 * Don't add threads for subtitles when we are scanning, unless
+                 * looking for forced subtitles.
+                 */
+                w = hb_get_work( WORK_DECVOBSUB );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+                w->subtitle = subtitle;
+                hb_list_add( job->list_work, w );
+            }
+
+            if( !job->indepth_scan && subtitle->source == CC608SUB )
+            {
+                w = hb_get_work( WORK_DECCC608 );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+                hb_list_add( job->list_work, w );
+            }
+
+            if( !job->indepth_scan && subtitle->source == SRTSUB )
+            {
+                w = hb_get_work( WORK_DECSRTSUB );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+                w->subtitle = subtitle;
+                hb_list_add( job->list_work, w );
+            }
+
+            if( !job->indepth_scan && 
+                subtitle->format == PICTURESUB
+                && subtitle->config.dest == PASSTHRUSUB )
+            {
+                /*
+                 * Passing through a subtitle picture, this will have to
+                 * be rle encoded before muxing.
+                 */
+                w = hb_get_work( WORK_ENCVOBSUB );
+                w->fifo_in  = subtitle->fifo_sync;
+                w->fifo_out = subtitle->fifo_out;
+                w->subtitle = subtitle;
+                hb_list_add( job->list_work, w );
+            }
+        }
+    }
+
+    if( !job->indepth_scan )
+    {
+        for( i = 0; i < hb_list_count( title->list_audio ); i++ )
+        {
+            audio = hb_list_item( title->list_audio, i );
+
+            /*
+            * Audio Decoder Thread
+            */
+            if ( ( w = hb_codec_decoder( audio->config.in.codec ) ) == NULL )
+            {
+                hb_error("Invalid input codec: %d", audio->config.in.codec);
+                *job->die = 1;
+                goto cleanup;
+            }
+            w->fifo_in  = audio->priv.fifo_in;
+            w->fifo_out = audio->priv.fifo_raw;
+            w->config   = &audio->priv.config;
+            w->audio    = audio;
+            w->codec_param = audio->config.in.codec_param;
+
+            hb_list_add( job->list_work, w );
+
+            /*
+            * Audio Encoder Thread
+            */
+            if( audio->config.out.codec != HB_ACODEC_AC3 &&
+                audio->config.out.codec != HB_ACODEC_DCA )
+            {
+                /*
+                * Add the encoder thread if not doing AC-3 pass through
+                */
+                if ( ( w = hb_codec_encoder( audio->config.out.codec ) ) == NULL )
+                {
+                    hb_error("Invalid audio codec: %#x", audio->config.out.codec);
+                    w = NULL;
+                    *job->die = 1;
+                    goto cleanup;
+                }
+                w->fifo_in  = audio->priv.fifo_sync;
+                w->fifo_out = audio->priv.fifo_out;
+                w->config   = &audio->priv.config;
+                w->audio    = audio;
+
+                hb_list_add( job->list_work, w );
+            }
+        }
     }
 
     /* Display settings */
@@ -896,18 +911,29 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     // The muxer requires track information that's set up by the encoder
     // init routines so we have to init the muxer last.
-    job->muxer = job->indepth_scan? NULL : hb_muxer_init( job );
+    muxer = job->indepth_scan? NULL : hb_muxer_init( job );
 
     w = hb_list_item( job->list_work, 0 );
-    w->thread_sleep_interval = 10;
-    w->init( w, job );
-    while( !*job->die )
+    while( !*job->die && w->status != HB_WORK_DONE )
     {
-        if ( ( w->status = w->work( w, NULL, NULL ) ) == HB_WORK_DONE )
-        {
+        hb_buffer_t      * buf_in, * buf_out;
+
+        buf_in = hb_fifo_get_wait( w->fifo_in );
+        if ( buf_in == NULL )
+            continue;
+        if ( *job->die )
             break;
+
+        w->status = w->work( w, &buf_in, &buf_out );
+
+        if( buf_in )
+        {
+            hb_buffer_close( &buf_in );
         }
-        hb_snooze( w->thread_sleep_interval );
+        if( buf_out )
+        {
+            hb_fifo_push_wait( w->fifo_out, buf_out );
+        }
     }
     hb_list_rem( job->list_work, w );
     w->close( w );
@@ -921,8 +947,11 @@ static void do_job( hb_job_t * job, int cpu_count )
 
 cleanup:
     /* Stop the write thread (thread_close will block until the muxer finishes) */
-    if( job->muxer != NULL )
-        hb_thread_close( &job->muxer );
+    if( muxer != NULL )
+    {
+        hb_thread_close( &muxer->thread );
+        muxer->close( muxer );
+    }
 
     job->done = 1;
 
@@ -1085,21 +1114,13 @@ static void work_loop( void * _w )
     hb_work_object_t * w = _w;
     hb_buffer_t      * buf_in, * buf_out;
 
-    while( !*w->done )
+    while( !*w->done && w->status != HB_WORK_DONE )
     {
-#if 0
-        hb_lock( job->pause );
-        hb_unlock( job->pause );
-#endif
-        if( hb_fifo_is_full( w->fifo_out ) ||
-//        if( (hb_fifo_percent_full( w->fifo_out ) > 0.8) ||
-            !( buf_in = hb_fifo_get( w->fifo_in ) ) )
-        {
-            hb_snooze( w->thread_sleep_interval );
-//			w->thread_sleep_interval += 1;
+        buf_in = hb_fifo_get_wait( w->fifo_in );
+        if ( buf_in == NULL )
             continue;
-        }
-//		w->thread_sleep_interval = MAX(1, (w->thread_sleep_interval - 1));
+        if ( *w->done )
+            break;
 
         w->status = w->work( w, &buf_in, &buf_out );
 
@@ -1121,7 +1142,7 @@ static void work_loop( void * _w )
         }
         if( buf_out )
         {
-            hb_fifo_push( w->fifo_out, buf_out );
+            hb_fifo_push_wait( w->fifo_out, buf_out );
         }
     }
 }
