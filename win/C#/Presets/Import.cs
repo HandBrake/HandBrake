@@ -11,6 +11,7 @@ namespace Handbrake.Presets
     {
         public QueryParser importMacPreset(string filename)
         {
+            XmlNode root = null;
             try
             {
                 if (!File.Exists(filename))
@@ -25,7 +26,7 @@ namespace Handbrake.Presets
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(fromfile);
 
-                XmlNode root = doc;
+                root = doc;
                 if (!root.HasChildNodes)
                 {
                     MessageBox.Show(
