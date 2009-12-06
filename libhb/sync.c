@@ -229,6 +229,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if( !sync->cur )
     {
         sync->cur = *buf_in;
+        *buf_in = NULL;
         if( sync->cur->size == 0 )
         {
             /* we got an end-of-stream as our first video packet? 
@@ -250,7 +251,6 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             }
             return HB_WORK_DONE;
         }
-        *buf_in = NULL;
         return HB_WORK_OK;
     }
     next = *buf_in;
