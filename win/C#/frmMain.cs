@@ -192,8 +192,11 @@ namespace Handbrake
                 {
                     return this.dvdDriveLabel;
                 }
+                
+                if(Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
+                    return Path.GetFileNameWithoutExtension(this.sourcePath);
 
-                return Path.GetFileNameWithoutExtension(this.sourcePath);
+                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.sourcePath));
             }
         }
         #endregion
