@@ -336,7 +336,7 @@ static void ReaderFunc( void * _r )
             hb_list_rem( list, buf );
             fifos = GetFifoForId( r->job, buf->id );
 
-            if ( fifos && ! r->saw_video )
+            if ( fifos && ! r->saw_video && !r->job->indepth_scan )
             {
                 // The first data packet with a PTS from an audio or video stream
                 // that we're decoding defines 'time zero'. Discard packets until
