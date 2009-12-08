@@ -498,7 +498,7 @@ int check_combing_mask( hb_filter_private_t * pv )
     int block_height    = pv->block_height;
     int block_x, block_y;
     int block_score = 0; int send_to_blend = 0;
-    
+    uint8_t * mask_p;
     int x, y, k;
 
     for( k = 0; k < 1; k++ )
@@ -509,35 +509,37 @@ int check_combing_mask( hb_filter_private_t * pv )
             for( x = 0; x < ( pv->width[k] - block_width ); x = x + block_width )
             {
                 block_score = 0;
+                
                 for( block_y = 0; block_y < block_height; block_y++ )
                 {
+                    int mask_y = y + block_y;
+                    mask_p = &pv->mask[k][mask_y*ref_stride + x];
+                    
                     for( block_x = 0; block_x < block_width; block_x++ )
                     {
-                        int mask_y = y + block_y;
-                        int mask_x = x + block_x;
-                        
                         /* We only want to mark a pixel in a block as combed
-                           if the pixels above and below are as well. Got to
-                           handle the top and bottom lines separately.       */
-                        if( y + block_y == 0 )
+                           if the adjacent pixels are as well. Got to
+                           handle the sides separately.       */
+                        if( (x + block_x) == 0 )
                         {
-                            if( pv->mask[k][mask_y*ref_stride+mask_x    ] == 255 &&
-                                pv->mask[k][mask_y*ref_stride+mask_x + 1] == 255 )
+                            if( mask_p[ 0 ] == 255 &&
+                                mask_p[ 1 ] == 255 )
                                     block_score++;
                         }
-                        else if( y + block_y == pv->height[k] - 1 )
+                        else if( (x + block_x) == (pv->width[k] -1) )
                         {
-                            if( pv->mask[k][mask_y*ref_stride+mask_x - 1] == 255 &&
-                                pv->mask[k][mask_y*ref_stride+mask_x    ] == 255 )
+                            if( mask_p[ -1 ] == 255 &&
+                                mask_p[  0 ] == 255 )
                                     block_score++;
                         }
                         else
                         {
-                            if( pv->mask[k][mask_y*ref_stride+mask_x - 1] == 255 &&
-                                pv->mask[k][mask_y*ref_stride+mask_x    ] == 255 &&
-                                pv->mask[k][mask_y*ref_stride+mask_x + 1] == 255 )
+                            if( mask_p[ -1 ] == 255 &&
+                                mask_p[  0 ] == 255 &&
+                                mask_p[  1 ] == 255 )
                                     block_score++;
-                        } 
+                        }
+                        mask_p++;
                     }
                 }
 
@@ -617,30 +619,23 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
         for( y =  segment_start; y < segment_stop; y++ )
         {
             /* These are just to make the buffer locations easier to read. */
-            int back_2    = ( y - 2 )*ref_stride ;
-            int back_1    = ( y - 1 )*ref_stride;
-            int current   =         y*ref_stride;
-            int forward_1 = ( y + 1 )*ref_stride;
-            int forward_2 = ( y + 2 )*ref_stride;
+            int up_2    = -2*ref_stride ;
+            int up_1    = -1*ref_stride;
+            int down_1 = ref_stride;
+            int down_2 = 2*ref_stride;
             
             /* We need to examine a column of 5 pixels
                in the prev, cur, and next frames.      */
-            uint8_t previous_frame[5];
-            uint8_t current_frame[5];
-            uint8_t next_frame[5];
+            uint8_t * cur = &pv->ref[1][k][y*ref_stride];
+            uint8_t * prev = &pv->ref[0][k][y*ref_stride];
+            uint8_t * next = &pv->ref[2][k][y*ref_stride];
+            uint8_t * mask = &pv->mask[k][y*ref_stride];
             
             for( x = 0; x < width; x++ )
             {
-                /* Fill up the current frame array with the current pixel values.*/
-                current_frame[0] = pv->ref[1][k][back_2    + x];
-                current_frame[1] = pv->ref[1][k][back_1    + x];
-                current_frame[2] = pv->ref[1][k][current   + x];
-                current_frame[3] = pv->ref[1][k][forward_1 + x];
-                current_frame[4] = pv->ref[1][k][forward_2 + x];
-
-                int up_diff   = current_frame[2] - current_frame[1];
-                int down_diff = current_frame[2] - current_frame[3];
-
+                int up_diff = cur[0] - cur[up_1];
+                int down_diff = cur[0] - cur[down_1];
+                
                 if( ( up_diff >  athresh && down_diff >  athresh ) ||
                     ( up_diff < -athresh && down_diff < -athresh ) )
                 {
@@ -650,24 +645,13 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
                     if( mthresh > 0 )
                     {
                         /* Make sure there's sufficient motion between frame t-1 to frame t+1. */
-                        previous_frame[0] = pv->ref[0][k][back_2    + x];
-                        previous_frame[1] = pv->ref[0][k][back_1    + x];
-                        previous_frame[2] = pv->ref[0][k][current   + x];
-                        previous_frame[3] = pv->ref[0][k][forward_1 + x];
-                        previous_frame[4] = pv->ref[0][k][forward_2 + x];
-                        next_frame[0]     = pv->ref[2][k][back_2    + x];
-                        next_frame[1]     = pv->ref[2][k][back_1    + x];
-                        next_frame[2]     = pv->ref[2][k][current   + x];
-                        next_frame[3]     = pv->ref[2][k][forward_1 + x];
-                        next_frame[4]     = pv->ref[2][k][forward_2 + x];
-                        
-                        if( abs( previous_frame[2] - current_frame[2] ) > mthresh &&
-                            abs(  current_frame[1] - next_frame[1]    ) > mthresh &&
-                            abs(  current_frame[3] - next_frame[3]    ) > mthresh )
+                        if( abs( prev[0] - cur[0] ) > mthresh &&
+                            abs(  cur[up_1] - next[up_1]    ) > mthresh &&
+                            abs(  cur[down_1] - next[down_1]    ) > mthresh )
                                 motion++;
-                        if( abs(     next_frame[2] - current_frame[2] ) > mthresh &&
-                            abs( previous_frame[1] - current_frame[1] ) > mthresh &&
-                            abs( previous_frame[3] - current_frame[3] ) > mthresh )
+                        if( abs(     next[0] - cur[0] ) > mthresh &&
+                            abs( prev[up_1] - cur[up_1] ) > mthresh &&
+                            abs( prev[down_1] - cur[down_1] ) > mthresh )
                                 motion++;
                     }
                     else
@@ -684,55 +668,64 @@ void detect_combed_segment( hb_filter_private_t * pv, int segment_start, int seg
                         if( spatial_metric == 0 )
                         {
                             /* Simple 32detect style comb detection */
-                            if( ( abs( current_frame[2] - current_frame[4] ) < 10  ) &&
-                                ( abs( current_frame[2] - current_frame[3] ) > 15 ) )
+                            if( ( abs( cur[0] - cur[down_2] ) < 10  ) &&
+                                ( abs( cur[0] - cur[down_1] ) > 15 ) )
                             {
-                                pv->mask[k][y*ref_stride + x] = 255;
+                                mask[0] = 255;
                             }
                             else
                             {
-                                pv->mask[k][y*ref_stride + x] = 0;
+                                mask[0] = 0;
                             }
                         }
                         else if( spatial_metric == 1 )
                         {
                             /* This, for comparison, is what IsCombed uses.
                                It's better, but still noise senstive.      */
-                               int combing = ( current_frame[1] - current_frame[2] ) *
-                                             ( current_frame[3] - current_frame[2] );
+                               int combing = ( cur[up_1] - cur[0] ) *
+                                             ( cur[down_1] - cur[0] );
                                
                                if( combing > athresh_squared )
-                                   pv->mask[k][y*ref_stride + x] = 255; 
+                                   mask[0] = 255; 
                                else
-                                   pv->mask[k][y*ref_stride + x] = 0;
+                                   mask[0] = 0;
                         }
                         else if( spatial_metric == 2 )
                         {
                             /* Tritical's noise-resistant combing scorer.
                                The check is done on a bob+blur convolution. */
-                            int combing = abs( current_frame[0]
-                                             + ( 4 * current_frame[2] )
-                                             + current_frame[4]
-                                             - ( 3 * ( current_frame[1]
-                                                     + current_frame[3] ) ) );
+                            int combing = abs( cur[up_2]
+                                             + ( 4 * cur[0] )
+                                             + cur[down_2]
+                                             - ( 3 * ( cur[up_1]
+                                                     + cur[down_1] ) ) );
 
                             /* If the frame is sufficiently combed,
                                then mark it down on the mask as 255. */
                             if( combing > athresh6 )
-                                pv->mask[k][y*ref_stride + x] = 255; 
+                            {
+                                mask[0] = 255;
+                            }
                             else
-                                pv->mask[k][y*ref_stride + x] = 0;
+                            {
+                                mask[0] = 0;
+                            }
                         }
                     }
                     else
                     {
-                        pv->mask[k][y*ref_stride + x] = 0;
+                        mask[0] = 0;
                     }
                 }
                 else
                 {
-                    pv->mask[k][y*ref_stride + x] = 0;
+                    mask[0] = 0;
                 }
+                
+                cur++;
+                prev++;
+                next++;
+                mask++;
             }
         }
     }
