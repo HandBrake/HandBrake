@@ -113,18 +113,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                 value++;
             }
     
-            /*
-               When B-frames are enabled, the max frame count increments
-               by 1 (regardless of the number of B-frames). If you don't
-               change the duration of the video track when you mux, libmp4
-               barfs.  So, check if the x264opts aren't using B-frames, and
-               when they aren't, set the boolean job->areBframes as false.
-             */
             if( !( strcmp( name, "bframes" ) ) )
             {
                 if( atoi( value ) == 0 )
                 {
                     param.analyse.i_weighted_pred = X264_WEIGHTP_NONE;
+                    hb_log("encx264: no bframes, disabling weight-p unless told otherwise");
                 }
             }
         }
@@ -169,8 +163,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             param.i_keyint_min = fps;
             param.i_keyint_max = fps * 10;
         }
-        
-        hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);
     }
 
     param.i_log_level  = X264_LOG_INFO;
@@ -181,9 +173,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encx264: encoding at level %i",
                 param.i_level_idc );
     }
-
-    /* B-frames are on by default.*/
-    job->areBframes = 1;
     
     /*
        	This section passes the string x264opts to libx264 for parsing into
@@ -226,35 +215,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
                 value++;
             }
 
-            /*
-               When B-frames are enabled, the max frame count increments
-               by 1 (regardless of the number of B-frames). If you don't
-               change the duration of the video track when you mux, libmp4
-               barfs.  So, check if the x264opts aren't using B-frames, and
-               when they aren't, set the boolean job->areBframes as false.
-             */
-            if( !( strcmp( name, "bframes" ) ) )
-            {
-                if( atoi( value ) == 0 )
-                {
-                    job->areBframes = 0;
-                }
-            }
-
-            /* Note b-pyramid here, so the initial delay can be doubled */
             if( !( strcmp( name, "b-pyramid" ) ) )
             {
-                if( value != NULL )
-                {
-                    if( atoi( value ) > 0 )
-                    {
-                        job->areBframes = 2;
-                    }
-                }
-                else
-                {
-                    job->areBframes = 2;
-                }
                 if( value == NULL || !strcmp( value, "1" ) )
                 {
                     value = "normal";
@@ -276,6 +238,29 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
         free(x264opts_start);
     }
+    
+    /* B-frames are on by default.*/
+    job->areBframes = 1;
+    
+    if(!param.rc.b_mb_tree && param.i_bframe && param.i_bframe_pyramid)
+    {
+        /* Note b-pyramid here, so the initial delay can be doubled */
+        job->areBframes = 2;
+    }
+    else if (!param.i_bframe)
+    {
+        /*
+         When B-frames are enabled, the max frame count increments
+         by 1 (regardless of the number of B-frames). If you don't
+         change the duration of the video track when you mux, libmp4
+         barfs.  So, check if the x264opts aren't using B-frames, and
+         when they aren't, set the boolean job->areBframes as false.
+         */
+        job->areBframes = 0;
+    }
+    
+    if (param.i_keyint_min != 25 || param.i_keyint_max != 250)
+        hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);
 
     /* set up the VUI color model & gamma to match what the COLR atom
      * set in muxmp4.c says. See libhb/muxmp4.c for notes. */
