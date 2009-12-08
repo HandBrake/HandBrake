@@ -369,7 +369,13 @@ static void mux_loop( void * _w )
         if ( buf_in == NULL )
             continue;
         if ( *job->die )
+        {
+            if( buf_in )
+            {
+                hb_buffer_close( &buf_in );
+            }
             break;
+        }
 
         w->status = w->work( w, &buf_in, NULL );
     }

@@ -136,6 +136,10 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
 void decsubClose( hb_work_object_t * w )
 {
+    hb_work_private_t * pv = w->private_data;
+
+    if ( pv->buf )
+        hb_buffer_close( &pv->buf );
     free( w->private_data );
 }
 
@@ -501,6 +505,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
          * When forcing subtitles, ignore all those that don't
          * have the forced flag set.
          */
+        hb_buffer_close( &pv->buf );
         return NULL;
     }
 

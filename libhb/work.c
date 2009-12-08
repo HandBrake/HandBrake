@@ -922,7 +922,13 @@ static void do_job( hb_job_t * job, int cpu_count )
         if ( buf_in == NULL )
             continue;
         if ( *job->die )
+        {
+            if( buf_in )
+            {
+                hb_buffer_close( &buf_in );
+            }
             break;
+        }
 
         w->status = w->work( w, &buf_in, &buf_out );
 
@@ -1120,7 +1126,13 @@ static void work_loop( void * _w )
         if ( buf_in == NULL )
             continue;
         if ( *w->done )
+        {
+            if( buf_in )
+            {
+                hb_buffer_close( &buf_in );
+            }
             break;
+        }
 
         w->status = w->work( w, &buf_in, &buf_out );
 
