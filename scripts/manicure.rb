@@ -275,10 +275,6 @@ class Display
     case hash["FileFormat"]
     when /MP4/
       commandString << "mp4 "
-    when /AVI/
-      commandString << "avi "
-    when /OGM/
-      commandString << "ogm "
     when /MKV/
       commandString << "mkv "
     end
@@ -289,8 +285,8 @@ class Display
       case hash["VideoEncoder"]
       when /x264/
         commandString << "x264"
-      when /XviD/
-        commandString << "xvid"
+      when /Theora/
+        commandString << "theora"
       end
     end
 
@@ -391,10 +387,6 @@ class Display
     case hash["FileFormat"]
     when /MP4/
       commandString << "mp4"
-    when /AVI/
-      commandString << "avi"
-    when /OGM/
-      commandString << "ogm"
     when /MKV/
       commandString << "mkv"
     end
@@ -432,7 +424,7 @@ class Display
     end
     
     #Subtitles
-    if hash["Subtitles"] != "None"
+    if hash["Subtitles"] && hash["Subtitles"] != "None"
       if hash["Subtitles"] == "Autoselect"
         commandString << " --subtitle-scan"
       else
@@ -445,29 +437,28 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
-      when 1
-        commandString << " --deinterlace=\"fast\""
       when 2
-        commandString << " --deinterlace=\slow\""
+        commandString << " --deinterlace=\"fast\""
       when 3
-        commandString << " --deinterlace=\"slower\""
+        commandString << " --deinterlace=\slow\""
       when 4
+        commandString << " --deinterlace=\"slower\""
+      when 5
         commandString << " --deinterlace=\"slowest\""
       end
       
       case hash["PictureDenoise"]
-      when 1
-        commandString << " --denoise=\"weak\""
       when 2
-        commandString << " --denoise=\"medium\""
+        commandString << " --denoise=\"weak\""
       when 3
+        commandString << " --denoise=\"medium\""
+      when 4
         commandString << " --denoise=\"strong\""
       end
       
-      if hash["PictureDetelecine"] == 1 then commandString << " --detelecine" end
-      if hash["PictureDeblock"] == 1 then commandString << " --deblock" end
-      if hash["VFR"].to_i == 1 then commandString << " --vfr" end
-      if hash["PictureDecomb"] == 1 then commandString << " --decomb" end
+      if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
+      if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
+      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
       
     end
     
@@ -476,6 +467,8 @@ class Display
       commandString << " --strict-anamorphic"
     elsif hash["PicturePAR"] == 2
       commandString << " --loose-anamorphic"
+    elsif hash["PicturePAR"] == 3
+      commandString << " --custom-anamorphic"
     end
 
     #Booleans
@@ -535,8 +528,8 @@ class Display
       case hash["VideoEncoder"]
       when /x264/
         commandString << "x264"
-      when /XviD/
-        commandString << "xvid"
+      when /Theora/
+        commandString << "theora"
       end
     end
 
@@ -637,10 +630,6 @@ class Display
     case hash["FileFormat"]
     when /MP4/
       commandString << "mp4"
-    when /AVI/
-      commandString << "avi"
-    when /OGM/
-      commandString << "ogm"
     when /MKV/
       commandString << "mkv"
     end
@@ -678,7 +667,7 @@ class Display
     end
     
     #Subtitles
-    if hash["Subtitles"] != "None"
+    if hash["Subtitles"] && hash["Subtitles"] != "None"
       if hash["Subtitles"] == "Autoselect"
         commandString << " --subtitle-scan"
       else
@@ -691,29 +680,28 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
-      when 1
-        commandString << " --deinterlace=\"fast\""
       when 2
-        commandString << " --deinterlace=\slow\""
+        commandString << " --deinterlace=\"fast\""
       when 3
-        commandString << " --deinterlace=\"slower\""
+        commandString << " --deinterlace=\slow\""
       when 4
+        commandString << " --deinterlace=\"slower\""
+      when 5
         commandString << " --deinterlace=\"slowest\""
       end
       
       case hash["PictureDenoise"]
-      when 1
-        commandString << " --denoise=\"weak\""
       when 2
-        commandString << " --denoise=\"medium\""
+        commandString << " --denoise=\"weak\""
       when 3
+        commandString << " --denoise=\"medium\""
+      when 4
         commandString << " --denoise=\"strong\""
       end
       
-      if hash["PictureDetelecine"] == 1 then commandString << " --detelecine" end
-      if hash["PictureDeblock"] == 1 then commandString << " --deblock" end
-      if hash["VFR"].to_i == 1 then commandString << " --vfr" end
-      if hash["PictureDecomb"] == 1 then commandString << " --decomb" end
+      if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
+      if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
+      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
     end
 
     #Anamorphic
@@ -721,6 +709,8 @@ class Display
       commandString << " --strict-anamorphic"
     elsif hash["PicturePAR"] == 2
       commandString << " --loose-anamorphic"
+    elsif hash["PicturePAR"] == 3
+      commandString << " --custom-anamorphic"
     end
     
     #Booleans
@@ -754,10 +744,6 @@ class Display
     case hash["FileFormat"]
     when /MP4/
       commandString << "    mux = " << "HB_MUX_MP4;\n    "
-    when /AVI/
-      commandString << "    mux = " << "HB_MUX_AVI;\n    "
-    when /OGM/
-      commandString << "    mux = " << "HB_MUX_OGM;\n    "
     when /MKV/
       commandString << "    mux = " << "HB_MUX_MKV;\n    "
     end
@@ -779,8 +765,8 @@ class Display
       case hash["VideoEncoder"]
       when /x264/
         commandString << "HB_VCODEC_X264;\n    "
-      when /XviD/
-        commandString << "HB_VCODEC_XVID;\n    "        
+      when /Theora/
+        commandString << "HB_VCODEC_THEORA;\n    "        
       end
     end
 
@@ -792,7 +778,6 @@ class Display
       commandString << "job->vbitrate = " << hash["VideoAvgBitrate"] << ";\n    "
     when 2
       commandString << "job->vquality = " << hash["VideoQualitySlider"].to_s << ";\n    "
-      commandString << "job->crf = 1;\n    "
     end
 
     #FPS
@@ -947,36 +932,39 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
-      when 1
-        commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"-1\";\n    "
       when 2
         commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"2\";\n    "
+        commandString << "deinterlace_opt = \"-1\";\n    "
       when 3
         commandString << "deinterlace = 1;\n    "
-        commandString << "deinterlace_opt = \"0\";\n    "
+        commandString << "deinterlace_opt = \"2\";\n    "
       when 4
+        commandString << "deinterlace = 1;\n    "
+        commandString << "deinterlace_opt = \"0\";\n    "
+      when 5
         commandString << "deinterlace = 1;\n    "
         commandString << "deinterlace_opt = \"1:-1:1\";\n    "
       end
       
       case hash["PictureDenoise"]
-      when 1
-        commandString << "denoise = 1;\n    "
-        commandString << "denoise_opt = \"2:1:2:3\";\n    "
       when 2
         commandString << "denoise = 1;\n    "
-        commandString << "denoise_opt = \"3:2:2:3\";\n    "
+        commandString << "denoise_opt = \"2:1:2:3\";\n    "
       when 3
+        commandString << "denoise = 1;\n    "
+        commandString << "denoise_opt = \"3:2:2:3\";\n    "
+      when 4
         commandString << "denoise = 1;\n    "
         commandString << "denoise_opt = \"7:7:5:5\";\n    "
       end
       
-      if hash["PictureDetelecine"] == 1 then commandString << "detelecine = 1;\n    " end
-      if hash["PictureDeblock"] == 1 then commandString << "deblock = 1;\n    " end
-      if hash["VFR"].to_i == 1 then commandString << "vfr = 1;\n    " end
-      if hash["PictureDecomb"] == 1 then commandString << "decomb = 1;\n    " end
+      if hash["PictureDetelecine"] == 2 then commandString << "detelecine = 1;\n    " end
+      if hash["PictureDeblock"] != 0
+        then
+          commandString << "deblock = 1;\n    "
+          commandString << "deblock_opt = \"" << hash["PictureDeblock"].to_s << "\";\n    "
+        end
+      if hash["PictureDecomb"] == 2 then commandString << "decomb = 1;\n    " end
       
     end
     
@@ -985,6 +973,8 @@ class Display
       commandString << "anamorphic_mode = 1;\n    "
     elsif hash["PicturePAR"] == 2
       commandString << "anamorphic_mode = 2;\n    "
+    elsif hash["PicturePAR"] == 3
+      commandString << "anamorphic_mode = 3;\n    "
     end
     
     #Booleans
@@ -1045,8 +1035,8 @@ class Display
       case hash["VideoEncoder"]
       when /x264/
         commandString << "x264 "
-      when /XviD/
-        commandString << "xvid "
+      when /Theora/
+        commandString << "theora "
       end
     end
 
@@ -1147,10 +1137,6 @@ class Display
     case hash["FileFormat"]
     when /MP4/
       commandString << "mp4"
-    when /AVI/
-      commandString << "avi"
-    when /OGM/
-      commandString << "ogm"
     when /MKV/
       commandString << "mkv"
     end
@@ -1188,7 +1174,7 @@ class Display
     end
     
     #Subtitles
-    if hash["Subtitles"] != "None"
+    if hash["Subtitles"] && hash["Subtitles"] != "None"
       if hash["Subtitles"] == "Autoselect"
         commandString << " --subtitle-scan"
       else
@@ -1201,29 +1187,28 @@ class Display
     if hash["UsesPictureFilters"] == 1
       
       case hash["PictureDeinterlace"]
-      when 1
-        commandString << " --deinterlace=\\\"fast\\\""
       when 2
-        commandString << " --deinterlace=\\\slow\\\""
+        commandString << " --deinterlace=\\\"fast\\\""
       when 3
-        commandString << " --deinterlace=\\\"slower\\\""
+        commandString << " --deinterlace=\\\slow\\\""
       when 4
+        commandString << " --deinterlace=\\\"slower\\\""
+      when 5
         commandString << " --deinterlace=\\\"slowest\\\""
       end
       
       case hash["PictureDenoise"]
-      when 1
-        commandString << " --denoise=\\\"weak\\\""
       when 2
-        commandString << " --denoise=\\\"medium\\\""
+        commandString << " --denoise=\\\"weak\\\""
       when 3
+        commandString << " --denoise=\\\"medium\\\""
+      when 4
         commandString << " --denoise=\\\"strong\\\""
       end
       
-      if hash["PictureDetelecine"] == 1 then commandString << " --detelecine" end
-      if hash["PictureDeblock"] == 1 then commandString << " --deblock" end
-      if hash["VFR"].to_i == 1 then commandString << " --vfr" end
-      if hash["PictureDecomb"] == 1 then commandString << " --decomb" end
+      if hash["PictureDetelecine"] == 2 then commandString << " --detelecine" end
+      if hash["PictureDeblock"] != 0 then commandString << " --deblock=" << hash["PictureDeblock"].to_s end
+      if hash["PictureDecomb"] == 2 then commandString << " --decomb" end
     end
     
     #Anamorphic
@@ -1231,6 +1216,8 @@ class Display
       commandString << " --strict-anamorphic"
     elsif hash["PicturePAR"] == 2
       commandString << " --loose-anamorphic"
+    elsif hash["PicturePAR"] == 3
+      commandString << " --custom-anamorphic"
     end
     
     #Booleans
