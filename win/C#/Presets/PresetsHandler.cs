@@ -168,7 +168,8 @@ namespace Handbrake.Presets
                         string[] presetName = r.Split(line);
 
                         Preset newPreset = new Preset
-                                               {   Category = category,
+                                               {
+                                                   Category = category,
                                                    Name = presetName[0].Replace("+", "").Trim(),
                                                    Query = presetName[2],
                                                    Version = Properties.Settings.Default.hb_version,
@@ -195,36 +196,68 @@ namespace Handbrake.Presets
             _presets.Clear();
             _userPresets.Clear();
 
-            // Load in the users _presets from _userPresets.xml
-            if (File.Exists(_hbPresetFile))
+            try
             {
-                using (FileStream strm = new FileStream(_hbPresetFile, FileMode.Open, FileAccess.Read))
+                // Load in the users _presets from _userPresets.xml
+                if (File.Exists(_hbPresetFile))
                 {
-                    if (strm.Length != 0)
+                    using (FileStream strm = new FileStream(_hbPresetFile, FileMode.Open, FileAccess.Read))
                     {
-                        List<Preset> list = Ser.Deserialize(strm) as List<Preset>;
+                        if (strm.Length != 0)
+                        {
+                            List<Preset> list = Ser.Deserialize(strm) as List<Preset>;
 
-                        if (list != null)
-                            foreach (Preset preset in list)
-                                _presets.Add(preset);
+                            if (list != null)
+                                foreach (Preset preset in list)
+                                    _presets.Add(preset);
+                        }
                     }
                 }
             }
-
-            // Load in the users _presets from _userPresets.xml
-            if (File.Exists(_userPresetFile))
+            catch (Exception)
             {
-                using (FileStream strm = new FileStream(_userPresetFile, FileMode.Open, FileAccess.Read))
-                {
-                    if (strm.Length != 0)
-                    {
-                        List<Preset> list = Ser.Deserialize(strm) as List<Preset>;
+                MessageBox.Show(
+                    "HandBrakes preset file appears to have been corrupted. This file will now be re-generated!\n" +
+                    "If the problem presists, please delete the file: \n\n" + _hbPresetFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                UpdateBuiltInPresets();
+            }
 
-                        if (list != null)
-                            foreach (Preset preset in list)
-                                _userPresets.Add(preset);
+            try
+            {
+                // Load in the users _presets from _userPresets.xml
+                if (File.Exists(_userPresetFile))
+                {
+                    using (FileStream strm = new FileStream(_userPresetFile, FileMode.Open, FileAccess.Read))
+                    {
+                        if (strm.Length != 0)
+                        {
+                            List<Preset> list = Ser.Deserialize(strm) as List<Preset>;
+
+                            if (list != null)
+                                foreach (Preset preset in list)
+                                    _userPresets.Add(preset);
+                        }
                     }
                 }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(
+                    "Your User presets file appears to have been corrupted.\n" +
+                    "Your presets will not be loaded. You may need to re-create your presets.\n\n" +
+                    "Your user presets file has been renamed to 'user_presets.xml.old' and is located in:\n " +
+                    Path.GetDirectoryName(_userPresetFile) + "\n" +
+                    "You may be able to recover some presets if you know the XML language.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Recover from Error.
+                if (File.Exists(_userPresetFile))
+                {
+                    string disabledFile = _userPresetFile + ".old";
+                    if (File.Exists(disabledFile))
+                        File.Delete(disabledFile);
+                    File.Move(_userPresetFile, disabledFile);
+                }
+
             }
         }
 
@@ -241,7 +274,7 @@ namespace Handbrake.Presets
 
             if (_presets.Count != 0) // Built In Presets
             {
-                
+
                 foreach (Preset preset in _presets)
                 {
                     if (preset.Category != category)
