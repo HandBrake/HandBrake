@@ -819,11 +819,6 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 	gint ii;
 
 	// Fix up option dependencies
-	gboolean mbtree = ghb_lookup_mbtree(options);
-	if (mbtree)
-	{
-		x264_remove_opt(split, x264_bpyramid_syns);
-	}
 	gint subme = ghb_settings_combo_int(ud->settings, "x264_subme");
 	if (subme < 6)
 	{
