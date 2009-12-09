@@ -883,6 +883,12 @@ static void do_job( hb_job_t * job, int cpu_count )
             }
         }
     }
+    
+    if( job->chapter_markers && job->chapter_start == job->chapter_end )
+    {
+        job->chapter_markers = 0;
+        hb_log("work: only 1 chapter, disabling chapter markers");
+    }
 
     /* Display settings */
     hb_display_job_info( job );
