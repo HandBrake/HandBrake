@@ -242,12 +242,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     /* B-frames are on by default.*/
     job->areBframes = 1;
     
-    if(!param.rc.b_mb_tree && param.i_bframe && param.i_bframe_pyramid)
+    if( param.i_bframe && param.i_bframe_pyramid )
     {
         /* Note b-pyramid here, so the initial delay can be doubled */
         job->areBframes = 2;
     }
-    else if (!param.i_bframe)
+    else if( !param.i_bframe )
     {
         /*
          When B-frames are enabled, the max frame count increments
@@ -259,7 +259,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         job->areBframes = 0;
     }
     
-    if (param.i_keyint_min != 25 || param.i_keyint_max != 250)
+    if( param.i_keyint_min != 25 || param.i_keyint_max != 250 )
         hb_log("encx264: keyint-min: %i, keyint-max: %i", param.i_keyint_min, param.i_keyint_max);
 
     /* set up the VUI color model & gamma to match what the COLR atom
