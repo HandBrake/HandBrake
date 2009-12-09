@@ -1044,10 +1044,6 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                              hb_buffer_t ** buf_out )
 {
     hb_work_private_t *pv = w->private_data;
-    if ( ! pv->context )
-    {
-        init_ffmpeg_context( w );
-    }
     hb_buffer_t *in = *buf_in;
     *buf_in = NULL;
 
@@ -1055,13 +1051,18 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if ( in->size == 0 )
     {
         /* flush any frames left in the decoder */
-        while ( decodeFrame( pv, NULL, 0 ) )
+        while ( pv->context && decodeFrame( pv, NULL, 0 ) )
         {
         }
         flushDelayQueue( pv );
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
         return HB_WORK_DONE;
+    }
+
+    if ( ! pv->context )
+    {
+        init_ffmpeg_context( w );
     }
 
     int64_t pts = in->start;
