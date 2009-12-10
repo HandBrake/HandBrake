@@ -279,50 +279,6 @@ void muxClose( hb_work_object_t * w )
     hb_track_t  * track;
     int           i;
 
-    // we're all done muxing -- print final stats and cleanup.
-    if( job->pass == 0 || job->pass == 2 )
-    {
-        struct stat sb;
-        uint64_t bytes_total, frames_total;
-
-        /* Update the UI */
-        hb_state_t state;
-        state.state = HB_STATE_MUXING;
-        state.param.muxing.progress = 0;
-        hb_set_state( job->h, &state );
-
-        if( !stat( job->file, &sb ) )
-        {
-            hb_deep_log( 2, "mux: file size, %"PRId64" bytes", (uint64_t) sb.st_size );
-
-            bytes_total  = 0;
-            frames_total = 0;
-            for( i = 0; i < mux->ntracks; ++i )
-            {
-                track = mux->track[i];
-                hb_log( "mux: track %d, %"PRId64" frames, %"PRId64" bytes, %.2f kbps, fifo %d",
-                        i, track->frames, track->bytes,
-                        90000.0 * track->bytes / mux->pts / 125,
-                        track->mf.flen );
-                if( !i && ( job->vquality < 0.0 || job->vquality > 1.0 ) )
-                {
-                    /* Video */
-                    hb_deep_log( 2, "mux: video bitrate error, %+"PRId64" bytes",
-                            (int64_t)(track->bytes - mux->pts * job->vbitrate * 125 / 90000) );
-                }
-                bytes_total  += track->bytes;
-                frames_total += track->frames;
-            }
-
-            if( bytes_total && frames_total )
-            {
-                hb_deep_log( 2, "mux: overhead, %.2f bytes per frame",
-                        (float) ( sb.st_size - bytes_total ) /
-                        frames_total );
-            }
-        }
-    }
-    
     hb_lock( mux->mutex );
     if ( --mux->ref == 0 )
     {
@@ -332,6 +288,50 @@ void muxClose( hb_work_object_t * w )
             free( mux->m );
         }
 
+        // we're all done muxing -- print final stats and cleanup.
+        if( job->pass == 0 || job->pass == 2 )
+        {
+            struct stat sb;
+            uint64_t bytes_total, frames_total;
+
+            /* Update the UI */
+            hb_state_t state;
+            state.state = HB_STATE_MUXING;
+            state.param.muxing.progress = 0;
+            hb_set_state( job->h, &state );
+
+            if( !stat( job->file, &sb ) )
+            {
+                hb_deep_log( 2, "mux: file size, %"PRId64" bytes", (uint64_t) sb.st_size );
+
+                bytes_total  = 0;
+                frames_total = 0;
+                for( i = 0; i < mux->ntracks; ++i )
+                {
+                    track = mux->track[i];
+                    hb_log( "mux: track %d, %"PRId64" frames, %"PRId64" bytes, %.2f kbps, fifo %d",
+                            i, track->frames, track->bytes,
+                            90000.0 * track->bytes / mux->pts / 125,
+                            track->mf.flen );
+                    if( !i && ( job->vquality < 0.0 || job->vquality > 1.0 ) )
+                    {
+                        /* Video */
+                        hb_deep_log( 2, "mux: video bitrate error, %+"PRId64" bytes",
+                                (int64_t)(track->bytes - mux->pts * job->vbitrate * 125 / 90000) );
+                    }
+                    bytes_total  += track->bytes;
+                    frames_total += track->frames;
+                }
+
+                if( bytes_total && frames_total )
+                {
+                    hb_deep_log( 2, "mux: overhead, %.2f bytes per frame",
+                            (float) ( sb.st_size - bytes_total ) /
+                            frames_total );
+                }
+            }
+        }
+    
         for( i = 0; i < mux->ntracks; ++i )
         {
             track = mux->track[i];
