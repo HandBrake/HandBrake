@@ -1003,7 +1003,6 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             }
             continue;
         }
-        error_count = 0;
         switch ( event )
         {
         case DVDNAV_BLOCK_OK:
@@ -1015,6 +1014,7 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             if (chapter > 1)
                 b->new_chap = chapter;
             chapter = 0;
+            error_count = 0;
             return 1;
 
         case DVDNAV_NOP:
