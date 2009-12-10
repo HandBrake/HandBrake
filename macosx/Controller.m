@@ -2286,8 +2286,8 @@ fWorkingCount = 0;
     }
     
 	/* Subtitles*/
-    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] init];
-    [queueFileJob setObject:[NSArray arrayWithArray: [fSubtitlesDelegate getSubtitleArray: subtitlesArray]] forKey:@"SubtitleList"];
+    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
+    [queueFileJob setObject:[NSArray arrayWithArray: subtitlesArray] forKey:@"SubtitleList"];
     [subtitlesArray autorelease];
 
     /* Now we go ahead and set the "job->values in the plist for passing right to fQueueEncodeLibhb */

@@ -29,7 +29,7 @@ int                           container;
 // Create new subtitle track
 - (void)addSubtitleTrack;
 - (NSDictionary *)createSubtitleTrack;
-- (NSMutableArray*) getSubtitleArray: (NSMutableArray *) subtitlesArray ;
+- (NSMutableArray*) getSubtitleArray;
 // Add an srt file
 - (void)createSubtitleSrtTrack:(NSString *)filePath;
 

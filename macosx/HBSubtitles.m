@@ -426,7 +426,7 @@
     
 }
 
-- (NSMutableArray*) getSubtitleArray: (NSMutableArray *) subtitlesArray 
+- (NSMutableArray*) getSubtitleArray
 {
     return subtitleArray;
 }
