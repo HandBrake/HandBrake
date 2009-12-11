@@ -19,10 +19,14 @@ The following are the recommended specifications for building on @value{OS.linux
 
 @itemize @bullet
 @item Intel 32-bit or 64-bit kernel
-@item Ubuntu 8.0.4, gcc 4.3.0, yasm 0.7.1.2093
-@item Ubuntu 8.10, gcc 4.3.2, yasm 0.7.1.2093
-@item Fedora 9, gcc 4.3.0, yasm 0.7.1.2093
-@item Fedora 10, gcc 4.3.2, yasm 0.7.1.2093
+@item Ubuntu 8.04, gcc 4.3.0, yasm 0.7.1
+@item Ubuntu 8.10, gcc 4.3.2, yasm 0.7.1
+@item Ubuntu 9.04, gcc 4.3.3, yasm 0.7.1
+@item Ubuntu 9.10, gcc 4.4.1, yasm 0.8.0
+@item Fedora 9, gcc 4.3.0, yasm 0.7.1
+@item Fedora 10, gcc 4.3.2, yasm 0.7.1
+@item Fedora 11, gcc 4.4.0, yasm 0.7.2
+@item Fedora 12, gcc 4.4.2, yasm 0.7.2
 @item gcc 4.0.0 or higher is reported to work
 @end itemize
 
@@ -32,7 +36,7 @@ The following are the recommended specifications for building on @value{OS.linux
 
 The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
 
-Ubuntu 8.10 packages:
+Ubuntu 8.04 - 9.10 packages:
 @itemize @bullet
 @item subversion (cli/gui)
 @item yasm (cli/gui)
@@ -53,6 +57,8 @@ Ubuntu 8.10 packages:
 @item libgstreamer-plugins-base0.10-dev (gui)
 @end itemize
 
+Ubuntu 8.04, substitute libwebkitgtk-dev for libwebkit-dev
+
 To install these packages:
 @example
 sudo apt-get install subversion yasm build-essential \
@@ -62,7 +68,7 @@ libwebkit-dev libnotify-dev libgstreamer0.10-dev \
 libgstreamer-plugins-base0.10-dev
 @end example
 
-Fedora 10 package groups:
+Fedora 9 - 12 package groups:
 @itemize @bullet
 @item Development Tools
 @item Development Libraries
@@ -76,7 +82,7 @@ sudo yum groupinstall "Development Tools" "Development Libraries" \
 "X Software Development" "GNOME Software Development"
 @end example
 
-Additional Fedora 10 packages:
+Additional Fedora packages:
 @itemize @bullet
 @item yasm (cli/gui)
 @item zlib-devel (cli/gui)
@@ -89,13 +95,14 @@ Additional Fedora 10 packages:
 @item gstreamer-plugins-base-devel (gui)
 @end itemize
 
+Fedora 9 & 10, substitute WebKit-gtk-devel for webkitgtk-devel
+
 To install these packages:
 @example
 sudo yum install yasm zlib-devel bzip2-devel \
 dbus-glib-devel hal-devel webkitgtk-devel libnotify-devel\
 gstreamer-devel gstreamer-plugins-base-devel
 @end example
-
 
 @c %**-------------------------------------------------------------------------
 @include building/chapter.quickstart.texi
