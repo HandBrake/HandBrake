@@ -513,7 +513,9 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     {
         pv->buf->start  = pv->pts_start;
         pv->buf->stop   = pv->pts_stop;
-        return pv->buf;
+        buf = pv->buf;
+        pv->buf = NULL;
+        return buf;
     }
 
     /* Do the actual decoding now */
