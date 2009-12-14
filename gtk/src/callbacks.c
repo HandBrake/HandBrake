@@ -1490,6 +1490,18 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 		set_destination(ud);
 	}
 	ghb_preview_set_visible(ud);
+
+	gint end;
+	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+	gtk_widget_set_sensitive(widget, TRUE);
+	end = ghb_settings_get_int(ud->settings, "end_chapter");
+	if (1 == end)
+	{
+		ud->dont_clear_presets = TRUE;
+		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+		ud->dont_clear_presets = FALSE;
+		gtk_widget_set_sensitive(widget, FALSE);
+	}
 }
 
 G_MODULE_EXPORT void
@@ -1600,16 +1612,16 @@ start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		set_destination(ud);
 	}
-	widget = GHB_WIDGET (ud->builder, "chapters_tab");
+	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+	gtk_widget_set_sensitive(widget, TRUE);
 	// End may have been changed above, get it again
 	end = ghb_settings_get_int(ud->settings, "end_chapter");
 	if (start == end)
 	{
-		gtk_widget_hide(widget);
-	}
-	else
-	{
-		gtk_widget_show(widget);
+		ud->dont_clear_presets = TRUE;
+		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+		ud->dont_clear_presets = FALSE;
+		gtk_widget_set_sensitive(widget, FALSE);
 	}
 	update_title_duration(ud);
 }
@@ -1631,16 +1643,16 @@ end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		set_destination(ud);
 	}
-	widget = GHB_WIDGET (ud->builder, "chapters_tab");
+	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+	gtk_widget_set_sensitive(widget, TRUE);
 	// Start may have been changed above, get it again
 	start = ghb_settings_get_int(ud->settings, "start_chapter");
 	if (start == end)
 	{
-		gtk_widget_hide(widget);
-	}
-	else
-	{
-		gtk_widget_show(widget);
+		ud->dont_clear_presets = TRUE;
+		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+		ud->dont_clear_presets = FALSE;
+		gtk_widget_set_sensitive(widget, FALSE);
 	}
 	update_title_duration(ud);
 }
@@ -2466,6 +2478,11 @@ ghb_backend_events(signal_user_data_t *ud)
 		scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
 		gtk_progress_bar_set_fraction (scan_prog, 1.0);
 		gtk_widget_hide(GTK_WIDGET(scan_prog));
+
+		if (!ghb_settings_get_boolean(ud->settings, "preset_modified"))
+		{
+			ghb_refresh_preset(ud);
+		}
 
 		ghb_title_info_t tinfo;
 			

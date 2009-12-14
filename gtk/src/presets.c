@@ -3936,6 +3936,74 @@ preset_update_title_deps(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	}
 }
 
+void
+ghb_refresh_preset(signal_user_data_t *ud)
+{
+	ghb_title_info_t tinfo;
+	GValue *preset;
+	gint *indices, len;
+
+	g_debug("ghb_refresh_preset ()");
+	preset = ghb_settings_get_value(ud->settings, "preset_selection");
+	indices = ghb_preset_indices_from_path(presetsPlist, preset, &len);
+	if (indices)
+	{
+		gboolean folder;
+
+		folder = ghb_presets_get_folder(presetsPlist, indices, len);
+		if (!folder)
+		{
+			ud->dont_clear_presets = TRUE;
+			// Temporarily set the video_quality range to (0,100)
+			// This is needed so the video_quality value does not get
+			// truncated when set.  The range will be readjusted below
+			GtkWidget *qp = GHB_WIDGET(ud->builder, "VideoQualitySlider");
+			gtk_range_set_range (GTK_RANGE(qp), 0, 100);
+			gtk_scale_set_digits(GTK_SCALE(qp), 3);
+			// Clear the audio list prior to changing the preset.  Existing 
+			// audio can cause the container extension to be automatically 
+			// changed when it shouldn't be
+			ghb_clear_audio_list(ud);
+			ghb_set_preset_from_indices(ud, indices, len);
+			gint titleindex;
+			titleindex = ghb_settings_combo_int(ud->settings, "title");
+			ghb_set_pref_audio(titleindex, ud);
+			ghb_set_pref_subtitle(titleindex, ud);
+			ghb_settings_set_boolean(ud->settings, "preset_modified", FALSE);
+			if (ghb_get_title_info (&tinfo, titleindex))
+			{
+				preset_update_title_deps(ud, &tinfo);
+			}
+			ghb_set_scale (ud, GHB_PIC_KEEP_PAR);
+			ud->dont_clear_presets = FALSE;
+
+			gdouble vqmin, vqmax, step, page;
+			gint digits;
+			gboolean inverted;
+
+			ghb_vquality_range(ud, &vqmin, &vqmax, &step, 
+								&page, &digits, &inverted);
+			gtk_range_set_range (GTK_RANGE(qp), vqmin, vqmax);
+			gtk_range_set_increments (GTK_RANGE(qp), step, page);
+			gtk_scale_set_digits(GTK_SCALE(qp), digits);
+			gtk_range_set_inverted (GTK_RANGE(qp), inverted);
+
+			gchar *text;
+			gint crop[4];
+			GtkWidget *crop_widget;
+			crop[0] = ghb_settings_get_int(ud->settings, "PictureTopCrop");
+			crop[1] = ghb_settings_get_int(ud->settings, "PictureBottomCrop");
+			crop[2] = ghb_settings_get_int(ud->settings, "PictureLeftCrop");
+			crop[3] = ghb_settings_get_int(ud->settings, "PictureRightCrop");
+			crop_widget = GHB_WIDGET (ud->builder, "crop_values");
+			text = g_strdup_printf("%d:%d:%d:%d", 
+									crop[0], crop[1], crop[2], crop[3]);
+			gtk_label_set_text (GTK_LABEL(crop_widget), text);
+			g_free(text);
+		}
+	}
+}
+
 G_MODULE_EXPORT void
 presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
@@ -3975,7 +4043,6 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			// changed when it shouldn't be
 			ghb_clear_audio_list(ud);
 			ghb_set_preset_from_indices(ud, indices, len);
-			gtk_tree_path_free(treepath);
 			gint titleindex;
 			titleindex = ghb_settings_combo_int(ud->settings, "title");
 			ghb_set_pref_audio(titleindex, ud);
@@ -4012,11 +4079,23 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 			gtk_label_set_text (GTK_LABEL(crop_widget), text);
 			g_free(text);
 		}
+		gtk_tree_path_free(treepath);
 		gtk_widget_set_sensitive(widget, TRUE);
 	}
 	else
 	{
 		g_debug("No selection???  Perhaps unselected.");
+		gtk_widget_set_sensitive(widget, FALSE);
+	}
+	gint start = ghb_settings_get_int(ud->settings, "start_chapter");
+	gint end = ghb_settings_get_int(ud->settings, "end_chapter");
+	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+	gtk_widget_set_sensitive(widget, TRUE);
+	if (start == end)
+	{
+		ud->dont_clear_presets = TRUE;
+		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+		ud->dont_clear_presets = FALSE;
 		gtk_widget_set_sensitive(widget, FALSE);
 	}
 }

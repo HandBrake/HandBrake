@@ -41,5 +41,6 @@ gboolean ghb_preset_is_custom(void);
 void ghb_prefs_store(void);
 void ghb_pref_set(GValue *settings, const gchar *key);
 gboolean ghb_lock_file(const gchar *name);
+void ghb_refresh_preset(signal_user_data_t *ud);
 
 #endif // _GHB_PRESETS_H_
