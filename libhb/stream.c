@@ -2929,6 +2929,10 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     {
         buf->start = buf->renderOffset;
     }
+    else if ( buf->renderOffset == -1 && buf->start >= 0 )
+    {
+        buf->renderOffset = buf->start;
+    }
 
     /*
      * Check to see whether this video buffer is on a chapter
