@@ -374,6 +374,21 @@ hb_buffer_t * hb_fifo_see2( hb_fifo_t * f )
     return b;
 }
 
+int hb_fifo_full_wait( hb_fifo_t * f )
+{
+    int result;
+
+    hb_lock( f->lock );
+    if( f->size >= f->capacity )
+    {
+        f->wait_full = 1;
+        hb_cond_timedwait( f->cond_full, f->lock, FIFO_TIMEOUT );
+    }
+    result = ( f->size < f->capacity );
+    hb_unlock( f->lock );
+    return result;
+}
+
 void hb_fifo_push_wait( hb_fifo_t * f, hb_buffer_t * b )
 {
     if( !b )

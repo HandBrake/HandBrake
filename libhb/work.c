@@ -944,7 +944,14 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
         if( buf_out )
         {
-            hb_fifo_push_wait( w->fifo_out, buf_out );
+            while ( !*job->die )
+            {
+                if ( hb_fifo_full_wait( w->fifo_out ) )
+                {
+                    hb_fifo_push( w->fifo_out, buf_out );
+                    break;
+                }
+            }
         }
     }
     hb_list_rem( job->list_work, w );
@@ -1160,7 +1167,14 @@ static void work_loop( void * _w )
         }
         if( buf_out )
         {
-            hb_fifo_push_wait( w->fifo_out, buf_out );
+            while ( !*w->done )
+            {
+                if ( hb_fifo_full_wait( w->fifo_out ) )
+                {
+                    hb_fifo_push( w->fifo_out, buf_out );
+                    break;
+                }
+            }
         }
     }
 }

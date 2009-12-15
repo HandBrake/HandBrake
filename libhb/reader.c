@@ -69,7 +69,14 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
 
 static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 {
-    hb_fifo_push_wait( fifo, buf );
+    while ( !*r->die )
+    {
+        if ( hb_fifo_full_wait( fifo ) )
+        {
+            hb_fifo_push( fifo, buf );
+            break;
+        }
+    }
 }
 
 static int is_audio( hb_reader_t *r, int id )
