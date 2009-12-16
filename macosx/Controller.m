@@ -2980,12 +2980,10 @@ fWorkingCount = 0;
     }
 
     /* Subtitle settings */
-    NSMutableArray *subtitlesArray = nil;
-    subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray: subtitlesArray]];
+    NSMutableArray *subtitlesArray = [[NSMutableArray alloc] initWithArray:[fSubtitlesDelegate getSubtitleArray] copyItems:YES];
     
     
-    
- int subtitle = nil;
+int subtitle = nil;
 int force;
 int burned;
 int def;
