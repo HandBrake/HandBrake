@@ -51,13 +51,13 @@ namespace Handbrake.Controls
             this.btn_RemoveAudioTrack = new System.Windows.Forms.Button();
             this.btn_addAudioTrack = new System.Windows.Forms.Button();
             this.lbl_drc = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
+            this.lbl_drcHeader = new System.Windows.Forms.Label();
             this.tb_drc = new System.Windows.Forms.TrackBar();
             this.label68 = new System.Windows.Forms.Label();
-            this.label67 = new System.Windows.Forms.Label();
-            this.label66 = new System.Windows.Forms.Label();
+            this.lbl_sampleRate = new System.Windows.Forms.Label();
+            this.lbl_bitrate = new System.Windows.Forms.Label();
             this.label65 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
+            this.lbl_mixdown = new System.Windows.Forms.Label();
             this.drp_audioEncoder = new System.Windows.Forms.ComboBox();
             this.label27 = new System.Windows.Forms.Label();
             this.drp_audioMix = new System.Windows.Forms.ComboBox();
@@ -202,15 +202,15 @@ namespace Handbrake.Controls
             this.lbl_drc.TabIndex = 62;
             this.lbl_drc.Text = "0";
             // 
-            // label16
+            // lbl_drcHeader
             // 
-            this.label16.AutoSize = true;
-            this.label16.BackColor = System.Drawing.Color.Transparent;
-            this.label16.Location = new System.Drawing.Point(607, 17);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(28, 13);
-            this.label16.TabIndex = 61;
-            this.label16.Text = "DRC";
+            this.lbl_drcHeader.AutoSize = true;
+            this.lbl_drcHeader.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_drcHeader.Location = new System.Drawing.Point(607, 17);
+            this.lbl_drcHeader.Name = "lbl_drcHeader";
+            this.lbl_drcHeader.Size = new System.Drawing.Size(28, 13);
+            this.lbl_drcHeader.TabIndex = 61;
+            this.lbl_drcHeader.Text = "DRC";
             // 
             // tb_drc
             // 
@@ -236,25 +236,25 @@ namespace Handbrake.Controls
             this.label68.TabIndex = 49;
             this.label68.Text = "Audio Tracks";
             // 
-            // label67
+            // lbl_sampleRate
             // 
-            this.label67.AutoSize = true;
-            this.label67.BackColor = System.Drawing.Color.Transparent;
-            this.label67.Location = new System.Drawing.Point(463, 17);
-            this.label67.Name = "label67";
-            this.label67.Size = new System.Drawing.Size(61, 13);
-            this.label67.TabIndex = 57;
-            this.label67.Text = "Samplerate";
+            this.lbl_sampleRate.AutoSize = true;
+            this.lbl_sampleRate.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_sampleRate.Location = new System.Drawing.Point(463, 17);
+            this.lbl_sampleRate.Name = "lbl_sampleRate";
+            this.lbl_sampleRate.Size = new System.Drawing.Size(61, 13);
+            this.lbl_sampleRate.TabIndex = 57;
+            this.lbl_sampleRate.Text = "Samplerate";
             // 
-            // label66
+            // lbl_bitrate
             // 
-            this.label66.AutoSize = true;
-            this.label66.BackColor = System.Drawing.Color.Transparent;
-            this.label66.Location = new System.Drawing.Point(538, 17);
-            this.label66.Name = "label66";
-            this.label66.Size = new System.Drawing.Size(39, 13);
-            this.label66.TabIndex = 59;
-            this.label66.Text = "Bitrate";
+            this.lbl_bitrate.AutoSize = true;
+            this.lbl_bitrate.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_bitrate.Location = new System.Drawing.Point(538, 17);
+            this.lbl_bitrate.Name = "lbl_bitrate";
+            this.lbl_bitrate.Size = new System.Drawing.Size(39, 13);
+            this.lbl_bitrate.TabIndex = 59;
+            this.lbl_bitrate.Text = "Bitrate";
             // 
             // label65
             // 
@@ -266,15 +266,15 @@ namespace Handbrake.Controls
             this.label65.TabIndex = 53;
             this.label65.Text = "Audio Codec";
             // 
-            // label14
+            // lbl_mixdown
             // 
-            this.label14.AutoSize = true;
-            this.label14.BackColor = System.Drawing.Color.Transparent;
-            this.label14.Location = new System.Drawing.Point(368, 17);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(49, 13);
-            this.label14.TabIndex = 55;
-            this.label14.Text = "Mixdown";
+            this.lbl_mixdown.AutoSize = true;
+            this.lbl_mixdown.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_mixdown.Location = new System.Drawing.Point(368, 17);
+            this.lbl_mixdown.Name = "lbl_mixdown";
+            this.lbl_mixdown.Size = new System.Drawing.Size(49, 13);
+            this.lbl_mixdown.TabIndex = 55;
+            this.lbl_mixdown.Text = "Mixdown";
             // 
             // drp_audioEncoder
             // 
@@ -377,13 +377,13 @@ namespace Handbrake.Controls
             this.AudioTrackGroup.Controls.Add(this.drp_audioMix);
             this.AudioTrackGroup.Controls.Add(this.lbl_drc);
             this.AudioTrackGroup.Controls.Add(this.label27);
-            this.AudioTrackGroup.Controls.Add(this.label16);
+            this.AudioTrackGroup.Controls.Add(this.lbl_drcHeader);
             this.AudioTrackGroup.Controls.Add(this.drp_audioEncoder);
             this.AudioTrackGroup.Controls.Add(this.tb_drc);
-            this.AudioTrackGroup.Controls.Add(this.label14);
+            this.AudioTrackGroup.Controls.Add(this.lbl_mixdown);
             this.AudioTrackGroup.Controls.Add(this.label65);
-            this.AudioTrackGroup.Controls.Add(this.label67);
-            this.AudioTrackGroup.Controls.Add(this.label66);
+            this.AudioTrackGroup.Controls.Add(this.lbl_sampleRate);
+            this.AudioTrackGroup.Controls.Add(this.lbl_bitrate);
             this.AudioTrackGroup.Location = new System.Drawing.Point(16, 67);
             this.AudioTrackGroup.Name = "AudioTrackGroup";
             this.AudioTrackGroup.Size = new System.Drawing.Size(689, 77);
@@ -430,13 +430,13 @@ namespace Handbrake.Controls
         private System.Windows.Forms.Button btn_RemoveAudioTrack;
         private System.Windows.Forms.Button btn_addAudioTrack;
         internal System.Windows.Forms.Label lbl_drc;
-        internal System.Windows.Forms.Label label16;
+        internal System.Windows.Forms.Label lbl_drcHeader;
         internal System.Windows.Forms.TrackBar tb_drc;
         internal System.Windows.Forms.Label label68;
-        internal System.Windows.Forms.Label label67;
-        internal System.Windows.Forms.Label label66;
+        internal System.Windows.Forms.Label lbl_sampleRate;
+        internal System.Windows.Forms.Label lbl_bitrate;
         internal System.Windows.Forms.Label label65;
-        internal System.Windows.Forms.Label label14;
+        internal System.Windows.Forms.Label lbl_mixdown;
         internal System.Windows.Forms.ComboBox drp_audioEncoder;
         internal System.Windows.Forms.Label label27;
         internal System.Windows.Forms.ComboBox drp_audioMix;

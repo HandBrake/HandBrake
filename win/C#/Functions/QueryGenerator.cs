@@ -266,7 +266,7 @@ namespace Handbrake.Functions
 
                 // Sample Rate (-R)
                 if (row.SubItems[4].Text != String.Empty)
-                    samplerates.Add(row.SubItems[4].Text.Replace("Auto", "Auto"));
+                    samplerates.Add(row.SubItems[4].Text);
 
                 // Audio Bitrate (-B)
                 if (row.SubItems[5].Text != String.Empty)

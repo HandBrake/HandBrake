@@ -48,16 +48,44 @@ namespace Handbrake.Controls
                 drp_audioMix.Enabled = false;
                 drp_audioBitrate.Enabled = false;
                 drp_audioSample.Enabled = false;
+                tb_drc.Enabled = false;
 
-                drp_audioMix.SelectedIndex = 0;
+                lbl_bitrate.Enabled = false;
+                lbl_drc.Enabled = false;
+                lbl_drcHeader.Enabled = false;
+                lbl_mixdown.Enabled = false;
+                lbl_sampleRate.Enabled = false;
+
                 drp_audioBitrate.SelectedIndex = 0;
                 drp_audioSample.SelectedIndex = 0;
+                drp_audioMix.Items.Add("AC3 Passthru");
+                drp_audioMix.Items.Add("DTS Passthru");
+
+                if (drp_audioEncoder.Text.Contains("AC3"))
+                    drp_audioMix.SelectedItem = "AC3 Passthru";
+                else
+                    drp_audioMix.SelectedItem = "DTS Passthru";
+
+                drp_audioBitrate.Items.Add("Auto");
+                drp_audioBitrate.SelectedItem = "Auto";
+                tb_drc.Value = 0;
             }
             else
             {
                 drp_audioMix.Enabled = true;
                 drp_audioBitrate.Enabled = true;
                 drp_audioSample.Enabled = true;
+                tb_drc.Enabled = true;
+
+                lbl_bitrate.Enabled = true;
+                lbl_drc.Enabled = true;
+                lbl_drcHeader.Enabled = true;
+                lbl_mixdown.Enabled = true;
+                lbl_sampleRate.Enabled = true;
+
+                drp_audioMix.Items.Remove("AC3 Passthru");
+                drp_audioMix.Items.Remove("DTS Passthru");
+                drp_audioBitrate.Items.Remove("Auto");
 
                 drp_audioMix.SelectedIndex = 0;
                 drp_audioBitrate.SelectedIndex = 9;
@@ -68,6 +96,13 @@ namespace Handbrake.Controls
             if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
             {
                 lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text = drp_audioEncoder.Text;
+                if (drp_audioEncoder.Text.Contains("AC3"))
+                {
+                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text = "AC3 Passthru";
+                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text = "Auto";
+                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text = "Auto";
+                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text = "0.0";
+                }
                 lv_audioList.Select();
             }
         }
@@ -398,6 +433,5 @@ namespace Handbrake.Controls
             else
                 AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
         }
-
     }
 }
