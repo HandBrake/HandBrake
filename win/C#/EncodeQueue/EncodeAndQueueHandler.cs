@@ -141,7 +141,8 @@ namespace Handbrake.EncodeQueue
         /// <param name="file">The location of the file to write the queue to.</param>
         public void WriteQueueStateToFile(string file)
         {
-            string tempPath = file == "hb_queue_recovery.xml" ? Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml") : file;
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
+            string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
 
             try
             {
@@ -205,7 +206,8 @@ namespace Handbrake.EncodeQueue
         /// <param name="file">The location of the file to read the queue from.</param>
         public void LoadQueueFromFile(string file)
         {
-            string tempPath = file == "hb_queue_recovery.xml" ? Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml") : file;
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
+            string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
 
             if (File.Exists(tempPath))
             {

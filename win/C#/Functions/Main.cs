@@ -263,7 +263,7 @@ namespace Handbrake.Functions
         {
             try
             {
-                string tempPath = Path.Combine(Path.GetTempPath(), "hb_queue_recovery.xml");
+                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
                 if (File.Exists(tempPath))
                 {
                     using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
