@@ -51,6 +51,8 @@ static int    detelecine            = 0;
 static char * detelecine_opt        = 0;
 static int    decomb                = 0;
 static char * decomb_opt            = 0;
+static int    rotate                = 0;
+static char * rotate_opt            = 0;
 static int    grayscale   = 0;
 static int    vcodec      = HB_VCODEC_FFMPEG;
 static int    h264_13     = 0;
@@ -1070,6 +1072,12 @@ static int HandleEvents( hb_handle_t * h )
             
             /* Add selected filters */
             job->filters = hb_list_init();
+            
+            if( rotate )
+            {
+                hb_filter_rotate.settings = rotate_opt;
+                hb_list_add( job->filters, &hb_filter_rotate);
+            }
             if( detelecine )
             {
                 hb_filter_detelecine.settings = detelecine_opt;
@@ -2326,6 +2334,8 @@ static void ShowHelp()
      "          <weak/medium/strong>\n"
      "    -7, --deblock           Deblock video with pp7 filter\n"
      "          <QP:M>            (default 5:2)\n"
+     "        --rotate            Flips images axes\n"
+     "          <M>               (default 3)\n"
     "    -g, --grayscale         Grayscale encoding\n"
     "\n"
 
@@ -2498,6 +2508,7 @@ static int ParseOptions( int argc, char ** argv )
     #define SRT_OFFSET          271
     #define SRT_LANG            272
     #define SRT_DEFAULT         273
+    #define ROTATE_FILTER       274
     
     for( ;; )
     {
@@ -2544,6 +2555,7 @@ static int ParseOptions( int argc, char ** argv )
             { "detelecine",  optional_argument, NULL,    '9' },
             { "decomb",      optional_argument, NULL,    '5' },
             { "grayscale",   no_argument,       NULL,    'g' },
+            { "rotate",      optional_argument, NULL,   ROTATE_FILTER },
             { "strict-anamorphic",  no_argument, &anamorphic_mode, 1 },
             { "loose-anamorphic", no_argument, &anamorphic_mode, 2 },
             { "custom-anamorphic", no_argument, &anamorphic_mode, 3 },
@@ -2843,6 +2855,13 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case 'g':
                 grayscale = 1;
+                break;
+            case ROTATE_FILTER:
+                if( optarg != NULL )
+                {
+                    rotate_opt = strdup( optarg );
+                }
+                rotate = 1;
                 break;
             case DISPLAY_WIDTH:
                 if( optarg != NULL )

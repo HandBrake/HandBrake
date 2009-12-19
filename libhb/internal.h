@@ -307,7 +307,8 @@ enum
     FILTER_DEBLOCK,
     FILTER_DENOISE,
     FILTER_DETELECINE,
-    FILTER_DECOMB
+    FILTER_DECOMB,
+    FILTER_ROTATE
 };
 
 extern hb_work_object_t * hb_objects;
