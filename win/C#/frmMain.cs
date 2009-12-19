@@ -192,8 +192,8 @@ namespace Handbrake
                 {
                     return this.dvdDriveLabel;
                 }
-                
-                if(Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
+
+                if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
                     return Path.GetFileNameWithoutExtension(this.sourcePath);
 
                 return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.sourcePath));
@@ -789,19 +789,19 @@ namespace Handbrake
         {
             if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
                 ActivityWindow = new frmActivityWindow(lastAction);
-
-            switch (lastAction)
-            {
-                case "scan":
-                    ActivityWindow.SetScanMode();
-                    break;
-                case "encode":
-                    ActivityWindow.SetEncodeMode();
-                    break;
-                default:
-                    ActivityWindow.SetEncodeMode();
-                    break;
-            }
+            else
+                switch (lastAction)
+                {
+                    case "scan":
+                        ActivityWindow.SetScanMode();
+                        break;
+                    case "encode":
+                        ActivityWindow.SetEncodeMode();
+                        break;
+                    default:
+                        ActivityWindow.SetEncodeMode();
+                        break;
+                }
 
             ActivityWindow.Show();
             ActivityWindow.Activate();

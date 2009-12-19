@@ -28,14 +28,14 @@ namespace Handbrake
 
         public frmActivityWindow(string mode)
         {
+            InitializeComponent();
+
             _kilLThread = false;
             _position = 0;
             if (mode == "scan")
                 SetScanMode();
             else
                 SetEncodeMode();
-
-            InitializeComponent();
         }
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {

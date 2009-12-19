@@ -18,7 +18,7 @@ namespace Handbrake.EncodeQueue
 {
     public class EncodeAndQueueHandler
     {
-        private static XmlSerializer serializer = new XmlSerializer(typeof(List<Job>));
+        private static XmlSerializer serializer;
         private List<Job> queue = new List<Job>();
         private int nextJobId;
 
@@ -148,6 +148,8 @@ namespace Handbrake.EncodeQueue
             {
                 using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
                 {
+                    if (serializer == null)
+                        serializer = new XmlSerializer(typeof(List<Job>));
                     serializer.Serialize(strm, queue);
                     strm.Close();
                     strm.Dispose();
@@ -215,6 +217,9 @@ namespace Handbrake.EncodeQueue
                 {
                     if (strm.Length != 0)
                     {
+                        if (serializer == null)
+                            serializer = new XmlSerializer(typeof(List<Job>));
+
                         List<Job> list = serializer.Deserialize(strm) as List<Job>;
 
                         if (list != null)
@@ -325,7 +330,7 @@ namespace Handbrake.EncodeQueue
 
                 hbProcess.Close();
                 hbProcess.Dispose();
-                
+
                 isEncoding = false;
 
                 //Growl
@@ -383,7 +388,7 @@ namespace Handbrake.EncodeQueue
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 hbProcess = Process.Start(cliStart);
-                processID = Main.getCliProcess(before); 
+                processID = Main.getCliProcess(before);
                 currentQuery = query;
                 if (hbProcess != null)
                     processHandle = hbProcess.MainWindowHandle; // Set the process Handle
