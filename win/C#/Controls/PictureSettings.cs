@@ -380,10 +380,13 @@ namespace Handbrake.Controls
             crop_left.Enabled = check_customCrop.Checked;
             crop_right.Enabled = check_customCrop.Checked;
 
-            crop_top.Value = Source.AutoCropDimensions[0];
-            crop_bottom.Value = Source.AutoCropDimensions[1];
-            crop_left.Value = Source.AutoCropDimensions[2];
-            crop_right.Value = Source.AutoCropDimensions[3];
+            if (Source != null)
+            {
+                crop_top.Value = Source.AutoCropDimensions[0];
+                crop_bottom.Value = Source.AutoCropDimensions[1];
+                crop_left.Value = Source.AutoCropDimensions[2];
+                crop_right.Value = Source.AutoCropDimensions[3];
+            }
         }
         private void crop_ValueChanged(object sender, EventArgs e)
         {
@@ -507,5 +510,6 @@ namespace Handbrake.Controls
             if (PictureSettingsChanged != null)
                 PictureSettingsChanged(this, new EventArgs());
         }
+
     }
 }
