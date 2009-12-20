@@ -3275,6 +3275,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	static gboolean busy = FALSE;
 	
 	g_debug("ghb_set_scale ()\n");
+	picture_settings_deps(ud);
 	if (h_scan == NULL) return;
 	list = hb_get_titles( h_scan );
 	if( !hb_list_count( list ) )
@@ -3290,7 +3291,6 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 	job   = title->job;
 	if (job == NULL) return;
 
-	picture_settings_deps(ud);
 	if (busy) return;
 	busy = TRUE;
 
