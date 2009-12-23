@@ -382,6 +382,18 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fSrcAngleLabel setHidden:YES];
     [fSrcAnglePopUp setHidden:YES];
     
+    /* Setup the start / stop popup */
+    [fEncodeStartStopPopUp removeAllItems];
+    [fEncodeStartStopPopUp addItemWithTitle: @"Chapters"];
+    [fEncodeStartStopPopUp addItemWithTitle: @"Seconds"];
+    [fEncodeStartStopPopUp addItemWithTitle: @"Frames"];
+    /* Align the start / stop widgets with the chapter popups */
+    [fSrcTimeStartEncodingField setFrameOrigin:[fSrcChapterStartPopUp frame].origin];
+    [fSrcTimeEndEncodingField setFrameOrigin:[fSrcChapterEndPopUp frame].origin];
+    
+    [fSrcFrameStartEncodingField setFrameOrigin:[fSrcChapterStartPopUp frame].origin];
+    [fSrcFrameEndEncodingField setFrameOrigin:[fSrcChapterEndPopUp frame].origin];
+    
     /* Destination box*/
     NSMenuItem *menuItem;
     [fDstFormatPopUp removeAllItems];
@@ -412,7 +424,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* Video encoder */
     [fVidEncoderPopUp removeAllItems];
     [fVidEncoderPopUp addItemWithTitle: @"FFmpeg"];
-    
     
     
     /* Video quality */
@@ -511,7 +522,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fAudTrack2DrcField, fAudTrack3DrcSlider, fAudTrack3DrcField, fAudTrack4DrcSlider,fAudTrack4DrcField,
         fQueueStatus,fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
-    fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel};
+        fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
+        fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,fSrcFrameEndEncodingField};
     
     for( unsigned i = 0;
         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -753,8 +765,57 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 			break;
         }
 #undef p
+
             
 #define p s.param.working
+        
+        case HB_STATE_SEARCHING:
+		{
+            NSMutableString * string;
+            NSString * pass_desc;
+            
+            /* Update text field */
+            pass_desc = @"";
+            //string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point: pass %d %@ of %d, %.2f %%", @"" ), p.job_cur, pass_desc, p.job_count, 100.0 * p.progress];
+            /* For now, do not announce "pass x of x for the search phase ... */
+            string = [NSMutableString stringWithFormat: NSLocalizedString( @"Searching for start point ... :  %.2f %%", @"" ), 100.0 * p.progress];
+            
+			if( p.seconds > -1 )
+            {
+                [string appendFormat:
+                 NSLocalizedString( @" (ETA %02dh%02dm%02ds)", @"" ), p.hours, p.minutes, p.seconds];
+            }
+            
+            [fStatusField setStringValue: string];
+            /* Set the status string in fQueueController as well */
+            [fQueueController setQueueStatusString: string];
+            /* Update slider */
+            CGFloat progress_total = ( p.progress + p.job_cur - 1 ) / p.job_count;
+            [fRipIndicator setIndeterminate: NO];
+            [fRipIndicator setDoubleValue:100.0 * progress_total];
+            
+            // If progress bar hasn't been revealed at the bottom of the window, do
+            // that now. This code used to be in doRip. I moved it to here to handle
+            // the case where hb_start is called by HBQueueController and not from
+            // HBController.
+            if( !fRipIndicatorShown )
+            {
+                NSRect frame = [fWindow frame];
+                if( frame.size.width <= 591 )
+                    frame.size.width = 591;
+                frame.size.height += 36;
+                frame.origin.y -= 36;
+                [fWindow setFrame:frame display:YES animate:YES];
+                fRipIndicatorShown = YES;
+                
+            }
+            
+            /* Update dock icon */
+            /* Note not done yet */
+            break;  
+        }
+            
+
         case HB_STATE_WORKING:
         {
             NSMutableString * string;
@@ -1829,6 +1890,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* if its the initial successful scan after awakeFromNib */
             if (currentSuccessfulScanCount == 1)
             {
+                [self encodeStartStopPopUpChanged:nil];
+                
                 [self selectDefaultPreset:nil];
                 
                 // Open preview window now if it was visible when HB was closed
@@ -2128,9 +2191,34 @@ fWorkingCount = 0;
     [queueFileJob setObject:[fSrcDVD2Field stringValue] forKey:@"SourceName"];
     [queueFileJob setObject:[NSNumber numberWithInt:title->index] forKey:@"TitleNumber"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcAnglePopUp indexOfSelectedItem] + 1] forKey:@"TitleAngle"];
-    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"ChapterStart"];
     
+    /* Determine and set a variable to tell hb what start and stop times to use ... chapters vs seconds */
+    if( [fEncodeStartStopPopUp indexOfSelectedItem] == 0 )
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:0] forKey:@"fEncodeStartStop"];    
+    }
+    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 1)
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:1] forKey:@"fEncodeStartStop"];   
+    }
+    else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 2)
+    {
+        [queueFileJob setObject:[NSNumber numberWithInt:2] forKey:@"fEncodeStartStop"];
+    }
+    /* Chapter encode info */
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterStartPopUp indexOfSelectedItem] + 1] forKey:@"ChapterStart"];
     [queueFileJob setObject:[NSNumber numberWithInt:[fSrcChapterEndPopUp indexOfSelectedItem] + 1] forKey:@"ChapterEnd"];
+    /* Time (pts) encode info */
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcTimeStartEncodingField intValue]] forKey:@"StartSeconds"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcTimeEndEncodingField intValue] - [fSrcTimeStartEncodingField intValue]] forKey:@"StopSeconds"];
+    /* Frame number encode info */
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcFrameStartEncodingField intValue]] forKey:@"StartFrame"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]] forKey:@"StopFrame"];
+    
+    
+    /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
+        int title_duration_seconds = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
+    [queueFileJob setObject:[NSNumber numberWithInt:title_duration_seconds] forKey:@"SourceTotalSeconds"];
     
     [queueFileJob setObject:[fDstFile2Field stringValue] forKey:@"DestinationPath"];
     
@@ -3338,10 +3426,69 @@ bool one_burned = FALSE;
     hb_audio_config_t * audio;
     /* Title Angle for dvdnav */
     job->angle = [[queueToApply objectForKey:@"TitleAngle"] intValue];
-    /* Chapter selection */
-    job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
-    job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
+    
+    if([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 0)
+    {
+        /* Chapter selection */
+        [self writeToActivityLog: "Start / Stop set to chapters"];
+        job->chapter_start = [[queueToApply objectForKey:@"JobChapterStart"] intValue];
+        job->chapter_end   = [[queueToApply objectForKey:@"JobChapterEnd"] intValue];
+    }
+    else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 1)
+    {
+        /* we are pts based start / stop */
+        [self writeToActivityLog: "Start / Stop set to seconds ..."];
+        
+        /* Point A to Point B. Since we cannot get frame accurate start times, attempt to glean a semi-accurate start time based on a percentage of the
+         * scanned title time as per live preview, while in some cases inaccurate its the best I can do with what I have barring a pre-scan index afaik.
+         */
+        /* Attempt to bastardize the live preview code to get a roughly 1 second accurate point a to point b encode ... */
+        /* get the start seconds from the start seconds field */
+        int start_seconds = [[queueToApply objectForKey:@"StartSeconds"] intValue];
+        //job->start_at_preview = start_seconds;
+        /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
+        //job->seek_points = [[queueToApply objectForKey:@"SourceTotalSeconds"] intValue];
+        job->pts_to_start = start_seconds * 90000LL;
+        /* Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds */
+        int stop_seconds = [[queueToApply objectForKey:@"StopSeconds"] intValue];
+        job->pts_to_stop = stop_seconds * 90000LL;
+
+        /* A bunch of verbose activity log messages to check on what should be expected */
+        [self writeToActivityLog: "point a to b should start at: %d seconds", start_seconds];
+        [self writeToActivityLog: "point a to b should start at (hh:mm:ss): %d:%d:%d", start_seconds / 3600, ( start_seconds / 60 ) % 60,start_seconds % 60];
+        [self writeToActivityLog: "point a to b duration: %d seconds", stop_seconds];
+        [self writeToActivityLog: "point a to b duration (hh:mm:ss): %d:%d:%d", stop_seconds / 3600, ( stop_seconds / 60 ) % 60,stop_seconds % 60];
+        [self writeToActivityLog: "point a to b should end at: %d seconds", start_seconds + stop_seconds];
+        [self writeToActivityLog: "point a to b should end at (hh:mm:ss): %d:%d:%d", (start_seconds + stop_seconds) / 3600, ( (start_seconds + stop_seconds) / 60 ) % 60,(start_seconds + stop_seconds) % 60];
+    }
+    else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 2)
+    {
+        /* we are frame based start / stop */
+        [self writeToActivityLog: "Start / Stop set to frames ..."];
+        
+        /* Point A to Point B. Since we cannot get frame accurate start times, attempt to glean a semi-accurate start time based on a percentage of the
+         * scanned title time as per live preview, while in some cases inaccurate its the best I can do with what I have barring a pre-scan index afaik.
+         */
+        /* Attempt to bastardize the live preview code to get a roughly 1 second accurate point a to point b encode ... */
+        /* get the start seconds from the start seconds field */
+        int start_frame = [[queueToApply objectForKey:@"StartFrame"] intValue];
+        //job->start_at_preview = start_seconds;
+        /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
+        //job->seek_points = [[queueToApply objectForKey:@"SourceTotalSeconds"] intValue];
+        job->frame_to_start = start_frame;
+        /* Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds */
+        int stop_frame = [[queueToApply objectForKey:@"StopFrame"] intValue];
+        job->frame_to_stop = stop_frame;
+
+        /* A bunch of verbose activity log messages to check on what should be expected */
+        [self writeToActivityLog: "point a to b should start at frame %d", start_frame];
+        [self writeToActivityLog: "point a to b duration: %d frames", stop_frame];
+        [self writeToActivityLog: "point a to b should end at frame %d", start_frame + stop_frame];
+    }
+
 	
+        
+    
     /* Format (Muxer) and Video Encoder */
     job->mux = [[queueToApply objectForKey:@"JobFileFormatMux"] intValue];
     job->vcodec = [[queueToApply objectForKey:@"JobVideoEncoderVcodec"] intValue];
@@ -4198,6 +4345,14 @@ bool one_burned = FALSE;
         }
     }
     
+    /* For point a to point b pts encoding, set the start and end fields to 0 and the title duration in seconds respectively */
+    int duration = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
+    [fSrcTimeStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 0]];
+    [fSrcTimeEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration]];
+    /* For point a to point b frame encoding, set the start and end fields to 0 and the title duration * announced fps in seconds respectively */
+    [fSrcFrameStartEncodingField setStringValue: [NSString stringWithFormat: @"%d", 1]];
+    //[fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", ((title->hours * 3600) + (title->minutes * 60) + (title->seconds)) * 24]];
+    [fSrcFrameEndEncodingField setStringValue: [NSString stringWithFormat: @"%d", duration * (title->rate / title->rate_base)]];    
     
     /* If Auto Naming is on. We create an output filename of dvd name - title number */
     if( [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] > 0 && ( hb_list_count( list ) > 1 ) )
@@ -4208,7 +4363,10 @@ bool one_burned = FALSE;
             title->index,
 			[[fDstFile2Field stringValue] pathExtension]]];	
 	}
-
+    /* Update encode start / stop variables */
+     
+    
+    
     /* Update chapter popups */
     [fSrcChapterStartPopUp removeAllItems];
     [fSrcChapterEndPopUp   removeAllItems];
@@ -4309,6 +4467,55 @@ bool one_burned = FALSE;
     [self selectPreset:nil];
 }
 
+- (IBAction) encodeStartStopPopUpChanged: (id) sender;
+{
+    if( [fEncodeStartStopPopUp isEnabled] )
+    {
+        /* We are chapters */
+        if( [fEncodeStartStopPopUp indexOfSelectedItem] == 0 )
+        {
+            [fSrcChapterStartPopUp  setHidden: NO];
+            [fSrcChapterEndPopUp  setHidden: NO];
+            
+            [fSrcTimeStartEncodingField  setHidden: YES];
+            [fSrcTimeEndEncodingField  setHidden: YES];
+            
+            [fSrcFrameStartEncodingField  setHidden: YES];
+            [fSrcFrameEndEncodingField  setHidden: YES];
+            
+               [self chapterPopUpChanged:nil];   
+        }
+        /* We are time based (seconds) */
+        else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 1)
+        {
+            [fSrcChapterStartPopUp  setHidden: YES];
+            [fSrcChapterEndPopUp  setHidden: YES];
+            
+            [fSrcTimeStartEncodingField  setHidden: NO];
+            [fSrcTimeEndEncodingField  setHidden: NO];
+            
+            [fSrcFrameStartEncodingField  setHidden: YES];
+            [fSrcFrameEndEncodingField  setHidden: YES];
+            
+            [self startEndSecValueChanged:nil];
+        }
+        /* We are frame based */
+        else if ([fEncodeStartStopPopUp indexOfSelectedItem] == 2)
+        {
+            [fSrcChapterStartPopUp  setHidden: YES];
+            [fSrcChapterEndPopUp  setHidden: YES];
+            
+            [fSrcTimeStartEncodingField  setHidden: YES];
+            [fSrcTimeEndEncodingField  setHidden: YES];
+            
+            [fSrcFrameStartEncodingField  setHidden: NO];
+            [fSrcFrameEndEncodingField  setHidden: NO];
+            
+            [self startEndFrameValueChanged:nil];
+        }
+    }
+}
+
 - (IBAction) chapterPopUpChanged: (id) sender
 {
 
@@ -4337,7 +4544,7 @@ bool one_burned = FALSE;
     [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
         @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
         duration % 60]];
-
+    
     [self calculateBitrate: sender];
     
     if ( [fSrcChapterStartPopUp indexOfSelectedItem] ==  [fSrcChapterEndPopUp indexOfSelectedItem] )
@@ -4351,6 +4558,33 @@ bool one_burned = FALSE;
     [fCreateChapterMarkers setEnabled: YES];
     }
 }
+
+- (IBAction) startEndSecValueChanged: (id) sender
+{
+
+	int duration = [fSrcTimeEndEncodingField intValue] - [fSrcTimeStartEncodingField intValue];
+    [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
+        @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
+        duration % 60]];
+    
+    //[self calculateBitrate: sender];
+    
+}
+
+- (IBAction) startEndFrameValueChanged: (id) sender
+{
+    hb_list_t  * list  = hb_get_titles( fHandle );
+    hb_title_t * title = (hb_title_t*)
+    hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
+    
+    int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->rate / title->rate_base);
+    [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
+                                         @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
+                                         duration % 60]];
+    
+    //[self calculateBitrate: sender];
+}
+
 
 - (IBAction) formatPopUpChanged: (id) sender
 {

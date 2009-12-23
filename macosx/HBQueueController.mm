@@ -922,11 +922,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
     
     if ([[tableColumn identifier] isEqualToString:@"desc"])
     {
-        /* This should have caused the description we wanted to show*/
-        //return [item objectForKey:@"SourceName"];
         
-        /* code to build the description as per old queue */
-        //return [self formatEncodeItemDescription:item];
         
         /* Below should be put into a separate method but I am way too f'ing lazy right now */
         NSMutableAttributedString * finalString = [[[NSMutableAttributedString alloc] initWithString: @""] autorelease];
@@ -963,9 +959,24 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         
         NSString * titleString = [NSString stringWithFormat:@"Title %d", [[item objectForKey:@"TitleNumber"] intValue]];
         
-        NSString * chapterString = ([[item objectForKey:@"ChapterStart"] intValue] == [[item objectForKey:@"ChapterEnd"] intValue]) ?
-        [NSString stringWithFormat:@"Chapter %d", [[item objectForKey:@"ChapterStart"] intValue]] :
-        [NSString stringWithFormat:@"Chapters %d through %d", [[item objectForKey:@"ChapterStart"] intValue], [[item objectForKey:@"ChapterEnd"] intValue]];
+        NSString * startStopString = @"";
+        if ([[item objectForKey:@"fEncodeStartStop"] intValue] == 0)
+        {
+            /* Start Stop is chapters */
+            startStopString = ([[item objectForKey:@"ChapterStart"] intValue] == [[item objectForKey:@"ChapterEnd"] intValue]) ?
+            [NSString stringWithFormat:@"Chapter %d", [[item objectForKey:@"ChapterStart"] intValue]] :
+            [NSString stringWithFormat:@"Chapters %d through %d", [[item objectForKey:@"ChapterStart"] intValue], [[item objectForKey:@"ChapterEnd"] intValue]];
+        }
+        else if ([[item objectForKey:@"fEncodeStartStop"] intValue] == 1)
+        {
+            /* Start Stop is seconds */
+            startStopString = [NSString stringWithFormat:@"Seconds %d through %d", [[item objectForKey:@"StartSeconds"] intValue], [[item objectForKey:@"StartSeconds"] intValue] + [[item objectForKey:@"StopSeconds"] intValue]];
+        }
+        else if ([[item objectForKey:@"fEncodeStartStop"] intValue] == 2)
+        {
+            /* Start Stop is Frames */
+            startStopString = [NSString stringWithFormat:@"Frames %d through %d", [[item objectForKey:@"StartFrame"] intValue], [[item objectForKey:@"StartFrame"] intValue] + [[item objectForKey:@"StopFrame"] intValue]];
+        }
         
         NSString * passesString = @"";
         /* check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan */
@@ -994,7 +1005,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         /* lets add the output file name to the title string here */
         NSString * outputFilenameString = [[item objectForKey:@"DestinationPath"] lastPathComponent];
         
-        summaryInfo = [NSString stringWithFormat: @" (%@, %@, %@) -> %@", titleString, chapterString, passesString, outputFilenameString];
+        summaryInfo = [NSString stringWithFormat: @" (%@, %@, %@) -> %@", titleString, startStopString, passesString, outputFilenameString];
         
         [finalString appendString:[NSString stringWithFormat:@"%@\n", summaryInfo] withAttributes:detailAttr];  
         

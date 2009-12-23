@@ -77,10 +77,21 @@ BOOL                        fIsDragging;
     IBOutlet NSTextField         * fSrcAngleLabel;
     IBOutlet NSPopUpButton       * fSrcAnglePopUp;
     
+    /* Source start and end points */
+    IBOutlet NSPopUpButton       * fEncodeStartStopPopUp;
+    /* pts based start / stop */
+    IBOutlet NSTextField         * fSrcTimeStartEncodingField;
+    IBOutlet NSTextField         * fSrcTimeEndEncodingField;
+    /* frame based based start / stop */
+    IBOutlet NSTextField         * fSrcFrameStartEncodingField;
+    IBOutlet NSTextField         * fSrcFrameEndEncodingField;
+    
     IBOutlet NSTextField         * fSrcChapterField;
     IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
     IBOutlet NSTextField         * fSrcChapterToField;
     IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
+    
+    /* Source duration information */
     IBOutlet NSTextField         * fSrcDuration1Field;
     IBOutlet NSTextField         * fSrcDuration2Field;
 	
@@ -284,9 +295,12 @@ BOOL                        fIsDragging;
 
 - (void)     updateUI: (NSTimer *) timer;
 - (void)     enableUI: (bool) enable;
-
+- (IBAction) encodeStartStopPopUpChanged: (id) sender;
 - (IBAction) titlePopUpChanged: (id) sender;
 - (IBAction) chapterPopUpChanged: (id) sender;
+- (IBAction) startEndSecValueChanged: (id) sender;
+- (IBAction) startEndFrameValueChanged: (id) sender;
+
 
 - (IBAction) formatPopUpChanged: (id) sender;
 - (IBAction) videoEncoderPopUpChanged: (id) sender;
