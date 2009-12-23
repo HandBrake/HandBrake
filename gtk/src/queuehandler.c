@@ -70,7 +70,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	gchar *dest, *preset, *vol_name, *basename;
 	const gchar *vcodec, *container;
 	gchar *fps, *vcodec_abbr;
-	gint title, start_chapter, end_chapter, width, height;
+	gint title, start_point, end_point, width, height;
 	gint source_width, source_height;
 	gboolean pass2 = FALSE, keep_aspect, vqtype, turbo;
 	gint pic_par;
@@ -84,8 +84,8 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		
 	tweaks = ghb_settings_get_boolean(settings, "allow_tweaks");
 	title = ghb_settings_get_int(settings, "titlenum");
-	start_chapter = ghb_settings_get_int(settings, "start_chapter");
-	end_chapter = ghb_settings_get_int(settings, "end_chapter");
+	start_point = ghb_settings_get_int(settings, "start_point");
+	end_point = ghb_settings_get_int(settings, "end_point");
 	vol_name = ghb_settings_get_string(settings, "volume_label");
 	dest = ghb_settings_get_string(settings, "destination");
 	basename = g_path_get_basename(dest);
@@ -94,12 +94,19 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
 	if (!vqtype)
 		pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
+	const gchar *points;
+	if (ghb_settings_combo_int(settings, "PtoPType") == 0)
+		points = "Chapters";
+	else if (ghb_settings_combo_int(settings, "PtoPType") == 1)
+		points = "Seconds";
+	else if (ghb_settings_combo_int(settings, "PtoPType") == 2)
+		points = "Frames";
 	info = g_strdup_printf 
 	(
 		"<big><b>%s</b></big> "
-		"<small>(Title %d, Chapters %d through %d, %d Video %s)"
+		"<small>(Title %d, %s %d through %d, %d Video %s)"
 		" --> %s</small>",
-		 vol_name, title, start_chapter, end_chapter, 
+		 vol_name, title, points, start_point, end_point, 
 		 pass2 ? 2:1, pass2 ? "Passes":"Pass", escape
 	);
 	g_free(basename);
@@ -1044,7 +1051,8 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
 	scan_state = ghb_get_scan_state();
 
 	show_stop = queue_state & 
-				(GHB_STATE_WORKING | GHB_STATE_SCANNING | GHB_STATE_MUXING);
+				(GHB_STATE_WORKING | GHB_STATE_SEARCHING | 
+				 GHB_STATE_SCANNING | GHB_STATE_MUXING);
 	show_start = !(scan_state & GHB_STATE_SCANNING) && 
 					(titleindex >= 0 || queue_count > 0);
 
@@ -1205,7 +1213,8 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	gint state;
 
 	state = ghb_get_queue_state();
-	if (state & (GHB_STATE_WORKING | GHB_STATE_SCANNING | GHB_STATE_MUXING))
+	if (state & (GHB_STATE_WORKING | GHB_STATE_SEARCHING | 
+				 GHB_STATE_SCANNING | GHB_STATE_MUXING))
 	{
 		ghb_cancel_encode(ud, "You are currently encoding.  "
 								"What would you like to do?");

@@ -70,6 +70,18 @@ index_str_init(gint max_index)
 	}
 }
 
+static options_map_t d_point_to_point_opts[] =
+{
+	{"Chapters:",       "chapter", 0, "0"},
+	{"Seconds:", "time",    1, "1"},
+	{"Frames:",   "frame",   2, "2"},
+};
+combo_opts_t point_to_point_opts =
+{
+	sizeof(d_point_to_point_opts)/sizeof(options_map_t),
+	d_point_to_point_opts
+};
+
 static options_map_t d_when_complete_opts[] =
 {
 	{"Do Nothing",            "nothing",  0, "0"},
@@ -359,6 +371,7 @@ typedef struct
 
 combo_name_map_t combo_name_map[] =
 {
+	{"PtoPType", &point_to_point_opts},
 	{"WhenComplete", &when_complete_opts},
 	{"PicturePAR", &par_opts},
 	{"PictureModulus", &alignment_opts},
@@ -2563,6 +2576,7 @@ ghb_update_ui_combo_box(
 		audio_track_opts_set(ud->builder, "AudioTrack", user_data);
 		subtitle_track_opts_set(ud->builder, "SubtitleTrack", user_data);
 		generic_opts_set(ud->builder, "VideoQualityGranularity", &vqual_granularity_opts);
+		generic_opts_set(ud->builder, "PtoPType", &point_to_point_opts);
 		generic_opts_set(ud->builder, "WhenComplete", &when_complete_opts);
 		generic_opts_set(ud->builder, "PicturePAR", &par_opts);
 		generic_opts_set(ud->builder, "PictureModulus", &alignment_opts);
@@ -3077,6 +3091,22 @@ ghb_track_status()
 #define p s_queue.param.working
         case HB_STATE_WORKING:
 			hb_status.queue.state |= GHB_STATE_WORKING;
+			hb_status.queue.state &= ~GHB_STATE_PAUSED;
+			hb_status.queue.state &= ~GHB_STATE_SEARCHING;
+			hb_status.queue.job_cur = p.job_cur;
+			hb_status.queue.job_count = p.job_count;
+			hb_status.queue.progress = p.progress;
+			hb_status.queue.rate_cur = p.rate_cur;
+			hb_status.queue.rate_avg = p.rate_avg;
+			hb_status.queue.hours = p.hours;
+			hb_status.queue.minutes = p.minutes;
+			hb_status.queue.seconds = p.seconds;
+			hb_status.queue.unique_id = p.sequence_id & 0xFFFFFF;
+            break;
+
+        case HB_STATE_SEARCHING:
+			hb_status.queue.state |= GHB_STATE_SEARCHING;
+			hb_status.queue.state &= ~GHB_STATE_WORKING;
 			hb_status.queue.state &= ~GHB_STATE_PAUSED;
 			hb_status.queue.job_cur = p.job_cur;
 			hb_status.queue.job_count = p.job_count;
@@ -4212,13 +4242,42 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	}
 	if (!job->start_at_preview)
 	{
-		gint chapter_start, chapter_end;
-		chapter_start = ghb_settings_get_int(js, "start_chapter");
-		chapter_end = ghb_settings_get_int(js, "end_chapter");
+		gint start, end;
 		gint num_chapters = hb_list_count(title->list_chapter);
-		job->chapter_start = MIN( num_chapters, chapter_start );
-		job->chapter_end   = MAX( job->chapter_start, chapter_end );
+		gint duration = title->duration / 90000;
+		job->chapter_start = 1;
+		job->chapter_end = num_chapters;
 
+		if (ghb_settings_combo_int(js, "PtoPType") == 0)
+		{
+			start = ghb_settings_get_int(js, "start_point");
+			end = ghb_settings_get_int(js, "end_point");
+			job->chapter_start = MIN( num_chapters, start );
+			job->chapter_end   = MAX( job->chapter_start, end );
+
+		}
+		if (ghb_settings_combo_int(js, "PtoPType") == 1)
+		{
+			job->chapter_start = 1;
+			job->chapter_end = num_chapters;
+			start = ghb_settings_get_int(js, "start_point");
+			end = ghb_settings_get_int(js, "end_point");
+			job->pts_to_start = (int64_t)MIN(duration-1, start) * 90000;
+			job->pts_to_stop = (int64_t)MAX(start+1, end) * 90000 - 
+								job->pts_to_start;
+		}
+		if (ghb_settings_combo_int(js, "PtoPType") == 2)
+		{
+			job->chapter_start = 1;
+			job->chapter_end = num_chapters;
+			start = ghb_settings_get_int(js, "start_point");
+			end = ghb_settings_get_int(js, "end_point");
+			gint64 max_frames;
+			max_frames = (gint64)duration * title->rate / title->rate_base;
+			job->frame_to_start = (int64_t)MIN(max_frames-1, start-1);
+			job->frame_to_stop = (int64_t)MAX(start, end-1) - 
+								 job->frame_to_start;
+		}
 		job->chapter_markers = ghb_settings_get_boolean(js, "ChapterMarkers");
 		if (job->chapter_start == job->chapter_end)
 			job->chapter_markers = 0;
@@ -4228,14 +4287,14 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			GValue *chapter;
 			gint chap;
 			gint count;
-		
+
 			chapters = ghb_settings_get_value(js, "chapter_list");
 			count = ghb_array_len(chapters);
-			for(chap = chapter_start; chap <= chapter_end; chap++)
+			for(chap = start; chap <= end; chap++)
 			{
 				hb_chapter_t * chapter_s;
 				gchar *name;
-				
+
 				name = NULL;
 				if (chap-1 < count)
 				{

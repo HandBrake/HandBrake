@@ -4,6 +4,8 @@
 <dict>
 	<key>Initialization</key>
 	<dict>
+		<key>angle_count</key>
+		<integer>1</integer>
 		<key>angle</key>
 		<integer>1</integer>
 		<key>anamorphic</key>
@@ -14,7 +16,7 @@
 		<string></string>
 		<key>dest_file</key>
 		<string>new_video.mp4</string>
-		<key>end_chapter</key>
+		<key>end_point</key>
 		<integer>100</integer>
 		<key>folder</key>
 		<string></string>
@@ -30,6 +32,8 @@
 		<integer>720</integer>
 		<key>PictureDisplayHeight</key>
 		<integer>480</integer>
+		<key>PtoPType</key>
+		<string>chapter</string>
 		<key>scale_height</key>
 		<integer>0</integer>
 		<key>scale_width</key>
@@ -42,7 +46,7 @@
 		<false />
 		<key>single_title</key>
 		<integer>1</integer>
-		<key>start_chapter</key>
+		<key>start_point</key>
 		<integer>1</integer>
 		<key>start_frame</key>
 		<integer>-1</integer>

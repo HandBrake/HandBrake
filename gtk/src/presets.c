@@ -4087,16 +4087,20 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 		g_debug("No selection???  Perhaps unselected.");
 		gtk_widget_set_sensitive(widget, FALSE);
 	}
-	gint start = ghb_settings_get_int(ud->settings, "start_chapter");
-	gint end = ghb_settings_get_int(ud->settings, "end_chapter");
-	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-	gtk_widget_set_sensitive(widget, TRUE);
-	if (start == end)
+	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
 	{
-		ud->dont_clear_presets = TRUE;
-		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
-		ud->dont_clear_presets = FALSE;
-		gtk_widget_set_sensitive(widget, FALSE);
+		gint start, end;
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+		gtk_widget_set_sensitive(widget, TRUE);
+		if (start == end)
+		{
+			ud->dont_clear_presets = TRUE;
+			ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+			ud->dont_clear_presets = FALSE;
+			gtk_widget_set_sensitive(widget, FALSE);
+		}
 	}
 }
 

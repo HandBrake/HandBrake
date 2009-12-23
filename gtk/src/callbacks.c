@@ -296,7 +296,7 @@ on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
 {
 	gint state = ghb_get_queue_state();
 	g_debug("on_quit1_activate ()");
-	if (state & GHB_STATE_WORKING)
+	if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
 	{
 		if (ghb_cancel_encode2(ud, "Closing HandBrake will terminate encoding.\n"))
 		{
@@ -580,7 +580,8 @@ set_destination(signal_user_data_t *ud)
 				title = ghb_settings_combo_int(ud->settings, "title");
 				g_string_append_printf(str, " - %d", title+1);
 			}
-			if (ghb_settings_get_boolean(
+			if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0 && 
+				ghb_settings_get_boolean(
 					ud->settings, "chapters_in_destination"))
 			{
 				gint start, end;
@@ -590,8 +591,8 @@ set_destination(signal_user_data_t *ud)
 				{
 					g_string_append_printf(str, " -");
 				}
-				start = ghb_settings_get_int(ud->settings, "start_chapter");
-				end = ghb_settings_get_int(ud->settings, "end_chapter");
+				start = ghb_settings_get_int(ud->settings, "start_point");
+				end = ghb_settings_get_int(ud->settings, "end_point");
 				if (start == end)
 					g_string_append_printf(str, " Ch %d", start);
 				else
@@ -1259,7 +1260,7 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
 {
 	gint state = ghb_get_queue_state();
 	g_debug("window_delete_event_cb ()");
-	if (state & GHB_STATE_WORKING)
+	if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
 	{
 		if (ghb_cancel_encode2(ud, "Closing HandBrake will terminate encoding.\n"))
 		{
@@ -1334,9 +1335,45 @@ update_title_duration(signal_user_data_t *ud)
 	ti = ghb_settings_combo_int(ud->settings, "title");
 	widget = GHB_WIDGET (ud->builder, "title_duration");
 
-	start = ghb_settings_get_int(ud->settings, "start_chapter");
-	end = ghb_settings_get_int(ud->settings, "end_chapter");
-	ghb_part_duration(ti, start, end, &hh, &mm, &ss);
+	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
+	{
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		ghb_part_duration(ti, start, end, &hh, &mm, &ss);
+	}
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+	{
+		gint duration;
+
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		duration = end - start;
+		hh = duration / (60*60);
+		mm = (duration / 60) % 60;
+		ss = duration % 60;
+	}
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+	{
+		ghb_title_info_t tinfo;
+
+		if (ghb_get_title_info (&tinfo, ti))
+		{
+			gint64 frames;
+			gint duration;
+
+			start = ghb_settings_get_int(ud->settings, "start_point");
+			end = ghb_settings_get_int(ud->settings, "end_point");
+			frames = end - start + 1;
+			duration = frames * tinfo.rate_base / tinfo.rate;
+			hh = duration / (60*60);
+			mm = (duration / 60) % 60;
+			ss = duration % 60;
+		}
+		else
+		{
+			hh = mm = ss = 0;
+		}
+	}
 	text = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
@@ -1429,17 +1466,46 @@ show_title_info(signal_user_data_t *ud, ghb_title_info_t *tinfo)
 	gtk_label_set_text (GTK_LABEL(widget), text);
 	g_free(text);
 
-	g_debug("setting max end chapter %d", tinfo->num_chapters);
-	widget = GHB_WIDGET (ud->builder, "end_chapter");
-	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), tinfo->num_chapters);
-	widget = GHB_WIDGET (ud->builder, "start_chapter");
-	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
-	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
+
+	gint duration = tinfo->duration / 90000;
+
+	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
+	{
+		widget = GHB_WIDGET (ud->builder, "start_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
+
+		widget = GHB_WIDGET (ud->builder, "end_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->num_chapters);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), tinfo->num_chapters);
+	}
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+	{
+
+		widget = GHB_WIDGET (ud->builder, "start_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, duration-1);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 0);
+
+		widget = GHB_WIDGET (ud->builder, "end_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, duration);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), duration);
+	}
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+	{
+		gdouble max_frames = (gdouble)duration * tinfo->rate / tinfo->rate_base;
+		widget = GHB_WIDGET (ud->builder, "start_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
+
+		widget = GHB_WIDGET (ud->builder, "end_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), max_frames);
+	}
 
 	widget = GHB_WIDGET (ud->builder, "angle");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
 	gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo->angle_count);
+	ghb_settings_set_int(ud->settings, "angle_count", tinfo->angle_count);
 	ud->dont_clear_presets = FALSE;
 }
 
@@ -1453,7 +1519,6 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	
 	g_debug("title_changed_cb ()");
 	ghb_widget_to_setting(ud->settings, widget);
-	ghb_check_dependency(ud, widget, NULL);
 
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
 	ghb_update_ui_combo_box (ud, "AudioTrack", titleindex, FALSE);
@@ -1463,6 +1528,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	{
 		show_title_info(ud, &tinfo);
 	}
+	ghb_check_dependency(ud, widget, NULL);
 	update_chapter_list (ud);
 	ghb_adjust_audio_rate_combos(ud);
 	ghb_set_pref_audio(titleindex, ud);
@@ -1494,13 +1560,61 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	gint end;
 	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
 	gtk_widget_set_sensitive(widget, TRUE);
-	end = ghb_settings_get_int(ud->settings, "end_chapter");
+	end = ghb_settings_get_int(ud->settings, "end_point");
 	if (1 == end)
 	{
 		ud->dont_clear_presets = TRUE;
 		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
 		ud->dont_clear_presets = FALSE;
 		gtk_widget_set_sensitive(widget, FALSE);
+	}
+}
+
+G_MODULE_EXPORT void
+ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	gint ti;
+	ghb_title_info_t tinfo;
+
+	ghb_widget_to_setting(ud->settings, widget);
+	ghb_check_dependency(ud, widget, NULL);
+	ghb_live_reset(ud);
+
+	ti = ghb_settings_combo_int(ud->settings, "title");
+	if (!ghb_get_title_info (&tinfo, ti))
+		return;
+
+	gint duration = tinfo.duration / 90000;
+	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
+	{
+		widget = GHB_WIDGET (ud->builder, "start_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo.num_chapters);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
+
+		widget = GHB_WIDGET (ud->builder, "end_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, tinfo.num_chapters);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), tinfo.num_chapters);
+	}
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
+	{
+		widget = GHB_WIDGET (ud->builder, "start_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 0, duration-1);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 0);
+
+		widget = GHB_WIDGET (ud->builder, "end_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, duration);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), duration);
+	}
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+	{
+		gdouble max_frames = (gdouble)duration * tinfo.rate / tinfo.rate_base;
+		widget = GHB_WIDGET (ud->builder, "start_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), 1);
+
+		widget = GHB_WIDGET (ud->builder, "end_point");
+		gtk_spin_button_set_range (GTK_SPIN_BUTTON(widget), 1, max_frames);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON(widget), max_frames);
 	}
 }
 
@@ -1596,65 +1710,107 @@ target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-start_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint start, end;
 	const gchar *name = gtk_widget_get_name(widget);
 
-	g_debug("start_chapter_changed_cb () %s", name);
+	g_debug("start_point_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	start = ghb_settings_get_int(ud->settings, "start_chapter");
-	end = ghb_settings_get_int(ud->settings, "end_chapter");
-	if (start > end)
-		ghb_ui_update(ud, "end_chapter", ghb_int_value(start));
-	ghb_check_dependency(ud, widget, NULL);
-	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
 	{
-		set_destination(ud);
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start > end)
+			ghb_ui_update(ud, "end_point", ghb_int_value(start));
+		ghb_check_dependency(ud, widget, NULL);
+		if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+		{
+			set_destination(ud);
+		}
+		widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+		gtk_widget_set_sensitive(widget, TRUE);
+		// End may have been changed above, get it again
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start == end)
+		{
+			ud->dont_clear_presets = TRUE;
+			ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+			ud->dont_clear_presets = FALSE;
+			gtk_widget_set_sensitive(widget, FALSE);
+		}
+		update_title_duration(ud);
 	}
-	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-	gtk_widget_set_sensitive(widget, TRUE);
-	// End may have been changed above, get it again
-	end = ghb_settings_get_int(ud->settings, "end_chapter");
-	if (start == end)
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
 	{
-		ud->dont_clear_presets = TRUE;
-		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
-		ud->dont_clear_presets = FALSE;
-		gtk_widget_set_sensitive(widget, FALSE);
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start >= end)
+			ghb_ui_update(ud, "end_point", ghb_int_value(start+1));
+		ghb_check_dependency(ud, widget, NULL);
+		update_title_duration(ud);
 	}
-	update_title_duration(ud);
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+	{
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start > end)
+			ghb_ui_update(ud, "end_point", ghb_int_value(start));
+		ghb_check_dependency(ud, widget, NULL);
+		update_title_duration(ud);
+	}
 }
 
 G_MODULE_EXPORT void
-end_chapter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint start, end;
 	const gchar *name = gtk_widget_get_name(widget);
 
-	g_debug("end_chapter_changed_cb () %s", name);
+	g_debug("end_point_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
-	start = ghb_settings_get_int(ud->settings, "start_chapter");
-	end = ghb_settings_get_int(ud->settings, "end_chapter");
-	if (start > end)
-		ghb_ui_update(ud, "start_chapter", ghb_int_value(end));
-	ghb_check_dependency(ud, widget, NULL);
-	if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+	if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
 	{
-		set_destination(ud);
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start > end)
+			ghb_ui_update(ud, "start_point", ghb_int_value(end));
+		ghb_check_dependency(ud, widget, NULL);
+		if (ghb_settings_get_boolean(ud->settings, "chapters_in_destination"))
+		{
+			set_destination(ud);
+		}
+		widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
+		gtk_widget_set_sensitive(widget, TRUE);
+		// Start may have been changed above, get it again
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		if (start == end)
+		{
+			ud->dont_clear_presets = TRUE;
+			ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
+			ud->dont_clear_presets = FALSE;
+			gtk_widget_set_sensitive(widget, FALSE);
+		}
+		update_title_duration(ud);
 	}
-	widget = GHB_WIDGET (ud->builder, "ChapterMarkers");
-	gtk_widget_set_sensitive(widget, TRUE);
-	// Start may have been changed above, get it again
-	start = ghb_settings_get_int(ud->settings, "start_chapter");
-	if (start == end)
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
 	{
-		ud->dont_clear_presets = TRUE;
-		ghb_ui_update(ud, "ChapterMarkers", ghb_boolean_value(FALSE));
-		ud->dont_clear_presets = FALSE;
-		gtk_widget_set_sensitive(widget, FALSE);
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start >= end)
+			ghb_ui_update(ud, "start_point", ghb_int_value(end-1));
+		ghb_check_dependency(ud, widget, NULL);
+		update_title_duration(ud);
 	}
-	update_title_duration(ud);
+	else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
+	{
+		start = ghb_settings_get_int(ud->settings, "start_point");
+		end = ghb_settings_get_int(ud->settings, "end_point");
+		if (start > end)
+			ghb_ui_update(ud, "start_point", ghb_int_value(end));
+		ghb_check_dependency(ud, widget, NULL);
+		update_title_duration(ud);
+	}
 }
 
 G_MODULE_EXPORT void
@@ -2388,6 +2544,46 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 	return status_str;
 }
 
+gchar*
+searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
+{
+	gchar *task_str, *job_str, *status_str;
+	gint qcount;
+	gint index;
+	GValue *js;
+
+	qcount = ghb_array_len(ud->queue);
+	index = find_queue_job(ud->queue, status->unique_id, &js);
+	if (qcount > 1)
+	{
+		job_str = g_strdup_printf("job %d of %d, ", index+1, qcount);
+	}
+	else
+	{
+		job_str = g_strdup("");
+	}
+	task_str = g_strdup_printf("Searching for start time, ");
+	if(status->seconds > -1)
+	{
+		status_str= g_strdup_printf(
+			"Encoding: %s%s%.2f %%"
+			" (ETA %02dh%02dm%02ds)",
+			job_str, task_str,
+			100.0 * status->progress,
+			status->hours, status->minutes, status->seconds );
+	}
+	else
+	{
+		status_str= g_strdup_printf(
+			"Encoding: %s%s%.2f %%",
+			job_str, task_str,
+			100.0 * status->progress );
+	}
+	g_free(task_str);
+	g_free(job_str);
+	return status_str;
+}
+
 static void
 ghb_backend_events(signal_user_data_t *ud)
 {
@@ -2525,6 +2721,44 @@ ghb_backend_events(signal_user_data_t *ud)
 	else if (status.queue.state & GHB_STATE_PAUSED)
 	{
 		gtk_label_set_text (work_status, "Paused");
+	}
+	else if (status.queue.state & GHB_STATE_SEARCHING)
+	{
+		static gint working = 0;
+
+		// This needs to be in scanning and working since scanning
+		// happens fast enough that it can be missed
+		index = find_queue_job(ud->queue, status.queue.unique_id, &js);
+		if (status.queue.unique_id != 0 && index >= 0)
+		{
+			gchar working_icon[] = "hb-working0";
+			working_icon[10] = '0' + working;
+			working = (working+1) % 6;
+			treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
+			store = GTK_TREE_STORE(gtk_tree_view_get_model(treeview));
+			gchar *path = g_strdup_printf ("%d", index);
+			if (gtk_tree_model_get_iter_from_string(
+					GTK_TREE_MODEL(store), &iter, path))
+			{
+				gtk_tree_store_set(store, &iter, 0, working_icon, -1);
+			}
+			g_free(path);
+		}
+		GtkLabel *label;
+		gchar *status_str;
+
+		status_str = searching_status_string(ud, &status.queue);
+		label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status"));
+		gtk_label_set_text (label, status_str);
+#if !GTK_CHECK_VERSION(2, 16, 0)
+		GtkStatusIcon *si;
+
+		si = GTK_STATUS_ICON(GHB_OBJECT(ud->builder, "hb_status"));
+		gtk_status_icon_set_tooltip(si, status_str);
+#endif
+		gtk_label_set_text (work_status, status_str);
+		gtk_progress_bar_set_fraction (progress, status.queue.progress);
+		g_free(status_str);
 	}
 	else if (status.queue.state & GHB_STATE_WORKING)
 	{
@@ -2693,6 +2927,8 @@ status_icon_query_tooltip_cb(
 	ghb_get_status(&status);
 	if (status.queue.state & GHB_STATE_WORKING)
 		status_str = working_status_string(ud, &status.queue);
+	else if (status.queue.state & GHB_STATE_SEARCHING)
+		status_str = searching_status_string(ud, &status.queue);
 	else if (status.queue.state & GHB_STATE_WORKDONE)
 		status_str = g_strdup("Encode Complete");
 	else
