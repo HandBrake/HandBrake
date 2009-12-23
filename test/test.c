@@ -117,6 +117,10 @@ static int    color_matrix  = 0;
 static int    preview_count = 10;
 static int    store_previews = 0;
 static int    start_at_preview = 0;
+static int64_t start_at_pts    = 0;
+static int    start_at_frame = 0;
+static char * start_at_string = NULL;
+static char * start_at_token = NULL;
 static int64_t stop_at_pts    = 0;
 static int    stop_at_frame = 0;
 static char * stop_at_string = NULL;
@@ -353,6 +357,7 @@ int main( int argc, char ** argv )
 	if( x264opts2 ) free (x264opts2 );
     if (preset_name) free (preset_name);
     if( stop_at_string ) free( stop_at_string );
+    if( start_at_string ) free( start_at_string );
 
     fprintf( stderr, "HandBrake has exited.\n" );
 
@@ -572,7 +577,7 @@ static int HandleEvents( hb_handle_t * h )
 
             PrintTitleInfo( title );
 
-            if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame )
+            if( chapter_start && chapter_end && !stop_at_pts && !start_at_preview && !stop_at_frame && !start_at_pts && !start_at_frame )
             {
                 job->chapter_start = MAX( job->chapter_start,
                                           chapter_start );
@@ -1982,6 +1987,18 @@ static int HandleEvents( hb_handle_t * h )
                 subtitle_scan = 0;
             }
             
+            if( start_at_pts )
+            {
+                job->pts_to_start = start_at_pts;
+                subtitle_scan = 0;
+            }
+            
+            if( start_at_frame )
+            {
+                job->frame_to_start = start_at_frame;
+                subtitle_scan = 0;
+            }
+            
             if( subtitle_scan )
             {
                 char *x264opts_tmp;
@@ -2085,6 +2102,17 @@ static int HandleEvents( hb_handle_t * h )
         }
 
 #define p s.param.working
+        case HB_STATE_SEARCHING:
+            fprintf( stdout, "\rEncoding: task %d of %d, Searching for start time, %.2f %%",
+                     p.job_cur, p.job_count, 100.0 * p.progress );
+            if( p.seconds > -1 )
+            {
+                fprintf( stdout, " (ETA %02dh%02dm%02ds)", 
+                         p.hours, p.minutes, p.seconds );
+            }
+            fflush(stdout);
+            break;
+
         case HB_STATE_WORKING:
             fprintf( stdout, "\rEncoding: task %d of %d, %.2f %%",
                      p.job_cur, p.job_count, 100.0 * p.progress );
@@ -2190,6 +2218,8 @@ static void ShowHelp()
     "                            and whether or not they're stored to disk (0 or 1).\n"
     "                            (default: 10:0)\n"
     "    --start-at-preview <#>  Start encoding at a given preview.\n"
+    "    --start-at    <unit:#>  Start encoding at a given frame, duration (in seconds),\n"
+    "                            or pts (on a 90kHz clock)\n"
     "    --stop-at     <unit:#>  Stop encoding at a given frame, duration (in seconds),\n"
     "                            or pts (on a 90kHz clock)"
     "\n"
@@ -2493,22 +2523,23 @@ static int ParseOptions( int argc, char ** argv )
     
     #define PREVIEWS            257
     #define START_AT_PREVIEW    258
-    #define STOP_AT             259
-    #define ANGLE               260
-    #define DVDNAV              261
-    #define DISPLAY_WIDTH       262
-    #define PIXEL_ASPECT        263
-    #define MODULUS             264
-    #define KEEP_DISPLAY_ASPECT 265
-    #define SUB_BURNED          266
-    #define SUB_DEFAULT         267
-    #define NATIVE_DUB          268
-    #define SRT_FILE            269
-    #define SRT_CODESET         270
-    #define SRT_OFFSET          271
-    #define SRT_LANG            272
-    #define SRT_DEFAULT         273
-    #define ROTATE_FILTER       274
+    #define START_AT            259
+    #define STOP_AT             260
+    #define ANGLE               261
+    #define DVDNAV              262
+    #define DISPLAY_WIDTH       263
+    #define PIXEL_ASPECT        264
+    #define MODULUS             265
+    #define KEEP_DISPLAY_ASPECT 266
+    #define SUB_BURNED          267
+    #define SUB_DEFAULT         268
+    #define NATIVE_DUB          269
+    #define SRT_FILE            270
+    #define SRT_CODESET         271
+    #define SRT_OFFSET          272
+    #define SRT_LANG            273
+    #define SRT_DEFAULT         274
+    #define ROTATE_FILTER       275
     
     for( ;; )
     {
@@ -2585,6 +2616,7 @@ static int ParseOptions( int argc, char ** argv )
             { "color-matrix",required_argument, NULL,    'M' },
             { "previews",    required_argument, NULL,    PREVIEWS },
             { "start-at-preview", required_argument, NULL, START_AT_PREVIEW },
+            { "start-at",    required_argument, NULL,    START_AT },
             { "stop-at",    required_argument, NULL,     STOP_AT },
             { "vfr",         no_argument,       &cfr,    0 },
             { "cfr",         no_argument,       &cfr,    1 },
@@ -3001,6 +3033,26 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case START_AT_PREVIEW:
                 start_at_preview = atoi( optarg );
+                break;
+            case START_AT:
+                start_at_string = strdup( optarg );
+                start_at_token = strtok( start_at_string, ":");
+                if( !strcmp( start_at_token, "frame" ) )
+                {
+                    start_at_token = strtok( NULL, ":");
+                    start_at_frame = atoi(start_at_token);
+                }
+                else if( !strcmp( start_at_token, "pts" ) )
+                {
+                    start_at_token = strtok( NULL, ":");
+                    sscanf( start_at_token, "%"SCNd64, &start_at_pts );
+                }
+                else if( !strcmp( start_at_token, "duration" ) )
+                {
+                    start_at_token = strtok( NULL, ":");
+                    sscanf( start_at_token, "%"SCNd64, &start_at_pts );
+                    start_at_pts *= 90000LL;
+                }
                 break;
             case STOP_AT:
                 stop_at_string = strdup( optarg );
