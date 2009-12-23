@@ -31,6 +31,9 @@ typedef struct
     uint8_t        st_slots;        // size (in slots) of stream_timing array
     uint8_t        saw_video;       // != 0 if we've seen video
     uint8_t        saw_audio;       // != 0 if we've seen audio
+
+    int            start_found;     // found pts_to_start point
+    uint64_t       st_first;
 } hb_reader_t;
 
 /***********************************************************************
@@ -38,6 +41,7 @@ typedef struct
  **********************************************************************/
 static void        ReaderFunc( void * );
 static hb_fifo_t ** GetFifoForId( hb_job_t * job, int id );
+static void UpdateState( hb_reader_t  * r, int64_t start);
 
 /***********************************************************************
  * hb_reader_init
@@ -63,13 +67,16 @@ hb_thread_t * hb_reader_init( hb_job_t * job )
     r->stream_timing[0].last = -r->stream_timing[0].average;
     r->stream_timing[1].id = -1;
 
+    if ( !job->pts_to_start )
+        r->start_found = 1;
+
     return hb_thread_init( "reader", ReaderFunc, r,
                            HB_NORMAL_PRIORITY );
 }
 
 static void push_buf( const hb_reader_t *r, hb_fifo_t *fifo, hb_buffer_t *buf )
 {
-    while ( !*r->die )
+    while ( !*r->die && !r->job->done )
     {
         if ( hb_fifo_full_wait( fifo ) )
         {
@@ -209,6 +216,7 @@ static void ReaderFunc( void * _r )
         return;
     }
 
+    hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
     if (r->dvd)
     {
         /*
@@ -233,6 +241,7 @@ static void ReaderFunc( void * _r )
         if( !hb_dvd_start( r->dvd, r->title, start ) )
         {
             hb_dvd_close( &r->dvd );
+            hb_buffer_close( &ps );
             return;
         }
         if (r->job->angle)
@@ -253,6 +262,27 @@ static void ReaderFunc( void * _r )
         // XXX code from DecodePreviews - should go into its own routine
         hb_stream_seek( r->stream, (float)( r->job->start_at_preview - 1 ) /
                         ( r->job->seek_points ? ( r->job->seek_points + 1.0 ) : 11.0 ) );
+
+    } 
+    else if ( r->stream && r->job->pts_to_start )
+    {
+        
+        // Find out what the first timestamp of the stream is
+        // and then seek to the appropriate offset from it
+        if ( hb_stream_read( r->stream, ps ) )
+        {
+            if ( ps->start > 0 )
+                r->job->pts_to_start += ps->start;
+        }
+        
+        if ( hb_stream_seek_ts( r->stream, r->job->pts_to_start ) >= 0 )
+        {
+            // Seek takes us to the nearest I-frame before the timestamp
+            // that we want.  So we will retrieve the start time of the
+            // first packet we get, subtract that from pts_to_start, and
+            // inspect the reset of the frames in sync.
+            r->start_found = 2;
+        }
 
     } 
     else if( r->stream )
@@ -278,7 +308,6 @@ static void ReaderFunc( void * _r )
     }
 
     list  = hb_list_init();
-    hb_buffer_t *ps = hb_buffer_init( HB_DVD_READ_BUFFER_SIZE );
 
     while( !*r->die && !r->job->done )
     {
@@ -311,6 +340,15 @@ static void ReaderFunc( void * _r )
           if ( !hb_stream_read( r->stream, ps ) )
           {
             break;
+          }
+          if ( r->start_found == 2 )
+          {
+            // We will inspect the timestamps of each frame in sync
+            // to skip from this seek point to the timestamp we
+            // want to start at.
+            if ( ps->start > 0 && ps->start < r->job->pts_to_start )
+                r->job->pts_to_start -= ps->start;
+            r->start_found = 1;
           }
         }
 
@@ -367,6 +405,32 @@ static void ReaderFunc( void * _r )
             }
             if( fifos )
             {
+                if ( buf->start != -1 )
+                {
+                    int64_t start = buf->start - r->scr_offset;
+                    if ( !r->start_found )
+                        UpdateState( r, start );
+
+                    if ( !r->start_found &&
+                        r->job->pts_to_start && 
+                        buf->renderOffset != -1 &&
+                        start >= r->job->pts_to_start )
+                    {
+                        // pts_to_start point found
+                        // force a new scr offset computation
+                        stream_timing_t *st = find_st( r, buf );
+                        if ( st && 
+                            (st->is_audio ||
+                            ( st == r->stream_timing && !r->saw_audio ) ) )
+                        {
+                            // Re-zero our timestamps
+                            st->last = -st->average;
+                            new_scr_offset( r, buf );
+                            r->start_found = 1;
+                            r->job->pts_to_start = 0;
+                        }
+                    }
+                }
                 if ( buf->renderOffset != -1 )
                 {
                     if ( r->scr_changes == r->demux.scr_changes )
@@ -433,13 +497,11 @@ static void ReaderFunc( void * _r )
                 if ( buf->start != -1 )
                 {
                     buf->start -= r->scr_offset;
-                    if ( r->job->pts_to_stop && buf->start > r->job->pts_to_stop )
-                    {
-                        // we're doing a subset of the input and we've hit the
-                        // stopping point.
-                        hb_buffer_close( &buf );
-                        goto done;
-                    }
+                }
+                if ( !r->start_found )
+                {
+                    hb_buffer_close( &buf );
+                    continue;
                 }
 
                 buf->sequence = r->sequence++;
@@ -463,7 +525,6 @@ static void ReaderFunc( void * _r )
         }
     }
 
-  done:
     // send empty buffers downstream to video & audio decoders to signal we're done.
     if( !*r->die && !r->job->done )
     {
@@ -511,6 +572,46 @@ static void ReaderFunc( void * _r )
     _r = NULL;
 }
 
+static void UpdateState( hb_reader_t  * r, int64_t start)
+{
+    hb_state_t state;
+    uint64_t now;
+    double avg;
+
+    now = hb_get_date();
+    if( !r->st_first )
+    {
+        r->st_first = now;
+    }
+
+#define p state.param.working
+    state.state = HB_STATE_SEARCHING;
+    p.progress  = (float) start / (float) r->job->pts_to_start;
+    if( p.progress > 1.0 )
+    {
+        p.progress = 1.0;
+    }
+    if (now > r->st_first)
+    {
+        int eta;
+
+        avg = 1000.0 * (double)start / (now - r->st_first);
+        eta = ( r->job->pts_to_start - start ) / avg;
+        p.hours   = eta / 3600;
+        p.minutes = ( eta % 3600 ) / 60;
+        p.seconds = eta % 60;
+    }
+    else
+    {
+        p.rate_avg = 0.0;
+        p.hours    = -1;
+        p.minutes  = -1;
+        p.seconds  = -1;
+    }
+#undef p
+
+    hb_set_state( r->job->h, &state );
+}
 /***********************************************************************
  * GetFifoForId
  ***********************************************************************

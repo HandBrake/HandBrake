@@ -23,10 +23,19 @@ typedef struct
     int         count_frames;
     int64_t     audio_passthru_slip;
     int64_t     video_pts_slip;
+    int64_t     pts_offset;
+
+    /* Frame based point-to-point support */
+    int64_t     audio_pts_thresh;
+    int         start_found;
+    hb_cond_t * next_frame;
+    int         pts_count;
+    int64_t   * first_pts;
 } hb_sync_common_t;
 
 typedef struct
 {
+    int          index;
     int64_t      next_start;    /* start time of next output frame */
     int64_t      next_pts;     /* start time of next input frame */
     int64_t      first_drop;   /* PTS of first 'went backwards' frame dropped */
@@ -44,7 +53,7 @@ typedef struct
 typedef struct
 {
     /* Video */
-    int64_t    pts_offset;
+    int        first_frame;
     int64_t    pts_skip;
     int64_t    next_start;    /* start time of next output frame */
     int64_t    next_pts;      /* start time of next input frame */
@@ -77,9 +86,12 @@ struct hb_work_private_s
 /***********************************************************************
  * Local prototypes
  **********************************************************************/
+static void getPtsOffset( hb_work_object_t * w );
+static int  checkPtsOffset( hb_work_object_t * w );
 static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i );
 static void InsertSilence( hb_work_object_t * w, int64_t d );
 static void UpdateState( hb_work_object_t * w );
+static void UpdateSearchState( hb_work_object_t * w, int64_t start );
 static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
                                        hb_sync_audio_t *sync );
 
@@ -103,6 +115,20 @@ int hb_sync_init( hb_job_t * job )
     pv->common = calloc( 1, sizeof( hb_sync_common_t ) );
     pv->common->ref++;
     pv->common->mutex = hb_lock_init();
+    pv->common->audio_pts_thresh = 0;
+    pv->common->next_frame = hb_cond_init();
+    pv->common->pts_count = 1 + hb_list_count( title->list_audio );
+    pv->common->first_pts = malloc( sizeof(int64_t) * pv->common->pts_count );
+    for ( i = 0; i < pv->common->pts_count; i++ )
+        pv->common->first_pts[i] = INT64_MAX;
+    if ( job->frame_to_start || job->pts_to_start )
+    {
+        pv->common->start_found = 0;
+    }
+    else
+    {
+        pv->common->start_found = 1;
+    }
 
     w = hb_get_work( WORK_SYNC_VIDEO );
     w->private_data = pv;
@@ -110,7 +136,8 @@ int hb_sync_init( hb_job_t * job )
     w->fifo_out = job->fifo_sync;
 
     pv->job            = job;
-    sync->pts_offset   = INT64_MIN;
+    pv->common->pts_offset   = INT64_MIN;
+    sync->first_frame = 1;
 
     if( job->pass == 2 )
     {
@@ -226,16 +253,103 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     int i;
 
     *buf_out = NULL;
+    next = *buf_in;
+    *buf_in = NULL;
+
+    /* Wait for start of point-to-point encoding */
+    if( !pv->common->start_found )
+    {
+        hb_sync_video_t   * sync = &pv->type.video;
+
+        if( next->size == 0 )
+        {
+            *buf_out = next;
+            pv->common->start_found = 1;
+            hb_cond_broadcast( pv->common->next_frame );
+
+            /*
+             * Push through any subtitle EOFs in case they 
+             * were not synced through.
+             */
+            for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
+            {
+                subtitle = hb_list_item( job->list_subtitle, i );
+                if( subtitle->config.dest == PASSTHRUSUB )
+                {
+                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                }
+            }
+            return HB_WORK_DONE;
+        }
+        if ( pv->common->count_frames < job->frame_to_start ||
+             next->start < job->pts_to_start )
+        {
+            // Flush any subtitles that have pts prior to the
+            // current frame
+            for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
+            {
+                subtitle = hb_list_item( job->list_subtitle, i );
+                while( ( sub = hb_fifo_see( subtitle->fifo_raw ) ) )
+                {
+                    if ( sub->start > next->start )
+                        break;
+                    sub = hb_fifo_get( subtitle->fifo_raw );
+                    hb_buffer_close( &sub );
+                }
+            }
+            hb_lock( pv->common->mutex );
+            // Tell the audio threads what must be dropped
+            pv->common->audio_pts_thresh = next->start;
+            hb_cond_broadcast( pv->common->next_frame );
+            hb_unlock( pv->common->mutex );
+
+            UpdateSearchState( w, next->start );
+            hb_buffer_close( &next );
+
+            return HB_WORK_OK;
+        }
+        hb_lock( pv->common->mutex );
+        pv->common->start_found = 1;
+        pv->common->count_frames = 0;
+        hb_cond_broadcast( pv->common->next_frame );
+        hb_unlock( pv->common->mutex );
+        sync->st_first = 0;
+    }
+
+    /* Wait till we can determine the initial pts of all streams */
+    if( pv->common->pts_offset == INT64_MIN )
+    {
+        pv->common->first_pts[0] = next->start;
+        hb_lock( pv->common->mutex );
+        while( pv->common->pts_offset == INT64_MIN )
+        {
+            // Full fifos will make us wait forever, so get the
+            // pts offset from the available streams if full
+            if ( hb_fifo_is_full( job->fifo_raw ) )
+            {
+                getPtsOffset( w );
+                hb_cond_broadcast( pv->common->next_frame );
+            }
+            else if ( checkPtsOffset( w ) )
+                hb_cond_broadcast( pv->common->next_frame );
+            else
+                hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
+        }
+        hb_unlock( pv->common->mutex );
+    }
+
     if( !sync->cur )
     {
-        sync->cur = *buf_in;
-        *buf_in = NULL;
+        sync->cur = next;
         if( sync->cur->size == 0 )
         {
             /* we got an end-of-stream as our first video packet? 
              * Feed it downstream & signal that we're done. 
              */
             *buf_out = hb_buffer_init( 0 );
+
+            pv->common->start_found = 1;
+            hb_cond_broadcast( pv->common->next_frame );
 
             /*
              * Push through any subtitle EOFs in case they 
@@ -253,21 +367,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
         return HB_WORK_OK;
     }
-    next = *buf_in;
-    *buf_in = NULL;
     cur = sync->cur;
-    if( job->frame_to_stop && pv->common->count_frames > job->frame_to_stop )
-    {
-        // Drop an empty buffer into our output to ensure that things
-        // get flushed all the way out.
-        hb_buffer_close( &sync->cur );
-        hb_buffer_close( &next );
-        *buf_out = hb_buffer_init( 0 );
-        hb_log( "sync: reached %d frames, exiting early",
-                pv->common->count_frames );
-        return HB_WORK_DONE;
-    }
-
     /* At this point we have a frame to process. Let's check
         1) if we will be able to push into the fifo ahead
         2) if the next frame is there already, since we need it to
@@ -303,13 +403,41 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
             }
         }
+        pv->common->start_found = 1;
+        hb_cond_broadcast( pv->common->next_frame );
         return HB_WORK_DONE;
     }
-    if( sync->pts_offset == INT64_MIN )
+
+    /* Check for end of point-to-point frame encoding */
+    if( job->frame_to_stop && pv->common->count_frames > job->frame_to_stop )
+    {
+        // Drop an empty buffer into our output to ensure that things
+        // get flushed all the way out.
+        hb_buffer_close( &sync->cur );
+        hb_buffer_close( &next );
+        *buf_out = hb_buffer_init( 0 );
+        hb_log( "sync: reached %d frames, exiting early",
+                pv->common->count_frames );
+        return HB_WORK_DONE;
+    }
+
+    /* Check for end of point-to-point pts encoding */
+    if( job->pts_to_stop && sync->next_start >= job->pts_to_stop )
+    {
+        // Drop an empty buffer into our output to ensure that things
+        // get flushed all the way out.
+        hb_log( "sync: reached pts %"PRId64", exiting early",
+                sync->cur->start );
+        hb_buffer_close( &sync->cur );
+        hb_buffer_close( &next );
+        *buf_out = hb_buffer_init( 0 );
+        return HB_WORK_DONE;
+    }
+
+    if( sync->first_frame )
     {
         /* This is our first frame */
-        sync->pts_offset = 0;
-        if ( cur->start != 0 )
+        if ( cur->start > pv->common->pts_offset )
         {
             /*
              * The first pts from a dvd should always be zero but
@@ -320,8 +448,9 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
              * be in sync.
              */
             hb_log( "sync: first pts is %"PRId64, cur->start );
-            cur->start = 0;
+            cur->start = pv->common->pts_offset;
         }
+        sync->first_frame = 0;
     }
 
     /*
@@ -744,9 +873,6 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     *buf_out = NULL;
     buf = *buf_in;
     *buf_in = NULL;
-    hb_lock( pv->common->mutex );
-    start = buf->start - pv->common->audio_passthru_slip;
-    hb_unlock( pv->common->mutex );
     /* if the next buffer is an eof send it downstream */
     if ( buf->size <= 0 )
     {
@@ -754,12 +880,70 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_out = hb_buffer_init( 0 );
         return HB_WORK_DONE;
     }
+
+    /* Wait for start frame if doing point-to-point */
+    hb_lock( pv->common->mutex );
+    while ( !pv->common->start_found )
+    {
+        if ( buf->start < pv->common->audio_pts_thresh )
+        {
+            hb_buffer_close( &buf );
+            hb_unlock( pv->common->mutex );
+            return HB_WORK_OK;
+        }
+        while ( !pv->common->start_found && 
+                buf->start >= pv->common->audio_pts_thresh )
+        {
+            hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
+        }
+    }
+    if ( buf->start < pv->common->audio_pts_thresh )
+    {
+        hb_buffer_close( &buf );
+        hb_unlock( pv->common->mutex );
+        return HB_WORK_OK;
+    }
+    hb_unlock( pv->common->mutex );
+
+    /* Wait till we can determine the initial pts of all streams */
+    if( pv->common->pts_offset == INT64_MIN )
+    {
+        pv->common->first_pts[sync->index+1] = buf->start;
+        hb_lock( pv->common->mutex );
+        while( pv->common->pts_offset == INT64_MIN )
+        {
+            // Full fifos will make us wait forever, so get the
+            // pts offset from the available streams if full
+            if (hb_fifo_is_full(w->fifo_in))
+            {
+                getPtsOffset( w );
+                hb_cond_broadcast( pv->common->next_frame );
+            }
+            else if ( checkPtsOffset( w ) )
+                hb_cond_broadcast( pv->common->next_frame );
+            else
+                hb_cond_timedwait( pv->common->next_frame, pv->common->mutex, 200 );
+        }
+        hb_unlock( pv->common->mutex );
+    }
+
     if( job->frame_to_stop && pv->common->count_frames >= job->frame_to_stop )
     {
         hb_buffer_close( &buf );
         *buf_out = hb_buffer_init( 0 );
         return HB_WORK_DONE;
     }
+
+    if( job->pts_to_stop && sync->next_start >= job->pts_to_stop )
+    {
+        hb_buffer_close( &buf );
+        *buf_out = hb_buffer_init( 0 );
+        return HB_WORK_DONE;
+    }
+
+    hb_lock( pv->common->mutex );
+    start = buf->start - pv->common->audio_passthru_slip;
+    hb_unlock( pv->common->mutex );
     if ( (int64_t)( start - sync->next_pts ) < 0 )
     {
         // audio time went backwards.
@@ -859,6 +1043,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
 
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     sync = &pv->type.audio;
+    sync->index = i;
     pv->job    = job;
     pv->common = common;
     pv->common->ref++;
@@ -1086,4 +1271,93 @@ static void UpdateState( hb_work_object_t * w )
 #undef p
 
     hb_set_state( pv->job->h, &state );
+}
+
+static void UpdateSearchState( hb_work_object_t * w, int64_t start )
+{
+    hb_work_private_t * pv = w->private_data;
+    hb_sync_video_t   * sync = &pv->type.video;
+    hb_state_t state;
+    uint64_t now;
+    double avg;
+
+    now = hb_get_date();
+    if( !pv->common->count_frames )
+    {
+        sync->st_first = now;
+        pv->job->st_pause_date = -1;
+        pv->job->st_paused = 0;
+    }
+    pv->common->count_frames++;
+
+#define p state.param.working
+    state.state = HB_STATE_SEARCHING;
+    if ( pv->job->frame_to_start )
+        p.progress  = (float) pv->common->count_frames / 
+                      (float) pv->job->frame_to_start;
+    else if ( pv->job->pts_to_start )
+        p.progress  = (float) start / (float) pv->job->pts_to_start;
+    else
+        p.progress = 0;
+    if( p.progress > 1.0 )
+    {
+        p.progress = 1.0;
+    }
+    if (now > sync->st_first)
+    {
+        int eta;
+
+        if ( pv->job->frame_to_start )
+        {
+            avg = 1000.0 * (double)pv->common->count_frames / (now - sync->st_first);
+            eta = ( pv->job->frame_to_start - pv->common->count_frames ) / avg;
+        }
+        else if ( pv->job->pts_to_start )
+        {
+            avg = 1000.0 * (double)start / (now - sync->st_first);
+            eta = ( pv->job->pts_to_start - start ) / avg;
+        }
+        p.hours   = eta / 3600;
+        p.minutes = ( eta % 3600 ) / 60;
+        p.seconds = eta % 60;
+    }
+    else
+    {
+        p.rate_avg = 0.0;
+        p.hours    = -1;
+        p.minutes  = -1;
+        p.seconds  = -1;
+    }
+#undef p
+
+    hb_set_state( pv->job->h, &state );
+}
+
+static void getPtsOffset( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    int           i ;
+    int64_t       first_pts = INT64_MAX;
+
+    for( i = 0; i < pv->common->pts_count; i++ )
+    {
+        if ( pv->common->first_pts[i] < first_pts )
+            first_pts = pv->common->first_pts[i];
+    }
+    pv->common->audio_passthru_slip = pv->common->pts_offset = first_pts;
+    return;
+}
+
+static int checkPtsOffset( hb_work_object_t * w )
+{
+    hb_work_private_t * pv = w->private_data;
+    int           i ;
+
+    for( i = 0; i < pv->common->pts_count; i++ )
+    {
+        if ( pv->common->first_pts[i] == INT64_MAX )
+            return 0;
+    }
+    getPtsOffset( w );
+    return 1;
 }

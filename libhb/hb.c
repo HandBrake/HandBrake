@@ -1454,7 +1454,8 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     hb_lock( h->pause_lock );
     hb_lock( h->state_lock );
     memcpy( &h->state, s, sizeof( hb_state_t ) );
-    if( h->state.state == HB_STATE_WORKING )
+    if( h->state.state == HB_STATE_WORKING ||
+        h->state.state == HB_STATE_SEARCHING )
     {
         /* XXX Hack */
         if (h->job_count < 1)

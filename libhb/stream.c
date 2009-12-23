@@ -207,6 +207,7 @@ static void ffmpeg_close( hb_stream_t *d );
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream );
 static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf );
 static int ffmpeg_seek( hb_stream_t *stream, float frac );
+static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts );
 
 /*
  * streams have a bunch of state that's learned during the scan. We don't
@@ -1307,6 +1308,15 @@ int hb_stream_seek( hb_stream_t * stream, float f )
     }
 
     return 1;
+}
+
+int hb_stream_seek_ts( hb_stream_t * stream, int64_t ts )
+{
+	if ( stream->hb_stream_type == ffmpeg )
+    {
+        return ffmpeg_seek_ts( stream, ts );
+    }
+    return -1;
 }
 
 static const char* make_upper( const char* s )
@@ -2982,4 +2992,17 @@ static int ffmpeg_seek( hb_stream_t *stream, float frac )
         av_seek_frame( ic, -1, 0LL, AVSEEK_FLAG_BACKWARD );
     }
     return 1;
+}
+
+// Assumes that we are always seeking forward
+static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts )
+{
+    AVFormatContext *ic = stream->ffmpeg_ic;
+    int64_t pos;
+
+    pos = ts * AV_TIME_BASE / 90000;
+    stream->need_keyframe = 1;
+    // Seek to the nearest timestamp before that requested where
+    // there is an I-frame
+    return av_seek_frame( ic, -1, pos, AVSEEK_FLAG_BACKWARD );
 }

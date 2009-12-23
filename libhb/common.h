@@ -260,7 +260,10 @@ struct hb_job_s
     hb_subtitle_config_t    select_subtitle_config;
 
     int             angle;              // dvd angle to encode
-    int             frame_to_stop;       // declare eof when we hit this frame
+    int             frame_to_start;     // declare eof when we hit this frame
+    int64_t         pts_to_start;       // drop frames until  we pass this pts 
+                                        //  in the time-linearized input stream
+    int             frame_to_stop;      // declare eof when we hit this frame
     int64_t         pts_to_stop;        // declare eof when we pass this pts in
                                         //  the time-linearized input stream
     int             start_at_preview;   // if non-zero, encoding will start
@@ -566,6 +569,7 @@ struct hb_state_s
 #define HB_STATE_PAUSED   16
 #define HB_STATE_WORKDONE 32
 #define HB_STATE_MUXING   64
+#define HB_STATE_SEARCHING 128
     int state;
 
     union

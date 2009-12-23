@@ -82,6 +82,7 @@ hb_cond_t * hb_cond_init();
 void        hb_cond_wait( hb_cond_t *, hb_lock_t * );
 void        hb_cond_timedwait( hb_cond_t * c, hb_lock_t * lock, int msec );
 void        hb_cond_signal( hb_cond_t * );
+void        hb_cond_broadcast( hb_cond_t * c );
 void        hb_cond_close( hb_cond_t ** );
 
 /************************************************************************

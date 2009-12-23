@@ -657,6 +657,13 @@ void hb_cond_signal( hb_cond_t * c )
 #endif
 }
 
+void hb_cond_broadcast( hb_cond_t * c )
+{
+#if USE_PTHREAD
+    pthread_cond_broadcast( &c->cond );
+#endif
+}
+
 /************************************************************************
  * Network
  ***********************************************************************/
