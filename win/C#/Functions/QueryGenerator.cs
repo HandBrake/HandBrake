@@ -429,7 +429,7 @@ namespace Handbrake.Functions
                         trackID = tempSub[0];
 
                         if (item.Forced == "Yes")
-                            itemToAdd = trackID;
+                            itemToAdd = "scan";
 
                         if (itemToAdd != "")
                             subtitleForced += subtitleForced == "" ? itemToAdd : "," + itemToAdd;
