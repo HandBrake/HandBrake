@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System;
 using System.Globalization;
@@ -38,21 +39,21 @@ namespace Handbrake.Parsing
     /// <param name="TimeRemaining">The estimated time remaining for this task to complete</param>
     public delegate void EncodeProgressEventHandler(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining);
 
-       
+
     /// <summary>
     /// A simple wrapper around a StreamReader to keep track of the entire output from a cli process
     /// </summary>
     internal class Parser : StreamReader
     {
-        private string m_buffer;
+        private StringBuilder _buffer = new StringBuilder("");
         /// <summary>
         /// The output from the CLI process
         /// </summary>
-        public string Buffer
+        public String Buffer
         {
             get
             {
-                return m_buffer;
+                return _buffer.ToString();
             }
         }
 
@@ -82,22 +83,27 @@ namespace Handbrake.Parsing
         /// Default constructor for this object
         /// </summary>
         /// <param name="baseStream">The stream to parse from</param>
-        public Parser(Stream baseStream) : base(baseStream)
+        public Parser(Stream baseStream)
+            : base(baseStream)
         {
-            m_buffer = string.Empty;
         }
 
         public override string ReadLine()
         {
             string tmp = base.ReadLine();
 
-            m_buffer += tmp + Environment.NewLine;
-            Match m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
+            _buffer.AppendLine(tmp);
+
+            Match m = null;
+            if (tmp.Contains("Scanning title"))
+                m = Regex.Match(tmp, "^Scanning title ([0-9]*) of ([0-9]*)");
+
             if (OnReadLine != null)
                 OnReadLine(this, tmp);
 
-            if (m.Success && OnScanProgress != null)
-                OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+            if (m != null)
+                if (m.Success && OnScanProgress != null)
+                    OnScanProgress(this, int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
 
             return tmp;
         }
@@ -106,7 +112,8 @@ namespace Handbrake.Parsing
         {
             string tmp = base.ReadToEnd();
 
-            m_buffer += tmp + Environment.NewLine;
+            _buffer.AppendLine(tmp);
+
             if (OnReadToEnd != null)
                 OnReadToEnd(this, tmp);
 
