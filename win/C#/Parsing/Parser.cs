@@ -92,7 +92,7 @@ namespace Handbrake.Parsing
         {
             string tmp = base.ReadLine();
 
-            _buffer.AppendLine(tmp);
+            _buffer.Append(tmp + Environment.NewLine);
 
             Match m = null;
             if (tmp.Contains("Scanning title"))
@@ -112,7 +112,7 @@ namespace Handbrake.Parsing
         {
             string tmp = base.ReadToEnd();
 
-            _buffer.AppendLine(tmp);
+            _buffer.Append(tmp + Environment.NewLine);
 
             if (OnReadToEnd != null)
                 OnReadToEnd(this, tmp);
