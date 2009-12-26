@@ -383,8 +383,14 @@ namespace Handbrake.Controls
             }
             return false;
         }
-        public void SetSubtitleTrackAuto()
+        public void SetSubtitleTrackAuto(object[] subs)
         {
+            drp_subtitleTracks.Items.Clear();
+            drp_subtitleTracks.Items.Add("Foreign Audio Search (Bitmap)");
+            drp_subtitleTracks.Items.AddRange(subs);
+            drp_subtitleTracks.SelectedIndex = 0;
+            Clear();
+
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
             if (Properties.Settings.Default.NativeLanguage != "Any")
             {

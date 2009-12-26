@@ -265,7 +265,7 @@ namespace Handbrake.Controls
 
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
             if (Properties.Settings.Default.NativeLanguage == "Any")
-                drp_audioTrack.SelectedIndex = 0;
+                drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
             else
             {
                 if (Properties.Settings.Default.DubAudio) // "Dub Foreign language audio" 
@@ -294,7 +294,7 @@ namespace Handbrake.Controls
                     }
                 }
                 else
-                    drp_audioTrack.SelectedIndex = 0; // "Use Foreign language audio and Subtitles"
+                    drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0; // "Use Foreign language audio and Subtitles"
             }
             drp_audioMix.SelectedIndex = 0;
         }

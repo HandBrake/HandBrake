@@ -932,12 +932,7 @@ namespace Handbrake
                 AudioSettings.SetTrackList(selectedTitle);
 
                 // Populate the Subtitles dropdown
-                Subtitles.drp_subtitleTracks.Items.Clear();
-                Subtitles.drp_subtitleTracks.Items.Add("Foreign Audio Search (Bitmap)");
-                Subtitles.drp_subtitleTracks.Items.AddRange(selectedTitle.Subtitles.ToArray());
-                Subtitles.drp_subtitleTracks.SelectedIndex = 0;
-                Subtitles.Clear();
-                Subtitles.SetSubtitleTrackAuto();
+                Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());
             }
             // Update the source label if we have multiple streams
             if (selectedTitle != null)
