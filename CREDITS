@@ -35,24 +35,9 @@ libavcodec authors:
   Juan J. Sierralta
   Lionel Ulmer
 
-libdts authors:
+libdca authors:
   Gildas Bazin
   Sam Hocevar
-
-libdvdcss authors:
-  Billy Biggs
-  Stéphane Borel
-  Håkan Hjort
-  Samuel Hocevar
-  Eugenio Jarosiewicz
-  Jon Lech Johansen
-  Markus Kuespert
-  Pascal Levesque
-  Steven M. Schultz
-  David Siebörger
-  Alex Strelnikov
-  German Tischler
-  Gildas Bazin
 
 libdvdread authors:
   Björn Englund
@@ -67,6 +52,12 @@ libfaac authors:
   thebard
   Ivan Dimkovic
   Krzysztof Nikiel
+  
+libfaad2 authors:
+  M. Bakker
+  Alexander Kurpiers
+  Volker Fischer
+  Gian-Carlo Pascutto
 
 libmp3lame authors:
   Mike Cheng
@@ -145,16 +136,3 @@ libvorbis authors:
 
 libx264 authors:
   Laurent Aimar
-
-libxvidcore authors:
-  Christoph Lampert
-  Michael Militzer
-  Peter Ross
-  Benjamin Herrenschmidt
-  Daniel Smith
-  Dirk Knop
-  Edouard Gomez
-  Guillaume Morin
-  MinChen
-  Pascal Massimino
-  Radoslaw Czyz
