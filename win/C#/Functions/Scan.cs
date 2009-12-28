@@ -23,10 +23,10 @@ namespace Handbrake.Functions
         public event EventHandler ScanCompleted;
         public event EventHandler ScanStatusChanged;
 
-        public void ScanSource(string sourcePath)
+        public void ScanSource(string sourcePath, int title)
         {
-            Thread t = new Thread(new ParameterizedThreadStart(RunScan));
-            t.Start(sourcePath);
+            Thread t = new Thread(unused => RunScan(sourcePath, title));
+            t.Start();
         }
 
         public DVD SouceData()
@@ -49,7 +49,7 @@ namespace Handbrake.Functions
             return _hbProc;
         }
 
-        private void RunScan(object sourcePath)
+        private void RunScan(object sourcePath, int title)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Handbrake.Functions
                     StartInfo =
                     {
                         FileName = handbrakeCLIPath,
-                        Arguments = String.Format(@" -i ""{0}"" -t0 {1} -v ", sourcePath, dvdnav),
+                        Arguments = String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, dvdnav),
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         UseShellExecute = false,

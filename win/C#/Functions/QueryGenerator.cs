@@ -18,16 +18,16 @@ namespace Handbrake.Functions
         /// Generates a full CLI query for either encoding or previe encoeds if duration and preview are defined.
         /// </summary>
         /// <param name="mainWindow"></param>
+        /// <param name="mode"></param>
         /// <param name="duration"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public string GenerateCLIQuery(frmMain mainWindow, int duration, string preview)
+        public string GenerateCLIQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
             string query = "";
-
-            if (!string.IsNullOrEmpty(mainWindow.sourcePath))
-                if (mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
-                    query = " -i " + '"' + mainWindow.sourcePath + '"';
+            
+            if (!string.IsNullOrEmpty(mainWindow.sourcePath) && mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
+                query = " -i " + '"' + mainWindow.sourcePath + '"';
 
             if (mainWindow.drp_dvdtitle.Text != "")
             {
@@ -35,32 +35,46 @@ namespace Handbrake.Functions
                 query += " -t " + titleInfo[0];
             }
 
-            if (!Properties.Settings.Default.noDvdNav)
-                if (mainWindow.drop_angle.Items.Count != 0)
-                    query += " --angle " + mainWindow.drop_angle.SelectedItem;
+            if (!Properties.Settings.Default.noDvdNav && mainWindow.drop_angle.Items.Count != 0)
+                query += " --angle " + mainWindow.drop_angle.SelectedItem;
 
-
-            if (duration != 0 && preview != null) // Preivew Query
+            // Decide what part of the video we want to encode.
+            switch (mode)
             {
-                query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
-                query += " --start-at-preview " + preview;
-                query += " --stop-at duration:" + duration + " ";
+                case 0: // Chapters
+                    if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "")
+                        query += string.Format(" -c {0}", mainWindow.drop_chapterStart.Text);
+                    else if (mainWindow.drop_chapterStart.Text != "" && mainWindow.drop_chapterFinish.Text != "")
+                        query += string.Format(" -c {0}-{1}", mainWindow.drop_chapterStart.Text, mainWindow.drop_chapterFinish.Text);
+                    break;
+                case 1: // Seconds
+                    int start, end;
+                    int.TryParse(mainWindow.drop_chapterStart.Text, out start);
+                    int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
+                    int calculatedDuration = end - start;
 
-                if (mainWindow.text_destination.Text != "")
-                    query += " -o " + '"' + mainWindow.text_destination.Text.Replace(".m", "_sample.m") + '"';
-            }
-            else // Non Preview Query
-            {
-                if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "")
-                    query += " -c " + mainWindow.drop_chapterStart.Text;
-                else if (mainWindow.drop_chapterStart.Text == "Auto" && mainWindow.drop_chapterFinish.Text != "Auto")
-                    query += " -c " + "0-" + mainWindow.drop_chapterFinish.Text;
-                else if (mainWindow.drop_chapterStart.Text != "Auto" && mainWindow.drop_chapterFinish.Text != "Auto" && mainWindow.drop_chapterStart.Text != "")
-                    query += " -c " + mainWindow.drop_chapterStart.Text + "-" + mainWindow.drop_chapterFinish.Text;
+                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
+                    break;
+                case 2: // Frames
+                    int.TryParse(mainWindow.drop_chapterStart.Text, out start);
+                    int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
+                    calculatedDuration = end - start;
 
-                if (mainWindow.text_destination.Text != "")
-                    query += " -o " + '"' + mainWindow.text_destination.Text + '"';
+                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
+                    break;
+                case 3: // Preview
+                    query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
+                    query += " --start-at-preview " + preview;
+                    query += " --stop-at duration:" + duration + " ";
+
+                    if (mainWindow.text_destination.Text != "")
+                        query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
+                    break;
+                default:
+                    break;
             }
+            if (mode != 3)
+                query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text);
 
             query += GenerateTabbedComponentsQuery(mainWindow);
 
@@ -258,11 +272,11 @@ namespace Handbrake.Functions
 
                 // Audio Codec (-E)
                 if (row.SubItems[2].Text != String.Empty)
-                    codecs.Add(getAudioEncoder(row.SubItems[2].Text));
+                    codecs.Add(GetAudioEncoder(row.SubItems[2].Text));
 
                 // Audio Mixdown (-6)
                 if (row.SubItems[3].Text != String.Empty)
-                    mixdowns.Add(getMixDown(row.SubItems[3].Text));
+                    mixdowns.Add(GetMixDown(row.SubItems[3].Text));
 
                 // Sample Rate (-R)
                 if (row.SubItems[4].Text != String.Empty)
@@ -377,7 +391,7 @@ namespace Handbrake.Functions
                 string subtitleForced = String.Empty;
                 string subtitleBurn = String.Empty;
                 string subtitleDefault = String.Empty;
- 
+
                 // SRT
                 string srtFile = String.Empty;
                 string srtCodeset = String.Empty;
@@ -499,7 +513,7 @@ namespace Handbrake.Functions
                                       ? Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv")
                                       : Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
 
-                    if (chapterCSVSave(mainWindow, path) == false)
+                    if (ChapterCSVSave(mainWindow, path) == false)
                         query += " -m ";
                     else
                         query += " --markers=" + "\"" + path + "\"";
@@ -528,7 +542,7 @@ namespace Handbrake.Functions
             return query;
         }
 
-        private static string getMixDown(string selectedAudio)
+        private static string GetMixDown(string selectedAudio)
         {
             switch (selectedAudio)
             {
@@ -548,7 +562,7 @@ namespace Handbrake.Functions
                     return "auto";
             }
         }
-        private static string getAudioEncoder(string selectedEncoder)
+        private static string GetAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
             {
@@ -566,7 +580,7 @@ namespace Handbrake.Functions
                     return "";
             }
         }
-        private static Boolean chapterCSVSave(frmMain mainWindow, string filePathName)
+        private static Boolean ChapterCSVSave(frmMain mainWindow, string filePathName)
         {
             try
             {

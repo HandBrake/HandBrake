@@ -85,6 +85,7 @@ namespace Handbrake
             loadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
+            drop_mode.SelectedIndex = 0;
             queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
             if (!Properties.Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
@@ -297,7 +298,10 @@ namespace Handbrake
             if (fileList != null)
             {
                 if (fileList[0] != "")
-                    StartScan(fileList[0]);
+                {
+                    this.selectedSourceType = SourceType.VideoFile;
+                    StartScan(fileList[0], 0);
+                }
                 else
                     UpdateSourceLabel();
             }
@@ -383,7 +387,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, queryGen.GenerateCLIQuery(this, 0, null), presetHandler);
+            Form preset = new frmAddPreset(this, queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -621,16 +625,16 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.Update(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null),
+                        presetHandler.Update(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null),
                                                    parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
                     PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.Add(parsed.PresetName, queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings);
+                    presetHandler.Add(parsed.PresetName, queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings);
 
-                    if (presetHandler.Add(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, 0, null), parsed.UsesPictureSettings))
+                    if (presetHandler.Add(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
                         treeView_presets.Nodes.Add(preset_treeview);
@@ -670,8 +674,8 @@ namespace Handbrake
             {
                 if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
-                    string generatedQuery = queryGen.GenerateCLIQuery(this, 0, null);
-                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.GenerateCLIQuery(this, 0, null);
+                    string generatedQuery = queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
@@ -740,7 +744,7 @@ namespace Handbrake
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query = queryGen.GenerateCLIQuery(this, 0, null);
+                String query = queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -843,7 +847,7 @@ namespace Handbrake
             if (DVD_Open.ShowDialog() == DialogResult.OK)
             {
                 this.selectedSourceType = SourceType.Folder;
-                selectSource(DVD_Open.SelectedPath);
+                SelectSource(DVD_Open.SelectedPath);
             }
             else
                 UpdateSourceLabel();
@@ -853,7 +857,7 @@ namespace Handbrake
             if (ISO_Open.ShowDialog() == DialogResult.OK)
             {
                 this.selectedSourceType = SourceType.VideoFile;
-                selectSource(ISO_Open.FileName);
+                SelectSource(ISO_Open.FileName);
             }
             else
                 UpdateSourceLabel();
@@ -862,9 +866,9 @@ namespace Handbrake
         {
             if (this.dvdDrivePath == null) return;
             this.selectedSourceType = SourceType.DvdDrive;
-            selectSource(this.dvdDrivePath);
+            SelectSource(this.dvdDrivePath);
         }
-        private void selectSource(string file)
+        private void SelectSource(string file)
         {
             Check_ChapterMarkers.Enabled = true;
             lastAction = "scan";
@@ -877,7 +881,7 @@ namespace Handbrake
             }
 
             sourcePath = Path.GetFileName(file);
-            StartScan(file);
+            StartScan(file,0);
         }
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -970,6 +974,9 @@ namespace Handbrake
         }
         private void chapersChanged(object sender, EventArgs e)
         {
+            if (drop_mode.SelectedIndex != 0) // Function is not used if we are not in chapters mode.
+                return;
+
             Control ctl = (Control)sender;
             int chapterStart, chapterEnd;
             int.TryParse(drop_chapterStart.Text, out chapterStart);
@@ -1035,6 +1042,16 @@ namespace Handbrake
                     data_chpt.Enabled = true;
                 }
             }
+        }
+        private void drop_mode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (drop_mode.SelectedIndex == 0) return;
+
+            if (drop_mode.SelectedIndex != 0)
+                drop_mode.SelectedIndex = 0;
+
+            MessageBox.Show("This feature is not implemented yet! Switching Back to Chapters Mode.", "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         //Destination
@@ -1382,7 +1399,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = queryGen.GenerateCLIQuery(this, 0, null);
+            rtf_query.Text = queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {
@@ -1396,7 +1413,7 @@ namespace Handbrake
         public Boolean isScanning { get; set; }
         private Scan SourceScan;
 
-        private void StartScan(String filename)
+        private void StartScan(String filename, int title)
         {
             // Setup the GUI components for the scan.
             sourcePath = filename;
@@ -1419,11 +1436,9 @@ namespace Handbrake
             // Start the Scan
             try
             {
-                // if (ActivityWindow != null)
-                // ActivityWindow.SetupLogViewer(true);
                 isScanning = true;
                 SourceScan = new Scan();
-                SourceScan.ScanSource(sourcePath);
+                SourceScan.ScanSource(sourcePath, title);
                 SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
                 SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
             }

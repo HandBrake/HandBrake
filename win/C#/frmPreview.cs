@@ -13,14 +13,13 @@ namespace Handbrake
 {
     public partial class frmPreview : Form
     {
-
-        QueryGenerator hb_common_func = new QueryGenerator();
-        EncodeAndQueueHandler process = new EncodeAndQueueHandler();
+        readonly QueryGenerator HbCommonFunc = new QueryGenerator();
+        readonly EncodeAndQueueHandler Process = new EncodeAndQueueHandler();
         private delegate void UpdateUIHandler();
-        String currently_playing = "";
-        readonly frmMain mainWindow;
-        private Thread player;
-        private Boolean noQT;
+        String CurrentlyPlaying = "";
+        readonly frmMain MainWindow;
+        private Thread Player;
+        private readonly Boolean NoQT;
 
         public frmPreview(frmMain mw)
         {
@@ -30,9 +29,9 @@ namespace Handbrake
             }
             catch (Exception)
             {
-                noQT = true;
+                NoQT = true;
             }
-            this.mainWindow = mw;
+            this.MainWindow = mw;
             cb_preview.SelectedIndex = 0;
             cb_duration.SelectedIndex = 1;
 
@@ -48,11 +47,11 @@ namespace Handbrake
             lbl_status.Visible = true;
             try
             {
-                if (!noQT)
+                if (!NoQT)
                     QTControl.URL = "";
 
-                if (File.Exists(currently_playing))
-                    File.Delete(currently_playing);
+                if (File.Exists(CurrentlyPlaying))
+                    File.Delete(CurrentlyPlaying);
             }
             catch (Exception)
             {
@@ -64,17 +63,17 @@ namespace Handbrake
             lbl_status.Text = "Encoding Sample for (VLC) ...";
             int duration;
             int.TryParse(cb_duration.Text, out duration);
-            String query = hb_common_func.GenerateCLIQuery(mainWindow, duration, cb_preview.Text);
-            ThreadPool.QueueUserWorkItem(procMonitor, query);
+            String query = HbCommonFunc.GenerateCLIQuery(MainWindow, 3, duration, cb_preview.Text);
+            ThreadPool.QueueUserWorkItem(ProcMonitor, query);
         }
         private void btn_playQT_Click(object sender, EventArgs e)
         {
-            if (noQT)
+            if (NoQT)
             {
                 MessageBox.Show(this, "It would appear QuickTime 7 is not installed or not accessible. Please (re)install QuickTime.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (mainWindow.text_destination.Text.Contains(".mkv"))
+            if (MainWindow.text_destination.Text.Contains(".mkv"))
             {
                 MessageBox.Show(this,
                                 "The QuickTime Control does not support MKV files, It is recommended you use VLC option instead.",
@@ -86,8 +85,8 @@ namespace Handbrake
                 try
                 {
                     QTControl.URL = "";
-                    if (File.Exists(currently_playing))
-                        File.Delete(currently_playing);
+                    if (File.Exists(CurrentlyPlaying))
+                        File.Delete(CurrentlyPlaying);
                 }
                 catch (Exception)
                 {
@@ -99,60 +98,60 @@ namespace Handbrake
                 lbl_status.Text = "Encoding Sample for (QT) ...";
                 int duration;
                 int.TryParse(cb_duration.Text, out duration);
-                String query = hb_common_func.GenerateCLIQuery(mainWindow, duration, cb_preview.Text);
+                String query = HbCommonFunc.GenerateCLIQuery(MainWindow, 3, duration, cb_preview.Text);
 
-                ThreadPool.QueueUserWorkItem(procMonitor, query);
+                ThreadPool.QueueUserWorkItem(ProcMonitor, query);
             }
         }
-        private void procMonitor(object state)
+        private void ProcMonitor(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
-            if (process.hbProcess != null)
+            if (Process.hbProcess != null)
                 MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                process.RunCli((string)state);
-                if (process.hbProcess != null)
+                Process.RunCli((string)state);
+                if (Process.hbProcess != null)
                 {
-                    process.hbProcess.WaitForExit();
-                    process.hbProcess = null;
+                    Process.hbProcess.WaitForExit();
+                    Process.hbProcess = null;
                 }
-                encodeCompleted();
+                EncodeCompleted();
             }
         }
-        private void encodeCompleted()
+        private void EncodeCompleted()
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new UpdateUIHandler(encodeCompleted));
+                    BeginInvoke(new UpdateUIHandler(EncodeCompleted));
                     return;
                 }
-                if (!noQT)
+                if (!NoQT)
                     btn_playQT.Enabled = true;
                 btn_playVLC.Enabled = true;
 
-                // Decide which player to use.
+                // Decide which Player to use.
                 String playerSelection = lbl_status.Text.Contains("QT") ? "QT" : "VLC";
 
                 lbl_status.Text = "Loading Clip ...";
 
                 // Get the sample filename
-                if (mainWindow.text_destination.Text != "")
-                    currently_playing = mainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").Replace(".mkv", "_sample.mkv"); ;
+                if (MainWindow.text_destination.Text != "")
+                    CurrentlyPlaying = MainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").Replace(".mkv", "_sample.mkv"); ;
 
                 // Play back in QT or VLC
                 if (playerSelection == "QT")
-                    play();
+                    Play();
                 else
-                    playVLC();
+                    PlayVLC();
 
                 lbl_status.Text = "";
             }
             catch (Exception exc)
             {
-                MessageBox.Show(this, "frmPreview.cs encodeCompleted " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "frmPreview.cs EncodeCompleted " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -162,27 +161,36 @@ namespace Handbrake
         /// <summary>
         /// Play the video back in the QuickTime control
         /// </summary>
-        private void play()
+        private void Play()
         {
-            player = new Thread(OpenMovie) { IsBackground = true };
-            player.Start();
+            Player = new Thread(OpenMovie) { IsBackground = true };
+            Player.Start();
             lbl_status.Visible = false;
         }
 
         /// <summary>
-        /// Play the video back in an external VLC player
+        /// Play the video back in an external VLC Player
         /// </summary>
-        private void playVLC()
+        private void PlayVLC()
         {
-            // Launch VLC and play video.
-            if (currently_playing != "")
+            // Launch VLC and Play video.
+            if (CurrentlyPlaying != "")
             {
-                if (File.Exists(currently_playing))
+                if (File.Exists(CurrentlyPlaying))
                 {
                     // Attempt to find VLC if it doesn't exist in the default set location.
+                    string vlcPath;
+                    
+                    if (8 == IntPtr.Size || (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
+                        vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+                    else
+                        vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
+      
+                    vlcPath = vlcPath != null ? vlcPath + @"\VideoLAN\VLC\vlc.exe" : @"C:\Program Files (x86)\VideoLAN\VLC\vlc.exe";
+                    
                     if (!File.Exists(Properties.Settings.Default.VLC_Path))
                     {
-                        if (File.Exists("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"))
+                        if (File.Exists(vlcPath))
                         {
                             Properties.Settings.Default.VLC_Path = "C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe";
                             Properties.Settings.Default.Save(); // Save this new path if it does
@@ -197,12 +205,12 @@ namespace Handbrake
 
                     if (File.Exists(Properties.Settings.Default.VLC_Path))
                     {
-                        String args = "\"" + currently_playing + "\"";
+                        String args = "\"" + CurrentlyPlaying + "\"";
                         ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
-                        Process.Start(vlc);
+                        System.Diagnostics.Process.Start(vlc);
                         lbl_status.Text = "VLC will now launch.";
                     }
-                    
+
                 }
                 else
                     MessageBox.Show(this, "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -223,9 +231,9 @@ namespace Handbrake
                     BeginInvoke(new UpdateUIHandler(OpenMovie));
                     return;
                 }
-                QTControl.URL = currently_playing;
+                QTControl.URL = CurrentlyPlaying;
                 QTControl.SetSizing(QTSizingModeEnum.qtControlFitsMovie, true);
-                QTControl.URL = currently_playing;
+                QTControl.URL = CurrentlyPlaying;
                 QTControl.Show();
 
                 this.ClientSize = QTControl.Size;
