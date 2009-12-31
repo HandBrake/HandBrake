@@ -146,7 +146,7 @@ int encCoreAudioInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
-    if( audio->config.out.mixdown == HB_AMIXDOWN_6CH && audio->config.in.codec == HB_ACODEC_AC3 )
+    if( ( audio->config.out.mixdown == HB_AMIXDOWN_6CH ) && ( audio->config.in.codec == HB_ACODEC_AC3) )
     {
         SInt32 channelMap[6] = { 2, 1, 3, 4, 5, 0 };
         AudioConverterSetProperty( pv->converter, kAudioConverterChannelMap,
@@ -251,10 +251,11 @@ static OSStatus inInputDataProc( AudioConverterRef converter, UInt32 *npackets,
                           void *userdata )
 {
     hb_work_private_t *pv = userdata;
-    pv->ibytes = hb_list_bytes( pv->list );
 
-    if( pv->ibytes == 0 ) {
+    if( pv->ibytes == 0 )
+    {
         *npackets = 0;
+        hb_log( "CoreAudio: no data to use in inInputDataProc" );
         return noErr;
     }
 
@@ -262,11 +263,20 @@ static OSStatus inInputDataProc( AudioConverterRef converter, UInt32 *npackets,
         free( pv->buf );
 
     uint64_t pts, pos;
-    pv->ibytes = buffers->mBuffers[0].mDataByteSize = MIN( *npackets * pv->isamplesiz, pv->ibytes );
-    buffers->mBuffers[0].mData = pv->buf = malloc( buffers->mBuffers[0].mDataByteSize );
+    buffers->mBuffers[0].mDataByteSize = MIN( *npackets * pv->isamplesiz, pv->ibytes );
+    buffers->mBuffers[0].mData = pv->buf = calloc(1 , buffers->mBuffers[0].mDataByteSize );
 
-    hb_list_getbytes( pv->list, buffers->mBuffers[0].mData,
-                      buffers->mBuffers[0].mDataByteSize, &pts, &pos );
+    if( hb_list_bytes( pv->list ) >= buffers->mBuffers[0].mDataByteSize )
+    {
+        hb_list_getbytes( pv->list, buffers->mBuffers[0].mData,
+                          buffers->mBuffers[0].mDataByteSize, &pts, &pos );
+    }
+    else
+    {
+        hb_log( "CoreAudio: Not enought data, exiting inInputDataProc" );
+        *npackets = 0;
+        return 1;
+    }
 
     *npackets = buffers->mBuffers[0].mDataByteSize / pv->isamplesiz;
 
@@ -274,8 +284,11 @@ static OSStatus inInputDataProc( AudioConverterRef converter, UInt32 *npackets,
     float *fdata = buffers->mBuffers[0].mData;
     int i;
 
-    for( i = 0; i < *npackets * pv->nchannels; i++ )
+    for( i = 0; i < *npackets * pv->nchannels; i++ ) {
         fdata[i] = fdata[i] / 32768.f;
+    }
+
+    pv->ibytes -= buffers->mBuffers[0].mDataByteSize;
 
     return noErr;
 }
@@ -291,7 +304,7 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     UInt32 npackets = 1;
 
     /* check if we need more data */
-    if( hb_list_bytes( pv->list ) < pv->isamples * pv->isamplesiz )
+    if( ( pv->ibytes = hb_list_bytes( pv->list ) ) < pv->isamples * pv->isamplesiz )
         return NULL;
 
     hb_buffer_t * obuf;
@@ -304,11 +317,16 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     obuflist.mBuffers[0].mDataByteSize = obuf->size;
     obuflist.mBuffers[0].mData = obuf->data;
 
-    AudioConverterFillComplexBuffer( pv->converter, inInputDataProc, pv, 
+    OSStatus err = AudioConverterFillComplexBuffer( pv->converter, inInputDataProc, pv, 
                                      &npackets, &obuflist, &odesc );
-
-    if( odesc.mDataByteSize == 0 )
+    if( err ) {
+        hb_log( "CoreAudio: Not enough data" );
         return NULL;
+    }
+    if( odesc.mDataByteSize == 0 || npackets == 0 ) {
+        return NULL;
+        hb_log( "CoreAudio: 0 packets returned " );
+    }
 
     obuf->start = pv->pts;
     pv->pts += 90000LL * pv->isamples / pv->osamplerate;
@@ -317,6 +335,45 @@ static hb_buffer_t * Encode( hb_work_object_t * w )
     obuf->frametype = HB_FRAME_AUDIO;
 
     return obuf;
+}
+
+static hb_buffer_t *Flush( hb_work_object_t *w, hb_buffer_t *bufin )
+{
+    hb_work_private_t *pv = w->private_data;
+
+    // pad whatever data we have out to four input frames.
+    int nbytes = hb_list_bytes( pv->list );
+    int pad = pv->isamples * pv->isamplesiz - nbytes;
+    if ( pad > 0 )
+    {
+        hb_buffer_t *tmp = hb_buffer_init( pad );
+        memset( tmp->data, 0, pad );
+        hb_list_add( pv->list, tmp );
+    }
+
+    hb_buffer_t *bufout = NULL, *buf = NULL;
+    while ( hb_list_bytes( pv->list ) >= pv->isamples * pv->isamplesiz )
+    {
+        hb_buffer_t *b = Encode( w );
+        if ( b )
+        {
+            if ( bufout == NULL )
+            {
+                bufout = b;
+            }
+            else
+            {
+                buf->next = b;
+            }
+            buf = b;
+        }
+    }
+    // add the eof marker to the end of our buf chain
+    if ( buf )
+        buf->next = bufin;
+    else
+        bufout = bufin;
+    return bufout;
 }
 
 /***********************************************************************
@@ -332,8 +389,9 @@ int encCoreAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     if( (*buf_in)->size <= 0 )
     {
-        // EOF on input - send it downstream & say we're done
-        *buf_out = *buf_in;
+        // EOF on input. Finish encoding what we have buffered then send
+        // it & the eof downstream.
+        *buf_out = Flush( w, *buf_in );
         *buf_in = NULL;
         return HB_WORK_DONE;
     }
