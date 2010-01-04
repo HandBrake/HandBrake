@@ -4564,7 +4564,7 @@ bool one_burned = FALSE;
 
 	int duration = [fSrcTimeEndEncodingField intValue] - [fSrcTimeStartEncodingField intValue];
     [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
-        @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
+        @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60,
         duration % 60]];
     
     //[self calculateBitrate: sender];
@@ -4579,7 +4579,7 @@ bool one_burned = FALSE;
     
     int duration = ([fSrcFrameEndEncodingField intValue] - [fSrcFrameStartEncodingField intValue]) / (title->rate / title->rate_base);
     [fSrcDuration2Field setStringValue: [NSString stringWithFormat:
-                                         @"%02lld:%02lld:%02lld", duration / 3600, ( duration / 60 ) % 60,
+                                         @"%02d:%02d:%02d", duration / 3600, ( duration / 60 ) % 60,
                                          duration % 60]];
     
     //[self calculateBitrate: sender];
