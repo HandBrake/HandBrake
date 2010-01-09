@@ -37,6 +37,7 @@ namespace Handbrake
         private SourceType selectedSourceType;
         private string dvdDrivePath;
         private string dvdDriveLabel;
+        private Preset CurrentlySelectedPreset;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -283,6 +284,7 @@ namespace Handbrake
         private void changePresetLabel(object sender, EventArgs e)
         {
             labelPreset.Text = "Output Settings (Preset: Custom)";
+            CurrentlySelectedPreset = null;
         }
 
         private static void frmMain_DragEnter(object sender, DragEventArgs e)
@@ -578,7 +580,8 @@ namespace Handbrake
             {
                 // Ok, so, we've selected a preset. Now we want to load it.
                 string presetName = treeView_presets.SelectedNode.Text;
-                if (presetHandler.GetPreset(presetName) != null)
+                Preset preset = presetHandler.GetPreset(presetName);
+                if (preset != null)
                 {
                     string query = presetHandler.GetPreset(presetName).Query;
                     Boolean loadPictureSettings = presetHandler.GetPreset(presetName).PictureSettings;
@@ -597,6 +600,9 @@ namespace Handbrake
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
+
+                        // Finally, let this window have a copy of the preset settings.
+                        CurrentlySelectedPreset = preset;
                     }
                 }
             }
@@ -903,6 +909,7 @@ namespace Handbrake
             {
                 selectedTitle = drp_dvdtitle.SelectedItem as Title;
                 lbl_duration.Text = selectedTitle.Duration.ToString();
+                PictureSettings.CurrentlySelectedPreset = CurrentlySelectedPreset;
                 PictureSettings.Source = selectedTitle;  // Setup Picture Settings Tab Control
 
                 // Populate the Angles dropdown

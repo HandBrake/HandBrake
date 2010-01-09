@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Handbrake.Parsing;
+using Handbrake.Presets;
 
 namespace Handbrake.Controls
 {
@@ -42,11 +43,21 @@ namespace Handbrake.Controls
                 lbl_Aspect.Text = _sourceTitle.AspectRatio.ToString(Culture);
                 lbl_src_res.Text = _sourceTitle.Resolution.Width + " x " + _sourceTitle.Resolution.Height;
 
-                // Set the Recommended Cropping values
-                crop_top.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[0]);
-                crop_bottom.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[1]);
-                crop_left.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[2]);
-                crop_right.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[3]);
+                // Set the Recommended Cropping values, but only if a preset doesn't have hard set picture settings.
+                if (CurrentlySelectedPreset != null && CurrentlySelectedPreset.PictureSettings == false)
+                {
+                    crop_top.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[0]);
+                    crop_bottom.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[1]);
+                    crop_left.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[2]);
+                    crop_right.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[3]);
+                }
+                else if (CurrentlySelectedPreset == null )
+                {
+                    crop_top.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[0]);
+                    crop_bottom.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[1]);
+                    crop_left.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[2]);
+                    crop_right.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[3]);
+                }
 
                 // Set the Resolution Boxes
                 if (drp_anamorphic.SelectedIndex == 0)
@@ -74,10 +85,15 @@ namespace Handbrake.Controls
 
 
                 Size croppedDar = CalculateAnamorphicSizes();
-                _cachedDar = (double) croppedDar.Width/croppedDar.Height;
+                _cachedDar = (double)croppedDar.Width / croppedDar.Height;
                 updownDisplayWidth.Value = croppedDar.Width;
             }
         }
+
+        /// <summary>
+        /// Which preset is currently selected by the user.
+        /// </summary>
+        public Preset CurrentlySelectedPreset { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum allowable size for the encoded resolution. Set a value to
@@ -269,7 +285,7 @@ namespace Handbrake.Controls
 
                 // Calculate new Height Value
                 int modulus;
-                if(!int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus))
+                if (!int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus))
                     modulus = 16;
 
                 int rawCalculatedHeight = (int)((int)updownDisplayWidth.Value / _cachedDar);
@@ -451,7 +467,7 @@ namespace Handbrake.Controls
                             - Uses mod16-compliant dimensions,
                             - Allows users to set the width
                         */
-                        width = (int) text_width.Value;
+                        width = (int)text_width.Value;
                         width = GetModulusValue(width); /* Time to get picture width that divide cleanly.*/
 
                         height = (width / storage_aspect) + 0.5;
@@ -506,7 +522,7 @@ namespace Handbrake.Controls
         // Hidden UI feature to drop the MaxWidth / Height with the MaxWidth/Height label is double clicked
         private void lbl_max_DoubleClick(object sender, EventArgs e)
         {
-            PresetMaximumResolution = new Size(0,0);
+            PresetMaximumResolution = new Size(0, 0);
             if (PictureSettingsChanged != null)
                 PictureSettingsChanged(this, new EventArgs());
         }

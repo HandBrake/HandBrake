@@ -167,13 +167,17 @@ namespace Handbrake.Presets
                         Regex r = new Regex("(:  )"); // Split on hyphens. 
                         string[] presetName = r.Split(line);
 
+                        bool pic = false;
+                        if (presetName[2].Contains("crop"))
+                            pic = true;
+
                         Preset newPreset = new Preset
                                                {
                                                    Category = category,
                                                    Name = presetName[0].Replace("+", "").Trim(),
                                                    Query = presetName[2],
                                                    Version = Properties.Settings.Default.hb_version,
-                                                   PictureSettings = true
+                                                   PictureSettings = pic
                                                };
                         _presets.Add(newPreset);
                     }
