@@ -24,6 +24,7 @@ namespace Handbrake.Parsing
         private readonly List<Subtitle> m_subtitles;
         private List<String> m_angles = new List<string>();
         private float m_aspectRatio;
+        private float m_fps;
         private int[] m_autoCrop;
         private string source;
         private TimeSpan m_duration;
@@ -130,6 +131,14 @@ namespace Handbrake.Parsing
         {
             get { return m_angles; }
         }
+
+        /// <summary>
+        /// Collection of Angles in this Title
+        /// </summary>
+        public float Fps
+        {
+            get { return m_fps; }
+        }
   
         /// <summary>
         /// Override of the ToString method to provide an easy way to use this object in the UI
@@ -186,6 +195,7 @@ namespace Handbrake.Parsing
                 thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
                 thisTitle.m_parVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
                 thisTitle.m_aspectRatio = float.Parse(m.Groups[5].Value, Culture);
+                thisTitle.m_fps = float.Parse(m.Groups[6].Value, Culture);
             }
 
             // Get autocrop region for this title

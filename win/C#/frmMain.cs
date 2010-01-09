@@ -881,7 +881,7 @@ namespace Handbrake
             }
 
             sourcePath = Path.GetFileName(file);
-            StartScan(file,0);
+            StartScan(file, 0);
         }
         private void drp_dvdtitle_Click(object sender, EventArgs e)
         {
@@ -891,6 +891,7 @@ namespace Handbrake
         private void drp_dvdtitle_SelectedIndexChanged(object sender, EventArgs e)
         {
             UnRegisterPresetEventHandler();
+            drop_mode.SelectedIndex = 0;
 
             PictureSettings.lbl_Aspect.Text = "Select a Title"; // Reset some values on the form
             drop_chapterStart.Items.Clear();
@@ -1048,10 +1049,24 @@ namespace Handbrake
             int start, end;
             int.TryParse(drop_chapterStart.Text, out start);
             int.TryParse(drop_chapterFinish.Text, out end);
+            double duration = end - start;
 
-            int duration = end - start;
-            TimeSpan dur = TimeSpan.FromSeconds(duration);
-            lbl_duration.Text = dur.ToString();
+            switch (drop_mode.SelectedIndex)
+            {
+                case 1:
+                    lbl_duration.Text = TimeSpan.FromSeconds(duration).ToString();
+                    return;
+                case 2:
+                    if (selectedTitle != null)
+                    {
+                        duration = duration / selectedTitle.Fps;
+                        lbl_duration.Text = TimeSpan.FromSeconds(duration).ToString();
+                    }
+                    else
+                        lbl_duration.Text = "--:--:--";
+
+                    return;
+            }
         }
         private void drop_mode_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1085,8 +1100,15 @@ namespace Handbrake
                     }
                     return;
                 case 2:
-                    MessageBox.Show("This feature is not implemented yet! Switching Back to Chapters Mode.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    drop_mode.SelectedIndex = 0;
+                    this.drop_chapterStart.TextChanged += new System.EventHandler(this.SecondsOrFramesChanged);
+                    this.drop_chapterFinish.TextChanged += new System.EventHandler(this.SecondsOrFramesChanged);
+                    drop_chapterStart.DropDownStyle = ComboBoxStyle.Simple;
+                    drop_chapterFinish.DropDownStyle = ComboBoxStyle.Simple;
+                    if (selectedTitle != null)
+                    {
+                        drop_chapterStart.Text = "0";
+                        drop_chapterFinish.Text = (selectedTitle.Fps * selectedTitle.Duration.TotalSeconds).ToString();
+                    }
                     return;
             }
         }
