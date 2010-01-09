@@ -65,6 +65,7 @@ namespace Handbrake.Controls
             this.drp_modulus = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
+            this.lbl_presetCropWarning = new System.Windows.Forms.Label();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.crop_left)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.crop_right)).BeginInit();
@@ -644,10 +645,21 @@ namespace Handbrake.Controls
             this.label26.TabIndex = 113;
             this.label26.Text = "Size";
             // 
+            // lbl_presetCropWarning
+            // 
+            this.lbl_presetCropWarning.AutoSize = true;
+            this.lbl_presetCropWarning.ForeColor = System.Drawing.Color.Black;
+            this.lbl_presetCropWarning.Location = new System.Drawing.Point(479, 13);
+            this.lbl_presetCropWarning.Name = "lbl_presetCropWarning";
+            this.lbl_presetCropWarning.Size = new System.Drawing.Size(140, 13);
+            this.lbl_presetCropWarning.TabIndex = 118;
+            this.lbl_presetCropWarning.Text = "( Preset values are in use! )";
+            // 
             // PictureSettings
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.lbl_presetCropWarning);
             this.Controls.Add(this.tableLayoutPanel3);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -716,6 +728,7 @@ namespace Handbrake.Controls
         internal System.Windows.Forms.Label label26;
         internal System.Windows.Forms.NumericUpDown text_width;
         internal System.Windows.Forms.NumericUpDown text_height;
+        private System.Windows.Forms.Label lbl_presetCropWarning;
 
 
 

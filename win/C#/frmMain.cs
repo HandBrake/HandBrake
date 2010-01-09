@@ -603,6 +603,7 @@ namespace Handbrake
 
                         // Finally, let this window have a copy of the preset settings.
                         CurrentlySelectedPreset = preset;
+                        PictureSettings.SetPresetCropWarningLabel(preset);
                     }
                 }
             }

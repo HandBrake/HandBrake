@@ -184,7 +184,8 @@ namespace Handbrake.Functions
             {
                 int presetVal;
                 int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
-                mainWindow.slider_videoQuality.Value = presetVal;
+                if (presetVal > mainWindow.slider_videoQuality.Minimum)
+                    mainWindow.slider_videoQuality.Value = presetVal;
             }
 
 

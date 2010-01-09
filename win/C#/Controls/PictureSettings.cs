@@ -51,13 +51,14 @@ namespace Handbrake.Controls
                     crop_left.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[2]);
                     crop_right.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[3]);
                 }
-                else if (CurrentlySelectedPreset == null )
+                else if (CurrentlySelectedPreset == null)
                 {
                     crop_top.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[0]);
                     crop_bottom.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[1]);
                     crop_left.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[2]);
                     crop_right.Value = GetCropMod2Clean(_sourceTitle.AutoCropDimensions[3]);
                 }
+                SetPresetCropWarningLabel(CurrentlySelectedPreset);
 
                 // Set the Resolution Boxes
                 if (drp_anamorphic.SelectedIndex == 0)
@@ -118,6 +119,15 @@ namespace Handbrake.Controls
                 else
                     lbl_max.Text = "";
             }
+        }
+
+        public void SetPresetCropWarningLabel(Preset selectedPreset)
+        {
+            lbl_presetCropWarning.Visible = true;
+            if (selectedPreset != null && selectedPreset.PictureSettings == false)
+                lbl_presetCropWarning.Visible = false;
+            else if (selectedPreset == null)
+                lbl_presetCropWarning.Visible = false;
         }
 
         // Picture Controls
