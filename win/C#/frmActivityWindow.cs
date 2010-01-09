@@ -28,7 +28,6 @@ namespace Handbrake
         {
             InitializeComponent();
 
-            KilLThread = false;
             Position = 0;
             if (mode == "scan")
                 SetScanMode();
