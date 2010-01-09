@@ -329,7 +329,9 @@ namespace Handbrake.Functions
                 {
                     float qConvert = float.Parse(videoQuality.ToString().Replace("-q ", ""), Culture);
                     thisQuery.VideoQuality = qConvert;
-                }
+                } 
+                else
+                    thisQuery.VideoQuality = -1;
                 #endregion
 
                 #region Audio Tab

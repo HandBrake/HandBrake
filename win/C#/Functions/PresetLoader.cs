@@ -155,39 +155,41 @@ namespace Handbrake.Functions
 
             // Quality
 
-            mainWindow.radio_cq.Checked = true;
-            if (presetQuery.VideoEncoder == "H.264 (x264)")
+            if (presetQuery.VideoQuality != -1)
             {
-                double cqStep = Properties.Settings.Default.x264cqstep;
-                int value;
-                double x264step = cqStep;
-                double presetValue = presetQuery.VideoQuality;
-
-                double x = 51 / x264step;
-
-                double calculated = presetValue / x264step;
-                calculated = x - calculated;
-
-                int.TryParse(calculated.ToString(), out value);
-
-                // This will sometimes occur when the preset was generated 
-                // with a different granularity, so, round and try again.
-                if (value == 0)
+                mainWindow.radio_cq.Checked = true;
+                if (presetQuery.VideoEncoder == "H.264 (x264)")
                 {
-                    double val = Math.Round(calculated, 0);
-                    int.TryParse(val.ToString(), out value);
-                }
-                if (value <= mainWindow.slider_videoQuality.Maximum)
-                    mainWindow.slider_videoQuality.Value = value;
-            }
-            else
-            {
-                int presetVal;
-                int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
-                if (presetVal > mainWindow.slider_videoQuality.Minimum)
-                    mainWindow.slider_videoQuality.Value = presetVal;
-            }
+                    double cqStep = Properties.Settings.Default.x264cqstep;
+                    int value;
+                    double x264step = cqStep;
+                    double presetValue = presetQuery.VideoQuality;
 
+                    double x = 51/x264step;
+
+                    double calculated = presetValue/x264step;
+                    calculated = x - calculated;
+
+                    int.TryParse(calculated.ToString(), out value);
+
+                    // This will sometimes occur when the preset was generated 
+                    // with a different granularity, so, round and try again.
+                    if (value == 0)
+                    {
+                        double val = Math.Round(calculated, 0);
+                        int.TryParse(val.ToString(), out value);
+                    }
+                    if (value <= mainWindow.slider_videoQuality.Maximum)
+                        mainWindow.slider_videoQuality.Value = value;
+                }
+                else
+                {
+                    int presetVal;
+                    int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
+                    if (presetVal > mainWindow.slider_videoQuality.Minimum)
+                        mainWindow.slider_videoQuality.Value = presetVal;
+                }
+            }
 
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
 
