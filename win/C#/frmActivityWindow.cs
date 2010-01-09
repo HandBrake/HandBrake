@@ -11,133 +11,108 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 using Handbrake.Functions;
-using Microsoft.Win32;
-
+using Timer = System.Threading.Timer;
 
 namespace Handbrake
 {
     public partial class frmActivityWindow : Form
     {
-        private delegate void setTextCallback(StringBuilder text);
-        private delegate void setTextClearCallback();
-        private static int _position;
-        private static string _lastMode;
-        private static string _currentMode;
-        private Thread _monitor;
-        private Boolean _kilLThread;
-
+        private delegate void SetTextCallback(StringBuilder text);
+        private delegate void SetTextClearCallback();
+        private int Position;
+        private string LastMode;
+        private string CurrentMode;
+        private Timer WindowTimer;
+ 
         public frmActivityWindow(string mode)
         {
             InitializeComponent();
 
-            _kilLThread = false;
-            _position = 0;
+            KilLThread = false;
+            Position = 0;
             if (mode == "scan")
                 SetScanMode();
             else
                 SetEncodeMode();
         }
+
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
-            _monitor = new Thread(LogMonitor);
-            
-            try
-            {
-                _monitor.Start();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Unable to monitor HandBrakes log files. Please report this error. If the problem presists, try rebooting your computer.\n\n Debug Informaton:\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
         }
 
-        private void LogMonitor()
+        private void LogMonitor(object n)
         {
-            while (true)
+            if (SetLogFile != LastMode) Reset();
+
+            // Perform the window update
+            switch (SetLogFile)
             {
-                if (!IsHandleCreated || _kilLThread) // break out the thread if the window has been disposed.
+                case "last_scan_log.txt":
+                    AppendWindowText(ReadFile("last_scan_log.txt"));
+                    LastMode = "last_scan_log.txt";
                     break;
-
-                // Perform a reset if require.
-                // If we have switched to a different log file, we want to start from the beginning.
-                if (SetLogFile != _lastMode)
-                    Reset();
-
-                // Perform the window update
-                switch (SetLogFile)
-                {
-                    case "last_scan_log.txt":
-                        AppendWindowText(ReadFile("last_scan_log.txt"));
-                        _lastMode = "last_scan_log.txt";
-                        break;
-                    case "last_encode_log.txt":
-                        AppendWindowText(ReadFile("last_encode_log.txt"));
-                        _lastMode = "last_encode_log.txt";
-                        break;
-                }
-
-                try
-                {
-                    Thread.Sleep(1000);
-                }
-                catch (ThreadInterruptedException)
-                {
-                    // Do Nothnig.
-                }
-
+                case "last_encode_log.txt":
+                    AppendWindowText(ReadFile("last_encode_log.txt"));
+                    LastMode = "last_encode_log.txt";
+                    break;
             }
         }
         private StringBuilder ReadFile(string file)
         {
             StringBuilder appendText = new StringBuilder();
-
-            // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
-            // we'll need to make a copy of it.
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logFile = Path.Combine(logDir, file);
-            string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
-
-            try
+            lock (this)
             {
-                // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
-                if (File.Exists(logFile2))
-                    File.Delete(logFile2);
+                // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
+                // we'll need to make a copy of it.
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
+                string logFile = Path.Combine(logDir, file);
+                string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
 
-                // Copy the log file.
-                if (File.Exists(logFile))
-                    File.Copy(logFile, logFile2, true);
-                else
+                try
                 {
-                    appendText.AppendFormat("Waiting for the log file to be generated ...\n");
-                    _position = 0;
-                    ClearWindowText();
-                    PrintLogHeader();
-                    return appendText;
-                }
+                    // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
+                    if (File.Exists(logFile2))
+                        File.Delete(logFile2);
 
-                // Start the Reader
-                // Only use text which continues on from the last read line
-                StreamReader sr = new StreamReader(logFile2);
-                string line;
-                int i = 1;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (i > _position)
+                    // Copy the log file.
+                    if (File.Exists(logFile))
+                        File.Copy(logFile, logFile2, true);
+                    else
                     {
-                        appendText.AppendLine(line);
-                        _position++;
+                        appendText.AppendFormat("Waiting for the log file to be generated ...\n");
+                        Position = 0;
+                        ClearWindowText();
+                        PrintLogHeader();
+                        return appendText;
                     }
-                    i++;
-                }
-                sr.Close();
-                sr.Dispose();
 
-            }
-            catch (Exception exc)
-            {
-                appendText.AppendFormat("\n The Log file could not be read. You may need to restart HandBrake! " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                _position = 0;
-                ClearWindowText();
+                    // Start the Reader
+                    // Only use text which continues on from the last read line
+                    StreamReader sr = new StreamReader(logFile2);
+                    string line;
+                    int i = 1;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (i > Position)
+                        {
+                            appendText.AppendLine(line);
+                            Position++;
+                        }
+                        i++;
+                    }
+                    sr.Close();
+                    sr.Dispose();
+
+                }
+                catch (Exception exc)
+                {
+                    Reset();
+                    appendText = new StringBuilder();
+                    appendText.AppendFormat(
+                        "\nThe Log file is currently in use. Waiting for the log file to become accessible ...\n");
+                }
             }
             return appendText;
         }
@@ -149,15 +124,13 @@ namespace Handbrake
                 {
                     if (rtf_actLog.InvokeRequired)
                     {
-                        IAsyncResult invoked = BeginInvoke(new setTextCallback(AppendWindowText), new object[] { text });
+                        IAsyncResult invoked = BeginInvoke(new SetTextCallback(AppendWindowText), new object[] { text });
                         EndInvoke(invoked);
                     }
                     else
-                        rtf_actLog.AppendText(text.ToString());
+                        lock (rtf_actLog)
+                            rtf_actLog.AppendText(text.ToString());
                 }
-            } catch(ThreadInterruptedException)
-            {
-                // Do Nothing
             }
             catch (Exception exc)
             {
@@ -172,11 +145,12 @@ namespace Handbrake
                 {
                     if (rtf_actLog.InvokeRequired)
                     {
-                        IAsyncResult invoked = BeginInvoke(new setTextClearCallback(ClearWindowText));
+                        IAsyncResult invoked = BeginInvoke(new SetTextClearCallback(ClearWindowText));
                         EndInvoke(invoked);
                     }
                     else
-                        rtf_actLog.Clear();
+                        lock(rtf_actLog)
+                            rtf_actLog.Clear();
                 }
             }
             catch (Exception exc)
@@ -192,21 +166,28 @@ namespace Handbrake
                 {
                     if (rtf_actLog.InvokeRequired)
                     {
-                        IAsyncResult invoked = BeginInvoke(new setTextClearCallback(PrintLogHeader));
+                        IAsyncResult invoked = BeginInvoke(new SetTextClearCallback(PrintLogHeader));
                         EndInvoke(invoked);
                     }
                     else
                     {
-                        // Print the log header. This function will be re-implimented later. Do not delete.
-                        rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
-                        rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
-                        rtf_actLog.AppendText(String.Format("### CPU: {0} \n", getCpuCount()));
-                        rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", TotalPhysicalMemory()));
-                        rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", screenBounds().Bounds.Width, screenBounds().Bounds.Height));
-                        rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
-                        rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
-                        rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
-                        rtf_actLog.AppendText("#########################################\n\n");
+                        lock (rtf_actLog)
+                        {
+                            // Print the log header. This function will be re-implimented later. Do not delete.
+                            rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n",
+                                                                Properties.Settings.Default.hb_build,
+                                                                Properties.Settings.Default.hb_version));
+                            rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
+                            rtf_actLog.AppendText(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
+                            rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
+                            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n",
+                                                                SystemInfo.ScreenBounds.Bounds.Width,
+                                                                SystemInfo.ScreenBounds.Bounds.Height));
+                            rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
+                            rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
+                            rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
+                            rtf_actLog.AppendText("#########################################\n\n");
+                        }
                     }
                 }
             }
@@ -218,17 +199,20 @@ namespace Handbrake
         }
         private void Reset()
         {
-            _position = 0;
+            if (WindowTimer != null)
+                WindowTimer.Dispose();
+            Position = 0;
             ClearWindowText();
-            PrintLogHeader();
+            PrintLogHeader(); 
+            WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 2000, 1000);
         }
 
         #region Public
 
         public string SetLogFile
         {
-            get { return string.IsNullOrEmpty(_currentMode) ? "" : _currentMode; }
-            set { _currentMode = value; }
+            get { return string.IsNullOrEmpty(CurrentMode) ? "" : CurrentMode; }
+            set { CurrentMode = value; }
         }
         public void SetScanMode()
         {
@@ -248,26 +232,25 @@ namespace Handbrake
         #region User Interface
         private void mnu_copy_log_Click(object sender, EventArgs e)
         {
-            if (rtf_actLog.SelectedText != "")
-                Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
-            else
-                Clipboard.SetDataObject(rtf_actLog.Text, true);
+            Clipboard.SetDataObject(rtf_actLog.SelectedText != "" ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
         }
         private void mnu_openLogFolder_Click(object sender, EventArgs e)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string windir = Environment.GetEnvironmentVariable("WINDIR");
-            System.Diagnostics.Process prc = new System.Diagnostics.Process();
-            prc.StartInfo.FileName = windir + @"\explorer.exe";
-            prc.StartInfo.Arguments = logDir;
+            System.Diagnostics.Process prc = new System.Diagnostics.Process
+                                                 {
+                                                     StartInfo =
+                                                         {
+                                                             FileName = windir + @"\explorer.exe",
+                                                             Arguments = logDir
+                                                         }
+                                                 };
             prc.Start();
         }
         private void btn_copy_Click(object sender, EventArgs e)
         {
-            if (rtf_actLog.SelectedText != "")
-                Clipboard.SetDataObject(rtf_actLog.SelectedText, true);
-            else
-                Clipboard.SetDataObject(rtf_actLog.Text, true);
+            Clipboard.SetDataObject(rtf_actLog.SelectedText != "" ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
         }
         private void btn_scan_log_Click(object sender, EventArgs e)
         {
@@ -279,48 +262,9 @@ namespace Handbrake
         }
         #endregion
 
-        #region System Information
-        /// <summary>
-        /// Returns the total physical ram in a system
-        /// </summary>
-        /// <returns></returns>
-        public uint TotalPhysicalMemory()
-        {
-            Win32.MEMORYSTATUS memStatus = new Win32.MEMORYSTATUS();
-            Win32.GlobalMemoryStatus(ref memStatus);
-
-            uint MemoryInfo = memStatus.dwTotalPhys;
-            MemoryInfo = MemoryInfo / 1024 / 1024;
-
-            return MemoryInfo;
-        }
-
-        /// <summary>
-        /// Get the number of CPU Cores
-        /// </summary>
-        /// <returns>Object</returns>
-        public Object getCpuCount()
-        {
-            RegistryKey RegKey = Registry.LocalMachine;
-            RegKey = RegKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
-            return RegKey.GetValue("ProcessorNameString");
-        }
-
-        /// <summary>
-        /// Get the System screen size information.
-        /// </summary>
-        /// <returns>System.Windows.Forms.Scree</returns>
-        public Screen screenBounds()
-        {
-            return Screen.PrimaryScreen;
-        }
-        #endregion
-
         protected override void OnClosing(CancelEventArgs e)
         {
-            _kilLThread = true;
-            _monitor.Interrupt();
-            _monitor.Join();
+            WindowTimer.Dispose();
             e.Cancel = true;
             this.Dispose();
             base.OnClosing(e);
