@@ -131,9 +131,9 @@ namespace Handbrake
                             rtf_actLog.AppendText(text.ToString());
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show("Unless you are having problems, you can probably ignore this error. It would not hurt to report this error!\n\nSetWindowText(): Exception: \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
         }
         private void ClearWindowText()
@@ -152,9 +152,9 @@ namespace Handbrake
                             rtf_actLog.Clear();
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show("Unless you are having problems, you can probably ignore this error. It would not hurt to report this error!\n\nClearWindowText(): Exception: \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
         }
         private void PrintLogHeader()
@@ -190,9 +190,9 @@ namespace Handbrake
                     }
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
-                MessageBox.Show("Unless you are having problems, you can probably ignore this error. It would not hurt to report this error!\n\nPrintLogHeader(): Exception: \n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
 
         }
@@ -203,7 +203,7 @@ namespace Handbrake
             Position = 0;
             ClearWindowText();
             PrintLogHeader(); 
-            WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 2000, 1000);
+            WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
         }
 
         #region Public
