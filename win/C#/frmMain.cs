@@ -57,7 +57,7 @@ namespace Handbrake
             // Update the users config file with the CLI version data.
             lblStatus.Text = "Setting Version Data ...";
             Application.DoEvents();
-            Main.setCliVersionData();
+            Main.SetCliVersionData();
 
             // Show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;
@@ -167,7 +167,7 @@ namespace Handbrake
         // Startup Functions   
         private void queueRecovery()
         {
-            if (Main.checkQueueRecovery())
+            if (Main.CheckQueueRecovery())
             {
                 DialogResult result = MessageBox.Show("HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -943,10 +943,10 @@ namespace Handbrake
                 if (!string.IsNullOrEmpty(selectedTitle.SourceName))
                     labelSource.Text = labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
 
-            // Run the autoName & chapterNaming functions
+            // Run the AutoName & ChapterNaming functions
             if (Properties.Settings.Default.autoNaming)
             {
-                string autoPath = Main.autoName(this);
+                string autoPath = Main.AutoName(this);
                 if (autoPath != null)
                     text_destination.Text = autoPath;
                 else
@@ -956,7 +956,7 @@ namespace Handbrake
             data_chpt.Rows.Clear();
             if (selectedTitle.Chapters.Count != 1)
             {
-                DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
+                DataGridView chapterGridView = Main.ChapterNaming(data_chpt, drop_chapterFinish.Text);
                 if (chapterGridView != null)
                     data_chpt = chapterGridView;
             }
@@ -1020,11 +1020,11 @@ namespace Handbrake
             }
 
             // Update the Duration
-            lbl_duration.Text = Main.calculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle).ToString();
+            lbl_duration.Text = Main.CalculateDuration(drop_chapterStart.SelectedIndex, drop_chapterFinish.SelectedIndex, selectedTitle).ToString();
 
             // Run the Autonaming function
             if (Properties.Settings.Default.autoNaming)
-                text_destination.Text = Main.autoName(this);
+                text_destination.Text = Main.AutoName(this);
 
             // Disable chapter markers if only 1 chapter is selected.
             if (chapterStart == chapterEnd)
@@ -1043,15 +1043,52 @@ namespace Handbrake
                 }
             }
         }
+        private void SecondsOrFramesChanged(object sender, EventArgs e)
+        {
+            int start, end;
+            int.TryParse(drop_chapterStart.Text, out start);
+            int.TryParse(drop_chapterFinish.Text, out end);
+
+            int duration = end - start;
+            TimeSpan dur = TimeSpan.FromSeconds(duration);
+            lbl_duration.Text = dur.ToString();
+        }
         private void drop_mode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (drop_mode.SelectedIndex == 0) return;
+            // Reset
+            this.drop_chapterFinish.TextChanged -= new System.EventHandler(this.SecondsOrFramesChanged);
+            this.drop_chapterStart.TextChanged -= new System.EventHandler(this.SecondsOrFramesChanged);
 
-            if (drop_mode.SelectedIndex != 0)
-                drop_mode.SelectedIndex = 0;
-
-            MessageBox.Show("This feature is not implemented yet! Switching Back to Chapters Mode.", "",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Do Work
+            switch (drop_mode.SelectedIndex)
+            {
+                case 0:
+                    drop_chapterStart.DropDownStyle = ComboBoxStyle.DropDownList;
+                    drop_chapterFinish.DropDownStyle = ComboBoxStyle.DropDownList;
+                    if (drop_chapterStart.Items.Count != 0)
+                    {
+                        drop_chapterStart.SelectedIndex = 0;
+                        drop_chapterFinish.SelectedIndex = drop_chapterFinish.Items.Count - 1;
+                    }
+                    else
+                        lbl_duration.Text = "--:--:--";
+                    return;
+                case 1:
+                    this.drop_chapterStart.TextChanged += new System.EventHandler(this.SecondsOrFramesChanged);
+                    this.drop_chapterFinish.TextChanged += new System.EventHandler(this.SecondsOrFramesChanged);
+                    drop_chapterStart.DropDownStyle = ComboBoxStyle.Simple;
+                    drop_chapterFinish.DropDownStyle = ComboBoxStyle.Simple;
+                    if (selectedTitle != null)
+                    {
+                        drop_chapterStart.Text = "0";
+                        drop_chapterFinish.Text = selectedTitle.Duration.TotalSeconds.ToString();
+                    }
+                    return;
+                case 2:
+                    MessageBox.Show("This feature is not implemented yet! Switching Back to Chapters Mode.", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    drop_mode.SelectedIndex = 0;
+                    return;
+            }
         }
 
         //Destination
@@ -1381,7 +1418,7 @@ namespace Handbrake
             if (File_ChapterImport.ShowDialog() == DialogResult.OK)
             {
                 String filename = File_ChapterImport.FileName;
-                DataGridView imported = Main.importChapterNames(data_chpt, filename);
+                DataGridView imported = Main.ImportChapterNames(data_chpt, filename);
                 if (imported != null)
                     data_chpt = imported;
             }
@@ -1389,7 +1426,7 @@ namespace Handbrake
         private void mnu_resetChapters_Click(object sender, EventArgs e)
         {
             data_chpt.Rows.Clear();
-            DataGridView chapterGridView = Main.chapterNaming(data_chpt, drop_chapterFinish.Text);
+            DataGridView chapterGridView = Main.ChapterNaming(data_chpt, drop_chapterFinish.Text);
             if (chapterGridView != null)
             {
                 data_chpt = chapterGridView;
@@ -1485,7 +1522,7 @@ namespace Handbrake
 
                 // Now select the longest title
                 if (thisDVD.Titles.Count != 0)
-                    drp_dvdtitle.SelectedItem = Main.selectLongestTitle(thisDVD);
+                    drp_dvdtitle.SelectedItem = Main.SelectLongestTitle(thisDVD);
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 if (sourcePath.ToLower().Contains(".iso") || sourcePath.Contains("VIDEO_TS"))

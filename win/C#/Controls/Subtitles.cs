@@ -16,7 +16,7 @@ namespace Handbrake.Controls
         {
             InitializeComponent();
 
-            LangMap = Main.mapLanguages();
+            LangMap = Main.MapLanguages();
             foreach (string key in LangMap.Keys)
                 srt_lang.Items.Add(key);
 

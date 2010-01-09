@@ -388,7 +388,7 @@ namespace Handbrake.EncodeQueue
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 hbProcess = Process.Start(cliStart);
-                processID = Main.getCliProcess(before);
+                processID = Main.GetCliProcess(before);
                 currentQuery = query;
                 if (hbProcess != null)
                     processHandle = hbProcess.MainWindowHandle; // Set the process Handle

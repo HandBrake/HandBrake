@@ -20,12 +20,12 @@ namespace Handbrake.Functions
     static class Main
     {
         // Private Variables
-        private static readonly XmlSerializer ser = new XmlSerializer(typeof(List<Job>));
+        private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Job>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
         /// </summary>
-        public static TimeSpan calculateDuration(int chapterStart, int chapterEnd, Parsing.Title selectedTitle)
+        public static TimeSpan CalculateDuration(int chapterStart, int chapterEnd, Parsing.Title selectedTitle)
         {
             TimeSpan duration = TimeSpan.FromSeconds(0.0);
             chapterStart++; chapterEnd++;
@@ -41,7 +41,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
         /// </summary>
-        public static Parsing.Title selectLongestTitle(Parsing.DVD thisDvd)
+        public static Parsing.Title SelectLongestTitle(Parsing.DVD thisDvd)
         {
             TimeSpan longestDurationFound = TimeSpan.FromSeconds(0.0);
             Parsing.Title returnTitle = null;
@@ -60,7 +60,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
-        public static DataGridView chapterNaming(DataGridView dataChpt, string chapterEnd)
+        public static DataGridView ChapterNaming(DataGridView dataChpt, string chapterEnd)
         {
             int i = 0, finish = 0;
 
@@ -86,7 +86,7 @@ namespace Handbrake.Functions
         /// <param name="dataChpt"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public static DataGridView importChapterNames(DataGridView dataChpt, string filename)
+        public static DataGridView ImportChapterNames(DataGridView dataChpt, string filename)
         {
             IDictionary<int, string> chapterMap = new Dictionary<int, string>();
             try
@@ -124,7 +124,7 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string autoName(frmMain mainWindow) //ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
+        public static string AutoName(frmMain mainWindow) //ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
         {
             string AutoNamePath = string.Empty;
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
@@ -191,7 +191,7 @@ namespace Handbrake.Functions
         /// Get's HandBrakes version data from the CLI.
         /// </summary>
         /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
-        public static void setCliVersionData()
+        public static void SetCliVersionData()
         {
             String line;
 
@@ -259,7 +259,7 @@ namespace Handbrake.Functions
         /// If it does, it means the last queue did not complete before HandBrake closed.
         /// So, return a boolean if true. 
         /// </summary>
-        public static Boolean checkQueueRecovery()
+        public static Boolean CheckQueueRecovery()
         {
             try
             {
@@ -268,7 +268,7 @@ namespace Handbrake.Functions
                 {
                     using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
                     {
-                        List<Job> list = ser.Deserialize(strm) as List<Job>;
+                        List<Job> list = Ser.Deserialize(strm) as List<Job>;
                         if (list != null)
                             if (list.Count != 0)
                                 return true;
@@ -287,7 +287,7 @@ namespace Handbrake.Functions
         /// </summary>
         /// <param name="before">List of processes before the new process was started</param>
         /// <returns>Int - Process ID</returns>
-        public static int getCliProcess(Process[] before)
+        public static int GetCliProcess(Process[] before)
         {
             // This is a bit of a cludge. Maybe someone has a better idea on how to impliment this.
             // Since we used CMD to start HandBrakeCLI, we don't get the process ID from hbProc.
@@ -334,7 +334,7 @@ namespace Handbrake.Functions
         /// <summary>
         ///  Clear all the encode log files.
         /// </summary>
-        public static void clearLogs()
+        public static void ClearLogs()
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             if (Directory.Exists(logDir))
@@ -441,7 +441,7 @@ namespace Handbrake.Functions
         /// Map languages and their iso639_2 value into a IDictionary
         /// </summary>
         /// <returns></returns>
-        public static IDictionary<string, string> mapLanguages()
+        public static IDictionary<string, string> MapLanguages()
         {
             IDictionary<string, string> languageMap = new Dictionary<string, string>
                                                           {

@@ -21,7 +21,7 @@ namespace Handbrake
             InitializeComponent();
             mainWindow = mw;
 
-            IDictionary<string, string> langList = Main.mapLanguages();
+            IDictionary<string, string> langList = Main.MapLanguages();
             foreach (string item in langList.Keys)
                 drop_preferredLang.Items.Add(item);
 
@@ -352,7 +352,7 @@ namespace Handbrake
             DialogResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                Main.clearLogs();
+                Main.ClearLogs();
                 MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }

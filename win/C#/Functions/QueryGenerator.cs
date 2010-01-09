@@ -384,7 +384,7 @@ namespace Handbrake.Functions
             #region Subtitles Tab
             if (mainWindow.Subtitles.lv_subList.Items.Count != 0) // If we have subtitle tracks
             {
-                IDictionary<string, string> langMap = Main.mapLanguages();
+                IDictionary<string, string> langMap = Main.MapLanguages();
 
                 // BitMap and CC's
                 string subtitleTracks = String.Empty;
