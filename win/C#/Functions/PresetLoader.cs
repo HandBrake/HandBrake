@@ -50,12 +50,12 @@ namespace Handbrake.Functions
                 {
                     if (mainWindow.drop_format.SelectedIndex == 0)
                         mainWindow.SetExtension(".mp4");
-                    else 
+                    else
                         mainWindow.drop_format.SelectedIndex = 0;
                 }
                 else if (presetQuery.Format == "mkv")
                 {
-                    if(mainWindow.drop_format.SelectedIndex == 1)
+                    if (mainWindow.drop_format.SelectedIndex == 1)
                         mainWindow.SetExtension(".mkv");
                     else
                         mainWindow.drop_format.SelectedIndex = 1;
@@ -91,13 +91,13 @@ namespace Handbrake.Functions
                     mainWindow.PictureSettings.crop_right.Value = right;
                 }
             }
-            
+
             // Set the anamorphic mode 0,1,2,3
             mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
             // Aspect Ratio
             mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
-                
+
             // Set the Width and height as Required.
             if (presetQuery.Width != 0)
                 mainWindow.PictureSettings.text_width.Value = presetQuery.Width;
@@ -154,40 +154,39 @@ namespace Handbrake.Functions
             }
 
             // Quality
-            if (presetQuery.VideoQuality != 0)
+
+            mainWindow.radio_cq.Checked = true;
+            if (presetQuery.VideoEncoder == "H.264 (x264)")
             {
-                mainWindow.radio_cq.Checked = true;
-                if (presetQuery.VideoEncoder == "H.264 (x264)")
+                double cqStep = Properties.Settings.Default.x264cqstep;
+                int value;
+                double x264step = cqStep;
+                double presetValue = presetQuery.VideoQuality;
+
+                double x = 51 / x264step;
+
+                double calculated = presetValue / x264step;
+                calculated = x - calculated;
+
+                int.TryParse(calculated.ToString(), out value);
+
+                // This will sometimes occur when the preset was generated 
+                // with a different granularity, so, round and try again.
+                if (value == 0)
                 {
-                    double cqStep = Properties.Settings.Default.x264cqstep;
-                    int value;
-                    double x264step = cqStep;
-                    double presetValue = presetQuery.VideoQuality;
-
-                    double x = 51 / x264step;
-
-                    double calculated = presetValue / x264step;
-                    calculated = x - calculated;
-
-                    int.TryParse(calculated.ToString(), out value);
-
-                    // This will sometimes occur when the preset was generated 
-                    // with a different granularity, so, round and try again.
-                    if (value == 0)
-                    {
-                        double val = Math.Round(calculated, 0);
-                        int.TryParse(val.ToString(), out value);
-                    }
-                    if (value < mainWindow.slider_videoQuality.Maximum)
-                        mainWindow.slider_videoQuality.Value = value;
+                    double val = Math.Round(calculated, 0);
+                    int.TryParse(val.ToString(), out value);
                 }
-                else
-                {
-                    int presetVal;
-                    int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
-                    mainWindow.slider_videoQuality.Value = presetVal;
-                }
+                if (value <= mainWindow.slider_videoQuality.Maximum)
+                    mainWindow.slider_videoQuality.Value = value;
             }
+            else
+            {
+                int presetVal;
+                int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
+                mainWindow.slider_videoQuality.Value = presetVal;
+            }
+
 
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
 
