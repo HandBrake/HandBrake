@@ -117,10 +117,7 @@ int hb_sync_init( hb_job_t * job )
     pv->common->mutex = hb_lock_init();
     pv->common->audio_pts_thresh = 0;
     pv->common->next_frame = hb_cond_init();
-    pv->common->pts_count = 1 + hb_list_count( title->list_audio );
-    pv->common->first_pts = malloc( sizeof(int64_t) * pv->common->pts_count );
-    for ( i = 0; i < pv->common->pts_count; i++ )
-        pv->common->first_pts[i] = INT64_MAX;
+    pv->common->pts_count = 1;
     if ( job->frame_to_start || job->pts_to_start )
     {
         pv->common->start_found = 0;
@@ -182,6 +179,9 @@ int hb_sync_init( hb_job_t * job )
             InitAudio( job, pv->common, i );
         }
     }
+    pv->common->first_pts = malloc( sizeof(int64_t) * pv->common->pts_count );
+    for ( i = 0; i < pv->common->pts_count; i++ )
+        pv->common->first_pts[i] = INT64_MAX;
 
     return 0;
 }
@@ -1047,6 +1047,7 @@ static void InitAudio( hb_job_t * job, hb_sync_common_t * common, int i )
     pv->job    = job;
     pv->common = common;
     pv->common->ref++;
+    pv->common->pts_count++;
 
     w = hb_get_work( WORK_SYNC_AUDIO );
     w->private_data = pv;
