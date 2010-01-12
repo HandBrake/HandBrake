@@ -3170,8 +3170,6 @@ bool one_burned = FALSE;
                 
                 if (subt != NULL)
                 {
-                    [self writeToActivityLog: "Setting Subtitle: %s", subt];
-
                     hb_subtitle_config_t sub_config = subt->config;
                     
                     if (!burned && job->mux == HB_MUX_MKV && 
