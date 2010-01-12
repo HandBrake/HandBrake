@@ -45,9 +45,9 @@
         @"YES",             @"CheckForUpdates",
         @"Open Source",     @"LaunchSourceBehavior",
         @"English",         @"DefaultLanguage",
-        @"YES",              @"UseCoreAudio",
+        @"YES",             @"UseCoreAudio",
         @"NO",              @"DefaultMpegName",
-        @"YES",              @"UseDvdNav",
+        @"YES",             @"UseDvdNav",
         @"",                @"DefAdvancedx264Flags",
         @"YES",             @"DefaultPresetsDrawerShow",
         desktopDirectory,   @"LastDestinationDirectory",
@@ -60,7 +60,8 @@
         @"10",              @"PreviewsNumber",
         @"",                @"Drawer Size",
         @"0.25",            @"x264CqSliderFractional",
-        @"YES",              @"AlertBuiltInPresetUpdate",
+        @"YES",             @"AlertBuiltInPresetUpdate",
+        @"MetaX",           @"SendCompletedEncodeToApp",
         nil]];
 }
 
@@ -146,6 +147,50 @@
     return [NSArray arrayWithObjects: TOOLBAR_GENERAL, /*TOOLBAR_PICTURE, */
                                         TOOLBAR_AUDIO, TOOLBAR_ADVANCED, nil];
 }
+
+/* Manage the send encode to xxx.app windows and field */
+/*Opens the app browse window*/
+- (IBAction) browseSendToApp: (id) sender
+{
+    NSOpenPanel * panel;
+	
+    panel = [NSOpenPanel openPanel];
+    [panel setAllowsMultipleSelection: NO];
+    [panel setCanChooseFiles: YES];
+    [panel setCanChooseDirectories: NO ];
+    NSString * sendToAppDirectory;
+	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"])
+	{
+		sendToAppDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"];
+	}
+	else
+	{
+		sendToAppDirectory = @"/Applications";
+	}
+    [panel beginSheetForDirectory: sendToAppDirectory file: nil types: nil
+                   modalForWindow: [self window] modalDelegate: self
+                   didEndSelector: @selector( browseSendToAppDone:returnCode:contextInfo: )
+                      contextInfo: sender]; 
+}
+
+- (void) browseSendToAppDone: (NSOpenPanel *) sheet
+                  returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    if( returnCode == NSOKButton )
+    {
+        NSString *sendToAppPath = [[sheet filenames] objectAtIndex: 0];
+        NSString *sendToAppDirectory = [sendToAppPath stringByDeletingLastPathComponent];
+        [[NSUserDefaults standardUserDefaults] setObject:sendToAppDirectory forKey:@"LastSendToAppDirectory"];
+        [sheet orderOut: self];
+        NSString *sendToAppName;
+        sendToAppName = [[sendToAppPath lastPathComponent] stringByDeletingPathExtension];
+        /* we set the name of the app to send to in the display field */
+        [fSendEncodeToAppField setStringValue:sendToAppName];
+        [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"SendCompletedEncodeToApp"];
+        
+    }
+}
+
 
 @end
 

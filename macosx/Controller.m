@@ -1381,9 +1381,15 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     /* This end of encode action is called as each encode rolls off of the queue */
     if([[NSUserDefaults standardUserDefaults] boolForKey: @"sendToMetaX"] == YES)
     {
-        NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@", @"tell application \"MetaX\" to open (POSIX file \"", filePath, @"\")"]];
-        [myScript executeAndReturnError: nil];
-        [myScript release];
+        NSString *sendToApp = [[NSUserDefaults standardUserDefaults] objectForKey: @"SendCompletedEncodeToApp"];
+        if (![sendToApp isEqualToString:@"None"])
+        {
+            [self writeToActivityLog: "trying to send encode to: %s", [sendToApp UTF8String]];
+            NSAppleScript *myScript = [[NSAppleScript alloc] initWithSource: [NSString stringWithFormat: @"%@%@%@%@%@", @"tell application \"",sendToApp,@"\" to open (POSIX file \"", filePath, @"\")"]];
+            [myScript executeAndReturnError: nil];
+            [myScript release];
+        }
+        
     }
 }
 #pragma mark -
