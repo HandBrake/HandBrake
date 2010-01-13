@@ -12,14 +12,14 @@
 // Original value used by cleaner
 //#define TextStorageUpperSizeLimit 20000
 // lets use this higher value for now for better gui debugging
-#define TextStorageUpperSizeLimit 40000
+#define TextStorageUpperSizeLimit 125000
 
 /// When old output is removed, this is the amount of characters that will be
 /// left in outputTextStorage.
 // Original value used by cleaner
 //#define TextStorageLowerSizeLimit 15000
 // lets use this higher value for now for better gui debugging
-#define TextStorageLowerSizeLimit 35000
+#define TextStorageLowerSizeLimit 120000
 
 @implementation HBOutputPanelController
 
