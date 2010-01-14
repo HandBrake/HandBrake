@@ -2099,7 +2099,10 @@ ghb_find_audio_track(
 	gint track = -1;
 	gint max_chan = 0;
 	gboolean *used;
+	gboolean *passthru_used;
 	gint try_acodec;
+	gint passthru_acodec;
+	gboolean passthru;
 	
 	g_debug("find_audio_track ()\n");
 	if (h_scan == NULL) return -1;
@@ -2112,7 +2115,8 @@ ghb_find_audio_track(
 	if (count > 10) count = 10;
 	// Try to find an item that matches the preferred language and
 	// the passthru codec type
-	if (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
+	passthru = (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)) != 0;
+	if (passthru)
 	{
 		for (ii = 0; ii < count; ii++)
 		{
@@ -2120,11 +2124,11 @@ ghb_find_audio_track(
 
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-			try_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+			passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
 			// Is the source track use a passthru capable codec?
-			if (try_acodec == 0)
+			if (passthru_acodec == 0)
 				continue;
-			used = get_track_used(try_acodec, track_indices, count);
+			used = get_track_used(passthru_acodec, track_indices, count);
 			// Has the track already been used with this codec?
 			if (used[ii])
 				continue;
@@ -2163,7 +2167,15 @@ ghb_find_audio_track(
 		if (used[ii])
 			continue;
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
-													title->list_audio, ii );
+												title->list_audio, ii );
+		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		if (passthru_acodec && passthru)
+		{
+			passthru_used = get_track_used(passthru_acodec, track_indices, count);
+			// Has the track already been used with this codec for passthru?
+			if (passthru_used[ii])
+				continue;
+		}
 		// Find a track that is not visually impaired or dirctor's commentary
 		if ((audio->lang.type < 2) &&
 			((strcmp(lang, audio->lang.iso639_2) == 0) ||
@@ -2180,7 +2192,7 @@ ghb_find_audio_track(
 	}
 	// Try to fine an item that does not match the preferred language and
 	// matches the passthru codec type
-	if (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA))
+	if (passthru)
 	{
 		for (ii = 0; ii < count; ii++)
 		{
@@ -2188,11 +2200,11 @@ ghb_find_audio_track(
 
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
-			try_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+			passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
 			// Is the source track use a passthru capable codec?
-			if (try_acodec == 0)
+			if (passthru_acodec == 0)
 				continue;
-			used = get_track_used(try_acodec, track_indices, count);
+			used = get_track_used(passthru_acodec, track_indices, count);
 			// Has the track already been used with this codec?
 			if (used[ii])
 				continue;
@@ -2230,6 +2242,14 @@ ghb_find_audio_track(
 			continue;
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
+		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		if (passthru_acodec && passthru)
+		{
+			passthru_used = get_track_used(passthru_acodec, track_indices, count);
+			// Has the track already been used with this codec for passthru?
+			if (passthru_used[ii])
+				continue;
+		}
 		// Find a track that is not visually impaired or dirctor's commentary
 		if (audio->lang.type < 2)
 		{
@@ -2246,7 +2266,15 @@ ghb_find_audio_track(
 	for (ii = 0; ii < count; ii++)
 	{
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
-													title->list_audio, ii );
+												title->list_audio, ii );
+		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		if (passthru_acodec && passthru)
+		{
+			passthru_used = get_track_used(passthru_acodec, track_indices, count);
+			// Has the track already been used with this codec for passthru?
+			if (passthru_used[ii])
+				continue;
+		}
 		// Has the track already been used with this codec?
 		if (!used[ii])
 		{
