@@ -22,7 +22,7 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects *************
-        EncodeAndQueueHandler encodeQueue = new EncodeAndQueueHandler();
+        Queue encodeQueue = new Queue();
         PresetsHandler presetHandler = new PresetsHandler();
         QueryGenerator queryGen = new QueryGenerator();
 
@@ -38,6 +38,7 @@ namespace Handbrake
         private string dvdDrivePath;
         private string dvdDriveLabel;
         private Preset CurrentlySelectedPreset;
+        private DVD currentSource;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -667,10 +668,10 @@ namespace Handbrake
                 if (result == DialogResult.Yes)
                 {
                     // Pause The Queue
-                    encodeQueue.RequestPause();
+                    encodeQueue.Pause();
 
                     // Allow the CLI to exit cleanly
-                    Win32.SetForegroundWindow((int)encodeQueue.processHandle);
+                    Win32.SetForegroundWindow((int)encodeQueue.ProcessHandle);
                     SendKeys.Send("^C");
 
                     // Update the GUI
@@ -726,14 +727,14 @@ namespace Handbrake
                     if (overwrite == DialogResult.Yes)
                     {
                         if (encodeQueue.Count == 0)
-                            encodeQueue.AddJob(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
+                            encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
 
-                        queueWindow.setQueue();
+                        queueWindow.SetQueue();
                         if (encodeQueue.Count > 1)
                             queueWindow.Show(false);
 
                         setEncodeStarted(); // Encode is running, so setup the GUI appropriately
-                        encodeQueue.StartEncodeQueue(); // Start The Queue Encoding Process
+                        encodeQueue.Start(); // Start The Queue Encoding Process
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
                     }
                     if (ActivityWindow != null)
@@ -760,11 +761,11 @@ namespace Handbrake
                     DialogResult result = MessageBox.Show("There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                   "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
-                        encodeQueue.AddJob(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
+                        encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
 
                 }
                 else
-                    encodeQueue.AddJob(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
+                    encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != ""));
 
                 lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
@@ -1543,16 +1544,16 @@ namespace Handbrake
 
             try
             {
-                DVD thisDVD = SourceScan.SouceData();
+                currentSource = SourceScan.SouceData();
 
                 // Setup some GUI components
                 drp_dvdtitle.Items.Clear();
-                if (thisDVD.Titles.Count != 0)
-                    drp_dvdtitle.Items.AddRange(thisDVD.Titles.ToArray());
+                if (currentSource.Titles.Count != 0)
+                    drp_dvdtitle.Items.AddRange(currentSource.Titles.ToArray());
 
                 // Now select the longest title
-                if (thisDVD.Titles.Count != 0)
-                    drp_dvdtitle.SelectedItem = Main.SelectLongestTitle(thisDVD);
+                if (currentSource.Titles.Count != 0)
+                    drp_dvdtitle.SelectedItem = Main.SelectLongestTitle(currentSource);
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 if (sourcePath.ToLower().Contains(".iso") || sourcePath.Contains("VIDEO_TS") || Directory.Exists(Path.Combine(sourcePath, "VIDEO_TS")))
@@ -1768,7 +1769,7 @@ namespace Handbrake
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-            if ((encodeQueue.isEncoding) && (!encodeQueue.PauseRequested) && (encodeQueue.Count > 0))
+            if ((encodeQueue.IsEncoding) && (!encodeQueue.PauseRequested) && (encodeQueue.Count > 0))
             {
                 DialogResult result = MessageBox.Show("HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
                     "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -1784,7 +1785,7 @@ namespace Handbrake
         {
             try
             {
-                Parser encode = new Parser(encodeQueue.hbProcess.StandardOutput.BaseStream);
+                Parser encode = new Parser(encodeQueue.HbProcess.StandardOutput.BaseStream);
                 encode.OnEncodeProgress += encodeOnEncodeProgress;
                 while (!encode.EndOfStream)
                     encode.readEncodeStatus();

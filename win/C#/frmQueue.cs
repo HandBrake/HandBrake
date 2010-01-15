@@ -16,40 +16,41 @@ namespace Handbrake
     public partial class frmQueue : Form
     {
         private delegate void UpdateHandler();
-        private EncodeAndQueueHandler queue;
+        private Queue queue;
 
-        public frmQueue(EncodeAndQueueHandler q)
+        public frmQueue(Queue q)
         {
             InitializeComponent();
 
             this.queue = q;
-            queue.NewJobStarted += new EventHandler(queueOnEncodeStart);
-            queue.QueueCompleted += new EventHandler(queueOnQueueFinished);
-            queue.QueuePauseRequested += new EventHandler(queueOnPaused);
+            queue.NewJobStarted += new EventHandler(QueueOnEncodeStart);
+            queue.QueueCompleted += new EventHandler(QueueOnQueueFinished);
+            queue.QueuePauseRequested += new EventHandler(QueueOnPaused);
         }
-        void queueOnPaused(object sender, EventArgs e)
+
+        private void QueueOnPaused(object sender, EventArgs e)
         {
-            setUIEncodeFinished();
-            updateUIElements();
+            SetUIEncodeFinished();
+            UpdateUIElements();
         }
-        void queueOnQueueFinished(object sender, EventArgs e)
+        private void QueueOnQueueFinished(object sender, EventArgs e)
         {
-            setUIEncodeFinished();
-            resetQueue(); // Reset the Queue Window
+            SetUIEncodeFinished();
+            ResetQueue(); // Reset the Queue Window
         }
-        void queueOnEncodeStart(object sender, EventArgs e)
+        private void QueueOnEncodeStart(object sender, EventArgs e)
         {
-            setUIEncodeStarted(); // make sure the UI is set correctly
-            setCurrentEncodeInformation();
-            updateUIElements(); // Redraw the Queue, a new encode has started.
+            SetUIEncodeStarted(); // make sure the UI is set correctly
+            SetCurrentEncodeInformation();
+            UpdateUIElements(); // Redraw the Queue, a new encode has started.
         }
 
         /// <summary>
         /// Initializes the Queue list with the Arraylist from the Queue class
         /// </summary>
-        public void setQueue()
+        public void SetQueue()
         {
-            updateUIElements();
+            UpdateUIElements();
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace Handbrake
         /// <param name="doSetQueue">Indicates whether to call setQueue() before showing the window</param>
         public void Show(bool doSetQueue)
         {
-            if (doSetQueue) setQueue();
+            if (doSetQueue) SetQueue();
             base.Show();
 
             //Activate();
@@ -77,48 +78,48 @@ namespace Handbrake
         {
             if (queue.PauseRequested)
             {
-                setUIEncodeStarted();
+                SetUIEncodeStarted();
                 MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            if (!queue.isEncoding)
-                queue.StartEncodeQueue();
+            if (!queue.IsEncoding)
+                queue.Start();
 
         }
         private void btn_pause_Click(object sender, EventArgs e)
         {
-            queue.RequestPause();
-            setUIEncodeFinished();
-            resetQueue();
+            queue.Pause();
+            SetUIEncodeFinished();
+            ResetQueue();
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         // Window Display Management
-        private void setUIEncodeStarted()
+        private void SetUIEncodeStarted()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(setUIEncodeStarted));
+                BeginInvoke(new UpdateHandler(SetUIEncodeStarted));
                 return;
             }
             btn_encode.Enabled = false;
             btn_pause.Visible = true;
         }
-        private void setUIEncodeFinished()
+        private void SetUIEncodeFinished()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(setUIEncodeFinished));
+                BeginInvoke(new UpdateHandler(SetUIEncodeFinished));
                 return;
             }
             btn_pause.Visible = false;
             btn_encode.Enabled = true;
         }
-        private void resetQueue()
+        private void ResetQueue()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(resetQueue));
+                BeginInvoke(new UpdateHandler(ResetQueue));
                 return;
             }
             btn_pause.Visible = false;
@@ -133,11 +134,11 @@ namespace Handbrake
 
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
-        private void redrawQueue()
+        private void RedrawQueue()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(redrawQueue));
+                BeginInvoke(new UpdateHandler(RedrawQueue));
                 return;
             }
 
@@ -183,24 +184,24 @@ namespace Handbrake
                 list_queue.Items.Add(item);
             }
         }
-        private void updateUIElements()
+        private void UpdateUIElements()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(updateUIElements));
+                BeginInvoke(new UpdateHandler(UpdateUIElements));
                 return;
             }
 
-            redrawQueue();
+            RedrawQueue();
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
-        private void setCurrentEncodeInformation()
+        private void SetCurrentEncodeInformation()
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new UpdateHandler(setCurrentEncodeInformation));
+                    BeginInvoke(new UpdateHandler(SetCurrentEncodeInformation));
                 }
 
                 // found query is a global varible
@@ -238,7 +239,7 @@ namespace Handbrake
                 // Do Nothing
             }
         }
-        private void deleteSelectedItems()
+        private void DeleteSelectedItems()
         {
             // If there are selected items
             if (list_queue.SelectedIndices.Count > 0)
@@ -255,9 +256,9 @@ namespace Handbrake
 
                 // Remove each selected item
                 foreach (int selectedIndex in selectedIndices)
-                    queue.RemoveJob(selectedIndex);
+                    queue.Remove(selectedIndex);
 
-                updateUIElements();
+                UpdateUIElements();
 
                 // Select the item where the first deleted item was previously
                 if (firstSelectedIndex < list_queue.Items.Count)
@@ -270,34 +271,34 @@ namespace Handbrake
         // Queue Management
         private void mnu_up_Click(object sender, EventArgs e)
         {
-            moveUp();
+            MoveUp();
         }
         private void mnu_Down_Click(object sender, EventArgs e)
         {
-            moveDown();
+            MoveDown();
         }
         private void mnu_delete_Click(object sender, EventArgs e)
         {
-            deleteSelectedItems();
+            DeleteSelectedItems();
         }
         private void btn_up_Click(object sender, EventArgs e)
         {
-            moveUp();
+            MoveUp();
         }
         private void btn_down_Click(object sender, EventArgs e)
         {
-            moveDown();
+            MoveDown();
         }
         private void btn_delete_Click(object sender, EventArgs e)
         {
-            deleteSelectedItems();
+            DeleteSelectedItems();
         }
         private void list_queue_deleteKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
-                deleteSelectedItems();
+                DeleteSelectedItems();
         }
-        private void moveUp()
+        private void MoveUp()
         {
             // If there are selected items and the first item is not selected
             if (list_queue.SelectedIndices.Count > 0 && !list_queue.SelectedIndices.Contains(0))
@@ -311,7 +312,7 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.MoveUp(selectedIndex);
 
-                updateUIElements();
+                UpdateUIElements();
 
                 // Keep the selected item(s) selected, now moved up one index
                 foreach (int selectedIndex in selectedIndices)
@@ -321,7 +322,7 @@ namespace Handbrake
 
             list_queue.Select(); // Activate the control to show the selected items
         }
-        private void moveDown()
+        private void MoveDown()
         {
             // If there are selected items and the last item is not selected
             if (list_queue.SelectedIndices.Count > 0 &&
@@ -339,7 +340,7 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.MoveDown(selectedIndex);
 
-                updateUIElements();
+                UpdateUIElements();
 
                 // Keep the selected item(s) selected, now moved down one index
                 foreach (int selectedIndex in selectedIndices)
@@ -373,14 +374,14 @@ namespace Handbrake
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
                 queue.LoadQueueFromFile(OpenFile.FileName);
-            updateUIElements();
+            UpdateUIElements();
         }
         private void mnu_readd_Click(object sender, EventArgs e)
         {
             if (!queue.LastEncode.IsEmpty)
             {
-                queue.AddJob(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination, queue.LastEncode.CustomQuery);
-                updateUIElements();
+                queue.Add(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination, queue.LastEncode.CustomQuery);
+                UpdateUIElements();
             }
         }
 

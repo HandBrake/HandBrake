@@ -1,4 +1,4 @@
-﻿/*  EncodeAndQueueHandler.cs $
+﻿/*  Queue.cs $
  	
  	   This file is part of the HandBrake source code.
  	   Homepage: <http://handbrake.fr/>.
@@ -7,20 +7,20 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Handbrake.Functions;
+using Handbrake.Parsing;
 
 namespace Handbrake.EncodeQueue
 {
-    public class EncodeAndQueueHandler
+    public class Queue : Encode
     {
         private static XmlSerializer serializer;
-        private List<Job> queue = new List<Job>();
-        private int nextJobId;
+        private readonly List<Job> queue = new List<Job>();
+        private int NextJobId;
 
         #region Event Handlers
         /// <summary>
@@ -53,7 +53,7 @@ namespace Handbrake.EncodeQueue
         {
             Job job = queue[0];
             LastEncode = job;
-            RemoveJob(0); // Remove the item which we are about to pass out.
+            Remove(0); // Remove the item which we are about to pass out.
 
             WriteQueueStateToFile("hb_queue_recovery.xml");
 
@@ -82,10 +82,11 @@ namespace Handbrake.EncodeQueue
         /// <param name="query">The query that will be passed to the HandBrake CLI.</param>
         /// <param name="source">The location of the source video.</param>
         /// <param name="destination">The location where the encoded video will be.</param>
-        /// <param name="customJob"></param>
-        public void AddJob(string query, string source, string destination, bool customJob)
+        /// <param name="customJob">Custom job</param>
+        /// <param name="scanInfo">The Scan</param>
+        public void Add(string query, string source, string destination, bool customJob)
         {
-            Job newJob = new Job { Id = nextJobId++, Query = query, Source = source, Destination = destination, CustomQuery = customJob };
+            Job newJob = new Job { Id = NextJobId++, Query = query, Source = source, Destination = destination, CustomQuery = customJob };
 
             queue.Add(newJob);
             WriteQueueStateToFile("hb_queue_recovery.xml");
@@ -95,7 +96,7 @@ namespace Handbrake.EncodeQueue
         /// Removes an item from the queue.
         /// </summary>
         /// <param name="index">The zero-based location of the job in the queue.</param>
-        public void RemoveJob(int index)
+        public void Remove(int index)
         {
             queue.RemoveAt(index);
             WriteQueueStateToFile("hb_queue_recovery.xml");
@@ -268,7 +269,7 @@ namespace Handbrake.EncodeQueue
         /// Starts encoding the first job in the queue and continues encoding until all jobs
         /// have been encoded.
         /// </summary>
-        public void StartEncodeQueue()
+        public void Start()
         {
             if (this.Count != 0)
             {
@@ -279,7 +280,7 @@ namespace Handbrake.EncodeQueue
                     PauseRequested = false;
                     try
                     {
-                        Thread theQueue = new Thread(startProcess) { IsBackground = true };
+                        Thread theQueue = new Thread(StartQueue) { IsBackground = true };
                         theQueue.Start();
                     }
                     catch (Exception exc)
@@ -293,7 +294,7 @@ namespace Handbrake.EncodeQueue
         /// <summary>
         /// Requests a pause of the encode queue.
         /// </summary>
-        public void RequestPause()
+        public void Pause()
         {
             PauseRequested = true;
 
@@ -304,12 +305,12 @@ namespace Handbrake.EncodeQueue
         /// <summary>
         /// Stops the current job.
         /// </summary>
-        public void EndEncodeJob()
+        public void End()
         {
-            CloseCLI();
+            Stop();
         }
 
-        private void startProcess(object state)
+        private void StartQueue(object state)
         {
             // Run through each item on the queue
             while (this.Count != 0)
@@ -318,20 +319,20 @@ namespace Handbrake.EncodeQueue
                 string query = encJob.Query;
                 WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
-                RunCli(query);
+                Run(query);
 
                 if (NewJobStarted != null)
                     NewJobStarted(this, new EventArgs());
 
-                hbProcess.WaitForExit();
+                HbProcess.WaitForExit();
 
                 AddCLIQueryToLog(encJob);
                 CopyLog(LastEncode.Destination);
 
-                hbProcess.Close();
-                hbProcess.Dispose();
+                HbProcess.Close();
+                HbProcess.Dispose();
 
-                isEncoding = false;
+                IsEncoding = false;
 
                 //Growl
                 if (Properties.Settings.Default.growlEncode)
@@ -342,7 +343,7 @@ namespace Handbrake.EncodeQueue
 
                 while (PauseRequested) // Need to find a better way of doing this.
                 {
-                    Thread.Sleep(5000);
+                    Thread.Sleep(2000);
                 }
             }
             LastEncode = new Job();
@@ -351,190 +352,9 @@ namespace Handbrake.EncodeQueue
                 QueueCompleted(this, new EventArgs());
 
             // After the encode is done, we may want to shutdown, suspend etc.
-            AfterEncodeAction();
+            Finish();
         }
 
-        #endregion
-
-        #region CLI and Log Handling
-        public Process hbProcess { get; set; }
-        public int processID { get; set; }
-        public IntPtr processHandle { get; set; }
-        public String currentQuery { get; set; }
-        public Boolean isEncoding { get; set; }
-
-        /// <summary>
-        /// Execute a HandBrakeCLI process.
-        /// </summary>
-        /// <param name="query">The CLI Query</param>
-        public void RunCli(string query)
-        {
-            try
-            {
-                isEncoding = true;
-
-                string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs", "last_encode_log.txt");
-                string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, query, logPath);
-                ProcessStartInfo cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
-
-                if (Properties.Settings.Default.enocdeStatusInGui)
-                {
-                    cliStart.RedirectStandardOutput = true;
-                    cliStart.UseShellExecute = false;
-                }
-                if (Properties.Settings.Default.cli_minimized)
-                    cliStart.WindowStyle = ProcessWindowStyle.Minimized;
-
-                Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
-                hbProcess = Process.Start(cliStart);
-                processID = Main.GetCliProcess(before);
-                currentQuery = query;
-                if (hbProcess != null)
-                    processHandle = hbProcess.MainWindowHandle; // Set the process Handle
-
-                // Set the process Priority
-                Process hbCliProcess = null;
-                if (processID != -1)
-                    hbCliProcess = Process.GetProcessById(processID);
-
-                if (hbCliProcess != null)
-                    switch (Properties.Settings.Default.processPriority)
-                    {
-                        case "Realtime":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.RealTime;
-                            break;
-                        case "High":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.High;
-                            break;
-                        case "Above Normal":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
-                            break;
-                        case "Normal":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.Normal;
-                            break;
-                        case "Low":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.Idle;
-                            break;
-                        default:
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
-                            break;
-                    }
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\n   Detailed Error Information: error occured in runCli()\n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Kill the CLI process
-        /// </summary>
-        private void CloseCLI()
-        {
-            hbProcess.Kill();
-            isEncoding = false;
-        }
-
-        /// <summary>
-        /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
-        /// </summary>
-        private void AfterEncodeAction()
-        {
-            isEncoding = false;
-            currentQuery = String.Empty;
-
-            //Growl
-            if (Properties.Settings.Default.growlQueue)
-                GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
-
-            // Do something whent he encode ends.
-            switch (Properties.Settings.Default.CompletionOption)
-            {
-                case "Shutdown":
-                    Process.Start("Shutdown", "-s -t 60");
-                    break;
-                case "Log Off":
-                    Win32.ExitWindowsEx(0, 0);
-                    break;
-                case "Suspend":
-                    Application.SetSuspendState(PowerState.Suspend, true, true);
-                    break;
-                case "Hibernate":
-                    Application.SetSuspendState(PowerState.Hibernate, true, true);
-                    break;
-                case "Lock System":
-                    Win32.LockWorkStation();
-                    break;
-                case "Quit HandBrake":
-                    Application.Exit();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        /// <summar>
-        /// Append the CLI query to the start of the log file.
-        /// </summary>
-        /// <param name="query"></param>
-        private static void AddCLIQueryToLog(Job encJob)
-        {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logPath = Path.Combine(logDir, "last_encode_log.txt");
-
-            StreamReader reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read, FileShare.Read));
-            String log = reader.ReadToEnd();
-            reader.Close();
-
-            StreamWriter writer = new StreamWriter(File.Create(logPath));
-
-            writer.Write("### CLI Query: " + encJob.Query + "\n\n");
-            writer.Write("### User Query: " + encJob.CustomQuery + "\n\n");
-            writer.Write("#########################################\n\n");
-            writer.WriteLine(log);
-            writer.Flush();
-            writer.Close();
-        }
-
-        /// <summary>
-        /// Save a copy of the log to the users desired location or a default location
-        /// if this feature is enabled in options.
-        /// </summary>
-        /// <param name="destination"></param>
-        private static void CopyLog(string destination)
-        {
-            try
-            {
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-                string tempLogFile = Path.Combine(logDir, "last_encode_log.txt");
-
-                string encodeDestinationPath = Path.GetDirectoryName(destination);
-                String destinationFile = Path.GetFileName(destination);
-                string encodeLogFile = destinationFile + " " + DateTime.Now.ToString().Replace("/", "-").Replace(":", "-") + ".txt";
-
-                // Make sure the log directory exists.
-                if (!Directory.Exists(logDir))
-                    Directory.CreateDirectory(logDir);
-
-                // Copy the Log to HandBrakes log folder in the users applciation data folder.
-                File.Copy(tempLogFile, Path.Combine(logDir, encodeLogFile));
-
-                // Save a copy of the log file in the same location as the enocde.
-                if (Properties.Settings.Default.saveLogWithVideo)
-                    File.Copy(tempLogFile, Path.Combine(encodeDestinationPath, encodeLogFile));
-
-                // Save a copy of the log file to a user specified location
-                if (Directory.Exists(Properties.Settings.Default.saveLogPath))
-                    if (Properties.Settings.Default.saveLogPath != String.Empty && Properties.Settings.Default.saveLogToSpecifiedPath)
-                        File.Copy(tempLogFile, Path.Combine(Properties.Settings.Default.saveLogPath, encodeLogFile));
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show("Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc, "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
         #endregion
     }
 }

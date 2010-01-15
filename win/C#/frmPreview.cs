@@ -14,7 +14,7 @@ namespace Handbrake
     public partial class frmPreview : Form
     {
         readonly QueryGenerator HbCommonFunc = new QueryGenerator();
-        readonly EncodeAndQueueHandler Process = new EncodeAndQueueHandler();
+        readonly Queue Process = new Queue();
         private delegate void UpdateUIHandler();
         String CurrentlyPlaying = "";
         readonly frmMain MainWindow;
@@ -106,15 +106,15 @@ namespace Handbrake
         private void ProcMonitor(object state)
         {
             // Make sure we are not already encoding and if we are then display an error.
-            if (Process.hbProcess != null)
+            if (Process.HbProcess != null)
                 MessageBox.Show(this, "Handbrake is already encoding a video!", "Status", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                Process.RunCli((string)state);
-                if (Process.hbProcess != null)
+                Process.CreatePreviewSampe((string)state);
+                if (Process.HbProcess != null)
                 {
-                    Process.hbProcess.WaitForExit();
-                    Process.hbProcess = null;
+                    Process.HbProcess.WaitForExit();
+                    Process.HbProcess = null;
                 }
                 EncodeCompleted();
             }
