@@ -88,7 +88,7 @@ namespace Handbrake
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
             drop_mode.SelectedIndex = 0;
-            queueWindow = new frmQueue(encodeQueue);        // Prepare the Queue
+            queueWindow = new frmQueue(encodeQueue, this);        // Prepare the Queue
             if (!Properties.Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
 
@@ -1816,6 +1816,39 @@ namespace Handbrake
             VideoFile
         }
         #endregion
+
+        public void RecievingJob(Job job)
+        {
+            string query = job.Query;
+            StartScan(job.Source, 0);
+     
+
+            if (query != null)
+            {
+                //Ok, Reset all the H264 widgets before changing the preset
+                x264Panel.reset2Defaults();
+
+                // Send the query from the file to the Query Parser class
+                QueryParser presetQuery = QueryParser.Parse(query);
+
+                // Now load the preset
+                PresetLoader.presetLoader(this, presetQuery, "Load Back From Queue", true);
+
+                // The x264 widgets will need updated, so do this now:
+                x264Panel.X264_StandardizeOptString();
+                x264Panel.X264_SetCurrentSettingsInPanel();
+
+                // Finally, let this window have a copy of the preset settings.
+                CurrentlySelectedPreset = null;
+                PictureSettings.SetPresetCropWarningLabel(null);
+            }
+
+        }
+
+        private void UpdateGuiWithQueueItemAfterScan()
+        {
+            
+        }
 
         // This is the END of the road ****************************************
     }

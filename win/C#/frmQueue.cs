@@ -17,10 +17,13 @@ namespace Handbrake
     {
         private delegate void UpdateHandler();
         private Queue queue;
+        private frmMain mainWindow;
 
-        public frmQueue(Queue q)
+        public frmQueue(Queue q, frmMain mw)
         {
             InitializeComponent();
+
+            this.mainWindow = mw;
 
             this.queue = q;
             queue.NewJobStarted += new EventHandler(QueueOnEncodeStart);
@@ -93,6 +96,7 @@ namespace Handbrake
             ResetQueue();
             MessageBox.Show("No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
+
 
         // Window Display Management
         private void SetUIEncodeStarted()
@@ -384,6 +388,23 @@ namespace Handbrake
                 UpdateUIElements();
             }
         }
+        private void mnu_reconfigureJob_Click(object sender, EventArgs e)
+        {
+            if (list_queue.SelectedIndices != null)
+            {
+                lock (queue)
+                {
+                    lock (list_queue)
+                    {
+                        int index = list_queue.SelectedIndices[0];
+                        mainWindow.RecievingJob(queue.GetJob(index));
+                        queue.Remove(index);
+                        RedrawQueue();
+                    }
+                }
+            }
+        }
+
 
         // Hide's the window when the user tries to "x" out of the window instead of closing it.
         protected override void OnClosing(CancelEventArgs e)
@@ -392,6 +413,5 @@ namespace Handbrake
             this.Hide();
             base.OnClosing(e);
         }
-
     }
 }

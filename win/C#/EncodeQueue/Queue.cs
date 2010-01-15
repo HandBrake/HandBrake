@@ -103,6 +103,19 @@ namespace Handbrake.EncodeQueue
         }
 
         /// <summary>
+        /// Retrieve a job from the queue
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Job GetJob(int index)
+        {
+            if (queue.Count >= (index +1))
+                return queue[index];
+
+            return new Job();
+        }
+
+        /// <summary>
         /// Moves an item up one position in the queue.
         /// </summary>
         /// <param name="index">The zero-based location of the job in the queue.</param>
