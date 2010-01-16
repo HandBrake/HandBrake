@@ -1458,7 +1458,7 @@ namespace Handbrake
             this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(330, 17);
             this.check_showCliForInGUIEncode.TabIndex = 96;
             this.check_showCliForInGUIEncode.Text = "Show CLI window (Allows you to cleanly exit encode with ctrl-c)";
-            this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, "Displays the CLI status in the GUI windows instead of the CLI window.");
+            this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, resources.GetString("check_showCliForInGUIEncode.ToolTip"));
             this.check_showCliForInGUIEncode.UseVisualStyleBackColor = false;
             this.check_showCliForInGUIEncode.CheckedChanged += new System.EventHandler(this.check_showCliForInGUIEncode_CheckedChanged);
             // 
