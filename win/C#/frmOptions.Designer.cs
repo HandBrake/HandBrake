@@ -68,22 +68,22 @@ namespace Handbrake
             this.drop_preferredLang = new System.Windows.Forms.ComboBox();
             this.radio_dub = new System.Windows.Forms.RadioButton();
             this.tab_cli = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.check_clearOldLogs = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.check_cli_minimized = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.btn_saveLog = new System.Windows.Forms.Button();
-            this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
-            this.Label11 = new System.Windows.Forms.Label();
-            this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
-            this.Label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.text_logPath = new System.Windows.Forms.TextBox();
-            this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
-            this.drp_Priority = new System.Windows.Forms.ComboBox();
-            this.drp_processors = new System.Windows.Forms.ComboBox();
             this.btn_viewLogs = new System.Windows.Forms.Button();
+            this.drp_processors = new System.Windows.Forms.ComboBox();
+            this.Label11 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.Label4 = new System.Windows.Forms.Label();
             this.btn_clearLogs = new System.Windows.Forms.Button();
+            this.drp_Priority = new System.Windows.Forms.ComboBox();
+            this.check_logsInSpecifiedLocation = new System.Windows.Forms.CheckBox();
+            this.check_saveLogWithVideo = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btn_saveLog = new System.Windows.Forms.Button();
+            this.cb_logVerboseLvl = new System.Windows.Forms.ComboBox();
+            this.text_logPath = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
             this.drop_previewScanCount = new System.Windows.Forms.ComboBox();
@@ -136,13 +136,13 @@ namespace Handbrake
             this.label27 = new System.Windows.Forms.Label();
             this.openFile_vlc = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.check_showCliForInGUIEncode = new System.Windows.Forms.CheckBox();
             this.tab_options.SuspendLayout();
             this.tab_general.SuspendLayout();
             this.tab_picture.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tab_audio_sub.SuspendLayout();
             this.tab_cli.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
             this.tab_advanced.SuspendLayout();
             this.tab_debug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -578,7 +578,23 @@ namespace Handbrake
             // 
             // tab_cli
             // 
-            this.tab_cli.Controls.Add(this.tableLayoutPanel3);
+            this.tab_cli.Controls.Add(this.check_clearOldLogs);
+            this.tab_cli.Controls.Add(this.label12);
+            this.tab_cli.Controls.Add(this.check_cli_minimized);
+            this.tab_cli.Controls.Add(this.btn_viewLogs);
+            this.tab_cli.Controls.Add(this.drp_processors);
+            this.tab_cli.Controls.Add(this.Label11);
+            this.tab_cli.Controls.Add(this.label9);
+            this.tab_cli.Controls.Add(this.Label4);
+            this.tab_cli.Controls.Add(this.btn_clearLogs);
+            this.tab_cli.Controls.Add(this.drp_Priority);
+            this.tab_cli.Controls.Add(this.check_logsInSpecifiedLocation);
+            this.tab_cli.Controls.Add(this.check_saveLogWithVideo);
+            this.tab_cli.Controls.Add(this.label3);
+            this.tab_cli.Controls.Add(this.btn_saveLog);
+            this.tab_cli.Controls.Add(this.cb_logVerboseLvl);
+            this.tab_cli.Controls.Add(this.text_logPath);
+            this.tab_cli.Controls.Add(this.label14);
             this.tab_cli.Location = new System.Drawing.Point(4, 22);
             this.tab_cli.Name = "tab_cli";
             this.tab_cli.Padding = new System.Windows.Forms.Padding(10);
@@ -587,59 +603,28 @@ namespace Handbrake
             this.tab_cli.Text = "CLI";
             this.tab_cli.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel3
+            // check_clearOldLogs
             // 
-            this.tableLayoutPanel3.AutoSize = true;
-            this.tableLayoutPanel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel3.ColumnCount = 7;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel3.Controls.Add(this.label12, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.check_cli_minimized, 2, 0);
-            this.tableLayoutPanel3.Controls.Add(this.label9, 0, 4);
-            this.tableLayoutPanel3.Controls.Add(this.btn_saveLog, 6, 7);
-            this.tableLayoutPanel3.Controls.Add(this.check_logsInSpecifiedLocation, 2, 6);
-            this.tableLayoutPanel3.Controls.Add(this.Label11, 2, 1);
-            this.tableLayoutPanel3.Controls.Add(this.check_saveLogWithVideo, 2, 5);
-            this.tableLayoutPanel3.Controls.Add(this.Label4, 2, 2);
-            this.tableLayoutPanel3.Controls.Add(this.label3, 2, 4);
-            this.tableLayoutPanel3.Controls.Add(this.text_logPath, 3, 7);
-            this.tableLayoutPanel3.Controls.Add(this.cb_logVerboseLvl, 3, 4);
-            this.tableLayoutPanel3.Controls.Add(this.drp_Priority, 3, 2);
-            this.tableLayoutPanel3.Controls.Add(this.drp_processors, 3, 1);
-            this.tableLayoutPanel3.Controls.Add(this.btn_viewLogs, 2, 8);
-            this.tableLayoutPanel3.Controls.Add(this.btn_clearLogs, 4, 8);
-            this.tableLayoutPanel3.Controls.Add(this.label14, 2, 7);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(10, 10);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 10;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(560, 227);
-            this.tableLayoutPanel3.TabIndex = 62;
+            this.check_clearOldLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_clearOldLogs.AutoSize = true;
+            this.check_clearOldLogs.Location = new System.Drawing.Point(73, 265);
+            this.check_clearOldLogs.Name = "check_clearOldLogs";
+            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
+            this.check_clearOldLogs.TabIndex = 90;
+            this.check_clearOldLogs.Text = "Clear logs older than 30 days";
+            this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
+                    "tion Data Log folder.");
+            this.check_clearOldLogs.UseVisualStyleBackColor = true;
+            this.check_clearOldLogs.CheckedChanged += new System.EventHandler(this.check_clearOldLogs_CheckedChanged);
             // 
             // label12
             // 
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(11, 5);
+            this.label12.Location = new System.Drawing.Point(15, 15);
             this.label12.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label12.Name = "label12";
-            this.tableLayoutPanel3.SetRowSpan(this.label12, 2);
             this.label12.Size = new System.Drawing.Size(28, 13);
             this.label12.TabIndex = 75;
             this.label12.Text = "CLI:";
@@ -648,8 +633,7 @@ namespace Handbrake
             // 
             this.check_cli_minimized.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_cli_minimized.AutoSize = true;
-            this.tableLayoutPanel3.SetColumnSpan(this.check_cli_minimized, 5);
-            this.check_cli_minimized.Location = new System.Drawing.Point(65, 3);
+            this.check_cli_minimized.Location = new System.Drawing.Point(73, 14);
             this.check_cli_minimized.Name = "check_cli_minimized";
             this.check_cli_minimized.Size = new System.Drawing.Size(137, 17);
             this.check_cli_minimized.TabIndex = 76;
@@ -658,147 +642,22 @@ namespace Handbrake
             this.check_cli_minimized.UseVisualStyleBackColor = true;
             this.check_cli_minimized.CheckedChanged += new System.EventHandler(this.check_cli_minimized_CheckedChanged);
             // 
-            // label9
+            // btn_viewLogs
             // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(3, 102);
-            this.label9.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
-            this.label9.Name = "label9";
-            this.tableLayoutPanel3.SetRowSpan(this.label9, 2);
-            this.label9.Size = new System.Drawing.Size(36, 13);
-            this.label9.TabIndex = 77;
-            this.label9.Text = "Logs:";
-            // 
-            // btn_saveLog
-            // 
-            this.btn_saveLog.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.btn_saveLog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_saveLog.Location = new System.Drawing.Point(480, 173);
-            this.btn_saveLog.Name = "btn_saveLog";
-            this.btn_saveLog.Size = new System.Drawing.Size(77, 22);
-            this.btn_saveLog.TabIndex = 82;
-            this.btn_saveLog.Text = "Browse";
-            this.btn_saveLog.UseVisualStyleBackColor = true;
-            this.btn_saveLog.Click += new System.EventHandler(this.btn_saveLog_Click);
-            // 
-            // check_logsInSpecifiedLocation
-            // 
-            this.check_logsInSpecifiedLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_logsInSpecifiedLocation.AutoSize = true;
-            this.tableLayoutPanel3.SetColumnSpan(this.check_logsInSpecifiedLocation, 5);
-            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(65, 150);
-            this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
-            this.check_logsInSpecifiedLocation.TabIndex = 87;
-            this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
-            this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
-            this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
-            this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
-            // 
-            // Label11
-            // 
-            this.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Label11.AutoSize = true;
-            this.Label11.BackColor = System.Drawing.Color.Transparent;
-            this.Label11.Location = new System.Drawing.Point(65, 30);
-            this.Label11.Name = "Label11";
-            this.Label11.Size = new System.Drawing.Size(87, 13);
-            this.Label11.TabIndex = 40;
-            this.Label11.Text = "Processor cores:";
-            // 
-            // check_saveLogWithVideo
-            // 
-            this.check_saveLogWithVideo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.check_saveLogWithVideo.AutoSize = true;
-            this.tableLayoutPanel3.SetColumnSpan(this.check_saveLogWithVideo, 5);
-            this.check_saveLogWithVideo.Location = new System.Drawing.Point(65, 127);
-            this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
-            this.check_saveLogWithVideo.Size = new System.Drawing.Size(382, 17);
-            this.check_saveLogWithVideo.TabIndex = 83;
-            this.check_saveLogWithVideo.Text = "Put a copy of individual encode logs in the same location as encoded video";
-            this.ToolTip.SetToolTip(this.check_saveLogWithVideo, "Place a copy of the encode log in the same folder as the encoded movie.");
-            this.check_saveLogWithVideo.UseVisualStyleBackColor = true;
-            this.check_saveLogWithVideo.CheckedChanged += new System.EventHandler(this.check_saveLogWithVideo_CheckedChanged);
-            // 
-            // Label4
-            // 
-            this.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Label4.AutoSize = true;
-            this.Label4.BackColor = System.Drawing.Color.Transparent;
-            this.Label4.Location = new System.Drawing.Point(65, 57);
-            this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(70, 13);
-            this.Label4.TabIndex = 42;
-            this.Label4.Text = "Priority level:";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(65, 104);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(101, 13);
-            this.label3.TabIndex = 85;
-            this.label3.Text = "Log verbosity level:";
-            // 
-            // text_logPath
-            // 
-            this.text_logPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel3.SetColumnSpan(this.text_logPath, 3);
-            this.text_logPath.Location = new System.Drawing.Point(172, 173);
-            this.text_logPath.Name = "text_logPath";
-            this.text_logPath.Size = new System.Drawing.Size(302, 21);
-            this.text_logPath.TabIndex = 80;
-            this.ToolTip.SetToolTip(this.text_logPath, "The default location where auto named files are stored.");
-            this.text_logPath.TextChanged += new System.EventHandler(this.text_logPath_TextChanged);
-            // 
-            // cb_logVerboseLvl
-            // 
-            this.cb_logVerboseLvl.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel3.SetColumnSpan(this.cb_logVerboseLvl, 4);
-            this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_logVerboseLvl.FormattingEnabled = true;
-            this.cb_logVerboseLvl.Items.AddRange(new object[] {
-            "0",
-            "1",
-            "2"});
-            this.cb_logVerboseLvl.Location = new System.Drawing.Point(172, 100);
-            this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
-            this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
-            this.cb_logVerboseLvl.TabIndex = 86;
-            this.ToolTip.SetToolTip(this.cb_logVerboseLvl, "Activity Log Verbosity Level");
-            this.cb_logVerboseLvl.SelectedIndexChanged += new System.EventHandler(this.cb_logVerboseLvl_SelectedIndexChanged);
-            // 
-            // drp_Priority
-            // 
-            this.drp_Priority.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel3.SetColumnSpan(this.drp_Priority, 4);
-            this.drp_Priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_Priority.FormattingEnabled = true;
-            this.drp_Priority.Items.AddRange(new object[] {
-            "Realtime",
-            "High",
-            "Above Normal",
-            "Normal",
-            "Below Normal",
-            "Low"});
-            this.drp_Priority.Location = new System.Drawing.Point(172, 53);
-            this.drp_Priority.Name = "drp_Priority";
-            this.drp_Priority.Size = new System.Drawing.Size(111, 21);
-            this.drp_Priority.TabIndex = 43;
-            this.ToolTip.SetToolTip(this.drp_Priority, "Set the application priority level for the CLI. \r\nIt\'s best to leave this on Belo" +
-                    "w Normal if you wish to use your system whilst encoding with HandBrake.\r\n");
-            this.drp_Priority.SelectedIndexChanged += new System.EventHandler(this.drp_Priority_SelectedIndexChanged);
+            this.btn_viewLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_viewLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
+            this.btn_viewLogs.Location = new System.Drawing.Point(129, 227);
+            this.btn_viewLogs.Name = "btn_viewLogs";
+            this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
+            this.btn_viewLogs.TabIndex = 89;
+            this.btn_viewLogs.Text = "View Log Directory";
+            this.btn_viewLogs.UseVisualStyleBackColor = true;
+            this.btn_viewLogs.Click += new System.EventHandler(this.btn_viewLogs_Click);
             // 
             // drp_processors
             // 
             this.drp_processors.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel3.SetColumnSpan(this.drp_processors, 4);
             this.drp_processors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.drp_processors.FormattingEnabled = true;
             this.drp_processors.Items.AddRange(new object[] {
@@ -811,7 +670,7 @@ namespace Handbrake
             "6",
             "7",
             "8"});
-            this.drp_processors.Location = new System.Drawing.Point(172, 26);
+            this.drp_processors.Location = new System.Drawing.Point(177, 69);
             this.drp_processors.Name = "drp_processors";
             this.drp_processors.Size = new System.Drawing.Size(111, 21);
             this.drp_processors.TabIndex = 41;
@@ -819,26 +678,46 @@ namespace Handbrake
                     "n Automatic.");
             this.drp_processors.SelectedIndexChanged += new System.EventHandler(this.drp_processors_SelectedIndexChanged);
             // 
-            // btn_viewLogs
+            // Label11
             // 
-            this.btn_viewLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.tableLayoutPanel3.SetColumnSpan(this.btn_viewLogs, 2);
-            this.btn_viewLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_viewLogs.Location = new System.Drawing.Point(65, 201);
-            this.btn_viewLogs.Name = "btn_viewLogs";
-            this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
-            this.btn_viewLogs.TabIndex = 89;
-            this.btn_viewLogs.Text = "View Log Directory";
-            this.btn_viewLogs.UseVisualStyleBackColor = true;
-            this.btn_viewLogs.Click += new System.EventHandler(this.btn_viewLogs_Click);
+            this.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Label11.AutoSize = true;
+            this.Label11.BackColor = System.Drawing.Color.Transparent;
+            this.Label11.Location = new System.Drawing.Point(70, 45);
+            this.Label11.Name = "Label11";
+            this.Label11.Size = new System.Drawing.Size(87, 13);
+            this.Label11.TabIndex = 40;
+            this.Label11.Text = "Processor cores:";
+            // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(7, 123);
+            this.label9.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(36, 13);
+            this.label9.TabIndex = 77;
+            this.label9.Text = "Logs:";
+            // 
+            // Label4
+            // 
+            this.Label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.Label4.AutoSize = true;
+            this.Label4.BackColor = System.Drawing.Color.Transparent;
+            this.Label4.Location = new System.Drawing.Point(70, 72);
+            this.Label4.Name = "Label4";
+            this.Label4.Size = new System.Drawing.Size(70, 13);
+            this.Label4.TabIndex = 42;
+            this.Label4.Text = "Priority level:";
             // 
             // btn_clearLogs
             // 
             this.btn_clearLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_clearLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_clearLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_clearLogs.Location = new System.Drawing.Point(210, 201);
+            this.btn_clearLogs.Location = new System.Drawing.Point(274, 227);
             this.btn_clearLogs.Name = "btn_clearLogs";
             this.btn_clearLogs.Size = new System.Drawing.Size(135, 23);
             this.btn_clearLogs.TabIndex = 88;
@@ -846,11 +725,108 @@ namespace Handbrake
             this.btn_clearLogs.UseVisualStyleBackColor = true;
             this.btn_clearLogs.Click += new System.EventHandler(this.btn_clearLogs_Click);
             // 
+            // drp_Priority
+            // 
+            this.drp_Priority.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.drp_Priority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.drp_Priority.FormattingEnabled = true;
+            this.drp_Priority.Items.AddRange(new object[] {
+            "Realtime",
+            "High",
+            "Above Normal",
+            "Normal",
+            "Below Normal",
+            "Low"});
+            this.drp_Priority.Location = new System.Drawing.Point(177, 42);
+            this.drp_Priority.Name = "drp_Priority";
+            this.drp_Priority.Size = new System.Drawing.Size(111, 21);
+            this.drp_Priority.TabIndex = 43;
+            this.ToolTip.SetToolTip(this.drp_Priority, "Set the application priority level for the CLI. \r\nIt\'s best to leave this on Belo" +
+                    "w Normal if you wish to use your system whilst encoding with HandBrake.\r\n");
+            this.drp_Priority.SelectedIndexChanged += new System.EventHandler(this.drp_Priority_SelectedIndexChanged);
+            // 
+            // check_logsInSpecifiedLocation
+            // 
+            this.check_logsInSpecifiedLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_logsInSpecifiedLocation.AutoSize = true;
+            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 170);
+            this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.TabIndex = 87;
+            this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
+            this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
+            this.check_logsInSpecifiedLocation.UseVisualStyleBackColor = true;
+            this.check_logsInSpecifiedLocation.CheckedChanged += new System.EventHandler(this.check_logsInSpecifiedLocation_CheckedChanged);
+            // 
+            // check_saveLogWithVideo
+            // 
+            this.check_saveLogWithVideo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_saveLogWithVideo.AutoSize = true;
+            this.check_saveLogWithVideo.Location = new System.Drawing.Point(73, 147);
+            this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
+            this.check_saveLogWithVideo.Size = new System.Drawing.Size(382, 17);
+            this.check_saveLogWithVideo.TabIndex = 83;
+            this.check_saveLogWithVideo.Text = "Put a copy of individual encode logs in the same location as encoded video";
+            this.ToolTip.SetToolTip(this.check_saveLogWithVideo, "Place a copy of the encode log in the same folder as the encoded movie.");
+            this.check_saveLogWithVideo.UseVisualStyleBackColor = true;
+            this.check_saveLogWithVideo.CheckedChanged += new System.EventHandler(this.check_saveLogWithVideo_CheckedChanged);
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Location = new System.Drawing.Point(70, 123);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(101, 13);
+            this.label3.TabIndex = 85;
+            this.label3.Text = "Log verbosity level:";
+            // 
+            // btn_saveLog
+            // 
+            this.btn_saveLog.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.btn_saveLog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.btn_saveLog.Location = new System.Drawing.Point(437, 200);
+            this.btn_saveLog.Name = "btn_saveLog";
+            this.btn_saveLog.Size = new System.Drawing.Size(77, 22);
+            this.btn_saveLog.TabIndex = 82;
+            this.btn_saveLog.Text = "Browse";
+            this.btn_saveLog.UseVisualStyleBackColor = true;
+            this.btn_saveLog.Click += new System.EventHandler(this.btn_saveLog_Click);
+            // 
+            // cb_logVerboseLvl
+            // 
+            this.cb_logVerboseLvl.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.cb_logVerboseLvl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_logVerboseLvl.FormattingEnabled = true;
+            this.cb_logVerboseLvl.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2"});
+            this.cb_logVerboseLvl.Location = new System.Drawing.Point(177, 120);
+            this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
+            this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
+            this.cb_logVerboseLvl.TabIndex = 86;
+            this.ToolTip.SetToolTip(this.cb_logVerboseLvl, "Activity Log Verbosity Level");
+            this.cb_logVerboseLvl.SelectedIndexChanged += new System.EventHandler(this.cb_logVerboseLvl_SelectedIndexChanged);
+            // 
+            // text_logPath
+            // 
+            this.text_logPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_logPath.Location = new System.Drawing.Point(129, 200);
+            this.text_logPath.Name = "text_logPath";
+            this.text_logPath.Size = new System.Drawing.Size(302, 21);
+            this.text_logPath.TabIndex = 80;
+            this.ToolTip.SetToolTip(this.text_logPath, "The default location where auto named files are stored.");
+            this.text_logPath.TextChanged += new System.EventHandler(this.text_logPath_TextChanged);
+            // 
             // label14
             // 
             this.label14.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(65, 177);
+            this.label14.Location = new System.Drawing.Point(70, 203);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 13);
             this.label14.TabIndex = 81;
@@ -858,6 +834,7 @@ namespace Handbrake
             // 
             // tab_advanced
             // 
+            this.tab_advanced.Controls.Add(this.check_showCliForInGUIEncode);
             this.tab_advanced.Controls.Add(this.drop_previewScanCount);
             this.tab_advanced.Controls.Add(this.label33);
             this.tab_advanced.Controls.Add(this.label6);
@@ -890,7 +867,7 @@ namespace Handbrake
             "20",
             "25",
             "30"});
-            this.drop_previewScanCount.Location = new System.Drawing.Point(273, 155);
+            this.drop_previewScanCount.Location = new System.Drawing.Point(273, 173);
             this.drop_previewScanCount.Name = "drop_previewScanCount";
             this.drop_previewScanCount.Size = new System.Drawing.Size(85, 21);
             this.drop_previewScanCount.TabIndex = 95;
@@ -902,7 +879,7 @@ namespace Handbrake
             // 
             this.label33.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(79, 158);
+            this.label33.Location = new System.Drawing.Point(79, 176);
             this.label33.Name = "label33";
             this.label33.Size = new System.Drawing.Size(181, 13);
             this.label33.TabIndex = 94;
@@ -968,7 +945,7 @@ namespace Handbrake
             this.check_dvdnav.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_dvdnav.AutoSize = true;
             this.check_dvdnav.BackColor = System.Drawing.Color.Transparent;
-            this.check_dvdnav.Location = new System.Drawing.Point(82, 227);
+            this.check_dvdnav.Location = new System.Drawing.Point(82, 247);
             this.check_dvdnav.Name = "check_dvdnav";
             this.check_dvdnav.Size = new System.Drawing.Size(276, 17);
             this.check_dvdnav.TabIndex = 90;
@@ -996,7 +973,7 @@ namespace Handbrake
             this.label32.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label32.AutoSize = true;
             this.label32.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label32.Location = new System.Drawing.Point(13, 228);
+            this.label32.Location = new System.Drawing.Point(13, 248);
             this.label32.Name = "label32";
             this.label32.Size = new System.Drawing.Size(33, 13);
             this.label32.TabIndex = 89;
@@ -1011,7 +988,7 @@ namespace Handbrake
             "0.50",
             "0.25",
             "0.20"});
-            this.drop_x264step.Location = new System.Drawing.Point(273, 190);
+            this.drop_x264step.Location = new System.Drawing.Point(273, 210);
             this.drop_x264step.Name = "drop_x264step";
             this.drop_x264step.Size = new System.Drawing.Size(85, 21);
             this.drop_x264step.TabIndex = 86;
@@ -1022,7 +999,7 @@ namespace Handbrake
             // 
             this.label30.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(78, 193);
+            this.label30.Location = new System.Drawing.Point(78, 213);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(189, 13);
             this.label30.TabIndex = 87;
@@ -1048,7 +1025,7 @@ namespace Handbrake
             this.label28.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label28.AutoSize = true;
             this.label28.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label28.Location = new System.Drawing.Point(8, 193);
+            this.label28.Location = new System.Drawing.Point(8, 213);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(38, 13);
             this.label28.TabIndex = 85;
@@ -1471,6 +1448,20 @@ namespace Handbrake
             this.tableLayoutPanel5.Size = new System.Drawing.Size(594, 429);
             this.tableLayoutPanel5.TabIndex = 62;
             // 
+            // check_showCliForInGUIEncode
+            // 
+            this.check_showCliForInGUIEncode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_showCliForInGUIEncode.AutoSize = true;
+            this.check_showCliForInGUIEncode.BackColor = System.Drawing.Color.Transparent;
+            this.check_showCliForInGUIEncode.Location = new System.Drawing.Point(100, 152);
+            this.check_showCliForInGUIEncode.Name = "check_showCliForInGUIEncode";
+            this.check_showCliForInGUIEncode.Size = new System.Drawing.Size(330, 17);
+            this.check_showCliForInGUIEncode.TabIndex = 96;
+            this.check_showCliForInGUIEncode.Text = "Show CLI window (Allows you to cleanly exit encode with ctrl-c)";
+            this.ToolTip.SetToolTip(this.check_showCliForInGUIEncode, "Displays the CLI status in the GUI windows instead of the CLI window.");
+            this.check_showCliForInGUIEncode.UseVisualStyleBackColor = false;
+            this.check_showCliForInGUIEncode.CheckedChanged += new System.EventHandler(this.check_showCliForInGUIEncode_CheckedChanged);
+            // 
             // frmOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1501,8 +1492,6 @@ namespace Handbrake
             this.tab_audio_sub.PerformLayout();
             this.tab_cli.ResumeLayout(false);
             this.tab_cli.PerformLayout();
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
             this.tab_advanced.ResumeLayout(false);
             this.tab_advanced.PerformLayout();
             this.tab_debug.ResumeLayout(false);
@@ -1599,7 +1588,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_m4v;
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         internal System.Windows.Forms.ComboBox drp_processors;
         internal System.Windows.Forms.ComboBox drp_Priority;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
@@ -1617,5 +1605,7 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_GrowlQueue;
         internal System.Windows.Forms.ComboBox drop_previewScanCount;
         private System.Windows.Forms.Label label33;
+        internal System.Windows.Forms.CheckBox check_clearOldLogs;
+        internal System.Windows.Forms.CheckBox check_showCliForInGUIEncode;
     }
 }

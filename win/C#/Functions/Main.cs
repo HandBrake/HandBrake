@@ -205,7 +205,7 @@ namespace Handbrake.Functions
                 return;
 
             Properties.Settings.Default.cliLastModified = lastModified;
-            
+
             Process cliProcess = new Process();
             ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
                                                 {
@@ -345,9 +345,34 @@ namespace Handbrake.Functions
                 {
                     if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") && !file.Name.Contains("tmp_appReadable_log.txt"))
                         File.Delete(file.FullName);
+
                 }
             }
         }
+
+        /// <summary>
+        /// Clear old log files x days in the past
+        /// </summary>
+        public static void ClearOldLogs()
+        {
+            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+            if (Directory.Exists(logDir))
+            {
+                DirectoryInfo info = new DirectoryInfo(logDir);
+                FileInfo[] logFiles = info.GetFiles("*.txt");
+
+                foreach (FileInfo file in logFiles)
+                {
+                    if (file.LastWriteTime < DateTime.Now.AddDays(-30))
+                    {
+                        if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") && !file.Name.Contains("tmp_appReadable_log.txt"))
+                            File.Delete(file.FullName);
+
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Begins checking for an update to HandBrake.

@@ -116,7 +116,6 @@ namespace Handbrake
             // Log Verbosity Level
             cb_logVerboseLvl.SelectedIndex = Properties.Settings.Default.verboseLevel;
 
-
             // Save logs in the same directory as encoded files
             if (Properties.Settings.Default.saveLogWithVideo)
                 check_saveLogWithVideo.CheckState = CheckState.Checked;
@@ -128,6 +127,7 @@ namespace Handbrake
             // The saved log path
             text_logPath.Text = Properties.Settings.Default.saveLogPath;
 
+            check_clearOldLogs.Checked = Properties.Settings.Default.clearOldLogs;
 
             // #############################
             // Advanced
@@ -155,6 +155,8 @@ namespace Handbrake
             // Experimental In-GUI encode status indicator.
             if (Properties.Settings.Default.enocdeStatusInGui)
                 check_inGuiStatus.CheckState = CheckState.Checked;
+
+             check_showCliForInGUIEncode.Checked = Properties.Settings.Default.showCliForInGuiEncodeStatus;
 
             // Set the preview count
             drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
@@ -290,7 +292,7 @@ namespace Handbrake
         {
             if (radio_foreignAndSubs.Checked)
                 Properties.Settings.Default.DubAudio = false;
-        }       
+        }
         #endregion
 
         #region CLI
@@ -357,6 +359,11 @@ namespace Handbrake
                                 MessageBoxIcon.Information);
             }
         }
+
+        private void check_clearOldLogs_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.clearOldLogs = check_clearOldLogs.Checked;
+        }
         #endregion
 
         #region Advanced
@@ -391,9 +398,23 @@ namespace Handbrake
         private void check_inGuiStatus_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.Checked;
+
+            if (this.IsHandleCreated)
+                if (check_inGuiStatus.Checked)
+                {
+                    MessageBox.Show("This feature is experimental!\n\n You will not be able to ‘Stop’ an encode mid-process.\n"
+                                    + "Doing so will render the file unplayable.\n" +
+                                    "If you enable 'Show CLI Window', you'll be ablt to hit ctrl-c in the encode window to cleanly exit the CLI. This will give you a playable file.\n\n" +                                    
+                                    "You are also limited to 1 instance of HandBrakeCLI on your system.",
+                                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
         }
 
-        
+        private void check_showCliForInGUIEncode_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.showCliForInGuiEncodeStatus = check_showCliForInGUIEncode.Checked;
+        }
+
         private void drop_previewScanCount_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.previewScanCount = int.Parse(drop_previewScanCount.SelectedItem.ToString());

@@ -54,6 +54,8 @@ namespace Handbrake.EncodeQueue
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
+                    if (!Properties.Settings.Default.showCliForInGuiEncodeStatus)
+                        cliStart.CreateNoWindow = true;
                 }
                 if (Properties.Settings.Default.cli_minimized)
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
@@ -102,14 +104,19 @@ namespace Handbrake.EncodeQueue
         /// <summary>
         /// Kill the CLI process
         /// </summary>
-        protected void Stop()
+        public void Stop()
         {
-            if (EncodeEnded != null)
-                EncodeEnded(this, new EventArgs());
-
             if (HbProcess != null)
                 HbProcess.Kill();
+
+            Process[] list = Process.GetProcessesByName("HandBrakeCLI");
+            foreach (Process process in list)
+                    process.Kill();
+
             IsEncoding = false;
+
+            if (EncodeEnded != null)
+                EncodeEnded(this, new EventArgs());
         }
 
         /// <summary>
@@ -156,21 +163,29 @@ namespace Handbrake.EncodeQueue
         /// <param name="encJob"></param>
         protected void AddCLIQueryToLog(Job encJob)
         {
-            string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
-            string logPath = Path.Combine(logDir, "last_encode_log.txt");
+            try
+            {
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
+                string logPath = Path.Combine(logDir, "last_encode_log.txt");
 
-            StreamReader reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read, FileShare.Read));
-            String log = reader.ReadToEnd();
-            reader.Close();
+                StreamReader reader =
+                    new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read, FileShare.Read));
+                String log = reader.ReadToEnd();
+                reader.Close();
 
-            StreamWriter writer = new StreamWriter(File.Create(logPath));
+                StreamWriter writer = new StreamWriter(File.Create(logPath));
 
-            writer.Write("### CLI Query: " + encJob.Query + "\n\n");
-            writer.Write("### User Query: " + encJob.CustomQuery + "\n\n");
-            writer.Write("#########################################\n\n");
-            writer.WriteLine(log);
-            writer.Flush();
-            writer.Close();
+                writer.Write("### CLI Query: " + encJob.Query + "\n\n");
+                writer.Write("### User Query: " + encJob.CustomQuery + "\n\n");
+                writer.Write("#########################################\n\n");
+                writer.WriteLine(log);
+                writer.Flush();
+                writer.Close();
+            } catch (Exception exc)
+            {
+             
+            }
         }
 
         /// <summary>

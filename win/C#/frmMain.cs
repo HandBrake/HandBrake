@@ -81,6 +81,15 @@ namespace Handbrake
                 }
             }
 
+            // Clear the log files in the background
+            if (Properties.Settings.Default.clearOldLogs)
+            {
+                lblStatus.Text = "Clearing Old Log Files ...";
+                Application.DoEvents();
+                Thread clearLog = new Thread(Main.ClearOldLogs);
+                clearLog.Start();
+            }
+
             // Setup the GUI components
             lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
@@ -102,14 +111,11 @@ namespace Handbrake
 
                     if (query != null)
                     {
-                        //Ok, Reset all the H264 widgets before changing the preset
                         x264Panel.reset2Defaults();
 
-                        // Send the query from the file to the Query Parser class, then load the preset
                         QueryParser presetQuery = QueryParser.Parse(query);
                         PresetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
 
-                        // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
                     }
@@ -663,16 +669,31 @@ namespace Handbrake
         {
             if (btn_start.Text == "Stop")
             {
-                DialogResult result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                DialogResult result;
+                if (Properties.Settings.Default.enocdeStatusInGui && !Properties.Settings.Default.showCliForInGuiEncodeStatus)
+                    result = MessageBox.Show("Are you sure you wish to cancel the encode?\n\nPlease note, when 'Enable in-GUI encode status' is enabled, stopping this encode will render the file unplayable. ",
+                        "Cancel Encode?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                else
+                    result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
                 {
                     // Pause The Queue
                     encodeQueue.Pause();
 
-                    // Allow the CLI to exit cleanly
-                    Win32.SetForegroundWindow((int)encodeQueue.ProcessHandle);
-                    SendKeys.Send("^C");
+                    if (Properties.Settings.Default.enocdeStatusInGui && !Properties.Settings.Default.showCliForInGuiEncodeStatus)
+                    {
+                        encodeQueue.Stop();
+                        if (encodeQueue.HbProcess != null)
+                            encodeQueue.HbProcess.WaitForExit();
+                    }
+                    else
+                    {
+                        // Allow the CLI to exit cleanly
+                        Win32.SetForegroundWindow((int) encodeQueue.ProcessHandle);
+                        SendKeys.Send("^C");
+                    }
 
                     // Update the GUI
                     setEncodeFinished();
@@ -1843,11 +1864,6 @@ namespace Handbrake
                 PictureSettings.SetPresetCropWarningLabel(null);
             }
 
-        }
-
-        private void UpdateGuiWithQueueItemAfterScan()
-        {
-            
         }
 
         // This is the END of the road ****************************************

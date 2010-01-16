@@ -488,5 +488,29 @@ namespace Handbrake.Properties {
                 this["previewScanCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool clearOldLogs {
+            get {
+                return ((bool)(this["clearOldLogs"]));
+            }
+            set {
+                this["clearOldLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showCliForInGuiEncodeStatus {
+            get {
+                return ((bool)(this["showCliForInGuiEncodeStatus"]));
+            }
+            set {
+                this["showCliForInGuiEncodeStatus"] = value;
+            }
+        }
     }
 }
