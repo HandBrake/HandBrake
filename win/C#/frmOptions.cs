@@ -144,6 +144,7 @@ namespace Handbrake
             // Enable / Disable Query editor tab
             if (Properties.Settings.Default.QueryEditorTab)
                 check_queryEditorTab.CheckState = CheckState.Checked;
+            check_promptOnUnmatchingQueries.Enabled = check_queryEditorTab.Checked;
 
             // Prompt on inconsistant queries
             check_promptOnUnmatchingQueries.Checked = Properties.Settings.Default.PromptOnUnmatchingQueries;
@@ -156,7 +157,8 @@ namespace Handbrake
             if (Properties.Settings.Default.enocdeStatusInGui)
                 check_inGuiStatus.CheckState = CheckState.Checked;
 
-             check_showCliForInGUIEncode.Checked = Properties.Settings.Default.showCliForInGuiEncodeStatus;
+            check_showCliForInGUIEncode.Checked = Properties.Settings.Default.showCliForInGuiEncodeStatus;
+            check_showCliForInGUIEncode.Enabled = check_inGuiStatus.Checked;
 
             // Set the preview count
             drop_previewScanCount.SelectedItem = Properties.Settings.Default.previewScanCount.ToString();
@@ -399,12 +401,14 @@ namespace Handbrake
         {
             Properties.Settings.Default.enocdeStatusInGui = check_inGuiStatus.Checked;
 
+            check_showCliForInGUIEncode.Enabled = check_inGuiStatus.Checked;
+
             if (this.IsHandleCreated)
                 if (check_inGuiStatus.Checked)
                 {
                     MessageBox.Show("This feature is experimental!\n\n You will not be able to ‘Stop’ an encode mid-process.\n"
                                     + "Doing so will render the file unplayable.\n" +
-                                    "If you enable 'Show CLI Window', you'll be ablt to hit ctrl-c in the encode window to cleanly exit the CLI. This will give you a playable file.\n\n" +                                    
+                                    "If you enable 'Show CLI Window', you'll be ablt to hit ctrl-c in the encode window to cleanly exit the CLI. This will give you a playable file.\n\n" +
                                     "You are also limited to 1 instance of HandBrakeCLI on your system.",
                                     "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }

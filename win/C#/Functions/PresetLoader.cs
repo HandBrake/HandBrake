@@ -95,7 +95,7 @@ namespace Handbrake.Functions
             // Set the anamorphic mode 0,1,2,3
             mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
-            // Aspect Ratio
+            // Keep Aspect Ration Anamorphic Setting.
             mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
 
             // Set the Width and height as Required.
@@ -121,6 +121,10 @@ namespace Handbrake.Functions
             if (presetQuery.MaxWidth == 0 && presetQuery.Width == 0)
                 if (mainWindow.selectedTitle != null && mainWindow.selectedTitle.Resolution.Width != 0)
                     mainWindow.PictureSettings.text_width.Value = mainWindow.selectedTitle.Resolution.Width;
+
+            // Aspect Ratio for non anamorphic sources
+            if (presetQuery.AnamorphicMode == 0)
+                mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.Height == 0 ? CheckState.Checked : CheckState.Unchecked;
 
             // Custom Anamorphic Controls
             mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.displayWidthValue.ToString();
@@ -165,9 +169,9 @@ namespace Handbrake.Functions
                     double x264step = cqStep;
                     double presetValue = presetQuery.VideoQuality;
 
-                    double x = 51/x264step;
+                    double x = 51 / x264step;
 
-                    double calculated = presetValue/x264step;
+                    double calculated = presetValue / x264step;
                     calculated = x - calculated;
 
                     int.TryParse(calculated.ToString(), out value);
@@ -224,10 +228,7 @@ namespace Handbrake.Functions
                     newTrack.SubItems.Add(track.Encoder);
                     newTrack.SubItems.Add(track.MixDown);
                     newTrack.SubItems.Add(track.SampleRate);
-                    if (track.Encoder.Contains("AC3"))
-                        newTrack.SubItems.Add("Auto");
-                    else
-                        newTrack.SubItems.Add(track.Bitrate);
+                    newTrack.SubItems.Add(track.Encoder.Contains("AC3") ? "Auto" : track.Bitrate);
                     newTrack.SubItems.Add(track.DRC);
                     mainWindow.AudioSettings.AddTrackForPreset(newTrack);
                 }

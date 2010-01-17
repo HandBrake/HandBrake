@@ -325,7 +325,7 @@ namespace Handbrake.Controls
                     labelStaticDisplaySize.Visible = false;
                     labelDisplaySize.Visible = false;
 
-                    check_KeepAR.Checked = true;
+                    // check_KeepAR.Checked = true;
                     drp_modulus.SelectedIndex = 0;
 
                     if (check_KeepAR.Checked)
