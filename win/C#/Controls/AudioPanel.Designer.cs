@@ -85,7 +85,6 @@ namespace Handbrake.Controls
             this.lv_audioList.FullRowSelect = true;
             this.lv_audioList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lv_audioList.HideSelection = false;
-            this.lv_audioList.LabelWrap = false;
             this.lv_audioList.Location = new System.Drawing.Point(16, 150);
             this.lv_audioList.MultiSelect = false;
             this.lv_audioList.Name = "lv_audioList";
@@ -128,6 +127,7 @@ namespace Handbrake.Controls
             // col_drc
             // 
             this.col_drc.Text = "DRC";
+            this.col_drc.Width = 57;
             // 
             // audioMenu
             // 
@@ -223,7 +223,7 @@ namespace Handbrake.Controls
             this.tb_drc.Size = new System.Drawing.Size(57, 45);
             this.tb_drc.TabIndex = 60;
             this.tb_drc.TickFrequency = 10;
-            this.tb_drc.Scroll += new System.EventHandler(this.tb_drc_Scroll);
+            this.tb_drc.Scroll += new System.EventHandler(this.controlChanged);
             // 
             // label68
             // 
@@ -289,7 +289,7 @@ namespace Handbrake.Controls
             this.drp_audioEncoder.Name = "drp_audioEncoder";
             this.drp_audioEncoder.Size = new System.Drawing.Size(111, 21);
             this.drp_audioEncoder.TabIndex = 52;
-            this.drp_audioEncoder.SelectedIndexChanged += new System.EventHandler(this.drp_audenc_SelectedIndexChanged);
+            this.drp_audioEncoder.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
             // 
             // label27
             // 
@@ -316,7 +316,7 @@ namespace Handbrake.Controls
             this.drp_audioMix.Name = "drp_audioMix";
             this.drp_audioMix.Size = new System.Drawing.Size(129, 21);
             this.drp_audioMix.TabIndex = 54;
-            this.drp_audioMix.SelectedIndexChanged += new System.EventHandler(this.drp_audmix_SelectedIndexChanged);
+            this.drp_audioMix.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
             // 
             // drp_audioTrack
             // 
@@ -328,7 +328,7 @@ namespace Handbrake.Controls
             this.drp_audioTrack.Name = "drp_audioTrack";
             this.drp_audioTrack.Size = new System.Drawing.Size(194, 21);
             this.drp_audioTrack.TabIndex = 50;
-            this.drp_audioTrack.SelectedIndexChanged += new System.EventHandler(this.drp_audioTrack_SelectedIndexChanged);
+            this.drp_audioTrack.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
             // 
             // drp_audioBitrate
             // 
@@ -349,7 +349,7 @@ namespace Handbrake.Controls
             this.drp_audioBitrate.Name = "drp_audioBitrate";
             this.drp_audioBitrate.Size = new System.Drawing.Size(70, 21);
             this.drp_audioBitrate.TabIndex = 58;
-            this.drp_audioBitrate.SelectedIndexChanged += new System.EventHandler(this.drp_audbit_SelectedIndexChanged);
+            this.drp_audioBitrate.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
             // 
             // drp_audioSample
             // 
@@ -366,7 +366,7 @@ namespace Handbrake.Controls
             this.drp_audioSample.Name = "drp_audioSample";
             this.drp_audioSample.Size = new System.Drawing.Size(55, 21);
             this.drp_audioSample.TabIndex = 56;
-            this.drp_audioSample.SelectedIndexChanged += new System.EventHandler(this.drp_audsr_SelectedIndexChanged);
+            this.drp_audioSample.SelectedIndexChanged += new System.EventHandler(this.controlChanged);
             // 
             // AudioTrackGroup
             // 

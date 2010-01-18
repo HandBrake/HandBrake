@@ -130,7 +130,7 @@ namespace Handbrake.Presets
                         queryParsed.Width = int.Parse(value);
                         break;
                     case "PictureKeepRatio":
-                        queryParsed.keepDisplayAsect = value == "1";
+                        queryParsed.KeepDisplayAsect = value == "1";
                         break;
                     case "PicturePAR":
                         queryParsed.AnamorphicMode = int.Parse(value);

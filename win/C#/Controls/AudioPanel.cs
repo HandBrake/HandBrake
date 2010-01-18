@@ -5,6 +5,7 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Handbrake.Controls
@@ -16,145 +17,97 @@ namespace Handbrake.Controls
         public AudioPanel()
         {
             InitializeComponent();
-            drp_audioMix.SelectedIndex = 0;
+            drp_audioMix.SelectedItem = "Dolby Pro Logic II";
+            drp_audioSample.SelectedIndex = 1;
         }
 
-        // Audio Track Options
-        private void drp_audioTrack_SelectedIndexChanged(object sender, EventArgs e)
+        // Control and ListView
+        private void controlChanged(object sender, EventArgs e)
         {
+            Control ctl = (Control)sender;
+
+            switch (ctl.Name)
+            {
+                case "drp_audioTrack":
+                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[1].Text = drp_audioTrack.Text;
+                    break;
+                case "drp_audioEncoder":
+                    SetMixDown();
+                    SetBitrate();
+
+                    // Configure the widgets with values
+                    if (drp_audioEncoder.Text.Contains("AC3") || drp_audioEncoder.Text.Contains("DTS"))
+                    {
+                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = false;
+                        lbl_bitrate.Enabled = lbl_drc.Enabled = lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = false;
+                    }
+                    else
+                    {
+                        drp_audioMix.Enabled = drp_audioBitrate.Enabled = drp_audioSample.Enabled = tb_drc.Enabled = true;
+                        lbl_bitrate.Enabled = lbl_drc.Enabled = lbl_drcHeader.Enabled = lbl_mixdown.Enabled = lbl_sampleRate.Enabled = true;
+                    }
+
+                    // Update an item in the Audio list if required.
+                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text = drp_audioEncoder.Text;
+                    break;
+                case "drp_audioMix":
+                    SetBitrate();
+
+                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text = drp_audioMix.Text;
+                    break;
+                case "drp_audioSample":
+                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text = drp_audioSample.Text;
+                    break;
+                case "drp_audioBitrate":
+                    // Update an item in the Audio list if required.
+                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text = drp_audioBitrate.Text;
+                    break;
+                case "tb_drc":
+                    double value;
+                    if (tb_drc.Value == 0) value = 0;
+                    else
+                        value = ((tb_drc.Value - 1) / 10.0) + 1;
+
+                    lbl_drc.Text = value.ToString();
+
+                    // Update an item in the Audio list if required.
+                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                    {
+                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text = value.ToString();
+                        lv_audioList.Select();
+                    }
+                    break;
+            }
+
+            lv_audioList.Select();
+        }
+        private void lv_audioList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Set the dropdown controls based on the selected item in the Audio List.
             if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
             {
-                lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[1].Text = drp_audioTrack.Text;
-                lv_audioList.Select();
-            }
-        }
-        private void drp_audenc_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Setup the widgets with the correct avail options
-            if (drp_audioEncoder.Text.Contains("AAC"))
-            {
-                setMixDown(true);
-                setBitrate(160);
+                drp_audioTrack.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[1].Text;
+                drp_audioEncoder.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text;
+                drp_audioMix.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text;
+                drp_audioSample.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text;
+                drp_audioBitrate.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text;
+                double drcValue; int drcCalculated;
+                double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text, out drcValue);
+                if (drcValue != 0)
+                    drcValue = ((drcValue * 10) + 1) - 10;
+                int.TryParse(drcValue.ToString(), out drcCalculated);
+                tb_drc.Value = drcCalculated;
+                lbl_drc.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text;
+
+                AudioTrackGroup.Text = "Selected Track: " + lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[0].Text;
             }
             else
-            {
-                setMixDown(false);
-                setBitrate(320);
-            }
-
-            // Configure the widgets with values
-            if (drp_audioEncoder.Text.Contains("AC3") || drp_audioEncoder.Text.Contains("DTS"))
-            {
-                drp_audioMix.Enabled = false;
-                drp_audioBitrate.Enabled = false;
-                drp_audioSample.Enabled = false;
-                tb_drc.Enabled = false;
-
-                lbl_bitrate.Enabled = false;
-                lbl_drc.Enabled = false;
-                lbl_drcHeader.Enabled = false;
-                lbl_mixdown.Enabled = false;
-                lbl_sampleRate.Enabled = false;
-
-                drp_audioBitrate.SelectedIndex = 0;
-                drp_audioSample.SelectedIndex = 0;
-                drp_audioMix.Items.Add("AC3 Passthru");
-                drp_audioMix.Items.Add("DTS Passthru");
-
-                if (drp_audioEncoder.Text.Contains("AC3"))
-                    drp_audioMix.SelectedItem = "AC3 Passthru";
-                else
-                    drp_audioMix.SelectedItem = "DTS Passthru";
-
-                drp_audioBitrate.Items.Add("Auto");
-                drp_audioBitrate.SelectedItem = "Auto";
-                tb_drc.Value = 0;
-            }
-            else
-            {
-                drp_audioMix.Enabled = true;
-                drp_audioBitrate.Enabled = true;
-                drp_audioSample.Enabled = true;
-                tb_drc.Enabled = true;
-
-                lbl_bitrate.Enabled = true;
-                lbl_drc.Enabled = true;
-                lbl_drcHeader.Enabled = true;
-                lbl_mixdown.Enabled = true;
-                lbl_sampleRate.Enabled = true;
-
-                drp_audioMix.Items.Remove("AC3 Passthru");
-                drp_audioMix.Items.Remove("DTS Passthru");
-                drp_audioBitrate.Items.Remove("Auto");
-
-                drp_audioMix.SelectedIndex = 0;
-                drp_audioBitrate.SelectedIndex = 9;
-                drp_audioSample.SelectedIndex = 0;
-            }
-
-            // Update an item in the Audio list if required.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-            {
-                lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text = drp_audioEncoder.Text;
-                if (drp_audioEncoder.Text.Contains("AC3"))
-                {
-                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text = "AC3 Passthru";
-                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text = "Auto";
-                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text = "Auto";
-                    lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text = "0.0";
-                }
-                lv_audioList.Select();
-            }
-        }
-        private void drp_audmix_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((drp_audioEncoder.Text.Contains("AAC")) && (drp_audioMix.Text == "6 Channel Discrete"))
-                setBitrate(384);
-            else if ((drp_audioEncoder.Text.Contains("AAC")) && (drp_audioMix.Text != "6 Channel Discrete"))
-                setBitrate(160);
-
-            // Update an item in the Audio list if required.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-            {
-                lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text = drp_audioMix.Text;
-                lv_audioList.Select();
-            }
-        }
-        private void drp_audsr_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Update an item in the Audio list if required.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-            {
-                lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text = drp_audioSample.Text;
-                lv_audioList.Select();
-            }
-        }
-        private void drp_audbit_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Update an item in the Audio list if required.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-            {
-                if (drp_audioEncoder.Text.Contains("AC3"))
-                    drp_audioBitrate.SelectedItem = "Auto";
-                lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text = drp_audioBitrate.Text;
-                lv_audioList.Select();
-            }
-        }
-        private void tb_drc_Scroll(object sender, EventArgs e)
-        {
-            double value;
-            if (tb_drc.Value == 0) value = 0;
-            else
-                value = ((tb_drc.Value - 1) / 10.0) + 1;
-
-            lbl_drc.Text = value.ToString();
-
-            // Update an item in the Audio list if required.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-            {
-                lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text = value.ToString();
-                lv_audioList.Select();
-            }
+                AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
         }
 
         // Track Controls
@@ -184,75 +137,21 @@ namespace Handbrake.Controls
         }
         private void btn_RemoveAudioTrack_Click(object sender, EventArgs e)
         {
-            RemoveAudioTrack();
+            RemoveTrack();
         }
 
         // Audio List Menu
         private void audioList_moveup_Click(object sender, EventArgs e)
         {
-            if (lv_audioList.SelectedIndices.Count != 0)
-            {
-                ListViewItem item = lv_audioList.SelectedItems[0];
-                int index = item.Index;
-                index--;
-
-                if (lv_audioList.Items.Count > index && index >= 0)
-                {
-                    lv_audioList.Items.Remove(item);
-                    lv_audioList.Items.Insert(index, item);
-                    item.Selected = true;
-                    lv_audioList.Focus();
-                }
-            }
+            MoveTrack(true);
         }
         private void audioList_movedown_Click(object sender, EventArgs e)
         {
-            if (lv_audioList.SelectedIndices.Count != 0)
-            {
-                ListViewItem item = lv_audioList.SelectedItems[0];
-                int index = item.Index;
-                index++;
-
-                if (index < lv_audioList.Items.Count)
-                {
-                    lv_audioList.Items.Remove(item);
-                    lv_audioList.Items.Insert(index, item);
-                    item.Selected = true;
-                    lv_audioList.Focus();
-                }
-            }
+            MoveTrack(false);
         }
         private void audioList_remove_Click(object sender, EventArgs e)
         {
-            RemoveAudioTrack();
-        }
-        private void RemoveAudioTrack()
-        {
-            // Remove the Item and reselect the control if the following conditions are met.
-            if (lv_audioList.SelectedItems.Count != 0)
-            {
-                // The Audio List is about to change so raise the event.
-                if (this.AudioListChanged != null)
-                    this.AudioListChanged(this, new EventArgs());
-
-                // Record the current selected index.
-                int currentPosition = lv_audioList.SelectedIndices[0];
-
-                lv_audioList.Items.RemoveAt(lv_audioList.SelectedIndices[0]);
-
-                // Now reslect the correct item and give focus to the audio list.
-                if (lv_audioList.Items.Count != 0)
-                {
-                    if (currentPosition <= (lv_audioList.Items.Count - 1))
-                        lv_audioList.Items[currentPosition].Selected = true;
-                    else if (currentPosition > (lv_audioList.Items.Count - 1))
-                        lv_audioList.Items[lv_audioList.Items.Count - 1].Selected = true;
-
-                    lv_audioList.Select();
-                }
-                // Regenerate the ID numers
-                reGenerateListIDs();
-            }
+            RemoveTrack();
         }
 
         // Public Functions
@@ -355,16 +254,57 @@ namespace Handbrake.Controls
         }
         public Boolean RequiresM4V()
         {
-            foreach (ListViewItem item in lv_audioList.Items)
-            {
-                if (item.SubItems[2].Text.Contains("AC3"))
-                    return true;
-            }
-            return false;
+            return lv_audioList.Items.Cast<ListViewItem>().Any(item => item.SubItems[2].Text.Contains("AC3"));
         }
 
         // Helper Functions 
-        private void reGenerateListIDs()
+        private void RemoveTrack()
+        {
+            // Remove the Item and reselect the control if the following conditions are met.
+            if (lv_audioList.SelectedItems.Count != 0)
+            {
+                // The Audio List is about to change so raise the event.
+                if (this.AudioListChanged != null)
+                    this.AudioListChanged(this, new EventArgs());
+
+                // Record the current selected index.
+                int currentPosition = lv_audioList.SelectedIndices[0];
+
+                lv_audioList.Items.RemoveAt(lv_audioList.SelectedIndices[0]);
+
+                // Now reslect the correct item and give focus to the audio list.
+                if (lv_audioList.Items.Count != 0)
+                {
+                    if (currentPosition <= (lv_audioList.Items.Count - 1))
+                        lv_audioList.Items[currentPosition].Selected = true;
+                    else if (currentPosition > (lv_audioList.Items.Count - 1))
+                        lv_audioList.Items[lv_audioList.Items.Count - 1].Selected = true;
+
+                    lv_audioList.Select();
+                }
+                // Regenerate the ID numers
+                ReGenerateListIDs();
+            }
+        }
+        private void MoveTrack(bool up)
+        {
+            if (lv_audioList.SelectedIndices.Count == 0) return;
+
+            ListViewItem item = lv_audioList.SelectedItems[0];
+            int index = item.Index;
+
+            if (up) index--; else index++;
+
+            if (index < lv_audioList.Items.Count || (lv_audioList.Items.Count > index && index >= 0))
+            {
+                lv_audioList.Items.Remove(item);
+                lv_audioList.Items.Insert(index, item);
+                item.Selected = true;
+                lv_audioList.Focus();
+            }
+        }
+
+        private void ReGenerateListIDs()
         {
             int i = 1;
             foreach (ListViewItem item in lv_audioList.Items)
@@ -373,8 +313,38 @@ namespace Handbrake.Controls
                 i++;
             }
         }
-        private void setBitrate(int max)
+        private void SetBitrate()
         {
+            int max = 0;
+            drp_audioBitrate.Items.Remove("Auto");
+            drp_audioBitrate.Items.Remove("192");
+            drp_audioBitrate.Items.Remove("224");
+            drp_audioBitrate.Items.Remove("256");
+            drp_audioBitrate.Items.Remove("320");
+
+            switch (drp_audioEncoder.Text)
+            {
+                case "AAC (faac)":
+                    max = drp_audioMix.Text.Contains("6 Channel") ? 384 : 160;
+                    break;
+                case "MP3 (lame)":
+                    max = 320;
+                    break;
+                case "Vorbis (vorbis)":
+                    max = 384;
+                    break;
+                case "AC3 Passthru":
+                    drp_audioBitrate.Items.Add("Auto");
+                    drp_audioBitrate.SelectedItem = "Auto";
+                    drp_audioSample.SelectedItem = "Auto";
+                    break;
+                case "DTS Passthru":
+                    drp_audioBitrate.Items.Add("Auto");
+                    drp_audioBitrate.SelectedItem = "Auto";
+                    drp_audioSample.SelectedItem = "Auto";
+                    break;
+            }
+
             if (max > 160)
             {
                 drp_audioBitrate.Items.Add("192");
@@ -394,44 +364,46 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Remove("320");
                 drp_audioBitrate.Items.Remove("384");
             }
+
             if (drp_audioBitrate.SelectedItem == null)
                 drp_audioBitrate.SelectedIndex = drp_audioBitrate.Items.Count - 1;
         }
-        private void setMixDown(Boolean aac)
+        private void SetMixDown()
         {
             drp_audioMix.Items.Clear();
-            drp_audioMix.Items.Add("Automatic");
-            if (aac)
-                drp_audioMix.Items.Add("Mono");
+            drp_audioMix.Items.Add("Mono");
             drp_audioMix.Items.Add("Stereo");
             drp_audioMix.Items.Add("Dolby Surround");
             drp_audioMix.Items.Add("Dolby Pro Logic II");
-            if (aac)
-                drp_audioMix.Items.Add("6 Channel Discrete");
-        }
-        private void lv_audioList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Set the dropdown controls based on the selected item in the Audio List.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-            {
-                drp_audioTrack.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[1].Text;
-                drp_audioEncoder.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text;
-                drp_audioMix.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text;
-                drp_audioSample.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text;
-                drp_audioBitrate.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text;
-                double drcValue; int drcCalculated;
-                double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text, out drcValue);
-                if (drcValue == 0) drcCalculated = 0;
-                else
-                    drcValue = ((drcValue * 10) + 1) - 10;
-                int.TryParse(drcValue.ToString(), out drcCalculated);
-                tb_drc.Value = drcCalculated;
-                lbl_drc.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text;
+            drp_audioMix.Items.Add("6 Channel Discrete");
+            drp_audioMix.Items.Add("AC3 Passthru");
+            drp_audioMix.Items.Add("DTS Passthru");
 
-                AudioTrackGroup.Text = "Selected Track: " + lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[0].Text;
+            drp_audioMix.SelectedItem = "Dolby Pro Logic II";
+
+            switch (drp_audioEncoder.Text)
+            {
+                case "AAC (faac)":
+                    drp_audioMix.Items.Remove("AC3 Passthru");
+                    drp_audioMix.Items.Remove("DTS Passthru");
+                    break;
+                case "MP3 (lame)":
+                    drp_audioMix.Items.Remove("Mono");
+                    drp_audioMix.Items.Remove("6 Channel Discrete");
+                    drp_audioMix.Items.Remove("AC3 Passthru");
+                    drp_audioMix.Items.Remove("DTS Passthru");
+                    break;
+                case "Vorbis (vorbis)":
+                    drp_audioMix.Items.Remove("AC3 Passthru");
+                    drp_audioMix.Items.Remove("DTS Passthru");
+                    break;
+                case "AC3 Passthru":
+                    drp_audioMix.SelectedItem = "AC3 Passthru";
+                    break;
+                case "DTS Passthru":
+                    drp_audioMix.SelectedItem = "DTS Passthru";
+                    break;
             }
-            else
-                AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
         }
     }
 }

@@ -96,7 +96,7 @@ namespace Handbrake.Functions
             mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
             // Keep Aspect Ration Anamorphic Setting.
-            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.keepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.KeepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
 
             // Set the Width and height as Required.
             if (presetQuery.Width != 0)
@@ -127,9 +127,9 @@ namespace Handbrake.Functions
                 mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.Height == 0 ? CheckState.Checked : CheckState.Unchecked;
 
             // Custom Anamorphic Controls
-            mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.displayWidthValue.ToString();
-            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.pixelAspectWidth.ToString();
-            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.pixelAspectHeight.ToString();
+            mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.DisplayWidthValue.ToString();
+            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.PixelAspectWidth.ToString();
+            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.PixelAspectHeight.ToString();
             mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.AnamorphicModulus;
 
             #endregion

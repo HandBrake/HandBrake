@@ -182,9 +182,9 @@ namespace Handbrake.EncodeQueue
                 writer.WriteLine(log);
                 writer.Flush();
                 writer.Close();
-            } catch (Exception exc)
+            } catch (Exception)
             {
-             
+                return;
             }
         }
 

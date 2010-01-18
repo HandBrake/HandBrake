@@ -40,10 +40,10 @@ namespace Handbrake.Functions
         public string CropLeft { get; set; }
         public string CropRight { get; set; }
         public int AnamorphicMode { get; set; }
-        public Boolean keepDisplayAsect { get; set; }
-        public double displayWidthValue { get; set; }
-        public int pixelAspectWidth { get; set; }
-        public int pixelAspectHeight { get; set; }
+        public Boolean KeepDisplayAsect { get; set; }
+        public double DisplayWidthValue { get; set; }
+        public int PixelAspectWidth { get; set; }
+        public int PixelAspectHeight { get; set; }
         public int AnamorphicModulus { get; set; }
 
         // Video Filters
@@ -234,16 +234,16 @@ namespace Handbrake.Functions
                 else
                     thisQuery.AnamorphicMode = 0;
 
-                thisQuery.keepDisplayAsect = keepDisplayAsect.Success;
+                thisQuery.KeepDisplayAsect = keepDisplayAsect.Success;
 
                 if (displayWidth.Success)
-                    thisQuery.displayWidthValue = double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", ""));
+                    thisQuery.DisplayWidthValue = double.Parse(displayWidth.Groups[0].Value.Replace("--display-width ", ""));
 
                 if (pixelAspect.Success)
-                    thisQuery.pixelAspectWidth = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", ""));
+                    thisQuery.PixelAspectWidth = int.Parse(pixelAspect.Groups[1].Value.Replace("--pixel-aspect ", ""));
 
                 if (pixelAspect.Success && pixelAspect.Groups.Count >=3)
-                    thisQuery.pixelAspectHeight = int.Parse(pixelAspect.Groups[2].Value.Replace("--pixel-aspect ", ""));
+                    thisQuery.PixelAspectHeight = int.Parse(pixelAspect.Groups[2].Value.Replace("--pixel-aspect ", ""));
 
                 if (modulus.Success)
                     thisQuery.AnamorphicModulus = int.Parse(modulus.Groups[0].Value.Replace("--modulus ", ""));
@@ -375,11 +375,11 @@ namespace Handbrake.Functions
 
                     if (trackMixes != null)
                         if (trackMixes.Length >= (x + 1))                        // Audio Mix
-                            track.MixDown = getMixDown(trackMixes[x].Trim());
+                            track.MixDown = GetMixDown(trackMixes[x].Trim());
 
                     if (trackEncoders != null)
                         if (trackEncoders.Length >= (x + 1))                     // Audio Mix
-                            track.Encoder = getAudioEncoder(trackEncoders[x].Trim());
+                            track.Encoder = GetAudioEncoder(trackEncoders[x].Trim());
 
                     if (trackBitrates != null)
                         if (trackBitrates.Length >= (x + 1))                     // Audio Encoder
@@ -431,7 +431,7 @@ namespace Handbrake.Functions
 
             return thisQuery;
         }
-        private static string getMixDown(string mixdown)
+        private static string GetMixDown(string mixdown)
         {
             switch (mixdown.Trim())
             {
@@ -449,7 +449,7 @@ namespace Handbrake.Functions
                     return "Automatic";
             }
         }
-        private static string getAudioEncoder(string audioEnc)
+        private static string GetAudioEncoder(string audioEnc)
         {
             switch (audioEnc)
             {

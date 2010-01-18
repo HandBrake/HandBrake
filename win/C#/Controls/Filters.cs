@@ -262,6 +262,6 @@ namespace Handbrake.Controls
         public void setGrayScale(bool value)
         {
             check_grayscale.CheckState = value ? CheckState.Checked : CheckState.Unchecked;
-        } 
+        }
     }
 }
