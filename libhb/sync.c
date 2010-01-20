@@ -197,6 +197,11 @@ void syncVideoClose( hb_work_object_t * w )
     hb_job_t          * job   = pv->job;
     hb_sync_video_t   * sync = &pv->type.video;
 
+    // Wake up audio sync if it's still waiting on condition.
+    pv->common->pts_offset = 0;
+    pv->common->start_found = 1;
+    hb_cond_broadcast( pv->common->next_frame );
+
     if( sync->cur )
     {
         hb_buffer_close( &sync->cur );

@@ -3166,6 +3166,7 @@ ghb_track_status()
 			hb_status.queue.state &= ~GHB_STATE_MUXING;
 			hb_status.queue.state &= ~GHB_STATE_PAUSED;
 			hb_status.queue.state &= ~GHB_STATE_WORKING;
+			hb_status.queue.state &= ~GHB_STATE_SEARCHING;
 			switch (p.error)
 			{
 			case HB_ERROR_NONE:
@@ -4318,22 +4319,19 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 
 			chapters = ghb_settings_get_value(js, "chapter_list");
 			count = ghb_array_len(chapters);
-			for(chap = start; chap <= end; chap++)
+			for(chap = 0; chap < count; chap++)
 			{
 				hb_chapter_t * chapter_s;
 				gchar *name;
 
 				name = NULL;
-				if (chap-1 < count)
-				{
-					chapter = ghb_array_get_nth(chapters, chap-1);
-					name = ghb_value_string(chapter); 
-				}
+				chapter = ghb_array_get_nth(chapters, chap);
+				name = ghb_value_string(chapter); 
 				if (name == NULL)
 				{
-					name = g_strdup_printf ("Chapter %2d", chap);
+					name = g_strdup_printf ("Chapter %2d", chap+1);
 				}
-				chapter_s = hb_list_item( job->title->list_chapter, chap - 1);
+				chapter_s = hb_list_item( job->title->list_chapter, chap);
 				strncpy(chapter_s->title, name, 1023);
 				chapter_s->title[1023] = '\0';
 				g_free(name);
