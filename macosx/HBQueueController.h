@@ -137,6 +137,7 @@ BOOL                        fIsDragging;
 /* control encodes in the window */
 - (IBAction)removeSelectedQueueItem: (id)sender;
 - (IBAction)revealSelectedQueueItem: (id)sender;
+- (IBAction)editSelectedQueueItem: (id)sender;
 
 #if HB_OUTLINE_METRIC_CONTROLS
 - (IBAction)imageSpacingChanged: (id)sender;

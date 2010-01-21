@@ -202,8 +202,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                       NSLocalizedString(@" Do you want to reload them ?", nil));
         }
         
-        // call didDimissReloadQueue: (NSWindow *)sheet returnCode: (int)returnCode contextInfo: (void *)contextInfo
-        // right below to either clear the old queue or keep it loaded up.
     }
     else
     {
@@ -228,8 +226,6 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     int hbInstances = 0;
     for (aDictionary in runningAppDictionaries)
 	{
-        //	NSLog(@"Open App: %@", [aDictionary valueForKey:@"NSApplicationName"]);
-        
         if ([[aDictionary valueForKey:@"NSApplicationName"] isEqualToString:@"HandBrake"])
 		{
             hbInstances++;
@@ -1551,6 +1547,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                     /* make sure we remove any path extension as this can also be an '.mpg' file */
                     browsedSourceDisplayName = [[path lastPathComponent] retain];
                 }
+                applyQueueToScan = NO;
                 [self performScan:path scanTitleNum:0];
             }
 
@@ -1583,7 +1580,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     [NSApp endSheet: fScanSrcTitlePanel];
     [fScanSrcTitlePanel orderOut: self];
-
+    
     if(sender == fScanSrcTitleOpenButton)
     {
         /* We setup the scan status in the main window to indicate a source title scan */
@@ -1593,8 +1590,9 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         [fScanIndicator startAnimation: nil];
 		
         /* We use the performScan method to actually perform the specified scan passing the path and the title
-            * to be scanned
-            */
+         * to be scanned
+         */
+        applyQueueToScan = NO;
         [self performScan:[fScanSrcTitlePathField stringValue] scanTitleNum:[fScanSrcTitleNumField intValue]];
     }
 }
@@ -1602,8 +1600,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 /* Here we actually tell hb_scan to perform the source scan, using the path to source and title number*/
 - (void) performScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum
 {
-    /* set the bool applyQueueToScan so that we dont apply a queue setting to the final scan */
-    applyQueueToScan = NO;
+    
     /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
     BOOL vlcFound = 0;
@@ -1796,7 +1793,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         /* We use our advance pref to determine how many previews to scan */
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
         /* set title to NULL */
-        //fTitle = NULL;
+        fTitle = NULL;
         hb_scan( fHandle, [path UTF8String], scanTitleNum, hb_num_previews, 1 );
         [fSrcDVD2Field setStringValue:@"Scanning new source ..."];
     }
@@ -1833,11 +1830,25 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         }
         else
         {
-            /* We increment the successful scancount here by one,
+            if (applyQueueToScan == YES)
+            {
+                /* we are a rescan of an existing queue item and need to apply the queued settings to the scan */
+                [self writeToActivityLog: "showNewScan: This is a queued item rescan"];
+                
+            }
+            else if (applyQueueToScan == NO)
+            {
+                [self writeToActivityLog: "showNewScan: This is a new source item scan"];
+            }
+            else
+            {
+                [self writeToActivityLog: "showNewScan: cannot grok scan status"];
+            }
+            
+              /* We increment the successful scancount here by one,
              which we use at the end of this function to tell the gui
              if this is the first successful scan since launch and whether
              or not we should set all settings to the defaults */
-            
             currentSuccessfulScanCount++;
             
             [[fWindow toolbar] validateVisibleItems];
@@ -1849,12 +1860,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 
                 currentSource = [NSString stringWithUTF8String: title->name];
                 /*Set DVD Name at top of window with the browsedSourceDisplayName grokked right before -performScan */
+                if (!browsedSourceDisplayName)
+                {
+                    browsedSourceDisplayName = @"NoNameDetected";
+                }
                 [fSrcDVD2Field setStringValue:browsedSourceDisplayName];
                 
-                /* Use the dvd name in the default output field here
-                 May want to add code to remove blank spaces for some dvd names*/
+                /* If its a queue rescan for edit, get the queue item output path */
+                /* if not, its a new source scan. */
                 /* Check to see if the last destination has been set,use if so, if not, use Desktop */
-                if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
+                if (applyQueueToScan == YES)
+                {
+                    [fDstFile2Field setStringValue: [NSString stringWithFormat:@"%@", [[QueueFileArray objectAtIndex:fqueueEditRescanItemNum] objectForKey:@"DestinationPath"]]];
+                }
+                else if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"])
                 {
                     [fDstFile2Field setStringValue: [NSString stringWithFormat:
                                                      @"%@/%@.mp4", [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"],[browsedSourceDisplayName stringByDeletingPathExtension]]];
@@ -1907,6 +1926,13 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                 // Open picture sizing window now if it was visible when HB was closed
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:@"PictureSizeWindowIsOpen"])
                     [self showPicturePanel:nil];
+                
+            }
+            if (applyQueueToScan == YES)
+            {
+                /* we are a rescan of an existing queue item and need to apply the queued settings to the scan */
+                [self writeToActivityLog: "showNewScan: calling applyQueueSettingsToMainWindow"];
+                [self applyQueueSettingsToMainWindow:nil];
                 
             }
 
@@ -2537,15 +2563,10 @@ fWorkingCount = 0;
     /* set the bool so that showNewScan knows to apply the appropriate queue
     * settings as this is a queue rescan
     */
-    applyQueueToScan = YES;
+    //applyQueueToScan = YES;
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
-
-        /*On Screen Notification*/
-        //int status;
-        //status = NSRunAlertPanel(@"HandBrake is now loading up a new queue item...",@"Would You Like to wait until you add another encode?", @"Cancel", @"Okay", nil);
-        //[NSApp requestUserAttention:NSCriticalRequest];
-
+    
     if( [detector isVideoDVD] )
     {
         // The chosen path was actually on a DVD, so use the raw block
@@ -2611,286 +2632,6 @@ fWorkingCount = 0;
         hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, hb_num_previews, 0 );
     }
 }
-
-/* This method was originally used to load up a new queue item in the gui and
- * then start processing it. However we now have modified -prepareJob and use a second
- * instance of libhb to do our actual encoding, therefor right now it is not required. 
- * Nonetheless I want to leave this in here
- * because basically its everything we need to be able to actually modify a pending queue
- * item in the gui and resave it. At least for now - dynaflash
- */
-
-- (IBAction)applyQueueSettings:(id)sender
-{
-    NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:currentQueueEncodeIndex];
-    hb_job_t * job = fTitle->job;
-    
-    /* Set title number and chapters */
-    /* since the queue only scans a single title, we really don't need to pick a title */
-    //[fSrcTitlePopUp selectItemAtIndex: [[queueToApply objectForKey:@"TitleNumber"] intValue] - 1];
-    
-    [fSrcChapterStartPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1];
-    [fSrcChapterEndPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1];
-    
-    /* File Format */
-    [fDstFormatPopUp selectItemWithTitle:[queueToApply objectForKey:@"FileFormat"]];
-    [self formatPopUpChanged:nil];
-    
-    /* Chapter Markers*/
-    [fCreateChapterMarkers setState:[[queueToApply objectForKey:@"ChapterMarkers"] intValue]];
-    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
-    [fDstMp4LargeFileCheck setState:[[queueToApply objectForKey:@"Mp4LargeFile"] intValue]];
-    /* Mux mp4 with http optimization */
-    [fDstMp4HttpOptFileCheck setState:[[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue]];
-    
-    /* Video encoder */
-    /* We set the advanced opt string here if applicable*/
-    [fVidEncoderPopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoEncoder"]];
-    [fAdvancedOptions setOptions:[queueToApply objectForKey:@"x264Option"]];
-    
-    /* Lets run through the following functions to get variables set there */
-    [self videoEncoderPopUpChanged:nil];
-    /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
-    [fDstMp4iPodFileCheck setState:[[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue]];
-    [self calculateBitrate:nil];
-    
-    /* Video quality */
-    [fVidQualityMatrix selectCellAtRow:[[queueToApply objectForKey:@"VideoQualityType"] intValue] column:0];
-    
-    [fVidTargetSizeField setStringValue:[queueToApply objectForKey:@"VideoTargetSize"]];
-    [fVidBitrateField setStringValue:[queueToApply objectForKey:@"VideoAvgBitrate"]];
-    [fVidQualitySlider setFloatValue:[[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
-    
-    [self videoMatrixChanged:nil];
-    
-    /* Video framerate */
-    /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
-     detected framerate in the fVidRatePopUp so we use index 0*/
-    if ([[queueToApply objectForKey:@"VideoFramerate"] isEqualToString:@"Same as source"])
-    {
-        [fVidRatePopUp selectItemAtIndex: 0];
-    }
-    else
-    {
-        [fVidRatePopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoFramerate"]];
-    }
-    
-    /* 2 Pass Encoding */
-    [fVidTwoPassCheck setState:[[queueToApply objectForKey:@"VideoTwoPass"] intValue]];
-    [self twoPassCheckboxChanged:nil];
-    /* Turbo 1st pass for 2 Pass Encoding */
-    [fVidTurboPassCheck setState:[[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue]];
-    
-    /*Audio*/
-    if ([queueToApply objectForKey:@"Audio1Track"] > 0)
-    {
-        if ([fAudLang1PopUp indexOfSelectedItem] == 0)
-        {
-            [fAudLang1PopUp selectItemAtIndex: 1];
-        }
-        [self audioTrackPopUpChanged: fAudLang1PopUp];
-        [fAudTrack1CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-        [fAudTrack1MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Mixdown"]];
-        /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-         * mixdown*/
-        if  ([fAudTrack1MixPopUp selectedItem] == nil)
-        {
-            [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
-        }
-        [fAudTrack1RatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Samplerate"]];
-        /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-        if (![[queueToApply objectForKey:@"Audio1Encoder"] isEqualToString:@"AC3 Passthru"])
-        {
-            [fAudTrack1BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Bitrate"]];
-        }
-        [fAudTrack1DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio1TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack1DrcSlider];
-    }
-    if ([queueToApply objectForKey:@"Audio2Track"] > 0)
-    {
-        if ([fAudLang2PopUp indexOfSelectedItem] == 0)
-        {
-            [fAudLang2PopUp selectItemAtIndex: 1];
-        }
-        [self audioTrackPopUpChanged: fAudLang2PopUp];
-        [fAudTrack2CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-        [fAudTrack2MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Mixdown"]];
-        /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-         * mixdown*/
-        if  ([fAudTrack2MixPopUp selectedItem] == nil)
-        {
-            [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
-        }
-        [fAudTrack2RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Samplerate"]];
-        /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-        if (![[queueToApply objectForKey:@"Audio2Encoder"] isEqualToString:@"AC3 Passthru"])
-        {
-            [fAudTrack2BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Bitrate"]];
-        }
-        [fAudTrack2DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio2TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack2DrcSlider];
-    }
-    if ([queueToApply objectForKey:@"Audio3Track"] > 0)
-    {
-        if ([fAudLang3PopUp indexOfSelectedItem] == 0)
-        {
-            [fAudLang3PopUp selectItemAtIndex: 1];
-        }
-        [self audioTrackPopUpChanged: fAudLang3PopUp];
-        [fAudTrack3CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-        [fAudTrack3MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Mixdown"]];
-        /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-         * mixdown*/
-        if  ([fAudTrack3MixPopUp selectedItem] == nil)
-        {
-            [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
-        }
-        [fAudTrack3RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Samplerate"]];
-        /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-        if (![[queueToApply objectForKey:@"Audio3Encoder"] isEqualToString: @"AC3 Passthru"])
-        {
-            [fAudTrack3BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Bitrate"]];
-        }
-        [fAudTrack3DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio3TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack3DrcSlider];
-    }
-    if ([queueToApply objectForKey:@"Audio4Track"] > 0)
-    {
-        if ([fAudLang4PopUp indexOfSelectedItem] == 0)
-        {
-            [fAudLang4PopUp selectItemAtIndex: 1];
-        }
-        [self audioTrackPopUpChanged: fAudLang4PopUp];
-        [fAudTrack4CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Encoder"]];
-        [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-        [fAudTrack4MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Mixdown"]];
-        /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
-         * mixdown*/
-        if  ([fAudTrack4MixPopUp selectedItem] == nil)
-        {
-            [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
-        }
-        [fAudTrack4RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Samplerate"]];
-        /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
-        if (![[chosenPreset objectForKey:@"Audio4Encoder"] isEqualToString:@"AC3 Passthru"])
-        {
-            [fAudTrack4BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Bitrate"]];
-        }
-        [fAudTrack4DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio4TrackDRCSlider"] floatValue]];
-        [self audioDRCSliderChanged: fAudTrack4DrcSlider];
-    }
-    
-    
-    /*Subtitles*/
-    [fSubPopUp selectItemWithTitle:[queueToApply objectForKey:@"Subtitles"]];
-    /* Forced Subtitles */
-    [fSubForcedCheck setState:[[queueToApply objectForKey:@"SubtitlesForced"] intValue]];
-    
-    /* Picture Settings */
-    /* we check to make sure the presets width/height does not exceed the sources width/height */
-    if (fTitle->width < [[queueToApply objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[queueToApply objectForKey:@"PictureHeight"]  intValue])
-    {
-        /* if so, then we use the sources height and width to avoid scaling up */
-        job->width = fTitle->width;
-        job->height = fTitle->height;
-    }
-    else // source width/height is >= the preset height/width
-    {
-        /* we can go ahead and use the presets values for height and width */
-        job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
-        job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
-    }
-    job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
-    if (job->keep_ratio == 1)
-    {
-        hb_fix_aspect( job, HB_KEEP_WIDTH );
-        if( job->height > fTitle->height )
-        {
-            job->height = fTitle->height;
-            hb_fix_aspect( job, HB_KEEP_HEIGHT );
-        }
-    }
-    job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
-    
-    
-    /* If Cropping is set to custom, then recall all four crop values from
-     when the preset was created and apply them */
-    if ([[queueToApply objectForKey:@"PictureAutoCrop"]  intValue] == 0)
-    {
-        [fPictureController setAutoCrop:NO];
-        
-        /* Here we use the custom crop values saved at the time the preset was saved */
-        job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
-        job->crop[1] = [[queueToApply objectForKey:@"PictureBottomCrop"]  intValue];
-        job->crop[2] = [[queueToApply objectForKey:@"PictureLeftCrop"]  intValue];
-        job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
-        
-    }
-    else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
-    {
-        [fPictureController setAutoCrop:YES];
-        /* Here we use the auto crop values determined right after scan */
-        job->crop[0] = AutoCropTop;
-        job->crop[1] = AutoCropBottom;
-        job->crop[2] = AutoCropLeft;
-        job->crop[3] = AutoCropRight;
-        
-    }
-    
-    /* Filters */
-    /* Deinterlace */
-    [fPictureController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
-    
-    /* Detelecine */
-    [fPictureController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
-    /* Denoise */
-    [fPictureController setDenoise:[[queueToApply objectForKey:@"PictureDenoise"] intValue]];
-    /* Deblock */
-    [fPictureController setDeblock:[[queueToApply objectForKey:@"PictureDeblock"] intValue]];
-    /* Decomb */
-    [fPictureController setDecomb:[[queueToApply objectForKey:@"PictureDecomb"] intValue]];
-    /* Grayscale */
-    [fPictureController setGrayscale:[[queueToApply objectForKey:@"VideoGrayScale"] intValue]];
-    
-    [self calculatePictureSizing:nil];
-    
-    
-    /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
-    //[queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-    //    [queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
-    if ([queueToApply objectForKey:@"PresetIndexNum"]) // This item used a preset so insert that info
-	{
-		/* Deselect the currently selected Preset if there is one*/
-        //[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]] byExtendingSelection:NO];
-        //[self selectPreset:nil];
-		
-        //[fPresetsOutlineView selectRow:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]];
-		/* Change UI to show "Custom" settings are being used */
-		//[fPresetSelectedDisplay setStringValue: [[queueToApply objectForKey:@"PresetName"] stringValue]];
-        
-		curUserPresetChosenNum = nil;
-	}
-    else
-    {
-        /* Deselect the currently selected Preset if there is one*/
-		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
-		/* Change UI to show "Custom" settings are being used */
-		[fPresetSelectedDisplay setStringValue: @"Custom"];
-        
-		//curUserPresetChosenNum = nil;
-    }
-    
-    /* We need to set this bool back to NO, in case the user wants to do a scan */
-    //applyQueueToScan = NO;
-    
-    /* so now we go ahead and process the new settings */
-    [self processNewQueueEncode];
-}
-
-
 
 /* This assumes that we have re-scanned and loaded up a new queue item to send to libhb as fQueueEncodeLibhb */
 - (void) processNewQueueEncode
@@ -2987,6 +2728,396 @@ fWorkingCount = 0;
     /* We should be all setup so let 'er rip */   
     [self doRip];
 }
+
+
+
+#pragma mark -
+#pragma mark Queue Item Editing
+
+/* Rescans the chosen queue item back into the main window */
+- (void)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (int) scanTitleNum selectedQueueItem: (int) selectedQueueItem
+{
+    fqueueEditRescanItemNum = selectedQueueItem;
+    [self writeToActivityLog: "rescanQueueItemToMainWindow: Re-scanning queue item at index:%d",fqueueEditRescanItemNum];
+    applyQueueToScan = YES;
+    /* Set the browsedSourceDisplayName for showNewScan */
+    browsedSourceDisplayName = [[QueueFileArray objectAtIndex:fqueueEditRescanItemNum] objectForKey:@"SourceName"];
+    [self performScan:scanPath scanTitleNum:scanTitleNum];
+}
+
+
+/* We use this method after a queue item rescan for edit.
+ * it largely mirrors -selectPreset in terms of structure.
+ * Assumes that a queue item has been reloaded into the main window.
+ */
+- (IBAction)applyQueueSettingsToMainWindow:(id)sender
+{
+    NSMutableDictionary * queueToApply = [QueueFileArray objectAtIndex:fqueueEditRescanItemNum];
+    hb_job_t * job = fTitle->job;
+    if (queueToApply)
+    {
+        [self writeToActivityLog: "applyQueueSettingsToMainWindow: queue item found"];
+    }
+    /* Set title number and chapters */
+    /* since the queue only scans a single title, we really don't need to pick a title */
+    [fSrcTitlePopUp selectItemAtIndex: [[queueToApply objectForKey:@"TitleNumber"] intValue] - 1];
+    
+    [fSrcChapterStartPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1];
+    [fSrcChapterEndPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1];
+    
+    /* File Format */
+    [fDstFormatPopUp selectItemWithTitle:[queueToApply objectForKey:@"FileFormat"]];
+    [self formatPopUpChanged:nil];
+    
+    /* Chapter Markers*/
+    [fCreateChapterMarkers setState:[[queueToApply objectForKey:@"ChapterMarkers"] intValue]];
+    /* Allow Mpeg4 64 bit formatting +4GB file sizes */
+    [fDstMp4LargeFileCheck setState:[[queueToApply objectForKey:@"Mp4LargeFile"] intValue]];
+    /* Mux mp4 with http optimization */
+    [fDstMp4HttpOptFileCheck setState:[[queueToApply objectForKey:@"Mp4HttpOptimize"] intValue]];
+    
+    /* Video encoder */
+    /* We set the advanced opt string here if applicable*/
+    [fVidEncoderPopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoEncoder"]];
+    [fAdvancedOptions setOptions:[queueToApply objectForKey:@"x264Option"]];
+    
+    /* Lets run through the following functions to get variables set there */
+    [self videoEncoderPopUpChanged:nil];
+    /* Set the state of ipod compatible with Mp4iPodCompatible. Only for x264*/
+    [fDstMp4iPodFileCheck setState:[[queueToApply objectForKey:@"Mp4iPodCompatible"] intValue]];
+    [self calculateBitrate:nil];
+    
+    /* Video quality */
+    [fVidQualityMatrix selectCellAtRow:[[queueToApply objectForKey:@"VideoQualityType"] intValue] column:0];
+    
+    [fVidTargetSizeField setStringValue:[queueToApply objectForKey:@"VideoTargetSize"]];
+    [fVidBitrateField setStringValue:[queueToApply objectForKey:@"VideoAvgBitrate"]];
+    /* Since we are now using RF Values for the slider, we detect if the preset uses an old quality float.
+     * So, check to see if the quality value is less than 1.0 which should indicate the old ".062" type
+     * quality preset. Caveat: in the case of x264, where the RF scale starts at 0, it would misinterpret
+     * a preset that uses 0.0 - 0.99 for RF as an old style preset. Not sure how to get around that one yet,
+     * though it should be a corner case since it would pretty much be a preset for lossless encoding. */
+    if ([[queueToApply objectForKey:@"VideoQualitySlider"] floatValue] < 1.0)
+    {
+        /* For the quality slider we need to convert the old percent's to the new rf scales */
+        float rf =  (([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]) * [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]);
+        [fVidQualitySlider setFloatValue:rf];
+        
+    }
+    else
+    {
+        /* Since theora's qp value goes up from left to right, we can just set the slider float value */
+        if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
+        {
+            [fVidQualitySlider setFloatValue:[[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
+        }
+        else
+        {
+            /* since ffmpeg and x264 use an "inverted" slider (lower qp/rf values indicate a higher quality) we invert the value on the slider */
+            [fVidQualitySlider setFloatValue:([fVidQualitySlider maxValue] + [fVidQualitySlider minValue]) - [[queueToApply objectForKey:@"VideoQualitySlider"] floatValue]];
+        }
+    }
+    
+    [self videoMatrixChanged:nil];
+    [self writeToActivityLog: "applyQueueSettingsToMainWindow: video matrix changed"];    
+    /* Video framerate */
+    /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
+     detected framerate in the fVidRatePopUp so we use index 0*/
+    if ([[queueToApply objectForKey:@"VideoFramerate"] isEqualToString:@"Same as source"])
+    {
+        [fVidRatePopUp selectItemAtIndex: 0];
+    }
+    else
+    {
+        [fVidRatePopUp selectItemWithTitle:[queueToApply objectForKey:@"VideoFramerate"]];
+    }
+    
+    /* 2 Pass Encoding */
+    [fVidTwoPassCheck setState:[[queueToApply objectForKey:@"VideoTwoPass"] intValue]];
+    [self twoPassCheckboxChanged:nil];
+    /* Turbo 1st pass for 2 Pass Encoding */
+    [fVidTurboPassCheck setState:[[queueToApply objectForKey:@"VideoTurboTwoPass"] intValue]];
+    
+    /*Audio*/
+    
+    
+    /* Now lets add our new tracks to the audio list here */
+    if ([[queueToApply objectForKey:@"Audio1Track"] intValue] > 0)
+    {
+        [fAudLang1PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio1Track"] intValue]];
+        [self audioTrackPopUpChanged: fAudLang1PopUp];
+        [fAudTrack1CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Encoder"]];
+        [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
+        
+        [fAudTrack1MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Mixdown"]];
+        
+        [fAudTrack1RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Samplerate"]];
+        [fAudTrack1BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio1Bitrate"]];
+        
+        [fAudTrack1DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio1TrackDRCSlider"] floatValue]];
+        [self audioDRCSliderChanged: fAudTrack1DrcSlider];
+    }
+    else
+    {
+        [fAudLang1PopUp selectItemAtIndex: 0];
+        [self audioTrackPopUpChanged: fAudLang1PopUp];
+    }
+    if ([[queueToApply objectForKey:@"Audio2Track"] intValue] > 0)
+    {
+        [fAudLang2PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio2Track"] intValue]];
+        [self audioTrackPopUpChanged: fAudLang2PopUp];
+        [fAudTrack2CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Encoder"]];
+        [self audioTrackPopUpChanged: fAudTrack2CodecPopUp];
+        
+        [fAudTrack2MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Mixdown"]];
+        
+        [fAudTrack2RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Samplerate"]];
+        [fAudTrack2BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio2Bitrate"]];
+        
+        [fAudTrack2DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio2TrackDRCSlider"] floatValue]];
+        [self audioDRCSliderChanged: fAudTrack2DrcSlider];
+    }
+    else
+    {
+        [fAudLang2PopUp selectItemAtIndex: 0];
+        [self audioTrackPopUpChanged: fAudLang2PopUp];
+    }
+    if ([[queueToApply objectForKey:@"Audio3Track"] intValue] > 0)
+    {
+        [fAudLang3PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio3Track"] intValue]];
+        [self audioTrackPopUpChanged: fAudLang3PopUp];
+        [fAudTrack3CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Encoder"]];
+        [self audioTrackPopUpChanged: fAudTrack3CodecPopUp];
+        
+        [fAudTrack3MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Mixdown"]];
+        
+        [fAudTrack3RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Samplerate"]];
+        [fAudTrack3BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio3Bitrate"]];
+        
+        [fAudTrack3DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio3TrackDRCSlider"] floatValue]];
+        [self audioDRCSliderChanged: fAudTrack3DrcSlider];
+    }
+    else
+    {
+        [fAudLang3PopUp selectItemAtIndex: 0];
+        [self audioTrackPopUpChanged: fAudLang3PopUp];
+    }
+    if ([[queueToApply objectForKey:@"Audio4Track"] intValue] > 0)
+    {
+        [fAudLang4PopUp selectItemAtIndex: [[queueToApply objectForKey:@"Audio4Track"] intValue]];
+        [self audioTrackPopUpChanged: fAudLang4PopUp];
+        [fAudTrack4CodecPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Encoder"]];
+        [self audioTrackPopUpChanged: fAudTrack4CodecPopUp];
+        
+        [fAudTrack4MixPopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Mixdown"]];
+        
+        [fAudTrack4RatePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Samplerate"]];
+        [fAudTrack4BitratePopUp selectItemWithTitle:[queueToApply objectForKey:@"Audio4Bitrate"]];
+        
+        [fAudTrack4DrcSlider setFloatValue:[[queueToApply objectForKey:@"Audio4TrackDRCSlider"] floatValue]];
+        [self audioDRCSliderChanged: fAudTrack4DrcSlider];
+    }
+    else
+    {
+        [fAudLang4PopUp selectItemAtIndex: 0];
+        [self audioTrackPopUpChanged: fAudLang4PopUp];
+    }
+    
+    [self writeToActivityLog: "applyQueueSettingsToMainWindow: audio set up"];
+    /*Subtitles*/
+    /* Crashy crashy right now, working on it */
+    [fSubtitlesDelegate setNewSubtitles:[queueToApply objectForKey:@"SubtitleList"]];
+    [fSubtitlesTable reloadData];  
+    /* Picture Settings */
+    
+    /* If Cropping is set to custom, then recall all four crop values from
+     when the preset was created and apply them */
+    if ([[queueToApply objectForKey:@"PictureAutoCrop"]  intValue] == 0)
+    {
+        [fPictureController setAutoCrop:NO];
+        
+        /* Here we use the custom crop values saved at the time the preset was saved */
+        job->crop[0] = [[queueToApply objectForKey:@"PictureTopCrop"]  intValue];
+        job->crop[1] = [[queueToApply objectForKey:@"PictureBottomCrop"]  intValue];
+        job->crop[2] = [[queueToApply objectForKey:@"PictureLeftCrop"]  intValue];
+        job->crop[3] = [[queueToApply objectForKey:@"PictureRightCrop"]  intValue];
+        
+    }
+    else /* if auto crop has been saved in preset, set to auto and use post scan auto crop */
+    {
+        [fPictureController setAutoCrop:YES];
+        /* Here we use the auto crop values determined right after scan */
+        job->crop[0] = AutoCropTop;
+        job->crop[1] = AutoCropBottom;
+        job->crop[2] = AutoCropLeft;
+        job->crop[3] = AutoCropRight;
+        
+    }
+    
+    
+    /* we check to make sure the presets width/height does not exceed the sources width/height */
+    if (fTitle->width < [[queueToApply objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[queueToApply objectForKey:@"PictureHeight"]  intValue])
+    {
+        /* if so, then we use the sources height and width to avoid scaling up */
+        //job->width = fTitle->width;
+        //job->height = fTitle->height;
+        [self revertPictureSizeToMax:nil];
+    }
+    else // source width/height is >= the preset height/width
+    {
+        /* we can go ahead and use the presets values for height and width */
+        job->width = [[queueToApply objectForKey:@"PictureWidth"]  intValue];
+        job->height = [[queueToApply objectForKey:@"PictureHeight"]  intValue];
+    }
+    job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
+    if (job->keep_ratio == 1)
+    {
+        hb_fix_aspect( job, HB_KEEP_WIDTH );
+        if( job->height > fTitle->height )
+        {
+            job->height = fTitle->height;
+            hb_fix_aspect( job, HB_KEEP_HEIGHT );
+        }
+    }
+    job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
+    
+    
+    [self writeToActivityLog: "applyQueueSettingsToMainWindow: picture sizing set up"];
+    
+    
+    /* Filters */
+    
+    /* We only allow *either* Decomb or Deinterlace. So check for the PictureDecombDeinterlace key.
+     * also, older presets may not have this key, in which case we also check to see if that preset had  PictureDecomb
+     * specified, in which case we use decomb and ignore any possible Deinterlace settings as using both was less than
+     * sane.
+     */
+    [fPictureController setUseDecomb:1];
+    [fPictureController setDecomb:0];
+    [fPictureController setDeinterlace:0];
+    if ([[queueToApply objectForKey:@"PictureDecombDeinterlace"] intValue] == 1 || [[queueToApply objectForKey:@"PictureDecomb"] intValue] > 0)
+    {
+        /* we are using decomb */
+        /* Decomb */
+        if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] > 0)
+        {
+            [fPictureController setDecomb:[[queueToApply objectForKey:@"PictureDecomb"] intValue]];
+            
+            /* if we are using "Custom" in the decomb setting, also set the custom string*/
+            if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
+            {
+                [fPictureController setDecombCustomString:[queueToApply objectForKey:@"PictureDecombCustom"]];    
+            }
+        }
+    }
+    else
+    {
+        /* We are using Deinterlace */
+        /* Deinterlace */
+        if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] > 0)
+        {
+            [fPictureController setUseDecomb:0];
+            [fPictureController setDeinterlace:[[queueToApply objectForKey:@"PictureDeinterlace"] intValue]];
+            /* if we are using "Custom" in the deinterlace setting, also set the custom string*/
+            if ([[queueToApply objectForKey:@"PictureDeinterlace"] intValue] == 1)
+            {
+                [fPictureController setDeinterlaceCustomString:[queueToApply objectForKey:@"PictureDeinterlaceCustom"]];    
+            }
+        }
+    }
+    
+    
+    /* Detelecine */
+    if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] > 0)
+    {
+        [fPictureController setDetelecine:[[queueToApply objectForKey:@"PictureDetelecine"] intValue]];
+        /* if we are using "Custom" in the detelecine setting, also set the custom string*/
+        if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
+        {
+            [fPictureController setDetelecineCustomString:[queueToApply objectForKey:@"PictureDetelecineCustom"]];    
+        }
+    }
+    else
+    {
+        [fPictureController setDetelecine:0];
+    }
+    
+    /* Denoise */
+    if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] > 0)
+    {
+        [fPictureController setDenoise:[[queueToApply objectForKey:@"PictureDenoise"] intValue]];
+        /* if we are using "Custom" in the denoise setting, also set the custom string*/
+        if ([[queueToApply objectForKey:@"PictureDenoise"] intValue] == 1)
+        {
+            [fPictureController setDenoiseCustomString:[queueToApply objectForKey:@"PictureDenoiseCustom"]];    
+        }
+    }
+    else
+    {
+        [fPictureController setDenoise:0];
+    }   
+    
+    /* Deblock */
+    if ([[queueToApply objectForKey:@"PictureDeblock"] intValue] == 1)
+    {
+        /* if its a one, then its the old on/off deblock, set on to 5*/
+        [fPictureController setDeblock:5];
+    }
+    else
+    {
+        /* use the settings intValue */
+        [fPictureController setDeblock:[[queueToApply objectForKey:@"PictureDeblock"] intValue]];
+    }
+    
+    if ([[queueToApply objectForKey:@"VideoGrayScale"] intValue] == 1)
+    {
+        [fPictureController setGrayscale:1];
+    }
+    else
+    {
+        [fPictureController setGrayscale:0];
+    }
+    
+    /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
+    [fPictureController SetTitle:fTitle];
+    [fPictureController SetTitle:fTitle];
+    [self calculatePictureSizing:nil];
+    
+    [self writeToActivityLog: "applyQueueSettingsToMainWindow: picture filters set up"];
+    /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
+    //[queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
+    //    [queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
+    if ([queueToApply objectForKey:@"PresetIndexNum"]) // This item used a preset so insert that info
+	{
+		/* Deselect the currently selected Preset if there is one*/
+        //[fPresetsOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]] byExtendingSelection:NO];
+        //[self selectPreset:nil];
+		
+        //[fPresetsOutlineView selectRow:[[queueToApply objectForKey:@"PresetIndexNum"] intValue]];
+		/* Change UI to show "Custom" settings are being used */
+		//[fPresetSelectedDisplay setStringValue: [[queueToApply objectForKey:@"PresetName"] stringValue]];
+        
+		curUserPresetChosenNum = nil;
+	}
+    else
+    {
+        /* Deselect the currently selected Preset if there is one*/
+		[fPresetsOutlineView deselectRow:[fPresetsOutlineView selectedRow]];
+		/* Change UI to show "Custom" settings are being used */
+		[fPresetSelectedDisplay setStringValue: @"Custom"];
+        
+		//curUserPresetChosenNum = nil;
+    }
+    
+    /* We need to set this bool back to NO, in case the user wants to do a scan */
+    //applyQueueToScan = NO;
+    
+    /* Not that source is loaded and settings applied, delete the queue item from the queue */
+    //[self writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
+    //[self removeQueueFileItem:fqueueEditRescanItemNum];
+}
+
+
 
 #pragma mark -
 #pragma mark Live Preview
@@ -3758,9 +3889,7 @@ bool one_burned = FALSE;
                     sub_config.offset = [[tempObject objectForKey:@"subtitleTrackSrtOffset"] intValue];
                     
                     /* we need to srncpy file name and codeset */
-                    //sub_config.src_filename = [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String];
                     strncpy(sub_config.src_filename, [[tempObject objectForKey:@"subtitleSourceSrtFilePath"] UTF8String], 128);
-                    //sub_config.src_codeset = [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String];
                     strncpy(sub_config.src_codeset, [[tempObject objectForKey:@"subtitleTrackSrtCharCode"] UTF8String], 40);
                     
                     sub_config.force = 0;

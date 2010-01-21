@@ -243,7 +243,7 @@ BOOL                        fIsDragging;
 	NSMutableDictionary          *presetUserDefault;// this is 2 in "Default" preset key
     NSMutableDictionary          *presetUserDefaultParent;
     NSMutableDictionary          *presetUserDefaultParentParent;
-    int                        presetCurrentBuiltInCount; // keeps track of the current number of built in presets
+    int                           presetCurrentBuiltInCount; // keeps track of the current number of built in presets
     IBOutlet NSPanel             * fAddPresetPanel;
 	
     /* NSOutline View for the presets */
@@ -264,6 +264,8 @@ BOOL                        fIsDragging;
     int                          fCompletedCount;
     int                          fCanceledCount;
     int                          fWorkingCount;
+    
+    int                          fqueueEditRescanItemNum; // queue array item to be reloaded into the main window
     
     
     /* integer to set to determine the previous state
@@ -346,7 +348,11 @@ BOOL                        fIsDragging;
 - (void) performNewQueueScan:(NSString *) scanPath scanTitleNum: (int) scanTitleNum;
 - (void) processNewQueueEncode;
 - (void) clearQueueEncodedItems;
-- (IBAction)applyQueueSettings:(id)sender;
+/* Queue Editing */
+- (IBAction)applyQueueSettingsToMainWindow:(id)sender;
+- (IBAction)rescanQueueItemToMainWindow:(NSString *) scanPath scanTitleNum: (int) scanTitleNum selectedQueueItem: (int) selectedQueueItem;
+
+
 - (void) removeQueueFileItem:(int) queueItemToRemove;
 - (void) clearQueueAllItems;
 - (void)moveObjectsInQueueArray:(NSMutableArray *)array fromIndexes:(NSIndexSet *)indexSet toIndex:(NSUInteger)insertIndex;

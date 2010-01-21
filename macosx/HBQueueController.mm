@@ -75,8 +75,6 @@
     return fIsDragging;
 }
 
-
-
 @end
 
 #pragma mark Toolbar Identifiers
@@ -254,7 +252,7 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     if( ![[self window] setFrameUsingName:@"Queue"] )
         [[self window] center];
     [self setWindowFrameAutosaveName:@"Queue"];
-    [[self window] setExcludedFromWindowsMenu:YES];
+    //[[self window] setExcludedFromWindowsMenu:YES];
 
     /* lets setup our queue list outline view for drag and drop here */
     [fOutlineView registerForDraggedTypes: [NSArray arrayWithObject:DragDropSimplePboardType] ];
@@ -598,9 +596,53 @@ static NSString*    HBQueuePauseResumeToolbarIdentifier       = @"HBQueuePauseRe
     }
 }
 
+
+//------------------------------------------------------------------------------------
+// Send the selected queue item back to the main window for rescan and possible edit.
+//------------------------------------------------------------------------------------
+- (IBAction)editSelectedQueueItem: (id)sender
+{
+    NSIndexSet * selectedRows = [fOutlineView selectedRowIndexes];
+    NSUInteger row = [selectedRows firstIndex];
+    if( row == NSNotFound )
+        return;
+    /* if this is a currently encoding job, we need to be sure to alert the user,
+     * to let them decide to cancel it first, then if they do, we can come back and
+     * remove it */
+    
+    if ([[[fJobGroups objectAtIndex:row] objectForKey:@"Status"] integerValue] == 1)
+    {
+       /* We pause the encode here so that it doesn't finish right after and then
+        * screw up the sync while the window is open
+        */
+       [fHBController Pause:NULL];
+         NSString * alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It ?", nil)];
+        // Which window to attach the sheet to?
+        NSWindow * docWindow = nil;
+        if ([sender respondsToSelector: @selector(window)])
+            docWindow = [sender window];
+        
+        
+        NSBeginCriticalAlertSheet(
+                                  alertTitle,
+                                  NSLocalizedString(@"Keep Encoding", nil),
+                                  nil,
+                                  NSLocalizedString(@"Stop Encoding and Delete", nil),
+                                  docWindow, self,
+                                  nil, @selector(didDimissCancelCurrentJob:returnCode:contextInfo:), nil,
+                                  NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil));
+        
+    }
+    else
+    { 
+    /* since we are not a currently encoding item, we can just be cancelled */
+    [fHBController rescanQueueItemToMainWindow:[[fJobGroups objectAtIndex:row] objectForKey:@"SourcePath"] scanTitleNum:[[[fJobGroups objectAtIndex:row] objectForKey:@"TitleNumber"] integerValue] selectedQueueItem:row];
+    
+    }
+}
+
+
 #pragma mark -
-
-
 #pragma mark Animate Endcoding Item
 
 

@@ -35,6 +35,8 @@ int                           container;
 
 - (void)containerChanged:(int) newContainer;
 
+- (void)setNewSubtitles:(NSMutableArray*) newSubtitleArray;
+
 // Table View Delegates
 - (int)numberOfRowsInTableView:(NSTableView *)aTableView;
 

@@ -426,6 +426,7 @@
     
 }
 
+/* used to return the current subtitleArray to controller.m */
 - (NSMutableArray*) getSubtitleArray
 {
     return subtitleArray;
@@ -433,7 +434,52 @@
 
 - (void)containerChanged:(int) newContainer
 {
-container = newContainer;
+    container = newContainer;
+}
+
+- (void)setNewSubtitles:(NSMutableArray*) newSubtitleArray
+{
+    /* Note: we need to look for external subtitles so it can be added to the source array track.
+     * Remember the source container subs are already loaded with resetTitle which is already called
+     * so any external sub sources need to be added to our source subs here
+     */
+    
+    int i = 0;
+    NSEnumerator *enumerator = [newSubtitleArray objectEnumerator];
+    id tempObject;
+    while ( tempObject = [enumerator nextObject] )  
+    {
+        /* We have an srt track */
+        if ([[tempObject objectForKey:@"subtitleSourceTrackType"] isEqualToString:@"SRT"])
+        {
+            NSString *filePath = [tempObject objectForKey:@"subtitleSourceSrtFilePath"];
+            /* Start replicate the add new srt code above */
+            /* Create a new entry for the subtitle source array so it shows up in our subtitle source list */
+            NSString *displayname = [filePath lastPathComponent];// grok an appropriate display name from the srt subtitle */
+            /* create a dictionary of source subtitle information to store in our array */
+            NSMutableDictionary *newSubtitleSourceTrack = [[NSMutableDictionary alloc] init];
+            /* Subtitle Source track popup index */
+            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:[subtitleSourceArray count]+1] forKey:@"sourceTrackNum"];
+            /* Subtitle Source track type */
+            [newSubtitleSourceTrack setObject:displayname forKey:@"sourceTrackName"];
+            /* Subtitle Source track type (Source, Srt, etc.) */
+            [newSubtitleSourceTrack setObject:@"SRT" forKey:@"sourceTrackType"];
+            [newSubtitleSourceTrack setObject:@"SRT" forKey:@"subtitleSourceTrackType"];
+            /* Subtitle Source track type */
+            [newSubtitleSourceTrack setObject:filePath forKey:@"sourceSrtFilePath"];
+            /* Subtitle Source track popup isPictureSub */ 
+            [newSubtitleSourceTrack setObject:[NSNumber numberWithInt:0] forKey:@"sourceTrackisPictureSub"];
+            
+            [subtitleSourceArray addObject:newSubtitleSourceTrack];
+            [newSubtitleSourceTrack autorelease];
+            /* END replicate the add new srt code above */
+        }
+        i++;
+    }
+    
+    
+    /*Set the subtitleArray to the newSubtitleArray */
+    [subtitleArray setArray:newSubtitleArray];
 }
    
 #pragma mark -
