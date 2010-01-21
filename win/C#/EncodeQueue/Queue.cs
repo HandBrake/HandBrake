@@ -12,7 +12,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Handbrake.Functions;
-using Handbrake.Parsing;
 
 namespace Handbrake.EncodeQueue
 {
@@ -316,13 +315,9 @@ namespace Handbrake.EncodeQueue
         }
 
         /// <summary>
-        /// Stops the current job.
+        /// Run through all the jobs on the queue.
         /// </summary>
-        public void End()
-        {
-            Stop();
-        }
-
+        /// <param name="state"></param>
         private void StartQueue(object state)
         {
             // Run through each item on the queue

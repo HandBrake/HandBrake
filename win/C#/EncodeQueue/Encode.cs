@@ -14,20 +14,38 @@ namespace Handbrake.EncodeQueue
 {
     public class Encode
     {
-        public Process HbProcess { get; set; }
-        public int ProcessID { get; set; }
-        public IntPtr ProcessHandle { get; set; }
-        public String CurrentQuery { get; set; }
-        public Boolean IsEncoding { get; set; }
+        private int ProcessID { get; set; }
 
+        /// <summary>
+        /// The HB Process
+        /// </summary>
+        public Process HbProcess { get; set; }
+        
+        /// <summary>
+        /// The Process Handle
+        /// </summary>
+        public IntPtr ProcessHandle { get; set; }
+        
+        /// <summary>
+        /// Returns true of HandBrakeCLI.exe is running
+        /// </summary>
+        public Boolean IsEncoding { get; set; }     
+
+        /// <summary>
+        /// Fires when a new CLI Job starts
+        /// </summary>
         public event EventHandler EncodeStarted;
+
+        /// <summary>
+        /// Fires when a CLI job finishes.
+        /// </summary>
         public event EventHandler EncodeEnded;
 
         /// <summary>
         /// Create a preview sample video
         /// </summary>
         /// <param name="query"></param>
-        public void CreatePreviewSampe(string query)
+        public void CreatePreviewSample(string query)
         {
             Run(query);
         }
@@ -63,7 +81,7 @@ namespace Handbrake.EncodeQueue
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 HbProcess = Process.Start(cliStart);
                 ProcessID = Main.GetCliProcess(before);
-                CurrentQuery = query;
+
                 if (HbProcess != null)
                     ProcessHandle = HbProcess.MainWindowHandle; // Set the process Handle
 
@@ -125,7 +143,6 @@ namespace Handbrake.EncodeQueue
         protected void Finish()
         {
             IsEncoding = false;
-            CurrentQuery = String.Empty;
 
             //Growl
             if (Properties.Settings.Default.growlQueue)

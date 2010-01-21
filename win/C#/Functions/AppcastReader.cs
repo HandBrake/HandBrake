@@ -16,7 +16,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get the build information from the required appcasts. Run before accessing the public vars.
         /// </summary>
-        public void getInfo(string input)
+        public void GetInfo(string input)
         {
             try
             {
@@ -28,13 +28,14 @@ namespace Handbrake.Functions
                 Match ver = Regex.Match(result, @"sparkle:version=""([0-9]*)\""");
                 Match verShort = Regex.Match(result, @"sparkle:shortVersionString=""(([svn]*)([0-9.\s]*))\""");
 
-                build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
-                version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
-                downloadFile = nodeItem["windows"].InnerText;
-                descriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
-            } catch( Exception)
+                Build = ver.ToString().Replace("sparkle:version=", "").Replace("\"", "");
+                Version = verShort.ToString().Replace("sparkle:shortVersionString=", "").Replace("\"", "");
+                DownloadFile = nodeItem["windows"].InnerText;
+                DescriptionUrl = new Uri(nodeItem["sparkle:releaseNotesLink"].InnerText);
+            } 
+            catch( Exception)
             {
-                // Ignore Error.
+                return;
             }
         }
 
@@ -51,24 +52,24 @@ namespace Handbrake.Functions
             XmlDocument rssDoc = new XmlDocument();
             rssDoc.Load(rssReader);
 
-            for (int i = 0; i < rssDoc.ChildNodes.Count; i++)
+            foreach (XmlNode t in rssDoc.ChildNodes)
             {
-                if (rssDoc.ChildNodes[i].Name == "rss")
-                    nodeRss = rssDoc.ChildNodes[i];
+                if (t.Name == "rss")
+                    nodeRss = t;
             }
 
             if (nodeRss != null)
-                for (int i = 0; i < nodeRss.ChildNodes.Count; i++)
+                foreach (XmlNode t in nodeRss.ChildNodes)
                 {
-                    if (nodeRss.ChildNodes[i].Name == "channel")
-                        nodeChannel = nodeRss.ChildNodes[i];
+                    if (t.Name == "channel")
+                        nodeChannel = t;
                 }
 
             if (nodeChannel != null)
-                for (int i = 0; i < nodeChannel.ChildNodes.Count; i++)
+                foreach (XmlNode t in nodeChannel.ChildNodes)
                 {
-                    if (nodeChannel.ChildNodes[i].Name == "item")
-                        nodeItem = nodeChannel.ChildNodes[i];
+                    if (t.Name == "item")
+                        nodeItem = t;
                 }
 
             return nodeItem;
@@ -77,21 +78,21 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get Information about an update to HandBrake
         /// </summary>
-        public Uri descriptionUrl { get; set; }
+        public Uri DescriptionUrl { get; set; }
 
         /// <summary>
         /// Get HandBrake's version from the appcast.xml file.
         /// </summary>
-        public string version { get; set; }
+        public string Version { get; set; }
 
         /// <summary>
         /// Get HandBrake's Build from the appcast.xml file.
         /// </summary>
-        public string build { get; set; }
+        public string Build { get; set; }
 
         /// <summary>
         /// Get's the URL for update file.
         /// </summary>
-        public string downloadFile { get; set; }
+        public string DownloadFile { get; set; }
     }
 }

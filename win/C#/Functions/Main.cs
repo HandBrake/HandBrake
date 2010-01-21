@@ -373,7 +373,6 @@ namespace Handbrake.Functions
             }
         }
 
-
         /// <summary>
         /// Begins checking for an update to HandBrake.
         /// </summary>
@@ -394,10 +393,10 @@ namespace Handbrake.Functions
                     AppcastReader reader = new AppcastReader();
 
                     // Get the data, convert it to a string, and parse it into the AppcastReader
-                    reader.getInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
+                    reader.GetInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
 
                     // Further parse the information
-                    string build = reader.build;
+                    string build = reader.Build;
 
                     int latest = int.Parse(build);
                     int current = Properties.Settings.Default.hb_build;

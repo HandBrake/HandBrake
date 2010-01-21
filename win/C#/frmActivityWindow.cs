@@ -105,7 +105,7 @@ namespace Handbrake
                     sr.Dispose();
 
                 }
-                catch (Exception exc)
+                catch (Exception)
                 {
                     Reset();
                     appendText = new StringBuilder();

@@ -5,7 +5,6 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
-using Handbrake.Parsing;
 
 namespace Handbrake.EncodeQueue
 {
