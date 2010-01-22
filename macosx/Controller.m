@@ -3113,8 +3113,8 @@ fWorkingCount = 0;
     //applyQueueToScan = NO;
     
     /* Not that source is loaded and settings applied, delete the queue item from the queue */
-    //[self writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
-    //[self removeQueueFileItem:fqueueEditRescanItemNum];
+    [self writeToActivityLog: "applyQueueSettingsToMainWindow: deleting queue item:%d",fqueueEditRescanItemNum];
+    [self removeQueueFileItem:fqueueEditRescanItemNum];
 }
 
 
