@@ -590,7 +590,7 @@ namespace Handbrake.Functions
                 {
                     csv += row.Cells[0].Value.ToString();
                     csv += ",";
-                    csv += row.Cells[1].Value.ToString();
+                    csv += row.Cells[1].Value.ToString().Replace(",","\\,");
                     csv += Environment.NewLine;
                 }
                 StreamWriter file = new StreamWriter(filePathName);

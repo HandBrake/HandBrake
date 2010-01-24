@@ -97,10 +97,11 @@ namespace Handbrake.Functions
                 {
                     if (csv.Trim() != "")
                     {
+                        csv = csv.Replace("\\,", "<!comma!>");
                         string[] contents = csv.Split(',');
                         int chapter;
                         int.TryParse(contents[0], out chapter);
-                        chapterMap.Add(chapter, contents[1]);
+                        chapterMap.Add(chapter, contents[1].Replace("<!comma!>", ","));
                     }
                     csv = sr.ReadLine();
                 }
@@ -436,32 +437,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Used in EndUpdateCheck() for update checking and the IAsyncResult design pattern.
-        /// </summary>
-        private class UpdateCheckResult : IAsyncResult
-        {
-            public UpdateCheckResult(object asyncState, UpdateCheckInformation info)
-            {
-                AsyncState = asyncState;
-                Result = info;
-            }
-
-            /// <summary>
-            /// Gets whether the check was executed in debug mode.
-            /// </summary>
-            public object AsyncState { get; private set; }
-
-            /// <summary>
-            /// Gets the result of the update check.
-            /// </summary>
-            public UpdateCheckInformation Result { get; private set; }
-
-            public WaitHandle AsyncWaitHandle { get { throw new NotImplementedException(); } }
-            public bool CompletedSynchronously { get { throw new NotImplementedException(); } }
-            public bool IsCompleted { get { throw new NotImplementedException(); } }
-        }
-
-        /// <summary>
         /// Map languages and their iso639_2 value into a IDictionary
         /// </summary>
         /// <returns></returns>
@@ -658,6 +633,5 @@ namespace Handbrake.Functions
                                                           };
             return languageMap;
         }
-
     }
 }
