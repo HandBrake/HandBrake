@@ -1666,6 +1666,34 @@ namespace Handbrake
                 if (!string.IsNullOrEmpty(selectedTitle.SourceName)) // If it's one of multiple source files, make sure we don't use the folder name
                     labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
         }
+
+        public void RecievingJob(Job job)
+        {
+            string query = job.Query;
+            StartScan(job.Source, 0);
+
+
+            if (query != null)
+            {
+                //Ok, Reset all the H264 widgets before changing the preset
+                x264Panel.reset2Defaults();
+
+                // Send the query from the file to the Query Parser class
+                QueryParser presetQuery = QueryParser.Parse(query);
+
+                // Now load the preset
+                PresetLoader.presetLoader(this, presetQuery, "Load Back From Queue", true);
+
+                // The x264 widgets will need updated, so do this now:
+                x264Panel.X264_StandardizeOptString();
+                x264Panel.X264_SetCurrentSettingsInPanel();
+
+                // Finally, let this window have a copy of the preset settings.
+                CurrentlySelectedPreset = null;
+                PictureSettings.SetPresetCropWarningLabel(null);
+            }
+
+        }
         #endregion
 
         #region GUI
@@ -1783,6 +1811,29 @@ namespace Handbrake
         #endregion
 
         #region Overrides
+
+        /// <summary>
+        /// Handle GUI shortcuts
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.S))
+            {
+                btn_start_Click(this, new EventArgs());
+                return true;
+            }
+
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                btn_add2Queue_Click(this, new EventArgs());
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         /// <summary>
         /// If the queue is being processed, prompt the user to confirm application close.
         /// </summary>
@@ -1837,34 +1888,6 @@ namespace Handbrake
             VideoFile
         }
         #endregion
-
-        public void RecievingJob(Job job)
-        {
-            string query = job.Query;
-            StartScan(job.Source, 0);
-     
-
-            if (query != null)
-            {
-                //Ok, Reset all the H264 widgets before changing the preset
-                x264Panel.reset2Defaults();
-
-                // Send the query from the file to the Query Parser class
-                QueryParser presetQuery = QueryParser.Parse(query);
-
-                // Now load the preset
-                PresetLoader.presetLoader(this, presetQuery, "Load Back From Queue", true);
-
-                // The x264 widgets will need updated, so do this now:
-                x264Panel.X264_StandardizeOptString();
-                x264Panel.X264_SetCurrentSettingsInPanel();
-
-                // Finally, let this window have a copy of the preset settings.
-                CurrentlySelectedPreset = null;
-                PictureSettings.SetPresetCropWarningLabel(null);
-            }
-
-        }
 
         // This is the END of the road ****************************************
     }
