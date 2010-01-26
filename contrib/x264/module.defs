@@ -9,10 +9,10 @@ X264.CONFIGURE.shared =
 X264.CONFIGURE.static =
 
 X264.CONFIGURE.extra = --disable-mp4-output
+X264.CONFIGURE.extra += --disable-avs-input --disable-lavf-input --disable-ffms-input
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     X264.CONFIGURE.extra += --enable-pthread --cross-prefix=$(BUILD.spec)-
-    X264.CONFIGURE.extra += --disable-avs-input --disable-lavf-input --disable-ffms-input
     X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
 else
