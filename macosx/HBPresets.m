@@ -182,7 +182,7 @@
     [preset setObject:@"H.264 (x264)" forKey:@"VideoEncoder"];
 
     /* x264 Option String (We can use this to tweak the appleTV output)*/
-    [preset setObject:@"cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0" forKey:@"x264Option"];
+    [preset setObject:@"cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500" forKey:@"x264Option"];
 
     /* Video quality */
     [preset setObject:[NSNumber numberWithInt:2] forKey:@"VideoQualityType"];
