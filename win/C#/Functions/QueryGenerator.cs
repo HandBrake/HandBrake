@@ -17,12 +17,12 @@ namespace Handbrake.Functions
         /// <summary>
         /// Generates a full CLI query for either encoding or previe encoeds if duration and preview are defined.
         /// </summary>
-        /// <param name="mainWindow"></param>
-        /// <param name="mode"></param>
-        /// <param name="duration"></param>
-        /// <param name="preview"></param>
-        /// <returns></returns>
-        public string GenerateCLIQuery(frmMain mainWindow, int mode, int duration, string preview)
+        /// <param name="mainWindow">The Main Window</param>
+        /// <param name="mode">What Mode. (Point to Point Encoding)  Chapters, Seconds, Frames OR Preview Encode</param>
+        /// <param name="duration">time in seconds for preview mode</param>
+        /// <param name="preview"> --start-at-preview (int) </param>
+        /// <returns>CLI Query </returns>
+        public static string GenerateCLIQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
             string query = "";
             
@@ -542,6 +542,11 @@ namespace Handbrake.Functions
             return query;
         }
 
+        /// <summary>
+        /// Return the CLI Mixdown name
+        /// </summary>
+        /// <param name="selectedAudio">GUI mixdown name</param>
+        /// <returns>CLI mixdown name</returns>
         private static string GetMixDown(string selectedAudio)
         {
             switch (selectedAudio)
@@ -562,6 +567,12 @@ namespace Handbrake.Functions
                     return "auto";
             }
         }
+
+        /// <summary>
+        /// Get the CLI Audio Encoder name
+        /// </summary>
+        /// <param name="selectedEncoder">string The GUI Encode name</param>
+        /// <returns>string CLI encoder name</returns>
         private static string GetAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
@@ -580,6 +591,13 @@ namespace Handbrake.Functions
                     return "";
             }
         }
+
+        /// <summary>
+        /// Create a CSV file with the data from the Main Window Chapters tab
+        /// </summary>
+        /// <param name="mainWindow">Main Window</param>
+        /// <param name="filePathName">Path to save the csv file</param>
+        /// <returns>True if successful </returns>
         private static Boolean ChapterCSVSave(frmMain mainWindow, string filePathName)
         {
             try

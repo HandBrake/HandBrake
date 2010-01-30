@@ -24,7 +24,6 @@ namespace Handbrake
         // Objects which may be used by one or more other objects *************
         Queue encodeQueue = new Queue();
         PresetsHandler presetHandler = new PresetsHandler();
-        QueryGenerator queryGen = new QueryGenerator();
 
         // Globals: Mainly used for tracking. *********************************
         public Title selectedTitle;
@@ -114,7 +113,7 @@ namespace Handbrake
                         x264Panel.reset2Defaults();
 
                         QueryParser presetQuery = QueryParser.Parse(query);
-                        PresetLoader.presetLoader(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
+                        PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
 
                         x264Panel.X264_StandardizeOptString();
                         x264Panel.X264_SetCurrentSettingsInPanel();
@@ -222,9 +221,10 @@ namespace Handbrake
                 this.Resize += new EventHandler(frmMain_Resize);
 
             // Handle Encode Start / Finish / Pause
-            encodeQueue.CurrentJobCompleted += new EventHandler(encodeEnded);
+            
             encodeQueue.QueuePauseRequested += new EventHandler(encodePaused);
-            encodeQueue.NewJobStarted += new EventHandler(encodeStarted);
+            encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
+            encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
 
             // Handle a file being draged onto the GUI.
             this.DragEnter += new DragEventHandler(frmMain_DragEnter);
@@ -396,7 +396,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), presetHandler);
+            Form preset = new frmAddPreset(this, QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -602,7 +602,7 @@ namespace Handbrake
                         QueryParser presetQuery = QueryParser.Parse(query);
 
                         // Now load the preset
-                        PresetLoader.presetLoader(this, presetQuery, presetName, loadPictureSettings);
+                        PresetLoader.LoadPreset(this, presetQuery, presetName, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
                         x264Panel.X264_StandardizeOptString();
@@ -628,27 +628,26 @@ namespace Handbrake
         }
         private void importPreset()
         {
-            Import imp = new Import();
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
-                QueryParser parsed = imp.importMacPreset(openPreset.FileName);
+                QueryParser parsed = PlistPresetHandler.Import(openPreset.FileName);
                 if (presetHandler.CheckIfUserPresetExists(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result = MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", "Overwrite preset?",
                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
-                        PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.Update(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null),
+                        PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                        presetHandler.Update(parsed.PresetName + " (Imported)", QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null),
                                                    parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
-                    PresetLoader.presetLoader(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.Add(parsed.PresetName, queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings);
+                    PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
+                    presetHandler.Add(parsed.PresetName, QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings);
 
-                    if (presetHandler.Add(parsed.PresetName + " (Imported)", queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings))
+                    if (presetHandler.Add(parsed.PresetName + " (Imported)", QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
                         treeView_presets.Nodes.Add(preset_treeview);
@@ -671,11 +670,16 @@ namespace Handbrake
             {
                 DialogResult result;
                 if (Properties.Settings.Default.enocdeStatusInGui && !Properties.Settings.Default.showCliForInGuiEncodeStatus)
-                    result = MessageBox.Show("Are you sure you wish to cancel the encode?\n\nPlease note, when 'Enable in-GUI encode status' is enabled, stopping this encode will render the file unplayable. ",
-                        "Cancel Encode?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                {
+                    result = MessageBox.Show(
+                            "Are you sure you wish to cancel the encode?\n\nPlease note, when 'Enable in-GUI encode status' is enabled, stopping this encode will render the file unplayable. ",
+                            "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                }
                 else
+                {
                     result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                             MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                }
 
                 if (result == DialogResult.Yes)
                 {
@@ -690,9 +694,7 @@ namespace Handbrake
                     }
                     else
                     {
-                        // Allow the CLI to exit cleanly
-                        Win32.SetForegroundWindow((int) encodeQueue.ProcessHandle);
-                        SendKeys.Send("^C");
+                        encodeQueue.SafelyClose();
                     }
 
                     // Update the GUI
@@ -703,8 +705,8 @@ namespace Handbrake
             {
                 if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
-                    string generatedQuery = queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
-                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+                    string generatedQuery = QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
@@ -773,7 +775,7 @@ namespace Handbrake
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query = queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+                String query = QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -1488,7 +1490,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = queryGen.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+            rtf_query.Text = QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {
@@ -1682,7 +1684,7 @@ namespace Handbrake
                 QueryParser presetQuery = QueryParser.Parse(query);
 
                 // Now load the preset
-                PresetLoader.presetLoader(this, presetQuery, "Load Back From Queue", true);
+                PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue", true);
 
                 // The x264 widgets will need updated, so do this now:
                 x264Panel.X264_StandardizeOptString();

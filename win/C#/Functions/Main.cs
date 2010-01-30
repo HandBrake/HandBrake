@@ -125,7 +125,7 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
-        public static string AutoName(frmMain mainWindow) //ComboBox drpDvdtitle, string chapter_start, string chatper_end, string source, string dest, int format, Boolean chapters)
+        public static string AutoName(frmMain mainWindow)
         {
             string AutoNamePath = string.Empty;
             if (mainWindow.drp_dvdtitle.Text != "Automatic")

@@ -12,8 +12,14 @@ using Handbrake.Functions;
 
 namespace Handbrake.EncodeQueue
 {
+    /// <summary>
+    /// Class which handles the CLI
+    /// </summary>
     public class Encode
     {
+        /// <summary>
+        /// Process ID
+        /// </summary>
         private int ProcessID { get; set; }
 
         /// <summary>
@@ -120,6 +126,79 @@ namespace Handbrake.EncodeQueue
         }
 
         /// <summary>
+        /// Function to run the CLI directly rather than via CMD
+        /// TODO: Code to handle the Log data has yet to be written.
+        /// TODO: Code to handle the % / ETA info has to be written.
+        /// </summary>
+        protected void DirectRun(string query)
+        {
+            try
+            {
+                if (EncodeStarted != null)
+                    EncodeStarted(this, new EventArgs());
+
+                IsEncoding = true;
+
+                // Setup the job
+                string handbrakeCLIPath = Path.Combine(Environment.CurrentDirectory, "HandBrakeCLI.exe");
+                Process hbProc = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = handbrakeCLIPath,
+                        Arguments = query,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        RedirectStandardInput = true,
+                        CreateNoWindow = false,
+                        WindowStyle = ProcessWindowStyle.Minimized
+                    }
+                };
+
+                // Setup the redirects
+                hbProc.ErrorDataReceived += new DataReceivedEventHandler(HbProcErrorDataReceived);
+                hbProc.OutputDataReceived += new DataReceivedEventHandler(HbProcOutputDataReceived);
+
+                // Start the process
+                hbProc.Start();
+
+                // Set the Process Priority
+                switch (Properties.Settings.Default.processPriority)
+                {
+                    case "Realtime":
+                        hbProc.PriorityClass = ProcessPriorityClass.RealTime;
+                        break;
+                    case "High":
+                        hbProc.PriorityClass = ProcessPriorityClass.High;
+                        break;
+                    case "Above Normal":
+                        hbProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+                        break;
+                    case "Normal":
+                        hbProc.PriorityClass = ProcessPriorityClass.Normal;
+                        break;
+                    case "Low":
+                        hbProc.PriorityClass = ProcessPriorityClass.Idle;
+                        break;
+                    default:
+                        hbProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                }
+
+                // Set the class items
+                HbProcess = hbProc;
+                ProcessID = hbProc.Id;
+                ProcessHandle = hbProc.Handle;
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc);
+            }
+        }
+
+        /// <summary>
         /// Kill the CLI process
         /// </summary>
         public void Stop()
@@ -138,10 +217,53 @@ namespace Handbrake.EncodeQueue
         }
 
         /// <summary>
+        /// Attempt to Safely kill a DirectRun() CLI
+        /// NOTE: This will not work with a MinGW CLI
+        /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
+        /// </summary>
+        public void SafelyClose()
+        {
+            if ((int)ProcessHandle == 0)
+                return;
+
+            // Allow the CLI to exit cleanly
+            Win32.SetForegroundWindow((int)ProcessHandle);
+            SendKeys.Send("^C");
+
+            // HbProcess.StandardInput.AutoFlush = true;
+            // HbProcess.StandardInput.WriteLine("^C");
+        }
+
+        /// <summary>
+        /// Recieve the Standard Error information and process it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void HbProcErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            // TODO: Recieve the Log data and process it
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Standard Input Data Recieved from the CLI
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void HbProcOutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            // TODO: Recieve the %, ETA, FPS etc and process it
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
         /// </summary>
         protected void Finish()
         {
+            if (EncodeEnded != null)
+                EncodeEnded(this, new EventArgs());
+
             IsEncoding = false;
 
             //Growl

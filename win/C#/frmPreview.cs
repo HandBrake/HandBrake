@@ -13,7 +13,6 @@ namespace Handbrake
 {
     public partial class frmPreview : Form
     {
-        readonly QueryGenerator HbCommonFunc = new QueryGenerator();
         readonly Queue Process = new Queue();
         private delegate void UpdateUIHandler();
         String CurrentlyPlaying = "";
@@ -63,7 +62,7 @@ namespace Handbrake
             lbl_status.Text = "Encoding Sample for (VLC) ...";
             int duration;
             int.TryParse(cb_duration.Text, out duration);
-            String query = HbCommonFunc.GenerateCLIQuery(MainWindow, 3, duration, cb_preview.Text);
+            String query = QueryGenerator.GenerateCLIQuery(MainWindow, 3, duration, cb_preview.Text);
             ThreadPool.QueueUserWorkItem(ProcMonitor, query);
         }
         private void btn_playQT_Click(object sender, EventArgs e)
@@ -98,7 +97,7 @@ namespace Handbrake
                 lbl_status.Text = "Encoding Sample for (QT) ...";
                 int duration;
                 int.TryParse(cb_duration.Text, out duration);
-                String query = HbCommonFunc.GenerateCLIQuery(MainWindow, 3, duration, cb_preview.Text);
+                String query = QueryGenerator.GenerateCLIQuery(MainWindow, 3, duration, cb_preview.Text);
 
                 ThreadPool.QueueUserWorkItem(ProcMonitor, query);
             }

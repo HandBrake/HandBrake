@@ -7,6 +7,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Handbrake.Model;
 
 namespace Handbrake.Functions
 {
@@ -20,12 +21,8 @@ namespace Handbrake.Functions
         /// <param name="presetQuery">The Parsed CLI Query</param>
         /// <param name="name">Name of the preset</param>
         /// <param name="pictureSettings">Save picture settings in the preset</param>
-        public static void presetLoader(frmMain mainWindow, QueryParser presetQuery, string name, Boolean pictureSettings)
+        public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name, Boolean pictureSettings)
         {
-            // ---------------------------
-            // Setup the GUI
-            // ---------------------------
-
             #region Source
             // Reset some vaules to stock first to prevent errors.
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;

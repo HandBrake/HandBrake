@@ -16,24 +16,24 @@ namespace Handbrake.Presets
 {
     public class PresetsHandler
     {
-        List<Preset> _presets = new List<Preset>();
-        List<Preset> _userPresets = new List<Preset>();
+        List<Preset> Presets = new List<Preset>();
+        List<Preset> UserPresets = new List<Preset>();
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
-        readonly string _userPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
-        readonly string _hbPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
+        readonly string UserPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
+        readonly string HbPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
 
         /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="presetName">String, The name of the new preset</param>
         /// <param name="query">String, the CLI query for the new preset</param>
-        /// <param name="pictureSettings"> Bool, store crop/picture sizes in the _presets</param>
+        /// <param name="pictureSettings"> Bool, store crop/picture sizes in the Presets</param>
         public Boolean Add(string presetName, string query, Boolean pictureSettings)
         {
             if (CheckIfPresetExists(presetName) == false)
             {
                 Preset newPreset = new Preset { Name = presetName, Query = query, PictureSettings = pictureSettings, Version = Properties.Settings.Default.hb_version };
-                _userPresets.Add(newPreset);
+                UserPresets.Add(newPreset);
                 UpdatePresetFiles();
                 return true;
             }
@@ -50,36 +50,36 @@ namespace Handbrake.Presets
             List<Preset> newUserPresets = new List<Preset>();
 
             // Built In Presets
-            foreach (Preset item in _presets)
+            foreach (Preset item in Presets)
             {
                 if (item.Name != name)
                 {
                     newPresets.Add(item);
                 }
             }
-            _presets = newPresets;
+            Presets = newPresets;
 
             // User Presets
-            foreach (Preset item in _userPresets)
+            foreach (Preset item in UserPresets)
             {
                 if (item.Name != name)
                 {
                     newUserPresets.Add(item);
                 }
             }
-            _userPresets = newUserPresets;
+            UserPresets = newUserPresets;
 
-            // Rebuild the _userPresets.xml file
+            // Rebuild the UserPresets.xml file
             UpdatePresetFiles();
             UpdatePresetFiles();
         }
 
         /// <summary>
-        /// Remove all built in _presets;
+        /// Remove all built in Presets;
         /// </summary>
         public void RemoveBuiltInPresets()
         {
-            _presets.Clear();
+            Presets.Clear();
             UpdatePresetFiles();
         }
 
@@ -92,7 +92,7 @@ namespace Handbrake.Presets
         public void Update(string presetName, string query, Boolean pictureSettings)
         {
             // User Presets
-            foreach (Preset item in _userPresets)
+            foreach (Preset item in UserPresets)
             {
                 if (item.Name == presetName)
                 {
@@ -112,14 +112,14 @@ namespace Handbrake.Presets
         public Preset GetPreset(string name)
         {
             // Built In Presets
-            foreach (Preset item in _presets)
+            foreach (Preset item in Presets)
             {
                 if (item.Name == name)
                     return item;
             }
 
             // User Presets
-            foreach (Preset item in _userPresets)
+            foreach (Preset item in UserPresets)
             {
                 if (item.Name == name)
                     return item;
@@ -133,7 +133,7 @@ namespace Handbrake.Presets
         /// </summary>
         public void UpdateBuiltInPresets()
         {
-            // Create a new tempory file and execute the CLI to get the built in _presets.
+            // Create a new tempory file and execute the CLI to get the built in Presets.
             string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
             string presetsPath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
             string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
@@ -147,8 +147,8 @@ namespace Handbrake.Presets
                 hbproc.Close();
             }
 
-            // Clear the current built in _presets and now parse the tempory _presets file.
-            _presets.Clear();
+            // Clear the current built in Presets and now parse the tempory Presets file.
+            Presets.Clear();
 
             if (File.Exists(presetsPath))
             {
@@ -179,33 +179,33 @@ namespace Handbrake.Presets
                                                    Version = Properties.Settings.Default.hb_version,
                                                    PictureSettings = pic
                                                };
-                        _presets.Add(newPreset);
+                        Presets.Add(newPreset);
                     }
                 }
                 presetInput.Close();
                 presetInput.Dispose();
             }
 
-            // Finally, Create a new or update the current _presets.xml file
+            // Finally, Create a new or update the current Presets.xml file
             UpdatePresetFiles();
         }
 
         /// <summary>
-        /// Load in the preset data from _presets.xml and _userPresets.xml
-        /// Load it into the 2 arraylist's _presets and _userPresets
+        /// Load in the preset data from Presets.xml and UserPresets.xml
+        /// Load it into the 2 arraylist's Presets and UserPresets
         /// </summary>
         private void LoadPresetData()
         {
-            // First clear the _presets arraylists
-            _presets.Clear();
-            _userPresets.Clear();
+            // First clear the Presets arraylists
+            Presets.Clear();
+            UserPresets.Clear();
 
             try
             {
-                // Load in the users _presets from _userPresets.xml
-                if (File.Exists(_hbPresetFile))
+                // Load in the users Presets from UserPresets.xml
+                if (File.Exists(HbPresetFile))
                 {
-                    using (FileStream strm = new FileStream(_hbPresetFile, FileMode.Open, FileAccess.Read))
+                    using (FileStream strm = new FileStream(HbPresetFile, FileMode.Open, FileAccess.Read))
                     {
                         if (strm.Length != 0)
                         {
@@ -213,7 +213,7 @@ namespace Handbrake.Presets
 
                             if (list != null)
                                 foreach (Preset preset in list)
-                                    _presets.Add(preset);
+                                    Presets.Add(preset);
                         }
                     }
                 }
@@ -222,16 +222,16 @@ namespace Handbrake.Presets
             {
                 MessageBox.Show(
                     "HandBrakes preset file appears to have been corrupted. This file will now be re-generated!\n" +
-                    "If the problem presists, please delete the file: \n\n" + _hbPresetFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "If the problem presists, please delete the file: \n\n" + HbPresetFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 UpdateBuiltInPresets();
             }
 
             try
             {
-                // Load in the users _presets from _userPresets.xml
-                if (File.Exists(_userPresetFile))
+                // Load in the users Presets from UserPresets.xml
+                if (File.Exists(UserPresetFile))
                 {
-                    using (FileStream strm = new FileStream(_userPresetFile, FileMode.Open, FileAccess.Read))
+                    using (FileStream strm = new FileStream(UserPresetFile, FileMode.Open, FileAccess.Read))
                     {
                         if (strm.Length != 0)
                         {
@@ -239,7 +239,7 @@ namespace Handbrake.Presets
 
                             if (list != null)
                                 foreach (Preset preset in list)
-                                    _userPresets.Add(preset);
+                                    UserPresets.Add(preset);
                         }
                     }
                 }
@@ -250,16 +250,16 @@ namespace Handbrake.Presets
                     "Your User presets file appears to have been corrupted.\n" +
                     "Your presets will not be loaded. You may need to re-create your presets.\n\n" +
                     "Your user presets file has been renamed to 'user_presets.xml.old' and is located in:\n " +
-                    Path.GetDirectoryName(_userPresetFile) + "\n" +
+                    Path.GetDirectoryName(UserPresetFile) + "\n" +
                     "You may be able to recover some presets if you know the XML language.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 // Recover from Error.
-                if (File.Exists(_userPresetFile))
+                if (File.Exists(UserPresetFile))
                 {
-                    string disabledFile = _userPresetFile + ".old";
+                    string disabledFile = UserPresetFile + ".old";
                     if (File.Exists(disabledFile))
                         File.Delete(disabledFile);
-                    File.Move(_userPresetFile, disabledFile);
+                    File.Move(UserPresetFile, disabledFile);
                 }
 
             }
@@ -276,10 +276,10 @@ namespace Handbrake.Presets
             string category = string.Empty;
             TreeNode rootNode = null;
 
-            if (_presets.Count != 0) // Built In Presets
+            if (Presets.Count != 0) // Built In Presets
             {
 
-                foreach (Preset preset in _presets)
+                foreach (Preset preset in Presets)
                 {
                     if (preset.Category != category)
                     {
@@ -294,7 +294,7 @@ namespace Handbrake.Presets
             }
 
             rootNode = null; category = null;
-            foreach (Preset preset in _userPresets) // User Presets
+            foreach (Preset preset in UserPresets) // User Presets
             {
                 if (preset.Category != category && preset.Category != null)
                 {
@@ -317,16 +317,16 @@ namespace Handbrake.Presets
         {
             try
             {
-                using (FileStream strm = new FileStream(_hbPresetFile, FileMode.Create, FileAccess.Write))
+                using (FileStream strm = new FileStream(HbPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Ser.Serialize(strm, _presets);
+                    Ser.Serialize(strm, Presets);
                     strm.Close();
                     strm.Dispose();
                 }
 
-                using (FileStream strm = new FileStream(_userPresetFile, FileMode.Create, FileAccess.Write))
+                using (FileStream strm = new FileStream(UserPresetFile, FileMode.Create, FileAccess.Write))
                 {
-                    Ser.Serialize(strm, _userPresets);
+                    Ser.Serialize(strm, UserPresets);
                     strm.Close();
                     strm.Dispose();
                 }
@@ -338,7 +338,7 @@ namespace Handbrake.Presets
         }
 
         /// <summary>
-        /// Check if the preset "name" exists in either _presets or _userPresets lists.
+        /// Check if the preset "name" exists in either Presets or UserPresets lists.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -348,14 +348,14 @@ namespace Handbrake.Presets
                 return true;
 
             // Built In Presets
-            foreach (Preset item in _presets)
+            foreach (Preset item in Presets)
             {
                 if (item.Name == name)
                     return true;
             }
 
             // User Presets
-            foreach (Preset item in _userPresets)
+            foreach (Preset item in UserPresets)
             {
                 if (item.Name == name)
                     return true;
@@ -365,7 +365,7 @@ namespace Handbrake.Presets
         }
 
         /// <summary>
-        /// Check if the user preset "name" exists in _userPresets list.
+        /// Check if the user preset "name" exists in UserPresets list.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -375,7 +375,7 @@ namespace Handbrake.Presets
                 return false;
 
             // User Presets
-            foreach (Preset item in _userPresets)
+            foreach (Preset item in UserPresets)
             {
                 if (item.Name == name)
                     return true;
@@ -385,16 +385,16 @@ namespace Handbrake.Presets
         }
 
         /// <summary>
-        /// Check if the built in _presets stored are not out of date.
+        /// Check if the built in Presets stored are not out of date.
         /// Update them if they are.
         /// </summary>
         /// <returns></returns>
         public Boolean CheckIfPresetsAreOutOfDate()
         {
             LoadPresetData();
-            // Update built-in _presets if the built-in _presets belong to an older version.
-            if (_presets.Count != 0)
-                if (_presets[0].Version != Properties.Settings.Default.hb_version)
+            // Update built-in Presets if the built-in Presets belong to an older version.
+            if (Presets.Count != 0)
+                if (Presets[0].Version != Properties.Settings.Default.hb_version)
                 {
                     UpdateBuiltInPresets();
                     return true;

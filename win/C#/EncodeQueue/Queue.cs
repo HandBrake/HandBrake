@@ -21,27 +21,15 @@ namespace Handbrake.EncodeQueue
         private readonly List<Job> queue = new List<Job>();
         private int NextJobId;
 
-        #region Event Handlers
-        /// <summary>
-        /// Fires when an encode job has been started.
-        /// </summary>
-        public event EventHandler NewJobStarted;
-
         /// <summary>
         /// Fires when a pause to the encode queue has been requested.
         /// </summary>
         public event EventHandler QueuePauseRequested;
 
         /// <summary>
-        /// Fires when an encode job has been completed.
-        /// </summary>
-        public event EventHandler CurrentJobCompleted;
-
-        /// <summary>
         /// Fires when the entire encode queue has completed.
         /// </summary>
         public event EventHandler QueueCompleted;
-        #endregion
 
         #region Queue
         /// <summary>
@@ -329,9 +317,6 @@ namespace Handbrake.EncodeQueue
 
                 Run(query);
 
-                if (NewJobStarted != null)
-                    NewJobStarted(this, new EventArgs());
-
                 HbProcess.WaitForExit();
 
                 AddCLIQueryToLog(encJob);
@@ -345,9 +330,6 @@ namespace Handbrake.EncodeQueue
                 //Growl
                 if (Properties.Settings.Default.growlEncode)
                     GrowlCommunicator.Notify("Encode Completed", "Put down that cocktail...\nyour Handbrake encode is done.");
-
-                if (CurrentJobCompleted != null)
-                    CurrentJobCompleted(this, new EventArgs());
 
                 while (PauseRequested) // Need to find a better way of doing this.
                 {

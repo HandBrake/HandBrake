@@ -9,10 +9,11 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Collections;
+using Handbrake.Model;
 
 namespace Handbrake.Functions
 {
-    internal class QueryParser
+    public class QueryParser
     {
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
@@ -365,7 +366,7 @@ namespace Handbrake.Functions
                     trackDRCvalues = drcValues.ToString().Replace("-D ", "").Split(',');
 
                 // Create new Audio Track Classes and store them in the ArrayList
-                ArrayList AllAudioTrackInfo = new ArrayList();
+                ArrayList allAudioTrackInfo = new ArrayList();
                 for (int x = 0; x < encoderCount; x++)
                 {
                     AudioTrack track = new AudioTrack();
@@ -393,9 +394,9 @@ namespace Handbrake.Functions
                         if (trackDRCvalues.Length >= (x + 1))                   // Audio DRC Values
                             track.DRC = trackDRCvalues[x].Trim();
 
-                    AllAudioTrackInfo.Add(track);
+                    allAudioTrackInfo.Add(track);
                 }
-                thisQuery.AudioInformation = AllAudioTrackInfo;
+                thisQuery.AudioInformation = allAudioTrackInfo;
 
                 // Subtitle Stuff
                 if (subtitles.Success)
@@ -431,6 +432,12 @@ namespace Handbrake.Functions
 
             return thisQuery;
         }
+
+        /// <summary>
+        /// Get the GUI equiv to a CLI mixdown
+        /// </summary>
+        /// <param name="mixdown"></param>
+        /// <returns></returns>
         private static string GetMixDown(string mixdown)
         {
             switch (mixdown.Trim())
@@ -449,6 +456,12 @@ namespace Handbrake.Functions
                     return "Automatic";
             }
         }
+
+        /// <summary>
+        /// Get the GUI equiv to a CLI audio encoder
+        /// </summary>
+        /// <param name="audioEnc"></param>
+        /// <returns></returns>
         private static string GetAudioEncoder(string audioEnc)
         {
             switch (audioEnc)
@@ -467,24 +480,5 @@ namespace Handbrake.Functions
                     return "AAC (faac)";
             }
         }
-    }
-
-    public class AudioTrack
-    {
-        public AudioTrack()
-        {
-            // Default Values
-            Track = "Automatic";
-            MixDown = "Automatic";
-            SampleRate = "Auto";
-            Bitrate = "Auto";
-            DRC = "1";
-        }
-        public string Track { get; set; }
-        public string MixDown { get; set; }
-        public string Encoder { get; set; }
-        public string Bitrate { get; set; }
-        public string SampleRate { get; set; }
-        public string DRC { get; set; }
     }
 }

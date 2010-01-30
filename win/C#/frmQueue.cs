@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Handbrake.EncodeQueue;
 using System.Collections.ObjectModel;
+using Handbrake.Model;
 
 namespace Handbrake
 {
@@ -26,7 +27,7 @@ namespace Handbrake
             this.mainWindow = mw;
 
             this.queue = q;
-            queue.NewJobStarted += new EventHandler(QueueOnEncodeStart);
+            queue.EncodeStarted += new EventHandler(QueueOnEncodeStart);
             queue.QueueCompleted += new EventHandler(QueueOnQueueFinished);
             queue.QueuePauseRequested += new EventHandler(QueueOnPaused);
         }
@@ -176,7 +177,7 @@ namespace Handbrake
 
                 // Display The Audio Track Information
                 string audio = string.Empty;
-                foreach (Functions.AudioTrack track in parsed.AudioInformation)
+                foreach (AudioTrack track in parsed.AudioInformation)
                 {
                     if (audio != "")
                         audio += ", " + track.Encoder;
@@ -229,7 +230,7 @@ namespace Handbrake
 
                 // Display The Audio Track Information
                 string audio = string.Empty;
-                foreach (Functions.AudioTrack track in parsed.AudioInformation)
+                foreach (AudioTrack track in parsed.AudioInformation)
                 {
                     if (audio != "")
                         audio += ", " + track.Encoder;

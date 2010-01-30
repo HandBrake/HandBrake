@@ -15,40 +15,79 @@ namespace Handbrake.Functions
 {
     public class Scan
     {
-        private DVD _thisDvd;
-        private Parser _readData;
-        private Process _hbProc;
-        private string _scanProgress;
+        private DVD ThisDvd;
+        private Parser ReadData;
+        private Process HbProc;
+        private string ScanProgress;
+
+        /// <summary>
+        /// Scan has Started
+        /// </summary>
         public event EventHandler ScanStared;
+
+        /// <summary>
+        /// Scan has completed
+        /// </summary>
         public event EventHandler ScanCompleted;
+
+        /// <summary>
+        /// Scan process has changed to a new title
+        /// </summary>
         public event EventHandler ScanStatusChanged;
 
+        /// <summary>
+        /// Scan a Source Path.
+        /// Title 0: scan all
+        /// </summary>
+        /// <param name="sourcePath">Path to the file to scan</param>
+        /// <param name="title">int title number. 0 for scan all</param>
         public void ScanSource(string sourcePath, int title)
         {
             Thread t = new Thread(unused => RunScan(sourcePath, title));
             t.Start();
         }
 
+        /// <summary>
+        /// Object containing the information parsed in the scan.
+        /// </summary>
+        /// <returns></returns>
         public DVD SouceData()
         {
-            return _thisDvd;
+            return ThisDvd;
         }
 
+        /// <summary>
+        /// Raw log output from HandBrake CLI
+        /// </summary>
+        /// <returns></returns>
         public String LogData()
         {
-            return _readData.Buffer;
+            return ReadData.Buffer;
         }
 
+        /// <summary>
+        /// Progress of the scan.
+        /// </summary>
+        /// <returns></returns>
         public String ScanStatus()
         {
-            return _scanProgress;
+            return ScanProgress;
         }
 
+        /// <summary>
+        /// The Scan Process
+        /// </summary>
+        /// <returns></returns>
         public Process ScanProcess()
         {
-            return _hbProc;
+            return HbProc;
         }
 
+        /// <summary>
+        /// Start a scan for a given source path and title
+        /// </summary>
+        /// <param name="sourcePath"></param>
+        /// <param name="title"></param>
         private void RunScan(object sourcePath, int title)
         {
             try
@@ -68,7 +107,7 @@ namespace Handbrake.Functions
                 if (Properties.Settings.Default.noDvdNav)
                     dvdnav = " --no-dvdnav";
 
-                _hbProc = new Process
+                HbProc = new Process
                 {
                     StartInfo =
                     {
@@ -80,15 +119,15 @@ namespace Handbrake.Functions
                         CreateNoWindow = true
                     }
                 };
-                _hbProc.Start();
+                HbProc.Start();
 
-                _readData = new Parser(_hbProc.StandardError.BaseStream);
-                _readData.OnScanProgress += new ScanProgressEventHandler(OnScanProgress);
-                _thisDvd = DVD.Parse(_readData);
+                ReadData = new Parser(HbProc.StandardError.BaseStream);
+                ReadData.OnScanProgress += new ScanProgressEventHandler(OnScanProgress);
+                ThisDvd = DVD.Parse(ReadData);
 
                 // Write the Buffer out to file.
                 StreamWriter scanLog = new StreamWriter(dvdInfoPath);
-                scanLog.Write(_readData.Buffer);
+                scanLog.Write(ReadData.Buffer);
                 scanLog.Flush();
                 scanLog.Close();
 
@@ -101,9 +140,15 @@ namespace Handbrake.Functions
             }
         }
 
+        /// <summary>
+        /// Fire an event when the scan process progresses
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="currentTitle"></param>
+        /// <param name="titleCount"></param>
         private void OnScanProgress(object sender, int currentTitle, int titleCount)
         {
-            _scanProgress = string.Format("Processing Title: {0} of {1}", currentTitle, titleCount);
+            ScanProgress = string.Format("Processing Title: {0} of {1}", currentTitle, titleCount);
             if (ScanStatusChanged != null)
                 ScanStatusChanged(this, new EventArgs());
         }
