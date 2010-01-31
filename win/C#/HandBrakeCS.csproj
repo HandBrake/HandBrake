@@ -223,9 +223,9 @@
       <DependentUpon>frmActivityWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\AudioTrack.cs" />
-    <Compile Include="Presets\Export.cs" />
+    <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Presets\PlistPresetHandler.cs" />
-    <Compile Include="Presets\preset.cs" />
+    <Compile Include="Presets\Preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
     <Compile Include="EncodeQueue\Queue.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
@@ -327,7 +327,6 @@
     <Compile Include="EncodeQueue\Job.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Changelog.html" />
     <Content Include="handbrakepineapple.ico" />
     <None Include="Resources\logo64.png" />
     <None Include="Resources\logo128.png" />

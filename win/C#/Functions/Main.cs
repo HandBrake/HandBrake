@@ -14,6 +14,7 @@ using System.Xml.Serialization;
 using System.Threading;
 using Handbrake.EncodeQueue;
 using System.Net;
+using Handbrake.Model;
 
 namespace Handbrake.Functions
 {
@@ -632,6 +633,28 @@ namespace Handbrake.Functions
                                                               {"Zulu", "zul"}
                                                           };
             return languageMap;
+        }
+
+        /// <summary>
+        /// Get a list of available DVD drives which are ready and contain DVD content.
+        /// </summary>
+        /// <returns></returns>
+        public static List<DriveInformation> GetDrives()
+        {
+            List<DriveInformation> drives = new List<DriveInformation>();
+            DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
+            foreach (DriveInfo curDrive in theCollectionOfDrives)
+            {
+                if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady && File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
+                {
+                    drives.Add(new DriveInformation
+                                             {
+                                                 VolumeLabel = curDrive.VolumeLabel,
+                                                 RootDirectory = curDrive.RootDirectory + "VIDEO_TS"
+                                             });
+                }
+            }
+            return drives;
         }
     }
 }

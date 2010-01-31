@@ -213,22 +213,7 @@ namespace Handbrake.Functions
             #endregion
 
             #region Audio
-            // Clear the audio listing
-            mainWindow.AudioSettings.ClearAudioList();
-
-            if (presetQuery.AudioInformation != null)
-                foreach (AudioTrack track in presetQuery.AudioInformation)
-                {
-                    ListViewItem newTrack = new ListViewItem(mainWindow.AudioSettings.GetNewID().ToString());
-
-                    newTrack.SubItems.Add("Automatic");
-                    newTrack.SubItems.Add(track.Encoder);
-                    newTrack.SubItems.Add(track.MixDown);
-                    newTrack.SubItems.Add(track.SampleRate);
-                    newTrack.SubItems.Add(track.Encoder.Contains("AC3") ? "Auto" : track.Bitrate);
-                    newTrack.SubItems.Add(track.DRC);
-                    mainWindow.AudioSettings.AddTrackForPreset(newTrack);
-                }
+            mainWindow.AudioSettings.LoadTracks(presetQuery.AudioInformation);
             #endregion
 
             #region Other

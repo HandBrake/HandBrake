@@ -5,20 +5,111 @@
  	   It may be used under the terms of the GNU General Public License. */
 
 using System;
+using System.Collections;
 using System.Linq;
 using System.Windows.Forms;
+using Handbrake.Model;
 
 namespace Handbrake.Controls
 {
     public partial class AudioPanel : UserControl
     {
+        /// <summary>
+        /// The audio list has changed
+        /// </summary>
         public event EventHandler AudioListChanged;
 
+        /// <summary>
+        /// Create a new instance of the Audio Panel
+        /// </summary>
         public AudioPanel()
         {
             InitializeComponent();
             drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             drp_audioSample.SelectedIndex = 1;
+        }
+
+        /// <summary>
+        /// Get the audio panel
+        /// </summary>
+        /// <returns>A listview containing the audio tracks</returns>
+        public ListView GetAudioPanel()
+        {
+            return lv_audioList;
+        }
+
+        /// <summary>
+        /// Set the File Container. This funciton is used to limit the available options for each file container.
+        /// </summary>
+        /// <param name="path"></param>
+        public void SetContainer(String path)
+        {
+            string oldval = drp_audioEncoder.Text;
+            if ((path.Contains("MP4")) || (path.Contains("M4V")))
+            {
+                drp_audioEncoder.Items.Clear();
+                drp_audioEncoder.Items.Add("AAC (faac)");
+                drp_audioEncoder.Items.Add("AC3 Passthru");
+                if ((oldval != "AAC (faac)") && (oldval != "AC3 Passthru"))
+                    drp_audioEncoder.SelectedIndex = 0;
+                else
+                    drp_audioEncoder.SelectedItem = oldval;
+
+            }
+            else if (path.Contains("MKV"))
+            {
+                drp_audioEncoder.Items.Clear();
+                drp_audioEncoder.Items.Add("AAC (faac)");
+                drp_audioEncoder.Items.Add("MP3 (lame)");
+                drp_audioEncoder.Items.Add("AC3 Passthru");
+                drp_audioEncoder.Items.Add("DTS Passthru");
+                drp_audioEncoder.Items.Add("Vorbis (vorbis)");
+                drp_audioEncoder.SelectedItem = oldval;
+
+                if (drp_audioEncoder.Text == string.Empty)
+                    drp_audioEncoder.SelectedIndex = 0;
+            }
+
+            // Make sure the table is updated with new audio codecs
+            foreach (ListViewItem row in lv_audioList.Items)
+            {
+                if (!drp_audioEncoder.Items.Contains(row.SubItems[2].Text))
+                    row.SubItems[2].Text = drp_audioEncoder.Items[0].ToString();
+            }
+        }
+
+        /// <summary>
+        /// Checks if the settings used required the .m4v (rather than .mp4) extension
+        /// </summary>
+        /// <returns></returns>
+        public Boolean RequiresM4V()
+        {
+            return lv_audioList.Items.Cast<ListViewItem>().Any(item => item.SubItems[2].Text.Contains("AC3"));
+        }
+
+        /// <summary>
+        /// Load an arraylist of AudioTrack items into the list.
+        /// </summary>
+        /// <param name="audioTracks"></param>
+        public void LoadTracks(ArrayList audioTracks)
+        {
+            ClearAudioList();
+
+            if (audioTracks == null)
+                return;
+
+            foreach (AudioTrack track in audioTracks)
+            {
+                ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
+
+                newTrack.SubItems.Add("Automatic");
+                newTrack.SubItems.Add(track.Encoder);
+                newTrack.SubItems.Add(track.MixDown);
+                newTrack.SubItems.Add(track.SampleRate);
+                newTrack.SubItems.Add(track.Encoder.Contains("AC3") ? "Auto" : track.Bitrate);
+                newTrack.SubItems.Add(track.DRC);
+                AddTrackForPreset(newTrack);
+            }
         }
 
         // Control and ListView
@@ -197,67 +288,22 @@ namespace Handbrake.Controls
             }
             drp_audioMix.SelectedIndex = 0;
         }
-        public ListView GetAudioPanel()
-        {
-            return lv_audioList;
-        }
-        public void SetContainer(String path)
-        {
-            string oldval = drp_audioEncoder.Text;
-            if ((path.Contains("MP4")) || (path.Contains("M4V")))
-            {
-                drp_audioEncoder.Items.Clear();
-                drp_audioEncoder.Items.Add("AAC (faac)");
-                drp_audioEncoder.Items.Add("AC3 Passthru");
-                if ((oldval != "AAC (faac)") && (oldval != "AC3 Passthru"))
-                    drp_audioEncoder.SelectedIndex = 0;
-                else
-                    drp_audioEncoder.SelectedItem = oldval;
-
-            }
-            else if (path.Contains("MKV"))
-            {
-                drp_audioEncoder.Items.Clear();
-                drp_audioEncoder.Items.Add("AAC (faac)");
-                drp_audioEncoder.Items.Add("MP3 (lame)");
-                drp_audioEncoder.Items.Add("AC3 Passthru");
-                drp_audioEncoder.Items.Add("DTS Passthru");
-                drp_audioEncoder.Items.Add("Vorbis (vorbis)");
-                drp_audioEncoder.SelectedItem = oldval;
-
-                if (drp_audioEncoder.Text == string.Empty)
-                    drp_audioEncoder.SelectedIndex = 0;
-            }
-
-            // Make sure the table is updated with new audio codecs
-            foreach (ListViewItem row in lv_audioList.Items)
-            {
-                if (!drp_audioEncoder.Items.Contains(row.SubItems[2].Text))
-                    row.SubItems[2].Text = drp_audioEncoder.Items[0].ToString();
-            }
-        }
-        public void AddTrackForPreset(ListViewItem item)
+        private void AddTrackForPreset(ListViewItem item)
         {
             lv_audioList.Items.Add(item);
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
         }
-        public void ClearAudioList()
+        private void ClearAudioList()
         {
             lv_audioList.Items.Clear();
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
         }
-        public int GetNewID()
+        private int GetNewID()
         {
             return lv_audioList.Items.Count + 1;
         }
-        public Boolean RequiresM4V()
-        {
-            return lv_audioList.Items.Cast<ListViewItem>().Any(item => item.SubItems[2].Text.Contains("AC3"));
-        }
-
-        // Helper Functions 
         private void RemoveTrack()
         {
             // Remove the Item and reselect the control if the following conditions are met.
@@ -303,7 +349,6 @@ namespace Handbrake.Controls
                 lv_audioList.Focus();
             }
         }
-
         private void ReGenerateListIDs()
         {
             int i = 1;

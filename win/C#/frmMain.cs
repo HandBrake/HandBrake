@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Threading;
 using Handbrake.EncodeQueue;
 using Handbrake.Functions;
+using Handbrake.Model;
 using Handbrake.Presets;
 using Handbrake.Parsing;
 
@@ -92,7 +93,7 @@ namespace Handbrake
             // Setup the GUI components
             lblStatus.Text = "Setting up the GUI ...";
             Application.DoEvents();
-            loadPresetPanel();                       // Load the Preset Panel
+            LoadPresetPanel();                       // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = "";
             drop_mode.SelectedIndex = 0;
@@ -221,7 +222,7 @@ namespace Handbrake
                 this.Resize += new EventHandler(frmMain_Resize);
 
             // Handle Encode Start / Finish / Pause
-            
+
             encodeQueue.QueuePauseRequested += new EventHandler(encodePaused);
             encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
             encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
@@ -320,22 +321,22 @@ namespace Handbrake
         private void encodeStarted(object sender, EventArgs e)
         {
             lastAction = "encode";
-            setEncodeStarted();
+            SetEncodeStarted();
 
             // Experimental HBProc Process Monitoring.
             if (Properties.Settings.Default.enocdeStatusInGui)
             {
-                Thread encodeMon = new Thread(encodeMonitorThread);
+                Thread encodeMon = new Thread(EncodeMonitorThread);
                 encodeMon.Start();
             }
         }
         private void encodeEnded(object sender, EventArgs e)
         {
-            setEncodeFinished();
+            SetEncodeFinished();
         }
         private void encodePaused(object sender, EventArgs e)
         {
-            setEncodeFinished();
+            SetEncodeFinished();
         }
         #endregion
 
@@ -373,7 +374,7 @@ namespace Handbrake
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
             presetHandler.UpdateBuiltInPresets();
-            loadPresetPanel();
+            LoadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show("Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
@@ -384,7 +385,7 @@ namespace Handbrake
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
             presetHandler.RemoveBuiltInPresets();
-            loadPresetPanel(); // Reload the preset panel
+            LoadPresetPanel(); // Reload the preset panel
         }
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
@@ -567,7 +568,7 @@ namespace Handbrake
                         nodeStatus.Add(node.IsExpanded);
 
                     // Now reload the preset panel
-                    loadPresetPanel();
+                    LoadPresetPanel();
 
                     // And finally, re-expand any of the nodes if required
                     int i = 0;
@@ -661,7 +662,7 @@ namespace Handbrake
         private void btn_source_Click(object sender, EventArgs e)
         {
             mnu_dvd_drive.Visible = true;
-            Thread driveInfoThread = new Thread(getDriveInfoThread);
+            Thread driveInfoThread = new Thread(SetDriveSelectionMenuItem);
             driveInfoThread.Start();
         }
         private void btn_start_Click(object sender, EventArgs e)
@@ -698,7 +699,7 @@ namespace Handbrake
                     }
 
                     // Update the GUI
-                    setEncodeFinished();
+                    SetEncodeFinished();
                 }
             }
             else
@@ -756,7 +757,7 @@ namespace Handbrake
                         if (encodeQueue.Count > 1)
                             queueWindow.Show(false);
 
-                        setEncodeStarted(); // Encode is running, so setup the GUI appropriately
+                        SetEncodeStarted(); // Encode is running, so setup the GUI appropriately
                         encodeQueue.Start(); // Start The Queue Encoding Process
                         lastAction = "encode";   // Set the last action to encode - Used for activity window.
                     }
@@ -1698,17 +1699,17 @@ namespace Handbrake
         }
         #endregion
 
-        #region GUI
+        #region GUI Functions and Actions
         /// <summary>
         /// Set the GUI to it's finished encoding state.
         /// </summary>
-        private void setEncodeFinished()
+        private void SetEncodeFinished()
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new UpdateWindowHandler(setEncodeFinished));
+                    BeginInvoke(new UpdateWindowHandler(SetEncodeFinished));
                     return;
                 }
 
@@ -1734,13 +1735,13 @@ namespace Handbrake
         /// <summary>
         /// Set the GUI to it's started encoding state.
         /// </summary>
-        private void setEncodeStarted()
+        private void SetEncodeStarted()
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new UpdateWindowHandler(setEncodeStarted));
+                    BeginInvoke(new UpdateWindowHandler(SetEncodeStarted));
                     return;
                 }
 
@@ -1755,51 +1756,42 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString());
             }
         }
-        #endregion
 
-        #region DVD Drive Detection
-        private void getDriveInfoThread()
+        /// <summary>
+        /// Set the DVD Drive selection in the "Source" Menu
+        /// </summary>
+        private void SetDriveSelectionMenuItem()
         {
             try
             {
                 if (InvokeRequired)
                 {
-                    BeginInvoke(new UpdateWindowHandler(getDriveInfoThread));
+                    BeginInvoke(new UpdateWindowHandler(SetDriveSelectionMenuItem));
                     return;
                 }
 
-                Boolean foundDrive = false;
-                DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
-                foreach (DriveInfo curDrive in theCollectionOfDrives)
+                List<DriveInformation> drives = Main.GetDrives();
+
+                if (drives.Count == 0)
                 {
-                    if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady)
-                    {
-                        if (File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
-                        {
-                            this.dvdDrivePath = curDrive.RootDirectory + "VIDEO_TS";
-                            this.dvdDriveLabel = curDrive.VolumeLabel;
-                            mnu_dvd_drive.Text = this.dvdDrivePath + " (" + this.dvdDriveLabel + ")";
-                            foundDrive = true;
-                            break;
-                        }
-                    }
+                    mnu_dvd_drive.Text = "[No DVD Drive Ready]";
+                    return;
                 }
 
-                if (foundDrive == false)
-                    mnu_dvd_drive.Text = "[No DVD Drive Ready]";
+                this.dvdDrivePath = drives[0].RootDirectory + "VIDEO_TS";
+                this.dvdDriveLabel = drives[0].VolumeLabel;
+                mnu_dvd_drive.Text = this.dvdDrivePath + " (" + this.dvdDriveLabel + ")";
             }
             catch (Exception)
             {
                 mnu_dvd_drive.Text = "[No DVD Drive Ready / Found]";
             }
         }
-        #endregion
 
-        #region Public Methods
         /// <summary>
         /// Access the preset Handler and setup the preset panel.
         /// </summary>
-        public void loadPresetPanel()
+        private void LoadPresetPanel()
         {
             if (presetHandler.CheckIfPresetsAreOutOfDate())
                 if (!Properties.Settings.Default.presetNotification)
@@ -1855,12 +1847,15 @@ namespace Handbrake
         #endregion
 
         #region In-GUI Encode Status (Experimental)
-        private void encodeMonitorThread()
+        /// <summary>
+        /// Starts a new thread to monitor and process the CLI encode status
+        /// </summary>
+        private void EncodeMonitorThread()
         {
             try
             {
                 Parser encode = new Parser(encodeQueue.HbProcess.StandardOutput.BaseStream);
-                encode.OnEncodeProgress += encodeOnEncodeProgress;
+                encode.OnEncodeProgress += EncodeOnEncodeProgress;
                 while (!encode.EndOfStream)
                     encode.readEncodeStatus();
             }
@@ -1869,25 +1864,26 @@ namespace Handbrake
                 MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void encodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        
+        /// <summary>
+        /// Displays the Encode status in the GUI
+        /// </summary>
+        /// <param name="Sender"></param>
+        /// <param name="CurrentTask"></param>
+        /// <param name="TaskCount"></param>
+        /// <param name="PercentComplete"></param>
+        /// <param name="CurrentFps"></param>
+        /// <param name="AverageFps"></param>
+        /// <param name="TimeRemaining"></param>
+        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new EncodeProgressEventHandler(encodeOnEncodeProgress),
+                this.BeginInvoke(new EncodeProgressEventHandler(EncodeOnEncodeProgress),
                     new object[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
                 return;
             }
             lbl_encode.Text = string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
-        }
-        #endregion
-
-        #region enum
-        private enum SourceType
-        {
-            None = 0,
-            Folder,
-            DvdDrive,
-            VideoFile
         }
         #endregion
 
