@@ -1220,7 +1220,7 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
                 }
                 *cp++ = len >> 8;
                 *cp++ = len & 0xff;
-                fread_unlocked( cp, 1, len, src_stream->file_handle );
+                fread( cp, 1, len, src_stream->file_handle );
                 cp += len;
             }
         }
