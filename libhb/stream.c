@@ -1192,6 +1192,37 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
                 ep = b->data + b->alloc;
             }
             *cp++ = c;
+            // Non-video streams can emulate start codes, so we need
+            // to inspect PES packets and skip over their data
+            // sections to avoid mis-detection of the next pack header.
+            if ( ( strt_code >> 8 ) == 0x000001 &&
+                 ( strt_code & 0xff ) >= 0xbb )
+            {
+                int len = 0;
+                c = getc_unlocked( src_stream->file_handle );
+                if ( c == EOF )
+                    break;
+                len = c << 8;
+                c = getc_unlocked( src_stream->file_handle );
+                if ( c == EOF )
+                    break;
+                len |= c;
+                if ( cp+len+2 > ep )
+                {
+                    // need to expand the buffer
+                    int curSize = cp - b->data;
+                    if ( curSize * 2 > curSize+len+2 )
+                        hb_buffer_realloc( b, curSize * 2 );
+                    else
+                        hb_buffer_realloc( b, curSize + len + 2 );
+                    cp = b->data + curSize;
+                    ep = b->data + b->alloc;
+                }
+                *cp++ = len >> 8;
+                *cp++ = len & 0xff;
+                fread_unlocked( cp, 1, len, src_stream->file_handle );
+                cp += len;
+            }
         }
         funlockfile( src_stream->file_handle );
 
@@ -1201,7 +1232,8 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
         if ( c != EOF )
         {
             fseeko( src_stream->file_handle, -4, SEEK_CUR );
-            b->size -= 4;
+            // Only 3 of the 4 bytes read were added to the buffer.
+            b->size -= 3;
         }
         return 1;
     }
