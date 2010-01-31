@@ -74,6 +74,9 @@ namespace Handbrake.Parsing
             get { return m_titleNumber; }
         }
 
+        /// <summary>
+        /// Source Name
+        /// </summary>
         public string SourceName
         {
             get { return source;  }
@@ -150,6 +153,11 @@ namespace Handbrake.Parsing
                                  m_duration.Minutes, m_duration.Seconds);
         }
 
+        /// <summary>
+        /// Parse the Title Information
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns></returns>
         public static Title Parse(StringReader output)
         {
             var thisTitle = new Title();
@@ -216,6 +224,11 @@ namespace Handbrake.Parsing
             return thisTitle;
         }
 
+        /// <summary>
+        /// Return a list of parsed titles
+        /// </summary>
+        /// <param name="output"></param>
+        /// <returns></returns>
         public static Title[] ParseList(string output)
         {
             var titles = new List<Title>();

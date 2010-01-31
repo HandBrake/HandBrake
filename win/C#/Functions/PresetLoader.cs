@@ -132,12 +132,12 @@ namespace Handbrake.Functions
             #endregion
 
             #region Filters
-            mainWindow.Filters.setDecomb(presetQuery.Decomb);
-            mainWindow.Filters.setDeInterlace(presetQuery.DeInterlace);
-            mainWindow.Filters.setDeNoise(presetQuery.DeNoise);
-            mainWindow.Filters.setDeTelecine(presetQuery.DeTelecine);
-            mainWindow.Filters.setDeBlock(presetQuery.DeBlock);
-            mainWindow.Filters.setGrayScale(presetQuery.Grayscale);
+            mainWindow.Filters.SetDecomb(presetQuery.Decomb);
+            mainWindow.Filters.SetDeInterlace(presetQuery.DeInterlace);
+            mainWindow.Filters.SetDeNoise(presetQuery.DeNoise);
+            mainWindow.Filters.SetDeTelecine(presetQuery.DeTelecine);
+            mainWindow.Filters.SetDeBlock(presetQuery.DeBlock);
+            mainWindow.Filters.SetGrayScale(presetQuery.Grayscale);
             #endregion
 
             #region Video

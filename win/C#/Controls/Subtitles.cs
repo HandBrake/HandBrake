@@ -1,8 +1,15 @@
-﻿using System;
+﻿/*  Subtitles.cs $
+ 	
+ 	   This file is part of the HandBrake source code.
+ 	   Homepage: <http://handbrake.fr>.
+ 	   It may be used under the terms of the GNU General Public License. */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using Handbrake.Functions;
+using Handbrake.Model;
 
 namespace Handbrake.Controls
 {
@@ -10,7 +17,7 @@ namespace Handbrake.Controls
     {
         readonly IDictionary<string, string> LangMap = new Dictionary<string, string>();
         List<SubtitleInfo> SubList = new List<SubtitleInfo>();
-        private int _fileContainer;
+        private int FileContainer;
 
         public Subtitles()
         {
@@ -43,17 +50,17 @@ namespace Handbrake.Controls
                 srtLangVal = srt_lang.SelectedItem.ToString();
                 srtCode = srt_charcode.SelectedItem.ToString();
                 srtOffsetMs = (int)srt_offset.Value;
-                if (defaultSub == "Yes") setNoSrtDefault();
+                if (defaultSub == "Yes") SetNoSrtDefault();
             } else
             {
                 if (defaultSub == "Yes") SetNoDefault();
                 if (burnedVal == "Yes") SetNoBurned();
 
-                if (_fileContainer == 0)
+                if (FileContainer == 0)
                     burnedVal = "Yes";  // MP4 must have bitmap subs burned in.
             }
 
-            if (_fileContainer == 0) // MP4 and M4V file extension
+            if (FileContainer == 0) // MP4 and M4V file extension
             {
                 // Make sure we only have 1 bitmap track.
                 if (drp_subtitleTracks.SelectedItem != null && drp_subtitleTracks.SelectedItem.ToString().Contains("Bitmap"))
@@ -208,7 +215,7 @@ namespace Handbrake.Controls
 
             if (check_default.Checked) // Make sure we only have 1 default track
                 if (lv_subList.Items[lv_subList.SelectedIndices[0]].SubItems[0].Text.Contains(".srt"))
-                    setNoSrtDefault();
+                    SetNoSrtDefault();
                 else
                     SetNoDefault();
 
@@ -305,7 +312,7 @@ namespace Handbrake.Controls
             }
         }
 
-        private void setNoSrtDefault()
+        private void SetNoSrtDefault()
         {
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
@@ -411,9 +418,9 @@ namespace Handbrake.Controls
         }
         public void SetContainer(int value)
         {
-            _fileContainer = value;
+            FileContainer = value;
             Boolean trigger = false;
-            if (_fileContainer != 1)
+            if (FileContainer != 1)
                 foreach (ListViewItem item in lv_subList.Items)
                 {
                     if (item.SubItems[1].Text.Contains("Bitmap"))
@@ -427,34 +434,6 @@ namespace Handbrake.Controls
         public List<SubtitleInfo> GetSubtitleInfoList()
         {
             return SubList;
-        }
-    }
-
-    public class SubtitleInfo
-    {
-        public string Track { get; set; }
-        public string Forced { get; set; }
-        public string Burned { get; set; }
-        public string Default { get; set; }
-        public string SrtLang { get; set; }
-        public string SrtCharCode { get; set; }
-        public int SrtOffset { get; set; }
-        public string SrtPath { get; set; }
-        public string SrtFileName { get; set; }
-
-        public ListViewItem ListView
-        {
-            get
-            {
-                ListViewItem listTrack = new ListViewItem(Track);
-                listTrack.SubItems.Add(Forced);
-                listTrack.SubItems.Add(Burned);
-                listTrack.SubItems.Add(Default);
-                listTrack.SubItems.Add(SrtLang);
-                listTrack.SubItems.Add(SrtCharCode);
-                listTrack.SubItems.Add(SrtOffset.ToString());
-                return listTrack;
-            }
         }
     }
 }

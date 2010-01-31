@@ -224,6 +224,7 @@
     </Compile>
     <Compile Include="Model\AudioTrack.cs" />
     <Compile Include="Model\DriveInformation.cs" />
+    <Compile Include="Model\SourceType.cs" />
     <Compile Include="Presets\PlistPresetHandler.cs" />
     <Compile Include="Presets\Preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />

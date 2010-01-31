@@ -182,7 +182,7 @@ namespace Handbrake.Functions
             #endregion
 
             #region Filters
-            query += mainWindow.Filters.getCLIQuery;
+            query += mainWindow.Filters.GetCLIQuery;
             #endregion
 
             #region Video Settings Tab
