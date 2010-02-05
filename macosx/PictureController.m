@@ -581,7 +581,7 @@
     titleParWidth = job->anamorphic.par_width;
     titleParHeight = job->anamorphic.par_height;
     
-    [self SettingsChanged: nil];
+    [self SettingsChanged:nil];
 }
 
 - (IBAction) storageLinkChanged: (id) sender
@@ -973,15 +973,14 @@
         
 	}
 	
-    //job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
-    
     if ([fAnamorphicPopUp indexOfSelectedItem] != 3)
     {
-    job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
-            if( job->keep_ratio )
+        job->keep_ratio  = ( [fRatioCheck state] == NSOnState );
+        if( job->keep_ratio )
         {
             if( sender == fWidthStepper || sender == fRatioCheck ||
-               sender == fCropTopStepper || sender == fCropBottomStepper )
+               sender == fCropTopStepper || sender == fCropBottomStepper|| 
+               sender == fCropMatrix || sender == nil  )
             {
                 hb_fix_aspect( job, HB_KEEP_WIDTH );
                 if( job->height > fTitle->height )
