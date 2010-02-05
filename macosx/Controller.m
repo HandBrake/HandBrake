@@ -6837,17 +6837,25 @@ return YES;
                 
                 [self audioTrackPopUpChanged: audiocodecPopUp];
                 [mixdownPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioMixdown"]];
-                /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
+                [self audioTrackMixdownChanged: mixdownPopUp];
+                /* check to see if the selection was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
                  * mixdown*/
                 if  ([mixdownPopUp selectedItem] == nil)
                 {
                     [self audioTrackPopUpChanged: audiocodecPopUp];
+                    [self writeToActivityLog: "presetSelected mixdown not selected, rerun audioTrackPopUpChanged"];
                 }
                 [sampleratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioSamplerate"]];
                 /* We set the presets bitrate if it is *not* an AC3 track since that uses the input bitrate */
                 if (![[tempObject objectForKey:@"AudioEncoder"] isEqualToString:@"AC3 Passthru"])
                 {
                     [bitratePopUp selectItemWithTitle:[tempObject objectForKey:@"AudioBitrate"]];
+                    /* check to see if the bitrate selection was available, if not, rerun audioTrackMixdownChanged using the mixdown to just set the
+                     *default mixdown bitrate*/
+                    if ([bitratePopUp selectedItem] == nil)
+                    {
+                        [self audioTrackMixdownChanged: mixdownPopUp];
+                    }
                 }
                 [drcSlider setFloatValue:[[tempObject objectForKey:@"AudioTrackDRCSlider"] floatValue]];
                 [self audioDRCSliderChanged: drcSlider];
