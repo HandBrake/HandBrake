@@ -4656,35 +4656,29 @@ format_drc_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 G_MODULE_EXPORT gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
-	gdouble percent;
-
 	gint vcodec = ghb_settings_combo_int(ud->settings, "VideoEncoder");
 	switch (vcodec)
 	{
 		case HB_VCODEC_X264:
 		{
-			percent = 100. * (51 - val) / 51.;
-			return g_strdup_printf("RF: %.4g (%.0f%%)", val, percent);
+			return g_strdup_printf("RF: %.4g", val);
 		} break;
 
 		case HB_VCODEC_FFMPEG:
 		{
-			percent = 100. * (30 - (val - 1)) / 30.;
-			return g_strdup_printf("QP: %d (%.0f%%)", (int)val, percent);
+			return g_strdup_printf("QP: %d", (int)val);
 		} break;
 
 		case HB_VCODEC_THEORA:
 		{
-			percent = 100. * val / 63.;
-			return g_strdup_printf("QP: %d (%.0f%%)", (int)val, percent);
+			return g_strdup_printf("QP: %d", (int)val);
 		} break;
 
 		default:
 		{
-			percent = 0;
 		} break;
 	}
-	return g_strdup_printf("QP: %.1f / %.1f%%", val, percent);
+	return g_strdup_printf("QP: %.4g", val);
 }
 
 static void
