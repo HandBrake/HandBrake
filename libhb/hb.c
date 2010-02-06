@@ -49,8 +49,15 @@ struct hb_handle_s
 
 hb_lock_t *hb_avcodec_lock;
 hb_work_object_t * hb_objects = NULL;
+hb_process_initialized = 0;
 
 static void thread_func( void * );
+
+
+int hello_world(){
+	return 55555;
+}
+
 
 void hb_avcodec_init()
 {
@@ -94,6 +101,16 @@ void hb_register( hb_work_object_t * w )
  */
 hb_handle_t * hb_init( int verbose, int update_check )
 {
+	if (!hb_process_initialized)
+	{
+#ifdef USE_PTHREAD
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+		pthread_win32_process_attach_np();
+#endif
+#endif
+		hb_process_initialized =1;
+	}
+	
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
     uint64_t      date;
 

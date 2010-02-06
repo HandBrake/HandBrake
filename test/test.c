@@ -187,11 +187,6 @@ int main( int argc, char ** argv )
         return 1;
     }
 
-#if defined( PTW32_STATIC_LIB )
-    pthread_win32_process_attach_np();
-    pthread_win32_thread_attach_np();
-#endif
-
     /* Register our error handler */
     hb_register_error_handler(&hb_cli_error_handler);
 

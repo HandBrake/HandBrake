@@ -26,6 +26,8 @@ int           hb_get_build( hb_handle_t * );
    number and points 'version' to a version description. Returns a
    negative value otherwise. */
 int           hb_check_update( hb_handle_t * h, char ** version );
+	
+	int hello_world();
 
 /* hb_set_cpu_count()
    Force libhb to act as if you had X CPU(s).
