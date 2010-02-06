@@ -53,12 +53,6 @@ hb_process_initialized = 0;
 
 static void thread_func( void * );
 
-
-int hello_world(){
-	return 55555;
-}
-
-
 void hb_avcodec_init()
 {
     hb_avcodec_lock  = hb_lock_init();
