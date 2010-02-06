@@ -20,8 +20,7 @@ struct hb_mux_object_s
 
     int64_t sum_dur;    // sum of video frame durations so far
 
-    // bias to keep render offsets in ctts atom positive (set up by encx264)
-    int64_t init_delay;
+    hb_buffer_t *delay_buf;
 
     /* Chapter state information for muxing */
     MP4TrackId chapter_track;
@@ -146,8 +145,6 @@ static int MP4Init( hb_mux_object_t * m )
 			hb_deep_log( 2, "muxmp4: adding iPod atom");
 			MP4AddIPodUUID(m->file, mux_data->track);
 		}
-
-        m->init_delay = job->config.h264.init_delay;
     }
     else /* FFmpeg or XviD */
     {
@@ -774,23 +771,35 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
     hb_job_t * job = m->job;
     int64_t duration;
     int64_t offset = 0;
+    hb_buffer_t *tmp;
 
     if( mux_data == job->mux_data )
     {
         /* Video */
 
-        // if there are b-frames compute the render offset
-        // (we'll need it for both the video frame & the chapter track)
-        if ( m->init_delay )
+        if( job->vcodec == HB_VCODEC_X264 )
         {
-            offset = buf->start + m->init_delay - m->sum_dur;
-            if ( offset < 0 )
+            if ( buf && buf->start < buf->renderOffset )
             {
-                hb_log("MP4Mux: illegal render offset %"PRId64", start %"PRId64","
-                       "stop %"PRId64", sum_dur %"PRId64,
-                       offset, buf->start, buf->stop, m->sum_dur );
-                offset = 0;
+                hb_log("MP4Mux: PTS %"PRId64" < DTS %"PRId64,
+                       buf->start, buf->renderOffset );
+                buf->renderOffset = buf->start;
             }
+        }
+
+        // We delay muxing video by one frame so that we can calculate
+        // the dts to dts duration of the frames.
+        tmp = buf;
+        buf = m->delay_buf;
+        m->delay_buf = tmp;
+
+        if ( !buf )
+            return 0;
+
+        if( job->vcodec == HB_VCODEC_X264 )
+        {
+            // x264 supplies us with DTS, so offset is PTS - DTS
+            offset = buf->start - buf->renderOffset;
         }
 
         /* Add the sample before the new frame.
@@ -824,10 +833,54 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
         }
 
-        // We're getting the frames in decode order but the timestamps are
-        // for presentation so we have to use durations and effectively
-        // compute a DTS.
-        duration = buf->stop - buf->start;
+        if( job->vcodec == HB_VCODEC_X264 )
+        {
+            // x264 supplies us with DTS
+            if ( m->delay_buf )
+            {
+                duration = m->delay_buf->renderOffset - buf->renderOffset;
+            }
+            else
+            {
+                duration = buf->stop - m->sum_dur;
+                // Due to how libx264 generates DTS, it's possible for the
+                // above calculation to be negative. 
+                //
+                // x264 generates DTS by rearranging PTS in this sequence:
+                // pts0 - delay, pts1 - delay, pts2 - delay, pts1, pts2, pts3...
+                //
+                // where delay == pts2.  This guarantees that DTS <= PTS for
+                // any frame, but also generates this sequence of durations:
+                // d0 + d1 + d0 + d1 + d2 + d3 ... + d(N-2)
+                // 
+                // so the sum up to the last frame is:
+                // sum_dur = d0 + d1 + d0 + d1 + d2 + d3 ... + d(N-3)
+                //
+                // while the original total duration of the video was:
+                // duration = d0 + d1 + d2 + d3 ... + d(N)
+                //
+                // Note that if d0 + d1 != d(N-1) + d(N), the total
+                // length of the video changes since d(N-1) and d(N) are
+                // replaced by d0 and d1 in the final duration sum.
+                //
+                // To keep the total length of the video the same as the source
+                // we try to make 
+                // d(N-2) = duration - sum_dur
+                //
+                // But if d0 + d1 >= d(N-1) + d(N), the above calculation
+                // results in a nagative value and we need to fix it.
+                if ( duration <= 0 )
+                    duration = 90000. / ((double)job->vrate / (double)job->vrate_base);
+            }
+        }
+        else
+        {
+            // We're getting the frames in decode order but the timestamps are
+            // for presentation so we have to use durations and effectively
+            // compute a DTS.
+            duration = buf->stop - buf->start;
+        }
+
         if ( duration <= 0 )
         {
             /* We got an illegal mp4/h264 duration. This shouldn't
@@ -986,7 +1039,7 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             *job->die = 1;
         }
     }
-
+    hb_buffer_close( &buf );
 
     return 0;
 }
@@ -995,6 +1048,10 @@ static int MP4End( hb_mux_object_t * m )
 {
     hb_job_t   * job   = m->job;
     hb_title_t * title = job->title;
+
+    // Flush the delayed frame
+    if ( m->delay_buf )
+        MP4Mux( m, job->mux_data, NULL );
 
     /* Write our final chapter marker */
     if( m->job->chapter_markers )
@@ -1016,11 +1073,11 @@ static int MP4End( hb_mux_object_t * m )
         }
     }
 
-    if (job->areBframes)
+    if ( job->config.h264.init_delay )
     {
            // Insert track edit to get A/V back in sync.  The edit amount is
            // the init_delay.
-           int64_t edit_amt = m->init_delay;
+           int64_t edit_amt = job->config.h264.init_delay;
            MP4AddTrackEdit(m->file, 1, MP4_INVALID_EDIT_ID, edit_amt,
                            MP4GetTrackDuration(m->file, 1), 0);
             if ( m->job->chapter_markers )

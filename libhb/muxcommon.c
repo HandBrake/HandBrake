@@ -181,7 +181,6 @@ static void OutputTrackChunk( hb_mux_t *mux, hb_track_t *track, hb_mux_object_t 
         m->mux( m, track->mux_data, mf_pull( track ) );
         track->frames += 1;
         track->bytes  += buf->size;
-        hb_buffer_close( &buf );
     }
 }
 

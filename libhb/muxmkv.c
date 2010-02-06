@@ -399,6 +399,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
             mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
+            hb_buffer_close( &buf );
             return 0;
         }
     }
@@ -424,6 +425,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             mk_setFrameFlags(m->file, mux_data->track, timecode, 1, duration);
         }
         mk_flushFrame(m->file, mux_data->track);
+        hb_buffer_close( &buf );
         return 0;
     }
     else
@@ -442,6 +444,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
             }
             mk_addFrameData(m->file, mux_data->track, op->packet, op->bytes);
             mk_setFrameFlags(m->file, mux_data->track, timecode, 1, 0);
+            hb_buffer_close( &buf );
             return 0;
         }
     }
@@ -457,6 +460,7 @@ static int MKVMux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                        mux_data == job->mux_data) ? 
                             (buf->frametype == HB_FRAME_IDR) : 
                             ((buf->frametype & HB_FRAME_KEY) != 0)), 0 );
+    hb_buffer_close( &buf );
     return 0;
 }
 

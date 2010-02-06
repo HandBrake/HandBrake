@@ -55,7 +55,6 @@ struct hb_work_private_s
     uint32_t       frames_split; // number of frames we had to split
     int            chap_mark;   // saved chap mark when we're propagating it
     int64_t        last_stop;   // Debugging - stop time of previous input frame
-    int64_t        init_delay;
     int64_t        next_chap;
 
     struct {
@@ -133,6 +132,8 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_height     = job->height;
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
+    param.i_timebase_num   = 1;
+    param.i_timebase_den   = 90000;
 
     /* Disable annexb. Inserts size into nal header instead of start code */
     param.b_annexb     = 0;
@@ -356,44 +357,6 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     pv->pic_in.img.i_stride[2] = pv->pic_in.img.i_stride[1] = ( ( job->width + 1 ) >> 1 );
     pv->x264_allocated_pic = pv->pic_in.img.plane[0];
 
-    if (job->areBframes)
-    {
-        /* Basic initDelay value is the clockrate divided by the FPS
-           -- the length of one frame in clockticks.                  */
-        pv->init_delay = 90000. / ((double)job->vrate / (double)job->vrate_base);
-
-        /* 23.976-length frames are 3753.75 ticks long on average but the DVD
-           creates that average rate by repeating 59.95 fields so the max
-           frame size is actually 4504.5 (3 field times). The field durations
-           are computed based on quantized times (see below) so we need an extra
-           two ticks to account for the rounding. */
-        if (pv->init_delay == 3753)
-            pv->init_delay = 4507;
-
-        /* frame rates are not exact in the DVD 90KHz PTS clock (they are
-           exact in the DVD 27MHz system clock but we never see that) so the
-           rates computed above are all +-1 due to quantization. Worst case
-           is when a clock-rounded-down frame is adjacent to a rounded-up frame
-           which makes one of the frames 2 ticks longer than the nominal
-           frame time. */
-        pv->init_delay += 2;
-
-        /* For VFR, libhb sees the FPS as 29.97, but the longest frames
-           will use the duration of frames running at 23.976fps instead.
-           Since detelecine occasionally makes mistakes and since we have
-           to deal with some really horrible timing jitter from mkvs and
-           mp4s encoded with low resolution clocks, make the delay very
-           conservative if we're not doing CFR. */
-        if ( job->cfr != 1 )
-        {
-            pv->init_delay *= 2;
-        }
-
-        /* The delay is 1 frames for regular b-frames, 2 for b-pyramid. */
-        pv->init_delay *= job->areBframes;
-    }
-    w->config->h264.init_delay = pv->init_delay;
-
     return 0;
 }
 
@@ -451,6 +414,11 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     int64_t duration  = get_frame_duration( pv, pic_out->i_pts );
     buf->start = pic_out->i_pts;
     buf->stop  = pic_out->i_pts + duration;
+    buf->renderOffset = pic_out->i_dts;
+    if ( !w->config->h264.init_delay && pic_out->i_dts < 0 )
+    {
+        w->config->h264.init_delay = -pic_out->i_dts;
+    }
 
     /* Encode all the NALs we were given into buf.
        NOTE: This code assumes one video frame per NAL (but there can
@@ -677,62 +645,7 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     // Not EOF - encode the packet & wrap it in a NAL
     ++pv->frames_in;
-
-    // if we're re-ordering frames, check if this frame is too large to reorder
-    if ( pv->init_delay && in->stop - in->start > pv->init_delay )
-    {
-        // This frame's duration is larger than the time allotted for b-frame
-        // reordering. That means that if it's used as a reference the decoder
-        // won't be able to move it early enough to render it in correct
-        // sequence & the playback will have odd jumps & twitches. To make
-        // sure this doesn't happen we pretend this frame is multiple
-        // frames, each with duration <= init_delay. Since each of these
-        // new frames contains the same image the visual effect is identical
-        // to the original but the resulting stream can now be coded without
-        // error. We take advantage of the fact that x264 buffers frame
-        // data internally to feed the same image into the encoder multiple
-        // times, just changing its start & stop times each time.
-        ++pv->frames_split;
-        int64_t orig_stop = in->stop;
-        int64_t new_stop = in->start;
-        hb_buffer_t *last_buf = NULL;
-
-        // We want to spread the new frames uniformly over the total time
-        // so that we don't end up with a very short frame at the end.
-        // In the number of pieces calculation we add in init_delay-1 to
-        // round up but not add an extra piece if the frame duration is
-        // a multiple of init_delay. The final increment of frame_dur is
-        // to restore the bits that got truncated by the divide on the
-        // previous line. If we don't do this we end up with an extra tiny
-        // frame at the end whose duration is npieces-1.
-        int64_t frame_dur = orig_stop - new_stop;
-        int64_t npieces = ( frame_dur + pv->init_delay - 1 ) / pv->init_delay;
-        frame_dur /= npieces;
-        ++frame_dur;
-
-        while ( in->start < orig_stop )
-        {
-            new_stop += frame_dur;
-            if ( new_stop > orig_stop )
-                new_stop = orig_stop;
-            in->stop = new_stop;
-            hb_buffer_t *buf = x264_encode( w, in );
-            if ( buf )
-            {
-                ++pv->frames_out;
-                if ( last_buf == NULL )
-                    *buf_out = buf;
-                else
-                    last_buf->next = buf;
-                last_buf = buf;
-            }
-            in->start = new_stop;
-        }
-    }
-    else
-    {
-        ++pv->frames_out;
-        *buf_out = x264_encode( w, in );
-    }
+    ++pv->frames_out;
+    *buf_out = x264_encode( w, in );
     return HB_WORK_OK;
 }

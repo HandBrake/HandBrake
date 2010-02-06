@@ -1274,6 +1274,17 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     {
         av_seek_frame( stream->ffmpeg_ic, -1, pos, 0);
     }
+    else
+    {
+        // ffmpeg has a bug that causes the first PTS after
+        // av_find_stream_info() is called to be incorrect.
+        // av_find_stream_info is called whenever opening a file
+        // with ffmpeg.  av_seek_frame clears the condition
+        // that causes the problem. since hb_stream_seek_chapter
+        // is called before we start reading, make sure
+        // we do a seek here.
+        av_seek_frame( stream->ffmpeg_ic, -1, 0LL, AVSEEK_FLAG_BACKWARD );
+    }
     return 1;
 }
 
