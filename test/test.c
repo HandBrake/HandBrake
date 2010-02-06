@@ -356,11 +356,6 @@ int main( int argc, char ** argv )
 
     fprintf( stderr, "HandBrake has exited.\n" );
 
-#if defined( PTW32_STATIC_LIB )
-    pthread_win32_thread_detach_np();
-    pthread_win32_process_detach_np();
-#endif
-
     return 0;
 }
 
