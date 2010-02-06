@@ -883,18 +883,22 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
     // XXX the current version of libdvdnav can't seek outside the current
     // PGC. Check if the place we're seeking to is in a different
     // PGC. Position there & adjust the offset if so.
+    uint64_t pgc_offset = 0;
+    uint64_t chap_offset = 0;
     hb_chapter_t *pgc_change = hb_list_item(d->list_chapter, 0 );
     for ( ii = 0; ii < hb_list_count( d->list_chapter ); ++ii )
     {
         hb_chapter_t *chapter = hb_list_item( d->list_chapter, ii );
+        uint64_t chap_len = chapter->block_end - chapter->block_start + 1;
 
         if ( chapter->pgcn != pgc_change->pgcn )
         {
             // this chapter's in a different pgc from the previous - note the
             // change so we can make sector offset's be pgc relative.
+            pgc_offset = chap_offset;
             pgc_change = chapter;
         }
-        if ( chapter->block_start <= sector && sector <= chapter->block_end )
+        if ( chap_offset <= sector && sector < chap_offset + chap_len )
         {
             // this chapter contains the sector we want - see if it's in a
             // different pgc than the one we're currently in.
@@ -908,9 +912,10 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
                     hb_log("dvdnav prog play err: %s", dvdnav_err_to_string(d->dvdnav));
             }
             // seek sectors are pgc-relative so remove the pgc start sector.
-            sector -= pgc_change->block_start;
+            sector -= pgc_offset;
             break;
         }
+        chap_offset += chap_len;
     }
 
     // dvdnav will not let you seek or poll current position
