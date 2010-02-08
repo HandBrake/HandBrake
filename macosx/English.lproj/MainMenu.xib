@@ -3,16 +3,16 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10C540</string>
-		<string key="IBDocument.InterfaceBuilderVersion">732</string>
+		<string key="IBDocument.InterfaceBuilderVersion">740</string>
 		<string key="IBDocument.AppKitVersion">1038.25</string>
 		<string key="IBDocument.HIToolboxVersion">458.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">732</string>
+			<string key="NS.object.0">740</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2"/>
+			<integer value="1478"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -308,7 +308,7 @@
 											<object class="NSTextField" id="690304958">
 												<reference key="NSNextResponder" ref="1053078401"/>
 												<int key="NSvFlags">256</int>
-												<string key="NSFrame">{{538, 211}, {56, 14}}</string>
+												<string key="NSFrame">{{531, 211}, {56, 14}}</string>
 												<reference key="NSSuperview" ref="1053078401"/>
 												<bool key="NSEnabled">YES</bool>
 												<object class="NSTextFieldCell" key="NSCell" id="923732752">
@@ -396,7 +396,7 @@
 												<bool key="NSEnabled">YES</bool>
 												<object class="NSTextFieldCell" key="NSCell" id="936221726">
 													<int key="NSCellFlags">67239424</int>
-													<int key="NSCellFlags2">71434240</int>
+													<int key="NSCellFlags2">4325376</int>
 													<string key="NSContents">RF:</string>
 													<reference key="NSSupport" ref="26"/>
 													<reference key="NSControlView" ref="323705695"/>
@@ -11286,10 +11286,10 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{228, 306}, {760, 550}}</string>
+					<string>{{20, 306}, {760, 550}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="NO"/>
-					<string>{{228, 306}, {760, 550}}</string>
+					<string>{{20, 306}, {760, 550}}</string>
 					<integer value="1"/>
 					<string>{{65, 541}, {760, 550}}</string>
 					<boolean value="NO"/>
@@ -11813,7 +11813,7 @@
 							<string>addFactoryPresets:</string>
 							<string>addToQueue:</string>
 							<string>addUserPreset:</string>
-							<string>applyQueueSettings:</string>
+							<string>applyQueueSettingsToMainWindow:</string>
 							<string>audioAddAudioTrackCodecs:</string>
 							<string>audioCodecsPopUpChanged:</string>
 							<string>audioDRCSliderChanged:</string>

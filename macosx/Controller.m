@@ -5040,20 +5040,15 @@ the user is using "Custom" settings by determining the sender*/
     
     float sliderRfInverse = ([fVidQualitySlider maxValue] - [fVidQualitySlider floatValue]) + [fVidQualitySlider minValue];
     /* If the encoder is theora, use the float, otherwise use the inverse float*/
-    float sliderRfToPercent;
+    //float sliderRfToPercent;
     if ([[fVidEncoderPopUp selectedItem] tag] == HB_VCODEC_THEORA)
     {
-        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", [fVidQualitySlider floatValue]]];
-        sliderRfToPercent = [fVidQualityRFField floatValue] / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]);   
+        [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", [fVidQualitySlider floatValue]]];   
     }
     else
     {
         [fVidQualityRFField setStringValue: [NSString stringWithFormat: @"%.2f", sliderRfInverse]];
-        sliderRfToPercent = ( ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue])  - ([fVidQualityRFField floatValue] - [fVidQualitySlider minValue])) / ([fVidQualitySlider maxValue] - [fVidQualitySlider minValue]);
     }
-    [fVidConstantCell setTitle: [NSString stringWithFormat:
-                                 NSLocalizedString( @"Constant quality: %.2f %%", @"" ), 100 * sliderRfToPercent]];
-    
     [self customSettingUsed: sender];
 }
 
