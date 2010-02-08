@@ -11,6 +11,14 @@ namespace Handbrake.Controls
 {
     public partial class x264Panel : UserControl
     {
+        /* 
+         * TODO This code was ported from the obj-c MacGUI code. It's really messy and could really do with being cleaned up
+         * at some point.
+         */
+
+        /// <summary>
+        /// Initializes a new instance of the x264 panel user control
+        /// </summary>
         public x264Panel()
         {
             InitializeComponent();
@@ -18,109 +26,22 @@ namespace Handbrake.Controls
             if (Properties.Settings.Default.tooltipEnable)
                 ToolTip.Active = true;
 
-            reset2Defaults();
+            Reset2Defaults();
         }
 
-        public string x264Query
+        /// <summary>
+        /// Gets or sets the X264 query string
+        /// </summary>
+        public string X264Query
         {
             get { return rtf_x264Query.Text; }
             set { rtf_x264Query.Text = value; }
-        }
-
-        private void widgetControlChanged(object sender, EventArgs e)
-        {
-            Control changedControlName = (Control) sender;
-            string controlName = "";
-
-            switch (changedControlName.Name.Trim())
-            {
-                case "drop_refFrames":
-                    controlName = "ref";
-                    break;
-                case "check_mixedReferences":
-                    controlName = "mixed-refs";
-                    break;
-                case "drop_bFrames":
-                    controlName = "bframes";
-                    break;
-                case "drop_directPrediction":
-                    controlName = "direct";
-                    break;
-                case "check_weightedBFrames":
-                    controlName = "weightb";
-                    break;
-                case "check_pyrmidalBFrames":
-                    controlName = "b-pyramid";
-                    break;
-                case "drop_MotionEstimationMethod":
-                    controlName = "me";
-                    break;
-                case "drop_MotionEstimationRange":
-                    controlName = "merange";
-                    break;
-                case "drop_subpixelMotionEstimation":
-                    controlName = "subq";
-                    break;
-                case "drop_analysis":
-                    controlName = "analyse";
-                    break;
-                case "check_8x8DCT":
-                    controlName = "8x8dct";
-                    break;
-                case "drop_deblockAlpha":
-                    controlName = "deblock";
-                    break;
-                case "drop_deblockBeta":
-                    controlName = "deblock";
-                    break;
-                case "drop_trellis":
-                    controlName = "trellis";
-                    break;
-                case "check_noFastPSkip":
-                    controlName = "no-fast-pskip";
-                    break;
-                case "check_noDCTDecimate":
-                    controlName = "no-dct-decimate";
-                    break;
-                case "check_Cabac":
-                    controlName = "cabac";
-                    break;
-                case "slider_psyrd":
-                    controlName = "psy-rd";
-                    break;
-                case "slider_psytrellis":
-                    controlName = "psy-rd";
-                    break;
-                case "drop_adaptBFrames":
-                    controlName = "b-adapt";
-                    break;
-            }
-            on_x264_WidgetChange(controlName);
-        }
-        private void rtf_x264Query_TextChanged(object sender, EventArgs e)
-        {
-            if (rtf_x264Query.Text.EndsWith("\n"))
-            {
-                string query = rtf_x264Query.Text.Replace("\n", "");
-                reset2Defaults();
-                rtf_x264Query.Text = query;
-                X264_StandardizeOptString();
-                X264_SetCurrentSettingsInPanel();
-
-                if (rtf_x264Query.Text == string.Empty)
-                    reset2Defaults();
-            }
-        }
-        private void btn_reset_Click(object sender, EventArgs e)
-        {
-            rtf_x264Query.Text = "";
-            reset2Defaults();
         }
         
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
         /// </summary>
-        public void reset2Defaults()
+        public void Reset2Defaults()
         {
             check_8x8DCT.CheckState = CheckState.Checked;
             check_Cabac.CheckState = CheckState.Checked;
@@ -427,9 +348,9 @@ namespace Handbrake.Controls
         /// <summary>
         /// This function will update the X264 Query when one of the GUI widgets changes.
         /// </summary>
-        private void on_x264_WidgetChange(string sender)
+        private void OnX264WidgetChange(string sender)
         {
-            animate(sender);
+            Animate(sender);
             String optNameToChange = sender;
             String currentOptString = rtf_x264Query.Text;
 
@@ -440,9 +361,9 @@ namespace Handbrake.Controls
 
             // IF the current H264 Option String Contains Multiple Items or Just 1 Item
             if ((currentOptString.Contains(checkOptNameToChange)) || (currentOptString.StartsWith(checkOptNameToChangeBegin)))
-                hasOptions(currentOptString, optNameToChange);
+                HasOptions(currentOptString, optNameToChange);
             else // IF there is no options in the rich text box!
-                hasNoOptions(optNameToChange);
+                HasNoOptions(optNameToChange);
         }
 
         /// <summary>
@@ -451,7 +372,7 @@ namespace Handbrake.Controls
         /// </summary>
         /// <param name="currentOptString"></param>
         /// <param name="optNameToChange"></param>
-        private void hasOptions(string currentOptString, string optNameToChange)
+        private void HasOptions(string currentOptString, string optNameToChange)
         {
             String thisOpt;             // The separated option such as "bframes=3"
             String optName;        // The option name such as "bframes"
@@ -663,7 +584,7 @@ namespace Handbrake.Controls
         /// e.g no-fast-pskip
         /// </summary>
         /// <param name="optNameToChange"></param>
-        private void hasNoOptions(string optNameToChange)
+        private void HasNoOptions(IEquatable<string> optNameToChange)
         {
             string colon = "";
             if (rtf_x264Query.Text != "")
@@ -852,7 +773,7 @@ namespace Handbrake.Controls
         /// Shows and hides controls based on the values of other controls.
         /// </summary>
         /// <param name="sender"></param>
-        private void animate(string sender)
+        private void Animate(string sender)
         {
             /* Lots of situations to cover.
  	           - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
@@ -997,6 +918,97 @@ namespace Handbrake.Controls
                     }
                 break;
             }
+        }
+
+
+        private void widgetControlChanged(object sender, EventArgs e)
+        {
+            Control changedControlName = (Control)sender;
+            string controlName = "";
+
+            switch (changedControlName.Name.Trim())
+            {
+                case "drop_refFrames":
+                    controlName = "ref";
+                    break;
+                case "check_mixedReferences":
+                    controlName = "mixed-refs";
+                    break;
+                case "drop_bFrames":
+                    controlName = "bframes";
+                    break;
+                case "drop_directPrediction":
+                    controlName = "direct";
+                    break;
+                case "check_weightedBFrames":
+                    controlName = "weightb";
+                    break;
+                case "check_pyrmidalBFrames":
+                    controlName = "b-pyramid";
+                    break;
+                case "drop_MotionEstimationMethod":
+                    controlName = "me";
+                    break;
+                case "drop_MotionEstimationRange":
+                    controlName = "merange";
+                    break;
+                case "drop_subpixelMotionEstimation":
+                    controlName = "subq";
+                    break;
+                case "drop_analysis":
+                    controlName = "analyse";
+                    break;
+                case "check_8x8DCT":
+                    controlName = "8x8dct";
+                    break;
+                case "drop_deblockAlpha":
+                    controlName = "deblock";
+                    break;
+                case "drop_deblockBeta":
+                    controlName = "deblock";
+                    break;
+                case "drop_trellis":
+                    controlName = "trellis";
+                    break;
+                case "check_noFastPSkip":
+                    controlName = "no-fast-pskip";
+                    break;
+                case "check_noDCTDecimate":
+                    controlName = "no-dct-decimate";
+                    break;
+                case "check_Cabac":
+                    controlName = "cabac";
+                    break;
+                case "slider_psyrd":
+                    controlName = "psy-rd";
+                    break;
+                case "slider_psytrellis":
+                    controlName = "psy-rd";
+                    break;
+                case "drop_adaptBFrames":
+                    controlName = "b-adapt";
+                    break;
+            }
+            OnX264WidgetChange(controlName);
+        }
+        private void rtf_x264Query_TextChanged(object sender, EventArgs e)
+        {
+            if (rtf_x264Query.Text.EndsWith("\n"))
+            {
+                string query = rtf_x264Query.Text.Replace("\n", "");
+                Reset2Defaults();
+                rtf_x264Query.Text = query;
+                X264_StandardizeOptString();
+                X264_SetCurrentSettingsInPanel();
+
+                if (rtf_x264Query.Text == string.Empty)
+                    Reset2Defaults();
+            }
+        }
+        private void btn_reset_Click(object sender, EventArgs e)
+        {
+            rtf_x264Query.Text = "";
+            Reset2Defaults();
         }
     }
 }

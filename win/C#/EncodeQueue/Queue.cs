@@ -158,8 +158,7 @@ namespace Handbrake.EncodeQueue
             }
             catch (Exception)
             {
-                // Any Errors will be out of diskspace/permissions problems. 
-                // Don't report them as they'll annoy the user.
+                return;
             }
         }
 

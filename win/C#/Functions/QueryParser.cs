@@ -424,7 +424,7 @@ namespace Handbrake.Functions
             catch (Exception exc)
             {
                 MessageBox.Show(
-                    "An error has occured in the Query Parser. Please report this error on the forum in the 'Windows' support section. \n\n" +
+                    "An error has occured in the Query Parser.\n\n" +
                     exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 

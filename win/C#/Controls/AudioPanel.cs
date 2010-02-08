@@ -112,6 +112,53 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Set the Track list dropdown from the parsed title captured during the scan
+        /// </summary>
+        /// <param name="selectedTitle"></param>
+        public void SetTrackList(Parsing.Title selectedTitle)
+        {
+            drp_audioTrack.Items.Clear();
+            drp_audioTrack.Items.Add("Automatic");
+            drp_audioTrack.Items.Add("None");
+            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+
+            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
+            if (Properties.Settings.Default.NativeLanguage == "Any")
+                drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
+            else
+            {
+                if (Properties.Settings.Default.DubAudio) // "Dub Foreign language audio" 
+                {
+                    int i = 0;
+                    foreach (object item in drp_audioTrack.Items)
+                    {
+                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
+                        {
+                            drp_audioTrack.SelectedIndex = i;
+                            break;
+                        }
+
+                        i++;
+                    }
+
+                    if (drp_audioTrack.SelectedItem != null)
+                        foreach (ListViewItem item in lv_audioList.Items)
+                            item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
+                    else
+                    {
+                        drp_audioTrack.SelectedIndex = 0;
+                        if (drp_audioTrack.SelectedItem != null)
+                            foreach (ListViewItem item in lv_audioList.Items)
+                                item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
+                    }
+                }
+                else
+                    drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0; // "Use Foreign language audio and Subtitles"
+            }
+            drp_audioMix.SelectedIndex = 0;
+        }
+
         // Control and ListView
         private void controlChanged(object sender, EventArgs e)
         {
@@ -246,48 +293,6 @@ namespace Handbrake.Controls
         }
 
         // Public Functions
-        public void SetTrackList(Parsing.Title selectedTitle)
-        {
-            drp_audioTrack.Items.Clear();
-            drp_audioTrack.Items.Add("Automatic");
-            drp_audioTrack.Items.Add("None");
-            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-
-            // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
-            if (Properties.Settings.Default.NativeLanguage == "Any")
-                drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
-            else
-            {
-                if (Properties.Settings.Default.DubAudio) // "Dub Foreign language audio" 
-                {
-                    int i = 0;
-                    foreach (object item in drp_audioTrack.Items)
-                    {
-                        if (item.ToString().Contains(Properties.Settings.Default.NativeLanguage))
-                        {
-                            drp_audioTrack.SelectedIndex = i;
-                            break;
-                        }
-
-                        i++;
-                    }
-
-                    if (drp_audioTrack.SelectedItem != null)
-                        foreach (ListViewItem item in lv_audioList.Items)
-                            item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
-                    else
-                    {
-                        drp_audioTrack.SelectedIndex = 0;
-                        if (drp_audioTrack.SelectedItem != null)
-                            foreach (ListViewItem item in lv_audioList.Items)
-                                item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
-                    }
-                }
-                else
-                    drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0; // "Use Foreign language audio and Subtitles"
-            }
-            drp_audioMix.SelectedIndex = 0;
-        }
         private void AddTrackForPreset(ListViewItem item)
         {
             lv_audioList.Items.Add(item);

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.IO;
 using System.Collections.Generic;
+using Handbrake.Model;
 
 namespace Handbrake.Functions
 {
@@ -400,7 +401,7 @@ namespace Handbrake.Functions
                 string srtDefault = String.Empty;
                 int srtCount = 0;
 
-                List<Controls.SubtitleInfo> SubList = mainWindow.Subtitles.GetSubtitleInfoList();
+                List<SubtitleInfo> SubList = mainWindow.Subtitles.GetSubtitleInfoList();
 
                 foreach (var item in SubList)
                 {
@@ -524,8 +525,8 @@ namespace Handbrake.Functions
             #endregion
 
             #region  H264 Tab
-            if (mainWindow.x264Panel.x264Query != "")
-                query += " -x " + mainWindow.x264Panel.x264Query;
+            if (mainWindow.x264Panel.X264Query != "")
+                query += " -x " + mainWindow.x264Panel.X264Query;
             #endregion
 
             #region Processors / Other

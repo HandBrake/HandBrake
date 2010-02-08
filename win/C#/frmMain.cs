@@ -111,7 +111,7 @@ namespace Handbrake
 
                     if (query != null)
                     {
-                        x264Panel.reset2Defaults();
+                        x264Panel.Reset2Defaults();
 
                         QueryParser presetQuery = QueryParser.Parse(query);
                         PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset, loadPictureSettings);
@@ -597,7 +597,7 @@ namespace Handbrake
                     if (query != null)
                     {
                         //Ok, Reset all the H264 widgets before changing the preset
-                        x264Panel.reset2Defaults();
+                        x264Panel.Reset2Defaults();
 
                         // Send the query from the file to the Query Parser class
                         QueryParser presetQuery = QueryParser.Parse(query);
@@ -1262,7 +1262,7 @@ namespace Handbrake
                 check_turbo.CheckState = CheckState.Unchecked;
                 check_turbo.Enabled = false;
                 tab_advanced.Enabled = false;
-                x264Panel.x264Query = "";
+                x264Panel.X264Query = "";
                 check_iPodAtom.Enabled = false;
                 check_iPodAtom.Checked = false;
             }
@@ -1387,27 +1387,15 @@ namespace Handbrake
             switch (drp_videoEncoder.Text)
             {
                 case "MPEG-4 (FFmpeg)":
-                    double rfValue = 31 - (slider_videoQuality.Value - 1);
-                    double max = slider_videoQuality.Maximum;
-                    double min = slider_videoQuality.Minimum;
-                    double val = ((max - min) - (rfValue - min)) / (max - min);
                     lbl_SliderValue.Text = "QP:" + (32 - slider_videoQuality.Value);
-                    lbl_qualityValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "%";
                     break;
                 case "H.264 (x264)":
-                    rfValue = 51.0 - slider_videoQuality.Value * cqStep;
-                    max = slider_videoQuality.Maximum * cqStep;
-                    min = slider_videoQuality.Minimum;
-                    val = ((max - min) - (rfValue - min)) / (max - min);
+                    double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
                     rfValue = Math.Round(rfValue, 2);
                     lbl_SliderValue.Text = "RF:" + rfValue.ToString(new CultureInfo("en-US"));
-                    lbl_qualityValue.Text = Math.Round((val * 100), 2).ToString(new CultureInfo("en-US")) + "%";
                     break;
                 case "VP3 (Theora)":
-                    rfValue = slider_videoQuality.Value;
-                    double value = rfValue / 63;
                     lbl_SliderValue.Text = "QP:" + slider_videoQuality.Value;
-                    lbl_qualityValue.Text = Math.Round((value * 100), 2).ToString(new CultureInfo("en-US")) + "%";
                     break;
             }
         }
@@ -1679,7 +1667,7 @@ namespace Handbrake
             if (query != null)
             {
                 //Ok, Reset all the H264 widgets before changing the preset
-                x264Panel.reset2Defaults();
+                x264Panel.Reset2Defaults();
 
                 // Send the query from the file to the Query Parser class
                 QueryParser presetQuery = QueryParser.Parse(query);
