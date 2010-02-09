@@ -103,10 +103,19 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
     mux->allRdy |= is_continuous << t;
 }
 
-static void mf_push( hb_track_t *track, hb_buffer_t *buf )
+static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
 {
+    hb_track_t * track = mux->track[tk];
     uint32_t mask = track->mf.flen - 1;
     uint32_t in = track->mf.in;
+
+    if ( ( ( in + 2 ) & mask ) == ( track->mf.out & mask ) )
+    {
+        if ( track->mf.flen >= 1024 )
+        {
+            mux->rdy = mux->allRdy;
+        }
+    }
     if ( ( ( in + 1 ) & mask ) == ( track->mf.out & mask ) )
     {
         // fifo is full - expand it to double the current size.
@@ -157,13 +166,11 @@ static hb_buffer_t *mf_peek( hb_track_t *track )
 
 static void MoveToInternalFifos( int tk, hb_mux_t *mux, hb_buffer_t * buf )
 {
-    hb_track_t *track = mux->track[tk];
-
     // move all the buffers on the track's fifo to our internal
     // fifo so that (a) we don't deadlock in the reader and
     // (b) we can control how data from multiple tracks is
     // interleaved in the output file.
-    mf_push( track, buf );
+    mf_push( mux, tk, buf );
     if ( buf->stop >= mux->pts )
     {
         // buffer is past our next interleave point so
