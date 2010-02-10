@@ -379,7 +379,7 @@
 				<key>VideoTwoPass</key>
 				<integer>0</integer>
 				<key>x264Option</key>
-				<string>cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0</string>
+				<string>cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500</string>
 			</dict>
 		</array>
 		<key>Default</key>
