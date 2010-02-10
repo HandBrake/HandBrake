@@ -751,7 +751,7 @@ class Display
     
     #iPod MP4 atom
     if hash["Mp4iPodCompatible"].to_i == 1
-      commandString << "job->ipod_atom = 1;\n   "
+      commandString << "job->ipod_atom = 1;\n    "
     end
     
     # 64-bit files
@@ -896,7 +896,7 @@ class Display
       commandString << "job->crop[0] = " << hash["PictureTopCrop"].to_s << ";\n    "
       commandString << "job->crop[1] = " << hash["PictureBottomCrop"].to_s << ";\n    "
       commandString << "job->crop[2] = " << hash["PictureLeftCrop"].to_s << ";\n    "
-      commandString << "job->crop[4] - " << hash["PictureRightCrop"].to_s << ";\n    "
+      commandString << "job->crop[4] = " << hash["PictureRightCrop"].to_s << ";\n    "
     end
     
     #Dimensions
@@ -982,7 +982,7 @@ class Display
     if hash["VideoGrayScale"] == 1 then commandString << "job->grayscale = 1;\n    " end
     if hash["VideoTwoPass"] == 1 then commandString << "twoPass = 1;\n    " end
     if hash["VideoTurboTwoPass"] == 1 then commandString << "turbo_opts_enabled = 1;\n" end
-    
+    commandString << "\n"
     commandString << "}"
     
     # That's it, print to screen now
