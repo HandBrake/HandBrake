@@ -2528,7 +2528,7 @@ import_xlat_preset(GValue *dict)
 	const GValue *gval;
 
 	vquality = ghb_value_double(preset_dict_get_value(dict, "VideoQualitySlider"));
-	if (vquality < 1.0)
+	if (vquality > 0.0 && vquality < 1.0)
 	{
 		gint vcodec;
 
