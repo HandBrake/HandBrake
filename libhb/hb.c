@@ -49,7 +49,7 @@ struct hb_handle_s
 
 hb_lock_t *hb_avcodec_lock;
 hb_work_object_t * hb_objects = NULL;
-hb_process_initialized = 0;
+int hb_process_initialized = 0;
 
 static void thread_func( void * );
 
