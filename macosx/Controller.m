@@ -2320,10 +2320,11 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
 	[queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
+    [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
     /* if we are custom anamorphic, store the exact storage, par and display dims */
     if (fTitle->job->anamorphic.mode == 3)
     {
-        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.modulus] forKey:@"PicturePARModulus"];
+        [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PicturePARModulus"];
         
         [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->width] forKey:@"PicturePARStorageWidth"];
         [queueFileJob setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PicturePARStorageHeight"];
@@ -2954,6 +2955,7 @@ fWorkingCount = 0;
         
     }
     
+    //job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
     
     /* we check to make sure the presets width/height does not exceed the sources width/height */
     if (fTitle->width < [[queueToApply objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[queueToApply objectForKey:@"PictureHeight"]  intValue])
@@ -2980,7 +2982,7 @@ fWorkingCount = 0;
         }
     }
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
-    
+    job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
     
     [self writeToActivityLog: "applyQueueSettingsToMainWindow: picture sizing set up"];
     
@@ -3079,7 +3081,6 @@ fWorkingCount = 0;
     }
     
     /* we call SetTitle: in fPictureController so we get an instant update in the Picture Settings window */
-    [fPictureController SetTitle:fTitle];
     [fPictureController SetTitle:fTitle];
     [self calculatePictureSizing:nil];
     
@@ -3722,13 +3723,14 @@ bool one_burned = FALSE;
     
     job->keep_ratio = [[queueToApply objectForKey:@"PictureKeepRatio"]  intValue];
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
+    job->modulus = [[queueToApply objectForKey:@"PictureModulus"] intValue];
     if ([[queueToApply objectForKey:@"PicturePAR"]  intValue] == 3)
     {
         /* insert our custom values here for capuj */
         job->width = [[queueToApply objectForKey:@"PicturePARStorageWidth"]  intValue];
         job->height = [[queueToApply objectForKey:@"PicturePARStorageHeight"]  intValue];
         
-        job->anamorphic.modulus = [[queueToApply objectForKey:@"PicturePARModulus"] intValue];
+        job->modulus = [[queueToApply objectForKey:@"PicturePARModulus"] intValue];
         
         job->anamorphic.par_width = [[queueToApply objectForKey:@"PicturePARPixelWidth"]  intValue];
         job->anamorphic.par_height = [[queueToApply objectForKey:@"PicturePARPixelHeight"]  intValue];
@@ -5198,8 +5200,14 @@ the user is using "Custom" settings by determining the sender*/
         fTitle->job->keep_ratio = 0;
 	}
     
-    [fPictureSizeField setStringValue: [NSString stringWithFormat:@"Picture Size: %@", [fPictureController getPictureSizeInfoString]]];
-    
+    if (fTitle->job->anamorphic.mode != 1) // we are not strict so show the modulus
+	{
+        [fPictureSizeField setStringValue: [NSString stringWithFormat:@"Picture Size: %@, Modulus: %d", [fPictureController getPictureSizeInfoString], fTitle->job->modulus]];
+    }
+    else
+    {
+        [fPictureSizeField setStringValue: [NSString stringWithFormat:@"Picture Size: %@", [fPictureController getPictureSizeInfoString]]];
+    }
     NSString *picCropping;
     /* Set the display field for crop as per boolean */
 	if (![fPictureController autoCrop])
@@ -7097,7 +7105,16 @@ return YES;
                 
             }
             
-            
+            /* Set modulus */
+            if ([chosenPreset objectForKey:@"PictureModulus"])
+            {
+                job->modulus = [[chosenPreset objectForKey:@"PictureModulus"]  intValue];
+            }
+            else
+            {
+                job->modulus = 16;
+            }
+             
             /* Check to see if the objectForKey:@"UsesPictureSettings is 2 which is "Use Max for the source */
             if ([[chosenPreset objectForKey:@"UsesPictureSettings"]  intValue] == 2 || [[chosenPreset objectForKey:@"UsesMaxPictureSettings"]  intValue] == 1)
             {
@@ -7472,6 +7489,7 @@ return YES;
         [preset setObject:[NSNumber numberWithInt:fTitle->job->height] forKey:@"PictureHeight"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->keep_ratio] forKey:@"PictureKeepRatio"];
         [preset setObject:[NSNumber numberWithInt:fTitle->job->anamorphic.mode] forKey:@"PicturePAR"];
+        [preset setObject:[NSNumber numberWithInt:fTitle->job->modulus] forKey:@"PictureModulus"];
         
         /* Set crop settings here */
         [preset setObject:[NSNumber numberWithInt:[fPictureController autoCrop]] forKey:@"PictureAutoCrop"];

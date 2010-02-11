@@ -150,8 +150,6 @@
         [fParHeightLabel setHidden: NO];
         [fDisplayWidthField setHidden: NO];
         [fDisplayWidthLabel setHidden: NO];
-        [fModulusLabel setHidden: NO];
-        [fModulusPopUp setHidden: NO];
         /* adjust/move keep ar checkbox */
         [fRatioLabel setHidden: YES];
         [fRatioLabel2 setHidden: NO];
@@ -192,8 +190,6 @@
         [fParHeightLabel setHidden: YES];
         [fDisplayWidthField setHidden: YES];
         [fDisplayWidthLabel setHidden: YES];
-        [fModulusLabel setHidden: YES];
-        [fModulusPopUp setHidden: YES];
         /* adjust/move keep ar checkbox */
         [fRatioLabel setHidden: NO];
         [fRatioLabel2 setHidden: YES];
@@ -532,14 +528,15 @@
     [fModulusPopUp addItemWithTitle: @"8"];
     [fModulusPopUp addItemWithTitle: @"4"];
     [fModulusPopUp addItemWithTitle: @"2"];
-    if (job->anamorphic.mode == 3)
+    if (job->modulus)
     {
-        [fModulusPopUp selectItemWithTitle: [NSString stringWithFormat:@"%d",job->anamorphic.modulus]];
+        [fModulusPopUp selectItemWithTitle: [NSString stringWithFormat:@"%d",job->modulus]];
     }
     else
     {
-        [fModulusPopUp selectItemWithTitle: @"16"];
+        [fModulusPopUp selectItemAtIndex: 0];
     }
+    
     
     /* We initially set the previous state of keep ar to on */
     keepAspectRatioPreviousState = 1;
@@ -648,8 +645,24 @@
 - (IBAction) SettingsChanged: (id) sender
 {
     hb_job_t * job = fTitle->job;
-    [fModulusPopUp setEnabled:NO];
-    job->anamorphic.modulus = 16;
+
+    /* if we are anything but strict anamorphic */
+    if ([fAnamorphicPopUp indexOfSelectedItem] != 1)
+    {
+        [fModulusLabel setHidden:NO];
+        [fModulusPopUp setHidden:NO];
+    }
+    else
+    {
+        /* we are strict so hide the mod popup since libhb uses mod 2 for strict anamorphic*/
+        [fModulusLabel setHidden:YES];
+        [fModulusPopUp setHidden:YES];
+    }
+
+    job->modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
+    
+    [fWidthStepper  setIncrement: job->modulus];
+    [fHeightStepper setIncrement: job->modulus];
 
     /* Since custom anamorphic allows for a height setting > fTitle->height
      * check to make sure it is returned to fTitle->height for all other modes
@@ -687,14 +700,6 @@
         job->anamorphic.par_width = titleParWidth;
         job->anamorphic.par_height = titleParHeight;
         [fRatioLabel setHidden: NO];
-        
-        [fWidthStepper  setIncrement: 16];
-        [fHeightStepper setIncrement: 16];
-    }
-    else
-    {
-        [fWidthStepper  setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
-        [fHeightStepper setIncrement: [[fModulusPopUp titleOfSelectedItem] intValue]];
     }
     
 	if( [fAnamorphicPopUp indexOfSelectedItem] > 0 )
@@ -752,9 +757,7 @@
             job->anamorphic.mode = 3;
             
             /* Set the status of our custom ana only widgets accordingly */
-            /* for mod 3 we can use modulus other than 16 */
             [fModulusPopUp setEnabled:YES];
-            job->anamorphic.modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
             
             [fWidthStepper setEnabled: YES];
             [fWidthField setEnabled: YES];

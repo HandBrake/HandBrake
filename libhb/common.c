@@ -119,6 +119,9 @@ void hb_fix_aspect( hb_job_t * job, int keep )
 {
     hb_title_t * title = job->title;
     int          i;
+    int  min_width;
+    int min_height;
+    int    modulus;
 
     /* don't do anything unless the title has complete size info */
     if ( title->height == 0 || title->width == 0 || title->aspect == 0 )
@@ -129,44 +132,47 @@ void hb_fix_aspect( hb_job_t * job, int keep )
         return;
     }
 
-    /* Sanity checks:
-       Widths and heights must be multiples of 16 and greater than or
-       equal to 16
-       Crop values must be multiples of 2, greater than or equal to 0
-       and less than half of the dimension */
-    job->width   = MULTIPLE_16( job->width );
-    job->height  = MULTIPLE_16( job->height );
-    job->width   = MAX( 16, job->width );
-    job->height  = MAX( 16, job->height );
+    // min_width and min_height should be multiples of modulus
+    min_width    = 32;
+    min_height   = 32;
+    modulus      = job->modulus ? job->modulus : 16;
+
     for( i = 0; i < 4; i++ )
     {
-        job->crop[i] = EVEN( job->crop[i] );
-        job->crop[i] = MAX( 0, job->crop[i] );
+        // Sanity check crop values are zero or positive multiples of 2
         if( i < 2 )
         {
-            /* Top, bottom */
-            job->crop[i] = MIN( job->crop[i], ( title->height / 2 ) - 2 );
+            // Top, bottom
+            job->crop[i] = MIN( EVEN( job->crop[i] ), EVEN( ( title->height / 2 ) - ( min_height / 2 ) ) );
+            job->crop[i] = MAX( 0, job->crop[i] );
         }
         else
         {
-            /* Left, right */
-            job->crop[i] = MIN( job->crop[i], ( title->width / 2 ) - 2 );
+            // Left, right
+            job->crop[i] = MIN( EVEN( job->crop[i] ), EVEN( ( title->width / 2 ) - ( min_width / 2 ) ) );
+            job->crop[i] = MAX( 0, job->crop[i] );
         }
     }
 
     double par = (double)title->width / ( (double)title->height * title->aspect );
     double cropped_sar = (double)( title->height - job->crop[0] - job->crop[1] ) /
-                         (double)(title->width - job->crop[2] - job->crop[3] );
+                         (double)( title->width - job->crop[2] - job->crop[3] );
     double ar = par * cropped_sar;
+
+    // Dimensions must be greater than minimum and multiple of modulus
     if( keep == HB_KEEP_WIDTH )
     {
-        job->height = MULTIPLE_16( (uint64_t)( (double)job->width * ar ) );
-        job->height = MAX( 16, job->height );
+        job->width  = MULTIPLE_MOD( job->width, modulus );
+        job->width  = MAX( min_width, job->width );
+        job->height = MULTIPLE_MOD( (uint64_t)( (double)job->width * ar ), modulus );
+        job->height = MAX( min_height, job->height );
     }
     else
     {
-        job->width = MULTIPLE_16( (uint64_t)( (double)job->height / ar ) );
-        job->width = MAX( 16, job->width );
+        job->height = MULTIPLE_MOD( job->height, modulus );
+        job->height = MAX( min_height, job->height );
+        job->width  = MULTIPLE_MOD( (uint64_t)( (double)job->height / ar ), modulus );
+        job->width  = MAX( min_width, job->width );
     }
 }
 

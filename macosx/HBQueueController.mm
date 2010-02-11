@@ -1189,6 +1189,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         [finalString appendString: @"Destination: " withAttributes:detailBoldAttr];
         [finalString appendString: [item objectForKey:@"DestinationPath"] withAttributes:detailAttr];
         [finalString appendString:@"\n" withAttributes:detailAttr];
+        
         /* Fifth Line Picture Details*/
         NSString * pictureInfo;
         pictureInfo = [NSString stringWithFormat:@"%@", [item objectForKey:@"PictureSizingSummary"]];
@@ -1196,6 +1197,7 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         {
             pictureInfo = [pictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
         }
+        
         if ([[item objectForKey:@"VideoGrayScale"] intValue] == 1)
         {
             pictureInfo = [pictureInfo stringByAppendingString:@", Grayscale"];

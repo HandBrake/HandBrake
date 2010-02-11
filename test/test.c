@@ -1134,7 +1134,7 @@ static int HandleEvents( hb_handle_t * h )
                     
                     if (modulus)
                     {
-                        job->anamorphic.modulus = modulus;
+                        job->modulus = modulus;
                     }
                     
                     if( itu_par )
@@ -1159,7 +1159,7 @@ static int HandleEvents( hb_handle_t * h )
                     
                     if (modulus)
                     {
-                        job->anamorphic.modulus = modulus;
+                        job->modulus = modulus;
                     }
                     
                     if( itu_par )
@@ -2327,8 +2327,8 @@ static void ShowHelp()
     "    --itu-par               Use wider, ITU pixel aspect values for loose and\n"
     "                            custom anamorphic, useful with underscanned sources\n"
     "    --modulus               Set the number you want the scaled pixel dimensions\n"
-    "      <number>              to divide cleanly by, for loose and custom\n"
-    "                            anamorphic modes (default: 16)\n"
+    "      <number>              to divide cleanly by. Does not affect strict\n"
+    "                            anamorphic mode, which is always mod 2 (default: 16)\n"
     "    -M  --color-matrix      Set the color space signaled by the output\n"
     "          <601 or 709>      (Bt.601 is mostly for SD content, Bt.709 for HD,\n"
     "                             default: set by resolution)\n"

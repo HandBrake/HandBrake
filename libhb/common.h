@@ -166,14 +166,14 @@ struct hb_job_s
     /* Picture settings:
          crop:                must be multiples of 2 (top/bottom/left/right)
          deinterlace:         0 or 1
-         width:               must be a multiple of 16
-         height:              must be a multiple of 16
+         width:               must be a multiple of 2
+         height:              must be a multiple of 2
          keep_ratio:          used by UIs
          grayscale:           black and white encoding
          pixel_ratio:         store pixel aspect ratio in the video
          pixel_aspect_width:  numerator for pixel aspect ratio
          pixel_aspect_height: denominator for pixel aspect ratio
-         modulus:             set a number besides 16 for dimensions to be multiples of
+         modulus:             set a number for dimensions to be multiples of
          maxWidth:            keep width below this
          maxHeight:           keep height below this */
     int             crop[4];
@@ -187,7 +187,6 @@ struct hb_job_s
     struct
     {
         int             mode;
-        int             modulus;
         int             itu_par;
         int             par_width;
         int             par_height;
@@ -195,7 +194,8 @@ struct hb_job_s
         int             dar_height;
         int             keep_display_aspect;
     } anamorphic;
-    
+
+    int             modulus;
     int             maxWidth;
     int             maxHeight;
 

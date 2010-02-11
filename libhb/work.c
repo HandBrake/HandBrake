@@ -212,13 +212,9 @@ void hb_display_job_info( hb_job_t * job )
         {
             hb_log( "     + keeping source display aspect ratio"); 
         }
-        if( job->anamorphic.modulus != 16 )
-        {
-            hb_log( "     + modulus: %i", job->anamorphic.modulus ); 
-        }
-        hb_log( "     + storage dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d",
+        hb_log( "     + storage dimensions: %d * %d -> %d * %d, crop %d/%d/%d/%d, mod %i",
                     title->width, title->height, job->width, job->height,
-                    job->crop[0], job->crop[1], job->crop[2], job->crop[3] );
+                    job->crop[0], job->crop[1], job->crop[2], job->crop[3], job->modulus );
         if( job->anamorphic.itu_par )
         {
             hb_log( "     + using ITU pixel aspect ratio values"); 

@@ -3487,7 +3487,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
 		job->anamorphic.mode = pic_par;
 		// The scaler crashes if the dimensions are not divisible by 2
 		// Align mod 2.  And so does something in x264_encoder_headers()
-		job->anamorphic.modulus = mod;
+		job->modulus = mod;
 		job->anamorphic.par_width = title->pixel_aspect_width;
 		job->anamorphic.par_height = title->pixel_aspect_height;
 		job->anamorphic.dar_width = 0;
@@ -3630,7 +3630,7 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 	job->crop[3] = ghb_settings_get_int(settings, "PictureRightCrop");
 
 	job->anamorphic.mode = ghb_settings_combo_int(settings, "PicturePAR");
-	job->anamorphic.modulus = 
+	job->modulus = 
 		ghb_settings_combo_int(settings, "PictureModulus");
 	job->width = ghb_settings_get_int(settings, "scale_width");
 	job->height = ghb_settings_get_int(settings, "scale_height");
@@ -3647,7 +3647,7 @@ set_preview_job_settings(hb_job_t *job, GValue *settings)
 		job->crop[1] = 0;
 		job->crop[2] = 0;
 		job->crop[3] = 0;
-		job->anamorphic.modulus = 2;
+		job->modulus = 2;
 	}
 
 	gboolean decomb_deint = ghb_settings_get_boolean(settings, "PictureDecombDeinterlace");
@@ -4356,7 +4356,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 	gboolean keep_aspect;
 	keep_aspect = ghb_settings_get_boolean(js, "PictureKeepRatio");
 	job->anamorphic.mode = ghb_settings_combo_int(js, "PicturePAR");
-	job->anamorphic.modulus = ghb_settings_combo_int(js, "PictureModulus");
+	job->modulus = ghb_settings_combo_int(js, "PictureModulus");
 	if (job->anamorphic.mode)
 	{
 		job->anamorphic.par_width = title->pixel_aspect_width;

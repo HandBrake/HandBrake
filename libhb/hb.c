@@ -660,7 +660,7 @@ void hb_set_anamorphic_size( hb_job_t * job,
     int cropped_width = title->width - job->crop[2] - job->crop[3] ;
     int cropped_height = title->height - job->crop[0] - job->crop[1] ;
     double storage_aspect = (double)cropped_width / (double)cropped_height;
-    int mod = job->anamorphic.modulus ? job->anamorphic.modulus : 16;
+    int mod = job->modulus ? job->modulus : 16;
     double aspect = title->aspect;
     
     int pixel_aspect_width  = job->anamorphic.par_width;
