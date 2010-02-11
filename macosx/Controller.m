@@ -2955,7 +2955,7 @@ fWorkingCount = 0;
         
     }
     
-    //job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
+    job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
     
     /* we check to make sure the presets width/height does not exceed the sources width/height */
     if (fTitle->width < [[queueToApply objectForKey:@"PictureWidth"]  intValue] || fTitle->height < [[queueToApply objectForKey:@"PictureHeight"]  intValue])
