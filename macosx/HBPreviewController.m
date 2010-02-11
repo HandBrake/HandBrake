@@ -1145,39 +1145,15 @@
     }
     
     NSSize resultSize = imageSize;
-    
-    // Its better to have a view that's too small than a view that's too big, so
-    // apply the maximum constraints last.
-    if( resultSize.width < minWidth )
-    {
-        resultSize.height *= (minWidth / resultSize.width);
-        resultSize.width = minWidth;
-    }
-    if( resultSize.height < minHeight )
-    {
-        resultSize.width *= (minHeight / resultSize.height);
-        resultSize.height = minHeight;
-    }
-    if( resultSize.width > maxWidth )
-    {
-        resultSize.height *= (maxWidth / resultSize.width);
-        resultSize.width = maxWidth;
-    }
-    if( resultSize.height > maxHeight )
-    {
-        resultSize.width *= (maxHeight / resultSize.height);
-        resultSize.height = maxHeight;
-    }
-    
+    CGFloat resultPar = resultSize.width / resultSize.height;
+
+    //note, a mbp 15" at 1440 x 900 is a 1.6 ar
+    CGFloat screenAspect = screenSize.width / screenSize.height;
+    // Note, a standard dvd will use 720 x 480 which is a 1.5
+    CGFloat viewAreaAspect = viewAreaSize.width / viewAreaSize.height;
+
     if (scaleToScreen == YES)
     {
-        CGFloat screenAspect;
-        CGFloat viewAreaAspect; 
-        //note, a mbp 15" at 1440 x 900 is a 1.6 ar
-        screenAspect = screenSize.width / screenSize.height;
-        
-        // Note, a standard dvd will use 720 x 480 which is a 1.5
-        viewAreaAspect = viewAreaSize.width / viewAreaSize.height;
         
         if (screenAspect < viewAreaAspect)
         {
@@ -1190,6 +1166,32 @@
             resultSize.width = resultSize.height * viewAreaAspect;
         }
         
+    }
+    else if ( resultSize.width > maxWidth || resultSize.height > maxHeight )
+    {
+    	// Source is larger than screen in one or more dimensions
+        if ( resultPar > screenAspect )
+        {
+            // Source aspect wider than screen aspect, snap to max width and vary height
+            resultSize.width = maxWidth;
+            resultSize.height = (maxWidth / resultPar);
+        }
+        else
+        {
+            // Source aspect narrower than screen aspect, snap to max height vary width
+            resultSize.height = maxHeight;
+            resultSize.width = (maxHeight * resultPar);
+        }
+    }
+
+    // If necessary, grow to minimum dimensions to ensure controls overlay is not obstructed
+    if ( resultSize.width < minWidth )
+    {
+        resultSize.width = minWidth;
+    }
+    if ( resultSize.height < minHeight )
+    {
+        resultSize.height = minHeight;
     }
 
       return resultSize;
