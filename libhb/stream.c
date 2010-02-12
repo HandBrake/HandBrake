@@ -354,9 +354,8 @@ static int hb_stream_check_for_ts(const uint8_t *buf)
 
 static int hb_stream_check_for_ps(const uint8_t *buf)
 {
-    // transport streams should have a sync byte every 188 bytes.
-    // search the first 8KB of buf looking for at least 8 consecutive
-    // correctly located sync patterns.
+    // program streams should start with a PACK then some other mpeg start 
+    // code (usually a SYS but that might be missing if we only have a clip). 
     int offset = 0;
 
     for ( offset = 0; offset < 8*1024-24; ++offset )
