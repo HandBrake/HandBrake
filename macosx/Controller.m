@@ -2760,8 +2760,10 @@ fWorkingCount = 0;
         [self writeToActivityLog: "applyQueueSettingsToMainWindow: queue item found"];
     }
     /* Set title number and chapters */
-    /* since the queue only scans a single title, we really don't need to pick a title */
-    [fSrcTitlePopUp selectItemAtIndex: [[queueToApply objectForKey:@"TitleNumber"] intValue] - 1];
+    /* since the queue only scans a single title, its already been selected in showNewScan
+       so do not try to reset it here. However if we do decide to do full source scans on
+       a queue edit rescan, we would need it. So leaving in for now but commenting out. */
+    //[fSrcTitlePopUp selectItemAtIndex: [[queueToApply objectForKey:@"TitleNumber"] intValue] - 1];
     
     [fSrcChapterStartPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterStart"] intValue] - 1];
     [fSrcChapterEndPopUp selectItemAtIndex: [[queueToApply objectForKey:@"ChapterEnd"] intValue] - 1];
