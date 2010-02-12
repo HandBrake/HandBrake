@@ -4465,19 +4465,17 @@ bool one_burned = FALSE;
     hb_title_t * title = (hb_title_t*)
         hb_list_item( list, [fSrcTitlePopUp indexOfSelectedItem] );
 
-    /* If we are a stream type, grok the output file name from title->name upon title change */
-    if (title->type == HB_STREAM_TYPE)
+    /* If we are a stream type and a batch scan, grok the output file name from title->name upon title change */
+    if (title->type == HB_STREAM_TYPE && hb_list_count( list ) > 1 )
     {
         /* we set the default name according to the new title->name */
         [fDstFile2Field setStringValue: [NSString stringWithFormat:
                                          @"%@/%@.%@", [[fDstFile2Field stringValue] stringByDeletingLastPathComponent],
                                          [NSString stringWithUTF8String: title->name],
                                          [[fDstFile2Field stringValue] pathExtension]]];
-        /* If we have more than one title and are stream then we have a batch, change the source to read out the parent folder also */
-        if ( hb_list_count( list ) > 1 )
-        {                                  
-            [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
-        }
+        
+        /* Change the source to read out the parent folder also */
+        [fSrcDVD2Field setStringValue:[NSString stringWithFormat:@"%@/%@", browsedSourceDisplayName,[NSString stringWithUTF8String: title->name]]];
     }
     
     /* For point a to point b pts encoding, set the start and end fields to 0 and the title duration in seconds respectively */
