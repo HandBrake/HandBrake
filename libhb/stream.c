@@ -354,9 +354,17 @@ static int hb_stream_check_for_ts(const uint8_t *buf)
 
 static int hb_stream_check_for_ps(const uint8_t *buf)
 {
-    // program streams should start with a PACK then some other mpeg start
-    // code (usually a SYS but that might be missing if we only have a clip).
-    return check_ps_sync(buf) && check_ps_sc(buf);
+    // transport streams should have a sync byte every 188 bytes.
+    // search the first 8KB of buf looking for at least 8 consecutive
+    // correctly located sync patterns.
+    int offset = 0;
+
+    for ( offset = 0; offset < 8*1024-24; ++offset )
+    {
+        if ( check_ps_sync( &buf[offset] ) && check_ps_sc( &buf[offset] ) )
+            return 1;
+    }
+    return 0;
 }
 
 static int hb_stream_check_for_dvd_ps(const uint8_t *buf)
@@ -370,6 +378,7 @@ static int hb_stream_check_for_dvd_ps(const uint8_t *buf)
 static int hb_stream_get_type(hb_stream_t *stream)
 {
     uint8_t buf[2048*4];
+    int i = 64;
 
     if ( fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) )
     {
@@ -395,12 +404,17 @@ static int hb_stream_get_type(hb_stream_t *stream)
             stream->hb_stream_type = dvd_program;
             return 1;
         }
-        if ( hb_stream_check_for_ps(buf) != 0 )
+        do
         {
-            hb_log("file is MPEG Program Stream");
-            stream->hb_stream_type = program;
-            return 1;
-        }
+            if ( hb_stream_check_for_ps(buf) != 0 )
+            {
+                hb_log("file is MPEG Program Stream");
+                stream->hb_stream_type = program;
+                return 1;
+            }
+            // Seek back to handle start codes that run over end of last buffer
+            fseek( stream->file_handle, -28, SEEK_CUR );
+        } while ( --i && fread(buf, 1, sizeof(buf), stream->file_handle) == sizeof(buf) );
     }
     return 0;
 }
