@@ -651,6 +651,25 @@
     {
         [fModulusLabel setHidden:NO];
         [fModulusPopUp setHidden:NO];
+        if (sender == fModulusPopUp)
+        {
+            /* do a dry run with hb_fix aspect to get new modulus */
+            job->modulus = [[fModulusPopUp titleOfSelectedItem] intValue];
+            job->keep_ratio  = 1;
+            hb_fix_aspect( job, HB_KEEP_WIDTH );
+            if( job->height > fTitle->height )
+            {
+                job->height = fTitle->height;
+                hb_fix_aspect( job, HB_KEEP_HEIGHT );
+            }
+            [fWidthStepper      setIntValue: job->width];
+            [fWidthField        setIntValue: job->width];
+            if( [fAnamorphicPopUp indexOfSelectedItem] != 2) // if we are not loose or custom
+            {
+                [fHeightStepper     setIntValue: job->height];
+                [fHeightField       setIntValue: job->height];
+            }    
+        }
     }
     else
     {
