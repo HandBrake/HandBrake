@@ -232,8 +232,6 @@
     
     [fPictureView setHidden:NO];
     
-    //[fHBController writeToActivityLog: "displayPreview called"];
-    
     NSImage *fPreviewImage = [self imageForPicture: fPicture];
     NSSize imageScaledSize = [fPreviewImage size];
     [fPictureView setImage: fPreviewImage];
@@ -286,47 +284,28 @@
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
                           fTitle->job->width, fTitle->job->height];
-        
+        /* original
         displaySize.width = fTitle->width;
         displaySize.height = fTitle->height;
         imageScaledSize.width = fTitle->job->width;
         imageScaledSize.height = fTitle->job->height;
+        */
+        /* Test ... */
+        displaySize.width = fTitle->width;
+        displaySize.height = fTitle->height;
+        imageScaledSize.width = fTitle->job->width + fTitle->job->crop[2] + fTitle->job->crop[3];
+        imageScaledSize.height = fTitle->job->height + fTitle->job->crop[0] - fTitle->job->crop[1];
     }
     
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
     
-    /* Initially set our preview image here */
-    /*
-    if (scaleToScreen == YES)
-    {
-        viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
-        viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
-        [fPreviewImage setSize: viewSize];
-        //[fPictureView setFrameSize: viewSize];
-    }
-    
-    else
-    {
-        [fPreviewImage setSize: imageScaledSize];
-        [fPictureView setFrameSize: imageScaledSize];
-    }
-    [fPictureView setImage: fPreviewImage];
-    // center it vertically and horizontally
-    NSPoint origin = [fPictureViewArea frame].origin;
-    origin.y += ([fPictureViewArea frame].size.height -
-                 [fPictureView frame].size.height) / 2.0;
-    
-    origin.x += ([fPictureViewArea frame].size.width -
-                 [fPictureView frame].size.width) / 2.0;
-    [fPictureView setFrameOrigin:origin]; 
-    */
-    /* we also need to take into account scaling to full screen to activate switching the view size */
+        /* we also need to take into account scaling to full screen to activate switching the view size */
     if( [self viewNeedsToResizeToSize:viewSize])
     {
         if (fTitle->job->anamorphic.mode != 2 || (fTitle->job->anamorphic.mode == 2 && fTitle->width == fTitle->job->width))
         {
             [self resizeSheetForViewSize:viewSize];
-            //[self setViewSize:viewSize];
+            [self setViewSize:viewSize];
             
         }
     }   
@@ -343,17 +322,18 @@
     }
     
     NSString *scaleString;
-    
-    if( imageScaledSize.height > [fPictureView frame].size.height)
+    CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);
+    if (scale * 100.0 != 100)
+    //if( imageScaledSize.height > [fPictureView frame].size.height)
     {
-        CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);        
+        //CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);        
         scaleString = [NSString stringWithFormat:
-                       NSLocalizedString( @" (Scaled to %.0f%% actual size)",
+                       NSLocalizedString( @" (%.0f%% actual size)",
                                          @"String shown when a preview is scaled" ), scale * 100.0];
     }
     else
     {
-        scaleString = @"";
+        scaleString = @"(Actual size)";
     }
     /* Set the info fields in the hud controller */
     [fInfoField setStringValue: [NSString stringWithFormat:
@@ -509,6 +489,7 @@
         [self pictureSliderChanged:nil];
         [fScaleToScreenToggleButton setTitle:@">-<"];
     }
+    
 }
 
 - (BOOL)fullScreen
@@ -1061,7 +1042,8 @@
                  */
                 NSSize displaySize = NSMakeSize( ( CGFloat ) movieBounds.size.width, ( CGFloat ) movieBounds.size.height );
                 NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-                if( [self viewNeedsToResizeToSize:viewSize] ) {
+                if( [self viewNeedsToResizeToSize:viewSize] ) 
+                {
                     [self resizeSheetForViewSize:viewSize];
                     [self setViewSize:viewSize];
                 }
@@ -1213,8 +1195,10 @@
     
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
+    NSSize screenSize = [[[self window] screen] frame].size;
     NSSize maxSize = [[self window] maxSize];
     NSSize minSize = [[self window] minSize];
+    
     frame.size.width += deltaX;
     frame.size.height += deltaY;
     if( frame.size.width < minSize.width )
@@ -1226,7 +1210,7 @@
     {
         frame.size.height = minSize.height;
     }
-    
+
     
     // But now the sheet is off-center, so also shift the origin to center it and
     // keep the top aligned.
@@ -1256,7 +1240,19 @@
          * necessary.
          */
         NSSize screenSize = [[[self window] screen] frame].size;
+        CGFloat screenWidthMod = screenSize.width - 100;
+        CGFloat screenHeightMod = screenSize.height - 100;
         NSPoint screenOrigin = [[[self window] screen] frame].origin;
+        if (screenHeightMod < frame.size.height)
+        {
+            frame.size.height = screenHeightMod;
+        }
+        else if (screenWidthMod < frame.size.width)
+        {
+            frame.size.width = screenWidthMod;
+        }
+        
+        
         /* our origin is off the screen to the left*/
         if (frame.origin.x < screenOrigin.x)
         {
@@ -1283,10 +1279,12 @@
 - (void)setViewSize: (NSSize)viewSize
 {   
     /* special case for scaleToScreen */
-    if (scaleToScreen == YES)
+    NSSize screenSize = [[[self window] screen] frame].size;
+    NSSize areaSize = [fPictureViewArea frame].size;
+    if (scaleToScreen == YES || viewSize.width > areaSize.width || viewSize.height > areaSize.height)
     {
         /* for scaleToScreen, we expand the fPictureView to fit the entire screen */
-        NSSize areaSize = [fPictureViewArea frame].size;
+        //NSSize areaSize = [fPictureViewArea frame].size;
         CGFloat viewSizeAspect = viewSize.width / viewSize.height;
         if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
         {
@@ -1300,7 +1298,8 @@
         }
         
     }
-
+    
+    
     [fPictureView setFrameSize:viewSize];
 
     // center it vertically and horizontally
@@ -1315,6 +1314,12 @@
     origin.y = floor( origin.y );
     
     [fPictureView setFrameOrigin:origin];
+    
+    /* set the top of the hud controller boxes centered vertically with the origin of our window */
+    NSPoint hudControlBoxOrigin = [fPictureControlBox frame].origin;
+    hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - [fPictureControlBox frame].size.height;
+    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
 }
 
 
