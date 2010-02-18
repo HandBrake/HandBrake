@@ -212,6 +212,7 @@
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
     [self SettingsChanged: nil];
+
 }
 
 
@@ -324,7 +325,6 @@
     NSString *scaleString;
     CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);
     if (scale * 100.0 != 100)
-    //if( imageScaledSize.height > [fPictureView frame].size.height)
     {
         //CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);        
         scaleString = [NSString stringWithFormat:
@@ -1196,7 +1196,8 @@
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
     NSSize screenSize = [[[self window] screen] frame].size;
-    NSSize maxSize = [[self window] maxSize];
+    //NSSize maxSize = [[self window] maxSize];
+    NSSize maxSize = [[[self window] screen] visibleFrame].size;
     NSSize minSize = [[self window] minSize];
     
     frame.size.width += deltaX;
@@ -1210,6 +1211,18 @@
     {
         frame.size.height = minSize.height;
     }
+    /* compare frame to max size of screen */
+    if( frame.size.width > maxSize.width )
+    {
+        frame.size.width = maxSize.width;
+    }
+    
+    if( frame.size.height > maxSize.height )
+    {
+        frame.size.height = maxSize.height;
+    }
+    
+    
 
     
     // But now the sheet is off-center, so also shift the origin to center it and
@@ -1239,17 +1252,15 @@
          * So check the origin against the screen origin and adjust if
          * necessary.
          */
-        NSSize screenSize = [[[self window] screen] frame].size;
-        CGFloat screenWidthMod = screenSize.width - 100;
-        CGFloat screenHeightMod = screenSize.height - 100;
+        NSSize screenSize = [[[self window] screen] visibleFrame].size;
         NSPoint screenOrigin = [[[self window] screen] frame].origin;
-        if (screenHeightMod < frame.size.height)
+        if (screenSize.height < frame.size.height)
         {
-            frame.size.height = screenHeightMod;
+            frame.size.height = screenSize.height;
         }
-        else if (screenWidthMod < frame.size.width)
+        if (screenSize.width < frame.size.width)
         {
-            frame.size.width = screenWidthMod;
+            frame.size.width = screenSize.width;
         }
         
         
@@ -1279,12 +1290,11 @@
 - (void)setViewSize: (NSSize)viewSize
 {   
     /* special case for scaleToScreen */
-    NSSize screenSize = [[[self window] screen] frame].size;
+    NSSize screenSize = [[[self window] screen] visibleFrame].size;
     NSSize areaSize = [fPictureViewArea frame].size;
     if (scaleToScreen == YES || viewSize.width > areaSize.width || viewSize.height > areaSize.height)
     {
         /* for scaleToScreen, we expand the fPictureView to fit the entire screen */
-        //NSSize areaSize = [fPictureViewArea frame].size;
         CGFloat viewSizeAspect = viewSize.width / viewSize.height;
         if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
         {
