@@ -21,7 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="252"/>
+			<integer value="257"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -173,39 +173,6 @@
 																<int key="NSPeriodicInterval">25</int>
 															</object>
 														</object>
-														<object class="NSButton" id="537831590">
-															<reference key="NSNextResponder" ref="385854969"/>
-															<int key="NSvFlags">289</int>
-															<string key="NSFrame">{{253, 7}, {69, 25}}</string>
-															<reference key="NSSuperview" ref="385854969"/>
-															<object class="NSArray" key="NSViewContentFilters">
-																<bool key="EncodedWithXMLCoder">YES</bool>
-																<object class="CIColorMonochrome">
-																	<object class="CIColor" key="CI_inputColor">
-																		<float key="red">0.70196080207824707</float>
-																		<float key="green">0.70196080207824707</float>
-																		<float key="blue">0.70196080207824707</float>
-																		<float key="alpha">1</float>
-																	</object>
-																	<integer value="1" key="CI_inputIntensity"/>
-																	<bool key="CIEnabled">YES</bool>
-																</object>
-															</object>
-															<bool key="NSEnabled">YES</bool>
-															<object class="NSButtonCell" key="NSCell" id="29238952">
-																<int key="NSCellFlags">67239424</int>
-																<int key="NSCellFlags2">134479872</int>
-																<string key="NSContents">Full Screen</string>
-																<reference key="NSSupport" ref="22"/>
-																<reference key="NSControlView" ref="537831590"/>
-																<int key="NSButtonFlags">-2038284033</int>
-																<int key="NSButtonFlags2">163</int>
-																<string key="NSAlternateContents"/>
-																<string key="NSKeyEquivalent"/>
-																<int key="NSPeriodicDelay">200</int>
-																<int key="NSPeriodicInterval">25</int>
-															</object>
-														</object>
 														<object class="NSButton" id="141370142">
 															<reference key="NSNextResponder" ref="385854969"/>
 															<int key="NSvFlags">289</int>
@@ -242,7 +209,7 @@
 														<object class="NSButton" id="81685190">
 															<reference key="NSNextResponder" ref="385854969"/>
 															<int key="NSvFlags">289</int>
-															<string key="NSFrame">{{327, 7}, {34, 25}}</string>
+															<string key="NSFrame">{{259, 7}, {86, 25}}</string>
 															<reference key="NSSuperview" ref="385854969"/>
 															<object class="NSArray" key="NSViewContentFilters">
 																<bool key="EncodedWithXMLCoder">YES</bool>
@@ -261,7 +228,7 @@
 															<object class="NSButtonCell" key="NSCell" id="847033897">
 																<int key="NSCellFlags">67239424</int>
 																<int key="NSCellFlags2">134479872</int>
-																<string key="NSContents">&lt;-&gt;</string>
+																<string key="NSContents">Scale To Screen</string>
 																<reference key="NSSupport" ref="22"/>
 																<reference key="NSControlView" ref="81685190"/>
 																<int key="NSButtonFlags">-2038284033</int>
@@ -819,22 +786,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">fFullScreenToggleButton</string>
-						<reference key="source" ref="355312334"/>
-						<reference key="destination" ref="537831590"/>
-					</object>
-					<int key="connectionID">267</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">toggleScreenMode:</string>
-						<reference key="source" ref="355312334"/>
-						<reference key="destination" ref="537831590"/>
-					</object>
-					<int key="connectionID">270</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">fPictureSettingsToggleButton</string>
 						<reference key="source" ref="355312334"/>
 						<reference key="destination" ref="141370142"/>
@@ -970,12 +921,11 @@
 							<reference ref="628196212"/>
 							<reference ref="798240356"/>
 							<reference ref="396925210"/>
-							<reference ref="537831590"/>
 							<reference ref="141370142"/>
 							<reference ref="245200984"/>
-							<reference ref="81685190"/>
 							<reference ref="66510867"/>
 							<reference ref="598619000"/>
+							<reference ref="81685190"/>
 						</object>
 						<reference key="parent" ref="289177107"/>
 					</object>
@@ -1094,20 +1044,6 @@
 						<reference key="parent" ref="569473100"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">265</int>
-						<reference key="object" ref="537831590"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="29238952"/>
-						</object>
-						<reference key="parent" ref="92351498"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">266</int>
-						<reference key="object" ref="29238952"/>
-						<reference key="parent" ref="537831590"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">271</int>
 						<reference key="object" ref="141370142"/>
 						<object class="NSMutableArray" key="children">
@@ -1218,12 +1154,6 @@
 					<string>257.IBPluginDependency</string>
 					<string>261.IBPluginDependency</string>
 					<string>262.IBPluginDependency</string>
-					<string>265.IBPluginDependency</string>
-					<string>265.IBViewIntegration.shadowBlurRadius</string>
-					<string>265.IBViewIntegration.shadowColor</string>
-					<string>265.IBViewIntegration.shadowOffsetHeight</string>
-					<string>265.IBViewIntegration.shadowOffsetWidth</string>
-					<string>266.IBPluginDependency</string>
 					<string>271.IBPluginDependency</string>
 					<string>271.IBViewIntegration.shadowBlurRadius</string>
 					<string>271.IBViewIntegration.shadowColor</string>
@@ -1316,20 +1246,14 @@
 					<integer value="0"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="0"/>
-					<reference ref="864448722"/>
-					<integer value="0"/>
-					<integer value="0"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{411, 496}, {480, 360}}</string>
+					<string>{{261, 473}, {480, 360}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="YES"/>
-					<string>{{411, 496}, {480, 360}}</string>
+					<string>{{261, 473}, {480, 360}}</string>
 					<integer value="1"/>
 					<string>{{221, 276}, {533, 580}}</string>
 					<boolean value="NO"/>
@@ -1393,7 +1317,6 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>SettingsChanged:</string>
 							<string>createMoviePreview:</string>
-							<string>goFullScreen:</string>
 							<string>goWindowedScreen:</string>
 							<string>pictureSliderChanged:</string>
 							<string>previewDurationPopUpChanged:</string>
@@ -1401,7 +1324,6 @@
 							<string>showPictureSettings:</string>
 							<string>showPreviewWindow:</string>
 							<string>toggleScaleToScreen:</string>
-							<string>toggleScreenMode:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1410,9 +1332,7 @@
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
-							<string>id</string>
 							<string>NSString</string>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>

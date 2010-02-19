@@ -36,14 +36,8 @@
 //------------------------------------------------------------------------------------
 - (IBAction) showPictureWindow: (id)sender
 {
-    if ([fPreviewController fullScreen] == YES)
-    {
-        [self showWindow:sender];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
-        [self setToFullScreenMode];
-    }
-    else
-    {
+
+
         if ([[self window] isVisible])
         {
             [[self window] close];
@@ -54,15 +48,12 @@
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PictureSizeWindowIsOpen"];
             [self setToWindowedMode];
         }
-    }
+
     [self adjustFilterDisplay:nil];
     [self adjustSizingDisplay:nil];
 }
 
-- (BOOL) previewFullScreenMode
-{
-    return [fPreviewController fullScreen];
-}
+
 
 /* this method is used to detect clicking on a tab in fSizeFilterView */
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem
@@ -408,16 +399,6 @@
 }
 
 
-
-
-- (void) setToFullScreenMode
-{
-    int32_t shieldLevel = CGShieldingWindowLevel(); 
-    
-    [fPictureWindow setLevel:shieldLevel + 1]; 
-    // Show the window. 
-    [fPictureWindow makeKeyAndOrderFront:self];
-}
 
 - (void) setToWindowedMode
 {

@@ -49,10 +49,8 @@
     int                               hudTimerSeconds;
     
     /* Full Screen Mode Toggle */
-    IBOutlet NSButton               * fFullScreenToggleButton;
     IBOutlet NSButton               * fScaleToScreenToggleButton;
     IBOutlet NSButton               * fPictureSettingsToggleButton;
-    BOOL                              isFullScreen;
     BOOL                              scaleToScreen;
     /* Movie Previews */
     IBOutlet NSButton               * fCreatePreviewMovieButton;
@@ -80,12 +78,8 @@
 - (IBAction)showPictureSettings:(id)sender;
 - (NSString*) pictureSizeInfoString;
 
-/* Full Screen */
-- (IBAction)toggleScreenMode:(id)sender;
 - (IBAction)toggleScaleToScreen:(id)sender;
-- (BOOL)fullScreen;
-- (IBAction)goFullScreen:(id)sender;
-- (IBAction)goWindowedScreen:(id)sender;
+
 
 /* HUD overlay */
 - (void) startHudTimer;

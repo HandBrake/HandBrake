@@ -83,7 +83,6 @@
     //[self pictureSliderChanged:nil];
     [self startReceivingLibhbNotifications];
     
-    isFullScreen = NO;
     hudTimerSeconds = 0;
     /* we set the progress indicator to not use threaded animation
      * as it causes a conflict with the qtmovieview's controllerbar
@@ -134,7 +133,6 @@
     [fMovieView setHidden:YES];
 	[fMovieView setMovie:nil];
 
-    isFullScreen = NO;
     hudTimerSeconds = 0;
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"PreviewWindowIsOpen"];
 }
@@ -389,7 +387,6 @@
         [self showWindow:sender];
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"PreviewWindowIsOpen"];
         [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-        isFullScreen = NO;
         scaleToScreen = NO;
         [self pictureSliderChanged:nil];
     }
@@ -459,19 +456,7 @@
     }
 }
 
-#pragma mark Fullscreen Mode
 
-- (IBAction)toggleScreenMode:(id)sender
-{
-    if (!isFullScreen)
-    {
-        [self goFullScreen:nil];
-    }
-    else
-    {
-        [self goWindowedScreen:nil];
-    }
-}
 
 - (IBAction)toggleScaleToScreen:(id)sender
 {
@@ -480,117 +465,19 @@
         scaleToScreen = NO;
         /* make sure we are set to a still preview */
         [self pictureSliderChanged:nil];
-        [fScaleToScreenToggleButton setTitle:@"<->"];
+        [fScaleToScreenToggleButton setTitle:@"Scale To Screen"];
     }
     else
     {
         scaleToScreen = YES;
         /* make sure we are set to a still preview */
         [self pictureSliderChanged:nil];
-        [fScaleToScreenToggleButton setTitle:@">-<"];
+        [fScaleToScreenToggleButton setTitle:@"Actual Scale"];
     }
     
 }
 
-- (BOOL)fullScreen
-{
-    return isFullScreen;
-}
 
-- (IBAction)goFullScreen:(id)sender 
-{ 
-    // Get the screen information. 
-    NSScreen* mainScreen = [fPreviewWindow screen];
-    NSDictionary* screenInfo = [mainScreen deviceDescription]; 
-    NSNumber* screenID = [screenInfo objectForKey:@"NSScreenNumber"]; 
-    // Capture the screen. 
-    CGDirectDisplayID displayID = (CGDirectDisplayID)[screenID longValue]; 
-    CGDisplayErr err = CGDisplayCapture(displayID); 
-    
-    if (err == CGDisplayNoErr) 
-    { 
-        
-        /* make sure we are set to a still preview and not scaled to screen */
-        scaleToScreen = NO;
-        [self pictureSliderChanged:nil];
-        
-        // Create the full-screen window. 
-        //NSRect winRect = [mainScreen frame];
-        //fPictureViewArea
-        NSRect winRect = [fPictureViewArea frame];
-          
-        fFullScreenWindow = [[NSWindow alloc] initWithContentRect:winRect 
-                                                        styleMask:NSBorderlessWindowMask 
-                                                          backing:NSBackingStoreBuffered 
-                                                            defer:NO 
-                                                           screen:mainScreen]; 
-        
-        // Establish the window attributes. 
-        [fFullScreenWindow setReleasedWhenClosed:NO]; 
-        [fFullScreenWindow setDisplaysWhenScreenProfileChanges:YES]; 
-        [fFullScreenWindow setDelegate:self]; 
-        
-        /* insert a view into the new window */
-        [fFullScreenWindow setContentView:fPictureViewArea]; 
-        [fPictureViewArea setNeedsDisplay:YES];
-        
-        /* Better to center the window using the screen's frame
-         * and the windows origin. Note that we should take into
-         * account the auto sizing and alignment that occurs in 
-         * setViewSize each time the preview changes.
-         * Note: by using [fFullScreenWindow screen] (instead of
-         * [NSScreen mainScreen]) in referencing the screen
-         * coordinates, the full screen window will show up on
-         * whichever display was being used in windowed mode
-         * on multi-display systems
-         */
-        
-        NSSize screenSize = [[fFullScreenWindow screen] frame].size;
-        NSSize windowSize = [fFullScreenWindow frame].size;
-        NSPoint windowOrigin = [fFullScreenWindow frame].origin;
-        
-        /* Adjust our origin y (vertical) based on the screen height */
-        windowOrigin.y += (screenSize.height - windowSize.height) / 2.0;
-        windowOrigin.x += (screenSize.width - windowSize.width) / 2.0;
-        
-        [fFullScreenWindow setFrameOrigin:windowOrigin];
-        
-        /* lets kill the timer for now */
-        [self stopReceivingLibhbNotifications];
-        
-        /* We need to retain the fPreviewWindow */
-        [fPreviewWindow retain];
-        
-        [self setWindow:fFullScreenWindow];
-        
-        // The window has to be above the level of the shield window.
-        int32_t shieldLevel = CGShieldingWindowLevel(); 
-        
-        [fFullScreenWindow setLevel:shieldLevel]; 
-        
-        // Show the window. 
-        [fFullScreenWindow makeKeyAndOrderFront:self];
-        
-        
-        /* Change the name of fFullScreenToggleButton appropriately */
-        [fFullScreenToggleButton setTitle: @"Windowed"];
-        
-        /* Lets fire the timer back up for the hud controls, etc. */
-        [self startReceivingLibhbNotifications];
-        
-        isFullScreen = YES;
-        [fScaleToScreenToggleButton setHidden:NO];
-        
-        /* make sure we are set to a still preview */
-        [self pictureSliderChanged:nil];
-        
-        [fFullScreenWindow setAcceptsMouseMovedEvents:YES];
-        
-        
-        hudTimerSeconds = 0;
-        [self startHudTimer];
-    } 
-} 
 
 // Title-less windows normally don't receive key presses, override this
 - (BOOL)canBecomeKeyWindow
@@ -606,58 +493,7 @@
 }
 
 
-- (IBAction)goWindowedScreen:(id)sender
-{
-    
-    /* Get the screen info to release the display but don't actually do
-     * it until the windowed screen is setup.
-     */
-    scaleToScreen = NO;
-    [self pictureSliderChanged:nil];
-    [fScaleToScreenToggleButton setTitle:@"<->"];
-        
-    NSScreen* mainScreen = [NSScreen mainScreen]; 
-    NSDictionary* screenInfo = [mainScreen deviceDescription]; 
-    NSNumber* screenID = [screenInfo objectForKey:@"NSScreenNumber"];
-    CGDirectDisplayID displayID = (CGDirectDisplayID)[screenID longValue]; 
-    
-    [fFullScreenWindow dealloc];
-    [fFullScreenWindow release];
-    
-    
-    [fPreviewWindow setContentView:fPictureViewArea]; 
-    [fPictureViewArea setNeedsDisplay:YES];
-    [self setWindow:fPreviewWindow];
-    
-    // Show the window. 
-    [fPreviewWindow makeKeyAndOrderFront:self];
-    
-    /* Set the window back to regular level */
-    [fPreviewWindow setLevel:NSNormalWindowLevel];
-    
-    /* Set the isFullScreen flag back to NO */
-    isFullScreen = NO;
-    scaleToScreen = NO;
-    /* make sure we are set to a still preview */
-    [self pictureSliderChanged:nil];
-    [self showPreviewWindow:nil];
-    
-    /* Change the name of fFullScreenToggleButton appropriately */
-    [fFullScreenToggleButton setTitle: @"Full Screen"];
-    // [fScaleToScreenToggleButton setHidden:YES];
-    /* set the picture settings pallete back to normal level */
-    [fHBController picturePanelWindowed];
-    
-    /* Release the display now that the we are back in windowed mode */
-    CGDisplayRelease(displayID);
-    
-    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
-    //[fFullScreenWindow setAcceptsMouseMovedEvents:NO];
-    
-    hudTimerSeconds = 0;
-    [self startHudTimer];
-    
-}
+
 
 
 #pragma mark Still Preview Image Processing
@@ -994,9 +830,10 @@
      * we retain the gray cropping border  we have already established
      * with the still previews
      */
-
+    
     /* Load the new movie into fMovieView */
-    if (path) {
+    if (path) 
+    {
 		QTMovie * aMovie;
 		NSError	 *outError;
 		NSURL *movieUrl = [NSURL fileURLWithPath:path];
@@ -1008,20 +845,23 @@
 										 [NSNumber numberWithBool:NO], @"QTMovieOpenAsyncOKAttribute",
 										 QTMovieApertureModeClean, QTMovieApertureModeAttribute,
 										 nil];
-
+        
         aMovie = [[[QTMovie alloc] initWithAttributes:movieAttributes error:&outError] autorelease];
-
-		if (!aMovie) {
+        
+		if (!aMovie) 
+        {
 			NSLog(@"Unable to open movie");
 		}
-        else {
+        else 
+        {
             NSRect movieBounds;
             /* we get some size information from the preview movie */
             NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
             movieBounds = [fMovieView movieBounds];
             movieBounds.size.height = movieSize.height;
             
-            if ([fMovieView isControllerVisible]) {
+            if ([fMovieView isControllerVisible]) 
+            {
                 CGFloat controllerBarHeight = [fMovieView controllerBarHeight];
                 if ( controllerBarHeight != 0 ) //Check if QTKit return a real value or not.
                     movieBounds.size.height += controllerBarHeight;
@@ -1185,8 +1025,6 @@
     
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
-    NSSize screenSize = [[[self window] screen] frame].size;
-    //NSSize maxSize = [[self window] maxSize];
     NSSize maxSize = [[[self window] screen] visibleFrame].size;
     NSSize minSize = [[self window] minSize];
     
@@ -1220,22 +1058,7 @@
     if( frame.size.width != [[self window] frame].size.width )
         frame.origin.x -= (deltaX / 2.0);
     
-    if (isFullScreen)
-    {
-        if( frame.size.height != [[self window] frame].size.height )
-        {
-            frame.origin.y -= (deltaY / 2.0);
-        }
-        else
-        {
-            if( frame.size.height != [[self window] frame].size.height )
-                frame.origin.y -= deltaY;
-        }
         
-        [[self window] setFrame:frame display:YES animate:NO];
-    }
-    else
-    {
         /* Since upon launch we can open up the preview window if it was open
          * the last time we quit (and at the size it was) we want to make
          * sure that upon resize we do not have the window off the screen
@@ -1267,7 +1090,7 @@
         }
         
         [[self window] setFrame:frame display:YES animate:YES];
-    }
+    
     
 }
 

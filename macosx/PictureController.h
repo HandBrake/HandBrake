@@ -169,7 +169,7 @@
 - (void)tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem;
 - (IBAction) resizeInspectorForTab: (id)sender;
 - (IBAction) showPreviewWindow: (id)sender;
-- (BOOL) previewFullScreenMode;
+
 - (IBAction) previewGoWindowed: (id)sender;
 
 - (IBAction) adjustSizingDisplay: (id) sender;
@@ -187,7 +187,7 @@
 - (IBAction) storageLinkChanged: (id) sender;
 - (IBAction) parLinkChanged: (id) sender;
 - (IBAction) displayLinkChanged: (id) sender;
-- (void) setToFullScreenMode;
+
 - (void) setToWindowedMode;
 
 /* Filter Actions */
