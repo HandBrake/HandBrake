@@ -397,7 +397,7 @@ namespace Handbrake
         }
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), presetHandler);
+            Form preset = new frmAddPreset(this, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), presetHandler);
             preset.ShowDialog();
         }
         #endregion
@@ -639,16 +639,16 @@ namespace Handbrake
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.Update(parsed.PresetName + " (Imported)", QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null),
+                        presetHandler.Update(parsed.PresetName + " (Imported)", QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
                                                    parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.Add(parsed.PresetName, QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings);
+                    presetHandler.Add(parsed.PresetName, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings);
 
-                    if (presetHandler.Add(parsed.PresetName + " (Imported)", QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings))
+                    if (presetHandler.Add(parsed.PresetName + " (Imported)", QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)") { ForeColor = Color.Black };
                         treeView_presets.Nodes.Add(preset_treeview);
@@ -706,8 +706,8 @@ namespace Handbrake
             {
                 if (encodeQueue.Count != 0 || (!string.IsNullOrEmpty(sourcePath) && !string.IsNullOrEmpty(text_destination.Text)))
                 {
-                    string generatedQuery = QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
-                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+                    string generatedQuery = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
+                    string specifiedQuery = rtf_query.Text != "" ? rtf_query.Text : QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
                     string query = string.Empty;
 
                     // Check to make sure the generated query matches the GUI settings
@@ -776,7 +776,7 @@ namespace Handbrake
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                String query = QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+                String query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
                 if (rtf_query.Text != "")
                     query = rtf_query.Text;
 
@@ -1479,7 +1479,7 @@ namespace Handbrake
         // Query Editor Tab
         private void btn_generate_Query_Click(object sender, EventArgs e)
         {
-            rtf_query.Text = QueryGenerator.GenerateCLIQuery(this, drop_mode.SelectedIndex, 0, null);
+            rtf_query.Text = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
         }
         private void btn_clear_Click(object sender, EventArgs e)
         {

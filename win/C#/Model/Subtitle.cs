@@ -58,6 +58,17 @@ namespace Handbrake.Model
         public string SrtFileName { get; set; }
 
         /// <summary>
+        /// Returns if this is an SRT subtitle.
+        /// </summary>
+        public bool IsSrtSubtitle
+        {
+            get
+            {
+                return SrtFileName != "-";
+            }
+        }
+
+        /// <summary>
         /// A ListViewItem Containing information about this subitlte
         /// </summary>
         public ListViewItem ListView

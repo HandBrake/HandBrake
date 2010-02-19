@@ -80,7 +80,7 @@
             this.btn_addTrack.Text = "Add";
             this.toolTip.SetToolTip(this.btn_addTrack, "Add a new subtitle track to the list below");
             this.btn_addTrack.UseVisualStyleBackColor = false;
-            this.btn_addTrack.Click += new System.EventHandler(this.btn_addSubTrack_Click);
+            this.btn_addTrack.Click += new System.EventHandler(this.BtnAddSubTrackClick);
             // 
             // btn_RemoveSubTrack
             // 
@@ -93,7 +93,7 @@
             this.btn_RemoveSubTrack.TabIndex = 69;
             this.btn_RemoveSubTrack.Text = "Remove";
             this.btn_RemoveSubTrack.UseVisualStyleBackColor = false;
-            this.btn_RemoveSubTrack.Click += new System.EventHandler(this.btn_RemoveSubTrack_Click);
+            this.btn_RemoveSubTrack.Click += new System.EventHandler(this.BtnRemoveSubTrackClick);
             // 
             // lv_subList
             // 
@@ -117,7 +117,7 @@
             this.lv_subList.TabIndex = 70;
             this.lv_subList.UseCompatibleStateImageBehavior = false;
             this.lv_subList.View = System.Windows.Forms.View.Details;
-            this.lv_subList.SelectedIndexChanged += new System.EventHandler(this.lb_subList_SelectedIndexChanged);
+            this.lv_subList.SelectedIndexChanged += new System.EventHandler(this.LbSubListSelectedIndexChanged);
             // 
             // col_Source
             // 
@@ -168,7 +168,7 @@
             this.mnu_moveup.Name = "mnu_moveup";
             this.mnu_moveup.Size = new System.Drawing.Size(138, 22);
             this.mnu_moveup.Text = "Move Up";
-            this.mnu_moveup.Click += new System.EventHandler(this.mnu_moveup_Click);
+            this.mnu_moveup.Click += new System.EventHandler(this.MnuMoveupClick);
             // 
             // mnu_movedown
             // 
@@ -176,7 +176,7 @@
             this.mnu_movedown.Size = new System.Drawing.Size(138, 22);
             this.mnu_movedown.Text = "Move Down";
             this.mnu_movedown.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.mnu_movedown.Click += new System.EventHandler(this.mnu_movedown_Click);
+            this.mnu_movedown.Click += new System.EventHandler(this.MnuMovedownClick);
             // 
             // toolStripSeparator2
             // 
@@ -188,7 +188,7 @@
             this.mnu_remove.Name = "mnu_remove";
             this.mnu_remove.Size = new System.Drawing.Size(138, 22);
             this.mnu_remove.Text = "Remove";
-            this.mnu_remove.Click += new System.EventHandler(this.mnu_remove_Click);
+            this.mnu_remove.Click += new System.EventHandler(this.MnuRemoveClick);
             // 
             // label68
             // 
@@ -233,7 +233,7 @@
             this.drp_subtitleTracks.Name = "drp_subtitleTracks";
             this.drp_subtitleTracks.Size = new System.Drawing.Size(164, 21);
             this.drp_subtitleTracks.TabIndex = 74;
-            this.drp_subtitleTracks.SelectedIndexChanged += new System.EventHandler(this.drp_subtitleTracks_SelectedIndexChanged);
+            this.drp_subtitleTracks.SelectedIndexChanged += new System.EventHandler(this.DrpSubtitleTracksSelectedIndexChanged);
             // 
             // label10
             // 
@@ -284,7 +284,7 @@
             this.srt_offset.Name = "srt_offset";
             this.srt_offset.Size = new System.Drawing.Size(58, 21);
             this.srt_offset.TabIndex = 79;
-            this.srt_offset.ValueChanged += new System.EventHandler(this.srt_offset_ValueChanged);
+            this.srt_offset.ValueChanged += new System.EventHandler(this.SrtOffsetValueChanged);
             // 
             // srt_lang
             // 
@@ -295,7 +295,7 @@
             this.srt_lang.Name = "srt_lang";
             this.srt_lang.Size = new System.Drawing.Size(103, 21);
             this.srt_lang.TabIndex = 50;
-            this.srt_lang.SelectedIndexChanged += new System.EventHandler(this.srt_lang_SelectedIndexChanged);
+            this.srt_lang.SelectedIndexChanged += new System.EventHandler(this.SrtLangSelectedIndexChanged);
             // 
             // label8
             // 
@@ -347,7 +347,7 @@
             this.srt_charcode.Name = "srt_charcode";
             this.srt_charcode.Size = new System.Drawing.Size(78, 21);
             this.srt_charcode.TabIndex = 73;
-            this.srt_charcode.SelectedIndexChanged += new System.EventHandler(this.srt_charcode_SelectedIndexChanged);
+            this.srt_charcode.SelectedIndexChanged += new System.EventHandler(this.SrtCharcodeSelectedIndexChanged);
             // 
             // label4
             // 
@@ -366,7 +366,7 @@
             this.check_forced.Size = new System.Drawing.Size(15, 14);
             this.check_forced.TabIndex = 75;
             this.check_forced.UseVisualStyleBackColor = true;
-            this.check_forced.CheckedChanged += new System.EventHandler(this.check_forced_CheckedChanged);
+            this.check_forced.CheckedChanged += new System.EventHandler(this.CheckForcedCheckedChanged);
             // 
             // label7
             // 
@@ -394,7 +394,7 @@
             this.check_default.Size = new System.Drawing.Size(15, 14);
             this.check_default.TabIndex = 77;
             this.check_default.UseVisualStyleBackColor = true;
-            this.check_default.CheckedChanged += new System.EventHandler(this.check_default_CheckedChanged);
+            this.check_default.CheckedChanged += new System.EventHandler(this.CheckDefaultCheckedChanged);
             // 
             // check_burned
             // 
@@ -404,7 +404,7 @@
             this.check_burned.Size = new System.Drawing.Size(15, 14);
             this.check_burned.TabIndex = 76;
             this.check_burned.UseVisualStyleBackColor = true;
-            this.check_burned.CheckedChanged += new System.EventHandler(this.check_burned_CheckedChanged);
+            this.check_burned.CheckedChanged += new System.EventHandler(this.CheckBurnedCheckedChanged);
             // 
             // btn_srtAdd
             // 
@@ -418,7 +418,7 @@
             this.btn_srtAdd.Text = "Import SRT";
             this.toolTip.SetToolTip(this.btn_srtAdd, "Add a new SRT file to the \"track\" dropdown menu.");
             this.btn_srtAdd.UseVisualStyleBackColor = false;
-            this.btn_srtAdd.Click += new System.EventHandler(this.btn_srtAdd_Click);
+            this.btn_srtAdd.Click += new System.EventHandler(this.BtnSrtAddClick);
             // 
             // openFileDialog
             // 

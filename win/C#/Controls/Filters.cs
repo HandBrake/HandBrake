@@ -31,7 +31,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Returns the CLI query for the query generator.
         /// </summary>
-        public string GetCLIQuery
+        public string GetCliQuery
         {
             get
             {
@@ -262,14 +262,14 @@ namespace Handbrake.Controls
         }
 
         // Controls
-        private void drop_detelecine_SelectedIndexChanged(object sender, EventArgs e)
+        private void DropDetelecineSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDT.Visible = drop_detelecine.Text == "Custom";
             // A Filter has changed so raise a FilterSettingsChanged event.
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
-        private void drop_decomb_SelectedIndexChanged(object sender, EventArgs e)
+        private void DropDecombSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDC.Visible = drop_decomb.Text == "Custom";
             if (drop_decomb.SelectedIndex != 0 && drop_deinterlace.SelectedIndex != 0)
@@ -279,7 +279,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
-        private void drop_deinterlace_SelectedIndexChanged(object sender, EventArgs e)
+        private void DropDeinterlaceSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDI.Visible = drop_deinterlace.Text == "Custom";
             if (drop_decomb.SelectedIndex != 0 && drop_deinterlace.SelectedIndex != 0)
@@ -289,7 +289,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
-        private void drop_denoise_SelectedIndexChanged(object sender, EventArgs e)
+        private void DropDenoiseSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDN.Visible = drop_denoise.Text == "Custom";
 
@@ -297,7 +297,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
-        private void slider_deblock_Scroll(object sender, EventArgs e)
+        private void SliderDeblockScroll(object sender, EventArgs e)
         {
             lbl_deblockVal.Text = slider_deblock.Value == 4 ? "Off" : slider_deblock.Value.ToString();
 

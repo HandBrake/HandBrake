@@ -86,7 +86,7 @@
             this.drop_detelecine.Name = "drop_detelecine";
             this.drop_detelecine.Size = new System.Drawing.Size(174, 21);
             this.drop_detelecine.TabIndex = 45;
-            this.drop_detelecine.SelectedIndexChanged += new System.EventHandler(this.drop_detelecine_SelectedIndexChanged);
+            this.drop_detelecine.SelectedIndexChanged += new System.EventHandler(this.DropDetelecineSelectedIndexChanged);
             // 
             // text_customDC
             // 
@@ -124,7 +124,7 @@
             this.drop_decomb.Name = "drop_decomb";
             this.drop_decomb.Size = new System.Drawing.Size(174, 21);
             this.drop_decomb.TabIndex = 48;
-            this.drop_decomb.SelectedIndexChanged += new System.EventHandler(this.drop_decomb_SelectedIndexChanged);
+            this.drop_decomb.SelectedIndexChanged += new System.EventHandler(this.DropDecombSelectedIndexChanged);
             // 
             // text_customDI
             // 
@@ -164,7 +164,7 @@
             this.drop_deinterlace.Name = "drop_deinterlace";
             this.drop_deinterlace.Size = new System.Drawing.Size(174, 21);
             this.drop_deinterlace.TabIndex = 51;
-            this.drop_deinterlace.SelectedIndexChanged += new System.EventHandler(this.drop_deinterlace_SelectedIndexChanged);
+            this.drop_deinterlace.SelectedIndexChanged += new System.EventHandler(this.DropDeinterlaceSelectedIndexChanged);
             // 
             // text_customDN
             // 
@@ -204,7 +204,7 @@
             this.drop_denoise.Name = "drop_denoise";
             this.drop_denoise.Size = new System.Drawing.Size(174, 21);
             this.drop_denoise.TabIndex = 54;
-            this.drop_denoise.SelectedIndexChanged += new System.EventHandler(this.drop_denoise_SelectedIndexChanged);
+            this.drop_denoise.SelectedIndexChanged += new System.EventHandler(this.DropDenoiseSelectedIndexChanged);
             // 
             // slider_deblock
             // 
@@ -218,7 +218,7 @@
             this.slider_deblock.Size = new System.Drawing.Size(174, 45);
             this.slider_deblock.TabIndex = 58;
             this.slider_deblock.Value = 4;
-            this.slider_deblock.Scroll += new System.EventHandler(this.slider_deblock_Scroll);
+            this.slider_deblock.Scroll += new System.EventHandler(this.SliderDeblockScroll);
             // 
             // check_grayscale
             // 

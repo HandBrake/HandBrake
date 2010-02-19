@@ -142,7 +142,7 @@ namespace Handbrake.Controls
             this.crop_left.Name = "crop_left";
             this.crop_left.Size = new System.Drawing.Size(44, 21);
             this.crop_left.TabIndex = 98;
-            this.crop_left.ValueChanged += new System.EventHandler(this.crop_ValueChanged);
+            this.crop_left.ValueChanged += new System.EventHandler(this.CropValueChanged);
             // 
             // crop_right
             // 
@@ -161,7 +161,7 @@ namespace Handbrake.Controls
             this.crop_right.Name = "crop_right";
             this.crop_right.Size = new System.Drawing.Size(44, 21);
             this.crop_right.TabIndex = 101;
-            this.crop_right.ValueChanged += new System.EventHandler(this.crop_ValueChanged);
+            this.crop_right.ValueChanged += new System.EventHandler(this.CropValueChanged);
             // 
             // check_autoCrop
             // 
@@ -177,7 +177,7 @@ namespace Handbrake.Controls
             this.check_autoCrop.TabStop = true;
             this.check_autoCrop.Text = "Automatic";
             this.check_autoCrop.UseVisualStyleBackColor = true;
-            this.check_autoCrop.CheckedChanged += new System.EventHandler(this.check_autoCrop_CheckedChanged);
+            this.check_autoCrop.CheckedChanged += new System.EventHandler(this.CheckAutoCropCheckedChanged);
             // 
             // Label51
             // 
@@ -209,7 +209,7 @@ namespace Handbrake.Controls
             this.crop_top.Name = "crop_top";
             this.crop_top.Size = new System.Drawing.Size(44, 21);
             this.crop_top.TabIndex = 100;
-            this.crop_top.ValueChanged += new System.EventHandler(this.crop_ValueChanged);
+            this.crop_top.ValueChanged += new System.EventHandler(this.CropValueChanged);
             // 
             // Label53
             // 
@@ -254,7 +254,7 @@ namespace Handbrake.Controls
             this.crop_bottom.Name = "crop_bottom";
             this.crop_bottom.Size = new System.Drawing.Size(44, 21);
             this.crop_bottom.TabIndex = 103;
-            this.crop_bottom.ValueChanged += new System.EventHandler(this.crop_ValueChanged);
+            this.crop_bottom.ValueChanged += new System.EventHandler(this.CropValueChanged);
             // 
             // check_customCrop
             // 
@@ -374,7 +374,7 @@ namespace Handbrake.Controls
             this.text_width.Name = "text_width";
             this.text_width.Size = new System.Drawing.Size(64, 21);
             this.text_width.TabIndex = 85;
-            this.text_width.ValueChanged += new System.EventHandler(this.text_width_ValueChanged);
+            this.text_width.ValueChanged += new System.EventHandler(this.TextWidthValueChanged);
             // 
             // lbl_max
             // 
@@ -387,7 +387,7 @@ namespace Handbrake.Controls
             this.lbl_max.Size = new System.Drawing.Size(15, 13);
             this.lbl_max.TabIndex = 83;
             this.lbl_max.Text = "--";
-            this.lbl_max.DoubleClick += new System.EventHandler(this.lbl_max_DoubleClick);
+            this.lbl_max.DoubleClick += new System.EventHandler(this.LblMaxDoubleClick);
             // 
             // label4
             // 
@@ -414,7 +414,7 @@ namespace Handbrake.Controls
             this.text_height.Name = "text_height";
             this.text_height.Size = new System.Drawing.Size(64, 21);
             this.text_height.TabIndex = 86;
-            this.text_height.ValueChanged += new System.EventHandler(this.text_height_ValueChanged);
+            this.text_height.ValueChanged += new System.EventHandler(this.TextHeightValueChanged);
             // 
             // check_KeepAR
             // 
@@ -429,7 +429,7 @@ namespace Handbrake.Controls
             this.check_KeepAR.TabIndex = 95;
             this.check_KeepAR.Text = "Keep Aspect Ratio";
             this.check_KeepAR.UseVisualStyleBackColor = true;
-            this.check_KeepAR.CheckedChanged += new System.EventHandler(this.check_KeepAR_CheckedChanged);
+            this.check_KeepAR.CheckedChanged += new System.EventHandler(this.CheckKeepArCheckedChanged);
             // 
             // tableLayoutPanel1
             // 
@@ -473,7 +473,7 @@ namespace Handbrake.Controls
             this.updownParHeight.Name = "updownParHeight";
             this.updownParHeight.Size = new System.Drawing.Size(53, 21);
             this.updownParHeight.TabIndex = 112;
-            this.updownParHeight.ValueChanged += new System.EventHandler(this.text_width_ValueChanged);
+            this.updownParHeight.ValueChanged += new System.EventHandler(this.TextWidthValueChanged);
             // 
             // label6
             // 
@@ -537,7 +537,7 @@ namespace Handbrake.Controls
             this.updownParWidth.Name = "updownParWidth";
             this.updownParWidth.Size = new System.Drawing.Size(53, 21);
             this.updownParWidth.TabIndex = 111;
-            this.updownParWidth.ValueChanged += new System.EventHandler(this.text_width_ValueChanged);
+            this.updownParWidth.ValueChanged += new System.EventHandler(this.TextWidthValueChanged);
             // 
             // drp_anamorphic
             // 
@@ -552,7 +552,7 @@ namespace Handbrake.Controls
             this.drp_anamorphic.Name = "drp_anamorphic";
             this.drp_anamorphic.Size = new System.Drawing.Size(110, 21);
             this.drp_anamorphic.TabIndex = 82;
-            this.drp_anamorphic.SelectedIndexChanged += new System.EventHandler(this.drp_anamorphic_SelectedIndexChanged);
+            this.drp_anamorphic.SelectedIndexChanged += new System.EventHandler(this.DrpAnamorphicSelectedIndexChanged);
             // 
             // lbl_parWidth
             // 
@@ -578,7 +578,7 @@ namespace Handbrake.Controls
             this.updownDisplayWidth.Name = "updownDisplayWidth";
             this.updownDisplayWidth.Size = new System.Drawing.Size(53, 21);
             this.updownDisplayWidth.TabIndex = 110;
-            this.updownDisplayWidth.ValueChanged += new System.EventHandler(this.updownDisplayWidth_ValueChanged);
+            this.updownDisplayWidth.ValueChanged += new System.EventHandler(this.UpdownDisplayWidthValueChanged);
             // 
             // lbl_modulus
             // 
@@ -619,7 +619,7 @@ namespace Handbrake.Controls
             this.drp_modulus.Name = "drp_modulus";
             this.drp_modulus.Size = new System.Drawing.Size(110, 21);
             this.drp_modulus.TabIndex = 88;
-            this.drp_modulus.SelectedIndexChanged += new System.EventHandler(this.drp_modulus_SelectedIndexChanged);
+            this.drp_modulus.SelectedIndexChanged += new System.EventHandler(this.DrpModulusSelectedIndexChanged);
             // 
             // label8
             // 

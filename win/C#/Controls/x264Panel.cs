@@ -34,7 +34,7 @@ namespace Handbrake.Controls
         /// </summary>
         public string X264Query
         {
-            get { return rtf_x264Query.Text; }
+            get { return " -x " + rtf_x264Query.Text; }
             set { rtf_x264Query.Text = value; }
         }
         

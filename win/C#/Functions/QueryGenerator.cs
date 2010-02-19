@@ -23,7 +23,7 @@ namespace Handbrake.Functions
         /// <param name="duration">time in seconds for preview mode</param>
         /// <param name="preview"> --start-at-preview (int) </param>
         /// <returns>CLI Query </returns>
-        public static string GenerateCLIQuery(frmMain mainWindow, int mode, int duration, string preview)
+        public static string GenerateCliQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
             string query = "";
             
@@ -157,11 +157,17 @@ namespace Handbrake.Functions
 
             switch (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex)
             {
+                case 0:
+                    if (mainWindow.PictureSettings.drp_modulus.SelectedIndex != 0)
+                        query += " --modulus " + mainWindow.PictureSettings.drp_modulus.SelectedItem;
+                    break;
                 case 1:
                     query += " --strict-anamorphic ";
                     break;
                 case 2:
                     query += " --loose-anamorphic ";
+                    if (mainWindow.PictureSettings.drp_modulus.SelectedIndex != 0)
+                        query += " --modulus " + mainWindow.PictureSettings.drp_modulus.SelectedItem;
                     break;
                 case 3:
                     query += " --custom-anamorphic ";
@@ -182,9 +188,8 @@ namespace Handbrake.Functions
             }
             #endregion
 
-            #region Filters
-            query += mainWindow.Filters.GetCLIQuery;
-            #endregion
+            // Filters Panel
+            query += mainWindow.Filters.GetCliQuery;
 
             #region Video Settings Tab
 
@@ -382,116 +387,8 @@ namespace Handbrake.Functions
 
             #endregion
 
-            #region Subtitles Tab
-            if (mainWindow.Subtitles.lv_subList.Items.Count != 0) // If we have subtitle tracks
-            {
-                IDictionary<string, string> langMap = Main.MapLanguages();
-
-                // BitMap and CC's
-                string subtitleTracks = String.Empty;
-                string subtitleForced = String.Empty;
-                string subtitleBurn = String.Empty;
-                string subtitleDefault = String.Empty;
-
-                // SRT
-                string srtFile = String.Empty;
-                string srtCodeset = String.Empty;
-                string srtOffset = String.Empty;
-                string srtLang = String.Empty;
-                string srtDefault = String.Empty;
-                int srtCount = 0;
-
-                List<SubtitleInfo> SubList = mainWindow.Subtitles.GetSubtitleInfoList();
-
-                foreach (var item in SubList)
-                {
-                    string itemToAdd, trackID;
-
-                    if (item.SrtPath != "-") // We have an SRT file
-                    {
-                        srtCount++; // SRT track id.
-
-                        srtLang += srtLang == "" ? langMap[item.SrtLang] : "," + langMap[item.SrtLang];
-                        srtCodeset += srtCodeset == "" ? item.SrtCharCode : "," + item.SrtCharCode;
-
-                        if (item.Default == "Yes") // default
-                            srtDefault = srtCount.ToString();
-
-                        itemToAdd = item.SrtPath;
-                        srtFile += srtFile == "" ? itemToAdd : "," + itemToAdd;
-
-                        itemToAdd = item.SrtOffset.ToString();
-                        srtOffset += srtOffset == "" ? itemToAdd : "," + itemToAdd;
-                    }
-                    else // We have Bitmap or CC
-                    {
-                        string[] tempSub;
-
-                        // Find --subtitle <string>
-                        if (item.Track.Contains("Foreign Audio Search"))
-                            itemToAdd = "scan";
-                        else
-                        {
-                            tempSub = item.Track.Split(' ');
-                            itemToAdd = tempSub[0];
-                        }
-
-                        subtitleTracks += subtitleTracks == "" ? itemToAdd : "," + itemToAdd;
-
-                        // Find --subtitle-forced
-                        itemToAdd = "";
-                        tempSub = item.Track.Split(' ');
-                        trackID = tempSub[0];
-
-                        if (item.Forced == "Yes")
-                            itemToAdd = "scan";
-
-                        if (itemToAdd != "")
-                            subtitleForced += subtitleForced == "" ? itemToAdd : "," + itemToAdd;
-
-                        // Find --subtitle-burn and --subtitle-default
-                        trackID = tempSub[0];
-
-                        if (trackID.Trim() == "Foreign")
-                            trackID = "scan";
-
-                        if (item.Burned == "Yes") // burn
-                            subtitleBurn = trackID;
-
-                        if (item.Default == "Yes") // default
-                            subtitleDefault = trackID;
-                    }
-                }
-
-                // Build The CLI Subtitles Query
-                if (subtitleTracks != "")
-                {
-                    query += " --subtitle " + subtitleTracks;
-
-                    if (subtitleForced != "")
-                        query += " --subtitle-forced=" + subtitleForced;
-                    if (subtitleBurn != "")
-                        query += " --subtitle-burn=" + subtitleBurn;
-                    if (subtitleDefault != "")
-                        query += " --subtitle-default=" + subtitleDefault;
-                }
-
-                if (srtFile != "") // SRTs
-                {
-                    query += " --srt-file " + "\"" + srtFile + "\"";
-
-                    if (srtCodeset != "")
-                        query += " --srt-codeset " + srtCodeset;
-                    if (srtOffset != "")
-                        query += " --srt-offset " + srtOffset;
-                    if (srtLang != "")
-                        query += " --srt-lang " + srtLang;
-                    if (srtDefault != "")
-                        query += " --srt-default=" + srtDefault;
-                }
-
-            }
-            #endregion
+            // Subtitles Panel
+            query += mainWindow.Subtitles.GetCliQuery;
 
             #region Chapter Markers
 
@@ -502,16 +399,16 @@ namespace Handbrake.Functions
             dest_name = dest_name.Replace("\"", "");
             dest_name = dest_name.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "");
 
-            string source_title = mainWindow.drp_dvdtitle.Text;
-            string[] titlesplit = source_title.Split(' ');
-            source_title = titlesplit[0];
+            string sourceTitle = mainWindow.drp_dvdtitle.Text;
+            string[] titlesplit = sourceTitle.Split(' ');
+            sourceTitle = titlesplit[0];
 
             if (mainWindow.Check_ChapterMarkers.Checked && mainWindow.Check_ChapterMarkers.Enabled)
             {
                 if (dest_name.Trim() != String.Empty)
                 {
-                    string path = source_title != "Automatic"
-                                      ? Path.Combine(Path.GetTempPath(), dest_name + "-" + source_title + "-chapters.csv")
+                    string path = sourceTitle != "Automatic"
+                                      ? Path.Combine(Path.GetTempPath(), dest_name + "-" + sourceTitle + "-chapters.csv")
                                       : Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
 
                     if (ChapterCSVSave(mainWindow, path) == false)
@@ -524,10 +421,8 @@ namespace Handbrake.Functions
             }
             #endregion
 
-            #region  H264 Tab
-            if (mainWindow.x264Panel.X264Query != "")
-                query += " -x " + mainWindow.x264Panel.X264Query;
-            #endregion
+            // X264 Panel
+            query += " -x " + mainWindow.x264Panel.X264Query;
 
             #region Processors / Other
             string processors = Properties.Settings.Default.Processors;
