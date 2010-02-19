@@ -1105,7 +1105,7 @@
     CGFloat minWidth = 480.0;
     CGFloat minHeight = 360.0;
 
-    NSSize screenSize = [[NSScreen mainScreen] frame].size;
+    NSSize screenSize = [[NSScreen mainScreen] visibleFrame].size;
     NSSize sheetSize = [[self window] frame].size;
     NSSize viewAreaSize = [fPictureViewArea frame].size;
     CGFloat paddingX = sheetSize.width - viewAreaSize.width;
@@ -1113,18 +1113,8 @@
     CGFloat maxWidth;
     CGFloat maxHeight;
     
-    if (isFullScreen)
-    {
-        /* We are in full screen mode so lets use the full screen if we need to */
-        maxWidth =  screenSize.width - paddingX;
-        maxHeight = screenSize.height - paddingY;
-    }
-    else
-    {
-        // The max size of the view is when the sheet is taking up 85% of the screen.
-        maxWidth = (0.85 * screenSize.width) - paddingX;
-        maxHeight = (0.85 * screenSize.height) - paddingY;
-    }
+    maxWidth =  screenSize.width - paddingX;
+    maxHeight = screenSize.height - paddingY;
     
     NSSize resultSize = imageSize;
     CGFloat resultPar = resultSize.width / resultSize.height;
