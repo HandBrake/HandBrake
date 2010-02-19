@@ -79,7 +79,7 @@
 - (NSString*) pictureSizeInfoString;
 
 - (IBAction)toggleScaleToScreen:(id)sender;
-
+- (IBAction)goWindowedScreen:(id)sender;
 
 /* HUD overlay */
 - (void) startHudTimer;

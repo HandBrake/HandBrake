@@ -493,7 +493,58 @@
 }
 
 
-
+- (IBAction)goWindowedScreen:(id)sender
+{
+    
+    /* Get the screen info to release the display but don't actually do
+     * it until the windowed screen is setup.
+     */
+    scaleToScreen = NO;
+    [self pictureSliderChanged:nil];
+    [fScaleToScreenToggleButton setTitle:@"<->"];
+        
+    NSScreen* mainScreen = [NSScreen mainScreen]; 
+    NSDictionary* screenInfo = [mainScreen deviceDescription]; 
+    NSNumber* screenID = [screenInfo objectForKey:@"NSScreenNumber"];
+    CGDirectDisplayID displayID = (CGDirectDisplayID)[screenID longValue]; 
+    
+    [fFullScreenWindow dealloc];
+    [fFullScreenWindow release];
+    
+    
+    [fPreviewWindow setContentView:fPictureViewArea]; 
+    [fPictureViewArea setNeedsDisplay:YES];
+    [self setWindow:fPreviewWindow];
+    
+    // Show the window. 
+    [fPreviewWindow makeKeyAndOrderFront:self];
+    
+    /* Set the window back to regular level */
+    [fPreviewWindow setLevel:NSNormalWindowLevel];
+    
+    /* Set the isFullScreen flag back to NO */
+    //isFullScreen = NO;
+    scaleToScreen = NO;
+    /* make sure we are set to a still preview */
+    [self pictureSliderChanged:nil];
+    [self showPreviewWindow:nil];
+    
+    /* Change the name of fFullScreenToggleButton appropriately */
+    //[fFullScreenToggleButton setTitle: @"Full Screen"];
+    // [fScaleToScreenToggleButton setHidden:YES];
+    /* set the picture settings pallete back to normal level */
+    [fHBController picturePanelWindowed];
+    
+    /* Release the display now that the we are back in windowed mode */
+    CGDisplayRelease(displayID);
+    
+    [fPreviewWindow setAcceptsMouseMovedEvents:YES];
+    //[fFullScreenWindow setAcceptsMouseMovedEvents:NO];
+    
+    hudTimerSeconds = 0;
+    [self startHudTimer];
+    
+}
 
 
 #pragma mark Still Preview Image Processing

@@ -387,10 +387,7 @@
 
 #pragma mark -
 
-- (IBAction) previewGoWindowed: (id)sender
-{
-    [fPreviewController goWindowedScreen:self];
-}
+
 
 - (IBAction) showPreviewWindow: (id)sender
 {

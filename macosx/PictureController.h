@@ -170,7 +170,6 @@
 - (IBAction) resizeInspectorForTab: (id)sender;
 - (IBAction) showPreviewWindow: (id)sender;
 
-- (IBAction) previewGoWindowed: (id)sender;
 
 - (IBAction) adjustSizingDisplay: (id) sender;
 
