@@ -4,15 +4,15 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace Handbrake.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Globalization;
+    using System.IO;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// An object that represents a single Title of a DVD
     /// </summary>
@@ -22,7 +22,7 @@ namespace Handbrake.Parsing
         private readonly List<AudioTrack> m_audioTracks;
         private readonly List<Chapter> m_chapters;
         private readonly List<Subtitle> m_subtitles;
-        private List<String> m_angles = new List<string>();
+        private List<string> m_angles = new List<string>();
         private float m_aspectRatio;
         private float m_fps;
         private int[] m_autoCrop;
@@ -31,8 +31,9 @@ namespace Handbrake.Parsing
         private Size m_resolution;
         private int m_titleNumber;
         private Size m_parVal;
-        
+
         /// <summary>
+        /// Initializes a new instance of the <see cref="Title"/> class. 
         /// The constructor for this object
         /// </summary>
         public Title()
@@ -79,7 +80,7 @@ namespace Handbrake.Parsing
         /// </summary>
         public string SourceName
         {
-            get { return source;  }
+            get { return source; }
         }
 
         /// <summary>
@@ -142,14 +143,14 @@ namespace Handbrake.Parsing
         {
             get { return m_fps; }
         }
-  
+
         /// <summary>
         /// Override of the ToString method to provide an easy way to use this object in the UI
         /// </summary>
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", m_titleNumber, m_duration.Hours,
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", m_titleNumber, m_duration.Hours, 
                                  m_duration.Minutes, m_duration.Seconds);
         }
 
@@ -171,15 +172,15 @@ namespace Handbrake.Parsing
             string path = output.ReadLine();
             m = Regex.Match(path, @"^  \+ stream:");
             if (m.Success)
-                thisTitle.source = path.Replace("+ stream:", "").Trim();
- 
+                thisTitle.source = path.Replace("+ stream:", string.Empty).Trim();
+
             if (!Properties.Settings.Default.noDvdNav)
             {
                 // Get the Angles for the title.
                 m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9])");
                 if (m.Success)
                 {
-                    String angleList = m.Value.Replace("+ angle(s) ", "").Trim();
+                    string angleList = m.Value.Replace("+ angle(s) ", string.Empty).Trim();
                     int angleCount;
                     int.TryParse(angleList, out angleCount);
 
@@ -194,9 +195,9 @@ namespace Handbrake.Parsing
                 thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
 
             // Get resolution, aspect ratio and FPS for this title
-            m = Regex.Match(output.ReadLine(),
+            m = Regex.Match(output.ReadLine(), 
                             @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
-            //size: 720x576, pixel aspect: 16/15, display aspect: 1.33, 25.000 fps
+            // size: 720x576, pixel aspect: 16/15, display aspect: 1.33, 25.000 fps
 
             if (m.Success)
             {
@@ -209,9 +210,9 @@ namespace Handbrake.Parsing
             // Get autocrop region for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
             if (m.Success)
-                thisTitle.m_autoCrop = new int[]
+                thisTitle.m_autoCrop = new[]
                                            {
-                                               int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value),
+                                               int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), 
                                                int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value)
                                            };
 

@@ -4,14 +4,14 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System;
-using System.Globalization;
-
 namespace Handbrake.Parsing
 {
+    using System;
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// A delegate to handle custom events regarding data being parsed from the buffer
     /// </summary>
@@ -37,7 +37,9 @@ namespace Handbrake.Parsing
     /// <param name="CurrentFps">The current encoding fps</param>
     /// <param name="AverageFps">The average encoding fps for this task</param>
     /// <param name="TimeRemaining">The estimated time remaining for this task to complete</param>
-    public delegate void EncodeProgressEventHandler(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining);
+    public delegate void EncodeProgressEventHandler(
+        object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, 
+        TimeSpan TimeRemaining);
 
 
     /// <summary>
@@ -45,16 +47,14 @@ namespace Handbrake.Parsing
     /// </summary>
     internal class Parser : StreamReader
     {
-        private StringBuilder _buffer = new StringBuilder("");
+        private StringBuilder _buffer = new StringBuilder(string.Empty);
+
         /// <summary>
         /// The output from the CLI process
         /// </summary>
-        public String Buffer
+        public string Buffer
         {
-            get
-            {
-                return _buffer.ToString();
-            }
+            get { return _buffer.ToString(); }
         }
 
         /// <summary>
@@ -73,16 +73,21 @@ namespace Handbrake.Parsing
         public event ScanProgressEventHandler OnScanProgress;
 
         #region Experimetnal Code
+
         /// <summary>
         /// Raised upon the catching of a "Scanning title # of #..." in the stream
         /// </summary>
         public event EncodeProgressEventHandler OnEncodeProgress;
+
         #endregion
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Parser"/> class. 
         /// Default constructor for this object
         /// </summary>
-        /// <param name="baseStream">The stream to parse from</param>
+        /// <param name="baseStream">
+        /// The stream to parse from
+        /// </param>
         public Parser(Stream baseStream)
             : base(baseStream)
         {
@@ -128,7 +133,8 @@ namespace Handbrake.Parsing
             CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
             string tmp = base.ReadLine();
 
-            Match m = Regex.Match(tmp, @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
+            Match m = Regex.Match(tmp, 
+                                  @"^Encoding: task ([0-9]*) of ([0-9]*), ([0-9]*\.[0-9]*) %( \(([0-9]*\.[0-9]*) fps, avg ([0-9]*\.[0-9]*) fps, ETA ([0-9]{2})h([0-9]{2})m([0-9]{2})s\))?");
             if (m.Success && OnEncodeProgress != null)
             {
                 int currentTask = int.Parse(m.Groups[1].Value);

@@ -83,11 +83,11 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public void SafelyClose()
         {
-            if ((int)this.ProcessHandle == 0)
+            if ((int) this.ProcessHandle == 0)
                 return;
 
             // Allow the CLI to exit cleanly
-            Win32.SetForegroundWindow((int)this.ProcessHandle);
+            Win32.SetForegroundWindow((int) this.ProcessHandle);
             SendKeys.Send("^C");
 
             // HbProcess.StandardInput.AutoFlush = true;
@@ -166,7 +166,7 @@ namespace Handbrake.EncodeQueue
             {
                 MessageBox.Show(
                     "It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()\n\n" +
-                    exc,
+                    exc, 
                     "Error", 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
@@ -361,9 +361,9 @@ namespace Handbrake.EncodeQueue
             catch (Exception exc)
             {
                 MessageBox.Show(
-                    "Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc,
-                    "Error",
-                    MessageBoxButtons.OK,
+                    "Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc, 
+                    "Error", 
+                    MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
             }
         }

@@ -37,8 +37,9 @@ namespace Handbrake.Functions
         public static string GenerateCliQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
             string query = string.Empty;
-            
-            if (!string.IsNullOrEmpty(mainWindow.sourcePath) && mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
+
+            if (!string.IsNullOrEmpty(mainWindow.sourcePath) &&
+                mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
                 query = " -i " + '"' + mainWindow.sourcePath + '"';
 
             if (mainWindow.drp_dvdtitle.Text != string.Empty)
@@ -54,10 +55,13 @@ namespace Handbrake.Functions
             switch (mode)
             {
                 case 0: // Chapters
-                    if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != string.Empty)
+                    if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text &&
+                        mainWindow.drop_chapterStart.Text != string.Empty)
                         query += string.Format(" -c {0}", mainWindow.drop_chapterStart.Text);
-                    else if (mainWindow.drop_chapterStart.Text != string.Empty && mainWindow.drop_chapterFinish.Text != string.Empty)
-                        query += string.Format(" -c {0}-{1}", mainWindow.drop_chapterStart.Text, mainWindow.drop_chapterFinish.Text);
+                    else if (mainWindow.drop_chapterStart.Text != string.Empty &&
+                             mainWindow.drop_chapterFinish.Text != string.Empty)
+                        query += string.Format(" -c {0}-{1}", mainWindow.drop_chapterStart.Text, 
+                                               mainWindow.drop_chapterFinish.Text);
                     break;
                 case 1: // Seconds
                     int start, end;
@@ -65,14 +69,16 @@ namespace Handbrake.Functions
                     int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
                     int calculatedDuration = end - start;
 
-                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
+                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}", 
+                                           mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 2: // Frames
                     int.TryParse(mainWindow.drop_chapterStart.Text, out start);
                     int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
                     calculatedDuration = end - start;
 
-                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
+                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", 
+                                           mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 3: // Preview
                     query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
@@ -80,7 +86,8 @@ namespace Handbrake.Functions
                     query += " --stop-at duration:" + duration + " ";
 
                     if (mainWindow.text_destination.Text != string.Empty)
-                        query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
+                        query += string.Format(" -o \"{0}\" ", 
+                                               mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
                     break;
                 default:
                     break;
@@ -103,6 +110,7 @@ namespace Handbrake.Functions
             string query = string.Empty;
 
             #region Output Settings Box
+
             query += " -f " + mainWindow.drop_format.Text.ToLower().Replace(" file", string.Empty);
 
             // These are output settings features
@@ -114,6 +122,7 @@ namespace Handbrake.Functions
 
             if (mainWindow.check_optimiseMP4.Checked)
                 query += " -O ";
+
             #endregion
 
             #region Picture Settings Tab
@@ -122,7 +131,8 @@ namespace Handbrake.Functions
             if (mainWindow.PictureSettings.PresetMaximumResolution.Width == 0)
             {
                 if (mainWindow.PictureSettings.text_width.Value != 0)
-                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1)
+                        // Prevent usage for strict anamorphic
                         query += " -w " + mainWindow.PictureSettings.text_width.Text;
             }
             else
@@ -137,13 +147,16 @@ namespace Handbrake.Functions
             {
                 if (mainWindow.PictureSettings.text_height.Value != 0)
                     if (mainWindow.PictureSettings.text_height.Text != string.Empty)
-                        if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                        if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 ||
+                            mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
+                            // Prevent usage for strict anamorphic
                             query += " -l " + mainWindow.PictureSettings.text_height.Text;
             }
             else
             {
                 if (mainWindow.PictureSettings.text_height.Value != 0)
-                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 ||
+                        mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
                         query += " -Y " + mainWindow.PictureSettings.text_height.Text;
             }
 
@@ -193,10 +206,13 @@ namespace Handbrake.Functions
                         query += " --keep-display-aspect ";
 
                     if (!mainWindow.PictureSettings.check_KeepAR.Checked)
-                        if (mainWindow.PictureSettings.updownParWidth.Text != string.Empty && mainWindow.PictureSettings.updownParHeight.Text != string.Empty)
-                            query += " --pixel-aspect " + mainWindow.PictureSettings.updownParWidth.Text + ":" + mainWindow.PictureSettings.updownParHeight.Text + " ";
+                        if (mainWindow.PictureSettings.updownParWidth.Text != string.Empty &&
+                            mainWindow.PictureSettings.updownParHeight.Text != string.Empty)
+                            query += " --pixel-aspect " + mainWindow.PictureSettings.updownParWidth.Text + ":" +
+                                     mainWindow.PictureSettings.updownParHeight.Text + " ";
                     break;
             }
+
             #endregion
 
             // Filters Panel
@@ -240,7 +256,7 @@ namespace Handbrake.Functions
                         break;
                     case "H.264 (x264)":
                         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                        value = 51 - mainWindow.slider_videoQuality.Value * cqStep;
+                        value = 51 - mainWindow.slider_videoQuality.Value*cqStep;
                         value = Math.Round(value, 2);
                         query += " -q " + value.ToString(culture);
                         break;
@@ -259,6 +275,7 @@ namespace Handbrake.Functions
 
             if (mainWindow.drp_videoFramerate.Text != "Same as source")
                 query += " -r " + mainWindow.drp_videoFramerate.Text;
+
             #endregion
 
             #region Audio Settings Tab
@@ -417,8 +434,8 @@ namespace Handbrake.Functions
             // This is for the queue. It allows different chapter name files for each title.
             string[] destName = mainWindow.text_destination.Text.Split('\\');
             string dest_name = destName[destName.Length - 1];
-            dest_name = dest_name.Replace("\"", "");
-            dest_name = dest_name.Replace(".mp4", "").Replace(".m4v", "").Replace(".mkv", "");
+            dest_name = dest_name.Replace("\"", string.Empty);
+            dest_name = dest_name.Replace(".mp4", string.Empty).Replace(".m4v", string.Empty).Replace(".mkv", string.Empty);
 
             string sourceTitle = mainWindow.drp_dvdtitle.Text;
             string[] titlesplit = sourceTitle.Split(' ');
@@ -440,12 +457,14 @@ namespace Handbrake.Functions
                 else
                     query += " -m";
             }
+
             #endregion
 
             // X264 Panel
             query += " -x " + mainWindow.x264Panel.X264Query;
 
             #region Processors / Other
+
             string processors = Properties.Settings.Default.Processors;
             if (processors != "Automatic")
                 query += " -C " + processors + " ";
@@ -454,6 +473,7 @@ namespace Handbrake.Functions
 
             if (Properties.Settings.Default.noDvdNav)
                 query += " --no-dvdnav";
+
             #endregion
 
             return query;
@@ -540,7 +560,9 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" +
+                    exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
         }

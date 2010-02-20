@@ -4,14 +4,15 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Windows.Forms;
-using Handbrake.Functions;
-
 namespace Handbrake
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Globalization;
+    using System.Windows.Forms;
+    using Functions;
+
     public partial class frmOptions : Form
     {
         private frmMain mainWindow;
@@ -193,6 +194,7 @@ namespace Handbrake
         }
 
         #region General
+
         private void check_updateCheck_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.updateStatus = check_updateCheck.Checked;
@@ -254,7 +256,7 @@ namespace Handbrake
         {
             if (text_an_path.Text == string.Empty)
             {
-                Properties.Settings.Default.autoNamePath = "";
+                Properties.Settings.Default.autoNamePath = string.Empty;
                 text_an_path.Text = "Click 'Browse' to set the default location";
             }
             else
@@ -265,39 +267,48 @@ namespace Handbrake
         {
             Properties.Settings.Default.useM4v = check_m4v.Checked;
         }
+
         #endregion
 
         #region Picture
+
         private void btn_vlcPath_Click(object sender, EventArgs e)
         {
             openFile_vlc.ShowDialog();
             if (openFile_vlc.FileName != string.Empty)
                 txt_vlcPath.Text = openFile_vlc.FileName;
         }
+
         private void txt_vlcPath_TextChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.VLC_Path = txt_vlcPath.Text;
         }
+
         #endregion
 
         #region Audio and Subtitles
+
         private void drop_preferredLang_SelectedIndexChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.NativeLanguage = drop_preferredLang.SelectedItem.ToString();
         }
+
         private void radio_dub_CheckedChanged(object sender, EventArgs e)
         {
             if (radio_dub.Checked)
                 Properties.Settings.Default.DubAudio = true;
         }
+
         private void radio_foreignAndSubs_CheckedChanged(object sender, EventArgs e)
         {
             if (radio_foreignAndSubs.Checked)
                 Properties.Settings.Default.DubAudio = false;
         }
+
         #endregion
 
         #region CLI
+
         private void check_cli_minimized_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.cli_minimized = check_cli_minimized.Checked;
@@ -345,7 +356,7 @@ namespace Handbrake
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string windir = Environment.GetEnvironmentVariable("WINDIR");
-            System.Diagnostics.Process prc = new System.Diagnostics.Process();
+            Process prc = new Process();
             prc.StartInfo.FileName = windir + @"\explorer.exe";
             prc.StartInfo.Arguments = logDir;
             prc.Start();
@@ -353,11 +364,12 @@ namespace Handbrake
 
         private void btn_clearLogs_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs", 
+                                                  MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
                 Main.ClearLogs();
-                MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK,
+                MessageBox.Show(this, "HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButtons.OK, 
                                 MessageBoxIcon.Information);
             }
         }
@@ -366,6 +378,7 @@ namespace Handbrake
         {
             Properties.Settings.Default.clearOldLogs = check_clearOldLogs.Checked;
         }
+
         #endregion
 
         #region Advanced
@@ -406,11 +419,12 @@ namespace Handbrake
             if (this.IsHandleCreated)
                 if (check_inGuiStatus.Checked)
                 {
-                    MessageBox.Show("This feature is experimental!\n\n You will not be able to ‘Stop’ an encode mid-process.\n"
-                                    + "Doing so will render the file unplayable.\n" +
-                                    "If you enable 'Show CLI Window', you'll be ablt to hit ctrl-c in the encode window to cleanly exit the CLI. This will give you a playable file.\n\n" +
-                                    "You are also limited to 1 instance of HandBrakeCLI on your system.",
-                                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        "This feature is experimental!\n\n You will not be able to ‘Stop’ an encode mid-process.\n"
+                        + "Doing so will render the file unplayable.\n" +
+                        "If you enable 'Show CLI Window', you'll be ablt to hit ctrl-c in the encode window to cleanly exit the CLI. This will give you a playable file.\n\n" +
+                        "You are also limited to 1 instance of HandBrakeCLI on your system.", 
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
         }
 
@@ -448,13 +462,16 @@ namespace Handbrake
         {
             Properties.Settings.Default.noDvdNav = check_dvdnav.Checked;
         }
+
         #endregion
 
         #region Debug
+
         private void check_disableResCalc_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.disableResCalc = check_disableResCalc.Checked;
         }
+
         #endregion
 
         private void btn_close_Click(object sender, EventArgs e)

@@ -4,10 +4,10 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System.Windows.Forms;
-
 namespace Handbrake
 {
+    using System.Windows.Forms;
+
     public partial class frmSplashScreen : Form
     {
         public frmSplashScreen()

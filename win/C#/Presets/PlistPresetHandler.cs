@@ -4,17 +4,17 @@
  	   Homepage: <http://handbrake.fr/>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.IO;
-using System.Text;
-using System.Xml;
-using System.Windows.Forms;
-using System.Collections;
-using Handbrake.Functions;
-using Handbrake.Model;
-
 namespace Handbrake.Presets
 {
+    using System;
+    using System.Collections;
+    using System.IO;
+    using System.Text;
+    using System.Windows.Forms;
+    using System.Xml;
+    using Functions;
+    using Model;
+
     public class PlistPresetHandler
     {
         /* WARNING This file is not complete!!!!!!
@@ -53,7 +53,8 @@ namespace Handbrake.Presets
                 if (!root.HasChildNodes)
                 {
                     MessageBox.Show(
-                        "The Preset file you selected appears to be invlaid or from an older version of HandBrake", "Error",
+                        "The Preset file you selected appears to be invlaid or from an older version of HandBrake", 
+                        "Error", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
@@ -61,8 +62,9 @@ namespace Handbrake.Presets
             catch (Exception)
             {
                 MessageBox.Show(
-                "The Preset file you selected appears to be invlaid or from an older version of HandBrake.\n\n Please note, if you are exporting from the MacGui you may need to rebuild your preset so that it uses the current preset plist format.\n The MacGui does not currently update user presets automatically.", "Error",
-                       MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "The Preset file you selected appears to be invlaid or from an older version of HandBrake.\n\n Please note, if you are exporting from the MacGui you may need to rebuild your preset so that it uses the current preset plist format.\n The MacGui does not currently update user presets automatically.", 
+                    "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             // We'll query a query parser object and use it's public var structures to store all the data.
@@ -110,14 +112,15 @@ namespace Handbrake.Presets
 
             /***** Get the rest of the settings. *****/
             XmlNode presetSettings = root.ChildNodes[2].ChildNodes[0].FirstChild;
-            for (int i = 2; i < presetSettings.ChildNodes.Count; i += 2) // Start from 2 to avoid the audio settings which we don't need.
+            for (int i = 2; i < presetSettings.ChildNodes.Count; i += 2)
+                // Start from 2 to avoid the audio settings which we don't need.
             {
                 string key = presetSettings.ChildNodes[i].InnerText;
                 string value = presetSettings.ChildNodes[i + 1].InnerText;
 
                 switch (key)
                 {
-                    // Output Settings
+                        // Output Settings
                     case "FileFormat":
                         queryParsed.Format = value;
                         break;
@@ -131,7 +134,7 @@ namespace Handbrake.Presets
                         queryParsed.IpodAtom = value == "1";
                         break;
 
-                    // Picture Settings
+                        // Picture Settings
                     case "PictureAutoCrop":
                         break;
                     case "PictureTopCrop":
@@ -160,7 +163,7 @@ namespace Handbrake.Presets
                         break;
 
 
-                    // Filters
+                        // Filters
                     case "PictureDeblock":
                         queryParsed.DeBlock = int.Parse(value);
                         break;
@@ -169,7 +172,7 @@ namespace Handbrake.Presets
                         if (value == "2") queryParsed.Decomb = "Default";
                         break;
                     case "PictureDecombCustom":
-                        if (value != "")
+                        if (value != string.Empty)
                             queryParsed.Decomb = value;
                         break;
                     case "PictureDecombDeinterlace":
@@ -193,7 +196,7 @@ namespace Handbrake.Presets
                         }
                         break;
                     case "PictureDeinterlaceCustom":
-                        if (value != "")
+                        if (value != string.Empty)
                             queryParsed.DeInterlace = value;
                         break;
                     case "PictureDenoise":
@@ -215,7 +218,7 @@ namespace Handbrake.Presets
 
                         break;
                     case "PictureDenoiseCustom":
-                        if (value != "")
+                        if (value != string.Empty)
                             queryParsed.DeNoise = value;
                         break;
                     case "PictureDetelecine":
@@ -223,11 +226,11 @@ namespace Handbrake.Presets
                         if (value == "1") queryParsed.DeTelecine = "Default";
                         break;
                     case "PictureDetelecineCustom":
-                        if (value != "")
+                        if (value != string.Empty)
                             queryParsed.DeTelecine = value;
                         break;
 
-                    // Video Tab
+                        // Video Tab
                     case "VideoAvgBitrate":
                         queryParsed.Width = int.Parse(value);
                         break;
@@ -255,17 +258,17 @@ namespace Handbrake.Presets
                         queryParsed.TwoPass = value == "1";
                         break;
 
-                    // Chapter Markers Tab
+                        // Chapter Markers Tab
                     case "ChapterMarkers":
                         queryParsed.ChapterMarkers = value == "1";
                         break;
 
-                    // Advanced x264 tab
+                        // Advanced x264 tab
                     case "x264Option":
                         queryParsed.H264Query = value;
                         break;
 
-                    // Preset Information
+                        // Preset Information
                     case "PresetBuildNumber":
                         queryParsed.PresetBuildNumber = int.Parse(value);
                         break;
@@ -302,7 +305,8 @@ namespace Handbrake.Presets
 
             // Header
             Writer.WriteStartDocument();
-            Writer.WriteDocType("plist", "-//Apple//DTD PLIST 1.0//EN", @"http://www.apple.com/DTDs/PropertyList-1.0.dtd", null);
+            Writer.WriteDocType("plist", "-//Apple//DTD PLIST 1.0//EN", 
+                                @"http://www.apple.com/DTDs/PropertyList-1.0.dtd", null);
 
             Writer.WriteStartElement("plist");
             Writer.WriteStartElement("array");
@@ -319,7 +323,7 @@ namespace Handbrake.Presets
             // Closeout
             Writer.Close();
         }
-        
+
         /// <summary>
         /// Write a Plist file
         /// </summary>
@@ -337,49 +341,49 @@ namespace Handbrake.Presets
         /// </summary>
         private void AddEncodeSettings()
         {
-            AddEncodeElement("ChapterMarkers", "integer", "");
-            AddEncodeElement("Default", "integer", "");
-            AddEncodeElement("FileFormat", "String", "");
+            AddEncodeElement("ChapterMarkers", "integer", string.Empty);
+            AddEncodeElement("Default", "integer", string.Empty);
+            AddEncodeElement("FileFormat", "String", string.Empty);
             AddBooleanElement("Folder", true);
-            AddEncodeElement("Mp4HttpOptimize", "integer", "");
-            AddEncodeElement("Mp4LargeFile", "integer", "");
-            AddEncodeElement("Mp4iPodCompatible", "integer", "");
-            AddEncodeElement("PictureAutoCrop", "integer", "");
-            AddEncodeElement("PictureBottomCrop", "integer", "");
-            AddEncodeElement("PictureDeblock", "integer", "");
-            AddEncodeElement("PictureDecomb", "integer", "");
-            AddEncodeElement("PictureDecombCustom", "string", "");
-            AddEncodeElement("PictureDecombDeinterlace", "integer", "");
-            AddEncodeElement("PictureDeinterlace", "integer", "");
-            AddEncodeElement("PictureDeinterlaceCustom", "string", "");
-            AddEncodeElement("PictureDenoise", "integer", "");
-            AddEncodeElement("PictureDenoiseCustom", "string", "");
-            AddEncodeElement("PictureDetelecine", "integer", "");
-            AddEncodeElement("PictureDetelecineCustom", "string", "");
-            AddEncodeElement("PictureHeight", "integer", "");
-            AddEncodeElement("PictureKeepRatio", "integer", "");
-            AddEncodeElement("PictureLeftCrop", "integer", "");
-            AddEncodeElement("PicturePAR", "integer", "");
-            AddEncodeElement("PictureRightCrop", "integer", "");
-            AddEncodeElement("PictureTopCrop", "integer", "");
-            AddEncodeElement("PictureWidth", "integer", "");
-            AddEncodeElement("PresetBuildNumber", "string", "");
-            AddEncodeElement("PresetDescription", "string", "");
-            AddEncodeElement("PresetName", "string", "");
-            AddEncodeElement("Type", "integer", "");
-            AddEncodeElement("UsesMaxPictureSettings", "integer", "");
-            AddEncodeElement("UsesPictureFilters", "integer", "");
-            AddEncodeElement("UsesPictureSettings", "integer", "");
-            AddEncodeElement("VideoAvgBitrate", "string", "");
-            AddEncodeElement("VideoEncoder", "string", "");
-            AddEncodeElement("VideoFramerate", "string", "");
-            AddEncodeElement("VideoGrayScale", "integer", "");
-            AddEncodeElement("VideoQualitySlider", "real", "");
-            AddEncodeElement("VideoQualityType", "integer", "");
-            AddEncodeElement("VideoTargetSize", "string", "");
-            AddEncodeElement("VideoTurboTwoPass", "integer", "");
-            AddEncodeElement("VideoTwoPass", "integer", "");
-            AddEncodeElement("x264Option", "string", "");
+            AddEncodeElement("Mp4HttpOptimize", "integer", string.Empty);
+            AddEncodeElement("Mp4LargeFile", "integer", string.Empty);
+            AddEncodeElement("Mp4iPodCompatible", "integer", string.Empty);
+            AddEncodeElement("PictureAutoCrop", "integer", string.Empty);
+            AddEncodeElement("PictureBottomCrop", "integer", string.Empty);
+            AddEncodeElement("PictureDeblock", "integer", string.Empty);
+            AddEncodeElement("PictureDecomb", "integer", string.Empty);
+            AddEncodeElement("PictureDecombCustom", "string", string.Empty);
+            AddEncodeElement("PictureDecombDeinterlace", "integer", string.Empty);
+            AddEncodeElement("PictureDeinterlace", "integer", string.Empty);
+            AddEncodeElement("PictureDeinterlaceCustom", "string", string.Empty);
+            AddEncodeElement("PictureDenoise", "integer", string.Empty);
+            AddEncodeElement("PictureDenoiseCustom", "string", string.Empty);
+            AddEncodeElement("PictureDetelecine", "integer", string.Empty);
+            AddEncodeElement("PictureDetelecineCustom", "string", string.Empty);
+            AddEncodeElement("PictureHeight", "integer", string.Empty);
+            AddEncodeElement("PictureKeepRatio", "integer", string.Empty);
+            AddEncodeElement("PictureLeftCrop", "integer", string.Empty);
+            AddEncodeElement("PicturePAR", "integer", string.Empty);
+            AddEncodeElement("PictureRightCrop", "integer", string.Empty);
+            AddEncodeElement("PictureTopCrop", "integer", string.Empty);
+            AddEncodeElement("PictureWidth", "integer", string.Empty);
+            AddEncodeElement("PresetBuildNumber", "string", string.Empty);
+            AddEncodeElement("PresetDescription", "string", string.Empty);
+            AddEncodeElement("PresetName", "string", string.Empty);
+            AddEncodeElement("Type", "integer", string.Empty);
+            AddEncodeElement("UsesMaxPictureSettings", "integer", string.Empty);
+            AddEncodeElement("UsesPictureFilters", "integer", string.Empty);
+            AddEncodeElement("UsesPictureSettings", "integer", string.Empty);
+            AddEncodeElement("VideoAvgBitrate", "string", string.Empty);
+            AddEncodeElement("VideoEncoder", "string", string.Empty);
+            AddEncodeElement("VideoFramerate", "string", string.Empty);
+            AddEncodeElement("VideoGrayScale", "integer", string.Empty);
+            AddEncodeElement("VideoQualitySlider", "real", string.Empty);
+            AddEncodeElement("VideoQualityType", "integer", string.Empty);
+            AddEncodeElement("VideoTargetSize", "string", string.Empty);
+            AddEncodeElement("VideoTurboTwoPass", "integer", string.Empty);
+            AddEncodeElement("VideoTwoPass", "integer", string.Empty);
+            AddEncodeElement("x264Option", "string", string.Empty);
         }
 
         /// <summary>
@@ -387,7 +391,7 @@ namespace Handbrake.Presets
         /// </summary>
         /// <param name="keyName"></param>
         /// <param name="value"></param>
-        private void AddBooleanElement(string keyName, Boolean value)
+        private void AddBooleanElement(string keyName, bool value)
         {
             Writer.WriteStartElement("key");
             Writer.WriteString(keyName);

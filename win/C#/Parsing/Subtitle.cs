@@ -4,12 +4,12 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace Handbrake.Parsing
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD
     /// </summary>
@@ -72,9 +72,9 @@ namespace Handbrake.Parsing
             {
                 var thisSubtitle = new Subtitle
                                        {
-                                           m_trackNumber = int.Parse(m.Groups[1].Value.Trim()),
-                                           m_language = m.Groups[2].Value,
-                                           m_typecode = m.Groups[3].Value,
+                                           m_trackNumber = int.Parse(m.Groups[1].Value.Trim()), 
+                                           m_language = m.Groups[2].Value, 
+                                           m_typecode = m.Groups[3].Value, 
                                            m_type = m.Groups[4].Value
                                        };
                 return thisSubtitle;

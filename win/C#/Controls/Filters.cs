@@ -4,11 +4,11 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Windows.Forms;
-
 namespace Handbrake.Controls
 {
+    using System;
+    using System.Windows.Forms;
+
     public partial class Filters : UserControl
     {
         /// <summary>
@@ -17,6 +17,7 @@ namespace Handbrake.Controls
         public event EventHandler FilterSettingsChanged;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="Filters"/> class. 
         /// Creates a new instance of Filters
         /// </summary>
         public Filters()
@@ -35,12 +36,12 @@ namespace Handbrake.Controls
         {
             get
             {
-                string query = "";
+                string query = string.Empty;
 
-                switch (drop_detelecine.Text)  // DeTelecine
+                switch (drop_detelecine.Text) // DeTelecine
                 {
                     case "Off":
-                        query += "";
+                        query += string.Empty;
                         break;
                     case "Default":
                         query += " --detelecine";
@@ -49,7 +50,7 @@ namespace Handbrake.Controls
                         query += " --detelecine=\"" + text_customDT.Text + "\"";
                         break;
                     default:
-                        query += "";
+                        query += string.Empty;
                         break;
                 }
 
@@ -57,7 +58,7 @@ namespace Handbrake.Controls
                 switch (drop_decomb.Text) // Decomb
                 {
                     case "Off":
-                        query += "";
+                        query += string.Empty;
                         break;
                     case "Default":
                         query += " --decomb";
@@ -66,14 +67,14 @@ namespace Handbrake.Controls
                         query += " --decomb=\"" + text_customDC.Text + "\"";
                         break;
                     default:
-                        query += "";
+                        query += string.Empty;
                         break;
                 }
 
                 switch (drop_deinterlace.Text) // DeInterlace
                 {
                     case "None":
-                        query += "";
+                        query += string.Empty;
                         break;
                     case "Fast":
                         query += " --deinterlace=\"fast\"";
@@ -88,14 +89,14 @@ namespace Handbrake.Controls
                         query += " --deinterlace=\"" + text_customDI.Text + "\"";
                         break;
                     default:
-                        query += "";
+                        query += string.Empty;
                         break;
                 }
 
                 switch (drop_denoise.Text) // Denoise
                 {
                     case "None":
-                        query += "";
+                        query += string.Empty;
                         break;
                     case "Weak":
                         query += " --denoise=\"weak\"";
@@ -110,7 +111,7 @@ namespace Handbrake.Controls
                         query += " --denoise=\"" + text_customDN.Text + "\"";
                         break;
                     default:
-                        query += "";
+                        query += string.Empty;
                         break;
                 }
 
@@ -130,7 +131,7 @@ namespace Handbrake.Controls
         /// <param name="value">The value part of the CLI string</param>
         public void SetDeTelecine(string value)
         {
-            text_customDT.Text = "";
+            text_customDT.Text = string.Empty;
             text_customDT.Visible = false;
             switch (value)
             {
@@ -154,7 +155,7 @@ namespace Handbrake.Controls
         /// <param name="value">The value part of the CLI string</param>
         public void SetDeNoise(string value)
         {
-            text_customDN.Text = "";
+            text_customDN.Text = string.Empty;
             text_customDN.Visible = false;
             switch (value)
             {
@@ -184,11 +185,10 @@ namespace Handbrake.Controls
         /// <param name="value">The value part of the CLI string</param>
         public void SetDeInterlace(string value)
         {
-            text_customDI.Text = "";
+            text_customDI.Text = string.Empty;
             text_customDI.Visible = false;
             switch (value)
             {
-
                 case "Off":
                     drop_deinterlace.SelectedIndex = 0;
                     break;
@@ -216,7 +216,7 @@ namespace Handbrake.Controls
         /// <param name="value">The value part of the CLI string</param>
         public void SetDecomb(string value)
         {
-            text_customDC.Text = "";
+            text_customDC.Text = string.Empty;
             text_customDC.Visible = false;
             switch (value)
             {
@@ -269,6 +269,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
+
         private void DropDecombSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDC.Visible = drop_decomb.Text == "Custom";
@@ -279,6 +280,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
+
         private void DropDeinterlaceSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDI.Visible = drop_deinterlace.Text == "Custom";
@@ -289,6 +291,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
+
         private void DropDenoiseSelectedIndexChanged(object sender, EventArgs e)
         {
             text_customDN.Visible = drop_denoise.Text == "Custom";
@@ -297,6 +300,7 @@ namespace Handbrake.Controls
             if (this.FilterSettingsChanged != null)
                 this.FilterSettingsChanged(this, new EventArgs());
         }
+
         private void SliderDeblockScroll(object sender, EventArgs e)
         {
             lbl_deblockVal.Text = slider_deblock.Value == 4 ? "Off" : slider_deblock.Value.ToString();

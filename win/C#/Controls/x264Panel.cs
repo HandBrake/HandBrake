@@ -4,11 +4,11 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Windows.Forms;
-
 namespace Handbrake.Controls
 {
+    using System;
+    using System.Windows.Forms;
+
     public partial class x264Panel : UserControl
     {
         /* 
@@ -17,6 +17,7 @@ namespace Handbrake.Controls
          */
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="x264Panel"/> class. 
         /// Initializes a new instance of the x264 panel user control
         /// </summary>
         public x264Panel()
@@ -37,7 +38,7 @@ namespace Handbrake.Controls
             get { return " -x " + rtf_x264Query.Text; }
             set { rtf_x264Query.Text = value; }
         }
-        
+
         /// <summary>
         /// Reset all components to defaults and clears the x264 rtf box
         /// </summary>
@@ -64,7 +65,7 @@ namespace Handbrake.Controls
             slider_psytrellis.Value = 0;
             drop_adaptBFrames.SelectedIndex = 0;
 
-            rtf_x264Query.Text = "";
+            rtf_x264Query.Text = string.Empty;
         }
 
         /// <summary>
@@ -73,14 +74,14 @@ namespace Handbrake.Controls
         public void X264_StandardizeOptString()
         {
             /* Set widgets depending on the opt string in field */
-            String thisOpt; // The separated option such as "bframes=3"
-            String optName; // The option name such as "bframes"
-            String optValue;// The option value such as "3"
-            String changedOptString = "";
-            String[] currentOptsArray;
+            string thisOpt; // The separated option such as "bframes=3"
+            string optName; // The option name such as "bframes"
+            string optValue; // The option value such as "3"
+            string changedOptString = string.Empty;
+            string[] currentOptsArray;
 
             /*First, we get an opt string to process */
-            String currentOptString = rtf_x264Query.Text;
+            string currentOptString = rtf_x264Query.Text;
 
             /*verify there is an opt string to process */
             if (currentOptString.Contains("="))
@@ -97,8 +98,8 @@ namespace Handbrake.Controls
                     if (currentOptsArray[currentOptsArrayCount - 1] == string.Empty)
                         break;
 
-                    String[] splitOptRange = thisOpt.Split('=');
-                    if (thisOpt != "")
+                    string[] splitOptRange = thisOpt.Split('=');
+                    if (thisOpt != string.Empty)
                     {
                         if (thisOpt.Contains("="))
                         {
@@ -132,7 +133,7 @@ namespace Handbrake.Controls
             }
 
             /* Change the option string to reflect the new standardized option string */
-            if (changedOptString != "")
+            if (changedOptString != string.Empty)
                 rtf_x264Query.Text = changedOptString;
         }
 
@@ -143,9 +144,9 @@ namespace Handbrake.Controls
         /// </summary>
         /// <param name="cleanOptNameString"></param>
         /// <returns></returns>
-        private static string X264_StandardizeOptNames(String cleanOptNameString)
+        private static string X264_StandardizeOptNames(string cleanOptNameString)
         {
-            String input = cleanOptNameString;
+            string input = cleanOptNameString;
 
             if (input.Equals("ref") || input.Equals("frameref"))
                 cleanOptNameString = "ref";
@@ -195,13 +196,13 @@ namespace Handbrake.Controls
         public void X264_SetCurrentSettingsInPanel()
         {
             /* Set widgets depending on the opt string in field */
-            String thisOpt; // The separated option such as "bframes=3"
-            String optName; // The option name such as "bframes"
-            String optValue;// The option value such as "3"
-            String[] currentOptsArray;
+            string thisOpt; // The separated option such as "bframes=3"
+            string optName; // The option name such as "bframes"
+            string optValue; // The option value such as "3"
+            string[] currentOptsArray;
 
-            //Set currentOptString to the contents of the text box.
-            String currentOptString = rtf_x264Query.Text.Replace("\n", "");
+            // Set currentOptString to the contents of the text box.
+            string currentOptString = rtf_x264Query.Text.Replace("\n", string.Empty);
 
             /*verify there is an opt string to process */
             if (currentOptString.Contains("="))
@@ -217,7 +218,7 @@ namespace Handbrake.Controls
                 for (loopcounter = 0; loopcounter < currentOptsArrayCount; loopcounter++)
                 {
                     thisOpt = currentOptsArray[loopcounter];
-                    String[] splitOptRange = thisOpt.Split('=');
+                    string[] splitOptRange = thisOpt.Split('=');
 
                     if (thisOpt.Contains("="))
                     {
@@ -282,9 +283,9 @@ namespace Handbrake.Controls
                                 if (optValue == "auto")
                                     optValue = "Automatic";
 
-                                if (optValue != "")
+                                if (optValue != string.Empty)
                                 {
-                                    Char[] letters = optValue.ToCharArray();
+                                    char[] letters = optValue.ToCharArray();
                                     letters[0] = Char.ToUpper(letters[0]);
                                     optValue = new string(letters);
                                 }
@@ -296,7 +297,7 @@ namespace Handbrake.Controls
                                 string alphaDeblock = splitDeblock[0];
                                 string betaDeblock = splitDeblock[1];
 
-                                if (alphaDeblock.Equals("0") && betaDeblock.Replace("\n", "").Equals("0"))
+                                if (alphaDeblock.Equals("0") && betaDeblock.Replace("\n", string.Empty).Equals("0"))
                                 {
                                     drop_deblockAlpha.SelectedItem = "Default (0)";
                                     drop_deblockBeta.SelectedItem = "Default (0)";
@@ -305,7 +306,9 @@ namespace Handbrake.Controls
                                 {
                                     drop_deblockAlpha.SelectedItem = !alphaDeblock.Equals("0") ? alphaDeblock : "0";
 
-                                    drop_deblockBeta.SelectedItem = !betaDeblock.Replace("\n", "").Equals("0") ? betaDeblock.Replace("\n", "") : "0";
+                                    drop_deblockBeta.SelectedItem = !betaDeblock.Replace("\n", string.Empty).Equals("0")
+                                                                        ? betaDeblock.Replace("\n", string.Empty)
+                                                                        : "0";
                                 }
                                 continue;
                             case "analyse":
@@ -329,9 +332,9 @@ namespace Handbrake.Controls
                                 int val, val2;
 
                                 // default psy-rd = 1 (10 for the slider)
-                                psyrd = double.TryParse(x[0], out psyrd) ? psyrd * 10 : 10.0;
+                                psyrd = double.TryParse(x[0], out psyrd) ? psyrd*10 : 10.0;
                                 // default psy-trellis = 0
-                                psytrellis = double.TryParse(x[1], out psytrellis) ? psytrellis * 10 : 0.0; 
+                                psytrellis = double.TryParse(x[1], out psytrellis) ? psytrellis*10 : 0.0;
 
                                 int.TryParse(psyrd.ToString(), out val);
                                 int.TryParse(psytrellis.ToString(), out val2);
@@ -351,16 +354,17 @@ namespace Handbrake.Controls
         private void OnX264WidgetChange(string sender)
         {
             Animate(sender);
-            String optNameToChange = sender;
-            String currentOptString = rtf_x264Query.Text;
+            string optNameToChange = sender;
+            string currentOptString = rtf_x264Query.Text;
 
             /*First, we create a pattern to check for ":"optNameToChange"=" to modify the option if the name falls after
                 the first character of the opt string (hence the ":") */
-            String checkOptNameToChange = ":" + optNameToChange + "=";
-            String checkOptNameToChangeBegin = optNameToChange + "=";
+            string checkOptNameToChange = ":" + optNameToChange + "=";
+            string checkOptNameToChangeBegin = optNameToChange + "=";
 
             // IF the current H264 Option String Contains Multiple Items or Just 1 Item
-            if ((currentOptString.Contains(checkOptNameToChange)) || (currentOptString.StartsWith(checkOptNameToChangeBegin)))
+            if ((currentOptString.Contains(checkOptNameToChange)) ||
+                (currentOptString.StartsWith(checkOptNameToChangeBegin)))
                 HasOptions(currentOptString, optNameToChange);
             else // IF there is no options in the rich text box!
                 HasNoOptions(optNameToChange);
@@ -374,12 +378,12 @@ namespace Handbrake.Controls
         /// <param name="optNameToChange"></param>
         private void HasOptions(string currentOptString, string optNameToChange)
         {
-            String thisOpt;             // The separated option such as "bframes=3"
-            String optName;        // The option name such as "bframes"
-            String[] currentOptsArray;
+            string thisOpt; // The separated option such as "bframes=3"
+            string optName; // The option name such as "bframes"
+            string[] currentOptsArray;
 
             /* Create new empty opt string*/
-            String changedOptString = "";
+            string changedOptString = string.Empty;
 
             /*Put individual options into an array based on the ":" separator for processing, result is "<opt>=<value>"*/
             currentOptsArray = currentOptString.Split(':');
@@ -393,7 +397,7 @@ namespace Handbrake.Controls
                 {
                     string[] splitOptRange = thisOpt.Split('=');
 
-                    optName = splitOptRange[0];     // e.g bframes
+                    optName = splitOptRange[0]; // e.g bframes
 
                     /* 
                      * Run through the available widgets for x264 opts and set them, as you add widgets,
@@ -405,14 +409,15 @@ namespace Handbrake.Controls
                     {
                         if (optNameToChange.Equals("deblock"))
                         {
-                            String da = drop_deblockAlpha.SelectedItem.ToString();
-                            String db = drop_deblockBeta.SelectedItem.ToString();
+                            string da = drop_deblockAlpha.SelectedItem.ToString();
+                            string db = drop_deblockBeta.SelectedItem.ToString();
 
-                            if (((da.Contains("Default")) && (db.Contains("Default"))) || ((da.Contains("0")) && (db.Contains("0"))))
+                            if (((da.Contains("Default")) && (db.Contains("Default"))) ||
+                                ((da.Contains("0")) && (db.Contains("0"))))
                             {
                                 drop_deblockBeta.SelectedItem = "Default (0)";
                                 drop_deblockAlpha.SelectedItem = "Default (0)";
-                                thisOpt = "";
+                                thisOpt = string.Empty;
                             }
                             else if ((!da.Contains("Default")) && (db.Contains("Default")))
                             {
@@ -430,11 +435,11 @@ namespace Handbrake.Controls
                         else if (optNameToChange.Equals("psy-rd"))
                         {
                             if (slider_psyrd.Value == 10 && slider_psytrellis.Value == 0)
-                                thisOpt = "";
+                                thisOpt = string.Empty;
                             else
                             {
-                                double psyrd = slider_psyrd.Value * 0.1;
-                                double psytre = slider_psytrellis.Value * 0.1;
+                                double psyrd = slider_psyrd.Value*0.1;
+                                double psytre = slider_psytrellis.Value*0.1;
 
                                 string rd = psyrd.ToString("f1");
                                 string rt = psytre.ToString("f1");
@@ -443,19 +448,21 @@ namespace Handbrake.Controls
                             }
                         }
                         else if (optNameToChange.Equals("mixed-refs"))
-                            thisOpt = check_mixedReferences.CheckState == CheckState.Checked ? "mixed-refs=1" : "mixed-refs=0";
+                            thisOpt = check_mixedReferences.CheckState == CheckState.Checked
+                                          ? "mixed-refs=1"
+                                          : "mixed-refs=0";
                         else if (optNameToChange.Equals("weightb"))
-                            thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? "" : "weightb=0";
+                            thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? string.Empty : "weightb=0";
                         else if (optNameToChange.Equals("b-pyramid"))
-                            thisOpt = check_pyrmidalBFrames.CheckState == CheckState.Checked ? "b-pyramid=1" : "";
+                            thisOpt = check_pyrmidalBFrames.CheckState == CheckState.Checked ? "b-pyramid=1" : string.Empty;
                         else if (optNameToChange.Equals("no-fast-pskip"))
-                            thisOpt = check_noFastPSkip.CheckState == CheckState.Checked ? "no-fast-pskip=1" : "";
+                            thisOpt = check_noFastPSkip.CheckState == CheckState.Checked ? "no-fast-pskip=1" : string.Empty;
                         else if (optNameToChange.Equals("no-dct-decimate"))
-                            thisOpt = check_noDCTDecimate.CheckState == CheckState.Checked ? "no-dct-decimate=1" : "";
+                            thisOpt = check_noDCTDecimate.CheckState == CheckState.Checked ? "no-dct-decimate=1" : string.Empty;
                         else if (optNameToChange.Equals("8x8dct"))
                             thisOpt = check_8x8DCT.CheckState == CheckState.Checked ? "8x8dct=1" : "8x8dct=0";
                         else if (optNameToChange.Equals("cabac"))
-                            thisOpt = check_Cabac.CheckState == CheckState.Checked ? "" : "cabac=0";
+                            thisOpt = check_Cabac.CheckState == CheckState.Checked ? string.Empty : "cabac=0";
                         else if (optNameToChange.Equals("me"))
                         {
                             switch (drop_MotionEstimationMethod.SelectedIndex)
@@ -481,7 +488,7 @@ namespace Handbrake.Controls
                                     break;
 
                                 default:
-                                    thisOpt = "";
+                                    thisOpt = string.Empty;
                                     break;
                             }
                         }
@@ -506,7 +513,7 @@ namespace Handbrake.Controls
                                     break;
 
                                 default:
-                                    thisOpt = "";
+                                    thisOpt = string.Empty;
                                     break;
                             }
                         }
@@ -523,7 +530,7 @@ namespace Handbrake.Controls
                                     break;
 
                                 default:
-                                    thisOpt = "";
+                                    thisOpt = string.Empty;
                                     break;
                             }
                         }
@@ -531,47 +538,47 @@ namespace Handbrake.Controls
                         {
                             thisOpt = !drop_MotionEstimationRange.SelectedItem.ToString().Contains("Default")
                                           ? "merange=" + drop_MotionEstimationRange.SelectedItem
-                                          : "";
+                                          : string.Empty;
                         }
                         else if (optNameToChange.Equals("b-adapt"))
                         {
                             thisOpt = !drop_adaptBFrames.SelectedItem.ToString().Contains("Default")
                                           ? "b-adapt=" + (drop_adaptBFrames.SelectedIndex - 1)
-                                          : "";
+                                          : string.Empty;
                         }
                         else if (optNameToChange.Equals("ref"))
                         {
                             thisOpt = !drop_refFrames.SelectedItem.ToString().Contains("Default")
                                           ? "ref=" + drop_refFrames.SelectedItem
-                                          : "";
+                                          : string.Empty;
                         }
                         else if (optNameToChange.Equals("bframes"))
                         {
-                            String value = drop_bFrames.SelectedItem.ToString();
+                            string value = drop_bFrames.SelectedItem.ToString();
                             thisOpt = !drop_bFrames.SelectedItem.ToString().Contains("Default")
                                           ? "bframes=" + value
-                                          : "";
+                                          : string.Empty;
                         }
                         else if (optNameToChange.Equals("subq"))
                         {
-                            String value = drop_subpixelMotionEstimation.SelectedItem.ToString();
+                            string value = drop_subpixelMotionEstimation.SelectedItem.ToString();
                             thisOpt = !drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default")
                                           ? "subq=" + value
-                                          : "";
+                                          : string.Empty;
                         }
                         else if (optNameToChange.Equals("trellis"))
                         {
-                            String value = drop_trellis.SelectedItem.ToString();
+                            string value = drop_trellis.SelectedItem.ToString();
                             thisOpt = !drop_trellis.SelectedItem.ToString().Contains("Default")
                                           ? "trellis=" + value
-                                          : "";
+                                          : string.Empty;
                         }
                     }
                 }
 
                 /* Construct New String for opts here */
-                if (!thisOpt.Equals(""))
-                    changedOptString = changedOptString.Equals("") ? thisOpt : changedOptString + ":" + thisOpt;
+                if (!thisOpt.Equals(string.Empty))
+                    changedOptString = changedOptString.Equals(string.Empty) ? thisOpt : changedOptString + ":" + thisOpt;
             }
 
             /* Change the option string to reflect the new mod settings */
@@ -586,8 +593,8 @@ namespace Handbrake.Controls
         /// <param name="optNameToChange"></param>
         private void HasNoOptions(IEquatable<string> optNameToChange)
         {
-            string colon = "";
-            if (rtf_x264Query.Text != "")
+            string colon = string.Empty;
+            if (rtf_x264Query.Text != string.Empty)
                 colon = ":";
 
             string query = rtf_x264Query.Text;
@@ -669,11 +676,10 @@ namespace Handbrake.Controls
                 int value = drop_adaptBFrames.SelectedIndex - 1;
                 query = query + colon + "b-adapt=" + value;
             }
-
             else if (optNameToChange.Equals("deblock"))
             {
-                String da = drop_deblockAlpha.SelectedItem.ToString();
-                String db = drop_deblockBeta.Text;
+                string da = drop_deblockAlpha.SelectedItem.ToString();
+                string db = drop_deblockBeta.Text;
 
                 if (((da.Contains("Default")) && (db.Contains("Default"))) || ((da.Contains("0")) && (db.Contains("0"))))
                 {
@@ -694,11 +700,11 @@ namespace Handbrake.Controls
             else if (optNameToChange.Equals("psy-rd"))
             {
                 if (slider_psyrd.Value == 10 && slider_psytrellis.Value == 0)
-                    query += "";
+                    query += string.Empty;
                 else
                 {
-                    double psyrd = slider_psyrd.Value * 0.1;
-                    double psytre = slider_psytrellis.Value * 0.1;
+                    double psyrd = slider_psyrd.Value*0.1;
+                    double psytre = slider_psytrellis.Value*0.1;
 
                     string rd = psyrd.ToString("f1");
                     string rt = psytre.ToString("f1");
@@ -750,13 +756,13 @@ namespace Handbrake.Controls
             }
             else if (optNameToChange.Equals("bframes"))
             {
-                String value = drop_bFrames.SelectedItem.ToString();
+                string value = drop_bFrames.SelectedItem.ToString();
                 if (!drop_bFrames.SelectedItem.ToString().Contains("Default"))
                     query = query + colon + "bframes=" + value;
             }
             else if (optNameToChange.Equals("subq"))
             {
-                String value = drop_subpixelMotionEstimation.SelectedItem.ToString();
+                string value = drop_subpixelMotionEstimation.SelectedItem.ToString();
                 if (!drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default"))
                     query = query + colon + "subq=" + value;
             }
@@ -784,10 +790,10 @@ namespace Handbrake.Controls
  	           - trellis (if 0, turn off psy-trel)
  	        */
 
-            switch(sender)
+            switch (sender)
             {
                 case "bframes":
-                    if (drop_bFrames.SelectedIndex >0 && drop_bFrames.SelectedIndex < 2  )
+                    if (drop_bFrames.SelectedIndex > 0 && drop_bFrames.SelectedIndex < 2)
                     {
                         /* If the b-frame widget is at 0 or 1, the user has chosen
                            not to use b-frames at all. So disable the options
@@ -828,7 +834,7 @@ namespace Handbrake.Controls
                         drop_adaptBFrames.Visible = true;
                         lbl_adaptBFrames.Visible = true;
                     }
-                break;
+                    break;
                 case "cabac":
                     if (check_Cabac.Checked == false)
                     {
@@ -842,7 +848,7 @@ namespace Handbrake.Controls
                         drop_trellis.Visible = true;
                         lbl_trellis.Visible = true;
                     }
-                break;
+                    break;
                 case "analyse":
                     if (drop_analysis.SelectedIndex == 1)
                     {
@@ -853,7 +859,7 @@ namespace Handbrake.Controls
                     }
                     else
                         check_8x8DCT.Visible = true;
-                break;
+                    break;
                 case "ref":
                     if (drop_refFrames.SelectedIndex > 0 && drop_refFrames.SelectedIndex < 3)
                     {
@@ -863,8 +869,8 @@ namespace Handbrake.Controls
                     }
                     else
                         check_mixedReferences.Visible = true;
-                break;
-                case "me":        // Motion Estimation
+                    break;
+                case "me": // Motion Estimation
                     if (drop_MotionEstimationMethod.SelectedIndex < 3)
                     {
                         drop_MotionEstimationRange.Visible = false;
@@ -876,9 +882,10 @@ namespace Handbrake.Controls
                         drop_MotionEstimationRange.Visible = true;
                         lbl_merange.Visible = true;
                     }
-                break;
-                case "subq":        // subme
-                    if (drop_subpixelMotionEstimation.SelectedIndex != 0 && drop_subpixelMotionEstimation.SelectedIndex < 7)
+                    break;
+                case "subq": // subme
+                    if (drop_subpixelMotionEstimation.SelectedIndex != 0 &&
+                        drop_subpixelMotionEstimation.SelectedIndex < 7)
                     {
                         slider_psyrd.Visible = false;
                         slider_psyrd.Value = 10;
@@ -900,9 +907,9 @@ namespace Handbrake.Controls
                             lbl_psytrellis.Visible = true;
                         }
                     }
-                break;
-                case "trellis":        // subme
-                    if (drop_trellis.SelectedIndex > 0 && drop_trellis.SelectedIndex < 2 )
+                    break;
+                case "trellis": // subme
+                    if (drop_trellis.SelectedIndex > 0 && drop_trellis.SelectedIndex < 2)
                     {
                         slider_psytrellis.Visible = false;
                         slider_psytrellis.Value = 0;
@@ -910,21 +917,23 @@ namespace Handbrake.Controls
                     }
                     else
                     {
-                        if ((drop_subpixelMotionEstimation.SelectedIndex == 0 || drop_subpixelMotionEstimation.SelectedIndex >= 7) && check_Cabac.Checked && slider_psytrellis.Visible == false)
+                        if ((drop_subpixelMotionEstimation.SelectedIndex == 0 ||
+                             drop_subpixelMotionEstimation.SelectedIndex >= 7) && check_Cabac.Checked &&
+                            slider_psytrellis.Visible == false)
                         {
                             slider_psytrellis.Visible = true;
                             lbl_psytrellis.Visible = true;
                         }
                     }
-                break;
+                    break;
             }
         }
 
 
         private void widgetControlChanged(object sender, EventArgs e)
         {
-            Control changedControlName = (Control)sender;
-            string controlName = "";
+            Control changedControlName = (Control) sender;
+            string controlName = string.Empty;
 
             switch (changedControlName.Name.Trim())
             {
@@ -991,11 +1000,12 @@ namespace Handbrake.Controls
             }
             OnX264WidgetChange(controlName);
         }
+
         private void rtf_x264Query_TextChanged(object sender, EventArgs e)
         {
             if (rtf_x264Query.Text.EndsWith("\n"))
             {
-                string query = rtf_x264Query.Text.Replace("\n", "");
+                string query = rtf_x264Query.Text.Replace("\n", string.Empty);
                 Reset2Defaults();
                 rtf_x264Query.Text = query;
                 X264_StandardizeOptString();
@@ -1005,9 +1015,10 @@ namespace Handbrake.Controls
                     Reset2Defaults();
             }
         }
+
         private void btn_reset_Click(object sender, EventArgs e)
         {
-            rtf_x264Query.Text = "";
+            rtf_x264Query.Text = string.Empty;
             Reset2Defaults();
         }
     }

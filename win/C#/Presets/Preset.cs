@@ -4,10 +4,10 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-
 namespace Handbrake.Presets
 {
+    using System;
+
     public class Preset
     {
         /// <summary>
@@ -28,7 +28,7 @@ namespace Handbrake.Presets
         /// <summary>
         /// Get or set the usage of Picture Settings in presets.
         /// </summary>
-        public Boolean PictureSettings { get; set; }
+        public bool PictureSettings { get; set; }
 
         /// <summary>
         /// The version number which associates this preset with a HB build

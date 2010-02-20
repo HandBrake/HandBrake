@@ -3,24 +3,28 @@
  	   This file is part of the HandBrake source code.
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Xml.Serialization;
-
 namespace Handbrake.Presets
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Drawing;
+    using System.IO;
+    using System.Text.RegularExpressions;
+    using System.Windows.Forms;
+    using System.Xml.Serialization;
+
     public class PresetsHandler
     {
-        List<Preset> Presets = new List<Preset>();
-        List<Preset> UserPresets = new List<Preset>();
-        private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Preset>));
-        readonly string UserPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\user_presets.xml";
-        readonly string HbPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\presets.xml";
+        private List<Preset> Presets = new List<Preset>();
+        private List<Preset> UserPresets = new List<Preset>();
+        private static readonly XmlSerializer Ser = new XmlSerializer(typeof (List<Preset>));
+
+        private readonly string UserPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                                 "\\HandBrake\\user_presets.xml";
+
+        private readonly string HbPresetFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                               "\\HandBrake\\presets.xml";
 
         /// <summary>
         /// Add a new preset to the system
@@ -28,11 +32,17 @@ namespace Handbrake.Presets
         /// <param name="presetName">String, The name of the new preset</param>
         /// <param name="query">String, the CLI query for the new preset</param>
         /// <param name="pictureSettings"> Bool, store crop/picture sizes in the Presets</param>
-        public Boolean Add(string presetName, string query, Boolean pictureSettings)
+        public bool Add(string presetName, string query, bool pictureSettings)
         {
             if (CheckIfPresetExists(presetName) == false)
             {
-                Preset newPreset = new Preset { Name = presetName, Query = query, PictureSettings = pictureSettings, Version = Properties.Settings.Default.hb_version };
+                Preset newPreset = new Preset
+                                       {
+                                           Name = presetName, 
+                                           Query = query, 
+                                           PictureSettings = pictureSettings, 
+                                           Version = Properties.Settings.Default.hb_version
+                                       };
                 UserPresets.Add(newPreset);
                 UpdatePresetFiles();
                 return true;
@@ -89,7 +99,7 @@ namespace Handbrake.Presets
         /// <param name="presetName">String, The name of the new preset</param>
         /// <param name="query">String, the CLI query for the new preset</param>
         /// <param name="pictureSettings"> Bool, store crop/picture sizes in the preset</param>
-        public void Update(string presetName, string query, Boolean pictureSettings)
+        public void Update(string presetName, string query, bool pictureSettings)
         {
             // User Presets
             foreach (Preset item in UserPresets)
@@ -98,7 +108,8 @@ namespace Handbrake.Presets
                 {
                     item.Query = query;
                     item.PictureSettings = pictureSettings;
-                    MessageBox.Show("Changes to \"" + presetName + "\" Saved", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Changes to \"" + presetName + "\" Saved", "Success", MessageBoxButtons.OK, 
+                                    MessageBoxIcon.Information);
                     UpdatePresetFiles();
                 }
             }
@@ -136,9 +147,13 @@ namespace Handbrake.Presets
             // Create a new tempory file and execute the CLI to get the built in Presets.
             string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
             string presetsPath = Path.Combine(Path.GetTempPath(), "temp_presets.dat");
-            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, presetsPath);
+            string strCmdLine = String.Format(@"cmd /c """"{0}"" --preset-list >""{1}"" 2>&1""", handbrakeCLIPath, 
+                                              presetsPath);
 
-            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine) { WindowStyle = ProcessWindowStyle.Hidden };
+            ProcessStartInfo hbGetPresets = new ProcessStartInfo("CMD.exe", strCmdLine)
+                                                {
+                                                   WindowStyle = ProcessWindowStyle.Hidden
+                                                };
             Process hbproc = Process.Start(hbGetPresets);
             if (hbproc != null)
             {
@@ -160,7 +175,7 @@ namespace Handbrake.Presets
                 {
                     string line = presetInput.ReadLine();
                     if (line.Contains("<") && !line.Contains("<<")) // Found the beginning of a preset block 
-                        category = line.Replace("<", "").Trim();
+                        category = line.Replace("<", string.Empty).Trim();
 
                     if (line.Contains("+")) // A Preset
                     {
@@ -173,10 +188,10 @@ namespace Handbrake.Presets
 
                         Preset newPreset = new Preset
                                                {
-                                                   Category = category,
-                                                   Name = presetName[0].Replace("+", "").Trim(),
-                                                   Query = presetName[2],
-                                                   Version = Properties.Settings.Default.hb_version,
+                                                   Category = category, 
+                                                   Name = presetName[0].Replace("+", string.Empty).Trim(), 
+                                                   Query = presetName[2], 
+                                                   Version = Properties.Settings.Default.hb_version, 
                                                    PictureSettings = pic
                                                };
                         Presets.Add(newPreset);
@@ -222,7 +237,8 @@ namespace Handbrake.Presets
             {
                 MessageBox.Show(
                     "HandBrakes preset file appears to have been corrupted. This file will now be re-generated!\n" +
-                    "If the problem presists, please delete the file: \n\n" + HbPresetFile, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "If the problem presists, please delete the file: \n\n" + HbPresetFile, "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 UpdateBuiltInPresets();
             }
 
@@ -251,7 +267,8 @@ namespace Handbrake.Presets
                     "Your presets will not be loaded. You may need to re-create your presets.\n\n" +
                     "Your user presets file has been renamed to 'user_presets.xml.old' and is located in:\n " +
                     Path.GetDirectoryName(UserPresetFile) + "\n" +
-                    "You may be able to recover some presets if you know the XML language.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "You may be able to recover some presets if you know the XML language.", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 // Recover from Error.
                 if (File.Exists(UserPresetFile))
@@ -261,7 +278,6 @@ namespace Handbrake.Presets
                         File.Delete(disabledFile);
                     File.Move(UserPresetFile, disabledFile);
                 }
-
             }
         }
 
@@ -278,7 +294,6 @@ namespace Handbrake.Presets
 
             if (Presets.Count != 0) // Built In Presets
             {
-
                 foreach (Preset preset in Presets)
                 {
                     if (preset.Category != category)
@@ -293,20 +308,21 @@ namespace Handbrake.Presets
                 }
             }
 
-            rootNode = null; category = null;
+            rootNode = null;
+            category = null;
             foreach (Preset preset in UserPresets) // User Presets
             {
                 if (preset.Category != category && preset.Category != null)
                 {
-                    rootNode = new TreeNode(preset.Category) { ForeColor = Color.Black };
+                    rootNode = new TreeNode(preset.Category) {ForeColor = Color.Black};
                     presetPanel.Nodes.Add(rootNode);
                     category = preset.Category;
                 }
 
                 if (preset.Category == category && rootNode != null)
-                    rootNode.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black });
+                    rootNode.Nodes.Add(new TreeNode(preset.Name) {ForeColor = Color.Black});
                 else
-                    presetPanel.Nodes.Add(new TreeNode(preset.Name) { ForeColor = Color.Black });
+                    presetPanel.Nodes.Add(new TreeNode(preset.Name) {ForeColor = Color.Black});
             }
         }
 
@@ -333,7 +349,9 @@ namespace Handbrake.Presets
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show(
+                    "Unable to write to the file. Please make sure the location has the correct permissions for file writing.\n Error Information: \n\n" +
+                    exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
         }
 
@@ -342,7 +360,7 @@ namespace Handbrake.Presets
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private Boolean CheckIfPresetExists(string name)
+        private bool CheckIfPresetExists(string name)
         {
             if (name == string.Empty)
                 return true;
@@ -369,7 +387,7 @@ namespace Handbrake.Presets
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Boolean CheckIfUserPresetExists(string name)
+        public bool CheckIfUserPresetExists(string name)
         {
             if (name == string.Empty)
                 return false;
@@ -389,7 +407,7 @@ namespace Handbrake.Presets
         /// Update them if they are.
         /// </summary>
         /// <returns></returns>
-        public Boolean CheckIfPresetsAreOutOfDate()
+        public bool CheckIfPresetsAreOutOfDate()
         {
             LoadPresetData();
             // Update built-in Presets if the built-in Presets belong to an older version.

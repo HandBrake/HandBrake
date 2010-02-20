@@ -4,15 +4,15 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Windows.Forms;
-using System.Net;
-using System.IO;
-using System.Threading;
-using System.Diagnostics;
-
 namespace Handbrake
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net;
+    using System.Threading;
+    using System.Windows.Forms;
+
     public partial class frmDownload : Form
     {
         private readonly Thread _downloadThread;
@@ -21,9 +21,12 @@ namespace Handbrake
         private HttpWebRequest _webRequest;
         private HttpWebResponse _webResponse;
         private static int _progress;
-        private Boolean _killThread;
-        private delegate void UpdateProgessCallback(Int64 bytesRead, Int64 totalBytes);
+        private bool _killThread;
+
+        private delegate void UpdateProgessCallback(long bytesRead, long totalBytes);
+
         private delegate void DownloadCompleteCallback();
+
         private delegate void DownloadFailedCallback();
 
 
@@ -38,7 +41,7 @@ namespace Handbrake
         private void Download(object file)
         {
             string tempPath = Path.Combine(Path.GetTempPath(), "handbrake-setup.exe");
-            string hbUpdate = (string)file;
+            string hbUpdate = (string) file;
             WebClient wcDownload = new WebClient();
 
             try
@@ -46,10 +49,10 @@ namespace Handbrake
                 if (File.Exists(tempPath))
                     File.Delete(tempPath);
 
-                _webRequest = (HttpWebRequest)WebRequest.Create(hbUpdate);
+                _webRequest = (HttpWebRequest) WebRequest.Create(hbUpdate);
                 _webRequest.Credentials = CredentialCache.DefaultCredentials;
-                _webResponse = (HttpWebResponse)_webRequest.GetResponse();
-                Int64 fileSize = _webResponse.ContentLength;
+                _webResponse = (HttpWebResponse) _webRequest.GetResponse();
+                long fileSize = _webResponse.ContentLength;
 
                 _responceStream = wcDownload.OpenRead(hbUpdate);
                 _loacalStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -64,7 +67,7 @@ namespace Handbrake
                         return;
                     _loacalStream.Write(downBuffer, 0, bytesSize);
                     flength = _loacalStream.Length;
-                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] { _loacalStream.Length, fileSize });
+                    Invoke(new UpdateProgessCallback(this.UpdateProgress), new object[] {_loacalStream.Length, fileSize});
                 }
 
                 _responceStream.Close();
@@ -81,12 +84,12 @@ namespace Handbrake
             }
         }
 
-        private void UpdateProgress(Int64 bytesRead, Int64 totalBytes)
+        private void UpdateProgress(long bytesRead, long totalBytes)
         {
-            long p = (bytesRead * 100) / totalBytes;
+            long p = (bytesRead*100)/totalBytes;
             int.TryParse(p.ToString(), out _progress);
             progress_download.Value = _progress;
-            lblProgress.Text = (bytesRead / 1024) + "k of " + (totalBytes / 1024) + "k ";
+            lblProgress.Text = (bytesRead/1024) + "k of " + (totalBytes/1024) + "k ";
         }
 
         private void DownloadComplete()

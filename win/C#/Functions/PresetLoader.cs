@@ -33,6 +33,7 @@ namespace Handbrake.Functions
         public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name, bool pictureSettings)
         {
             #region Source
+
             // Reset some vaules to stock first to prevent errors.
             mainWindow.check_iPodAtom.CheckState = CheckState.Unchecked;
 
@@ -70,7 +71,9 @@ namespace Handbrake.Functions
 
             mainWindow.check_iPodAtom.CheckState = presetQuery.IpodAtom ? CheckState.Checked : CheckState.Unchecked;
 
-            mainWindow.check_optimiseMP4.CheckState = presetQuery.OptimizeMP4 ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.check_optimiseMP4.CheckState = presetQuery.OptimizeMP4
+                                                          ? CheckState.Checked
+                                                          : CheckState.Unchecked;
 
             mainWindow.check_largeFile.CheckState = presetQuery.LargeMP4 ? CheckState.Checked : CheckState.Unchecked;
 
@@ -79,6 +82,7 @@ namespace Handbrake.Functions
             #endregion
 
             #region Picture
+
             mainWindow.PictureSettings.check_autoCrop.Checked = true;
             if (pictureSettings) // only Load picture settings if the perset requires it
             {
@@ -102,7 +106,9 @@ namespace Handbrake.Functions
             mainWindow.PictureSettings.drp_anamorphic.SelectedIndex = presetQuery.AnamorphicMode;
 
             // Keep Aspect Ration Anamorphic Setting.
-            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.KeepDisplayAsect ? CheckState.Checked : CheckState.Unchecked;
+            mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.KeepDisplayAsect
+                                                                     ? CheckState.Checked
+                                                                     : CheckState.Unchecked;
 
             // Set the Width and height as Required.
             if (presetQuery.Width != 0)
@@ -130,7 +136,9 @@ namespace Handbrake.Functions
 
             // Aspect Ratio for non anamorphic sources
             if (presetQuery.AnamorphicMode == 0)
-                mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.Height == 0 ? CheckState.Checked : CheckState.Unchecked;
+                mainWindow.PictureSettings.check_KeepAR.CheckState = presetQuery.Height == 0
+                                                                         ? CheckState.Checked
+                                                                         : CheckState.Unchecked;
 
             // Custom Anamorphic Controls
             mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.DisplayWidthValue.ToString();
@@ -141,15 +149,18 @@ namespace Handbrake.Functions
             #endregion
 
             #region Filters
+
             mainWindow.Filters.SetDecomb(presetQuery.Decomb);
             mainWindow.Filters.SetDeInterlace(presetQuery.DeInterlace);
             mainWindow.Filters.SetDeNoise(presetQuery.DeNoise);
             mainWindow.Filters.SetDeTelecine(presetQuery.DeTelecine);
             mainWindow.Filters.SetDeBlock(presetQuery.DeBlock);
             mainWindow.Filters.SetGrayScale(presetQuery.Grayscale);
+
             #endregion
 
             #region Video
+
             mainWindow.drp_videoEncoder.Text = presetQuery.VideoEncoder;
 
             if (presetQuery.AverageVideoBitrate != null)
@@ -175,9 +186,9 @@ namespace Handbrake.Functions
                     double x264Step = cqStep;
                     double presetValue = presetQuery.VideoQuality;
 
-                    double x = 51 / x264Step;
+                    double x = 51/x264Step;
 
-                    double calculated = presetValue / x264Step;
+                    double calculated = presetValue/x264Step;
                     calculated = x - calculated;
 
                     int.TryParse(calculated.ToString(), out value);
@@ -222,14 +233,18 @@ namespace Handbrake.Functions
             #endregion
 
             #region Audio
+
             mainWindow.AudioSettings.LoadTracks(presetQuery.AudioInformation);
+
             #endregion
 
             #region Other
+
             mainWindow.x264Panel.X264Query = presetQuery.H264Query;
 
             // Set the preset name
             mainWindow.labelPreset.Text = "Output Settings (Preset: " + name + ")";
+
             #endregion
         }
     }

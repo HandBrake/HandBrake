@@ -4,15 +4,16 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Windows.Forms;
-using Handbrake.Functions;
-
 namespace Handbrake
 {
+    using System;
+    using System.Windows.Forms;
+    using Functions;
+
     public partial class frmUpdater : Form
     {
-        readonly AppcastReader Appcast;
+        private readonly AppcastReader Appcast;
+
         public frmUpdater(AppcastReader reader)
         {
             InitializeComponent();
@@ -29,7 +30,8 @@ namespace Handbrake
 
         private void SetVersions()
         {
-            string old = "(You have: " + Properties.Settings.Default.hb_version.Trim() + " / " + Properties.Settings.Default.hb_build.ToString().Trim() + ")";
+            string old = "(You have: " + Properties.Settings.Default.hb_version.Trim() + " / " +
+                         Properties.Settings.Default.hb_build.ToString().Trim() + ")";
             string newBuild = Appcast.Version.Trim() + " (" + Appcast.Build + ")";
             lbl_update_text.Text = "HandBrake " + newBuild + " is now available. " + old;
         }
@@ -53,6 +55,5 @@ namespace Handbrake
 
             this.Close();
         }
-
     }
 }

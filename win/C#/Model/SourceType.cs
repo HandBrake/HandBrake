@@ -13,17 +13,17 @@ namespace Handbrake.Model
         /// <summary>
         /// No Source Selected
         /// </summary>
-        None = 0,
+        None = 0, 
 
         /// <summary>
         /// The soruce selected is a folder
         /// </summary>
-        Folder,
+        Folder, 
 
         /// <summary>
         /// The source selected is a DVD drive
         /// </summary>
-        DvdDrive,
+        DvdDrive, 
 
         /// <summary>
         /// The source selected is a Video File

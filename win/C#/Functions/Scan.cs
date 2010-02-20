@@ -113,7 +113,8 @@ namespace Handbrake.Functions
                     this.ScanStared(this, new EventArgs());
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
                 string dvdInfoPath = Path.Combine(logDir, "last_scan_log.txt");
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
@@ -125,18 +126,18 @@ namespace Handbrake.Functions
                     dvdnav = " --no-dvdnav";
 
                 this.hbProc = new Process
-                             {
-                                 StartInfo =
-                                     {
-                                         FileName = handbrakeCLIPath,
-                                         Arguments =
-                                             String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, dvdnav),
-                                         RedirectStandardOutput = true,
-                                         RedirectStandardError = true,
-                                         UseShellExecute = false,
-                                         CreateNoWindow = true
-                                     }
-                             };
+                                  {
+                                      StartInfo =
+                                          {
+                                              FileName = handbrakeCLIPath, 
+                                              Arguments =
+                                                  String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, dvdnav), 
+                                              RedirectStandardOutput = true, 
+                                              RedirectStandardError = true, 
+                                              UseShellExecute = false, 
+                                              CreateNoWindow = true
+                                          }
+                                  };
                 this.hbProc.Start();
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);

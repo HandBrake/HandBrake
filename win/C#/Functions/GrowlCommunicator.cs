@@ -6,10 +6,7 @@
 namespace Handbrake.Functions
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using Growl.Connector;
-    using Growl.CoreLibrary;
 
     /// <summary>
     /// Provides all functionality for communicating with Growl for Windows.
@@ -35,7 +32,8 @@ namespace Handbrake.Functions
         /// <summary>
         /// Notification shown upon completion of encoding
         /// </summary>
-        private static NotificationType encodeOrQueueCompleted = new NotificationType("EncodeOrQueue", "HandBrake Status");
+        private static NotificationType encodeOrQueueCompleted = new NotificationType("EncodeOrQueue", 
+                                                                                      "HandBrake Status");
 
         /// <summary>
         /// Checks to see if Growl is currently running on the local machine.
@@ -60,7 +58,7 @@ namespace Handbrake.Functions
         public static void Register()
         {
             Initialize();
-            growl.Register(application, new NotificationType[] { encodeOrQueueCompleted });
+            growl.Register(application, new[] {encodeOrQueueCompleted});
         }
 
         /// <summary>
@@ -75,7 +73,8 @@ namespace Handbrake.Functions
         /// </param>
         public static void Notify(string title, string text)
         {
-            Notification notification = new Notification(application.Name, encodeOrQueueCompleted.Name, String.Empty, title, text);
+            Notification notification = new Notification(application.Name, encodeOrQueueCompleted.Name, String.Empty, 
+                                                         title, text);
             growl.Notify(notification);
         }
 
@@ -89,9 +88,10 @@ namespace Handbrake.Functions
         /// <param name="imageUrl">The notification image as a url</param>
         public static void Notify(NotificationType notificationType, string title, string text, string imageUrl)
         {
-            Notification notification = new Notification(application.Name, notificationType.Name, String.Empty, title, text)
+            Notification notification = new Notification(application.Name, notificationType.Name, String.Empty, title, 
+                                                         text)
                                             {
-                                               Icon = imageUrl
+                                                Icon = imageUrl
                                             };
 
             growl.Notify(notification);

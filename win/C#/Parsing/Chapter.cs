@@ -4,13 +4,13 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-
 namespace Handbrake.Parsing
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.RegularExpressions;
+
     /// <summary>
     /// An object representing a Chapter aosciated with a Title, in a DVD
     /// </summary>
@@ -47,13 +47,13 @@ namespace Handbrake.Parsing
 
         public static Chapter Parse(StringReader output)
         {
-            Match m = Regex.Match(output.ReadLine(),
+            Match m = Regex.Match(output.ReadLine(), 
                                   @"^    \+ ([0-9]*): cells ([0-9]*)->([0-9]*), ([0-9]*) blocks, duration ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
             {
                 var thisChapter = new Chapter
                                       {
-                                          m_chapterNumber = int.Parse(m.Groups[1].Value.Trim()),
+                                          m_chapterNumber = int.Parse(m.Groups[1].Value.Trim()), 
                                           m_duration = TimeSpan.Parse(m.Groups[5].Value)
                                       };
                 return thisChapter;

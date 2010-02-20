@@ -4,26 +4,29 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System;
-using System.ComponentModel;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Threading;
-using Handbrake.Functions;
-using Timer = System.Threading.Timer;
-
 namespace Handbrake
 {
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Text;
+    using System.Threading;
+    using System.Windows.Forms;
+    using Functions;
+    using Timer = System.Threading.Timer;
+
     public partial class frmActivityWindow : Form
     {
         private delegate void SetTextCallback(StringBuilder text);
+
         private delegate void SetTextClearCallback();
+
         private int Position;
         private string LastMode;
         private string CurrentMode;
         private Timer WindowTimer;
- 
+
         public frmActivityWindow(string mode)
         {
             InitializeComponent();
@@ -57,6 +60,7 @@ namespace Handbrake
                     break;
             }
         }
+
         private StringBuilder ReadFile(string file)
         {
             StringBuilder appendText = new StringBuilder();
@@ -103,7 +107,6 @@ namespace Handbrake
                     }
                     sr.Close();
                     sr.Dispose();
-
                 }
                 catch (Exception)
                 {
@@ -115,6 +118,7 @@ namespace Handbrake
             }
             return appendText;
         }
+
         private void AppendWindowText(StringBuilder text)
         {
             try
@@ -123,7 +127,7 @@ namespace Handbrake
                 {
                     if (rtf_actLog.InvokeRequired)
                     {
-                        IAsyncResult invoked = BeginInvoke(new SetTextCallback(AppendWindowText), new object[] { text });
+                        IAsyncResult invoked = BeginInvoke(new SetTextCallback(AppendWindowText), new object[] {text});
                         EndInvoke(invoked);
                     }
                     else
@@ -136,6 +140,7 @@ namespace Handbrake
                 return;
             }
         }
+
         private void ClearWindowText()
         {
             try
@@ -148,7 +153,7 @@ namespace Handbrake
                         EndInvoke(invoked);
                     }
                     else
-                        lock(rtf_actLog)
+                        lock (rtf_actLog)
                             rtf_actLog.Clear();
                 }
             }
@@ -157,6 +162,7 @@ namespace Handbrake
                 return;
             }
         }
+
         private void PrintLogHeader()
         {
             try
@@ -173,14 +179,14 @@ namespace Handbrake
                         lock (rtf_actLog)
                         {
                             // Print the log header. This function will be re-implimented later. Do not delete.
-                            rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n",
-                                                                Properties.Settings.Default.hb_build,
+                            rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", 
+                                                                Properties.Settings.Default.hb_build, 
                                                                 Properties.Settings.Default.hb_version));
                             rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
                             rtf_actLog.AppendText(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
                             rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
-                            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n",
-                                                                SystemInfo.ScreenBounds.Bounds.Width,
+                            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", 
+                                                                SystemInfo.ScreenBounds.Bounds.Width, 
                                                                 SystemInfo.ScreenBounds.Bounds.Height));
                             rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
                             rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
@@ -194,15 +200,15 @@ namespace Handbrake
             {
                 return;
             }
-
         }
+
         private void Reset()
         {
             if (WindowTimer != null)
                 WindowTimer.Dispose();
             Position = 0;
             ClearWindowText();
-            PrintLogHeader(); 
+            PrintLogHeader();
             WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
         }
 
@@ -210,15 +216,17 @@ namespace Handbrake
 
         public string SetLogFile
         {
-            get { return string.IsNullOrEmpty(CurrentMode) ? "" : CurrentMode; }
+            get { return string.IsNullOrEmpty(CurrentMode) ? string.Empty : CurrentMode; }
             set { CurrentMode = value; }
         }
+
         public void SetScanMode()
         {
             Reset();
             SetLogFile = "last_scan_log.txt";
             this.Text = "Activity Window (Scan Log)";
         }
+
         public void SetEncodeMode()
         {
             Reset();
@@ -229,36 +237,42 @@ namespace Handbrake
         #endregion
 
         #region User Interface
+
         private void mnu_copy_log_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(rtf_actLog.SelectedText != "" ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
+            Clipboard.SetDataObject(rtf_actLog.SelectedText != string.Empty ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
         }
+
         private void mnu_openLogFolder_Click(object sender, EventArgs e)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string windir = Environment.GetEnvironmentVariable("WINDIR");
-            System.Diagnostics.Process prc = new System.Diagnostics.Process
-                                                 {
-                                                     StartInfo =
-                                                         {
-                                                             FileName = windir + @"\explorer.exe",
-                                                             Arguments = logDir
-                                                         }
-                                                 };
+            Process prc = new Process
+                              {
+                                  StartInfo =
+                                      {
+                                          FileName = windir + @"\explorer.exe", 
+                                          Arguments = logDir
+                                      }
+                              };
             prc.Start();
         }
+
         private void btn_copy_Click(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject(rtf_actLog.SelectedText != "" ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
+            Clipboard.SetDataObject(rtf_actLog.SelectedText != string.Empty ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
         }
+
         private void btn_scan_log_Click(object sender, EventArgs e)
         {
             SetScanMode();
         }
+
         private void btn_encode_log_Click(object sender, EventArgs e)
         {
             SetEncodeMode();
         }
+
         #endregion
 
         protected override void OnClosing(CancelEventArgs e)

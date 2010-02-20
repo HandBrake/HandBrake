@@ -45,6 +45,7 @@ namespace Handbrake.EncodeQueue
         public event EventHandler QueueCompleted;
 
         #region Queue
+
         /// <summary>
         /// Gets and removes the next job in the queue.
         /// </summary>
@@ -93,7 +94,14 @@ namespace Handbrake.EncodeQueue
         /// </param>
         public void Add(string query, string source, string destination, bool customJob)
         {
-            Job newJob = new Job { Id = this.nextJobId++, Query = query, Source = source, Destination = destination, CustomQuery = customJob };
+            Job newJob = new Job
+                             {
+                                 Id = this.nextJobId++, 
+                                 Query = query, 
+                                 Source = source, 
+                                 Destination = destination, 
+                                 CustomQuery = customJob
+                             };
 
             this.queue.Add(newJob);
             this.WriteQueueStateToFile("hb_queue_recovery.xml");
@@ -162,7 +170,8 @@ namespace Handbrake.EncodeQueue
         /// <param name="file">The location of the file to write the queue to.</param>
         public void WriteQueueStateToFile(string file)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                                              @"HandBrake\hb_queue_recovery.xml");
             string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
 
             try
@@ -170,7 +179,7 @@ namespace Handbrake.EncodeQueue
                 using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
                 {
                     if (serializer == null)
-                        serializer = new XmlSerializer(typeof(List<Job>));
+                        serializer = new XmlSerializer(typeof (List<Job>));
                     serializer.Serialize(strm, queue);
                     strm.Close();
                     strm.Dispose();
@@ -212,13 +221,15 @@ namespace Handbrake.EncodeQueue
                         line.WriteLine(strCmdLine);
                     }
 
-                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK, 
+                                    MessageBoxIcon.Asterisk);
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    MessageBox.Show(
+                        "Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", 
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 }
-
             }
         }
 
@@ -228,7 +239,8 @@ namespace Handbrake.EncodeQueue
         /// <param name="file">The location of the file to read the queue from.</param>
         public void LoadQueueFromFile(string file)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+                                              @"HandBrake\hb_queue_recovery.xml");
             string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
 
             if (File.Exists(tempPath))
@@ -238,7 +250,7 @@ namespace Handbrake.EncodeQueue
                     if (strm.Length != 0)
                     {
                         if (serializer == null)
-                            serializer = new XmlSerializer(typeof(List<Job>));
+                            serializer = new XmlSerializer(typeof (List<Job>));
 
                         List<Job> list = serializer.Deserialize(strm) as List<Job>;
 
@@ -348,7 +360,8 @@ namespace Handbrake.EncodeQueue
 
                 // Growl
                 if (Properties.Settings.Default.growlEncode)
-                    GrowlCommunicator.Notify("Encode Completed", "Put down that cocktail...\nyour Handbrake encode is done.");
+                    GrowlCommunicator.Notify("Encode Completed", 
+                                             "Put down that cocktail...\nyour Handbrake encode is done.");
 
                 while (this.PauseRequested) // Need to find a better way of doing this.
                 {

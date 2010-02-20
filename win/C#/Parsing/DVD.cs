@@ -4,11 +4,11 @@
  	   Homepage: <http://handbrake.fr>.
  	   It may be used under the terms of the GNU General Public License. */
 
-using System.Collections.Generic;
-using System.IO;
-
 namespace Handbrake.Parsing
 {
+    using System.Collections.Generic;
+    using System.IO;
+
     /// <summary>
     /// An object representing a scanned DVD
     /// </summary>
@@ -17,6 +17,7 @@ namespace Handbrake.Parsing
         private readonly List<Title> m_titles;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="DVD"/> class. 
         /// Default constructor for this object
         /// </summary>
         public DVD()
