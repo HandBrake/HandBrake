@@ -52,13 +52,43 @@ namespace Handbrake.Functions
         /// </summary>
         public struct MEMORYSTATUS // Unused var's are required here.
         {
+            /// <summary>
+            /// Unknown
+            /// </summary>
             public UInt32 dwLength;
+
+            /// <summary>
+            /// Memory Load
+            /// </summary>
             public UInt32 dwMemoryLoad;
+
+            /// <summary>
+            /// </summary>
             public UInt32 dwTotalPhys; // Used
+
+            /// <summary>
+            /// Available Physical Memory
+            /// </summary>
             public UInt32 dwAvailPhys;
+
+            /// <summary>
+            /// Total Page File
+            /// </summary>
             public UInt32 dwTotalPageFile;
+
+            /// <summary>
+            /// Available Page File
+            /// </summary>
             public UInt32 dwAvailPageFile;
+
+            /// <summary>
+            /// Total Virtual Memory
+            /// </summary>
             public UInt32 dwTotalVirtual;
+
+            /// <summary>
+            /// Available Virtual Memory
+            /// </summary>
             public UInt32 dwAvailVirtual;
         }
 

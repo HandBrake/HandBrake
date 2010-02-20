@@ -1,23 +1,25 @@
-/*  Program.cs 
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
-using System.Windows.Forms;
-using System.IO;
-using Handbrake.Presets;
+/*  Program.cs
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
-    static class Program
+    using System;
+    using System.IO;
+    using System.Windows.Forms;
+    using Presets;
+
+    /// <summary>
+    /// HandBrake Starts Here
+    /// </summary>
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             Screen scr = Screen.PrimaryScreen;
             if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 620))
@@ -40,5 +42,4 @@ namespace Handbrake
             }
         }
     }
-
 }

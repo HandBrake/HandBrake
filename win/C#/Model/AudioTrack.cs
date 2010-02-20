@@ -1,8 +1,7 @@
 ﻿/*  AudioTrack.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Model
 {
@@ -12,45 +11,46 @@ namespace Handbrake.Model
     public class AudioTrack
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="AudioTrack"/> class. 
         /// Audio Track instance
         /// </summary>
         public AudioTrack()
         {
             // Default Values
-            Track = "Automatic";
-            MixDown = "Automatic";
-            SampleRate = "Auto";
-            Bitrate = "Auto";
-            DRC = "1";
+            this.Track = "Automatic";
+            this.MixDown = "Automatic";
+            this.SampleRate = "Auto";
+            this.Bitrate = "Auto";
+            this.DRC = "1";
         }
 
         /// <summary>
-        /// Audio Track Name
+        /// Gets or sets Audio Track Name
         /// </summary>
         public string Track { get; set; }
 
         /// <summary>
-        /// Audio Mixdown
+        /// Gets or sets Audio Mixdown
         /// </summary>
         public string MixDown { get; set; }
 
         /// <summary>
-        /// Audio Encoder
+        /// Gets or sets Audio Encoder
         /// </summary>
         public string Encoder { get; set; }
 
         /// <summary>
-        /// Audio Bitrate
+        /// Gets or sets Audio Bitrate
         /// </summary>
         public string Bitrate { get; set; }
 
         /// <summary>
-        /// Audio SampleRate
+        /// Gets or sets Audio SampleRate
         /// </summary>
         public string SampleRate { get; set; }
 
         /// <summary>
-        /// Dynamic Range Compression
+        /// Gets or sets Dynamic Range Compression
         /// </summary>
         public string DRC { get; set; }
     }

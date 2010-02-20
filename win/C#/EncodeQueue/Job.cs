@@ -1,13 +1,13 @@
 ﻿/*  QueueItem.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.EncodeQueue
 {
+    /// <summary>
+    /// The job.
+    /// </summary>
     public struct Job
     {
         /// <summary>
@@ -21,9 +21,9 @@ namespace Handbrake.EncodeQueue
         public string Query { get; set; }
 
         /// <summary>
-        /// record if this is a user or GUI generated query
+        /// Gets or sets a value indicating whether if this is a user or GUI generated query
         /// </summary>
-        public Boolean CustomQuery { get; set; }
+        public bool CustomQuery { get; set; }
 
         /// <summary>
         /// Gets or sets the source file of encoding.
@@ -36,11 +36,15 @@ namespace Handbrake.EncodeQueue
         public string Destination { get; set; }
 
         /// <summary>
-        /// Gets whether or not this instance is empty.
+        /// Gets a value indicating whether or not this instance is empty.
         /// </summary>
         public bool IsEmpty
         {
-            get { return Id == 0 && string.IsNullOrEmpty(Query) && string.IsNullOrEmpty(Source) && string.IsNullOrEmpty(Destination); }
+            get
+            {
+                return this.Id == 0 && string.IsNullOrEmpty(this.Query) && string.IsNullOrEmpty(this.Source) &&
+                       string.IsNullOrEmpty(this.Destination);
+            }
         }
     }
 }

@@ -104,6 +104,8 @@
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="EnumMember" />
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
       <Abbreviation Text="CLI" />
+      <Abbreviation Text="DRC" />
+      <Abbreviation Text="ID" />
     </Naming2>
   </CodeStyleSettings>
 </Configuration>

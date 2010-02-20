@@ -2,6 +2,13 @@
   <GlobalSettings>
     <StringProperty Name="MergeSettingsFiles">NoMerge</StringProperty>
   </GlobalSettings>
+  <Parsers>
+    <Parser ParserId="Microsoft.StyleCop.CSharp.CsParser">
+      <ParserSettings>
+        <BooleanProperty Name="AnalyzeDesignerFiles">False</BooleanProperty>
+      </ParserSettings>
+    </Parser>
+  </Parsers>
   <Analyzers>
     <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.DocumentationRules">
       <Rules>
@@ -41,6 +48,11 @@
           </RuleSettings>
         </Rule>
         <Rule Name="DocumentationTextMustMeetMinimumCharacterLength">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+        <Rule Name="DocumentationTextMustContainWhitespace">
           <RuleSettings>
             <BooleanProperty Name="Enabled">False</BooleanProperty>
           </RuleSettings>

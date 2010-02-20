@@ -1,25 +1,38 @@
 ﻿/*  Queue.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr/>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading;
-using System.Windows.Forms;
-using System.Xml.Serialization;
-using Handbrake.Functions;
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr/>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.EncodeQueue
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Threading;
+    using System.Windows.Forms;
+    using System.Xml.Serialization;
+    using Functions;
+
+    /// <summary>
+    /// The HandBrake Queue
+    /// </summary>
     public class Queue : Encode
     {
+        /// <summary>
+        /// An XML Serializer
+        /// </summary>
         private static XmlSerializer serializer;
+
+        /// <summary>
+        /// The Queue Job List
+        /// </summary>
         private readonly List<Job> queue = new List<Job>();
-        private int NextJobId;
+
+        /// <summary>
+        /// The Next Job ID
+        /// </summary>
+        private int nextJobId;
 
         /// <summary>
         /// Fires when a pause to the encode queue has been requested.
@@ -38,11 +51,11 @@ namespace Handbrake.EncodeQueue
         /// <returns>The job that was removed from the queue.</returns>
         private Job GetNextJob()
         {
-            Job job = queue[0];
-            LastEncode = job;
-            Remove(0); // Remove the item which we are about to pass out.
+            Job job = this.queue[0];
+            this.LastEncode = job;
+            this.Remove(0); // Remove the item which we are about to pass out.
 
-            WriteQueueStateToFile("hb_queue_recovery.xml");
+            this.WriteQueueStateToFile("hb_queue_recovery.xml");
 
             return job;
         }
@@ -52,7 +65,7 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public ReadOnlyCollection<Job> CurrentQueue
         {
-            get { return queue.AsReadOnly(); }
+            get { return this.queue.AsReadOnly(); }
         }
 
         /// <summary>
@@ -60,23 +73,30 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public int Count
         {
-            get { return queue.Count; }
+            get { return this.queue.Count; }
         }
 
         /// <summary>
         /// Adds an item to the queue.
         /// </summary>
-        /// <param name="query">The query that will be passed to the HandBrake CLI.</param>
-        /// <param name="source">The location of the source video.</param>
-        /// <param name="destination">The location where the encoded video will be.</param>
-        /// <param name="customJob">Custom job</param>
-        /// <param name="scanInfo">The Scan</param>
+        /// <param name="query">
+        /// The query that will be passed to the HandBrake CLI.
+        /// </param>
+        /// <param name="source">
+        /// The location of the source video.
+        /// </param>
+        /// <param name="destination">
+        /// The location where the encoded video will be.
+        /// </param>
+        /// <param name="customJob">
+        /// Custom job
+        /// </param>
         public void Add(string query, string source, string destination, bool customJob)
         {
-            Job newJob = new Job { Id = NextJobId++, Query = query, Source = source, Destination = destination, CustomQuery = customJob };
+            Job newJob = new Job { Id = this.nextJobId++, Query = query, Source = source, Destination = destination, CustomQuery = customJob };
 
-            queue.Add(newJob);
-            WriteQueueStateToFile("hb_queue_recovery.xml");
+            this.queue.Add(newJob);
+            this.WriteQueueStateToFile("hb_queue_recovery.xml");
         }
 
         /// <summary>
@@ -85,19 +105,19 @@ namespace Handbrake.EncodeQueue
         /// <param name="index">The zero-based location of the job in the queue.</param>
         public void Remove(int index)
         {
-            queue.RemoveAt(index);
-            WriteQueueStateToFile("hb_queue_recovery.xml");
+            this.queue.RemoveAt(index);
+            this.WriteQueueStateToFile("hb_queue_recovery.xml");
         }
 
         /// <summary>
         /// Retrieve a job from the queue
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <param name="index">the job id</param>
+        /// <returns>A job for the given index or blank job object</returns>
         public Job GetJob(int index)
         {
-            if (queue.Count >= (index +1))
-                return queue[index];
+            if (this.queue.Count >= (index + 1))
+                return this.queue[index];
 
             return new Job();
         }
@@ -125,15 +145,15 @@ namespace Handbrake.EncodeQueue
         /// <param name="index">The zero-based location of the job in the queue.</param>
         public void MoveDown(int index)
         {
-            if (index < queue.Count - 1)
+            if (index < this.queue.Count - 1)
             {
-                Job item = queue[index];
+                Job item = this.queue[index];
 
-                queue.RemoveAt(index);
-                queue.Insert((index + 1), item);
+                this.queue.RemoveAt(index);
+                this.queue.Insert((index + 1), item);
             }
 
-            WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+            this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
         }
 
         /// <summary>
@@ -168,11 +188,11 @@ namespace Handbrake.EncodeQueue
         /// <param name="file">The location of the file to write the batch file to.</param>
         public void WriteBatchScriptToFile(string file)
         {
-            string queries = "";
-            foreach (Job queue_item in queue)
+            string queries = string.Empty;
+            foreach (Job queueItem in this.queue)
             {
-                string q_item = queue_item.Query;
-                string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + q_item;
+                string qItem = queueItem.Query;
+                string fullQuery = '"' + Application.StartupPath + "\\HandBrakeCLI.exe" + '"' + qItem;
 
                 if (queries == string.Empty)
                     queries = queries + fullQuery;
@@ -181,7 +201,7 @@ namespace Handbrake.EncodeQueue
             }
             string strCmdLine = queries;
 
-            if (file != "")
+            if (file != string.Empty)
             {
                 try
                 {
@@ -224,10 +244,10 @@ namespace Handbrake.EncodeQueue
 
                         if (list != null)
                             foreach (Job item in list)
-                                queue.Add(item);
+                                this.queue.Add(item);
 
                         if (file != "hb_queue_recovery.xml")
-                            WriteQueueStateToFile("hb_queue_recovery.xml");
+                            this.WriteQueueStateToFile("hb_queue_recovery.xml");
                     }
                 }
             }
@@ -240,7 +260,7 @@ namespace Handbrake.EncodeQueue
         /// <returns>Whether or not the supplied destination is already in the queue.</returns>
         public bool CheckForDestinationDuplicate(string destination)
         {
-            foreach (Job checkItem in queue)
+            foreach (Job checkItem in this.queue)
             {
                 if (checkItem.Destination.Contains(destination.Replace("\\\\", "\\")))
                     return true;
@@ -254,15 +274,15 @@ namespace Handbrake.EncodeQueue
         #region Encoding
 
         /// <summary>
-        /// Gets the last encode that was processed.
+        /// Gets or sets the last encode that was processed.
         /// </summary>
         /// <returns></returns> 
         public Job LastEncode { get; set; }
 
         /// <summary>
-        /// Request Pause
+        /// Gets a value indicating whether Request Pause
         /// </summary>
-        public Boolean PauseRequested { get; private set; }
+        public bool PauseRequested { get; private set; }
 
         /// <summary>
         /// Starts encoding the first job in the queue and continues encoding until all jobs
@@ -272,14 +292,14 @@ namespace Handbrake.EncodeQueue
         {
             if (this.Count != 0)
             {
-                if (PauseRequested)
-                    PauseRequested = false;
+                if (this.PauseRequested)
+                    this.PauseRequested = false;
                 else
                 {
-                    PauseRequested = false;
+                    this.PauseRequested = false;
                     try
                     {
-                        Thread theQueue = new Thread(StartQueue) { IsBackground = true };
+                        Thread theQueue = new Thread(this.StartQueue) {IsBackground = true};
                         theQueue.Start();
                     }
                     catch (Exception exc)
@@ -295,50 +315,50 @@ namespace Handbrake.EncodeQueue
         /// </summary>
         public void Pause()
         {
-            PauseRequested = true;
+            this.PauseRequested = true;
 
-            if (QueuePauseRequested != null)
-                QueuePauseRequested(this, new EventArgs());
+            if (this.QueuePauseRequested != null)
+                this.QueuePauseRequested(this, new EventArgs());
         }
 
         /// <summary>
         /// Run through all the jobs on the queue.
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="state">Object State</param>
         private void StartQueue(object state)
         {
             // Run through each item on the queue
             while (this.Count != 0)
             {
-                Job encJob = GetNextJob();
+                Job encJob = this.GetNextJob();
                 string query = encJob.Query;
-                WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+                this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
                 Run(query);
 
                 HbProcess.WaitForExit();
 
                 AddCLIQueryToLog(encJob);
-                CopyLog(LastEncode.Destination);
+                this.CopyLog(this.LastEncode.Destination);
 
                 HbProcess.Close();
                 HbProcess.Dispose();
 
                 IsEncoding = false;
 
-                //Growl
+                // Growl
                 if (Properties.Settings.Default.growlEncode)
                     GrowlCommunicator.Notify("Encode Completed", "Put down that cocktail...\nyour Handbrake encode is done.");
 
-                while (PauseRequested) // Need to find a better way of doing this.
+                while (this.PauseRequested) // Need to find a better way of doing this.
                 {
                     Thread.Sleep(2000);
                 }
             }
-            LastEncode = new Job();
+            this.LastEncode = new Job();
 
-            if (QueueCompleted != null)
-                QueueCompleted(this, new EventArgs());
+            if (this.QueueCompleted != null)
+                this.QueueCompleted(this, new EventArgs());
 
             // After the encode is done, we may want to shutdown, suspend etc.
             Finish();
