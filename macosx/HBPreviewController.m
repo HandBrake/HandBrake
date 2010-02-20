@@ -210,6 +210,12 @@
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
     [self SettingsChanged: nil];
+    
+    /* set the top of the hud controller boxes centered vertically with the origin of our window */
+    NSPoint hudControlBoxOrigin = [fPictureControlBox frame].origin;
+    hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - [fPictureControlBox frame].size.height;
+    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
 
 }
 
@@ -1189,11 +1195,6 @@
     
     [fPictureView setFrameOrigin:origin];
     
-    /* set the top of the hud controller boxes centered vertically with the origin of our window */
-    NSPoint hudControlBoxOrigin = [fPictureControlBox frame].origin;
-    hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - [fPictureControlBox frame].size.height;
-    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
 }
 
 
