@@ -1,27 +1,36 @@
 ﻿/*  PresetLoader.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Handbrake.Model;
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Functions
 {
-    class PresetLoader
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// Load a preset into the main Window
+    /// </summary>
+    public class PresetLoader
     {
         /// <summary>
         /// This function takes in a Query which has been parsed by QueryParser and
         /// set's all the GUI widgets correctly.
         /// </summary>
-        /// <param name="mainWindow"></param>
-        /// <param name="presetQuery">The Parsed CLI Query</param>
-        /// <param name="name">Name of the preset</param>
-        /// <param name="pictureSettings">Save picture settings in the preset</param>
-        public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name, Boolean pictureSettings)
+        /// <param name="mainWindow">
+        /// FrmMain window
+        /// </param>
+        /// <param name="presetQuery">
+        /// The Parsed CLI Query
+        /// </param>
+        /// <param name="name">
+        /// Name of the preset
+        /// </param>
+        /// <param name="pictureSettings">
+        /// Save picture settings in the preset
+        /// </param>
+        public static void LoadPreset(frmMain mainWindow, QueryParser presetQuery, string name, bool pictureSettings)
         {
             #region Source
             // Reset some vaules to stock first to prevent errors.
@@ -163,12 +172,12 @@ namespace Handbrake.Functions
                 {
                     double cqStep = Properties.Settings.Default.x264cqstep;
                     int value;
-                    double x264step = cqStep;
+                    double x264Step = cqStep;
                     double presetValue = presetQuery.VideoQuality;
 
-                    double x = 51 / x264step;
+                    double x = 51 / x264Step;
 
-                    double calculated = presetValue / x264step;
+                    double calculated = presetValue / x264Step;
                     calculated = x - calculated;
 
                     int.TryParse(calculated.ToString(), out value);

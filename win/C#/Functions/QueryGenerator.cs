@@ -1,36 +1,47 @@
 ﻿/*  QueryGenerator.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr/>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
-using System.Windows.Forms;
-using System.Globalization;
-using System.IO;
-using System.Collections.Generic;
-using Handbrake.Model;
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr/>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Functions
 {
-    class QueryGenerator
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.IO;
+    using System.Windows.Forms;
+
+    /// <summary>
+    /// Generate a CLI Query for HandBrakeCLI
+    /// </summary>
+    public class QueryGenerator
     {
         /// <summary>
         /// Generates a full CLI query for either encoding or previe encoeds if duration and preview are defined.
         /// </summary>
-        /// <param name="mainWindow">The Main Window</param>
-        /// <param name="mode">What Mode. (Point to Point Encoding)  Chapters, Seconds, Frames OR Preview Encode</param>
-        /// <param name="duration">time in seconds for preview mode</param>
-        /// <param name="preview"> --start-at-preview (int) </param>
-        /// <returns>CLI Query </returns>
+        /// <param name="mainWindow">
+        /// The Main Window
+        /// </param>
+        /// <param name="mode">
+        /// What Mode. (Point to Point Encoding)  Chapters, Seconds, Frames OR Preview Encode
+        /// </param>
+        /// <param name="duration">
+        /// Time in seconds for preview mode
+        /// </param>
+        /// <param name="preview">
+        /// Preview --start-at-preview (int) 
+        /// </param>
+        /// <returns>
+        /// CLI Query 
+        /// </returns>
         public static string GenerateCliQuery(frmMain mainWindow, int mode, int duration, string preview)
         {
-            string query = "";
+            string query = string.Empty;
             
             if (!string.IsNullOrEmpty(mainWindow.sourcePath) && mainWindow.sourcePath.Trim() != "Select \"Source\" to continue")
                 query = " -i " + '"' + mainWindow.sourcePath + '"';
 
-            if (mainWindow.drp_dvdtitle.Text != "")
+            if (mainWindow.drp_dvdtitle.Text != string.Empty)
             {
                 string[] titleInfo = mainWindow.drp_dvdtitle.Text.Split(' ');
                 query += " -t " + titleInfo[0];
@@ -43,9 +54,9 @@ namespace Handbrake.Functions
             switch (mode)
             {
                 case 0: // Chapters
-                    if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != "")
+                    if (mainWindow.drop_chapterFinish.Text == mainWindow.drop_chapterStart.Text && mainWindow.drop_chapterStart.Text != string.Empty)
                         query += string.Format(" -c {0}", mainWindow.drop_chapterStart.Text);
-                    else if (mainWindow.drop_chapterStart.Text != "" && mainWindow.drop_chapterFinish.Text != "")
+                    else if (mainWindow.drop_chapterStart.Text != string.Empty && mainWindow.drop_chapterFinish.Text != string.Empty)
                         query += string.Format(" -c {0}-{1}", mainWindow.drop_chapterStart.Text, mainWindow.drop_chapterFinish.Text);
                     break;
                 case 1: // Seconds
@@ -68,7 +79,7 @@ namespace Handbrake.Functions
                     query += " --start-at-preview " + preview;
                     query += " --stop-at duration:" + duration + " ";
 
-                    if (mainWindow.text_destination.Text != "")
+                    if (mainWindow.text_destination.Text != string.Empty)
                         query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
                     break;
                 default:
@@ -85,14 +96,14 @@ namespace Handbrake.Functions
         /// <summary>
         /// Generates part of the CLI query, for the tabbed components only.
         /// </summary>
-        /// <param name="mainWindow"></param>
-        /// <returns></returns>
+        /// <param name="mainWindow">frmMain the main window</param>
+        /// <returns>The CLI Query for the Tab Screens on the main window</returns>
         public static string GenerateTabbedComponentsQuery(frmMain mainWindow)
         {
-            string query = "";
+            string query = string.Empty;
 
             #region Output Settings Box
-            query += " -f " + mainWindow.drop_format.Text.ToLower().Replace(" file", "");
+            query += " -f " + mainWindow.drop_format.Text.ToLower().Replace(" file", string.Empty);
 
             // These are output settings features
             if (mainWindow.check_largeFile.Checked)
@@ -125,7 +136,7 @@ namespace Handbrake.Functions
             if (mainWindow.PictureSettings.PresetMaximumResolution.Height == 0)
             {
                 if (mainWindow.PictureSettings.text_height.Value != 0)
-                    if (mainWindow.PictureSettings.text_height.Text != "")
+                    if (mainWindow.PictureSettings.text_height.Text != string.Empty)
                         if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
                             query += " -l " + mainWindow.PictureSettings.text_height.Text;
             }
@@ -182,7 +193,7 @@ namespace Handbrake.Functions
                         query += " --keep-display-aspect ";
 
                     if (!mainWindow.PictureSettings.check_KeepAR.Checked)
-                        if (mainWindow.PictureSettings.updownParWidth.Text != "" && mainWindow.PictureSettings.updownParHeight.Text != "")
+                        if (mainWindow.PictureSettings.updownParWidth.Text != string.Empty && mainWindow.PictureSettings.updownParHeight.Text != string.Empty)
                             query += " --pixel-aspect " + mainWindow.PictureSettings.updownParWidth.Text + ":" + mainWindow.PictureSettings.updownParHeight.Text + " ";
                     break;
             }
@@ -298,78 +309,87 @@ namespace Handbrake.Functions
             }
 
             // Audio Track (-a)
-            String audioItems = "";
-            Boolean firstLoop = true;
+            string audioItems = string.Empty;
+            bool firstLoop = true;
 
-            foreach (String item in tracks)
+            foreach (string item in tracks)
             {
                 if (firstLoop)
                 {
-                    audioItems = item; firstLoop = false;
+                    audioItems = item;
+                    firstLoop = false;
                 }
                 else
                     audioItems += "," + item;
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -a " + audioItems;
-            firstLoop = true; audioItems = ""; // Reset for another pass.
+            firstLoop = true;
+            audioItems = string.Empty; // Reset for another pass.
 
             // Audio Codec (-E)
-            foreach (String item in codecs)
+            foreach (string item in codecs)
             {
-
                 if (firstLoop)
                 {
-                    audioItems = item; firstLoop = false;
+                    audioItems = item;
+                    firstLoop = false;
                 }
                 else
                     audioItems += "," + item;
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -E " + audioItems;
-            firstLoop = true; audioItems = ""; // Reset for another pass.
+            firstLoop = true;
+            audioItems = string.Empty; // Reset for another pass.
 
             // Audio Mixdown (-6)
-            foreach (String item in mixdowns)
+            foreach (string item in mixdowns)
             {
                 if (firstLoop)
                 {
-                    audioItems = item; firstLoop = false;
+                    audioItems = item;
+                    firstLoop = false;
                 }
                 else
                     audioItems += "," + item;
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -6 " + audioItems;
-            firstLoop = true; audioItems = ""; // Reset for another pass.
+            firstLoop = true;
+            audioItems = string.Empty; // Reset for another pass.
 
             // Sample Rate (-R)
-            foreach (String item in samplerates)
+            foreach (string item in samplerates)
             {
                 if (firstLoop)
                 {
-                    audioItems = item; firstLoop = false;
+                    audioItems = item;
+                    firstLoop = false;
                 }
                 else
                     audioItems += "," + item;
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -R " + audioItems;
-            firstLoop = true; audioItems = ""; // Reset for another pass.
+            firstLoop = true;
+            audioItems = string.Empty; // Reset for another pass.
 
             // Audio Bitrate (-B)
-            foreach (String item in bitrates)
+            foreach (string item in bitrates)
             {
                 if (firstLoop)
                 {
-                    audioItems = item; firstLoop = false;
+                    audioItems = item;
+                    firstLoop = false;
                 }
                 else
                     audioItems += "," + item;
             }
             if (audioItems.Trim() != String.Empty)
                 query += " -B " + audioItems;
-            firstLoop = true; audioItems = ""; // Reset for another pass.
+            firstLoop = true;
+            audioItems = string.Empty; // Reset for another pass.
 
             // DRC (-D)
             foreach (var itm in drcs)
@@ -377,7 +397,8 @@ namespace Handbrake.Functions
                 string item = itm.ToString(new CultureInfo("en-US"));
                 if (firstLoop)
                 {
-                    audioItems = item; firstLoop = false;
+                    audioItems = item;
+                    firstLoop = false;
                 }
                 else
                     audioItems += "," + item;
@@ -411,7 +432,7 @@ namespace Handbrake.Functions
                                       ? Path.Combine(Path.GetTempPath(), dest_name + "-" + sourceTitle + "-chapters.csv")
                                       : Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
 
-                    if (ChapterCSVSave(mainWindow, path) == false)
+                    if (ChapterCsvSave(mainWindow, path) == false)
                         query += " -m ";
                     else
                         query += " --markers=" + "\"" + path + "\"";
@@ -467,8 +488,12 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get the CLI Audio Encoder name
         /// </summary>
-        /// <param name="selectedEncoder">string The GUI Encode name</param>
-        /// <returns>string CLI encoder name</returns>
+        /// <param name="selectedEncoder">
+        /// String The GUI Encode name
+        /// </param>
+        /// <returns>
+        /// String CLI encoder name
+        /// </returns>
         private static string GetAudioEncoder(string selectedEncoder)
         {
             switch (selectedEncoder)
@@ -484,7 +509,7 @@ namespace Handbrake.Functions
                 case "DTS Passthru":
                     return "dts";
                 default:
-                    return "";
+                    return string.Empty;
             }
         }
 
@@ -494,17 +519,17 @@ namespace Handbrake.Functions
         /// <param name="mainWindow">Main Window</param>
         /// <param name="filePathName">Path to save the csv file</param>
         /// <returns>True if successful </returns>
-        private static Boolean ChapterCSVSave(frmMain mainWindow, string filePathName)
+        private static bool ChapterCsvSave(frmMain mainWindow, string filePathName)
         {
             try
             {
-                string csv = "";
+                string csv = string.Empty;
 
                 foreach (DataGridViewRow row in mainWindow.data_chpt.Rows)
                 {
                     csv += row.Cells[0].Value.ToString();
                     csv += ",";
-                    csv += row.Cells[1].Value.ToString().Replace(",","\\,");
+                    csv += row.Cells[1].Value.ToString().Replace(",", "\\,");
                     csv += Environment.NewLine;
                 }
                 StreamWriter file = new StreamWriter(filePathName);

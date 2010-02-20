@@ -1,17 +1,16 @@
 /*  GrowlCommunicator.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Growl.Connector;
-using Growl.CoreLibrary;
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Functions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Growl.Connector;
+    using Growl.CoreLibrary;
+
     /// <summary>
     /// Provides all functionality for communicating with Growl for Windows.
     /// </summary>
@@ -36,7 +35,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Notification shown upon completion of encoding
         /// </summary>
-        public static NotificationType EncodeOrQueueCompleted = new NotificationType("EncodeOrQueue", "HandBrake Status");
+        private static NotificationType encodeOrQueueCompleted = new NotificationType("EncodeOrQueue", "HandBrake Status");
 
         /// <summary>
         /// Checks to see if Growl is currently running on the local machine.
@@ -61,16 +60,22 @@ namespace Handbrake.Functions
         public static void Register()
         {
             Initialize();
-            growl.Register(application, new NotificationType[] { EncodeOrQueueCompleted });
+            growl.Register(application, new NotificationType[] { encodeOrQueueCompleted });
         }
 
         /// <summary>
         /// Sends a notification to Growl. (Since Handbrake currently only supports one type of notification with
         /// static text, this is a shortcut method).
         /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="text">
+        /// The text to display.
+        /// </param>
         public static void Notify(string title, string text)
         {
-            Notification notification = new Notification(application.Name, EncodeOrQueueCompleted.Name, String.Empty, title, text);
+            Notification notification = new Notification(application.Name, encodeOrQueueCompleted.Name, String.Empty, title, text);
             growl.Notify(notification);
         }
 
@@ -84,8 +89,10 @@ namespace Handbrake.Functions
         /// <param name="imageUrl">The notification image as a url</param>
         public static void Notify(NotificationType notificationType, string title, string text, string imageUrl)
         {
-            Notification notification = new Notification(application.Name, notificationType.Name, String.Empty, title, text);
-            notification.Icon = imageUrl;
+            Notification notification = new Notification(application.Name, notificationType.Name, String.Empty, title, text)
+                                            {
+                                               Icon = imageUrl
+                                            };
 
             growl.Notify(notification);
         }
@@ -97,11 +104,15 @@ namespace Handbrake.Functions
         {
             if (growl == null)
             {
-                growl = new GrowlConnector();
-                growl.EncryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText;
+                growl = new GrowlConnector
+                            {
+                                EncryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText
+                            };
 
-                application = new Application("Handbrake");
-                application.Icon = global::Handbrake.Properties.Resources.logo64;
+                application = new Application("Handbrake")
+                                  {
+                                      Icon = Properties.Resources.logo64
+                                  };
             }
         }
     }

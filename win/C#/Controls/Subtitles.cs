@@ -311,12 +311,15 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Set all subtitle tracks so that they have no default.
+        /// </summary>
         private void SetNoSrtDefault()
         {
             int c = 0;
             foreach (ListViewItem item in lv_subList.Items)
             {
-                if (subList[c].SrtPath != "-")
+                if (!subList[c].IsSrtSubtitle)
                 {
                     if (item.SubItems[3].Text == "Yes")
                     {

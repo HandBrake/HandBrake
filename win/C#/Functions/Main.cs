@@ -1,35 +1,52 @@
 /*  Main.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
-
-using System;
-using System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.Xml.Serialization;
-using System.Threading;
-using Handbrake.EncodeQueue;
-using System.Net;
-using Handbrake.Model;
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Functions
 {
-    static class Main
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using System.Windows.Forms;
+    using System.Xml.Serialization;
+    using EncodeQueue;
+    using Model;
+
+    /// <summary>
+    /// Useful functions which various screens can use.
+    /// </summary>
+    public static class Main
     {
-        // Private Variables
+        /// <summary>
+        /// The XML Serializer
+        /// </summary>
         private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Job>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
         /// </summary>
+        /// <param name="chapterStart">
+        /// The chapter Start.
+        /// </param>
+        /// <param name="chapterEnd">
+        /// The chapter End.
+        /// </param>
+        /// <param name="selectedTitle">
+        /// The selected Title.
+        /// </param>
+        /// <returns>
+        /// The calculated duration.
+        /// </returns>
         public static TimeSpan CalculateDuration(int chapterStart, int chapterEnd, Parsing.Title selectedTitle)
         {
             TimeSpan duration = TimeSpan.FromSeconds(0.0);
-            chapterStart++; chapterEnd++;
+            chapterStart++;
+            chapterEnd++;
             if (chapterStart != 0 && chapterEnd != 0 && chapterEnd <= selectedTitle.Chapters.Count)
             {
                 for (int i = chapterStart; i <= chapterEnd; i++)
@@ -42,12 +59,18 @@ namespace Handbrake.Functions
         /// <summary>
         /// Select the longest title in the DVD title dropdown menu on frmMain
         /// </summary>
-        public static Parsing.Title SelectLongestTitle(Parsing.DVD thisDvd)
+        /// <param name="source">
+        /// The Source.
+        /// </param>
+        /// <returns>
+        /// The longest title.
+        /// </returns>
+        public static Parsing.Title SelectLongestTitle(Parsing.DVD source)
         {
             TimeSpan longestDurationFound = TimeSpan.FromSeconds(0.0);
             Parsing.Title returnTitle = null;
 
-            foreach (Parsing.Title item in thisDvd.Titles)
+            foreach (Parsing.Title item in source.Titles)
             {
                 if (item.Duration > longestDurationFound)
                 {
@@ -61,6 +84,15 @@ namespace Handbrake.Functions
         /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
+        /// <param name="dataChpt">
+        /// The DataGridView Control
+        /// </param>
+        /// <param name="chapterEnd">
+        /// The chapter End.
+        /// </param>
+        /// <returns>
+        /// The chapter naming.
+        /// </returns>
         public static DataGridView ChapterNaming(DataGridView dataChpt, string chapterEnd)
         {
             int i = 0, finish = 0;
@@ -71,7 +103,7 @@ namespace Handbrake.Functions
             while (i < finish)
             {
                 int n = dataChpt.Rows.Add();
-                dataChpt.Rows[n].Cells[0].Value = (i + 1);
+                dataChpt.Rows[n].Cells[0].Value = i + 1;
                 dataChpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
                 dataChpt.Rows[n].Cells[0].ValueType = typeof(int);
                 dataChpt.Rows[n].Cells[1].ValueType = typeof(string);
@@ -84,9 +116,13 @@ namespace Handbrake.Functions
         /// <summary>
         /// Import a CSV file which contains Chapter Names
         /// </summary>
-        /// <param name="dataChpt"></param>
-        /// <param name="filename"></param>
-        /// <returns></returns>
+        /// <param name="dataChpt">
+        /// The DataGridView Control
+        /// </param>
+        /// <param name="filename">
+        /// The filepath and name
+        /// </param>
+        /// <returns>A Populated DataGridView</returns>
         public static DataGridView ImportChapterNames(DataGridView dataChpt, string filename)
         {
             IDictionary<int, string> chapterMap = new Dictionary<int, string>();
@@ -96,7 +132,7 @@ namespace Handbrake.Functions
                 string csv = sr.ReadLine();
                 while (csv != null)
                 {
-                    if (csv.Trim() != "")
+                    if (csv.Trim() != string.Empty)
                     {
                         csv = csv.Replace("\\,", "<!comma!>");
                         string[] contents = csv.Split(',');
@@ -126,9 +162,15 @@ namespace Handbrake.Functions
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
+        /// <param name="mainWindow">
+        /// The main Window.
+        /// </param>
+        /// <returns>
+        /// The Generated FileName
+        /// </returns>
         public static string AutoName(frmMain mainWindow)
         {
-            string AutoNamePath = string.Empty;
+            string autoNamePath = string.Empty;
             if (mainWindow.drp_dvdtitle.Text != "Automatic")
             {
                 // Get the Source Name 
@@ -136,18 +178,18 @@ namespace Handbrake.Functions
 
                 // Get the Selected Title Number
                 string[] titlesplit = mainWindow.drp_dvdtitle.Text.Split(' ');
-                string dvdTitle = titlesplit[0].Replace("Automatic", "");
+                string dvdTitle = titlesplit[0].Replace("Automatic", string.Empty);
 
                 // Get the Chapter Start and Chapter End Numbers
-                string chapterStart = mainWindow.drop_chapterStart.Text.Replace("Auto", "");
-                string chapterFinish = mainWindow.drop_chapterFinish.Text.Replace("Auto", "");
+                string chapterStart = mainWindow.drop_chapterStart.Text.Replace("Auto", string.Empty);
+                string chapterFinish = mainWindow.drop_chapterFinish.Text.Replace("Auto", string.Empty);
                 string combinedChapterTag = chapterStart;
-                if (chapterFinish != chapterStart && chapterFinish != "")
+                if (chapterFinish != chapterStart && chapterFinish != string.Empty)
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
 
                 // Get the destination filename.
                 string destinationFilename;
-                if (Properties.Settings.Default.autoNameFormat != "")
+                if (Properties.Settings.Default.autoNameFormat != string.Empty)
                 {
                     destinationFilename = Properties.Settings.Default.autoNameFormat;
                     destinationFilename = destinationFilename.Replace("{source}", sourceName).Replace("{title}", dvdTitle).Replace("{chapters}", combinedChapterTag);
@@ -171,37 +213,34 @@ namespace Handbrake.Functions
                 if (!mainWindow.text_destination.Text.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // If there is an auto name path, use it...
-                    if (Properties.Settings.Default.autoNamePath.Trim() != "" && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
-                        AutoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destinationFilename);
+                    if (Properties.Settings.Default.autoNamePath.Trim() != string.Empty && Properties.Settings.Default.autoNamePath.Trim() != "Click 'Browse' to set the default location")
+                        autoNamePath = Path.Combine(Properties.Settings.Default.autoNamePath, destinationFilename);
                     else // ...otherwise, output to the source directory
-                        AutoNamePath = null;
+                        autoNamePath = null;
                 }
                 else // Otherwise, use the path that is already there.
                 {
                     // Use the path and change the file extension to match the previous destination
-                    AutoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
 
                     if (Path.HasExtension(mainWindow.text_destination.Text))
-                        AutoNamePath = Path.ChangeExtension(AutoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
+                        autoNamePath = Path.ChangeExtension(autoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
                 }
             }
 
-            return AutoNamePath;
+            return autoNamePath;
         }
 
         /// <summary>
         /// Get's HandBrakes version data from the CLI.
         /// </summary>
-        /// <returns>Arraylist of Version Data. 0 = hb_version 1 = hb_build</returns>
         public static void SetCliVersionData()
         {
-            String line;
+            string line;
 
             // 0 = SVN Build / Version
             // 1 = Build Date
-
             DateTime lastModified = File.GetLastWriteTime("HandBrakeCLI.exe");
-
 
             if (Properties.Settings.Default.cliLastModified == lastModified && Properties.Settings.Default.hb_build != 0)
                 return;
@@ -209,45 +248,52 @@ namespace Handbrake.Functions
             Properties.Settings.Default.cliLastModified = lastModified;
 
             Process cliProcess = new Process();
-            ProcessStartInfo handBrakeCLI = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
+            ProcessStartInfo handBrakeCli = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
                                                 {
                                                     UseShellExecute = false,
                                                     RedirectStandardError = true,
                                                     RedirectStandardOutput = true,
                                                     CreateNoWindow = true
                                                 };
-            cliProcess.StartInfo = handBrakeCLI;
+            cliProcess.StartInfo = handBrakeCli;
 
             try
             {
                 cliProcess.Start();
+
                 // Retrieve standard output and report back to parent thread until the process is complete
                 TextReader stdOutput = cliProcess.StandardError;
 
                 while (!cliProcess.HasExited)
                 {
-                    line = stdOutput.ReadLine() ?? "";
+                    line = stdOutput.ReadLine() ?? string.Empty;
                     Match m = Regex.Match(line, @"HandBrake ([svnM0-9.]*) \([0-9]*\)");
                     Match platform = Regex.Match(line, @"- ([A-Za-z0-9\s ]*) -");
 
                     if (m.Success)
                     {
-                        string data = line.Replace("(", "").Replace(")", "").Replace("HandBrake ", "");
+                        string data = line.Replace("(", string.Empty).Replace(")", string.Empty).Replace("HandBrake ", string.Empty);
                         string[] arr = data.Split(' ');
 
                         Properties.Settings.Default.hb_build = int.Parse(arr[1]);
                         Properties.Settings.Default.hb_version = arr[0];
                     }
+
                     if (platform.Success)
-                        Properties.Settings.Default.hb_platform = platform.Value.Replace("-", "").Trim();
+                    {
+                        Properties.Settings.Default.hb_platform = platform.Value.Replace("-", string.Empty).Trim();
+                    }
 
                     if (cliProcess.TotalProcessorTime.Seconds > 10) // Don't wait longer than 10 seconds.
                     {
                         Process cli = Process.GetProcessById(cliProcess.Id);
                         if (!cli.HasExited)
+                        {
                             cli.Kill();
+                        }
                     }
                 }
+
                 Properties.Settings.Default.Save();
             }
             catch (Exception e)
@@ -261,7 +307,10 @@ namespace Handbrake.Functions
         /// If it does, it means the last queue did not complete before HandBrake closed.
         /// So, return a boolean if true. 
         /// </summary>
-        public static Boolean CheckQueueRecovery()
+        /// <returns>
+        /// True if there is a queue to recover.
+        /// </returns>
+        public static bool CheckQueueRecovery()
         {
             try
             {
@@ -312,7 +361,7 @@ namespace Handbrake.Functions
             Process hbProcess = null;
             foreach (Process process in hbProcesses)
             {
-                Boolean found = false;
+                bool found = false;
                 // Check if the current CLI instance was running before we started the current one
                 foreach (Process bprocess in before)
                 {
@@ -347,7 +396,6 @@ namespace Handbrake.Functions
                 {
                     if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") && !file.Name.Contains("tmp_appReadable_log.txt"))
                         File.Delete(file.FullName);
-
                 }
             }
         }
@@ -369,7 +417,6 @@ namespace Handbrake.Functions
                     {
                         if (!file.Name.Contains("last_scan_log") && !file.Name.Contains("last_encode_log") && !file.Name.Contains("tmp_appReadable_log.txt"))
                             File.Delete(file.FullName);
-
                     }
                 }
             }
@@ -383,54 +430,76 @@ namespace Handbrake.Functions
         public static void BeginCheckForUpdates(AsyncCallback callback, bool debug)
         {
             ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
-            {
-                try
-                {
-                    // Is this a stable or unstable build?
-                    string url = Properties.Settings.Default.hb_build.ToString().EndsWith("1") ? Properties.Settings.Default.appcast_unstable : Properties.Settings.Default.appcast;
+                                                              {
+                                                                  try
+                                                                  {
+                                                                      // Is this a stable or unstable build?
+                                                                      string url =
+                                                                          Properties.Settings.Default.hb_build.ToString()
+                                                                              .EndsWith("1")
+                                                                              ? Properties.Settings.Default.
+                                                                                    appcast_unstable
+                                                                              : Properties.Settings.Default.appcast;
 
-                    // Initialize variables
-                    WebRequest request = WebRequest.Create(url);
-                    WebResponse response = request.GetResponse();
-                    AppcastReader reader = new AppcastReader();
+                                                                      // Initialize variables
+                                                                      WebRequest request = WebRequest.Create(url);
+                                                                      WebResponse response = request.GetResponse();
+                                                                      AppcastReader reader = new AppcastReader();
 
-                    // Get the data, convert it to a string, and parse it into the AppcastReader
-                    reader.GetInfo(new StreamReader(response.GetResponseStream()).ReadToEnd());
+                                                                      // Get the data, convert it to a string, and parse it into the AppcastReader
+                                                                      reader.GetInfo(
+                                                                          new StreamReader(response.GetResponseStream())
+                                                                              .ReadToEnd());
 
-                    // Further parse the information
-                    string build = reader.Build;
+                                                                      // Further parse the information
+                                                                      string build = reader.Build;
 
-                    int latest = int.Parse(build);
-                    int current = Properties.Settings.Default.hb_build;
-                    int skip = Properties.Settings.Default.skipversion;
+                                                                      int latest = int.Parse(build);
+                                                                      int current = Properties.Settings.Default.hb_build;
+                                                                      int skip = Properties.Settings.Default.skipversion;
 
-                    // If the user wanted to skip this version, don't report the update
-                    if (latest == skip)
-                    {
-                        UpdateCheckInformation info = new UpdateCheckInformation() { NewVersionAvailable = false, BuildInformation = null };
-                        callback(new UpdateCheckResult(debug, info));
-                        return;
-                    }
+                                                                      // If the user wanted to skip this version, don't report the update
+                                                                      if (latest == skip)
+                                                                      {
+                                                                          UpdateCheckInformation info =
+                                                                              new UpdateCheckInformation
+                                                                                  {
+                                                                                      NewVersionAvailable = false,
+                                                                                      BuildInformation = null
+                                                                                  };
+                                                                          callback(new UpdateCheckResult(debug, info));
+                                                                          return;
+                                                                      }
 
-                    // Set when the last update was
-                    Properties.Settings.Default.lastUpdateCheckDate = DateTime.Now;
-                    Properties.Settings.Default.Save();
+                                                                      // Set when the last update was
+                                                                      Properties.Settings.Default.lastUpdateCheckDate =
+                                                                          DateTime.Now;
+                                                                      Properties.Settings.Default.Save();
 
-                    UpdateCheckInformation info2 = new UpdateCheckInformation() { NewVersionAvailable = latest > current, BuildInformation = reader };
-                    callback(new UpdateCheckResult(debug, info2));
-                }
-                catch (Exception exc)
-                {
-                    callback(new UpdateCheckResult(debug, new UpdateCheckInformation() { Error = exc }));
-                }
-            }));
+                                                                      UpdateCheckInformation info2 =
+                                                                          new UpdateCheckInformation
+                                                                              {
+                                                                                  NewVersionAvailable = latest > current,
+                                                                                  BuildInformation = reader
+                                                                              };
+                                                                      callback(new UpdateCheckResult(debug, info2));
+                                                                  }
+                                                                  catch (Exception exc)
+                                                                  {
+                                                                      callback(new UpdateCheckResult(debug, new UpdateCheckInformation{Error = exc}));
+                                                                  }
+                                                              }));
         }
 
         /// <summary>
-        /// 
+        /// End Check for Updates
         /// </summary>
-        /// <param name="result"></param>
-        /// <returns></returns>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// Update Check information
+        /// </returns>
         public static UpdateCheckInformation EndCheckForUpdates(IAsyncResult result)
         {
             UpdateCheckResult checkResult = (UpdateCheckResult)result;
@@ -440,7 +509,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Map languages and their iso639_2 value into a IDictionary
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A Dictionary containing the language and iso code</returns>
         public static IDictionary<string, string> MapLanguages()
         {
             IDictionary<string, string> languageMap = new Dictionary<string, string>
@@ -638,7 +707,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get a list of available DVD drives which are ready and contain DVD content.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A List of Drives with their details</returns>
         public static List<DriveInformation> GetDrives()
         {
             List<DriveInformation> drives = new List<DriveInformation>();
@@ -648,10 +717,10 @@ namespace Handbrake.Functions
                 if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady && File.Exists(curDrive.RootDirectory + "VIDEO_TS\\VIDEO_TS.IFO"))
                 {
                     drives.Add(new DriveInformation
-                                             {
-                                                 VolumeLabel = curDrive.VolumeLabel,
-                                                 RootDirectory = curDrive.RootDirectory + "VIDEO_TS"
-                                             });
+                                   {
+                                       VolumeLabel = curDrive.VolumeLabel,
+                                       RootDirectory = curDrive.RootDirectory + "VIDEO_TS"
+                                   });
                 }
             }
             return drives;
