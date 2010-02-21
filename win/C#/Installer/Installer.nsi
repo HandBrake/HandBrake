@@ -8,8 +8,8 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Handbrake"
-!define PRODUCT_VERSION "SVN 2754 Snapshot"
-!define PRODUCT_VERSION_NUMBER "svn2754"
+!define PRODUCT_VERSION "SVN 3090 Snapshot"
+!define PRODUCT_VERSION_NUMBER "svn3090"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Handbrake.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -45,7 +45,7 @@ SetCompressor lzma
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI_CLI.exe"
+OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI.exe"
 
 !include WordFunc.nsh
 !insertmacro VersionCompare
