@@ -1,8 +1,7 @@
 /*  Title.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Parsing
 {
@@ -18,19 +17,70 @@ namespace Handbrake.Parsing
     /// </summary>
     public class Title
     {
+        /// <summary>
+        /// The Culture Info
+        /// </summary>
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
-        private readonly List<AudioTrack> m_audioTracks;
-        private readonly List<Chapter> m_chapters;
-        private readonly List<Subtitle> m_subtitles;
-        private List<string> m_angles = new List<string>();
-        private float m_aspectRatio;
-        private float m_fps;
-        private int[] m_autoCrop;
+
+        /// <summary>
+        /// A collection of Audio Tracks
+        /// </summary>
+        private readonly List<AudioTrack> audioTracks;
+
+        /// <summary>
+        /// A Collection of Chapters
+        /// </summary>
+        private readonly List<Chapter> chapters;
+
+        /// <summary>
+        /// A Collection of Subtitles
+        /// </summary>
+        private readonly List<Subtitle> subtitles;
+
+        /// <summary>
+        /// A collection of angles 
+        /// </summary>
+        private List<string> angles = new List<string>();
+
+        /// <summary>
+        /// The source aspect ratio
+        /// </summary>
+        private float aspectRatio;
+
+        /// <summary>
+        /// The source framerate
+        /// </summary>
+        private float fps;
+
+        /// <summary>
+        /// Source autocrop values
+        /// </summary>
+        private int[] autoCrop;
+
+        /// <summary>
+        /// Source name
+        /// </summary>
         private string source;
-        private TimeSpan m_duration;
-        private Size m_resolution;
-        private int m_titleNumber;
-        private Size m_parVal;
+
+        /// <summary>
+        /// The duration of the source
+        /// </summary>
+        private TimeSpan duration;
+
+        /// <summary>
+        /// The source resolution
+        /// </summary>
+        private Size resolution;
+
+        /// <summary>
+        /// The Title number
+        /// </summary>
+        private int titleNumber;
+
+        /// <summary>
+        /// The par values for this title.
+        /// </summary>
+        private Size parVal;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Title"/> class. 
@@ -38,33 +88,33 @@ namespace Handbrake.Parsing
         /// </summary>
         public Title()
         {
-            m_audioTracks = new List<AudioTrack>();
-            m_chapters = new List<Chapter>();
-            m_subtitles = new List<Subtitle>();
+            audioTracks = new List<AudioTrack>();
+            chapters = new List<Chapter>();
+            subtitles = new List<Subtitle>();
         }
 
         /// <summary>
-        /// Collection of chapters in this Title
+        /// Gets a Collection of chapters in this Title
         /// </summary>
         public List<Chapter> Chapters
         {
-            get { return m_chapters; }
+            get { return chapters; }
         }
 
         /// <summary>
-        /// Collection of audio tracks associated with this Title
+        /// Gets a Collection of audio tracks associated with this Title
         /// </summary>
         public List<AudioTrack> AudioTracks
         {
-            get { return m_audioTracks; }
+            get { return audioTracks; }
         }
 
         /// <summary>
-        /// Collection of subtitles associated with this Title
+        /// Gets aCollection of subtitles associated with this Title
         /// </summary>
         public List<Subtitle> Subtitles
         {
-            get { return m_subtitles; }
+            get { return subtitles; }
         }
 
         /// <summary>
@@ -72,11 +122,11 @@ namespace Handbrake.Parsing
         /// </summary>
         public int TitleNumber
         {
-            get { return m_titleNumber; }
+            get { return titleNumber; }
         }
 
         /// <summary>
-        /// Source Name
+        /// Gets the Source Name
         /// </summary>
         public string SourceName
         {
@@ -84,39 +134,39 @@ namespace Handbrake.Parsing
         }
 
         /// <summary>
-        /// The length in time of this Title
+        /// Gets the length in time of this Title
         /// </summary>
         public TimeSpan Duration
         {
-            get { return m_duration; }
+            get { return duration; }
         }
 
         /// <summary>
-        /// The resolution (width/height) of this Title
+        /// Gets the resolution (width/height) of this Title
         /// </summary>
         public Size Resolution
         {
-            get { return m_resolution; }
+            get { return resolution; }
         }
 
         /// <summary>
-        /// The aspect ratio of this Title
+        /// Gets the aspect ratio of this Title
         /// </summary>
         public float AspectRatio
         {
-            get { return m_aspectRatio; }
+            get { return aspectRatio; }
         }
 
         /// <summary>
-        /// Par Value
+        /// Gets Par Value
         /// </summary>
         public Size ParVal
         {
-            get { return m_parVal; }
+            get { return parVal; }
         }
 
         /// <summary>
-        /// The automatically detected crop region for this Title.
+        /// Gets the automatically detected crop region for this Title.
         /// This is an int array with 4 items in it as so:
         /// 0: 
         /// 1: 
@@ -125,23 +175,24 @@ namespace Handbrake.Parsing
         /// </summary>
         public int[] AutoCropDimensions
         {
-            get { return m_autoCrop; }
+            get { return autoCrop; }
         }
 
         /// <summary>
-        /// Collection of Angles in this Title
+        /// Gets a Collection of Angles in this Title
         /// </summary>
         public List<string> Angles
         {
-            get { return m_angles; }
+            get { return angles; }
         }
 
+
         /// <summary>
-        /// Collection of Angles in this Title
+        /// Gets the FPS of the source.
         /// </summary>
         public float Fps
         {
-            get { return m_fps; }
+            get { return fps; }
         }
 
         /// <summary>
@@ -150,15 +201,14 @@ namespace Handbrake.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", m_titleNumber, m_duration.Hours, 
-                                 m_duration.Minutes, m_duration.Seconds);
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", titleNumber, duration.Hours, duration.Minutes, duration.Seconds);
         }
 
         /// <summary>
         /// Parse the Title Information
         /// </summary>
-        /// <param name="output"></param>
-        /// <returns></returns>
+        /// <param name="output">A stingreader of output data</param>
+        /// <returns>A Title</returns>
         public static Title Parse(StringReader output)
         {
             var thisTitle = new Title();
@@ -166,7 +216,7 @@ namespace Handbrake.Parsing
             Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
             // Match track number for this title
             if (m.Success)
-                thisTitle.m_titleNumber = int.Parse(m.Groups[1].Value.Trim());
+                thisTitle.titleNumber = int.Parse(m.Groups[1].Value.Trim());
 
             // If we are scanning a groupd of files, we'll want to get the source name.
             string path = output.ReadLine();
@@ -185,42 +235,39 @@ namespace Handbrake.Parsing
                     int.TryParse(angleList, out angleCount);
 
                     for (int i = 1; i <= angleCount; i++)
-                        thisTitle.m_angles.Add(i.ToString());
+                        thisTitle.angles.Add(i.ToString());
                 }
             }
 
             // Get duration for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
-                thisTitle.m_duration = TimeSpan.Parse(m.Groups[1].Value);
+                thisTitle.duration = TimeSpan.Parse(m.Groups[1].Value);
 
             // Get resolution, aspect ratio and FPS for this title
-            m = Regex.Match(output.ReadLine(), 
-                            @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
-            // size: 720x576, pixel aspect: 16/15, display aspect: 1.33, 25.000 fps
-
+            m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
             if (m.Success)
             {
-                thisTitle.m_resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                thisTitle.m_parVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
-                thisTitle.m_aspectRatio = float.Parse(m.Groups[5].Value, Culture);
-                thisTitle.m_fps = float.Parse(m.Groups[6].Value, Culture);
+                thisTitle.resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                thisTitle.parVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
+                thisTitle.aspectRatio = float.Parse(m.Groups[5].Value, Culture);
+                thisTitle.fps = float.Parse(m.Groups[6].Value, Culture);
             }
 
             // Get autocrop region for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
             if (m.Success)
-                thisTitle.m_autoCrop = new[]
+                thisTitle.autoCrop = new[]
                                            {
                                                int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), 
                                                int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value)
                                            };
 
-            thisTitle.m_chapters.AddRange(Chapter.ParseList(output));
+            thisTitle.chapters.AddRange(Chapter.ParseList(output));
 
-            thisTitle.m_audioTracks.AddRange(AudioTrack.ParseList(output));
+            thisTitle.audioTracks.AddRange(AudioTrack.ParseList(output));
 
-            thisTitle.m_subtitles.AddRange(Subtitle.ParseList(output));
+            thisTitle.subtitles.AddRange(Subtitle.ParseList(output));
 
             return thisTitle;
         }
@@ -228,8 +275,8 @@ namespace Handbrake.Parsing
         /// <summary>
         /// Return a list of parsed titles
         /// </summary>
-        /// <param name="output"></param>
-        /// <returns></returns>
+        /// <param name="output">The Output</param>
+        /// <returns>A List of titles</returns>
         public static Title[] ParseList(string output)
         {
             var titles = new List<Title>();

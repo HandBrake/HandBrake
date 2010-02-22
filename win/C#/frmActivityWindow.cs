@@ -1,8 +1,7 @@
 /*  frmActivityWindow.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
@@ -16,51 +15,141 @@ namespace Handbrake
     using Functions;
     using Timer = System.Threading.Timer;
 
+    /// <summary>
+    /// The Activity Log Window
+    /// </summary>
     public partial class frmActivityWindow : Form
     {
-        private delegate void SetTextCallback(StringBuilder text);
+        /// <summary>
+        /// The current position in the log file
+        /// </summary>
+        private int position;
 
-        private delegate void SetTextClearCallback();
+        /// <summary>
+        /// The previous mode
+        /// </summary>
+        private string lastMode;
 
-        private int Position;
-        private string LastMode;
-        private string CurrentMode;
-        private Timer WindowTimer;
+        /// <summary>
+        /// The current mode
+        /// </summary>
+        private string currentMode;
 
+        /// <summary>
+        /// A Timer for this window
+        /// </summary>
+        private Timer windowTimer;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="frmActivityWindow"/> class.
+        /// </summary>
+        /// <param name="mode">
+        /// The mode.
+        /// </param>
         public frmActivityWindow(string mode)
         {
             InitializeComponent();
 
-            Position = 0;
+            position = 0;
             if (mode == "scan")
                 SetScanMode();
             else
                 SetEncodeMode();
         }
 
-        private void NewActivityWindow_Load(object sender, EventArgs e)
+        /// <summary>
+        /// A callback function for updating the ui
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        private delegate void SetTextCallback(StringBuilder text);
+
+        /// <summary>
+        /// Clear text callback
+        /// </summary>
+        private delegate void SetTextClearCallback();
+
+        // Public
+
+        /// <summary>
+        /// Gets or sets SetLogFile.
+        /// </summary>
+        public string SetLogFile
         {
-            WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
+            get { return string.IsNullOrEmpty(currentMode) ? string.Empty : currentMode; }
+            set { currentMode = value; }
         }
 
+        /// <summary>
+        /// Set the window to scan mode
+        /// </summary>
+        public void SetScanMode()
+        {
+            Reset();
+            SetLogFile = "last_scan_log.txt";
+            this.Text = "Activity Window (Scan Log)";
+        }
+
+        /// <summary>
+        /// Set the window to encode mode
+        /// </summary>
+        public void SetEncodeMode()
+        {
+            Reset();
+            SetLogFile = "last_encode_log.txt";
+            this.Text = "Activity Window (Enocde Log)";
+        }
+
+        // Logging
+
+        /// <summary>
+        /// On Window load, start a new timer
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void NewActivityWindow_Load(object sender, EventArgs e)
+        {
+            windowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
+        }
+
+        /// <summary>
+        /// Append new text to the window
+        /// </summary>
+        /// <param name="n">
+        /// The n.
+        /// </param>
         private void LogMonitor(object n)
         {
-            if (SetLogFile != LastMode) Reset();
+            if (SetLogFile != lastMode) Reset();
 
             // Perform the window update
             switch (SetLogFile)
             {
                 case "last_scan_log.txt":
                     AppendWindowText(ReadFile("last_scan_log.txt"));
-                    LastMode = "last_scan_log.txt";
+                    lastMode = "last_scan_log.txt";
                     break;
                 case "last_encode_log.txt":
                     AppendWindowText(ReadFile("last_encode_log.txt"));
-                    LastMode = "last_encode_log.txt";
+                    lastMode = "last_encode_log.txt";
                     break;
             }
         }
 
+        /// <summary>
+        /// Read the log file
+        /// </summary>
+        /// <param name="file">
+        /// The file.
+        /// </param>
+        /// <returns>
+        /// A string builder containing the log data
+        /// </returns>
         private StringBuilder ReadFile(string file)
         {
             StringBuilder appendText = new StringBuilder();
@@ -85,7 +174,7 @@ namespace Handbrake
                     else
                     {
                         appendText.AppendFormat("Waiting for the log file to be generated ...\n");
-                        Position = 0;
+                        position = 0;
                         ClearWindowText();
                         PrintLogHeader();
                         return appendText;
@@ -98,10 +187,10 @@ namespace Handbrake
                     int i = 1;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        if (i > Position)
+                        if (i > position)
                         {
                             appendText.AppendLine(line);
-                            Position++;
+                            position++;
                         }
                         i++;
                     }
@@ -112,13 +201,18 @@ namespace Handbrake
                 {
                     Reset();
                     appendText = new StringBuilder();
-                    appendText.AppendFormat(
-                        "\nThe Log file is currently in use. Waiting for the log file to become accessible ...\n");
+                    appendText.AppendLine("\nThe Log file is currently in use. Waiting for the log file to become accessible ...\n");
                 }
             }
             return appendText;
         }
 
+        /// <summary>
+        /// Append text to the RTF box
+        /// </summary>
+        /// <param name="text">
+        /// The text.
+        /// </param>
         private void AppendWindowText(StringBuilder text)
         {
             try
@@ -127,7 +221,7 @@ namespace Handbrake
                 {
                     if (rtf_actLog.InvokeRequired)
                     {
-                        IAsyncResult invoked = BeginInvoke(new SetTextCallback(AppendWindowText), new object[] {text});
+                        IAsyncResult invoked = BeginInvoke(new SetTextCallback(AppendWindowText), new object[] { text });
                         EndInvoke(invoked);
                     }
                     else
@@ -141,6 +235,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Clear the contents of the log window
+        /// </summary>
         private void ClearWindowText()
         {
             try
@@ -163,6 +260,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Display the log header
+        /// </summary>
         private void PrintLogHeader()
         {
             try
@@ -179,19 +279,19 @@ namespace Handbrake
                         lock (rtf_actLog)
                         {
                             // Print the log header. This function will be re-implimented later. Do not delete.
-                            rtf_actLog.AppendText(String.Format("### Windows GUI {1} {0} \n", 
-                                                                Properties.Settings.Default.hb_build, 
-                                                                Properties.Settings.Default.hb_version));
-                            rtf_actLog.AppendText(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
-                            rtf_actLog.AppendText(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
-                            rtf_actLog.AppendText(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
-                            rtf_actLog.AppendText(String.Format("### Screen: {0}x{1} \n", 
-                                                                SystemInfo.ScreenBounds.Bounds.Width, 
-                                                                SystemInfo.ScreenBounds.Bounds.Height));
-                            rtf_actLog.AppendText(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
-                            rtf_actLog.AppendText(String.Format("### Install Dir: {0} \n", Application.StartupPath));
-                            rtf_actLog.AppendText(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
-                            rtf_actLog.AppendText("#########################################\n\n");
+                            StringBuilder header = new StringBuilder();
+
+                            header.AppendLine(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
+                            header.AppendLine(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
+                            header.AppendLine(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
+                            header.AppendLine(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
+                            header.AppendLine(String.Format("### Screen: {0}x{1} \n", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+                            header.AppendLine(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
+                            header.AppendLine(String.Format("### Install Dir: {0} \n", Application.StartupPath));
+                            header.AppendLine(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
+                            header.AppendLine("#########################################\n\n");
+
+                            rtf_actLog.AppendText(header.ToString());
                         }
                     }
                 }
@@ -202,48 +302,45 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Reset Everything
+        /// </summary>
         private void Reset()
         {
-            if (WindowTimer != null)
-                WindowTimer.Dispose();
-            Position = 0;
+            if (windowTimer != null)
+                windowTimer.Dispose();
+            position = 0;
             ClearWindowText();
             PrintLogHeader();
-            WindowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
+            windowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
         }
 
-        #region Public
+        // Menus and Buttons
 
-        public string SetLogFile
-        {
-            get { return string.IsNullOrEmpty(CurrentMode) ? string.Empty : CurrentMode; }
-            set { CurrentMode = value; }
-        }
-
-        public void SetScanMode()
-        {
-            Reset();
-            SetLogFile = "last_scan_log.txt";
-            this.Text = "Activity Window (Scan Log)";
-        }
-
-        public void SetEncodeMode()
-        {
-            Reset();
-            SetLogFile = "last_encode_log.txt";
-            this.Text = "Activity Window (Enocde Log)";
-        }
-
-        #endregion
-
-        #region User Interface
-
-        private void mnu_copy_log_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Copy log to clipboard
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuCopyLogClick(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(rtf_actLog.SelectedText != string.Empty ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
         }
 
-        private void mnu_openLogFolder_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Open the log folder
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuOpenLogFolderClick(object sender, EventArgs e)
         {
             string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
             string windir = Environment.GetEnvironmentVariable("WINDIR");
@@ -251,33 +348,66 @@ namespace Handbrake
                               {
                                   StartInfo =
                                       {
-                                          FileName = windir + @"\explorer.exe", 
+                                          FileName = windir + @"\explorer.exe",
                                           Arguments = logDir
                                       }
                               };
             prc.Start();
         }
 
-        private void btn_copy_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Copy the log
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void BtnCopyClick(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(rtf_actLog.SelectedText != string.Empty ? rtf_actLog.SelectedText : rtf_actLog.Text, true);
         }
 
-        private void btn_scan_log_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Set scan mode
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void BtnScanLogClick(object sender, EventArgs e)
         {
             SetScanMode();
         }
 
-        private void btn_encode_log_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Set the encode mode
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void BtnEncodeLogClick(object sender, EventArgs e)
         {
             SetEncodeMode();
         }
 
-        #endregion
+        // Overrides
 
+        /// <summary>
+        /// override onclosing
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected override void OnClosing(CancelEventArgs e)
         {
-            WindowTimer.Dispose();
+            windowTimer.Dispose();
             e.Cancel = true;
             this.Dispose();
             base.OnClosing(e);

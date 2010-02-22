@@ -1,8 +1,7 @@
 /*  Subtitle.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Parsing
 {
@@ -15,54 +14,67 @@ namespace Handbrake.Parsing
     /// </summary>
     public class Subtitle
     {
-        private string m_language;
-        private int m_trackNumber;
-        private string m_type;
-        private string m_typecode;
+        /// <summary>
+        /// The Language
+        /// </summary>
+        private string language;
 
         /// <summary>
-        /// The track number of this Subtitle
+        /// The Track Number
+        /// </summary>
+        private int trackNumber;
+
+        /// <summary>
+        /// The type of subtitle
+        /// </summary>
+        private string type;
+
+        /// <summary>
+        /// The typecode
+        /// </summary>
+        private string typecode;
+
+        /// <summary>
+        /// Gets the track number of this Subtitle
         /// </summary>
         public int TrackNumber
         {
-            get { return m_trackNumber; }
+            get { return trackNumber; }
         }
 
         /// <summary>
-        /// The language (if detected) of this Subtitle
+        /// Gets the The language (if detected) of this Subtitle
         /// </summary>
         public string Language
         {
-            get { return m_language; }
+            get { return language; }
         }
 
         /// <summary>
-        /// Langauage Code
+        /// Gets the Langauage Code
         /// </summary>
         public string LanguageCode
         {
-            get { return m_typecode; }
+            get { return typecode; }
         }
 
-
         /// <summary>
-        /// Subtitle Type
+        /// Gets the Subtitle Type
         /// </summary>
         public string Type
         {
-            get { return m_type; }
+            get { return type; }
         }
-
 
         /// <summary>
-        /// Override of the ToString method to make this object easier to use in the UI
+        /// Parse the input strings related to subtitles
         /// </summary>
-        /// <returns>A string formatted as: {track #} {language}</returns>
-        public override string ToString()
-        {
-            return string.Format("{0} {1} ({2})", m_trackNumber, m_language, m_type);
-        }
-
+        /// <param name="output">
+        /// The output.
+        /// </param>
+        /// <returns>
+        /// A Subitle object
+        /// </returns>
         public static Subtitle Parse(StringReader output)
         {
             string curLine = output.ReadLine();
@@ -72,17 +84,26 @@ namespace Handbrake.Parsing
             {
                 var thisSubtitle = new Subtitle
                                        {
-                                           m_trackNumber = int.Parse(m.Groups[1].Value.Trim()), 
-                                           m_language = m.Groups[2].Value, 
-                                           m_typecode = m.Groups[3].Value, 
-                                           m_type = m.Groups[4].Value
+                                           trackNumber = int.Parse(m.Groups[1].Value.Trim()), 
+                                           language = m.Groups[2].Value, 
+                                           typecode = m.Groups[3].Value, 
+                                           type = m.Groups[4].Value
                                        };
                 return thisSubtitle;
             }
             return null;
         }
 
-        public static Subtitle[] ParseList(StringReader output)
+        /// <summary>
+        /// Parse a list of Subtitle tracks from an input string.
+        /// </summary>
+        /// <param name="output">
+        /// The output.
+        /// </param>
+        /// <returns>
+        /// An array of Subtitle objects
+        /// </returns>
+        public static IEnumerable<Subtitle> ParseList(StringReader output)
         {
             var subtitles = new List<Subtitle>();
             while ((char) output.Peek() != '+')
@@ -95,6 +116,15 @@ namespace Handbrake.Parsing
                     break;
             }
             return subtitles.ToArray();
+        }
+
+        /// <summary>
+        /// Override of the ToString method to make this object easier to use in the UI
+        /// </summary>
+        /// <returns>A string formatted as: {track #} {language}</returns>
+        public override string ToString()
+        {
+            return string.Format("{0} {1} ({2})", trackNumber, language, type);
         }
     }
 }

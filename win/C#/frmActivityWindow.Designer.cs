@@ -78,7 +78,7 @@ namespace Handbrake
             this.mnu_copy_log.Name = "mnu_copy_log";
             this.mnu_copy_log.Size = new System.Drawing.Size(253, 22);
             this.mnu_copy_log.Text = "Copy";
-            this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
+            this.mnu_copy_log.Click += new System.EventHandler(this.MnuCopyLogClick);
             // 
             // mnu_openLogFolder
             // 
@@ -86,7 +86,7 @@ namespace Handbrake
             this.mnu_openLogFolder.Name = "mnu_openLogFolder";
             this.mnu_openLogFolder.Size = new System.Drawing.Size(253, 22);
             this.mnu_openLogFolder.Text = "Open Individual Log File Directory";
-            this.mnu_openLogFolder.Click += new System.EventHandler(this.mnu_openLogFolder_Click);
+            this.mnu_openLogFolder.Click += new System.EventHandler(this.MnuOpenLogFolderClick);
             // 
             // ToolTip
             // 
@@ -124,7 +124,7 @@ namespace Handbrake
             this.btn_encode_log.Name = "btn_encode_log";
             this.btn_encode_log.Size = new System.Drawing.Size(152, 22);
             this.btn_encode_log.Text = "Encode Log";
-            this.btn_encode_log.Click += new System.EventHandler(this.btn_encode_log_Click);
+            this.btn_encode_log.Click += new System.EventHandler(this.BtnEncodeLogClick);
             // 
             // btn_scan_log
             // 
@@ -132,7 +132,7 @@ namespace Handbrake
             this.btn_scan_log.Name = "btn_scan_log";
             this.btn_scan_log.Size = new System.Drawing.Size(152, 22);
             this.btn_scan_log.Text = "Scan Log";
-            this.btn_scan_log.Click += new System.EventHandler(this.btn_scan_log_Click);
+            this.btn_scan_log.Click += new System.EventHandler(this.BtnScanLogClick);
             // 
             // btn_copy
             // 
@@ -142,7 +142,7 @@ namespace Handbrake
             this.btn_copy.Name = "btn_copy";
             this.btn_copy.Size = new System.Drawing.Size(122, 22);
             this.btn_copy.Text = "Copy to clipboard";
-            this.btn_copy.Click += new System.EventHandler(this.btn_copy_Click);
+            this.btn_copy.Click += new System.EventHandler(this.BtnCopyClick);
             // 
             // panel1
             // 

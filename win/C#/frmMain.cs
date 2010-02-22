@@ -2001,7 +2001,7 @@ namespace Handbrake
                 Parser encode = new Parser(encodeQueue.HbProcess.StandardOutput.BaseStream);
                 encode.OnEncodeProgress += EncodeOnEncodeProgress;
                 while (!encode.EndOfStream)
-                    encode.readEncodeStatus();
+                    encode.ReadEncodeStatus();
             }
             catch (Exception exc)
             {
