@@ -3242,7 +3242,6 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			return;
 		}
 		array = ghb_plist_parse_file(filename);
-		g_free(filename);
 
 		import_xlat_presets(array);
 		presets_clear_default(array);
@@ -3292,8 +3291,10 @@ preset_import_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 			ghb_settings_set_string(ud->settings, "ExportDirectory", dir);
 			ghb_pref_save(ud->settings, "ExportDirectory");
 		}
+		g_free(filename);
 		g_free(exportDir);
 		g_free(dir);
+		store_presets();
 	}
 	gtk_widget_destroy(dialog);
 }
