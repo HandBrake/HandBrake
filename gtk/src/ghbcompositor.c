@@ -617,6 +617,9 @@ ghb_compositor_blend (GtkWidget *widget, GdkEventExpose *event)
         {
             /* get our child */
             child = GTK_WIDGET(draw->data);
+            if (!GTK_WIDGET_VISIBLE(child))
+                continue;
+
             /* the source data is the (composited) event box */
             gdk_cairo_set_source_pixmap (cr, child->window,
                                         child->allocation.x,
