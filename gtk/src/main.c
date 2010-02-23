@@ -152,7 +152,7 @@ MyConnect(
     g_return_if_fail(handler_name != NULL);
     g_return_if_fail(signal_name != NULL);
 
-	//const gchar *name = gtk_widget_get_name((GtkWidget*)object);
+	//const gchar *name = ghb_get_setting_key((GtkWidget*)object);
 	//g_message("\n\nname %s", name);
 	g_debug("handler_name %s", handler_name);
 	g_debug("signal_name %s", signal_name);
@@ -192,7 +192,7 @@ change_font(GtkWidget *widget, gpointer data)
     font_desc = pango_font_description_from_string(font);
     if (font_desc == NULL) exit(1);
     gtk_widget_modify_font(widget, font_desc);
-    name = gtk_widget_get_name(widget);
+    name = ghb_get_setting_key(widget);
     g_debug("changing font for widget %s\n", name);
     if (GTK_IS_CONTAINER(widget))
     {

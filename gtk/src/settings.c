@@ -179,17 +179,14 @@ ghb_settings_combo_string(const GValue *settings, const gchar *key)
 // Map widget names to setting keys
 // Widgets that map to settings have names
 // of this format: s_<setting key>
-static const gchar*
-get_setting_key(GtkWidget *widget)
+const gchar*
+ghb_get_setting_key(GtkWidget *widget)
 {
 	const gchar *name;
 	
 	g_debug("get_setting_key ()\n");
 	if (widget == NULL) return NULL;
-	if (GTK_IS_ACTION(widget))
-		name = gtk_action_get_name(GTK_ACTION(widget));
-	else
-		name = gtk_widget_get_name(widget);
+	name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
 		
 	if (name == NULL)
 	{
@@ -214,10 +211,7 @@ ghb_widget_value(GtkWidget *widget)
 	}
 
 	type = GTK_WIDGET_TYPE(widget);
-	if (GTK_IS_ACTION(widget))
-		name = gtk_action_get_name(GTK_ACTION(widget));
-	else
-		name = gtk_widget_get_name(widget);
+	name = ghb_get_setting_key(widget);
 	g_debug("ghb_widget_value widget (%s)\n", name);
 	if (type == GTK_TYPE_ENTRY)
 	{
@@ -442,7 +436,7 @@ ghb_widget_to_setting(GValue *settings, GtkWidget *widget)
 	if (widget == NULL) return;
 	g_debug("ghb_widget_to_setting");
 	// Find corresponding setting
-	key = get_setting_key(widget);
+	key = ghb_get_setting_key(widget);
 	if (key == NULL) return;
 	value = ghb_widget_value(widget);
 	if (value != NULL)

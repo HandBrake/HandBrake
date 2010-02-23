@@ -199,7 +199,7 @@ ghb_check_dependency(
 		type = GTK_WIDGET_TYPE(widget);
 		if (type == GTK_TYPE_COMBO_BOX || type == GTK_TYPE_COMBO_BOX_ENTRY)
 			if (gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) < 0) return;
-		name = gtk_widget_get_name(widget);
+		name = ghb_get_setting_key(widget);
 	}
 	else
 		name = alt_name;
@@ -1068,7 +1068,7 @@ dvd_source_activate_cb(GtkAction *action, signal_user_data_t *ud)
 	gchar *sourcename;
 
 	sourcename = ghb_settings_get_string(ud->settings, "scan_source");
-	filename = gtk_action_get_name(action);
+	filename = gtk_buildable_get_name(GTK_BUILDABLE(action));
 	ghb_do_scan(ud, filename, 0, TRUE);
 	if (strcmp(sourcename, filename) != 0)
 	{
@@ -1694,7 +1694,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 target_size_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	g_debug("target_size_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
@@ -1713,7 +1713,7 @@ G_MODULE_EXPORT void
 start_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint start, end;
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 
 	g_debug("start_point_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
@@ -1765,7 +1765,7 @@ G_MODULE_EXPORT void
 end_point_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint start, end;
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 
 	g_debug("end_point_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
@@ -3588,7 +3588,7 @@ pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("pref_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 }
 
@@ -3598,7 +3598,7 @@ use_m4v_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("use_m4v_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 	ghb_update_destination_extension(ud);
 }
@@ -3609,7 +3609,7 @@ show_status_cb(GtkWidget *widget, signal_user_data_t *ud)
 	g_debug("show_status_cb");
 	ghb_widget_to_setting (ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 
 	GtkStatusIcon *si;
@@ -3626,7 +3626,7 @@ vqual_granularity_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_widget_to_setting (ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
 
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 
 	gdouble vqmin, vqmax, step, page;
@@ -3643,7 +3643,7 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("tweaks_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 }
 
@@ -3652,7 +3652,7 @@ hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	g_debug("hbfd_feature_changed_cb");
 	ghb_widget_to_setting (ud->settings, widget);
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 
 	gboolean hbfd = ghb_settings_get_boolean(ud->settings, "hbfd_feature");
@@ -4559,7 +4559,7 @@ tweak_setting_cb(
 		GtkResponseType response;
 		gchar *tweak = NULL;
 
-		name = gtk_widget_get_name(widget);
+		name = ghb_get_setting_key(widget);
 		if (g_str_has_prefix(name, "tweak_"))
 		{
 			tweak_name = g_strdup(name);

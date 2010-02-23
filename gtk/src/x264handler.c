@@ -523,7 +523,7 @@ static void
 x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 {
 	gint jj;
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	gchar **opt_syns = NULL;
 	const gchar *def_val = NULL;
 	gint type;

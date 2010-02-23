@@ -877,7 +877,7 @@ preview_button_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_widget_to_setting (ud->settings, xwidget);
 	ghb_preview_set_visible(ud);
 	ghb_check_dependency(ud, xwidget, NULL);
-	const gchar *name = gtk_widget_get_name(xwidget);
+	const gchar *name = ghb_get_setting_key(xwidget);
 	ghb_pref_save(ud->settings, name);
 }
 
@@ -934,7 +934,7 @@ fullscreen_clicked_cb(GtkWidget *toggle, signal_user_data_t *ud)
 	g_debug("fullscreen_clicked_cb()");
 	ghb_widget_to_setting (ud->settings, toggle);
 	ghb_check_dependency(ud, toggle, NULL);
-	const gchar *name = gtk_widget_get_name(toggle);
+	const gchar *name = ghb_get_setting_key(toggle);
 	ghb_pref_save(ud->settings, name);
 
 	window = GTK_WINDOW(GHB_WIDGET (ud->builder, "preview_window"));
@@ -1030,7 +1030,7 @@ preview_duration_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 	ghb_live_reset(ud);
 	ghb_widget_to_setting (ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	ghb_pref_save(ud->settings, name);
 }
 

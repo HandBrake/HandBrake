@@ -478,7 +478,7 @@ drc_widget_changed_cb(GtkWidget *widget, gdouble val, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 subtitle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-	const gchar *name = gtk_widget_get_name(widget);
+	const gchar *name = ghb_get_setting_key(widget);
 	g_debug("subtitle_changed_cb () %s", name);
 	ghb_widget_to_setting(ud->settings, widget);
 	ghb_check_dependency(ud, widget, NULL);
