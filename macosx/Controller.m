@@ -5586,14 +5586,12 @@ the user is using "Custom" settings by determining the sender*/
         {
             case 0:
                 /* MP4 */
-                // FAAC
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_FAAC];
-
                 // CA_AAC
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (CoreAudio)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_CA_AAC];
-
+                // FAAC
+                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
+                [menuItem setTag: HB_ACODEC_FAAC];
                 // AC3 Passthru
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_AC3];
@@ -5601,12 +5599,12 @@ the user is using "Custom" settings by determining the sender*/
                 
             case 1:
                 /* MKV */
-                // FAAC
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_FAAC];
                 // CA_AAC
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (CoreAudio)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_CA_AAC];
+                // FAAC
+                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
+                [menuItem setTag: HB_ACODEC_FAAC];
                 // AC3 Passthru
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_AC3];
@@ -5619,26 +5617,6 @@ the user is using "Custom" settings by determining the sender*/
                 // Vorbis
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"Vorbis (vorbis)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_VORBIS];
-                break;
-                
-            case 2: 
-                /* AVI */
-                // MP3
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"MP3 (lame)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_LAME];
-                // AC3 Passthru
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_AC3];
-                break;
-                
-            case 3:
-                /* OGM */
-                // Vorbis
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"Vorbis (vorbis)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_VORBIS];
-                // MP3
-                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"MP3 (lame)" action: NULL keyEquivalent: @""];
-                [menuItem setTag: HB_ACODEC_LAME];
                 break;
         }
         [audiocodecPopUp selectItemAtIndex:0];
@@ -5911,37 +5889,19 @@ the user is using "Custom" settings by determining the sender*/
 
             }
             /* In the case of a source track that is not AC3 and the user tries to use AC3 Passthru (which does not work)
-             * we force the Audio Codec choice back to a workable codec. We use MP3 for avi and aac for all
-             * other containers.
+             * we force the Audio Codec choice back to a workable codec. We use CoreAudio aac for all containers.
              */
             if (audio->in.codec != HB_ACODEC_AC3 && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_AC3)
             {
-                /* If we are using the avi container, we select MP3 as there is no aac available*/
-                if ([[fDstFormatPopUp selectedItem] tag] == HB_MUX_AVI)
-                {
-                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_LAME];
-                }
-                else
-                {
-                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_FAAC];
-                }
+                [audiocodecPopUp selectItemWithTag: HB_ACODEC_CA_AAC];
             }
             
             /* In the case of a source track that is not DTS and the user tries to use DTS Passthru (which does not work)
-             * we force the Audio Codec choice back to a workable codec. We use MP3 for avi and aac for all
-             * other containers.
+             * we force the Audio Codec choice back to a workable codec. We use CoreAudio aac for all containers.
              */
             if (audio->in.codec != HB_ACODEC_DCA && [[audiocodecPopUp selectedItem] tag] == HB_ACODEC_DCA)
             {
-                /* If we are using the avi container, we select MP3 as there is no aac available*/
-                if ([[fDstFormatPopUp selectedItem] tag] == HB_MUX_AVI)
-                {
-                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_LAME];
-                }
-                else
-                {
-                    [audiocodecPopUp selectItemWithTag: HB_ACODEC_FAAC];
-                }
+                [audiocodecPopUp selectItemWithTag: HB_ACODEC_CA_AAC];
             }
             
             /* Setup our samplerate and bitrate popups we will need based on mixdown */
@@ -6831,8 +6791,9 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: trackLangPopUp];
                 [audiocodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
-                /* check our pref for core audio and use it in place of faac if applicable */
-                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                /* check our pref for core audio and use it in place of faac if preset is a built in  */
+                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
+                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
                     [[tempObject objectForKey:@"AudioEncoder"] isEqualToString: @"AAC (faac)"])
                 {
                     [audiocodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
@@ -6926,12 +6887,14 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang1PopUp];
                 [fAudTrack1CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Encoder"]];
-                /* check our pref for core audio and use it in place of faac if applicable */
-                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                /* check our pref for core audio and use it in place of faac if preset is built in */
+                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
+                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
                     [[chosenPreset objectForKey:@"Audio1Encoder"] isEqualToString: @"AAC (faac)"])
                 {
                     [fAudTrack1CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
                 }
+                
                 [self audioTrackPopUpChanged: fAudTrack1CodecPopUp];
                 [fAudTrack1MixPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio1Mixdown"]];
                 /* check to see if the selections was available, if not, rerun audioTrackPopUpChanged using the codec to just set the default
@@ -6958,8 +6921,9 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang2PopUp];
                 [fAudTrack2CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio2Encoder"]];
-                /* check our pref for core audio and use it in place of faac if applicable */
-                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                /* check our pref for core audio and use it in place of faac if preset is built in */
+                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
+                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
                     [[chosenPreset objectForKey:@"Audio2Encoder"] isEqualToString: @"AAC (faac)"])
                 {
                     [fAudTrack2CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
@@ -6989,8 +6953,9 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang3PopUp];
                 [fAudTrack3CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio3Encoder"]];
-                /* check our pref for core audio and use it in place of faac if applicable */
-                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                /* check our pref for core audio and use it in place of faac if preset is built in */
+                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
+                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
                     [[chosenPreset objectForKey:@"Audio3Encoder"] isEqualToString: @"AAC (faac)"])
                 {
                     [fAudTrack3CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
@@ -7020,8 +6985,9 @@ return YES;
                 }
                 [self audioTrackPopUpChanged: fAudLang4PopUp];
                 [fAudTrack4CodecPopUp selectItemWithTitle:[chosenPreset objectForKey:@"Audio4Encoder"]];
-                /* check our pref for core audio and use it in place of faac if applicable */
-                if ([[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
+                /* check our pref for core audio and use it in place of faac if preset is built in */
+                if ([[chosenPreset objectForKey:@"Type"] intValue] == 0 && 
+                    [[NSUserDefaults standardUserDefaults] boolForKey: @"UseCoreAudio"] == YES && 
                     [[chosenPreset objectForKey:@"Audio4Encoder"] isEqualToString: @"AAC (faac)"])
                 {
                     [fAudTrack4CodecPopUp selectItemWithTitle:@"AAC (CoreAudio)"];
