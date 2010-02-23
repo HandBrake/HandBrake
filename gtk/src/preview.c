@@ -1043,7 +1043,7 @@ hud_timeout(signal_user_data_t *ud)
 
 	g_debug("hud_timeout()");
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
-	gtk_widget_hide_all(widget);
+	gtk_widget_hide(widget);
 	hud_timeout_id = 0;
 	return FALSE;
 }
@@ -1066,7 +1066,7 @@ hud_enter_cb(
 			g_source_destroy(source);
 	}
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
-	gtk_widget_show_all(widget);
+	gtk_widget_show(widget);
 	hud_timeout_id = 0;
 	return FALSE;
 }
@@ -1112,7 +1112,7 @@ preview_motion_cb(
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
 	if (!GTK_WIDGET_VISIBLE(widget))
 	{
-		gtk_widget_show_all(widget);
+		gtk_widget_show(widget);
 	}
 	hud_timeout_id = g_timeout_add_seconds(4, (GSourceFunc)hud_timeout, ud);
 	return FALSE;
