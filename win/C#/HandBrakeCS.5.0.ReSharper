@@ -106,6 +106,8 @@
       <Abbreviation Text="CLI" />
       <Abbreviation Text="DRC" />
       <Abbreviation Text="ID" />
+      <Abbreviation Text="MP" />
+      <Abbreviation Text="DVD" />
     </Naming2>
   </CodeStyleSettings>
 </Configuration>

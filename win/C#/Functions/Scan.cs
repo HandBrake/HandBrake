@@ -53,6 +53,11 @@ namespace Handbrake.Functions
         public event EventHandler ScanStatusChanged;
 
         /// <summary>
+        /// Gets or sets a value indicating whether IsScanning.
+        /// </summary>
+        public bool IsScanning { get; set; }
+
+        /// <summary>
         /// Scan a Source Path.
         /// Title 0: scan all
         /// </summary>
@@ -109,6 +114,7 @@ namespace Handbrake.Functions
         {
             try
             {
+                IsScanning = true;
                 if (this.ScanStared != null)
                     this.ScanStared(this, new EventArgs());
 
@@ -152,6 +158,7 @@ namespace Handbrake.Functions
 
                 if (this.ScanCompleted != null)
                     this.ScanCompleted(this, new EventArgs());
+                IsScanning = false;
             }
             catch (Exception exc)
             {

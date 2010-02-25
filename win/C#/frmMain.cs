@@ -1037,7 +1037,6 @@ namespace Handbrake
             UnRegisterPresetEventHandler();
             drop_mode.SelectedIndex = 0;
 
-            PictureSettings.lbl_Aspect.Text = "Select a Title"; // Reset some values on the form
             drop_chapterStart.Items.Clear();
             drop_chapterFinish.Items.Clear();
 
@@ -1791,7 +1790,6 @@ namespace Handbrake
             drop_chapterFinish.Items.Clear();
             lbl_duration.Text = "Select a Title";
             PictureSettings.lbl_src_res.Text = "Select a Title";
-            PictureSettings.lbl_Aspect.Text = "Select a Title";
             sourcePath = String.Empty;
             text_destination.Text = String.Empty;
             selectedTitle = null;

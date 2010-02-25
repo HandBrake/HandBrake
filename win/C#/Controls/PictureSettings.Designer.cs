@@ -42,11 +42,8 @@ namespace Handbrake.Controls
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label7 = new System.Windows.Forms.Label();
             this.lbl_src_res = new System.Windows.Forms.Label();
-            this.Label91 = new System.Windows.Forms.Label();
-            this.lbl_Aspect = new System.Windows.Forms.Label();
             this.Label55 = new System.Windows.Forms.Label();
             this.text_width = new System.Windows.Forms.NumericUpDown();
-            this.lbl_max = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.text_height = new System.Windows.Forms.NumericUpDown();
             this.check_KeepAR = new System.Windows.Forms.CheckBox();
@@ -280,11 +277,8 @@ namespace Handbrake.Controls
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.Controls.Add(this.label7, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.lbl_src_res, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.Label91, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lbl_Aspect, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.Label55, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.text_width, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.lbl_max, 4, 1);
             this.tableLayoutPanel2.Controls.Add(this.label4, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.text_height, 3, 1);
             this.tableLayoutPanel2.Controls.Add(this.check_KeepAR, 1, 2);
@@ -323,32 +317,6 @@ namespace Handbrake.Controls
             this.lbl_src_res.TabIndex = 77;
             this.lbl_src_res.Text = "--";
             // 
-            // Label91
-            // 
-            this.Label91.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Label91.AutoSize = true;
-            this.Label91.BackColor = System.Drawing.Color.Transparent;
-            this.Label91.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.Label91.Location = new System.Drawing.Point(120, 3);
-            this.Label91.Margin = new System.Windows.Forms.Padding(3);
-            this.Label91.Name = "Label91";
-            this.Label91.Size = new System.Drawing.Size(72, 13);
-            this.Label91.TabIndex = 78;
-            this.Label91.Text = "Aspect Ratio:";
-            // 
-            // lbl_Aspect
-            // 
-            this.lbl_Aspect.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lbl_Aspect.AutoSize = true;
-            this.lbl_Aspect.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_Aspect.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbl_Aspect.Location = new System.Drawing.Point(198, 3);
-            this.lbl_Aspect.Margin = new System.Windows.Forms.Padding(3);
-            this.lbl_Aspect.Name = "lbl_Aspect";
-            this.lbl_Aspect.Size = new System.Drawing.Size(15, 13);
-            this.lbl_Aspect.TabIndex = 79;
-            this.lbl_Aspect.Text = "--";
-            // 
             // Label55
             // 
             this.Label55.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -376,19 +344,6 @@ namespace Handbrake.Controls
             this.text_width.TabIndex = 85;
             this.text_width.ValueChanged += new System.EventHandler(this.TextWidthValueChanged);
             // 
-            // lbl_max
-            // 
-            this.lbl_max.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lbl_max.AutoSize = true;
-            this.lbl_max.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbl_max.Location = new System.Drawing.Point(268, 26);
-            this.lbl_max.Margin = new System.Windows.Forms.Padding(3);
-            this.lbl_max.Name = "lbl_max";
-            this.lbl_max.Size = new System.Drawing.Size(15, 13);
-            this.lbl_max.TabIndex = 83;
-            this.lbl_max.Text = "--";
-            this.lbl_max.DoubleClick += new System.EventHandler(this.LblMaxDoubleClick);
-            // 
             // label4
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -405,7 +360,7 @@ namespace Handbrake.Controls
             // 
             // text_height
             // 
-            this.text_height.Location = new System.Drawing.Point(198, 22);
+            this.text_height.Location = new System.Drawing.Point(168, 22);
             this.text_height.Maximum = new decimal(new int[] {
             2560,
             0,
@@ -705,10 +660,7 @@ namespace Handbrake.Controls
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         internal System.Windows.Forms.Label label7;
         internal System.Windows.Forms.Label lbl_src_res;
-        internal System.Windows.Forms.Label Label91;
-        internal System.Windows.Forms.Label lbl_Aspect;
         internal System.Windows.Forms.Label Label55;
-        private System.Windows.Forms.Label lbl_max;
         internal System.Windows.Forms.Label label4;
         internal System.Windows.Forms.CheckBox check_KeepAR;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

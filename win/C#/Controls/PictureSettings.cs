@@ -1,8 +1,7 @@
 /*  PictureSetting.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Controls
 {
@@ -13,17 +12,16 @@ namespace Handbrake.Controls
     using Parsing;
     using Presets;
 
+    /// <summary>
+    /// The Picture Settings Panel
+    /// </summary>
     public partial class PictureSettings : UserControl
     {
         private readonly CultureInfo culture = new CultureInfo("en-US", false);
-        public event EventHandler PictureSettingsChanged;
-
         private bool preventChangingWidth;
         private bool preventChangingHeight;
         private bool preventChangingCustom;
         private bool preventChangingDisplayWidth;
-        private int presetMaximumWidth;
-        private int presetMaximumHeight;
         private double cachedDar;
         private Title sourceTitle;
 
@@ -40,11 +38,20 @@ namespace Handbrake.Controls
         }
 
         /// <summary>
+        /// Picture Settings Changed Event Handler
+        /// </summary>
+        public event EventHandler PictureSettingsChanged;
+
+        /// <summary>
         /// Gets or sets the source media used by this control.
         /// </summary>
         public Title Source
         {
-            private get { return sourceTitle; }
+            private get
+            {
+                return sourceTitle;
+            }
+
             set
             {
                 sourceTitle = value;
@@ -54,7 +61,7 @@ namespace Handbrake.Controls
         }
 
         /// <summary>
-        /// Which preset is currently selected by the user.
+        /// Gets or sets the currently selected preset.
         /// </summary>
         public Preset CurrentlySelectedPreset { get; set; }
 
@@ -62,29 +69,14 @@ namespace Handbrake.Controls
         /// Gets or sets the maximum allowable size for the encoded resolution. Set a value to
         /// "0" if the maximum does not matter.
         /// </summary>
-        public Size PresetMaximumResolution
-        {
-            get { return new Size(presetMaximumWidth, presetMaximumHeight); }
-            set
-            {
-                presetMaximumWidth = value.Width;
-                presetMaximumHeight = value.Height;
-
-                if (value.Width != 0 && value.Height != 0)
-                    lbl_max.Text = "Max Width / Height";
-                else if (value.Width != 0)
-                    lbl_max.Text = "Max Width";
-                else if (value.Height != 0)
-                    lbl_max.Text = "Max Height";
-                else
-                    lbl_max.Text = string.Empty;
-            }
-        }
+        public Size PresetMaximumResolution { get; set; }
 
         /// <summary>
         /// Set the Preset Crop Warning Label
         /// </summary>
-        /// <param name="selectedPreset"></param>
+        /// <param name="selectedPreset">
+        /// The Selected preset
+        /// </param>
         public void SetPresetCropWarningLabel(Preset selectedPreset)
         {
             lbl_presetCropWarning.Visible = true;
@@ -100,12 +92,10 @@ namespace Handbrake.Controls
         private void NewSourceSet()
         {
             // Set the Aspect Ratio
-            lbl_Aspect.Text = sourceTitle.AspectRatio.ToString(culture);
             lbl_src_res.Text = sourceTitle.Resolution.Width + " x " + sourceTitle.Resolution.Height;
 
             // Set the Recommended Cropping values, but only if a preset doesn't have hard set picture settings.
-            if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.PictureSettings == false) ||
-                CurrentlySelectedPreset == null)
+            if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.PictureSettings == false) || CurrentlySelectedPreset == null)
             {
                 crop_top.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions[0]);
                 crop_bottom.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions[1]);
@@ -118,19 +108,28 @@ namespace Handbrake.Controls
             // Set the Resolution Boxes
             if (drp_anamorphic.SelectedIndex == 0)
             {
-                if (text_width.Value == 0) // Only update the values if the fields don't already have values.
-                    text_width.Value = sourceTitle.Resolution.Width;
+                int width = sourceTitle.Resolution.Width;
+
+                if (width > PresetMaximumResolution.Width && PresetMaximumResolution.Width != 0) // If the preset has a Max width set, don't use a width larger than it.
+                    width = PresetMaximumResolution.Width;
+
+                if (text_width.Value == 0 || (text_width.Value > PresetMaximumResolution.Width && PresetMaximumResolution.Width != 0)) // Only update the values if the fields don't already have values.
+                    text_width.Value = width;
 
                 check_KeepAR.Checked = true; // Forces Resolution to be correct.
             }
             else
             {
-                if (text_width.Value == 0 && text_height.Value == 0)
-                    // Only update the values if the fields don't already have values.
-                {
-                    text_width.Value = sourceTitle.Resolution.Width;
-                    text_height.Value = sourceTitle.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
-                }
+                int width = sourceTitle.Resolution.Width;
+                if (width > PresetMaximumResolution.Width && PresetMaximumResolution.Width != 0) // If the preset has a Max width set, don't use a width larger than it.
+                    width = PresetMaximumResolution.Width;
+
+                int height = sourceTitle.Resolution.Height;
+                if (height > PresetMaximumResolution.Height && PresetMaximumResolution.Height != 0) // If the preset has a Max height set, don't use a width larger than it.
+                    height = PresetMaximumResolution.Height;
+
+                text_width.Value = width;
+                text_height.Value = height - (int)crop_top.Value - (int)crop_bottom.Value;
 
                 labelDisplaySize.Text = CalculateAnamorphicSizes().Width + "x" + CalculateAnamorphicSizes().Height;
             }
@@ -139,7 +138,7 @@ namespace Handbrake.Controls
             updownParHeight.Value = sourceTitle.ParVal.Height;
 
             Size croppedDar = CalculateAnamorphicSizes();
-            cachedDar = (double) croppedDar.Width/croppedDar.Height;
+            cachedDar = (double)croppedDar.Width / croppedDar.Height;
             updownDisplayWidth.Value = croppedDar.Width;
         }
 
@@ -164,17 +163,17 @@ namespace Handbrake.Controls
                     {
                         preventChangingHeight = true;
 
-                        int width = (int) text_width.Value;
+                        int width = (int)text_width.Value;
 
-                        double crop_width = Source.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
-                        double crop_height = Source.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                        double crop_width = Source.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
+                        double crop_height = Source.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
 
                         if (SourceAspect.Width == 0 && SourceAspect.Height == 0)
                             break;
 
-                        double newHeight = ((double) width*Source.Resolution.Width*SourceAspect.Height*crop_height)/
-                                           (Source.Resolution.Height*SourceAspect.Width*crop_width);
-                        text_height.Value = (decimal) GetModulusValue(newHeight);
+                        double newHeight = ((double)width * Source.Resolution.Width * SourceAspect.Height * crop_height) /
+                                           (Source.Resolution.Height * SourceAspect.Width * crop_width);
+                        text_height.Value = (decimal)GetModulusValue(newHeight);
 
                         preventChangingHeight = false;
                     }
@@ -186,7 +185,7 @@ namespace Handbrake.Controls
                             break;
 
                         preventChangingDisplayWidth = true;
-                        updownDisplayWidth.Value = text_width.Value*updownParWidth.Value/updownParHeight.Value;
+                        updownDisplayWidth.Value = text_width.Value * updownParWidth.Value / updownParHeight.Value;
                         preventChangingDisplayWidth = false;
 
                         labelDisplaySize.Text = Math.Truncate(updownDisplayWidth.Value) + "x" + text_height.Value;
@@ -225,14 +224,14 @@ namespace Handbrake.Controls
                     {
                         preventChangingWidth = true;
 
-                        double crop_width = Source.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
-                        double crop_height = Source.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
+                        double crop_width = Source.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
+                        double crop_height = Source.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
 
-                        double new_width = ((double) text_height.Value*Source.Resolution.Height*SourceAspect.Width*
-                                            crop_width)/
-                                           (Source.Resolution.Width*SourceAspect.Height*crop_height);
+                        double new_width = ((double)text_height.Value * Source.Resolution.Height * SourceAspect.Width *
+                                            crop_width) /
+                                           (Source.Resolution.Width * SourceAspect.Height * crop_height);
 
-                        text_width.Value = (decimal) GetModulusValue(new_width);
+                        text_width.Value = (decimal)GetModulusValue(new_width);
 
                         preventChangingWidth = false;
                     }
@@ -247,12 +246,12 @@ namespace Handbrake.Controls
                         // - Changes PIXEL HEIGHT to STORAGE WIDTH
                         // DAR = DISPLAY WIDTH / DISPLAY HEIGHT (cache after every modification)
 
-                        double rawCalculatedDisplayWidth = (double) text_height.Value*cachedDar;
+                        double rawCalculatedDisplayWidth = (double)text_height.Value * cachedDar;
 
                         preventChangingDisplayWidth = true; // Start Guards
                         preventChangingWidth = true;
 
-                        updownDisplayWidth.Value = (decimal) rawCalculatedDisplayWidth;
+                        updownDisplayWidth.Value = (decimal)rawCalculatedDisplayWidth;
                         updownParWidth.Value = updownDisplayWidth.Value;
                         updownParHeight.Value = text_width.Value;
 
@@ -315,12 +314,12 @@ namespace Handbrake.Controls
                 if (!int.TryParse(drp_modulus.SelectedItem.ToString(), out modulus))
                     modulus = 16;
 
-                int rawCalculatedHeight = (int) ((int) updownDisplayWidth.Value/cachedDar);
-                int modulusHeight = rawCalculatedHeight - (rawCalculatedHeight%modulus);
+                int rawCalculatedHeight = (int)((int)updownDisplayWidth.Value / cachedDar);
+                int modulusHeight = rawCalculatedHeight - (rawCalculatedHeight % modulus);
 
                 // Update value
                 preventChangingHeight = true;
-                text_height.Value = (decimal) modulusHeight;
+                text_height.Value = (decimal)modulusHeight;
                 updownParWidth.Value = updownDisplayWidth.Value;
                 updownParHeight.Value = text_width.Value;
                 preventChangingHeight = false;
@@ -339,8 +338,9 @@ namespace Handbrake.Controls
 
                     SetCustomAnamorphicOptionsVisible(false);
                     labelStaticDisplaySize.Visible = false;
-                    labelDisplaySize.Visible = true;
+                    labelDisplaySize.Visible = false;
                     drp_modulus.Visible = true;
+                    lbl_modulus.Visible = true;
 
                     // check_KeepAR.Checked = true;
 
@@ -401,8 +401,8 @@ namespace Handbrake.Controls
             preventChangingWidth = true;
             preventChangingHeight = true;
 
-            text_width.Value = (decimal) GetModulusValue((double) text_width.Value);
-            text_height.Value = (decimal) GetModulusValue((double) text_height.Value);
+            text_width.Value = (decimal)GetModulusValue((double)text_width.Value);
+            text_height.Value = (decimal)GetModulusValue((double)text_height.Value);
 
             preventChangingWidth = false;
             preventChangingHeight = false;
@@ -456,8 +456,8 @@ namespace Handbrake.Controls
             get
             {
                 if (Source != null) // display aspect = (width * par_width) / (height * par_height)
-                    return new Size((Source.ParVal.Width*Source.Resolution.Width), 
-                                    (Source.ParVal.Height*Source.Resolution.Height));
+                    return new Size((Source.ParVal.Width * Source.Resolution.Width),
+                                    (Source.ParVal.Height * Source.Resolution.Height));
 
                 return new Size(0, 0); // Fall over to 16:9 and hope for the best
             }
@@ -468,12 +468,12 @@ namespace Handbrake.Controls
             if (Source != null)
             {
                 /* Set up some variables to make the math easier to follow. */
-                int croppedWidth = Source.Resolution.Width - (int) crop_left.Value - (int) crop_right.Value;
-                int croppedHeight = Source.Resolution.Height - (int) crop_top.Value - (int) crop_bottom.Value;
-                double storageAspect = (double) croppedWidth/croppedHeight;
+                int croppedWidth = Source.Resolution.Width - (int)crop_left.Value - (int)crop_right.Value;
+                int croppedHeight = Source.Resolution.Height - (int)crop_top.Value - (int)crop_bottom.Value;
+                double storageAspect = (double)croppedWidth / croppedHeight;
 
                 /* Figure out what width the source would display at. */
-                double sourceDisplayWidth = (double) croppedWidth*Source.ParVal.Width/Source.ParVal.Height;
+                double sourceDisplayWidth = (double)croppedWidth * Source.ParVal.Width / Source.ParVal.Height;
 
                 /*
                      3 different ways of deciding output dimensions:
@@ -487,31 +487,31 @@ namespace Handbrake.Controls
                     default:
                     case 1:
                         /* Strict anamorphic */
-                        double displayWidth = ((double) croppedWidth*Source.ParVal.Width/Source.ParVal.Height);
+                        double displayWidth = ((double)croppedWidth * Source.ParVal.Width / Source.ParVal.Height);
                         displayWidth = Math.Round(displayWidth, 0);
-                        Size output = new Size((int) displayWidth, croppedHeight);
+                        Size output = new Size((int)displayWidth, croppedHeight);
                         return output;
                     case 2:
                         /* "Loose" anamorphic.
                             - Uses mod16-compliant dimensions,
                             - Allows users to set the width
                         */
-                        width = (int) text_width.Value;
+                        width = (int)text_width.Value;
                         width = GetModulusValue(width); /* Time to get picture width that divide cleanly.*/
 
-                        height = (width/storageAspect) + 0.5;
+                        height = (width / storageAspect) + 0.5;
                         height = GetModulusValue(height); /* Time to get picture height that divide cleanly.*/
 
                         /* The film AR is the source's display width / cropped source height.
                            The output display width is the output height * film AR.
                            The output PAR is the output display width / output storage width. */
-                        double pixelAspectWidth = height*sourceDisplayWidth/croppedHeight;
+                        double pixelAspectWidth = height * sourceDisplayWidth / croppedHeight;
                         double pixelAspectHeight = width;
 
-                        double disWidthLoose = (width*pixelAspectWidth/pixelAspectHeight);
+                        double disWidthLoose = (width * pixelAspectWidth / pixelAspectHeight);
                         if (double.IsNaN(disWidthLoose))
                             disWidthLoose = 0;
-                        return new Size((int) disWidthLoose, (int) height);
+                        return new Size((int)disWidthLoose, (int)height);
                     case 3:
 
                         // Get the User Interface Values
@@ -519,12 +519,12 @@ namespace Handbrake.Controls
                         double.TryParse(updownDisplayWidth.Text, out UIdisplayWidth);
 
                         /* Anamorphic 3: Power User Jamboree - Set everything based on specified values */
-                        height = GetModulusValue((double) text_height.Value);
+                        height = GetModulusValue((double)text_height.Value);
 
                         if (check_KeepAR.Checked)
-                            return new Size((int) Math.Truncate(UIdisplayWidth), (int) height);
+                            return new Size((int)Math.Truncate(UIdisplayWidth), (int)height);
 
-                        return new Size((int) Math.Truncate(UIdisplayWidth), (int) height);
+                        return new Size((int)Math.Truncate(UIdisplayWidth), (int)height);
                 }
             }
 
@@ -535,27 +535,19 @@ namespace Handbrake.Controls
         private double GetModulusValue(double value)
         {
             int mod = int.Parse(drp_modulus.SelectedItem.ToString());
-            double remainder = value%mod;
+            double remainder = value % mod;
 
             if (remainder == 0)
                 return value;
 
-            return remainder >= ((double) mod/2) ? value + (mod - remainder) : value - remainder;
+            return remainder >= ((double)mod / 2) ? value + (mod - remainder) : value - remainder;
         }
 
         private static int GetCropMod2Clean(int value)
         {
-            int remainder = value%2;
+            int remainder = value % 2;
             if (remainder == 0) return value;
             return (value + remainder);
-        }
-
-        // Hidden UI feature to drop the MaxWidth / Height with the MaxWidth/Height label is double clicked
-        private void LblMaxDoubleClick(object sender, EventArgs e)
-        {
-            PresetMaximumResolution = new Size(0, 0);
-            if (PictureSettingsChanged != null)
-                PictureSettingsChanged(this, new EventArgs());
         }
     }
 }

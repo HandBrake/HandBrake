@@ -60,7 +60,7 @@ namespace Handbrake.Functions
                         query += string.Format(" -c {0}", mainWindow.drop_chapterStart.Text);
                     else if (mainWindow.drop_chapterStart.Text != string.Empty &&
                              mainWindow.drop_chapterFinish.Text != string.Empty)
-                        query += string.Format(" -c {0}-{1}", mainWindow.drop_chapterStart.Text, 
+                        query += string.Format(" -c {0}-{1}", mainWindow.drop_chapterStart.Text,
                                                mainWindow.drop_chapterFinish.Text);
                     break;
                 case 1: // Seconds
@@ -69,7 +69,7 @@ namespace Handbrake.Functions
                     int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
                     int calculatedDuration = end - start;
 
-                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}", 
+                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}",
                                            mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 2: // Frames
@@ -77,7 +77,7 @@ namespace Handbrake.Functions
                     int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
                     calculatedDuration = end - start;
 
-                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", 
+                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}",
                                            mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 3: // Preview
@@ -86,7 +86,7 @@ namespace Handbrake.Functions
                     query += " --stop-at duration:" + duration + " ";
 
                     if (mainWindow.text_destination.Text != string.Empty)
-                        query += string.Format(" -o \"{0}\" ", 
+                        query += string.Format(" -o \"{0}\" ",
                                                mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
                     break;
                 default:
@@ -127,38 +127,13 @@ namespace Handbrake.Functions
 
             #region Picture Settings Tab
 
-            // Use MaxWidth for built-in presets and width for user settings.
-            if (mainWindow.PictureSettings.PresetMaximumResolution.Width == 0)
-            {
-                if (mainWindow.PictureSettings.text_width.Value != 0)
-                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1)
-                        // Prevent usage for strict anamorphic
-                        query += " -w " + mainWindow.PictureSettings.text_width.Text;
-            }
-            else
-            {
-                if (mainWindow.PictureSettings.text_width.Value != 0)
-                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1)
-                        query += " -X " + mainWindow.PictureSettings.text_width.Text;
-            }
+            if (mainWindow.PictureSettings.text_width.Value != 0)
+                if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex != 1) // Prevent usage for strict anamorphic
+                    query += " -w " + mainWindow.PictureSettings.text_width.Text;
 
-            // Use MaxHeight for built-in presets and height for user settings.
-            if (mainWindow.PictureSettings.PresetMaximumResolution.Height == 0)
-            {
-                if (mainWindow.PictureSettings.text_height.Value != 0)
-                    if (mainWindow.PictureSettings.text_height.Text != string.Empty)
-                        if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 ||
-                            mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
-                            // Prevent usage for strict anamorphic
-                            query += " -l " + mainWindow.PictureSettings.text_height.Text;
-            }
-            else
-            {
-                if (mainWindow.PictureSettings.text_height.Value != 0)
-                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 ||
-                        mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3)
-                        query += " -Y " + mainWindow.PictureSettings.text_height.Text;
-            }
+            if (mainWindow.PictureSettings.text_height.Value != 0 && mainWindow.PictureSettings.text_height.Text != string.Empty)
+                    if (mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 0 || mainWindow.PictureSettings.drp_anamorphic.SelectedIndex == 3) // Prevent usage for strict anamorphic
+                        query += " -l " + mainWindow.PictureSettings.text_height.Text;
 
             string cropTop = mainWindow.PictureSettings.crop_top.Text;
             string cropBottom = mainWindow.PictureSettings.crop_bottom.Text;
@@ -256,7 +231,7 @@ namespace Handbrake.Functions
                         break;
                     case "H.264 (x264)":
                         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                        value = 51 - mainWindow.slider_videoQuality.Value*cqStep;
+                        value = 51 - mainWindow.slider_videoQuality.Value * cqStep;
                         value = Math.Round(value, 2);
                         query += " -q " + value.ToString(culture);
                         break;

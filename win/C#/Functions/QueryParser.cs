@@ -1,8 +1,7 @@
 /*  QueryParser.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Functions
 {
@@ -13,8 +12,14 @@ namespace Handbrake.Functions
     using System.Windows.Forms;
     using Model;
 
+    /// <summary>
+    /// Parse a CLI Query
+    /// </summary>
     public class QueryParser
     {
+        /// <summary>
+        /// The Culture
+        /// </summary>
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
         #region Varibles
@@ -433,9 +438,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show(
-                    "An error has occured in the Query Parser.\n\n" +
-                    exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("An error has occured in the Query Parser.\n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             #endregion
@@ -446,8 +449,8 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get the GUI equiv to a CLI mixdown
         /// </summary>
-        /// <param name="mixdown"></param>
-        /// <returns></returns>
+        /// <param name="mixdown">The Audio Mixdown</param>
+        /// <returns>The GUI representation of the mixdown</returns>
         private static string GetMixDown(string mixdown)
         {
             switch (mixdown.Trim())
@@ -470,8 +473,8 @@ namespace Handbrake.Functions
         /// <summary>
         /// Get the GUI equiv to a CLI audio encoder
         /// </summary>
-        /// <param name="audioEnc"></param>
-        /// <returns></returns>
+        /// <param name="audioEnc">The Audio Encoder</param>
+        /// <returns>The GUI representation of that audio encoder</returns>
         private static string GetAudioEncoder(string audioEnc)
         {
             switch (audioEnc)
