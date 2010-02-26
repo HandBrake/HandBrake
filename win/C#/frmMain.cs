@@ -15,11 +15,11 @@ namespace Handbrake
     using System.IO;
     using System.Threading;
     using System.Windows.Forms;
-    using EncodeQueue;
     using Functions;
     using Model;
     using Parsing;
     using Presets;
+    using Services;
 
     public partial class frmMain : Form
     {

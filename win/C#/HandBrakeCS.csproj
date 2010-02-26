@@ -164,7 +164,7 @@
     <Compile Include="Controls\x264Panel.Designer.cs">
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
-    <Compile Include="EncodeQueue\Encode.cs" />
+    <Compile Include="Services\Encode.cs" />
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -217,7 +217,7 @@
     <Compile Include="Functions\PresetLoader.cs" />
     <Compile Include="Functions\QueryGenerator.cs" />
     <Compile Include="Functions\Main.cs" />
-    <Compile Include="Functions\Scan.cs" />
+    <Compile Include="Services\Scan.cs" />
     <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\UpdateCheckInformation.cs" />
     <Compile Include="Functions\Win32.cs" />
@@ -234,7 +234,7 @@
     <Compile Include="Presets\PlistPresetHandler.cs" />
     <Compile Include="Presets\Preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="EncodeQueue\Queue.cs" />
+    <Compile Include="Services\Queue.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\QueryParser.cs" />
     <Compile Include="Parsing\AudioTrack.cs" />
@@ -331,7 +331,7 @@
     <Compile Include="frmSplashScreen.Designer.cs">
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="EncodeQueue\Job.cs" />
+    <Compile Include="Model\Job.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
@@ -427,5 +427,5 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.3\Microsoft.StyleCop.targets" />  
+  <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.3\Microsoft.StyleCop.targets" />
 </Project>

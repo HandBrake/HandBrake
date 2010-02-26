@@ -180,6 +180,33 @@ namespace Handbrake
                         return appendText;
                     }
 
+
+                    // TODO This is just Experimental Code. Just ignore it.
+                    ////if (encode.ActivityLog == null)
+                    ////{
+                    ////    appendText.AppendFormat("Waiting for the log file to be generated ...\n");
+                    ////    position = 0;
+                    ////    ClearWindowText();
+                    ////    PrintLogHeader();
+                    ////    return appendText;
+                    ////}
+
+                    ////using (StringReader reader = new StringReader(encode.ActivityLog))
+                    ////{
+                    ////    string line;
+                    ////    int i = 1;
+                    ////    while ((line = reader.ReadLine()) != null)
+                    ////    {
+                    ////        if (i > position)
+                    ////        {
+                    ////            appendText.AppendLine(line);
+                    ////            position++;
+                    ////        }
+                    ////        i++;
+                    ////    }
+
+                    ////}
+
                     // Start the Reader
                     // Only use text which continues on from the last read line
                     StreamReader sr = new StreamReader(logFile2);

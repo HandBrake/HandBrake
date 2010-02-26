@@ -11,9 +11,9 @@ namespace Handbrake
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Windows.Forms;
-    using EncodeQueue;
     using Functions;
     using Model;
+    using Services;
 
     public partial class frmQueue : Form
     {
