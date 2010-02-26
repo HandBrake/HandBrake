@@ -186,9 +186,9 @@ namespace Handbrake.Functions
                     double x264Step = cqStep;
                     double presetValue = presetQuery.VideoQuality;
 
-                    double x = 51/x264Step;
+                    double x = 51 / x264Step;
 
-                    double calculated = presetValue/x264Step;
+                    double calculated = presetValue / x264Step;
                     calculated = x - calculated;
 
                     int.TryParse(calculated.ToString(), out value);

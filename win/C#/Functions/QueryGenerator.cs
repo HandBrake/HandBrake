@@ -69,16 +69,14 @@ namespace Handbrake.Functions
                     int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
                     int calculatedDuration = end - start;
 
-                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}",
-                                           mainWindow.drop_chapterStart.Text, calculatedDuration);
+                    query += string.Format(" --start-at duration:{0} --stop-at duration:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 2: // Frames
                     int.TryParse(mainWindow.drop_chapterStart.Text, out start);
                     int.TryParse(mainWindow.drop_chapterFinish.Text, out end);
                     calculatedDuration = end - start;
 
-                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}",
-                                           mainWindow.drop_chapterStart.Text, calculatedDuration);
+                    query += string.Format(" --start-at frame:{0} --stop-at frame:{1}", mainWindow.drop_chapterStart.Text, calculatedDuration);
                     break;
                 case 3: // Preview
                     query += " --previews " + Properties.Settings.Default.previewScanCount + " ";
@@ -86,8 +84,7 @@ namespace Handbrake.Functions
                     query += " --stop-at duration:" + duration + " ";
 
                     if (mainWindow.text_destination.Text != string.Empty)
-                        query += string.Format(" -o \"{0}\" ",
-                                               mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
+                        query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
                     break;
                 default:
                     break;
@@ -231,7 +228,7 @@ namespace Handbrake.Functions
                         break;
                     case "H.264 (x264)":
                         CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
-                        value = 51 - mainWindow.slider_videoQuality.Value * cqStep;
+                        value = 51 - (mainWindow.slider_videoQuality.Value * cqStep);
                         value = Math.Round(value, 2);
                         query += " -q " + value.ToString(culture);
                         break;
@@ -407,10 +404,10 @@ namespace Handbrake.Functions
 
             // Attach Source name and dvd title to the start of the chapters.csv filename.
             // This is for the queue. It allows different chapter name files for each title.
-            string[] destName = mainWindow.text_destination.Text.Split('\\');
-            string dest_name = destName[destName.Length - 1];
-            dest_name = dest_name.Replace("\"", string.Empty);
-            dest_name = dest_name.Replace(".mp4", string.Empty).Replace(".m4v", string.Empty).Replace(".mkv", string.Empty);
+            string[] destNameSplit = mainWindow.text_destination.Text.Split('\\');
+            string destName = destNameSplit[destNameSplit.Length - 1];
+            destName = destName.Replace("\"", string.Empty);
+            destName = destName.Replace(".mp4", string.Empty).Replace(".m4v", string.Empty).Replace(".mkv", string.Empty);
 
             string sourceTitle = mainWindow.drp_dvdtitle.Text;
             string[] titlesplit = sourceTitle.Split(' ');
@@ -418,11 +415,11 @@ namespace Handbrake.Functions
 
             if (mainWindow.Check_ChapterMarkers.Checked && mainWindow.Check_ChapterMarkers.Enabled)
             {
-                if (dest_name.Trim() != String.Empty)
+                if (destName.Trim() != String.Empty)
                 {
                     string path = sourceTitle != "Automatic"
-                                      ? Path.Combine(Path.GetTempPath(), dest_name + "-" + sourceTitle + "-chapters.csv")
-                                      : Path.Combine(Path.GetTempPath(), dest_name + "-chapters.csv");
+                                      ? Path.Combine(Path.GetTempPath(), destName + "-" + sourceTitle + "-chapters.csv")
+                                      : Path.Combine(Path.GetTempPath(), destName + "-chapters.csv");
 
                     if (ChapterCsvSave(mainWindow, path) == false)
                         query += " -m ";
@@ -535,9 +532,7 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show(
-                    "Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" +
-                    exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
         }

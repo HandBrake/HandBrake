@@ -32,8 +32,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// Notification shown upon completion of encoding
         /// </summary>
-        private static NotificationType encodeOrQueueCompleted = new NotificationType("EncodeOrQueue", 
-                                                                                      "HandBrake Status");
+        private static NotificationType encodeOrQueueCompleted = new NotificationType("EncodeOrQueue", "HandBrake Status");
 
         /// <summary>
         /// Checks to see if Growl is currently running on the local machine.

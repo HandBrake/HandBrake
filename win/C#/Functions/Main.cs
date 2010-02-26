@@ -14,7 +14,6 @@ namespace Handbrake.Functions
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
-    using EncodeQueue;
     using Model;
     using Parsing;
 
@@ -26,7 +25,7 @@ namespace Handbrake.Functions
         /// <summary>
         /// The XML Serializer
         /// </summary>
-        private static readonly XmlSerializer Ser = new XmlSerializer(typeof (List<Job>));
+        private static readonly XmlSerializer Ser = new XmlSerializer(typeof(List<Job>));
 
         /// <summary>
         /// Calculate the duration of the selected title and chapters
@@ -106,8 +105,8 @@ namespace Handbrake.Functions
                 int n = dataChpt.Rows.Add();
                 dataChpt.Rows[n].Cells[0].Value = i + 1;
                 dataChpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
-                dataChpt.Rows[n].Cells[0].ValueType = typeof (int);
-                dataChpt.Rows[n].Cells[1].ValueType = typeof (string);
+                dataChpt.Rows[n].Cells[0].ValueType = typeof(int);
+                dataChpt.Rows[n].Cells[1].ValueType = typeof(string);
                 i++;
             }
 
@@ -226,12 +225,10 @@ namespace Handbrake.Functions
                 else // Otherwise, use the path that is already there.
                 {
                     // Use the path and change the file extension to match the previous destination
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), 
-                                                destinationFilename);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
 
                     if (Path.HasExtension(mainWindow.text_destination.Text))
-                        autoNamePath = Path.ChangeExtension(autoNamePath, 
-                                                            Path.GetExtension(mainWindow.text_destination.Text));
+                        autoNamePath = Path.ChangeExtension(autoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
                 }
             }
 
@@ -279,8 +276,7 @@ namespace Handbrake.Functions
 
                     if (m.Success)
                     {
-                        string data = line.Replace("(", string.Empty).Replace(")", string.Empty).Replace("HandBrake ", 
-                                                                                                         string.Empty);
+                        string data = line.Replace("(", string.Empty).Replace(")", string.Empty).Replace("HandBrake ", string.Empty);
                         string[] arr = data.Split(' ');
 
                         Properties.Settings.Default.hb_build = int.Parse(arr[1]);
@@ -322,8 +318,7 @@ namespace Handbrake.Functions
         {
             try
             {
-                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
-                                               @"HandBrake\hb_queue_recovery.xml");
+                string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"HandBrake\hb_queue_recovery.xml");
                 if (File.Exists(tempPath))
                 {
                     using (FileStream strm = new FileStream(tempPath, FileMode.Open, FileAccess.Read))
@@ -498,11 +493,7 @@ namespace Handbrake.Functions
                                                                   }
                                                                   catch (Exception exc)
                                                                   {
-                                                                      callback(new UpdateCheckResult(debug, 
-                                                                                                     new UpdateCheckInformation
-                                                                                                         {
-                                                                                                            Error = exc
-                                                                                                         }));
+                                                                      callback(new UpdateCheckResult(debug, new UpdateCheckInformation { Error = exc }));
                                                                   }
                                                               }));
         }
