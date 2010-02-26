@@ -433,7 +433,7 @@ namespace Handbrake.Functions
             #endregion
 
             // X264 Panel
-            query += " -x " + mainWindow.x264Panel.X264Query;
+            query += mainWindow.x264Panel.X264Query;
 
             #region Processors / Other
 
