@@ -142,8 +142,8 @@ namespace Handbrake.Controls
         /// Input: String. - Single X264 Option. Name only
         /// Output: String - Single X264 Option. Name only. Changed to standard format
         /// </summary>
-        /// <param name="cleanOptNameString"></param>
-        /// <returns></returns>
+        /// <param name="cleanOptNameString">a string of x264 options to clean</param>
+        /// <returns>A string containing standardized x264 option names</returns>
         private static string X264_StandardizeOptNames(string cleanOptNameString)
         {
             string input = cleanOptNameString;

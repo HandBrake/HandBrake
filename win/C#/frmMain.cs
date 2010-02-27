@@ -34,12 +34,13 @@ namespace Handbrake
         private frmActivityWindow ActivityWindow;
         private Form splash;
         public string sourcePath;
-        private string lastAction;
+        private ActivityLogMode lastAction;
         private SourceType selectedSourceType;
         private string dvdDrivePath;
         private string dvdDriveLabel;
         private Preset CurrentlySelectedPreset;
         private DVD currentSource;
+        private Scan SourceScan = new Scan();
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -337,7 +338,7 @@ namespace Handbrake
 
         private void encodeStarted(object sender, EventArgs e)
         {
-            lastAction = "encode";
+            lastAction = ActivityLogMode.Encode;
             SetEncodeStarted();
 
             // Experimental HBProc Process Monitoring.
@@ -385,7 +386,7 @@ namespace Handbrake
 
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(lastAction);
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(lastAction, encodeQueue, SourceScan);
             dvdInfoWindow.Show();
         }
 
@@ -850,10 +851,10 @@ namespace Handbrake
 
                         SetEncodeStarted(); // Encode is running, so setup the GUI appropriately
                         encodeQueue.Start(); // Start The Queue Encoding Process
-                        lastAction = "encode"; // Set the last action to encode - Used for activity window.
+                        lastAction = ActivityLogMode.Encode; // Set the last action to encode - Used for activity window.
                     }
                     if (ActivityWindow != null)
-                        ActivityWindow.SetEncodeMode();
+                        ActivityWindow.SetMode(ActivityLogMode.Encode);
 
                     this.Focus();
                 }
@@ -924,18 +925,18 @@ namespace Handbrake
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
-                ActivityWindow = new frmActivityWindow(lastAction);
+                ActivityWindow = new frmActivityWindow(lastAction, encodeQueue, SourceScan);
             else
                 switch (lastAction)
                 {
-                    case "scan":
-                        ActivityWindow.SetScanMode();
+                    case ActivityLogMode.Scan:
+                        ActivityWindow.SetMode(ActivityLogMode.Scan);
                         break;
-                    case "encode":
-                        ActivityWindow.SetEncodeMode();
+                    case ActivityLogMode.Encode:
+                        ActivityWindow.SetMode(ActivityLogMode.Encode);
                         break;
                     default:
-                        ActivityWindow.SetEncodeMode();
+                        ActivityWindow.SetMode(ActivityLogMode.Encode);
                         break;
                 }
 
@@ -1011,7 +1012,7 @@ namespace Handbrake
         private void SelectSource(string file)
         {
             Check_ChapterMarkers.Enabled = true;
-            lastAction = "scan";
+            lastAction = ActivityLogMode.Scan;
             sourcePath = string.Empty;
 
             if (file == string.Empty) // Must have a file or path
@@ -1630,7 +1631,6 @@ namespace Handbrake
         #region Source Scan
 
         public bool isScanning { get; set; }
-        private Scan SourceScan;
 
         private void StartScan(string filename, int title)
         {
@@ -1650,7 +1650,7 @@ namespace Handbrake
             mnu_killCLI.Visible = true;
 
             if (ActivityWindow != null)
-                ActivityWindow.SetScanMode();
+                ActivityWindow.SetMode(ActivityLogMode.Scan);
 
             // Start the Scan
             try

@@ -164,6 +164,7 @@
     <Compile Include="Controls\x264Panel.Designer.cs">
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\ActivityLogMode.cs" />
     <Compile Include="Services\Encode.cs" />
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>

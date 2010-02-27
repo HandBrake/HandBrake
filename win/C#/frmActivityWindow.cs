@@ -13,6 +13,8 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
     using Functions;
+    using Model;
+    using Services;
     using Timer = System.Threading.Timer;
 
     /// <summary>
@@ -26,19 +28,24 @@ namespace Handbrake
         private int position;
 
         /// <summary>
-        /// The previous mode
-        /// </summary>
-        private string lastMode;
-
-        /// <summary>
-        /// The current mode
-        /// </summary>
-        private string currentMode;
-
-        /// <summary>
         /// A Timer for this window
         /// </summary>
         private Timer windowTimer;
+
+        /// <summary>
+        /// The Encode Object
+        /// </summary>
+        private Encode encode;
+
+        /// <summary>
+        /// The Scan Object
+        /// </summary>
+        private Scan scan;
+
+        /// <summary>
+        /// The Type of log that the window is currently dealing with
+        /// </summary>
+        private ActivityLogMode mode;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="frmActivityWindow"/> class.
@@ -46,15 +53,20 @@ namespace Handbrake
         /// <param name="mode">
         /// The mode.
         /// </param>
-        public frmActivityWindow(string mode)
+        /// <param name="encode">
+        /// The encode.
+        /// </param>
+        /// <param name="scan">
+        /// The scan.
+        /// </param>
+        public frmActivityWindow(ActivityLogMode mode, Encode encode, Scan scan)
         {
             InitializeComponent();
 
-            position = 0;
-            if (mode == "scan")
-                SetScanMode();
-            else
-                SetEncodeMode();
+            this.encode = encode;
+            this.scan = scan;
+            this.mode = mode;
+            this.position = 0;
         }
 
         /// <summary>
@@ -73,32 +85,16 @@ namespace Handbrake
         // Public
 
         /// <summary>
-        /// Gets or sets SetLogFile.
-        /// </summary>
-        public string SetLogFile
-        {
-            get { return string.IsNullOrEmpty(currentMode) ? string.Empty : currentMode; }
-            set { currentMode = value; }
-        }
-
-        /// <summary>
         /// Set the window to scan mode
         /// </summary>
-        public void SetScanMode()
+        /// <param name="setMode">
+        /// The set Mode.
+        /// </param>
+        public void SetMode(ActivityLogMode setMode)
         {
             Reset();
-            SetLogFile = "last_scan_log.txt";
-            this.Text = "Activity Window (Scan Log)";
-        }
-
-        /// <summary>
-        /// Set the window to encode mode
-        /// </summary>
-        public void SetEncodeMode()
-        {
-            Reset();
-            SetLogFile = "last_encode_log.txt";
-            this.Text = "Activity Window (Enocde Log)";
+            this.mode = setMode;
+            this.Text = mode == ActivityLogMode.Scan ? "Activity Window (Scan Log)" : "Activity Window (Enocde Log)";
         }
 
         // Logging
@@ -125,113 +121,76 @@ namespace Handbrake
         /// </param>
         private void LogMonitor(object n)
         {
-            if (SetLogFile != lastMode) Reset();
-
-            // Perform the window update
-            switch (SetLogFile)
-            {
-                case "last_scan_log.txt":
-                    AppendWindowText(ReadFile("last_scan_log.txt"));
-                    lastMode = "last_scan_log.txt";
-                    break;
-                case "last_encode_log.txt":
-                    AppendWindowText(ReadFile("last_encode_log.txt"));
-                    lastMode = "last_encode_log.txt";
-                    break;
-            }
+            AppendWindowText(GetLog());
         }
 
         /// <summary>
-        /// Read the log file
+        /// New Code for getting the Activity log from the Services rather than reading a file.
         /// </summary>
-        /// <param name="file">
-        /// The file.
-        /// </param>
         /// <returns>
-        /// A string builder containing the log data
+        /// The StringBuilder containing a log
         /// </returns>
-        private StringBuilder ReadFile(string file)
+        private StringBuilder GetLog()
         {
             StringBuilder appendText = new StringBuilder();
-            lock (this)
+            
+            if (this.mode == ActivityLogMode.Scan)
             {
-                // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
-                // we'll need to make a copy of it.
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
-                                "\\HandBrake\\logs";
-                string logFile = Path.Combine(logDir, file);
-                string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
-
-                try
+                if (scan == null || scan.ActivityLog == string.Empty)
                 {
-                    // Make sure the application readable log file does not already exist. FileCopy fill fail if it does.
-                    if (File.Exists(logFile2))
-                        File.Delete(logFile2);
-
-                    // Copy the log file.
-                    if (File.Exists(logFile))
-                        File.Copy(logFile, logFile2, true);
-                    else
-                    {
-                        appendText.AppendFormat("Waiting for the log file to be generated ...\n");
-                        position = 0;
-                        ClearWindowText();
-                        PrintLogHeader();
-                        return appendText;
-                    }
-
-
-                    // TODO This is just Experimental Code. Just ignore it.
-                    ////if (encode.ActivityLog == null)
-                    ////{
-                    ////    appendText.AppendFormat("Waiting for the log file to be generated ...\n");
-                    ////    position = 0;
-                    ////    ClearWindowText();
-                    ////    PrintLogHeader();
-                    ////    return appendText;
-                    ////}
-
-                    ////using (StringReader reader = new StringReader(encode.ActivityLog))
-                    ////{
-                    ////    string line;
-                    ////    int i = 1;
-                    ////    while ((line = reader.ReadLine()) != null)
-                    ////    {
-                    ////        if (i > position)
-                    ////        {
-                    ////            appendText.AppendLine(line);
-                    ////            position++;
-                    ////        }
-                    ////        i++;
-                    ////    }
-
-                    ////}
-
-                    // Start the Reader
-                    // Only use text which continues on from the last read line
-                    StreamReader sr = new StreamReader(logFile2);
-                    string line;
-                    int i = 1;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        if (i > position)
-                        {
-                            appendText.AppendLine(line);
-                            position++;
-                        }
-                        i++;
-                    }
-                    sr.Close();
-                    sr.Dispose();
+                    appendText.AppendFormat("Waiting for the log to be generated ...\n");
+                    position = 0;
+                    ClearWindowText();
+                    PrintLogHeader();
+                    return appendText;
                 }
-                catch (Exception)
+
+                using (StringReader reader = new StringReader(scan.ActivityLog))
                 {
-                    Reset();
-                    appendText = new StringBuilder();
-                    appendText.AppendLine("\nThe Log file is currently in use. Waiting for the log file to become accessible ...\n");
+                    LogReader(reader, appendText);
+                }
+            }
+            else
+            {
+                if (encode == null || encode.ActivityLog == string.Empty)
+                {
+                    appendText.AppendFormat("Waiting for the log to be generated ...\n");
+                    position = 0;
+                    ClearWindowText();
+                    PrintLogHeader();
+                    return appendText;
+                }
+
+                using (StringReader reader = new StringReader(encode.ActivityLog))
+                {
+                    LogReader(reader, appendText);
                 }
             }
             return appendText;
+        }
+
+        /// <summary>
+        /// Reads the log data from a Scan or Encode object
+        /// </summary>
+        /// <param name="reader">
+        /// The reader.
+        /// </param>
+        /// <param name="appendText">
+        /// The append text.
+        /// </param>
+        private void LogReader(StringReader reader, StringBuilder appendText)
+        {
+            string line;
+            int i = 1;
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (i > position)
+                {
+                    appendText.AppendLine(line);
+                    position++;
+                }
+                i++;
+            }
         }
 
         /// <summary>
@@ -308,15 +267,15 @@ namespace Handbrake
                             // Print the log header. This function will be re-implimented later. Do not delete.
                             StringBuilder header = new StringBuilder();
 
-                            header.AppendLine(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
-                            header.AppendLine(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
-                            header.AppendLine(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
-                            header.AppendLine(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
-                            header.AppendLine(String.Format("### Screen: {0}x{1} \n", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
-                            header.AppendLine(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
-                            header.AppendLine(String.Format("### Install Dir: {0} \n", Application.StartupPath));
-                            header.AppendLine(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
-                            header.AppendLine("#########################################\n\n");
+                            header.Append(String.Format("### Windows GUI {1} {0} \n", Properties.Settings.Default.hb_build, Properties.Settings.Default.hb_version));
+                            header.Append(String.Format("### Running: {0} \n###\n", Environment.OSVersion));
+                            header.Append(String.Format("### CPU: {0} \n", SystemInfo.GetCpuCount));
+                            header.Append(String.Format("### Ram: {0} MB \n", SystemInfo.TotalPhysicalMemory));
+                            header.Append(String.Format("### Screen: {0}x{1} \n", SystemInfo.ScreenBounds.Bounds.Width, SystemInfo.ScreenBounds.Bounds.Height));
+                            header.Append(String.Format("### Temp Dir: {0} \n", Path.GetTempPath()));
+                            header.Append(String.Format("### Install Dir: {0} \n", Application.StartupPath));
+                            header.Append(String.Format("### Data Dir: {0} \n", Application.UserAppDataPath));
+                            header.Append("#########################################\n\n");
 
                             rtf_actLog.AppendText(header.ToString());
                         }
@@ -407,7 +366,7 @@ namespace Handbrake
         /// </param>
         private void BtnScanLogClick(object sender, EventArgs e)
         {
-            SetScanMode();
+            SetMode(ActivityLogMode.Scan);
         }
 
         /// <summary>
@@ -421,7 +380,7 @@ namespace Handbrake
         /// </param>
         private void BtnEncodeLogClick(object sender, EventArgs e)
         {
-            SetEncodeMode();
+            SetMode(ActivityLogMode.Encode);
         }
 
         // Overrides
