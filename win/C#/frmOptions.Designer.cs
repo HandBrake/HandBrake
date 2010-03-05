@@ -605,7 +605,7 @@ namespace Handbrake
             this.check_clearOldLogs.AutoSize = true;
             this.check_clearOldLogs.Location = new System.Drawing.Point(73, 226);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
-            this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
+            this.check_clearOldLogs.Size = new System.Drawing.Size(162, 17);
             this.check_clearOldLogs.TabIndex = 90;
             this.check_clearOldLogs.Text = "Clear logs older than 30 days";
             this.ToolTip.SetToolTip(this.check_clearOldLogs, "Clear logs which are older than 30 days.\r\nThis only applies to HandBrakes Applica" +
@@ -631,7 +631,7 @@ namespace Handbrake
             this.check_cli_minimized.AutoSize = true;
             this.check_cli_minimized.Location = new System.Drawing.Point(73, 14);
             this.check_cli_minimized.Name = "check_cli_minimized";
-            this.check_cli_minimized.Size = new System.Drawing.Size(137, 17);
+            this.check_cli_minimized.Size = new System.Drawing.Size(135, 17);
             this.check_cli_minimized.TabIndex = 76;
             this.check_cli_minimized.Text = "Start window minimized";
             this.ToolTip.SetToolTip(this.check_cli_minimized, "Starts a CLI window minimized.");
@@ -713,7 +713,7 @@ namespace Handbrake
             this.check_logsInSpecifiedLocation.AutoSize = true;
             this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 131);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
-            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
+            this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(305, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
             this.check_logsInSpecifiedLocation.Text = "Put a copy of individual encode logs in a specified location:";
             this.ToolTip.SetToolTip(this.check_logsInSpecifiedLocation, "Place a copy of the encode log in the same folder as the encoded movie.");
