@@ -72,8 +72,6 @@ namespace Handbrake
             this.label12 = new System.Windows.Forms.Label();
             this.check_cli_minimized = new System.Windows.Forms.CheckBox();
             this.btn_viewLogs = new System.Windows.Forms.Button();
-            this.drp_processors = new System.Windows.Forms.ComboBox();
-            this.Label11 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
             this.btn_clearLogs = new System.Windows.Forms.Button();
@@ -582,8 +580,6 @@ namespace Handbrake
             this.tab_cli.Controls.Add(this.label12);
             this.tab_cli.Controls.Add(this.check_cli_minimized);
             this.tab_cli.Controls.Add(this.btn_viewLogs);
-            this.tab_cli.Controls.Add(this.drp_processors);
-            this.tab_cli.Controls.Add(this.Label11);
             this.tab_cli.Controls.Add(this.label9);
             this.tab_cli.Controls.Add(this.Label4);
             this.tab_cli.Controls.Add(this.btn_clearLogs);
@@ -607,7 +603,7 @@ namespace Handbrake
             // 
             this.check_clearOldLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_clearOldLogs.AutoSize = true;
-            this.check_clearOldLogs.Location = new System.Drawing.Point(73, 265);
+            this.check_clearOldLogs.Location = new System.Drawing.Point(73, 226);
             this.check_clearOldLogs.Name = "check_clearOldLogs";
             this.check_clearOldLogs.Size = new System.Drawing.Size(166, 17);
             this.check_clearOldLogs.TabIndex = 90;
@@ -647,7 +643,7 @@ namespace Handbrake
             this.btn_viewLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_viewLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_viewLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_viewLogs.Location = new System.Drawing.Point(129, 227);
+            this.btn_viewLogs.Location = new System.Drawing.Point(129, 188);
             this.btn_viewLogs.Name = "btn_viewLogs";
             this.btn_viewLogs.Size = new System.Drawing.Size(139, 23);
             this.btn_viewLogs.TabIndex = 89;
@@ -655,46 +651,12 @@ namespace Handbrake
             this.btn_viewLogs.UseVisualStyleBackColor = true;
             this.btn_viewLogs.Click += new System.EventHandler(this.btn_viewLogs_Click);
             // 
-            // drp_processors
-            // 
-            this.drp_processors.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.drp_processors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.drp_processors.FormattingEnabled = true;
-            this.drp_processors.Items.AddRange(new object[] {
-            "Automatic",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8"});
-            this.drp_processors.Location = new System.Drawing.Point(177, 69);
-            this.drp_processors.Name = "drp_processors";
-            this.drp_processors.Size = new System.Drawing.Size(111, 21);
-            this.drp_processors.TabIndex = 41;
-            this.ToolTip.SetToolTip(this.drp_processors, "The number of processor\'s / processor cores. Unless your having problems, leave o" +
-                    "n Automatic.");
-            this.drp_processors.SelectedIndexChanged += new System.EventHandler(this.drp_processors_SelectedIndexChanged);
-            // 
-            // Label11
-            // 
-            this.Label11.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.Label11.AutoSize = true;
-            this.Label11.BackColor = System.Drawing.Color.Transparent;
-            this.Label11.Location = new System.Drawing.Point(70, 72);
-            this.Label11.Name = "Label11";
-            this.Label11.Size = new System.Drawing.Size(87, 13);
-            this.Label11.TabIndex = 40;
-            this.Label11.Text = "Processor cores:";
-            // 
             // label9
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(7, 123);
+            this.label9.Location = new System.Drawing.Point(7, 84);
             this.label9.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(36, 13);
@@ -717,7 +679,7 @@ namespace Handbrake
             this.btn_clearLogs.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btn_clearLogs.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_clearLogs.ForeColor = System.Drawing.Color.DarkOrange;
-            this.btn_clearLogs.Location = new System.Drawing.Point(274, 227);
+            this.btn_clearLogs.Location = new System.Drawing.Point(274, 188);
             this.btn_clearLogs.Name = "btn_clearLogs";
             this.btn_clearLogs.Size = new System.Drawing.Size(135, 23);
             this.btn_clearLogs.TabIndex = 88;
@@ -749,7 +711,7 @@ namespace Handbrake
             // 
             this.check_logsInSpecifiedLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_logsInSpecifiedLocation.AutoSize = true;
-            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 170);
+            this.check_logsInSpecifiedLocation.Location = new System.Drawing.Point(73, 131);
             this.check_logsInSpecifiedLocation.Name = "check_logsInSpecifiedLocation";
             this.check_logsInSpecifiedLocation.Size = new System.Drawing.Size(306, 17);
             this.check_logsInSpecifiedLocation.TabIndex = 87;
@@ -762,7 +724,7 @@ namespace Handbrake
             // 
             this.check_saveLogWithVideo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_saveLogWithVideo.AutoSize = true;
-            this.check_saveLogWithVideo.Location = new System.Drawing.Point(73, 147);
+            this.check_saveLogWithVideo.Location = new System.Drawing.Point(73, 108);
             this.check_saveLogWithVideo.Name = "check_saveLogWithVideo";
             this.check_saveLogWithVideo.Size = new System.Drawing.Size(382, 17);
             this.check_saveLogWithVideo.TabIndex = 83;
@@ -776,7 +738,7 @@ namespace Handbrake
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(70, 123);
+            this.label3.Location = new System.Drawing.Point(70, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(101, 13);
             this.label3.TabIndex = 85;
@@ -788,7 +750,7 @@ namespace Handbrake
             this.btn_saveLog.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_saveLog.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_saveLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_saveLog.Location = new System.Drawing.Point(437, 200);
+            this.btn_saveLog.Location = new System.Drawing.Point(437, 161);
             this.btn_saveLog.Name = "btn_saveLog";
             this.btn_saveLog.Size = new System.Drawing.Size(77, 22);
             this.btn_saveLog.TabIndex = 82;
@@ -805,7 +767,7 @@ namespace Handbrake
             "0",
             "1",
             "2"});
-            this.cb_logVerboseLvl.Location = new System.Drawing.Point(177, 120);
+            this.cb_logVerboseLvl.Location = new System.Drawing.Point(177, 81);
             this.cb_logVerboseLvl.Name = "cb_logVerboseLvl";
             this.cb_logVerboseLvl.Size = new System.Drawing.Size(111, 21);
             this.cb_logVerboseLvl.TabIndex = 86;
@@ -815,7 +777,7 @@ namespace Handbrake
             // text_logPath
             // 
             this.text_logPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.text_logPath.Location = new System.Drawing.Point(129, 200);
+            this.text_logPath.Location = new System.Drawing.Point(129, 161);
             this.text_logPath.Name = "text_logPath";
             this.text_logPath.Size = new System.Drawing.Size(302, 21);
             this.text_logPath.TabIndex = 80;
@@ -826,7 +788,7 @@ namespace Handbrake
             // 
             this.label14.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(70, 203);
+            this.label14.Location = new System.Drawing.Point(70, 164);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 13);
             this.label14.TabIndex = 81;
@@ -1515,7 +1477,6 @@ namespace Handbrake
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.TabPage tab_general;
         private System.Windows.Forms.FolderBrowserDialog pathFinder;
-        internal System.Windows.Forms.Label Label11;
         internal System.Windows.Forms.Label Label4;
         internal System.Windows.Forms.CheckBox check_tooltip;
         internal System.Windows.Forms.CheckBox check_updateCheck;
@@ -1588,7 +1549,6 @@ namespace Handbrake
         internal System.Windows.Forms.CheckBox check_m4v;
         internal System.Windows.Forms.ComboBox drop_updateCheckDays;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        internal System.Windows.Forms.ComboBox drp_processors;
         internal System.Windows.Forms.ComboBox drp_Priority;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.CheckBox check_promptOnUnmatchingQueries;

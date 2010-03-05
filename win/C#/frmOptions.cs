@@ -108,9 +108,6 @@ namespace Handbrake
             if (Properties.Settings.Default.cli_minimized)
                 check_cli_minimized.CheckState = CheckState.Checked;
 
-            // Number of processor cores
-            drp_processors.Text = Properties.Settings.Default.Processors;
-
             // Priority level for encodes
             drp_Priority.Text = Properties.Settings.Default.processPriority;
 
@@ -312,11 +309,6 @@ namespace Handbrake
         private void check_cli_minimized_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.cli_minimized = check_cli_minimized.Checked;
-        }
-
-        private void drp_processors_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Processors = drp_processors.Text;
         }
 
         private void drp_Priority_SelectedIndexChanged(object sender, EventArgs e)

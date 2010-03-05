@@ -37,18 +37,6 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Automatic")]
-        public string Processors {
-            get {
-                return ((string)(this["Processors"]));
-            }
-            set {
-                this["Processors"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool updateStatus {
             get {

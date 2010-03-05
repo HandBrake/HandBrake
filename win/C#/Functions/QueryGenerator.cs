@@ -435,18 +435,13 @@ namespace Handbrake.Functions
             // X264 Panel
             query += mainWindow.x264Panel.X264Query;
 
-            #region Processors / Other
-
-            string processors = Properties.Settings.Default.Processors;
-            if (processors != "Automatic")
-                query += " -C " + processors + " ";
-
+            // Verbosity Level
             query += " -v " + Properties.Settings.Default.verboseLevel;
 
+            // LibDVDNav
             if (Properties.Settings.Default.noDvdNav)
                 query += " --no-dvdnav";
 
-            #endregion
 
             return query;
         }

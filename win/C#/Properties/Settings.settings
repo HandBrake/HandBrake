@@ -5,9 +5,6 @@
     <Setting Name="processPriority" Type="System.String" Scope="User">
       <Value Profile="(Default)">Below Normal</Value>
     </Setting>
-    <Setting Name="Processors" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Automatic</Value>
-    </Setting>
     <Setting Name="updateStatus" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
