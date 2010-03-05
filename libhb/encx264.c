@@ -123,6 +123,9 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         }
     }
     
+    /* Temporary hack to use old b-pyramid default */
+    param.i_bframe_pyramid = 0;
+
     /* Enable metrics */
     param.analyse.b_psnr = 1;
     param.analyse.b_ssim = 1;
