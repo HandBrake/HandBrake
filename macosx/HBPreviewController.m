@@ -209,6 +209,7 @@
     fPicture = 0;
     MaxOutputWidth = title->width - job->crop[2] - job->crop[3];
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
+    
     [self SettingsChanged: nil];
     
     /* set the top of the hud controller boxes centered vertically with the origin of our window */
@@ -223,7 +224,7 @@
 
 // Adjusts the window to draw the current picture (fPicture) adjusting its size as
 // necessary to display as much of the picture as possible.
-- (void) displayPreview
+- (void) displayPreview 
 {
     hb_job_t * job = fTitle->job;
     /* lets make sure that the still picture view is not hidden and that 
@@ -279,7 +280,7 @@
                           @"Source: %dx%d, Output: %dx%d, Anamorphic: %dx%d Custom",
                           fTitle->width, fTitle->height, output_width, output_height, fTitle->job->anamorphic.dar_width, fTitle->job->anamorphic.dar_height];
         
-        displaySize.width = fTitle->job->anamorphic.dar_width + fTitle->job->crop[2] + fTitle->job->crop[3];
+        displaySize.width = fTitle->job->anamorphic.dar_width + fTitle->job->crop[2] + fTitle->job->crop[3] ;
         displaySize.height = fTitle->job->anamorphic.dar_height + fTitle->job->crop[0] + fTitle->job->crop[1];
         imageScaledSize.width = (int)fTitle->job->anamorphic.dar_width;
         imageScaledSize.height = (int)fTitle->job->height;   
@@ -289,48 +290,97 @@
         sizeInfoString = [NSString stringWithFormat:
                           @"Source: %dx%d, Output: %dx%d", fTitle->width, fTitle->height,
                           fTitle->job->width, fTitle->job->height];
-        /* original
+       
         displaySize.width = fTitle->width;
         displaySize.height = fTitle->height;
         imageScaledSize.width = fTitle->job->width;
         imageScaledSize.height = fTitle->job->height;
-        */
-        /* Test ... */
-        displaySize.width = fTitle->width;
-        displaySize.height = fTitle->height;
-        imageScaledSize.width = fTitle->job->width + fTitle->job->crop[2] + fTitle->job->crop[3];
-        imageScaledSize.height = fTitle->job->height + fTitle->job->crop[0] - fTitle->job->crop[1];
     }
+    
+    
     
     NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
+    [self resizeSheetForViewSize:viewSize];
+
+    NSSize windowSize = [[self window] frame].size;    
     
-        /* we also need to take into account scaling to full screen to activate switching the view size */
-    if( [self viewNeedsToResizeToSize:viewSize])
-    {
-        if (fTitle->job->anamorphic.mode != 2 || (fTitle->job->anamorphic.mode == 2 && fTitle->width == fTitle->job->width))
-        {
-            [self resizeSheetForViewSize:viewSize];
-            [self setViewSize:viewSize];
-            
-        }
-    }   
-    
-    viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
-    viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
-    [self setViewSize:viewSize];
-    
-    /* special case for scaleToScreen */
     if (scaleToScreen == YES)
     {
-        [fPreviewImage setSize: viewSize];
-        [fPictureView setImage: fPreviewImage];
+        /* Note: this should probably become a utility function */
+        /* We are in Scale To Screen mode so, we have to get the ratio for height and width against the window
+         *size so we can scale from there.
+         */
+        CGFloat deltaWidth = imageScaledSize.width / displaySize.width;
+        CGFloat deltaHeight = imageScaledSize.height /displaySize.height;
+        NSSize windowSize = [[self window] frame].size;  
+        CGFloat pictureAspectRatio = imageScaledSize.width / imageScaledSize.height;
+        
+        /* Set our min size to the storage size */
+        NSSize minSize;
+        minSize.width = fTitle->width;
+        minSize.height = fTitle->height;
+
+        /* Set delta's based on minimum size */
+        if (imageScaledSize.width <  minSize.width)
+        {
+            deltaWidth = imageScaledSize.width / minSize.width;
+        }
+        else
+        {
+            deltaWidth = 1.0;
+        }
+        
+        if (imageScaledSize.height <  minSize.height)
+        {
+            deltaHeight =  imageScaledSize.height / minSize.height;
+        }
+        else
+        {
+            deltaHeight = 1.0;
+        }
+        
+        /* Now apply our deltas to the full screen view */
+        if (pictureAspectRatio > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
+        {
+            viewSize.width = windowSize.width * deltaWidth;
+            viewSize.height = viewSize.width / pictureAspectRatio;
+            
+        }
+        else
+        {
+            viewSize.height = windowSize.height * deltaHeight; 
+            viewSize.width = viewSize.height * pictureAspectRatio;
+        }
+        
+    }
+    else
+    {
+        viewSize.width = viewSize.width - (viewSize.width - imageScaledSize.width);
+        viewSize.height = viewSize.height - (viewSize.height - imageScaledSize.height);
+        
+        if (fTitle->width > windowSize.width || fTitle->height > windowSize.height)
+        {
+            CGFloat viewSizeAspect = viewSize.width / viewSize.height;
+            if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
+            {
+                viewSize.width = viewSize.width * (windowSize.width / fTitle->width) ;
+                viewSize.height = viewSize.width / viewSizeAspect;
+            }
+            else
+            {
+                viewSize.height = viewSize.height * (windowSize.height / fTitle->height);
+                viewSize.width = viewSize.height * viewSizeAspect;
+            }
+        }
+        
     }
     
+    [self setViewSize:viewSize];
+
     NSString *scaleString;
     CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);
     if (scale * 100.0 != 100)
     {
-        //CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);        
         scaleString = [NSString stringWithFormat:
                        NSLocalizedString( @" (%.0f%% actual size)",
                                          @"String shown when a preview is scaled" ), scale * 100.0];
@@ -338,6 +388,11 @@
     else
     {
         scaleString = @"(Actual size)";
+    }
+    
+    if (scaleToScreen == YES)
+    {
+        scaleString = [scaleString stringByAppendingString:@" Scaled To Screen"];
     }
     /* Set the info fields in the hud controller */
     [fInfoField setStringValue: [NSString stringWithFormat:
@@ -867,8 +922,6 @@
             [fMovieCreationProgressIndicator setHidden: YES];
             [fEncodingControlBox setHidden: YES];
             isEncoding = NO;
-            /* we make sure the picture slider and preview match */
-            [self pictureSliderChanged:nil];
 
             // Show the movie view
             [self showMoviePreview:fPreviewMoviePath];
@@ -916,66 +969,60 @@
             NSSize movieSize= [[aMovie attributeForKey:QTMovieNaturalSizeAttribute] sizeValue];
             movieBounds = [fMovieView movieBounds];
             movieBounds.size.height = movieSize.height;
-            
+            /* We also get our view size to use for scaling fMovieView's size */
+            NSSize scaledMovieViewSize = [fPictureView frame].size;
             if ([fMovieView isControllerVisible]) 
             {
                 CGFloat controllerBarHeight = [fMovieView controllerBarHeight];
                 if ( controllerBarHeight != 0 ) //Check if QTKit return a real value or not.
+                {
                     movieBounds.size.height += controllerBarHeight;
+                    scaledMovieViewSize.height += controllerBarHeight;
+                }
                 else
+                {
                     movieBounds.size.height += 15;
+                    scaledMovieViewSize.height += 15;
+                }
             }
             
             movieBounds.size.width = movieSize.width;
             
-            /* We need to find out if the preview movie needs to be scaled down so
-             * that it doesn't overflow our available viewing container (just like for image
-             * in -displayPreview) for HD sources, etc. [fPictureViewArea frame].size.height*/
-            if( (movieBounds.size.height) > [fPictureViewArea frame].size.height || scaleToScreen == YES )
+            /* we need to account for an issue where the scaledMovieViewSize > the window size */
+            if (scaledMovieViewSize.height > [[self window] frame].size.height)
             {
-                /* The preview movie would be larger than the available viewing area
-                 * in the preview movie, so we go ahead and scale it down to the same size
-                 * as the still preview  or we readjust our window to allow for the added height if need be
+                [fHBController writeToActivityLog: "showMoviePreview: Our window is not tall enough to show the controller bar ..."];
+                /*we need to scale the movie down vertically by 15 px to allow for the controller bar
+                 * and scale the width accordingly.
                  */
-                NSSize displaySize = NSMakeSize( ( CGFloat ) movieBounds.size.width, ( CGFloat ) movieBounds.size.height );
-                NSSize viewSize = [self optimalViewSizeForImageSize:displaySize];
-                if( [self viewNeedsToResizeToSize:viewSize] ) 
-                {
-                    [self resizeSheetForViewSize:viewSize];
-                    [self setViewSize:viewSize];
-                }
-                [fMovieView setFrameSize:viewSize];
-            }
-            else
-            {
-                /* Since the preview movie is smaller than the available viewing area
-                 * we can go ahead and use the preview movies native size */
-                [fMovieView setFrameSize:movieBounds.size];
+               
+               // FIX ME: currently trying to scale everything to show the controller bar does not work right.
+               // Commented out til fixed, resulting issue when the movie is the full size of the window is no
+               // controller bar is visible. Live Preview still plays fine though.
+               /*
+               CGFloat pictureAspectRatio = scaledMovieViewSize.width / scaledMovieViewSize.height;
+               scaledMovieViewSize.height = [[self window] frame].size.height - 15; 
+               scaledMovieViewSize.width = scaledMovieViewSize.height * pictureAspectRatio;
+               NSRect windowFrame = [[self window] frame];
+               windowFrame.size.width = scaledMovieViewSize.width;
+               windowFrame.size.height = scaledMovieViewSize.height + 15;
+               [[self window] setFrame:windowFrame display:YES animate:YES];
+               [fPictureView setFrameSize:scaledMovieViewSize];
+               */ 
             }
             
-            //lets reposition the movie if need be
             
-            NSPoint origin = [fPictureViewArea frame].origin;
-            origin.x += trunc( ( [fPictureViewArea frame].size.width -
+            
+            /* Scale the fMovieView to scaledMovieViewSize */
+            [fMovieView setFrameSize:scaledMovieViewSize];
+            
+            /*set our origin try using fPictureViewArea or fPictureView */
+            NSPoint origin = [fPictureView frame].origin;
+            origin.x += trunc( ( [fPictureView frame].size.width -
                                 [fMovieView frame].size.width ) / 2.0 );
-            /* We need to detect whether or not we are currently less than the available height.*/
-            if( movieBounds.size.height < [fPictureView frame].size.height )
-            {
-                /* If we are, we are adding 15 to the height to allow for the controller bar so
-                 * we need to subtract half of that for the origin.y to get the controller bar
-                 * below the movie to it lines up vertically with where our still preview was
-                 */
-                origin.y += trunc( ( ( [fPictureViewArea frame].size.height -
+            origin.y += trunc( ( ( [fPictureView frame].size.height -
                                       [fMovieView frame].size.height ) / 2.0 ) - 7.5 );
-            }
-            else
-            {
-                /* if we are >= to the height of the picture view area, the controller bar
-                 * gets taken care of with picture resizing, so we do not want to offset the height
-                 */
-                origin.y += trunc( ( [fPictureViewArea frame].size.height -
-                                    [fMovieView frame].size.height ) / 2.0 );
-            }
+
             [fMovieView setFrameOrigin:origin];
             [fMovieView setMovie:aMovie];
             [fMovieView setHidden:NO];
@@ -998,18 +1045,34 @@
 //
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize
 {
-    // The min size is 320x240
+    // The min size is 480x360
     CGFloat minWidth = 480.0;
     CGFloat minHeight = 360.0;
 
-    NSSize screenSize = [[NSScreen mainScreen] visibleFrame].size;
+    NSSize screenSize = [[[self window] screen] visibleFrame].size;
     NSSize sheetSize = [[self window] frame].size;
     NSSize viewAreaSize = [fPictureViewArea frame].size;
-    CGFloat paddingX = sheetSize.width - viewAreaSize.width;
-    CGFloat paddingY = sheetSize.height - viewAreaSize.height;
+    CGFloat paddingX = 0.00;
+    CGFloat paddingY = 0.00;
+    
+    if (fTitle->width > screenSize.width || fTitle->height > screenSize.height)
+    {
+        if (scaleToScreen == YES)
+        {
+            paddingX = screenSize.width - imageSize.width;
+            paddingY = screenSize.height - imageSize.height;
+        }
+        
+        else
+        {
+            paddingX = sheetSize.width - viewAreaSize.width;
+            paddingY = sheetSize.height - viewAreaSize.height;  
+        }
+
+    }
+    
     CGFloat maxWidth;
     CGFloat maxHeight;
-    
     maxWidth =  screenSize.width - paddingX;
     maxHeight = screenSize.height - paddingY;
     
@@ -1020,7 +1083,7 @@
     CGFloat screenAspect = screenSize.width / screenSize.height;
     // Note, a standard dvd will use 720 x 480 which is a 1.5
     CGFloat viewAreaAspect = viewAreaSize.width / viewAreaSize.height;
-
+    
     if (scaleToScreen == YES)
     {
         
@@ -1062,8 +1125,8 @@
     {
         resultSize.height = minHeight;
     }
-
-      return resultSize;
+    
+    return resultSize;
 
     
 }
@@ -1083,7 +1146,17 @@
     // Now resize the whole panel by those same deltas, but don't exceed the min
     NSRect frame = [[self window] frame];
     NSSize maxSize = [[[self window] screen] visibleFrame].size;
-    NSSize minSize = [[self window] minSize];
+    /* if we are not Scale To Screen, put an 85% of visible screen on the window */
+    if (scaleToScreen == NO )
+    {
+        maxSize.width = maxSize.width * 0.85;
+        maxSize.height = maxSize.height * 0.85;
+    }
+    
+    /* Set our min size to the storage size */
+    NSSize minSize;
+    minSize.width = fTitle->width;
+    minSize.height = fTitle->height;
     
     frame.size.width += deltaX;
     frame.size.height += deltaY;
@@ -1097,6 +1170,7 @@
         frame.size.height = minSize.height;
     }
     /* compare frame to max size of screen */
+    
     if( frame.size.width > maxSize.width )
     {
         frame.size.width = maxSize.width;
@@ -1106,6 +1180,7 @@
     {
         frame.size.height = maxSize.height;
     }
+    
     
     
 
@@ -1159,13 +1234,16 @@
 //
 - (void)setViewSize: (NSSize)viewSize
 {   
+    
     /* special case for scaleToScreen */
     NSSize screenSize = [[[self window] screen] visibleFrame].size;
     NSSize areaSize = [fPictureViewArea frame].size;
-    if (scaleToScreen == YES || viewSize.width > areaSize.width || viewSize.height > areaSize.height)
+    NSSize pictureSize = [fPictureView frame].size;
+    CGFloat viewSizeAspect = viewSize.width / viewSize.height;
+    
+    if (viewSize.width > areaSize.width || viewSize.height > areaSize.height)
     {
-        /* for scaleToScreen, we expand the fPictureView to fit the entire screen */
-        CGFloat viewSizeAspect = viewSize.width / viewSize.height;
+        
         if (viewSizeAspect > 1.0) // we are wider than taller, so expand the width to fill the area and scale the height
         {
             viewSize.width = areaSize.width;
@@ -1179,9 +1257,10 @@
         
     }
     
-    
     [fPictureView setFrameSize:viewSize];
-
+    NSSize newAreaSize = [fPictureViewArea frame].size;
+    
+    
     // center it vertically and horizontally
     NSPoint origin = [fPictureViewArea frame].origin;
     origin.y += ([fPictureViewArea frame].size.height -
