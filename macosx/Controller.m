@@ -325,7 +325,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 - (void) awakeFromNib
 {
     [fWindow center];
-    [fWindow setExcludedFromWindowsMenu:YES];
+    [fWindow setExcludedFromWindowsMenu:NO];
+    
     [fAdvancedOptions setView:fAdvancedView];
     
     /* lets setup our presets drawer for drag and drop here */
