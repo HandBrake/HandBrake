@@ -754,6 +754,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                     *subtitle = *(interjob->select_subtitle);
                     free( interjob->select_subtitle );
                     interjob->select_subtitle = NULL;
+                    break;
                 }
             }
         }
