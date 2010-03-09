@@ -262,15 +262,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 
 - (NSApplicationTerminateReply) applicationShouldTerminate: (NSApplication *) app
 {
-    /* if we are in preview full screen mode, we need to go to
-     * windowed mode and release the display before we terminate.
-     * We do it here (instead of applicationWillTerminate) so we 
-     * release the displays and can then see the alerts below.
-     */
-    if ([fPictureController previewFullScreenMode] == YES)
-    {
-        [fPictureController previewGoWindowed:nil];
-    }
+
     
     hb_state_t s;
     hb_get_state( fQueueEncodeLibhb, &s );
