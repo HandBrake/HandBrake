@@ -433,7 +433,7 @@ namespace Handbrake.Functions
             #endregion
 
             // X264 Panel
-            query += mainWindow.x264Panel.X264Query;
+            query += " -x " + mainWindow.x264Panel.X264Query;
 
             // Verbosity Level
             query += " -v " + Properties.Settings.Default.verboseLevel;
