@@ -542,6 +542,7 @@
     <signal handler="window_delete_event_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox48">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
@@ -671,9 +672,11 @@
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
           <object class="GtkVBox" id="vbox14">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <child>
               <object class="GtkVBox" id="vbox15">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkAlignment" id="alignment1">
@@ -686,6 +689,7 @@
                     <property name="xscale">1</property>
                     <child>
                       <object class="GtkVBox" id="vbox16">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="spacing">2</property>
                         <child>
@@ -1177,6 +1181,7 @@
 
                     <child>
                       <object class="GtkVBox" id="vbox43">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     	<property name="spacing">14</property>
@@ -1195,6 +1200,7 @@
                                 <property name="left_padding">12</property>
                                 <child>
                                   <object class="GtkVBox" id="vbox11">
+                                    <property name="orientation">vertical</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
@@ -1322,6 +1328,7 @@
                                 <property name="right_padding">2</property>
                                 <child>
                                   <object class="GtkVBox" id="vbox44">
+                                    <property name="orientation">vertical</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
@@ -1429,6 +1436,7 @@
                         </child>
                         <child>
                           <object class="GtkVBox" id="vbox45">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
@@ -1447,6 +1455,7 @@
                                     <property name="right_padding">2</property>
                                     <child>
                                       <object class="GtkVBox" id="vbox46">
+                                        <property name="orientation">vertical</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
@@ -1570,6 +1579,7 @@
 
                     <child>
                       <object class="GtkVBox" id="vbox9">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
 
@@ -1685,6 +1695,7 @@
                         <property name="left_padding">24</property>
                         <child>
                           <object class="GtkVBox" id="vbox13">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">4</property>
@@ -1822,6 +1833,7 @@
                         <property name="right_padding">24</property>
                         <child>
                           <object class="GtkVBox" id="vbox47">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
@@ -1988,6 +2000,7 @@ FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                 </child>
                 <child>
                   <object class="GtkVBox" id="audio_tab">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
@@ -2000,6 +2013,7 @@ FFmpeg's and Theora's scale is more linear.  These encoders do not have a lossle
                         <property name="right_padding">2</property>
                         <child>
                           <object class="GtkVBox" id="vbox17">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">2</property>
@@ -2291,6 +2305,7 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                 </child>
                 <child>
                   <object class="GtkVBox" id="subtitle_tab">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
@@ -2303,6 +2318,7 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                         <property name="right_padding">2</property>
                         <child>
                           <object class="GtkVBox" id="vbox12">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">2</property>
@@ -2587,6 +2603,7 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                     <property name="spacing">2</property>
                     <child>
                       <object class="GtkVBox" id="vbox21">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="spacing">10</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -2604,6 +2621,7 @@ For source audio that has a wide dynamic range (very loud and very soft sequence
                                 <property name="left_padding">12</property>
                                 <child>
                                   <object class="GtkVBox" id="vbox22">
+                                    <property name="orientation">vertical</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <child>
@@ -2931,6 +2949,7 @@ no-dct-decimate=0:cabac=1</property>
                     </child>
                     <child>
                       <object class="GtkVBox" id="vbox25">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="spacing">10</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -3197,6 +3216,7 @@ no-dct-decimate=0:cabac=1</property>
                                 <property name="right_padding">2</property>
                                 <child>
                                   <object class="GtkVBox" id="vbox27">
+                                    <property name="orientation">vertical</property>
                                     <property name="visible">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="spacing">2</property>
@@ -3436,6 +3456,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                 </child>
                 <child>
                   <object class="GtkVBox" id="chapters_tab">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <child>
                       <object class="GtkHBox" id="hbox30">
@@ -3601,6 +3622,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                 <property name="left_padding">8</property>
                 <child>
                   <object class="GtkVBox" id="presets_vbox">
+                    <property name="orientation">vertical</property>
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
@@ -3732,6 +3754,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <signal name="delete_event" handler="gtk_widget_hide_on_delete"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox6">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
@@ -3739,6 +3762,7 @@ Requires subme >= 6 and trellis >= 1.</property>
             <property name="visible">True</property>
             <child>
               <object class="GtkVBox" id="vbox20">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkEventBox" id="eventbox1">
@@ -3779,6 +3803,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                     <property name="show-border">False</property>
                     <child>
                       <object class="GtkVBox" id="vbox42">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkAlignment" id="alignment60">
@@ -3867,6 +3892,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                             <property name="bottom_padding">6</property>
                             <child>
                               <object class="GtkVBox" id="vbox5">
+                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkCheckButton" id="use_source_name">
@@ -3888,6 +3914,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                                     <property name="left_padding">18</property>
                                     <child>
                                       <object class="GtkVBox" id="vbox29">
+                                        <property name="orientation">vertical</property>
                                         <property name="visible">True</property>
                                         <child>
                                           <object class="GtkCheckButton" id="chapters_in_destination">
@@ -4029,6 +4056,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                     </child>
                     <child>
                       <object class="GtkVBox" id="vbox18">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkAlignment" id="alignment61">
@@ -4040,6 +4068,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkVBox" id="vbox7">
+                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkHBox" id="hbox81">
@@ -4081,6 +4110,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                                     <property name="left_padding">17</property>
                                     <child>
                                       <object class="GtkVBox" id="vbox49">
+                                        <property name="orientation">vertical</property>
                                         <property name="visible">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <child>
@@ -4170,6 +4200,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                     </child>
                     <child>
                       <object class="GtkVBox" id="vbox1">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkAlignment" id="alignment3">
@@ -4179,6 +4210,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkVBox" id="vbox3">
+                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkHBox" id="hbox6">
@@ -4245,6 +4277,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkVBox" id="vbox2">
+                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkCheckButton" id="EncodeLogLocation">
@@ -4394,6 +4427,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                             <property name="left_padding">12</property>
                             <child>
                               <object class="GtkVBox" id="vbox4">
+                                <property name="orientation">vertical</property>
                                 <property name="visible">True</property>
                                 <child>
                                   <object class="GtkCheckButton" id="allow_tweaks">
@@ -4497,6 +4531,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox7">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="spacing">2</property>
@@ -4588,11 +4623,13 @@ Requires subme >= 6 and trellis >= 1.</property>
     <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox3">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkVBox" id="vbox28">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
@@ -4724,6 +4761,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <signal handler="activity_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox37">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
@@ -4782,6 +4820,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <signal handler="queue_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox34">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <child>
@@ -4836,6 +4875,7 @@ Requires subme >= 6 and trellis >= 1.</property>
         </child>
         <child>
           <object class="GtkVBox" id="vbox38">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <child>
               <object class="GtkLabel" id="current_encode">
@@ -4918,6 +4958,7 @@ Requires subme >= 6 and trellis >= 1.</property>
     <signal handler="settings_window_delete_cb" name="delete_event"/>
     <child>
       <object class="GtkVBox" id="vbox40">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="spacing">5</property>
         <child>
@@ -4963,6 +5004,7 @@ Requires subme >= 6 and trellis >= 1.</property>
 
                     <child>
                       <object class="GtkVBox" id="vbox6">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
@@ -5197,6 +5239,7 @@ the required multiple.</property>
                         <property name="right_padding">2</property>
                         <child>
                           <object class="GtkVBox" id="vbox30">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">2</property>
@@ -5398,6 +5441,7 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                         <property name="right_padding">2</property>
                         <child>
                           <object class="GtkVBox" id="vbox10">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="spacing">2</property>
@@ -5622,6 +5666,7 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                 <property name="spacing">16</property>
                         <child>
                           <object class="GtkVBox" id="vbox8">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
@@ -5737,6 +5782,7 @@ Encoders are most effecient when the video dimensions are aligned to some specif
                         </child>
                         <child>
                           <object class="GtkVBox" id="vbox39">
+                            <property name="orientation">vertical</property>
                             <property name="visible">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <child>
@@ -6003,6 +6049,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
             <property name="bottom_padding">5</property>
             <child>
               <object class="GtkVBox" id="vbox35">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
@@ -6059,6 +6106,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                     </child>
                     <child>
                       <object class="GtkVBox" id="live_progress_box">
+                        <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkLabel" id="label71">
@@ -6405,6 +6453,7 @@ libx264 authors:
     <signal handler="gtk_widget_hide_on_delete" name="delete_event"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox4">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
@@ -6438,6 +6487,7 @@ libx264 authors:
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox8">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
@@ -6445,6 +6495,7 @@ libx264 authors:
             <property name="visible">True</property>
             <child>
               <object class="GtkVBox" id="vbox19">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkEventBox" id="eventbox2">
@@ -6477,6 +6528,7 @@ libx264 authors:
             </child>
             <child>
               <object class="GtkVBox" id="vbox41">
+                <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <child>
                   <object class="GtkLabel" id="label22">
@@ -6601,10 +6653,12 @@ libx264 authors:
     <signal handler="chooser_file_selected_cb" name="selection-changed"/>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox9">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="spacing">2</property>
         <child>
           <object class="GtkVBox" id="source_extra">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <child>
               <object class="GtkHBox" id="single_title_box">
