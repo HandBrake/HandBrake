@@ -1,8 +1,7 @@
 ﻿/*  AudioPanel.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake.Controls
 {
@@ -158,7 +157,6 @@ namespace Handbrake.Controls
                     drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
                         // "Use Foreign language audio and Subtitles"
             }
-            drp_audioMix.SelectedIndex = 0;
         }
 
         // Control and ListView

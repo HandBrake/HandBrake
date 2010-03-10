@@ -1077,6 +1077,7 @@ namespace Handbrake
             this.x264Panel.Name = "x264Panel";
             this.x264Panel.Size = new System.Drawing.Size(720, 306);
             this.x264Panel.TabIndex = 0;
+            this.x264Panel.X264Query = " -x ";
             // 
             // tab_query
             // 
