@@ -729,6 +729,14 @@ main (int argc, char *argv[])
 	//GtkWidget *widget = GHB_WIDGET(ud->builder, "PictureDetelecineCustom");
 	//gtk_entry_set_inner_border(widget, 2);
 
+	// Since GtkBuilder no longer assigns object ids to widget names
+	// Assign a few that are necessary for style overrides to work
+	GtkWidget *widget;
+	widget = GHB_WIDGET(ud->builder, "preview_hud");
+	gtk_widget_set_name(widget, "preview_hud");
+	widget = GHB_WIDGET(ud->builder, "preview_window");
+	gtk_widget_set_name(widget, "preview_window");
+
 	// Set up the "hud" control overlay for the preview window
 	GtkWidget *draw, *hud, *blender, *align;
 
@@ -849,7 +857,6 @@ main (int argc, char *argv[])
 	// Ugly hack to keep subtitle table from bouncing around as I change
 	// which set of controls are visible
 	GtkRequisition req;
-	GtkWidget *widget;
 	gint height;
 	
 	widget = GHB_WIDGET(ud->builder, "SrtCodeset");
