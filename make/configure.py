@@ -1302,6 +1302,10 @@ try:
         doc.add( 'XCODE.external.prefix', cfg.xcode_x_prefix )
 
     doc.addMake( '' )
+    doc.addMake( '## define debug mode before other includes' )
+    doc.addMake( '## since it is tested in some module.defs' )
+    doc.add( 'GCC.g', debugMode.mode )
+    doc.addBlank()
     doc.addMake( '## include definitions' )
     doc.addMake( 'include $(SRC/)make/include/main.defs' )
 
@@ -1324,7 +1328,6 @@ try:
         doc.add( 'GCC.minver', '' )
     doc.add( 'GCC.ldsysroot', '$(GCC.sysroot)' )
     doc.add( 'GCC.ldminver', '$(GCC.minver)' )
-    doc.add( 'GCC.g', debugMode.mode )
     doc.add( 'GCC.O', optimizeMode.mode )
 
     if options.enable_asm and not Tools.yasm.fail:

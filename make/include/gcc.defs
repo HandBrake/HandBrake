@@ -14,7 +14,9 @@ GCC.minver  =
 GCC.ldminver=
 GCC.vis     = 0
 GCC.pic     = 0
-GCC.g       = none
+ifndef GCC.g
+	GCC.g       = none
+endif
 GCC.O       = none
 GCC.D       =
 GCC.I       =
