@@ -1915,7 +1915,7 @@ namespace Handbrake
                     return;
                 }
 
-                this.dvdDrivePath = drives[0].RootDirectory + "VIDEO_TS";
+                this.dvdDrivePath = drives[0].RootDirectory;
                 this.dvdDriveLabel = drives[0].VolumeLabel;
                 mnu_dvd_drive.Text = this.dvdDrivePath + " (" + this.dvdDriveLabel + ")";
             }
