@@ -719,6 +719,7 @@ namespace Handbrake.Functions
         {
             List<DriveInformation> drives = new List<DriveInformation>();
             DriveInfo[] theCollectionOfDrives = DriveInfo.GetDrives();
+            int id = 0;
             foreach (DriveInfo curDrive in theCollectionOfDrives)
             {
                 if (curDrive.DriveType == DriveType.CDRom && curDrive.IsReady &&
@@ -726,9 +727,11 @@ namespace Handbrake.Functions
                 {
                     drives.Add(new DriveInformation
                                    {
+                                       Id = id,
                                        VolumeLabel = curDrive.VolumeLabel, 
                                        RootDirectory = curDrive.RootDirectory + "VIDEO_TS"
                                    });
+                    id++;
                 }
             }
             return drives;

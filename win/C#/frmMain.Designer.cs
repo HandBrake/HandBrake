@@ -40,7 +40,7 @@ namespace Handbrake
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ContextMenuStrip notifyIconMenu;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_restore = new System.Windows.Forms.ToolStripMenuItem();
             this.DVD_Save = new System.Windows.Forms.SaveFileDialog();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -145,7 +145,6 @@ namespace Handbrake
             this.btn_file_source = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_dvd_source = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_dvd_drive = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.btn_start = new System.Windows.Forms.ToolStripButton();
             this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
@@ -400,9 +399,9 @@ namespace Handbrake
             // 
             // number
             // 
-            dataGridViewCellStyle2.Format = "N0";
-            dataGridViewCellStyle2.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
             this.number.Frozen = true;
             this.number.HeaderText = "Chapter Number";
             this.number.MaxInputLength = 3;
@@ -1077,6 +1076,7 @@ namespace Handbrake
             this.x264Panel.Name = "x264Panel";
             this.x264Panel.Size = new System.Drawing.Size(720, 306);
             this.x264Panel.TabIndex = 0;
+            this.x264Panel.X264Query = "";
             // 
             // tab_query
             // 
@@ -1281,8 +1281,7 @@ namespace Handbrake
             this.btn_source.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btn_file_source,
             this.btn_dvd_source,
-            this.toolStripSeparator1,
-            this.mnu_dvd_drive});
+            this.toolStripSeparator1});
             this.btn_source.Image = global::Handbrake.Properties.Resources.Movies;
             this.btn_source.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_source.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -1297,7 +1296,7 @@ namespace Handbrake
             this.btn_file_source.Image = global::Handbrake.Properties.Resources.Movies_Small;
             this.btn_file_source.Name = "btn_file_source";
             this.btn_file_source.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.btn_file_source.Size = new System.Drawing.Size(189, 22);
+            this.btn_file_source.Size = new System.Drawing.Size(182, 22);
             this.btn_file_source.Text = "Video File";
             this.btn_file_source.Click += new System.EventHandler(this.btn_file_source_Click);
             // 
@@ -1308,23 +1307,14 @@ namespace Handbrake
             this.btn_dvd_source.Name = "btn_dvd_source";
             this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.O)));
-            this.btn_dvd_source.Size = new System.Drawing.Size(189, 22);
+            this.btn_dvd_source.Size = new System.Drawing.Size(182, 22);
             this.btn_dvd_source.Text = "Folder";
             this.btn_dvd_source.Click += new System.EventHandler(this.btn_dvd_source_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(186, 6);
-            // 
-            // mnu_dvd_drive
-            // 
-            this.mnu_dvd_drive.Image = global::Handbrake.Properties.Resources.disc_small;
-            this.mnu_dvd_drive.Name = "mnu_dvd_drive";
-            this.mnu_dvd_drive.Size = new System.Drawing.Size(189, 22);
-            this.mnu_dvd_drive.Text = "[No DVD Drive Ready]";
-            this.mnu_dvd_drive.Visible = false;
-            this.mnu_dvd_drive.Click += new System.EventHandler(this.mnu_dvd_drive_Click);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
             // 
             // toolStripSeparator10
             // 
@@ -1794,7 +1784,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripStatusLabel lbl_encode;
         internal System.Windows.Forms.OpenFileDialog ISO_Open;
         internal System.Windows.Forms.FolderBrowserDialog DVD_Open;
-        internal System.Windows.Forms.ToolStripMenuItem mnu_dvd_drive;
         private System.Windows.Forms.ContextMenuStrip presets_menu;
         private System.Windows.Forms.ToolStripMenuItem pmnu_expandAll;
         private System.Windows.Forms.ToolStripMenuItem pmnu_collapse;

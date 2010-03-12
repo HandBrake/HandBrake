@@ -19,6 +19,7 @@ namespace Handbrake
     using Model;
     using Parsing;
     using Presets;
+    using Properties;
     using Services;
 
     public partial class frmMain : Form
@@ -41,6 +42,7 @@ namespace Handbrake
         private Preset CurrentlySelectedPreset;
         private DVD currentSource;
         private Scan SourceScan = new Scan();
+        private List<DriveInformation> drives;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -54,7 +56,7 @@ namespace Handbrake
             // Load and setup the splash screen in this thread
             splash = new frmSplashScreen();
             splash.Show(this);
-            Label lblStatus = new Label {Size = new Size(150, 20), Location = new Point(182, 102)};
+            Label lblStatus = new Label { Size = new Size(150, 20), Location = new Point(182, 102) };
             splash.Controls.Add(lblStatus);
 
             InitializeComponent();
@@ -118,7 +120,7 @@ namespace Handbrake
                         x264Panel.Reset2Defaults();
 
                         QueryParser presetQuery = QueryParser.Parse(query);
-                        PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset, 
+                        PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset,
                                                 loadPictureSettings);
 
                         x264Panel.X264_StandardizeOptString();
@@ -172,9 +174,9 @@ namespace Handbrake
             }
             catch (Exception ex)
             {
-                if ((bool) result.AsyncState)
+                if ((bool)result.AsyncState)
                     MessageBox.Show(
-                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex, 
+                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex,
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -186,7 +188,7 @@ namespace Handbrake
             {
                 DialogResult result =
                     MessageBox.Show(
-                        "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?", 
+                        "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
                         "Queue Recovery Possible", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
@@ -406,7 +408,7 @@ namespace Handbrake
             LoadPresetPanel();
             if (treeView_presets.Nodes.Count == 0)
                 MessageBox.Show(
-                    "Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!", 
+                    "Unable to load the presets.xml file. Please select \"Update Built-in Presets\" from the Presets Menu. \nMake sure you are running the program in Admin mode if running on Vista. See Windows FAQ for details!",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 MessageBox.Show("Presets have been updated!", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -432,7 +434,7 @@ namespace Handbrake
 
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
-            Form preset = new frmAddPreset(this, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), 
+            Form preset = new frmAddPreset(this, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
                                            presetHandler);
             preset.ShowDialog();
         }
@@ -477,16 +479,16 @@ namespace Handbrake
                     updateWindow.ShowDialog();
                 }
                 else
-                    MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK, 
+                    MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
                 lbl_updateCheck.Visible = false;
                 return;
             }
             catch (Exception ex)
             {
-                if ((bool) result.AsyncState)
+                if ((bool)result.AsyncState)
                     MessageBox.Show(
-                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex, 
+                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex,
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -524,13 +526,13 @@ namespace Handbrake
             DialogResult result =
                 MessageBox.Show(
                     "Do you wish to include picture settings when updating the preset: " +
-                    treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel, 
+                    treeView_presets.SelectedNode.Text, "Update Preset", MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
-                presetHandler.Update(treeView_presets.SelectedNode.Text, 
+                presetHandler.Update(treeView_presets.SelectedNode.Text,
                                      QueryGenerator.GenerateTabbedComponentsQuery(this), true);
             else if (result == DialogResult.No)
-                presetHandler.Update(treeView_presets.SelectedNode.Text, 
+                presetHandler.Update(treeView_presets.SelectedNode.Text,
                                      QueryGenerator.GenerateTabbedComponentsQuery(this), false);
         }
 
@@ -566,7 +568,7 @@ namespace Handbrake
 
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", 
+            DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset",
                                                   MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
@@ -583,7 +585,7 @@ namespace Handbrake
         {
             if (treeView_presets.SelectedNode != null)
             {
-                DialogResult result = MessageBox.Show("Are you sure you wish to set this preset as the default?", 
+                DialogResult result = MessageBox.Show("Are you sure you wish to set this preset as the default?",
                                                       "Preset", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
@@ -621,7 +623,7 @@ namespace Handbrake
         {
             if (e.KeyCode == Keys.Delete)
             {
-                DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset", 
+                DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset",
                                                       MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.Yes)
                 {
@@ -704,31 +706,31 @@ namespace Handbrake
                 if (presetHandler.CheckIfUserPresetExists(parsed.PresetName + " (Imported)"))
                 {
                     DialogResult result =
-                        MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?", 
-                                        "Overwrite preset?", 
+                        MessageBox.Show("This preset appears to already exist. Would you like to overwrite it?",
+                                        "Overwrite preset?",
                                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
                         PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                        presetHandler.Update(parsed.PresetName + " (Imported)", 
-                                             QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), 
+                        presetHandler.Update(parsed.PresetName + " (Imported)",
+                                             QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
                                              parsed.UsesPictureSettings);
                     }
                 }
                 else
                 {
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.Add(parsed.PresetName, 
-                                      QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), 
+                    presetHandler.Add(parsed.PresetName,
+                                      QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
                                       parsed.UsesPictureSettings);
 
-                    if (presetHandler.Add(parsed.PresetName + " (Imported)", 
-                                          QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null), 
+                    if (presetHandler.Add(parsed.PresetName + " (Imported)",
+                                          QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
                                           parsed.UsesPictureSettings))
                     {
                         TreeNode preset_treeview = new TreeNode(parsed.PresetName + " (Imported)")
                                                        {
-                                                          ForeColor = Color.Black
+                                                           ForeColor = Color.Black
                                                        };
                         treeView_presets.Nodes.Add(preset_treeview);
                     }
@@ -742,7 +744,23 @@ namespace Handbrake
 
         private void btn_source_Click(object sender, EventArgs e)
         {
-            mnu_dvd_drive.Visible = true;
+            // Remove old Drive Menu Items.
+            List<ToolStripMenuItem> itemsToRemove = new List<ToolStripMenuItem>();
+            foreach (var item in btn_source.DropDownItems)
+            {
+                if (item.GetType() == typeof(ToolStripMenuItem))
+                {
+                    ToolStripMenuItem menuItem = (ToolStripMenuItem)item;
+                    if (menuItem.Name.StartsWith("Drive"))
+                    {
+                        itemsToRemove.Add(menuItem);
+                    }
+                }
+            }
+
+            foreach (ToolStripMenuItem item in itemsToRemove)
+                btn_source.DropDownItems.Remove(item);
+
             Thread driveInfoThread = new Thread(SetDriveSelectionMenuItem);
             driveInfoThread.Start();
         }
@@ -756,12 +774,12 @@ namespace Handbrake
                     !Properties.Settings.Default.showCliForInGuiEncodeStatus)
                 {
                     result = MessageBox.Show(
-                        "Are you sure you wish to cancel the encode?\n\nPlease note, when 'Enable in-GUI encode status' is enabled, stopping this encode will render the file unplayable. ", 
+                        "Are you sure you wish to cancel the encode?\n\nPlease note, when 'Enable in-GUI encode status' is enabled, stopping this encode will render the file unplayable. ",
                         "Cancel Encode?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 }
                 else
                 {
-                    result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?", 
+                    result = MessageBox.Show("Are you sure you wish to cancel the encode?", "Cancel Encode?",
                                              MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 }
 
@@ -806,9 +824,9 @@ namespace Handbrake
                                                               "priority over the GUI, your recently updated settings will not be taken " +
                                                               "into account when encoding this job." +
                                                               Environment.NewLine + Environment.NewLine +
-                                                              "Do you want to replace the manual query with the updated GUI-generated query?", 
-                                                              "Manual Query does not Match GUI", 
-                                                              MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk, 
+                                                              "Do you want to replace the manual query with the updated GUI-generated query?",
+                                                              "Manual Query does not Match GUI",
+                                                              MessageBoxButtons.YesNoCancel, MessageBoxIcon.Asterisk,
                                                               MessageBoxDefaultButton.Button3);
 
                         switch (result)
@@ -837,7 +855,7 @@ namespace Handbrake
                         if (File.Exists(text_destination.Text))
                             overwrite =
                                 MessageBox.Show(
-                                    "The destination file already exists. Are you sure you want to overwrite it?", 
+                                    "The destination file already exists. Are you sure you want to overwrite it?",
                                     "Overwrite File?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (overwrite == DialogResult.Yes)
@@ -859,7 +877,7 @@ namespace Handbrake
                     this.Focus();
                 }
                 else if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
-                    MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, 
+                    MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK,
                                     MessageBoxIcon.Warning);
             }
         }
@@ -867,7 +885,7 @@ namespace Handbrake
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
-                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, 
+                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
             else
             {
@@ -879,7 +897,7 @@ namespace Handbrake
                 {
                     DialogResult result =
                         MessageBox.Show(
-                            "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?", 
+                            "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                             "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                         encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
@@ -902,7 +920,7 @@ namespace Handbrake
         private void tb_preview_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
-                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, 
+                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
             else
             {
@@ -917,7 +935,7 @@ namespace Handbrake
                     qtpreview.Show();
                 }
                 else
-                    MessageBox.Show(qtpreview, "The preview window is already open!", "Warning", MessageBoxButtons.OK, 
+                    MessageBox.Show(qtpreview, "The preview window is already open!", "Warning", MessageBoxButtons.OK,
                                     MessageBoxIcon.Warning);
             }
         }
@@ -1004,9 +1022,22 @@ namespace Handbrake
 
         private void mnu_dvd_drive_Click(object sender, EventArgs e)
         {
-            if (this.dvdDrivePath == null) return;
-            this.selectedSourceType = SourceType.DvdDrive;
-            SelectSource(this.dvdDrivePath);
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item != null)
+            {
+                string driveId = item.Name.Replace("Drive", string.Empty);
+                int id;
+                if (int.TryParse(driveId, out id))
+                {
+
+                    this.dvdDrivePath = drives[id].RootDirectory;
+                    this.dvdDriveLabel = drives[id].VolumeLabel;
+
+                    if (this.dvdDrivePath == null) return;
+                    this.selectedSourceType = SourceType.DvdDrive;
+                    SelectSource(this.dvdDrivePath);
+                }
+            }
         }
 
         private void SelectSource(string file)
@@ -1029,7 +1060,7 @@ namespace Handbrake
         {
             if ((drp_dvdtitle.Items.Count == 1) && (drp_dvdtitle.Items[0].ToString() == "Automatic"))
                 MessageBox.Show(
-                    "There are no titles to select. Please load a source file by clicking the 'Source' button above before trying to select a title.", 
+                    "There are no titles to select. Please load a source file by clicking the 'Source' button above before trying to select a title.",
                     "Alert", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
@@ -1097,7 +1128,7 @@ namespace Handbrake
                     text_destination.Text = autoPath;
                 else
                     MessageBox.Show(
-                        "You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')", 
+                        "You currently have \"Automatically name output files\" enabled for the destination file box, but you do not have a default directory set.\n\nYou should set a \"Default Path\" in HandBrakes preferences. (See 'Tools' menu -> 'Options' -> 'General' Tab -> 'Default Path')",
                         "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
@@ -1126,7 +1157,7 @@ namespace Handbrake
             if (drop_mode.SelectedIndex != 0) // Function is not used if we are not in chapters mode.
                 return;
 
-            Control ctl = (Control) sender;
+            Control ctl = (Control)sender;
             int chapterStart, chapterEnd;
             int.TryParse(drop_chapterStart.Text, out chapterStart);
             int.TryParse(drop_chapterFinish.Text, out chapterEnd);
@@ -1160,8 +1191,8 @@ namespace Handbrake
                             int n = data_chpt.Rows.Add();
                             data_chpt.Rows[n].Cells[0].Value = (i + 1);
                             data_chpt.Rows[n].Cells[1].Value = "Chapter " + (i + 1);
-                            data_chpt.Rows[n].Cells[0].ValueType = typeof (int);
-                            data_chpt.Rows[n].Cells[1].ValueType = typeof (string);
+                            data_chpt.Rows[n].Cells[0].ValueType = typeof(int);
+                            data_chpt.Rows[n].Cells[1].ValueType = typeof(string);
                             i++;
                         }
                     }
@@ -1210,7 +1241,7 @@ namespace Handbrake
                 case 2:
                     if (selectedTitle != null)
                     {
-                        duration = duration/selectedTitle.Fps;
+                        duration = duration / selectedTitle.Fps;
                         lbl_duration.Text = TimeSpan.FromSeconds(duration).ToString();
                     }
                     else
@@ -1259,7 +1290,7 @@ namespace Handbrake
                     if (selectedTitle != null)
                     {
                         drop_chapterStart.Text = "0";
-                        drop_chapterFinish.Text = (selectedTitle.Fps*selectedTitle.Duration.TotalSeconds).ToString();
+                        drop_chapterFinish.Text = (selectedTitle.Fps * selectedTitle.Duration.TotalSeconds).ToString();
                     }
                     return;
             }
@@ -1288,7 +1319,7 @@ namespace Handbrake
                 {
                     case 1:
                         if (
-                            !Path.GetExtension(DVD_Save.FileName).Equals(".mp4", 
+                            !Path.GetExtension(DVD_Save.FileName).Equals(".mp4",
                                                                          StringComparison.InvariantCultureIgnoreCase))
                             if (Properties.Settings.Default.useM4v)
                                 DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".m4v").Replace(".mkv", ".m4v");
@@ -1297,7 +1328,7 @@ namespace Handbrake
                         break;
                     case 2:
                         if (
-                            !Path.GetExtension(DVD_Save.FileName).Equals(".mkv", 
+                            !Path.GetExtension(DVD_Save.FileName).Equals(".mkv",
                                                                          StringComparison.InvariantCultureIgnoreCase))
                             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
                         break;
@@ -1409,8 +1440,8 @@ namespace Handbrake
 
                     CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                     double cqStep = Properties.Settings.Default.x264cqstep;
-                    double multiplier = 1.0/cqStep;
-                    double value = slider_videoQuality.Value*multiplier;
+                    double multiplier = 1.0 / cqStep;
+                    double value = slider_videoQuality.Value * multiplier;
 
                     switch (Properties.Settings.Default.x264cqstep.ToString(culture))
                     {
@@ -1431,7 +1462,7 @@ namespace Handbrake
                             break;
                     }
                     if (value < slider_videoQuality.Maximum)
-                        slider_videoQuality.Value = slider_videoQuality.Maximum - (int) value;
+                        slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
 
                     break;
                 case "VP3 (Theora)":
@@ -1474,7 +1505,7 @@ namespace Handbrake
         {
             // Work out the current RF value.
             double cqStep = _cachedCqStep;
-            double rfValue = 51.0 - slider_videoQuality.Value*cqStep;
+            double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
 
             // Change the maximum value for the slider
             switch (Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US")))
@@ -1501,11 +1532,11 @@ namespace Handbrake
 
             // Reset the CQ slider back to the previous value as close as possible
             double cqStepNew = Properties.Settings.Default.x264cqstep;
-            double rfValueCurrent = 51.0 - slider_videoQuality.Value*cqStepNew;
+            double rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
             while (rfValueCurrent < rfValue)
             {
                 slider_videoQuality.Value--;
-                rfValueCurrent = 51.0 - slider_videoQuality.Value*cqStepNew;
+                rfValueCurrent = 51.0 - slider_videoQuality.Value * cqStepNew;
             }
 
             // Cache the CQ step for the next calculation
@@ -1521,7 +1552,7 @@ namespace Handbrake
                     lbl_SliderValue.Text = "QP:" + (32 - slider_videoQuality.Value);
                     break;
                 case "H.264 (x264)":
-                    double rfValue = 51.0 - slider_videoQuality.Value*cqStep;
+                    double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
                     rfValue = Math.Round(rfValue, 2);
                     lbl_SliderValue.Text = "RF:" + rfValue.ToString(new CultureInfo("en-US"));
                     break;
@@ -1723,7 +1754,7 @@ namespace Handbrake
                 if (drp_dvdtitle.Items.Count == 0)
                 {
                     MessageBox.Show(
-                        "No Title(s) found. \n\nYour Source may be copy protected, badly mastered or in a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).", 
+                        "No Title(s) found. \n\nYour Source may be copy protected, badly mastered or in a format which HandBrake does not support. \nPlease refer to the Documentation and FAQ (see Help Menu).",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                     sourcePath = string.Empty;
                 }
@@ -1734,7 +1765,7 @@ namespace Handbrake
             }
             catch (Exception exc)
             {
-                MessageBox.Show("frmMain.cs - updateUIafterScan " + exc, "Error", MessageBoxButtons.OK, 
+                MessageBox.Show("frmMain.cs - updateUIafterScan " + exc, "Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
                 EnableGUI();
             }
@@ -1907,21 +1938,25 @@ namespace Handbrake
                     return;
                 }
 
-                List<DriveInformation> drives = Main.GetDrives();
+                drives = Main.GetDrives();
 
-                if (drives.Count == 0)
+                List<ToolStripMenuItem> menuItems = new List<ToolStripMenuItem>();
+                foreach (DriveInformation drive in drives)
                 {
-                    mnu_dvd_drive.Text = "[No DVD Drive Ready]";
-                    return;
+                    ToolStripMenuItem menuItem = new ToolStripMenuItem();
+                    menuItem.Name = drive.ToString();
+                    menuItem.Text = drive.RootDirectory + " (" + drive.VolumeLabel + ")";
+                    menuItem.Image = Resources.disc_small;
+                    menuItem.Click += new EventHandler(mnu_dvd_drive_Click);
+                    menuItems.Add(menuItem);
                 }
 
-                this.dvdDrivePath = drives[0].RootDirectory;
-                this.dvdDriveLabel = drives[0].VolumeLabel;
-                mnu_dvd_drive.Text = this.dvdDrivePath + " (" + this.dvdDriveLabel + ")";
+                foreach (ToolStripMenuItem item in menuItems)
+                    btn_source.DropDownItems.Add(item);
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-                mnu_dvd_drive.Text = "[No DVD Drive Ready / Found]";
+                MessageBox.Show("Error in SetDriveSelectionMenuItem" + exc);
             }
         }
 
@@ -1932,8 +1967,8 @@ namespace Handbrake
         {
             if (presetHandler.CheckIfPresetsAreOutOfDate())
                 if (!Properties.Settings.Default.presetNotification)
-                    MessageBox.Show(splash, 
-                                    "HandBrake has determined your built-in presets are out of date... These presets will now be updated.", 
+                    MessageBox.Show(splash,
+                                    "HandBrake has determined your built-in presets are out of date... These presets will now be updated.",
                                     "Preset Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             presetHandler.GetPresetPanel(ref treeView_presets);
@@ -1977,7 +2012,7 @@ namespace Handbrake
             {
                 DialogResult result =
                     MessageBox.Show(
-                        "HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?", 
+                        "HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
                         "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (result == DialogResult.No)
                     e.Cancel = true;
@@ -2017,12 +2052,12 @@ namespace Handbrake
         /// <param name="CurrentFps"></param>
         /// <param name="AverageFps"></param>
         /// <param name="TimeRemaining"></param>
-        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, 
+        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete,
                                             float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new EncodeProgressEventHandler(EncodeOnEncodeProgress), 
+                this.BeginInvoke(new EncodeProgressEventHandler(EncodeOnEncodeProgress),
                                  new[]
                                      {
                                          Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, 
@@ -2031,7 +2066,7 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text =
-                string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", 
+                string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ",
                               PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
 
