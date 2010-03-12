@@ -8,8 +8,10 @@ namespace Handbrake.Functions
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Net;
+    using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Windows.Forms;
@@ -151,7 +153,7 @@ namespace Handbrake.Functions
             foreach (DataGridViewRow item in dataChpt.Rows)
             {
                 string name;
-                chapterMap.TryGetValue((int) item.Cells[0].Value, out name);
+                chapterMap.TryGetValue((int)item.Cells[0].Value, out name);
                 item.Cells[1].Value = name ?? "Chapter " + item.Cells[0].Value;
             }
 
@@ -175,6 +177,12 @@ namespace Handbrake.Functions
             {
                 // Get the Source Name 
                 string sourceName = mainWindow.SourceName;
+
+                if (Properties.Settings.Default.AutoNameRemoveUnderscore)
+                    sourceName = sourceName.Replace("_", " ");
+
+                if (Properties.Settings.Default.AutoNameTitleCase)
+                    sourceName = TitleCase(sourceName);
 
                 // Get the Selected Title Number
                 string[] titlesplit = mainWindow.drp_dvdtitle.Text.Split(' ');
@@ -254,9 +262,9 @@ namespace Handbrake.Functions
             Process cliProcess = new Process();
             ProcessStartInfo handBrakeCli = new ProcessStartInfo("HandBrakeCLI.exe", " -u -v0")
                                                 {
-                                                    UseShellExecute = false, 
-                                                    RedirectStandardError = true, 
-                                                    RedirectStandardOutput = true, 
+                                                    UseShellExecute = false,
+                                                    RedirectStandardError = true,
+                                                    RedirectStandardOutput = true,
                                                     CreateNoWindow = true
                                                 };
             cliProcess.StartInfo = handBrakeCli;
@@ -471,7 +479,7 @@ namespace Handbrake.Functions
                                                                           UpdateCheckInformation info =
                                                                               new UpdateCheckInformation
                                                                                   {
-                                                                                      NewVersionAvailable = false, 
+                                                                                      NewVersionAvailable = false,
                                                                                       BuildInformation = null
                                                                                   };
                                                                           callback(new UpdateCheckResult(debug, info));
@@ -486,7 +494,7 @@ namespace Handbrake.Functions
                                                                       UpdateCheckInformation info2 =
                                                                           new UpdateCheckInformation
                                                                               {
-                                                                                  NewVersionAvailable = latest > current, 
+                                                                                  NewVersionAvailable = latest > current,
                                                                                   BuildInformation = reader
                                                                               };
                                                                       callback(new UpdateCheckResult(debug, info2));
@@ -509,7 +517,7 @@ namespace Handbrake.Functions
         /// </returns>
         public static UpdateCheckInformation EndCheckForUpdates(IAsyncResult result)
         {
-            UpdateCheckResult checkResult = (UpdateCheckResult) result;
+            UpdateCheckResult checkResult = (UpdateCheckResult)result;
             return checkResult.Result;
         }
 
@@ -728,7 +736,7 @@ namespace Handbrake.Functions
                     drives.Add(new DriveInformation
                                    {
                                        Id = id,
-                                       VolumeLabel = curDrive.VolumeLabel, 
+                                       VolumeLabel = curDrive.VolumeLabel,
                                        RootDirectory = curDrive.RootDirectory + "VIDEO_TS"
                                    });
                     id++;
@@ -736,5 +744,21 @@ namespace Handbrake.Functions
             }
             return drives;
         }
+
+        public static string TitleCase(string input)
+        {
+            string[] tokens = input.Split(' ');
+            StringBuilder sb = new StringBuilder(input.Length);
+            foreach (string s in tokens)
+            {
+                sb.Append(s[0].ToString().ToUpper());
+                sb.Append(s.Substring(1).ToLower());
+                sb.Append(" ");
+            }
+
+            return sb.ToString().Trim();
+        }
+
+
     }
 }

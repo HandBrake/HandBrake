@@ -500,5 +500,29 @@ namespace Handbrake.Properties {
                 this["showCliForInGuiEncodeStatus"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoNameTitleCase {
+            get {
+                return ((bool)(this["AutoNameTitleCase"]));
+            }
+            set {
+                this["AutoNameTitleCase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoNameRemoveUnderscore {
+            get {
+                return ((bool)(this["AutoNameRemoveUnderscore"]));
+            }
+            set {
+                this["AutoNameRemoveUnderscore"] = value;
+            }
+        }
     }
 }

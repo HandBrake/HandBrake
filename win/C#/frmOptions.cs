@@ -81,6 +81,12 @@ namespace Handbrake
             if (Properties.Settings.Default.useM4v)
                 check_m4v.CheckState = CheckState.Checked;
 
+            // Remove Underscores
+            check_removeUnderscores.Checked = Properties.Settings.Default.AutoNameRemoveUnderscore;
+
+            // Title case
+            check_TitleCase.Checked = Properties.Settings.Default.AutoNameTitleCase;
+
             // #############################
             // Picture Tab
             // #############################
@@ -263,6 +269,16 @@ namespace Handbrake
         private void check_m4v_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.useM4v = check_m4v.Checked;
+        }
+
+        private void check_removeUnderscores_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoNameRemoveUnderscore = check_removeUnderscores.Checked;
+        }
+
+        private void check_TitleCase_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoNameTitleCase = check_TitleCase.Checked;
         }
 
         #endregion
@@ -471,5 +487,6 @@ namespace Handbrake
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
             this.Close();
         }
+
     }
 }

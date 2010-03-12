@@ -40,6 +40,8 @@ namespace Handbrake
             this.drp_completeOption = new System.Windows.Forms.ComboBox();
             this.tab_options = new System.Windows.Forms.TabControl();
             this.tab_general = new System.Windows.Forms.TabPage();
+            this.check_TitleCase = new System.Windows.Forms.CheckBox();
+            this.check_removeUnderscores = new System.Windows.Forms.CheckBox();
             this.check_growlEncode = new System.Windows.Forms.CheckBox();
             this.check_GrowlQueue = new System.Windows.Forms.CheckBox();
             this.check_m4v = new System.Windows.Forms.CheckBox();
@@ -200,6 +202,8 @@ namespace Handbrake
             // 
             // tab_general
             // 
+            this.tab_general.Controls.Add(this.check_TitleCase);
+            this.tab_general.Controls.Add(this.check_removeUnderscores);
             this.tab_general.Controls.Add(this.check_growlEncode);
             this.tab_general.Controls.Add(this.check_GrowlQueue);
             this.tab_general.Controls.Add(this.check_m4v);
@@ -224,6 +228,33 @@ namespace Handbrake
             this.tab_general.TabIndex = 3;
             this.tab_general.Text = "General";
             this.tab_general.UseVisualStyleBackColor = true;
+            // 
+            // check_TitleCase
+            // 
+            this.check_TitleCase.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_TitleCase.AutoSize = true;
+            this.check_TitleCase.Location = new System.Drawing.Point(297, 279);
+            this.check_TitleCase.Name = "check_TitleCase";
+            this.check_TitleCase.Size = new System.Drawing.Size(151, 17);
+            this.check_TitleCase.TabIndex = 101;
+            this.check_TitleCase.Text = "Change case to Title Case";
+            this.ToolTip.SetToolTip(this.check_TitleCase, "For the {source} option:.\r\nChange the source name to Title Case\r\ne.g \"MOVIE NAME\"" +
+                    " to \"Movie Name\"\r\n");
+            this.check_TitleCase.UseVisualStyleBackColor = true;
+            this.check_TitleCase.CheckedChanged += new System.EventHandler(this.check_TitleCase_CheckedChanged);
+            // 
+            // check_removeUnderscores
+            // 
+            this.check_removeUnderscores.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.check_removeUnderscores.AutoSize = true;
+            this.check_removeUnderscores.Location = new System.Drawing.Point(108, 279);
+            this.check_removeUnderscores.Name = "check_removeUnderscores";
+            this.check_removeUnderscores.Size = new System.Drawing.Size(183, 17);
+            this.check_removeUnderscores.TabIndex = 100;
+            this.check_removeUnderscores.Text = "Remove Underscores from Name";
+            this.ToolTip.SetToolTip(this.check_removeUnderscores, "For the {source} option:\r\nRemove any underscores from the source name.\r\n\r\n");
+            this.check_removeUnderscores.UseVisualStyleBackColor = true;
+            this.check_removeUnderscores.CheckedChanged += new System.EventHandler(this.check_removeUnderscores_CheckedChanged);
             // 
             // check_growlEncode
             // 
@@ -259,7 +290,7 @@ namespace Handbrake
             // 
             this.check_m4v.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.check_m4v.AutoSize = true;
-            this.check_m4v.Location = new System.Drawing.Point(108, 279);
+            this.check_m4v.Location = new System.Drawing.Point(108, 303);
             this.check_m4v.Name = "check_m4v";
             this.check_m4v.Size = new System.Drawing.Size(319, 17);
             this.check_m4v.TabIndex = 82;
@@ -1567,5 +1598,7 @@ namespace Handbrake
         private System.Windows.Forms.Label label33;
         internal System.Windows.Forms.CheckBox check_clearOldLogs;
         internal System.Windows.Forms.CheckBox check_showCliForInGUIEncode;
+        internal System.Windows.Forms.CheckBox check_TitleCase;
+        internal System.Windows.Forms.CheckBox check_removeUnderscores;
     }
 }
