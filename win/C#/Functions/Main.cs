@@ -745,6 +745,15 @@ namespace Handbrake.Functions
             return drives;
         }
 
+        /// <summary>
+        /// Change a string to Title Case/
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// A string in title case.
+        /// </returns>
         public static string TitleCase(string input)
         {
             string[] tokens = input.Split(' ');
@@ -758,7 +767,5 @@ namespace Handbrake.Functions
 
             return sb.ToString().Trim();
         }
-
-
     }
 }
