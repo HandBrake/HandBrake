@@ -1659,35 +1659,45 @@ static void hb_ts_stream_init(hb_stream_t *stream)
 static off_t align_to_next_packet(hb_stream_t *stream)
 {
     uint8_t buf[MAX_HOLE];
-	off_t pos = 0;
+    off_t pos = 0;
     off_t start = ftello(stream->file_handle);
+    off_t orig;
 
     if ( start >= stream->packetsize ) {
         start -= stream->packetsize;
         fseeko(stream->file_handle, start, SEEK_SET);
     }
+    orig = start;
 
-    if (fread(buf, sizeof(buf), 1, stream->file_handle) == 1)
-	{
-        const uint8_t *bp = buf;
-        int i;
-
-        for ( i = sizeof(buf); --i >= 0; ++bp )
+    while (1)
+    {
+        if (fread(buf, sizeof(buf), 1, stream->file_handle) == 1)
         {
-            if ( have_ts_sync( bp, stream->packetsize ) )
+            const uint8_t *bp = buf;
+            int i;
+
+            for ( i = sizeof(buf) - 8 * stream->packetsize; --i >= 0; ++bp )
             {
+                if ( have_ts_sync( bp, stream->packetsize ) )
+                {
+                    break;
+                }
+            }
+            if ( i >= 0 )
+            {
+                pos = ( bp - buf ) - stream->packetsize + 188;
                 break;
             }
+            fseeko(stream->file_handle, -8 * stream->packetsize, SEEK_CUR);
+            start = ftello(stream->file_handle);
         }
-        if ( i >= 0 )
+        else
         {
-            pos = ( bp - buf ) - stream->packetsize + 188;
-            if ( pos < 0 )
-                pos = 0;
+            return 0;
         }
-	}
+    }
     fseeko(stream->file_handle, start+pos, SEEK_SET);
-	return pos;
+    return start - orig + pos;
 }
 
 
