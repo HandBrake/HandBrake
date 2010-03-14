@@ -347,7 +347,8 @@ static int MP4Init( hb_mux_object_t * m )
                     (const uint8_t*)(audio->config.out.name),
                     strlen(audio->config.out.name));
             }
-        } else {
+        } else if( audio->config.out.codec == HB_ACODEC_FAAC ||
+                   audio->config.out.codec == HB_ACODEC_CA_AAC ) {
             mux_data->track = MP4AddAudioTrack(
                 m->file,
                 audio->config.out.samplerate, 1024, MP4_MPEG4_AUDIO_TYPE );
@@ -373,6 +374,32 @@ static int MP4Init( hb_mux_object_t * m )
             MP4SetTrackESConfiguration(
                 m->file, mux_data->track,
                 audio->priv.config.aac.bytes, audio->priv.config.aac.length );
+
+            /* Set the correct number of channels for this track */
+             MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels", (uint16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown));
+        } else if( audio->config.out.codec == HB_ACODEC_LAME ) {
+            mux_data->track = MP4AddAudioTrack(
+                m->file,
+                audio->config.out.samplerate, 1152, MP4_MPEG2_AUDIO_TYPE );
+
+            /* Tune track chunk duration */
+            MP4TuneTrackDurationPerChunk( m, mux_data->track );
+
+            if (audio->config.out.name == NULL) {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const uint8_t*)"Stereo", strlen("Stereo"));
+            }
+            else {
+                MP4SetTrackBytesProperty(
+                    m->file, mux_data->track,
+                    "udta.name.value",
+                    (const uint8_t*)(audio->config.out.name),
+                    strlen(audio->config.out.name));
+            }
+
+            MP4SetAudioProfileLevel( m->file, 0x0F );
 
             /* Set the correct number of channels for this track */
              MP4SetTrackIntegerProperty(m->file, mux_data->track, "mdia.minf.stbl.stsd.mp4a.channels", (uint16_t)HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown));

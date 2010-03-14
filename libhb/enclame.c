@@ -48,10 +48,19 @@ int enclameInit( hb_work_object_t * w, hb_job_t * job )
     hb_log( "enclame: opening libmp3lame" );
 
     pv->lame = lame_init();
-    lame_set_brate( pv->lame, audio->config.out.bitrate );
+    // use ABR
+    lame_set_VBR( pv->lame, vbr_abr );
+    lame_set_VBR_mean_bitrate_kbps( pv->lame, audio->config.out.bitrate );
     lame_set_in_samplerate( pv->lame, audio->config.out.samplerate );
     lame_set_out_samplerate( pv->lame, audio->config.out.samplerate );
     lame_init_params( pv->lame );
+    // Lame's default encoding mode is JOINT_STEREO.  This subtracts signal
+    // that is "common" to left and right (within some threshold) and encodes
+    // it separately.  This improves quality at low bitrates, but hurts 
+    // imaging (channel separation) at higher bitrates.  So if the bitrate
+    // is suffeciently high, use regular STEREO mode.
+    if ( audio->config.out.bitrate >= 128 )
+        lame_set_mode( pv->lame, STEREO );
 
     pv->input_samples = 1152 * 2;
     pv->output_bytes = LAME_MAXMP3BUFFER;

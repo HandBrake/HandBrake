@@ -1384,7 +1384,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	}
 	if (container == HB_MUX_MP4)
 	{
-		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_LAME, TRUE);
 		grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, TRUE);
 		grey_combo_box_item(builder, "VideoEncoder", HB_VCODEC_THEORA, TRUE);
 	}
@@ -4063,12 +4062,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		if (mux == HB_MUX_MP4)
 		{ 
 			mux_s = "MP4";
-			// mp4/mp3|vorbis combination is not supported.
-			if (codec == HB_ACODEC_LAME)
-			{
-				a_unsup = "MP3";
-				codec = HB_ACODEC_FAAC;
-			}
+			// mp4/vorbis|DTS combination is not supported.
 			if (codec == HB_ACODEC_VORBIS)
 			{
 				a_unsup = "Vorbis";
@@ -4517,8 +4511,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			}
 		}
 		if ((job->mux == HB_MUX_MP4) && 
-			((audio.out.codec & HB_ACODEC_LAME) ||
-			(audio.out.codec & HB_ACODEC_DCA) ||
+			((audio.out.codec & HB_ACODEC_DCA) ||
 			(audio.out.codec & HB_ACODEC_VORBIS)))
 		{
 			// mp4/mp3|dts|vorbis combination is not supported.
