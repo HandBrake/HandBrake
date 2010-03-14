@@ -546,11 +546,8 @@ IoRedirect(signal_user_data_t *ud)
 	g_free(config);
 	// Set encoding to raw.
 	g_io_channel_set_encoding (ud->activity_log, NULL, NULL);
-#if !defined(_WIN32)
-	stderr->_fileno = pfd[1];
-#else
-	stderr->_file = pfd[1];
-#endif
+	// redirect stderr to the writer end of the pipe
+	dup2(pfd[1], /*stderr*/2);
 	setvbuf(stderr, NULL, _IONBF, 0);
 	channel = g_io_channel_unix_new (pfd[0]);
 	// I was getting an this error:
