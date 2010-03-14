@@ -6068,7 +6068,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="hbox70">
+                  <object class="GtkHBox" id="live_preview_box">
                     <property name="visible">True</property>
                     <property name="spacing">5</property>
                     <child>
@@ -6152,7 +6152,7 @@ The classic deinterlace filter is applied to all frames. Frames that are not int
                     <property name="visible">True</property>
                     <property name="spacing">10</property>
                     <child>
-                      <object class="GtkHBox" id="hbox60">
+                      <object class="GtkHBox" id="live_preview_duration_box">
                         <property name="visible">True</property>
                         <property name="spacing">2</property>
                         <child>

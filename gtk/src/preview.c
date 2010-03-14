@@ -62,6 +62,7 @@ struct preview_s
 	gint encode_frame;
 	gint live_id;
 	gchar *current;
+	gint live_enabled;
 };
 
 #if defined(_ENABLE_GST)
@@ -81,6 +82,9 @@ ghb_screen_par(signal_user_data_t *ud, gint *par_n, gint *par_d)
 	GstElement *xover;
 	GObjectClass *klass;
 	GParamSpec *pspec;
+
+	if (!ud->preview->live_enabled)
+		goto fail;
 
 	g_value_init(&disp_par, GST_TYPE_FRACTION);
 	gst_value_set_fraction(&disp_par, 1, 1);
@@ -169,7 +173,7 @@ ghb_preview_init(signal_user_data_t *ud)
 	//xover = gst_element_factory_make("xvimagesink", "xover");
 	//xover = gst_element_factory_make("ximagesink", "xover");
 	xover = gst_element_factory_make("gconfvideosink", "xover");
-	if (xover == NULL)
+	if (ud->preview->play == NULL || xover == NULL)
 	{
 		GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
 		gtk_widget_hide (widget);
@@ -177,16 +181,19 @@ ghb_preview_init(signal_user_data_t *ud)
 		gtk_widget_hide (widget);
 		return;
 	}
+	else
+	{
 
-	g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
-	g_object_set(ud->preview->play, "subtitle-font-desc", 
-				"sans bold 20", NULL);
-	//g_object_set(G_OBJECT(xover), "force-aspect-ratio", TRUE, NULL);
+		g_object_set(G_OBJECT(ud->preview->play), "video-sink", xover, NULL);
+		g_object_set(ud->preview->play, "subtitle-font-desc", 
+					"sans bold 20", NULL);
 
-	bus = gst_pipeline_get_bus(GST_PIPELINE(ud->preview->play));
-	gst_bus_add_watch(bus, live_preview_cb, ud);
-	gst_bus_set_sync_handler(bus, create_window, ud->preview);
-	gst_object_unref(bus);
+		bus = gst_pipeline_get_bus(GST_PIPELINE(ud->preview->play));
+		gst_bus_add_watch(bus, live_preview_cb, ud);
+		gst_bus_set_sync_handler(bus, create_window, ud->preview);
+		gst_object_unref(bus);
+		ud->preview->live_enabled = 1;
+	}
 #else
 	widget = GHB_WIDGET(ud->builder, "live_preview_box");
 	gtk_widget_hide (widget);
@@ -445,6 +452,9 @@ live_preview_start(signal_user_data_t *ud)
 	GtkImage *img;
 	gchar *uri;
 
+	if (!ud->preview->live_enabled)
+		return;
+
 	img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
 	if (!ud->preview->encoded[ud->preview->frame])
 	{
@@ -468,6 +478,9 @@ live_preview_pause(signal_user_data_t *ud)
 {
 	GtkImage *img;
 
+	if (!ud->preview->live_enabled)
+		return;
+
 	img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
 	gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
 	gst_element_set_state(ud->preview->play, GST_STATE_PAUSED);
@@ -480,6 +493,9 @@ live_preview_stop(signal_user_data_t *ud)
 {
 	GtkImage *img;
 	GtkRange *progress;
+
+	if (!ud->preview->live_enabled)
+		return;
 
 	img = GTK_IMAGE(GHB_WIDGET(ud->builder, "live_preview_play_image"));
 	gtk_image_set_from_stock(img, "gtk-media-play", GTK_ICON_SIZE_BUTTON);
@@ -605,6 +621,9 @@ ghb_live_preview_progress(signal_user_data_t *ud)
 	GstFormat fmt = GST_FORMAT_TIME;
 	gint64 len = -1, pos = -1;
 
+	if (!ud->preview->live_enabled)
+		return;
+
 	if (ud->preview->state != PREVIEW_STATE_LIVE || ud->preview->seek_lock)
 		return;
 
@@ -653,6 +672,9 @@ live_preview_seek_cb(GtkWidget *widget, signal_user_data_t *ud)
 #if defined(_ENABLE_GST)
 	gdouble dval;
 	gint64 pos;
+
+	if (!ud->preview->live_enabled)
+		return;
 
 	if (ud->preview->progress_lock)
 		return;
@@ -757,6 +779,9 @@ delayed_expose_cb(signal_user_data_t *ud)
 	GstElement *vsink;
 	GstXOverlay *xover;
 
+	if (!ud->preview->live_enabled)
+		return FALSE;
+
 	g_object_get(ud->preview->play, "video-sink", &vsink, NULL);
 	if (vsink == NULL)
 		return FALSE;
@@ -780,7 +805,7 @@ preview_expose_cb(
 	signal_user_data_t *ud)
 {
 #if defined(_ENABLE_GST)
-	if (ud->preview->state == PREVIEW_STATE_LIVE)
+	if (ud->preview->live_enabled && ud->preview->state == PREVIEW_STATE_LIVE)
 	{
 		if (GST_STATE(ud->preview->play) >= GST_STATE_PAUSED)
 		{
