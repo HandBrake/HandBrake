@@ -111,7 +111,7 @@ static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
 
     if ( ( ( in + 2 ) & mask ) == ( track->mf.out & mask ) )
     {
-        if ( track->mf.flen >= 1024 )
+        if ( track->mf.flen >= 256 )
         {
             mux->rdy = mux->allRdy;
         }
