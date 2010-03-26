@@ -609,8 +609,8 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         
         if( data->store_previews )
         {
-            hb_get_tempory_filename( data->h, filename, "%" PRIxPTR "%d",
-                                     (intptr_t)title, i );
+            hb_get_tempory_filename( data->h, filename, "%d_%d_%d",
+                                     hb_get_instance_id(data->h), title->index, i );
 
             file_preview = fopen( filename, "wb" );
             if( file_preview )

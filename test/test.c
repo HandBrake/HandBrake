@@ -213,6 +213,7 @@ int main( int argc, char ** argv )
                      "date.\n" );
         }
         hb_close( &h );
+        hb_global_close();
         return 0;
     }
 
@@ -324,6 +325,7 @@ int main( int argc, char ** argv )
 
     /* Clean up */
     hb_close( &h );
+    hb_global_close();
     if( input )  free( input );
     if( output ) free( output );
     if( format ) free( format );

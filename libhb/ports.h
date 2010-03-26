@@ -30,9 +30,9 @@ int      hb_get_cpu_count();
 int hb_dvd_region(char *device, int *region_mask);
 
 /************************************************************************
- * Files utils
+ * File utils
  ***********************************************************************/
-void hb_get_tempory_directory( hb_handle_t * h, char path[512] );
+void hb_get_temporary_directory( char path[512] );
 void hb_get_tempory_filename( hb_handle_t *, char name[1024],
                               char * fmt, ... );
 void hb_mkdir( char * name );

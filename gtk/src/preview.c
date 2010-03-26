@@ -533,8 +533,6 @@ ghb_live_reset(signal_user_data_t *ud)
 		ghb_set_preview_image(ud);
 }
 
-extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
-
 G_MODULE_EXPORT void
 live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {

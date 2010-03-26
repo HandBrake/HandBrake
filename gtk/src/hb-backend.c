@@ -1095,14 +1095,14 @@ get_amix_value(gint val)
 static hb_handle_t * h_scan = NULL;
 static hb_handle_t * h_queue = NULL;
 
-extern void hb_get_tempory_directory(hb_handle_t *h, char path[512]);
+extern void hb_get_temporary_directory(char path[512]);
 
 gchar*
 ghb_get_tmp_dir()
 {
 	char dir[512];
 
-	hb_get_tempory_directory(h_scan, dir);
+	hb_get_temporary_directory(dir);
 	return g_strdup(dir);
 }
 
@@ -1111,7 +1111,7 @@ ghb_hb_cleanup(gboolean partial)
 {
 	char dir[512];
 
-	hb_get_tempory_directory(h_scan, dir);
+	hb_get_temporary_directory(dir);
 	del_tree(dir, !partial);
 }
 
@@ -2948,6 +2948,7 @@ ghb_backend_close()
 {
 	hb_close(&h_queue);
 	hb_close(&h_scan);
+	hb_global_close();
 }
 
 void ghb_backend_scan_stop()

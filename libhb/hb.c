@@ -3,6 +3,8 @@
 
 struct hb_handle_s
 {
+    int            id;
+    
     /* The "Check for update" thread */
     int            build;
     char           version[32];
@@ -49,6 +51,7 @@ struct hb_handle_s
 
 hb_lock_t *hb_avcodec_lock;
 hb_work_object_t * hb_objects = NULL;
+int hb_instance_counter = 0;
 int hb_process_initialized = 0;
 
 static void thread_func( void * );
@@ -95,16 +98,16 @@ void hb_register( hb_work_object_t * w )
  */
 hb_handle_t * hb_init( int verbose, int update_check )
 {
-	if (!hb_process_initialized)
-	{
+    if (!hb_process_initialized)
+    {
 #ifdef USE_PTHREAD
 #if defined( _WIN32 ) || defined( __MINGW32__ )
-		pthread_win32_process_attach_np();
+        pthread_win32_process_attach_np();
 #endif
 #endif
-		hb_process_initialized =1;
-	}
-	
+        hb_process_initialized =1;
+    }
+    
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
     uint64_t      date;
 
@@ -112,7 +115,9 @@ hb_handle_t * hb_init( int verbose, int update_check )
     global_verbosity_level = verbose;
     if( verbose )
         putenv( "HB_DEBUG=1" );
-
+    
+    h->id = hb_instance_counter++;
+    
     /* Check for an update on the website if asked to */
     h->build = -1;
 
@@ -194,7 +199,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
 #ifdef __APPLE__
 	hb_register( &hb_encca_aac );
 #endif
-
+    
     return h;
 }
 
@@ -215,6 +220,8 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     {
         putenv( "HB_DEBUG=1" );
     }
+
+    h->id = hb_instance_counter++;
 
     /* Check for an update on the website if asked to */
     h->build = -1;
@@ -356,7 +363,7 @@ void hb_remove_previews( hb_handle_t * h )
     struct dirent * entry;
 
     memset( dirname, 0, 1024 );
-    hb_get_tempory_directory( h, dirname );
+    hb_get_temporary_directory( dirname );
     dir = opendir( dirname );
     if (dir == NULL) return;
 
@@ -370,7 +377,7 @@ void hb_remove_previews( hb_handle_t * h )
         for( i = 0; i < count; i++ )
         {
             title = hb_list_item( h->list_title, i );
-            len = snprintf( filename, 1024, "%" PRIxPTR, (intptr_t) title );
+            len = snprintf( filename, 1024, "%d_%d", h->id, title->index );
             if (strncmp(entry->d_name, filename, len) == 0)
             {
                 snprintf( filename, 1024, "%s/%s", dirname, entry->d_name );
@@ -461,8 +468,8 @@ void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
 
     memset( filename, 0, 1024 );
 
-    hb_get_tempory_filename( h, filename, "%" PRIxPTR "%d",
-                             (intptr_t) title, picture );
+    hb_get_tempory_filename( h, filename, "%d_%d_%d",
+                             h->id, title->index, picture );
 
     file = fopen( filename, "rb" );
     if( !file )
@@ -1314,6 +1321,7 @@ void hb_close( hb_handle_t ** _h )
     hb_title_t * title;
 
     h->die = 1;
+    
     hb_thread_close( &h->main_thread );
 
     while( ( title = hb_list_item( h->list_title, 0 ) ) )
@@ -1331,9 +1339,41 @@ void hb_close( hb_handle_t ** _h )
     hb_list_close( &h->jobs );
     hb_lock_close( &h->state_lock );
     hb_lock_close( &h->pause_lock );
+
     free( h );
     *_h = NULL;
+}
 
+/**
+ * Cleans up libhb at a process level. Call before the app closes. Removes preview directory.
+ */
+void hb_global_close()
+{
+    char dirname[1024];
+    DIR * dir;
+    struct dirent * entry;
+    
+    /* Find and remove temp folder */
+    memset( dirname, 0, 1024 );
+    hb_get_temporary_directory( dirname );
+
+    dir = opendir( dirname );
+    if (dir)
+    {
+        while( ( entry = readdir( dir ) ) )
+        {
+            char filename[1024];
+            if( entry->d_name[0] == '.' )
+            {
+                continue;
+            }
+            memset( filename, 0, 1024 );
+            snprintf( filename, 1023, "%s/%s", dirname, entry->d_name );
+            unlink( filename );
+        }
+        closedir( dir );
+        rmdir( dirname );
+    }
 }
 
 /**
@@ -1346,14 +1386,12 @@ static void thread_func( void * _h )
 {
     hb_handle_t * h = (hb_handle_t *) _h;
     char dirname[1024];
-    DIR * dir;
-    struct dirent * entry;
 
     h->pid = getpid();
 
     /* Create folder for temporary files */
     memset( dirname, 0, 1024 );
-    hb_get_tempory_directory( h, dirname );
+    hb_get_temporary_directory( dirname );
 
     hb_mkdir( dirname );
 
@@ -1420,30 +1458,17 @@ static void thread_func( void * _h )
         hb_snooze( 50 );
     }
 
+    if( h->scan_thread )
+    {
+        hb_scan_stop( h );
+        hb_thread_close( &h->scan_thread );
+    }
     if( h->work_thread )
     {
         hb_stop( h );
         hb_thread_close( &h->work_thread );
     }
-
-    /* Remove temp folder */
-    dir = opendir( dirname );
-    if (dir)
-    {
-        while( ( entry = readdir( dir ) ) )
-        {
-            char filename[1024];
-            if( entry->d_name[0] == '.' )
-            {
-                continue;
-            }
-            memset( filename, 0, 1024 );
-            snprintf( filename, 1023, "%s/%s", dirname, entry->d_name );
-            unlink( filename );
-        }
-        closedir( dir );
-        rmdir( dirname );
-    }
+    hb_remove_previews( h );
 }
 
 /**
@@ -1453,6 +1478,15 @@ static void thread_func( void * _h )
 int hb_get_pid( hb_handle_t * h )
 {
     return h->pid;
+}
+
+/**
+ * Returns the id for the given instance.
+ * @param h Handle to hb_handle_t
+ */
+int hb_get_instance_id( hb_handle_t * h )
+{
+    return h->id;
 }
 
 /**

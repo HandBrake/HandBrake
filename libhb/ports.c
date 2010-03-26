@@ -65,6 +65,7 @@
 #endif
 
 #include <stddef.h>
+#include <unistd.h>
 
 #include "hb.h"
 
@@ -225,9 +226,9 @@ int hb_get_cpu_count()
 }
 
 /************************************************************************
- * Get a tempory directory for HB
+ * Get a temporary directory for HB
  ***********************************************************************/
-void hb_get_tempory_directory( hb_handle_t * h, char path[512] )
+void hb_get_temporary_directory( char path[512] )
 {
     char base[512];
 
@@ -251,7 +252,7 @@ void hb_get_tempory_directory( hb_handle_t * h, char path[512] )
     if( base[strlen(base)-1] == '/' )
         base[strlen(base)-1] = '\0';
 
-    snprintf( path, 512, "%s/hb.%d", base, hb_get_pid( h ) );
+    snprintf( path, 512, "%s/hb.%d", base, getpid() );
 }
 
 /************************************************************************
@@ -262,7 +263,7 @@ void hb_get_tempory_filename( hb_handle_t * h, char name[1024],
 {
     va_list args;
 
-    hb_get_tempory_directory( h, name );
+    hb_get_temporary_directory( name );
     strcat( name, "/" );
 
     va_start( args, fmt );
