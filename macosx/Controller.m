@@ -5362,6 +5362,13 @@ the user is using "Custom" settings by determining the sender*/
     /* We will first verify that a lower track number has been selected before enabling each track
      * for example, make sure a track is selected for track 1 before enabling track 2, etc.
      */
+    
+    /* If the source has no audio then disable audio track 1 */
+    if (hb_list_count( fTitle->list_audio ) == 0)
+    {
+        [fAudLang1PopUp selectItemAtIndex:0];
+    }
+     
     if ([fAudLang1PopUp indexOfSelectedItem] == 0)
     {
         [fAudLang2PopUp setEnabled: NO];
@@ -5517,28 +5524,34 @@ the user is using "Custom" settings by determining the sender*/
     /* e.g. to find the first French track, pass in an NSString * of "Francais" */
     /* e.g. to find the first English 5.1 AC3 track, pass in an NSString * of "English (AC3) (5.1 ch)" */
     /* if no matching track is found, then selectIndexIfNotFound is used to choose which track to select instead */
-
-	if (searchPrefixString)
-	{
-
-        for( int i = 0; i < [sender numberOfItems]; i++ )
+    if (hb_list_count( fTitle->list_audio ) != 0)
+    {
+        if (searchPrefixString)
         {
-            /* Try to find the desired search string */
-            if ([[[sender itemAtIndex: i] title] hasPrefix:searchPrefixString])
+            
+            for( int i = 0; i < [sender numberOfItems]; i++ )
             {
-                [sender selectItemAtIndex: i];
-                return;
+                /* Try to find the desired search string */
+                if ([[[sender itemAtIndex: i] title] hasPrefix:searchPrefixString])
+                {
+                    [sender selectItemAtIndex: i];
+                    return;
+                }
             }
+            /* couldn't find the string, so select the requested "search string not found" item */
+            /* index of 0 means select the "none" item */
+            /* index of 1 means select the first audio track */
+            [sender selectItemAtIndex: selectIndexIfNotFound];
         }
-        /* couldn't find the string, so select the requested "search string not found" item */
-        /* index of 0 means select the "none" item */
-        /* index of 1 means select the first audio track */
-        [sender selectItemAtIndex: selectIndexIfNotFound];
-	}
+        else
+        {
+            /* if no search string is provided, then select the selectIndexIfNotFound item */
+            [sender selectItemAtIndex: selectIndexIfNotFound];
+        }
+    }
     else
     {
-        /* if no search string is provided, then select the selectIndexIfNotFound item */
-        [sender selectItemAtIndex: selectIndexIfNotFound];
+        [sender selectItemAtIndex: 0];
     }
 
 }
@@ -5633,6 +5646,12 @@ the user is using "Custom" settings by determining the sender*/
     
     /* make sure we have a selected title before continuing */
     if (fTitle == NULL) return;
+    /* make sure we have a source audio track before continuing */
+    if (hb_list_count( fTitle->list_audio ) == 0)
+    {
+        [sender selectItemAtIndex:0];
+        return;
+    }
     /* if the sender is the lanaguage popup and there is nothing in the codec popup, lets call
     * audioAddAudioTrackCodecs on the codec popup to populate it properly before moving on
     */
@@ -6039,7 +6058,7 @@ the user is using "Custom" settings by determining the sender*/
     }
     
     /* make sure we have a selected title before continuing */
-    if (fTitle == NULL) return;
+    if (fTitle == NULL || hb_list_count( fTitle->list_audio ) == 0) return;
     /* get the audio so we can find out what input rates are*/
     hb_audio_config_t * audio;
     audio = (hb_audio_config_t *) hb_list_audio_config_item( fTitle->list_audio, [audiotrackPopUp indexOfSelectedItem] - 1 );
