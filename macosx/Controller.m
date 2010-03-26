@@ -309,8 +309,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     [fPictureController release];
     [fApplicationIcon release];
 
-	hb_close(&fHandle);
+    hb_close(&fHandle);
     hb_close(&fQueueEncodeLibhb);
+    hb_global_close();
+
 }
 
 

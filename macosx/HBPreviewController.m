@@ -159,6 +159,8 @@
     
     [fPicturePreviews release];
     [fFullScreenWindow release];
+    
+    hb_close(&fPreviewLibhb);
 
     [super dealloc];
 }
