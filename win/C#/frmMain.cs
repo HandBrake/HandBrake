@@ -429,7 +429,7 @@ namespace Handbrake
 
         private void mnu_importMacPreset_Click(object sender, EventArgs e)
         {
-            importPreset();
+            ImportPreset();
         }
 
         private void btn_new_preset_Click(object sender, EventArgs e)
@@ -518,7 +518,7 @@ namespace Handbrake
 
         private void pmnu_import_Click(object sender, EventArgs e)
         {
-            importPreset();
+            ImportPreset();
         }
 
         private void pmnu_saveChanges_Click(object sender, EventArgs e)
@@ -698,7 +698,7 @@ namespace Handbrake
             }
         }
 
-        private void importPreset()
+        private void ImportPreset()
         {
             if (openPreset.ShowDialog() == DialogResult.OK)
             {
@@ -720,10 +720,6 @@ namespace Handbrake
                 else
                 {
                     PresetLoader.LoadPreset(this, parsed, parsed.PresetName, parsed.UsesPictureSettings);
-                    presetHandler.Add(parsed.PresetName,
-                                      QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
-                                      parsed.UsesPictureSettings);
-
                     if (presetHandler.Add(parsed.PresetName + " (Imported)",
                                           QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
                                           parsed.UsesPictureSettings))
@@ -1073,7 +1069,7 @@ namespace Handbrake
             drop_chapterFinish.Items.Clear();
 
             // If the dropdown is set to automatic nothing else needs to be done.
-            // Otheriwse if its not, title data has to be loased from parsing.
+            // Otheriwse if its not, title data has to be loaded from parsing.
             if (drp_dvdtitle.Text != "Automatic")
             {
                 selectedTitle = drp_dvdtitle.SelectedItem as Title;
@@ -1110,7 +1106,7 @@ namespace Handbrake
                     drop_chapterFinish.Text = drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString();
 
                 // Populate the Audio Channels Dropdown
-                AudioSettings.SetTrackList(selectedTitle);
+                AudioSettings.SetTrackList(selectedTitle, CurrentlySelectedPreset);
 
                 // Populate the Subtitles dropdown
                 Subtitles.SetSubtitleTrackAuto(selectedTitle.Subtitles.ToArray());

@@ -53,8 +53,8 @@ namespace Handbrake.Presets
                 if (!root.HasChildNodes)
                 {
                     MessageBox.Show(
-                        "The Preset file you selected appears to be invlaid or from an older version of HandBrake", 
-                        "Error", 
+                        "The Preset file you selected appears to be invlaid or from an older version of HandBrake",
+                        "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return null;
                 }
@@ -62,15 +62,15 @@ namespace Handbrake.Presets
             catch (Exception)
             {
                 MessageBox.Show(
-                    "The Preset file you selected appears to be invlaid or from an older version of HandBrake.\n\n Please note, if you are exporting from the MacGui you may need to rebuild your preset so that it uses the current preset plist format.\n The MacGui does not currently update user presets automatically.", 
-                    "Error", 
+                    "The Preset file you selected appears to be invlaid or from an older version of HandBrake.\n\n Please note, if you are exporting from the MacGui you may need to rebuild your preset so that it uses the current preset plist format.\n The MacGui does not currently update user presets automatically.",
+                    "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             // We'll query a query parser object and use it's public var structures to store all the data.
             // This will allow the preset loader logic to be used instead of writing custom logic just for this file.
             QueryParser queryParsed = new QueryParser();
-
+            string QualityMode = string.Empty;
             /***** Get the Audio Tracks *****/
             XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[1];
             ArrayList AudioInfo = new ArrayList();
@@ -113,14 +113,14 @@ namespace Handbrake.Presets
             /***** Get the rest of the settings. *****/
             XmlNode presetSettings = root.ChildNodes[2].ChildNodes[0].FirstChild;
             for (int i = 2; i < presetSettings.ChildNodes.Count; i += 2)
-                // Start from 2 to avoid the audio settings which we don't need.
+            // Start from 2 to avoid the audio settings which we don't need.
             {
                 string key = presetSettings.ChildNodes[i].InnerText;
                 string value = presetSettings.ChildNodes[i + 1].InnerText;
 
                 switch (key)
                 {
-                        // Output Settings
+                    // Output Settings
                     case "FileFormat":
                         queryParsed.Format = value;
                         break;
@@ -134,7 +134,7 @@ namespace Handbrake.Presets
                         queryParsed.IpodAtom = value == "1";
                         break;
 
-                        // Picture Settings
+                    // Picture Settings
                     case "PictureAutoCrop":
                         break;
                     case "PictureTopCrop":
@@ -163,7 +163,7 @@ namespace Handbrake.Presets
                         break;
 
 
-                        // Filters
+                    // Filters
                     case "PictureDeblock":
                         queryParsed.DeBlock = int.Parse(value);
                         break;
@@ -230,9 +230,9 @@ namespace Handbrake.Presets
                             queryParsed.DeTelecine = value;
                         break;
 
-                        // Video Tab
+                    // Video Tab
                     case "VideoAvgBitrate":
-                        queryParsed.Width = int.Parse(value);
+                        queryParsed.AverageVideoBitrate = value;
                         break;
                     case "VideoEncoder":
                         queryParsed.VideoEncoder = value;
@@ -246,7 +246,8 @@ namespace Handbrake.Presets
                     case "VideoQualitySlider":
                         queryParsed.VideoQuality = float.Parse(value);
                         break;
-                    case "VideoQualityType":
+                    case "VideoQualityType": // The Type of Quality Mode used
+                        QualityMode = value;
                         break;
                     case "VideoTargetSize":
                         queryParsed.VideoTargetSize = value;
@@ -258,17 +259,17 @@ namespace Handbrake.Presets
                         queryParsed.TwoPass = value == "1";
                         break;
 
-                        // Chapter Markers Tab
+                    // Chapter Markers Tab
                     case "ChapterMarkers":
                         queryParsed.ChapterMarkers = value == "1";
                         break;
 
-                        // Advanced x264 tab
+                    // Advanced x264 tab
                     case "x264Option":
                         queryParsed.H264Query = value;
                         break;
 
-                        // Preset Information
+                    // Preset Information
                     case "PresetBuildNumber":
                         queryParsed.PresetBuildNumber = int.Parse(value);
                         break;
@@ -292,6 +293,24 @@ namespace Handbrake.Presets
                         break;
                 }
             }
+
+            // Kill any Quality values we don't need.
+            switch (QualityMode)
+            {
+                case "0": // FileSize
+                    queryParsed.VideoQuality = -1;
+                    queryParsed.AverageVideoBitrate = null;
+                    break;
+                case "1": // Avg Bitrate
+                    queryParsed.VideoQuality = -1;
+                    queryParsed.VideoTargetSize = null;
+                    break;
+                case "2": // CQ
+                    queryParsed.AverageVideoBitrate = null;
+                    queryParsed.VideoTargetSize = null;
+                    break;
+            }
+
             return queryParsed;
         }
 
@@ -305,7 +324,7 @@ namespace Handbrake.Presets
 
             // Header
             Writer.WriteStartDocument();
-            Writer.WriteDocType("plist", "-//Apple//DTD PLIST 1.0//EN", 
+            Writer.WriteDocType("plist", "-//Apple//DTD PLIST 1.0//EN",
                                 @"http://www.apple.com/DTDs/PropertyList-1.0.dtd", null);
 
             Writer.WriteStartElement("plist");

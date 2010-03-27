@@ -9,7 +9,9 @@ namespace Handbrake.Controls
     using System.Collections;
     using System.Linq;
     using System.Windows.Forms;
+    using Functions;
     using Parsing;
+    using Presets;
     using AudioTrack = Model.AudioTrack;
 
     public partial class AudioPanel : UserControl
@@ -116,16 +118,43 @@ namespace Handbrake.Controls
         /// Set the Track list dropdown from the parsed title captured during the scan
         /// </summary>
         /// <param name="selectedTitle"></param>
-        public void SetTrackList(Title selectedTitle)
+        public void SetTrackList(Title selectedTitle, Preset preset)
         {
-            drp_audioTrack.Items.Clear();
-            drp_audioTrack.Items.Add("Automatic");
-            drp_audioTrack.Items.Add("None");
-            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+            if (selectedTitle.AudioTracks.Count == 0)
+            {
+                lv_audioList.Items.Clear();
+                drp_audioTrack.Items.Clear();
+                drp_audioTrack.Items.Add("None Found");
+                drp_audioTrack.SelectedIndex = 0;
+                return;
+            }
+            else
+            {
+                drp_audioTrack.Items.Clear();
+                drp_audioTrack.Items.Add("Automatic");
+                drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+
+                if (lv_audioList.Items.Count == 0 && preset != null)
+                {
+                    QueryParser parsed = QueryParser.Parse(preset.Query);
+                    foreach (AudioTrack audioTrack in parsed.AudioInformation)
+                    {
+                        ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
+                        newTrack.SubItems.Add(audioTrack.Track);
+                        newTrack.SubItems.Add(audioTrack.Encoder);
+                        newTrack.SubItems.Add(audioTrack.MixDown);
+                        newTrack.SubItems.Add(audioTrack.SampleRate);
+                        newTrack.SubItems.Add(audioTrack.Bitrate);
+                        newTrack.SubItems.Add(audioTrack.DRC.ToString());
+                        lv_audioList.Items.Add(newTrack);
+                    }
+                }
+
+            }
 
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
             if (Properties.Settings.Default.NativeLanguage == "Any")
-                drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
+                drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 2 ? 1 : 0;
             else
             {
                 if (Properties.Settings.Default.DubAudio) // "Dub Foreign language audio" 
@@ -155,14 +184,14 @@ namespace Handbrake.Controls
                 }
                 else
                     drp_audioTrack.SelectedIndex = drp_audioTrack.Items.Count >= 3 ? 2 : 0;
-                        // "Use Foreign language audio and Subtitles"
+                // "Use Foreign language audio and Subtitles"
             }
         }
 
         // Control and ListView
         private void controlChanged(object sender, EventArgs e)
         {
-            Control ctl = (Control) sender;
+            Control ctl = (Control)sender;
 
             switch (ctl.Name)
             {
@@ -215,7 +244,7 @@ namespace Handbrake.Controls
                     double value;
                     if (tb_drc.Value == 0) value = 0;
                     else
-                        value = ((tb_drc.Value - 1)/10.0) + 1;
+                        value = ((tb_drc.Value - 1) / 10.0) + 1;
 
                     lbl_drc.Text = value.ToString();
 
@@ -245,7 +274,7 @@ namespace Handbrake.Controls
                 int drcCalculated;
                 double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text, out drcValue);
                 if (drcValue != 0)
-                    drcValue = ((drcValue*10) + 1) - 10;
+                    drcValue = ((drcValue * 10) + 1) - 10;
                 int.TryParse(drcValue.ToString(), out drcCalculated);
                 tb_drc.Value = drcCalculated;
                 lbl_drc.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text;
@@ -260,9 +289,16 @@ namespace Handbrake.Controls
         // Track Controls
         private void btn_addAudioTrack_Click(object sender, EventArgs e)
         {
+            if (drp_audioTrack.Text == "None Found")
+            {
+                MessageBox.Show("Your source appears to have no audio tracks that HandBrake supports.", "Warning",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             double value = 0;
             if (tb_drc.Value != 0)
-                value = ((tb_drc.Value - 1)/10.0) + 1;
+                value = ((tb_drc.Value - 1) / 10.0) + 1;
 
             // Create a new row for the Audio list based on the currently selected items in the dropdown.
             ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
