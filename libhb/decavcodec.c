@@ -286,9 +286,17 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         int parser_output_buffer_len;
         int64_t cur = pv->pts_next;
 
-        len = av_parser_parse2( pv->parser, pv->context,
-                                &parser_output_buffer, &parser_output_buffer_len,
-                                in->data + pos, in->size - pos, cur, cur, AV_NOPTS_VALUE );
+        if ( pv->parser != NULL )
+        {
+            len = av_parser_parse2( pv->parser, pv->context,
+                    &parser_output_buffer, &parser_output_buffer_len,
+                    in->data + pos, in->size - pos, cur, cur, AV_NOPTS_VALUE );
+        }
+        else
+        {
+            parser_output_buffer = in->data;
+            len = parser_output_buffer_len = in->size;
+        }
         if (parser_output_buffer_len)
         {
             // set the duration on every frame since the stream format can
@@ -377,9 +385,19 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     while ( pos < buf->size )
     {
-        int len = av_parser_parse2( parser, context, &pbuffer, &pbuffer_size,
+        int len;
+
+        if (parser != NULL )
+        {
+            len = av_parser_parse2( parser, context, &pbuffer, &pbuffer_size,
                                     buf->data + pos, buf->size - pos,
                                     buf->start, buf->start, AV_NOPTS_VALUE );
+        }
+        else
+        {
+            pbuffer = buf->data;
+            len = pbuffer_size = buf->size;
+        }
         pos += len;
         if ( pbuffer_size > 0 )
         {
@@ -401,7 +419,8 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         }
     }
     av_free( buffer );
-    av_parser_close( parser );
+    if ( parser != NULL )
+        av_parser_close( parser );
     hb_avcodec_close( context );
     return ret;
 }

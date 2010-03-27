@@ -15,6 +15,11 @@
 #include "mp4v2/mp4v2.h"
 
 #define min(a, b) a < b ? a : b
+#define STR4_TO_UINT32(p) \
+    ((((const uint8_t*)(p))[0] << 24) | \
+     (((const uint8_t*)(p))[1] << 16) | \
+     (((const uint8_t*)(p))[2] <<  8) | \
+      ((const uint8_t*)(p))[3])
 
 /*
  * This table defines how ISO MPEG stream type codes map to HandBrake
@@ -25,8 +30,9 @@
  * Entries with a worker proc id of 0 or a kind of 'U' indicate that HB
  * doesn't handle the stream type.
  */
+typedef enum { N, U, A, V } kind_t;
 typedef struct {
-    enum { N, U, A, V } kind; /* not handled / unknown / audio / video */
+    kind_t kind; /* not handled / unknown / audio / video */
     int codec;          /* HB worker object id of codec */
     int codec_param;    /* param for codec (usually ffmpeg codec id) */
     const char* name;   /* description of type */
@@ -59,7 +65,7 @@ static const stream2codec_t st2codec[256] = {
 
     st(0x1b, V, WORK_DECAVCODECV,  CODEC_ID_H264,  "H.264"),
 
-    st(0x80, N, 0,                 0,              "DigiCipher II Video"),
+    st(0x80, N, HB_ACODEC_MPGA,    CODEC_ID_PCM_BLURAY, "DigiCipher II Video"),
     st(0x81, A, HB_ACODEC_AC3,     0,              "AC-3"),
     st(0x82, A, HB_ACODEC_DCA,     0,              "HDMV DTS"),
     st(0x83, A, HB_ACODEC_LPCM,    0,              "LPCM"),
@@ -177,8 +183,8 @@ struct hb_stream_s
         int section_length;
         int program_number;
         unsigned int PCR_PID;
+        uint32_t reg_desc;
         int program_info_length;
-        unsigned char *progam_info_descriptor_data;
         struct
         {
             unsigned char stream_type;
@@ -1448,9 +1454,12 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
 
     /* check that we found a PES header */
     uint8_t stype = 0;
+    kind_t kind;
+
     if (buf && buf[0] == 0x00 && buf[1] == 0x00 && buf[2] == 0x01)
     {
         stype = stream->ts_stream_type[1 + aud_pid_index];
+        kind = st2codec[stype].kind;
 
         // 0xbd ("private stream 1") is the normal container for non-ISO
         // media - AC3/DCA/PCM/etc.
@@ -1463,6 +1472,15 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 // some other type of audio we'll end up ignoring them).
                 stype = 0x81;
                 stream->ts_stream_type[1 + aud_pid_index] = 0x81;
+                kind = st2codec[stype].kind;
+            }
+            if ( stype == 0x80 && 
+                 stream->pmt_info.reg_desc == STR4_TO_UINT32("HDMV") )
+            {
+                // LPCM audio in bluray have an stype of 0x80
+                // 0x80 is used for other DigiCipher normally
+                // To distinguish, Bluray streams have a reg_desc of HDMV
+                kind = A;
             }
         }
         else if ( buf[3] == 0xfd )
@@ -1482,6 +1500,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 stream->ts_multiplexed[1 + aud_pid_index] = 0x76;
                 stype = 0x81;
                 stream->ts_stream_type[1 + aud_pid_index] = 0x81;
+                kind = st2codec[stype].kind;
             }
             if ( st2codec[stype].kind == A && stype == 0x86 )
             {
@@ -1490,6 +1509,7 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 stream->ts_multiplexed[1 + aud_pid_index] = 0x71;
                 stype = 0x82;
                 stream->ts_stream_type[1 + aud_pid_index] = 0x82;
+                kind = st2codec[stype].kind;
             }
         }
         else if ((buf[3] & 0xe0) == 0xc0)
@@ -1501,21 +1521,23 @@ static hb_audio_t *hb_ts_stream_set_audio_id_and_codec(hb_stream_t *stream,
                 // XXX assume unknown stream types are MPEG audio
                 stype = 0x03;
                 stream->ts_stream_type[1 + aud_pid_index] = 0x03;
+                kind = st2codec[stype].kind;
             }
         }
         else
         {
             stype = 0;
+            kind = st2codec[stype].kind;
         }
     }
     // if we found an audio stream type & HB has a codec that can decode it
     // finish configuring the audio so we'll add it to the title's list.
-    if ( st2codec[stype].kind == A && st2codec[stype].codec )
+    if ( kind == A && st2codec[stype].codec )
     {
         audio->id = 1 + aud_pid_index;
         audio->config.in.codec = st2codec[stype].codec;
         audio->config.in.codec_param = st2codec[stype].codec_param;
-		set_audio_description( audio,
+        set_audio_description( audio,
                   lang_for_code( stream->a52_info[aud_pid_index].lang_code ) );
         hb_log("transport stream pid 0x%x (type 0x%x) may be %s audio (id 0x%x)",
                stream->ts_audio_pids[aud_pid_index],
@@ -1799,7 +1821,7 @@ static const char *stream_type_name (uint8_t stream_type)
 int decode_program_map(hb_stream_t* stream)
 {
     bitbuf_t bb;
-	set_buf(&bb, stream->pmt_info.tablebuf, stream->pmt_info.tablepos, 0);
+    set_buf(&bb, stream->pmt_info.tablebuf, stream->pmt_info.tablepos, 0);
 
     get_bits(&bb, 8);  // table_id
     get_bits(&bb, 4);
@@ -1814,22 +1836,44 @@ int decode_program_map(hb_stream_t* stream)
     get_bits(&bb, 8);  // section_number
     get_bits(&bb, 8);  // last_section_number
     get_bits(&bb, 3);
-    unsigned int PCR_PID = get_bits(&bb, 13);
-    stream->pmt_info.PCR_PID = PCR_PID;
+    stream->pmt_info.PCR_PID = get_bits(&bb, 13);
     get_bits(&bb, 4);
-    unsigned int program_info_length = get_bits(&bb, 12);
+    int program_info_length = get_bits(&bb, 12);
     stream->pmt_info.program_info_length = program_info_length;
 
-	int i=0;
-	unsigned char *descriptor_buf = (unsigned char *) malloc(program_info_length);
-	for (i = 0; i < program_info_length; i++)
-	{
-	  descriptor_buf[i] = get_bits(&bb, 8);
-	}
+    int i;
+    for (i = 0; i < program_info_length - 2; )
+    {
+        uint8_t tag, len;
+        tag = get_bits(&bb, 8);
+        len = get_bits(&bb, 8);
+        i += 2;
+        if ( i + len > program_info_length )
+        {
+            break;
+        }
+        if (tag == 0x05 && len >= 4)
+        {
+            // registration descriptor
+            stream->pmt_info.reg_desc = get_bits(&bb, 32);
+            i += 4;
+            len -= 4;
+        }
+        int j;
+        for ( j = 0; j < len; j++ )
+        {
+            get_bits(&bb, 8);
+        }
+        i += len;
+    }
+    for ( ; i < program_info_length; i++ )
+    {
+        get_bits(&bb, 8);
+    }
 
-	int cur_pos =  9 /* data after the section length field*/ + program_info_length;
-	int done_reading_stream_types = 0;
-	while (!done_reading_stream_types)
+    int cur_pos =  9 /* data after the section length field*/ + program_info_length;
+    int done_reading_stream_types = 0;
+    while (!done_reading_stream_types)
     {
         unsigned char stream_type = get_bits(&bb, 8);
         get_bits(&bb, 3);
@@ -1887,8 +1931,7 @@ int decode_program_map(hb_stream_t* stream)
             done_reading_stream_types = 1;
     }
 
-	free(descriptor_buf);
-	return 1;
+    return 1;
 }
 
 static int build_program_map(const uint8_t *buf, hb_stream_t *stream)
