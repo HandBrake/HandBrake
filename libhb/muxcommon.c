@@ -185,9 +185,10 @@ static void OutputTrackChunk( hb_mux_t *mux, hb_track_t *track, hb_mux_object_t 
 
     while ( ( buf = mf_peek( track ) ) != NULL && buf->start < mux->pts )
     {
-        m->mux( m, track->mux_data, mf_pull( track ) );
+        buf = mf_pull( track );
         track->frames += 1;
         track->bytes  += buf->size;
+        m->mux( m, track->mux_data, buf );
     }
 }
 
