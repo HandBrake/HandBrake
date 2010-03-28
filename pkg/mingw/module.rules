@@ -1,5 +1,15 @@
 pkg.create:: $(PKG.cli.zip)
 
 $(PKG.cli.zip): | $(dir $(PKG.cli.zip))
-$(PKG.cli.zip): $(PKG.gui.zip)
-	$(MV.exe) $(PKG.cli.tmp.zip) $(PKG.cli.zip)
+$(PKG.cli.zip): | $(STAGE.out.cli/)
+	$(STAGE.out.cli/)
+
+
+
+$(STAGE.out.cli/):
+	$(MKDIR.exe) -p $@
+	$(CP.exe) HandBrakeCLI.exe ./stage/cli
+	$(CP.exe) ../libraries/libgcc_s_sjlj-1.dll ./stage/cli
+	$(call STAGE.doc,$(STAGE.out.cli/))
+
+
