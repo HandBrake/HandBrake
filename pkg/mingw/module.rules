@@ -1,0 +1,5 @@
+pkg.create:: $(PKG.cli.zip)
+
+$(PKG.cli.zip): | $(dir $(PKG.cli.zip))
+$(PKG.cli.zip): $(PKG.gui.zip)
+	$(MV.exe) $(PKG.cli.tmp.zip) $(PKG.cli.zip)
