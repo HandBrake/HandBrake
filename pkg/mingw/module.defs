@@ -1,6 +1,6 @@
 PKG.cli.zip = $(PKG.out/)$(HB.name)-$(HB.version)-Win_CLI.zip
 
-PKG.cli.tmp.zip = $(PKG.out/)$(HB.name)-$(HB.version)-Win_CLI.tmp.zip
+PKG.mingw.lib = $(SRC/)libraries
 
 STAGE.out.cli/ = $(STAGE.out/)cli/
 
