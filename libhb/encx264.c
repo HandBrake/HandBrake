@@ -342,12 +342,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     x264_encoder_headers( pv->x264, &nal, &nal_count );
 
     /* Sequence Parameter Set */
-    memcpy(w->config->h264.sps, nal[1].p_payload + 4, nal[1].i_payload - 4);
-    w->config->h264.sps_length = nal[1].i_payload - 4;
+    memcpy(w->config->h264.sps, nal[0].p_payload + 4, nal[0].i_payload - 4);
+    w->config->h264.sps_length = nal[0].i_payload - 4;
 
     /* Picture Parameter Set */
-    memcpy(w->config->h264.pps, nal[2].p_payload + 4, nal[2].i_payload - 4);
-    w->config->h264.pps_length = nal[2].i_payload - 4;
+    memcpy(w->config->h264.pps, nal[1].p_payload + 4, nal[1].i_payload - 4);
+    w->config->h264.pps_length = nal[1].i_payload - 4;
 
     x264_picture_alloc( &pv->pic_in, X264_CSP_I420,
                         job->width, job->height );
