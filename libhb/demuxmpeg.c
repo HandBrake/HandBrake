@@ -106,6 +106,23 @@ int hb_demux_ps( hb_buffer_t * buf_ps, hb_list_t * list_es, hb_psdemux_t* state 
         id           = d[pos];
         pos               += 1;
 
+        /* pack_header */
+        if( id == 0xBA)
+        {
+            pos += 10 + (d[pos+9] & 7);
+            continue;
+        }
+
+        /* system_header */
+        if( id == 0xBB )
+        {
+            int header_length;
+
+            header_length  = ( d[pos] << 8 ) + d[pos+1];
+            pos           += 2 + header_length;
+            continue;
+        }
+
         pes_packet_length  = ( d[pos] << 8 ) + d[pos+1];
         pos               += 2;               /* pes_packet_length */
         pes_packet_end     = pos + pes_packet_length;
