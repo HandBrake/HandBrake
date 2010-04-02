@@ -90,7 +90,6 @@ namespace Handbrake
             this.mnu_SelectDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_user_guide = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_handbrake_home = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_UpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -696,7 +695,6 @@ namespace Handbrake
             // 
             this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu_user_guide,
-            this.mnu_handbrake_home,
             this.ToolStripSeparator3,
             this.mnu_UpdateCheck,
             this.toolStripSeparator6,
@@ -709,40 +707,32 @@ namespace Handbrake
             // 
             this.mnu_user_guide.Image = global::Handbrake.Properties.Resources.Help16;
             this.mnu_user_guide.Name = "mnu_user_guide";
-            this.mnu_user_guide.Size = new System.Drawing.Size(194, 22);
+            this.mnu_user_guide.Size = new System.Drawing.Size(192, 22);
             this.mnu_user_guide.Text = "HandBrake User Guide";
             this.mnu_user_guide.Click += new System.EventHandler(this.mnu_user_guide_Click);
-            // 
-            // mnu_handbrake_home
-            // 
-            this.mnu_handbrake_home.Image = global::Handbrake.Properties.Resources.info16;
-            this.mnu_handbrake_home.Name = "mnu_handbrake_home";
-            this.mnu_handbrake_home.Size = new System.Drawing.Size(194, 22);
-            this.mnu_handbrake_home.Text = "HandBrake Homepage";
-            this.mnu_handbrake_home.Click += new System.EventHandler(this.mnu_handbrake_home_Click);
             // 
             // ToolStripSeparator3
             // 
             this.ToolStripSeparator3.Name = "ToolStripSeparator3";
-            this.ToolStripSeparator3.Size = new System.Drawing.Size(191, 6);
+            this.ToolStripSeparator3.Size = new System.Drawing.Size(189, 6);
             // 
             // mnu_UpdateCheck
             // 
             this.mnu_UpdateCheck.Name = "mnu_UpdateCheck";
-            this.mnu_UpdateCheck.Size = new System.Drawing.Size(194, 22);
+            this.mnu_UpdateCheck.Size = new System.Drawing.Size(192, 22);
             this.mnu_UpdateCheck.Text = "Check for Updates";
             this.mnu_UpdateCheck.Click += new System.EventHandler(this.mnu_UpdateCheck_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(191, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(189, 6);
             // 
             // mnu_about
             // 
             this.mnu_about.Image = global::Handbrake.Properties.Resources.hb16;
             this.mnu_about.Name = "mnu_about";
-            this.mnu_about.Size = new System.Drawing.Size(194, 22);
+            this.mnu_about.Size = new System.Drawing.Size(192, 22);
             this.mnu_about.Text = "About...";
             this.mnu_about.Click += new System.EventHandler(this.mnu_about_Click);
             // 
@@ -1760,7 +1750,6 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripButton btn_showQueue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btn_ActivityWindow;
-        private System.Windows.Forms.ToolStripMenuItem mnu_handbrake_home;
         internal System.Windows.Forms.Button btn_removePreset;
         internal System.Windows.Forms.Button btn_addPreset;
         internal System.Windows.Forms.Label label25;

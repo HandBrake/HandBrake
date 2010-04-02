@@ -1736,8 +1736,10 @@ namespace Handbrake
                     drp_dvdtitle.SelectedItem = Main.SelectLongestTitle(currentSource);
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
-                if (sourcePath.ToLower().Contains(".iso") || sourcePath.Contains("VIDEO_TS") ||
-                    Directory.Exists(Path.Combine(sourcePath, "VIDEO_TS")))
+                int start, end;
+                int.TryParse(drop_chapterStart.Items[0].ToString(), out start);
+                int.TryParse(drop_chapterFinish.Items[drop_chapterFinish.Items.Count -1].ToString(), out end);
+                if (end > start)
                     Check_ChapterMarkers.Enabled = true;
                 else
                 {
