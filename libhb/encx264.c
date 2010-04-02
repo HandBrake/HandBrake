@@ -623,10 +623,12 @@ int encx264Work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         x264_nal_t *nal;
         hb_buffer_t *last_buf = NULL;
 
-        while (1)
+        while ( x264_encoder_delayed_frames( pv->x264 ) )
         {
             x264_encoder_encode( pv->x264, &nal, &i_nal, NULL, &pic_out );
-            if ( i_nal <= 0 )
+            if ( i_nal == 0 )
+                continue;
+            if ( i_nal < 0 )
                 break;
 
             hb_buffer_t *buf = nal_encode( w, &pic_out, i_nal, nal );
