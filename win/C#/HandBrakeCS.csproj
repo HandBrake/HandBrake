@@ -476,10 +476,13 @@
   </Target>
   -->
   <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.3\Microsoft.StyleCop.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>cd ../../
+  <PropertyGroup Condition=" '$(Configuration)' == 'Install' ">
+
+    <PostBuildEvent>
+cd ../../
 copy Installer\Installer.nsi bin\Install
 cd bin\Install
-makensis Installer.nsi</PostBuildEvent>
+makensis Installer.nsi
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
