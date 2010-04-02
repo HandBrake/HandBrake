@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake")]
 [assembly: AssemblyProduct("HandBrake")]
-[assembly: AssemblyCopyright("Copyright ©  2009")]
+[assembly: AssemblyCopyright("Copyright ©  2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -39,6 +39,6 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
-[assembly: AssemblyVersion("0.9.4.5")]
-[assembly: AssemblyFileVersion("0.9.4.5")]
+[assembly: AssemblyVersion("0.9.4.4")]
+[assembly: AssemblyFileVersion("0.9.4.4")]
 [assembly: NeutralResourcesLanguage("")]

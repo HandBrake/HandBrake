@@ -401,7 +401,8 @@ namespace Handbrake.Controls
             "6",
             "7",
             "8",
-            "9"});
+            "9",
+            "10"});
             this.drop_subpixelMotionEstimation.Location = new System.Drawing.Point(423, 42);
             this.drop_subpixelMotionEstimation.Name = "drop_subpixelMotionEstimation";
             this.drop_subpixelMotionEstimation.Size = new System.Drawing.Size(139, 21);
