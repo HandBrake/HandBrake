@@ -3572,15 +3572,9 @@ bool one_burned = FALSE;
         /* we are pts based start / stop */
         [self writeToActivityLog: "Start / Stop set to seconds ..."];
         
-        /* Point A to Point B. Since we cannot get frame accurate start times, attempt to glean a semi-accurate start time based on a percentage of the
-         * scanned title time as per live preview, while in some cases inaccurate its the best I can do with what I have barring a pre-scan index afaik.
-         */
-        /* Attempt to bastardize the live preview code to get a roughly 1 second accurate point a to point b encode ... */
-        /* get the start seconds from the start seconds field */
+        /* Point A to Point B. Time to time in seconds.*/
+         /* get the start seconds from the start seconds field */
         int start_seconds = [[queueToApply objectForKey:@"StartSeconds"] intValue];
-        //job->start_at_preview = start_seconds;
-        /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
-        //job->seek_points = [[queueToApply objectForKey:@"SourceTotalSeconds"] intValue];
         job->pts_to_start = start_seconds * 90000LL;
         /* Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds */
         int stop_seconds = [[queueToApply objectForKey:@"StopSeconds"] intValue];
@@ -3599,17 +3593,11 @@ bool one_burned = FALSE;
         /* we are frame based start / stop */
         [self writeToActivityLog: "Start / Stop set to frames ..."];
         
-        /* Point A to Point B. Since we cannot get frame accurate start times, attempt to glean a semi-accurate start time based on a percentage of the
-         * scanned title time as per live preview, while in some cases inaccurate its the best I can do with what I have barring a pre-scan index afaik.
-         */
-        /* Attempt to bastardize the live preview code to get a roughly 1 second accurate point a to point b encode ... */
-        /* get the start seconds from the start seconds field */
+        /* Point A to Point B. Frame to frame */
+         /* get the start frame from the start frame field */
         int start_frame = [[queueToApply objectForKey:@"StartFrame"] intValue];
-        //job->start_at_preview = start_seconds;
-        /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
-        //job->seek_points = [[queueToApply objectForKey:@"SourceTotalSeconds"] intValue];
         job->frame_to_start = start_frame;
-        /* Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds */
+        /* get the frame to stop on from the end frame field */
         int stop_frame = [[queueToApply objectForKey:@"StopFrame"] intValue];
         job->frame_to_stop = stop_frame;
 
