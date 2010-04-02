@@ -436,6 +436,7 @@ struct hb_audio_s
 
         hb_esconfig_t config;
         hb_mux_data_t * mux_data;
+        hb_fifo_t     * scan_cache;
     } priv;
 };
 #endif

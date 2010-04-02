@@ -87,6 +87,7 @@ void          hb_buffer_copy_settings( hb_buffer_t * dst,
 
 hb_fifo_t   * hb_fifo_init( int capacity, int thresh );
 int           hb_fifo_size( hb_fifo_t * );
+int           hb_fifo_size_bytes( hb_fifo_t * );
 int           hb_fifo_is_full( hb_fifo_t * );
 float         hb_fifo_percent_full( hb_fifo_t * f );
 hb_buffer_t * hb_fifo_get( hb_fifo_t * );

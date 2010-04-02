@@ -30,7 +30,7 @@ typedef struct
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
-static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
+static int LookForAudio( hb_title_t * title, hb_buffer_t * b );
 static int  AllAudioOK( hb_title_t * title );
 
 static const char *aspect_to_string( double aspect )
@@ -162,6 +162,11 @@ static void ScanFunc( void * _data )
                 hb_list_rem( title->list_audio, audio );
                 free( audio );
                 continue;
+            }
+            if ( audio->priv.scan_cache )
+            {
+                hb_fifo_flush( audio->priv.scan_cache );
+                hb_fifo_close( &audio->priv.scan_cache );
             }
             j++;
         }
@@ -513,9 +518,11 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                         vid_buf = NULL;
                     }
                 }
-                else if( ! AllAudioOK( title ) )
+                else 
                 {
-                    LookForAudio( title, buf_es );
+                    if( ! AllAudioOK( title ) )
+                        if ( !LookForAudio( title, buf_es ) )
+                            buf_es = NULL;
                 }
                 if ( buf_es )
                     hb_buffer_close( &buf_es );
@@ -698,6 +705,15 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
         ++npreviews;
 
 skip_preview:
+        /* Make sure we found audio rates and bitrates */
+        for( j = 0; j < hb_list_count( title->list_audio ); j++ )
+        {
+            hb_audio_t * audio = hb_list_item( title->list_audio, j );
+            if ( audio->priv.scan_cache )
+            {
+                hb_fifo_flush( audio->priv.scan_cache );
+            }
+        }
         if ( vid_buf )
             hb_buffer_close( &vid_buf );
     }
@@ -809,7 +825,7 @@ skip_preview:
  * aren't (e.g., some European DVD Teletext streams use the same IDs as US ATSC
  * AC-3 audio).
  */
-static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
+static int LookForAudio( hb_title_t * title, hb_buffer_t * b )
 {
     int i;
 
@@ -830,8 +846,19 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if( !audio || audio->config.in.bitrate != 0 )
     {
         /* not found or already done */
-        return;
+        return 1;
     }
+
+    if ( audio->priv.scan_cache == NULL )
+        audio->priv.scan_cache = hb_fifo_init( 16, 16 );
+
+    if ( hb_fifo_size_bytes( audio->priv.scan_cache ) >= 4096 )
+    {
+        hb_buffer_t * tmp;
+        tmp = hb_fifo_get( audio->priv.scan_cache );
+        hb_buffer_close( &tmp );
+    }
+    hb_fifo_push( audio->priv.scan_cache, b );
 
     hb_work_object_t *w = hb_codec_decoder( audio->config.in.codec );
 
@@ -845,6 +872,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     hb_work_info_t info;
     w->audio = audio;
     w->codec_param = audio->config.in.codec_param;
+    b = hb_fifo_see( audio->priv.scan_cache );
     int ret = w->bsinfo( w, b, &info );
     if ( ret < 0 )
     {
@@ -856,8 +884,11 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if ( !info.bitrate )
     {
         /* didn't find any info */
-        return;
+        return 0;
     }
+    hb_fifo_flush( audio->priv.scan_cache );
+    hb_fifo_close( &audio->priv.scan_cache );
+
     audio->config.in.samplerate = info.rate;
     audio->config.in.bitrate = info.bitrate;
     audio->config.in.channel_layout = info.channel_layout;
@@ -886,7 +917,7 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
             audio->config.lang.description );
  
     free( w );
-    return;
+    return 1;
 
     // We get here if there's no hope of finding info on an audio bitstream,
     // either because we don't have a decoder (or a decoder with a bitstream
@@ -898,7 +929,10 @@ static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if ( w )
         free( w );
 
+    hb_fifo_flush( audio->priv.scan_cache );
+    hb_fifo_close( &audio->priv.scan_cache );
     hb_list_rem( title->list_audio, audio );
+    return -1;
 }
 
 /*

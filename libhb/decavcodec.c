@@ -389,44 +389,53 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
     uint8_t *buffer = av_malloc( AVCODEC_MAX_AUDIO_FRAME_SIZE );
     int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
     unsigned char *pbuffer;
-    int pos = 0, pbuffer_size;
+    int pos, pbuffer_size;
 
-    while ( pos < buf->size )
+    while ( buf && !ret )
     {
-        int len;
+        pos = 0;
+        while ( pos < buf->size )
+        {
+            int len;
 
-        if (parser != NULL )
-        {
-            len = av_parser_parse2( parser, context, &pbuffer, &pbuffer_size,
-                                    buf->data + pos, buf->size - pos,
-                                    buf->start, buf->start, AV_NOPTS_VALUE );
-        }
-        else
-        {
-            pbuffer = buf->data;
-            len = pbuffer_size = buf->size;
-        }
-        pos += len;
-        if ( pbuffer_size > 0 )
-        {
-            AVPacket avp;
-            av_init_packet( &avp );
-            avp.data = pbuffer;
-            avp.size = pbuffer_size;
-
-            len = avcodec_decode_audio3( context, (int16_t*)buffer, &out_size, &avp );
-            if ( len > 0 && context->sample_rate > 0 )
+            if (parser != NULL )
             {
-                info->bitrate = context->bit_rate;
-                info->rate = context->sample_rate;
-                info->rate_base = 1;
-                info->channel_layout = 
-                    hb_ff_layout_xlat(context->channel_layout, context->channels);
-                ret = 1;
-                break;
+                len = av_parser_parse2( parser, context, &pbuffer, 
+                                        &pbuffer_size, buf->data + pos, 
+                                        buf->size - pos, buf->start, 
+                                        buf->start, AV_NOPTS_VALUE );
+            }
+            else
+            {
+                pbuffer = buf->data;
+                len = pbuffer_size = buf->size;
+            }
+            pos += len;
+            if ( pbuffer_size > 0 )
+            {
+                AVPacket avp;
+                av_init_packet( &avp );
+                avp.data = pbuffer;
+                avp.size = pbuffer_size;
+
+                len = avcodec_decode_audio3( context, (int16_t*)buffer, 
+                                             &out_size, &avp );
+                if ( len > 0 && context->sample_rate > 0 )
+                {
+                    info->bitrate = context->bit_rate;
+                    info->rate = context->sample_rate;
+                    info->rate_base = 1;
+                    info->channel_layout = 
+                        hb_ff_layout_xlat(context->channel_layout, 
+                                          context->channels);
+                    ret = 1;
+                    break;
+                }
             }
         }
+        buf = buf->next;
     }
+
     av_free( buffer );
     if ( parser != NULL )
         av_parser_close( parser );

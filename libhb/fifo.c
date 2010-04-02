@@ -235,6 +235,23 @@ hb_fifo_t * hb_fifo_init( int capacity, int thresh )
     return f;
 }
 
+int hb_fifo_size_bytes( hb_fifo_t * f )
+{
+    int ret = 0;
+    hb_buffer_t * link;
+
+    hb_lock( f->lock );
+    link = f->first;
+    while ( link )
+    {
+        ret += link->size;
+        link = link->next;
+    }
+    hb_unlock( f->lock );
+
+    return ret;
+}
+
 int hb_fifo_size( hb_fifo_t * f )
 {
     int ret;
