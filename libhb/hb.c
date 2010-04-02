@@ -80,6 +80,51 @@ int hb_avcodec_close(AVCodecContext *avctx)
     return ret;
 }
 
+int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
+{
+    switch (ff_channel_layout)
+    {
+        case CH_LAYOUT_MONO:
+            return HB_INPUT_CH_LAYOUT_MONO;
+        case CH_LAYOUT_STEREO:
+            return HB_INPUT_CH_LAYOUT_STEREO;
+        case CH_LAYOUT_SURROUND:
+            return HB_INPUT_CH_LAYOUT_3F;
+        case CH_LAYOUT_4POINT0:
+            return HB_INPUT_CH_LAYOUT_3F1R;
+        case CH_LAYOUT_2_2:
+            return HB_INPUT_CH_LAYOUT_2F2R;
+        case CH_LAYOUT_QUAD:
+            return HB_INPUT_CH_LAYOUT_2F2R;
+        case CH_LAYOUT_5POINT0:
+            // ffmpeg like to neglect to signal LFE
+            if (channels == 6)
+                return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            return HB_INPUT_CH_LAYOUT_3F2R;
+        case CH_LAYOUT_5POINT1:
+            return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+        case CH_LAYOUT_5POINT0_BACK:
+            // ffmpeg like to neglect to signal LFE
+            if (channels == 6)
+                return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            return HB_INPUT_CH_LAYOUT_3F2R;
+        case CH_LAYOUT_5POINT1_BACK:
+            return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+        case CH_LAYOUT_7POINT0:
+            // ffmpeg like to neglect to signal LFE
+            if (channels == 8)
+                return HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            return HB_INPUT_CH_LAYOUT_3F4R;
+        case CH_LAYOUT_7POINT1:
+            return HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+        case CH_LAYOUT_STEREO_DOWNMIX:
+            return HB_INPUT_CH_LAYOUT_STEREO;
+        default:
+            return HB_INPUT_CH_LAYOUT_STEREO;
+    }
+    return HB_INPUT_CH_LAYOUT_STEREO;
+}
+
 /**
  * Registers work objects, by adding the work object to a liked list.
  * @param w Handle to hb_work_object_t to register.

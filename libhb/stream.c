@@ -1435,6 +1435,18 @@ static void set_audio_description( hb_audio_t *audio, iso639_lang_t *lang )
               sizeof( audio->config.lang.description ), "%s (%s)",
               strlen(lang->native_name) ? lang->native_name : lang->eng_name,
               codec_name );
+
+    if (audio->config.in.codec == HB_ACODEC_FFMPEG)
+    {
+        int layout = audio->config.in.channel_layout;
+        char *desc = audio->config.lang.description +
+                        strlen( audio->config.lang.description );
+        sprintf( desc, " (%d.%d ch)",
+                 HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT(layout) +
+                     HB_INPUT_CH_LAYOUT_GET_DISCRETE_REAR_COUNT(layout),
+                 HB_INPUT_CH_LAYOUT_GET_DISCRETE_LFE_COUNT(layout) );
+    }
+
     snprintf( audio->config.lang.simple, sizeof( audio->config.lang.simple ), "%s",
               strlen(lang->native_name) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2, sizeof( audio->config.lang.iso639_2 ),
@@ -2777,18 +2789,6 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
     // paramters here.
     if ( codec->bit_rate || codec->sample_rate )
     {
-        static const int chan2layout[] = {
-            HB_INPUT_CH_LAYOUT_MONO,  // We should allow no audio really.
-            HB_INPUT_CH_LAYOUT_MONO,   
-            HB_INPUT_CH_LAYOUT_STEREO,
-            HB_INPUT_CH_LAYOUT_2F1R,   
-            HB_INPUT_CH_LAYOUT_2F2R,
-            HB_INPUT_CH_LAYOUT_3F2R,   
-            HB_INPUT_CH_LAYOUT_4F2R,
-            HB_INPUT_CH_LAYOUT_STEREO, 
-            HB_INPUT_CH_LAYOUT_STEREO,
-        };
-
         hb_audio_t *audio = calloc( 1, sizeof(*audio) );;
 
         audio->id = id;
@@ -2807,7 +2807,8 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 
             audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
             audio->config.in.samplerate = codec->sample_rate;
-            audio->config.in.channel_layout = chan2layout[codec->channels & 7];
+            audio->config.in.channel_layout = 
+                hb_ff_layout_xlat(codec->channel_layout, codec->channels);
         }
 
         set_audio_description( audio, lang_for_code2( st->language ) );

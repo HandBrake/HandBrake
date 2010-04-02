@@ -361,6 +361,7 @@ struct hb_job_s
 #define HB_INPUT_CH_LAYOUT_2F2R    0x0722022
 #define HB_INPUT_CH_LAYOUT_3F2R    0x0832032
 #define HB_INPUT_CH_LAYOUT_4F2R    0x0942042
+#define HB_INPUT_CH_LAYOUT_3F4R    0x0a34034
 #define HB_INPUT_CH_LAYOUT_HAS_LFE 0x0000100
 /* define some macros to extract the various information from the HB_AMIXDOWN_XXXX values */
 #define HB_INPUT_CH_LAYOUT_GET_DISCRETE_FRONT_COUNT( a ) ( ( a & HB_INPUT_CH_LAYOUT_DISCRETE_FRONT_MASK ) >> 16 )

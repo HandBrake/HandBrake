@@ -546,7 +546,6 @@ static void do_job( hb_job_t * job, int cpu_count )
             // So if the encoder is lame we need the output to be stereo (or multichannel
             // matrixed into stereo like dpl). If the decoder is not AC3 or DCA the
             // encoder has to handle the input format since we can't do a mixdown.
-#define CAN_MIXDOWN(a) ( a->config.in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA) )
 #define STEREO_ONLY(a) ( a->config.out.codec & HB_ACODEC_LAME )
 
             switch (audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
@@ -566,16 +565,6 @@ static void do_job( hb_job_t * job, int cpu_count )
                 case HB_INPUT_CH_LAYOUT_MONO:
                     if ( STEREO_ONLY( audio ) )
                     {
-                        if ( !CAN_MIXDOWN( audio ) )
-                        {
-                            // XXX we're hosed - we can't mix up & lame can't handle
-                            // the input format. The user shouldn't be able to make
-                            // this choice. It's too late to do anything about it now
-                            // so complain in the log & let things abort in lame.
-                            hb_log( "ERROR - can't use lame mp3 audio output with "
-                                    "mono audio stream %x - output will be messed up",
-                                    audio->id );
-                        }
                         audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                     }
                     else
@@ -589,7 +578,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 // the A52 flags don't allow for a way to distinguish between DPL1 and
                 // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
                 case HB_INPUT_CH_LAYOUT_DOLBY:
-                    if ( STEREO_ONLY( audio ) || !CAN_MIXDOWN( audio ) ||
+                    if ( STEREO_ONLY( audio ) ||
                          audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
                     {
                         audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
@@ -599,57 +588,31 @@ static void do_job( hb_job_t * job, int cpu_count )
                 // 4 channel discrete
                 case HB_INPUT_CH_LAYOUT_2F2R:
                 case HB_INPUT_CH_LAYOUT_3F1R:
-                    if ( CAN_MIXDOWN( audio ) )
+                    if ( STEREO_ONLY( audio ) ||
+                         audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
                     {
-                        if ( STEREO_ONLY( audio ) ||
-                             audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
-                        {
-                            audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
-                        }
-                    }
-                    else
-                    {
-                        // XXX we can't mixdown & don't have any way to specify
-                        // 4 channel discrete output so we're hosed.
-                        hb_log( "ERROR - can't handle 4 channel discrete audio stream "
-                                "%x - output will be messed up", audio->id );
+                        audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                     }
                     break;
 
                 // 5 or 6 channel discrete
                 case HB_INPUT_CH_LAYOUT_3F2R:
-                    if ( CAN_MIXDOWN( audio ) )
+                    if ( STEREO_ONLY( audio ) )
                     {
-                        if ( STEREO_ONLY( audio ) )
+                        if ( audio->config.out.mixdown < HB_AMIXDOWN_STEREO )
                         {
-                            if ( audio->config.out.mixdown < HB_AMIXDOWN_STEREO )
-                            {
-                                audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
-                            }
-                            else if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBYPLII )
-                            {
-                                audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
-                            }
+                            audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                         }
-                        else if ( ! ( audio->config.in.channel_layout &
-                                        HB_INPUT_CH_LAYOUT_HAS_LFE ) )
+                        else if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBYPLII )
                         {
-                            // we don't do 5 channel discrete so mixdown to DPLII
                             audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
                         }
                     }
                     else if ( ! ( audio->config.in.channel_layout &
-                                        HB_INPUT_CH_LAYOUT_HAS_LFE ) )
+                                    HB_INPUT_CH_LAYOUT_HAS_LFE ) )
                     {
-                        // XXX we can't mixdown & don't have any way to specify
-                        // 5 channel discrete output so we're hosed.
-                        hb_log( "ERROR - can't handle 5 channel discrete audio stream "
-                                "%x - output will be messed up", audio->id );
-                    }
-                    else
-                    {
-                        // we can't mixdown so force 6 channel discrete
-                        audio->config.out.mixdown = HB_AMIXDOWN_6CH;
+                        // we don't do 5 channel discrete so mixdown to DPLII
+                        audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
                     }
                     break;
             }

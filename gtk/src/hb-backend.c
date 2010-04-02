@@ -1397,8 +1397,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (audio)
 	{
-		allow_mono = allow_mono &&
-			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA));
 		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -1408,7 +1406,6 @@ ghb_grey_combo_options(GtkBuilder *builder)
 			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch = allow_6ch &&
-			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
 	}
@@ -1449,9 +1446,7 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 	audio = get_hb_audio(titleindex, track);
 	if (audio)
 	{
-		allow_mono =
-			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(acodec & ~HB_ACODEC_LAME);
+		allow_mono = (acodec & ~HB_ACODEC_LAME);
 		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -1461,7 +1456,6 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch =
-			(audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
 			(acodec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(audio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);
@@ -4096,9 +4090,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gboolean allow_dolby = TRUE;
 		gboolean allow_dpl2 = TRUE;
 		gboolean allow_6ch = TRUE;
-		allow_mono =
-			(taudio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-			(codec & ~HB_ACODEC_LAME);
+		allow_mono = (codec & ~HB_ACODEC_LAME);
 		gint layout = taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -4108,7 +4100,6 @@ ghb_validate_audio(signal_user_data_t *ud)
 			(layout == HB_INPUT_CH_LAYOUT_DOLBY);
 		allow_dpl2 = (layout == HB_INPUT_CH_LAYOUT_3F2R);
 		allow_6ch =
-			(taudio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
 			(codec & ~HB_ACODEC_LAME) &&
 			(layout == HB_INPUT_CH_LAYOUT_3F2R) && 
 			(taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_HAS_LFE);

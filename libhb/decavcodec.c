@@ -61,6 +61,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "downmix.h"
 #include "libavcodec/audioconvert.h"
 
 static int  decavcodecInit( hb_work_object_t *, hb_job_t * );
@@ -108,9 +109,11 @@ struct hb_work_private_s
     pts_heap_t      pts_heap;
     void*           buffer;
     struct SwsContext *sws_context; // if we have to rescale or convert color space
+    hb_downmix_t    *downmix;
+    hb_sample_t     *downmix_buffer;
 };
 
-static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size );
+static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size );
 static hb_buffer_t *link_buf_list( hb_work_private_t *pv );
 
 
@@ -200,6 +203,14 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     pv->context = avcodec_alloc_context();
     hb_avcodec_open( pv->context, codec );
 
+    if ( w->audio != NULL &&
+         hb_need_downmix( w->audio->config.in.channel_layout, 
+                          w->audio->config.out.mixdown) )
+    {
+        pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
+                                      w->audio->config.out.mixdown);
+    }
+
     return 0;
 }
 
@@ -240,6 +251,15 @@ static void decavcodecClose( hb_work_object_t * w )
         {
             av_free( pv->buffer );
             pv->buffer = NULL;
+        }
+        if ( pv->downmix )
+        {
+            hb_downmix_close( &(pv->downmix) );
+        }
+        if ( pv->downmix_buffer )
+        {
+            free( pv->downmix_buffer );
+            pv->downmix_buffer = NULL;
         }
         free( pv );
         w->private_data = NULL;
@@ -311,7 +331,7 @@ static int decavcodecWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 pv->duration = 90000. /
                             (double)( pv->context->sample_rate * pv->context->channels );
             }
-            decodeAudio( pv, parser_output_buffer, parser_output_buffer_len );
+            decodeAudio( w->audio, pv, parser_output_buffer, parser_output_buffer_len );
         }
     }
     *buf_out = link_buf_list( pv );
@@ -336,18 +356,6 @@ static int decavcodecInfo( hb_work_object_t *w, hb_work_info_t *info )
     }
     return 0;
 }
-
-static const int chan2layout[] = {
-    HB_INPUT_CH_LAYOUT_MONO,  // We should allow no audio really.
-    HB_INPUT_CH_LAYOUT_MONO,   
-    HB_INPUT_CH_LAYOUT_STEREO,
-    HB_INPUT_CH_LAYOUT_2F1R,   
-    HB_INPUT_CH_LAYOUT_2F2R,
-    HB_INPUT_CH_LAYOUT_3F2R,   
-    HB_INPUT_CH_LAYOUT_4F2R,
-    HB_INPUT_CH_LAYOUT_STEREO, 
-    HB_INPUT_CH_LAYOUT_STEREO,
-};
 
 static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                              hb_work_info_t *info )
@@ -412,7 +420,8 @@ static int decavcodecBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                 info->bitrate = context->bit_rate;
                 info->rate = context->sample_rate;
                 info->rate_base = 1;
-                info->channel_layout = chan2layout[context->channels & 7];
+                info->channel_layout = 
+                    hb_ff_layout_xlat(context->channel_layout, context->channels);
                 ret = 1;
                 break;
             }
@@ -1056,6 +1065,15 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
     pv->list = hb_list_init();
     pv->pts_next = -1;
     pv->pts = -1;
+
+    if ( w->audio != NULL &&
+         hb_need_downmix( w->audio->config.in.channel_layout, 
+                          w->audio->config.out.mixdown) )
+    {
+        pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
+                                      w->audio->config.out.mixdown);
+    }
+
     return 0;
 }
 
@@ -1125,7 +1143,7 @@ static int decavcodecviInfo( hb_work_object_t *w, hb_work_info_t *info )
     return 0;
 }
 
-static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
+static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *data, int size )
 {
     AVCodecContext *context = pv->context;
     int pos = 0;
@@ -1145,6 +1163,7 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
         avp.size = size - pos;
 
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
+        int nsamples;
         int len = avcodec_decode_audio3( context, buffer, &out_size, &avp );
         if ( len <= 0 )
         {
@@ -1169,8 +1188,8 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
                                                               context->sample_fmt, 1,
                                                               NULL, 0 );
                 // get output buffer size (in 2-byte samples) then malloc a buffer
-                out_size = ( out_size * 2 ) / isamp;
-                buffer = av_malloc( out_size );
+                nsamples = out_size / isamp;
+                buffer = av_malloc( nsamples * 2 );
 
                 // we're doing straight sample format conversion which behaves as if
                 // there were only one channel.
@@ -1179,26 +1198,56 @@ static void decodeAudio( hb_work_private_t *pv, uint8_t *data, int size )
                 const int istride[6] = { isamp };
                 const int ostride[6] = { 2 };
 
-                av_audio_convert( ctx, obuf, ostride, ibuf, istride, out_size >> 1 );
+                av_audio_convert( ctx, obuf, ostride, ibuf, istride, nsamples );
                 av_audio_convert_free( ctx );
             }
-            hb_buffer_t *buf = hb_buffer_init( 2 * out_size );
+            else
+            {
+                nsamples = out_size / 2;
+            }
 
-            // convert from bytes to total samples
-            out_size >>= 1;
+            hb_buffer_t * buf;
+
+            if ( pv->downmix )
+            {
+                pv->downmix_buffer = realloc(pv->downmix_buffer, nsamples * sizeof(hb_sample_t));
+                
+                int i;
+                for( i = 0; i < nsamples; ++i )
+                {
+                    pv->downmix_buffer[i] = buffer[i];
+                }
+
+                int n_ch_samples = nsamples / context->channels;
+                hb_layout_remap( hb_smpte_chan_map, pv->downmix_buffer, 
+                                 audio->config.in.channel_layout, n_ch_samples );
+
+                int channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
+
+                buf = hb_buffer_init( n_ch_samples * channels * sizeof(float) );
+                hb_sample_t *samples = (hb_sample_t *)buf->data;
+                hb_downmix(pv->downmix, samples, pv->downmix_buffer, n_ch_samples);
+            }
+            else
+            {
+                buf = hb_buffer_init( nsamples * sizeof(float) );
+                float *fl32 = (float *)buf->data;
+                int i;
+                for( i = 0; i < nsamples; ++i )
+                {
+                    fl32[i] = buffer[i];
+                }
+                int n_ch_samples = nsamples / context->channels;
+                hb_layout_remap( hb_smpte_chan_map, fl32, 
+                                 audio->config.in.channel_layout, n_ch_samples );
+            }
 
             double pts = pv->pts_next;
             buf->start = pts;
-            pts += out_size * pv->duration;
+            pts += nsamples * pv->duration;
             buf->stop  = pts;
             pv->pts_next = pts;
 
-            float *fl32 = (float *)buf->data;
-            int i;
-            for( i = 0; i < out_size; ++i )
-            {
-                fl32[i] = buffer[i];
-            }
             hb_list_add( pv->list, buf );
 
             // if we allocated a buffer for sample format conversion, free it
@@ -1251,7 +1300,7 @@ static int decavcodecaiWork( hb_work_object_t *w, hb_buffer_t **buf_in,
         pv->pts_next = in->start;
     }
     prepare_ffmpeg_buffer( in );
-    decodeAudio( pv, in->data, in->size );
+    decodeAudio( w->audio, pv, in->data, in->size );
     *buf_out = link_buf_list( pv );
 
     return HB_WORK_OK;
