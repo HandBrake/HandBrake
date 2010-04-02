@@ -135,8 +135,17 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     param.i_height     = job->height;
     param.i_fps_num    = job->vrate;
     param.i_fps_den    = job->vrate_base;
-    param.i_timebase_num   = 1;
-    param.i_timebase_den   = 90000;
+    if ( job->cfr == 1 )
+    {
+        param.i_timebase_num   = 0;
+        param.i_timebase_den   = 0;
+        param.b_vfr_input = 0;
+    }
+    else
+    {
+        param.i_timebase_num   = 1;
+        param.i_timebase_den   = 90000;
+    }
 
     /* Disable annexb. Inserts size into nal header instead of start code */
     param.b_annexb     = 0;
