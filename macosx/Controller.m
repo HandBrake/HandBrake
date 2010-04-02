@@ -5750,16 +5750,10 @@ the user is using "Custom" settings by determining the sender*/
         {
 
             /* find out if our selected output audio codec supports mono and / or 6ch */
-            /* we also check for an input codec of AC3 or DCA,
-             as they are the only libraries able to do the mixdown to mono / conversion to 6-ch */
             /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
              but this may change in the future, so they are separated for flexibility */
-            int audioCodecsSupportMono =
-                    (audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-                    (acodec != HB_ACODEC_LAME);
-            int audioCodecsSupport6Ch =
-                    (audio->in.codec & (HB_ACODEC_AC3|HB_ACODEC_DCA)) &&
-                    (acodec != HB_ACODEC_LAME);
+            int audioCodecsSupportMono = (audio->in.codec && acodec != HB_ACODEC_LAME);
+            int audioCodecsSupport6Ch = (audio->in.codec && acodec != HB_ACODEC_LAME);
             
             /* check for AC-3 passthru */
             if (audio->in.codec == HB_ACODEC_AC3 && acodec == HB_ACODEC_AC3)
