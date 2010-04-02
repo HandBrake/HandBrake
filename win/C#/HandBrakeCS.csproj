@@ -133,6 +133,12 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|AnyCPU'">
+    <OutputPath>bin\NightlyBuild\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NightlyBuild|x86'">
+    <OutputPath>bin\x86\NightlyBuild\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Growl.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=980c2339411be384, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -353,6 +359,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Installer\MakeNightly.nsi" />
     <None Include="Installer\Installer.nsi" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -477,12 +484,24 @@
   -->
   <Import Project="$(ProgramFiles)\MSBuild\Microsoft\StyleCop\v4.3\Microsoft.StyleCop.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Install' ">
-
     <PostBuildEvent>
-cd ../../
-copy Installer\Installer.nsi bin\Install
-cd bin\Install
-makensis Installer.nsi
-</PostBuildEvent>
+	cd ../../
+	copy Installer\Installer.nsi bin\Install /Y
+	copy handbrakepineapple.ico bin\Install /Y
+	xcopy doc bin\Install\doc /I /Y
+	cd bin\Install
+	makensis Installer.nsi
+	</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'NightlyBuild' ">
+    <PostBuildEvent>
+	cd ../../
+	copy Installer\MakeNightly.nsi bin\NightlyBuild /Y
+	copy handbrakepineapple.ico bin\NightlyBuild /Y
+	xcopy doc bin\NightlyBuild\doc /I /Y
+	cd bin\NightlyBuild
+	makensis MakeNightly.nsi
+	</PostBuildEvent>
+  </PropertyGroup>
+
 </Project>

@@ -1,0 +1,108 @@
+AUTHORS file for HandBrake <http://handbrake.fr/>
+
+Eric Petit <titer@m0k.org>
+ + Core (construct, multithreading, BeOS/OS X/Linux ports)
+ + MPEG demuxer
+ + MPEG-2, AC3 and MPGA decoders (w/ libmpeg2/liba52/libavcodec)
+ + LPCM "decoder"
+ + MPEG-4, MP3 and AAC encoders (w/ libavcodec/libxvidcore/libmp3lame/
+   libfaac)
+ + AC-3 pass-through
+ + AVI muxer
+ + MP4 muxer (w/ libmp4v2)
+ + BeOS interface
+ + OS X interface
+ + French translation
+
+Laurent Aimar <fenrir@via.ecp.fr>
+ + H264 and Vorbis encoders (w/ libx264/libvorbis)
+ + OGG/OGM muxer (w/ libogg)
+ + Gtk2 interface
+ + wxWidgets interface
+
+Van Jacobson <vanj.hb@gmail.com> (van)
+ + Universal input architecture
+ + MPEG Standard Target Decoder timing model
+ + Auto-typing MPEG stream files
+ + Minor bug fixing in MPEG stream support
+ + Minor dvd reader fixes
+ + Chapter mark bug fixes
+
+John Allen (?) <johnallenemail@gmail.com> (johnallen)
+ + Core enhancements
+ + Threading enhancements
+ + Simplified Mac OS X GUI
+
+Joe Crain <dynaflashtech@gmail.com> (dynaflash)
+ + Mac OS X GUI enhancements/rewrite
+
+Damiano Galassi <damiog@gmail.com> (ritsuka)
+ + Mac OS X GUI enhancements
+
+Edward Groenendaal <eddyg.hb@myreflection.org> (eddyg)
+ + Major bug fixes
+ + Subtitle scan & Colour
+ + Performance improvements
+
+Rodney Hester <rhester@multics.dynalias.com> (rhester)
+ + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
+
+Andrew Kimpton <awk@awkward.org> (awk)
+ + MPEG Audio fixes
+ + MPEG Stream Support
+
+Chris Lee <clee@kde.org>
+ + PAR/anamorphic support
+ + dvdread enhancements
+ + Linux GUI
+
+Chris Long <chris.long@mac.com> (chrislong)
+ + iPod firmware 1.2+ 640x480 MPEG-4/H.264 support
+
+Brian Mario <Unknown> (brianmario)
+ + Windows GUI
+
+Maurj <handbrake@maurj.com> (maurj)
+ + Dolby Surround and Dolby Pro Logic II mixdowns
+ + 6-channel AAC audio from 5.1 source
+ + Mono AAC audio from mono source
+ + PAR/anamorphic support in mp4 file format
+ + Chapter markers in mp4 file format
+ + Mac OS X GUI enhancements
+ + Support for DTS audio sources
+
+Mirkwood <mirkwood07@gmail.com> (mirkwood)
+ + Windows CLI port
+
+Nyx <unknown> (Nyx)
+ + Frame re-ordering and flushing in mp4
+
+Philippe Rigaux <pri@nopapers.org> (prigaux)
+ + 3rd party library integration
+ + Mac OS X GUI enhancements
+ + PAR/anamorphic support
+ + Universal binary build process
+ + Conversion from jam to make for compiles
+
+Jonathon Rubin <jb.rubin@gmail.com> (jbrjake)
+ + Massive core enhancements
+ + Significant improvements to H.264 support
+
+Scott <unknown> (s55)
+ + Windows GUI
+ 
+John Stebbins <jstebbins.hb@gmail.com> (j45)
+ + GTK GUI
+ + TrueHD demuxing
+ + libavcodec video encoding quality enhancements
+ + Numerous bug fixes
+ 
+Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
+ + Ported video filters from libmpcodec
+
+Mark Krenek <markkrenek@mac.com> (travistex)
+ + Mac OS X GUI enhancements
+ + Mac OS X GUI Queueing system
+
+Kona 'mike' Blend <Kona8lend@gmail.com> (KonaBlend)
+ + Build System and related guides

@@ -9,6 +9,8 @@ Global
 		Debug|x86 = Debug|x86
 		Install|Any CPU = Install|Any CPU
 		Install|x86 = Install|x86
+		NightlyBuild|Any CPU = NightlyBuild|Any CPU
+		NightlyBuild|x86 = NightlyBuild|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -21,6 +23,10 @@ Global
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|Any CPU.Build.0 = Install|Any CPU
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|x86.ActiveCfg = Install|x86
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|x86.Build.0 = Install|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|Any CPU.ActiveCfg = NightlyBuild|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|Any CPU.Build.0 = NightlyBuild|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|x86.ActiveCfg = NightlyBuild|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|x86.Build.0 = NightlyBuild|x86
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|x86.ActiveCfg = Release|x86
