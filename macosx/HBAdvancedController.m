@@ -148,7 +148,7 @@
     /*Sub Me fX264optSubmePopUp*/
     [fX264optSubmePopUp removeAllItems];
     [fX264optSubmePopUp addItemWithTitle:@"Default (7)"];
-    for (i=0; i<10;i++)
+    for (i=0; i<11;i++)
     {
         [fX264optSubmePopUp addItemWithTitle:[NSString stringWithFormat:@"%d",i]];
     }
