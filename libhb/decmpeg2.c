@@ -41,6 +41,7 @@ typedef struct hb_libmpeg2_s
     int                  height;
     int                  rate;
     double               aspect_ratio;
+    enum PixelFormat     pixfmt;
     int                  got_iframe;        /* set when we get our first iframe */
     int                  look_for_iframe;   /* need an iframe to add chap break */
     int                  look_for_break;    /* need gop start to add chap break */
@@ -246,7 +247,7 @@ static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
     {
         if ( m->tags[m->cur_tag].start < 0 ||
              ( m->got_iframe && m->tags[m->cur_tag].start >= m->first_pts ) )
-            hb_log("mpeg2 tag botch: pts %lld, tag pts %lld buf 0x%p",
+            hb_log("mpeg2 tag botch: pts %"PRId64", tag pts %"PRId64" buf 0x%p",
                    buf_es->start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
         if ( m->tags[m->cur_tag].cc_buf )
             hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
@@ -256,6 +257,7 @@ static void next_tag( hb_libmpeg2_t *m, hb_buffer_t *buf_es )
 }
 
 static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
+                                   enum PixelFormat pixfmt,
                                    uint8_t* y, uint8_t *u, uint8_t *v )
 {
     int dst_w = width, dst_h = height;
@@ -268,19 +270,28 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
     hb_buffer_t *buf  = hb_video_buffer_init( dst_w, dst_h );
     buf->start = -1;
 
-    if ( dst_w != width || dst_h != height )
+    if ( dst_w != width || dst_h != height || pixfmt == PIX_FMT_YUV422P )
     {
         // we're encoding and the frame dimensions don't match the title dimensions -
         // rescale & matte Y, U, V into our output buf.
         AVPicture in, out;
-        avpicture_alloc(&in,  PIX_FMT_YUV420P, width, height );
+        avpicture_alloc(&in,  pixfmt, width, height );
         avpicture_alloc(&out, PIX_FMT_YUV420P, dst_w, dst_h );
 
         int src_wh = width * height;
-        memcpy( in.data[0], y, src_wh );
-        memcpy( in.data[1], u, src_wh >> 2 );
-        memcpy( in.data[2], v, src_wh >> 2 );
-        struct SwsContext *context = sws_getContext( width, height, PIX_FMT_YUV420P,
+        if ( pixfmt == PIX_FMT_YUV422P )
+        {
+            memcpy( in.data[0], y, src_wh );
+            memcpy( in.data[1], u, src_wh >> 1 );
+            memcpy( in.data[2], v, src_wh >> 1 );
+        }
+        else
+        {
+            memcpy( in.data[0], y, src_wh );
+            memcpy( in.data[1], u, src_wh >> 2 );
+            memcpy( in.data[2], v, src_wh >> 2 );
+        }
+        struct SwsContext *context = sws_getContext( width, height, pixfmt,
                                                      dst_w, dst_h, PIX_FMT_YUV420P,
                                                      SWS_LANCZOS|SWS_ACCURATE_RND,
                                                      NULL, NULL, NULL );
@@ -323,8 +334,8 @@ static hb_buffer_t *hb_copy_frame( hb_job_t *job, int width, int height,
 static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                                hb_list_t * list_raw )
 {
-    mpeg2_state_t   state;
-    hb_buffer_t   * buf;
+    mpeg2_state_t    state;
+    hb_buffer_t    * buf;
 
     if ( buf_es->size )
     {
@@ -356,7 +367,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             {
                 if (m->tags[m->cur_tag].cc_buf)
                 {
-                    hb_log("mpeg2 tag botch2: pts %lld, tag pts %lld buf 0x%p",
+                    hb_log("mpeg2 tag botch2: pts %"PRId64", tag pts %"PRId64" buf 0x%p",
                            buf_es->start, m->tags[m->cur_tag].start, m->tags[m->cur_tag].cc_buf);
                     hb_buffer_close( &m->tags[m->cur_tag].cc_buf );
                 }
@@ -389,6 +400,15 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                     m->aspect_ratio = ar_numer / ar_denom;
                 }
             }
+            if ( m->info->sequence->width >> 1 == m->info->sequence->chroma_width &&
+                 m->info->sequence->height >> 1 == m->info->sequence->chroma_height )
+            {
+                m->pixfmt = PIX_FMT_YUV420P;
+            }
+            else
+            {
+                m->pixfmt = PIX_FMT_YUV422P;
+            }
         }
         else if( state == STATE_GOP && m->look_for_break)
         {
@@ -413,6 +433,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
             {
                 buf  = hb_copy_frame( m->job, m->info->sequence->width,
                                       m->info->sequence->height,
+                                      m->pixfmt,
                                       m->info->display_fbuf->buf[0],
                                       m->info->display_fbuf->buf[1],
                                       m->info->display_fbuf->buf[2] );
