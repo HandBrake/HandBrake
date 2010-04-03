@@ -100,7 +100,7 @@ static hb_buffer_t * OutputAudioFrame( hb_audio_t *audio, hb_buffer_t *buf,
  ***********************************************************************
  * Initialize the work object
  **********************************************************************/
-int hb_sync_init( hb_job_t * job )
+hb_work_object_t * hb_sync_init( hb_job_t * job )
 {
     hb_title_t        * title = job->title;
     hb_chapter_t      * chapter;
@@ -109,6 +109,7 @@ int hb_sync_init( hb_job_t * job )
     hb_work_private_t * pv;
     hb_sync_video_t   * sync;
     hb_work_object_t  * w;
+    hb_work_object_t  * ret = NULL;
 
     pv = calloc( 1, sizeof( hb_work_private_t ) );
     sync = &pv->type.video;
@@ -127,7 +128,7 @@ int hb_sync_init( hb_job_t * job )
         pv->common->start_found = 1;
     }
 
-    w = hb_get_work( WORK_SYNC_VIDEO );
+    ret = w = hb_get_work( WORK_SYNC_VIDEO );
     w->private_data = pv;
     w->fifo_in = job->fifo_raw;
     w->fifo_out = job->fifo_sync;
@@ -167,7 +168,6 @@ int hb_sync_init( hb_job_t * job )
         }
         sync->count_frames_max = duration * title->rate / title->rate_base / 90000;
     }
-    hb_list_add( job->list_work, w );
 
     hb_log( "sync: expecting %d video frames", sync->count_frames_max );
 
@@ -183,7 +183,7 @@ int hb_sync_init( hb_job_t * job )
     for ( i = 0; i < pv->common->pts_count; i++ )
         pv->common->first_pts[i] = INT64_MAX;
 
-    return 0;
+    return ret;
 }
 
 /***********************************************************************
@@ -800,7 +800,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
     /* Update UI */
     UpdateState( w );
-        
+
     return HB_WORK_OK;
 }
 
@@ -872,7 +872,6 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_job_t        * job = pv->job;
     hb_sync_audio_t * sync = &pv->type.audio;
     hb_buffer_t     * buf;
-    //hb_fifo_t       * fifo;
     int64_t start;
 
     *buf_out = NULL;
@@ -1017,8 +1016,6 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 (int)((start - sync->next_pts) / 90),
                 w->audio->id, start, sync->next_pts );
         InsertSilence( w, start - sync->next_pts );
-        *buf_out = buf;
-        return HB_WORK_OK;
     }
 
     /*

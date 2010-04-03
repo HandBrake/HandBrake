@@ -385,6 +385,10 @@ static void mux_loop( void * _w )
         }
 
         w->status = w->work( w, &buf_in, NULL );
+        if( buf_in )
+        {
+            hb_buffer_close( &buf_in );
+        }
     }
 }
 
@@ -445,8 +449,7 @@ hb_work_object_t * hb_muxer_init( hb_job_t * job )
     muxer->private_data->track = mux->ntracks;
     muxer->fifo_in = job->fifo_mpeg4;
     add_mux_track( mux, job->mux_data, 1 );
-    muxer->done = &job->done;
-    muxer->thread = hb_thread_init( muxer->name, mux_loop, muxer, HB_NORMAL_PRIORITY );
+    muxer->done = &muxer->private_data->mux->done;
 
     for( i = 0; i < hb_list_count( title->list_audio ); i++ )
     {

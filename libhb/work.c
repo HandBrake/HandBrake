@@ -381,6 +381,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     hb_title_t    * title;
     int             i, j;
     hb_work_object_t * w;
+    hb_work_object_t * sync;
     hb_work_object_t * muxer;
     hb_interjob_t * interjob;
 
@@ -641,12 +642,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
     }
     /* Synchronization */
-    if( hb_sync_init( job ) )
-    {
-        hb_error( "Failure to initialise sync" );
-        *job->die = 1;
-        goto cleanup;
-    }
+    sync = hb_sync_init( job );
 
     /* Video decoder */
     int vcodec = title->video_codec? title->video_codec : WORK_DECMPEG2;
@@ -658,7 +654,10 @@ static void do_job( hb_job_t * job, int cpu_count )
     /* Video renderer */
     hb_list_add( job->list_work, ( w = hb_get_work( WORK_RENDER ) ) );
     w->fifo_in  = job->fifo_sync;
-    w->fifo_out = job->fifo_render;
+    if( !job->indepth_scan )
+        w->fifo_out = job->fifo_render;
+    else
+        w->fifo_out = NULL;
 
     if( !job->indepth_scan )
     {
@@ -860,7 +859,7 @@ static void do_job( hb_job_t * job, int cpu_count )
     job->done = 0;
 
     /* Launch processing threads */
-    for( i = 1; i < hb_list_count( job->list_work ); i++ )
+    for( i = 0; i < hb_list_count( job->list_work ); i++ )
     {
         w = hb_list_item( job->list_work, i );
         w->done = &job->done;
@@ -875,12 +874,32 @@ static void do_job( hb_job_t * job, int cpu_count )
                                     HB_LOW_PRIORITY );
     }
 
-    // The muxer requires track information that's set up by the encoder
-    // init routines so we have to init the muxer last.
-    muxer = job->indepth_scan? NULL : hb_muxer_init( job );
+    if ( job->indepth_scan )
+    {
+        muxer = NULL;
+        w = sync;
+        sync->done = &job->done;
+    }
+    else
+    {
+        sync->done = &job->done;
+        sync->thread_sleep_interval = 10;
+        if( sync->init( w, job ) )
+        {
+            hb_error( "Failure to initialise thread '%s'", w->name );
+            *job->die = 1;
+            goto cleanup;
+        }
+        sync->thread = hb_thread_init( sync->name, work_loop, sync,
+                                    HB_LOW_PRIORITY );
 
-    w = hb_list_item( job->list_work, 0 );
-    while( !*job->die && w->status != HB_WORK_DONE )
+        // The muxer requires track information that's set up by the encoder
+        // init routines so we have to init the muxer last.
+        muxer = hb_muxer_init( job );
+        w = muxer;
+    }
+
+    while ( !*job->die && !*w->done && w->status != HB_WORK_DONE )
     {
         hb_buffer_t      * buf_in, * buf_out;
 
@@ -896,11 +915,16 @@ static void do_job( hb_job_t * job, int cpu_count )
             break;
         }
 
+        buf_out = NULL;
         w->status = w->work( w, &buf_in, &buf_out );
 
         if( buf_in )
         {
             hb_buffer_close( &buf_in );
+        }
+        if ( buf_out && w->fifo_out == NULL )
+        {
+            hb_buffer_close( &buf_out );
         }
         if( buf_out )
         {
@@ -914,9 +938,20 @@ static void do_job( hb_job_t * job, int cpu_count )
             }
         }
     }
-    hb_list_rem( job->list_work, w );
-    w->close( w );
-    free( w );
+
+    job->done = 1;
+    if( muxer != NULL )
+    {
+        muxer->close( muxer );
+        free( muxer );
+
+        if( sync->thread != NULL )
+        {
+            hb_thread_close( &sync->thread );
+            sync->close( sync );
+        }
+        free( sync );
+    }
 
     hb_handle_t * h = job->h;
     hb_state_t state;
@@ -926,12 +961,6 @@ static void do_job( hb_job_t * job, int cpu_count )
 
 cleanup:
     /* Stop the write thread (thread_close will block until the muxer finishes) */
-    if( muxer != NULL )
-    {
-        hb_thread_close( &muxer->thread );
-        muxer->close( muxer );
-    }
-
     job->done = 1;
 
     /* Close work objects */
@@ -1125,6 +1154,10 @@ static void work_loop( void * _w )
         {
             hb_buffer_close( &buf_in );
         }
+        if ( buf_out && w->fifo_out == NULL )
+        {
+            hb_buffer_close( &buf_out );
+        }
         if( buf_out )
         {
             while ( !*w->done )
@@ -1136,5 +1169,13 @@ static void work_loop( void * _w )
                 }
             }
         }
+    }
+    // Consume data in incoming fifo till job complete so that
+    // residual data does not stall the pipeline
+    while( !*w->done )
+    {
+        buf_in = hb_fifo_get_wait( w->fifo_in );
+        if ( buf_in != NULL )
+            hb_buffer_close( &buf_in );
     }
 }
