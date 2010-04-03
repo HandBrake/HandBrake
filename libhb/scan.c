@@ -30,7 +30,7 @@ typedef struct
 
 static void ScanFunc( void * );
 static int  DecodePreviews( hb_scan_t *, hb_title_t * title );
-static int LookForAudio( hb_title_t * title, hb_buffer_t * b );
+static void LookForAudio( hb_title_t * title, hb_buffer_t * b );
 static int  AllAudioOK( hb_title_t * title );
 
 static const char *aspect_to_string( double aspect )
@@ -518,11 +518,10 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title )
                         vid_buf = NULL;
                     }
                 }
-                else 
+                else if( ! AllAudioOK( title ) ) 
                 {
-                    if( ! AllAudioOK( title ) )
-                        if ( !LookForAudio( title, buf_es ) )
-                            buf_es = NULL;
+                    LookForAudio( title, buf_es );
+                    buf_es = NULL;
                 }
                 if ( buf_es )
                     hb_buffer_close( &buf_es );
@@ -825,7 +824,7 @@ skip_preview:
  * aren't (e.g., some European DVD Teletext streams use the same IDs as US ATSC
  * AC-3 audio).
  */
-static int LookForAudio( hb_title_t * title, hb_buffer_t * b )
+static void LookForAudio( hb_title_t * title, hb_buffer_t * b )
 {
     int i;
 
@@ -846,7 +845,8 @@ static int LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if( !audio || audio->config.in.bitrate != 0 )
     {
         /* not found or already done */
-        return 1;
+        hb_buffer_close( &b );
+        return;
     }
 
     if ( audio->priv.scan_cache == NULL )
@@ -884,7 +884,7 @@ static int LookForAudio( hb_title_t * title, hb_buffer_t * b )
     if ( !info.bitrate )
     {
         /* didn't find any info */
-        return 0;
+        return;
     }
     hb_fifo_flush( audio->priv.scan_cache );
     hb_fifo_close( &audio->priv.scan_cache );
@@ -917,7 +917,7 @@ static int LookForAudio( hb_title_t * title, hb_buffer_t * b )
             audio->config.lang.description );
  
     free( w );
-    return 1;
+    return;
 
     // We get here if there's no hope of finding info on an audio bitstream,
     // either because we don't have a decoder (or a decoder with a bitstream
@@ -932,7 +932,7 @@ static int LookForAudio( hb_title_t * title, hb_buffer_t * b )
     hb_fifo_flush( audio->priv.scan_cache );
     hb_fifo_close( &audio->priv.scan_cache );
     hb_list_rem( title->list_audio, audio );
-    return -1;
+    return;
 }
 
 /*
