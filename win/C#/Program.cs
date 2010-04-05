@@ -33,11 +33,6 @@ namespace Handbrake
                 missingFiles += "\"HandBrakeCLI.exe\" was not found.";
             }
 
-            if (!File.Exists(Path.Combine(Application.StartupPath, "libgcc_s_sjlj-1.dll")))
-            {
-                missingFiles += "\n\"libgcc_s_sjlj-1.dll\" was not found.";
-            }
-
             if (missingFiles != string.Empty)
             {
                 MessageBox.Show(failedInstall + missingFiles + "\n\n"+ nightlyCLIMissing, "Error", MessageBoxButtons.OK,
