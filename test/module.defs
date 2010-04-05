@@ -49,4 +49,5 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     TEST.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.l += iberty ws2_32
+	TEST.GCC.args.extra.exe++ += -static
 endif
