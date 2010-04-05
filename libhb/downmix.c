@@ -888,6 +888,7 @@ int hb_mixdown_to_mode(uint32_t mixdown)
     }
 }
 
+
 // ffmpeg gives us SMPTE channel layout
 // We could use this layout and remap channels in encfaac,
 // but VLC may have problems with remapping, so lets
@@ -924,47 +925,232 @@ int hb_mixdown_to_mode(uint32_t mixdown)
 // 3F4-LFE        L   R   C    LFE  Rls  Rrs  LS   RS
 //
 
-// Map Indicies are mode, lfe, channel respectively
-int hb_ac3_chan_map[10][2][8] =
+#define CH_C      0
+#define CH_L      1
+#define CH_R      2
+#define CH_CS     3
+#define CH_LS     3
+#define CH_RS     4
+#define CH_Rls    5
+#define CH_Rrs    6
+#define CH_LFE    7
+
+hb_chan_map_t hb_qt_chan_map =
 {
-//     w/o LFE                       w/ LFE
-//     C  L  R LS RS Rls Rrs         L  R  C LS RS Rls Rls LFE
-    {{ 0,                       }, { 1, 0,                     }}, // MONO
-    {{ 0, 1,                    }, { 1, 2, 0,                  }}, // STEREO
-    {{ 1, 0, 2,                 }, { 2, 1, 3, 0,               }}, // 3F
-    {{ 0, 1, 2,                 }, { 1, 2, 3, 0,               }}, // 2F1R
-    {{ 1, 0, 2, 3,              }, { 2, 1, 3, 4, 0,            }}, // 3F1R
-    {{ 0, 1, 2, 3,              }, { 1, 2, 3, 4, 0,            }}, // 2F2R
-    {{ 1, 0, 2, 3, 4,           }, { 2, 1, 3, 4, 5,  0,        }}, // 3F2R
-    {{ 1, 0, 2, 3, 4,  5,  6,   }, { 2, 1, 3, 4, 5,  6,  7,  0 }}, // 3F4R
-    {{ 0, 1,                    }, { 0, 1,                     }}, // DOLBY
-    {{ 0, 1,                    }, { 0, 1,                     }}  // DPLII
+{
+    {{ CH_C,                                                     },
+     { CH_C, CH_LFE,                                             }}, // MONO
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R, CH_LFE,                                       }}, // STEREO
+
+    {{ CH_C, CH_L, CH_R,                                         },
+     { CH_C, CH_L, CH_R, CH_LFE,                                 }}, // 3F
+
+    {{ CH_L, CH_R, CH_CS,                                        },
+     { CH_L, CH_R, CH_CS, CH_LFE,                                }}, // 2F1R
+
+    {{ CH_C, CH_L, CH_R, CH_CS,                                  },
+     { CH_C, CH_L, CH_R, CH_CS, CH_LFE,                          }}, // 3F1R
+
+    {{ CH_L, CH_R, CH_LS, CH_RS,                                 },
+     { CH_L, CH_R, CH_LS, CH_RS, CH_LFE,                         }}, // 2F2R
+
+    {{ CH_C, CH_L, CH_R, CH_LS, CH_RS,                           },
+     { CH_C, CH_L, CH_R, CH_LS, CH_RS, CH_LFE,                   }}, // 3F2R
+
+    {{ CH_C, CH_L, CH_R, CH_LS, CH_RS,  CH_Rls,  CH_Rrs,         },
+     { CH_C, CH_L, CH_R, CH_LS, CH_RS,  CH_Rls,  CH_Rrs,  CH_LFE }}, // 3F4R
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R,                                               }}, // DOLBY
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R,                                               }}  // DPLII
+},
+{
+    // CH_C  CH_L  CH_R  CH_LS/CS  CH_RS   CH_Rls   CH_Rrs   CH_LFE 
+    {{ 0,    0,    0,    0,        0,      0,       0,       0   },
+     { 0,    0,    0,    0,        0,      0,       0,       1   }}, // MONO
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       2   }}, // STEREO
+
+    {{ 0,    1,    2,    0,        0,      0,       0,       0   },
+     { 0,    1,    2,    0,        0,      0,       0,       3   }}, // 3F
+
+    {{ 0,    0,    1,    2,        0,      0,       0,       0   },
+     { 0,    0,    1,    2,        0,      0,       0,       3   }}, // 2F1R
+
+    {{ 0,    1,    2,    3,        0,      0,       0,       0   },
+     { 0,    1,    2,    3,        0,      0,       0,       4   }}, // 3F1R
+
+    {{ 0,    0,    1,    2,        3,      0,       0,       0   },
+     { 0,    0,    1,    2,        3,      0,       0,       4   }}, // 2F2R
+
+    {{ 0,    1,    2,    3,        4,      0,       0,       0   },
+     { 0,    1,    2,    3,        4,      0,       0,       5   }}, // 3F2R
+
+    {{ 0,    1,    2,    3,        4,      5,       6,       0   },
+     { 0,    1,    2,    3,        4,      5,       6,       7   }}, // 3F4R
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       0   }}, // DOLBY
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       0   }}  // DPLII
+}
 };
 
-int hb_smpte_chan_map[10][2][8] =
+hb_chan_map_t hb_smpte_chan_map =
 {
-//     w/o LFE                       w/ LFE
-//     L  R  C LS RS Rls Rrs         L  R  C LS RS Rls Rls LFE
-    {{ 0,                       }, { 0, 1,                     }}, // MONO
-    {{ 0, 1,                    }, { 0, 1, 2,                  }}, // STEREO
-    {{ 2, 0, 1,                 }, { 2, 0, 1, 3,               }}, // 3F
-    {{ 0, 1, 2,                 }, { 0, 1, 3, 2,               }}, // 2F1R
-    {{ 2, 0, 1, 3,              }, { 2, 0, 1, 4, 3,            }}, // 3F1R
-    {{ 0, 1, 2, 3,              }, { 0, 1, 3, 4, 2,            }}, // 2F2R
-    {{ 2, 0, 1, 3, 4,           }, { 2, 0, 1, 4, 5,  3,        }}, // 3F2R
-    {{ 2, 0, 1, 5, 6,  3,  4,   }, { 2, 0, 1, 6, 7,  4,  5,  3 }}, // 3F4R
-    {{ 0, 1,                    }, { 0, 1,                     }}, // DOLBY
-    {{ 0, 1,                    }, { 0, 1,                     }}  // DPLII
+{
+    {{ CH_C,                                                     },
+     { CH_C, CH_LFE,                                             }}, // MONO
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R, CH_LFE,                                       }}, // STEREO
+
+    {{ CH_L, CH_R, CH_C,                                         },
+     { CH_L, CH_R, CH_C, CH_LFE,                                 }}, // 3F
+
+    {{ CH_L, CH_R, CH_CS,                                        },
+     { CH_L, CH_R, CH_LFE, CH_CS,                                }}, // 2F1R
+
+    {{ CH_L, CH_R, CH_C,   CH_CS,                                },
+     { CH_L, CH_R, CH_LFE, CH_CS,                                }}, // 3F1R
+
+    {{ CH_L, CH_R, CH_LS,  CH_RS,                                },
+     { CH_L, CH_R, CH_LFE, CH_LS, CH_RS,                         }}, // 2F2R
+
+    {{ CH_L, CH_R, CH_C, CH_LS,  CH_RS,                          },
+     { CH_L, CH_R, CH_C, CH_LFE, CH_LS, CH_RS,                   }}, // 3F2R
+
+    {{ CH_L, CH_R, CH_C, CH_Rls, CH_Rrs, CH_LS, CH_RS },
+     { CH_L, CH_R, CH_C, CH_LFE, CH_Rls, CH_Rrs, CH_LS, CH_RS    }}, // 3F4R
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R,                                               }}, // DOLBY
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R,                                               }}  // DPLII
+},
+{
+    // CH_C  CH_L  CH_R  CH_LS/CS  CH_RS   CH_Rls   CH_Rrs   CH_LFE 
+    {{ 0,    0,    0,    0,        0,      0,       0,       0   },
+     { 0,    0,    0,    0,        0,      0,       0,       1   }}, // MONO
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       2   }}, // STEREO
+
+    {{ 2,    0,    1,    0,        0,      0,       0,       0   },
+     { 2,    0,    1,    0,        0,      0,       0,       3   }}, // 3F
+
+    {{ 0,    0,    1,    2,        0,      0,       0,       0   },
+     { 0,    0,    1,    3,        0,      0,       0,       2   }}, // 2F1R
+
+    {{ 2,    0,    1,    3,        0,      0,       0,       0   },
+     { 2,    0,    1,    4,        0,      0,       0,       3   }}, // 3F1R
+
+    {{ 0,    0,    1,    2,        3,      0,       0,       0   },
+     { 0,    0,    1,    3,        4,      0,       0,       2   }}, // 2F2R
+
+    {{ 2,    0,    1,    3,        4,      0,       0,       0   },
+     { 2,    0,    1,    4,        5,      0,       0,       3   }}, // 3F2R
+
+    {{ 2,    0,    1,    5,        6,      3,       4,       0   },
+     { 2,    0,    1,    6,        7,      4,       5,       3   }}, // 3F4R
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       0   }}, // DOLBY
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       0   }}  // DPLII
+}
 };
+
+hb_chan_map_t hb_ac3_chan_map =
+{
+{
+    {{ CH_C,                                                     },
+     { CH_LFE, CH_C,                                             }}, // MONO
+
+    {{ CH_L, CH_R,                                               },
+     { CH_LFE, CH_L, CH_R,                                       }}, // STEREO
+
+    {{ CH_L, CH_C, CH_R,                                         },
+     { CH_LFE, CH_L, CH_C, CH_R,                                 }}, // 3F
+
+    {{ CH_L, CH_R, CH_CS,                                        },
+     { CH_LFE, CH_L, CH_R, CH_CS,                                }}, // 2F1R
+
+    {{ CH_L, CH_C, CH_R, CH_CS,                                  },
+     { CH_LFE, CH_L, CH_C, CH_R, CH_CS,                          }}, // 3F1R
+
+    {{ CH_L, CH_R, CH_LS, CH_RS,                                 },
+     { CH_LFE, CH_L, CH_R, CH_LS, CH_RS,                         }}, // 2F2R
+
+    {{ CH_L, CH_C, CH_R, CH_LS, CH_RS,                           },
+     { CH_LFE, CH_L, CH_C, CH_R, CH_LS, CH_RS,                   }}, // 3F2R
+
+    {{ CH_L, CH_C, CH_R, CH_LS, CH_RS,  CH_Rls,  CH_Rrs,         },
+     { CH_LFE, CH_L, CH_C, CH_R, CH_LS, CH_RS,  CH_Rls,  CH_Rrs  }}, // 3F4R
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R,                                               }}, // DOLBY
+
+    {{ CH_L, CH_R,                                               },
+     { CH_L, CH_R,                                               }}  // DPLII
+},
+{
+    // CH_C  CH_L  CH_R  CH_LS/CS  CH_RS   CH_Rls   CH_Rrs   CH_LFE 
+    {{ 0,    0,    0,    0,        0,      0,       0,       0   },
+     { 1,    0,    0,    0,        0,      0,       0,       0   }}, // MONO
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    1,    2,    0,        0,      0,       0,       0   }}, // STEREO
+
+    {{ 1,    0,    2,    0,        0,      0,       0,       0   },
+     { 2,    1,    3,    0,        0,      0,       0,       0   }}, // 3F
+
+    {{ 0,    0,    1,    2,        0,      0,       0,       0   },
+     { 0,    1,    2,    3,        0,      0,       0,       0   }}, // 2F1R
+
+    {{ 1,    0,    2,    3,        0,      0,       0,       0   },
+     { 2,    1,    3,    4,        0,      0,       0,       0   }}, // 3F1R
+
+    {{ 0,    0,    1,    2,        3,      0,       0,       0   },
+     { 0,    1,    2,    3,        4,      0,       0,       0   }}, // 2F2R
+
+    {{ 1,    0,    2,    3,        4,      0,       0,       0   },
+     { 2,    1,    3,    4,        5,      0,       0,       0   }}, // 3F2R
+
+    {{ 1,    0,    2,    3,        4,      5,       6,       0   },
+     { 2,    1,    3,    4,        5,      6,       7,       0   }}, // 3F4R
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       0   }}, // DOLBY
+
+    {{ 0,    0,    1,    0,        0,      0,       0,       0   },
+     { 0,    0,    1,    0,        0,      0,       0,       0   }}  // DPLII
+}
+};
+
 static const uint8_t nchans_tbl[] = {1, 2, 3, 3, 4, 4, 5, 7, 2, 2};
 
 // Takes a set of samples and remaps the channel layout
-void hb_layout_remap( int (*layouts)[2][8], hb_sample_t * samples, int layout, int nsamples )
+void hb_layout_remap( 
+    hb_chan_map_t * map_in, 
+    hb_chan_map_t * map_out, 
+    int layout, 
+    hb_sample_t * samples, 
+    int nsamples )
 {
     int nchans;
     int ii, jj;
     int lfe;
     int * map;
+    int * inv_map;
     int mode;
     hb_sample_t tmp[6];
 
@@ -972,7 +1158,8 @@ void hb_layout_remap( int (*layouts)[2][8], hb_sample_t * samples, int layout, i
     lfe = ((mode & DOWNMIX_LFE_FLAG) != 0);
     mode = mode & DOWNMIX_CHANNEL_MASK;
     nchans = nchans_tbl[mode] + lfe;
-    map = layouts[mode][lfe];
+    inv_map = map_in->inv_chan_map[mode][lfe];
+    map = map_out->chan_map[mode][lfe];
 
     for (ii = 0; ii < nsamples; ii++)
     {
@@ -982,7 +1169,8 @@ void hb_layout_remap( int (*layouts)[2][8], hb_sample_t * samples, int layout, i
         }
         for (jj = 0; jj < nchans; jj++)
         {
-            samples[jj] = tmp[map[jj]];
+            int ord = map[jj];
+            samples[jj] = tmp[inv_map[ord]];
         }
         samples += nchans;
     }
@@ -1016,43 +1204,36 @@ static void matrix_mul(
     }
 }
 
-static void set_level(
-    hb_sample_t (*matrix)[8], 
-    hb_sample_t clev, 
-    hb_sample_t slev, 
-    hb_sample_t level, 
-    int mode_in, 
-    int mode_out)
+static void set_level( hb_downmix_t * downmix )
 {
     int ii, jj;
-    int spos;
     int layout_in, layout_out;
+    int mode_in;
+    int mode_out;
+
+    mode_in = downmix->mode_in & ~DOWNMIX_FLAGS_MASK;
+    mode_out = downmix->mode_out & ~DOWNMIX_FLAGS_MASK;
 
     for (ii = 0; ii < 8; ii++)
     {
         for (jj = 0; jj < 8; jj++)
         {
-            matrix[ii][jj] *= level;
+            downmix->matrix[ii][jj] *= downmix->level;
         }
     }
     if (mode_out >= DOWNMIX_DOLBY)
         return;
 
-    spos = 3;
     layout_in = channel_layout_map[mode_in];
     layout_out = channel_layout_map[mode_out];
 
-    if (!(layout_in & HB_CH_FRONT_CENTER))
-    {
-        spos--;
-    }
-    else
+    if (layout_in & HB_CH_FRONT_CENTER)
     {
         if (!(layout_out & HB_CH_FRONT_CENTER))
         {
             for (jj = 0; jj < 8; jj++)
             {
-                matrix[0][jj] *= clev;
+                downmix->matrix[downmix->center][jj] *= downmix->clev;
             }
         }
     }
@@ -1064,29 +1245,16 @@ static void set_level(
             return;
         }
     }
-    if (layout_in & (HB_CH_SIDE_LEFT|HB_CH_SIDE_RIGHT))
+    for (jj = 0; jj < 8; jj++)
     {
-        for (jj = 0; jj < 8; jj++)
-        {
-            matrix[spos][jj] *= slev;
-            matrix[spos+1][jj] *= slev;
-        }
-        spos += 2;
-    }
-    else if (layout_in & (HB_CH_BACK_CENTER))
-    {
-        for (jj = 0; jj < 8; jj++)
-        {
-            matrix[spos][jj] *= slev;
-        }
-    }
-    if (layout_in & (HB_CH_BACK_LEFT|HB_CH_BACK_RIGHT))
-    {
-        for (jj = 0; jj < 8; jj++)
-        {
-            matrix[spos][jj] *= slev;
-            matrix[spos+1][jj] *= slev;
-        }
+        if ( downmix->left_surround >= 0 )
+            downmix->matrix[downmix->left_surround][jj] *= downmix->slev;
+        if ( downmix->right_surround >= 0 )
+            downmix->matrix[downmix->right_surround][jj] *= downmix->slev;
+        if ( downmix->rear_left_surround >= 0 )
+            downmix->matrix[downmix->rear_left_surround][jj] *= downmix->slev;
+        if ( downmix->rear_right_surround >= 0 )
+            downmix->matrix[downmix->rear_right_surround][jj] *= downmix->slev;
     }
 }
 
@@ -1101,9 +1269,8 @@ static void set_level(
 // in the resulting downmixed audio.
 void hb_downmix_adjust_level( hb_downmix_t * downmix )
 {
-    int ii, jj;
     int mode_in, mode_out;
-    hb_sample_t level = 1.0;
+    hb_sample_t level = downmix->level;
     hb_sample_t clev = downmix->clev;
     hb_sample_t slev = downmix->slev;
 
@@ -1218,13 +1385,8 @@ void hb_downmix_adjust_level( hb_downmix_t * downmix )
         level /= 1 + LVL_3DB + 2 * LVL_SQRT_1_3 + 2 * LVL_SQRT_2_3;
     }
 
-    for (ii = 0; ii < 8; ii++)
-    {
-        for (jj = 0; jj < 8; jj++)
-        {
-            downmix->matrix[ii][jj] *= level;
-        }
-    }
+    downmix->level = level;
+    downmix->matrix_initialized = 0;
 }
 
 void hb_downmix_set_bias( hb_downmix_t * downmix, hb_sample_t bias )
@@ -1233,12 +1395,31 @@ void hb_downmix_set_bias( hb_downmix_t * downmix, hb_sample_t bias )
 }
 
 // Changes the downmix mode if it needs changing after initialization
-int hb_downmix_set_mode( hb_downmix_t * downmix, int layout, int mixdown )
+static void set_mode( hb_downmix_t * downmix )
 {
     int ii, jj;
-    int lfe_in, lfe_out;
     int mode_in, mode_out;
     hb_sample_t (*matrix)[8];
+
+    mode_in = downmix->mode_in & ~DOWNMIX_FLAGS_MASK;
+    mode_out = downmix->mode_out & ~DOWNMIX_FLAGS_MASK;
+
+    matrix = downmix_matrix[mode_in][mode_out];
+
+    for (ii = 0; ii < 8; ii++)
+    {
+        for (jj = 0; jj < 8; jj++)
+        {
+            downmix->matrix[ii][jj] = matrix[ii][jj];
+        }
+    }
+}
+
+// Changes the downmix mode if it needs changing after initialization
+int hb_downmix_set_mode( hb_downmix_t * downmix, int layout, int mixdown )
+{
+    int lfe_in, lfe_out;
+    int mode_in, mode_out;
 
     if ( downmix == NULL )
         return -1;
@@ -1254,53 +1435,121 @@ int hb_downmix_set_mode( hb_downmix_t * downmix, int layout, int mixdown )
     if (mode_in >= DOWNMIX_NUM_MODES || mode_out >= DOWNMIX_NUM_MODES)
         return -1;
 
-    matrix = downmix_matrix[mode_in][mode_out];
-
-    for (ii = 0; ii < 8; ii++)
-    {
-        for (jj = 0; jj < 8; jj++)
-        {
-            downmix->matrix[ii][jj] = matrix[ii][jj];
-        }
-    }
-
     lfe_in = ((downmix->mode_in & DOWNMIX_LFE_FLAG) != 0);
     lfe_out = ((downmix->mode_out & DOWNMIX_LFE_FLAG) != 0);
 
     downmix->nchans_in = nchans_tbl[mode_in] + lfe_in;
     downmix->nchans_out = nchans_tbl[mode_out] + lfe_out;
+
+    downmix->matrix_initialized = 0;
     return 0;
 }
 
 // Changes the downmix levels if they need changing after initialization
 void hb_downmix_set_level( hb_downmix_t * downmix, hb_sample_t clev, hb_sample_t slev, hb_sample_t level )
 {
-    int ii, jj;
-    int mode_in, mode_out;
-    hb_sample_t (*matrix)[8];
-
     if ( downmix == NULL )
         return;
 
-    mode_in = downmix->mode_in & ~DOWNMIX_FLAGS_MASK;
-    mode_out = downmix->mode_out & ~DOWNMIX_FLAGS_MASK;
-
-    if (mode_in >= DOWNMIX_NUM_MODES || mode_out >= DOWNMIX_NUM_MODES)
-        return;
-
-    matrix = downmix_matrix[mode_in][mode_out];
-
-    for (ii = 0; ii < 8; ii++)
-    {
-        for (jj = 0; jj < 8; jj++)
-        {
-            downmix->matrix[ii][jj] = matrix[ii][jj];
-        }
-    }
     downmix->clev = clev;
     downmix->slev = slev;
     downmix->level = level;
-    set_level(downmix->matrix, clev, slev, level, mode_in, mode_out);
+    downmix->matrix_initialized = 0;
+}
+
+static void set_chan_map( hb_downmix_t * downmix )
+{
+    int nchans;
+    int ii, jj;
+    int lfe;
+    int * map;
+    int * inv_map;
+    int mode;
+    hb_sample_t matrix[8][8];
+
+    // Copy the matrix
+    for ( ii = 0; ii < 8; ii++ )
+    {
+        for ( jj = 0; jj < 8; jj++ )
+        {
+            matrix[ii][jj] = downmix->matrix[ii][jj];
+        }
+    }
+
+    // Rearrange the rows to correspond to the input channel order
+    lfe = ((downmix->mode_in & DOWNMIX_LFE_FLAG) != 0);
+    mode = downmix->mode_in & DOWNMIX_CHANNEL_MASK;
+    nchans = nchans_tbl[mode] + lfe;
+    map = downmix->map_in.chan_map[mode][lfe];
+    inv_map = hb_qt_chan_map.inv_chan_map[mode][lfe];
+
+    downmix->center = -1;
+    downmix->left_surround = -1;
+    downmix->right_surround = -1;
+    downmix->rear_left_surround = -1;
+    downmix->rear_right_surround = -1;
+    for ( ii = 0; ii < nchans; ii++ )
+    {
+        int ord = map[ii];
+        int row = inv_map[ord];
+        switch (ord)
+        {
+            case CH_C:
+                downmix->center = ii;
+                break;
+            case CH_LS:
+                downmix->left_surround = ii;
+                break;
+            case CH_RS:
+                downmix->right_surround = ii;
+                break;
+            case CH_Rls:
+                downmix->rear_right_surround = ii;
+                break;
+            case CH_Rrs:
+                downmix->rear_left_surround = ii;
+                break;
+        }
+        for ( jj = 0; jj < 8; jj++ )
+        {
+            downmix->matrix[ii][jj] = matrix[row][jj];
+        }
+    }
+
+    // Copy the matrix
+    for ( ii = 0; ii < 8; ii++ )
+    {
+        for ( jj = 0; jj < 8; jj++ )
+        {
+            matrix[ii][jj] = downmix->matrix[ii][jj];
+        }
+    }
+
+    // Rearrange the columns to correspond to the output channel order
+    lfe = ((downmix->mode_out & DOWNMIX_LFE_FLAG) != 0);
+    mode = downmix->mode_out & DOWNMIX_CHANNEL_MASK;
+    nchans = nchans_tbl[mode] + lfe;
+    map = downmix->map_out.chan_map[mode][lfe];
+    inv_map = hb_qt_chan_map.inv_chan_map[mode][lfe];
+    for ( ii = 0; ii < nchans; ii++ )
+    {
+        int ord = map[ii];
+        int col = inv_map[ord];
+        for ( jj = 0; jj < 8; jj++ )
+        {
+            downmix->matrix[jj][ii] = matrix[jj][col];
+        }
+    }
+}
+
+void hb_downmix_set_chan_map( 
+    hb_downmix_t * downmix, 
+    hb_chan_map_t * map_in, 
+    hb_chan_map_t * map_out )
+{
+    downmix->map_in = *map_in;
+    downmix->map_out = *map_out;
+    downmix->matrix_initialized = 0;
 }
 
 hb_downmix_t * hb_downmix_init(int layout, int mixdown)
@@ -1315,12 +1564,11 @@ hb_downmix_t * hb_downmix_init(int layout, int mixdown)
         return NULL;
     }
     // Set some good default values
-    downmix->clev = LVL_3DB;
-    downmix->slev = LVL_3DB;
-    downmix->level = 1.0;
+    hb_downmix_set_level( downmix, LVL_3DB, LVL_3DB, 1.0 );
     downmix->bias = 0.0;
-    set_level(downmix->matrix, LVL_3DB, LVL_3DB, 1.0, 
-              downmix->mode_in, downmix->mode_out);
+    downmix->matrix_initialized = 0;
+    // The default input and output channel order is QT
+    hb_downmix_set_chan_map( downmix, &hb_qt_chan_map, &hb_qt_chan_map );
     return downmix;
 }
 
@@ -1331,10 +1579,22 @@ void hb_downmix_close( hb_downmix_t **downmix )
     *downmix = NULL;
 }
 
+static void init_matrix( hb_downmix_t * downmix )
+{
+    if ( !downmix->matrix_initialized )
+    {
+        set_mode( downmix );
+        set_chan_map( downmix );
+        set_level(downmix);
+        downmix->matrix_initialized = 1;
+    }
+}
+
 void hb_downmix( hb_downmix_t * downmix, hb_sample_t * dst, hb_sample_t * src, int nsamples)
 {
-    matrix_mul(dst, src, downmix->nchans_out, downmix->nchans_in, 
-               nsamples, downmix->matrix, downmix->bias);
+    init_matrix( downmix );
+    matrix_mul( dst, src, downmix->nchans_out, downmix->nchans_in, 
+               nsamples, downmix->matrix, downmix->bias );
 }
 
 int hb_need_downmix( int layout, int mixdown )

@@ -209,6 +209,7 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                       w->audio->config.out.mixdown);
+        hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_qt_chan_map );
     }
 
     return 0;
@@ -1081,6 +1082,7 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
     {
         pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                       w->audio->config.out.mixdown);
+        hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_qt_chan_map );
     }
 
     return 0;
@@ -1228,9 +1230,6 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                 }
 
                 int n_ch_samples = nsamples / context->channels;
-                hb_layout_remap( hb_smpte_chan_map, pv->downmix_buffer, 
-                                 audio->config.in.channel_layout, n_ch_samples );
-
                 int channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
                 buf = hb_buffer_init( n_ch_samples * channels * sizeof(float) );
@@ -1247,8 +1246,9 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
                     fl32[i] = buffer[i];
                 }
                 int n_ch_samples = nsamples / context->channels;
-                hb_layout_remap( hb_smpte_chan_map, fl32, 
-                                 audio->config.in.channel_layout, n_ch_samples );
+                hb_layout_remap( &hb_smpte_chan_map, &hb_qt_chan_map,
+                                 audio->config.in.channel_layout, 
+                                 fl32, n_ch_samples );
             }
 
             double pts = pv->pts_next;
