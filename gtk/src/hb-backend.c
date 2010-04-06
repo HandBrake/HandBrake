@@ -4642,9 +4642,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
     		hb_subtitle_config_t sub_config;
 
        		subt = (hb_subtitle_t *)hb_list_item(title->list_subtitle, subtitle);
-			sub_config = subt->config;
 			if (subt != NULL)
 			{
+				sub_config = subt->config;
 				if (!burned && job->mux == HB_MUX_MKV && 
 					subt->format == PICTURESUB)
 				{
