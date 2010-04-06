@@ -6728,6 +6728,7 @@ return YES;
         {
             
             /* pointer to this track's mixdown, codec, sample rate and bitrate NSPopUpButton's */
+            NSPopUpButton * trackLangPreviousPopUp = nil;
             NSPopUpButton * trackLangPopUp = nil;
             NSPopUpButton * mixdownPopUp = nil;
             NSPopUpButton * audiocodecPopUp = nil;
@@ -6754,6 +6755,7 @@ return YES;
                 }
                 if( i == 2 )
                 {
+                    trackLangPreviousPopUp = fAudLang1PopUp;
                     trackLangPopUp = fAudLang2PopUp;
                     mixdownPopUp = fAudTrack2MixPopUp;
                     audiocodecPopUp = fAudTrack2CodecPopUp;
@@ -6763,6 +6765,7 @@ return YES;
                 }
                 if( i == 3 )
                 {
+                    trackLangPreviousPopUp = fAudLang2PopUp;
                     trackLangPopUp = fAudLang3PopUp;
                     mixdownPopUp = fAudTrack3MixPopUp;
                     audiocodecPopUp = fAudTrack3CodecPopUp;
@@ -6772,6 +6775,7 @@ return YES;
                 }
                 if( i == 4 )
                 {
+                    trackLangPreviousPopUp = fAudLang3PopUp;
                     trackLangPopUp = fAudLang4PopUp;
                     mixdownPopUp = fAudTrack4MixPopUp;
                     audiocodecPopUp = fAudTrack4CodecPopUp;
@@ -6783,7 +6787,16 @@ return YES;
                 
                 if ([trackLangPopUp indexOfSelectedItem] == 0)
                 {
-                    [trackLangPopUp selectItemAtIndex: 1];
+                    if (i ==1)
+                    {
+                        [trackLangPopUp selectItemAtIndex: 1];
+                    }
+                    else
+                    {
+                        /* if we are greater than track 1, select
+                         * the same track as the previous track */
+                        [trackLangPopUp selectItemAtIndex: [trackLangPreviousPopUp indexOfSelectedItem]];
+                    }
                 }
                 [self audioTrackPopUpChanged: trackLangPopUp];
                 [audiocodecPopUp selectItemWithTitle:[tempObject objectForKey:@"AudioEncoder"]];
