@@ -97,13 +97,15 @@ static int deca52Init( hb_work_object_t * w, hb_job_t * job )
     pv->list      = hb_list_init();
     pv->state     = a52_init( 0 );
 
-	/* Decide what format we want out of a52dec
-	work.c has already done some of this deduction for us in do_job() */
+    /* Decide what format we want out of a52dec
+    work.c has already done some of this deduction for us in do_job() */
 
-	pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(audio->config.out.mixdown);
+    pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(audio->config.out.mixdown);
+    if ( audio->config.out.codec == HB_ACODEC_LAME )
+        pv->flags_out |= A52_ADJUST_LEVEL;
 
-	/* pass the number of channels used into the private work data */
-	/* will only be actually used if we're not doing AC3 passthru */
+    /* pass the number of channels used into the private work data */
+    /* will only be actually used if we're not doing AC3 passthru */
     pv->out_discrete_channels = HB_AMIXDOWN_GET_DISCRETE_CHANNEL_COUNT(audio->config.out.mixdown);
 
     pv->level     = 32768.0;
@@ -304,10 +306,10 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         /* Interleave */
         for( j = 0; j < 256; j++ )
         {
-			for ( k = 0; k < pv->out_discrete_channels; k++ )
-			{
-				samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j];
-			}
+            for ( k = 0; k < pv->out_discrete_channels; k++ )
+            {
+                samples_out[(pv->out_discrete_channels*j)+k]   = samples_in[(256*k)+j];
+            }
         }
 
     }
