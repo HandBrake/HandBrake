@@ -36,13 +36,13 @@ namespace Handbrake.Controls
         {
             this.components = new System.ComponentModel.Container();
             this.lv_audioList = new System.Windows.Forms.ListView();
-            this.col_id = new System.Windows.Forms.ColumnHeader();
-            this.col_Source = new System.Windows.Forms.ColumnHeader();
-            this.col_codec = new System.Windows.Forms.ColumnHeader();
-            this.col_mixdown = new System.Windows.Forms.ColumnHeader();
-            this.col_samplerate = new System.Windows.Forms.ColumnHeader();
-            this.col_bitrate = new System.Windows.Forms.ColumnHeader();
-            this.col_drc = new System.Windows.Forms.ColumnHeader();
+            this.col_id = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_Source = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_codec = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_mixdown = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_samplerate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_bitrate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_drc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.audioMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.audioList_moveup = new System.Windows.Forms.ToolStripMenuItem();
             this.audioList_movedown = new System.Windows.Forms.ToolStripMenuItem();
@@ -324,7 +324,7 @@ namespace Handbrake.Controls
             this.drp_audioTrack.FormattingEnabled = true;
             this.drp_audioTrack.Items.AddRange(new object[] {
             "Automatic"});
-            this.drp_audioTrack.Location = new System.Drawing.Point(15, 35);
+            this.drp_audioTrack.Location = new System.Drawing.Point(15, 34);
             this.drp_audioTrack.Name = "drp_audioTrack";
             this.drp_audioTrack.Size = new System.Drawing.Size(194, 21);
             this.drp_audioTrack.TabIndex = 50;

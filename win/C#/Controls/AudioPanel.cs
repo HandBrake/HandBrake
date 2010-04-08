@@ -52,6 +52,7 @@ namespace Handbrake.Controls
             {
                 drp_audioEncoder.Items.Clear();
                 drp_audioEncoder.Items.Add("AAC (faac)");
+                drp_audioEncoder.Items.Add("MP3 (lame)");
                 drp_audioEncoder.Items.Add("AC3 Passthru");
                 if ((oldval != "AAC (faac)") && (oldval != "AC3 Passthru"))
                     drp_audioEncoder.SelectedIndex = 0;
