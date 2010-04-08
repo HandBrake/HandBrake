@@ -37,6 +37,7 @@ static char * input       = NULL;
 static char * output      = NULL;
 static char * format      = NULL;
 static int    titleindex  = 1;
+static int    titlescan   = 0;
 static int    longest_title = 0;
 static char * native_language = NULL;
 static int    native_dub  = 0;
@@ -482,7 +483,7 @@ static int HandleEvents( hb_handle_t * h )
         case HB_STATE_SCANNING:
             /* Show what title is currently being scanned */
             fprintf( stderr, "Scanning title %d", p.title_cur );
-            if( !titleindex )
+            if( !titleindex || titlescan )
                 fprintf( stderr, " of %d", p.title_count );
             fprintf( stderr, "...\n" );
             break;
@@ -551,7 +552,7 @@ static int HandleEvents( hb_handle_t * h )
                 title = hb_list_item( list, 0 );
             }
 
-            if( !titleindex )
+            if( !titleindex || titlescan )
             {
                 /* Scan-only mode, print infos and exit */
                 int i;
@@ -2199,8 +2200,9 @@ static void ShowHelp()
 
     "### Source Options-----------------------------------------------------------\n\n"
     "    -i, --input <string>    Set input device\n"
-    "    -t, --title <number>    Select a title to encode (0 to scan only,\n"
+    "    -t, --title <number>    Select a title to encode (0 to scan all titles only,\n"
     "                            default: 1)\n"
+    "        --scan              Scan selected title only.\n"
     "    -L, --longest           Select the longest title\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
@@ -2532,6 +2534,7 @@ static int ParseOptions( int argc, char ** argv )
     #define SRT_LANG            273
     #define SRT_DEFAULT         274
     #define ROTATE_FILTER       275
+    #define SCAN_ONLY           276
     
     for( ;; )
     {
@@ -2551,6 +2554,7 @@ static int ParseOptions( int argc, char ** argv )
             { "ipod-atom",   no_argument,       NULL,    'I' },
 
             { "title",       required_argument, NULL,    't' },
+            { "scan",        no_argument,       NULL,    SCAN_ONLY },
             { "longest",     no_argument,       NULL,    'L' },
             { "chapters",    required_argument, NULL,    'c' },
             { "angle",       required_argument, NULL,    ANGLE },
@@ -2697,6 +2701,9 @@ static int ParseOptions( int argc, char ** argv )
 
             case 't':
                 titleindex = atoi( optarg );
+                break;
+            case SCAN_ONLY:
+                titlescan = 1;
                 break;
             case 'L':
                 longest_title = 1;
@@ -3096,7 +3103,7 @@ static int CheckOptions( int argc, char ** argv )
     }
 
     /* Parse format */
-    if( titleindex > 0 )
+    if( titleindex > 0 && !titlescan )
     {
         if( output == NULL || *output == '\0' )
         {
