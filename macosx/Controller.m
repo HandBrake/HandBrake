@@ -5588,6 +5588,9 @@ the user is using "Custom" settings by determining the sender*/
                 // FAAC
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AAC (faac)" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_FAAC];
+                // MP3
+                menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"MP3 (lame)" action: NULL keyEquivalent: @""];
+                [menuItem setTag: HB_ACODEC_LAME];
                 // AC3 Passthru
                 menuItem = [[audiocodecPopUp menu] addItemWithTitle:@"AC3 Passthru" action: NULL keyEquivalent: @""];
                 [menuItem setTag: HB_ACODEC_AC3];
