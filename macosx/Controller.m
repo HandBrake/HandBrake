@@ -2047,7 +2047,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
      * by one to keep in sync with the queue array
      */
     currentQueueEncodeIndex--;
-    [self writeToActivityLog: "removeQueueFileItem: Removing a cancelled/finished encode, decrement currentQueueEncodeIndex to %d", currentQueueEncodeIndex];
+
     }
     [QueueFileArray removeObjectAtIndex:queueItemToRemove];
     [self saveQueueFileItem];
