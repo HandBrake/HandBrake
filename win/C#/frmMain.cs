@@ -1434,29 +1434,12 @@ namespace Handbrake
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
 
-                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                     double cqStep = Properties.Settings.Default.x264cqstep;
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
+                    
+                    slider_videoQuality.Maximum = (int)(51/Properties.Settings.Default.x264cqstep);
 
-                    switch (Properties.Settings.Default.x264cqstep.ToString(culture))
-                    {
-                        case "0.2":
-                            slider_videoQuality.Maximum = 255;
-                            break;
-                        case "0.25":
-                            slider_videoQuality.Maximum = 204;
-                            break;
-                        case "0.5":
-                            slider_videoQuality.Maximum = 102;
-                            break;
-                        case "1":
-                            slider_videoQuality.Maximum = 51;
-                            break;
-                        default:
-                            slider_videoQuality.Maximum = 51;
-                            break;
-                    }
                     if (value < slider_videoQuality.Maximum)
                         slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
 
