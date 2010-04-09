@@ -2244,7 +2244,7 @@ fWorkingCount = 0;
     
     
     /* The number of seek points equals the number of seconds announced in the title as that is our current granularity */
-        int title_duration_seconds = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
+    int title_duration_seconds = (title->hours * 3600) + (title->minutes * 60) + (title->seconds);
     [queueFileJob setObject:[NSNumber numberWithInt:title_duration_seconds] forKey:@"SourceTotalSeconds"];
     
     [queueFileJob setObject:[fDstFile2Field stringValue] forKey:@"DestinationPath"];
@@ -2443,7 +2443,6 @@ fWorkingCount = 0;
     /*Audio*/
     if ([fAudLang1PopUp indexOfSelectedItem] > 0)
     {
-        //[queueFileJob setObject:[fAudTrack1CodecPopUp indexOfSelectedItem] forKey:@"JobAudio1Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1CodecPopUp selectedItem] tag]] forKey:@"JobAudio1Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1MixPopUp selectedItem] tag]] forKey:@"JobAudio1Mixdown"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack1RatePopUp selectedItem] tag]] forKey:@"JobAudio1Samplerate"];
@@ -2451,7 +2450,6 @@ fWorkingCount = 0;
      }
     if ([fAudLang2PopUp indexOfSelectedItem] > 0)
     {
-        //[queueFileJob setObject:[fAudTrack1CodecPopUp indexOfSelectedItem] forKey:@"JobAudio2Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2CodecPopUp selectedItem] tag]] forKey:@"JobAudio2Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2MixPopUp selectedItem] tag]] forKey:@"JobAudio2Mixdown"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack2RatePopUp selectedItem] tag]] forKey:@"JobAudio2Samplerate"];
@@ -2459,7 +2457,6 @@ fWorkingCount = 0;
     }
     if ([fAudLang3PopUp indexOfSelectedItem] > 0)
     {
-        //[queueFileJob setObject:[fAudTrack1CodecPopUp indexOfSelectedItem] forKey:@"JobAudio3Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3CodecPopUp selectedItem] tag]] forKey:@"JobAudio3Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3MixPopUp selectedItem] tag]] forKey:@"JobAudio3Mixdown"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack3RatePopUp selectedItem] tag]] forKey:@"JobAudio3Samplerate"];
@@ -2467,14 +2464,12 @@ fWorkingCount = 0;
     }
     if ([fAudLang4PopUp indexOfSelectedItem] > 0)
     {
-        //[queueFileJob setObject:[fAudTrack1CodecPopUp indexOfSelectedItem] forKey:@"JobAudio4Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4CodecPopUp selectedItem] tag]] forKey:@"JobAudio4Encoder"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4MixPopUp selectedItem] tag]] forKey:@"JobAudio4Mixdown"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4RatePopUp selectedItem] tag]] forKey:@"JobAudio4Samplerate"];
         [queueFileJob setObject:[NSNumber numberWithInt:[[fAudTrack4BitratePopUp selectedItem] tag]] forKey:@"JobAudio4Bitrate"];
     }
 
- 
     /* we need to auto relase the queueFileJob and return it */
     [queueFileJob autorelease];
     return queueFileJob;
@@ -2525,21 +2520,17 @@ fWorkingCount = 0;
 	
     /* We save all of the Queue data here */
     [self saveQueueFileItem];
-	/* We Reload the New Table data for presets */
-    //[fPresetsOutlineView reloadData];
 
     /* Since we have now marked a queue item as done
      * we can go ahead and increment currentQueueEncodeIndex 
      * so that if there is anything left in the queue we can
      * go ahead and move to the next item if we want to */
     currentQueueEncodeIndex++ ;
-    [self writeToActivityLog: "incrementQueueItemDone currentQueueEncodeIndex is incremented to: %d", currentQueueEncodeIndex];
     int queueItems = [QueueFileArray count];
     /* If we still have more items in our queue, lets go to the next one */
     if (currentQueueEncodeIndex < queueItems)
     {
-    [self writeToActivityLog: "incrementQueueItemDone currentQueueEncodeIndex is incremented to: %d", currentQueueEncodeIndex];
-    [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
+        [self performNewQueueScan:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"SourcePath"] scanTitleNum:[[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"TitleNumber"]intValue]];
     }
     else
     {
@@ -2553,13 +2544,11 @@ fWorkingCount = 0;
    /* Tell HB to output a new activity log file for this encode */
     [outputPanel startEncodeLog:[[QueueFileArray objectAtIndex:currentQueueEncodeIndex] objectForKey:@"DestinationPath"]];
     
-    
-     /* use a bool to determine whether or not we can decrypt using vlc */
+    /* use a bool to determine whether or not we can decrypt using vlc */
     BOOL cancelScanDecrypt = 0;
     /* set the bool so that showNewScan knows to apply the appropriate queue
-    * settings as this is a queue rescan
-    */
-    //applyQueueToScan = YES;
+     * settings as this is a queue rescan
+     */
     NSString *path = scanPath;
     HBDVDDetector *detector = [HBDVDDetector detectorForPath:path];
     
@@ -2622,8 +2611,7 @@ fWorkingCount = 0;
             [self writeToActivityLog: "scanning specifically for title: %d", scanTitleNum];
         }
         
-        [self writeToActivityLog: "performNewQueueScan currentQueueEncodeIndex is: %d", currentQueueEncodeIndex];
-        /* We use our advance pref to determine how many previews to scan */
+         /* We use our advance pref to determine how many previews to scan */
         int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
         hb_scan( fQueueEncodeLibhb, [path UTF8String], scanTitleNum, hb_num_previews, 0 );
     }
@@ -2645,7 +2633,6 @@ fWorkingCount = 0;
     [self writeToActivityLog: "Preset: %s", [[queueToApply objectForKey:@"PresetName"] UTF8String]];
     [self writeToActivityLog: "processNewQueueEncode number of passes expected is: %d", ([[queueToApply objectForKey:@"VideoTwoPass"] intValue] + 1)];
     job->file = [[queueToApply objectForKey:@"DestinationPath"] UTF8String];
-    //[self writeToActivityLog: "processNewQueueEncode sending to prepareJob"];
     [self prepareJob];
     
     /*
@@ -2719,7 +2706,6 @@ fWorkingCount = 0;
         hb_list_rem(job->list_subtitle, subtitle);
         free(subtitle);
     }
-    
     
     /* We should be all setup so let 'er rip */   
     [self doRip];
@@ -2817,7 +2803,7 @@ fWorkingCount = 0;
     }
     
     [self videoMatrixChanged:nil];
-    [self writeToActivityLog: "applyQueueSettingsToMainWindow: video matrix changed"];    
+        
     /* Video framerate */
     /* For video preset video framerate, we want to make sure that Same as source does not conflict with the
      detected framerate in the fVidRatePopUp so we use index 0*/
@@ -2921,7 +2907,6 @@ fWorkingCount = 0;
         [self audioTrackPopUpChanged: fAudLang4PopUp];
     }
     
-    [self writeToActivityLog: "applyQueueSettingsToMainWindow: audio set up"];
     /*Subtitles*/
     /* Crashy crashy right now, working on it */
     [fSubtitlesDelegate setNewSubtitles:[queueToApply objectForKey:@"SubtitleList"]];
@@ -2980,9 +2965,6 @@ fWorkingCount = 0;
     }
     job->anamorphic.mode = [[queueToApply objectForKey:@"PicturePAR"]  intValue];
     job->modulus = [[queueToApply objectForKey:@"PictureModulus"]  intValue];
-    
-    [self writeToActivityLog: "applyQueueSettingsToMainWindow: picture sizing set up"];
-    
     
     /* Filters */
     
@@ -3081,10 +3063,9 @@ fWorkingCount = 0;
     [fPictureController SetTitle:fTitle];
     [self calculatePictureSizing:nil];
     
-    [self writeToActivityLog: "applyQueueSettingsToMainWindow: picture filters set up"];
     /* somehow we need to figure out a way to tie the queue item to a preset if it used one */
     //[queueFileJob setObject:[fPresetSelectedDisplay stringValue] forKey:@"PresetName"];
-    //    [queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
+    //[queueFileJob setObject:[NSNumber numberWithInt:[fPresetsOutlineView selectedRow]] forKey:@"PresetIndexNum"];
     if ([queueToApply objectForKey:@"PresetIndexNum"]) // This item used a preset so insert that info
 	{
 		/* Deselect the currently selected Preset if there is one*/
