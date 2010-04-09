@@ -143,7 +143,7 @@ namespace Handbrake.Functions
             mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.DisplayWidthValue.ToString();
             mainWindow.PictureSettings.updownParHeight.Text = presetQuery.PixelAspectWidth.ToString();
             mainWindow.PictureSettings.updownParWidth.Text = presetQuery.PixelAspectHeight.ToString();
-            mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.AnamorphicModulus;
+            mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.AnamorphicModulus.ToString();
 
             #endregion
 

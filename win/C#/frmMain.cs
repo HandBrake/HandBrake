@@ -1324,8 +1324,7 @@ namespace Handbrake
                         break;
                     case 2:
                         if (
-                            !Path.GetExtension(DVD_Save.FileName).Equals(".mkv",
-                                                                         StringComparison.InvariantCultureIgnoreCase))
+                            !Path.GetExtension(DVD_Save.FileName).Equals(".mkv", StringComparison.InvariantCultureIgnoreCase))
                             DVD_Save.FileName = DVD_Save.FileName.Replace(".mp4", ".mkv").Replace(".m4v", ".mkv");
                         break;
                     default:
@@ -1434,6 +1433,7 @@ namespace Handbrake
                     slider_videoQuality.Minimum = 0;
                     slider_videoQuality.TickFrequency = 1;
 
+                    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
                     double cqStep = Properties.Settings.Default.x264cqstep;
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
@@ -1487,24 +1487,7 @@ namespace Handbrake
             double rfValue = 51.0 - slider_videoQuality.Value * cqStep;
 
             // Change the maximum value for the slider
-            switch (Properties.Settings.Default.x264cqstep.ToString(new CultureInfo("en-US")))
-            {
-                case "0.2":
-                    slider_videoQuality.Maximum = 255;
-                    break;
-                case "0.25":
-                    slider_videoQuality.Maximum = 204;
-                    break;
-                case "0.5":
-                    slider_videoQuality.Maximum = 102;
-                    break;
-                case "1":
-                    slider_videoQuality.Maximum = 51;
-                    break;
-                default:
-                    slider_videoQuality.Maximum = 51;
-                    break;
-            }
+            slider_videoQuality.Maximum = (int)(51 / Properties.Settings.Default.x264cqstep);
 
             // Reset the CQ slider to RF0
             slider_videoQuality.Value = slider_videoQuality.Maximum;

@@ -126,9 +126,9 @@ namespace Handbrake.Functions
             Match customAnamorphic = Regex.Match(input, @"--custom-anamorphic");
 
             Match keepDisplayAsect = Regex.Match(input, @"--keep-display-aspect");
-            Match displayWidth = Regex.Match(input, @"--display-width ([0-9*])");
+            Match displayWidth = Regex.Match(input, @"--display-width ([0-9]*)");
             Match pixelAspect = Regex.Match(input, @"--pixel-aspect ([0-9]*):([0-9]*)");
-            Match modulus = Regex.Match(input, @"--modulus ([0-9*])");
+            Match modulus = Regex.Match(input, @"--modulus ([0-9]*)");
 
             // Picture Settings - Filters
             Match decomb = Regex.Match(input, @" --decomb");
