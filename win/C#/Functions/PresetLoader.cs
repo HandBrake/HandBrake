@@ -7,6 +7,7 @@ namespace Handbrake.Functions
 {
     using System;
     using System.Drawing;
+    using System.Globalization;
     using System.Windows.Forms;
 
     /// <summary>
@@ -175,41 +176,10 @@ namespace Handbrake.Functions
             }
 
             // Quality
-
             if (presetQuery.VideoQuality != -1)
             {
                 mainWindow.radio_cq.Checked = true;
-                if (presetQuery.VideoEncoder == "H.264 (x264)")
-                {
-                    double cqStep = Properties.Settings.Default.x264cqstep;
-                    int value;
-                    double x264Step = cqStep;
-                    double presetValue = presetQuery.VideoQuality;
-
-                    double x = 51 / x264Step;
-
-                    double calculated = presetValue / x264Step;
-                    calculated = x - calculated;
-
-                    int.TryParse(calculated.ToString(), out value);
-
-                    // This will sometimes occur when the preset was generated 
-                    // with a different granularity, so, round and try again.
-                    if (value == 0)
-                    {
-                        double val = Math.Round(calculated, 0);
-                        int.TryParse(val.ToString(), out value);
-                    }
-                    if (value <= mainWindow.slider_videoQuality.Maximum)
-                        mainWindow.slider_videoQuality.Value = value;
-                }
-                else
-                {
-                    int presetVal;
-                    int.TryParse(presetQuery.VideoQuality.ToString(), out presetVal);
-                    if (presetVal > mainWindow.slider_videoQuality.Minimum)
-                        mainWindow.slider_videoQuality.Value = presetVal;
-                }
+                mainWindow.slider_videoQuality.Value = QualityToSliderValue(presetQuery.VideoEncoder, presetQuery.VideoQuality);
             }
 
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
@@ -246,6 +216,32 @@ namespace Handbrake.Functions
             mainWindow.labelPreset.Text = "Output Settings (Preset: " + name + ")";
 
             #endregion
+        }
+
+        /// <summary>
+        /// Convert a Quality Value to a position value for the Video Quality slider
+        /// </summary>
+        /// <param name="videoEncoder">The selected video encoder</param>
+        /// <param name="value">The Quality value</param>
+        /// <returns>The position on the video quality slider</returns>
+        private static int QualityToSliderValue(string videoEncoder, float value)
+        {
+            int sliderValue = 0;
+            switch (videoEncoder)
+            {
+                case "MPEG-4 (FFmpeg)":
+                    sliderValue = 32 - (int)value;
+                    break;
+                case "H.264 (x264)":
+                    double cqStep = Properties.Settings.Default.x264cqstep;
+                    sliderValue = (int)((51.0 / cqStep) - (value/cqStep));
+                    break;
+                case "VP3 (Theora)":
+                    sliderValue = (int)value;
+                    break;
+            }
+
+            return sliderValue;
         }
     }
 }
