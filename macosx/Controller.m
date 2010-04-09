@@ -3573,20 +3573,13 @@ bool one_burned = FALSE;
         [self writeToActivityLog: "Start / Stop set to seconds ..."];
         
         /* Point A to Point B. Time to time in seconds.*/
-         /* get the start seconds from the start seconds field */
+        /* get the start seconds from the start seconds field */
         int start_seconds = [[queueToApply objectForKey:@"StartSeconds"] intValue];
         job->pts_to_start = start_seconds * 90000LL;
         /* Stop seconds is actually the duration of encode, so subtract the end seconds from the start seconds */
         int stop_seconds = [[queueToApply objectForKey:@"StopSeconds"] intValue];
         job->pts_to_stop = stop_seconds * 90000LL;
-
-        /* A bunch of verbose activity log messages to check on what should be expected */
-        [self writeToActivityLog: "point a to b should start at: %d seconds", start_seconds];
-        [self writeToActivityLog: "point a to b should start at (hh:mm:ss): %d:%d:%d", start_seconds / 3600, ( start_seconds / 60 ) % 60,start_seconds % 60];
-        [self writeToActivityLog: "point a to b duration: %d seconds", stop_seconds];
-        [self writeToActivityLog: "point a to b duration (hh:mm:ss): %d:%d:%d", stop_seconds / 3600, ( stop_seconds / 60 ) % 60,stop_seconds % 60];
-        [self writeToActivityLog: "point a to b should end at: %d seconds", start_seconds + stop_seconds];
-        [self writeToActivityLog: "point a to b should end at (hh:mm:ss): %d:%d:%d", (start_seconds + stop_seconds) / 3600, ( (start_seconds + stop_seconds) / 60 ) % 60,(start_seconds + stop_seconds) % 60];
+        
     }
     else if ([[queueToApply objectForKey:@"fEncodeStartStop"] intValue] == 2)
     {
@@ -3594,17 +3587,13 @@ bool one_burned = FALSE;
         [self writeToActivityLog: "Start / Stop set to frames ..."];
         
         /* Point A to Point B. Frame to frame */
-         /* get the start frame from the start frame field */
+        /* get the start frame from the start frame field */
         int start_frame = [[queueToApply objectForKey:@"StartFrame"] intValue];
         job->frame_to_start = start_frame;
         /* get the frame to stop on from the end frame field */
         int stop_frame = [[queueToApply objectForKey:@"StopFrame"] intValue];
         job->frame_to_stop = stop_frame;
-
-        /* A bunch of verbose activity log messages to check on what should be expected */
-        [self writeToActivityLog: "point a to b should start at frame %d", start_frame];
-        [self writeToActivityLog: "point a to b duration: %d frames", stop_frame];
-        [self writeToActivityLog: "point a to b should end at frame %d", start_frame + stop_frame];
+        
     }
 
 	
