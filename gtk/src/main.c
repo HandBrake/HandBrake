@@ -519,11 +519,66 @@ bind_presets_tree_model (signal_user_data_t *ud)
 }
 
 static void
+clean_old_logs()
+{
+	const gchar *file;
+	gchar *config;
+
+	config = ghb_get_user_config_dir(NULL);
+
+	if (g_file_test(config, G_FILE_TEST_IS_DIR))
+	{
+		GDir *gdir = g_dir_open(config, 0, NULL);
+		file = g_dir_read_name(gdir);
+		while (file)
+		{
+			if (strncmp(file, "Activity.log.", 13) == 0)
+			{
+				gchar *path;
+				int fd, lock = 1;
+				int pid;
+
+				sscanf(file, "Activity.log.%d", &pid);
+
+				path = g_strdup_printf("%s/ghb.pid.%d", config, pid);
+				if (g_file_test(path, G_FILE_TEST_EXISTS))
+				{
+					fd = g_open(path, O_RDWR);
+					if (fd >= 0)
+					{
+						lock = lockf(fd, F_TLOCK, 0);
+					}
+					g_free(path);
+					close(fd);
+					if (lock == 0)
+					{
+						path = g_strdup_printf("%s/%s", config, file);
+						g_unlink(path);
+						g_free(path);
+					}
+				}
+				else
+				{
+					g_free(path);
+					path = g_strdup_printf("%s/%s", config, file);
+					g_unlink(path);
+					g_free(path);
+				}
+			}
+			file = g_dir_read_name(gdir);
+		}
+		g_dir_close(gdir);
+	}
+	g_free(config);
+}
+
+static void
 IoRedirect(signal_user_data_t *ud)
 {
 	GIOChannel *channel;
 	gint pfd[2];
 	gchar *config, *path, *str;
+	pid_t pid;
 
 	// I'm opening a pipe and attaching the writer end to stderr
 	// The reader end will be polled by main event loop and I'll get
@@ -533,10 +588,11 @@ IoRedirect(signal_user_data_t *ud)
 		g_warning("Failed to redirect IO. Logging impaired\n");
 		return;
 	}
+	clean_old_logs();
 	// Open activity log.
-	// TODO: Put this in the same directory as the encode destination
 	config = ghb_get_user_config_dir(NULL);
-	path = g_strdup_printf("%s/%s", config, "Activity.log");
+	pid = getpid();
+	path = g_strdup_printf("%s/Activity.log.%d", config, pid);
 	ud->activity_log = g_io_channel_new_file (path, "w", NULL);
 	ud->job_activity_log = NULL;
 	str = g_strdup_printf("<big><b>%s</b></big>", path);
