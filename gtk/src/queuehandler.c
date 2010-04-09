@@ -1259,13 +1259,20 @@ ghb_reload_queue(signal_user_data_t *ud)
 	GValue *queue;
 	gint unfinished = 0;
 	gint count, ii;
+	gint pid;
 	gint status;
 	GValue *settings;
 	gchar *message;
 
 	g_debug("ghb_reload_queue");
 
-	queue = ghb_load_queue();
+find_pid:
+	pid = ghb_find_pid_file();
+	if (pid < 0)
+		return FALSE;
+
+	queue = ghb_load_old_queue(pid);
+	ghb_remove_old_queue_file(pid);
 	// Look for unfinished entries
 	count = ghb_array_len(queue);
 	for (ii = 0; ii < count; ii++)
@@ -1277,6 +1284,9 @@ ghb_reload_queue(signal_user_data_t *ud)
 			unfinished++;
 		}
 	}
+	if (!unfinished)
+		goto find_pid;
+
 	if (unfinished)
 	{
 		message = g_strdup_printf(
@@ -1314,11 +1324,11 @@ ghb_reload_queue(signal_user_data_t *ud)
 				add_to_queue_list(ud, settings, NULL);
 			}
 			ghb_queue_buttons_grey(ud);
+			ghb_save_queue(ud->queue);
 		}
 		else
 		{
 			ghb_value_free(queue);
-			ghb_remove_queue_file();
 		}
 		g_free(message);
 	}

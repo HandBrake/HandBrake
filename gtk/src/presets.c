@@ -1151,6 +1151,104 @@ ghb_lock_file(const gchar *name)
 #endif
 }
 
+void
+ghb_write_pid_file()
+{
+#if !defined(_WIN32)
+	gchar *config, *path;
+	pid_t pid;
+	FILE *fp;
+	int fd, lock;
+
+	pid = getpid();
+
+	config = ghb_get_user_config_dir(NULL);
+	path = g_strdup_printf ("%s/ghb.pid.%d", config, pid);
+
+	fp = g_fopen(path, "w");
+	fprintf(fp, "%d\n", pid);
+	fclose(fp);
+
+	fd = open(path, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
+	lock = lockf(fd, F_TLOCK, 0);
+
+	g_free(config);
+	g_free(path);
+#endif
+}
+
+void
+ghb_unlink_pid_file(int pid)
+{
+	gchar *config, *path;
+
+	config = ghb_get_user_config_dir(NULL);
+	path = g_strdup_printf ("%s/ghb.pid.%d", config, pid);
+
+	if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+	{
+		g_unlink(path);
+	}
+
+	g_free(config);
+	g_free(path);
+}
+
+int
+ghb_find_pid_file()
+{
+	const gchar *file;
+	gchar *config;
+
+	config = ghb_get_user_config_dir(NULL);
+
+	if (g_file_test(config, G_FILE_TEST_IS_DIR))
+	{
+		GDir *gdir = g_dir_open(config, 0, NULL);
+		file = g_dir_read_name(gdir);
+		while (file)
+		{
+			if (strncmp(file, "ghb.pid.", 8) == 0)
+			{
+				gchar *path;
+				int fd, lock = 1;
+				pid_t my_pid;
+				int pid;
+
+				sscanf(file, "ghb.pid.%d", &pid);
+				my_pid = getpid();
+				if (my_pid == pid)
+				{
+					file = g_dir_read_name(gdir);
+					continue;
+				}
+
+				path = g_strdup_printf("%s/%s", config, file);
+				fd = g_open(path, O_RDWR);
+				if (fd >= 0)
+				{
+					lock = lockf(fd, F_TLOCK, 0);
+				}
+				if (lock == 0)
+				{
+					close(fd);
+					g_dir_close(gdir);
+					g_unlink(path);
+					g_free(path);
+					g_free(config);
+					return pid;
+				}
+				g_free(path);
+				close(fd);
+			}
+			file = g_dir_read_name(gdir);
+		}
+		g_dir_close(gdir);
+	}
+	g_free(config);
+	return -1;
+}
+
 static void
 remove_plist(const gchar *name)
 {
@@ -1806,19 +1904,61 @@ remove_std_presets(signal_user_data_t *ud)
 void
 ghb_save_queue(GValue *queue)
 {
-	store_plist(queue, "queue");
+	pid_t pid;
+	char *path;
+
+	pid = getpid();
+	path = g_strdup_printf ("queue.%d", pid);
+	store_plist(queue, path);
+	g_free(path);
 }
 
 GValue*
 ghb_load_queue()
 {
-	return load_plist("queue");
+	GValue *queue;
+	pid_t pid;
+	char *path;
+
+	pid = getpid();
+	path = g_strdup_printf ("queue.%d", pid);
+	queue = load_plist(path);
+	g_free(path);
+	return queue;
+}
+
+GValue*
+ghb_load_old_queue(int pid)
+{
+	GValue *queue;
+	char *path;
+
+	path = g_strdup_printf ("queue.%d", pid);
+	queue = load_plist(path);
+	g_free(path);
+	return queue;
+}
+
+void
+ghb_remove_old_queue_file(int pid)
+{
+	char *path;
+
+	path = g_strdup_printf ("queue.%d", pid);
+	remove_plist(path);
+	g_free(path);
 }
 
 void
 ghb_remove_queue_file()
 {
-	remove_plist("queue");
+	pid_t pid;
+	char *path;
+
+	pid = getpid();
+	path = g_strdup_printf ("queue.%d", pid);
+	remove_plist(path);
+	g_free(path);
 }
 
 typedef struct
