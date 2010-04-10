@@ -506,7 +506,7 @@ static int hb_libmpeg2_decode( hb_libmpeg2_t * m, hb_buffer_t * buf_es,
                 m->flag = m->info->display_picture->flags;
 
 /*  Uncomment this block to see frame-by-frame picture flags, as the video encodes.
-               hb_log("***** MPEG 2 Picture Info for PTS %lld *****", buf->start);
+               hb_log("***** MPEG 2 Picture Info for PTS %"PRId64" *****", buf->start);
                 if( m->flag & TOP_FIRST )
                     hb_log("MPEG2 Flag: Top field first");
                 if( m->flag & PROGRESSIVE )

@@ -1,6 +1,10 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 
+#if defined( SYS_MINGW ) && defined( PTW32_STATIC_LIB )
+#include <pthread.h>
+#endif
+
 struct hb_handle_s
 {
     int            id;
@@ -145,10 +149,8 @@ hb_handle_t * hb_init( int verbose, int update_check )
 {
     if (!hb_process_initialized)
     {
-#ifdef USE_PTHREAD
-#if defined( _WIN32 ) || defined( __MINGW32__ )
+#if defined( SYS_MINGW ) && defined( PTW32_STATIC_LIB )
         pthread_win32_process_attach_np();
-#endif
 #endif
         hb_process_initialized =1;
     }
@@ -680,13 +682,13 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
     if( average_cc > threshold )
     {
 #if 0
-            hb_log("Average %i combed (Threshold %i) %i/%i/%i | PTS: %lld (%fs) %s", average_cc, threshold, cc[0], cc[1], cc[2], buf->start, (float)buf->start / 90000, (buf->flags & 16) ? "Film" : "Video" );
+            hb_log("Average %i combed (Threshold %i) %i/%i/%i | PTS: %"PRId64" (%fs) %s", average_cc, threshold, cc[0], cc[1], cc[2], buf->start, (float)buf->start / 90000, (buf->flags & 16) ? "Film" : "Video" );
 #endif
         return 1;
     }
 
 #if 0
-    hb_log("SKIPPED Average %i combed (Threshold %i) %i/%i/%i | PTS: %lld (%fs) %s", average_cc, threshold, cc[0], cc[1], cc[2], buf->start, (float)buf->start / 90000, (buf->flags & 16) ? "Film" : "Video" );
+    hb_log("SKIPPED Average %i combed (Threshold %i) %i/%i/%i | PTS: %"PRId64" (%fs) %s", average_cc, threshold, cc[0], cc[1], cc[2], buf->start, (float)buf->start / 90000, (buf->flags & 16) ? "Film" : "Video" );
 #endif
 
     /* Reaching this point means no combing detected. */

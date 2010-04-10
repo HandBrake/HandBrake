@@ -1146,7 +1146,7 @@ static void work_loop( void * _w )
         if( buf_in && buf_out && buf_in->new_chap && buf_in->start == buf_out->start)
         {
             // restore log below to debug chapter mark propagation problems
-            //hb_log("work %s: Copying Chapter Break @ %lld", w->name, buf_in->start);
+            //hb_log("work %s: Copying Chapter Break @ %"PRId64, w->name, buf_in->start);
             buf_out->new_chap = buf_in->new_chap;
         }
 

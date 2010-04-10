@@ -1500,7 +1500,7 @@ void write_cc_line_as_transcript (struct eia608_screen *data, struct s_write *wb
         buffer->start = wb->data608->current_visible_start_ms;
         buffer->stop = get_fts(wb);
         memcpy( buffer->data, wb->subline, length + 1 );
-        //hb_log("CC %lld: %s", buffer->stop, wb->subline);
+        //hb_log("CC %"PRId64": %s", buffer->stop, wb->subline);
 
         if (wb->hb_last_buffer) {
             wb->hb_last_buffer->next = buffer;
@@ -1684,7 +1684,7 @@ int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
 
     LLONG endms   = get_fts(wb)+subs_delay;
     endms--; // To prevent overlapping with next line.
-    sprintf ((char *) str,"<SYNC start=\"%llu\"><P class=\"UNKNOWNCC\">\r\n",startms);
+    sprintf ((char *) str,"<SYNC start=\"%"PRIu64"\"><P class=\"UNKNOWNCC\">\r\n",startms);
     if (debug_608 && encoding!=ENC_UNICODE)
     {
         hb_log ("\r%s\n", str);
@@ -1722,7 +1722,7 @@ int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
     wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
     fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
     XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    sprintf ((char *) str,"<SYNC start=\"%llu\"><P class=\"UNKNOWNCC\">&nbsp;</P></SYNC>\r\n\r\n",endms);
+    sprintf ((char *) str,"<SYNC start=\"%"PRIu64"\"><P class=\"UNKNOWNCC\">&nbsp;</P></SYNC>\r\n\r\n",endms);
     if (debug_608 && encoding!=ENC_UNICODE)
     {
         hb_log ("\r%s\n", str);

@@ -592,7 +592,7 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                     sub->stop = sub2->start;
                 }
                 
-                // hb_log("0x%x: video seq: %lld  subtitle sequence: %lld",
+                // hb_log("0x%x: video seq: %"PRId64" subtitle sequence: %"PRId64,
                 //       sub, cur->sequence, sub->sequence);
                 
                 if( sub->sequence > cur->sequence )

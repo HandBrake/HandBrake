@@ -93,7 +93,7 @@ LIBHB.dll.libs = $(foreach n, \
         ogg pthreadGC2 samplerate swscale theora vorbis vorbisenc x264 z, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
-LIBHB.GCC.args.extra.dylib++ = -Wl,--out-implib,$(LIBHB.lib)
+LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
 LIBHB.GCC.l += iberty ws2_32
 LIBHB.out += $(LIBHB.dll) $(LIBHB.lib)
 
