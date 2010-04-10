@@ -50,6 +50,7 @@ namespace Handbrake
             this.wBrowser = new System.Windows.Forms.WebBrowser();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button_container = new System.Windows.Forms.SplitContainer();
+            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -73,7 +74,7 @@ namespace Handbrake
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(82, 49);
+            this.label6.Location = new System.Drawing.Point(84, 46);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(175, 13);
             this.label6.TabIndex = 30;
@@ -131,7 +132,7 @@ namespace Handbrake
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(84, 87);
+            this.label3.Location = new System.Drawing.Point(84, 63);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(90, 13);
             this.label3.TabIndex = 57;
@@ -150,7 +151,7 @@ namespace Handbrake
             // lbl_update_text
             // 
             this.lbl_update_text.AutoSize = true;
-            this.lbl_update_text.Location = new System.Drawing.Point(84, 36);
+            this.lbl_update_text.Location = new System.Drawing.Point(84, 33);
             this.lbl_update_text.Name = "lbl_update_text";
             this.lbl_update_text.Size = new System.Drawing.Size(409, 13);
             this.lbl_update_text.TabIndex = 58;
@@ -158,6 +159,8 @@ namespace Handbrake
             // 
             // panel1
             // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.PictureBox1);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
@@ -166,31 +169,31 @@ namespace Handbrake
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(712, 105);
+            this.panel1.Size = new System.Drawing.Size(710, 97);
             this.panel1.TabIndex = 60;
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 419);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 346);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(712, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(710, 22);
             this.statusStrip1.TabIndex = 65;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel3.Location = new System.Drawing.Point(0, 105);
+            this.panel3.Location = new System.Drawing.Point(0, 97);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(87, 314);
+            this.panel3.Size = new System.Drawing.Size(87, 249);
             this.panel3.TabIndex = 67;
             // 
             // panel5
             // 
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(683, 105);
+            this.panel5.Location = new System.Drawing.Point(681, 97);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(29, 314);
+            this.panel5.Size = new System.Drawing.Size(29, 249);
             this.panel5.TabIndex = 68;
             // 
             // wBrowser
@@ -199,14 +202,14 @@ namespace Handbrake
             this.wBrowser.Location = new System.Drawing.Point(0, 0);
             this.wBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.wBrowser.Name = "wBrowser";
-            this.wBrowser.Size = new System.Drawing.Size(596, 264);
+            this.wBrowser.Size = new System.Drawing.Size(594, 203);
             this.wBrowser.TabIndex = 31;
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer1.Location = new System.Drawing.Point(87, 105);
+            this.splitContainer1.Location = new System.Drawing.Point(87, 97);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -218,8 +221,8 @@ namespace Handbrake
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.button_container);
-            this.splitContainer1.Size = new System.Drawing.Size(596, 314);
-            this.splitContainer1.SplitterDistance = 264;
+            this.splitContainer1.Size = new System.Drawing.Size(594, 249);
+            this.splitContainer1.SplitterDistance = 203;
             this.splitContainer1.TabIndex = 69;
             // 
             // button_container
@@ -237,15 +240,26 @@ namespace Handbrake
             // 
             this.button_container.Panel2.Controls.Add(this.btn_remindLater);
             this.button_container.Panel2.Controls.Add(this.btn_installUpdate);
-            this.button_container.Size = new System.Drawing.Size(596, 46);
-            this.button_container.SplitterDistance = 330;
+            this.button_container.Size = new System.Drawing.Size(594, 42);
+            this.button_container.SplitterDistance = 318;
             this.button_container.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 87);
+            this.panel2.MaximumSize = new System.Drawing.Size(0, 10);
+            this.panel2.MinimumSize = new System.Drawing.Size(0, 10);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(710, 10);
+            this.panel2.TabIndex = 59;
             // 
             // frmUpdater
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(712, 441);
+            this.ClientSize = new System.Drawing.Size(710, 368);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
@@ -254,7 +268,7 @@ namespace Handbrake
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(720, 470);
+            this.MinimumSize = new System.Drawing.Size(540, 300);
             this.Name = "frmUpdater";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Update";
@@ -291,5 +305,6 @@ namespace Handbrake
         private System.Windows.Forms.WebBrowser wBrowser;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer button_container;
+        private System.Windows.Forms.Panel panel2;
     }
 }

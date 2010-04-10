@@ -393,6 +393,7 @@
     <None Include="Resources\Help16.png" />
     <None Include="Resources\info16.png" />
     <None Include="Resources\folder.png" />
+    <None Include="Resources\download.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />
@@ -503,5 +504,4 @@
 	makensis MakeNightly.nsi
 	</PostBuildEvent>
   </PropertyGroup>
-
 </Project>
