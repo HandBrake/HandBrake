@@ -21,6 +21,7 @@ endif
 build:
 clean:
 install:
+install-strip:
 uninstall:
 xclean: contrib.xclean clean
 doc:

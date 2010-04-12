@@ -2,6 +2,7 @@ $(eval $(call import.MODULE.rules,GTK))
 
 build: hgtk.build gtk.build
 install: gtk.install
+install-strip: gtk.install-strip
 uninstall: gtk.uninstall
 clean: hgtk.clean gtk.clean
 xclean: hgtk.clean gtk.xclean
@@ -33,6 +34,9 @@ endif
 gtk.build: | $(GTK.build/)
 gtk.build: $(GTK.CONFIGURE.stamp) $(LIBHB.a)
 	+$(MAKE) -C $(GTK.build/)
+
+gtk.install-strip:
+	$(MAKE) -C $(GTK.build/) prefix=$(PREFIX) install-strip
 
 gtk.install:
 	$(MAKE) -C $(GTK.build/) prefix=$(PREFIX) install

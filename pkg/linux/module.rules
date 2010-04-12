@@ -1,20 +1,35 @@
-pkg.create.deb:: pkg.create $(PKG.gui.deb) $(PKG.cli.deb)
-pkg.create.rpm:: pkg.create $(PKG.gui.rpm) $(PKG.cli.rpm)
+pkg.create.deb:: $(PKG.gui.deb) $(PKG.cli.deb)
+pkg.create.rpm:: $(PKG.gui.rpm)
 
-$(PKG.gui.rpm) $(PKG.cli.rpm): | $(dir $(PKG.gui.rpm) $(PKG.cli.rpm))
-$(PKG.gui.rpm) $(PKG.cli.rpm):
+$(PKG.rpm.src.tar.bz2): | $(STAGE.out.rpm.src/)
+	$(TAR.exe) cjf $@ -C $(STAGE.out.rpm.src/) $(PKG.basename)
+
+$(STAGE.out.rpm.src/):
+#	-$(MKDIR.exe) -p $(STAGE.out.rpm.src/)$(PKG.basename)
+#	tar c --exclude build ../* | tar x -C $(STAGE.out.rpm.src/)$(PKG.basename)
+	svn co -r$(HB.repo.rev) $(HB.repo.url) $@/$(PKG.basename)
+	-$(MKDIR.exe) $(STAGE.out.rpm.src/)$(PKG.basename)/download
+	$(CP.exe) $(SRC/)download/*.tar.* $(STAGE.out.rpm.src/)$(PKG.basename)/download
+
+$(PKG.native.rpm.stamp): $(PKG.rpm.src.tar.bz2)
 	-$(MKDIR.exe) -p $(RPM.out/)SOURCES
 	-$(MKDIR.exe) -p $(RPM.out/)SPECS
 	-$(MKDIR.exe) -p $(RPM.out/)BUILD
 	-$(MKDIR.exe) -p $(RPM.out/)RPMS
 	-$(MKDIR.exe) -p $(RPM.out/)SRPMS
 	-$(MKDIR.exe) -p $(RPMROOT.out/)
-	$(CP.exe) $(GTK.src/)ghb.spec $(RPM.out/)SPECS
-	$(CP.exe) $(PKG.src.tar.bz2) $(RPM.out/)SOURCES
-	$(TAR.exe) -xf $(PKG.src.tar.bz2) -C $(RPM.out/)BUILD
-	rpmbuild --define="version $(HB.version)" --define="_topdir $(PWD)/$(RPM.out)" --buildroot $(RPMROOT.out) -ba $(GTK.src/)ghb.spec
-	$(CP.exe) $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-cli-$(HB.version)*.rpm $(PKG.cli.rpm)
-	$(CP.exe) $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-gui-$(HB.version)*.rpm $(PKG.gui.rpm)
+	echo "%define name $(HB.name)" > $(RPM.out/)SPECS/ghb.spec
+	echo "%define release 1" >> $(RPM.out/)SPECS/ghb.spec
+	echo "%define version $(HB.version)" >> $(RPM.out/)SPECS/ghb.spec
+	cat $(GTK.src/)ghb.spec >> $(RPM.out/)SPECS/ghb.spec
+	$(CP.exe) $(PKG.rpm.src.tar.bz2) $(RPM.out/)SOURCES
+	rpmbuild --define="_topdir $(PWD)/$(RPM.out)" --buildroot $(RPMROOT.out) -ba $(RPM.out/)SPECS/ghb.spec
+	$(TOUCH.exe) $(PKG.native.rpm.stamp)
+
+$(PKG.gui.rpm): | $(dir $(PKG.gui.rpm))
+$(PKG.gui.rpm): $(PKG.native.rpm.stamp)
+	$(CP.exe) $(PKG.gui.native.rpm) $(PKG.gui.rpm)
+	$(CP.exe) $(PKG.cli.native.rpm) $(PKG.cli.rpm)
 
 $(PKG.gui.deb): | $(dir $(PKG.gui.deb))
 $(PKG.gui.deb):

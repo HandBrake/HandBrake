@@ -24,12 +24,17 @@ clean: test.clean
 ## skip install/uninstall on darwin
 ifneq ($(BUILD.system),darwin)
 
+test.install-strip: | $(dir $(TEST.install.exe))
+	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+	$(STRIP.exe) $(TEST.install.exe)
+
 test.install: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
 
 test.uninstall:
 	$(RM.exe) -f $(TEST.install.exe)
 
+install-strip: test.install-strip
 install: test.install
 uninstall: test.uninstall
 

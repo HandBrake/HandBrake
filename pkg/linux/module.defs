@@ -1,11 +1,22 @@
 PKG.deb.machine = `dpkg --print-architecture`
 PKG.rpm.machine = `rpm -E "%_target_cpu"`
+PKG.release = 1
+PKG.rpm.dist = `rpm -E "%dist"`
+
+PKG.rpm.src.tar.bz2 = $(STAGE.out.src/)rpm/$(PKG.basename).tar.bz2
+STAGE.out.rpm.src/ = $(STAGE.out.src/)rpm/
+
 PKG.debian  = $(PKG.in/)linux/debian
 PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_CLI_$(BUILD.machine).deb
 PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_GUI_$(BUILD.machine).deb
 
 PKG.cli.tmp.deb = $(PKG.out/)handbrake-cli_$(HB.version)_$(PKG.deb.machine).deb
 PKG.gui.tmp.deb = $(PKG.out/)handbrake-gtk_$(HB.version)_$(PKG.deb.machine).deb
+
+PKG.native.rpm.stamp = $(RPM.out/).rpm.stamp
+
+PKG.gui.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-gui-$(HB.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
+PKG.cli.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name)-cli-$(HB.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
 
 PKG.cli.rpm  = $(PKG.out/)$(HB.name)-$(HB.version)-Fedora_CLI_$(BUILD.machine).rpm
 PKG.gui.rpm  = $(PKG.out/)$(HB.name)-$(HB.version)-Fedora_GUI_$(BUILD.machine).rpm
