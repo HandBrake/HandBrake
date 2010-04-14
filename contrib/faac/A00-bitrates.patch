@@ -1,0 +1,60 @@
+diff -Naur faac-1.28/libfaac/frame.c ../build.debug/contrib/faac/faac-1.28/libfaac/frame.c
+--- faac-1.28.orig/libfaac/frame.c	2004-11-17 06:26:06.000000000 -0800
++++ faac-1.28/libfaac/frame.c	2010-04-10 12:26:28.200614437 -0700
+@@ -196,6 +196,8 @@
+ 			{47000, 10000},
+ 			{64000, 16000},
+ 			{76000, 20000},
++			{128000, 22000},
++			{160000, 22000},
+ #endif
+ 			{0, 0}
+ 		};
+@@ -242,8 +244,6 @@
+ 		config->bitRate = tmpbitRate * hEncoder->sampleRate / 44100;
+ #endif
+ 
+-		if (config->bandWidth > bwbase)
+-		  config->bandWidth = bwbase;
+ 	}
+ 
+     hEncoder->config.bitRate = config->bitRate;
+@@ -251,6 +251,7 @@
+     if (!config->bandWidth)
+     {
+         config->bandWidth = (config->quantqual - 100) * bwmult + bwbase;
++        config->bandWidth *= (double)hEncoder->sampleRate / 44100;
+     }
+ 
+     hEncoder->config.bandWidth = config->bandWidth;
+@@ -261,8 +262,8 @@
+     if (hEncoder->config.bandWidth > (hEncoder->sampleRate / 2))
+ 		hEncoder->config.bandWidth = hEncoder->sampleRate / 2;
+ 
+-    if (config->quantqual > 500)
+-		config->quantqual = 500;
++    if (config->quantqual > 700)
++		config->quantqual = 700;
+     if (config->quantqual < 10)
+ 		config->quantqual = 10;
+ 
+@@ -328,8 +329,6 @@
+     hEncoder->config.useTns = 0;
+     hEncoder->config.bitRate = 0; /* default bitrate / channel */
+     hEncoder->config.bandWidth = bwfac * hEncoder->sampleRate;
+-    if (hEncoder->config.bandWidth > bwbase)
+-		hEncoder->config.bandWidth = bwbase;
+     hEncoder->config.quantqual = 100;
+     hEncoder->config.psymodellist = (psymodellist_t *)psymodellist;
+     hEncoder->config.psymodelidx = 0;
+@@ -888,8 +887,8 @@
+ 		if (((diff > 0) && (fix > 0.0)) || ((diff < 0) && (fix < 0.0)))
+ 		{
+ 			hEncoder->aacquantCfg.quality *= (1.0 - fix);
+-			if (hEncoder->aacquantCfg.quality > 300)
+-				hEncoder->aacquantCfg.quality = 300;
++			if (hEncoder->aacquantCfg.quality > 700)
++				hEncoder->aacquantCfg.quality = 700;
+             if (hEncoder->aacquantCfg.quality < 50)
+                 hEncoder->aacquantCfg.quality = 50;
+ 		}

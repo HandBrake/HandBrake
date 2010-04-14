@@ -948,7 +948,7 @@ ghb_find_closest_audio_bitrate(gint codec, gint rate)
 	gint result;
 
 	if (codec == HB_ACODEC_FAAC)
-		high = 160;
+		high = 320;
 
 	result = high;
 	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
@@ -1421,7 +1421,12 @@ ghb_get_best_audio_bitrate(gint acodec, gint br, gint channels)
 {
 	if (acodec & HB_ACODEC_FAAC)
 	{
-    	int maxbr = channels * 80;
+		int maxbr;
+
+		if (channels == 2)
+			maxbr = 320;
+		else
+			maxbr = 768;
 		if (br > maxbr)
 			br = maxbr;
 	}
@@ -2091,7 +2096,7 @@ ghb_find_audio_track(
 	gint count = 0;
 	gint track = -1;
 	gint max_chan = 0;
-	gboolean *used;
+	gboolean *used = NULL;
 	gboolean *passthru_used;
 	gint try_acodec;
 	gint passthru_acodec;

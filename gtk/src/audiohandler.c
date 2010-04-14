@@ -79,12 +79,12 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	}
 	else if (acodec == HB_ACODEC_FAAC)
 	{
-		gint br, last = 160, first = 0;
+		gint br, last = 320, first = 0;
 
 		if (mix == HB_AMIXDOWN_6CH)
 		{
 			first = 192;
-			last = 448;
+			last = 768;
 		}
 
 		widget = GHB_WIDGET(ud->builder, "AudioBitrate");
