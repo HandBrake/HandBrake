@@ -44,13 +44,13 @@ namespace Handbrake
             this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.lbl_update_text = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.wBrowser = new System.Windows.Forms.WebBrowser();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button_container = new System.Windows.Forms.SplitContainer();
-            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -172,6 +172,17 @@ namespace Handbrake
             this.panel1.Size = new System.Drawing.Size(710, 97);
             this.panel1.TabIndex = 60;
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 87);
+            this.panel2.MaximumSize = new System.Drawing.Size(0, 10);
+            this.panel2.MinimumSize = new System.Drawing.Size(0, 10);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(710, 10);
+            this.panel2.TabIndex = 59;
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Location = new System.Drawing.Point(0, 346);
@@ -243,17 +254,6 @@ namespace Handbrake
             this.button_container.Size = new System.Drawing.Size(594, 42);
             this.button_container.SplitterDistance = 318;
             this.button_container.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 87);
-            this.panel2.MaximumSize = new System.Drawing.Size(0, 10);
-            this.panel2.MinimumSize = new System.Drawing.Size(0, 10);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(710, 10);
-            this.panel2.TabIndex = 59;
             // 
             // frmUpdater
             // 

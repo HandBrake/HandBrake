@@ -21,6 +21,8 @@ namespace Handbrake
         [STAThread]
         public static void Main()
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             const string failedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
             const string nightlyCLIMissing =
                 "If you have downloaded the \"HandBrakeGUI\" nightly, " +
@@ -60,6 +62,20 @@ namespace Handbrake
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain());
             }
+        }
+
+        /// <summary>
+        /// Throw up an error message for any unhandled exceptions.
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">Unhandled Exception EventArgs </param>
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show(
+                "An unexpected error has occured.\n\nSender:" + sender + "\n\nException:" + e.ExceptionObject, 
+                "Unhandled Exception",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
         }
     }
 }

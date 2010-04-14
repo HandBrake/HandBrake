@@ -419,6 +419,34 @@ namespace Handbrake.Controls
             }
         }
 
+
+        private void SetBitrate2()
+        {
+            int max = 0;
+            switch (drp_audioEncoder.Text)
+            {
+                case "AAC (faac)":
+                    max = drp_audioMix.Text.Contains("6 Channel") ? 384 : 160;
+                    break;
+                case "MP3 (lame)":
+                    max = 320;
+                    break;
+                case "Vorbis (vorbis)":
+                    max = 384;
+                    break;
+                case "AC3 Passthru":
+                    drp_audioBitrate.Items.Add("Auto");
+                    drp_audioBitrate.SelectedItem = "Auto";
+                    drp_audioSample.SelectedItem = "Auto";
+                    break;
+                case "DTS Passthru":
+                    drp_audioBitrate.Items.Add("Auto");
+                    drp_audioBitrate.SelectedItem = "Auto";
+                    drp_audioSample.SelectedItem = "Auto";
+                    break;
+            }
+        }
+
         private void SetBitrate()
         {
             int max = 0;
@@ -427,11 +455,14 @@ namespace Handbrake.Controls
             drp_audioBitrate.Items.Remove("224");
             drp_audioBitrate.Items.Remove("256");
             drp_audioBitrate.Items.Remove("320");
+            drp_audioBitrate.Items.Remove("384");
+            drp_audioBitrate.Items.Remove("448");
+            drp_audioBitrate.Items.Remove("768");
 
             switch (drp_audioEncoder.Text)
             {
                 case "AAC (faac)":
-                    max = drp_audioMix.Text.Contains("6 Channel") ? 384 : 160;
+                    max = drp_audioMix.Text.Contains("6 Channel") ? 768 : 320;
                     break;
                 case "MP3 (lame)":
                     max = 320;
@@ -457,21 +488,20 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Add("224");
                 drp_audioBitrate.Items.Add("256");
                 drp_audioBitrate.Items.Add("320");
-                if (max == 384)
-                    drp_audioBitrate.Items.Add("384");
-                else
-                    drp_audioBitrate.Items.Remove("384");
-            }
-            else
-            {
-                drp_audioBitrate.Items.Remove("192");
-                drp_audioBitrate.Items.Remove("224");
-                drp_audioBitrate.Items.Remove("256");
-                drp_audioBitrate.Items.Remove("320");
-                drp_audioBitrate.Items.Remove("384");
             }
 
-            if (drp_audioBitrate.SelectedItem == null)
+            if (max > 320)
+            {
+                drp_audioBitrate.Items.Add("384");
+            }
+
+            if (max == 768)
+            {
+                drp_audioBitrate.Items.Add("448");
+                drp_audioBitrate.Items.Add("768");
+            }
+
+             if (drp_audioBitrate.SelectedItem == null)
                 drp_audioBitrate.SelectedIndex = drp_audioBitrate.Items.Count - 1;
         }
 
