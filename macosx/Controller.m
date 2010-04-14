@@ -5951,17 +5951,16 @@ the user is using "Custom" settings by determining the sender*/
             {
                 /* FAAC has a minimum of 192 kbps for 6-channel discrete */
                 minbitrate = 192;
-                /* If either mixdown popup includes 6-channel discrete, then allow up to 448 kbps */
-                maxbitrate = 448;
+                /* If either mixdown popup includes 6-channel discrete, then allow up to 768 kbps */
+                maxbitrate = 768;
                 break;
             }
             else
             {
                 /* FAAC is happy using our min bitrate of 32 kbps for stereo or mono */
                 minbitrate = 32;
-                /* FAAC won't honour anything more than 160 for stereo, so let's not offer it */
                 /* note: haven't dealt with mono separately here, FAAC will just use the max it can */
-                maxbitrate = 160;
+                maxbitrate = 320;
                 break;
             }
 
