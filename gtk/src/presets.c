@@ -1211,7 +1211,6 @@ ghb_find_pid_file()
 			if (strncmp(file, "ghb.pid.", 8) == 0)
 			{
 				gchar *path;
-				int fd, lock = 1;
 				pid_t my_pid;
 				int pid;
 
@@ -1222,9 +1221,12 @@ ghb_find_pid_file()
 					file = g_dir_read_name(gdir);
 					continue;
 				}
-
 				path = g_strdup_printf("%s/%s", config, file);
-				fd = g_open(path, O_RDWR);
+
+#if !defined(_WIN32)
+				int fd, lock = 1;
+
+				fd = open(path, O_RDWR);
 				if (fd >= 0)
 				{
 					lock = lockf(fd, F_TLOCK, 0);
@@ -1240,6 +1242,13 @@ ghb_find_pid_file()
 				}
 				g_free(path);
 				close(fd);
+#else
+				g_dir_close(gdir);
+				g_unlink(path);
+				g_free(path);
+				g_free(config);
+				return pid;
+#endif
 			}
 			file = g_dir_read_name(gdir);
 		}

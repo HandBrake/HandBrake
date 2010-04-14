@@ -40,7 +40,6 @@
 #else
 #include <windows.h>
 #include <io.h>
-//#include <pthread/pthread.h>
 #define pipe(phandles)	_pipe (phandles, 4096, _O_BINARY)
 #endif
 
@@ -521,6 +520,7 @@ bind_presets_tree_model (signal_user_data_t *ud)
 static void
 clean_old_logs()
 {
+#if !defined(_WIN32)
 	const gchar *file;
 	gchar *config;
 
@@ -543,7 +543,7 @@ clean_old_logs()
 				path = g_strdup_printf("%s/ghb.pid.%d", config, pid);
 				if (g_file_test(path, G_FILE_TEST_EXISTS))
 				{
-					fd = g_open(path, O_RDWR);
+					fd = open(path, O_RDWR);
 					if (fd >= 0)
 					{
 						lock = lockf(fd, F_TLOCK, 0);
@@ -570,6 +570,60 @@ clean_old_logs()
 		g_dir_close(gdir);
 	}
 	g_free(config);
+#else
+	const gchar *file;
+	gchar *config;
+
+	config = ghb_get_user_config_dir(NULL);
+
+	if (g_file_test(config, G_FILE_TEST_IS_DIR))
+	{
+		GDir *gdir = g_dir_open(config, 0, NULL);
+		file = g_dir_read_name(gdir);
+		while (file)
+		{
+			if (strncmp(file, "Activity.log.", 13) == 0)
+			{
+				gchar *path;
+				int pid;
+
+				sscanf(file, "Activity.log.%d", &pid);
+
+#if 0
+				int fd, lock = 1;
+
+				path = g_strdup_printf("%s/ghb.pid.%d", config, pid);
+				if (g_file_test(path, G_FILE_TEST_EXISTS))
+				{
+					fd = open(path, O_RDWR);
+					if (fd >= 0)
+					{
+						lock = lockf(fd, F_TLOCK, 0);
+					}
+					g_free(path);
+					close(fd);
+					if (lock == 0)
+					{
+						path = g_strdup_printf("%s/%s", config, file);
+						g_unlink(path);
+						g_free(path);
+					}
+				}
+				else
+#endif
+				{
+					//g_free(path);
+					path = g_strdup_printf("%s/%s", config, file);
+					g_unlink(path);
+					g_free(path);
+				}
+			}
+			file = g_dir_read_name(gdir);
+		}
+		g_dir_close(gdir);
+	}
+	g_free(config);
+#endif
 }
 
 static void
@@ -720,11 +774,6 @@ main (int argc, char *argv[])
 	bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-#endif
-
-#ifdef PTW32_STATIC_LIB
-	pthread_win32_process_attach_np();
-	pthread_win32_thread_attach_np();
 #endif
 
 	if (!g_thread_supported())
@@ -921,9 +970,6 @@ main (int argc, char *argv[])
 	notify_uninit();
 #endif
 	g_free(ud);
-#ifdef PTW32_STATIC_LIB
-	pthread_win32_thread_detach_np();
-	pthread_win32_process_detach_np();
-#endif
+
 	return 0;
 }
