@@ -419,34 +419,6 @@ namespace Handbrake.Controls
             }
         }
 
-
-        private void SetBitrate2()
-        {
-            int max = 0;
-            switch (drp_audioEncoder.Text)
-            {
-                case "AAC (faac)":
-                    max = drp_audioMix.Text.Contains("6 Channel") ? 384 : 160;
-                    break;
-                case "MP3 (lame)":
-                    max = 320;
-                    break;
-                case "Vorbis (vorbis)":
-                    max = 384;
-                    break;
-                case "AC3 Passthru":
-                    drp_audioBitrate.Items.Add("Auto");
-                    drp_audioBitrate.SelectedItem = "Auto";
-                    drp_audioSample.SelectedItem = "Auto";
-                    break;
-                case "DTS Passthru":
-                    drp_audioBitrate.Items.Add("Auto");
-                    drp_audioBitrate.SelectedItem = "Auto";
-                    drp_audioSample.SelectedItem = "Auto";
-                    break;
-            }
-        }
-
         private void SetBitrate()
         {
             int max = 0;
