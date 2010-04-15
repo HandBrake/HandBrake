@@ -53,7 +53,6 @@ binary-indep: build install
 	dh_installdocs -i
 	dh_install --sourcedir=debian/tmp -i
 	dh_icons -i
-	dh_desktop -i
 	dh_link -i
 	dh_compress -i
 	dh_fixperms -i
@@ -73,7 +72,6 @@ binary-arch: build install
 	dh_installman -a
 	dh_link -a
 	dh_icons -a
-	dh_desktop -a
 	dh_strip -a
 	dh_compress -a
 	dh_fixperms -a

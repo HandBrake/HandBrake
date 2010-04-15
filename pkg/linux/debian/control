@@ -2,8 +2,8 @@ Source: handbrake
 Section: graphics
 Priority: optional
 Maintainer: John Stebbins <jstebbins.hb@gmail.com>
-Build-Depends: debhelper (>= 6), autotools-dev, libtool, libgtkhtml3.14-dev, libhal-storage-dev, intltool, autoconf, yasm (>= 0.7.0), libbz2-dev, zlib1g-dev
-Standards-Version: 3.7.3
+Build-Depends: debhelper (>= 6), autotools-dev, libtool, libhal-storage-dev, intltool, autoconf, yasm (>= 0.7.0), libbz2-dev, zlib1g-dev, libwebkit-dev, libnotify-dev, libgstreamer0.10-dev, libgstreamer-plugins-base0.10-dev, wget
+Standards-Version: 3.8.4
 Homepage: http://www.handbrake.fr/
 
 Package: handbrake-cli
@@ -19,7 +19,7 @@ Description: versatile DVD ripper and video transcoder - command line
 
 Package: handbrake-gtk
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libwebkit-dev, libnotify-dev
 Conflicts: handbrake
 Description: versatile DVD ripper and video transcoder - GTK GUI
  HandBrake is a versatile, easy-to-use tool for converting DVDs and other videos
