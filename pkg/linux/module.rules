@@ -60,8 +60,8 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
-	(cd $(STAGE.out.src/)lucid && dput handbrake-snapshots $(PKG.deb.basename)_$(HB.version)ppa1~lucid1_source.changes )
-	(cd $(STAGE.out.src/)karmic && dput handbrake-snapshots $(PKG.deb.basename)_$(HB.version)ppa1~karmic1_source.changes )
+	(cd $(STAGE.out.src/)lucid && dput handbrake-snapshots handbrake_$(HB.version)ppa1~lucid1_source.changes )
+	(cd $(STAGE.out.src/)karmic && dput handbrake-snapshots handbrake_$(HB.version)ppa1~karmic1_source.changes )
 
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
