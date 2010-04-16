@@ -47,6 +47,7 @@ $(PKG.gui.deb):
 	$(MV.exe) $(PKG.gui.tmp.deb) $(PKG.gui.deb)
 
 $(PKG.src.deb.tar):
+	make contrib.fetch
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)lucid/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)lucid/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)lucid/$(PKG.deb.basename)
@@ -60,7 +61,7 @@ $(PKG.src.deb.tar):
 	svn co -r$(HB.repo.rev) $(HB.repo.url) $(STAGE.out.src/)karmic/$(PKG.deb.basename)
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)karmic/$(PKG.deb.basename)
 	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)karmic/$(PKG.deb.basename)
-	echo "handbrake ($(HB.version)ppa1~karmic) karmic; urgency=low" > $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
+	echo "handbrake ($(HB.version)ppa1~karmic1) karmic; urgency=low" > $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
 	echo "    - See timeline at http://trac.handbrake.fr/timeline" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)karmic/$(PKG.deb.basename)/debian/changelog
