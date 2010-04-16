@@ -40,6 +40,7 @@ $(PKG.gui.rpm): $(PKG.native.rpm.stamp)
 #
 # Debian binary package rules
 #
+$(PKG.gui.tmp.deb): | $(dir $(PKG.gui.tmp.deb))
 $(PKG.gui.tmp.deb): GNUmakefile
 	-$(RM.exe) $(SRC/)debian
 	ln -s $(PWD)/$(PKG.debian) $(SRC/)debian
