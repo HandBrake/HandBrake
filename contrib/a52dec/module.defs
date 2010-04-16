@@ -5,4 +5,4 @@ A52DEC.FETCH.url = http://download.m0k.org/handbrake/contrib/a52dec-0.7.4.tar.gz
 A52DEC.EXTRACT.tarbase = a52dec
 A52DEC.INSTALL.strip = liba52.a
 
-A52DEC.CONFIGURE.bootstrap = ./bootstrap;
+A52DEC.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
