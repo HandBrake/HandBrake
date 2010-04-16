@@ -11,6 +11,7 @@ PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_CLI_$(BUILD.machine).de
 PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.version)-Ubuntu_GUI_$(BUILD.machine).deb
 PKG.deb.basename = handbrake-$(HB.version)
 PKG.src.deb.tar = handbrake_$(HB.version).tar.gz
+PKG.src.deb.stamp = $(STAGE.out.src/).debsrc.stamp
 PKG.src.deb = $(PKG.out/)handbrake_$(HB.version).deb
 
 PKG.cli.tmp.deb = $(PKG.out/)handbrake-cli_$(HB.version)_$(PKG.deb.machine).deb
