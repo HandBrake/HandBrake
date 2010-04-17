@@ -733,13 +733,6 @@ struct hb_filter_object_s
 #endif
 };
 
-#define HB_FILTER_DETELECINE    1
-#define HB_FILTER_DEINTERLACE   2
-#define HB_FILTER_DEBLOCK       3
-#define HB_FILTER_DENOISE       4
-#define HB_FILTER_DECOMB        5
-#define HB_FILTER_ROTATE        6
-
 extern hb_filter_object_t hb_filter_detelecine;
 extern hb_filter_object_t hb_filter_deinterlace;
 extern hb_filter_object_t hb_filter_deblock;
