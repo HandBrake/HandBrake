@@ -148,9 +148,6 @@ namespace Handbrake.Services
             this.job = encJob;
             try
             {
-                if (this.EncodeStarted != null)
-                    this.EncodeStarted(this, new EventArgs());
-
                 IsEncoding = true;
 
                 ResetLogReader();
@@ -176,6 +173,10 @@ namespace Handbrake.Services
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 this.HbProcess = Process.Start(cliStart);
                 this.ProcessID = Main.GetCliProcess(before);
+
+                // Fire the Encode Started Event
+                if (this.EncodeStarted != null)
+                    this.EncodeStarted(this, new EventArgs());
 
 
                 if (this.HbProcess != null)
