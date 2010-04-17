@@ -1,8 +1,7 @@
 /*  frmQueue.Designer.cs 
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
@@ -106,7 +105,7 @@ namespace Handbrake
             this.btn_down.Text = "Down";
             this.toolTip1.SetToolTip(this.btn_down, "Move the selected item down 1 place in the queue");
             this.btn_down.UseVisualStyleBackColor = true;
-            this.btn_down.Click += new System.EventHandler(this.btn_down_Click);
+            this.btn_down.Click += new System.EventHandler(this.BtnDownClick);
             // 
             // btn_up
             // 
@@ -124,7 +123,7 @@ namespace Handbrake
             this.btn_up.Text = "Up";
             this.toolTip1.SetToolTip(this.btn_up, "Move the selected item up 1 place in the queue.");
             this.btn_up.UseVisualStyleBackColor = true;
-            this.btn_up.Click += new System.EventHandler(this.btn_up_Click);
+            this.btn_up.Click += new System.EventHandler(this.BtnUpClick);
             // 
             // btn_delete
             // 
@@ -142,7 +141,7 @@ namespace Handbrake
             this.btn_delete.Text = "Delete";
             this.toolTip1.SetToolTip(this.btn_delete, "Remove the selected item from the queue");
             this.btn_delete.UseVisualStyleBackColor = true;
-            this.btn_delete.Click += new System.EventHandler(this.btn_delete_Click);
+            this.btn_delete.Click += new System.EventHandler(this.BtnDeleteClick);
             // 
             // label4
             // 
@@ -257,7 +256,7 @@ namespace Handbrake
             this.btn_encode.Name = "btn_encode";
             this.btn_encode.Size = new System.Drawing.Size(82, 36);
             this.btn_encode.Text = "Encode";
-            this.btn_encode.Click += new System.EventHandler(this.btn_encode_Click);
+            this.btn_encode.Click += new System.EventHandler(this.BtnEncodeClick);
             // 
             // btn_pause
             // 
@@ -269,7 +268,7 @@ namespace Handbrake
             this.btn_pause.Size = new System.Drawing.Size(74, 36);
             this.btn_pause.Text = "Pause";
             this.btn_pause.Visible = false;
-            this.btn_pause.Click += new System.EventHandler(this.btn_pause_Click);
+            this.btn_pause.Click += new System.EventHandler(this.BtnPauseClick);
             // 
             // toolStripSeparator1
             // 
@@ -298,7 +297,7 @@ namespace Handbrake
             this.mnu_batch.Name = "mnu_batch";
             this.mnu_batch.Size = new System.Drawing.Size(238, 22);
             this.mnu_batch.Text = "Generate Batch Script";
-            this.mnu_batch.Click += new System.EventHandler(this.mnu_batch_Click);
+            this.mnu_batch.Click += new System.EventHandler(this.MnuBatchClick);
             // 
             // mnu_import
             // 
@@ -306,7 +305,7 @@ namespace Handbrake
             this.mnu_import.Name = "mnu_import";
             this.mnu_import.Size = new System.Drawing.Size(238, 22);
             this.mnu_import.Text = "Import Queue";
-            this.mnu_import.Click += new System.EventHandler(this.mnu_import_Click);
+            this.mnu_import.Click += new System.EventHandler(this.MnuImportClick);
             // 
             // mnu_export
             // 
@@ -314,7 +313,7 @@ namespace Handbrake
             this.mnu_export.Name = "mnu_export";
             this.mnu_export.Size = new System.Drawing.Size(238, 22);
             this.mnu_export.Text = "Export Queue";
-            this.mnu_export.Click += new System.EventHandler(this.mnu_export_Click);
+            this.mnu_export.Click += new System.EventHandler(this.MnuExportClick);
             // 
             // toolStripSeparator2
             // 
@@ -329,7 +328,7 @@ namespace Handbrake
             this.mnu_readd.Size = new System.Drawing.Size(238, 22);
             this.mnu_readd.Text = "Re-Add Currently Running Job";
             this.mnu_readd.ToolTipText = "Readds the currently encoding job back onto the queue.";
-            this.mnu_readd.Click += new System.EventHandler(this.mnu_readd_Click);
+            this.mnu_readd.Click += new System.EventHandler(this.MnuReaddClick);
             // 
             // mnu_reconfigureJob
             // 
@@ -338,7 +337,7 @@ namespace Handbrake
             this.mnu_reconfigureJob.Text = "Reconfigure Job (Experimental)";
             this.mnu_reconfigureJob.ToolTipText = "Removes the job from the queue and sends it back to the main window.\r\nFrom there," +
                 " you can change settings then re-add it to the queue";
-            this.mnu_reconfigureJob.Click += new System.EventHandler(this.mnu_reconfigureJob_Click);
+            this.mnu_reconfigureJob.Click += new System.EventHandler(this.MnuReconfigureJobClick);
             // 
             // SaveFile
             // 
@@ -365,7 +364,7 @@ namespace Handbrake
             this.list_queue.TabIndex = 72;
             this.list_queue.UseCompatibleStateImageBehavior = false;
             this.list_queue.View = System.Windows.Forms.View.Details;
-            this.list_queue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.list_queue_deleteKey);
+            this.list_queue.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ListQueueDeleteKey);
             // 
             // Title
             // 
@@ -412,14 +411,14 @@ namespace Handbrake
             this.mnu_up.Name = "mnu_up";
             this.mnu_up.Size = new System.Drawing.Size(138, 22);
             this.mnu_up.Text = "Move Up";
-            this.mnu_up.Click += new System.EventHandler(this.mnu_up_Click);
+            this.mnu_up.Click += new System.EventHandler(this.MnuUpClick);
             // 
             // mnu_Down
             // 
             this.mnu_Down.Name = "mnu_Down";
             this.mnu_Down.Size = new System.Drawing.Size(138, 22);
             this.mnu_Down.Text = "Move Down";
-            this.mnu_Down.Click += new System.EventHandler(this.mnu_Down_Click);
+            this.mnu_Down.Click += new System.EventHandler(this.MnuDownClick);
             // 
             // toolStripSeparator3
             // 
@@ -431,7 +430,7 @@ namespace Handbrake
             this.mnu_delete.Name = "mnu_delete";
             this.mnu_delete.Size = new System.Drawing.Size(138, 22);
             this.mnu_delete.Text = "Delete";
-            this.mnu_delete.Click += new System.EventHandler(this.mnu_delete_Click);
+            this.mnu_delete.Click += new System.EventHandler(this.MnuDeleteClick);
             // 
             // statusStrip1
             // 

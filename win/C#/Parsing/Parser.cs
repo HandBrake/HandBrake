@@ -38,7 +38,6 @@ namespace Handbrake.Parsing
     /// <param name="timeRemaining">The estimated time remaining for this task to complete</param>
     public delegate void EncodeProgressEventHandler(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float averageFps, TimeSpan timeRemaining);
 
-
     /// <summary>
     /// A simple wrapper around a StreamReader to keep track of the entire output from a cli process
     /// </summary>

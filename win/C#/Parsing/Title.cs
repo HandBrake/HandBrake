@@ -118,7 +118,7 @@ namespace Handbrake.Parsing
         }
 
         /// <summary>
-        /// The track number of this Title
+        /// Gets The track number of this Title
         /// </summary>
         public int TitleNumber
         {
@@ -186,22 +186,12 @@ namespace Handbrake.Parsing
             get { return angles; }
         }
 
-
         /// <summary>
         /// Gets the FPS of the source.
         /// </summary>
         public float Fps
         {
             get { return fps; }
-        }
-
-        /// <summary>
-        /// Override of the ToString method to provide an easy way to use this object in the UI
-        /// </summary>
-        /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
-        public override string ToString()
-        {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", titleNumber, duration.Hours, duration.Minutes, duration.Seconds);
         }
 
         /// <summary>
@@ -292,6 +282,15 @@ namespace Handbrake.Parsing
             }
 
             return titles.ToArray();
+        }
+
+        /// <summary>
+        /// Override of the ToString method to provide an easy way to use this object in the UI
+        /// </summary>
+        /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
+        public override string ToString()
+        {
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", titleNumber, duration.Hours, duration.Minutes, duration.Seconds);
         }
     }
 }

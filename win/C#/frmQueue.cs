@@ -1,8 +1,7 @@
 /*  frmQueue.cs $
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
@@ -15,13 +14,35 @@ namespace Handbrake
     using Model;
     using Services;
 
+    /// <summary>
+    /// The Queue Window
+    /// </summary>
     public partial class frmQueue : Form
     {
+        /// <summary>
+        /// Update Handler Delegate
+        /// </summary>
         private delegate void UpdateHandler();
 
-        private Queue queue;
-        private frmMain mainWindow;
+        /// <summary>
+        /// An instance of the Queue service
+        /// </summary>
+        private readonly Queue queue;
 
+        /// <summary>
+        /// A reference to the main application window
+        /// </summary>
+        private readonly frmMain mainWindow;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="frmQueue"/> class.
+        /// </summary>
+        /// <param name="q">
+        /// An instance of the queue service.
+        /// </param>
+        /// <param name="mw">
+        /// The main window.
+        /// </param>
         public frmQueue(Queue q, frmMain mw)
         {
             InitializeComponent();
@@ -34,23 +55,50 @@ namespace Handbrake
             queue.QueuePauseRequested += new EventHandler(QueueOnPaused);
         }
 
+        /// <summary>
+        /// Handle the Queue Paused event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
         private void QueueOnPaused(object sender, EventArgs e)
         {
-            SetUIEncodeFinished();
-            UpdateUIElements();
+            SetUiEncodeFinished();
+            UpdateUiElements();
         }
 
+        /// <summary>
+        /// Handle the Queue Finished event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
         private void QueueOnQueueFinished(object sender, EventArgs e)
         {
-            SetUIEncodeFinished();
+            SetUiEncodeFinished();
             ResetQueue(); // Reset the Queue Window
         }
 
+        /// <summary>
+        /// Handle the Encode Started event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void QueueOnEncodeStart(object sender, EventArgs e)
         {
-            SetUIEncodeStarted(); // make sure the UI is set correctly
+            SetUiEncodeStarted(); // make sure the UI is set correctly
             SetCurrentEncodeInformation();
-            UpdateUIElements(); // Redraw the Queue, a new encode has started.
+            UpdateUiElements(); // Redraw the Queue, a new encode has started.
         }
 
         /// <summary>
@@ -58,7 +106,7 @@ namespace Handbrake
         /// </summary>
         public void SetQueue()
         {
-            UpdateUIElements();
+            UpdateUiElements();
         }
 
         /// <summary>
@@ -81,12 +129,16 @@ namespace Handbrake
             // Activate();
         }
 
-        // Start and Stop Controls
-        private void btn_encode_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the Encode button Click event
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">the EventArgs</param>
+        private void BtnEncodeClick(object sender, EventArgs e)
         {
             if (queue.PauseRequested)
             {
-                SetUIEncodeStarted();
+                SetUiEncodeStarted();
                 MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
@@ -94,40 +146,58 @@ namespace Handbrake
                 queue.Start();
         }
 
-        private void btn_pause_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the Pause button click event.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void BtnPauseClick(object sender, EventArgs e)
         {
             queue.Pause();
-            SetUIEncodeFinished();
+            SetUiEncodeFinished();
             ResetQueue();
             MessageBox.Show(
-                "No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.", 
+                "No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.",
                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        // UI Work
 
-        // Window Display Management
-        private void SetUIEncodeStarted()
+        /// <summary>
+        /// Setup the UI to show that an encode has started
+        /// </summary>
+        private void SetUiEncodeStarted()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(SetUIEncodeStarted));
+                BeginInvoke(new UpdateHandler(SetUiEncodeStarted));
                 return;
             }
             btn_encode.Enabled = false;
             btn_pause.Visible = true;
         }
 
-        private void SetUIEncodeFinished()
+        /// <summary>
+        /// Setup the UI to indicate that an encode has finished.
+        /// </summary>
+        private void SetUiEncodeFinished()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(SetUIEncodeFinished));
+                BeginInvoke(new UpdateHandler(SetUiEncodeFinished));
                 return;
             }
             btn_pause.Visible = false;
             btn_encode.Enabled = true;
         }
 
+        /// <summary>
+        /// Reset the Queue Window display
+        /// </summary>
         private void ResetQueue()
         {
             if (InvokeRequired)
@@ -148,6 +218,9 @@ namespace Handbrake
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
 
+        /// <summary>
+        /// Redraw the Queue window with the latest information about HandBrakes status
+        /// </summary>
         private void RedrawQueue()
         {
             if (InvokeRequired)
@@ -158,10 +231,10 @@ namespace Handbrake
 
             list_queue.Items.Clear();
             ReadOnlyCollection<Job> theQueue = queue.CurrentQueue;
-            foreach (Job queue_item in theQueue)
+            foreach (Job queueItem in theQueue)
             {
-                string q_item = queue_item.Query;
-                QueryParser parsed = Functions.QueryParser.Parse(q_item);
+                string qItem = queueItem.Query;
+                QueryParser parsed = Functions.QueryParser.Parse(qItem);
 
                 // Get the DVD Title
                 string title = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
@@ -180,8 +253,8 @@ namespace Handbrake
                 ListViewItem item = new ListViewItem();
                 item.Text = title; // Title
                 item.SubItems.Add(chapters); // Chapters
-                item.SubItems.Add(queue_item.Source); // Source
-                item.SubItems.Add(queue_item.Destination); // Destination
+                item.SubItems.Add(queueItem.Source); // Source
+                item.SubItems.Add(queueItem.Destination); // Destination
                 item.SubItems.Add(parsed.VideoEncoder); // Video
 
                 // Display The Audio Track Information
@@ -199,11 +272,14 @@ namespace Handbrake
             }
         }
 
-        private void UpdateUIElements()
+        /// <summary>
+        /// Update the UI elements
+        /// </summary>
+        private void UpdateUiElements()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(UpdateUIElements));
+                BeginInvoke(new UpdateHandler(UpdateUiElements));
                 return;
             }
 
@@ -211,6 +287,9 @@ namespace Handbrake
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
 
+        /// <summary>
+        /// Set the window up with the current encode information
+        /// </summary>
         private void SetCurrentEncodeInformation()
         {
             try
@@ -256,6 +335,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Delete the currently selected items on the queue
+        /// </summary>
         private void DeleteSelectedItems()
         {
             // If there are selected items
@@ -275,7 +357,7 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.Remove(selectedIndex);
 
-                UpdateUIElements();
+                UpdateUiElements();
 
                 // Select the item where the first deleted item was previously
                 if (firstSelectedIndex < list_queue.Items.Count)
@@ -286,42 +368,108 @@ namespace Handbrake
         }
 
         // Queue Management
-        private void mnu_up_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the Move Up Menu Item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuUpClick(object sender, EventArgs e)
         {
             MoveUp();
         }
 
-        private void mnu_Down_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the Move down Menu Item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuDownClick(object sender, EventArgs e)
         {
             MoveDown();
         }
 
-        private void mnu_delete_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the delete Menu Item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuDeleteClick(object sender, EventArgs e)
         {
             DeleteSelectedItems();
         }
 
-        private void btn_up_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the Button Up Click
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void BtnUpClick(object sender, EventArgs e)
         {
             MoveUp();
         }
 
-        private void btn_down_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the button down click
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void BtnDownClick(object sender, EventArgs e)
         {
             MoveDown();
         }
 
-        private void btn_delete_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Handle the delete button click
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void BtnDeleteClick(object sender, EventArgs e)
         {
             DeleteSelectedItems();
         }
 
-        private void list_queue_deleteKey(object sender, KeyEventArgs e)
+        /// <summary>
+        /// Handle the delete keyboard press
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void ListQueueDeleteKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
                 DeleteSelectedItems();
         }
 
+        /// <summary>
+        /// Move items up in the queue
+        /// </summary>
         private void MoveUp()
         {
             // If there are selected items and the first item is not selected
@@ -336,7 +484,7 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.MoveUp(selectedIndex);
 
-                UpdateUIElements();
+                UpdateUiElements();
 
                 // Keep the selected item(s) selected, now moved up one index
                 foreach (int selectedIndex in selectedIndices)
@@ -347,6 +495,9 @@ namespace Handbrake
             list_queue.Select(); // Activate the control to show the selected items
         }
 
+        /// <summary>
+        /// Move items down in the queue
+        /// </summary>
         private void MoveDown()
         {
             // If there are selected items and the last item is not selected
@@ -365,7 +516,7 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.MoveDown(selectedIndex);
 
-                UpdateUIElements();
+                UpdateUiElements();
 
                 // Keep the selected item(s) selected, now moved down one index
                 foreach (int selectedIndex in selectedIndices)
@@ -377,7 +528,17 @@ namespace Handbrake
         }
 
         // Queue Import/Export Features
-        private void mnu_batch_Click(object sender, EventArgs e)
+
+        /// <summary>
+        /// Create a batch script
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuBatchClick(object sender, EventArgs e)
         {
             SaveFile.FileName = string.Empty;
             SaveFile.Filter = "Batch|.bat";
@@ -386,7 +547,16 @@ namespace Handbrake
                 queue.WriteBatchScriptToFile(SaveFile.FileName);
         }
 
-        private void mnu_export_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Export Queue
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuExportClick(object sender, EventArgs e)
         {
             SaveFile.FileName = string.Empty;
             SaveFile.Filter = "HandBrake Queue|*.queue";
@@ -395,26 +565,53 @@ namespace Handbrake
                 queue.WriteQueueStateToFile(SaveFile.FileName);
         }
 
-        private void mnu_import_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Import Queue
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuImportClick(object sender, EventArgs e)
         {
             OpenFile.FileName = string.Empty;
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
                 queue.LoadQueueFromFile(OpenFile.FileName);
-            UpdateUIElements();
+            UpdateUiElements();
         }
 
-        private void mnu_readd_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Readd current job to queue
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuReaddClick(object sender, EventArgs e)
         {
             if (!queue.LastEncode.IsEmpty)
             {
-                queue.Add(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination, 
+                queue.Add(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination,
                           queue.LastEncode.CustomQuery);
-                UpdateUIElements();
+                UpdateUiElements();
             }
         }
 
-        private void mnu_reconfigureJob_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Edit Job
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuReconfigureJobClick(object sender, EventArgs e)
         {
             if (list_queue.SelectedIndices != null)
             {
@@ -431,8 +628,12 @@ namespace Handbrake
             }
         }
 
-
-        // Hide's the window when the user tries to "x" out of the window instead of closing it.
+        /// <summary>
+        /// Hide's the window when the user tries to "x" out of the window instead of closing it.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;

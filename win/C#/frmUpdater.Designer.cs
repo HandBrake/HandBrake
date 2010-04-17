@@ -1,8 +1,7 @@
 /*  frmUpdater.Designer.cs 
- 	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
@@ -94,7 +93,7 @@ namespace Handbrake
             this.btn_skip.TabIndex = 54;
             this.btn_skip.Text = "Skip This Version";
             this.btn_skip.UseVisualStyleBackColor = false;
-            this.btn_skip.Click += new System.EventHandler(this.btn_skip_Click);
+            this.btn_skip.Click += new System.EventHandler(this.BtnSkipClick);
             // 
             // btn_installUpdate
             // 
@@ -110,7 +109,7 @@ namespace Handbrake
             this.btn_installUpdate.TabIndex = 55;
             this.btn_installUpdate.Text = "Install Update";
             this.btn_installUpdate.UseVisualStyleBackColor = false;
-            this.btn_installUpdate.Click += new System.EventHandler(this.btn_installUpdate_Click);
+            this.btn_installUpdate.Click += new System.EventHandler(this.BtnInstallUpdateClick);
             // 
             // btn_remindLater
             // 
@@ -126,7 +125,7 @@ namespace Handbrake
             this.btn_remindLater.TabIndex = 56;
             this.btn_remindLater.Text = "Remind me Later";
             this.btn_remindLater.UseVisualStyleBackColor = false;
-            this.btn_remindLater.Click += new System.EventHandler(this.btn_remindLater_Click);
+            this.btn_remindLater.Click += new System.EventHandler(this.BtnRemindLaterClick);
             // 
             // label3
             // 

@@ -1,8 +1,8 @@
 ﻿/*  AudioTrack.cs $
  	
- 	   This file is part of the HandBrake source code.
- 	   Homepage: <http://handbrake.fr>.
- 	   It may be used under the terms of the GNU General Public License. */
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
@@ -79,7 +79,7 @@ namespace Handbrake
             this.btn_add.TabIndex = 2;
             this.btn_add.Text = "Add";
             this.btn_add.UseVisualStyleBackColor = false;
-            this.btn_add.Click += new System.EventHandler(this.btn_add_Click);
+            this.btn_add.Click += new System.EventHandler(this.BtnAddClick);
             // 
             // btn_cancel
             // 
@@ -93,7 +93,7 @@ namespace Handbrake
             this.btn_cancel.TabIndex = 3;
             this.btn_cancel.Text = "Cancel";
             this.btn_cancel.UseVisualStyleBackColor = false;
-            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
+            this.btn_cancel.Click += new System.EventHandler(this.BtnCancelClick);
             // 
             // check_pictureSettings
             // 
