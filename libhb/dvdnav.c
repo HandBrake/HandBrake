@@ -836,6 +836,7 @@ static int hb_dvdnav_start( hb_dvd_t * e, hb_title_t *title, int c )
     {
         return 0;
     }
+    dvdnav_reset( d->dvdnav );
     chapter = hb_list_item( title->list_chapter, c - 1);
     if (chapter != NULL)
         result = dvdnav_program_play(d->dvdnav, t, chapter->pgcn, chapter->pgn);
@@ -905,6 +906,13 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
             int32_t title, pgcn, pgn;
             if (dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn ) != DVDNAV_STATUS_OK)
                 hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
+            // If we find ourselves in a new title, it means a title
+            // transition was made while reading data.  Jumping between
+            // titles can cause the vm to get into a bad state.  So
+            // reset the vm in this case.
+            if ( d->title != title )
+                dvdnav_reset( d->dvdnav );
+
             if ( d->title != title || chapter->pgcn != pgcn )
             {
                 // this chapter is in a different pgc - switch to it.
@@ -1088,6 +1096,16 @@ static int hb_dvdnav_read( hb_dvd_t * e, hb_buffer_t * b )
             * event can be used to query such information only when
             * necessary and update the decoding/displaying accordingly. 
             */
+            {
+                int tt = 0, pgcn = 0, pgn = 0, c;
+
+                dvdnav_current_title_program(d->dvdnav, &tt, &pgcn, &pgn);
+                if (tt != d->title)
+                {
+                    // Transition to another title signals that we are done.
+                    return 0;
+                }
+            }
             break;
 
         case DVDNAV_CELL_CHANGE:
