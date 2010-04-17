@@ -8,7 +8,6 @@ $(PKG.cli.zip): | $(STAGE.out.cli/)
 $(STAGE.out.cli/):
 	-$(MKDIR.exe) -p $@
 	$(CP.exe) HandBrakeCLI.exe $(STAGE.out.cli/)
-	$(CP.exe) $(PKG.mingw.lib)/libgcc_s_sjlj-1.dll $(STAGE.out.cli/)
 	$(call STAGE.doc,$(STAGE.out.cli/))
 
 

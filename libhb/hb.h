@@ -14,6 +14,7 @@ extern "C" {
 #define HB_DEBUG_NONE 0
 #define HB_DEBUG_ALL  1
 void          hb_register( hb_work_object_t * );
+void          hb_register_logger( void (*log_cb)(const char* message) );
 hb_handle_t * hb_init( int verbose, int update_check );
 hb_handle_t * hb_init_dl ( int verbose, int update_check ); // hb_init for use with dylib
 
@@ -43,6 +44,8 @@ void          hb_scan( hb_handle_t *, const char * path,
                        int title_index, int preview_count,
                        int store_previews );
 void          hb_scan_stop( hb_handle_t * );
+hb_filter_object_t * hb_get_filter_object(int filter_id, const char * settings);
+uint64_t      hb_first_duration( hb_handle_t * );
 
 /* hb_get_titles()
    Returns the list of valid titles detected by the latest scan. */
@@ -53,16 +56,22 @@ hb_list_t   * hb_get_titles( hb_handle_t * );
    Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
 int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
 
+void          hb_get_preview_by_index( hb_handle_t *, int, int, uint8_t * );
 void          hb_get_preview( hb_handle_t *, hb_title_t *, int,
                               uint8_t * );
 void          hb_set_size( hb_job_t *, double ratio, int pixels );
+void          hb_set_anamorphic_size_by_index( hb_handle_t *, int,
+                int *output_width, int *output_height,
+                int *output_par_width, int *output_par_height );
 void          hb_set_anamorphic_size( hb_job_t *,
                 int *output_width, int *output_height,
-                int *output_par_width, int *output_par_height);
+                int *output_par_width, int *output_par_height );
 
 /* Handling jobs */
 int           hb_count( hb_handle_t * );
 hb_job_t *    hb_job( hb_handle_t *, int );
+void          hb_set_chapter_name( hb_handle_t *, int, int, const char * );
+void          hb_set_job( hb_handle_t *, int, hb_job_t * );
 void          hb_add( hb_handle_t *, hb_job_t * );
 void          hb_rem( hb_handle_t *, hb_job_t * );
 
