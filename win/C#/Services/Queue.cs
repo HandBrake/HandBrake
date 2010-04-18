@@ -94,11 +94,12 @@ namespace Handbrake.Services
         /// <param name="customJob">
         /// Custom job
         /// </param>
-        public void Add(string query, string source, string destination, bool customJob)
+        public void Add(string query, int title, string source, string destination, bool customJob)
         {
             Job newJob = new Job
                              {
-                                 Id = this.nextJobId++, 
+                                 Id = this.nextJobId++,
+                                 Title = title,
                                  Query = query, 
                                  Source = source, 
                                  Destination = destination, 

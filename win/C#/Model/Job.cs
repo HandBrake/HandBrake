@@ -17,6 +17,11 @@ namespace Handbrake.Model
         public int Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the selected Title.
+        /// </summary>
+        public int Title { get; set; }
+
+        /// <summary>
         /// Gets or sets the query string.
         /// </summary>
         public string Query { get; set; }

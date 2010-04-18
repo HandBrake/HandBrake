@@ -856,7 +856,7 @@ namespace Handbrake
                     if (overwrite == DialogResult.Yes)
                     {
                         if (encodeQueue.Count == 0)
-                            encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                            encodeQueue.Add(query, getTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
 
                         queueWindow.SetQueue();
                         if (encodeQueue.Count > 1)
@@ -895,10 +895,10 @@ namespace Handbrake
                             "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                             "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
-                        encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                        encodeQueue.Add(query, getTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
                 }
                 else
-                    encodeQueue.Add(query, sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                    encodeQueue.Add(query, getTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
 
                 lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
@@ -1436,8 +1436,8 @@ namespace Handbrake
                     double cqStep = Properties.Settings.Default.x264cqstep;
                     double multiplier = 1.0 / cqStep;
                     double value = slider_videoQuality.Value * multiplier;
-                    
-                    slider_videoQuality.Maximum = (int)(51/Properties.Settings.Default.x264cqstep);
+
+                    slider_videoQuality.Maximum = (int)(51 / Properties.Settings.Default.x264cqstep);
 
                     if (value < slider_videoQuality.Maximum)
                         slider_videoQuality.Value = slider_videoQuality.Maximum - (int)value;
@@ -1703,7 +1703,7 @@ namespace Handbrake
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 int start, end;
                 int.TryParse(drop_chapterStart.Items[0].ToString(), out start);
-                int.TryParse(drop_chapterFinish.Items[drop_chapterFinish.Items.Count -1].ToString(), out end);
+                int.TryParse(drop_chapterFinish.Items[drop_chapterFinish.Items.Count - 1].ToString(), out end);
                 if (end > start)
                     Check_ChapterMarkers.Enabled = true;
                 else
@@ -1803,8 +1803,7 @@ namespace Handbrake
         public void RecievingJob(Job job)
         {
             string query = job.Query;
-            StartScan(job.Source, 0);
-
+            StartScan(job.Source, job.Title);
 
             if (query != null)
             {
@@ -1936,6 +1935,24 @@ namespace Handbrake
 
             presetHandler.GetPresetPanel(ref treeView_presets);
             treeView_presets.Update();
+        }
+
+        /// <summary>
+        /// Get the title from the selected item in the title dropdown.
+        /// </summary>
+        /// <returns>
+        /// The title.
+        /// </returns>
+        private int getTitle()
+        {
+            int title = 0;
+            if (drp_dvdtitle.SelectedItem != null)
+            {
+                string[] titleInfo = drp_dvdtitle.SelectedItem.ToString().Split(' ');
+                int.TryParse(titleInfo[0], out title);
+            }
+
+            return title;
         }
 
         #endregion

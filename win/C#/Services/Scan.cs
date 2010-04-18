@@ -33,7 +33,10 @@ namespace Handbrake.Services
         /// </summary>
         private StringBuilder logBuffer;
 
-        static object locker = new object();
+        /// <summary>
+        /// A Lock object
+        /// </summary>
+        private static object locker = new object();
 
         /// <summary>
         /// The line number thats been read to in the log file
@@ -140,30 +143,34 @@ namespace Handbrake.Services
                 ResetLogReader();
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
                 string dvdInfoPath = Path.Combine(logDir, "last_scan_log.txt");
 
                 // Make we don't pick up a stale last_encode_log.txt (and that we have rights to the file)
                 if (File.Exists(dvdInfoPath))
                     File.Delete(dvdInfoPath);
 
-                string dvdnav = string.Empty;
+                string extraArguments = string.Empty;
                 if (Properties.Settings.Default.noDvdNav)
-                    dvdnav = " --no-dvdnav";
+                    extraArguments = " --no-dvdnav";
+
+                if (title > 0)
+                    extraArguments += " --scan ";
 
                 this.hbProc = new Process
-                                  {
-                                      StartInfo =
-                                          {
-                                              FileName = handbrakeCLIPath,
-                                              Arguments =
-                                                  String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, dvdnav),
-                                              RedirectStandardOutput = true,
-                                              RedirectStandardError = true,
-                                              UseShellExecute = false,
-                                              CreateNoWindow = true
-                                          }
-                                  };
+                                      {
+                                          StartInfo =
+                                              {
+                                                  FileName = handbrakeCLIPath,
+                                                  Arguments =
+                                                      String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, extraArguments),
+                                                  RedirectStandardOutput = true,
+                                                  RedirectStandardError = true,
+                                                  UseShellExecute = false,
+                                                  CreateNoWindow = true
+                                              }
+                                      };
 
                 // Start the Scan
                 this.hbProc.Start();

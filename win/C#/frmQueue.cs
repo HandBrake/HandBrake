@@ -397,6 +397,32 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// Edit a job
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void MnuEditClick(object sender, EventArgs e)
+        {
+            if (list_queue.SelectedIndices != null)
+            {
+                lock (queue)
+                {
+                    lock (list_queue)
+                    {
+                        int index = list_queue.SelectedIndices[0];
+                        mainWindow.RecievingJob(queue.GetJob(index));
+                        queue.Remove(index);
+                        RedrawQueue();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Handle the delete Menu Item
         /// </summary>
         /// <param name="sender">
@@ -596,35 +622,13 @@ namespace Handbrake
         {
             if (!queue.LastEncode.IsEmpty)
             {
-                queue.Add(queue.LastEncode.Query, queue.LastEncode.Source, queue.LastEncode.Destination,
-                          queue.LastEncode.CustomQuery);
+                queue.Add(
+                    queue.LastEncode.Query, 
+                    queue.LastEncode.Title, 
+                    queue.LastEncode.Source,
+                    queue.LastEncode.Destination,
+                    queue.LastEncode.CustomQuery);
                 UpdateUiElements();
-            }
-        }
-
-        /// <summary>
-        /// Edit Job
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void MnuReconfigureJobClick(object sender, EventArgs e)
-        {
-            if (list_queue.SelectedIndices != null)
-            {
-                lock (queue)
-                {
-                    lock (list_queue)
-                    {
-                        int index = list_queue.SelectedIndices[0];
-                        mainWindow.RecievingJob(queue.GetJob(index));
-                        queue.Remove(index);
-                        RedrawQueue();
-                    }
-                }
             }
         }
 

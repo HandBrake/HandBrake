@@ -58,7 +58,6 @@ namespace Handbrake
             this.mnu_export = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_readd = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_reconfigureJob = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveFile = new System.Windows.Forms.SaveFileDialog();
             this.list_queue = new System.Windows.Forms.ListView();
             this.Title = new System.Windows.Forms.ColumnHeader();
@@ -71,6 +70,8 @@ namespace Handbrake
             this.mnu_up = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_Down = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnu_edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_encodesPending = new System.Windows.Forms.ToolStripStatusLabel();
@@ -282,8 +283,7 @@ namespace Handbrake
             this.mnu_import,
             this.mnu_export,
             this.toolStripSeparator2,
-            this.mnu_readd,
-            this.mnu_reconfigureJob});
+            this.mnu_readd});
             this.drop_button_queue.Image = global::Handbrake.Properties.Resources.ActivityWindow;
             this.drop_button_queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.drop_button_queue.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -295,7 +295,7 @@ namespace Handbrake
             // 
             this.mnu_batch.Image = global::Handbrake.Properties.Resources.Output_Small;
             this.mnu_batch.Name = "mnu_batch";
-            this.mnu_batch.Size = new System.Drawing.Size(238, 22);
+            this.mnu_batch.Size = new System.Drawing.Size(235, 22);
             this.mnu_batch.Text = "Generate Batch Script";
             this.mnu_batch.Click += new System.EventHandler(this.MnuBatchClick);
             // 
@@ -303,7 +303,7 @@ namespace Handbrake
             // 
             this.mnu_import.Image = global::Handbrake.Properties.Resources.folder;
             this.mnu_import.Name = "mnu_import";
-            this.mnu_import.Size = new System.Drawing.Size(238, 22);
+            this.mnu_import.Size = new System.Drawing.Size(235, 22);
             this.mnu_import.Text = "Import Queue";
             this.mnu_import.Click += new System.EventHandler(this.MnuImportClick);
             // 
@@ -311,33 +311,24 @@ namespace Handbrake
             // 
             this.mnu_export.Image = global::Handbrake.Properties.Resources.save;
             this.mnu_export.Name = "mnu_export";
-            this.mnu_export.Size = new System.Drawing.Size(238, 22);
+            this.mnu_export.Size = new System.Drawing.Size(235, 22);
             this.mnu_export.Text = "Export Queue";
             this.mnu_export.Click += new System.EventHandler(this.MnuExportClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(235, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(232, 6);
             // 
             // mnu_readd
             // 
             this.mnu_readd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.mnu_readd.Image = global::Handbrake.Properties.Resources.AddToQueue_small;
             this.mnu_readd.Name = "mnu_readd";
-            this.mnu_readd.Size = new System.Drawing.Size(238, 22);
+            this.mnu_readd.Size = new System.Drawing.Size(235, 22);
             this.mnu_readd.Text = "Re-Add Currently Running Job";
             this.mnu_readd.ToolTipText = "Readds the currently encoding job back onto the queue.";
             this.mnu_readd.Click += new System.EventHandler(this.MnuReaddClick);
-            // 
-            // mnu_reconfigureJob
-            // 
-            this.mnu_reconfigureJob.Name = "mnu_reconfigureJob";
-            this.mnu_reconfigureJob.Size = new System.Drawing.Size(238, 22);
-            this.mnu_reconfigureJob.Text = "Reconfigure Job (Experimental)";
-            this.mnu_reconfigureJob.ToolTipText = "Removes the job from the queue and sends it back to the main window.\r\nFrom there," +
-                " you can change settings then re-add it to the queue";
-            this.mnu_reconfigureJob.Click += new System.EventHandler(this.MnuReconfigureJobClick);
             // 
             // SaveFile
             // 
@@ -402,33 +393,47 @@ namespace Handbrake
             this.mnu_up,
             this.mnu_Down,
             this.toolStripSeparator3,
+            this.mnu_edit,
+            this.toolStripSeparator4,
             this.mnu_delete});
             this.mnu_queue.Name = "mnu_queue";
-            this.mnu_queue.Size = new System.Drawing.Size(139, 76);
+            this.mnu_queue.Size = new System.Drawing.Size(153, 126);
             // 
             // mnu_up
             // 
             this.mnu_up.Name = "mnu_up";
-            this.mnu_up.Size = new System.Drawing.Size(138, 22);
+            this.mnu_up.Size = new System.Drawing.Size(152, 22);
             this.mnu_up.Text = "Move Up";
             this.mnu_up.Click += new System.EventHandler(this.MnuUpClick);
             // 
             // mnu_Down
             // 
             this.mnu_Down.Name = "mnu_Down";
-            this.mnu_Down.Size = new System.Drawing.Size(138, 22);
+            this.mnu_Down.Size = new System.Drawing.Size(152, 22);
             this.mnu_Down.Text = "Move Down";
             this.mnu_Down.Click += new System.EventHandler(this.MnuDownClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(135, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            // 
+            // mnu_edit
+            // 
+            this.mnu_edit.Name = "mnu_edit";
+            this.mnu_edit.Size = new System.Drawing.Size(152, 22);
+            this.mnu_edit.Text = "Edit";
+            this.mnu_edit.Click += new System.EventHandler(this.MnuEditClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // mnu_delete
             // 
             this.mnu_delete.Name = "mnu_delete";
-            this.mnu_delete.Size = new System.Drawing.Size(138, 22);
+            this.mnu_delete.Size = new System.Drawing.Size(152, 22);
             this.mnu_delete.Text = "Delete";
             this.mnu_delete.Click += new System.EventHandler(this.MnuDeleteClick);
             // 
@@ -614,6 +619,7 @@ namespace Handbrake
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem mnu_delete;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.ToolStripMenuItem mnu_reconfigureJob;
+        private System.Windows.Forms.ToolStripMenuItem mnu_edit;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }
