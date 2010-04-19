@@ -1152,7 +1152,7 @@ void hb_layout_remap(
     int * map;
     int * inv_map;
     int mode;
-    hb_sample_t tmp[6];
+    hb_sample_t tmp[8];
 
     mode = hb_layout_to_mode(layout);
     lfe = ((mode & DOWNMIX_LFE_FLAG) != 0);
