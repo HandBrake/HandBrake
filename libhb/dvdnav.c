@@ -835,11 +835,83 @@ static int find_title( hb_list_t * list_title, int title )
     return -1;
 }
 
+static void skip_some( dvdnav_t * dvdnav, int blocks )
+{
+    int ii;
+    int result, event, len;
+    uint8_t buf[HB_DVD_READ_BUFFER_SIZE];
+
+    for ( ii = 0; ii < blocks; ii++ )
+    {
+        result = dvdnav_get_next_block( dvdnav, buf, &event, &len );
+        if ( result == DVDNAV_STATUS_ERR )
+        {
+            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
+            return;
+        }
+        switch ( event )
+        {
+        case DVDNAV_BLOCK_OK:
+            break;
+
+        case DVDNAV_CELL_CHANGE:
+        {
+        } break;
+
+        case DVDNAV_STILL_FRAME:
+            dvdnav_still_skip( dvdnav );
+            break;
+
+        case DVDNAV_WAIT:
+            dvdnav_wait_skip( dvdnav );
+            break;
+
+        case DVDNAV_STOP:
+            return;
+
+        case DVDNAV_HOP_CHANNEL:
+            break;
+
+        case DVDNAV_NAV_PACKET:
+            break;
+
+        case DVDNAV_VTS_CHANGE:
+        {
+            dvdnav_vts_change_event_t *event;
+            event = (dvdnav_vts_change_event_t*)buf;
+            // Some discs initialize the vts with the "first play" item
+            // and some don't seem to.  So if we see it is uninitialized,
+            // set it.
+            if ( event->new_vtsN <= 0 )
+                result = dvdnav_title_play( dvdnav, 1 );
+        } break;
+
+        case DVDNAV_HIGHLIGHT:
+            break;
+
+        case DVDNAV_AUDIO_STREAM_CHANGE:
+            break;
+
+        case DVDNAV_SPU_STREAM_CHANGE:
+            break;
+
+        case DVDNAV_SPU_CLUT_CHANGE:
+            break;
+
+        case DVDNAV_NOP:
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
 static int try_button( dvdnav_t * dvdnav, int menu_id, int button, hb_list_t * list_title )
 {
     int result, event, len;
     uint8_t buf[HB_DVD_READ_BUFFER_SIZE];
-    int ii;
+    int ii, jj;
     int32_t cur_title, title, pgcn, pgn;
     uint64_t longest_duration = 0;
     int longest = -1;
@@ -878,292 +950,292 @@ static int try_button( dvdnav_t * dvdnav, int menu_id, int button, hb_list_t * l
     }
     cur_title = title;
 
-    for (ii = 0; ii < 8000; ii++)
+    for (jj = 0; jj < 5; jj++)
     {
-        result = dvdnav_get_next_block( dvdnav, buf, &event, &len );
-        if ( result == DVDNAV_STATUS_ERR )
+        for (ii = 0; ii < 2000; ii++)
         {
-            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
-            return 0;
+            result = dvdnav_get_next_block( dvdnav, buf, &event, &len );
+            if ( result == DVDNAV_STATUS_ERR )
+            {
+                hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(dvdnav));
+                return 0;
+            }
+            switch ( event )
+            {
+            case DVDNAV_BLOCK_OK:
+                break;
+
+            case DVDNAV_CELL_CHANGE:
+            {
+                result = dvdnav_current_title_program( dvdnav, &title, &pgcn, &pgn );
+                if (result != DVDNAV_STATUS_OK)
+                    hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(dvdnav));
+
+                if ( title != cur_title && title > 0 )
+                {
+                    hb_title_t * hbtitle;
+                    int index;
+                    index = find_title( list_title, title );
+                    hbtitle = hb_list_item( list_title, index );
+                    if ( hbtitle != NULL )
+                    {
+                        if ( hbtitle->duration > longest_duration )
+                        {
+                            longest_duration = hbtitle->duration;
+                            longest = title;
+                        }
+                    }
+                    // If the duration is longer than 10min, assume
+                    // this isn't garbage leading to something bigger.
+                    if ( longest_duration / 90000 > 10 * 60 )
+                    {
+                        return longest;
+                    }
+                }
+                cur_title = title;
+                if (title > 0)
+                {
+                    result = dvdnav_next_pg_search( dvdnav );
+                    if ( result != DVDNAV_STATUS_OK )
+                    {
+                        return longest;
+                    }
+                }
+            } break;
+
+            case DVDNAV_STILL_FRAME:
+                dvdnav_still_skip( dvdnav );
+                break;
+
+            case DVDNAV_WAIT:
+                dvdnav_wait_skip( dvdnav );
+                break;
+
+            case DVDNAV_STOP:
+                return 0;
+
+            case DVDNAV_HOP_CHANNEL:
+                break;
+
+            case DVDNAV_NAV_PACKET:
+            {
+            } break;
+
+            case DVDNAV_VTS_CHANGE:
+            {
+                result = dvdnav_current_title_program( dvdnav, &title, &pgcn, &pgn );
+                if (result != DVDNAV_STATUS_OK)
+                    hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(dvdnav));
+
+                if ( title != cur_title && title > 0 )
+                {
+                    hb_title_t * hbtitle;
+                    int index;
+                    index = find_title( list_title, title );
+                    hbtitle = hb_list_item( list_title, index );
+                    if ( hbtitle != NULL )
+                    {
+                        if ( hbtitle->duration > longest_duration )
+                        {
+                            longest_duration = hbtitle->duration;
+                            longest = title;
+                        }
+                    }
+                    if ( longest_duration / 90000 > 10 * 60 )
+                    {
+                        return longest;
+                    }
+                }
+                cur_title = title;
+            } break;
+
+            case DVDNAV_HIGHLIGHT:
+                break;
+
+            case DVDNAV_AUDIO_STREAM_CHANGE:
+                break;
+
+            case DVDNAV_SPU_STREAM_CHANGE:
+                break;
+
+            case DVDNAV_SPU_CLUT_CHANGE:
+                break;
+
+            case DVDNAV_NOP:
+                break;
+
+            default:
+                break;
+            }
         }
-        switch ( event )
+        if (cur_title > 0)
         {
-        case DVDNAV_BLOCK_OK:
-            break;
-
-        case DVDNAV_CELL_CHANGE:
-        {
-            result = dvdnav_current_title_program( dvdnav, &title, &pgcn, &pgn );
-            if (result != DVDNAV_STATUS_OK)
-                hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(dvdnav));
-            if ( title != cur_title && title > 0 )
-            {
-                hb_title_t * hbtitle;
-                int index;
-                index = find_title( list_title, title );
-                hbtitle = hb_list_item( list_title, index );
-                if ( hbtitle != NULL )
-                {
-                    if ( hbtitle->duration > longest_duration )
-                    {
-                        longest_duration = hbtitle->duration;
-                        longest = title;
-                    }
-                }
-                // If the duration is longer than 10min, assume
-                // this isn't garbage leading to something bigger.
-                if ( longest_duration / 90000 > 10 * 60 )
-                {
-                    return longest;
-                }
-                cur_title = title;
-            }
-            if (title > 0)
-            {
-                result = dvdnav_next_pg_search( dvdnav );
-                if ( result != DVDNAV_STATUS_OK )
-                {
-                    return longest;
-                }
-                int next_title, next_pgcn, next_pgn;
-                dvdnav_current_title_program( dvdnav, &next_title, &next_pgcn, &next_pgn );
-                if (title == next_title && pgcn == next_pgcn && pgn == next_pgn)
-                {
-                    return longest;
-                }
-            }
-        } break;
-
-        case DVDNAV_STILL_FRAME:
-            dvdnav_still_skip( dvdnav );
-            break;
-
-        case DVDNAV_WAIT:
-            dvdnav_wait_skip( dvdnav );
-            break;
-
-        case DVDNAV_STOP:
-            hb_log("dvdnav: stop encountered during seek");
-            return 0;
-
-        case DVDNAV_HOP_CHANNEL:
-            break;
-
-        case DVDNAV_NAV_PACKET:
-        {
-        } break;
-
-        case DVDNAV_VTS_CHANGE:
-        {
-            result = dvdnav_current_title_program( dvdnav, &title, &pgcn, &pgn );
-            if (result != DVDNAV_STATUS_OK)
-                hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(dvdnav));
-            if ( title != cur_title && title > 0 )
-            {
-                hb_title_t * hbtitle;
-                int index;
-                index = find_title( list_title, title );
-                hbtitle = hb_list_item( list_title, index );
-                if ( hbtitle != NULL )
-                {
-                    if ( hbtitle->duration > longest_duration )
-                    {
-                        longest_duration = hbtitle->duration;
-                        longest = title;
-                    }
-                }
-                cur_title = title;
-                if ( longest_duration / 90000 > 10 * 60 )
-                {
-                    return longest;
-                }
-            }
-            if ( title > 0 )
-            {
-                dvdnav_next_pg_search( dvdnav );
-            }
-        } break;
-
-        case DVDNAV_HIGHLIGHT:
-            break;
-
-        case DVDNAV_AUDIO_STREAM_CHANGE:
-            break;
-
-        case DVDNAV_SPU_STREAM_CHANGE:
-            break;
-
-        case DVDNAV_SPU_CLUT_CHANGE:
-            break;
-
-        case DVDNAV_NOP:
-            break;
-
-        default:
-            break;
+            // Some titles have long lead-ins. Try skipping it.
+            dvdnav_next_pg_search( dvdnav );
         }
     }
     return longest;
 }
 
-static int try_menu( hb_dvdnav_t * d, hb_list_t * list_title, DVDMenuID_t menu )
+static int try_menu( 
+    hb_dvdnav_t * d, 
+    hb_list_t * list_title, 
+    DVDMenuID_t menu, 
+    uint64_t fallback_duration )
 {
     int result, event, len;
     uint8_t buf[HB_DVD_READ_BUFFER_SIZE];
-    int ii;
+    int ii, jj;
     int32_t cur_title, title, pgcn, pgn;
     uint64_t longest_duration = 0;
     int longest = -1;
 
-    dvdnav_reset( d->dvdnav );
-    result = dvdnav_title_play( d->dvdnav, 1 );
-    if ( result == DVDNAV_STATUS_ERR )
-    {
-        hb_error("dvdnav: Can not set title, %s", dvdnav_err_to_string(d->dvdnav));
-        goto done;
-    }
+
     result = dvdnav_menu_call( d->dvdnav, menu );
     if ( result != DVDNAV_STATUS_OK )
     {
-        hb_error("dvdnav: Can not set dvd menu, %s", dvdnav_err_to_string(d->dvdnav));
-        goto done;
+        // Sometimes the "first play" item doesn't initialize the
+        // initial VTS. So do it here.
+        result = dvdnav_title_play( d->dvdnav, 1 );
+        result = dvdnav_menu_call( d->dvdnav, menu );
+        if ( result != DVDNAV_STATUS_OK )
+        {
+            hb_error("dvdnav: Can not set dvd menu, %s", dvdnav_err_to_string(d->dvdnav));
+            goto done;
+        }
     }
 
-    result = dvdnav_current_title_program( d->dvdnav, &cur_title, &pgcn, &pgn );
+    result = dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn );
     if (result != DVDNAV_STATUS_OK)
         hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
 
-    // Hit the root menu again to see if we can force
-    // our way to the main menu.
-    dvdnav_next_pg_search( d->dvdnav );
-    result = dvdnav_menu_call( d->dvdnav, menu );
+    cur_title = title;
 
-    dvdnav_next_pg_search( d->dvdnav );
-    result = dvdnav_menu_call( d->dvdnav, menu );
-
-    if ( cur_title > 0 )
+    for (jj = 0; jj < 4; jj++)
     {
-        dvdnav_next_pg_search( d->dvdnav );
-    }
-
-    for (ii = 0; ii < 5000; ii++)
-    {
-        result = dvdnav_get_next_block( d->dvdnav, buf, &event, &len );
-        if ( result == DVDNAV_STATUS_ERR )
+        for (ii = 0; ii < 4000; ii++)
         {
-            hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
-            goto done;
-        }
-        switch ( event )
-        {
-        case DVDNAV_BLOCK_OK:
-            break;
-
-        case DVDNAV_CELL_CHANGE:
-        {
-            result = dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn );
-            if (result != DVDNAV_STATUS_OK)
-                hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
-            cur_title = title;
-            if ( title > 0 )
+            result = dvdnav_get_next_block( d->dvdnav, buf, &event, &len );
+            if ( result == DVDNAV_STATUS_ERR )
             {
-                dvdnav_next_pg_search( d->dvdnav );
+                hb_error("dvdnav: Read Error, %s", dvdnav_err_to_string(d->dvdnav));
+                goto done;
             }
-        } break;
-
-        case DVDNAV_STILL_FRAME:
-            dvdnav_still_skip( d->dvdnav );
-            break;
-
-        case DVDNAV_WAIT:
-            dvdnav_wait_skip( d->dvdnav );
-            break;
-
-        case DVDNAV_STOP:
-            hb_log("dvdnav: stop encountered during seek");
-            d->stopped = 1;
-            goto done;
-
-        case DVDNAV_HOP_CHANNEL:
-            break;
-
-        case DVDNAV_NAV_PACKET:
-        {
-            pci_t *pci = dvdnav_get_current_nav_pci( d->dvdnav );
-            int kk;
-            int buttons;
-            if ( pci == NULL ) break;
-
-            buttons = pci->hli.hl_gi.btn_ns;
-            if ( cur_title == 0 && buttons > 0 )
+            switch ( event )
             {
-                int menu_title, menu_id;
-                result = dvdnav_current_title_info( d->dvdnav, &menu_title, &menu_id );
+            case DVDNAV_BLOCK_OK:
+                break;
+
+            case DVDNAV_CELL_CHANGE:
+            {
+                result = dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn );
                 if (result != DVDNAV_STATUS_OK)
                     hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
-                for (kk = 0; kk < buttons; kk++)
+                cur_title = title;
+            } break;
+
+            case DVDNAV_STILL_FRAME:
+                dvdnav_still_skip( d->dvdnav );
+                break;
+
+            case DVDNAV_WAIT:
+                dvdnav_wait_skip( d->dvdnav );
+                break;
+
+            case DVDNAV_STOP:
+                goto done;
+
+            case DVDNAV_HOP_CHANNEL:
+                break;
+
+            case DVDNAV_NAV_PACKET:
+            {
+                pci_t *pci = dvdnav_get_current_nav_pci( d->dvdnav );
+                int kk;
+                int buttons;
+                if ( pci == NULL ) break;
+
+                buttons = pci->hli.hl_gi.btn_ns;
+                if ( cur_title == 0 && buttons > 1 )
                 {
-                    dvdnav_t *dvdnav_copy;
-
-                    result = dvdnav_dup( &dvdnav_copy, d->dvdnav );
+                    int menu_title, menu_id;
+                    result = dvdnav_current_title_info( d->dvdnav, &menu_title, &menu_id );
                     if (result != DVDNAV_STATUS_OK)
+                        hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
+                    for (kk = 0; kk < buttons; kk++)
                     {
-                        hb_log("dvdnav dup failed: %s", dvdnav_err_to_string(d->dvdnav));
-                        goto done;
-                    }
-                    title = try_button( dvdnav_copy, menu_id, kk, list_title );
-                    dvdnav_free_dup( dvdnav_copy );
+                        dvdnav_t *dvdnav_copy;
 
-                    if ( title >= 0 )
-                    {
-                        hb_title_t * hbtitle;
-                        int index;
-                        index = find_title( list_title, title );
-                        hbtitle = hb_list_item( list_title, index );
-                        if ( hbtitle != NULL )
+                        result = dvdnav_dup( &dvdnav_copy, d->dvdnav );
+                        if (result != DVDNAV_STATUS_OK)
                         {
-                            if ( hbtitle->duration > longest_duration )
+                            hb_log("dvdnav dup failed: %s", dvdnav_err_to_string(d->dvdnav));
+                            goto done;
+                        }
+                        title = try_button( dvdnav_copy, menu_id, kk, list_title );
+                        dvdnav_free_dup( dvdnav_copy );
+
+                        if ( title >= 0 )
+                        {
+                            hb_title_t * hbtitle;
+                            int index;
+                            index = find_title( list_title, title );
+                            hbtitle = hb_list_item( list_title, index );
+                            if ( hbtitle != NULL )
                             {
-                                longest_duration = hbtitle->duration;
-                                longest = title;
+                                if ( hbtitle->duration > longest_duration )
+                                {
+                                    longest_duration = hbtitle->duration;
+                                    longest = title;
+                                    if ((float)fallback_duration * 0.75 < longest_duration)
+                                        goto done;
+                                }
                             }
                         }
                     }
+                    goto done;
                 }
-                goto done;
-            }
-        } break;
+                if ( cur_title == 0 && buttons == 1 )
+                {
+                    dvdnav_button_select_and_activate( d->dvdnav, pci, 1 );
+                }
+            } break;
 
-        case DVDNAV_VTS_CHANGE:
-        {
-            result = dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn );
-            if (result != DVDNAV_STATUS_OK)
-                hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
-            cur_title = title;
-            if ( title > 0 )
+            case DVDNAV_VTS_CHANGE:
             {
-                dvdnav_next_pg_search( d->dvdnav );
+                result = dvdnav_current_title_program( d->dvdnav, &title, &pgcn, &pgn );
+                if (result != DVDNAV_STATUS_OK)
+                    hb_log("dvdnav cur pgcn err: %s", dvdnav_err_to_string(d->dvdnav));
+                cur_title = title;
+            } break;
+
+            case DVDNAV_HIGHLIGHT:
+                break;
+
+            case DVDNAV_AUDIO_STREAM_CHANGE:
+                break;
+
+            case DVDNAV_SPU_STREAM_CHANGE:
+                break;
+
+            case DVDNAV_SPU_CLUT_CHANGE:
+                break;
+
+            case DVDNAV_NOP:
+                break;
+
+            default:
+                break;
             }
-        } break;
-
-        case DVDNAV_HIGHLIGHT:
-            break;
-
-        case DVDNAV_AUDIO_STREAM_CHANGE:
-            break;
-
-        case DVDNAV_SPU_STREAM_CHANGE:
-            break;
-
-        case DVDNAV_SPU_CLUT_CHANGE:
-            break;
-
-        case DVDNAV_NOP:
-            break;
-
-        default:
-            break;
         }
+        // Sometimes the menu is preceeded by a intro that just
+        // gets restarted when hitting the menu button. So
+        // try skipping with the skip forward button.  Then
+        // try hitting the menu again.
+        if ( !(jj & 1) )
+            dvdnav_next_pg_search( d->dvdnav );
+        else
+            result = dvdnav_menu_call( d->dvdnav, menu );
     }
 
 done:
@@ -1191,7 +1263,10 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
         }
     }
 
-    longest_root = try_menu( d, list_title, DVD_MENU_Root );
+    dvdnav_reset( d->dvdnav );
+    skip_some( d->dvdnav, 500 );
+
+    longest_root = try_menu( d, list_title, DVD_MENU_Root, longest_duration_fallback );
     if ( longest_root >= 0 )
     {
         hb_title_t * hbtitle;
@@ -1204,7 +1279,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     if ( longest_root < 0 || 
          (float)longest_duration_fallback * 0.7 > longest_duration_root)
     {
-        longest_title = try_menu( d, list_title, DVD_MENU_Title );
+        longest_title = try_menu( d, list_title, DVD_MENU_Title, longest_duration_fallback );
         if ( longest_title >= 0 )
         {
             hb_title_t * hbtitle;
