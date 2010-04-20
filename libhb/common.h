@@ -155,6 +155,7 @@ struct hb_job_s
 
     /* Pointer to the title to be ripped */
     hb_title_t    * title;
+    int             feature; // Detected DVD feature title
 
     /* Chapter selection */
     int             chapter_start;

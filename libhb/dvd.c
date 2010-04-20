@@ -24,6 +24,7 @@ static int           hb_dvdread_read( hb_dvd_t * d, hb_buffer_t * b );
 static int           hb_dvdread_chapter( hb_dvd_t * d );
 static int           hb_dvdread_angle_count( hb_dvd_t * d );
 static void          hb_dvdread_set_angle( hb_dvd_t * d, int angle );
+static int           hb_dvdread_main_feature( hb_dvd_t * d, hb_list_t * list_title );
 
 hb_dvd_func_t hb_dvdread_func =
 {
@@ -38,7 +39,8 @@ hb_dvd_func_t hb_dvdread_func =
     hb_dvdread_read,
     hb_dvdread_chapter,
     hb_dvdread_angle_count,
-    hb_dvdread_set_angle
+    hb_dvdread_set_angle,
+    hb_dvdread_main_feature
 };
 
 static hb_dvd_func_t *dvd_methods = &hb_dvdread_func;
@@ -53,6 +55,24 @@ static int hb_dvdread_is_break( hb_dvdread_t * d );
 hb_dvd_func_t * hb_dvdread_methods( void )
 {
     return &hb_dvdread_func;
+}
+
+static int hb_dvdread_main_feature( hb_dvd_t * e, hb_list_t * list_title )
+{
+    int ii;
+    uint64_t longest_duration = 0;
+    int longest = -1;
+
+    for ( ii = 0; ii < hb_list_count( list_title ); ii++ )
+    {
+        hb_title_t * title = hb_list_item( list_title, ii );
+        if ( title->duration > longest_duration )
+        {
+            longest_duration = title->duration;
+            longest = title->index;
+        }
+    }
+    return longest;
 }
 
 static char * hb_dvdread_name( char * path )
@@ -1291,6 +1311,11 @@ int hb_dvd_angle_count( hb_dvd_t * d )
 void hb_dvd_set_angle( hb_dvd_t * d, int angle )
 {
     dvd_methods->set_angle(d, angle);
+}
+
+int hb_dvd_main_feature( hb_dvd_t * d, hb_list_t * list_title )
+{
+    return dvd_methods->main_feature(d, list_title);
 }
 
 // hb_dvd_set_dvdnav must only be called when no dvd source is open

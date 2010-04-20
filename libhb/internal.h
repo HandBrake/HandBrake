@@ -205,6 +205,7 @@ int          hb_dvd_is_break( hb_dvd_t * d );
 void         hb_dvd_close( hb_dvd_t ** );
 int          hb_dvd_angle_count( hb_dvd_t * d );
 void         hb_dvd_set_angle( hb_dvd_t * d, int angle );
+int          hb_dvd_main_feature( hb_dvd_t * d, hb_list_t * list_title );
 
 hb_stream_t * hb_stream_open( char * path, hb_title_t *title );
 void		 hb_stream_close( hb_stream_t ** );

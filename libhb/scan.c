@@ -69,6 +69,7 @@ static void ScanFunc( void * _data )
     hb_scan_t  * data = (hb_scan_t *) _data;
     hb_title_t * title;
     int          i;
+    int          feature = 0;
 
 	data->dvd = NULL;
 	data->stream = NULL;
@@ -93,6 +94,7 @@ static void ScanFunc( void * _data )
                 hb_list_add( data->list_title,
                              hb_dvd_title_scan( data->dvd, i + 1 ) );
             }
+            feature = hb_dvd_main_feature( data->dvd, data->list_title );
         }
     }
     else if ( ( data->batch = hb_batch_init( data->path ) ) )
@@ -184,6 +186,7 @@ static void ScanFunc( void * _data )
         title->job = job;
 
         job->title = title;
+        job->feature = feature;
 
         /* Set defaults settings */
         job->chapter_start = 1;

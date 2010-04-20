@@ -378,6 +378,10 @@ static void PrintTitleInfo( hb_title_t * title )
     int i;
 
     fprintf( stderr, "+ title %d:\n", title->index );
+    if ( title->index == title->job->feature )
+    {
+        fprintf( stderr, "  + Main Feature\n" );
+    }
     if ( title->type == HB_STREAM_TYPE )
     {
         fprintf( stderr, "  + stream: %s\n", title->path );

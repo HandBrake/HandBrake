@@ -2019,19 +2019,22 @@ ghb_longest_title()
 	gint count = 0;
 	guint64 longest = 0;
 	gint titleindex = 0;
+	gint feature;
 	
 	g_debug("ghb_longest_title ()\n");
 	if (h_scan == NULL) return 0;
 	list = hb_get_titles( h_scan );
 	count = hb_list_count( list );
 	if (count > 100) count = 100;
+	if (count < 1) return 0;
+	title = (hb_title_t*)hb_list_item(list, 0);
+	feature = title->job->feature;
 	for (ii = 0; ii < count; ii++)
 	{
 		title = (hb_title_t*)hb_list_item(list, ii);
-		if (title->duration > longest)
+		if (title->index == feature)
 		{
-			titleindex = ii;
-			longest = title->duration;
+			return ii;
 		}
 	}
 	return titleindex;

@@ -79,6 +79,7 @@ struct hb_dvd_func_s
     int           (* chapter)     ( hb_dvd_t * );
     int           (* angle_count) ( hb_dvd_t * );
     void          (* set_angle)   ( hb_dvd_t *, int );
+    int           (* main_feature)( hb_dvd_t *, hb_list_t * );
 };
 typedef struct hb_dvd_func_s hb_dvd_func_t;
 

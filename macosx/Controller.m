@@ -1803,9 +1803,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
 {
     hb_list_t  * list;
 	hb_title_t * title;
-	int indxpri=0; 	  // Used to search the longuest title (default in combobox)
-	int longuestpri=0; // Used to search the longuest title (default in combobox)
-    
+	int feature_title=0; // Used to store the main feature title
 
         list = hb_get_titles( fHandle );
         
@@ -1879,11 +1877,10 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
                                                      @"%@/Desktop/%@.mp4", NSHomeDirectory(),[browsedSourceDisplayName stringByDeletingPathExtension]]];
                 }
                 
-                
-                if (longuestpri < title->hours*60*60 + title->minutes *60 + title->seconds)
+                /* See if this is the main feature according to libhb */
+                if (title->index == title->job->feature)
                 {
-                    longuestpri=title->hours*60*60 + title->minutes *60 + title->seconds;
-                    indxpri=i;
+                    feature_title = i;
                 }
                 
                 [fSrcTitlePopUp addItemWithTitle: [NSString
@@ -1899,8 +1896,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             }
             else
             {
-                /* if not then select the longest title (dvd) */
-                [fSrcTitlePopUp selectItemAtIndex: indxpri];
+                /* if not then select the main feature title */
+                [fSrcTitlePopUp selectItemAtIndex: feature_title];
             }
             [self titlePopUpChanged:nil];
             
