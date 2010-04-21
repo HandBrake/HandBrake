@@ -281,7 +281,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 subtitle = hb_list_item( job->list_subtitle, i );
                 if( subtitle->config.dest == PASSTHRUSUB )
                 {
-                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                    if( subtitle->source == VOBSUB ) 
+                        hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
+                    else
+                        hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
                 }
             }
             return HB_WORK_DONE;
@@ -365,7 +368,10 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 subtitle = hb_list_item( job->list_subtitle, i );
                 if( subtitle->config.dest == PASSTHRUSUB )
                 {
-                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+                    if( subtitle->source == VOBSUB ) 
+                        hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
+                    else
+                        hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
                 }
             }
             return HB_WORK_DONE;
@@ -423,6 +429,21 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_out = hb_buffer_init( 0 );
         hb_log( "sync: reached %d frames, exiting early",
                 pv->common->count_frames );
+
+        /*
+         * Push through any subtitle EOFs in case they were not synced through.
+         */
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
+        {
+            subtitle = hb_list_item( job->list_subtitle, i );
+            if( subtitle->config.dest == PASSTHRUSUB )
+            {
+                if( subtitle->source == VOBSUB ) 
+                    hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
+                else
+                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+            }
+        }
         return HB_WORK_DONE;
     }
 
@@ -436,6 +457,21 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         hb_buffer_close( &sync->cur );
         hb_buffer_close( &next );
         *buf_out = hb_buffer_init( 0 );
+
+        /*
+         * Push through any subtitle EOFs in case they were not synced through.
+         */
+        for( i = 0; i < hb_list_count( job->list_subtitle ); i++)
+        {
+            subtitle = hb_list_item( job->list_subtitle, i );
+            if( subtitle->config.dest == PASSTHRUSUB )
+            {
+                if( subtitle->source == VOBSUB ) 
+                    hb_fifo_push( subtitle->fifo_sync, hb_buffer_init( 0 ) );
+                else
+                    hb_fifo_push( subtitle->fifo_out, hb_buffer_init( 0 ) );
+            }
+        }
         return HB_WORK_DONE;
     }
 
