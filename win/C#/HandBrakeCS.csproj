@@ -359,6 +359,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Installer\MakeNightly.nsi.tmpl" />
     <None Include="Installer\MakeNightly.nsi" />
     <None Include="Installer\Installer.nsi" />
     <None Include="Properties\Settings.settings">
@@ -503,5 +504,9 @@
 	cd bin\NightlyBuild
 	makensis MakeNightly.nsi
 	</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'NightlyBuild' ">
+    <PreBuildEvent>subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
+subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Installer\MakeNightly.nsi.tmpl" "$(ProjectDir)Installer\MakeNightly.nsi"</PreBuildEvent>
   </PropertyGroup>
 </Project>
