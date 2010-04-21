@@ -164,6 +164,18 @@ ghb_preview_init(signal_user_data_t *ud)
 	GstBus *bus;
 	GstElement *xover;
 
+#if GTK_CHECK_VERSION(2,18,0)
+	if (!gdk_window_ensure_native(ud->preview->view->window))
+	{
+		g_message("Couldn't create native window for GstXOverlay. Disabling live preview.");
+		GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
+		gtk_widget_hide (widget);
+		widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
+		gtk_widget_hide (widget);
+		return;
+	}
+#endif
+
 #if !defined(_WIN32)
 	ud->preview->xid = GDK_DRAWABLE_XID(ud->preview->view->window);
 #else
@@ -175,6 +187,7 @@ ghb_preview_init(signal_user_data_t *ud)
 	xover = gst_element_factory_make("gconfvideosink", "xover");
 	if (ud->preview->play == NULL || xover == NULL)
 	{
+		g_message("Couldn't initialize gstreamer. Disabling live preview.");
 		GtkWidget *widget = GHB_WIDGET(ud->builder, "live_preview_box");
 		gtk_widget_hide (widget);
 		widget = GHB_WIDGET(ud->builder, "live_preview_duration_box");
