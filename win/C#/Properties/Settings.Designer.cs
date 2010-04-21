@@ -524,5 +524,17 @@ namespace Handbrake.Properties {
                 this["AutoNameRemoveUnderscore"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3240")]
+        public int hb_min_cli {
+            get {
+                return ((int)(this["hb_min_cli"]));
+            }
+            set {
+                this["hb_min_cli"] = value;
+            }
+        }
     }
 }
