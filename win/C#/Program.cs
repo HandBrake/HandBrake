@@ -37,8 +37,11 @@ namespace Handbrake
 
             if (missingFiles != string.Empty)
             {
-                MessageBox.Show(failedInstall + missingFiles + "\n\n"+ nightlyCLIMissing, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                MessageBox.Show(
+                    failedInstall + missingFiles + "\n\n" + nightlyCLIMissing,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
 
