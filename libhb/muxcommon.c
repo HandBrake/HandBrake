@@ -289,6 +289,19 @@ void muxClose( hb_work_object_t * w )
     hb_lock( mux->mutex );
     if ( --mux->ref == 0 )
     {
+        // Update state before closing muxer.  Closing the muxer
+        // may initiate optimization which can take a while and
+        // we want the muxing state to be visible while this is
+        // happening.
+        if( job->pass == 0 || job->pass == 2 )
+        {
+            /* Update the UI */
+            hb_state_t state;
+            state.state = HB_STATE_MUXING;
+            state.param.muxing.progress = 0;
+            hb_set_state( job->h, &state );
+        }
+
         if( mux->m )
         {
             mux->m->end( mux->m );
@@ -300,12 +313,6 @@ void muxClose( hb_work_object_t * w )
         {
             struct stat sb;
             uint64_t bytes_total, frames_total;
-
-            /* Update the UI */
-            hb_state_t state;
-            state.state = HB_STATE_MUXING;
-            state.param.muxing.progress = 0;
-            hb_set_state( job->h, &state );
 
             if( !stat( job->file, &sb ) )
             {

@@ -939,6 +939,12 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
     }
 
+    hb_handle_t * h = job->h;
+    hb_state_t state;
+    hb_get_state( h, &state );
+    
+    hb_log("work: average encoding speed for job is %f fps", state.param.working.rate_avg);
+
     job->done = 1;
     if( muxer != NULL )
     {
@@ -952,12 +958,6 @@ static void do_job( hb_job_t * job, int cpu_count )
         }
         free( sync );
     }
-
-    hb_handle_t * h = job->h;
-    hb_state_t state;
-    hb_get_state( h, &state );
-    
-    hb_log("work: average encoding speed for job is %f fps", state.param.working.rate_avg);
 
 cleanup:
     /* Stop the write thread (thread_close will block until the muxer finishes) */
