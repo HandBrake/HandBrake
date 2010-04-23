@@ -112,8 +112,19 @@ namespace Handbrake.Functions
         /// </summary>
         public enum ConsoleCtrlEvent
         {
+            /// <summary>
+            /// Ctrl - C
+            /// </summary>
             CTRL_C = 0,
+
+            /// <summary>
+            /// Ctrl - Break
+            /// </summary>
             CTRL_BREAK = 1,
+
+            /// <summary>
+            /// Ctrl - Close
+            /// </summary>
             CTRL_CLOSE = 2,
         }
     }

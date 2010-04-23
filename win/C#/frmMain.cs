@@ -1628,18 +1628,8 @@ namespace Handbrake
         {
             // Setup the GUI components for the scan.
             sourcePath = filename;
-            foreach (Control ctrl in Controls)
-                if (!(ctrl is StatusStrip || ctrl is MenuStrip || ctrl is ToolStrip))
-                    ctrl.Enabled = false;
 
-            lbl_encode.Visible = true;
-            lbl_encode.Text = "Scanning ...";
-            btn_source.Enabled = false;
-            btn_start.Enabled = false;
-            btn_showQueue.Enabled = false;
-            btn_add2Queue.Enabled = false;
-            tb_preview.Enabled = false;
-            mnu_killCLI.Visible = true;
+            this.DisableGUI();
 
             if (ActivityWindow != null)
                 ActivityWindow.SetMode(ActivityLogMode.Scan);
@@ -1754,6 +1744,22 @@ namespace Handbrake
             {
                 MessageBox.Show("frmMain.cs - EnableGUI() " + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void DisableGUI()
+        {
+            foreach (Control ctrl in Controls)
+                if (!(ctrl is StatusStrip || ctrl is MenuStrip || ctrl is ToolStrip))
+                    ctrl.Enabled = false;
+
+            lbl_encode.Visible = true;
+            lbl_encode.Text = "Scanning ...";
+            btn_source.Enabled = false;
+            btn_start.Enabled = false;
+            btn_showQueue.Enabled = false;
+            btn_add2Queue.Enabled = false;
+            tb_preview.Enabled = false;
+            mnu_killCLI.Visible = true;
         }
 
         private void KillScan()
@@ -2032,22 +2038,17 @@ namespace Handbrake
         /// <param name="CurrentFps"></param>
         /// <param name="AverageFps"></param>
         /// <param name="TimeRemaining"></param>
-        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete,
-                                            float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
         {
             if (this.InvokeRequired)
             {
-                this.BeginInvoke(new EncodeProgressEventHandler(EncodeOnEncodeProgress),
-                                 new[]
-                                     {
-                                         Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, 
-                                         TimeRemaining
-                                     });
+                this.BeginInvoke(
+                    new EncodeProgressEventHandler(EncodeOnEncodeProgress),
+                    new[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
                 return;
             }
             lbl_encode.Text =
-                string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ",
-                              PercentComplete, CurrentFps, AverageFps, TimeRemaining);
+                string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
         }
 
         #endregion

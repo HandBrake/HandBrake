@@ -3,7 +3,6 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-
 namespace Handbrake.Services
 {
     using System;
@@ -94,8 +93,7 @@ namespace Handbrake.Services
         /// </param>
         public void CreatePreviewSample(string query)
         {
-            Job job = new Job {Query = query};
-            this.Run(job);
+            this.Run(new Job {Query = query});
         }
 
         /// <summary>
@@ -177,7 +175,6 @@ namespace Handbrake.Services
                 // Fire the Encode Started Event
                 if (this.EncodeStarted != null)
                     this.EncodeStarted(this, new EventArgs());
-
 
                 if (this.HbProcess != null)
                     this.ProcessHandle = this.HbProcess.MainWindowHandle; // Set the process Handle

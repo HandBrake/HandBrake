@@ -14,13 +14,11 @@ namespace Handbrake.Controls
     using Presets;
     using AudioTrack = Model.AudioTrack;
 
+    /// <summary>
+    /// The AudioPanel Control
+    /// </summary>
     public partial class AudioPanel : UserControl
     {
-        /// <summary>
-        /// The audio list has changed
-        /// </summary>
-        public event EventHandler AudioListChanged;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioPanel"/> class. 
         /// Create a new instance of the Audio Panel
@@ -31,6 +29,11 @@ namespace Handbrake.Controls
             drp_audioMix.SelectedItem = "Dolby Pro Logic II";
             drp_audioSample.SelectedIndex = 1;
         }
+
+        /// <summary>
+        /// The audio list has changed
+        /// </summary>
+        public event EventHandler AudioListChanged;
 
         /// <summary>
         /// Get the audio panel
@@ -44,7 +47,9 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the File Container. This funciton is used to limit the available options for each file container.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">
+        /// the file path
+        /// </param>
         public void SetContainer(string path)
         {
             string oldval = drp_audioEncoder.Text;
@@ -84,7 +89,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Checks if the settings used required the .m4v (rather than .mp4) extension
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if m4v is required</returns>
         public bool RequiresM4V()
         {
             return lv_audioList.Items.Cast<ListViewItem>().Any(item => item.SubItems[2].Text.Contains("AC3"));
@@ -93,7 +98,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Load an arraylist of AudioTrack items into the list.
         /// </summary>
-        /// <param name="audioTracks"></param>
+        /// <param name="audioTracks">List of audio tracks</param>
         public void LoadTracks(ArrayList audioTracks)
         {
             ClearAudioList();
@@ -118,7 +123,8 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the Track list dropdown from the parsed title captured during the scan
         /// </summary>
-        /// <param name="selectedTitle"></param>
+        /// <param name="selectedTitle">The selected title</param>
+        /// <param name="preset">A preset</param>
         public void SetTrackList(Title selectedTitle, Preset preset)
         {
             if (selectedTitle.AudioTracks.Count == 0)
@@ -129,28 +135,25 @@ namespace Handbrake.Controls
                 drp_audioTrack.SelectedIndex = 0;
                 return;
             }
-            else
+
+            drp_audioTrack.Items.Clear();
+            drp_audioTrack.Items.Add("Automatic");
+            drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
+
+            if (lv_audioList.Items.Count == 0 && preset != null)
             {
-                drp_audioTrack.Items.Clear();
-                drp_audioTrack.Items.Add("Automatic");
-                drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
-
-                if (lv_audioList.Items.Count == 0 && preset != null)
+                QueryParser parsed = QueryParser.Parse(preset.Query);
+                foreach (AudioTrack audioTrack in parsed.AudioInformation)
                 {
-                    QueryParser parsed = QueryParser.Parse(preset.Query);
-                    foreach (AudioTrack audioTrack in parsed.AudioInformation)
-                    {
-                        ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
-                        newTrack.SubItems.Add(audioTrack.Track);
-                        newTrack.SubItems.Add(audioTrack.Encoder);
-                        newTrack.SubItems.Add(audioTrack.MixDown);
-                        newTrack.SubItems.Add(audioTrack.SampleRate);
-                        newTrack.SubItems.Add(audioTrack.Bitrate);
-                        newTrack.SubItems.Add(audioTrack.DRC.ToString());
-                        lv_audioList.Items.Add(newTrack);
-                    }
+                    ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
+                    newTrack.SubItems.Add(audioTrack.Track);
+                    newTrack.SubItems.Add(audioTrack.Encoder);
+                    newTrack.SubItems.Add(audioTrack.MixDown);
+                    newTrack.SubItems.Add(audioTrack.SampleRate);
+                    newTrack.SubItems.Add(audioTrack.Bitrate);
+                    newTrack.SubItems.Add(audioTrack.DRC);
+                    lv_audioList.Items.Add(newTrack);
                 }
-
             }
 
             // Handle Native Language and "Dub Foreign language audio" and "Use Foreign language audio and Subtitles" Options
@@ -190,6 +193,16 @@ namespace Handbrake.Controls
         }
 
         // Control and ListView
+
+        /// <summary>
+        /// one of the controls has changed. Event handler
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void controlChanged(object sender, EventArgs e)
         {
             Control ctl = (Control)sender;
@@ -261,6 +274,15 @@ namespace Handbrake.Controls
             lv_audioList.Select();
         }
 
+        /// <summary>
+        /// The Audio List selected index changed event handler
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void lv_audioList_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Set the dropdown controls based on the selected item in the Audio List.
@@ -288,12 +310,25 @@ namespace Handbrake.Controls
         }
 
         // Track Controls
+
+        /// <summary>
+        /// The Add Audio Track button event handler
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_addAudioTrack_Click(object sender, EventArgs e)
         {
             if (drp_audioTrack.Text == "None Found")
             {
-                MessageBox.Show("Your source appears to have no audio tracks that HandBrake supports.", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Your source appears to have no audio tracks that HandBrake supports.",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -320,28 +355,72 @@ namespace Handbrake.Controls
             lv_audioList.Select();
         }
 
+        /// <summary>
+        /// The Remove Track button event handler
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_RemoveAudioTrack_Click(object sender, EventArgs e)
         {
             RemoveTrack();
         }
 
         // Audio List Menu
+
+        /// <summary>
+        /// The Audio List Move Up menu item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void audioList_moveup_Click(object sender, EventArgs e)
         {
             MoveTrack(true);
         }
 
+        /// <summary>
+        /// The audio list move down menu item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void audioList_movedown_Click(object sender, EventArgs e)
         {
             MoveTrack(false);
         }
 
+        /// <summary>
+        /// The audio list remove menu item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void audioList_remove_Click(object sender, EventArgs e)
         {
             RemoveTrack();
         }
 
         // Public Functions
+
+        /// <summary>
+        /// Add track for preset
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
         private void AddTrackForPreset(ListViewItem item)
         {
             lv_audioList.Items.Add(item);
@@ -349,6 +428,9 @@ namespace Handbrake.Controls
                 this.AudioListChanged(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Clear the audio list
+        /// </summary>
         private void ClearAudioList()
         {
             lv_audioList.Items.Clear();
@@ -356,11 +438,20 @@ namespace Handbrake.Controls
                 this.AudioListChanged(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Get a new ID for the next audio track
+        /// </summary>
+        /// <returns>
+        /// an int
+        /// </returns>
         private int GetNewID()
         {
             return lv_audioList.Items.Count + 1;
         }
 
+        /// <summary>
+        /// Remove an audio track from the list
+        /// </summary>
         private void RemoveTrack()
         {
             // Remove the Item and reselect the control if the following conditions are met.
@@ -390,6 +481,12 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Move an audio track up or down the audio list
+        /// </summary>
+        /// <param name="up">
+        /// The up.
+        /// </param>
         private void MoveTrack(bool up)
         {
             if (lv_audioList.SelectedIndices.Count == 0) return;
@@ -409,6 +506,9 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Regenerate all the audio track id's on the audio list
+        /// </summary>
         private void ReGenerateListIDs()
         {
             int i = 1;
@@ -419,6 +519,9 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Set the bitrate dropdown
+        /// </summary>
         private void SetBitrate()
         {
             int max = 0;
@@ -473,10 +576,13 @@ namespace Handbrake.Controls
                 drp_audioBitrate.Items.Add("768");
             }
 
-             if (drp_audioBitrate.SelectedItem == null)
+            if (drp_audioBitrate.SelectedItem == null)
                 drp_audioBitrate.SelectedIndex = drp_audioBitrate.Items.Count - 1;
         }
 
+        /// <summary>
+        /// Set the mixdown dropdown
+        /// </summary>
         private void SetMixDown()
         {
             drp_audioMix.Items.Clear();

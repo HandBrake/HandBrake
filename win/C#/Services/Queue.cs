@@ -3,7 +3,6 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-
 namespace Handbrake.Services
 {
     using System;
@@ -22,14 +21,14 @@ namespace Handbrake.Services
     public class Queue : Encode
     {
         /// <summary>
-        /// An XML Serializer
-        /// </summary>
-        private static XmlSerializer serializer;
-
-        /// <summary>
         /// The Queue Job List
         /// </summary>
         private readonly List<Job> queue = new List<Job>();
+
+        /// <summary>
+        /// An XML Serializer
+        /// </summary>
+        private static XmlSerializer serializer;
 
         /// <summary>
         /// The Next Job ID
@@ -84,6 +83,9 @@ namespace Handbrake.Services
         /// </summary>
         /// <param name="query">
         /// The query that will be passed to the HandBrake CLI.
+        /// </param>
+        /// <param name="title">
+        /// The title.
         /// </param>
         /// <param name="source">
         /// The location of the source video.
