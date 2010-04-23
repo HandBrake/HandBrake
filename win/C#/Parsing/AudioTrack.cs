@@ -117,8 +117,8 @@ namespace Handbrake.Parsing
         public static AudioTrack Parse(StringReader output)
         {
             string audioTrack = output.ReadLine();
-            Match m = Regex.Match(audioTrack, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\) \((.*)\)");
-            Match track = Regex.Match(audioTrack, @"^    \+ ([0-9]*), ([A-Za-z0-9]*) \((.*)\)"); // ID and Language
+            Match m = Regex.Match(audioTrack, @"^    \+ ([0-9]*), ([A-Za-z0-9,\s]*) \((.*)\) \((.*)\)");
+            Match track = Regex.Match(audioTrack, @"^    \+ ([0-9]*), ([A-Za-z0-9,\s]*) \((.*)\)"); // ID and Language
             Match iso639_2 = Regex.Match(audioTrack, @"iso639-2: ([a-zA-Z]*)\)");
             Match samplerate = Regex.Match(audioTrack, @"([0-9]*)Hz");
             Match bitrate = Regex.Match(audioTrack, @"([0-9]*)bps");
