@@ -1686,9 +1686,13 @@ namespace Handbrake
                 if (currentSource.Titles.Count != 0)
                     drp_dvdtitle.Items.AddRange(currentSource.Titles.ToArray());
 
-                // Now select the longest title
-                if (currentSource.Titles.Count != 0)
-                    drp_dvdtitle.SelectedItem = Main.SelectLongestTitle(currentSource);
+                foreach (Title title in currentSource.Titles)
+                {
+                    if (title.MainTitle)
+                    {
+                        drp_dvdtitle.SelectedItem = title;
+                    }
+                }
 
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 int start, end;

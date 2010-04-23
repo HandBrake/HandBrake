@@ -59,31 +59,6 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
-        /// Select the longest title in the DVD title dropdown menu on frmMain
-        /// </summary>
-        /// <param name="source">
-        /// The Source.
-        /// </param>
-        /// <returns>
-        /// The longest title.
-        /// </returns>
-        public static Title SelectLongestTitle(DVD source)
-        {
-            TimeSpan longestDurationFound = TimeSpan.FromSeconds(0.0);
-            Title returnTitle = null;
-
-            foreach (Title item in source.Titles)
-            {
-                if (item.Duration > longestDurationFound)
-                {
-                    returnTitle = item;
-                    longestDurationFound = item.Duration;
-                }
-            }
-            return returnTitle;
-        }
-
-        /// <summary>
         /// Set's up the DataGridView on the Chapters tab (frmMain)
         /// </summary>
         /// <param name="dataChpt">

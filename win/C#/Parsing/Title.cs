@@ -78,6 +78,11 @@ namespace Handbrake.Parsing
         private int titleNumber;
 
         /// <summary>
+        /// Is A Main Title
+        /// </summary>
+        private bool mainTitle;
+
+        /// <summary>
         /// The par values for this title.
         /// </summary>
         private Size parVal;
@@ -122,7 +127,15 @@ namespace Handbrake.Parsing
         /// </summary>
         public int TitleNumber
         {
-            get { return titleNumber; }
+            get { return this.titleNumber; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this is a MainTitle.
+        /// </summary>
+        public bool MainTitle
+        {
+            get { return this.mainTitle; }
         }
 
         /// <summary>
@@ -210,6 +223,14 @@ namespace Handbrake.Parsing
 
             // If we are scanning a groupd of files, we'll want to get the source name.
             string path = output.ReadLine();
+
+            m = Regex.Match(path, @"  \+ Main Feature");
+            if (m.Success)
+            {
+                thisTitle.mainTitle = true;
+                path = output.ReadLine();
+            }
+
             m = Regex.Match(path, @"^  \+ stream:");
             if (m.Success)
                 thisTitle.source = path.Replace("+ stream:", string.Empty).Trim();
