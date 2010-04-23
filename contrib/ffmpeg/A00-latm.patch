@@ -1,7 +1,7 @@
-Index: libavcodec/allcodecs.c
+Index: ffmpeg-r20817/libavcodec/allcodecs.c
 ===================================================================
---- ffmpeg.orig/libavcodec/allcodecs.c	(revision 20594)
-+++ ffmpeg/libavcodec/allcodecs.c	(working copy)
+--- ffmpeg-r20817/libavcodec/allcodecs.c	(revision 20817)
++++ ffmpeg-r20817/libavcodec/allcodecs.c	(working copy)
 @@ -314,6 +314,7 @@
      REGISTER_ENCDEC  (LIBDIRAC, libdirac);
      REGISTER_ENCODER (LIBFAAC, libfaac);
@@ -18,10 +18,10 @@ Index: libavcodec/allcodecs.c
      REGISTER_PARSER  (AC3, ac3);
      REGISTER_PARSER  (CAVSVIDEO, cavsvideo);
      REGISTER_PARSER  (DCA, dca);
-Index: libavcodec/avcodec.h
+Index: ffmpeg-r20817/libavcodec/avcodec.h
 ===================================================================
---- ffmpeg.orig/libavcodec/avcodec.h	(revision 20594)
-+++ ffmpeg/libavcodec/avcodec.h	(working copy)
+--- ffmpeg-r20817/libavcodec/avcodec.h	(revision 20817)
++++ ffmpeg-r20817/libavcodec/avcodec.h	(working copy)
 @@ -276,6 +276,7 @@
      CODEC_ID_MP2= 0x15000,
      CODEC_ID_MP3, ///< preferred ID for decoding MPEG audio layer 1, 2 or 3
@@ -30,10 +30,10 @@ Index: libavcodec/avcodec.h
      CODEC_ID_AC3,
      CODEC_ID_DTS,
      CODEC_ID_VORBIS,
-Index: libavcodec/Makefile
+Index: ffmpeg-r20817/libavcodec/Makefile
 ===================================================================
---- ffmpeg.orig/libavcodec/Makefile	(revision 20594)
-+++ ffmpeg/libavcodec/Makefile	(working copy)
+--- ffmpeg-r20817/libavcodec/Makefile	(revision 20817)
++++ ffmpeg-r20817/libavcodec/Makefile	(working copy)
 @@ -474,7 +474,7 @@
  OBJS-$(CONFIG_LIBDIRAC_DECODER)           += libdiracdec.o
  OBJS-$(CONFIG_LIBDIRAC_ENCODER)           += libdiracenc.o libdirac_libschro.o
@@ -52,11 +52,11 @@ Index: libavcodec/Makefile
  OBJS-$(CONFIG_AC3_PARSER)              += ac3_parser.o ac3tab.o \
                                            aac_ac3_parser.o
  OBJS-$(CONFIG_CAVSVIDEO_PARSER)        += cavs_parser.o
-Index: libavcodec/latmaac.c
+Index: ffmpeg-r20817/libavcodec/latmaac.c
 ===================================================================
---- ffmpeg.orig/libavcodec/latmaac.c	(revision 0)
-+++ ffmpeg/libavcodec/latmaac.c	(revision 0)
-@@ -0,0 +1,624 @@
+--- ffmpeg-r20817/libavcodec/latmaac.c	(revision 0)
++++ ffmpeg-r20817/libavcodec/latmaac.c	(revision 0)
+@@ -0,0 +1,625 @@
 +/*
 + * copyright (c) 2008 Paul Kendall <paul@kcbbs.gen.nz>
 + *
@@ -641,6 +641,7 @@ Index: libavcodec/latmaac.c
 +static int faac_decode_init(AVCodecContext *avctx)
 +{
 +    FAACContext *s = avctx->priv_data;
++    avctx->sample_fmt = SAMPLE_FMT_S16;
 +    avctx->frame_size = 360;
 +    avctx->sample_rate = 48000;
 +    avctx->channels = 2;
@@ -681,10 +682,10 @@ Index: libavcodec/latmaac.c
 +    .decode = faac_decode_frame,
 +    .long_name = "AAC over LATM",
 +};
-Index: libavcodec/latm_parser.c
+Index: ffmpeg-r20817/libavcodec/latm_parser.c
 ===================================================================
---- ffmpeg.orig/libavcodec/latm_parser.c	(revision 0)
-+++ ffmpeg/libavcodec/latm_parser.c	(revision 0)
+--- ffmpeg-r20817/libavcodec/latm_parser.c	(revision 0)
++++ ffmpeg-r20817/libavcodec/latm_parser.c	(revision 0)
 @@ -0,0 +1,128 @@
 +/*
 + * LATM parser
@@ -814,10 +815,10 @@ Index: libavcodec/latm_parser.c
 +    ff_parse_close,
 +    latm_split,
 +};
-Index: libavformat/mpegts.c
+Index: ffmpeg-r20817/libavformat/mpegts.c
 ===================================================================
---- ffmpeg.orig/libavformat/mpegts.c	(revision 20594)
-+++ ffmpeg/libavformat/mpegts.c	(working copy)
+--- ffmpeg-r20817/libavformat/mpegts.c	(revision 20817)
++++ ffmpeg-r20817/libavformat/mpegts.c	(working copy)
 @@ -499,7 +499,7 @@
      { 0x04, CODEC_TYPE_AUDIO,        CODEC_ID_MP3 },
      { 0x0f, CODEC_TYPE_AUDIO,        CODEC_ID_AAC },
@@ -836,10 +837,10 @@ Index: libavformat/mpegts.c
                          goto skip;
  
                      /* stream not present in PMT */
-Index: libavformat/mpegts.h
+Index: ffmpeg-r20817/libavformat/mpegts.h
 ===================================================================
---- ffmpeg.orig/libavformat/mpegts.h	(revision 20594)
-+++ ffmpeg/libavformat/mpegts.h	(working copy)
+--- ffmpeg-r20817/libavformat/mpegts.h	(revision 20817)
++++ ffmpeg-r20817/libavformat/mpegts.h	(working copy)
 @@ -49,6 +49,7 @@
  #define STREAM_TYPE_PRIVATE_DATA    0x06
  #define STREAM_TYPE_AUDIO_AAC       0x0f
@@ -848,10 +849,10 @@ Index: libavformat/mpegts.h
  #define STREAM_TYPE_VIDEO_H264      0x1b
  #define STREAM_TYPE_VIDEO_VC1       0xea
  #define STREAM_TYPE_VIDEO_DIRAC     0xd1
-Index: libavformat/mpeg.c
+Index: ffmpeg-r20817/libavformat/mpeg.c
 ===================================================================
---- ffmpeg.orig/libavformat/mpeg.c	(revision 20594)
-+++ ffmpeg/libavformat/mpeg.c	(working copy)
+--- ffmpeg-r20817/libavformat/mpeg.c	(revision 20817)
++++ ffmpeg-r20817/libavformat/mpeg.c	(working copy)
 @@ -282,7 +282,7 @@
      /* find matching stream */
      if (!((startcode >= 0x1c0 && startcode <= 0x1df) ||
@@ -871,10 +872,10 @@ Index: libavformat/mpeg.c
          } else if(es_type == STREAM_TYPE_VIDEO_MPEG4){
              codec_id = CODEC_ID_MPEG4;
              type = CODEC_TYPE_VIDEO;
-Index: libavformat/mpeg.h
+Index: ffmpeg-r20817/libavformat/mpeg.h
 ===================================================================
---- ffmpeg.orig/libavformat/mpeg.h	(revision 20594)
-+++ ffmpeg/libavformat/mpeg.h	(working copy)
+--- ffmpeg-r20817/libavformat/mpeg.h	(revision 20817)
++++ ffmpeg-r20817/libavformat/mpeg.h	(working copy)
 @@ -53,6 +53,7 @@
  #define STREAM_TYPE_PRIVATE_DATA    0x06
  #define STREAM_TYPE_AUDIO_AAC       0x0f
