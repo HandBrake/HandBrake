@@ -390,6 +390,9 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         cur->start = sync->next_start;
         cur->stop = cur->start + 90000. / ((double)job->vrate / (double)job->vrate_base);
 
+        /* Make sure last frame is reflected in frame count */
+        pv->common->count_frames++;
+
         /* Push the frame to the renderer */
         hb_fifo_push( job->fifo_sync, cur );
         sync->cur = NULL;
