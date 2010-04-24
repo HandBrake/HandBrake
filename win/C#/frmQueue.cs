@@ -237,17 +237,17 @@ namespace Handbrake
                 QueryParser parsed = Functions.QueryParser.Parse(qItem);
 
                 // Get the DVD Title
-                string title = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
+                string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
 
                 // Get the DVD Chapters
                 string chapters;
-                if (parsed.DVDChapterStart == 0)
+                if (parsed.ChapterStart == 0)
                     chapters = "Auto";
                 else
                 {
-                    chapters = parsed.DVDChapterStart.ToString();
-                    if (parsed.DVDChapterFinish != 0)
-                        chapters = chapters + " - " + parsed.DVDChapterFinish;
+                    chapters = parsed.ChapterStart.ToString();
+                    if (parsed.ChapterFinish != 0)
+                        chapters = chapters + " - " + parsed.ChapterFinish;
                 }
 
                 ListViewItem item = new ListViewItem();
@@ -300,19 +300,19 @@ namespace Handbrake
                 }
 
                 // found query is a global varible
-                QueryParser parsed = Functions.QueryParser.Parse(queue.LastEncode.Query);
+                QueryParser parsed = QueryParser.Parse(queue.LastEncode.Query);
                 lbl_source.Text = queue.LastEncode.Source;
                 lbl_dest.Text = queue.LastEncode.Destination;
 
-                lbl_title.Text = parsed.DVDTitle == 0 ? "Auto" : parsed.DVDTitle.ToString();
+                lbl_title.Text = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
 
-                if (Equals(parsed.DVDChapterStart, 0))
+                if (Equals(parsed.ChapterStart, 0))
                     lbl_chapt.Text = "Auto";
                 else
                 {
-                    string chapters = parsed.DVDChapterStart.ToString();
-                    if (parsed.DVDChapterFinish != 0)
-                        chapters = chapters + " - " + parsed.DVDChapterFinish;
+                    string chapters = parsed.ChapterStart.ToString();
+                    if (parsed.ChapterFinish != 0)
+                        chapters = chapters + " - " + parsed.ChapterFinish;
                     lbl_chapt.Text = chapters;
                 }
 

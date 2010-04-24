@@ -12,7 +12,6 @@ namespace Handbrake.Model
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioTrack"/> class. 
-        /// Audio Track instance
         /// </summary>
         public AudioTrack()
         {

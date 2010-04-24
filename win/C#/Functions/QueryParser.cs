@@ -24,71 +24,266 @@ namespace Handbrake.Functions
 
         #region Varibles
 
-        // Source
-        public int DVDTitle { get; set; }
-        public int DVDChapterStart { get; set; }
-        public int DVDChapterFinish { get; set; }
+        #region Source Title / Chapters
+        /// <summary>
+        /// Gets or sets Title.
+        /// </summary>
+        public int Title { get; set; }
 
-        // Output Settings
+        /// <summary>
+        /// Gets or sets ChapterStart.
+        /// </summary>
+        public int ChapterStart { get; set; }
+
+        /// <summary>
+        /// Gets or sets ChapterFinish.
+        /// </summary>
+        public int ChapterFinish { get; set; }
+        #endregion
+
+        #region Output Settings
+        /// <summary>
+        /// Gets or sets the file Format. e.g mkv or mp4
+        /// </summary>
         public string Format { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether LargeMP4 support is enabled.
+        /// This is the 64bit MP4 file that allows >4GB files
+        /// </summary>
         public bool LargeMP4 { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IpodAtom is inserted
+        /// </summary>
         public bool IpodAtom { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether OptimizeMP4 is enabed for web streaming
+        /// </summary>
         public bool OptimizeMP4 { get; set; }
+        #endregion
 
-        // Picture Settings
+        #region Picture Settings
+
+        /// <summary>
+        /// Gets or sets Width.
+        /// </summary>
         public int Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets Height.
+        /// </summary>
         public int Height { get; set; }
+
+        /// <summary>
+        /// Gets or sets MaxWidth.
+        /// </summary>
         public int MaxWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets MaxHeight.
+        /// </summary>
         public int MaxHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets CropValues.
+        /// </summary>
         public string CropValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets CropTop.
+        /// </summary>
         public string CropTop { get; set; }
+
+        /// <summary>
+        /// Gets or sets CropBottom.
+        /// </summary>
         public string CropBottom { get; set; }
+
+        /// <summary>
+        /// Gets or sets CropLeft.
+        /// </summary>
         public string CropLeft { get; set; }
+
+        /// <summary>
+        /// Gets or sets CropRight.
+        /// </summary>
         public string CropRight { get; set; }
+
+        /// <summary>
+        /// Gets or sets AnamorphicMode.
+        /// </summary>
         public int AnamorphicMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether KeepDisplayAsect.
+        /// </summary>
         public bool KeepDisplayAsect { get; set; }
+
+        /// <summary>
+        /// Gets or sets DisplayWidthValue.
+        /// </summary>
         public double DisplayWidthValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets PixelAspectWidth.
+        /// </summary>
         public int PixelAspectWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets PixelAspectHeight.
+        /// </summary>
         public int PixelAspectHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets AnamorphicModulus.
+        /// </summary>
         public int AnamorphicModulus { get; set; }
+        #endregion
 
-        // Video Filters
+        #region Video Filters
+
+        /// <summary>
+        /// Gets or sets DeTelecine.
+        /// </summary>
         public string DeTelecine { get; set; }
+
+        /// <summary>
+        /// Gets or sets DeBlock.
+        /// </summary>
         public int DeBlock { get; set; }
+
+        /// <summary>
+        /// Gets or sets DeInterlace.
+        /// </summary>
         public string DeInterlace { get; set; }
+
+        /// <summary>
+        /// Gets or sets DeNoise.
+        /// </summary>
         public string DeNoise { get; set; }
+
+        /// <summary>
+        /// Gets or sets Decomb.
+        /// </summary>
         public string Decomb { get; set; }
+        #endregion
 
-        // Video Settings
+        #region Video Settings
+        /// <summary>
+        /// Gets or sets VideoEncoder.
+        /// </summary>
         public string VideoEncoder { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Grayscale.
+        /// </summary>
         public bool Grayscale { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether TwoPass.
+        /// </summary>
         public bool TwoPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether TurboFirstPass.
+        /// </summary>
         public bool TurboFirstPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets VideoFramerate.
+        /// </summary>
         public string VideoFramerate { get; set; }
+
+        /// <summary>
+        /// Gets or sets AverageVideoBitrate.
+        /// </summary>
         public string AverageVideoBitrate { get; set; }
+
+        /// <summary>
+        /// Gets or sets VideoTargetSize.
+        /// </summary>
         public string VideoTargetSize { get; set; }
+
+        /// <summary>
+        /// Gets or sets VideoQuality.
+        /// </summary>
         public float VideoQuality { get; set; }
+        #endregion
 
-        // Audio Settings
+        #region Audio Settings
+
+        /// <summary>
+        /// Gets or sets AudioInformation.
+        /// </summary>
         public ArrayList AudioInformation { get; set; }
-        public string Subtitles { get; set; }
-        public bool ForcedSubtitles { get; set; }
 
-        // Chapter Markers
+        /// <summary>
+        /// Gets or sets Subtitles.
+        /// </summary>
+        public string Subtitles { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether ForcedSubtitles.
+        /// </summary>
+        public bool ForcedSubtitles { get; set; }
+        #endregion
+
+        #region Other
+        /// <summary>
+        /// Gets or sets a value indicating whether ChapterMarkers.
+        /// </summary>
         public bool ChapterMarkers { get; set; }
 
-        // Other
+        /// <summary>
+        /// Gets or sets H264Query.
+        /// </summary>
         public string H264Query { get; set; }
-        public bool Verbose { get; set; }
 
-        // Preset Information
+        /// <summary>
+        /// Gets or sets a value indicating whether Verbose.
+        /// </summary>
+        public bool Verbose { get; set; }
+        #endregion
+
+        #region Preset Information
+
+        /// <summary>
+        /// Gets or sets PresetBuildNumber.
+        /// </summary>
         public int PresetBuildNumber { get; set; }
+
+        /// <summary>
+        /// Gets or sets PresetDescription.
+        /// </summary>
         public string PresetDescription { get; set; }
+
+        /// <summary>
+        /// Gets or sets PresetName.
+        /// </summary>
         public string PresetName { get; set; }
+
+        /// <summary>
+        /// Gets or sets Type.
+        /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UsesMaxPictureSettings.
+        /// </summary>
         public bool UsesMaxPictureSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UsesPictureFilters.
+        /// </summary>
         public bool UsesPictureFilters { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether UsesPictureSettings.
+        /// </summary>
         public bool UsesPictureSettings { get; set; }
+        #endregion
 
         #endregion
 
@@ -181,19 +376,19 @@ namespace Handbrake.Functions
                 #region Source Tab
 
                 if (title.Success)
-                    thisQuery.DVDTitle = int.Parse(title.ToString().Replace("-t ", string.Empty));
+                    thisQuery.Title = int.Parse(title.ToString().Replace("-t ", string.Empty));
 
                 if (chapters.Success)
                 {
                     string[] actTitles = chapters.ToString().Replace("-c ", string.Empty).Split('-');
-                    thisQuery.DVDChapterStart = int.Parse(actTitles[0]);
+                    thisQuery.ChapterStart = int.Parse(actTitles[0]);
                     if (actTitles.Length > 1)
                     {
-                        thisQuery.DVDChapterFinish = int.Parse(actTitles[1]);
+                        thisQuery.ChapterFinish = int.Parse(actTitles[1]);
                     }
 
-                    if ((thisQuery.DVDChapterStart == 1) && (thisQuery.DVDChapterFinish == 0))
-                        thisQuery.DVDChapterFinish = thisQuery.DVDChapterStart;
+                    if ((thisQuery.ChapterStart == 1) && (thisQuery.ChapterFinish == 0))
+                        thisQuery.ChapterFinish = thisQuery.ChapterStart;
                 }
 
                 #endregion

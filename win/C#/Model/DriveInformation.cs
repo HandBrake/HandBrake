@@ -10,7 +10,6 @@ namespace Handbrake.Model
     /// </summary>
     public class DriveInformation
     {
-
         /// <summary>
         /// Gets or sets A Unique ID That represemts this model.
         /// </summary>
