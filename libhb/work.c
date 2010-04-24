@@ -49,6 +49,24 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, int cpu_count,
     return hb_thread_init( "work", work_func, work, HB_LOW_PRIORITY );
 }
 
+static void InitWorkState( hb_handle_t * h )
+{
+    hb_state_t state;
+
+    state.state = HB_STATE_WORKING;
+#define p state.param.working
+    p.progress  = 0.0;
+    p.rate_cur  = 0.0;
+    p.rate_avg  = 0.0;
+    p.hours     = -1;
+    p.minutes   = -1;
+    p.seconds   = -1; 
+#undef p
+
+    hb_set_state( h, &state );
+
+}
+
 /**
  * Iterates through job list and calls do_job for each job.
  * @param _work Handle work object.
@@ -65,6 +83,7 @@ static void work_func( void * _work )
         hb_list_rem( work->jobs, job );
         job->die = work->die;
         *(work->current_job) = job;
+        InitWorkState( job->h );
         do_job( job, work->cpu_count );
         *(work->current_job) = NULL;
     }
