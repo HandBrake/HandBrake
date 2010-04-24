@@ -15,56 +15,24 @@ namespace Handbrake.Parsing
     public class Subtitle
     {
         /// <summary>
-        /// The Language
-        /// </summary>
-        private string language;
-
-        /// <summary>
-        /// The Track Number
-        /// </summary>
-        private int trackNumber;
-
-        /// <summary>
-        /// The type of subtitle
-        /// </summary>
-        private string type;
-
-        /// <summary>
-        /// The typecode
-        /// </summary>
-        private string typecode;
-
-        /// <summary>
         /// Gets the track number of this Subtitle
         /// </summary>
-        public int TrackNumber
-        {
-            get { return trackNumber; }
-        }
+        public int TrackNumber { get; private set; }
 
         /// <summary>
         /// Gets the The language (if detected) of this Subtitle
         /// </summary>
-        public string Language
-        {
-            get { return language; }
-        }
+        public string Language { get; private set; }
 
         /// <summary>
         /// Gets the Langauage Code
         /// </summary>
-        public string LanguageCode
-        {
-            get { return typecode; }
-        }
+        public string LanguageCode { get; private set; }
 
         /// <summary>
         /// Gets the Subtitle Type
         /// </summary>
-        public string Type
-        {
-            get { return type; }
-        }
+        public string Type { get; private set; }
 
         /// <summary>
         /// Parse the input strings related to subtitles
@@ -84,10 +52,10 @@ namespace Handbrake.Parsing
             {
                 var thisSubtitle = new Subtitle
                                        {
-                                           trackNumber = int.Parse(m.Groups[1].Value.Trim()), 
-                                           language = m.Groups[2].Value, 
-                                           typecode = m.Groups[3].Value, 
-                                           type = m.Groups[4].Value
+                                           TrackNumber = int.Parse(m.Groups[1].Value.Trim()), 
+                                           Language = m.Groups[2].Value, 
+                                           LanguageCode = m.Groups[3].Value, 
+                                           Type = m.Groups[4].Value
                                        };
                 return thisSubtitle;
             }
@@ -124,7 +92,7 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2})", trackNumber, language, type);
+            return string.Format("{0} {1} ({2})", TrackNumber, Language, Type);
         }
     }
 }

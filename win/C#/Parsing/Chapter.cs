@@ -16,30 +16,14 @@ namespace Handbrake.Parsing
     public class Chapter
     {
         /// <summary>
-        /// Chapter Number
-        /// </summary>
-        private int chapterNumber;
-
-        /// <summary>
-        /// The Duration of the chapter
-        /// </summary>
-        private TimeSpan duration;
-
-        /// <summary>
         /// Gets The number of this Chapter, in regards to it's parent Title
         /// </summary>
-        public int ChapterNumber
-        {
-            get { return chapterNumber; }
-        }
+        public int ChapterNumber { get; private set; }
 
         /// <summary>
         /// Gets The length in time this Chapter spans
         /// </summary>
-        public TimeSpan Duration
-        {
-            get { return duration; }
-        }
+        public TimeSpan Duration { get; private set; }
 
         /// <summary>
         /// Parse a CLI string to a Chapter object
@@ -59,8 +43,8 @@ namespace Handbrake.Parsing
             {
                 var thisChapter = new Chapter
                                       {
-                                          chapterNumber = int.Parse(m.Groups[1].Value.Trim()), 
-                                          duration = TimeSpan.Parse(m.Groups[5].Value)
+                                          ChapterNumber = int.Parse(m.Groups[1].Value.Trim()), 
+                                          Duration = TimeSpan.Parse(m.Groups[5].Value)
                                       };
                 return thisChapter;
             }
@@ -103,7 +87,7 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {chapter #}</returns>
         public override string ToString()
         {
-            return chapterNumber.ToString();
+            return ChapterNumber.ToString();
         }
     }
 }

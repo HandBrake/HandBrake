@@ -1,6 +1,4 @@
-/*  DVD.cs $
- 	
-    This file is part of the HandBrake source code.
+/*  DVD.cs $    This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
@@ -14,25 +12,29 @@ namespace Handbrake.Parsing
     /// </summary>
     public class DVD
     {
-        private readonly List<Title> titles;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DVD"/> class. 
         /// Default constructor for this object
         /// </summary>
         public DVD()
         {
-            titles = new List<Title>();
+            Titles = new List<Title>();
         }
 
         /// <summary>
-        /// Collection of Titles associated with this DVD
+        /// Gets Titles. A list of titles from the source
         /// </summary>
-        public List<Title> Titles
-        {
-            get { return titles; }
-        }
+        public List<Title> Titles { get; private set; }
 
+        /// <summary>
+        /// Parse the StreamReader output into a List of Titles
+        /// </summary>
+        /// <param name="output">
+        /// The output.
+        /// </param>
+        /// <returns>
+        /// A DVD object which contains a list of title inforamtion
+        /// </returns>
         public static DVD Parse(StreamReader output)
         {
             var thisDVD = new DVD();
@@ -40,7 +42,7 @@ namespace Handbrake.Parsing
             while (!output.EndOfStream)
             {
                 if ((char) output.Peek() == '+')
-                    thisDVD.titles.AddRange(Title.ParseList(output.ReadToEnd()));
+                    thisDVD.Titles.AddRange(Title.ParseList(output.ReadToEnd()));
                 else
                     output.ReadLine();
             }

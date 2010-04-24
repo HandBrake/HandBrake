@@ -46,7 +46,7 @@ namespace Handbrake.Parsing
         /// <summary>
         /// The Buffer StringBuilder
         /// </summary>
-        private StringBuilder buffer = new StringBuilder(string.Empty);
+        private readonly StringBuilder buffer = new StringBuilder(string.Empty);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Parser"/> class. 

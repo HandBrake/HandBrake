@@ -23,189 +23,86 @@ namespace Handbrake.Parsing
         private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
 
         /// <summary>
-        /// A collection of Audio Tracks
-        /// </summary>
-        private readonly List<AudioTrack> audioTracks;
-
-        /// <summary>
-        /// A Collection of Chapters
-        /// </summary>
-        private readonly List<Chapter> chapters;
-
-        /// <summary>
-        /// A Collection of Subtitles
-        /// </summary>
-        private readonly List<Subtitle> subtitles;
-
-        /// <summary>
-        /// A collection of angles 
-        /// </summary>
-        private List<string> angles = new List<string>();
-
-        /// <summary>
-        /// The source aspect ratio
-        /// </summary>
-        private float aspectRatio;
-
-        /// <summary>
-        /// The source framerate
-        /// </summary>
-        private float fps;
-
-        /// <summary>
-        /// Source autocrop values
-        /// </summary>
-        private int[] autoCrop;
-
-        /// <summary>
-        /// Source name
-        /// </summary>
-        private string source;
-
-        /// <summary>
-        /// The duration of the source
-        /// </summary>
-        private TimeSpan duration;
-
-        /// <summary>
-        /// The source resolution
-        /// </summary>
-        private Size resolution;
-
-        /// <summary>
-        /// The Title number
-        /// </summary>
-        private int titleNumber;
-
-        /// <summary>
-        /// Is A Main Title
-        /// </summary>
-        private bool mainTitle;
-
-        /// <summary>
-        /// The par values for this title.
-        /// </summary>
-        private Size parVal;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Title"/> class. 
         /// The constructor for this object
         /// </summary>
         public Title()
         {
-            audioTracks = new List<AudioTrack>();
-            chapters = new List<Chapter>();
-            subtitles = new List<Subtitle>();
+            Angles = new List<string>();
+            AudioTracks = new List<AudioTrack>();
+            Chapters = new List<Chapter>();
+            Subtitles = new List<Subtitle>();
         }
 
         /// <summary>
         /// Gets a Collection of chapters in this Title
         /// </summary>
-        public List<Chapter> Chapters
-        {
-            get { return chapters; }
-        }
+        public List<Chapter> Chapters { get; private set; }
 
         /// <summary>
         /// Gets a Collection of audio tracks associated with this Title
         /// </summary>
-        public List<AudioTrack> AudioTracks
-        {
-            get { return audioTracks; }
-        }
+        public List<AudioTrack> AudioTracks { get; private set; }
 
         /// <summary>
         /// Gets aCollection of subtitles associated with this Title
         /// </summary>
-        public List<Subtitle> Subtitles
-        {
-            get { return subtitles; }
-        }
+        public List<Subtitle> Subtitles { get; private set; }
 
         /// <summary>
         /// Gets The track number of this Title
         /// </summary>
-        public int TitleNumber
-        {
-            get { return this.titleNumber; }
-        }
+        public int TitleNumber { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this is a MainTitle.
         /// </summary>
-        public bool MainTitle
-        {
-            get { return this.mainTitle; }
-        }
+        public bool MainTitle { get; private set; }
 
         /// <summary>
         /// Gets the Source Name
         /// </summary>
-        public string SourceName
-        {
-            get { return source; }
-        }
+        public string SourceName { get; private set; }
 
         /// <summary>
         /// Gets the length in time of this Title
         /// </summary>
-        public TimeSpan Duration
-        {
-            get { return duration; }
-        }
+        public TimeSpan Duration { get; private set; }
 
         /// <summary>
         /// Gets the resolution (width/height) of this Title
         /// </summary>
-        public Size Resolution
-        {
-            get { return resolution; }
-        }
+        public Size Resolution { get; private set; }
 
         /// <summary>
         /// Gets the aspect ratio of this Title
         /// </summary>
-        public float AspectRatio
-        {
-            get { return aspectRatio; }
-        }
+        public float AspectRatio { get; private set; }
 
         /// <summary>
         /// Gets Par Value
         /// </summary>
-        public Size ParVal
-        {
-            get { return parVal; }
-        }
+        public Size ParVal { get; private set; }
 
         /// <summary>
         /// Gets the automatically detected crop region for this Title.
         /// This is an int array with 4 items in it as so:
-        /// 0: 
-        /// 1: 
-        /// 2: 
-        /// 3: 
+        /// 0: T
+        /// 1: B
+        /// 2: L
+        /// 3: R
         /// </summary>
-        public int[] AutoCropDimensions
-        {
-            get { return autoCrop; }
-        }
+        public int[] AutoCropDimensions { get; private set; }
 
         /// <summary>
         /// Gets a Collection of Angles in this Title
         /// </summary>
-        public List<string> Angles
-        {
-            get { return angles; }
-        }
+        public List<string> Angles { get; private set; }
 
         /// <summary>
         /// Gets the FPS of the source.
         /// </summary>
-        public float Fps
-        {
-            get { return fps; }
-        }
+        public float Fps { get; private set; }
 
         /// <summary>
         /// Parse the Title Information
@@ -219,7 +116,7 @@ namespace Handbrake.Parsing
             Match m = Regex.Match(output.ReadLine(), @"^\+ title ([0-9]*):");
             // Match track number for this title
             if (m.Success)
-                thisTitle.titleNumber = int.Parse(m.Groups[1].Value.Trim());
+                thisTitle.TitleNumber = int.Parse(m.Groups[1].Value.Trim());
 
             // If we are scanning a groupd of files, we'll want to get the source name.
             string path = output.ReadLine();
@@ -227,13 +124,13 @@ namespace Handbrake.Parsing
             m = Regex.Match(path, @"  \+ Main Feature");
             if (m.Success)
             {
-                thisTitle.mainTitle = true;
+                thisTitle.MainTitle = true;
                 path = output.ReadLine();
             }
 
             m = Regex.Match(path, @"^  \+ stream:");
             if (m.Success)
-                thisTitle.source = path.Replace("+ stream:", string.Empty).Trim();
+                thisTitle.SourceName = path.Replace("+ stream:", string.Empty).Trim();
 
             if (!Properties.Settings.Default.noDvdNav)
             {
@@ -246,39 +143,39 @@ namespace Handbrake.Parsing
                     int.TryParse(angleList, out angleCount);
 
                     for (int i = 1; i <= angleCount; i++)
-                        thisTitle.angles.Add(i.ToString());
+                        thisTitle.Angles.Add(i.ToString());
                 }
             }
 
             // Get duration for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ duration: ([0-9]{2}:[0-9]{2}:[0-9]{2})");
             if (m.Success)
-                thisTitle.duration = TimeSpan.Parse(m.Groups[1].Value);
+                thisTitle.Duration = TimeSpan.Parse(m.Groups[1].Value);
 
             // Get resolution, aspect ratio and FPS for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ size: ([0-9]*)x([0-9]*), pixel aspect: ([0-9]*)/([0-9]*), display aspect: ([0-9]*\.[0-9]*), ([0-9]*\.[0-9]*) fps");
             if (m.Success)
             {
-                thisTitle.resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
-                thisTitle.parVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
-                thisTitle.aspectRatio = float.Parse(m.Groups[5].Value, Culture);
-                thisTitle.fps = float.Parse(m.Groups[6].Value, Culture);
+                thisTitle.Resolution = new Size(int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value));
+                thisTitle.ParVal = new Size(int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value));
+                thisTitle.AspectRatio = float.Parse(m.Groups[5].Value, Culture);
+                thisTitle.Fps = float.Parse(m.Groups[6].Value, Culture);
             }
 
             // Get autocrop region for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
             if (m.Success)
-                thisTitle.autoCrop = new[]
+                thisTitle.AutoCropDimensions = new[]
                                            {
                                                int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), 
                                                int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value)
                                            };
 
-            thisTitle.chapters.AddRange(Chapter.ParseList(output));
+            thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 
-            thisTitle.audioTracks.AddRange(AudioTrack.ParseList(output));
+            thisTitle.AudioTracks.AddRange(AudioTrack.ParseList(output));
 
-            thisTitle.subtitles.AddRange(Subtitle.ParseList(output));
+            thisTitle.Subtitles.AddRange(Subtitle.ParseList(output));
 
             return thisTitle;
         }
@@ -311,7 +208,7 @@ namespace Handbrake.Parsing
         /// <returns>A string representing this track in the format: {title #} (00:00:00)</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1:00}:{2:00}:{3:00})", titleNumber, duration.Hours, duration.Minutes, duration.Seconds);
+            return string.Format("{0} ({1:00}:{2:00}:{3:00})", TitleNumber, Duration.Hours, Duration.Minutes, Duration.Seconds);
         }
     }
 }
