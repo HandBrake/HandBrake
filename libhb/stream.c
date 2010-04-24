@@ -2783,10 +2783,17 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 {
     AVStream *st = stream->ffmpeg_ic->streams[id];
     AVCodecContext *codec = st->codec;
+    int layout;
 
     // scan will ignore any audio without a bitrate. Since we've already
     // typed the audio in order to determine its codec we set up the audio
     // paramters here.
+    layout = hb_ff_layout_xlat( codec->channel_layout, codec->channels );
+    if ( !layout )
+    {
+        // Unsupported layout
+        return;
+    }
     if ( codec->bit_rate || codec->sample_rate )
     {
         hb_audio_t *audio = calloc( 1, sizeof(*audio) );;
@@ -2807,8 +2814,7 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 
             audio->config.in.bitrate = codec->bit_rate? codec->bit_rate : 1;
             audio->config.in.samplerate = codec->sample_rate;
-            audio->config.in.channel_layout = 
-                hb_ff_layout_xlat(codec->channel_layout, codec->channels);
+            audio->config.in.channel_layout = layout;
         }
 
         set_audio_description( audio, lang_for_code2( st->language ) );

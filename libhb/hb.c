@@ -86,47 +86,95 @@ int hb_avcodec_close(AVCodecContext *avctx)
 
 int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
 {
+    int hb_layout;
+
     switch (ff_channel_layout)
     {
         case CH_LAYOUT_MONO:
-            return HB_INPUT_CH_LAYOUT_MONO;
+            hb_layout = HB_INPUT_CH_LAYOUT_MONO;
+            break;
         case CH_LAYOUT_STEREO:
-            return HB_INPUT_CH_LAYOUT_STEREO;
+            hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
         case CH_LAYOUT_SURROUND:
-            return HB_INPUT_CH_LAYOUT_3F;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F;
+            break;
         case CH_LAYOUT_4POINT0:
-            return HB_INPUT_CH_LAYOUT_3F1R;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            break;
         case CH_LAYOUT_2_2:
-            return HB_INPUT_CH_LAYOUT_2F2R;
+            hb_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            break;
         case CH_LAYOUT_QUAD:
-            return HB_INPUT_CH_LAYOUT_2F2R;
+            hb_layout = HB_INPUT_CH_LAYOUT_2F2R;
+            break;
         case CH_LAYOUT_5POINT0:
-            // ffmpeg like to neglect to signal LFE
-            if (channels == 6)
-                return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
-            return HB_INPUT_CH_LAYOUT_3F2R;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
         case CH_LAYOUT_5POINT1:
-            return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            break;
         case CH_LAYOUT_5POINT0_BACK:
-            // ffmpeg like to neglect to signal LFE
-            if (channels == 6)
-                return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
-            return HB_INPUT_CH_LAYOUT_3F2R;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
         case CH_LAYOUT_5POINT1_BACK:
-            return HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            break;
         case CH_LAYOUT_7POINT0:
-            // ffmpeg like to neglect to signal LFE
-            if (channels == 8)
-                return HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
-            return HB_INPUT_CH_LAYOUT_3F4R;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F4R;
+            break;
         case CH_LAYOUT_7POINT1:
-            return HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            hb_layout = HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            break;
         case CH_LAYOUT_STEREO_DOWNMIX:
-            return HB_INPUT_CH_LAYOUT_STEREO;
+            hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
         default:
-            return HB_INPUT_CH_LAYOUT_STEREO;
+            hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
     }
-    return HB_INPUT_CH_LAYOUT_STEREO;
+    // Now make sure the chosen layout agrees with the number of channels
+    // ffmpeg tells us there are.  It seems ffmpeg is sometimes confused
+    // about this. So we will make a best guess based on the number
+    // of channels.
+    int chans = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT( hb_layout );
+    if ( chans == channels )
+    {
+        return hb_layout;
+    }
+    hb_log( "Channels reported by ffmpeg (%d) != computed layout channels (%d).\n", channels, chans );
+    switch (channels)
+    {
+        case 1:
+            hb_layout = HB_INPUT_CH_LAYOUT_MONO;
+            break;
+        case 2:
+            hb_layout = HB_INPUT_CH_LAYOUT_STEREO;
+            break;
+        case 3:
+            hb_layout = HB_INPUT_CH_LAYOUT_3F;
+            break;
+        case 4:
+            hb_layout = HB_INPUT_CH_LAYOUT_3F1R;
+            break;
+        case 5:
+            hb_layout = HB_INPUT_CH_LAYOUT_3F2R;
+            break;
+        case 6:
+            hb_layout = HB_INPUT_CH_LAYOUT_3F2R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            break;
+        case 7:
+            hb_layout = HB_INPUT_CH_LAYOUT_3F4R;
+            break;
+        case 8:
+            hb_layout = HB_INPUT_CH_LAYOUT_3F4R|HB_INPUT_CH_LAYOUT_HAS_LFE;
+            break;
+        default:
+            hb_log("Unsupported number of audio channels (%d).\n", channels);
+            hb_layout = 0;
+            break;
+    }
+    return hb_layout;
 }
 
 /**
