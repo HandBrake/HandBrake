@@ -525,6 +525,14 @@ static int get_frame_buf( AVCodecContext *context, AVFrame *frame )
     return avcodec_default_get_buffer( context, frame );
 }
 
+static int reget_frame_buf( AVCodecContext *context, AVFrame *frame )
+{
+    hb_work_private_t *pv = context->opaque;
+    frame->pts = pv->pts;
+    pv->pts = -1;
+    return avcodec_default_reget_buffer( context, frame );
+}
+
 static void log_chapter( hb_work_private_t *pv, int chap_num, int64_t pts )
 {
     hb_chapter_t *c = hb_list_item( pv->job->title->list_chapter, chap_num - 1 );
@@ -754,6 +762,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     /* we have to wrap ffmpeg's get_buffer to be able to set the pts (?!) */
     pv->context->opaque = pv;
     pv->context->get_buffer = get_frame_buf;
+    pv->context->reget_buffer = reget_frame_buf;
 
     return 0;
 }
@@ -1041,6 +1050,7 @@ static void init_ffmpeg_context( hb_work_object_t *w )
     // we have to wrap ffmpeg's get_buffer to be able to set the pts (?!)
     pv->context->opaque = pv;
     pv->context->get_buffer = get_frame_buf;
+    pv->context->reget_buffer = reget_frame_buf;
 
     // avi, mkv and possibly mp4 containers can contain the M$ VFW packed
     // b-frames abortion that messes up frame ordering and timestamps.
