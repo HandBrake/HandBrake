@@ -1172,6 +1172,7 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
 {
     AVCodecContext *context = pv->context;
     int pos = 0;
+    int loop_limit = 256;
 
     while ( pos < size )
     {
@@ -1190,10 +1191,18 @@ static void decodeAudio( hb_audio_t * audio, hb_work_private_t *pv, uint8_t *dat
         int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
         int nsamples;
         int len = avcodec_decode_audio3( context, buffer, &out_size, &avp );
-        if ( len <= 0 )
+        if ( len < 0 )
         {
             return;
         }
+        if ( len == 0 )
+        {
+            if ( !(loop_limit--) )
+                return;
+        }
+        else
+            loop_limit = 256;
+
         pos += len;
         if( out_size > 0 )
         {
