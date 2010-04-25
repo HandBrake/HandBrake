@@ -61,9 +61,10 @@ namespace Handbrake
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
-            lblStatus.Text = "Setting Version Data ...";
+            lblStatus.Text = "Updating and Checking CLI Version Data ...";
             Application.DoEvents();
             Main.SetCliVersionData();
+            Main.CheckForValidCliVersion();
 
             // Show the form, but leave disabled until preloading is complete then show the main form
             this.Enabled = false;

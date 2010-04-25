@@ -290,6 +290,32 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
+        /// Check to make sure that the user has an up to date version of the CLI installed.
+        /// </summary>
+        public static void CheckForValidCliVersion()
+        {
+            // Make sure we have a recent version for svn builds
+            string version = Properties.Settings.Default.hb_version;
+            if (version.Contains("svn"))
+            {
+                version = version.Replace("svn", string.Empty).Trim();
+                int build;
+                int.TryParse(version, out build);
+                if (build < Properties.Settings.Default.hb_min_cli)
+                {
+                    MessageBox.Show(
+                        "It appears you are trying to use a CLI executable that is too old for this version of the HandBrake GUI.\n" +
+                        "Please update the HandBrakeCLI.exe to a newer build.\n\n" +
+                        "HandBrake Detected: " + Properties.Settings.Default.hb_version,
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
         /// Check if the queue recovery file contains records.
         /// If it does, it means the last queue did not complete before HandBrake closed.
         /// So, return a boolean if true. 

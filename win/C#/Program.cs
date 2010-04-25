@@ -45,25 +45,6 @@ namespace Handbrake
                 return;
             }
 
-            // Make sure we have a recent version for svn builds
-            string version = Properties.Settings.Default.hb_version;
-            if (version.Contains("svn"))
-            {
-                version = version.Replace("svn", string.Empty).Trim();
-                int build;
-                int.TryParse(version, out build);
-                if (build < Properties.Settings.Default.hb_min_cli)
-                {
-                    MessageBox.Show(
-                        "It appears you are trying to use a CLI executable that is too old for this version of the HandBrake GUI.\n" + 
-                        "Please update the HandBrakeCLI.exe to a newer build. ",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                    return;
-                }
-            }
-
             // Check were not running on a screen that's going to cause some funnies to happen.
             Screen scr = Screen.PrimaryScreen;
             if ((scr.Bounds.Width < 1024) || (scr.Bounds.Height < 620))
