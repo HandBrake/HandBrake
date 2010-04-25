@@ -124,7 +124,7 @@ define import.CONTRIB.defs
     $(1).INSTALL.ntargets =
 
     $(1).INSTALL.args = !make @dir !extra !ntargets
-    $(1).INSTALL.args.dir = -C $$(1) install
+    $(1).INSTALL.args.dir = -j 1 -C $$(1) install
 
     $(1).INSTALL.mkdirs = $$(CONTRIB.build/)lib/ $$(CONTRIB.build/)include/
     $(1).INSTALL.target = $$($(1).build/).stamp.install

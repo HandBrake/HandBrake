@@ -1,8 +1,8 @@
 Index: libavcodec/mpegvideo.c
 ===================================================================
---- ffmpeg.orig/libavcodec/mpegvideo.c	(revision 20594)
+--- ffmpeg.orig/libavcodec/mpegvideo.c	(revision 22823)
 +++ ffmpeg/libavcodec/mpegvideo.c	(working copy)
-@@ -834,19 +834,18 @@
+@@ -867,19 +867,18 @@
      }
  
      av_log(s->avctx, AV_LOG_FATAL, "Internal error, picture buffer overflow\n");
@@ -36,18 +36,9 @@ Index: libavcodec/mpegvideo.c
  static void update_noise_reduction(MpegEncContext *s){
 Index: libavcodec/h264.c
 ===================================================================
---- ffmpeg.orig/libavcodec/h264.c	(revision 20594)
+--- ffmpeg.orig/libavcodec/h264.c	(revision 22823)
 +++ ffmpeg/libavcodec/h264.c	(working copy)
-@@ -3411,7 +3411,7 @@
-          * stream. Need to discard one frame. Prevents overrun of the
-          * short_ref and long_ref buffers.
-          */
--        av_log(h->s.avctx, AV_LOG_ERROR,
-+        av_log(h->s.avctx, AV_LOG_DEBUG,
-                "number of reference frames exceeds max (probably "
-                "corrupt input), discarding one\n");
- 
-@@ -7786,7 +7786,7 @@
+@@ -2772,7 +2772,7 @@
  
      if(!(s->flags2 & CODEC_FLAG2_CHUNKS) && !s->current_picture_ptr){
          if (avctx->skip_frame >= AVDISCARD_NONREF || s->hurry_up) return 0;
@@ -55,4 +46,17 @@ Index: libavcodec/h264.c
 +        av_log(avctx, AV_LOG_DEBUG, "no frame!\n");
          return -1;
      }
+ 
+Index: libavcodec/h264_refs.c
+===================================================================
+--- ffmpeg.orig/libavcodec/h264_refs.c	(revision 22823)
++++ ffmpeg/libavcodec/h264_refs.c	(working copy)
+@@ -608,7 +608,7 @@
+          * stream. Need to discard one frame. Prevents overrun of the
+          * short_ref and long_ref buffers.
+          */
+-        av_log(h->s.avctx, AV_LOG_ERROR,
++        av_log(h->s.avctx, AV_LOG_DEBUG,
+                "number of reference frames exceeds max (probably "
+                "corrupt input), discarding one\n");
  

@@ -1,12 +1,13 @@
-diff -Naur ffmpeg.orig/libavcodec/Makefile ffmpeg/libavcodec/Makefile
---- ffmpeg.orig/libavcodec/Makefile	2008-12-01 01:40:36.000000000 -0500
-+++ ffmpeg/libavcodec/Makefile	2009-02-23 07:03:23.000000000 -0500
+Index: libavcodec/Makefile
+===================================================================
+--- ffmpeg.orig/libavcodec/Makefile	(revision 22823)
++++ ffmpeg/libavcodec/Makefile	(working copy)
 @@ -3,7 +3,7 @@
  NAME = avcodec
  FFLIBS = avutil
  
--HEADERS = avcodec.h opt.h vdpau.h xvmc.h
-+HEADERS = avcodec.h opt.h vdpau.h xvmc.h audioconvert.h
+-HEADERS = avcodec.h avfft.h dxva2.h opt.h vaapi.h vdpau.h xvmc.h
++HEADERS = avcodec.h avfft.h dxva2.h opt.h vaapi.h vdpau.h xvmc.h audioconvert.h
  
  OBJS = allcodecs.o                                                      \
         audioconvert.o                                                   \

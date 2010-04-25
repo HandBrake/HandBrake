@@ -1259,6 +1259,14 @@ int hb_stream_read( hb_stream_t * src_stream, hb_buffer_t * b )
     return hb_ts_stream_decode( src_stream, b );
 }
 
+int64_t ffmpeg_initial_timestamp( hb_stream_t * stream )
+{
+    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_video_id];
+    if ( s->nb_index_entries < 1 )
+        return 0;
+
+    return s->index_entries[0].timestamp;
+}
 int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
 {
 
@@ -1284,7 +1292,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     stream->chapter = chapter_num - 1;
     stream->chapter_end = sum_dur;
 
-    int64_t pos = ( ( ( sum_dur - chapter->duration ) * AV_TIME_BASE ) / 90000 );
+    int64_t pos = ( ( ( sum_dur - chapter->duration ) * AV_TIME_BASE ) / 90000 ) + ffmpeg_initial_timestamp( stream );
 
     hb_deep_log( 2, "Seeking to chapter %d: starts %"PRId64", ends %"PRId64", AV pos %"PRId64,
                  chapter_num, sum_dur - chapter->duration, sum_dur, pos);
@@ -1302,7 +1310,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
         // that causes the problem. since hb_stream_seek_chapter
         // is called before we start reading, make sure
         // we do a seek here.
-        av_seek_frame( stream->ffmpeg_ic, -1, 0LL, AVSEEK_FLAG_BACKWARD );
+        av_seek_frame( stream->ffmpeg_ic, -1, ffmpeg_initial_timestamp( stream ), AVSEEK_FLAG_BACKWARD );
     }
     return 1;
 }
@@ -2857,6 +2865,13 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
              avcodec_find_decoder( ic->streams[i]->codec->codec_id ) &&
              title->video_codec == 0 )
         {
+            AVCodecContext *context = ic->streams[i]->codec;
+            if ( context->pix_fmt != PIX_FMT_YUV420P &&
+                 !sws_isSupportedInput( context->pix_fmt ) )
+            {
+                hb_log( "ffmpeg_title_scan: Unsupported color space" );
+                continue;
+            }
             title->video_id = i;
             stream->ffmpeg_video_id = i;
 
@@ -3116,7 +3131,7 @@ static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts )
     AVFormatContext *ic = stream->ffmpeg_ic;
     int64_t pos;
 
-    pos = ts * AV_TIME_BASE / 90000;
+    pos = ts * AV_TIME_BASE / 90000 + ffmpeg_initial_timestamp( stream );
     stream->need_keyframe = 1;
     // Seek to the nearest timestamp before that requested where
     // there is an I-frame

@@ -1027,8 +1027,14 @@ static void init_ffmpeg_context( hb_work_object_t *w )
         // Because the time bases are so screwed up, we only take values
         // in the range 8fps - 64fps.
         AVRational tb;
-        if ( st->time_base.num * 64 > st->time_base.den &&
-             st->time_base.den > st->time_base.num * 8 )
+        if ( st->avg_frame_rate.den * 64 > st->avg_frame_rate.num &&
+             st->avg_frame_rate.num > st->avg_frame_rate.den * 8 )
+        {
+            tb.num = st->avg_frame_rate.den;
+            tb.den = st->avg_frame_rate.num;
+        }
+        else if ( st->time_base.num * 64 > st->time_base.den &&
+                  st->time_base.den > st->time_base.num * 8 )
         {
             tb = st->time_base;
         }

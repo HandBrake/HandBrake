@@ -1,8 +1,8 @@
-Index: ffmpeg-r20817/libavcodec/allcodecs.c
+Index: ffmpeg-r22950/libavcodec/allcodecs.c
 ===================================================================
---- ffmpeg-r20817/libavcodec/allcodecs.c	(revision 20817)
-+++ ffmpeg-r20817/libavcodec/allcodecs.c	(working copy)
-@@ -314,6 +314,7 @@
+--- ffmpeg-r22950/libavcodec/allcodecs.c	(revision 22950)
++++ ffmpeg-r22950/libavcodec/allcodecs.c	(working copy)
+@@ -334,6 +334,7 @@
      REGISTER_ENCDEC  (LIBDIRAC, libdirac);
      REGISTER_ENCODER (LIBFAAC, libfaac);
      REGISTER_DECODER (LIBFAAD, libfaad);
@@ -10,7 +10,7 @@ Index: ffmpeg-r20817/libavcodec/allcodecs.c
      REGISTER_ENCDEC  (LIBGSM, libgsm);
      REGISTER_ENCDEC  (LIBGSM_MS, libgsm_ms);
      REGISTER_ENCODER (LIBMP3LAME, libmp3lame);
-@@ -329,6 +330,7 @@
+@@ -349,6 +350,7 @@
  
      /* parsers */
      REGISTER_PARSER  (AAC, aac);
@@ -18,11 +18,11 @@ Index: ffmpeg-r20817/libavcodec/allcodecs.c
      REGISTER_PARSER  (AC3, ac3);
      REGISTER_PARSER  (CAVSVIDEO, cavsvideo);
      REGISTER_PARSER  (DCA, dca);
-Index: ffmpeg-r20817/libavcodec/avcodec.h
+Index: ffmpeg-r22950/libavcodec/avcodec.h
 ===================================================================
---- ffmpeg-r20817/libavcodec/avcodec.h	(revision 20817)
-+++ ffmpeg-r20817/libavcodec/avcodec.h	(working copy)
-@@ -276,6 +276,7 @@
+--- ffmpeg-r22950/libavcodec/avcodec.h	(revision 22950)
++++ ffmpeg-r22950/libavcodec/avcodec.h	(working copy)
+@@ -286,6 +286,7 @@
      CODEC_ID_MP2= 0x15000,
      CODEC_ID_MP3, ///< preferred ID for decoding MPEG audio layer 1, 2 or 3
      CODEC_ID_AAC,
@@ -30,11 +30,11 @@ Index: ffmpeg-r20817/libavcodec/avcodec.h
      CODEC_ID_AC3,
      CODEC_ID_DTS,
      CODEC_ID_VORBIS,
-Index: ffmpeg-r20817/libavcodec/Makefile
+Index: ffmpeg-r22950/libavcodec/Makefile
 ===================================================================
---- ffmpeg-r20817/libavcodec/Makefile	(revision 20817)
-+++ ffmpeg-r20817/libavcodec/Makefile	(working copy)
-@@ -474,7 +474,7 @@
+--- ffmpeg-r22950/libavcodec/Makefile	(revision 22950)
++++ ffmpeg-r22950/libavcodec/Makefile	(working copy)
+@@ -505,7 +505,7 @@
  OBJS-$(CONFIG_LIBDIRAC_DECODER)           += libdiracdec.o
  OBJS-$(CONFIG_LIBDIRAC_ENCODER)           += libdiracenc.o libdirac_libschro.o
  OBJS-$(CONFIG_LIBFAAC_ENCODER)            += libfaac.o
@@ -43,7 +43,7 @@ Index: ffmpeg-r20817/libavcodec/Makefile
  OBJS-$(CONFIG_LIBGSM_DECODER)             += libgsm.o
  OBJS-$(CONFIG_LIBGSM_ENCODER)             += libgsm.o
  OBJS-$(CONFIG_LIBGSM_MS_DECODER)          += libgsm.o
-@@ -498,7 +498,7 @@
+@@ -529,7 +529,7 @@
  
  # parsers
  OBJS-$(CONFIG_AAC_PARSER)              += aac_parser.o aac_ac3_parser.o \
@@ -52,11 +52,11 @@ Index: ffmpeg-r20817/libavcodec/Makefile
  OBJS-$(CONFIG_AC3_PARSER)              += ac3_parser.o ac3tab.o \
                                            aac_ac3_parser.o
  OBJS-$(CONFIG_CAVSVIDEO_PARSER)        += cavs_parser.o
-Index: ffmpeg-r20817/libavcodec/latmaac.c
+Index: ffmpeg-r22950/libavcodec/latmaac.c
 ===================================================================
---- ffmpeg-r20817/libavcodec/latmaac.c	(revision 0)
-+++ ffmpeg-r20817/libavcodec/latmaac.c	(revision 0)
-@@ -0,0 +1,625 @@
+--- ffmpeg-r22950/libavcodec/latmaac.c	(revision 0)
++++ ffmpeg-r22950/libavcodec/latmaac.c	(revision 0)
+@@ -0,0 +1,642 @@
 +/*
 + * copyright (c) 2008 Paul Kendall <paul@kcbbs.gen.nz>
 + *
@@ -167,13 +167,16 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +
 +static void readGASpecificConfig(struct AACConfig *cfg, GetBitContext *b, PutBitContext *o)
 +{
-+    int framelen_flag = get_bits(b, 1);
-+    put_bits(o, 1, framelen_flag);
-+    int dependsOnCoder = get_bits(b, 1);
-+    put_bits(o, 1, dependsOnCoder);
++    int framelen_flag;
++    int dependsOnCoder;
 +    int ext_flag;
 +    int delay;
 +    int layerNr;
++
++    framelen_flag = get_bits(b, 1);
++    put_bits(o, 1, framelen_flag);
++    dependsOnCoder = get_bits(b, 1);
++    put_bits(o, 1, dependsOnCoder);
 +
 +    if (dependsOnCoder) {
 +        delay = get_bits(b, 14);
@@ -213,13 +216,16 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +
 +static int readAudioSpecificConfig(struct AACConfig *cfg, GetBitContext *b)
 +{
++    int ret;
++    int sbr_present;
 +    PutBitContext o;
++
 +    init_put_bits(&o, cfg->extra, sizeof(cfg->extra));
 +
 +    // returns the number of bits read
-+    int ret = 0;
-+    int sbr_present = -1;
 +
++    ret = 0;
++    sbr_present = -1;
 +    // object
 +    cfg->audioObjectType = get_bits(b, 5);
 +        put_bits(&o, 5, cfg->audioObjectType);
@@ -287,6 +293,8 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +    }
 +
 +    if (parser->audio_mux_version_A == 0) {
++        int frame_length_type;
++
 +        if (parser->audio_mux_version == 1) {
 +            parser->taraFullness = latm_get_value(b);
 +        }
@@ -314,7 +322,7 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +        }
 +
 +        // these are not needed... perhaps
-+        int frame_length_type = get_bits(b, 3);
++        frame_length_type = get_bits(b, 3);
 +        parser->frameLengthType = frame_length_type;
 +        if (frame_length_type == 0) {
 +            get_bits(b, 8);
@@ -323,10 +331,12 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +        } else if (frame_length_type == 3 ||
 +            frame_length_type == 4 ||
 +            frame_length_type == 5) {
-+            int celp_table_index = get_bits(b, 6);
++            int celp_table_index;
++            celp_table_index = get_bits(b, 6);
 +        } else if (frame_length_type == 6 ||
 +            frame_length_type == 7) {
-+            int hvxc_table_index = get_bits(b, 1);
++            int hvxc_table_index;
++            hvxc_table_index = get_bits(b, 1);
 +        }
 +
 +        // other data
@@ -337,8 +347,8 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +                parser->other_data_bits = latm_get_value(b);
 +            } else {
 +                // other data not present
-+                parser->other_data_bits = 0;
 +                int esc, tmp;
++                parser->other_data_bits = 0;
 +                do {
 +                    parser->other_data_bits <<= 8;
 +                    esc = get_bits(b, 1);
@@ -401,9 +411,10 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +
 +static int readAudioSyncStream(struct AACParser *parser, GetBitContext *b, int size, uint8_t *payload, int *payloadsize)
 +{
++    int muxlength;
 +    // ISO/IEC 14496-3 Table 1.28 - Syntax of AudioMuxElement()
 +    if (get_bits(b, 11) != 0x2b7) return -1;        // not LATM
-+    int muxlength = get_bits(b, 13);
++    muxlength = get_bits(b, 13);
 +
 +    if (3+muxlength > size) return 0;            // not enough data
 +
@@ -528,7 +539,11 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +
 +    // are we going to initialize from decoder specific info ?
 +    if (decoder->parser->config.extrasize > 0) {
-+        char ret = NeAACDecInit2(decoder->aac_decoder, (unsigned char*)decoder->parser->config.extra, decoder->parser->config.extrasize, &decoder->in_samplerate, &decoder->in_channels);
++        char ret;
++        unsigned long samplerate;
++
++        ret = NeAACDecInit2(decoder->aac_decoder, (unsigned char*)decoder->parser->config.extra, decoder->parser->config.extrasize, &samplerate, &decoder->in_channels);
++        decoder->in_samplerate = samplerate;
 +        if (ret < 0) {
 +            aac_filter_close(decoder);        // gone wrong ?
 +            return -1;
@@ -541,7 +556,7 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +    return 0;
 +}
 +
-+AACDecoder *aac_filter_create()
++static AACDecoder *aac_filter_create()
 +{
 +    AACDecoder *decoder = (AACDecoder *)av_malloc(sizeof(AACDecoder));
 +    decoder->parser = latm_create_parser();
@@ -550,14 +565,14 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +    return (void *)decoder;
 +}
 +
-+void aac_filter_destroy(AACDecoder *decoder)
++static void aac_filter_destroy(AACDecoder *decoder)
 +{
 +    aac_filter_close(decoder);
 +    latm_destroy_parser(decoder->parser);
 +    av_free(decoder);
 +}
 +
-+int aac_filter_receive(AACDecoder *decoder, void *out, int *out_size, uint8_t *data, int size)
++static int aac_filter_receive(AACDecoder *decoder, void *out, int *out_size, uint8_t *data, int size)
 +{
 +    uint8_t    tempbuf[32*1024];
 +    int        ret;
@@ -574,6 +589,9 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +    latm_write_data(decoder->parser, data, size);
 +
 +    do {
++        NeAACDecFrameInfo    info;
++        void *buf;
++
 +        ret = latm_parse_packet(decoder->parser, tempbuf, sizeof(tempbuf));
 +                if (ret < 0) {
 +                        latm_flush(decoder->parser);
@@ -600,8 +618,7 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +        //-------------------------------------------------------------------------
 +        // Decode samples
 +        //-------------------------------------------------------------------------
-+        NeAACDecFrameInfo    info;
-+        void *buf = NeAACDecDecode(decoder->aac_decoder, &info, data, size);
++        buf = NeAACDecDecode(decoder->aac_decoder, &info, data, size);
 +
 +        if (buf) {
 +            decoder->in_samplerate = info.samplerate;
@@ -631,7 +648,7 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +    return consumed;
 +}
 +
-+void aac_filter_getinfo(AACDecoder *decoder, int *sample_rate, int *channels)
++static void aac_filter_getinfo(AACDecoder *decoder, int *sample_rate, int *channels)
 +{
 +    if(!decoder->open) return;
 +    *sample_rate = decoder->in_samplerate;
@@ -682,10 +699,10 @@ Index: ffmpeg-r20817/libavcodec/latmaac.c
 +    .decode = faac_decode_frame,
 +    .long_name = "AAC over LATM",
 +};
-Index: ffmpeg-r20817/libavcodec/latm_parser.c
+Index: ffmpeg-r22950/libavcodec/latm_parser.c
 ===================================================================
---- ffmpeg-r20817/libavcodec/latm_parser.c	(revision 0)
-+++ ffmpeg-r20817/libavcodec/latm_parser.c	(revision 0)
+--- ffmpeg-r22950/libavcodec/latm_parser.c	(revision 0)
++++ ffmpeg-r22950/libavcodec/latm_parser.c	(revision 0)
 @@ -0,0 +1,128 @@
 +/*
 + * LATM parser
@@ -815,20 +832,20 @@ Index: ffmpeg-r20817/libavcodec/latm_parser.c
 +    ff_parse_close,
 +    latm_split,
 +};
-Index: ffmpeg-r20817/libavformat/mpegts.c
+Index: ffmpeg-r22950/libavformat/mpegts.c
 ===================================================================
---- ffmpeg-r20817/libavformat/mpegts.c	(revision 20817)
-+++ ffmpeg-r20817/libavformat/mpegts.c	(working copy)
-@@ -499,7 +499,7 @@
-     { 0x04, CODEC_TYPE_AUDIO,        CODEC_ID_MP3 },
-     { 0x0f, CODEC_TYPE_AUDIO,        CODEC_ID_AAC },
-     { 0x10, CODEC_TYPE_VIDEO,      CODEC_ID_MPEG4 },
--    { 0x11, CODEC_TYPE_AUDIO,        CODEC_ID_AAC }, /* LATM syntax */
-+    { 0x11, CODEC_TYPE_AUDIO,   CODEC_ID_AAC_LATM }, /* LATM syntax */
-     { 0x1b, CODEC_TYPE_VIDEO,       CODEC_ID_H264 },
-     { 0xd1, CODEC_TYPE_VIDEO,      CODEC_ID_DIRAC },
-     { 0xea, CODEC_TYPE_VIDEO,        CODEC_ID_VC1 },
-@@ -683,7 +683,7 @@
+--- ffmpeg-r22950/libavformat/mpegts.c	(revision 22950)
++++ ffmpeg-r22950/libavformat/mpegts.c	(working copy)
+@@ -497,7 +497,7 @@
+     { 0x04, AVMEDIA_TYPE_AUDIO,        CODEC_ID_MP3 },
+     { 0x0f, AVMEDIA_TYPE_AUDIO,        CODEC_ID_AAC },
+     { 0x10, AVMEDIA_TYPE_VIDEO,      CODEC_ID_MPEG4 },
+-  //{ 0x11, AVMEDIA_TYPE_AUDIO,        CODEC_ID_AAC }, /* LATM syntax */
++    { 0x11, AVMEDIA_TYPE_AUDIO,   CODEC_ID_AAC_LATM }, /* LATM syntax */
+     { 0x1b, AVMEDIA_TYPE_VIDEO,       CODEC_ID_H264 },
+     { 0xd1, AVMEDIA_TYPE_VIDEO,      CODEC_ID_DIRAC },
+     { 0xea, AVMEDIA_TYPE_VIDEO,        CODEC_ID_VC1 },
+@@ -684,7 +684,7 @@
  
                      if ((!pes->st && pes->stream->nb_streams == MAX_STREAMS) ||
                          (pes->st && pes->st->discard == AVDISCARD_ALL) ||
@@ -837,10 +854,10 @@ Index: ffmpeg-r20817/libavformat/mpegts.c
                          goto skip;
  
                      /* stream not present in PMT */
-Index: ffmpeg-r20817/libavformat/mpegts.h
+Index: ffmpeg-r22950/libavformat/mpegts.h
 ===================================================================
---- ffmpeg-r20817/libavformat/mpegts.h	(revision 20817)
-+++ ffmpeg-r20817/libavformat/mpegts.h	(working copy)
+--- ffmpeg-r22950/libavformat/mpegts.h	(revision 22950)
++++ ffmpeg-r22950/libavformat/mpegts.h	(working copy)
 @@ -49,6 +49,7 @@
  #define STREAM_TYPE_PRIVATE_DATA    0x06
  #define STREAM_TYPE_AUDIO_AAC       0x0f
@@ -849,11 +866,11 @@ Index: ffmpeg-r20817/libavformat/mpegts.h
  #define STREAM_TYPE_VIDEO_H264      0x1b
  #define STREAM_TYPE_VIDEO_VC1       0xea
  #define STREAM_TYPE_VIDEO_DIRAC     0xd1
-Index: ffmpeg-r20817/libavformat/mpeg.c
+Index: ffmpeg-r22950/libavformat/mpeg.c
 ===================================================================
---- ffmpeg-r20817/libavformat/mpeg.c	(revision 20817)
-+++ ffmpeg-r20817/libavformat/mpeg.c	(working copy)
-@@ -282,7 +282,7 @@
+--- ffmpeg-r22950/libavformat/mpeg.c	(revision 22950)
++++ ffmpeg-r22950/libavformat/mpeg.c	(working copy)
+@@ -287,7 +287,7 @@
      /* find matching stream */
      if (!((startcode >= 0x1c0 && startcode <= 0x1df) ||
            (startcode >= 0x1e0 && startcode <= 0x1ef) ||
@@ -862,20 +879,20 @@ Index: ffmpeg-r20817/libavformat/mpeg.c
          goto redo;
      if (ppos) {
          *ppos = url_ftell(s->pb) - 4;
-@@ -449,6 +449,9 @@
+@@ -454,6 +454,9 @@
          } else if(es_type == STREAM_TYPE_AUDIO_AAC){
              codec_id = CODEC_ID_AAC;
-             type = CODEC_TYPE_AUDIO;
+             type = AVMEDIA_TYPE_AUDIO;
 +        } else if(es_type == STREAM_TYPE_AUDIO_AAC_LATM){
 +            codec_id = CODEC_ID_AAC_LATM;
 +            type = CODEC_TYPE_AUDIO;
          } else if(es_type == STREAM_TYPE_VIDEO_MPEG4){
              codec_id = CODEC_ID_MPEG4;
-             type = CODEC_TYPE_VIDEO;
-Index: ffmpeg-r20817/libavformat/mpeg.h
+             type = AVMEDIA_TYPE_VIDEO;
+Index: ffmpeg-r22950/libavformat/mpeg.h
 ===================================================================
---- ffmpeg-r20817/libavformat/mpeg.h	(revision 20817)
-+++ ffmpeg-r20817/libavformat/mpeg.h	(working copy)
+--- ffmpeg-r22950/libavformat/mpeg.h	(revision 22950)
++++ ffmpeg-r22950/libavformat/mpeg.h	(working copy)
 @@ -53,6 +53,7 @@
  #define STREAM_TYPE_PRIVATE_DATA    0x06
  #define STREAM_TYPE_AUDIO_AAC       0x0f

@@ -1,6 +1,6 @@
 Index: libavcodec/pngdec.c
 ===================================================================
---- ffmpeg.orig/libavcodec/pngdec.c	(revision 20594)
+--- ffmpeg.orig/libavcodec/pngdec.c	(revision 22823)
 +++ ffmpeg/libavcodec/pngdec.c	(working copy)
 @@ -597,6 +597,18 @@
          }
@@ -20,7 +20,7 @@ Index: libavcodec/pngdec.c
 +#if 0
       /* handle p-frames only if a predecessor frame is available */
       if(s->last_picture->data[0] != NULL) {
-          if(!(avpkt->flags & PKT_FLAG_KEY)) {
+          if(!(avpkt->flags & AV_PKT_FLAG_KEY)) {
 @@ -613,6 +625,7 @@
              }
          }
