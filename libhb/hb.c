@@ -142,7 +142,7 @@ int hb_ff_layout_xlat(int64_t ff_channel_layout, int channels)
     {
         return hb_layout;
     }
-    hb_log( "Channels reported by ffmpeg (%d) != computed layout channels (%d).\n", channels, chans );
+    hb_log( "Channels reported by ffmpeg (%d) != computed layout channels (%d).", channels, chans );
     switch (channels)
     {
         case 1:
