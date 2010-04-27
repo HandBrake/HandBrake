@@ -38,7 +38,7 @@ static char * output      = NULL;
 static char * format      = NULL;
 static int    titleindex  = 1;
 static int    titlescan   = 0;
-static int    longest_title = 0;
+static int    main_feature = 0;
 static char * native_language = NULL;
 static int    native_dub  = 0;
 static int    twoPass     = 0;
@@ -234,9 +234,9 @@ int main( int argc, char ** argv )
     /* Feed libhb with a DVD to scan */
     fprintf( stderr, "Opening %s...\n", input );
 
-    if (longest_title) {
+    if (main_feature) {
         /*
-         * We need to scan for all the titles in order to find the longest
+         * We need to scan for all the titles in order to find the main feature
          */
         titleindex = 0;
     }
@@ -518,15 +518,15 @@ static int HandleEvents( hb_handle_t * h )
                 die = 1;
                 break;
             }
-	        if( longest_title )
+	        if( main_feature )
 	        {
                 int i;
-                int longest_title_idx=0;
-                int longest_title_pos=-1;
-                int longest_title_time=0;
+                int main_feature_idx=0;
+                int main_feature_pos=-1;
+                int main_feature_time=0;
                 int title_time;
 
-                fprintf( stderr, "Searching for longest title...\n" );
+                fprintf( stderr, "Searching for main feature title...\n" );
 
                 for( i = 0; i < hb_list_count( list ); i++ )
                 {
@@ -534,24 +534,31 @@ static int HandleEvents( hb_handle_t * h )
                     title_time = (title->hours*60*60 ) + (title->minutes *60) + (title->seconds);
                     fprintf( stderr, " + Title (%d) index %d has length %dsec\n",
                              i, title->index, title_time );
-                    if( longest_title_time < title_time )
+                    if( main_feature_time < title_time )
                     {
-                        longest_title_time = title_time;
-                        longest_title_pos = i;
-                        longest_title_idx = title->index;
+                        main_feature_time = title_time;
+                        main_feature_pos = i;
+                        main_feature_idx = title->index;
+                    }
+                    if( title->job->feature == title->index )
+                    {
+                        main_feature_time = title_time;
+                        main_feature_pos = i;
+                        main_feature_idx = title->index;
+                        break;
                     }
                 }
-                if( longest_title_pos == -1 )
+                if( main_feature_pos == -1 )
                 {
-                    fprintf( stderr, "No longest title found.\n" );
+                    fprintf( stderr, "No main feature title found.\n" );
                     die = 1;
                     break;
                 }
-                titleindex = longest_title_idx;
-                fprintf( stderr, "Found longest title, setting title to %d\n",
-                         longest_title_idx);
+                titleindex = main_feature_idx;
+                fprintf( stderr, "Found main feature title, setting title to %d\n",
+                         main_feature_idx);
 
-                title = hb_list_item( list, longest_title_pos);
+                title = hb_list_item( list, main_feature_pos);
             } else {
                 title = hb_list_item( list, 0 );
             }
@@ -2207,7 +2214,7 @@ static void ShowHelp()
     "    -t, --title <number>    Select a title to encode (0 to scan all titles only,\n"
     "                            default: 1)\n"
     "        --scan              Scan selected title only.\n"
-    "    -L, --longest           Select the longest title\n"
+    "        --main-feature      Detect and select the main feature title.\n"
     "    -c, --chapters <string> Select chapters (e.g. \"1-3\" for chapters\n"
     "                            1 to 3, or \"3\" for chapter 3 only,\n"
     "                            default: all chapters)\n"
@@ -2539,6 +2546,7 @@ static int ParseOptions( int argc, char ** argv )
     #define SRT_DEFAULT         274
     #define ROTATE_FILTER       275
     #define SCAN_ONLY           276
+    #define MAIN_FEATURE        277
     
     for( ;; )
     {
@@ -2559,7 +2567,7 @@ static int ParseOptions( int argc, char ** argv )
 
             { "title",       required_argument, NULL,    't' },
             { "scan",        no_argument,       NULL,    SCAN_ONLY },
-            { "longest",     no_argument,       NULL,    'L' },
+            { "main-feature",no_argument,       NULL,    MAIN_FEATURE },
             { "chapters",    required_argument, NULL,    'c' },
             { "angle",       required_argument, NULL,    ANGLE },
             { "markers",     optional_argument, NULL,    'm' },
@@ -2709,8 +2717,8 @@ static int ParseOptions( int argc, char ** argv )
             case SCAN_ONLY:
                 titlescan = 1;
                 break;
-            case 'L':
-                longest_title = 1;
+            case MAIN_FEATURE:
+                main_feature = 1;
                 break;
             case 'c':
             {
