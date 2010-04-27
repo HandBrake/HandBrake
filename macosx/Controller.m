@@ -3422,6 +3422,7 @@ bool one_burned = FALSE;
     */
     
 	/* Detelecine */
+    hb_filter_detelecine.settings = NULL;
     if ([fPictureController detelecine] == 1)
     {
         /* use a custom detelecine string */
@@ -3440,6 +3441,7 @@ bool one_burned = FALSE;
     {
         /* Decomb */
         /* we add the custom string if present */
+        hb_filter_decomb.settings = NULL;
         if ([fPictureController decomb] == 1)
         {
             /* use a custom decomb string */
@@ -3975,6 +3977,7 @@ bool one_burned = FALSE;
      * The order of the filters is critical
      */
     /* Detelecine */
+    hb_filter_detelecine.settings = NULL;
     if ([[queueToApply objectForKey:@"PictureDetelecine"] intValue] == 1)
     {
         /* use a custom detelecine string */
@@ -3991,6 +3994,7 @@ bool one_burned = FALSE;
     {
         /* Decomb */
         /* we add the custom string if present */
+        hb_filter_decomb.settings = NULL;
         if ([[queueToApply objectForKey:@"PictureDecomb"] intValue] == 1)
         {
             /* use a custom decomb string */
