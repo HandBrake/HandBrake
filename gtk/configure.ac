@@ -76,7 +76,7 @@ case $host in
 	mingw_flag=yes
     ;;
   *)
-	GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 hal hal-storage libnotify"
+	GHB_PACKAGES="gtk+-2.0 >= 2.10 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 gstreamer-video-0.10 gstreamer-pbutils-0.10 gio-2.0 libnotify gudev-1.0"
 	mingw_flag=no
     ;;
 esac

@@ -22,7 +22,8 @@
 
 #if !defined(_WIN32)
 #include <poll.h>
-#include <libhal-storage.h>
+#define G_UDEV_API_IS_SUBJECT_TO_CHANGE 1
+#include <gudev/gudev.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 
@@ -3785,7 +3786,7 @@ dvd_device_list()
 }
 
 #if !defined(_WIN32)
-static LibHalContext *hal_ctx = NULL;
+static GUdevClient *udev_ctx = NULL;
 #endif
 
 gboolean
@@ -3793,24 +3794,40 @@ ghb_is_cd(GDrive *gd)
 {
 #if !defined(_WIN32)
 	gchar *device;
-	LibHalDrive *halDrive;
-	LibHalDriveType dtype;
+	GUdevDevice *udd;
 
-	if (hal_ctx == NULL)
+	if (udev_ctx == NULL)
 		return FALSE;
 
 	device = g_drive_get_identifier(gd, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE);
 	if (device == NULL)
 		return FALSE;
-	halDrive = libhal_drive_from_device_file (hal_ctx, device);
+
+	udd = g_udev_client_query_by_device_file(udev_ctx, device);
 	g_free(device);
-	if (halDrive == NULL)
+
+	if (udd == NULL)
+	{
+		g_message("udev: Failed to lookup device %s", device);
 		return FALSE;
-	dtype = libhal_drive_get_type(halDrive);
-	libhal_drive_free(halDrive);
-	return (dtype == LIBHAL_DRIVE_TYPE_CDROM);
+	}
+
+	gint val;
+	val = g_udev_device_get_property_as_int(udd, "ID_CDROM_DVD");
+	if (val == 1)
+		return TRUE;
+
+	return FALSE;
 #else
 	return FALSE;
+#endif
+}
+
+void
+ghb_udev_init()
+{
+#if !defined(_WIN32)
+	udev_ctx = g_udev_client_new(NULL);
 #endif
 }
 
@@ -3962,12 +3979,6 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 #endif
 
 #if !defined(_WIN32)
-static void
-dbus_init (void)
-{
-	dbus_g_thread_init();
-}
-
 #define GPM_DBUS_PM_SERVICE			"org.freedesktop.PowerManagement"
 #define GPM_DBUS_PM_PATH			"/org/freedesktop/PowerManagement"
 #define GPM_DBUS_PM_INTERFACE		"org.freedesktop.PowerManagement"
@@ -4070,11 +4081,11 @@ ghb_suspend_gpm()
 #endif
 }
 
+#if !defined(_WIN32)
 static gboolean
 ghb_can_shutdown_gpm()
 {
 	gboolean can_shutdown = FALSE;
-#if !defined(_WIN32)
 	DBusGConnection *conn;
 	DBusGProxy	*proxy;
 	GError *error = NULL;
@@ -4115,14 +4126,14 @@ ghb_can_shutdown_gpm()
 	}
 	g_object_unref(G_OBJECT(proxy));
 	dbus_g_connection_unref(conn);
-#endif
 	return can_shutdown;
 }
+#endif
 
+#if !defined(_WIN32)
 static void
 ghb_shutdown_gpm()
 {
-#if !defined(_WIN32)
 	DBusGConnection *conn;
 	DBusGProxy	*proxy;
 	GError *error = NULL;
@@ -4160,8 +4171,8 @@ ghb_shutdown_gpm()
 	}
 	g_object_unref(G_OBJECT(proxy));
 	dbus_g_connection_unref(conn);
-#endif
 }
+#endif
 
 void
 ghb_inhibit_gpm()
@@ -4477,65 +4488,6 @@ ghb_uninhibit_gsm()
 		ghb_uninhibit_gpm();
 	}
 	gpm_inhibited = FALSE;
-#endif
-}
-
-void
-ghb_hal_init()
-{
-#if !defined(_WIN32)
-	DBusGConnection *gconn;
-	DBusConnection *conn;
-	GError *gerror = NULL;
-	DBusError error;
-	char **devices;
-	int nr;
-
-	dbus_init ();
-
-	if (!(hal_ctx = libhal_ctx_new ())) {
-		g_warning ("failed to create a HAL context!");
-		return;
-	}
-
-	gconn = dbus_g_bus_get(DBUS_BUS_SYSTEM, &gerror);
-	if (gerror != NULL)
-	{
-		g_warning("DBUS cannot connect: %s", gerror->message);
-		g_error_free(gerror);
-		return;
-	}
-	conn = dbus_g_connection_get_connection(gconn);
-	libhal_ctx_set_dbus_connection (hal_ctx, conn);
-	dbus_error_init (&error);
-	if (!libhal_ctx_init (hal_ctx, &error)) {
-		g_warning ("libhal_ctx_init failed: %s", error.message ? error.message : "unknown");
-		dbus_error_free (&error);
-		libhal_ctx_free (hal_ctx);
-		dbus_g_connection_unref(gconn);
-		hal_ctx = NULL;
-		return;
-	}
-
-	/*
-	 * Do something to ping the HAL daemon - the above functions will
-	 * succeed even if hald is not running, so long as DBUS is.  But we
-	 * want to exit silently if hald is not running, to behave on
-	 * pre-2.6 systems.
-	 */
-	if (!(devices = libhal_get_all_devices (hal_ctx, &nr, &error))) {
-		g_warning ("seems that HAL is not running: %s", error.message ? error.message : "unknown");
-		dbus_error_free (&error);
-
-		libhal_ctx_shutdown (hal_ctx, NULL);
-		libhal_ctx_free (hal_ctx);
-		hal_ctx = NULL;
-		dbus_g_connection_unref(gconn);
-		return;
-	}
-
-	libhal_free_string_array (devices);
-	dbus_g_connection_unref(gconn);
 #endif
 }
 

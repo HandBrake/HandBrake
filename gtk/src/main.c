@@ -37,6 +37,7 @@
 #if !defined(_WIN32)
 #include <gst/gst.h>
 #include <libnotify/notify.h>
+#include <dbus/dbus-glib.h>
 #else
 #include <windows.h>
 #include <io.h>
@@ -800,8 +801,9 @@ main (int argc, char *argv[])
 	ghb_load_icons();
 
 #if !defined(_WIN32)
-	ghb_hal_init();
+	dbus_g_thread_init();
 #endif
+	ghb_udev_init();
 
 	ghb_write_pid_file();
 	ud = g_malloc0(sizeof(signal_user_data_t));

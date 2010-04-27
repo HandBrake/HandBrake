@@ -2017,7 +2017,6 @@ ghb_longest_title()
 	hb_title_t * title;
 	gint ii;
 	gint count = 0;
-	guint64 longest = 0;
 	gint titleindex = 0;
 	gint feature;
 	

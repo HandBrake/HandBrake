@@ -94,7 +94,7 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 	vqtype = ghb_settings_get_boolean(settings, "vquality_type_constant");
 	if (!vqtype)
 		pass2 = ghb_settings_get_boolean(settings, "VideoTwoPass");
-	const gchar *points;
+	const gchar *points = "Chapters";
 	if (ghb_settings_combo_int(settings, "PtoPType") == 0)
 		points = "Chapters";
 	else if (ghb_settings_combo_int(settings, "PtoPType") == 1)

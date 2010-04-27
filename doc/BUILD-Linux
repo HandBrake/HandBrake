@@ -1,4 +1,4 @@
-Guide to Building HandBrake svn3023 (2009121001) on Linux
+Guide to Building HandBrake svn3269 (2010042701) on Linux
 *********************************************************
 
 Table of Contents
@@ -86,7 +86,7 @@ The GTK UI introduces some significant extra build requirements. If you
 intend to disable building the GUI with `configure --disable-gtk' you
 will not need many of these packages installed:
 
-Ubuntu 8.04 - 9.10 packages:
+Ubuntu 9.10 - 10.04 packages:
    * subversion (cli/gui)
 
    * yasm (cli/gui)
@@ -109,9 +109,7 @@ Ubuntu 8.04 - 9.10 packages:
 
    * libgtk2.0-dev (gui)
 
-   * libhal-dev (gui)
-
-   * libhal-storage-dev (gui)
+   * libgudev-1.0-dev (gui)
 
    * libwebkit-dev (gui)
 
@@ -121,16 +119,14 @@ Ubuntu 8.04 - 9.10 packages:
 
    * libgstreamer-plugins-base0.10-dev (gui)
 
-Ubuntu 8.04, substitute libwebkitgtk-dev for libwebkit-dev
-
 To install these packages:
      sudo apt-get install subversion yasm build-essential \
      autoconf libtool zlib1g-dev libbz2-dev intltool libglib2.0-dev \
-     libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
+     libdbus-glib-1-dev libgtk2.0-dev libgudev-1.0-dev \
      libwebkit-dev libnotify-dev libgstreamer0.10-dev \
      libgstreamer-plugins-base0.10-dev
 
-Fedora 9 - 12 package groups:
+Fedora 12 - 13 package groups:
    * Development Tools
 
    * Development Libraries
@@ -152,7 +148,7 @@ Additional Fedora packages:
 
    * dbus-glib-devel (gui)
 
-   * hal-devel (gui)
+   * libgudev1-devel (gui)
 
    * webkitgtk-devel (gui)
 
@@ -162,11 +158,9 @@ Additional Fedora packages:
 
    * gstreamer-plugins-base-devel (gui)
 
-Fedora 9 & 10, substitute WebKit-gtk-devel for webkitgtk-devel
-
 To install these packages:
      sudo yum install yasm zlib-devel bzip2-devel \
-     dbus-glib-devel hal-devel webkitgtk-devel libnotify-devel\
+     dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel\
      gstreamer-devel gstreamer-plugins-base-devel
 
 3 QuickStart
@@ -554,7 +548,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    3023
-     date:   2009-12-10 09:44:05 -0800
+     rev:    3269
+     date:   2010-04-27 09:51:55 -0700
      type:   developer
 

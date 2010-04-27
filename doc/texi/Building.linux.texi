@@ -36,7 +36,7 @@ The following are the recommended specifications for building on @value{OS.linux
 
 The @b{GTK UI} introduces some significant extra build requirements. If you intend to disable building the GUI with @command{configure --disable-gtk} you will not need many of these packages installed:
 
-Ubuntu 8.04 - 9.10 packages:
+Ubuntu 9.10 - 10.04 packages:
 @itemize @bullet
 @item subversion (cli/gui)
 @item yasm (cli/gui)
@@ -49,26 +49,23 @@ Ubuntu 8.04 - 9.10 packages:
 @item libglib2.0-dev (gui)
 @item libdbus-glib-1-dev (gui)
 @item libgtk2.0-dev (gui)
-@item libhal-dev (gui)
-@item libhal-storage-dev (gui)
+@item libgudev-1.0-dev (gui)
 @item libwebkit-dev (gui)
 @item libnotify-dev (gui)
 @item libgstreamer0.10-dev (gui)
 @item libgstreamer-plugins-base0.10-dev (gui)
 @end itemize
 
-Ubuntu 8.04, substitute libwebkitgtk-dev for libwebkit-dev
-
 To install these packages:
 @example
 sudo apt-get install subversion yasm build-essential \
 autoconf libtool zlib1g-dev libbz2-dev intltool libglib2.0-dev \
-libdbus-glib-1-dev libgtk2.0-dev libhal-dev libhal-storage-dev \
+libdbus-glib-1-dev libgtk2.0-dev libgudev-1.0-dev \
 libwebkit-dev libnotify-dev libgstreamer0.10-dev \
 libgstreamer-plugins-base0.10-dev
 @end example
 
-Fedora 9 - 12 package groups:
+Fedora 12 - 13 package groups:
 @itemize @bullet
 @item Development Tools
 @item Development Libraries
@@ -88,19 +85,17 @@ Additional Fedora packages:
 @item zlib-devel (cli/gui)
 @item bzip2-devel (cli/gui)
 @item dbus-glib-devel (gui)
-@item hal-devel (gui)
+@item libgudev1-devel (gui)
 @item webkitgtk-devel (gui)
 @item libnotify-devel (gui)
 @item gstreamer-devel (gui)
 @item gstreamer-plugins-base-devel (gui)
 @end itemize
 
-Fedora 9 & 10, substitute WebKit-gtk-devel for webkitgtk-devel
-
 To install these packages:
 @example
 sudo yum install yasm zlib-devel bzip2-devel \
-dbus-glib-devel hal-devel webkitgtk-devel libnotify-devel\
+dbus-glib-devel libgudev1-devel webkitgtk-devel libnotify-devel\
 gstreamer-devel gstreamer-plugins-base-devel
 @end example
 
