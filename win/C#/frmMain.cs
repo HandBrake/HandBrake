@@ -1704,6 +1704,11 @@ namespace Handbrake
                     }
                 }
 
+                if (drp_dvdtitle.SelectedItem == null && drp_dvdtitle.Items.Count > 0)
+                {
+                    drp_dvdtitle.SelectedIndex = 0;
+                }
+
                 // Enable the creation of chapter markers if the file is an image of a dvd.
                 int start, end;
                 int.TryParse(drop_chapterStart.Items[0].ToString(), out start);
