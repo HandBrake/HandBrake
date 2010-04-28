@@ -211,6 +211,7 @@
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ActivityLogMode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Encode.cs" />
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
@@ -291,7 +292,6 @@
     <Compile Include="Parsing\Subtitle.cs" />
     <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -509,7 +509,7 @@
 	makensis MakeNightly.nsi
 	</PostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'NightlyBuild' ">
+  <PropertyGroup>
     <PreBuildEvent>
 	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
 	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
