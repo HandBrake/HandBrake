@@ -66,8 +66,12 @@ namespace Handbrake
             Application.DoEvents();
             Main.SetCliVersionData();
             Main.CheckForValidCliVersion();
-            Version v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            this.Text += " " + v.ToString(4);
+
+            if (Settings.Default.hb_version.Contains("svn"))
+            {
+                Version v = Assembly.GetExecutingAssembly().GetName().Version;
+                this.Text += " " + v.ToString(4);
+            }
 
             // Show the form, but leave disabled until preloading is complete then show the main form)
             this.Enabled = false;
