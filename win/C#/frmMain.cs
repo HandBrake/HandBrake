@@ -12,6 +12,7 @@ namespace Handbrake
     using System.Drawing;
     using System.Globalization;
     using System.IO;
+    using System.Reflection;
     using System.Threading;
     using System.Windows.Forms;
     using Functions;
@@ -61,12 +62,14 @@ namespace Handbrake
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
-            lblStatus.Text = "Updating and Checking CLI Version Data ...";
+            lblStatus.Text = "Checking CLI Version Data ...";
             Application.DoEvents();
             Main.SetCliVersionData();
             Main.CheckForValidCliVersion();
+            Version v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            this.Text += " " + v.ToString(4);
 
-            // Show the form, but leave disabled until preloading is complete then show the main form
+            // Show the form, but leave disabled until preloading is complete then show the main form)
             this.Enabled = false;
             this.Show();
             Application.DoEvents(); // Forces frmMain to draw
@@ -987,6 +990,8 @@ namespace Handbrake
             this.Activate();
             this.WindowState = FormWindowState.Normal;
             notifyIcon.Visible = false;
+
+            this.StartScan(null, 2);
         }
 
         #endregion

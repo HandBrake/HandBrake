@@ -215,6 +215,14 @@ namespace Handbrake.Functions
                 }
             }
 
+            foreach (char character in Path.GetInvalidFileNameChars())
+            {
+                if (autoNamePath != null)
+                {
+                    autoNamePath = autoNamePath.Replace(character.ToString(), string.Empty);
+                }
+            }
+
             return autoNamePath;
         }
 
@@ -306,7 +314,7 @@ namespace Handbrake.Functions
                     MessageBox.Show(
                         "It appears you are trying to use a CLI executable that is too old for this version of the HandBrake GUI.\n" +
                         "Please update the HandBrakeCLI.exe to a newer build.\n\n" +
-                        "HandBrake Detected: " + Properties.Settings.Default.hb_version,
+                        "HandBrake build Detected: " + Properties.Settings.Default.hb_version,
                         "Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
