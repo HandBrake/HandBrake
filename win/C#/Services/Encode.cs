@@ -3,6 +3,8 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace Handbrake.Services
 {
     using System;
@@ -62,9 +64,13 @@ namespace Handbrake.Services
         public IntPtr ProcessHandle { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether HandBrakeCLI.exe is running
+        /// Gets or sets a value indicating whether IsEncoding.
         /// </summary>
-        public bool IsEncoding { get; set; }
+        public bool IsEncoding
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the Process ID
@@ -93,7 +99,7 @@ namespace Handbrake.Services
         /// </param>
         public void CreatePreviewSample(string query)
         {
-            this.Run(new Job {Query = query});
+            this.Run(new Job { Query = query });
         }
 
         /// <summary>
@@ -110,8 +116,6 @@ namespace Handbrake.Services
 
             if (this.EncodeEnded != null)
                 this.EncodeEnded(this, new EventArgs());
-
-            IsEncoding = false;
         }
 
         /// <summary>
@@ -131,8 +135,6 @@ namespace Handbrake.Services
 
             // HbProcess.StandardInput.AutoFlush = true;
             // HbProcess.StandardInput.WriteLine("^C");
-
-            IsEncoding = false;
         }
 
         /// <summary>
@@ -146,16 +148,20 @@ namespace Handbrake.Services
             this.job = encJob;
             try
             {
-                IsEncoding = true;
-
                 ResetLogReader();
+
+                if (this.EncodeStarted != null)
+                    this.EncodeStarted(this, new EventArgs());
+
+                IsEncoding = true;
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
                 string logPath =
                     Path.Combine(
                         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs",
                         "last_encode_log.txt");
-                string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, encJob.Query, logPath);
+                string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, encJob.Query,
+                                                  logPath);
                 var cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
 
                 if (Settings.Default.enocdeStatusInGui)
@@ -169,44 +175,48 @@ namespace Handbrake.Services
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
-                this.HbProcess = Process.Start(cliStart);
+                Process startProcess = Process.Start(cliStart);
+
                 this.ProcessID = Main.GetCliProcess(before);
 
                 // Fire the Encode Started Event
                 if (this.EncodeStarted != null)
                     this.EncodeStarted(this, new EventArgs());
 
-                if (this.HbProcess != null)
-                    this.ProcessHandle = this.HbProcess.MainWindowHandle; // Set the process Handle
+                if (startProcess != null)
+                    this.ProcessHandle = startProcess.MainWindowHandle; // Set the process Handle
 
                 // Start the Log Monitor
                 windowTimer = new Timer(new TimerCallback(ReadFile), null, 1000, 1000);
 
                 // Set the process Priority
-                Process hbCliProcess = null;
                 if (this.ProcessID != -1)
-                    hbCliProcess = Process.GetProcessById(this.ProcessID);
+                {
+                    HbProcess = Process.GetProcessById(this.ProcessID);
+                    HbProcess.EnableRaisingEvents = true;
+                    HbProcess.Exited += new EventHandler(HbProcess_Exited);
+                }
 
-                if (hbCliProcess != null)
+                if (HbProcess != null)
                     switch (Settings.Default.processPriority)
                     {
                         case "Realtime":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.RealTime;
+                            HbProcess.PriorityClass = ProcessPriorityClass.RealTime;
                             break;
                         case "High":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.High;
+                            HbProcess.PriorityClass = ProcessPriorityClass.High;
                             break;
                         case "Above Normal":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
+                            HbProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
                             break;
                         case "Normal":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.Normal;
+                            HbProcess.PriorityClass = ProcessPriorityClass.Normal;
                             break;
                         case "Low":
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.Idle;
+                            HbProcess.PriorityClass = ProcessPriorityClass.Idle;
                             break;
                         default:
-                            hbCliProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+                            HbProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
                             break;
                     }
             }
@@ -219,6 +229,20 @@ namespace Handbrake.Services
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// The HandBrakeCLI process has exited.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void HbProcess_Exited(object sender, EventArgs e)
+        {
+            IsEncoding = false;
         }
 
         /// <summary>
@@ -237,24 +261,25 @@ namespace Handbrake.Services
                     this.EncodeStarted(this, new EventArgs());
 
                 IsEncoding = true;
+
                 ResetLogReader();
 
                 // Setup the job
                 string handbrakeCLIPath = Path.Combine(Environment.CurrentDirectory, "HandBrakeCLI.exe");
                 HbProcess = new Process
-                                 {
-                                     StartInfo =
-                                         {
-                                             FileName = handbrakeCLIPath,
-                                             Arguments = query,
-                                             UseShellExecute = false,
-                                             RedirectStandardOutput = true,
-                                             RedirectStandardError = true,
-                                             RedirectStandardInput = true,
-                                             CreateNoWindow = false,
-                                             WindowStyle = ProcessWindowStyle.Minimized
-                                         }
-                                 };
+                                {
+                                    StartInfo =
+                                        {
+                                            FileName = handbrakeCLIPath,
+                                            Arguments = query,
+                                            UseShellExecute = false,
+                                            RedirectStandardOutput = true,
+                                            RedirectStandardError = true,
+                                            RedirectStandardInput = true,
+                                            CreateNoWindow = false,
+                                            WindowStyle = ProcessWindowStyle.Minimized
+                                        }
+                                };
 
                 // Setup event handlers for rediected data
                 HbProcess.ErrorDataReceived += new DataReceivedEventHandler(HbProcErrorDataReceived);
@@ -308,8 +333,6 @@ namespace Handbrake.Services
             if (this.EncodeEnded != null)
                 this.EncodeEnded(this, new EventArgs());
 
-            IsEncoding = false;
-
             if (!IsEncoding)
             {
                 windowTimer.Dispose();
@@ -356,7 +379,8 @@ namespace Handbrake.Services
         {
             try
             {
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
                 string logPath = Path.Combine(logDir, "last_encode_log.txt");
 
                 var reader = new StreamReader(File.Open(logPath, FileMode.Open, FileAccess.Read, FileShare.Read));
@@ -436,7 +460,8 @@ namespace Handbrake.Services
             {
                 // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
                 // we'll need to make a copy of it.
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
                 string logFile = Path.Combine(logDir, "last_encode_log.txt");
                 string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
 

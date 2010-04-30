@@ -364,8 +364,6 @@ namespace Handbrake.Services
                 HbProcess.Close();
                 HbProcess.Dispose();
 
-                IsEncoding = false;
-
                 // Growl
                 if (Properties.Settings.Default.growlEncode)
                     GrowlCommunicator.Notify("Encode Completed", 
