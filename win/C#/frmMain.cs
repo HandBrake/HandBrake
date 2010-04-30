@@ -1783,23 +1783,13 @@ namespace Handbrake
 
         private void KillScan()
         {
-            try
-            {
-                SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
-                EnableGUI();
-                ResetGUI();
+            SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
+            EnableGUI();
+            ResetGUI();
 
-                if (SourceScan.ScanProcess() != null)
-                    SourceScan.ScanProcess().Kill();
+            SourceScan.KillScan();
 
-                lbl_encode.Text = "Scan Cancelled!";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" +
-                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            lbl_encode.Text = "Scan Cancelled!";
         }
 
         private void ResetGUI()
@@ -1987,9 +1977,9 @@ namespace Handbrake
         /// <summary>
         /// Handle GUI shortcuts
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="keyData"></param>
-        /// <returns></returns>
+        /// <param name="msg">Message</param>
+        /// <param name="keyData">Keys</param>
+        /// <returns>Bool</returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.S))
@@ -2009,18 +1999,31 @@ namespace Handbrake
         /// <summary>
         /// If the queue is being processed, prompt the user to confirm application close.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">FormClosingEventArgs</param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             // If currently encoding, the queue isn't paused, and there are queue items to process, prompt to confirm close.
-            if ((encodeQueue.IsEncoding) && (!encodeQueue.PauseRequested) && (encodeQueue.Count > 0))
+            if (encodeQueue.IsEncoding)
             {
                 DialogResult result =
                     MessageBox.Show(
-                        "HandBrake has queue items to process. Closing HandBrake will not stop the current encoding, but will stop processing the queue.\n\nDo you want to close HandBrake?",
+                        "HandBrake has queue items to process. Closing HandBrake will stop the current encoding.\n\nDo you want to close HandBrake?",
                         "Close HandBrake?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
                 if (result == DialogResult.No)
                     e.Cancel = true;
+
+                // Try to safely close out if we can, or kill the cli if using in-gui status
+                if (Settings.Default.enocdeStatusInGui)
+                    encodeQueue.Stop();
+                else
+                    encodeQueue.SafelyClose();
+            }
+
+            if (SourceScan.IsScanning)
+            {
+                SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
+                SourceScan.KillScan();
             }
             base.OnFormClosing(e);
         }

@@ -128,6 +128,24 @@ namespace Handbrake.Services
         }
 
         /// <summary>
+        /// Kill the scan
+        /// </summary>
+        public void KillScan()
+        {
+            try
+            {
+                if (hbProc != null)
+                    hbProc.Kill();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" +
+                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
         /// Start a scan for a given source path and title
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
@@ -193,7 +211,7 @@ namespace Handbrake.Services
             {
                 Console.WriteLine("frmMain.cs - scanProcess() " + exc);
             }
-        }
+        }     
 
         /// <summary>
         /// Read the log file

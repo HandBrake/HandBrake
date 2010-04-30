@@ -104,7 +104,6 @@ namespace Handbrake
             else
                 radio_foreignAndSubs.Checked = true;
 
-
             // #############################
             // CLI
             // #############################

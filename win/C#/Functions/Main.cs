@@ -153,6 +153,15 @@ namespace Handbrake.Functions
                 // Get the Source Name 
                 string sourceName = mainWindow.SourceName;
 
+                // Remove any illeagal characters from the source name
+                foreach (char character in Path.GetInvalidFileNameChars())
+                {
+                    if (autoNamePath != null)
+                    {
+                        sourceName = sourceName.Replace(character.ToString(), string.Empty);
+                    }
+                }
+
                 if (Properties.Settings.Default.AutoNameRemoveUnderscore)
                     sourceName = sourceName.Replace("_", " ");
 
@@ -208,18 +217,12 @@ namespace Handbrake.Functions
                 else // Otherwise, use the path that is already there.
                 {
                     // Use the path and change the file extension to match the previous destination
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text), destinationFilename);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(mainWindow.text_destination.Text),
+                                                destinationFilename);
 
                     if (Path.HasExtension(mainWindow.text_destination.Text))
-                        autoNamePath = Path.ChangeExtension(autoNamePath, Path.GetExtension(mainWindow.text_destination.Text));
-                }
-            }
-
-            foreach (char character in Path.GetInvalidFileNameChars())
-            {
-                if (autoNamePath != null)
-                {
-                    autoNamePath = autoNamePath.Replace(character.ToString(), string.Empty);
+                        autoNamePath = Path.ChangeExtension(autoNamePath,
+                                                            Path.GetExtension(mainWindow.text_destination.Text));
                 }
             }
 
