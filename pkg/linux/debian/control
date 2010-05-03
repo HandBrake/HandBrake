@@ -19,7 +19,7 @@ Description: versatile DVD ripper and video transcoder - command line
 
 Package: handbrake-gtk
 Architecture: i386 amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}, libwebkit, libnotify
+Depends: ${shlibs:Depends}, ${misc:Depends}, libwebkit-1.0.2, libnotify1
 Conflicts: handbrake
 Description: versatile DVD ripper and video transcoder - GTK GUI
  HandBrake is a versatile, easy-to-use tool for converting DVDs and other videos
