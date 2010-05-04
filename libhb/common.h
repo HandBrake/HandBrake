@@ -125,6 +125,8 @@ struct hb_subtitle_config_s
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
     int  force;
     int  default_track; 
+    
+    /* SRT subtitle tracks only */
     char src_filename[128];
     char src_codeset[40];
     int64_t offset;
@@ -465,6 +467,35 @@ struct hb_chapter_s
     char     title[1024];
 };
 
+/*
+ * A subtitle track.
+ * 
+ * Required fields when a demuxer creates a subtitle track are:
+ * > id
+ *     - ID of this track
+ *     - must be unique for all tracks within a single job,
+ *       since it is used to look up the appropriate in-FIFO with GetFifoForId()
+ * > format
+ *     - format of the packets the subtitle decoder work-object sends to sub->fifo_raw
+ *     - for passthru subtitles, is also the format of the final packets sent to sub->fifo_out
+ *     - PICTURESUB for banded 8-bit YAUV pixels
+ *     - TEXTSUB for UTF-8 text marked up with <b>, <i>, or <u>
+ *     - read by the muxers, and by the subtitle burn-in logic in the hb_sync_video work-object
+ * > source
+ *     - used to create the appropriate subtitle decoder work-object in do_job()
+ * > config.dest
+ *     - whether to render the subtitle on the video track (RENDERSUB) or 
+ *       to pass it through its own subtitle track in the output container (PASSTHRUSUB)
+ *     - for legacy compatibility, all newly created VOBSUB tracks should default to RENDERSUB
+ *     - since only VOBSUBs are renderable (as of 2010-04-25), all other newly created
+ *       subtitle track types should default to PASSTHRUSUB
+ * > lang
+ *     - user-readable description of the subtitle track
+ *     - may correspond to the language of the track (see the 'iso639_2' field)
+ *     - may correspond to the type of track (see the 'type' field; ex: "Closed Captions")
+ * > iso639_2
+ *     - language code for the subtitle, or "und" if unknown
+ */
 struct hb_subtitle_s
 {
     int  id;
@@ -473,7 +504,7 @@ struct hb_subtitle_s
     hb_subtitle_config_t config;
 
     enum subtype { PICTURESUB, TEXTSUB } format;
-    enum subsource { VOBSUB, SRTSUB, CC608SUB, CC708SUB } source;
+    enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB } source;
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */
@@ -693,6 +724,8 @@ extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_encvobsub;
 extern hb_work_object_t hb_deccc608;
 extern hb_work_object_t hb_decsrtsub;
+extern hb_work_object_t hb_decutf8sub;
+extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encx264;

@@ -38,19 +38,25 @@ void hb_set_state( hb_handle_t *, hb_state_t * );
 /***********************************************************************
  * fifo.c
  **********************************************************************/
+/*
+ * Holds a packet of data that is moving through the transcoding process.
+ * 
+ * May have metadata associated with it via extra fields
+ * that are conditionally used depending on the type of packet.
+ */
 struct hb_buffer_s
 {
-    int           size;
-    int           alloc;
-    uint8_t *     data;
-    int           cur;
+    int           size;     // size of this packet
+    int           alloc;    // used internally by the packet allocator (hb_buffer_init)
+    uint8_t *     data;     // packet data
+    int           cur;      // used internally by packet lists (hb_list_t)
 
     int64_t       sequence;
 
-    int           id;
-    int64_t       start;
-    int64_t       stop;
-    int           new_chap;
+    int           id;           // ID of the track that the packet comes from
+    int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
+    int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
+    int           new_chap;     // Video packets: ???
 
 #define HB_FRAME_IDR    0x01
 #define HB_FRAME_I      0x02
@@ -66,13 +72,20 @@ struct hb_buffer_s
     /* Holds the output PTS from x264, for use by b-frame offsets in muxmp4.c */
     int64_t     renderOffset;
 
+    // VOB subtitle packets:
+    //   Location and size of the subpicture.
     int           x;
     int           y;
     int           width;
     int           height;
 
+    // Video packets (after processing by the hb_sync_video work-object):
+    //   A (copy of a) VOB subtitle packet that needs to be burned into this video packet by the hb_render work-object.
+    //   Subtitles that are simply passed thru are NOT attached to the associated video packets.
     hb_buffer_t * sub;
 
+    // Packets in a list:
+    //   the next packet in the list
     hb_buffer_t * next;
 };
 
@@ -285,6 +298,8 @@ enum
     WORK_DECCC608,
     WORK_DECVOBSUB,
     WORK_DECSRTSUB,
+    WORK_DECUTF8SUB,
+    WORK_DECTX3GSUB,
     WORK_ENCVOBSUB,
     WORK_RENDER,
     WORK_ENCAVCODEC,

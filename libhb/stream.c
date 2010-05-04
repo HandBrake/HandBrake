@@ -2831,6 +2831,56 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
     }
 }
 
+static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id )
+{
+    AVStream *st = stream->ffmpeg_ic->streams[id];
+    AVCodecContext *codec = st->codec;
+    
+    hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
+    
+    subtitle->id = id;
+    
+    switch ( codec->codec_id )
+    {
+        // TODO(davidfstr): get universal VOB sub input working
+        /*
+        case CODEC_ID_DVD_SUBTITLE:
+            subtitle->format = PICTURESUB;
+            subtitle->source = VOBSUB;
+            subtitle->config.dest = RENDERSUB;  // By default render (burn-in) the VOBSUB.
+            break;
+        */
+        case CODEC_ID_TEXT:
+            subtitle->format = TEXTSUB;
+            subtitle->source = UTF8SUB;
+            subtitle->config.dest = PASSTHRUSUB;
+            break;
+        case CODEC_ID_MOV_TEXT: // TX3G
+            subtitle->format = TEXTSUB;
+            subtitle->source = TX3GSUB;
+            subtitle->config.dest = PASSTHRUSUB;
+            break;
+        // TODO(davidfstr): implement SSA subtitle support
+        /*
+        case CODEC_ID_SSA:
+            subtitle->format = TEXTSUB;
+            subtitle->source = SSASUB;
+            subtitle->config.dest = PASSTHRUSUB;
+            break;
+        */
+        default:
+            hb_log("add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x", (int) codec->codec_id);
+            free(subtitle);
+            return;
+    }
+    
+    iso639_lang_t *language = lang_for_code2( st->language );
+    strcpy( subtitle->lang, language->eng_name );
+    strncpy( subtitle->iso639_2, language->iso639_2, 4 );
+    
+    hb_list_add(title->list_subtitle, subtitle);
+}
+
 static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
 {
     AVFormatContext *ic = stream->ffmpeg_ic;
@@ -2886,6 +2936,10 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream )
                   avcodec_find_decoder( ic->streams[i]->codec->codec_id ) )
         {
             add_ffmpeg_audio( title, stream, i );
+        }
+        else if ( ic->streams[i]->codec->codec_type == CODEC_TYPE_SUBTITLE )
+        {
+            add_ffmpeg_subtitle( title, stream, i );
         }
     }
 
@@ -3073,6 +3127,26 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     else if ( buf->renderOffset == -1 && buf->start >= 0 )
     {
         buf->renderOffset = buf->start;
+    }
+    
+    /* 
+     * Fill out buf->stop for subtitle packets
+     * 
+     * libavcodec's MKV demuxer stores the duration of UTF-8 (TEXT) subtitles
+     * in the 'convergence_duration' field for some reason.
+     * 
+     * Other subtitles' durations are stored in the 'duration' field.
+     */
+    enum CodecID ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
+    if ( ffmpeg_pkt_codec == CODEC_ID_TEXT ) {
+        int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->convergence_duration;
+        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
+        buf->stop = buf->start + buf_duration;
+    }
+    if ( ffmpeg_pkt_codec == CODEC_ID_MOV_TEXT ) {
+        int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt->duration;
+        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv );
+        buf->stop = buf->start + buf_duration;
     }
 
     /*
