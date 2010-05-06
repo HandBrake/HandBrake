@@ -210,6 +210,9 @@ BOOL                        fIsDragging;
     /* Chapters box */
     IBOutlet NSButton            * fCreateChapterMarkers;
     IBOutlet NSTableView         * fChapterTable;
+	IBOutlet NSButton            * fLoadChaptersButton;
+	IBOutlet NSButton            * fSaveChaptersButton;
+	IBOutlet NSTableColumn       * fChapterTableNameColumn;
 	ChapterTitles                * fChapterTitlesDelegate;
 	
     /* Bottom */
@@ -436,7 +439,7 @@ BOOL                        fIsDragging;
 - (IBAction)getDefaultPresets:(id)sender;
 
 -(void)sendToMetaX:(NSString *) filePath;
-    // Growl methods
+// Growl methods
 - (NSDictionary *) registrationDictionaryForGrowl;
 -(void)showGrowlDoneNotification:(NSString *) filePath;
 - (IBAction)showDebugOutputPanel:(id)sender;
@@ -449,8 +452,14 @@ BOOL                        fIsDragging;
 
 - (int) hbInstances;
 
+// Chapter files methods
+- (IBAction) browseForChapterFile: (id) sender;
+- (void)     browseForChapterFileDone: (NSOpenPanel *) sheet
+                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
-
+- (IBAction) browseForChapterFileSave: (id) sender;
+- (void)     browseForChapterFileSaveDone: (NSSavePanel *) sheet
+                 returnCode: (int) returnCode contextInfo: (void *) contextInfo;
 
 @end
 

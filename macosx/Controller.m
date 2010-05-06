@@ -514,7 +514,7 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fQueueStatus,fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
         fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
-        fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,fSrcFrameEndEncodingField};
+        fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton};
     
     for( unsigned i = 0;
         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -7995,6 +7995,154 @@ return YES;
     
 }
 
+#pragma mark -
+#pragma mark Chapter Files Import / Export
+
+- (IBAction) browseForChapterFile: (id) sender
+{
+	/* Open a panel to let the user choose the file */
+	NSOpenPanel * panel = [NSOpenPanel openPanel];
+	/* We get the current file name and path from the destination field here */
+	[panel beginSheetForDirectory: [NSString stringWithFormat:@"%@/",
+                                    [[NSUserDefaults standardUserDefaults] stringForKey:@"LastDestinationDirectory"]]
+                             file: NULL
+                            types: [NSArray arrayWithObjects:@"csv",nil]
+                   modalForWindow: fWindow modalDelegate: self
+                   didEndSelector: @selector( browseForChapterFileDone:returnCode:contextInfo: )
+                      contextInfo: NULL];
+}
+
+- (void) browseForChapterFileDone: (NSOpenPanel *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    NSArray *chaptersArray; /* temp array for chapters */
+	NSMutableArray *chaptersMutableArray; /* temp array for chapters */
+    NSString *chapterName; 	/* temp string from file */
+    int chapters, i;
+    
+    if( returnCode == NSOKButton )  /* if they click OK */
+    {	
+        chapterName = [[NSString alloc] initWithContentsOfFile:[sheet filename] encoding:NSUTF8StringEncoding error:NULL];
+        chaptersArray = [chapterName componentsSeparatedByString:@"\n"];
+        chaptersMutableArray= [chaptersArray mutableCopy];
+		chapters = [fChapterTitlesDelegate numberOfRowsInTableView:fChapterTable];
+        if ([chaptersMutableArray count] > 0)
+        { 
+        /* if last item is empty remove it */
+            if ([[chaptersMutableArray objectAtIndex:[chaptersArray count]-1] length] == 0)
+            {
+                [chaptersMutableArray removeLastObject];
+            }
+        }
+        /* if chapters in table is not equal to array count */
+        if ((unsigned int) chapters != [chaptersMutableArray count])
+        {
+            [sheet close];
+            [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", @"Unable to load chapter file")
+                             defaultButton:NSLocalizedString(@"OK", @"OK")
+                           alternateButton:NULL 
+                               otherButton:NULL
+                 informativeTextWithFormat:NSLocalizedString(@"%d chapters expected, %d chapters found in %@", @"%d chapters expected, %d chapters found in %@"), 
+              chapters, [chaptersMutableArray count], [[sheet filename] lastPathComponent]] runModal];
+            return;
+        }
+		/* otherwise, go ahead and populate table with array */
+		for (i=0; i<chapters; i++)
+        {
+         
+            if([[chaptersMutableArray objectAtIndex:i] length] > 5)
+            { 
+                /* avoid a segfault */
+                /* Get the Range.location of the first comma in the line and then put everything after that into chapterTitle */
+                NSRange firstCommaRange = [[chaptersMutableArray objectAtIndex:i] rangeOfString:@","];
+                NSString *chapterTitle = [[chaptersMutableArray objectAtIndex:i] substringFromIndex:firstCommaRange.location + 1];
+                /* Since we store our chapterTitle commas as "\," for the cli, we now need to remove the escaping "\" from the title */
+                chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"\\," withString:@","];
+                [fChapterTitlesDelegate tableView:fChapterTable 
+                                   setObjectValue:chapterTitle
+                                   forTableColumn:fChapterTableNameColumn
+                                              row:i];
+            }
+            else 
+            {
+                [sheet close];
+                [[NSAlert alertWithMessageText:NSLocalizedString(@"Unable to load chapter file", @"Unable to load chapter file")
+                                 defaultButton:NSLocalizedString(@"OK", @"OK")
+                               alternateButton:NULL 
+                                   otherButton:NULL
+                     informativeTextWithFormat:NSLocalizedString(@"%@ was not formatted as expected.", @"%@ was not formatted as expected."), [[sheet filename] lastPathComponent]] runModal];   
+                [fChapterTable reloadData];
+                return;
+            }
+        }
+        [fChapterTable reloadData];
+    }
+}
+
+- (IBAction) browseForChapterFileSave: (id) sender
+{
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    /* Open a panel to let the user save to a file */
+    [panel setAllowedFileTypes:[NSArray arrayWithObjects:@"csv",nil]];
+    [panel beginSheetForDirectory: [[fDstFile2Field stringValue] stringByDeletingLastPathComponent] 
+                             file: [[[[fDstFile2Field stringValue] lastPathComponent] stringByDeletingPathExtension] 
+                                     stringByAppendingString:@"-chapters.csv"]
+                   modalForWindow: fWindow 
+                    modalDelegate: self
+                   didEndSelector: @selector( browseForChapterFileSaveDone:returnCode:contextInfo: )
+                      contextInfo: NULL];
+}
+
+- (void) browseForChapterFileSaveDone: (NSSavePanel *) sheet
+    returnCode: (int) returnCode contextInfo: (void *) contextInfo
+{
+    NSString *chapterName;      /* pointer for string for later file-writing */
+    NSString *chapterTitle;
+    NSError *saveError = [[NSError alloc] init];
+    int chapters, i;    /* ints for the number of chapters in the table and the loop */
+    
+    if( returnCode == NSOKButton )   /* if they clicked OK */
+    {	
+        chapters = [fChapterTitlesDelegate numberOfRowsInTableView:fChapterTable];
+        chapterName = [NSString string];
+        for (i=0; i<chapters; i++)
+        {
+            /* put each chapter title from the table into the array */
+            if (i<9)
+            { /* if i is from 0 to 8 (chapters 1 to 9) add two leading zeros */
+                chapterName = [chapterName stringByAppendingFormat:@"00%d,",i+1];
+            }
+            else if (i<99)
+            { /* if i is from 9 to 98 (chapters 10 to 99) add one leading zero */
+                chapterName = [chapterName stringByAppendingFormat:@"0%d,",i+1];
+            }
+            else if (i<999)
+            { /* in case i is from 99 to 998 (chapters 100 to 999) no leading zeros */
+                chapterName = [chapterName stringByAppendingFormat:@"%d,",i+1];
+            }
+            
+            chapterTitle = [fChapterTitlesDelegate tableView:fChapterTable objectValueForTableColumn:fChapterTableNameColumn row:i];
+            /* escape any commas in the chapter name with "\," */
+            chapterTitle = [chapterTitle stringByReplacingOccurrencesOfString:@"," withString:@"\\,"];
+            chapterName = [chapterName stringByAppendingString:chapterTitle];
+            if (i+1 != chapters)
+            { /* if not the last chapter */
+                chapterName = [chapterName stringByAppendingString:@ "\n"];
+            }
+
+            
+        }
+        /* try to write it to where the user wanted */
+        if (![chapterName writeToFile:[sheet filename] 
+                           atomically:NO 
+                             encoding:NSUTF8StringEncoding 
+                                error:&saveError])
+        {
+            [sheet close];
+            [[NSAlert alertWithError:saveError] runModal];
+        }
+    }
+}
 
 @end
 
