@@ -1605,6 +1605,19 @@ namespace Handbrake
             }
         }
 
+        private void btn_export_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Csv File|*.csv";
+            saveFileDialog.DefaultExt = "csv";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = saveFileDialog.FileName;
+
+                Main.SaveChapterMarkersToCsv(this, filename);
+            }
+        }
+
         private void mnu_resetChapters_Click(object sender, EventArgs e)
         {
             data_chpt.Rows.Clear();
@@ -2074,6 +2087,7 @@ namespace Handbrake
         }
 
         #endregion
+
 
         // This is the END of the road ****************************************
     }

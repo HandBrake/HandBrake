@@ -136,6 +136,38 @@ namespace Handbrake.Functions
         }
 
         /// <summary>
+        /// Create a CSV file with the data from the Main Window Chapters tab
+        /// </summary>
+        /// <param name="mainWindow">Main Window</param>
+        /// <param name="filePathName">Path to save the csv file</param>
+        /// <returns>True if successful </returns>
+        public static bool SaveChapterMarkersToCsv(frmMain mainWindow, string filePathName)
+        {
+            try
+            {
+                string csv = string.Empty;
+
+                foreach (DataGridViewRow row in mainWindow.data_chpt.Rows)
+                {
+                    csv += row.Cells[0].Value.ToString();
+                    csv += ",";
+                    csv += row.Cells[1].Value.ToString().Replace(",", "\\,");
+                    csv += Environment.NewLine;
+                }
+                StreamWriter file = new StreamWriter(filePathName);
+                file.Write(csv);
+                file.Close();
+                file.Dispose();
+                return true;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Function which generates the filename and path automatically based on 
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>

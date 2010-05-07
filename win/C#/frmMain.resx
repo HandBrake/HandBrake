@@ -169,6 +169,16 @@ Note: Currently, if you wish to use a , in your chapter name, you must escape it
   <metadata name="AudioMenuRowHeightHack.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>392, 54</value>
   </metadata>
+  <data name="btn_export.ToolTip" xml:space="preserve">
+    <value>Import a comma separated file containing the chapter information.
+The CSV should be formatted as follows:
+
+1,Chapter 1 Name
+2,Chapter 2 Name
+3,Chapter 3 Name
+
+Note: Currently, if you wish to use a , in your chapter name, you must escape it with a \</value>
+  </data>
   <metadata name="presets_menu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>265, 54</value>
   </metadata>
