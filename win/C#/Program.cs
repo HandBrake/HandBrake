@@ -8,6 +8,9 @@ namespace Handbrake
     using System;
     using System.IO;
     using System.Windows.Forms;
+
+    using Handbrake.Properties;
+
     using Presets;
 
     /// <summary>
@@ -21,6 +24,12 @@ namespace Handbrake
         [STAThread]
         public static void Main()
         {
+            if (Settings.Default.UpdateRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpdateRequired = false;
+            }
+
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
 
             const string failedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";

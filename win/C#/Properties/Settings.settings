@@ -131,5 +131,8 @@
     <Setting Name="hb_min_cli" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3264</Value>
     </Setting>
+    <Setting Name="UpdateRequired" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
