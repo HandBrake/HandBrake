@@ -77,10 +77,7 @@ namespace Handbrake
             this.mnu_exit = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_open3 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_encode = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_encodeLog = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
             this.PresetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_presetReset = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_delete_preset = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,11 +86,9 @@ namespace Handbrake
             this.mnu_importMacPreset = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_SelectDefault = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnu_user_guide = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.mnu_UpdateCheck = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             this.frmMainMenu = new System.Windows.Forms.MenuStrip();
             this.label5 = new System.Windows.Forms.Label();
             this.Label47 = new System.Windows.Forms.Label();
@@ -140,17 +135,8 @@ namespace Handbrake
             this.pmnu_saveChanges = new System.Windows.Forms.ToolStripMenuItem();
             this.pmnu_delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btn_source = new System.Windows.Forms.ToolStripDropDownButton();
-            this.btn_file_source = new System.Windows.Forms.ToolStripMenuItem();
-            this.btn_dvd_source = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
-            this.btn_start = new System.Windows.Forms.ToolStripButton();
-            this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
-            this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tb_preview = new System.Windows.Forms.ToolStripButton();
-            this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
@@ -173,6 +159,20 @@ namespace Handbrake
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
+            this.btn_source = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btn_file_source = new System.Windows.Forms.ToolStripMenuItem();
+            this.btn_dvd_source = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btn_start = new System.Windows.Forms.ToolStripButton();
+            this.btn_add2Queue = new System.Windows.Forms.ToolStripButton();
+            this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
+            this.tb_preview = new System.Windows.Forms.ToolStripButton();
+            this.btn_ActivityWindow = new System.Windows.Forms.ToolStripButton();
+            this.mnu_encode = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_encodeLog = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_options = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_user_guide = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_about = new System.Windows.Forms.ToolStripMenuItem();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -207,12 +207,13 @@ namespace Handbrake
             this.btn_restore});
             notifyIconMenu.Name = "notifyIconMenu";
             notifyIconMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            notifyIconMenu.Size = new System.Drawing.Size(114, 26);
+            notifyIconMenu.Size = new System.Drawing.Size(153, 48);
             // 
             // btn_restore
             // 
+            this.btn_restore.Image = global::Handbrake.Properties.Resources.Restore;
             this.btn_restore.Name = "btn_restore";
-            this.btn_restore.Size = new System.Drawing.Size(113, 22);
+            this.btn_restore.Size = new System.Drawing.Size(152, 22);
             this.btn_restore.Text = "Restore";
             this.btn_restore.Click += new System.EventHandler(this.btn_restore_Click);
             // 
@@ -618,36 +619,10 @@ namespace Handbrake
             this.ToolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.ToolsToolStripMenuItem.Text = "&Tools";
             // 
-            // mnu_encode
-            // 
-            this.mnu_encode.Image = global::Handbrake.Properties.Resources.Queue_Small;
-            this.mnu_encode.Name = "mnu_encode";
-            this.mnu_encode.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
-            this.mnu_encode.Size = new System.Drawing.Size(201, 22);
-            this.mnu_encode.Text = "Show Queue";
-            this.mnu_encode.Click += new System.EventHandler(this.mnu_encode_Click);
-            // 
-            // mnu_encodeLog
-            // 
-            this.mnu_encodeLog.Image = global::Handbrake.Properties.Resources.ActivityWindow_small;
-            this.mnu_encodeLog.Name = "mnu_encodeLog";
-            this.mnu_encodeLog.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.mnu_encodeLog.Size = new System.Drawing.Size(201, 22);
-            this.mnu_encodeLog.Text = "Activity Window";
-            this.mnu_encodeLog.Click += new System.EventHandler(this.mnu_encodeLog_Click);
-            // 
             // ToolStripSeparator5
             // 
             this.ToolStripSeparator5.Name = "ToolStripSeparator5";
             this.ToolStripSeparator5.Size = new System.Drawing.Size(198, 6);
-            // 
-            // mnu_options
-            // 
-            this.mnu_options.Image = global::Handbrake.Properties.Resources.Pref_Small;
-            this.mnu_options.Name = "mnu_options";
-            this.mnu_options.Size = new System.Drawing.Size(201, 22);
-            this.mnu_options.Text = "Options";
-            this.mnu_options.Click += new System.EventHandler(this.mnu_options_Click);
             // 
             // PresetsToolStripMenuItem
             // 
@@ -716,14 +691,6 @@ namespace Handbrake
             this.HelpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.HelpToolStripMenuItem.Text = "&Help";
             // 
-            // mnu_user_guide
-            // 
-            this.mnu_user_guide.Image = global::Handbrake.Properties.Resources.Help16;
-            this.mnu_user_guide.Name = "mnu_user_guide";
-            this.mnu_user_guide.Size = new System.Drawing.Size(192, 22);
-            this.mnu_user_guide.Text = "HandBrake User Guide";
-            this.mnu_user_guide.Click += new System.EventHandler(this.mnu_user_guide_Click);
-            // 
             // ToolStripSeparator3
             // 
             this.ToolStripSeparator3.Name = "ToolStripSeparator3";
@@ -740,14 +707,6 @@ namespace Handbrake
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(189, 6);
-            // 
-            // mnu_about
-            // 
-            this.mnu_about.Image = global::Handbrake.Properties.Resources.hb16;
-            this.mnu_about.Name = "mnu_about";
-            this.mnu_about.Size = new System.Drawing.Size(192, 22);
-            this.mnu_about.Text = "About...";
-            this.mnu_about.Click += new System.EventHandler(this.mnu_about_Click);
             // 
             // frmMainMenu
             // 
@@ -1280,110 +1239,15 @@ namespace Handbrake
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // btn_source
-            // 
-            this.btn_source.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btn_file_source,
-            this.btn_dvd_source,
-            this.toolStripSeparator1});
-            this.btn_source.Image = global::Handbrake.Properties.Resources.Movies;
-            this.btn_source.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_source.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_source.Name = "btn_source";
-            this.btn_source.Size = new System.Drawing.Size(88, 36);
-            this.btn_source.Text = "Source";
-            this.btn_source.ToolTipText = "Open a new source file or folder.";
-            this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
-            // 
-            // btn_file_source
-            // 
-            this.btn_file_source.Image = global::Handbrake.Properties.Resources.Movies_Small;
-            this.btn_file_source.Name = "btn_file_source";
-            this.btn_file_source.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.btn_file_source.Size = new System.Drawing.Size(182, 22);
-            this.btn_file_source.Text = "Video File";
-            this.btn_file_source.Click += new System.EventHandler(this.btn_file_source_Click);
-            // 
-            // btn_dvd_source
-            // 
-            this.btn_dvd_source.Image = global::Handbrake.Properties.Resources.folder;
-            this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_dvd_source.Name = "btn_dvd_source";
-            this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.O)));
-            this.btn_dvd_source.Size = new System.Drawing.Size(182, 22);
-            this.btn_dvd_source.Text = "Folder";
-            this.btn_dvd_source.Click += new System.EventHandler(this.btn_dvd_source_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
-            // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
             this.toolStripSeparator10.Size = new System.Drawing.Size(6, 39);
             // 
-            // btn_start
-            // 
-            this.btn_start.Image = global::Handbrake.Properties.Resources.Play;
-            this.btn_start.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_start.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(67, 36);
-            this.btn_start.Text = "Start";
-            this.btn_start.ToolTipText = "Start the encoding process";
-            this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
-            // 
-            // btn_add2Queue
-            // 
-            this.btn_add2Queue.Image = global::Handbrake.Properties.Resources.AddToQueue;
-            this.btn_add2Queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_add2Queue.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_add2Queue.Name = "btn_add2Queue";
-            this.btn_add2Queue.Size = new System.Drawing.Size(117, 36);
-            this.btn_add2Queue.Text = "Add to Queue";
-            this.btn_add2Queue.ToolTipText = "Add a new item to the Queue";
-            this.btn_add2Queue.Click += new System.EventHandler(this.btn_add2Queue_Click);
-            // 
-            // btn_showQueue
-            // 
-            this.btn_showQueue.Image = global::Handbrake.Properties.Resources.Queue;
-            this.btn_showQueue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_showQueue.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_showQueue.Name = "btn_showQueue";
-            this.btn_showQueue.Size = new System.Drawing.Size(110, 36);
-            this.btn_showQueue.Tag = "";
-            this.btn_showQueue.Text = "Show Queue";
-            this.btn_showQueue.Click += new System.EventHandler(this.btn_showQueue_Click);
-            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 39);
-            // 
-            // tb_preview
-            // 
-            this.tb_preview.Image = global::Handbrake.Properties.Resources.window;
-            this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tb_preview.Name = "tb_preview";
-            this.tb_preview.Size = new System.Drawing.Size(84, 36);
-            this.tb_preview.Text = "Preview";
-            this.tb_preview.Click += new System.EventHandler(this.tb_preview_Click);
-            // 
-            // btn_ActivityWindow
-            // 
-            this.btn_ActivityWindow.Image = global::Handbrake.Properties.Resources.ActivityWindow;
-            this.btn_ActivityWindow.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btn_ActivityWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btn_ActivityWindow.Name = "btn_ActivityWindow";
-            this.btn_ActivityWindow.Size = new System.Drawing.Size(130, 36);
-            this.btn_ActivityWindow.Text = "Activity Window";
-            this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
-                "ently running encode.";
-            this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
             // 
             // notifyIcon
             // 
@@ -1638,6 +1502,143 @@ namespace Handbrake
             // File_ChapterImport
             // 
             this.File_ChapterImport.Filter = "CSV Files|*.csv";
+            // 
+            // btn_source
+            // 
+            this.btn_source.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btn_file_source,
+            this.btn_dvd_source,
+            this.toolStripSeparator1});
+            this.btn_source.Image = global::Handbrake.Properties.Resources.Movies;
+            this.btn_source.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_source.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_source.Name = "btn_source";
+            this.btn_source.Size = new System.Drawing.Size(88, 36);
+            this.btn_source.Text = "Source";
+            this.btn_source.ToolTipText = "Open a new source file or folder.";
+            this.btn_source.Click += new System.EventHandler(this.btn_source_Click);
+            // 
+            // btn_file_source
+            // 
+            this.btn_file_source.Image = global::Handbrake.Properties.Resources.Movies_Small;
+            this.btn_file_source.Name = "btn_file_source";
+            this.btn_file_source.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.btn_file_source.Size = new System.Drawing.Size(182, 22);
+            this.btn_file_source.Text = "Video File";
+            this.btn_file_source.Click += new System.EventHandler(this.btn_file_source_Click);
+            // 
+            // btn_dvd_source
+            // 
+            this.btn_dvd_source.Image = global::Handbrake.Properties.Resources.folder;
+            this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_dvd_source.Name = "btn_dvd_source";
+            this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.O)));
+            this.btn_dvd_source.Size = new System.Drawing.Size(182, 22);
+            this.btn_dvd_source.Text = "Folder";
+            this.btn_dvd_source.Click += new System.EventHandler(this.btn_dvd_source_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(179, 6);
+            // 
+            // btn_start
+            // 
+            this.btn_start.Image = global::Handbrake.Properties.Resources.Play;
+            this.btn_start.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_start.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_start.Name = "btn_start";
+            this.btn_start.Size = new System.Drawing.Size(67, 36);
+            this.btn_start.Text = "Start";
+            this.btn_start.ToolTipText = "Start the encoding process";
+            this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
+            // 
+            // btn_add2Queue
+            // 
+            this.btn_add2Queue.Image = global::Handbrake.Properties.Resources.AddToQueue;
+            this.btn_add2Queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_add2Queue.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_add2Queue.Name = "btn_add2Queue";
+            this.btn_add2Queue.Size = new System.Drawing.Size(117, 36);
+            this.btn_add2Queue.Text = "Add to Queue";
+            this.btn_add2Queue.ToolTipText = "Add a new item to the Queue";
+            this.btn_add2Queue.Click += new System.EventHandler(this.btn_add2Queue_Click);
+            // 
+            // btn_showQueue
+            // 
+            this.btn_showQueue.Image = global::Handbrake.Properties.Resources.Queue;
+            this.btn_showQueue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_showQueue.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_showQueue.Name = "btn_showQueue";
+            this.btn_showQueue.Size = new System.Drawing.Size(110, 36);
+            this.btn_showQueue.Tag = "";
+            this.btn_showQueue.Text = "Show Queue";
+            this.btn_showQueue.Click += new System.EventHandler(this.btn_showQueue_Click);
+            // 
+            // tb_preview
+            // 
+            this.tb_preview.Image = global::Handbrake.Properties.Resources.window;
+            this.tb_preview.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.tb_preview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tb_preview.Name = "tb_preview";
+            this.tb_preview.Size = new System.Drawing.Size(84, 36);
+            this.tb_preview.Text = "Preview";
+            this.tb_preview.Click += new System.EventHandler(this.tb_preview_Click);
+            // 
+            // btn_ActivityWindow
+            // 
+            this.btn_ActivityWindow.Image = global::Handbrake.Properties.Resources.ActivityWindow;
+            this.btn_ActivityWindow.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btn_ActivityWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btn_ActivityWindow.Name = "btn_ActivityWindow";
+            this.btn_ActivityWindow.Size = new System.Drawing.Size(130, 36);
+            this.btn_ActivityWindow.Text = "Activity Window";
+            this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
+                "ently running encode.";
+            this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
+            // 
+            // mnu_encode
+            // 
+            this.mnu_encode.Image = global::Handbrake.Properties.Resources.Queue_Small;
+            this.mnu_encode.Name = "mnu_encode";
+            this.mnu_encode.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Q)));
+            this.mnu_encode.Size = new System.Drawing.Size(201, 22);
+            this.mnu_encode.Text = "Show Queue";
+            this.mnu_encode.Click += new System.EventHandler(this.mnu_encode_Click);
+            // 
+            // mnu_encodeLog
+            // 
+            this.mnu_encodeLog.Image = global::Handbrake.Properties.Resources.ActivityWindow_small;
+            this.mnu_encodeLog.Name = "mnu_encodeLog";
+            this.mnu_encodeLog.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.mnu_encodeLog.Size = new System.Drawing.Size(201, 22);
+            this.mnu_encodeLog.Text = "Activity Window";
+            this.mnu_encodeLog.Click += new System.EventHandler(this.mnu_encodeLog_Click);
+            // 
+            // mnu_options
+            // 
+            this.mnu_options.Image = global::Handbrake.Properties.Resources.Pref_Small;
+            this.mnu_options.Name = "mnu_options";
+            this.mnu_options.Size = new System.Drawing.Size(201, 22);
+            this.mnu_options.Text = "Options";
+            this.mnu_options.Click += new System.EventHandler(this.mnu_options_Click);
+            // 
+            // mnu_user_guide
+            // 
+            this.mnu_user_guide.Image = global::Handbrake.Properties.Resources.Help16;
+            this.mnu_user_guide.Name = "mnu_user_guide";
+            this.mnu_user_guide.Size = new System.Drawing.Size(192, 22);
+            this.mnu_user_guide.Text = "HandBrake User Guide";
+            this.mnu_user_guide.Click += new System.EventHandler(this.mnu_user_guide_Click);
+            // 
+            // mnu_about
+            // 
+            this.mnu_about.Image = global::Handbrake.Properties.Resources.hb16;
+            this.mnu_about.Name = "mnu_about";
+            this.mnu_about.Size = new System.Drawing.Size(192, 22);
+            this.mnu_about.Text = "About...";
+            this.mnu_about.Click += new System.EventHandler(this.mnu_about_Click);
             // 
             // frmMain
             // 
