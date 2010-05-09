@@ -407,7 +407,7 @@ namespace Handbrake
         /// </param>
         private void MnuEditClick(object sender, EventArgs e)
         {
-            if (list_queue.SelectedIndices != null)
+            if (list_queue.SelectedIndices != null && list_queue.SelectedIndices.Count != 0)
             {
                 lock (queue)
                 {

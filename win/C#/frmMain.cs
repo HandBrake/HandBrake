@@ -994,8 +994,6 @@ namespace Handbrake
             this.Activate();
             this.WindowState = FormWindowState.Normal;
             notifyIcon.Visible = false;
-
-            this.StartScan(null, 2);
         }
 
         #endregion

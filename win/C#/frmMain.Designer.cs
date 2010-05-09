@@ -55,6 +55,8 @@ namespace Handbrake
             this.check_optimiseMP4 = new System.Windows.Forms.CheckBox();
             this.check_iPodAtom = new System.Windows.Forms.CheckBox();
             this.data_chpt = new System.Windows.Forms.DataGridView();
+            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ChaptersMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnu_resetChapters = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_addPreset = new System.Windows.Forms.Button();
@@ -171,8 +173,6 @@ namespace Handbrake
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
-            this.number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -394,6 +394,24 @@ namespace Handbrake
             this.data_chpt.Size = new System.Drawing.Size(684, 236);
             this.data_chpt.TabIndex = 3;
             this.ToolTip.SetToolTip(this.data_chpt, resources.GetString("data_chpt.ToolTip"));
+            // 
+            // number
+            // 
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = null;
+            this.number.DefaultCellStyle = dataGridViewCellStyle1;
+            this.number.Frozen = true;
+            this.number.HeaderText = "Chapter Number";
+            this.number.MaxInputLength = 3;
+            this.number.Name = "number";
+            this.number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.number.Width = 165;
+            // 
+            // name
+            // 
+            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.name.HeaderText = "Chapter Name";
+            this.name.Name = "name";
             // 
             // ChaptersMenu
             // 
@@ -1288,7 +1306,7 @@ namespace Handbrake
             // 
             // btn_dvd_source
             // 
-            this.btn_dvd_source.Image = ((System.Drawing.Image)(resources.GetObject("btn_dvd_source.Image")));
+            this.btn_dvd_source.Image = global::Handbrake.Properties.Resources.folder;
             this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_dvd_source.Name = "btn_dvd_source";
             this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
@@ -1620,24 +1638,6 @@ namespace Handbrake
             // File_ChapterImport
             // 
             this.File_ChapterImport.Filter = "CSV Files|*.csv";
-            // 
-            // number
-            // 
-            dataGridViewCellStyle1.Format = "N0";
-            dataGridViewCellStyle1.NullValue = null;
-            this.number.DefaultCellStyle = dataGridViewCellStyle1;
-            this.number.Frozen = true;
-            this.number.HeaderText = "Chapter Number";
-            this.number.MaxInputLength = 3;
-            this.number.Name = "number";
-            this.number.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.number.Width = 165;
-            // 
-            // name
-            // 
-            this.name.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.name.HeaderText = "Chapter Name";
-            this.name.Name = "name";
             // 
             // frmMain
             // 
