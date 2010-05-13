@@ -101,8 +101,6 @@ static int deca52Init( hb_work_object_t * w, hb_job_t * job )
     work.c has already done some of this deduction for us in do_job() */
 
     pv->flags_out = HB_AMIXDOWN_GET_A52_FORMAT(audio->config.out.mixdown);
-    if ( audio->config.out.codec == HB_ACODEC_LAME )
-        pv->flags_out |= A52_ADJUST_LEVEL;
 
     /* pass the number of channels used into the private work data */
     /* will only be actually used if we're not doing AC3 passthru */

@@ -1393,7 +1393,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	gboolean allow_dolby = TRUE;
 	gboolean allow_dpl2 = TRUE;
 	gboolean allow_6ch = TRUE;
-	allow_mono = acodec & ~HB_ACODEC_LAME;
+	allow_mono = TRUE;
 	allow_6ch = acodec & ~HB_ACODEC_LAME;
 	if (audio)
 	{
@@ -1451,7 +1451,7 @@ ghb_get_best_mix(gint titleindex, gint track, gint acodec, gint mix)
 	audio = get_hb_audio(titleindex, track);
 	if (audio)
 	{
-		allow_mono = (acodec & ~HB_ACODEC_LAME);
+		allow_mono = TRUE;
 		gint layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);
@@ -4097,7 +4097,7 @@ ghb_validate_audio(signal_user_data_t *ud)
 		gboolean allow_dolby = TRUE;
 		gboolean allow_dpl2 = TRUE;
 		gboolean allow_6ch = TRUE;
-		allow_mono = (codec & ~HB_ACODEC_LAME);
+		allow_mono = TRUE;
 		gint layout = taudio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
 		allow_stereo =
 			((layout == HB_INPUT_CH_LAYOUT_MONO && !allow_mono) || layout >= HB_INPUT_CH_LAYOUT_STEREO);

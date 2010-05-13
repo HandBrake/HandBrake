@@ -568,16 +568,13 @@ static void do_job( hb_job_t * job, int cpu_count )
             // So if the encoder is lame we need the output to be stereo (or multichannel
             // matrixed into stereo like dpl). If the decoder is not AC3 or DCA the
             // encoder has to handle the input format since we can't do a mixdown.
-#define STEREO_ONLY(a) ( a->config.out.codec & HB_ACODEC_LAME )
-
             switch (audio->config.in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK)
             {
                 // stereo input or something not handled below
                 default:
                 case HB_INPUT_CH_LAYOUT_STEREO:
                     // mono gets mixed up to stereo & more than stereo gets mixed down
-                    if ( STEREO_ONLY( audio ) ||
-                         audio->config.out.mixdown > HB_AMIXDOWN_STEREO)
+                    if ( audio->config.out.mixdown > HB_AMIXDOWN_STEREO )
                     {
                         audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
                     }
@@ -585,23 +582,15 @@ static void do_job( hb_job_t * job, int cpu_count )
 
                 // mono input
                 case HB_INPUT_CH_LAYOUT_MONO:
-                    if ( STEREO_ONLY( audio ) )
-                    {
-                        audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
-                    }
-                    else
-                    {
-                        // everything else passes through
-                        audio->config.out.mixdown = HB_AMIXDOWN_MONO;
-                    }
+                    // everything else passes through
+                    audio->config.out.mixdown = HB_AMIXDOWN_MONO;
                     break;
 
                 // dolby (DPL1 aka Dolby Surround = 4.0 matrix-encoded) input
                 // the A52 flags don't allow for a way to distinguish between DPL1 and
                 // DPL2 on a DVD so we always assume a DPL1 source for A52_DOLBY.
                 case HB_INPUT_CH_LAYOUT_DOLBY:
-                    if ( STEREO_ONLY( audio ) ||
-                         audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
+                    if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
                     {
                         audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                     }
@@ -610,8 +599,7 @@ static void do_job( hb_job_t * job, int cpu_count )
                 // 4 channel discrete
                 case HB_INPUT_CH_LAYOUT_2F2R:
                 case HB_INPUT_CH_LAYOUT_3F1R:
-                    if ( STEREO_ONLY( audio ) ||
-                         audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
+                    if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBY )
                     {
                         audio->config.out.mixdown = HB_AMIXDOWN_DOLBY;
                     }
@@ -619,18 +607,7 @@ static void do_job( hb_job_t * job, int cpu_count )
 
                 // 5 or 6 channel discrete
                 case HB_INPUT_CH_LAYOUT_3F2R:
-                    if ( STEREO_ONLY( audio ) )
-                    {
-                        if ( audio->config.out.mixdown < HB_AMIXDOWN_STEREO )
-                        {
-                            audio->config.out.mixdown = HB_AMIXDOWN_STEREO;
-                        }
-                        else if ( audio->config.out.mixdown > HB_AMIXDOWN_DOLBYPLII )
-                        {
-                            audio->config.out.mixdown = HB_AMIXDOWN_DOLBYPLII;
-                        }
-                    }
-                    else if ( ! ( audio->config.in.channel_layout &
+                    if ( ! ( audio->config.in.channel_layout &
                                     HB_INPUT_CH_LAYOUT_HAS_LFE ) )
                     {
                         // we don't do 5 channel discrete so mixdown to DPLII

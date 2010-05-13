@@ -210,8 +210,6 @@ static int decavcodecInit( hb_work_object_t * w, hb_job_t * job )
         pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                       w->audio->config.out.mixdown);
         hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_qt_chan_map );
-        if ( w->audio->config.out.codec == HB_ACODEC_LAME )
-            hb_downmix_adjust_level( pv->downmix );
     }
 
     return 0;
@@ -1101,8 +1099,6 @@ static int decavcodecviInit( hb_work_object_t * w, hb_job_t * job )
         pv->downmix = hb_downmix_init(w->audio->config.in.channel_layout, 
                                       w->audio->config.out.mixdown);
         hb_downmix_set_chan_map( pv->downmix, &hb_smpte_chan_map, &hb_qt_chan_map );
-        if ( w->audio->config.out.codec == HB_ACODEC_LAME )
-            hb_downmix_adjust_level( pv->downmix );
     }
 
     return 0;
