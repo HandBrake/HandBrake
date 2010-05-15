@@ -2247,7 +2247,7 @@ static void ShowHelp()
     "    -x, --x264opts <string> Specify advanced x264 options in the\n"
     "                            same style as mencoder:\n"
     "                            option1=value1:option2=value2\n"
-    "    -q, --quality <float>   Set video quality (0.0..1.0)\n"
+    "    -q, --quality <number>  Set video quality\n"
     "    -S, --size <MB>         Set target size\n"
     "    -b, --vb <kb/s>         Set video bitrate (default: 1000)\n"
     "    -2, --two-pass          Use two-pass mode\n"
