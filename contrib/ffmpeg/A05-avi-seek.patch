@@ -19,22 +19,32 @@ Index: libavformat/avidec.c
      for(i = 0; i < s->nb_streams; i++) {
          AVStream *st2 = s->streams[i];
          AVIStream *ast2 = st2->priv_data;
-@@ -1129,10 +1130,12 @@
+@@ -1129,10 +1130,20 @@
              index=0;
  
          if(!avi->non_interleaved){
-+            while(index+1 < st2->nb_index_entries && st2->index_entries[index].pos < pos)
-+                index++;
-             while(index>0 && st2->index_entries[index].pos > pos)
-                 index--;
+-            while(index>0 && st2->index_entries[index].pos > pos)
+-                index--;
 -            while(index+1 < st2->nb_index_entries && st2->index_entries[index].pos < pos)
 -                index++;
-+            if (st2->index_entries[index].pos < min_pos)
-+                min_pos = st2->index_entries[index].pos;
++            if (flags & AVSEEK_FLAG_BACKWARD) {
++                while(index+1 < st2->nb_index_entries && st2->index_entries[index].pos < pos)
++                    index++;
++                while(index>0 && st2->index_entries[index].pos > pos)
++                    index--;
++                if (st2->index_entries[index].pos < min_pos)
++                    min_pos = st2->index_entries[index].pos;
++            }
++            else {
++                while(index>0 && st2->index_entries[index].pos > pos)
++                    index--;
++                while(index+1 < st2->nb_index_entries && st2->index_entries[index].pos < pos)
++                    index++;
++            }
          }
  
  //        av_log(s, AV_LOG_DEBUG, "%"PRId64" %d %"PRId64"\n", timestamp, index, st2->index_entries[index].timestamp);
-@@ -1141,7 +1144,7 @@
+@@ -1141,7 +1152,7 @@
      }
  
      /* do the seek */
