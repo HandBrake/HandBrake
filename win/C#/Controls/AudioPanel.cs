@@ -603,7 +603,6 @@ namespace Handbrake.Controls
                     drp_audioMix.Items.Remove("DTS Passthru");
                     break;
                 case "MP3 (lame)":
-                    drp_audioMix.Items.Remove("Mono");
                     drp_audioMix.Items.Remove("6 Channel Discrete");
                     drp_audioMix.Items.Remove("AC3 Passthru");
                     drp_audioMix.Items.Remove("DTS Passthru");
