@@ -83,11 +83,20 @@ namespace Handbrake
         /// <param name="e">Unhandled Exception EventArgs </param>
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(
-                "An unexpected error has occured.\n\nSender:" + sender + "\n\nException:" + e.ExceptionObject, 
-                "Unhandled Exception",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+            try
+            {
+                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+                exceptionWindow.Setup("An Unknown Error has occured.", e.ExceptionObject.ToString());
+                exceptionWindow.ShowDialog();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(
+                    "An Unknown Error has occured. \n\n Exception:" + e.ExceptionObject,
+                    "Unhandled Exception",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -40,7 +40,6 @@ namespace Handbrake
             this.btn_installUpdate = new System.Windows.Forms.Button();
             this.btn_remindLater = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.lbl_update_text = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -50,7 +49,7 @@ namespace Handbrake
             this.wBrowser = new System.Windows.Forms.WebBrowser();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button_container = new System.Windows.Forms.SplitContainer();
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
+            this.PictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -58,6 +57,7 @@ namespace Handbrake
             this.button_container.Panel1.SuspendLayout();
             this.button_container.Panel2.SuspendLayout();
             this.button_container.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -136,16 +136,6 @@ namespace Handbrake
             this.label3.Size = new System.Drawing.Size(90, 13);
             this.label3.TabIndex = 57;
             this.label3.Text = "Release Notes:";
-            // 
-            // PictureBox1
-            // 
-            this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo64;
-            this.PictureBox1.InitialImage = null;
-            this.PictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.PictureBox1.Name = "PictureBox1";
-            this.PictureBox1.Size = new System.Drawing.Size(64, 64);
-            this.PictureBox1.TabIndex = 24;
-            this.PictureBox1.TabStop = false;
             // 
             // lbl_update_text
             // 
@@ -254,6 +244,16 @@ namespace Handbrake
             this.button_container.SplitterDistance = 318;
             this.button_container.TabIndex = 0;
             // 
+            // PictureBox1
+            // 
+            this.PictureBox1.Image = global::Handbrake.Properties.Resources.logo64;
+            this.PictureBox1.InitialImage = null;
+            this.PictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.PictureBox1.Name = "PictureBox1";
+            this.PictureBox1.Size = new System.Drawing.Size(64, 64);
+            this.PictureBox1.TabIndex = 24;
+            this.PictureBox1.TabStop = false;
+            // 
             // frmUpdater
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -271,7 +271,6 @@ namespace Handbrake
             this.Name = "frmUpdater";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Update";
-            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -282,6 +281,7 @@ namespace Handbrake
             this.button_container.Panel2.ResumeLayout(false);
             this.button_container.Panel2.PerformLayout();
             this.button_container.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

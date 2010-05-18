@@ -210,6 +210,12 @@
     <Compile Include="Controls\x264Panel.Designer.cs">
       <DependentUpon>x264Panel.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmExceptionWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmExceptionWindow.Designer.cs">
+      <DependentUpon>frmExceptionWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\ActivityLogMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Encode.cs" />
@@ -312,6 +318,9 @@
       <DependentUpon>x264Panel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmExceptionWindow.resx">
+      <DependentUpon>frmExceptionWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmPreview.resx">
       <DependentUpon>frmPreview.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -389,6 +398,7 @@
     <None Include="Resources\logo128.png" />
     <None Include="Resources\ActivityWindow.png" />
     <None Include="Resources\AddToQueue.png" />
+    <None Include="Resources\109_AllAnnotations_Error_64x64_72.png" />
     <Content Include="Resources\ActivityWindow_small.png" />
     <None Include="Resources\AddToQueue_small.png" />
     <Content Include="Resources\copy.png" />
@@ -399,6 +409,8 @@
     <None Include="Resources\info16.png" />
     <None Include="Resources\folder.png" />
     <None Include="Resources\download.png" />
+    <None Include="Resources\error.png" />
+    <None Include="Resources\ErrorX.png" />
     <Content Include="Resources\Output_Small.png" />
     <None Include="Resources\Pause.png" />
     <None Include="Resources\Play.png" />

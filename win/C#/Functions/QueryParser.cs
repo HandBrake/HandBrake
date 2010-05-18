@@ -633,7 +633,9 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show("An error has occured in the Query Parser.\n\n" + exc, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+                exceptionWindow.Setup("An error has occured in the Query Parser.", exc.ToString());
+                exceptionWindow.ShowDialog();
             }
 
             #endregion

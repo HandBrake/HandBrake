@@ -162,7 +162,9 @@ namespace Handbrake.Functions
             }
             catch (Exception exc)
             {
-                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+                exceptionWindow.Setup("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode", exc.ToString());
+                exceptionWindow.ShowDialog();
                 return false;
             }
         }
@@ -328,7 +330,9 @@ namespace Handbrake.Functions
             }
             catch (Exception e)
             {
-                MessageBox.Show("Unable to retrieve version information from the CLI. \nError:\n" + e);
+                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+                exceptionWindow.Setup("Unable to retrieve version information from the CLI.", e.ToString());
+                exceptionWindow.ShowDialog();
             }
         }
 
