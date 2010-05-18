@@ -14,6 +14,8 @@
 }
 @end
 
+
+
 @interface PreviewController (Private)
 
 - (NSSize)optimalViewSizeForImageSize: (NSSize)imageSize;
@@ -44,10 +46,11 @@
         int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
         fPreviewLibhb = hb_init(loggingLevel, 0);
         
+        
+
 	}
 	return self;
 }
-
 
 
 //------------------------------------------------------------------------------------
@@ -130,6 +133,8 @@
     // Show the picture view
     [fPictureView setHidden:NO];
     [fMovieView pause:nil];
+    [fMovieTimer invalidate];
+    [fMovieTimer release];
     [fMovieView setHidden:YES];
 	[fMovieView setMovie:nil];
 
@@ -157,11 +162,16 @@
     [fHudTimer invalidate];
     [fHudTimer release];
     
+    [fMovieTimer invalidate];
+    [fMovieTimer release];
+    
     [fPicturePreviews release];
     [fFullScreenWindow release];
     
     hb_close(&fPreviewLibhb);
-
+    
+    [self removeMovieCallbacks];
+    
     [super dealloc];
 }
 
@@ -219,6 +229,7 @@
     hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - [fPictureControlBox frame].size.height;
     [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
     [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
 
 }
 
@@ -232,11 +243,15 @@
     /* lets make sure that the still picture view is not hidden and that 
      * the movie preview is 
      */
+     aMovie = nil;
     [fMovieView pause:nil];
     [fMovieView setHidden:YES];
 	[fMovieView setMovie:nil];
     [fMovieCreationProgressIndicator stopAnimation: nil];
     [fMovieCreationProgressIndicator setHidden: YES];
+    [fMoviePlaybackControlBox setHidden: YES];
+    [self stopMovieTimer];
+    [fPictureControlBox setHidden: NO];
     
     [fPictureView setHidden:NO];
     
@@ -473,19 +488,35 @@
     NSPoint mouseLoc = [theEvent locationInWindow];
     
     /* Test for mouse location to show/hide hud controls */
-    if( isEncoding == NO ) {
+    if( isEncoding == NO ) 
+    {
+        /* Since we are not encoding, verify which control hud to show
+         * or hide based on aMovie ( aMovie indicates we need movie controls )
+         */
+        NSBox           * hudBoxToShow;
+        if ( aMovie == nil ) // No movie loaded up
+        {
+            hudBoxToShow = fPictureControlBox;
+        }
+        else // We have a movie
+        {
+            hudBoxToShow = fMoviePlaybackControlBox;
+        }
+        
         if( NSPointInRect( mouseLoc, [fPictureControlBox frame] ) )
         {
-            [[fPictureControlBox animator] setHidden: NO];
+            [[hudBoxToShow animator] setHidden: NO];
             [self stopHudTimer];
         }
 		else if( NSPointInRect( mouseLoc, [fPictureViewArea frame] ) )
         {
-            [[fPictureControlBox animator] setHidden: NO];
+            [[hudBoxToShow animator] setHidden: NO];
             [self startHudTimer];
         }
         else
-            [[fPictureControlBox animator] setHidden: YES];
+        {
+            [[hudBoxToShow animator] setHidden: YES];
+        }
 	}
 }
 
@@ -513,8 +544,13 @@
 - (void) hudTimerFired: (NSTimer*)theTimer
 {
     hudTimerSeconds++;
-    if( hudTimerSeconds >= 10 ) {
+    if( hudTimerSeconds >= 10 ) 
+    {
+        /* Regardless which control box is active, after the timer
+         * period we want either one to fade to hidden.
+         */
         [[fPictureControlBox animator] setHidden: YES];
+        [[fMoviePlaybackControlBox animator] setHidden: YES];
         [self stopHudTimer];
     }
 }
@@ -923,6 +959,7 @@
             [fMovieCreationProgressIndicator stopAnimation: nil];
             [fMovieCreationProgressIndicator setHidden: YES];
             [fEncodingControlBox setHidden: YES];
+            [fPictureControlBox setHidden: YES];
             isEncoding = NO;
 
             // Show the movie view
@@ -933,6 +970,103 @@
         }
     }
 }
+
+- (IBAction) toggleMoviePreviewPlayPause: (id) sender
+{
+    /* make sure a movie is even loaded up */
+    if (aMovie != nil)
+    {
+        /* For some stupid reason there is no "isPlaying" method for a QTMovie
+         * object, given that, we detect the rate to determine whether the movie
+         * is playing or not.
+         */
+        if ([aMovie rate] != 0) // we are playing 
+        {
+            [fMovieView pause:aMovie];
+            [fPlayPauseButton setTitle: @">"];
+        }
+        else // we are paused or stopped
+        {
+            [fMovieView play:aMovie];
+            [fPlayPauseButton setTitle: @"||"];   
+        }
+    }
+    
+}
+
+- (IBAction) moviePlaybackGoToBeginning: (id) sender
+{
+    /* make sure a movie is even loaded up */
+    if (aMovie != nil)
+    {
+        [fMovieView gotoBeginning:aMovie];
+     }
+    
+}
+
+- (IBAction) moviePlaybackGoToEnd: (id) sender
+{
+    /* make sure a movie is even loaded up */
+    if (aMovie != nil)
+    {
+        [fMovieView gotoEnd:aMovie];
+     }
+    
+}
+
+- (IBAction) moviePlaybackGoBackwardOneFrame: (id) sender
+{
+    /* make sure a movie is even loaded up */
+    if (aMovie != nil)
+    {
+        [fMovieView pause:aMovie]; // Pause the movie
+        [fMovieView stepBackward:aMovie];
+     }
+    
+}
+
+- (IBAction) moviePlaybackGoForwardOneFrame: (id) sender
+{
+    /* make sure a movie is even loaded up */
+    if (aMovie != nil)
+    {
+        [fMovieView pause:aMovie]; // Pause the movie
+        [fMovieView stepForward:aMovie];
+     }
+    
+}
+
+
+- (void) startMovieTimer
+{
+	if( fMovieTimer ) {
+		[fMovieTimer invalidate];
+		[fMovieTimer release];
+	}
+    fMovieTimer = [NSTimer scheduledTimerWithTimeInterval:0.10 target:self selector:@selector(movieTimerFired:) userInfo:nil repeats:YES];
+    [fMovieTimer retain];
+}
+
+- (void) stopMovieTimer
+{
+    if( fMovieTimer )
+    {
+        [fMovieTimer invalidate];
+        [fMovieTimer release];
+        fMovieTimer = nil;
+    }
+}
+
+- (void) movieTimerFired: (NSTimer*)theTimer
+{
+     if (aMovie != nil)
+    {
+        [self adjustPreviewScrubberForCurrentMovieTime];
+        [fMovieInfoField setStringValue: [NSString stringWithFormat:NSLocalizedString( @"%@", @"" ),[self calculatePlaybackSMTPETimecodeForDisplay]]];    
+    }
+}
+
+
 
 - (IBAction) showMoviePreview: (NSString *) path
 {
@@ -946,7 +1080,7 @@
     /* Load the new movie into fMovieView */
     if (path) 
     {
-		QTMovie * aMovie;
+		//QTMovie * aMovie;
 		NSError	 *outError;
 		NSURL *movieUrl = [NSURL fileURLWithPath:path];
 		NSDictionary *movieAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -955,10 +1089,12 @@
 										 [NSNumber numberWithBool:YES], @"QTMovieOpenForPlaybackAttribute",
 										 [NSNumber numberWithBool:NO], @"QTMovieOpenAsyncRequiredAttribute",								
 										 [NSNumber numberWithBool:NO], @"QTMovieOpenAsyncOKAttribute",
+                                         [NSNumber numberWithBool:YES], @"QTMovieIsSteppableAttribute",
 										 QTMovieApertureModeClean, QTMovieApertureModeAttribute,
 										 nil];
         
         aMovie = [[[QTMovie alloc] initWithAttributes:movieAttributes error:&outError] autorelease];
+        
         
 		if (!aMovie) 
         {
@@ -973,6 +1109,7 @@
             movieBounds.size.height = movieSize.height;
             /* We also get our view size to use for scaling fMovieView's size */
             NSSize scaledMovieViewSize = [fPictureView frame].size;
+            [fMovieView setControllerVisible:FALSE];
             if ([fMovieView isControllerVisible]) 
             {
                 CGFloat controllerBarHeight = [fMovieView controllerBarHeight];
@@ -994,23 +1131,6 @@
             if (scaledMovieViewSize.height > [[self window] frame].size.height)
             {
                 [fHBController writeToActivityLog: "showMoviePreview: Our window is not tall enough to show the controller bar ..."];
-                /*we need to scale the movie down vertically by 15 px to allow for the controller bar
-                 * and scale the width accordingly.
-                 */
-               
-               // FIX ME: currently trying to scale everything to show the controller bar does not work right.
-               // Commented out til fixed, resulting issue when the movie is the full size of the window is no
-               // controller bar is visible. Live Preview still plays fine though.
-               /*
-               CGFloat pictureAspectRatio = scaledMovieViewSize.width / scaledMovieViewSize.height;
-               scaledMovieViewSize.height = [[self window] frame].size.height - 15; 
-               scaledMovieViewSize.width = scaledMovieViewSize.height * pictureAspectRatio;
-               NSRect windowFrame = [[self window] frame];
-               windowFrame.size.width = scaledMovieViewSize.width;
-               windowFrame.size.height = scaledMovieViewSize.height + 15;
-               [[self window] setFrame:windowFrame display:YES animate:YES];
-               [fPictureView setFrameSize:scaledMovieViewSize];
-               */ 
             }
             
             
@@ -1028,12 +1148,193 @@
             [fMovieView setFrameOrigin:origin];
             [fMovieView setMovie:aMovie];
             [fMovieView setHidden:NO];
+            [fMoviePlaybackControlBox setHidden: NO];
+            [fPictureControlBox setHidden: YES];
+            
             // to actually play the movie
+            
+            [self initPreviewScrubberForMovie];
+            [self startMovieTimer];
+            /* Install amovie notifications */
+            [aMovie setDelegate:self];
+            [self installMovieCallbacks];
             [fMovieView play:aMovie];
+
         }
     }
     isEncoding = NO;
 }
+#pragma mark *** Movie Playback Scrubber and time code methods ***
+
+/* Since MacOSX Leopard QTKit has taken over some responsibility for assessing movie playback
+ * information from the old QuickTime carbon api ( time code information as well as fps, etc.).
+ * However, the QTKit devs at apple were not really big on documentation and further ...
+ * QuickTimes ability to playback HB's largely variable framerate output makes perfectly frame
+ * accurate information at best convoluted. Still, for the purpose of a custom hud based custom
+ * playback scrubber slider this has so far proven to be as accurate as I have found. To say it
+ * could use some better accuracy is not understating it enough probably.
+ * Most of this was gleaned from this obscure Apple Mail list thread:
+ * http://www.mailinglistarchive.com/quicktime-api@lists.apple.com/msg05642.html
+ * Now as we currently do not show a QTKit control bar with scrubber for display sizes > container
+ * size, this seems to facilitate playback control from the HB custom HUD controller fairly close
+ * to the built in controller bar.
+ * Further work needs to be done to try to get accurate frame by frame playback display if we want it.
+ * Note that the keyboard commands for frame by frame step through etc. work as always.
+ */ 
+
+// Returns a human readable string from the currentTime of movie playback
+- (NSString*) calculatePlaybackSMTPETimecodeForDisplay
+{
+    QTTime time = [aMovie currentTime];
+    
+    NSString *smtpeTimeCodeString;
+    int days, hour, minute, second, frame;
+    long long result;
+    
+    result = time.timeValue / time.timeScale; // second
+    frame = (time.timeValue % time.timeScale) / 100;
+    
+    second = result % 60;
+    
+    result = result / 60; // minute
+    minute = result % 60;
+    
+    result = result / 60; // hour
+    hour = result % 24;	 
+    days = result;
+    
+    smtpeTimeCodeString = [NSString stringWithFormat:@"Time: %02d:%02d:%02d", hour, minute, second]; // hh:mm:ss
+    return smtpeTimeCodeString;
+    
+}
+
+
+// Initialize the preview scrubber min/max to appropriate values for the current movie
+-(void) initPreviewScrubberForMovie
+{
+    if (aMovie)
+    {
+        
+        QTTime duration = [aMovie duration];
+        float result = duration.timeValue / duration.timeScale;
+        
+        [fMovieScrubberSlider setMinValue:0.0];
+        [fMovieScrubberSlider setMaxValue: (float)result];
+        [fMovieScrubberSlider setFloatValue: 0.0];
+    }
+}
+
+
+-(void) adjustPreviewScrubberForCurrentMovieTime
+{
+    if (aMovie)
+    {
+        QTTime time = [aMovie currentTime];
+        
+        float result = (float)time.timeValue / (float)time.timeScale;;
+        [fMovieScrubberSlider setFloatValue:result];
+    }
+}
+
+- (IBAction) previewScrubberChanged: (id) sender
+{
+    if (aMovie)
+    {
+        [fMovieView pause:aMovie]; // Pause the movie
+        QTTime time = [aMovie currentTime];
+        [self setTime: time.timeScale * [fMovieScrubberSlider floatValue]];
+        [self calculatePlaybackSMTPETimecodeForDisplay];
+    }
+}
+#pragma mark *** Movie Notifications ***
+
+- (void) installMovieCallbacks
+{
+
+
+/*Notification for any time the movie rate changes */
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(movieRateDidChange:)
+                                                     name:@"QTMovieRateDidChangeNotification"
+                                                   object:aMovie];
+        /*Notification for when the movie ends */
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(movieDidEnd:)
+                                                     name:@"QTMovieDidEndNotification"
+                                                   object:aMovie];
+}
+
+- (void)removeMovieCallbacks
+{
+    if (aMovie)
+    {
+        /*Notification for any time the movie rate changes */
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:@"QTMovieRateDidChangeNotification"
+                                                      object:aMovie];
+        /*Notification for when the movie ends */
+        [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                        name:@"QTMovieDidEndNotification"
+                                                      object:aMovie];
+    }
+}
+
+- (void)movieRateDidChange:(NSNotification *)notification
+{
+    if (aMovie != nil)
+    {
+        /* For some stupid reason there is no "isPlaying" method for a QTMovie
+         * object, given that, we detect the rate to determine whether the movie
+         * is playing or not.
+         */
+        //[self adjustPreviewScrubberForCurrentMovieTime];
+        if ([aMovie rate] != 0) // we are playing 
+        {
+            [fPlayPauseButton setTitle: @"||"];
+        }
+        else // we are paused or stopped
+        {
+            [fPlayPauseButton setTitle: @">"];
+        }
+    }
+}
+/* This notification is not currently used. However we should keep it "just in case" as
+ * live preview playback is enhanced.
+ */
+- (void)movieDidEnd:(NSNotification *)notification
+{
+
+    //[fHBController writeToActivityLog: "Movie DidEnd Notification Received"];
+}
+
+
+#pragma mark *** QTTime Utilities ***
+
+	// convert a time value (long) to a QTTime structure
+-(void)timeToQTTime:(long)timeValue resultTime:(QTTime *)aQTTime
+{
+	NSNumber *timeScaleObj;
+	long timeScaleValue;
+
+	timeScaleObj = [aMovie attributeForKey:QTMovieTimeScaleAttribute];
+	timeScaleValue = [timeScaleObj longValue];
+
+	*aQTTime = QTMakeTime(timeValue, timeScaleValue);
+}
+
+	// set the movie's current time
+-(void)setTime:(int)timeValue
+{
+	QTTime movieQTTime;
+	NSValue *valueForQTTime;
+	
+	[self timeToQTTime:timeValue resultTime:&movieQTTime];
+
+	valueForQTTime = [NSValue valueWithQTTime:movieQTTime];
+
+	[aMovie setAttribute:valueForQTTime forKey:QTMovieCurrentTimeAttribute];
+}
+
 
 @end
 

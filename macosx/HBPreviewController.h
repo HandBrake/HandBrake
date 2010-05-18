@@ -30,6 +30,7 @@
     IBOutlet NSBox           * fPictureViewArea;
     IBOutlet NSBox           * fPictureControlBox;
     IBOutlet NSBox           * fEncodingControlBox;
+    IBOutlet NSBox           * fMoviePlaybackControlBox;
 
     IBOutlet NSSlider        * fPictureSlider;
     IBOutlet NSTextField     * fInfoField;
@@ -52,7 +53,22 @@
     IBOutlet NSButton               * fScaleToScreenToggleButton;
     IBOutlet NSButton               * fPictureSettingsToggleButton;
     BOOL                              scaleToScreen;
+    
     /* Movie Previews */
+    QTMovie                         * aMovie;
+    IBOutlet QTMovieView            * fMovieView;
+    /* Playback Panel Controls */
+    IBOutlet NSButton               * fPlayPauseButton;
+    IBOutlet NSButton               * fGoToBeginningButton;
+    IBOutlet NSButton               * fGoToEndButton;
+    IBOutlet NSButton               * fGoForwardOneFrameButton;
+    IBOutlet NSButton               * fGoBackwardOneFrameButton;
+    IBOutlet NSSlider               * fMovieScrubberSlider;
+    IBOutlet NSButton               * fGoToStillPreviewButton;
+    IBOutlet NSTextField            * fMovieInfoField;
+    NSTimer                         * fMovieTimer;
+    
+    
     IBOutlet NSButton               * fCreatePreviewMovieButton;
     IBOutlet NSButton               * fCancelPreviewMovieButton;
     IBOutlet NSButton               * fShowPreviewMovieButton;
@@ -61,7 +77,6 @@
     hb_handle_t                     * fPreviewLibhb;           // private libhb for creating previews
     NSTimer                         * fLibhbTimer;             // timer for retrieving state from libhb
     IBOutlet NSTextField            * fPreviewMovieStatusField; 
-    IBOutlet QTMovieView            * fMovieView;
     IBOutlet NSPopUpButton          * fPreviewMovieLengthPopUp; // popup of choices for length of preview in seconds
 }
 - (id)init;
@@ -89,9 +104,28 @@
 - (void) startReceivingLibhbNotifications;
 - (void) stopReceivingLibhbNotifications;
 
+- (void) installMovieCallbacks;
+- (void)removeMovieCallbacks;
+
 - (IBAction) createMoviePreview: (id) sender;
 - (void) libhbStateChanged: (hb_state_t ) state;
 - (IBAction) showMoviePreview: (NSString *) path;
+- (IBAction) toggleMoviePreviewPlayPause: (id) sender;
+- (IBAction) moviePlaybackGoToBeginning: (id) sender;
+- (IBAction) moviePlaybackGoToEnd: (id) sender;
+- (IBAction) moviePlaybackGoBackwardOneFrame: (id) sender;
+- (IBAction) moviePlaybackGoForwardOneFrame: (id) sender;
+
+-(void) initPreviewScrubberForMovie;
+-(void) adjustPreviewScrubberForCurrentMovieTime;
+- (IBAction) previewScrubberChanged: (id) sender;
+-(void)setTime:(int)timeValue;
+-(void)timeToQTTime:(long)timeValue resultTime:(QTTime *)aQTTime;
+- (void) startMovieTimer;
+- (void) stopMovieTimer;
+- (NSString*) calculatePlaybackSMTPETimecodeForDisplay;
+
+
 - (IBAction) previewDurationPopUpChanged: (id) sender;
 
 
