@@ -437,6 +437,12 @@ namespace Handbrake
             ImportPreset();
         }
 
+        private void mnu_exportMacPreset_Click(object sender, EventArgs e)
+        {
+            ExportPreset();
+        }
+
+
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
             Form preset = new frmAddPreset(this, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
@@ -736,6 +742,21 @@ namespace Handbrake
                         treeView_presets.Nodes.Add(preset_treeview);
                     }
                 }
+            }
+        }
+
+        private void ExportPreset()
+        {
+            MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+
+            SaveFileDialog savefiledialog = new SaveFileDialog();
+            savefiledialog.Filter = "plist|*.plist";
+
+            if (savefiledialog.ShowDialog() == DialogResult.OK)
+            {
+                QueryParser parsed = QueryParser.Parse(QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null));
+                PlistPresetHandler.Export(savefiledialog.FileName, parsed);
             }
         }
 

@@ -320,6 +320,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmExceptionWindow.resx">
       <DependentUpon>frmExceptionWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPreview.resx">
       <DependentUpon>frmPreview.cs</DependentUpon>

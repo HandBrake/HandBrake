@@ -96,7 +96,7 @@ namespace Handbrake
         /// </param>
         private delegate void SetModeCallback(ActivityLogMode setMode);
 
-        /* Public Methods */
+        /* Private Methods */
 
         /// <summary>
         /// Set the window to scan mode
@@ -142,8 +142,6 @@ namespace Handbrake
                 }
             }
         }
-
-        /* Private Methods */
 
         /// <summary>
         /// On Window load, start a new timer
