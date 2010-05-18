@@ -3,8 +3,6 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace Handbrake.Services
 {
     using System;
@@ -23,6 +21,8 @@ namespace Handbrake.Services
     /// </summary>
     public class Encode
     {
+        /* Private Variables */
+
         /// <summary>
         /// An Encode Job
         /// </summary>
@@ -44,6 +44,18 @@ namespace Handbrake.Services
         private Timer windowTimer;
 
         /// <summary>
+        /// Gets The Process Handle
+        /// </summary>
+        private IntPtr processHandle;
+
+        /// <summary>
+        /// Gets the Process ID
+        /// </summary>
+        private int processID;
+
+        /* Event Handlers */
+
+        /// <summary>
         /// Fires when a new CLI Job starts
         /// </summary>
         public event EventHandler EncodeStarted;
@@ -53,29 +65,19 @@ namespace Handbrake.Services
         /// </summary>
         public event EventHandler EncodeEnded;
 
+        /* Properties */
+
         /// <summary>
         /// Gets or sets The HB Process
         /// </summary>
         public Process HbProcess { get; set; }
 
         /// <summary>
-        /// Gets or sets The Process Handle
+        /// Gets a value indicating whether IsEncoding.
         /// </summary>
-        public IntPtr ProcessHandle { get; set; }
+        public bool IsEncoding { get; private set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether IsEncoding.
-        /// </summary>
-        public bool IsEncoding
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Gets or sets the Process ID
-        /// </summary>
-        public int ProcessID { get; set; }
+        /* Public Methods */
 
         /// <summary>
         /// Gets ActivityLog.
@@ -84,10 +86,13 @@ namespace Handbrake.Services
         {
             get
             {
-                if (logBuffer != null)
-                    return logBuffer.ToString();
+                if (logBuffer == null)
+                {
+                    ResetLogReader();
+                    ReadFile(null);
+                }
 
-                return string.Empty;
+                return logBuffer != null ? logBuffer.ToString() : string.Empty;
             }
         }
 
@@ -125,11 +130,11 @@ namespace Handbrake.Services
         /// </summary>
         public void SafelyClose()
         {
-            if ((int)this.ProcessHandle == 0)
+            if ((int)this.processHandle == 0)
                 return;
 
             // Allow the CLI to exit cleanly
-            Win32.SetForegroundWindow((int)this.ProcessHandle);
+            Win32.SetForegroundWindow((int)this.processHandle);
             SendKeys.Send("^C");
             SendKeys.Flush();
 
@@ -177,22 +182,22 @@ namespace Handbrake.Services
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
                 Process startProcess = Process.Start(cliStart);
 
-                this.ProcessID = Main.GetCliProcess(before);
+                this.processID = Main.GetCliProcess(before);
 
                 // Fire the Encode Started Event
                 if (this.EncodeStarted != null)
                     this.EncodeStarted(this, new EventArgs());
 
                 if (startProcess != null)
-                    this.ProcessHandle = startProcess.MainWindowHandle; // Set the process Handle
+                    this.processHandle = startProcess.MainWindowHandle; // Set the process Handle
 
                 // Start the Log Monitor
                 windowTimer = new Timer(new TimerCallback(ReadFile), null, 1000, 1000);
 
                 // Set the process Priority
-                if (this.ProcessID != -1)
+                if (this.processID != -1)
                 {
-                    HbProcess = Process.GetProcessById(this.ProcessID);
+                    HbProcess = Process.GetProcessById(this.processID);
                     HbProcess.EnableRaisingEvents = true;
                     HbProcess.Exited += new EventHandler(HbProcess_Exited);
                 }
@@ -316,8 +321,8 @@ namespace Handbrake.Services
                 }
 
                 // Set the class items
-                this.ProcessID = HbProcess.Id;
-                this.ProcessHandle = HbProcess.Handle;
+                this.processID = HbProcess.Id;
+                this.processHandle = HbProcess.Handle;
             }
             catch (Exception exc)
             {
@@ -330,14 +335,14 @@ namespace Handbrake.Services
         /// </summary>
         protected void Finish()
         {
-            if (this.EncodeEnded != null)
-                this.EncodeEnded(this, new EventArgs());
-
             if (!IsEncoding)
             {
                 windowTimer.Dispose();
                 ReadFile(null);
             }
+
+            if (this.EncodeEnded != null)
+                this.EncodeEnded(this, new EventArgs());
 
             // Growl
             if (Settings.Default.growlQueue)
@@ -481,7 +486,7 @@ namespace Handbrake.Services
                     }
 
                     // Put the Query and User Generated Query Flag on the log.
-                    if (logFilePosition == 0)
+                    if (logFilePosition == 0 && job.Query != null)
                     {
                         logBuffer.AppendLine("### CLI Query: " + job.Query);
                         logBuffer.AppendLine("### User Query: " + job.CustomQuery);

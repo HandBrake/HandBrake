@@ -35,13 +35,12 @@ namespace Handbrake
         private frmActivityWindow ActivityWindow;
         private Form splash;
         public string sourcePath;
-        private ActivityLogMode lastAction;
         private SourceType selectedSourceType;
         private string dvdDrivePath;
         private string dvdDriveLabel;
         private Preset CurrentlySelectedPreset;
         private DVD currentSource;
-        private Scan SourceScan = new Scan();
+        private ScanService SourceScan = new ScanService();
         private List<DriveInformation> drives;
 
         // Delegates **********************************************************
@@ -347,7 +346,6 @@ namespace Handbrake
 
         private void encodeStarted(object sender, EventArgs e)
         {
-            lastAction = ActivityLogMode.Encode;
             SetEncodeStarted();
 
             // Experimental HBProc Process Monitoring.
@@ -395,7 +393,7 @@ namespace Handbrake
 
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
-            frmActivityWindow dvdInfoWindow = new frmActivityWindow(lastAction, encodeQueue, SourceScan);
+            frmActivityWindow dvdInfoWindow = new frmActivityWindow(encodeQueue, SourceScan);
             dvdInfoWindow.Show();
         }
 
@@ -872,10 +870,7 @@ namespace Handbrake
 
                         SetEncodeStarted(); // Encode is running, so setup the GUI appropriately
                         encodeQueue.Start(); // Start The Queue Encoding Process
-                        lastAction = ActivityLogMode.Encode; // Set the last action to encode - Used for activity window.
                     }
-                    if (ActivityWindow != null)
-                        ActivityWindow.SetMode(ActivityLogMode.Encode);
 
                     this.Focus();
                 }
@@ -946,20 +941,7 @@ namespace Handbrake
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
-                ActivityWindow = new frmActivityWindow(lastAction, encodeQueue, SourceScan);
-            else
-                switch (lastAction)
-                {
-                    case ActivityLogMode.Scan:
-                        ActivityWindow.SetMode(ActivityLogMode.Scan);
-                        break;
-                    case ActivityLogMode.Encode:
-                        ActivityWindow.SetMode(ActivityLogMode.Encode);
-                        break;
-                    default:
-                        ActivityWindow.SetMode(ActivityLogMode.Encode);
-                        break;
-                }
+                ActivityWindow = new frmActivityWindow(encodeQueue, SourceScan);
 
             ActivityWindow.Show();
             ActivityWindow.Activate();
@@ -1046,7 +1028,6 @@ namespace Handbrake
         private void SelectSource(string file)
         {
             Check_ChapterMarkers.Enabled = true;
-            lastAction = ActivityLogMode.Scan;
             sourcePath = string.Empty;
 
             if (file == string.Empty) // Must have a file or path
@@ -1652,15 +1633,11 @@ namespace Handbrake
 
             this.DisableGUI();
 
-            if (ActivityWindow != null)
-                ActivityWindow.SetMode(ActivityLogMode.Scan);
-
             // Start the Scan
             try
             {
                 isScanning = true;
-                SourceScan = new Scan();
-                SourceScan.ScanSource(sourcePath, title);
+                SourceScan.Scan(sourcePath, title);
                 SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
                 SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
             }
@@ -1687,7 +1664,7 @@ namespace Handbrake
                 BeginInvoke(new UpdateWindowHandler(UpdateScanStatusLabel));
                 return;
             }
-            lbl_encode.Text = SourceScan.ScanStatus();
+            lbl_encode.Text = SourceScan.ScanStatus;
         }
 
         private void UpdateGuiAfterScan()
@@ -1700,7 +1677,7 @@ namespace Handbrake
 
             try
             {
-                currentSource = SourceScan.SouceData();
+                currentSource = SourceScan.SouceData;
 
                 // Setup some GUI components
                 drp_dvdtitle.Items.Clear();
@@ -1798,7 +1775,7 @@ namespace Handbrake
             EnableGUI();
             ResetGUI();
 
-            SourceScan.KillScan();
+            SourceScan.Stop();
 
             lbl_encode.Text = "Scan Cancelled!";
         }
@@ -2034,7 +2011,7 @@ namespace Handbrake
             if (SourceScan.IsScanning)
             {
                 SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
-                SourceScan.KillScan();
+                SourceScan.Stop();
             }
             base.OnFormClosing(e);
         }
@@ -2085,7 +2062,6 @@ namespace Handbrake
         }
 
         #endregion
-
 
         // This is the END of the road ****************************************
     }

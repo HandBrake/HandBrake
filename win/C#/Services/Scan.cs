@@ -16,12 +16,14 @@ namespace Handbrake.Services
     /// <summary>
     /// Scan a Source
     /// </summary>
-    public class Scan
+    public class ScanService
     {
+        /* Private Variables */
+
         /// <summary>
-        /// The information for this source
+        /// A Lock object
         /// </summary>
-        private DVD thisDvd;
+        private static readonly object locker = new object();
 
         /// <summary>
         /// The CLI data parser
@@ -34,11 +36,6 @@ namespace Handbrake.Services
         private StringBuilder logBuffer;
 
         /// <summary>
-        /// A Lock object
-        /// </summary>
-        private static object locker = new object();
-
-        /// <summary>
         /// The line number thats been read to in the log file
         /// </summary>
         private int logFilePosition;
@@ -48,10 +45,7 @@ namespace Handbrake.Services
         /// </summary>
         private Process hbProc;
 
-        /// <summary>
-        /// The Progress of the scan
-        /// </summary>
-        private string scanProgress;
+        /* Event Handlers */
 
         /// <summary>
         /// Scan has Started
@@ -68,10 +62,22 @@ namespace Handbrake.Services
         /// </summary>
         public event EventHandler ScanStatusChanged;
 
+        /* Properties */
+
         /// <summary>
-        /// Gets or sets a value indicating whether IsScanning.
+        /// Gets a value indicating whether IsScanning.
         /// </summary>
-        public bool IsScanning { get; set; }
+        public bool IsScanning { get; private set; }
+
+        /// <summary>
+        /// Gets the Scan Status.
+        /// </summary>
+        public string ScanStatus { get; private set; }
+
+        /// <summary>
+        /// Gets the Souce Data.
+        /// </summary>
+        public DVD SouceData { get; private set; }
 
         /// <summary>
         /// Gets ActivityLog.
@@ -81,12 +87,19 @@ namespace Handbrake.Services
             get
             {
                 if (IsScanning)
-                    return readData.Buffer;
+                    return readData.Buffer.ToString();
 
-                ReadFile();
-                return logBuffer.ToString();
+                if (logBuffer == null)
+                {
+                    ResetLogReader();
+                    ReadLastScanFile();  
+                }
+
+                return logBuffer != null ? logBuffer.ToString() : string.Empty;
             }
         }
+
+        /* Public Methods */
 
         /// <summary>
         /// Scan a Source Path.
@@ -94,43 +107,16 @@ namespace Handbrake.Services
         /// </summary>
         /// <param name="sourcePath">Path to the file to scan</param>
         /// <param name="title">int title number. 0 for scan all</param>
-        public void ScanSource(string sourcePath, int title)
+        public void Scan(string sourcePath, int title)
         {
-            Thread t = new Thread(unused => this.RunScan(sourcePath, title));
+            Thread t = new Thread(unused => this.ScanSource(sourcePath, title));
             t.Start();
-        }
-
-        /// <summary>
-        /// Object containing the information parsed in the scan.
-        /// </summary>
-        /// <returns>The DVD object containing the scan information</returns>
-        public DVD SouceData()
-        {
-            return this.thisDvd;
-        }
-
-        /// <summary>
-        /// Progress of the scan.
-        /// </summary>
-        /// <returns>The progress of the scan</returns>
-        public string ScanStatus()
-        {
-            return this.scanProgress;
-        }
-
-        /// <summary>
-        /// The Scan Process
-        /// </summary>
-        /// <returns>The CLI process</returns>
-        public Process ScanProcess()
-        {
-            return this.hbProc;
         }
 
         /// <summary>
         /// Kill the scan
         /// </summary>
-        public void KillScan()
+        public void Stop()
         {
             try
             {
@@ -145,12 +131,14 @@ namespace Handbrake.Services
             }
         }
 
+        /* Private Methods */
+
         /// <summary>
         /// Start a scan for a given source path and title
         /// </summary>
         /// <param name="sourcePath">Path to the source file</param>
         /// <param name="title">the title number to look at</param>
-        private void RunScan(object sourcePath, int title)
+        private void ScanSource(object sourcePath, int title)
         {
             try
             {
@@ -177,52 +165,58 @@ namespace Handbrake.Services
                     extraArguments += " --scan ";
 
                 this.hbProc = new Process
-                                      {
-                                          StartInfo =
-                                              {
-                                                  FileName = handbrakeCLIPath,
-                                                  Arguments =
-                                                      String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title, extraArguments),
-                                                  RedirectStandardOutput = true,
-                                                  RedirectStandardError = true,
-                                                  UseShellExecute = false,
-                                                  CreateNoWindow = true
-                                              }
-                                      };
+                                  {
+                                      StartInfo =
+                                          {
+                                              FileName = handbrakeCLIPath,
+                                              Arguments =
+                                                  String.Format(@" -i ""{0}"" -t{1} {2} -v ", sourcePath, title,
+                                                                extraArguments),
+                                              RedirectStandardOutput = true,
+                                              RedirectStandardError = true,
+                                              UseShellExecute = false,
+                                              CreateNoWindow = true
+                                          }
+                                  };
 
                 // Start the Scan
                 this.hbProc.Start();
 
                 this.readData = new Parser(this.hbProc.StandardError.BaseStream);
                 this.readData.OnScanProgress += new ScanProgressEventHandler(this.OnScanProgress);
-                this.thisDvd = DVD.Parse(this.readData);
+                this.SouceData = DVD.Parse(this.readData);
 
                 // Write the Buffer out to file.
                 StreamWriter scanLog = new StreamWriter(dvdInfoPath);
                 scanLog.Write(this.readData.Buffer);
                 scanLog.Flush();
                 scanLog.Close();
+                logBuffer = readData.Buffer;
+
+                IsScanning = false;
 
                 if (this.ScanCompleted != null)
                     this.ScanCompleted(this, new EventArgs());
-                IsScanning = false;
             }
             catch (Exception exc)
             {
-                Console.WriteLine("frmMain.cs - scanProcess() " + exc);
+                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+                exceptionWindow.Setup("frmMain.cs - scanProcess() Error", exc.ToString());
+                exceptionWindow.ShowDialog();
             }
-        }     
+        }
 
         /// <summary>
         /// Read the log file
         /// </summary>
-        private void ReadFile()
+        private void ReadLastScanFile()
         {
             lock (locker)
             {
                 // last_encode_log.txt is the primary log file. Since .NET can't read this file whilst the CLI is outputing to it (Not even in read only mode),
                 // we'll need to make a copy of it.
-                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs";
+                string logDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+                                "\\HandBrake\\logs";
                 string logFile = Path.Combine(logDir, "last_scan_log.txt");
                 string logFile2 = Path.Combine(logDir, "tmp_appReadable_log.txt");
 
@@ -258,8 +252,9 @@ namespace Handbrake.Services
                     sr.Close();
                     sr.Dispose();
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
+                    Console.WriteLine(exc.ToString());
                     ResetLogReader();
                 }
             }
@@ -282,7 +277,7 @@ namespace Handbrake.Services
         /// <param name="titleCount">the total number of titles</param>
         private void OnScanProgress(object sender, int currentTitle, int titleCount)
         {
-            this.scanProgress = string.Format("Processing Title: {0} of {1}", currentTitle, titleCount);
+            this.ScanStatus = string.Format("Processing Title: {0} of {1}", currentTitle, titleCount);
             if (this.ScanStatusChanged != null)
                 this.ScanStatusChanged(this, new EventArgs());
         }

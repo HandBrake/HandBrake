@@ -22,6 +22,8 @@ namespace Handbrake
     /// </summary>
     public partial class frmActivityWindow : Form
     {
+        /* Private Variables */
+
         /// <summary>
         /// The current position in the log file
         /// </summary>
@@ -40,34 +42,38 @@ namespace Handbrake
         /// <summary>
         /// The Scan Object
         /// </summary>
-        private Scan scan;
+        private ScanService scan;
 
         /// <summary>
         /// The Type of log that the window is currently dealing with
         /// </summary>
         private ActivityLogMode mode;
 
+        /* Constructor */
+
         /// <summary>
         /// Initializes a new instance of the <see cref="frmActivityWindow"/> class.
         /// </summary>
-        /// <param name="mode">
-        /// The mode.
-        /// </param>
         /// <param name="encode">
         /// The encode.
         /// </param>
         /// <param name="scan">
         /// The scan.
         /// </param>
-        public frmActivityWindow(ActivityLogMode mode, Encode encode, Scan scan)
+        public frmActivityWindow(Encode encode, ScanService scan)
         {
             InitializeComponent();
 
             this.encode = encode;
             this.scan = scan;
-            this.mode = mode;
             this.position = 0;
+
+            // Listen for Scan and Encode Starting Events
+            scan.ScanStared += scan_ScanStared;
+            encode.EncodeStarted += encode_EncodeStarted;
         }
+
+        /* Delegates */
 
         /// <summary>
         /// A callback function for updating the ui
@@ -82,7 +88,15 @@ namespace Handbrake
         /// </summary>
         private delegate void SetTextClearCallback();
 
-        // Public
+        /// <summary>
+        /// Set mode callback
+        /// </summary>
+        /// <param name="setMode">
+        /// The set mode.
+        /// </param>
+        private delegate void SetModeCallback(ActivityLogMode setMode);
+
+        /* Public Methods */
 
         /// <summary>
         /// Set the window to scan mode
@@ -90,14 +104,46 @@ namespace Handbrake
         /// <param name="setMode">
         /// The set Mode.
         /// </param>
-        public void SetMode(ActivityLogMode setMode)
+        private void SetMode(ActivityLogMode setMode)
         {
-            Reset();
-            this.mode = setMode;
-            this.Text = mode == ActivityLogMode.Scan ? "Activity Window (Scan Log)" : "Activity Window (Enocde Log)";
+            if (IsHandleCreated)
+            {
+                if (rtf_actLog.InvokeRequired)
+                {
+                    IAsyncResult invoked = BeginInvoke(new SetModeCallback(SetMode), new object[] {setMode});
+                    EndInvoke(invoked);
+                }
+                else
+                {
+                    Reset();
+                    this.mode = setMode;
+
+                    Array values = Enum.GetValues(typeof(ActivityLogMode));
+                    Properties.Settings.Default.ActivityWindowLastMode = (int) values.GetValue(Convert.ToInt32(setMode));
+                    Properties.Settings.Default.Save();
+
+                    this.Text = mode == ActivityLogMode.Scan
+                                    ? "Activity Window (Scan Log)"
+                                    : "Activity Window (Encode Log)";
+
+                    if (mode == ActivityLogMode.Scan)
+                    {
+                        scan.ScanCompleted += stopWindowRefresh;
+                        encode.EncodeEnded -= stopWindowRefresh;
+                    }
+                    else
+                    {
+                        scan.ScanCompleted -= stopWindowRefresh;
+                        encode.EncodeEnded += stopWindowRefresh;
+                    }
+
+                    // Start a fresh window timer
+                    windowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
+                }
+            }
         }
 
-        // Logging
+        /* Private Methods */
 
         /// <summary>
         /// On Window load, start a new timer
@@ -110,7 +156,51 @@ namespace Handbrake
         /// </param>
         private void NewActivityWindow_Load(object sender, EventArgs e)
         {
-            windowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
+            ActivityLogMode activitLogMode = (ActivityLogMode) Enum.ToObject(typeof(ActivityLogMode), Properties.Settings.Default.ActivityWindowLastMode);
+            SetMode(activitLogMode);        
+        }
+
+        /// <summary>
+        /// Set the Log window to encode mode when an encode starts.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void encode_EncodeStarted(object sender, EventArgs e)
+        {
+            SetMode(ActivityLogMode.Encode);
+        }
+
+        /// <summary>
+        /// Set the log widow to scan mode when a scan starts
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void scan_ScanStared(object sender, EventArgs e)
+        {
+            SetMode(ActivityLogMode.Scan);
+        }
+
+        /// <summary>
+        /// Stop refreshing the window when no scanning or encoding is happening.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void stopWindowRefresh(object sender, EventArgs e)
+        {
+            windowTimer.Dispose();
+            LogMonitor(null);
         }
 
         /// <summary>
@@ -133,7 +223,7 @@ namespace Handbrake
         private StringBuilder GetLog()
         {
             StringBuilder appendText = new StringBuilder();
-            
+
             if (this.mode == ActivityLogMode.Scan)
             {
                 if (scan == null || scan.ActivityLog == string.Empty)
@@ -213,6 +303,12 @@ namespace Handbrake
                     else
                         lock (rtf_actLog)
                             rtf_actLog.AppendText(text.ToString());
+
+                    // Stop the refresh process if log has finished.
+                    if (text.ToString().Contains("HandBrake has Exited"))
+                    {
+                        windowTimer.Dispose();
+                    }
                 }
             }
             catch (Exception)
@@ -301,7 +397,7 @@ namespace Handbrake
             windowTimer = new Timer(new TimerCallback(LogMonitor), null, 1000, 1000);
         }
 
-        // Menus and Buttons
+        /* Menus and Buttons */
 
         /// <summary>
         /// Copy log to clipboard
@@ -383,7 +479,7 @@ namespace Handbrake
             SetMode(ActivityLogMode.Encode);
         }
 
-        // Overrides
+        /* Overrides */
 
         /// <summary>
         /// override onclosing
@@ -393,6 +489,12 @@ namespace Handbrake
         /// </param>
         protected override void OnClosing(CancelEventArgs e)
         {
+            scan.ScanStared -= scan_ScanStared;
+            encode.EncodeStarted -= encode_EncodeStarted;
+
+            scan.ScanCompleted -= stopWindowRefresh;
+            encode.EncodeEnded -= stopWindowRefresh;
+
             windowTimer.Dispose();
             e.Cancel = true;
             this.Dispose();

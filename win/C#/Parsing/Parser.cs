@@ -82,9 +82,9 @@ namespace Handbrake.Parsing
         /// <summary>
         /// Gets the buffer of data that came from the CLI standard input/error
         /// </summary>
-        public string Buffer
+        public StringBuilder Buffer
         {
-            get { return buffer.ToString(); }
+            get { return buffer; }
         }
 
         /// <summary>
