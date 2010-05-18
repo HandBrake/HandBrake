@@ -252,7 +252,7 @@ namespace Handbrake.Functions
 
             #region Audio Settings Tab
 
-            ListView audioTracks = mainWindow.AudioSettings.GetAudioPanel();
+            DataGridView audioTracks = mainWindow.AudioSettings.GetAudioPanel();
             List<string> tracks = new List<string>();
             List<string> codecs = new List<string>();
             List<string> mixdowns = new List<string>();
@@ -261,40 +261,40 @@ namespace Handbrake.Functions
             List<string> drcs = new List<string>();
 
             // No Audio
-            if (audioTracks.Items.Count == 0)
+            if (audioTracks.Rows.Count == 0)
                 query += " -a none ";
 
             // Gather information about each audio track and store them in the declared lists.
-            foreach (ListViewItem row in audioTracks.Items)
+            foreach (DataGridViewRow row in audioTracks.Rows)
             {
                 // Audio Track (-a)
-                if (row.SubItems[1].Text == "Automatic")
+                if (row.Cells[1].Value.ToString() == "Automatic")
                     tracks.Add("1");
-                else if (row.Text != "None")
+                else if (row.Cells[1].Value.ToString() != "None")
                 {
-                    string[] tempSub = row.SubItems[1].Text.Split(' ');
+                    string[] tempSub = row.Cells[1].Value.ToString().Split(' ');
                     tracks.Add(tempSub[0]);
                 }
 
                 // Audio Codec (-E)
-                if (row.SubItems[2].Text != String.Empty)
-                    codecs.Add(GetAudioEncoder(row.SubItems[2].Text));
+                if (row.Cells[2].Value.ToString() != String.Empty)
+                    codecs.Add(GetAudioEncoder(row.Cells[2].Value.ToString()));
 
                 // Audio Mixdown (-6)
-                if (row.SubItems[3].Text != String.Empty)
-                    mixdowns.Add(GetMixDown(row.SubItems[3].Text));
+                if (row.Cells[3].Value.ToString() != String.Empty)
+                    mixdowns.Add(GetMixDown(row.Cells[3].Value.ToString()));
 
                 // Sample Rate (-R)
-                if (row.SubItems[4].Text != String.Empty)
-                    samplerates.Add(row.SubItems[4].Text);
+                if (row.Cells[4].Value.ToString() != String.Empty)
+                    samplerates.Add(row.Cells[4].Value.ToString());
 
                 // Audio Bitrate (-B)
-                if (row.SubItems[5].Text != String.Empty)
-                    bitrates.Add(row.SubItems[5].Text.Replace("Auto", "auto"));
+                if (row.Cells[5].Value.ToString() != String.Empty)
+                    bitrates.Add(row.Cells[5].Value.ToString().Replace("Auto", "auto"));
 
                 // DRC (-D)
-                if (row.SubItems[6].Text != String.Empty)
-                    drcs.Add(row.SubItems[6].Text);
+                if (row.Cells[6].Value.ToString() != String.Empty)
+                    drcs.Add(row.Cells[6].Value.ToString());
             }
 
             // Audio Track (-a)

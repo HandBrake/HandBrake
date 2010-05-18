@@ -39,9 +39,9 @@ namespace Handbrake.Controls
         /// Get the audio panel
         /// </summary>
         /// <returns>A listview containing the audio tracks</returns>
-        public ListView GetAudioPanel()
+        public DataGridView GetAudioPanel()
         {
-            return lv_audioList;
+            return audioList;
         }
 
         /// <summary>
@@ -79,10 +79,10 @@ namespace Handbrake.Controls
             }
 
             // Make sure the table is updated with new audio codecs
-            foreach (ListViewItem row in lv_audioList.Items)
+            foreach (DataGridViewRow row in audioList.Rows)
             {
-                if (!drp_audioEncoder.Items.Contains(row.SubItems[2].Text))
-                    row.SubItems[2].Text = drp_audioEncoder.Items[0].ToString();
+                if (!drp_audioEncoder.Items.Contains(row.Cells[2].Value))
+                    row.Cells[2].Value = drp_audioEncoder.Items[0].ToString();
             }
         }
 
@@ -92,7 +92,7 @@ namespace Handbrake.Controls
         /// <returns>True if m4v is required</returns>
         public bool RequiresM4V()
         {
-            return lv_audioList.Items.Cast<ListViewItem>().Any(item => item.SubItems[2].Text.Contains("AC3"));
+            return this.audioList.Rows.Cast<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString().Contains("AC3"));
         }
 
         /// <summary>
@@ -108,14 +108,15 @@ namespace Handbrake.Controls
 
             foreach (AudioTrack track in audioTracks)
             {
-                ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
-
-                newTrack.SubItems.Add("Automatic");
-                newTrack.SubItems.Add(track.Encoder);
-                newTrack.SubItems.Add(track.MixDown);
-                newTrack.SubItems.Add(track.SampleRate);
-                newTrack.SubItems.Add(track.Encoder.Contains("AC3") ? "Auto" : track.Bitrate);
-                newTrack.SubItems.Add(track.DRC);
+                DataGridViewRow newTrack = new DataGridViewRow();
+                newTrack.CreateCells(audioList);
+                newTrack.Cells[0].Value = GetNewID().ToString();
+                newTrack.Cells[1].Value = "Automatic";
+                newTrack.Cells[2].Value = track.Encoder;
+                newTrack.Cells[3].Value = track.MixDown;
+                newTrack.Cells[4].Value = track.SampleRate;
+                newTrack.Cells[5].Value = track.Encoder.Contains("AC3") ? "Auto" : track.Bitrate;
+                newTrack.Cells[6].Value = track.DRC;
                 AddTrackForPreset(newTrack);
             }
         }
@@ -129,30 +130,40 @@ namespace Handbrake.Controls
         {
             if (selectedTitle.AudioTracks.Count == 0)
             {
-                lv_audioList.Items.Clear();
+                audioList.Rows.Clear();
                 drp_audioTrack.Items.Clear();
                 drp_audioTrack.Items.Add("None Found");
                 drp_audioTrack.SelectedIndex = 0;
                 return;
             }
 
+            // The Source Information for the title will have changed, so set all the tracks to Automatic.
+            foreach (DataGridViewRow row in this.audioList.Rows)
+            {
+                row.Cells[1].Value = "Automatic";
+            }
+
+            // Setup the Audio track source dropdown with the new audio tracks.
             drp_audioTrack.Items.Clear();
             drp_audioTrack.Items.Add("Automatic");
             drp_audioTrack.Items.AddRange(selectedTitle.AudioTracks.ToArray());
 
-            if (lv_audioList.Items.Count == 0 && preset != null)
+            // Re-add any audio tracks that the preset has.
+            if (audioList.Rows.Count == 0 && preset != null)
             {
                 QueryParser parsed = QueryParser.Parse(preset.Query);
                 foreach (AudioTrack audioTrack in parsed.AudioInformation)
                 {
-                    ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
-                    newTrack.SubItems.Add(audioTrack.Track);
-                    newTrack.SubItems.Add(audioTrack.Encoder);
-                    newTrack.SubItems.Add(audioTrack.MixDown);
-                    newTrack.SubItems.Add(audioTrack.SampleRate);
-                    newTrack.SubItems.Add(audioTrack.Bitrate);
-                    newTrack.SubItems.Add(audioTrack.DRC);
-                    lv_audioList.Items.Add(newTrack);
+                    DataGridViewRow newTrack = new DataGridViewRow();
+                    newTrack.CreateCells(audioList);
+                    newTrack.Cells[0].Value = GetNewID().ToString();
+                    newTrack.Cells[1].Value = (audioTrack.Track);
+                    newTrack.Cells[2].Value = (audioTrack.Encoder);
+                    newTrack.Cells[3].Value = (audioTrack.MixDown);
+                    newTrack.Cells[4].Value = (audioTrack.SampleRate);
+                    newTrack.Cells[5].Value = (audioTrack.Bitrate);
+                    newTrack.Cells[6].Value = (audioTrack.DRC);
+                    audioList.Rows.Add(newTrack);
                 }
             }
 
@@ -176,14 +187,14 @@ namespace Handbrake.Controls
                     }
 
                     if (drp_audioTrack.SelectedItem != null)
-                        foreach (ListViewItem item in lv_audioList.Items)
-                            item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
+                        foreach (DataGridViewRow item in audioList.Rows)
+                            item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
                     else
                     {
                         drp_audioTrack.SelectedIndex = 0;
                         if (drp_audioTrack.SelectedItem != null)
-                            foreach (ListViewItem item in lv_audioList.Items)
-                                item.SubItems[1].Text = drp_audioTrack.SelectedItem.ToString();
+                            foreach (DataGridViewRow item in audioList.Rows)
+                                item.Cells[1].Value = drp_audioTrack.SelectedItem.ToString();
                     }
                 }
                 else
@@ -210,8 +221,8 @@ namespace Handbrake.Controls
             switch (ctl.Name)
             {
                 case "drp_audioTrack":
-                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[1].Text = drp_audioTrack.Text;
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                        audioList.SelectedRows[0].Cells[1].Value = drp_audioTrack.Text;
                     break;
                 case "drp_audioEncoder":
                     SetMixDown();
@@ -236,23 +247,23 @@ namespace Handbrake.Controls
                     }
 
                     // Update an item in the Audio list if required.
-                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text = drp_audioEncoder.Text;
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                        audioList.SelectedRows[0].Cells[2].Value = drp_audioEncoder.Text;
                     break;
                 case "drp_audioMix":
                     SetBitrate();
 
-                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text = drp_audioMix.Text;
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                        audioList.SelectedRows[0].Cells[3].Value = drp_audioMix.Text;
                     break;
                 case "drp_audioSample":
-                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text = drp_audioSample.Text;
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                        audioList.SelectedRows[0].Cells[4].Value = drp_audioSample.Text;
                     break;
                 case "drp_audioBitrate":
                     // Update an item in the Audio list if required.
-                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
-                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text = drp_audioBitrate.Text;
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
+                        audioList.SelectedRows[0].Cells[5].Value = drp_audioBitrate.Text;
                     break;
                 case "tb_drc":
                     double value;
@@ -263,15 +274,15 @@ namespace Handbrake.Controls
                     lbl_drc.Text = value.ToString();
 
                     // Update an item in the Audio list if required.
-                    if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+                    if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
                     {
-                        lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text = value.ToString();
-                        lv_audioList.Select();
+                        audioList.SelectedRows[0].Cells[6].Value = value.ToString();
+                        audioList.Select();
                     }
                     break;
             }
 
-            lv_audioList.Select();
+            audioList.Select();
         }
 
         /// <summary>
@@ -283,27 +294,26 @@ namespace Handbrake.Controls
         /// <param name="e">
         /// The e.
         /// </param>
-        private void lv_audioList_SelectedIndexChanged(object sender, EventArgs e)
+        private void audioList_SelectionChanged(object sender, EventArgs e)
         {
             // Set the dropdown controls based on the selected item in the Audio List.
-            if (lv_audioList.Items.Count != 0 && lv_audioList.SelectedIndices.Count != 0)
+            if (audioList.Rows.Count != 0 && audioList.SelectedRows.Count != 0)
             {
-                drp_audioTrack.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[1].Text;
-                drp_audioEncoder.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[2].Text;
-                drp_audioMix.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[3].Text;
-                drp_audioSample.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[4].Text;
-                drp_audioBitrate.SelectedItem = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[5].Text;
+                drp_audioTrack.SelectedItem = audioList.SelectedRows[0].Cells[1].Value;
+                drp_audioEncoder.SelectedItem = audioList.SelectedRows[0].Cells[2].Value;
+                drp_audioMix.SelectedItem = audioList.SelectedRows[0].Cells[3].Value;
+                drp_audioSample.SelectedItem = audioList.SelectedRows[0].Cells[4].Value;
+                drp_audioBitrate.SelectedItem = audioList.SelectedRows[0].Cells[5].Value;
                 double drcValue;
                 int drcCalculated;
-                double.TryParse(lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text, out drcValue);
+                double.TryParse(audioList.SelectedRows[0].Cells[6].Value.ToString(), out drcValue);
                 if (drcValue != 0)
                     drcValue = ((drcValue * 10) + 1) - 10;
                 int.TryParse(drcValue.ToString(), out drcCalculated);
                 tb_drc.Value = drcCalculated;
-                lbl_drc.Text = lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[6].Text;
+                lbl_drc.Text = audioList.SelectedRows[0].Cells[6].Value.ToString();
 
-                AudioTrackGroup.Text = "Selected Track: " +
-                                       lv_audioList.Items[lv_audioList.SelectedIndices[0]].SubItems[0].Text;
+                AudioTrackGroup.Text = "Selected Track: " + audioList.SelectedRows[0].Cells[0].Value;
             }
             else
                 AudioTrackGroup.Text = "Selected Track: None (Click \"Add Track\" to add)";
@@ -337,22 +347,25 @@ namespace Handbrake.Controls
                 value = ((tb_drc.Value - 1) / 10.0) + 1;
 
             // Create a new row for the Audio list based on the currently selected items in the dropdown.
-            ListViewItem newTrack = new ListViewItem(GetNewID().ToString());
-            newTrack.SubItems.Add(drp_audioTrack.Text);
-            newTrack.SubItems.Add(drp_audioEncoder.Text);
-            newTrack.SubItems.Add(drp_audioMix.Text);
-            newTrack.SubItems.Add(drp_audioSample.Text);
-            newTrack.SubItems.Add(drp_audioBitrate.Text);
-            newTrack.SubItems.Add(value.ToString());
-            lv_audioList.Items.Add(newTrack);
+            DataGridViewRow newTrack = new DataGridViewRow();
+            newTrack.CreateCells(audioList);
+            newTrack.Cells[0].Value = GetNewID().ToString();
+            newTrack.Cells[1].Value = drp_audioTrack.Text;
+            newTrack.Cells[2].Value = drp_audioEncoder.Text;
+            newTrack.Cells[3].Value = drp_audioMix.Text;
+            newTrack.Cells[4].Value = drp_audioSample.Text;
+            newTrack.Cells[5].Value = drp_audioBitrate.Text;
+            newTrack.Cells[6].Value = value.ToString();
+            audioList.Rows.Add(newTrack);
 
             // The Audio List has changed to raise the event.
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
 
             // Select the newly added track and select the control       
-            lv_audioList.Items[lv_audioList.Items.Count - 1].Selected = true;
-            lv_audioList.Select();
+            audioList.ClearSelection();
+            audioList.Rows[audioList.Rows.Count - 1].Selected = true;
+            audioList.Select();
         }
 
         /// <summary>
@@ -413,7 +426,7 @@ namespace Handbrake.Controls
             RemoveTrack();
         }
 
-        // Public Functions
+        // Private Functions
 
         /// <summary>
         /// Add track for preset
@@ -421,9 +434,9 @@ namespace Handbrake.Controls
         /// <param name="item">
         /// The item.
         /// </param>
-        private void AddTrackForPreset(ListViewItem item)
+        private void AddTrackForPreset(DataGridViewRow item)
         {
-            lv_audioList.Items.Add(item);
+            audioList.Rows.Add(item);
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
         }
@@ -433,7 +446,7 @@ namespace Handbrake.Controls
         /// </summary>
         private void ClearAudioList()
         {
-            lv_audioList.Items.Clear();
+            audioList.Rows.Clear();
             if (this.AudioListChanged != null)
                 this.AudioListChanged(this, new EventArgs());
         }
@@ -446,7 +459,7 @@ namespace Handbrake.Controls
         /// </returns>
         private int GetNewID()
         {
-            return lv_audioList.Items.Count + 1;
+            return audioList.Rows.Count + 1;
         }
 
         /// <summary>
@@ -455,26 +468,27 @@ namespace Handbrake.Controls
         private void RemoveTrack()
         {
             // Remove the Item and reselect the control if the following conditions are met.
-            if (lv_audioList.SelectedItems.Count != 0)
+            if (audioList.SelectedRows.Count != 0)
             {
                 // The Audio List is about to change so raise the event.
                 if (this.AudioListChanged != null)
                     this.AudioListChanged(this, new EventArgs());
 
                 // Record the current selected index.
-                int currentPosition = lv_audioList.SelectedIndices[0];
+                int currentPosition = audioList.SelectedRows[0].Index;
 
-                lv_audioList.Items.RemoveAt(lv_audioList.SelectedIndices[0]);
+                audioList.Rows.Remove(audioList.SelectedRows[0]);
 
                 // Now reslect the correct item and give focus to the audio list.
-                if (lv_audioList.Items.Count != 0)
+                if (audioList.Rows.Count != 0)
                 {
-                    if (currentPosition <= (lv_audioList.Items.Count - 1))
-                        lv_audioList.Items[currentPosition].Selected = true;
-                    else if (currentPosition > (lv_audioList.Items.Count - 1))
-                        lv_audioList.Items[lv_audioList.Items.Count - 1].Selected = true;
+                    audioList.ClearSelection();
+                    if (currentPosition <= (audioList.Rows.Count - 1))
+                        audioList.Rows[currentPosition].Selected = true;
+                    else if (currentPosition > (audioList.Rows.Count - 1))
+                        audioList.Rows[audioList.Rows.Count - 1].Selected = true;
 
-                    lv_audioList.Select();
+                    audioList.Select();
                 }
                 // Regenerate the ID numers
                 ReGenerateListIDs();
@@ -489,20 +503,20 @@ namespace Handbrake.Controls
         /// </param>
         private void MoveTrack(bool up)
         {
-            if (lv_audioList.SelectedIndices.Count == 0) return;
+            if (audioList.SelectedRows.Count == 0) return;
 
-            ListViewItem item = lv_audioList.SelectedItems[0];
+            DataGridViewRow item = audioList.SelectedRows[0];
             int index = item.Index;
 
             if (up) index--;
             else index++;
-
-            if (index < lv_audioList.Items.Count || (lv_audioList.Items.Count > index && index >= 0))
+    
+            if (index < audioList.Rows.Count || (audioList.Rows.Count > index && index >= 0))
             {
-                lv_audioList.Items.Remove(item);
-                lv_audioList.Items.Insert(index, item);
+                audioList.Rows.Remove(item);
+                audioList.Rows.Insert(index, item);
+                audioList.ClearSelection();
                 item.Selected = true;
-                lv_audioList.Focus();
             }
         }
 
@@ -512,9 +526,9 @@ namespace Handbrake.Controls
         private void ReGenerateListIDs()
         {
             int i = 1;
-            foreach (ListViewItem item in lv_audioList.Items)
+            foreach (DataGridViewRow item in audioList.Rows)
             {
-                item.SubItems[0].Text = i.ToString();
+                item.Cells[0].Value = i.ToString();
                 i++;
             }
         }
