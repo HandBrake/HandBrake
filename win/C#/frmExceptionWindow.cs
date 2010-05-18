@@ -51,6 +51,20 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// Copy from the right click menu
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void mnu_copy_log_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(rtf_exceptionFull.SelectedText != string.Empty ? rtf_exceptionFull.SelectedText : rtf_exceptionFull.Text, true);
+        } 
+
+        /// <summary>
         /// Close the window
         /// </summary>
         /// <param name="sender">
@@ -62,6 +76,6 @@ namespace Handbrake
         private void btn_close_Click(object sender, EventArgs e)
         {
             this.Close();
-        }       
+        }
     }
 }

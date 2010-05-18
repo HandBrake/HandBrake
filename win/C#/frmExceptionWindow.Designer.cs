@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmExceptionWindow));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -42,10 +43,13 @@
             this.btn_close = new System.Windows.Forms.Button();
             this.btn_copy = new System.Windows.Forms.Button();
             this.rtf_exceptionFull = new System.Windows.Forms.RichTextBox();
+            this.rightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnu_copy_log = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel6.SuspendLayout();
+            this.rightClickMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -166,9 +170,11 @@
             this.btn_copy.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.btn_copy.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_copy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.btn_copy.Location = new System.Drawing.Point(29, 8);
+            this.btn_copy.Image = global::Handbrake.Properties.Resources.copy;
+            this.btn_copy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btn_copy.Location = new System.Drawing.Point(14, 8);
             this.btn_copy.Name = "btn_copy";
-            this.btn_copy.Size = new System.Drawing.Size(70, 25);
+            this.btn_copy.Size = new System.Drawing.Size(85, 25);
             this.btn_copy.TabIndex = 57;
             this.btn_copy.Text = "Copy";
             this.btn_copy.UseVisualStyleBackColor = false;
@@ -176,12 +182,28 @@
             // 
             // rtf_exceptionFull
             // 
+            this.rtf_exceptionFull.ContextMenuStrip = this.rightClickMenu;
             this.rtf_exceptionFull.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtf_exceptionFull.Location = new System.Drawing.Point(76, 97);
             this.rtf_exceptionFull.Name = "rtf_exceptionFull";
             this.rtf_exceptionFull.Size = new System.Drawing.Size(564, 216);
             this.rtf_exceptionFull.TabIndex = 70;
             this.rtf_exceptionFull.Text = "";
+            // 
+            // rightClickMenu
+            // 
+            this.rightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnu_copy_log});
+            this.rightClickMenu.Name = "rightClickMenu";
+            this.rightClickMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // mnu_copy_log
+            // 
+            this.mnu_copy_log.Image = global::Handbrake.Properties.Resources.copy;
+            this.mnu_copy_log.Name = "mnu_copy_log";
+            this.mnu_copy_log.Size = new System.Drawing.Size(152, 22);
+            this.mnu_copy_log.Text = "Copy";
+            this.mnu_copy_log.Click += new System.EventHandler(this.mnu_copy_log_Click);
             // 
             // frmExceptionWindow
             // 
@@ -201,6 +223,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).EndInit();
             this.panel4.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
+            this.rightClickMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -220,5 +243,7 @@
         internal System.Windows.Forms.Button btn_close;
         private System.Windows.Forms.Panel panel6;
         internal System.Windows.Forms.Button btn_copy;
+        private System.Windows.Forms.ContextMenuStrip rightClickMenu;
+        private System.Windows.Forms.ToolStripMenuItem mnu_copy_log;
     }
 }
