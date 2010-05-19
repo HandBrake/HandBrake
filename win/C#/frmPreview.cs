@@ -1,4 +1,6 @@
-﻿namespace Handbrake
+﻿using Handbrake.Parsing;
+
+namespace Handbrake
 {
     using System;
     using System.Diagnostics;
@@ -40,6 +42,14 @@
             for (int i = 1; i <= Properties.Settings.Default.previewScanCount; i++)
                 cb_preview.Items.Add(i.ToString());
             cb_preview.SelectedIndex = 0;
+
+            Process.EncodeStarted += new EventHandler(Process_EncodeStarted);
+        }
+
+        private void Process_EncodeStarted(object sender, EventArgs e)
+        {
+            Thread encodeMon = new Thread(EncodeMonitorThread);
+            encodeMon.Start();
         }
 
         #region Encode Sample
@@ -47,6 +57,10 @@
         private void btn_playVLC_Click(object sender, EventArgs e)
         {
             lbl_status.Visible = true;
+            ProgressBarStatus.Visible = true;
+            ProgressBarStatus.Value = 0;
+            lbl_encodeStatus.Visible = true;
+
             try
             {
                 if (!NoQT)
@@ -88,6 +102,9 @@
             else
             {
                 lbl_status.Visible = true;
+                ProgressBarStatus.Visible = true;
+                ProgressBarStatus.Value = 0;
+                lbl_encodeStatus.Visible = true;
                 try
                 {
                     QTControl.URL = string.Empty;
@@ -121,6 +138,7 @@
             else
             {
                 Process.CreatePreviewSample((string) state);
+
                 if (Process.HbProcess != null)
                 {
                     Process.HbProcess.WaitForExit();
@@ -129,6 +147,35 @@
                 EncodeCompleted();
             }
         }
+
+        private void EncodeMonitorThread()
+        {
+            try
+            {
+                Parser encode = new Parser(Process.HbProcess.StandardOutput.BaseStream);
+                encode.OnEncodeProgress += EncodeOnEncodeProgress;
+                while (!encode.EndOfStream)
+                    encode.ReadEncodeStatus();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(
+                    new EncodeProgressEventHandler(EncodeOnEncodeProgress),
+                    new[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
+                return;
+            }
+            lbl_encodeStatus.Text = PercentComplete + "%";
+            ProgressBarStatus.Value = (int)Math.Round(PercentComplete);
+        }
+
 
         private void EncodeCompleted()
         {
@@ -139,6 +186,10 @@
                     BeginInvoke(new UpdateUIHandler(EncodeCompleted));
                     return;
                 }
+
+                ProgressBarStatus.Visible = false;
+                lbl_encodeStatus.Visible = false;
+
                 if (!NoQT)
                     btn_playQT.Enabled = true;
                 btn_playVLC.Enabled = true;
@@ -275,5 +326,11 @@
         }
 
         #endregion
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            Process.EncodeStarted -= Process_EncodeStarted;
+            base.OnClosing(e);
+        }
     }
 }

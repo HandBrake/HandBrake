@@ -350,7 +350,7 @@ namespace Handbrake.Services
                 Job encJob = this.GetNextJob();
                 this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
 
-                Run(encJob);
+                Run(encJob, false);
 
                 if (HbProcess == null)
                 {

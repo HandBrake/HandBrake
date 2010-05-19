@@ -104,7 +104,7 @@ namespace Handbrake.Services
         /// </param>
         public void CreatePreviewSample(string query)
         {
-            this.Run(new Job { Query = query });
+            this.Run(new Job { Query = query }, true);
         }
 
         /// <summary>
@@ -148,82 +148,77 @@ namespace Handbrake.Services
         /// <param name="encJob">
         /// The enc Job.
         /// </param>
-        protected void Run(Job encJob)
+        /// <param name="RequireStandardOuput">
+        /// Set to True to show no window and force standard output redirect
+        /// </param>
+        protected void Run(Job encJob, bool RequireStandardOuput)
         {
             this.job = encJob;
             try
             {
                 ResetLogReader();
-
-                if (this.EncodeStarted != null)
-                    this.EncodeStarted(this, new EventArgs());
-
                 IsEncoding = true;
 
                 string handbrakeCLIPath = Path.Combine(Application.StartupPath, "HandBrakeCLI.exe");
-                string logPath =
-                    Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs",
-                        "last_encode_log.txt");
-                string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, encJob.Query,
-                                                  logPath);
+                string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\HandBrake\\logs", "last_encode_log.txt");
+                string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, encJob.Query, logPath);
                 var cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
 
-                if (Settings.Default.enocdeStatusInGui)
+                if (Settings.Default.enocdeStatusInGui || RequireStandardOuput)
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
-                    if (!Settings.Default.showCliForInGuiEncodeStatus)
+                    if (!Settings.Default.showCliForInGuiEncodeStatus || RequireStandardOuput)
                         cliStart.CreateNoWindow = true;
                 }
                 if (Settings.Default.cli_minimized)
                     cliStart.WindowStyle = ProcessWindowStyle.Minimized;
 
                 Process[] before = Process.GetProcesses(); // Get a list of running processes before starting.
-                Process startProcess = Process.Start(cliStart);
-
+                HbProcess = Process.Start(cliStart);
                 this.processID = Main.GetCliProcess(before);
 
-                // Fire the Encode Started Event
-                if (this.EncodeStarted != null)
-                    this.EncodeStarted(this, new EventArgs());
-
-                if (startProcess != null)
-                    this.processHandle = startProcess.MainWindowHandle; // Set the process Handle
-
+                if (HbProcess != null)
+                    this.processHandle = HbProcess.MainWindowHandle; // Set the process Handle
+      
                 // Start the Log Monitor
                 windowTimer = new Timer(new TimerCallback(ReadFile), null, 1000, 1000);
 
                 // Set the process Priority
+                Process hbCliProcess = null;
                 if (this.processID != -1)
                 {
-                    HbProcess = Process.GetProcessById(this.processID);
-                    HbProcess.EnableRaisingEvents = true;
-                    HbProcess.Exited += new EventHandler(HbProcess_Exited);
+                    hbCliProcess = Process.GetProcessById(this.processID);
+                    hbCliProcess.EnableRaisingEvents = true;
+                    hbCliProcess.Exited += new EventHandler(HbProcess_Exited);
                 }
 
-                if (HbProcess != null)
+                if (hbCliProcess != null)
                     switch (Settings.Default.processPriority)
                     {
                         case "Realtime":
-                            HbProcess.PriorityClass = ProcessPriorityClass.RealTime;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.RealTime;
                             break;
                         case "High":
-                            HbProcess.PriorityClass = ProcessPriorityClass.High;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.High;
                             break;
                         case "Above Normal":
-                            HbProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.AboveNormal;
                             break;
                         case "Normal":
-                            HbProcess.PriorityClass = ProcessPriorityClass.Normal;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.Normal;
                             break;
                         case "Low":
-                            HbProcess.PriorityClass = ProcessPriorityClass.Idle;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.Idle;
                             break;
                         default:
-                            HbProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
+                            hbCliProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
                             break;
                     }
+
+                // Fire the Encode Started Event
+                if (this.EncodeStarted != null)
+                    this.EncodeStarted(this, new EventArgs());
             }
             catch (Exception exc)
             {

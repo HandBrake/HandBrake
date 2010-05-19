@@ -42,6 +42,9 @@
             this.QTControl = new AxQTOControlLib.AxQTControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_status = new System.Windows.Forms.Label();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ProgressBarStatus = new System.Windows.Forms.ToolStripProgressBar();
+            this.lbl_encodeStatus = new System.Windows.Forms.ToolStripLabel();
             this.toolBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QTControl)).BeginInit();
             this.panel1.SuspendLayout();
@@ -56,7 +59,10 @@
             this.toolStripLabel2,
             this.cb_duration,
             this.btn_playQT,
-            this.btn_playVLC});
+            this.btn_playVLC,
+            this.toolStripSeparator1,
+            this.ProgressBarStatus,
+            this.lbl_encodeStatus});
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
             this.toolBar.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -175,6 +181,24 @@
             this.lbl_status.Text = "{0}";
             this.lbl_status.Visible = false;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // ProgressBarStatus
+            // 
+            this.ProgressBarStatus.Name = "ProgressBarStatus";
+            this.ProgressBarStatus.Size = new System.Drawing.Size(100, 22);
+            this.ProgressBarStatus.Visible = false;
+            // 
+            // lbl_encodeStatus
+            // 
+            this.lbl_encodeStatus.Name = "lbl_encodeStatus";
+            this.lbl_encodeStatus.Size = new System.Drawing.Size(38, 22);
+            this.lbl_encodeStatus.Text = "0.00%";
+            this.lbl_encodeStatus.Visible = false;
+            // 
             // frmPreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -210,5 +234,8 @@
         private System.Windows.Forms.ToolStripButton btn_playVLC;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lbl_status;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripProgressBar ProgressBarStatus;
+        private System.Windows.Forms.ToolStripLabel lbl_encodeStatus;
     }
 }
