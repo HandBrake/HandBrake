@@ -1,4 +1,7 @@
-﻿using Handbrake.Parsing;
+﻿/*  frmPreview.cs $
+    This file is part of the HandBrake source code.
+    Homepage: <http://handbrake.fr/>.
+    It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
@@ -12,17 +15,17 @@ namespace Handbrake
     using QTOControlLib;
     using QTOLibrary;
     using Services;
+    using Parsing;
 
     public partial class frmPreview : Form
     {
-        private readonly Queue Process = new Queue();
-
-        private delegate void UpdateUIHandler();
-
         private string CurrentlyPlaying = string.Empty;
         private readonly frmMain MainWindow;
         private Thread Player;
         private readonly bool NoQT;
+        private readonly Queue Process = new Queue();
+        private delegate void UpdateUIHandler();
+        private bool playWithVLC;
 
         public frmPreview(frmMain mw)
         {
@@ -45,7 +48,6 @@ namespace Handbrake
 
             Process.EncodeStarted += new EventHandler(Process_EncodeStarted);
         }
-
         private void Process_EncodeStarted(object sender, EventArgs e)
         {
             Thread encodeMon = new Thread(EncodeMonitorThread);
@@ -56,10 +58,10 @@ namespace Handbrake
 
         private void btn_playVLC_Click(object sender, EventArgs e)
         {
-            lbl_status.Visible = true;
             ProgressBarStatus.Visible = true;
             ProgressBarStatus.Value = 0;
             lbl_encodeStatus.Visible = true;
+            playWithVLC = true;
 
             try
             {
@@ -77,7 +79,7 @@ namespace Handbrake
 
             btn_playQT.Enabled = false;
             btn_playVLC.Enabled = false;
-            lbl_status.Text = "Encoding Sample for (VLC) ...";
+            this.Text += " (Encoding)";
             int duration;
             int.TryParse(cb_duration.Text, out duration);
             string query = QueryGenerator.GenerateCliQuery(MainWindow, 3, duration, cb_preview.Text);
@@ -86,6 +88,7 @@ namespace Handbrake
 
         private void btn_playQT_Click(object sender, EventArgs e)
         {
+            playWithVLC = false;
             if (NoQT)
             {
                 MessageBox.Show(this, 
@@ -101,7 +104,6 @@ namespace Handbrake
             }
             else
             {
-                lbl_status.Visible = true;
                 ProgressBarStatus.Visible = true;
                 ProgressBarStatus.Value = 0;
                 lbl_encodeStatus.Visible = true;
@@ -120,7 +122,7 @@ namespace Handbrake
 
                 btn_playQT.Enabled = false;
                 btn_playVLC.Enabled = false;
-                lbl_status.Text = "Encoding Sample for (QT) ...";
+                this.Text += " (Encoding)";
                 int duration;
                 int.TryParse(cb_duration.Text, out duration);
                 string query = QueryGenerator.GenerateCliQuery(MainWindow, 3, duration, cb_preview.Text);
@@ -194,25 +196,19 @@ namespace Handbrake
                     btn_playQT.Enabled = true;
                 btn_playVLC.Enabled = true;
 
-                // Decide which Player to use.
-                string playerSelection = lbl_status.Text.Contains("QT") ? "QT" : "VLC";
-
-                lbl_status.Text = "Loading Clip ...";
+                this.Text = this.Text.Replace(" (Encoding)", string.Empty);
 
                 // Get the sample filename
                 if (MainWindow.text_destination.Text != string.Empty)
                     CurrentlyPlaying =
                         MainWindow.text_destination.Text.Replace(".mp4", "_sample.mp4").Replace(".m4v", "_sample.m4v").
                             Replace(".mkv", "_sample.mkv");
-                ;
 
                 // Play back in QT or VLC
-                if (playerSelection == "QT")
+                if (!playWithVLC)
                     Play();
                 else
                     PlayVLC();
-
-                lbl_status.Text = string.Empty;
             }
             catch (Exception exc)
             {
@@ -232,7 +228,6 @@ namespace Handbrake
         {
             Player = new Thread(OpenMovie) {IsBackground = true};
             Player.Start();
-            lbl_status.Visible = false;
         }
 
         /// <summary>
@@ -278,7 +273,6 @@ namespace Handbrake
                         string args = "\"" + CurrentlyPlaying + "\"";
                         ProcessStartInfo vlc = new ProcessStartInfo(Properties.Settings.Default.VLC_Path, args);
                         System.Diagnostics.Process.Start(vlc);
-                        lbl_status.Text = "VLC will now launch.";
                     }
                 }
                 else
@@ -286,7 +280,6 @@ namespace Handbrake
                                     "Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.", 
                                     "VLC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            lbl_status.Visible = false;
         }
 
         /// <summary>

@@ -41,7 +41,6 @@
             this.btn_playVLC = new System.Windows.Forms.ToolStripButton();
             this.QTControl = new AxQTOControlLib.AxQTControl();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lbl_status = new System.Windows.Forms.Label();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ProgressBarStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.lbl_encodeStatus = new System.Windows.Forms.ToolStripLabel();
@@ -159,27 +158,12 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.lbl_status);
             this.panel1.Controls.Add(this.QTControl);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 25);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(772, 481);
             this.panel1.TabIndex = 40;
-            // 
-            // lbl_status
-            // 
-            this.lbl_status.AutoSize = true;
-            this.lbl_status.BackColor = System.Drawing.Color.Transparent;
-            this.lbl_status.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_status.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_status.ForeColor = System.Drawing.Color.White;
-            this.lbl_status.Location = new System.Drawing.Point(0, 0);
-            this.lbl_status.Name = "lbl_status";
-            this.lbl_status.Size = new System.Drawing.Size(51, 25);
-            this.lbl_status.TabIndex = 40;
-            this.lbl_status.Text = "{0}";
-            this.lbl_status.Visible = false;
             // 
             // toolStripSeparator1
             // 
@@ -216,7 +200,6 @@
             this.toolBar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.QTControl)).EndInit();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -233,7 +216,6 @@
         private System.Windows.Forms.ToolStripComboBox cb_duration;
         private System.Windows.Forms.ToolStripButton btn_playVLC;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label lbl_status;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripProgressBar ProgressBarStatus;
         private System.Windows.Forms.ToolStripLabel lbl_encodeStatus;

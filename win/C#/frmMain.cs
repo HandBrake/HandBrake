@@ -42,6 +42,7 @@ namespace Handbrake
         private DVD currentSource;
         private ScanService SourceScan = new ScanService();
         private List<DriveInformation> drives;
+        private Thread encodeMonitor;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -351,8 +352,8 @@ namespace Handbrake
             // Experimental HBProc Process Monitoring.
             if (Properties.Settings.Default.enocdeStatusInGui)
             {
-                Thread encodeMon = new Thread(EncodeMonitorThread);
-                encodeMon.Start();
+                encodeMonitor = new Thread(EncodeMonitorThread);
+                encodeMonitor.Start();
             }
         }
 
@@ -821,9 +822,6 @@ namespace Handbrake
                     {
                         encodeQueue.SafelyClose();
                     }
-
-                    // Update the GUI
-                    SetEncodeFinished();
                 }
             }
             else
@@ -1868,6 +1866,7 @@ namespace Handbrake
                 }
 
                 lbl_encode.Text = "Encoding Finished";
+                ProgressBarStatus.Visible = false;
                 btn_start.Text = "Start";
                 btn_start.ToolTipText = "Start the encoding process";
                 btn_start.Image = Properties.Resources.Play;
@@ -1898,8 +1897,9 @@ namespace Handbrake
                     BeginInvoke(new UpdateWindowHandler(SetEncodeStarted));
                     return;
                 }
-
                 lbl_encode.Visible = true;
+                ProgressBarStatus.Value = 0;
+                ProgressBarStatus.Visible = true;
                 lbl_encode.Text = "Encoding with " + encodeQueue.Count + " encode(s) pending";
                 btn_start.Text = "Stop";
                 btn_start.ToolTipText = "Stop the encoding process.";
@@ -2052,6 +2052,8 @@ namespace Handbrake
                 encode.OnEncodeProgress += EncodeOnEncodeProgress;
                 while (!encode.EndOfStream)
                     encode.ReadEncodeStatus();
+
+                SetEncodeFinished();
             }
             catch (Exception exc)
             {
@@ -2079,7 +2081,14 @@ namespace Handbrake
                 return;
             }
             lbl_encode.Text =
-                string.Format("Encode Progress: {0}%,       FPS: {1},       Avg FPS: {2},       Time Remaining: {3} ", PercentComplete, CurrentFps, AverageFps, TimeRemaining);
+                string.Format(
+                "{0:00.00}%,    FPS: {1:000.0},    Avg FPS: {2:000.0},    Time Remaining: {3}", 
+                PercentComplete, 
+                CurrentFps, 
+                AverageFps, 
+                TimeRemaining);
+
+            ProgressBarStatus.Value = (int)Math.Round(PercentComplete);
         }
 
         #endregion
