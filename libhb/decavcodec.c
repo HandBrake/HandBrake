@@ -561,7 +561,20 @@ static void flushDelayQueue( hb_work_private_t *pv )
     }
 }
 
-static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
+/*
+ * Decodes a video frame from the specified raw packet data ('data', 'size', 'sequence').
+ * The output of this function is stored in 'pv->list', which contains a list
+ * of zero or more decoded packets.
+ * 
+ * The returned packets are guaranteed to have their timestamps in the correct order,
+ * even if the original packets decoded by libavcodec have misordered timestamps,
+ * due to the use of 'packed B-frames'.
+ * 
+ * Internally the set of decoded packets may be buffered in 'pv->delayq'
+ * until enough packets have been decoded so that the timestamps can be
+ * correctly rewritten, if this is necessary.
+ */
+static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size, int sequence )
 {
     int got_picture, oldlevel = 0;
     AVFrame frame;
@@ -634,6 +647,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
         {
             buf = copy_frame( pv, &frame );
             buf->start = pts;
+            buf->sequence = sequence;
             hb_list_add( pv->list, buf );
             ++pv->nframes;
             return got_picture;
@@ -681,7 +695,9 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
         }
 
         // add the new frame to the delayq & push its timestamp on the heap
-        pv->delayq[slot] = copy_frame( pv, &frame );
+        buf = copy_frame( pv, &frame );
+        buf->sequence = sequence;
+        pv->delayq[slot] = buf;
         heap_push( &pv->pts_heap, pts );
 
         ++pv->nframes;
@@ -690,7 +706,7 @@ static int decodeFrame( hb_work_private_t *pv, uint8_t *data, int size )
     return got_picture;
 }
 
-static void decodeVideo( hb_work_private_t *pv, uint8_t *data, int size,
+static void decodeVideo( hb_work_private_t *pv, uint8_t *data, int size, int sequence,
                          int64_t pts, int64_t dts )
 {
     /*
@@ -710,20 +726,24 @@ static void decodeVideo( hb_work_private_t *pv, uint8_t *data, int size,
         if ( pout_len > 0 )
         {
             pv->pts = pv->parser->pts;
-            decodeFrame( pv, pout, pout_len );
+            decodeFrame( pv, pout, pout_len, sequence );
         }
     } while ( pos < size );
 
     /* the stuff above flushed the parser, now flush the decoder */
     if ( size <= 0 )
     {
-        while ( decodeFrame( pv, NULL, 0 ) )
+        while ( decodeFrame( pv, NULL, 0, sequence ) )
         {
         }
         flushDelayQueue( pv );
     }
 }
 
+/*
+ * Removes all packets from 'pv->list', links them together into
+ * a linked-list, and returns the first packet in the list.
+ */
 static hb_buffer_t *link_buf_list( hb_work_private_t *pv )
 {
     hb_buffer_t *head = hb_list_item( pv->list, 0 );
@@ -863,7 +883,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     /* if we got an empty buffer signaling end-of-stream send it downstream */
     if ( in->size == 0 )
     {
-        decodeVideo( pv, in->data, in->size, pts, dts );
+        decodeVideo( pv, in->data, in->size, in->sequence, pts, dts );
         hb_list_add( pv->list, in );
         *buf_out = link_buf_list( pv );
         return HB_WORK_DONE;
@@ -900,7 +920,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->new_chap = in->new_chap;
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
-    decodeVideo( pv, in->data, in->size, pts, dts );
+    decodeVideo( pv, in->data, in->size, in->sequence, pts, dts );
     hb_buffer_close( &in );
     *buf_out = link_buf_list( pv );
     return HB_WORK_OK;
@@ -1115,7 +1135,7 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if ( in->size == 0 )
     {
         /* flush any frames left in the decoder */
-        while ( pv->context && decodeFrame( pv, NULL, 0 ) )
+        while ( pv->context && decodeFrame( pv, NULL, 0, in->sequence ) )
         {
         }
         flushDelayQueue( pv );
@@ -1146,7 +1166,7 @@ static int decavcodecviWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->chap_time = pts >= 0? pts : pv->pts_next;
     }
     prepare_ffmpeg_buffer( in );
-    decodeFrame( pv, in->data, in->size );
+    decodeFrame( pv, in->data, in->size, in->sequence );
     hb_buffer_close( &in );
     *buf_out = link_buf_list( pv );
     return HB_WORK_OK;

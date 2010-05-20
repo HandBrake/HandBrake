@@ -51,12 +51,23 @@ struct hb_buffer_s
     uint8_t *     data;     // packet data
     int           cur;      // used internally by packet lists (hb_list_t)
 
+    /*
+     * Corresponds to the order that this packet was read from the demuxer.
+     * 
+     * It is important that video decoder work-objects pass this value through
+     * from their input packets to the output packets they generate. Otherwise
+     * RENDERSUB subtitles (especially VOB subtitles) will break.
+     * 
+     * Subtitle decoder work-objects that output a renderable subtitle
+     * format (ex: PICTURESUB) must also be careful to pass the sequence number
+     * through for the same reason.
+     */
     int64_t       sequence;
 
     int           id;           // ID of the track that the packet comes from
     int64_t       start;        // Video and subtitle packets: start time of frame/subtitle
     int64_t       stop;         // Video and subtitle packets: stop time of frame/subtitle
-    int           new_chap;     // Video packets: ???
+    int           new_chap;     // Video packets: if non-zero, is the index of the chapter whose boundary was crossed
 
 #define HB_FRAME_IDR    0x01
 #define HB_FRAME_I      0x02

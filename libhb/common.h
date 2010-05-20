@@ -478,7 +478,7 @@ struct hb_chapter_s
  * > format
  *     - format of the packets the subtitle decoder work-object sends to sub->fifo_raw
  *     - for passthru subtitles, is also the format of the final packets sent to sub->fifo_out
- *     - PICTURESUB for banded 8-bit YAUV pixels
+ *     - PICTURESUB for banded 8-bit YAUV pixels; see decvobsub.c documentation for more info
  *     - TEXTSUB for UTF-8 text marked up with <b>, <i>, or <u>
  *     - read by the muxers, and by the subtitle burn-in logic in the hb_sync_video work-object
  * > source
@@ -508,6 +508,10 @@ struct hb_subtitle_s
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */
+    
+    // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
+    // Must be filled out by the demuxer for VOB subtitle tracks.
+    uint32_t    palette[16];
 
     int hits;     /* How many hits/occurrences of this subtitle */
     int forced_hits; /* How many forced hits in this subtitle */
@@ -576,8 +580,6 @@ struct hb_title_s
     int         video_bitrate;
     const char  *container_name;
     int         data_rate;
-
-    uint32_t    palette[16];
 
     hb_metadata_t *metadata;
 
@@ -779,5 +781,8 @@ typedef void hb_error_handler_t( const char *errmsg );
 extern void hb_register_error_handler( hb_error_handler_t * handler );
 
 char * hb_strdup_printf( char * fmt, ... );
+
+int hb_yuv2rgb(int yuv);
+int hb_rgb2yuv(int rgb);
 
 #endif

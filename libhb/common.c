@@ -1021,3 +1021,71 @@ char * hb_strdup_printf( char * fmt, ... )
     }
 }
 
+/**********************************************************************
+ * hb_yuv2rgb
+ **********************************************************************
+ * Converts a YCbCr pixel to an RGB pixel.
+ * 
+ * This conversion is lossy (due to rounding and clamping).
+ * 
+ * Algorithm:
+ *   http://en.wikipedia.org/w/index.php?title=YCbCr&oldid=361987695#Technical_details
+ *********************************************************************/
+int hb_yuv2rgb(int yuv)
+{
+    double y, Cr, Cb;
+    int r, g, b;
+
+    y  = (yuv >> 16) & 0xff;
+    Cb = (yuv >>  8) & 0xff;
+    Cr = (yuv      ) & 0xff;
+
+    r = 1.164 * (y - 16)                      + 2.018 * (Cb - 128);
+    g = 1.164 * (y - 16) - 0.813 * (Cr - 128) - 0.391 * (Cb - 128);
+    b = 1.164 * (y - 16) + 1.596 * (Cr - 128);
+    
+    r = (r < 0) ? 0 : r;
+    g = (g < 0) ? 0 : g;
+    b = (b < 0) ? 0 : b;
+    
+    r = (r > 255) ? 255 : r;
+    g = (g > 255) ? 255 : g;
+    b = (b > 255) ? 255 : b;
+    
+    return (r << 16) | (g << 8) | b;
+}
+
+/**********************************************************************
+ * hb_rgb2yuv
+ **********************************************************************
+ * Converts an RGB pixel to a YCbCr pixel.
+ * 
+ * This conversion is lossy (due to rounding and clamping).
+ * 
+ * Algorithm:
+ *   http://en.wikipedia.org/w/index.php?title=YCbCr&oldid=361987695#Technical_details
+ *********************************************************************/
+int hb_rgb2yuv(int rgb)
+{
+    double r, g, b;
+    int y, Cr, Cb;
+    
+    r = (rgb >> 16) & 0xff;
+    g = (rgb >>  8) & 0xff;
+    b = (rgb      ) & 0xff;
+
+    y  =  16. + ( 0.257 * r) + (0.504 * g) + (0.098 * b);
+    Cb = 128. + (-0.148 * r) - (0.291 * g) + (0.439 * b);
+    Cr = 128. + ( 0.439 * r) - (0.368 * g) - (0.071 * b);
+    
+    y = (y < 0) ? 0 : y;
+    Cb = (Cb < 0) ? 0 : Cb;
+    Cr = (Cr < 0) ? 0 : Cr;
+    
+    y = (y > 255) ? 255 : y;
+    Cb = (Cb > 255) ? 255 : Cb;
+    Cr = (Cr > 255) ? 255 : Cr;
+    
+    return (y << 16) | (Cb << 8) | Cr;
+}
+

@@ -2831,6 +2831,73 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
     }
 }
 
+/*
+ * Parses the 'subtitle->palette' information from the specific VOB subtitle track's private data.
+ * Returns 0 if successful or 1 if parsing failed or was incomplete.
+ * 
+ * Format:
+ *   MkvVobSubtitlePrivateData = ( Line )*
+ *   Line = FieldName ':' ' ' FieldValue '\n'
+ *   FieldName = [^:]+
+ *   FieldValue = [^\n]+
+ * 
+ * The line of interest is:
+ *   PaletteLine = "palette" ':' ' ' RRGGBB ( ',' ' ' RRGGBB )*
+ * 
+ * More information on the format at:
+ *   http://www.matroska.org/technical/specs/subtitles/images.html
+ */
+static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *subtitle )
+{
+    if ( codec->extradata_size <= 0 )
+        return 1;
+    
+    // lines = (string) codec->extradata;
+    char *lines = malloc( codec->extradata_size + 1 );
+    if ( lines == NULL )
+        return 1;
+    memcpy( lines, codec->extradata, codec->extradata_size );
+    lines[codec->extradata_size] = '\0';
+    
+    uint32_t rgb[16];
+    int gotPalette = 0;
+    
+    char *curLine, *curLine_parserData;
+    for ( curLine = strtok_r( lines, "\n", &curLine_parserData );
+          curLine;
+          curLine = strtok_r( NULL, "\n", &curLine_parserData ) )
+    {
+        int numElementsRead = sscanf(curLine, "palette: "
+            "%06x, %06x, %06x, %06x, "
+            "%06x, %06x, %06x, %06x, "
+            "%06x, %06x, %06x, %06x, "
+            "%06x, %06x, %06x, %06x",
+            &rgb[0],  &rgb[1],  &rgb[2],  &rgb[3],
+            &rgb[4],  &rgb[5],  &rgb[6],  &rgb[7],
+            &rgb[8],  &rgb[9],  &rgb[10], &rgb[11],
+            &rgb[12], &rgb[13], &rgb[14], &rgb[15]);
+        
+        if (numElementsRead == 16) {
+            gotPalette = 1;
+            break;
+        }
+    }
+    
+    free( lines );
+    
+    if ( gotPalette )
+    {
+        int i;
+        for (i=0; i<16; i++)
+            subtitle->palette[i] = hb_rgb2yuv(rgb[i]);
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
 static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id )
 {
     AVStream *st = stream->ffmpeg_ic->streams[id];
@@ -2842,14 +2909,14 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     
     switch ( codec->codec_id )
     {
-        // TODO(davidfstr): get universal VOB sub input working
-        /*
         case CODEC_ID_DVD_SUBTITLE:
             subtitle->format = PICTURESUB;
             subtitle->source = VOBSUB;
             subtitle->config.dest = RENDERSUB;  // By default render (burn-in) the VOBSUB.
+            if ( ffmpeg_parse_vobsub_extradata( codec, subtitle ) )
+                hb_log( "add_ffmpeg_subtitle: malformed extradata for VOB subtitle track; "
+                        "subtitle colors likely to be wrong" );
             break;
-        */
         case CODEC_ID_TEXT:
             subtitle->format = TEXTSUB;
             subtitle->source = UTF8SUB;
@@ -2869,7 +2936,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             break;
         */
         default:
-            hb_log("add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x", (int) codec->codec_id);
+            hb_log( "add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x", (int) codec->codec_id );
             free(subtitle);
             return;
     }
@@ -3132,10 +3199,14 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
     /* 
      * Fill out buf->stop for subtitle packets
      * 
-     * libavcodec's MKV demuxer stores the duration of UTF-8 (TEXT) subtitles
+     * libavcodec's MKV demuxer stores the duration of UTF-8 subtitles (CODEC_ID_TEXT)
      * in the 'convergence_duration' field for some reason.
      * 
      * Other subtitles' durations are stored in the 'duration' field.
+     * 
+     * VOB subtitles (CODEC_ID_DVD_SUBTITLE) do not have their duration stored in
+     * either field. This is not a problem because the VOB decoder can extract this
+     * information from the packet payload itself.
      */
     enum CodecID ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;
     if ( ffmpeg_pkt_codec == CODEC_ID_TEXT ) {

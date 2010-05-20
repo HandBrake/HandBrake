@@ -4,6 +4,26 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
+/*
+ * Decoder for DVD bitmap subtitles, also known as "VOB subtitles" within the HandBrake source code.
+ * 
+ * Input format of the subtitle packets is described here:
+ *   http://sam.zoy.org/writings/dvd/subtitles/
+ *
+ * An auxiliary input is the color palette lookup table, in 'subtitle->palette'.
+ * The demuxer implementation must fill out this table appropriately.
+ * - In the case of a true DVD input, the palette is read from the IFO file.
+ * - In the case of an MKV file input, the palette is read from the codec private data of the subtitle track.
+ *
+ * Output format of this decoder is PICTURESUB, which is:
+ *   struct PictureSubPacket {
+ *       uint8_t lum[pixelCount];
+ *       uint8_t alpha[pixelCount];
+ *       uint8_t chromaU[pixelCount];
+ *       uint8_t chromaV[pixelCount];
+ *   }
+ */
+
 #include "hb.h"
 
 struct hb_work_private_s
@@ -42,6 +62,21 @@ int decsubInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
     pv->pts = -1;
+    
+    // Warn if the input color palette is empty
+    int paletteEmpty = 1;
+    int i;
+    for (i=0; i<16; i++)
+    {
+        if (w->subtitle->palette[i])
+        {
+            paletteEmpty = 0;
+            break;
+        }
+    }
+    if (paletteEmpty) {
+        hb_log( "decvobsub: input color palette is empty; not demuxed properly?" );
+    }
 
     return 0;
 }
@@ -262,7 +297,7 @@ static void ParseControls( hb_work_object_t * w )
                          * work, but I get the right colours by doing
                          * no conversion.
                          */
-                        uint32_t color = title->palette[colors[j]];
+                        uint32_t color = w->subtitle->palette[colors[j]];
                         uint8_t Cr, Cb, y;
                         y = (color>>16) & 0xff;
                         Cr = (color>>8) & 0xff;

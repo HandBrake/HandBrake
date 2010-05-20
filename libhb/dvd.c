@@ -443,10 +443,6 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
         hb_list_add( title->list_audio, audio );
     }
 
-    memcpy( title->palette,
-            vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
-            16 * sizeof( uint32_t ) );
-
     /* Check for subtitles */
     for( i = 0; i < vts->vtsi_mat->nr_of_vts_subp_streams; i++ )
     {
@@ -502,6 +498,10 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t )
         subtitle->config.dest   = RENDERSUB;  // By default render (burn-in) the VOBSUB.
 
         subtitle->type = lang_extension;
+        
+        memcpy( subtitle->palette,
+            vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
+            16 * sizeof( uint32_t ) );
 
         switch( lang_extension )
         {  

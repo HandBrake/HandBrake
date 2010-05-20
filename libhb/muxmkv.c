@@ -34,27 +34,6 @@ struct hb_mux_data_s
     int       sub_format;
 };
 
-static int yuv2rgb(int yuv)
-{
-    double y, Cr, Cb;
-    int r, g, b;
-
-    y =  (yuv >> 16) & 0xff;
-    Cb = (yuv >>  8) & 0xff;
-    Cr = (yuv      ) & 0xff;
-
-    r = 1.164 * (y - 16)                      + 2.018 * (Cb - 128);
-    g = 1.164 * (y - 16) - 0.813 * (Cr - 128) - 0.391 * (Cb - 128);
-    b = 1.164 * (y - 16) + 1.596 * (Cr - 128);
-    r = (r < 0) ? 0 : r;
-    g = (g < 0) ? 0 : g;
-    b = (b < 0) ? 0 : b;
-    r = (r > 255) ? 255 : r;
-    g = (g > 255) ? 255 : g;
-    b = (b > 255) ? 255 : b;
-    return (r << 16) | (g << 8) | b;
-}
-
 /**********************************************************************
  * MKVInit
  **********************************************************************
@@ -296,7 +275,7 @@ static int MKVInit( hb_mux_object_t * m )
             case PICTURESUB:
                 track->codecID = MK_SUBTITLE_VOBSUB;
                 for (j = 0; j < 16; j++)
-                    rgb[j] = yuv2rgb(title->palette[j]);
+                    rgb[j] = hb_yuv2rgb(subtitle->palette[j]);
                 len = snprintf(subidx, 2048, subidx_fmt, 
                         title->width, title->height,
                         0, 0, "OFF",
