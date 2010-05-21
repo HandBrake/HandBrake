@@ -141,8 +141,8 @@ namespace Handbrake.Functions
 
             // Custom Anamorphic Controls
             mainWindow.PictureSettings.updownDisplayWidth.Text = presetQuery.DisplayWidthValue.ToString();
-            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.PixelAspectWidth.ToString();
-            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.PixelAspectHeight.ToString();
+            mainWindow.PictureSettings.updownParHeight.Text = presetQuery.PixelAspectHeight.ToString();
+            mainWindow.PictureSettings.updownParWidth.Text = presetQuery.PixelAspectWidth.ToString();
             mainWindow.PictureSettings.drp_modulus.SelectedItem = presetQuery.AnamorphicModulus.ToString();
 
             #endregion
