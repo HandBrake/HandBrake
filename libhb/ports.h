@@ -19,6 +19,9 @@
 uint64_t hb_get_date();
 void     hb_snooze( int delay );
 int      hb_get_cpu_count();
+#ifdef SYS_MINGW
+char *strtok_r(char *s, const char *delim, char **save_ptr);
+#endif
 
 #ifdef __LIBHB__
 
