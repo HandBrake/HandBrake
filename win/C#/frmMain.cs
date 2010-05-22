@@ -748,16 +748,20 @@ namespace Handbrake
 
         private void ExportPreset()
         {
-            MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
+            // MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            // return;
 
             SaveFileDialog savefiledialog = new SaveFileDialog();
             savefiledialog.Filter = "plist|*.plist";
 
-            if (savefiledialog.ShowDialog() == DialogResult.OK)
+            if (treeView_presets.SelectedNode != null)
             {
-                QueryParser parsed = QueryParser.Parse(QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null));
-                PlistPresetHandler.Export(savefiledialog.FileName, parsed);
+
+                if (savefiledialog.ShowDialog() == DialogResult.OK)
+                {
+                    Preset preset = presetHandler.GetPreset(treeView_presets.SelectedNode.Text);
+                    PlistPresetHandler.Export(savefiledialog.FileName, preset);
+                }
             }
         }
 
