@@ -1750,7 +1750,12 @@ static void redirect_thread_func(void * _data)
 {
     int pfd[2];
     pipe(pfd);
+#if defined( SYS_MINGW )
+    // dup2 doesn't work on windows for some stupid reason
+    stderr->_file = pfd[1];
+#else
     dup2(pfd[1], /*stderr*/ 2);
+#endif
     FILE * log_f = fdopen(pfd[0], "rb");
     
     char line_buffer[500];
