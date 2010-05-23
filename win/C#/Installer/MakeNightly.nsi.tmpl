@@ -14,6 +14,11 @@
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
+;Required .NET framework
+!define MIN_FRA_MAJOR "3"
+!define MIN_FRA_MINOR "5"
+!define MIN_FRA_BUILD "*"
+
 SetCompressor lzma
 
 ; MUI 1.67 compatible ------
@@ -51,45 +56,71 @@ OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI.exe"
 !insertmacro VersionCompare
 !include LogicLib.nsh
 
-; Check to see if .NET Framework 2.0 or above is Installed.
-Function .onInit
-  Call GetDotNETVersion
-  Pop $0
-  ${If} $0 == "not found"
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library is not installed. $\r$\n You can download .Net Framework 2.0 redistributable from the microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
-    Abort
-  ${EndIf}
-
-  StrCpy $0 $0 "" 1 # skip "v"
-
-  ${VersionCompare} $0 "2.0" $1
-  ${If} $1 == 2
-    MessageBox MB_OK|MB_ICONSTOP ".NET runtime library v2.0 or newer is required. You have $0. $\r$\n You can download .Net Framework 2.0 redistributable from the Microsoft website. $\r$\n Alternatively you can use google for a direct download URL"
-    Abort
-  ${EndIf}
-FunctionEnd
-
-Function GetDotNETVersion
-  Push $0
-  Push $1
-
-  System::Call "mscoree::GetCORVersion(w .r0, i ${NSIS_MAX_STRLEN}, *i) i .r1 ?u"
-  StrCmp $1 "error" 0 +2
-    StrCpy $0 "not found"
-
-  Pop $1
-  Exch $0
-FunctionEnd
-
-
 InstallDir "$PROGRAMFILES\Handbrake"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+Var InstallDotNET
+
+Function .onInit
+
+  ; Begin Only allow one version
+  System::Call 'kernel32::CreateMutexA(i 0, i 0, t "myMutex") i .r1 ?e'
+  Pop $R0
+
+  StrCmp $R0 0 +3
+  MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
+  Abort
+
+  ;Remove previous version
+  ReadRegStr $R0 HKLM \
+  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}\" \
+  "UninstallString"
+  StrCmp $R0 "" done
+
+  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+  "${PRODUCT_NAME} ${PRODUCT_VERSION} is already installed. $\n$\nClick `OK` to remove the \
+  previous version or `Cancel` to continue." \
+  IDOK uninst
+  goto done
+
+ ;Run the uninstaller
+  uninst:
+   Exec $INSTDIR\uninst.exe
+  done:
+FunctionEnd
+
 Section "Handbrake" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
+
+  ; Begin Check .NET version
+  StrCpy $InstallDotNET "No"
+  Call CheckFramework
+     StrCmp $0 "1" +3
+        StrCpy $InstallDotNET "Yes"
+      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the .NET Framework 3.5 SP1 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}."
+     Pop $0
+
+  ; Get .NET if required
+  ${If} $InstallDotNET == "Yes"
+     SetDetailsView hide
+     inetc::get /caption "Downloading .NET Framework 3.5" /canceltext "Cancel" "http://www.microsoft.com/downloads/info.aspx?na=90&p=&SrcDisplayLang=en&SrcCategoryId=&SrcFamilyId=ab99342f-5d1a-413d-8319-81da479ab0d7&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f0%2f6%2f1%2f061f001c-8752-4600-a198-53214c69b51f%2fdotnetfx35setup.exe" "$INSTDIR\dotnetfx.exe" /end
+     Pop $1
+
+     ${If} $1 != "OK"
+           Delete "$INSTDIR\dotnetfx.exe"
+           Abort "Installation cancelled, ${PRODUCT_NAME} requires the .NET 3.5 Framework"
+     ${EndIf}
+
+     ExecWait "$INSTDIR\dotnetfx.exe"
+     Delete "$INSTDIR\dotnetfx.exe"
+
+     SetDetailsView show
+  ${EndIf}
+  
+  
   File "Handbrake.exe"
   CreateDirectory "$SMPROGRAMS\Handbrake"
   CreateShortCut "$SMPROGRAMS\Handbrake\Handbrake.lnk" "$INSTDIR\Handbrake.exe"
@@ -147,3 +178,137 @@ Section Uninstall
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
   SetAutoClose true
 SectionEnd
+
+;Check for .NET framework
+Function CheckFrameWork
+
+   ;Save the variables in case something else is using them
+  Push $0
+  Push $1
+  Push $2
+  Push $3
+  Push $4
+  Push $R1
+  Push $R2
+  Push $R3
+  Push $R4
+  Push $R5
+  Push $R6
+  Push $R7
+  Push $R8
+
+  StrCpy $R5 "0"
+  StrCpy $R6 "0"
+  StrCpy $R7 "0"
+  StrCpy $R8 "0.0.0"
+  StrCpy $0 0
+
+  loop:
+
+  ;Get each sub key under "SOFTWARE\Microsoft\NET Framework Setup\NDP"
+  EnumRegKey $1 HKLM "SOFTWARE\Microsoft\NET Framework Setup\NDP" $0
+  StrCmp $1 "" done ;jump to end if no more registry keys
+  IntOp $0 $0 + 1
+  StrCpy $2 $1 1 ;Cut off the first character
+  StrCpy $3 $1 "" 1 ;Remainder of string
+
+  ;Loop if first character is not a 'v'
+  StrCmpS $2 "v" start_parse loop
+
+  ;Parse the string
+  start_parse:
+  StrCpy $R1 ""
+  StrCpy $R2 ""
+  StrCpy $R3 ""
+  StrCpy $R4 $3
+
+  StrCpy $4 1
+
+  parse:
+  StrCmp $3 "" parse_done ;If string is empty, we are finished
+  StrCpy $2 $3 1 ;Cut off the first character
+  StrCpy $3 $3 "" 1 ;Remainder of string
+  StrCmp $2 "." is_dot not_dot ;Move to next part if it's a dot
+
+  is_dot:
+  IntOp $4 $4 + 1 ; Move to the next section
+  goto parse ;Carry on parsing
+
+  not_dot:
+  IntCmp $4 1 major_ver
+  IntCmp $4 2 minor_ver
+  IntCmp $4 3 build_ver
+  IntCmp $4 4 parse_done
+
+  major_ver:
+  StrCpy $R1 $R1$2
+  goto parse ;Carry on parsing
+
+  minor_ver:
+  StrCpy $R2 $R2$2
+  goto parse ;Carry on parsing
+
+  build_ver:
+  StrCpy $R3 $R3$2
+  goto parse ;Carry on parsing
+
+  parse_done:
+
+  IntCmp $R1 $R5 this_major_same loop this_major_more
+  this_major_more:
+  StrCpy $R5 $R1
+  StrCpy $R6 $R2
+  StrCpy $R7 $R3
+  StrCpy $R8 $R4
+
+  goto loop
+
+  this_major_same:
+  IntCmp $R2 $R6 this_minor_same loop this_minor_more
+  this_minor_more:
+  StrCpy $R6 $R2
+  StrCpy $R7 R3
+  StrCpy $R8 $R4
+  goto loop
+
+  this_minor_same:
+  IntCmp $R3 $R7 loop loop this_build_more
+  this_build_more:
+  StrCpy $R7 $R3
+  StrCpy $R8 $R4
+  goto loop
+
+  done:
+
+  ;Have we got the framework we need?
+  IntCmp $R5 ${MIN_FRA_MAJOR} max_major_same fail OK
+  max_major_same:
+  IntCmp $R6 ${MIN_FRA_MINOR} max_minor_same fail OK
+  max_minor_same:
+  IntCmp $R7 ${MIN_FRA_BUILD} OK fail OK
+
+  ;Version on machine is greater than what we need
+  OK:
+  StrCpy $0 "1"
+  goto end
+
+  fail:
+  StrCmp $R8 "0.0.0" end
+
+
+  end:
+
+  ;Pop the variables we pushed earlier
+  Pop $R8
+  Pop $R7
+  Pop $R6
+  Pop $R5
+  Pop $R4
+  Pop $R3
+  Pop $R2
+  Pop $R1
+  Pop $4
+  Pop $3
+  Pop $2
+  Pop $1
+FunctionEnd
