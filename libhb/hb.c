@@ -1,8 +1,14 @@
 #include "hb.h"
 #include "hbffmpeg.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
-#if defined( SYS_MINGW ) && defined( PTW32_STATIC_LIB )
+#if defined( SYS_MINGW )
+#include <io.h>
+#if defined( PTW32_STATIC_LIB )
 #include <pthread.h>
+#endif
 #endif
 
 struct hb_handle_s
@@ -59,6 +65,7 @@ int hb_instance_counter = 0;
 int hb_process_initialized = 0;
 
 static void thread_func( void * );
+hb_title_t * hb_get_title_by_index( hb_handle_t *, int );
 
 void hb_avcodec_init()
 {
@@ -188,6 +195,45 @@ void hb_register( hb_work_object_t * w )
 }
 
 /**
+ * Ensures that the process has been initialized.
+ */
+static void process_init()
+{
+    if (!hb_process_initialized)
+    {
+#if defined( SYS_MINGW ) && defined( PTW32_STATIC_LIB )
+        pthread_win32_process_attach_np();
+#endif
+
+#if defined( _WIN32 ) || defined( __MINGW32__ )
+        setvbuf( stdout, NULL, _IONBF, 0 );
+        setvbuf( stderr, NULL, _IONBF, 0 );
+#endif
+        hb_process_initialized = 1;
+    }
+    
+}
+
+void (*hb_log_callback)(const char* message);
+static void redirect_thread_func(void *);
+
+#if defined( SYS_MINGW )
+#define pipe(phandles)  _pipe (phandles, 4096, _O_BINARY)
+#endif
+
+/**
+ * Registers the given function as a logger. All logs will be passed to it.
+ * @param log_cb The function to register as a logger.
+ */
+void hb_register_logger( void (*log_cb)(const char* message) )
+{
+    process_init();
+
+    hb_log_callback = log_cb;
+    hb_thread_init("ioredirect", redirect_thread_func, NULL, HB_NORMAL_PRIORITY);
+}
+
+/**
  * libhb initialization routine.
  * @param verbose HB_DEBUG_NONE or HB_DEBUG_ALL.
  * @param update_check signals libhb to check for updated version from HandBrake website.
@@ -195,14 +241,8 @@ void hb_register( hb_work_object_t * w )
  */
 hb_handle_t * hb_init( int verbose, int update_check )
 {
-    if (!hb_process_initialized)
-    {
-#if defined( SYS_MINGW ) && defined( PTW32_STATIC_LIB )
-        pthread_win32_process_attach_np();
-#endif
-        hb_process_initialized =1;
-    }
-    
+    process_init();
+
     hb_handle_t * h = calloc( sizeof( hb_handle_t ), 1 );
     uint64_t      date;
 
@@ -530,9 +570,27 @@ hb_list_t * hb_get_titles( hb_handle_t * h )
 /**
  * Create preview image of desired title a index of picture.
  * @param h Handle to hb_handle_t.
+ * @param title_index Index of the title to get the preview for (1-based).
+ * @param picture Index in title.
+ * @param buffer Handle to buffer were image will be drawn.
+ */
+void hb_get_preview_by_index( hb_handle_t * h, int title_index, int picture, uint8_t * buffer )
+{
+    hb_title_t * title;
+
+    title = hb_get_title_by_index( h, title_index );
+    if ( title != NULL )
+    {
+        hb_get_preview( h, title, picture, buffer );
+    } 
+}
+
+/**
+ * Create preview image of desired title a index of picture.
+ * @param h Handle to hb_handle_t.
  * @param title Handle to hb_title_t of desired title.
  * @param picture Index in title.
- * @param buffer Handle to buufer were inage will be drawn.
+ * @param buffer Handle to buffer were image will be drawn.
  */
 void hb_get_preview( hb_handle_t * h, hb_title_t * title, int picture,
                      uint8_t * buffer )
@@ -751,11 +809,31 @@ int hb_detect_comb( hb_buffer_t * buf, int width, int height, int color_equal, i
 /**
  * Calculates job width and height for anamorphic content,
  *
+ * @param h Instance handle
+ * @param title_index Index of the title/job to inspect (1-based).
+ * @param output_width Pointer to returned storage width
+ * @param output_height Pointer to returned storage height
+ * @param output_par_width Pointer to returned pixel width
+ * @param output_par_height Pointer to returned pixel height
+ */
+void hb_set_anamorphic_size_by_index( hb_handle_t * h, int title_index,
+        int *output_width, int *output_height,
+        int *output_par_width, int *output_par_height )
+{
+    hb_title_t * title;
+    title = hb_get_title_by_index( h, title_index );
+    
+    hb_set_anamorphic_size( title->job, output_width, output_height, output_par_width, output_par_height );
+}
+
+/**
+ * Calculates job width and height for anamorphic content,
+ *
  * @param job Handle to hb_job_t
  * @param output_width Pointer to returned storage width
  * @param output_height Pointer to returned storage height
  * @param output_par_width Pointer to returned pixel width
- @ param output_par_height Pointer to returned pixel height
+ * @param output_par_height Pointer to returned pixel height
  */
 void hb_set_anamorphic_size( hb_job_t * job,
         int *output_width, int *output_height,
@@ -1071,6 +1149,53 @@ hb_job_t * hb_current_job( hb_handle_t * h )
 }
 
 /**
+ * Applies information from the given job to the official job instance.
+ * @param h Handle to hb_handle_t.
+ * @param title_index Index of the title to apply the chapter name to (1-based).
+ * @param chapter The chapter to apply the name to (1-based).
+ * @param job Job information to apply.
+ */
+void hb_set_chapter_name( hb_handle_t * h, int title_index, int chapter_index, const char * chapter_name )
+{
+    hb_title_t * title;
+    title = hb_get_title_by_index( h, title_index );
+    
+    hb_chapter_t * chapter = hb_list_item( title->list_chapter, chapter_index - 1 );
+    
+    strncpy(chapter->title, chapter_name, 1023);
+    chapter->title[1023] = '\0';
+}
+
+/**
+ * Applies information from the given job to the official job instance.
+ * Currently only applies information needed for anamorphic size calculation and previews.
+ * @param h Handle to hb_handle_t.
+ * @param title_index Index of the title to apply the job information to (1-based).
+ * @param job Job information to apply.
+ */
+void hb_set_job( hb_handle_t * h, int title_index, hb_job_t * job )
+{
+	int i;
+
+    hb_title_t * title;
+    title = hb_get_title_by_index( h, title_index );
+    
+    hb_job_t * job_target = title->job;
+    
+    job_target->deinterlace = job->deinterlace;
+    job_target->width = job->width;
+    job_target->height = job->height;
+    job_target->maxWidth = job->maxWidth;
+    job_target->maxHeight = job->maxHeight;
+    for (i = 0; i < 4; i++)
+    {
+        job_target->crop[i] = job->crop[i];
+    }
+	
+    job_target->anamorphic = job->anamorphic;
+}
+
+/**
  * Adds a job to the job list.
  * @param h Handle to hb_handle_t.
  * @param job Handle to hb_job_t.
@@ -1377,6 +1502,52 @@ void hb_scan_stop( hb_handle_t * h )
 }
 
 /**
+ * Gets a filter object with the given type and settings.
+ * @param filter_id The type of filter to get.
+ * @param settings The filter settings to use.
+ * @returns The requested filter object.
+ */
+hb_filter_object_t * hb_get_filter_object(int filter_id, const char * settings)
+{
+    if (filter_id == HB_FILTER_ROTATE)
+    {
+        hb_filter_rotate.settings = strdup(settings);
+        return &hb_filter_rotate;
+    }
+
+    if (filter_id == HB_FILTER_DETELECINE)
+    {
+        hb_filter_detelecine.settings = strdup(settings);
+        return &hb_filter_detelecine;
+    }
+
+    if (filter_id == HB_FILTER_DECOMB)
+    {
+        hb_filter_decomb.settings = strdup(settings);
+        return &hb_filter_decomb;
+    }
+
+    if (filter_id == HB_FILTER_DEINTERLACE)
+    {
+        hb_filter_deinterlace.settings = strdup(settings);
+        return &hb_filter_deinterlace;
+    }
+
+    if (filter_id == HB_FILTER_DEBLOCK)
+    {
+        hb_filter_deblock.settings = strdup(settings);
+        return &hb_filter_deblock;
+    }
+
+    if (filter_id == HB_FILTER_DENOISE)
+    {
+        hb_filter_denoise.settings = strdup(settings);
+        return &hb_filter_denoise;
+    }
+    return NULL;
+}
+
+/**
  * Returns the state of the conversion process.
  * @param h Handle to hb_handle_t.
  * @param s Handle to hb_state_t which to copy the state data.
@@ -1571,6 +1742,25 @@ static void thread_func( void * _h )
 }
 
 /**
+ * Redirects stderr to the registered callback
+ * function.
+ * @param _data Unused.
+ */
+static void redirect_thread_func(void * _data)
+{
+    int pfd[2];
+    pipe(pfd);
+    dup2(pfd[1], /*stderr*/ 2);
+    FILE * log_f = fdopen(pfd[0], "rb");
+    
+    char line_buffer[500];
+    while(fgets(line_buffer, 500, log_f) != NULL)
+    {
+        hb_log_callback(line_buffer);
+    }
+}
+
+/**
  * Returns the PID.
  * @param h Handle to hb_handle_t
  */
@@ -1582,10 +1772,34 @@ int hb_get_pid( hb_handle_t * h )
 /**
  * Returns the id for the given instance.
  * @param h Handle to hb_handle_t
+ * @returns The ID for the given instance
  */
 int hb_get_instance_id( hb_handle_t * h )
 {
     return h->id;
+}
+
+/**
+ * Returns the title with the given title index.
+ * @param h Handle to hb_handle_t
+ * @param title_index the index of the title to get
+ * @returns The requested title
+ */
+hb_title_t * hb_get_title_by_index( hb_handle_t * h, int title_index )
+{
+    hb_title_t * title;
+    int i;
+	int count = hb_list_count( h->list_title );
+    for (i = 0; i < count; i++)
+    {
+        title = hb_list_item( h->list_title, i );
+        if (title->index == title_index)
+        {
+            return title;
+        }
+    }
+    
+    return NULL;
 }
 
 /**
