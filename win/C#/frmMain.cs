@@ -748,8 +748,8 @@ namespace Handbrake
 
         private void ExportPreset()
         {
-            // MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            // return;
+            MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
 
             SaveFileDialog savefiledialog = new SaveFileDialog();
             savefiledialog.Filter = "plist|*.plist";
