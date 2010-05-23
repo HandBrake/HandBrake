@@ -314,6 +314,90 @@ class ShellProbe( Action ):
 
 ###############################################################################
 ##
+## Compile test probe: determine if compile time feature is supported
+##
+## returns true if feature successfully compiles
+##
+##   
+class CCProbe( Action ):
+    def __init__( self, pretext, command, test_file ):
+        super( CCProbe, self ).__init__( 'probe', pretext )
+        self.command = command
+        self.test_file = test_file
+
+    def _action( self ):
+        ## write program file
+        file = open( 'conftest.c', 'w' )
+        file.write( self.test_file )
+        file.close()
+        ## pipe and redirect stderr to stdout; effects communicate result
+        pipe = subprocess.Popen( '%s -c -o conftest.o conftest.c' % self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+
+        ## read data into memory buffers, only first element (stdout) data is used
+        data = pipe.communicate()
+        self.fail = pipe.returncode != 0
+
+        if data[0]:
+            self.session = data[0].splitlines()
+        else:
+            self.session = []
+
+        if pipe.returncode:
+            self.msg_end = 'code %d' % (pipe.returncode)
+        os.remove( 'conftest.c' )
+        if not self.fail:
+            os.remove( 'conftest.o' )
+
+    def _dumpSession( self, printf ):
+        printf( '  + %s\n', self.command )
+        super( CCProbe, self )._dumpSession( printf )
+
+
+###############################################################################
+##
+## Compile test probe: determine if compile time feature is supported
+##
+## returns true if feature successfully compiles
+##
+##   
+class LDProbe( Action ):
+    def __init__( self, pretext, command, lib, test_file ):
+        super( LDProbe, self ).__init__( 'probe', pretext )
+        self.command = command
+        self.test_file = test_file
+        self.lib = lib
+
+    def _action( self ):
+        ## write program file
+        file = open( 'conftest.c', 'w' )
+        file.write( self.test_file )
+        file.close()
+        ## pipe and redirect stderr to stdout; effects communicate result
+        pipe = subprocess.Popen( '%s -o conftest conftest.c %s' % (self.command, self.lib), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+
+        ## read data into memory buffers, only first element (stdout) data is used
+        data = pipe.communicate()
+        self.fail = pipe.returncode != 0
+
+        if data[0]:
+            self.session = data[0].splitlines()
+        else:
+            self.session = []
+
+        if pipe.returncode:
+            self.msg_end = 'code %d' % (pipe.returncode)
+
+        os.remove( 'conftest.c' )
+        if not self.fail:
+            os.remove( 'conftest' )
+
+    def _dumpSession( self, printf ):
+        printf( '  + %s\n', self.command )
+        super( LDProbe, self )._dumpSession( printf )
+
+
+###############################################################################
+##
 ## GNU host tuple probe: determine canonical platform type
 ##
 ## example results from various platforms:
@@ -1200,6 +1284,81 @@ try:
     for action in Action.actions:
         action.run()
 
+    if build.system == 'mingw':
+        dlfcn_test = """
+#include <dlfcn.h>
+#include <stdio.h>
+
+void fnord() { int i=42;}
+int main ()
+{
+  void *self = dlopen (0, RTLD_GLOBAL|RTLD_NOW);
+  int status = 1;
+
+  if (self)
+    {
+      if (dlsym (self,"fnord"))       status = 0;
+      else if (dlsym( self,"_fnord")) status = 0;
+      /* dlclose (self); */
+    }
+  else
+    puts (dlerror ());
+
+  return status;
+}
+"""
+        dlfcn = LDProbe( 'static dlfcn', '%s -static' % Tools.gcc.pathname, '-ldl', dlfcn_test )
+        dlfcn.run()
+
+        pthread_test = """
+#include <stdio.h>
+#include <pthread.h>
+int main ()
+{
+  pthread_t thread;
+  pthread_create (&thread, NULL, NULL, NULL);
+  return 0;
+}
+"""
+        pthread = LDProbe( 'static pthread', '%s -static' % Tools.gcc.pathname, '-lpthreadGC2', pthread_test )
+        pthread.run()
+
+        bz2_test = """
+#include <stdio.h>
+#include <bzlib.h>
+int main ()
+{
+  BZ2_bzReadOpen(NULL, NULL, 0, 0, NULL, 0);
+  return 0;
+}
+"""
+        bz2 = LDProbe( 'static bz2', '%s -static' % Tools.gcc.pathname, '-lbz2', bz2_test )
+        bz2.run()
+
+        libz_test = """
+#include <stdio.h>
+#include <zlib.h>
+int main ()
+{
+  compress(NULL, NULL, NULL, 0);
+  return 0;
+}
+"""
+        libz = LDProbe( 'static zlib', '%s -static' % Tools.gcc.pathname, '-lz', libz_test )
+        libz.run()
+
+        iconv_test = """
+#include <stdio.h>
+#include <iconv.h>
+int main ()
+{
+  iconv_open(NULL, NULL);
+  return 0;
+}
+"""
+        iconv = LDProbe( 'static iconv', '%s -static' % Tools.gcc.pathname, '-liconv', iconv_test )
+        iconv.run()
+
     ## cfg hook before doc prep
     cfg.doc_ready()
 
@@ -1300,6 +1459,19 @@ try:
         doc.add( 'XCODE.external.src',    cfg.xcode_x_src )
         doc.add( 'XCODE.external.build',  cfg.xcode_x_build )
         doc.add( 'XCODE.external.prefix', cfg.xcode_x_prefix )
+
+    doc.addBlank()
+    if build.system == 'mingw':
+        if not dlfcn.fail:
+            doc.add( 'HAS.dlfcn', 1 )
+        if not pthread.fail:
+            doc.add( 'HAS.pthread', 1 )
+        if not bz2.fail:
+            doc.add( 'HAS.bz2', 1 )
+        if not libz.fail:
+            doc.add( 'HAS.libz', 1 )
+        if not iconv.fail:
+            doc.add( 'HAS.iconv', 1 )
 
     doc.addMake( '' )
     doc.addMake( '## define debug mode before other includes' )

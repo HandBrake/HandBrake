@@ -16,14 +16,21 @@ TEST.libs = $(LIBHB.a) $(foreach n, \
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
 
+ifeq (1,$(PTHREADW32.enabled))
+    TEST.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
+endif
 ifeq (1,$(LIBICONV.enabled))
     TEST.libs += $(CONTRIB.build/)lib/libiconv.a
 endif
 ifeq (1,$(BZIP2.enabled))
     TEST.libs += $(CONTRIB.build/)lib/libbz2.a
+else
+	TEST.GCC.l += bz2
 endif
 ifeq (1,$(ZLIB.enabled))
     TEST.libs += $(CONTRIB.build/)lib/libz.a
+else
+	TEST.GCC.l += z
 endif
 
 ###############################################################################
@@ -40,13 +47,21 @@ TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
     TEST.GCC.f += IOKit CoreServices AudioToolbox
-    TEST.GCC.l += iconv bz2 z
+    TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
-    TEST.GCC.l += bz2 z pthread dl m
+    TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),solaris)
-    TEST.GCC.l += bz2 z pthread nsl socket
+    TEST.GCC.l += pthread nsl socket
 else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    TEST.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
+ifeq ($(HAS.iconv),1)
+    TEST.GCC.l += iconv
+endif
+ifeq ($(HAS.pthread),1)
+    TEST.GCC.l += pthreadGC2
+endif
+ifeq ($(HAS.dlfcn),1)
+    TEST.GCC.l += dl
+endif
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.l += iberty ws2_32
 	TEST.GCC.args.extra.exe++ += -static

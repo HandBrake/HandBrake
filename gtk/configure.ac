@@ -45,6 +45,10 @@ else
 	AC_SUBST(HB_DIR, '$(top_srcdir)/'"..")
 fi
 
+AC_ARG_ENABLE(dl,
+	AS_HELP_STRING([--enable-dl], [enable libdl]),
+	use_libdl=yes, use_libdl=no)
+
 AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--enable-gst], [enable gstreamer on Win32]),
 	w32_gst=yes, w32_gst=no)
@@ -102,6 +106,14 @@ fi
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
 PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
+
+case $host in
+  *-*-mingw*)
+    if test "x$use_libdl" = "xyes" ; then
+		GHB_LIBS="$GHB_LIBS -ldl"
+	fi
+    ;;
+esac
 
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)

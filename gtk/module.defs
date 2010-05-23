@@ -6,6 +6,13 @@ GTK.build/ = $(BUILD/)gtk/
 
 GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure
 
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+GTK.CONFIGURE.extra += --host=$(BUILD.spec) 
+ifeq ($(HAS.dlfcn),1)
+	GTK.CONFIGURE.extra += --enable-dl
+endif
+endif
+
 ###############################################################################
 
 GTK.out += $(GTK.CONFIGURE.stamp)

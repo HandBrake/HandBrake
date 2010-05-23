@@ -89,12 +89,39 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        a52 bz2 avcodec avformat avutil dca dvdnav dvdread faac faad iconv mkv mpeg2 mp3lame mp4v2 \
-        ogg pthreadGC2 samplerate swscale theora vorbis vorbisenc x264 z, \
+        a52 avcodec avformat avutil dca dvdnav dvdread faac faad mkv mpeg2 mp3lame mp4v2 \
+        ogg samplerate swscale theora vorbis vorbisenc x264, \
         $(CONTRIB.build/)lib/lib$(n).a )
+
+ifneq ($(HAS.iconv),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libiconv.a
+else
+    LIBHB.GCC.l += iconv
+endif
+
+ifneq ($(HAS.pthread),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
+else
+    LIBHB.GCC.l += pthreadGC2
+endif
+
+ifneq ($(HAS.bz2),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libbz2.a
+else
+    LIBHB.GCC.l += bz2
+endif
+
+ifneq ($(HAS.libz),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/libz.a
+else
+    LIBHB.GCC.l += z
+endif
 
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
 LIBHB.GCC.l += iberty ws2_32
+ifeq ($(HAS.dlfcn),1)
+    LIBHB.GCC.l += dl
+endif
 LIBHB.out += $(LIBHB.dll) $(LIBHB.lib)
 
 endif
