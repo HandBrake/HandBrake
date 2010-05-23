@@ -25,7 +25,7 @@ namespace Handbrake.Functions
                 Win32.GlobalMemoryStatus(ref memStatus);
 
                 uint memoryInfo = memStatus.dwTotalPhys;
-                memoryInfo = memoryInfo/1024/1024;
+                memoryInfo = memoryInfo / 1024 / 1024;
 
                 return memoryInfo;
             }

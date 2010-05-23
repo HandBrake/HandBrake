@@ -9,6 +9,7 @@ namespace Handbrake.Services
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
@@ -36,6 +37,17 @@ namespace Handbrake.Services
         private int nextJobId;
 
         /// <summary>
+        /// Fires when the Queue has started
+        /// </summary>
+        public event EventHandler QueueStarted;
+
+        /// <summary>
+        /// Fires when a job is Added, Removed or Re-Ordered.
+        /// Should be used for triggering an update of the Queue Window.
+        /// </summary>
+        public event EventHandler QueueListChanged;
+
+        /// <summary>
         /// Fires when a pause to the encode queue has been requested.
         /// </summary>
         public event EventHandler QueuePauseRequested;
@@ -44,6 +56,35 @@ namespace Handbrake.Services
         /// Fires when the entire encode queue has completed.
         /// </summary>
         public event EventHandler QueueCompleted;
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets the last encode that was processed.
+        /// </summary>
+        /// <returns></returns> 
+        public Job LastEncode { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether Request Pause
+        /// </summary>
+        public bool Paused { get; private set; }
+
+        /// <summary>
+        /// Gets the current state of the encode queue.
+        /// </summary>
+        public ReadOnlyCollection<Job> CurrentQueue
+        {
+            get { return this.queue.AsReadOnly(); }
+        }
+
+        /// <summary>
+        /// Gets the number of items in the queue.
+        /// </summary>
+        public int Count
+        {
+            get { return this.queue.Count; }
+        }
+        #endregion
 
         #region Queue
 
@@ -60,22 +101,6 @@ namespace Handbrake.Services
             this.WriteQueueStateToFile("hb_queue_recovery.xml");
 
             return job;
-        }
-
-        /// <summary>
-        /// Gets the current state of the encode queue.
-        /// </summary>
-        public ReadOnlyCollection<Job> CurrentQueue
-        {
-            get { return this.queue.AsReadOnly(); }
-        }
-
-        /// <summary>
-        /// Gets the number of items in the queue.
-        /// </summary>
-        public int Count
-        {
-            get { return this.queue.Count; }
         }
 
         /// <summary>
@@ -102,14 +127,17 @@ namespace Handbrake.Services
                              {
                                  Id = this.nextJobId++,
                                  Title = title,
-                                 Query = query, 
-                                 Source = source, 
-                                 Destination = destination, 
+                                 Query = query,
+                                 Source = source,
+                                 Destination = destination,
                                  CustomQuery = customJob
                              };
 
             this.queue.Add(newJob);
             this.WriteQueueStateToFile("hb_queue_recovery.xml");
+
+            if (this.QueueListChanged != null)
+                this.QueueListChanged(this, new EventArgs());
         }
 
         /// <summary>
@@ -120,6 +148,9 @@ namespace Handbrake.Services
         {
             this.queue.RemoveAt(index);
             this.WriteQueueStateToFile("hb_queue_recovery.xml");
+
+            if (this.QueueListChanged != null)
+                this.QueueListChanged(this, new EventArgs());
         }
 
         /// <summary>
@@ -150,6 +181,9 @@ namespace Handbrake.Services
             }
 
             WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+
+            if (this.QueueListChanged != null)
+                this.QueueListChanged(this, new EventArgs());
         }
 
         /// <summary>
@@ -167,6 +201,9 @@ namespace Handbrake.Services
             }
 
             this.WriteQueueStateToFile("hb_queue_recovery.xml"); // Update the queue recovery file
+
+            if (this.QueueListChanged != null)
+                this.QueueListChanged(this, new EventArgs());
         }
 
         /// <summary>
@@ -175,7 +212,7 @@ namespace Handbrake.Services
         /// <param name="file">The location of the file to write the queue to.</param>
         public void WriteQueueStateToFile(string file)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                               @"HandBrake\hb_queue_recovery.xml");
             string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
 
@@ -184,7 +221,7 @@ namespace Handbrake.Services
                 using (FileStream strm = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
                 {
                     if (serializer == null)
-                        serializer = new XmlSerializer(typeof (List<Job>));
+                        serializer = new XmlSerializer(typeof(List<Job>));
                     serializer.Serialize(strm, queue);
                     strm.Close();
                     strm.Dispose();
@@ -226,14 +263,12 @@ namespace Handbrake.Services
                         line.WriteLine(strCmdLine);
                     }
 
-                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK, 
+                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK,
                                     MessageBoxIcon.Asterisk);
                 }
-                catch (Exception)
+                catch (Exception exc)
                 {
-                    MessageBox.Show(
-                        "Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", 
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    Main.ShowExceptiowWindow("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", exc.ToString());
                 }
             }
         }
@@ -244,7 +279,7 @@ namespace Handbrake.Services
         /// <param name="file">The location of the file to read the queue from.</param>
         public void LoadQueueFromFile(string file)
         {
-            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), 
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                               @"HandBrake\hb_queue_recovery.xml");
             string tempPath = file == "hb_queue_recovery.xml" ? appDataPath : file;
 
@@ -255,7 +290,7 @@ namespace Handbrake.Services
                     if (strm.Length != 0)
                     {
                         if (serializer == null)
-                            serializer = new XmlSerializer(typeof (List<Job>));
+                            serializer = new XmlSerializer(typeof(List<Job>));
 
                         List<Job> list = serializer.Deserialize(strm) as List<Job>;
 
@@ -277,29 +312,12 @@ namespace Handbrake.Services
         /// <returns>Whether or not the supplied destination is already in the queue.</returns>
         public bool CheckForDestinationDuplicate(string destination)
         {
-            foreach (Job checkItem in this.queue)
-            {
-                if (checkItem.Destination.Contains(destination.Replace("\\\\", "\\")))
-                    return true;
-            }
-
-            return false;
+            return this.queue.Any(checkItem => checkItem.Destination.Contains(destination.Replace("\\\\", "\\")));
         }
 
         #endregion
 
         #region Encoding
-
-        /// <summary>
-        /// Gets or sets the last encode that was processed.
-        /// </summary>
-        /// <returns></returns> 
-        public Job LastEncode { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether Request Pause
-        /// </summary>
-        public bool PauseRequested { get; private set; }
 
         /// <summary>
         /// Starts encoding the first job in the queue and continues encoding until all jobs
@@ -309,19 +327,22 @@ namespace Handbrake.Services
         {
             if (this.Count != 0)
             {
-                if (this.PauseRequested)
-                    this.PauseRequested = false;
+                if (this.Paused)
+                    this.Paused = false;
                 else
                 {
-                    this.PauseRequested = false;
+                    this.Paused = false;
                     try
                     {
-                        Thread theQueue = new Thread(this.StartQueue) {IsBackground = true};
+                        Thread theQueue = new Thread(this.StartQueue) { IsBackground = true };
                         theQueue.Start();
+
+                        if (this.QueueStarted != null)
+                            this.QueueStarted(this, new EventArgs());
                     }
                     catch (Exception exc)
                     {
-                        MessageBox.Show(exc.ToString());
+                        Main.ShowExceptiowWindow("Unable to Start Queue", exc.ToString());
                     }
                 }
             }
@@ -332,7 +353,7 @@ namespace Handbrake.Services
         /// </summary>
         public void Pause()
         {
-            this.PauseRequested = true;
+            this.Paused = true;
 
             if (this.QueuePauseRequested != null)
                 this.QueuePauseRequested(this, new EventArgs());
@@ -366,10 +387,10 @@ namespace Handbrake.Services
 
                 // Growl
                 if (Properties.Settings.Default.growlEncode)
-                    GrowlCommunicator.Notify("Encode Completed", 
+                    GrowlCommunicator.Notify("Encode Completed",
                                              "Put down that cocktail...\nyour Handbrake encode is done.");
 
-                while (this.PauseRequested) // Need to find a better way of doing this.
+                while (this.Paused) // Need to find a better way of doing this.
                 {
                     Thread.Sleep(2000);
                 }

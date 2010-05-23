@@ -1,5 +1,4 @@
 ﻿/*  Filters.cs $
- 	
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
@@ -30,7 +29,7 @@ namespace Handbrake.Controls
         }
 
         /// <summary>
-        /// Returns the CLI query for the query generator.
+        /// Gets the CLI query for the query generator.
         /// </summary>
         public string GetCliQuery
         {
@@ -53,7 +52,6 @@ namespace Handbrake.Controls
                         query += string.Empty;
                         break;
                 }
-
 
                 switch (drop_decomb.Text) // Decomb
                 {

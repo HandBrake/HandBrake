@@ -84,7 +84,6 @@ namespace Handbrake.Controls
                                    ? srtLangVal + " (" + srtFile + ")"
                                    : drp_subtitleTracks.SelectedItem.ToString();
 
-
             SubtitleInfo track = new SubtitleInfo
                                      {
                                          Track = trackName, 
@@ -433,7 +432,7 @@ namespace Handbrake.Controls
         /// Automatically setup the subtitle tracks.
         /// This handles the automatic setup of subitles which the user can control from the program options
         /// </summary>
-        /// <param name="subs"></param>
+        /// <param name="subs">List of Subtitles</param>
         public void SetSubtitleTrackAuto(object[] subs)
         {
             drp_subtitleTracks.Items.Clear();
@@ -464,7 +463,7 @@ namespace Handbrake.Controls
         /// <summary>
         /// Set the file container which is currently in use.
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">The File Container</param>
         public void SetContainer(int value)
         {
             fileContainer = value;
@@ -484,16 +483,16 @@ namespace Handbrake.Controls
         /// <summary>
         /// Get the list of subtitles.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A List of SubtitleInfo Object</returns>
         public List<SubtitleInfo> GetSubtitleInfoList()
         {
             return subList;
         }
 
         /// <summary>
-        /// Get the CLI Query for this panel
+        /// Gets the CLI Query for this panel
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A CliQuery string</returns>
         public string GetCliQuery
         {
             get

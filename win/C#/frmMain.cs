@@ -28,12 +28,14 @@ namespace Handbrake
         private Queue encodeQueue = new Queue();
         private PresetsHandler presetHandler = new PresetsHandler();
 
-        // Globals: Mainly used for tracking. *********************************
-        public Title selectedTitle;
+        // Windows ************************************************************
         private frmQueue queueWindow;
         private frmPreview qtpreview;
         private frmActivityWindow ActivityWindow;
-        private Form splash;
+        private frmSplashScreen splash = new frmSplashScreen();
+
+        // Globals: Mainly used for tracking. *********************************
+        public Title selectedTitle;
         public string sourcePath;
         private SourceType selectedSourceType;
         private string dvdDrivePath;
@@ -49,12 +51,34 @@ namespace Handbrake
 
         // Applicaiton Startup ************************************************
 
+        #region Properties
+
+        /// <summary>
+        /// Gets SourceName.
+        /// </summary>
+        public string SourceName
+        {
+            get
+            {
+                if (this.selectedSourceType == SourceType.DvdDrive)
+                {
+                    return this.dvdDriveLabel;
+                }
+
+                if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
+                    return Path.GetFileNameWithoutExtension(this.sourcePath);
+
+                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.sourcePath));
+            }
+        }
+
+        #endregion
+
         #region Application Startup
 
         public frmMain()
         {
             // Load and setup the splash screen in this thread
-            splash = new frmSplashScreen();
             splash.Show(this);
             Label lblStatus = new Label { Size = new Size(150, 20), Location = new Point(182, 102) };
             splash.Controls.Add(lblStatus);
@@ -62,8 +86,7 @@ namespace Handbrake
             InitializeComponent();
 
             // Update the users config file with the CLI version data.
-            lblStatus.Text = "Checking CLI Version Data ...";
-            Application.DoEvents();
+            UpdateSplashStatus(lblStatus, "Checking CLI Version Data ...");
             Main.SetCliVersionData();
             Main.CheckForValidCliVersion();
 
@@ -86,9 +109,7 @@ namespace Handbrake
                 TimeSpan elapsed = now.Subtract(lastCheck);
                 if (elapsed.TotalDays > Properties.Settings.Default.daysBetweenUpdateCheck)
                 {
-                    lblStatus.Text = "Checking for updates ...";
-                    Application.DoEvents();
-
+                    UpdateSplashStatus(lblStatus, "Checking for updates ...");
                     Main.BeginCheckForUpdates(new AsyncCallback(UpdateCheckDone), false);
                 }
             }
@@ -96,15 +117,13 @@ namespace Handbrake
             // Clear the log files in the background
             if (Properties.Settings.Default.clearOldLogs)
             {
-                lblStatus.Text = "Clearing Old Log Files ...";
-                Application.DoEvents();
+                UpdateSplashStatus(lblStatus, "Clearing Old Log Files ..");
                 Thread clearLog = new Thread(Main.ClearOldLogs);
                 clearLog.Start();
             }
 
             // Setup the GUI components
-            lblStatus.Text = "Setting up the GUI ...";
-            Application.DoEvents();
+            UpdateSplashStatus(lblStatus, "Setting up the GUI ...");
             LoadPresetPanel(); // Load the Preset Panel
             treeView_presets.ExpandAll();
             lbl_encode.Text = string.Empty;
@@ -112,44 +131,33 @@ namespace Handbrake
             queueWindow = new frmQueue(encodeQueue, this); // Prepare the Queue
             if (!Properties.Settings.Default.QueryEditorTab)
                 tabs_panel.TabPages.RemoveAt(7); // Remove the query editor tab if the user does not want it enabled.
+            if (Properties.Settings.Default.tooltipEnable)
+                ToolTip.Active = true;
 
             // Load the user's default settings or Normal Preset
-            if (Properties.Settings.Default.defaultPreset != string.Empty)
+            if (Properties.Settings.Default.defaultPreset != string.Empty && presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
             {
-                if (presetHandler.GetPreset(Properties.Settings.Default.defaultPreset) != null)
+                string query = presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).Query;
+                if (query != null)
                 {
-                    string query = presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).Query;
-                    bool loadPictureSettings =
-                        presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).PictureSettings;
+                    x264Panel.Reset2Defaults();
 
-                    if (query != null)
-                    {
-                        x264Panel.Reset2Defaults();
+                    QueryParser presetQuery = QueryParser.Parse(query);
+                    PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset,
+                                            presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).PictureSettings);
 
-                        QueryParser presetQuery = QueryParser.Parse(query);
-                        PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset,
-                                                loadPictureSettings);
-
-                        x264Panel.X264_StandardizeOptString();
-                        x264Panel.X264_SetCurrentSettingsInPanel();
-                    }
+                    x264Panel.X264_StandardizeOptString();
+                    x264Panel.X264_SetCurrentSettingsInPanel();
                 }
-                else
-                    loadNormalPreset();
             }
             else
                 loadNormalPreset();
-
-            // Enabled GUI tooltip's if Required
-            if (Properties.Settings.Default.tooltipEnable)
-                ToolTip.Active = true;
 
             // Register with Growl (if not using Growl for the encoding completion action, this wont hurt anything)
             GrowlCommunicator.Register();
 
             // Finished Loading
-            lblStatus.Text = "Loading Complete!";
-            Application.DoEvents();
+            UpdateSplashStatus(lblStatus, "Loading Complete.");
             splash.Close();
             splash.Dispose();
             this.Enabled = true;
@@ -182,9 +190,7 @@ namespace Handbrake
             catch (Exception ex)
             {
                 if ((bool)result.AsyncState)
-                    MessageBox.Show(
-                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex,
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Main.ShowExceptiowWindow("Unable to check for updates, Please try again later.", ex.ToString());
             }
         }
 
@@ -210,24 +216,10 @@ namespace Handbrake
             }
         }
 
-        #endregion
-
-        #region Properties
-
-        public string SourceName
+        private void UpdateSplashStatus(Label status, string text)
         {
-            get
-            {
-                if (this.selectedSourceType == SourceType.DvdDrive)
-                {
-                    return this.dvdDriveLabel;
-                }
-
-                if (Path.GetFileNameWithoutExtension(this.sourcePath) != "VIDEO_TS")
-                    return Path.GetFileNameWithoutExtension(this.sourcePath);
-
-                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.sourcePath));
-            }
+            status.Text = text;
+            Application.DoEvents();
         }
 
         #endregion
@@ -245,7 +237,6 @@ namespace Handbrake
                 this.Resize += new EventHandler(frmMain_Resize);
 
             // Handle Encode Start / Finish / Pause
-
             encodeQueue.QueuePauseRequested += new EventHandler(encodePaused);
             encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
             encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
@@ -265,7 +256,7 @@ namespace Handbrake
             check_optimiseMP4.CheckedChanged += new EventHandler(changePresetLabel);
 
             // Picture Settings
-            // PictureSettings.PictureSettingsChanged += new EventHandler(changePresetLabel);
+            PictureSettings.PictureSettingsChanged += new EventHandler(changePresetLabel);
 
             // Filter Settings
             Filters.FilterSettingsChanged += new EventHandler(changePresetLabel);
@@ -294,7 +285,7 @@ namespace Handbrake
             check_optimiseMP4.CheckedChanged -= new EventHandler(changePresetLabel);
 
             // Picture Settings
-            // PictureSettings.PictureSettingsChanged -= new EventHandler(changePresetLabel);
+            PictureSettings.PictureSettingsChanged -= new EventHandler(changePresetLabel);
 
             // Filter Settings
             Filters.FilterSettingsChanged -= new EventHandler(changePresetLabel);
@@ -333,7 +324,7 @@ namespace Handbrake
 
             if (fileList != null)
             {
-                if (fileList[0] != string.Empty)
+                if (!string.IsNullOrEmpty(fileList[0]))
                 {
                     this.selectedSourceType = SourceType.VideoFile;
                     StartScan(fileList[0], 0);
@@ -373,11 +364,29 @@ namespace Handbrake
 
         #region File Menu
 
+        /// <summary>
+        /// Kill The scan menu Item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_killCLI_Click(object sender, EventArgs e)
         {
             KillScan();
         }
 
+        /// <summary>
+        /// Exit the Application Menu Item
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_exit_Click(object sender, EventArgs e)
         {
             Application.Exit();
@@ -387,17 +396,44 @@ namespace Handbrake
 
         #region Tools Menu
 
+        /// <summary>
+        /// Menu - Start Button
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_encode_Click(object sender, EventArgs e)
         {
             queueWindow.Show();
         }
 
+        /// <summary>
+        /// Menu - Display the Log Window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_encodeLog_Click(object sender, EventArgs e)
         {
             frmActivityWindow dvdInfoWindow = new frmActivityWindow(encodeQueue, SourceScan);
             dvdInfoWindow.Show();
         }
 
+        /// <summary>
+        /// Menu - Display the Options Window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_options_Click(object sender, EventArgs e)
         {
             Form options = new frmOptions(this);
@@ -408,6 +444,15 @@ namespace Handbrake
 
         #region Presets Menu
 
+        /// <summary>
+        /// Reset the Built in Presets
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_presetReset_Click(object sender, EventArgs e)
         {
             presetHandler.UpdateBuiltInPresets();
@@ -422,28 +467,72 @@ namespace Handbrake
             treeView_presets.ExpandAll();
         }
 
+        /// <summary>
+        /// Delete the selected preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_delete_preset_Click(object sender, EventArgs e)
         {
             presetHandler.RemoveBuiltInPresets();
             LoadPresetPanel(); // Reload the preset panel
         }
 
+        /// <summary>
+        /// Select the Normal preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_SelectDefault_Click(object sender, EventArgs e)
         {
             loadNormalPreset();
         }
 
+        /// <summary>
+        /// Import a plist Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_importMacPreset_Click(object sender, EventArgs e)
         {
             ImportPreset();
         }
 
+        /// <summary>
+        /// Export a Plist Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_exportMacPreset_Click(object sender, EventArgs e)
         {
             ExportPreset();
         }
 
-
+        /// <summary>
+        /// Create a new Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_new_preset_Click(object sender, EventArgs e)
         {
             Form preset = new frmAddPreset(this, QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null),
@@ -455,56 +544,44 @@ namespace Handbrake
 
         #region Help Menu
 
+        /// <summary>
+        /// Menu - Display the User Guide Web Page
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_user_guide_Click(object sender, EventArgs e)
         {
             Process.Start("http://trac.handbrake.fr/wiki/HandBrakeGuide");
         }
 
-        private void mnu_handbrake_home_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://handbrake.fr");
-        }
-
+        /// <summary>
+        /// Menu - Check for Updates
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
             lbl_updateCheck.Visible = true;
             Main.BeginCheckForUpdates(new AsyncCallback(updateCheckDoneMenu), false);
         }
 
-        private void updateCheckDoneMenu(IAsyncResult result)
-        {
-            // Make sure it's running on the calling thread
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(() => updateCheckDoneMenu(result)));
-                return;
-            }
-            UpdateCheckInformation info;
-            try
-            {
-                // Get the information about the new build, if any, and close the window
-                info = Main.EndCheckForUpdates(result);
-
-                if (info.NewVersionAvailable && info.BuildInformation != null)
-                {
-                    frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
-                    updateWindow.ShowDialog();
-                }
-                else
-                    MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                lbl_updateCheck.Visible = false;
-                return;
-            }
-            catch (Exception ex)
-            {
-                if ((bool)result.AsyncState)
-                    MessageBox.Show(
-                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex,
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
+        /// <summary>
+        /// Menu - Display the About Window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void mnu_about_Click(object sender, EventArgs e)
         {
             using (frmAbout About = new frmAbout())
@@ -517,22 +594,57 @@ namespace Handbrake
 
         #region Preset Bar
 
-        // Right Click Menu Code
+        /// <summary>
+        /// RMenu - Expand All
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void pmnu_expandAll_Click(object sender, EventArgs e)
         {
             treeView_presets.ExpandAll();
         }
 
+        /// <summary>
+        /// RMenu - Collaspe All
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void pmnu_collapse_Click(object sender, EventArgs e)
         {
             treeView_presets.CollapseAll();
         }
 
+        /// <summary>
+        /// Menu - Import Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void pmnu_import_Click(object sender, EventArgs e)
         {
             ImportPreset();
         }
 
+        /// <summary>
+        /// RMenu - Save Changes to Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void pmnu_saveChanges_Click(object sender, EventArgs e)
         {
             DialogResult result =
@@ -548,6 +660,15 @@ namespace Handbrake
                                      QueryGenerator.GenerateTabbedComponentsQuery(this), false);
         }
 
+        /// <summary>
+        /// RMenu - Delete Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void pmnu_delete_click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
@@ -558,6 +679,15 @@ namespace Handbrake
             treeView_presets.Select();
         }
 
+        /// <summary>
+        /// Preset Menu Is Opening. Setup the Menu
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void presets_menu_Opening(object sender, CancelEventArgs e)
         {
             // Make sure that the save menu is always disabled by default
@@ -572,12 +702,31 @@ namespace Handbrake
         }
 
         // Presets Management
+
+        /// <summary>
+        /// Button - Add a preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_addPreset_Click(object sender, EventArgs e)
         {
             Form preset = new frmAddPreset(this, QueryGenerator.GenerateTabbedComponentsQuery(this), presetHandler);
             preset.ShowDialog();
         }
 
+        /// <summary>
+        /// Button - remove a Preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_removePreset_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Are you sure you wish to delete the selected preset?", "Preset",
@@ -593,6 +742,15 @@ namespace Handbrake
             treeView_presets.Select();
         }
 
+        /// <summary>
+        /// Button - Set the selected preset as the default
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_setDefault_Click(object sender, EventArgs e)
         {
             if (treeView_presets.SelectedNode != null)
@@ -610,6 +768,15 @@ namespace Handbrake
                 MessageBox.Show("Please select a preset first.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        /// <summary>
+        /// PresetBar Mouse Down event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void treeview_presets_mouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -626,11 +793,29 @@ namespace Handbrake
             treeView_presets.Select();
         }
 
+        /// <summary>
+        /// Preset Bar after selecting the preset
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void treeView_presets_AfterSelect(object sender, TreeViewEventArgs e)
         {
             selectPreset();
         }
 
+        /// <summary>
+        /// Preset Bar - Handle the Delete Key
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void treeView_presets_deleteKey(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Delete)
@@ -663,6 +848,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Select the selected preset and setup the GUI
+        /// </summary>
         private void selectPreset()
         {
             if (treeView_presets.SelectedNode != null)
@@ -698,6 +886,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Load the Normal Preset
+        /// </summary>
         private void loadNormalPreset()
         {
             foreach (TreeNode treenode in treeView_presets.Nodes)
@@ -710,6 +901,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Import a plist preset
+        /// </summary>
         private void ImportPreset()
         {
             if (openPreset.ShowDialog() == DialogResult.OK)
@@ -746,6 +940,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Export a plist Preset
+        /// </summary>
         private void ExportPreset()
         {
             MessageBox.Show("This feature has not been implimented yet.", "Not Implimented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -769,6 +966,15 @@ namespace Handbrake
 
         #region ToolStrip
 
+        /// <summary>
+        /// Toolbar - When the Source button is clicked, Clear any DVD drives and add any available DVD drives that can be used as a source.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_source_Click(object sender, EventArgs e)
         {
             // Remove old Drive Menu Items.
@@ -792,6 +998,15 @@ namespace Handbrake
             driveInfoThread.Start();
         }
 
+        /// <summary>
+        /// Toolbar - Start The Encode
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_start_Click(object sender, EventArgs e)
         {
             if (btn_start.Text == "Stop")
@@ -903,6 +1118,15 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Toolbar - Add the current job to the Queue
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
@@ -932,12 +1156,30 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Toolbar - Show the Queue
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_showQueue_Click(object sender, EventArgs e)
         {
             queueWindow.Show();
             queueWindow.Activate();
         }
 
+        /// <summary>
+        /// Toolbar - Show the Preview Window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void tb_preview_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
@@ -961,6 +1203,15 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Toolbar - Show the Activity log Window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_ActivityWindow_Click(object sender, EventArgs e)
         {
             if (ActivityWindow == null || !ActivityWindow.IsHandleCreated)
@@ -974,6 +1225,15 @@ namespace Handbrake
 
         #region System Tray Icon
 
+        /// <summary>
+        /// Handle Resizing of the main window when deaing with the Notify Icon
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void frmMain_Resize(object sender, EventArgs e)
         {
             if (FormWindowState.Minimized == this.WindowState)
@@ -985,6 +1245,15 @@ namespace Handbrake
                 notifyIcon.Visible = false;
         }
 
+        /// <summary>
+        /// Double Click the Tray Icon
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             this.Visible = true;
@@ -993,6 +1262,15 @@ namespace Handbrake
             notifyIcon.Visible = false;
         }
 
+        /// <summary>
+        /// Tray Icon - Restore Menu Item - Resture the Window
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void btn_restore_Click(object sender, EventArgs e)
         {
             this.Visible = true;
@@ -1003,7 +1281,7 @@ namespace Handbrake
 
         #endregion
 
-        #region Tab Control
+        #region Main Window and Tab Control
 
         // Source
         private void btn_dvd_source_Click(object sender, EventArgs e)
@@ -1647,8 +1925,15 @@ namespace Handbrake
 
         #region Source Scan
 
-        public bool isScanning { get; set; }
-
+        /// <summary>
+        /// Start the Scan Process
+        /// </summary>
+        /// <param name="filename">
+        /// The filename.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         private void StartScan(string filename, int title)
         {
             // Setup the GUI components for the scan.
@@ -1659,7 +1944,6 @@ namespace Handbrake
             // Start the Scan
             try
             {
-                isScanning = true;
                 SourceScan.Scan(sourcePath, title);
                 SourceScan.ScanStatusChanged += new EventHandler(SourceScan_ScanStatusChanged);
                 SourceScan.ScanCompleted += new EventHandler(SourceScan_ScanCompleted);
@@ -1670,16 +1954,37 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Update the Status label for the scan
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void SourceScan_ScanStatusChanged(object sender, EventArgs e)
         {
             UpdateScanStatusLabel();
         }
 
+        /// <summary>
+        /// Update the UI after the scan has completed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void SourceScan_ScanCompleted(object sender, EventArgs e)
         {
             UpdateGuiAfterScan();
         }
 
+        /// <summary>
+        /// Update the Scan Status Label
+        /// </summary>
         private void UpdateScanStatusLabel()
         {
             if (InvokeRequired)
@@ -1690,6 +1995,9 @@ namespace Handbrake
             lbl_encode.Text = SourceScan.ScanStatus;
         }
 
+        /// <summary>
+        /// Reset the GUI when the scan has completed
+        /// </summary>
         private void UpdateGuiAfterScan()
         {
             if (InvokeRequired)
@@ -1754,6 +2062,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Enable the GUI
+        /// </summary>
         private void EnableGUI()
         {
             try
@@ -1776,6 +2087,9 @@ namespace Handbrake
             }
         }
 
+        /// <summary>
+        /// Disable the GUI
+        /// </summary>
         private void DisableGUI()
         {
             foreach (Control ctrl in Controls)
@@ -1792,6 +2106,9 @@ namespace Handbrake
             mnu_killCLI.Visible = true;
         }
 
+        /// <summary>
+        /// Kill the Scan
+        /// </summary>
         private void KillScan()
         {
             SourceScan.ScanCompleted -= new EventHandler(SourceScan_ScanCompleted);
@@ -1803,6 +2120,9 @@ namespace Handbrake
             lbl_encode.Text = "Scan Cancelled!";
         }
 
+        /// <summary>
+        /// Reset the GUI
+        /// </summary>
         private void ResetGUI()
         {
             drp_dvdtitle.Items.Clear();
@@ -1813,9 +2133,11 @@ namespace Handbrake
             sourcePath = String.Empty;
             text_destination.Text = String.Empty;
             selectedTitle = null;
-            isScanning = false;
         }
 
+        /// <summary>
+        /// Update the Source Label
+        /// </summary>
         private void UpdateSourceLabel()
         {
             labelSource.Text = string.IsNullOrEmpty(sourcePath) ? "Select \"Source\" to continue." : this.SourceName;
@@ -1826,6 +2148,12 @@ namespace Handbrake
                     labelSource.Text = Path.GetFileName(selectedTitle.SourceName);
         }
 
+        /// <summary>
+        /// Take a job from the Queue, rescan it, and reload the GUI for that job.
+        /// </summary>
+        /// <param name="job">
+        /// The job.
+        /// </param>
         public void RecievingJob(Job job)
         {
             string query = job.Query;
@@ -1933,10 +2261,12 @@ namespace Handbrake
                 List<ToolStripMenuItem> menuItems = new List<ToolStripMenuItem>();
                 foreach (DriveInformation drive in drives)
                 {
-                    ToolStripMenuItem menuItem = new ToolStripMenuItem();
-                    menuItem.Name = drive.ToString();
-                    menuItem.Text = drive.RootDirectory + " (" + drive.VolumeLabel + ")";
-                    menuItem.Image = Resources.disc_small;
+                    ToolStripMenuItem menuItem = new ToolStripMenuItem
+                        {
+                            Name = drive.ToString(),
+                            Text = drive.RootDirectory + " (" + drive.VolumeLabel + ")",
+                            Image = Resources.disc_small
+                        };
                     menuItem.Click += new EventHandler(mnu_dvd_drive_Click);
                     menuItems.Add(menuItem);
                 }
@@ -1981,6 +2311,46 @@ namespace Handbrake
             }
 
             return title;
+        }
+
+        /// <summary>
+        /// Handle the Update Check Finishing.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        private void updateCheckDoneMenu(IAsyncResult result)
+        {
+            // Make sure it's running on the calling thread
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => updateCheckDoneMenu(result)));
+                return;
+            }
+            UpdateCheckInformation info;
+            try
+            {
+                // Get the information about the new build, if any, and close the window
+                info = Main.EndCheckForUpdates(result);
+
+                if (info.NewVersionAvailable && info.BuildInformation != null)
+                {
+                    frmUpdater updateWindow = new frmUpdater(info.BuildInformation);
+                    updateWindow.ShowDialog();
+                }
+                else
+                    MessageBox.Show("There are no new updates at this time.", "Update Check", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                lbl_updateCheck.Visible = false;
+                return;
+            }
+            catch (Exception ex)
+            {
+                if ((bool)result.AsyncState)
+                    MessageBox.Show(
+                        "Unable to check for updates, Please try again later.\n\nDetailed Error Information:\n" + ex,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion
@@ -2043,7 +2413,7 @@ namespace Handbrake
 
         #endregion
 
-        #region In-GUI Encode Status (Experimental)
+        #region In-GUI Encode Status
 
         /// <summary>
         /// Starts a new thread to monitor and process the CLI encode status
@@ -2068,31 +2438,31 @@ namespace Handbrake
         /// <summary>
         /// Displays the Encode status in the GUI
         /// </summary>
-        /// <param name="Sender"></param>
-        /// <param name="CurrentTask"></param>
-        /// <param name="TaskCount"></param>
-        /// <param name="PercentComplete"></param>
-        /// <param name="CurrentFps"></param>
-        /// <param name="AverageFps"></param>
-        /// <param name="TimeRemaining"></param>
-        private void EncodeOnEncodeProgress(object Sender, int CurrentTask, int TaskCount, float PercentComplete, float CurrentFps, float AverageFps, TimeSpan TimeRemaining)
+        /// <param name="sender">The sender</param>
+        /// <param name="currentTask">The current task</param>
+        /// <param name="taskCount">Number of tasks</param>
+        /// <param name="percentComplete">Percent complete</param>
+        /// <param name="currentFps">Current encode speed in fps</param>
+        /// <param name="av">Avg encode speed</param>
+        /// <param name="timeRemaining">Time Left</param>
+        private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float av, TimeSpan timeRemaining)
         {
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(
                     new EncodeProgressEventHandler(EncodeOnEncodeProgress),
-                    new[] { Sender, CurrentTask, TaskCount, PercentComplete, CurrentFps, AverageFps, TimeRemaining });
+                    new[] { sender, currentTask, taskCount, percentComplete, currentFps, av, timeRemaining });
                 return;
             }
             lbl_encode.Text =
                 string.Format(
-                "{0:00.00}%,    FPS: {1:000.0},    Avg FPS: {2:000.0},    Time Remaining: {3}", 
-                PercentComplete, 
-                CurrentFps, 
-                AverageFps, 
-                TimeRemaining);
+                "{0:00.00}%,    FPS: {1:000.0},    Avg FPS: {2:000.0},    Time Remaining: {3}",
+                percentComplete,
+                currentFps,
+                av,
+                timeRemaining);
 
-            ProgressBarStatus.Value = (int)Math.Round(PercentComplete);
+            ProgressBarStatus.Value = (int)Math.Round(percentComplete);
         }
 
         #endregion

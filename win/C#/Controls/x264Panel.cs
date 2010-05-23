@@ -353,6 +353,9 @@ namespace Handbrake.Controls
         /// <summary>
         /// This function will update the X264 Query when one of the GUI widgets changes.
         /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
         private void OnX264WidgetChange(string sender)
         {
             Animate(sender);
@@ -376,8 +379,8 @@ namespace Handbrake.Controls
         /// Called when the current x264 option string contains multiple (or a single) item(s) in it seperated by :
         /// it updates the current option that the widget corrosponds to, if it is already in thes string.
         /// </summary>
-        /// <param name="currentOptString"></param>
-        /// <param name="optNameToChange"></param>
+        /// <param name="currentOptString">The Current Option String</param>
+        /// <param name="optNameToChange">Name of the option to change</param>
         private void HasOptions(string currentOptString, string optNameToChange)
         {
             string thisOpt; // The separated option such as "bframes=3"
@@ -440,8 +443,8 @@ namespace Handbrake.Controls
                                 thisOpt = string.Empty;
                             else
                             {
-                                double psyrd = slider_psyrd.Value*0.1;
-                                double psytre = slider_psytrellis.Value*0.1;
+                                double psyrd = slider_psyrd.Value * 0.1;
+                                double psytre = slider_psytrellis.Value * 0.1;
 
                                 string rd = psyrd.ToString("f1");
                                 string rt = psytre.ToString("f1");
@@ -592,7 +595,7 @@ namespace Handbrake.Controls
         /// Handles 2 cases.  1 Where rtf_x264Query.Text is empty, and one where there is an option with no value,
         /// e.g no-fast-pskip
         /// </summary>
-        /// <param name="optNameToChange"></param>
+        /// <param name="optNameToChange">The Option Name to Change</param>
         private void HasNoOptions(IEquatable<string> optNameToChange)
         {
             string colon = string.Empty;
@@ -705,8 +708,8 @@ namespace Handbrake.Controls
                     query += string.Empty;
                 else
                 {
-                    double psyrd = slider_psyrd.Value*0.1;
-                    double psytre = slider_psytrellis.Value*0.1;
+                    double psyrd = slider_psyrd.Value * 0.1;
+                    double psytre = slider_psytrellis.Value * 0.1;
 
                     string rd = psyrd.ToString("f1");
                     string rt = psytre.ToString("f1");
@@ -780,17 +783,17 @@ namespace Handbrake.Controls
         /// <summary>
         /// Shows and hides controls based on the values of other controls.
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="sender">The Sender</param>
         private void Animate(string sender)
         {
             /* Lots of situations to cover.
- 	           - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
- 	           - CABAC (when 0 turn off trellis)
- 	           - analysis (if none, turn off 8x8dct)
- 	           - refs (under 2, disable mixed-refs)
- 	           - subme (if under 6, turn off psy-rd and psy-trel)
- 	           - trellis (if 0, turn off psy-trel)
- 	        */
+               - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
+               - CABAC (when 0 turn off trellis)
+               - analysis (if none, turn off 8x8dct)
+               - refs (under 2, disable mixed-refs)
+               - subme (if under 6, turn off psy-rd and psy-trel)
+               - trellis (if 0, turn off psy-trel)
+             */
 
             switch (sender)
             {
@@ -893,7 +896,6 @@ namespace Handbrake.Controls
                         slider_psyrd.Value = 10;
                         lbl_psyrd.Visible = false;
 
-
                         slider_psytrellis.Visible = false;
                         slider_psytrellis.Value = 0;
                         lbl_psytrellis.Visible = false;
@@ -930,7 +932,6 @@ namespace Handbrake.Controls
                     break;
             }
         }
-
 
         private void widgetControlChanged(object sender, EventArgs e)
         {

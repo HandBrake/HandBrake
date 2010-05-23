@@ -31,7 +31,6 @@ namespace Handbrake.Presets
             QueryParser queryParsed = new QueryParser();
             string qualityMode = string.Empty;
 
-
             #region Get a List of Audio Track Objects
             XmlNode audioListDict = root.ChildNodes[2].ChildNodes[0].FirstChild.ChildNodes[1];
             ArrayList audioTracks = new ArrayList();

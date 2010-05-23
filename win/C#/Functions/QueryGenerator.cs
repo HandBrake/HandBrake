@@ -442,7 +442,6 @@ namespace Handbrake.Functions
             if (Properties.Settings.Default.noDvdNav)
                 query += " --no-dvdnav";
 
-
             return query;
         }
 

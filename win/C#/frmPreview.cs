@@ -178,7 +178,6 @@ namespace Handbrake
             ProgressBarStatus.Value = (int)Math.Round(PercentComplete);
         }
 
-
         private void EncodeCompleted()
         {
             try

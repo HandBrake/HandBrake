@@ -232,7 +232,7 @@ namespace Handbrake.Functions
                     break;
                 case "H.264 (x264)":
                     double cqStep = Properties.Settings.Default.x264cqstep;
-                    sliderValue = (int)((51.0 / cqStep) - (value/cqStep));
+                    sliderValue = (int)((51.0 / cqStep) - (value / cqStep));
                     break;
                 case "VP3 (Theora)":
                     sliderValue = (int)value;

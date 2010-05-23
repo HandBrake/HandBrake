@@ -24,21 +24,24 @@ namespace Handbrake
         [STAThread]
         public static void Main()
         {
+            // Handle any unhandled exceptions
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+            // Attempt to upgrade / keep the users settings between versions
             if (Settings.Default.UpdateRequired)
             {
                 Settings.Default.Upgrade();
                 Settings.Default.UpdateRequired = false;
             }
 
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
-            const string failedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
-            const string nightlyCLIMissing =
+            // Make sure we have any pre-requesits before trying to launch
+            const string FailedInstall = "HandBrake is not installed properly. Please reinstall HandBrake. \n\n";
+            const string NightlyCLIMissing =
                 "If you have downloaded the \"HandBrakeGUI\" nightly, " +
                 "please make sure you have also downloaded the \"HandBrakeCLI\" nightly and extracted it's contents to the same folder. ";
             string missingFiles = string.Empty;
 
-            // Verify HandBrakeCLI.exe and ilibgcc_s_sjlj-1.dll exists
+            // Verify HandBrakeCLI.exe exists
             if (!File.Exists(Path.Combine(Application.StartupPath, "HandBrakeCLI.exe")))
             {
                 missingFiles += "\"HandBrakeCLI.exe\" was not found.";
@@ -47,7 +50,7 @@ namespace Handbrake
             if (missingFiles != string.Empty)
             {
                 MessageBox.Show(
-                    failedInstall + missingFiles + "\n\n" + nightlyCLIMissing,
+                    FailedInstall + missingFiles + "\n\n" + NightlyCLIMissing,
                     "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

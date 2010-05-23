@@ -815,5 +815,21 @@ namespace Handbrake.Functions
 
             return sb.ToString().Trim();
         }
+
+        /// <summary>
+        /// Show the Exception Window
+        /// </summary>
+        /// <param name="shortError">
+        /// The short error.
+        /// </param>
+        /// <param name="longError">
+        /// The long error.
+        /// </param>
+        public static void ShowExceptiowWindow(string shortError, string longError)
+        {
+            frmExceptionWindow exceptionWindow = new frmExceptionWindow();
+            exceptionWindow.Setup(shortError, longError);
+            exceptionWindow.Show();
+        }
     }
 }

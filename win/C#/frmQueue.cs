@@ -125,8 +125,6 @@ namespace Handbrake
         {
             if (doSetQueue) SetQueue();
             base.Show();
-
-            // Activate();
         }
 
         /// <summary>
@@ -136,10 +134,9 @@ namespace Handbrake
         /// <param name="e">the EventArgs</param>
         private void BtnEncodeClick(object sender, EventArgs e)
         {
-            if (queue.PauseRequested)
+            if (queue.Paused)
             {
                 SetUiEncodeStarted();
-                MessageBox.Show("Encoding restarted", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             if (!queue.IsEncoding)

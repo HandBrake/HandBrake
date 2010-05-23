@@ -3,7 +3,6 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-
 namespace Handbrake.Functions
 {
     using System;
@@ -63,6 +62,7 @@ namespace Handbrake.Functions
             public UInt32 dwMemoryLoad;
 
             /// <summary>
+            /// Total Physical Memory
             /// </summary>
             public UInt32 dwTotalPhys; // Used
 
@@ -104,6 +104,18 @@ namespace Handbrake.Functions
             ref MEMORYSTATUS lpBuffer
         );
 
+        /// <summary>
+        /// Generate a Console Ctrl Event
+        /// </summary>
+        /// <param name="sigevent">
+        /// The sigevent.
+        /// </param>
+        /// <param name="dwProcessGroupId">
+        /// The dw process group id.
+        /// </param>
+        /// <returns>
+        /// Bool true is sucess
+        /// </returns>
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool GenerateConsoleCtrlEvent(ConsoleCtrlEvent sigevent, int dwProcessGroupId);
 

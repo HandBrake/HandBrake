@@ -1,5 +1,4 @@
 /*  frmDownload.cs $
- 	
     This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
@@ -28,7 +27,6 @@ namespace Handbrake
         private delegate void DownloadCompleteCallback();
 
         private delegate void DownloadFailedCallback();
-
 
         public frmDownload(string filename)
         {
@@ -86,10 +84,10 @@ namespace Handbrake
 
         private void UpdateProgress(long bytesRead, long totalBytes)
         {
-            long p = (bytesRead*100)/totalBytes;
+            long p = (bytesRead * 100) / totalBytes;
             int.TryParse(p.ToString(), out _progress);
             progress_download.Value = _progress;
-            lblProgress.Text = (bytesRead/1024) + "k of " + (totalBytes/1024) + "k ";
+            lblProgress.Text = (bytesRead / 1024) + "k of " + (totalBytes / 1024) + "k ";
         }
 
         private void DownloadComplete()
