@@ -4730,7 +4730,10 @@ ghb_net_recv_cb(GIOChannel *ioc, GIOCondition cond, gpointer data)
 	}
 	if (status == G_IO_STATUS_EOF)
 	{
-		ud->appcast[ud->appcast_len] = 0;
+		if ( ud->appcast != NULL )
+		{
+			ud->appcast[ud->appcast_len] = 0;
+		}
 		ghb_net_close(ioc);
 		process_appcast(ud);
 		return FALSE;
