@@ -3893,23 +3893,6 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 		{
 			one_burned = TRUE;
 		}
-		if (!burned && mux == HB_MUX_MP4 && source == VOBSUB)
-		{
-			// MP4 can only handle burned vobsubs.  make sure there isn't
-			// already something burned in the list
-			message = g_strdup_printf(
-			"Your chosen container does not support soft bitmap subtitles.\n\n"
-				"You should change your subtitle selections.\n"
-				"If you continue, some subtitles will be lost.");
-			if (!ghb_message_dialog(GTK_MESSAGE_WARNING, message, 
-				"Cancel", "Continue"))
-			{
-				g_free(message);
-				return FALSE;
-			}
-			g_free(message);
-			break;
-		}
 		if (source == SRTSUB)
 		{
 			gchar *filename;
@@ -4621,14 +4604,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 		subtitle = ghb_settings_get_int(ssettings, "SubtitleTrack");
 		if (subtitle == -1)
 		{
-			if (!burned && job->mux == HB_MUX_MKV)
+			if (!burned)
 			{
 				job->select_subtitle_config.dest = PASSTHRUSUB;
-			}
-			else if (!burned && job->mux == HB_MUX_MP4)
-			{
-				// Skip any non-burned vobsubs when output is mp4
-				continue;
 			}
 			else if (burned)
 			{
@@ -4652,16 +4630,9 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 			if (subt != NULL)
 			{
 				sub_config = subt->config;
-				if (!burned && job->mux == HB_MUX_MKV && 
-					subt->format == PICTURESUB)
+				if (!burned && subt->format == PICTURESUB)
 				{
 					sub_config.dest = PASSTHRUSUB;
-				}
-				else if (!burned && job->mux == HB_MUX_MP4 && 
-					subt->format == PICTURESUB)
-				{
-					// Skip any non-burned vobsubs when output is mp4
-					continue;
 				}
 				else if ( burned && subt->format == PICTURESUB )
 				{

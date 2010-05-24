@@ -520,6 +520,46 @@ static int MP4Init( hb_mux_object_t * m )
                 MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
             }
         }
+        else if( subtitle && subtitle->format == PICTURESUB && 
+            subtitle->config.dest == PASSTHRUSUB )
+        {
+            mux_data = calloc(1, sizeof( hb_mux_data_t ) );
+            subtitle->mux_data = mux_data;
+            mux_data->subtitle = 1;
+            mux_data->sub_format = subtitle->format;
+
+            mux_data->track = MP4AddSubpicTrack( m->file, 90000, title->width, title->height );
+
+            MP4SetTrackLanguage(m->file, mux_data->track, subtitle->iso639_2);
+
+            /* Tune track chunk duration */
+            MP4TuneTrackDurationPerChunk( m, mux_data->track );
+            uint8_t palette[16][4];
+            int ii;
+            for ( ii = 0; ii < 16; ii++ )
+            {
+                palette[ii][0] = 0;
+                palette[ii][1] = (subtitle->palette[ii] >> 16) & 0xff;
+                palette[ii][2] = (subtitle->palette[ii] >> 8) & 0xff;
+                palette[ii][3] = (subtitle->palette[ii]) & 0xff;
+            }
+            if (!(MP4SetTrackESConfiguration( m->file, mux_data->track,
+                    (uint8_t*)palette, 16 * 4 )))
+            {
+                hb_error("muxmp4.c: MP4SetTrackESConfiguration failed!");
+                *job->die = 1;
+                return 0;
+            }
+            if ( !subtitle_default || subtitle->config.default_track ) {
+                /* Enable the default subtitle track */
+                MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_ENABLED | TRACK_IN_MOVIE));
+                subtitle_default = 1;
+            }
+            else
+            {
+                MP4SetTrackIntegerProperty(m->file, mux_data->track, "tkhd.flags", (TRACK_DISABLED | TRACK_IN_MOVIE));
+            }
+        }
     }
 
     if (job->chapter_markers)
@@ -1038,6 +1078,39 @@ static int MP4Mux( hb_mux_object_t * m, hb_mux_data_t * mux_data,
                                  mux_data->track,
                                  output,
                                  buffersize + stylesize + 2,
+                                 buf->stop - buf->start,
+                                 0,
+                                 1 ))
+            {
+                hb_error("Failed to write to output file, disk full?");
+                *job->die = 1;
+            }
+
+            mux_data->sum_dur += (buf->stop - buf->start);
+        }
+        else if( mux_data->sub_format == PICTURESUB )
+        {
+            /* Write an empty sample */
+            if ( mux_data->sum_dur < buf->start )
+            {
+                uint8_t empty[2] = {0,0};
+                if( !MP4WriteSample( m->file,
+                                    mux_data->track,
+                                    empty,
+                                    2,
+                                    buf->start - mux_data->sum_dur,
+                                    0,
+                                    1 ))
+                {
+                    hb_error("Failed to write to output file, disk full?");
+                    *job->die = 1;
+                } 
+                mux_data->sum_dur += buf->start - mux_data->sum_dur;
+            }
+            if( !MP4WriteSample( m->file,
+                                 mux_data->track,
+                                 buf->data,
+                                 buf->size,
                                  buf->stop - buf->start,
                                  0,
                                  1 ))

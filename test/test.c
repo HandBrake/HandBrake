@@ -1792,17 +1792,9 @@ static int HandleEvents( hb_handle_t * h )
 
                         force = test_sub_list(subforce, token, pos);
 
-                        if ( !burn && mux == HB_MUX_MKV && 
-                             subtitle->format == PICTURESUB)
+                        if ( !burn && subtitle->format == PICTURESUB)
                         {
                             sub_config.dest = PASSTHRUSUB;
-                        }
-                        else if (!burn && mux == HB_MUX_MP4 &&
-                             subtitle->format == PICTURESUB)
-                        {
-                            // Skip any non-burned vobsubs when output is mp4
-                            fprintf( stderr, "Warning: Skipping subtitle track %d, can't pass-through VOBSUBs in an MP4 container,\nadd '--subtitle-burn %d' to the command line\n", track+1, track+1 );
-                            continue;
                         }
                         else if ( burn && subtitle->format == PICTURESUB )
                         {

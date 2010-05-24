@@ -41,15 +41,6 @@ free_subtitle_key(gpointer data)
 static gboolean
 mustBurn(signal_user_data_t *ud, GValue *settings)
 {
-	if (ghb_settings_combo_int(ud->settings, "FileFormat") == HB_MUX_MP4)
-	{
-		// MP4 can only handle burned vobsubs.  make sure there isn't
-		// already something burned in the list
-		if (ghb_settings_get_int(settings, "SubtitleSource") == VOBSUB)
-		{
-			return TRUE;
-		}
-	}
 	return FALSE;
 }
 
