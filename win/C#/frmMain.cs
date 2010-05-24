@@ -1130,10 +1130,15 @@ namespace Handbrake
         private void btn_add2Queue_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(sourcePath) || string.IsNullOrEmpty(text_destination.Text))
-                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
+                if (!Directory.Exists(text_destination.Text))
+                {
+                    MessageBox.Show("Destination Path does not exist.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 string query = QueryGenerator.GenerateCliQuery(this, drop_mode.SelectedIndex, 0, null);
                 if (rtf_query.Text != string.Empty)
                     query = rtf_query.Text;
