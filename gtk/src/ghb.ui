@@ -3806,7 +3806,7 @@ Requires subme >= 6 and trellis >= 1.</property>
                         <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <child>
-                          <object class="GtkAlignment" id="alignment60">
+                          <object class="GtkAlignment" id="check_updates_box">
                             <property name="visible">True</property>
                             <property name="left_padding">12</property>
                             <property name="top_padding">6</property>

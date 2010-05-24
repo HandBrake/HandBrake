@@ -29,11 +29,15 @@
 
 #include <netinet/in.h>
 #include <netdb.h>
+
+#if !defined(_NO_UPDATE_CHECK)
 #if defined(_OLD_WEBKIT)
 #include <webkit.h>
 #else
 #include <webkit/webkit.h>
 #endif
+#endif
+
 #include <libnotify/notify.h>
 #include <gdk/gdkx.h>
 #else
@@ -2972,6 +2976,7 @@ ghb_timer_cb(gpointer data)
 		update_preview = FALSE;
 	}
 
+#if !defined(_NO_UPDATE_CHECK)
 	if (!appcast_busy)
 	{
 		gchar *updates;
@@ -3002,6 +3007,7 @@ ghb_timer_cb(gpointer data)
 			}
 		}
 	}
+#endif
 	return TRUE;
 }
 
@@ -4664,6 +4670,7 @@ process_appcast(signal_user_data_t *ud)
 	gtk_label_set_text(GTK_LABEL(label), msg);
 
 #if !defined(_WIN32)
+#if !defined(_NO_UPDATE_CHECK)
 	if (html == NULL)
 	{
 		html = webkit_web_view_new();
@@ -4674,6 +4681,7 @@ process_appcast(signal_user_data_t *ud)
 		gtk_widget_show(html);
 	}
 	webkit_web_view_open(WEBKIT_WEB_VIEW(html), description);
+#endif
 #endif
 	dialog = GHB_WIDGET(ud->builder, "update_dialog");
 	response = gtk_dialog_run(GTK_DIALOG(dialog));

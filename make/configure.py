@@ -1055,6 +1055,8 @@ def createCLI():
 
     h = IfHost( 'disable GTK GUI', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--disable-gtk', default=False, action='store_true', help=h )
+    h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
     h = IfHost( 'enable GTK GUI (mingw)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-gtk-mingw', default=False, action='store_true', help=h )
 
@@ -1451,6 +1453,7 @@ int main ()
     doc.addBlank()
     doc.add( 'FEATURE.asm',   'disabled' )
     doc.add( 'FEATURE.gtk',   int( not options.disable_gtk ))
+    doc.add( 'FEATURE.gtk.update.checks',   int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gtk.mingw',   int( options.enable_gtk_mingw ))
     doc.add( 'FEATURE.xcode', int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
 

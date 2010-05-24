@@ -53,6 +53,10 @@ AC_ARG_ENABLE(gst,
 	AS_HELP_STRING([--enable-gst], [enable gstreamer on Win32]),
 	w32_gst=yes, w32_gst=no)
 
+AC_ARG_ENABLE(update-checks,
+	AS_HELP_STRING([--disable-update-checks], [disable update checks]),
+	update_checks=no, update_checks=yes)
+
 # overwrite global variable (used for Makefile generation)
 AC_SUBST(GLOBALCXXFLAGS, $CXXFLAGS )
 AC_SUBST(GLOBALLDFLAGS, $LDFLAGS )
@@ -90,17 +94,22 @@ if test "x$w32_gst" = "xyes" -o  "x$mingw_flag" != "xyes" ; then
 	CFLAGS="$CFLAGS -D_ENABLE_GST"
 fi
 
-PKG_CHECK_MODULES(OldWebKitGtk, WebKitGtk, old_webkit=yes, old_webkit=no)
-if test "x$old_webkit" = "xyes" ; then
-	if test "x$mingw_flag" = "xno" ; then
-		GHB_PACKAGES="$GHB_PACKAGES WebKitGtk"
-		CXXFLAGS="$CXXFLAGS -D_OLD_WEBKIT"
-		CFLAGS="$CFLAGS -D_OLD_WEBKIT"
+PKG_PROG_PKG_CONFIG
+if test "x$update_checks" = "xyes" ; then
+	PKG_CHECK_MODULES(OldWebKitGtk, WebKitGtk, old_webkit=yes, old_webkit=no)
+	if test "x$old_webkit" = "xyes" ; then
+		if test "x$mingw_flag" = "xno" ; then
+			GHB_PACKAGES="$GHB_PACKAGES WebKitGtk"
+			CXXFLAGS="$CXXFLAGS -D_OLD_WEBKIT"
+			CFLAGS="$CFLAGS -D_OLD_WEBKIT"
+		fi
+	else
+		if test "x$mingw_flag" = "xno" ; then
+			GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
+		fi
 	fi
 else
-	if test "x$mingw_flag" = "xno" ; then
-		GHB_PACKAGES="$GHB_PACKAGES webkit-1.0"
-	fi
+	CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
 fi
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])

@@ -47,7 +47,7 @@
 #endif /* !G_ENABLE_DEBUG */
 
 
-/* VOID:STRING,STRING (marshalers.list:1) */
+/* VOID:STRING,STRING (/home/jstebbins/Source/HandBrake.update-checks/build.debug/../gtk/src/marshalers.list:1) */
 void
 ghb_marshal_VOID__STRING_STRING (GClosure     *closure,
                                  GValue       *return_value G_GNUC_UNUSED,
@@ -84,7 +84,7 @@ ghb_marshal_VOID__STRING_STRING (GClosure     *closure,
             data2);
 }
 
-/* BOOLEAN:BOXED (marshalers.list:2) */
+/* BOOLEAN:BOXED (/home/jstebbins/Source/HandBrake.update-checks/build.debug/../gtk/src/marshalers.list:2) */
 void
 ghb_marshal_BOOLEAN__BOXED (GClosure     *closure,
                             GValue       *return_value G_GNUC_UNUSED,

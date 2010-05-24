@@ -827,6 +827,11 @@ main (int argc, char *argv[])
 	// Since GtkBuilder no longer assigns object ids to widget names
 	// Assign a few that are necessary for style overrides to work
 	GtkWidget *widget;
+#if defined(_NO_UPDATE_CHECK)
+	widget = GHB_WIDGET(ud->builder, "check_updates_box");
+	gtk_widget_hide(widget);
+#endif
+
 	widget = GHB_WIDGET(ud->builder, "preview_hud");
 	gtk_widget_set_name(widget, "preview_hud");
 	widget = GHB_WIDGET(ud->builder, "preview_window");

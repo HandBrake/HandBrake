@@ -22,9 +22,13 @@ BUILD.out += $(GTK.out)
 ###############################################################################
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    GTK.GCC.D += PTW32_STATIC_LIB
+	GTK.GCC.D += PTW32_STATIC_LIB
+	GTK.CONFIGURE.extra = --host=$(BUILD.spec)
 endif
 
+ifeq (0,$(FEATURE.gtk.update.checks))
+	GTK.CONFIGURE.extra += --disable-update-checks
+endif
 
 ###############################################################################
 ###############################################################################
