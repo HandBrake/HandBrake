@@ -26,7 +26,7 @@ FORCEVERSION =
 
 $(BUILDDIR)/GNUmakefile: $(CONFIGURE)
 	dh_testdir
-	unset CFLAGS; unset CPPLAGS; unset CXXLAGS; $(CONFIGURE) --prefix=/usr
+	unset CFLAGS; unset CPPLAGS; unset CXXLAGS; $(CONFIGURE) --disable-gtk-update-checks --prefix=/usr
 
 build:  $(BUILDDIR)/GNUmakefile
 	dh_testdir
