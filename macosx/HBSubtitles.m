@@ -757,17 +757,15 @@
     if ([[aTableColumn identifier] isEqualToString:@"track"])
     {
         
-        /* since mp4 only supports burned in vobsubs (bitmap) we need to make sure burned in is specified */
+        /* Since currently no quicktime based playback devices support soft vobsubs (bitmap) in mp4, we make sure
+         * "burned in" is specified  by default to avoid massive confusion and anarchy. */
         if (container == HB_MUX_MP4 && [anObject intValue] != 0)
         {
-            /* so, if isPictureSub = TRUE and we are mp4, we now have to A) set burned-in to 1 and b) remove any other
-             * tracks specified that are burned in */
             if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 1)
             {
                 [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
             }
         }
-        
         
         /* We use the track popup index number (presumes index 0 is "None" which is ignored and only used to remove tracks if need be)
          * to determine whether to 1 modify an existing track, 2. add a new empty "None" track or 3. remove an existing track.
@@ -838,11 +836,10 @@
         else if ([[aTableColumn identifier] isEqualToString:@"burned"])
         {
             [aCell setState:[[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleTrackBurned"] intValue]];
-            /* Disable the "Burned-In" checkbox if a) the track is "None", b) the subtitle track is text (we do not support burning in
-             * text subs, or c) we are mp4 and the track is a vobsub (picture sub) */
+            /* Disable the "Burned-In" checkbox if a) the track is "None" or b) the subtitle track is text (we do not support burning in
+             * text subs) */
             if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackNum"] intValue] == 0 ||
-                [[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 0 ||
-                (container == HB_MUX_MP4 && [[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 1))
+                [[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 0)
             {
                 [aCell setEnabled:NO];
             }
@@ -916,49 +913,6 @@
         
     }
     
-    
-    if (container == HB_MUX_MP4)
-    {
-        /* now remove any other tracks that are set as burned and are picturesubs */
-        int i = 0;
-        int removedTracks = 0;
-        NSEnumerator *enumerator = [subtitleArray objectEnumerator];
-        id tempObject;
-        NSMutableArray *tempArrayToDelete = [NSMutableArray array];
-        BOOL removeTrack = NO; 
-        while ( tempObject = [enumerator nextObject] )  
-        {
-            
-            if ([[tempObject objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 1)
-            {
-                /* if this is the first vobsub mark it. if not, remove it */
-                if (removeTrack == NO)
-                {
-                    /* make sure that this is set to be burned in */
-                    [tempObject setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
-                    removeTrack = YES;
-                }
-                else
-                {
-                    [tempArrayToDelete addObject:tempObject];
-                    removedTracks ++;
-                }
-            }
-            
-            i++;
-        }
-        /* check to see if there are tracks to remove from the array */
-        if ([tempArrayToDelete count] > 0)
-        {
-            /* Popup a warning that hb only support one pic sub being burned in with mp4 */
-            int status;
-            status = NSRunAlertPanel(@"More than one vobsub is not supported in an mp4...",@"Your first vobsub track will now be used.", @"OK", nil, nil);
-            [NSApp requestUserAttention:NSCriticalRequest];
-            
-            [subtitleArray removeObjectsInArray:tempArrayToDelete];
-            [aTableView reloadData];
-        }
-    }
 }
 
 

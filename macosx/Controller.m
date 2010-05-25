@@ -3221,23 +3221,18 @@ bool one_burned = FALSE;
                 [self writeToActivityLog: "Foreign Language Search: %d", 1];
                 
                 job->indepth_scan = 1;
-                if (burned == 1 || job->mux != HB_MUX_MP4)
+                
+                if (burned != 1)
                 {
-                    if (burned != 1 && job->mux == HB_MUX_MKV)
-                    {
-                        job->select_subtitle_config.dest = PASSTHRUSUB;
-                    }
-                    else
-                    {
-                        job->select_subtitle_config.dest = RENDERSUB;
-                    }
-                    
-                    job->select_subtitle_config.force = force;
-                    job->select_subtitle_config.default_track = def;
-                    
+                    job->select_subtitle_config.dest = PASSTHRUSUB;
+                }
+                else
+                {
+                    job->select_subtitle_config.dest = RENDERSUB;
                 }
                 
-                
+                job->select_subtitle_config.force = force;
+                job->select_subtitle_config.default_track = def;
             }
             else
             {
@@ -3285,16 +3280,9 @@ bool one_burned = FALSE;
                 {
                     hb_subtitle_config_t sub_config = subt->config;
                     
-                    if (!burned && job->mux == HB_MUX_MKV && 
-                        subt->format == PICTURESUB)
+                    if ( !burned && subt->format == PICTURESUB )
                     {
                         sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if (!burned && job->mux == HB_MUX_MP4 && 
-                             subt->format == PICTURESUB)
-                    {
-                        // Skip any non-burned vobsubs when output is mp4
-                        continue;
                     }
                     else if ( burned && subt->format == PICTURESUB )
                     {
@@ -3796,22 +3784,18 @@ bool one_burned = FALSE;
                 [self writeToActivityLog: "Foreign Language Search: %d", 1];
                 
                 job->indepth_scan = 1;
-                if (burned == 1 || job->mux != HB_MUX_MP4)
+                
+                if (burned != 1)
                 {
-                    if (burned != 1 && job->mux == HB_MUX_MKV)
-                    {
-                        job->select_subtitle_config.dest = PASSTHRUSUB;
-                    }
-                    else
-                    {
-                        job->select_subtitle_config.dest = RENDERSUB;
-                    }
-                    
-                    job->select_subtitle_config.force = force;
-                    job->select_subtitle_config.default_track = def;
+                    job->select_subtitle_config.dest = PASSTHRUSUB;
+                }
+                else
+                {
+                    job->select_subtitle_config.dest = RENDERSUB;
                 }
                 
-                
+                job->select_subtitle_config.force = force;
+                job->select_subtitle_config.default_track = def;
             }
             else
             {
@@ -3860,16 +3844,9 @@ bool one_burned = FALSE;
                 {
                     hb_subtitle_config_t sub_config = subt->config;
                     
-                    if (!burned && job->mux == HB_MUX_MKV && 
-                        subt->format == PICTURESUB)
+                    if ( !burned && subt->format == PICTURESUB )
                     {
                         sub_config.dest = PASSTHRUSUB;
-                    }
-                    else if (!burned && job->mux == HB_MUX_MP4 && 
-                             subt->format == PICTURESUB)
-                    {
-                        // Skip any non-burned vobsubs when output is mp4
-                        continue;
                     }
                     else if ( burned && subt->format == PICTURESUB )
                     {
