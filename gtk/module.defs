@@ -6,13 +6,6 @@ GTK.build/ = $(BUILD/)gtk/
 
 GTK.CONFIGURE.stamp = $(GTK.build/).stamp.configure
 
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-GTK.CONFIGURE.extra += --host=$(BUILD.spec) 
-ifeq ($(HAS.dlfcn),1)
-	GTK.CONFIGURE.extra += --enable-dl
-endif
-endif
-
 ###############################################################################
 
 GTK.out += $(GTK.CONFIGURE.stamp)
@@ -22,8 +15,10 @@ BUILD.out += $(GTK.out)
 ###############################################################################
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-	GTK.GCC.D += PTW32_STATIC_LIB
-	GTK.CONFIGURE.extra = --host=$(BUILD.spec)
+GTK.CONFIGURE.extra += --host=$(BUILD.spec) 
+ifeq ($(HAS.dlfcn),1)
+	GTK.CONFIGURE.extra += --enable-dl
+endif
 endif
 
 ifeq (0,$(FEATURE.gtk.update.checks))
