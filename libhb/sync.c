@@ -116,7 +116,7 @@ hb_work_object_t * hb_sync_init( hb_job_t * job )
     pv->common = calloc( 1, sizeof( hb_sync_common_t ) );
     pv->common->ref++;
     pv->common->mutex = hb_lock_init();
-    pv->common->audio_pts_thresh = 0;
+    pv->common->audio_pts_thresh = -1;
     pv->common->next_frame = hb_cond_init();
     pv->common->pts_count = 1;
     if ( job->frame_to_start || job->pts_to_start )
@@ -930,6 +930,13 @@ static int syncAudioWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_lock( pv->common->mutex );
     while ( !pv->common->start_found )
     {
+        if ( pv->common->audio_pts_thresh < 0 )
+        {
+            // I would initialize this in hb_sync_init, but 
+            // job->pts_to_start can be modified by reader 
+            // after hb_sync_init is called.
+            pv->common->audio_pts_thresh = job->pts_to_start;
+        }
         if ( buf->start < pv->common->audio_pts_thresh )
         {
             hb_buffer_close( &buf );

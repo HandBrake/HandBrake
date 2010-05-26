@@ -266,24 +266,25 @@ static void ReaderFunc( void * _r )
     } 
     else if ( r->stream && r->job->pts_to_start )
     {
+        int64_t pts_to_start = r->job->pts_to_start;
         
         // Find out what the first timestamp of the stream is
         // and then seek to the appropriate offset from it
         if ( hb_stream_read( r->stream, ps ) )
         {
             if ( ps->start > 0 )
-                r->job->pts_to_start += ps->start;
+                pts_to_start += ps->start;
         }
         
-        if ( hb_stream_seek_ts( r->stream, r->job->pts_to_start ) >= 0 )
+        if ( hb_stream_seek_ts( r->stream, pts_to_start ) >= 0 )
         {
             // Seek takes us to the nearest I-frame before the timestamp
             // that we want.  So we will retrieve the start time of the
             // first packet we get, subtract that from pts_to_start, and
             // inspect the reset of the frames in sync.
             r->start_found = 2;
+            r->job->pts_to_start = pts_to_start;
         }
-
     } 
     else if( r->stream )
     {
@@ -348,6 +349,8 @@ static void ReaderFunc( void * _r )
             // want to start at.
             if ( ps->start > 0 && ps->start < r->job->pts_to_start )
                 r->job->pts_to_start -= ps->start;
+            else if ( ps->start >= r->job->pts_to_start )
+                r->job->pts_to_start = 0;
             r->start_found = 1;
           }
         }
@@ -405,44 +408,9 @@ static void ReaderFunc( void * _r )
             }
             if( fifos )
             {
-                if ( buf->start != -1 )
-                {
-                    int64_t start = buf->start - r->scr_offset;
-                    if ( !r->start_found )
-                        UpdateState( r, start );
-
-                    if ( !r->start_found &&
-                        r->job->pts_to_start && 
-                        buf->renderOffset != -1 &&
-                        start >= r->job->pts_to_start )
-                    {
-                        // pts_to_start point found
-                        // force a new scr offset computation
-                        stream_timing_t *st = find_st( r, buf );
-                        if ( st && 
-                            (st->is_audio ||
-                            ( st == r->stream_timing && !r->saw_audio ) ) )
-                        {
-                            // Re-zero our timestamps
-                            st->last = -st->average;
-                            new_scr_offset( r, buf );
-                            r->start_found = 1;
-                            r->job->pts_to_start = 0;
-                        }
-                    }
-                }
                 if ( buf->renderOffset != -1 )
                 {
-                    if ( r->scr_changes == r->demux.scr_changes )
-                    {
-                        // This packet is referenced to the same SCR as the last.
-                        // Adjust timestamp to remove the System Clock Reference
-                        // offset then update the average inter-packet time
-                        // for this stream.
-                        buf->renderOffset -= r->scr_offset;
-                        update_ipt( r, buf );
-                    }
-                    else
+                    if ( r->scr_changes != r->demux.scr_changes )
                     {
                         // This is the first audio or video packet after an SCR
                         // change. Compute a new scr offset that would make this
@@ -496,7 +464,42 @@ static void ReaderFunc( void * _r )
                 }
                 if ( buf->start != -1 )
                 {
+                    int64_t start = buf->start - r->scr_offset;
+                    if ( !r->start_found )
+                        UpdateState( r, start );
+
+                    if ( !r->start_found &&
+                        r->job->pts_to_start && 
+                        buf->renderOffset != -1 &&
+                        start >= r->job->pts_to_start )
+                    {
+                        // pts_to_start point found
+                        // force a new scr offset computation
+                        stream_timing_t *st = find_st( r, buf );
+                        if ( st && 
+                            (st->is_audio ||
+                            ( st == r->stream_timing && !r->saw_audio ) ) )
+                        {
+                            // Re-zero our timestamps
+                            st->last = -st->average;
+                            new_scr_offset( r, buf );
+                            r->start_found = 1;
+                            r->job->pts_to_start = 0;
+                        }
+                    }
                     buf->start -= r->scr_offset;
+                }
+                if ( buf->renderOffset != -1 )
+                {
+                    if ( r->scr_changes == r->demux.scr_changes )
+                    {
+                        // This packet is referenced to the same SCR as the last.
+                        // Adjust timestamp to remove the System Clock Reference
+                        // offset then update the average inter-packet time
+                        // for this stream.
+                        buf->renderOffset -= r->scr_offset;
+                        update_ipt( r, buf );
+                    }
                 }
                 if ( !r->start_found )
                 {
