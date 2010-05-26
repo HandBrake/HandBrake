@@ -758,12 +758,30 @@
     {
         
         /* Since currently no quicktime based playback devices support soft vobsubs (bitmap) in mp4, we make sure
-         * "burned in" is specified  by default to avoid massive confusion and anarchy. */
+         * "burned in" is specified  by default to avoid massive confusion and anarchy. However we also want to guard against
+         * multiple burned in subtitle tracks as libhb would ignore all but the first one anyway. Plus it would probably be
+         * stupid.
+         */
         if (container == HB_MUX_MP4 && [anObject intValue] != 0)
         {
             if ([[[subtitleArray objectAtIndex:rowIndex] objectForKey:@"subtitleSourceTrackisPictureSub"] intValue] == 1)
             {
-                [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
+                /* lets see if there are currently any burned in subs specified */
+                NSEnumerator *enumerator = [subtitleArray objectEnumerator];
+                id tempObject;
+                BOOL subtrackBurnedInFound = NO;
+                while ( tempObject = [enumerator nextObject] )  
+                {
+                    if ([[tempObject objectForKey:@"subtitleTrackBurned"] intValue] == 1)
+                    {
+                        subtrackBurnedInFound = YES;
+                    }
+                }
+                /* if we have no current vobsub set to burn it in ... burn it in by default */
+                if(!subtrackBurnedInFound)
+                {
+                    [[subtitleArray objectAtIndex:rowIndex] setObject:[NSNumber numberWithInt:1] forKey:@"subtitleTrackBurned"];
+                }
             }
         }
         
@@ -912,7 +930,7 @@
         }
         
     }
-    
+     
 }
 
 
