@@ -1133,7 +1133,7 @@ namespace Handbrake
                 MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             else
             {
-                if (!Directory.Exists(text_destination.Text))
+                if (!Directory.Exists(Path.GetDirectoryName(text_destination.Text)))
                 {
                     MessageBox.Show("Destination Path does not exist.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
