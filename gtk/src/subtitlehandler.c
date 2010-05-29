@@ -678,6 +678,7 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 	gint row;
 	GValue *settings = NULL;
 	const GValue *subtitle_list;
+	gboolean allow_burn_force = FALSE;
 	
 	g_debug("subtitle_list_refresh_selected ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
@@ -752,6 +753,10 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			burned = ghb_settings_get_boolean(settings, "SubtitleBurned");
 		}
 
+		if (i_source == VOBSUB)
+			allow_burn_force = TRUE;
+
+
 		gtk_list_store_set(GTK_LIST_STORE(store), &iter, 
 			// These are displayed in list
 			0, track,
@@ -763,6 +768,8 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			// These are used to set combo box values when a list item is selected
 			6, s_track,
 			7, i_source,
+			8, allow_burn_force,
+			9, allow_burn_force,
 			-1);
 		g_free(track);
 		g_free(source);
@@ -909,6 +916,7 @@ add_to_subtitle_list(
 	gboolean forced, burned, def;
 	gchar *s_track;
 	gint i_source;
+	gboolean allow_burn_force = FALSE;
 	
 	g_debug("add_to_subtitle_list ()");
 	treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_list"));
@@ -924,6 +932,9 @@ add_to_subtitle_list(
 	i_source = ghb_settings_get_int(settings, "SubtitleSource");
 	source = subtitle_source_name(i_source);
 
+	if (i_source == VOBSUB)
+		allow_burn_force = TRUE;
+
 	gtk_list_store_append(store, &iter);
 	gtk_list_store_set(store, &iter, 
 		// These are displayed in list
@@ -935,8 +946,8 @@ add_to_subtitle_list(
 		// These are used to set combo box values when a list item is selected
 		6, s_track,
 		7, i_source,
-		8, TRUE,
-		9, TRUE,
+		8, allow_burn_force,
+		9, allow_burn_force,
 		10, FALSE,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);

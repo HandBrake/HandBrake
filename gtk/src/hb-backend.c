@@ -1149,6 +1149,30 @@ ghb_subtitle_track_source(signal_user_data_t *ud, gint track)
 }
 
 const char*
+ghb_subtitle_source_name(gint source)
+{
+	const gchar * name = "Unknown";
+	switch (source)
+	{
+		case VOBSUB:
+			name = "Bitmap";
+			break;
+		case TX3GSUB:
+		case UTF8SUB:
+		case CC708SUB:
+		case CC608SUB:
+			name = "Text";
+			break;
+		case SRTSUB:
+			name = "SRT";
+			break;
+		default:
+			break;
+	}
+	return name;
+}
+
+const char*
 ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 {
 	gint titleindex;
@@ -1186,21 +1210,7 @@ ghb_subtitle_track_source_name(signal_user_data_t *ud, gint track)
 	sub = hb_list_item( title->list_subtitle, track);
 	if (sub != NULL)
 	{
-		switch (sub->source)
-		{
-			case VOBSUB:
-				name = "Bitmap";
-				break;
-			case CC708SUB:
-			case CC608SUB:
-				name = "Text";
-				break;
-			case SRTSUB:
-				name = "SRT";
-				break;
-			default:
-				break;
-		}
+		name = ghb_subtitle_source_name(sub->source);
 	}
 
 done:
@@ -1966,7 +1976,16 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
        		subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
 			// Skip subtitles that must be burned if there is already
 			// a burned subtitle in the list
-			options[ii] = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
+			if (subtitle->source == VOBSUB)
+			{
+				options[ii] = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
+			}
+			else
+			{
+				options[ii] = g_strdup_printf("%d - %s (%s)", ii+1, 
+					subtitle->lang, 
+					ghb_subtitle_source_name(subtitle->source));
+			}
 			subtitle_opts.map[ii+1].option = options[ii];
 			subtitle_opts.map[ii+1].shortOpt = index_str[ii];
 			subtitle_opts.map[ii+1].ivalue = ii;
@@ -2382,7 +2401,7 @@ ghb_find_subtitle_track(
 				continue;
 
        		subtitle = (hb_subtitle_t*)hb_list_item( title->list_subtitle, ii );
-			if (((burn || force) && (subtitle->source == VOBSUB)) &&
+			if ((!(burn || force) || (subtitle->source == VOBSUB)) &&
 				((strcmp(lang, subtitle->iso639_2) == 0) ||
 				 (strcmp(lang, "und") == 0)))
 			{
@@ -3860,7 +3879,6 @@ ghb_validate_subtitles(signal_user_data_t *ud)
 	titleindex = ghb_settings_combo_int(ud->settings, "title");
     title = hb_list_item( list, titleindex );
 	if (title == NULL) return FALSE;
-	gint mux = ghb_settings_combo_int(ud->settings, "FileFormat");
 
 	const GValue *slist, *settings;
 	gint count, ii, source;
