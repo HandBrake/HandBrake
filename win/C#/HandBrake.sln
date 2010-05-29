@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeCS", "HandBrakeCS.csproj", "{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Build|Any CPU = Build|Any CPU
+		Build|x86 = Build|x86
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Install|Any CPU = Install|Any CPU
+		Install|x86 = Install|x86
+		NightlyBuild|Any CPU = NightlyBuild|Any CPU
+		NightlyBuild|x86 = NightlyBuild|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|Any CPU.ActiveCfg = Build|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|Any CPU.Build.0 = Build|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|x86.ActiveCfg = Build|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Build|x86.Build.0 = Build|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|x86.ActiveCfg = Debug|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Debug|x86.Build.0 = Debug|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|Any CPU.ActiveCfg = Install|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|Any CPU.Build.0 = Install|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|x86.ActiveCfg = Install|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Install|x86.Build.0 = Install|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|Any CPU.ActiveCfg = NightlyBuild|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|Any CPU.Build.0 = NightlyBuild|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|x86.ActiveCfg = NightlyBuild|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.NightlyBuild|x86.Build.0 = NightlyBuild|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|x86.ActiveCfg = Release|x86
+		{A2923D42-C38B-4B12-8CBA-B8D93D6B13A3}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
