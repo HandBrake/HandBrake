@@ -1660,7 +1660,6 @@ namespace Handbrake
             }
 
             AudioSettings.SetContainer(drop_format.Text);
-            Subtitles.SetContainer(drop_format.SelectedIndex);
 
             if (drop_format.Text.Contains("MP4"))
             {

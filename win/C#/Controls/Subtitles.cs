@@ -34,11 +34,6 @@ namespace Handbrake.Controls
         private readonly List<SubtitleInfo> subList = new List<SubtitleInfo>();
 
         /// <summary>
-        /// The File Container
-        /// </summary>
-        private int fileContainer;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="Subtitles"/> class.
         /// </summary>
         public Subtitles()
@@ -259,11 +254,29 @@ namespace Handbrake.Controls
             srtFiles.Add(Path.GetFileName(openFileDialog.FileName), openFileDialog.FileName);
         }
 
+        /// <summary>
+        /// Remove a subtitle track
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void BtnRemoveSubTrackClick(object sender, EventArgs e)
         {
             RemoveTrack();
         }
 
+        /// <summary>
+        /// The Subtitle List selected index has changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void LbSubListSelectedIndexChanged(object sender, EventArgs e)
         {
             // Set the dropdown controls based on the selected item in the List.
@@ -308,6 +321,15 @@ namespace Handbrake.Controls
 
         /* Bitmap / CC / SRT Controls */
 
+        /// <summary>
+        /// Handle the Subtitle track dropdown changed event
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void DrpSubtitleTracksSelectedIndexChanged(object sender, EventArgs e)
         {
             if (drp_subtitleTracks.SelectedItem.ToString().Contains(".srt"))
@@ -349,6 +371,15 @@ namespace Handbrake.Controls
             subList[lv_subList.SelectedIndices[0]].Track = drp_subtitleTracks.SelectedItem.ToString();
         }
 
+        /// <summary>
+        /// Foreced Subtitles checkbox changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CheckForcedCheckedChanged(object sender, EventArgs e)
         {
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
@@ -360,6 +391,15 @@ namespace Handbrake.Controls
                 // Update SubList List<SubtitleInfo> 
         }
 
+        /// <summary>
+        /// Burned in subtitles checkbox changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CheckBurnedCheckedChanged(object sender, EventArgs e)
         {
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
@@ -374,6 +414,15 @@ namespace Handbrake.Controls
                 // Update SubList List<SubtitleInfo> 
         }
 
+        /// <summary>
+        /// Default Subitle track check changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CheckDefaultCheckedChanged(object sender, EventArgs e)
         {
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
@@ -391,6 +440,15 @@ namespace Handbrake.Controls
                 // Update SubList List<SubtitleInfo>
         }
 
+        /// <summary>
+        /// Srt Offset Numeric Control Changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void SrtOffsetValueChanged(object sender, EventArgs e)
         {
             // Update an item in the  list if required.
@@ -404,6 +462,15 @@ namespace Handbrake.Controls
                 // Update SubList List<SubtitleInfo>
         }
 
+        /// <summary>
+        /// The SRT Charcode changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void SrtCharcodeSelectedIndexChanged(object sender, EventArgs e)
         {
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
@@ -415,6 +482,15 @@ namespace Handbrake.Controls
                 // Update SubList List<SubtitleInfo>
         }
 
+        /// <summary>
+        /// The Srt Language code changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void SrtLangSelectedIndexChanged(object sender, EventArgs e)
         {
             if (lv_subList.Items.Count == 0 || lv_subList.SelectedIndices.Count == 0) return;
@@ -428,6 +504,15 @@ namespace Handbrake.Controls
 
         /* Right Click Menu */
 
+        /// <summary>
+        /// Move an item in the subtitle list up
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void MnuMoveupClick(object sender, EventArgs e)
         {
             if (lv_subList.SelectedIndices.Count != 0)
@@ -446,6 +531,15 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Move an item in the subtitle list down
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void MnuMovedownClick(object sender, EventArgs e)
         {
             if (lv_subList.SelectedIndices.Count != 0)
@@ -464,6 +558,15 @@ namespace Handbrake.Controls
             }
         }
 
+        /// <summary>
+        /// Remove a selected subtitle track.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void MnuRemoveClick(object sender, EventArgs e)
         {
             RemoveTrack();
@@ -571,15 +674,7 @@ namespace Handbrake.Controls
         /// <returns>True if Yes</returns>
         public bool RequiresM4V()
         {
-            foreach (ListViewItem item in lv_subList.Items)
-            {
-                if (item.SubItems.Count != 5)
-                    return true;
-
-                if (item.SubItems[1].Text.Contains("(Text)"))
-                    return true;
-            }
-            return false;
+            return this.lv_subList.Items.Cast<ListViewItem>().Any(item => item.SubItems.Count != 5 || item.SubItems[1].Text.Contains("(Text)"));
         }
 
         /// <summary>
@@ -612,15 +707,6 @@ namespace Handbrake.Controls
                     BtnAddSubTrackClick(this, new EventArgs());
                 }
             }
-        }
-
-        /// <summary>
-        /// Set the file container which is currently in use.
-        /// </summary>
-        /// <param name="value">The File Container</param>
-        public void SetContainer(int value)
-        {
-            fileContainer = value;
         }
 
         /// <summary>
