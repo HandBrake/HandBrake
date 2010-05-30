@@ -2928,8 +2928,16 @@ static int ffmpeg_parse_vobsub_extradata_mp4( AVCodecContext *codec, hb_subtitle
             codec->extradata[j+2] << 8  |   // Cb
             codec->extradata[j+3] << 0;     // Cr
     }
-    subtitle->width = codec->width;
-    subtitle->height = codec->height;
+    if (codec->width <= 0 || codec->height <= 0)
+    {
+        subtitle->width = 720;
+        subtitle->height = 480;
+    }
+    else
+    {
+        subtitle->width = codec->width;
+        subtitle->height = codec->height;
+    }
     return 0;
 }
 
