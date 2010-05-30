@@ -16,8 +16,8 @@
 #define LVL_45DB 0.5946035575013605
 #define LVL_6DB 0.5
 
-#define LVL_SQRT_1_3 0.577350269
-#define LVL_SQRT_2_3 0.816496581
+#define LVL_SQRT_1_4 0.5
+#define LVL_SQRT_3_4 0.866025404
 
 #define HB_CH_FRONT_LEFT             0x00000001
 #define HB_CH_FRONT_RIGHT            0x00000002
@@ -605,8 +605,8 @@ hb_sample_t downmix_matrix[DOWNMIX_NUM_MODES][DOWNMIX_NUM_MODES][8][8] =
     // DPLII out
     { { 1,             0,             0, 0, 0, 0, 0, 0 },
       { 0,             1,             0, 0, 0, 0, 0, 0 },
-      { LVL_SQRT_2_3,  -LVL_SQRT_1_3, 0, 0, 0, 0, 0, 0 },
-      { -LVL_SQRT_1_3, LVL_SQRT_2_3,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_3_4, LVL_SQRT_1_4,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_1_4, LVL_SQRT_3_4,  0, 0, 0, 0, 0, 0 },
       { 0,             0,             1, 0, 0, 0, 0, 0 },
       { 0,             0,             0, 0, 0, 0, 0, 0 },
       { 0,             0,             0, 0, 0, 0, 0, 0 },
@@ -699,8 +699,8 @@ hb_sample_t downmix_matrix[DOWNMIX_NUM_MODES][DOWNMIX_NUM_MODES][8][8] =
     { { LVL_3DB,       LVL_3DB,       0, 0, 0, 0, 0, 0 },
       { 1,             0,             0, 0, 0, 0, 0, 0 },
       { 0,             1,             0, 0, 0, 0, 0, 0 },
-      { LVL_SQRT_2_3,  -LVL_SQRT_1_3, 0, 0, 0, 0, 0, 0 },
-      { -LVL_SQRT_1_3, LVL_SQRT_2_3,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_3_4, LVL_SQRT_1_4,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_1_4, LVL_SQRT_3_4,  0, 0, 0, 0, 0, 0 },
       { 0,             0,             1, 0, 0, 0, 0, 0 },
       { 0,             0,             0, 0, 0, 0, 0, 0 },
       { 0,             0,             0, 0, 0, 0, 0, 0 } },
@@ -792,10 +792,10 @@ hb_sample_t downmix_matrix[DOWNMIX_NUM_MODES][DOWNMIX_NUM_MODES][8][8] =
     { { LVL_3DB,               LVL_3DB,               0, 0, 0, 0, 0, 0 },
       { 1,                     0,                     0, 0, 0, 0, 0, 0 },
       { 0,                     1,                     0, 0, 0, 0, 0, 0 },
-      { LVL_SQRT_2_3*LVL_3DB,  -LVL_SQRT_1_3*LVL_3DB, 0, 0, 0, 0, 0, 0 },
-      { -LVL_SQRT_1_3*LVL_3DB, LVL_SQRT_2_3*LVL_3DB,  0, 0, 0, 0, 0, 0 },
-      { LVL_SQRT_2_3*LVL_3DB,  -LVL_SQRT_1_3*LVL_3DB, 0, 0, 0, 0, 0, 0 },
-      { -LVL_SQRT_1_3*LVL_3DB, LVL_SQRT_2_3*LVL_3DB,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_3_4*LVL_3DB, LVL_SQRT_1_4*LVL_3DB,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_1_4*LVL_3DB, LVL_SQRT_3_4*LVL_3DB,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_3_4*LVL_3DB, LVL_SQRT_1_4*LVL_3DB,  0, 0, 0, 0, 0, 0 },
+      { -LVL_SQRT_1_4*LVL_3DB, LVL_SQRT_3_4*LVL_3DB,  0, 0, 0, 0, 0, 0 },
       { 0,                     0,                     1, 0, 0, 0, 0, 0 } }
 },
 };
@@ -1349,7 +1349,7 @@ void hb_downmix_adjust_level( hb_downmix_t * downmix )
         break;
 
     case MIXMODE(DOWNMIX_2F2R, DOWNMIX_DPLII):
-        level /= 1 + LVL_SQRT_1_3 + LVL_SQRT_2_3;
+        level /= 1 + LVL_SQRT_1_4 + LVL_SQRT_3_4;
         break;
 
     case MIXMODE(DOWNMIX_3F2R, DOWNMIX_MONO):
@@ -1366,7 +1366,7 @@ void hb_downmix_adjust_level( hb_downmix_t * downmix )
         break;
 
     case MIXMODE(DOWNMIX_3F2R, DOWNMIX_DPLII):
-        level /= 1 + LVL_3DB + LVL_SQRT_1_3 + LVL_SQRT_2_3;
+        level /= 1 + LVL_3DB + LVL_SQRT_1_4 + LVL_SQRT_3_4;
         break;
 
     case MIXMODE(DOWNMIX_3F4R, DOWNMIX_STEREO):
@@ -1382,7 +1382,7 @@ void hb_downmix_adjust_level( hb_downmix_t * downmix )
         break;
 
     case MIXMODE(DOWNMIX_3F4R, DOWNMIX_DPLII):
-        level /= 1 + LVL_3DB + 2 * LVL_SQRT_1_3 + 2 * LVL_SQRT_2_3;
+        level /= 1 + LVL_3DB + 2 * LVL_SQRT_1_4 + 2 * LVL_SQRT_3_4;
     }
 
     downmix->level = level;
