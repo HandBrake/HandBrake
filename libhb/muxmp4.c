@@ -528,7 +528,7 @@ static int MP4Init( hb_mux_object_t * m )
             mux_data->subtitle = 1;
             mux_data->sub_format = subtitle->format;
 
-            mux_data->track = MP4AddSubpicTrack( m->file, 90000, title->width, title->height );
+            mux_data->track = MP4AddSubpicTrack( m->file, 90000, subtitle->width, subtitle->height );
 
             MP4SetTrackLanguage(m->file, mux_data->track, subtitle->iso639_2);
 

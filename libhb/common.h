@@ -512,6 +512,8 @@ struct hb_subtitle_s
     // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
     // Must be filled out by the demuxer for VOB subtitle tracks.
     uint32_t    palette[16];
+    int         width;
+    int         height;
 
     int hits;     /* How many hits/occurrences of this subtitle */
     int forced_hits; /* How many forced hits in this subtitle */

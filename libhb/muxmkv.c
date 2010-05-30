@@ -277,7 +277,7 @@ static int MKVInit( hb_mux_object_t * m )
                 for (j = 0; j < 16; j++)
                     rgb[j] = hb_yuv2rgb(subtitle->palette[j]);
                 len = snprintf(subidx, 2048, subidx_fmt, 
-                        title->width, title->height,
+                        subtitle->width, subtitle->height,
                         0, 0, "OFF",
                         rgb[0], rgb[1], rgb[2], rgb[3],
                         rgb[4], rgb[5], rgb[6], rgb[7],

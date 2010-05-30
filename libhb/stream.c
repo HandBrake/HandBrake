@@ -2832,9 +2832,6 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
 }
 
 /*
- * Parses the 'subtitle->palette' information from the specific VOB subtitle track's private data.
- * Returns 0 if successful or 1 if parsing failed or was incomplete.
- * 
  * Format:
  *   MkvVobSubtitlePrivateData = ( Line )*
  *   Line = FieldName ':' ' ' FieldValue '\n'
@@ -2847,11 +2844,8 @@ static void add_ffmpeg_audio( hb_title_t *title, hb_stream_t *stream, int id )
  * More information on the format at:
  *   http://www.matroska.org/technical/specs/subtitles/images.html
  */
-static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *subtitle )
+static int ffmpeg_parse_vobsub_extradata_mkv( AVCodecContext *codec, hb_subtitle_t *subtitle )
 {
-    if ( codec->extradata_size <= 0 )
-        return 1;
-    
     // lines = (string) codec->extradata;
     char *lines = malloc( codec->extradata_size + 1 );
     if ( lines == NULL )
@@ -2861,26 +2855,46 @@ static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *
     
     uint32_t rgb[16];
     int gotPalette = 0;
+    int gotDimensions = 0;
     
     char *curLine, *curLine_parserData;
     for ( curLine = strtok_r( lines, "\n", &curLine_parserData );
           curLine;
           curLine = strtok_r( NULL, "\n", &curLine_parserData ) )
     {
-        int numElementsRead = sscanf(curLine, "palette: "
-            "%06x, %06x, %06x, %06x, "
-            "%06x, %06x, %06x, %06x, "
-            "%06x, %06x, %06x, %06x, "
-            "%06x, %06x, %06x, %06x",
-            &rgb[0],  &rgb[1],  &rgb[2],  &rgb[3],
-            &rgb[4],  &rgb[5],  &rgb[6],  &rgb[7],
-            &rgb[8],  &rgb[9],  &rgb[10], &rgb[11],
-            &rgb[12], &rgb[13], &rgb[14], &rgb[15]);
-        
-        if (numElementsRead == 16) {
-            gotPalette = 1;
-            break;
+        if (!gotPalette)
+        {
+            int numElementsRead = sscanf(curLine, "palette: "
+                "%06x, %06x, %06x, %06x, "
+                "%06x, %06x, %06x, %06x, "
+                "%06x, %06x, %06x, %06x, "
+                "%06x, %06x, %06x, %06x",
+                &rgb[0],  &rgb[1],  &rgb[2],  &rgb[3],
+                &rgb[4],  &rgb[5],  &rgb[6],  &rgb[7],
+                &rgb[8],  &rgb[9],  &rgb[10], &rgb[11],
+                &rgb[12], &rgb[13], &rgb[14], &rgb[15]);
+
+            if (numElementsRead == 16) {
+                gotPalette = 1;
+            }
         }
+        if (!gotDimensions)
+        {
+            int numElementsRead = sscanf(curLine, "size: %dx%d",
+                &subtitle->width, &subtitle->height);
+
+            if (numElementsRead == 2) {
+                gotDimensions = 1;
+            }
+        }
+        if (gotPalette && gotDimensions)
+            break;
+    }
+
+    if (subtitle->width == 0 || subtitle->height == 0)
+    {
+        subtitle->width = 720;
+        subtitle->height = 480;
     }
     
     free( lines );
@@ -2896,6 +2910,39 @@ static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *
     {
         return 1;
     }
+}
+
+/*
+ * Format: 8-bit {0,Y,Cb,Cr} x 16
+ */
+static int ffmpeg_parse_vobsub_extradata_mp4( AVCodecContext *codec, hb_subtitle_t *subtitle )
+{
+    if ( codec->extradata_size != 4*16 )
+        return 1;
+    
+    int i, j;
+    for ( i=0, j=0; i<16; i++, j+=4 )
+    {
+        subtitle->palette[i] = 
+            codec->extradata[j+1] << 16 |   // Y
+            codec->extradata[j+2] << 8  |   // Cb
+            codec->extradata[j+3] << 0;     // Cr
+    }
+    subtitle->width = codec->width;
+    subtitle->height = codec->height;
+    return 0;
+}
+
+/*
+ * Parses the 'subtitle->palette' information from the specific VOB subtitle track's private data.
+ * Returns 0 if successful or 1 if parsing failed or was incomplete.
+ */
+static int ffmpeg_parse_vobsub_extradata( AVCodecContext *codec, hb_subtitle_t *subtitle )
+{
+    // XXX: Better if we actually chose the correct parser based on the input container
+    return
+        ffmpeg_parse_vobsub_extradata_mkv( codec, subtitle ) &&
+        ffmpeg_parse_vobsub_extradata_mp4( codec, subtitle );
 }
 
 static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id )

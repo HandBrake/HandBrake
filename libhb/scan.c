@@ -173,6 +173,22 @@ static void ScanFunc( void * _data )
             j++;
         }
 
+        if ( data->dvd )
+        {
+            // The subtitle width and height needs to be set to the 
+            // title widht and height for DVDs.  title width and
+            // height don't get set until we decode previews, so
+            // we can't set subtitle width/height till we get here.
+            for( j = 0; j < hb_list_count( title->list_subtitle ); j++ )
+            {
+                hb_subtitle_t *subtitle = hb_list_item( title->list_subtitle, j );
+                if ( subtitle->source == VOBSUB )
+                {
+                    subtitle->width = title->width;
+                    subtitle->height = title->height;
+                }
+            }
+        }
         i++;
     }
 
