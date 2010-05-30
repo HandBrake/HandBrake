@@ -63,8 +63,6 @@ struct eia608_screen // A CC buffer
     int empty; // Buffer completely empty?    	
 };
 
-#define LLONG long long
-
 struct eia608
 {
     struct eia608_screen buffer1;
@@ -73,7 +71,7 @@ struct eia608
     int visible_buffer;
     int srt_counter; // Number of subs currently written
     int screenfuls_counter; // Number of meaningful screenfuls written
-    LLONG current_visible_start_ms; // At what time did the current visible buffer became so?
+    int64_t current_visible_start_ms; // At what time did the current visible buffer became so?
     // unsigned current_visible_start_cc; // At what time did the current visible buffer became so?
     enum cc_modes mode;
     unsigned char last_c1, last_c2;

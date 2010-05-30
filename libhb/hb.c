@@ -1511,37 +1511,37 @@ hb_filter_object_t * hb_get_filter_object(int filter_id, const char * settings)
 {
     if (filter_id == HB_FILTER_ROTATE)
     {
-        hb_filter_rotate.settings = settings;
+        hb_filter_rotate.settings = (char*)settings;
         return &hb_filter_rotate;
     }
 
     if (filter_id == HB_FILTER_DETELECINE)
     {
-        hb_filter_detelecine.settings = settings;
+        hb_filter_detelecine.settings = (char*)settings;
         return &hb_filter_detelecine;
     }
 
     if (filter_id == HB_FILTER_DECOMB)
     {
-        hb_filter_decomb.settings = settings;
+        hb_filter_decomb.settings = (char*)settings;
         return &hb_filter_decomb;
     }
 
     if (filter_id == HB_FILTER_DEINTERLACE)
     {
-        hb_filter_deinterlace.settings = settings;
+        hb_filter_deinterlace.settings = (char*)settings;
         return &hb_filter_deinterlace;
     }
 
     if (filter_id == HB_FILTER_DEBLOCK)
     {
-        hb_filter_deblock.settings = settings;
+        hb_filter_deblock.settings = (char*)settings;
         return &hb_filter_deblock;
     }
 
     if (filter_id == HB_FILTER_DENOISE)
     {
-        hb_filter_denoise.settings = settings;
+        hb_filter_denoise.settings = (char*)settings;
         return &hb_filter_denoise;
     }
     return NULL;

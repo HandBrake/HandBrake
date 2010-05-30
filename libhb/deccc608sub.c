@@ -18,7 +18,7 @@ static int cc_channel = 1;
 static enum output_format write_format = OF_SRT;
 static int sentence_cap = 0;
 static int subs_delay = 0;
-static LLONG screens_to_process = -1;
+static int64_t screens_to_process = -1;
 static int processed_enough = 0;
 static int gui_mode_reports = 0;
 static int norollup = 1;
@@ -27,7 +27,7 @@ static int direct_rollup = 0;
 /*
  * Get the time of the last buffer that we have received.
  */
-static LLONG get_fts(struct s_write *wb)
+static int64_t get_fts(struct s_write *wb)
 {
     return wb->last_pts;
 }
@@ -1414,10 +1414,10 @@ void handle_text_attr (const unsigned char c1, const unsigned char c2, struct s_
     }
 }
 
-void mstotime (LLONG milli, unsigned *hours, unsigned *minutes,
+void mstotime (int64_t milli, unsigned *hours, unsigned *minutes,
                unsigned *seconds, unsigned *ms)
 {
-    // LLONG milli = (LLONG) ((ccblock*1000)/29.97);
+    // int64_t milli = (int64_t) ((ccblock*1000)/29.97);
     *ms=(unsigned) (milli%1000); // milliseconds
     milli=(milli-*ms)/1000;  // Remainder, in seconds
     *seconds = (int) (milli%60);
@@ -1546,7 +1546,7 @@ void write_cc_buffer_to_gui (struct eia608_screen *data, struct s_write *wb)
     unsigned h2,m2,s2,ms2;    
     int i;
 
-    LLONG ms_start= wb->data608->current_visible_start_ms;
+    int64_t ms_start= wb->data608->current_visible_start_ms;
 
     ms_start+=subs_delay;
     if (ms_start<0) // Drop screens that because of subs_delay start too early
@@ -1559,7 +1559,7 @@ void write_cc_buffer_to_gui (struct eia608_screen *data, struct s_write *wb)
             hb_log ("###SUBTITLE#");            
             if (!time_reported)
             {
-                LLONG ms_end = get_fts(wb)+subs_delay;		
+                int64_t ms_end = get_fts(wb)+subs_delay;		
                 mstotime (ms_start,&h1,&m1,&s1,&ms1);
                 mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
                 // Note, only MM:SS here as we need to save space in the preview window
@@ -1585,14 +1585,14 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
     unsigned h1,m1,s1,ms1;
     unsigned h2,m2,s2,ms2;
     int wrote_something = 0;
-    LLONG ms_start= wb->data608->current_visible_start_ms;
+    int64_t ms_start= wb->data608->current_visible_start_ms;
     int i;
 
     ms_start+=subs_delay;
     if (ms_start<0) // Drop screens that because of subs_delay start too early
         return 0;
 
-    LLONG ms_end = get_fts(wb)+subs_delay;		
+    int64_t ms_end = get_fts(wb)+subs_delay;		
     mstotime (ms_start,&h1,&m1,&s1,&ms1);
     mstotime (ms_end-1,&h2,&m2,&s2,&ms2); // -1 To prevent overlapping with next line.
     char timeline[128];   
@@ -1675,16 +1675,16 @@ int write_cc_buffer_as_srt (struct eia608_screen *data, struct s_write *wb)
 int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
 {
     int wrote_something=0;
-    LLONG startms = wb->data608->current_visible_start_ms;
+    int64_t startms = wb->data608->current_visible_start_ms;
     int i;
 
     startms+=subs_delay;
     if (startms<0) // Drop screens that because of subs_delay start too early
         return 0; 
 
-    LLONG endms   = get_fts(wb)+subs_delay;
+    int64_t endms   = get_fts(wb)+subs_delay;
     endms--; // To prevent overlapping with next line.
-    sprintf ((char *) str,"<SYNC start=\"%"PRIu64"\"><P class=\"UNKNOWNCC\">\r\n",startms);
+    sprintf ((char *) str,"<SYNC start=\"%"PRId64"\"><P class=\"UNKNOWNCC\">\r\n",startms);
     if (debug_608 && encoding!=ENC_UNICODE)
     {
         hb_log ("\r%s\n", str);
@@ -1722,7 +1722,7 @@ int write_cc_buffer_as_sami (struct eia608_screen *data, struct s_write *wb)
     wb->enc_buffer_used=encode_line (wb->enc_buffer,(unsigned char *) str);
     fwrite (wb->enc_buffer,wb->enc_buffer_used,1,wb->fh);
     XMLRPC_APPEND(wb->enc_buffer,wb->enc_buffer_used);
-    sprintf ((char *) str,"<SYNC start=\"%"PRIu64"\"><P class=\"UNKNOWNCC\">&nbsp;</P></SYNC>\r\n\r\n",endms);
+    sprintf ((char *) str,"<SYNC start=\"%"PRId64"\"><P class=\"UNKNOWNCC\">&nbsp;</P></SYNC>\r\n\r\n",endms);
     if (debug_608 && encoding!=ENC_UNICODE)
     {
         hb_log ("\r%s\n", str);

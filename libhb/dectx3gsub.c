@@ -41,6 +41,7 @@ typedef struct {
 #define READ_U16()      (pos[0] << 8) | pos[1];                                     pos += 2;
 #define READ_U32()      (pos[0] << 24) | (pos[1] << 16) | (pos[2] << 8) | pos[3];   pos += 4;
 #define READ_ARRAY(n)   pos;                                                        pos += n;
+#define SKIP_ARRAY(n)   pos += n;
 
 #define WRITE_CHAR(c)       {dst[0]=c;                                              dst += 1;}
 #define WRITE_START_TAG(c)  {dst[0]='<'; dst[1]=c;   dst[2]='>';                    dst += 3;}
@@ -97,7 +98,7 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
             
             if ( numStyleRecords != 0 ) {
                 hb_log( "dectx3gsub: found additional StyleBoxes on subtitle; skipping" );
-                READ_ARRAY(size);
+                SKIP_ARRAY(size);
                 continue;
             }
             
@@ -118,7 +119,7 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
             }
         } else {
             // Found some other kind of TextSampleModifierBox. Skip it.
-            READ_ARRAY(size);
+            SKIP_ARRAY(size);
         }
     }
     
@@ -174,6 +175,7 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
 #undef READ_U16
 #undef READ_U32
 #undef READ_ARRAY
+#undef SKIP_ARRAY
 
 #undef WRITE_CHAR
 #undef WRITE_START_TAG
