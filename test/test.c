@@ -637,7 +637,10 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:8x8dct=0:trellis=0:subme=6");
                     }
-                    anamorphic_mode = 2;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 2;
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -760,7 +763,10 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500");
                     }
-                    anamorphic_mode = 2;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 2;
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -800,7 +806,10 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("ref=2:bframes=2:subme=6:mixed-refs=0:weightb=0:8x8dct=0:trellis=0");
                     }
-                    anamorphic_mode = 1;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 1;
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -842,7 +851,10 @@ static int HandleEvents( hb_handle_t * h )
                     }
                     detelecine = 1;
                     decomb = 1;
-                    anamorphic_mode = 2;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 2;
+                    }
                     job->chapter_markers = 1;
                 }
 
@@ -916,7 +928,10 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         x264opts = strdup("ref=1:subme=5:me=umh:no-fast-pskip=1:cabac=0:weightb=0:8x8dct=0:trellis=0");
                     }
-                    anamorphic_mode = 1;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 1;
+                    }
                     job->chapter_markers = 1;
                 }
 
