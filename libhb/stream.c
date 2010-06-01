@@ -2982,14 +2982,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->source = TX3GSUB;
             subtitle->config.dest = PASSTHRUSUB;
             break;
-        // TODO(davidfstr): implement SSA subtitle support
-        /*
         case CODEC_ID_SSA:
             subtitle->format = TEXTSUB;
             subtitle->source = SSASUB;
             subtitle->config.dest = PASSTHRUSUB;
             break;
-        */
         default:
             hb_log( "add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x", (int) codec->codec_id );
             free(subtitle);
@@ -3261,6 +3258,10 @@ static int ffmpeg_read( hb_stream_t *stream, hb_buffer_t *buf )
      * 
      * VOB subtitles (CODEC_ID_DVD_SUBTITLE) do not have their duration stored in
      * either field. This is not a problem because the VOB decoder can extract this
+     * information from the packet payload itself.
+     * 
+     * SSA subtitles (CODEC_ID_SSA) do not have their duration stored in
+     * either field. This is not a problem because the SSA decoder can extract this
      * information from the packet payload itself.
      */
     enum CodecID ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt->stream_index]->codec->codec_id;

@@ -320,7 +320,8 @@ void hb_display_job_info( hb_job_t * job )
                         subtitle->source == VOBSUB ? "VOBSUB" : 
                         subtitle->source == CC608SUB || subtitle->source == CC708SUB ? "CC" : 
                         subtitle->source == UTF8SUB ? "UTF-8" : 
-                        subtitle->source == TX3GSUB ? "TX3G" : "Unknown",
+                        subtitle->source == TX3GSUB ? "TX3G" : 
+                        subtitle->source == SSASUB ? "SSA" : "Unknown",
                         subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through",
                         subtitle->config.force ? ", Forced Only" : "",
                         subtitle->config.default_track ? ", Default" : "" );
@@ -797,10 +798,15 @@ static void do_job( hb_job_t * job, int cpu_count )
             
             if( !job->indepth_scan && subtitle->source == TX3GSUB )
             {
-                // TODO(davidfstr): For MP4 containers, an alternate work-object
-                //                  should be used that just passes the packets through,
-                //                  instead of downconverting to UTF-8 subtitles.
                 w = hb_get_work( WORK_DECTX3GSUB );
+                w->fifo_in  = subtitle->fifo_in;
+                w->fifo_out = subtitle->fifo_raw;
+                hb_list_add( job->list_work, w );
+            }
+            
+            if( !job->indepth_scan && subtitle->source == SSASUB )
+            {
+                w = hb_get_work( WORK_DECSSASUB );
                 w->fifo_in  = subtitle->fifo_in;
                 w->fifo_out = subtitle->fifo_raw;
                 hb_list_add( job->list_work, w );

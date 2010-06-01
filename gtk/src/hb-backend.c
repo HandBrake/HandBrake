@@ -1155,16 +1155,23 @@ ghb_subtitle_source_name(gint source)
 	switch (source)
 	{
 		case VOBSUB:
-			name = "Bitmap";
+			name = "VOBSUB";
 			break;
 		case TX3GSUB:
+			name = "TX3G";
+			break;
 		case UTF8SUB:
+			name = "UTF8";
+			break;
 		case CC708SUB:
 		case CC608SUB:
-			name = "Text";
+			name = "CC";
 			break;
 		case SRTSUB:
 			name = "SRT";
+			break;
+		case SSASUB:
+			name = "SSA";
 			break;
 		default:
 			break;
@@ -1976,11 +1983,13 @@ subtitle_track_opts_set(GtkBuilder *builder, const gchar *name, gint titleindex)
        		subtitle = (hb_subtitle_t *)hb_list_item(title->list_subtitle, ii);
 			// Skip subtitles that must be burned if there is already
 			// a burned subtitle in the list
+#if 0
 			if (subtitle->source == VOBSUB)
 			{
 				options[ii] = g_strdup_printf("%d - %s", ii+1, subtitle->lang);
 			}
 			else
+#endif
 			{
 				options[ii] = g_strdup_printf("%d - %s (%s)", ii+1, 
 					subtitle->lang, 

@@ -128,6 +128,8 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
      */
     int maxOutputSize = textLength + (numStyleRecords * NUM_FACE_STYLE_FLAGS * (MAX_OPEN_TAG_SIZE + MAX_CLOSE_TAG_SIZE));
     hb_buffer_t *out = hb_buffer_init( maxOutputSize );
+    if ( out == NULL )
+        goto fail;
     uint8_t *dst = out->data;
     int charIndex = 0;
     for ( pos = text, end = text + textLength; pos < end; pos++ ) {
@@ -165,6 +167,7 @@ static hb_buffer_t *tx3g_decode_to_utf8( hb_buffer_t *in )
     out->start = in->start;
     out->stop = in->stop;
     
+fail:
     free( startStyle );
     free( endStyle );
     
@@ -204,19 +207,21 @@ static int dectx3gWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         out = hb_buffer_init( 0 );
     }
     
-    // We shouldn't be storing the extra NULL character,
-    // but the MP4 muxer expects this, unfortunately.
-    if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
-        // NOTE: out->size remains unchanged
-        hb_buffer_realloc( out, out->size + 1 );
-        out->data[out->size] = '\0';
-    }
-    
-    // If the input packet was non-empty, do not pass through
-    // an empty output packet (even if the subtitle was empty),
-    // as this would be interpreted as an end-of-stream
-    if ( in->size > 0 && out->size == 0 ) {
-        hb_buffer_close(&out);
+    if ( out != NULL ) {
+        // We shouldn't be storing the extra NULL character,
+        // but the MP4 muxer expects this, unfortunately.
+        if ( out->size > 0 && out->data[out->size - 1] != '\0' ) {
+            // NOTE: out->size remains unchanged
+            hb_buffer_realloc( out, out->size + 1 );
+            out->data[out->size] = '\0';
+        }
+        
+        // If the input packet was non-empty, do not pass through
+        // an empty output packet (even if the subtitle was empty),
+        // as this would be interpreted as an end-of-stream
+        if ( in->size > 0 && out->size == 0 ) {
+            hb_buffer_close(&out);
+        }
     }
     
     // Dispose the input packet, as it is no longer needed

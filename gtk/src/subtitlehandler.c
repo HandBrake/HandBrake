@@ -642,30 +642,6 @@ subtitle_default_toggled_cb(
 	ghb_live_reset(ud);
 }
 
-static const char*
-subtitle_source_name(gint source)
-{
-	const gchar * name;
-
-	switch (source)
-	{
-		case VOBSUB:
-			name = "Bitmap";
-			break;
-		case CC708SUB:
-		case CC608SUB:
-			name = "Text";
-			break;
-		case SRTSUB:
-			name = "SRT";
-			break;
-		default:
-			name = "Unknown";
-			break;
-	}
-	return name;
-}
-
 static void
 subtitle_list_refresh_selected(signal_user_data_t *ud)
 {
@@ -721,8 +697,6 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 
 			lang = ghb_settings_combo_option(settings, "SrtLanguage");
 			code = ghb_settings_get_string(settings, "SrtCodeset");
-			track = g_strdup_printf("%s (%s)", lang, code);
-			g_free(code);
 
 			s_track = ghb_settings_get_string(settings, "SrtFile");
 			if (g_file_test(s_track, G_FILE_TEST_IS_REGULAR))
@@ -730,13 +704,16 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 				gchar *basename;
 
 				basename = g_path_get_basename(s_track);
+				track = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
 				source = g_strdup_printf("SRT (%s)", basename);
 				g_free(basename);
 			}
 			else
 			{
+				track = g_strdup_printf("%s (%s)(SRT)", lang, code);
 				source = g_strdup_printf("SRT (none)");
 			}
+			g_free(code);
 			offset = ghb_settings_get_int(settings, "SrtOffset");
 
 			forced = FALSE;
@@ -746,7 +723,7 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 		{
 			track = g_strdup(
 				ghb_settings_combo_option(settings, "SubtitleTrack"));
-			source = g_strdup(subtitle_source_name(i_source));
+			source = g_strdup(ghb_subtitle_source_name(i_source));
 			s_track = ghb_settings_get_string(settings, "SubtitleTrack");
 
 			forced = ghb_settings_get_boolean(settings, "SubtitleForced");
@@ -763,13 +740,12 @@ subtitle_list_refresh_selected(signal_user_data_t *ud)
 			1, forced,
 			2, burned,
 			3, def,
-			4, source,
-			5, offset,
+			4, offset,
 			// These are used to set combo box values when a list item is selected
-			6, s_track,
-			7, i_source,
+			5, s_track,
+			6, i_source,
+			7, allow_burn_force,
 			8, allow_burn_force,
-			9, allow_burn_force,
 			-1);
 		g_free(track);
 		g_free(source);
@@ -930,7 +906,7 @@ add_to_subtitle_list(
 
 	s_track = ghb_settings_get_string(settings, "SubtitleTrack");
 	i_source = ghb_settings_get_int(settings, "SubtitleSource");
-	source = subtitle_source_name(i_source);
+	source = ghb_subtitle_source_name(i_source);
 
 	if (i_source == VOBSUB)
 		allow_burn_force = TRUE;
@@ -942,13 +918,12 @@ add_to_subtitle_list(
 		1, forced,
 		2, burned,
 		3, def,
-		4, source,
 		// These are used to set combo box values when a list item is selected
-		6, s_track,
-		7, i_source,
+		5, s_track,
+		6, i_source,
+		7, allow_burn_force,
 		8, allow_burn_force,
-		9, allow_burn_force,
-		10, FALSE,
+		9, FALSE,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
 	g_free(s_track);
@@ -975,7 +950,6 @@ add_to_srt_list(
 
 	lang = ghb_settings_combo_option(settings, "SrtLanguage");
 	code = ghb_settings_get_string(settings, "SrtCodeset");
-	track = g_strdup_printf("%s (%s)", lang, code);
 	forced = FALSE;
 	burned = FALSE;
 	def = ghb_settings_get_boolean(settings, "SubtitleDefaultTrack");
@@ -986,11 +960,13 @@ add_to_srt_list(
 		gchar *basename;
 
 		basename = g_path_get_basename(filename);
+		track = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
 		source = g_strdup_printf("SRT (%s)", basename);
 		g_free(basename);
 	}
 	else
 	{
+		track = g_strdup_printf("%s (%s)(SRT)", lang, code);
 		source = g_strdup_printf("SRT (none)");
 	}
 	i_source = SRTSUB;
@@ -1003,14 +979,13 @@ add_to_srt_list(
 		1, forced,
 		2, burned,
 		3, def,
-		4, source,
-		5, offset,
+		4, offset,
 		// These are used to set combo box values when a list item is selected
-		6, filename,
-		7, i_source,
+		5, filename,
+		6, i_source,
+		7, FALSE,
 		8, FALSE,
-		9, FALSE,
-		10, TRUE,
+		9, TRUE,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
 	g_free(code);

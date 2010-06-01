@@ -504,7 +504,7 @@ struct hb_subtitle_s
     hb_subtitle_config_t config;
 
     enum subtype { PICTURESUB, TEXTSUB } format;
-    enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB } source;
+    enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB, SSASUB } source;
     char lang[1024];
     char iso639_2[4];
     uint8_t type; /* Closed Caption, Childrens, Directors etc */
@@ -730,6 +730,7 @@ extern hb_work_object_t hb_deccc608;
 extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
+extern hb_work_object_t hb_decssasub;
 extern hb_work_object_t hb_render;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encx264;

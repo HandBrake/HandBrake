@@ -318,6 +318,7 @@ hb_handle_t * hb_init( int verbose, int update_check )
     hb_register( &hb_decsrtsub );
     hb_register( &hb_decutf8sub );
     hb_register( &hb_dectx3gsub );
+    hb_register( &hb_decssasub );
 	hb_register( &hb_render );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encx264 );
@@ -421,6 +422,7 @@ hb_handle_t * hb_init_dl( int verbose, int update_check )
     hb_register( &hb_decsrtsub );
     hb_register( &hb_decutf8sub );
     hb_register( &hb_dectx3gsub );
+    hb_register( &hb_decssasub );
 	hb_register( &hb_render );
 	hb_register( &hb_encavcodec );
 	hb_register( &hb_encx264 );

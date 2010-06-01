@@ -566,7 +566,8 @@ int syncVideoWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             subtitle->source == CC708SUB ||
             subtitle->source == SRTSUB ||
             subtitle->source == UTF8SUB ||
-            subtitle->source == TX3GSUB)
+            subtitle->source == TX3GSUB ||
+            subtitle->source == SSASUB)
         {
             /*
              * Rewrite timestamps on subtitles that came from Closed Captions
