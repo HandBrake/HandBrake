@@ -305,14 +305,26 @@ void hb_display_job_info( hb_job_t * job )
 
         if( subtitle )
         {
-            hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s ", subtitle->track, subtitle->lang, subtitle->id,
-                    subtitle->format == PICTURESUB ? "Picture" : "Text",
-                    subtitle->source == VOBSUB ? "VOBSUB" : 
-                    subtitle->source == UTF8SUB ? "UTF-8" : 
-                    subtitle->source == TX3GSUB ? "TX3G" : 
-                    ((subtitle->source == CC608SUB ||
-                      subtitle->source == CC708SUB) ? "CC" : "SRT"),
-                    subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through");
+            if( subtitle->source == SRTSUB )
+            {
+                /* For SRT, print offset and charset too */
+                hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s%s, offset: %"PRId64", charset: %s",
+                        subtitle->track, subtitle->lang, subtitle->id, "Text", "SRT", "Pass-Through",
+                        subtitle->config.default_track ? ", Default" : "",
+                        subtitle->config.offset, subtitle->config.src_codeset );
+            }
+            else
+            {
+                hb_log( " * subtitle track %i, %s (id %x) %s [%s] -> %s%s%s", subtitle->track, subtitle->lang, subtitle->id,
+                        subtitle->format == PICTURESUB ? "Picture" : "Text",
+                        subtitle->source == VOBSUB ? "VOBSUB" : 
+                        subtitle->source == CC608SUB || subtitle->source == CC708SUB ? "CC" : 
+                        subtitle->source == UTF8SUB ? "UTF-8" : 
+                        subtitle->source == TX3GSUB ? "TX3G" : "Unknown",
+                        subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through",
+                        subtitle->config.force ? ", Forced Only" : "",
+                        subtitle->config.default_track ? ", Default" : "" );
+            }
         }
     }
 
