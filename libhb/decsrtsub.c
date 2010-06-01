@@ -42,6 +42,7 @@ struct hb_work_private_s
     char       utf8_buf[2048];
     int        utf8_pos;
     int        utf8_end;
+    int        utf8_bom_skipped;
     unsigned long current_time;
     unsigned long number_of_entries;
     unsigned long last_entry_number;
@@ -116,6 +117,16 @@ static int utf8_fill( hb_work_private_t * pv )
 
         pv->utf8_end = q - pv->utf8_buf;
         pv->pos = p - pv->buf;
+
+        if ( !pv->utf8_bom_skipped )
+        {
+            uint8_t *buf = (uint8_t*)pv->utf8_buf;
+            if (buf[0] == 0xef && buf[1] == 0xbb && buf[2] == 0xbf)
+            {
+                pv->utf8_pos = 3;
+            }
+            pv->utf8_bom_skipped = 1;
+        }
 
         if( ( retval == -1 ) && ( errno == EINVAL ) )
         {
@@ -460,8 +471,6 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
 
         buffer = hb_buffer_init( 0 );
         hb_fifo_push( w->fifo_in, buffer);
-        
-        pv->file = fopen( w->subtitle->config.src_filename, "r" );
         
         pv->current_state = k_state_potential_new_entry;
         pv->number_of_entries = 0;
