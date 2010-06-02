@@ -223,13 +223,6 @@
     MaxOutputHeight = title->height - job->crop[0] - job->crop[1];
     
     [self SettingsChanged: nil];
-    
-    /* set the top of the hud controller boxes centered vertically with the origin of our window */
-    NSPoint hudControlBoxOrigin = [fPictureControlBox frame].origin;
-    hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - [fPictureControlBox frame].size.height;
-    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
-    [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
 
 }
 
@@ -393,6 +386,15 @@
     }
     
     [self setViewSize:viewSize];
+    
+    /* relocate our hud origins as per setViewSize */
+    NSPoint hudControlBoxOrigin = [fPictureControlBox frame].origin;
+    hudControlBoxOrigin.y = ([[self window] frame].size.height / 2) - (viewSize.height / 2);
+    hudControlBoxOrigin.x = ([[self window] frame].size.width / 2) - ([fPictureControlBox frame].size.width / 2);
+    [fPictureControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fEncodingControlBox setFrameOrigin:hudControlBoxOrigin];
+    [fMoviePlaybackControlBox setFrameOrigin:hudControlBoxOrigin];
+
 
     NSString *scaleString;
     CGFloat scale = ( ( CGFloat )[fPictureView frame].size.width) / ( ( CGFloat )imageScaledSize.width);
