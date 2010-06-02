@@ -33,7 +33,7 @@ typedef enum {
               sec   * 1000L +\
               centi * 10L ) )
 
-static StyleSet ssa_parse_style_override( char *pos, StyleSet prevStyles )
+static StyleSet ssa_parse_style_override( uint8_t *pos, StyleSet prevStyles )
 {
     StyleSet nextStyles = prevStyles;
     for (;;)
@@ -72,7 +72,7 @@ static StyleSet ssa_parse_style_override( char *pos, StyleSet prevStyles )
 }
 
 static void ssa_append_html_tags_for_style_change(
-    char **dst, StyleSet prevStyles, StyleSet nextStyles )
+    uint8_t **dst, StyleSet prevStyles, StyleSet nextStyles )
 {
     #define APPEND(str) { \
         char *src = str; \
@@ -149,7 +149,7 @@ static hb_buffer_t *ssa_decode_to_utf8( hb_buffer_t *in )
         }
     }
     
-    int maxOutputSize = (end - pos) + ((numStyleOverrides + 1) * MAX_OVERHEAD_PER_OVERRIDE);
+    int maxOutputSize = (end - textFieldPos) + ((numStyleOverrides + 1) * MAX_OVERHEAD_PER_OVERRIDE);
     hb_buffer_t *out = hb_buffer_init( maxOutputSize );
     if ( out == NULL )
         return NULL;
