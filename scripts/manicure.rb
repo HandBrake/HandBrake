@@ -84,7 +84,8 @@ class Presets
    homeLocation = `echo $HOME`.chomp
    
    # Use that to build a path to the presets .plist
-   inputFile = homeLocation+'/Library/Application Support/HandBrake/UserPresets.plist'
+   #inputFile = homeLocation+'/Library/Application Support/HandBrake/UserPresets.plist'
+   inputFile = homeLocation+'/UserPresets.plist'
    
     # Parse the presets into hashes
     @hashMasterList = Plist::parse_xml( inputFile )
@@ -969,12 +970,17 @@ class Display
     end
     
     #Anamorphic
-    if hash["PicturePAR"] == 1
-      commandString << "anamorphic_mode = 1;\n    "
-    elsif hash["PicturePAR"] == 2
-      commandString << "anamorphic_mode = 2;\n    "
-    elsif hash["PicturePAR"] == 3
-      commandString << "anamorphic_mode = 3;\n    "
+    if hash["PicturePAR"] != 0
+      commandString << "if( !anamorphic_mode )\n    "
+      commandString << "{\n    "
+      if hash["PicturePAR"] == 1
+        commandString << "    anamorphic_mode = 1;\n    "
+      elsif hash["PicturePAR"] == 2
+        commandString << "    anamorphic_mode = 2;\n    "
+      elsif hash["PicturePAR"] == 3
+        commandString << "    anamorphic_mode = 3;\n    "
+      end
+      commandString << "}\n    "
     end
     
     #Booleans
