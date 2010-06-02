@@ -84,8 +84,7 @@ class Presets
    homeLocation = `echo $HOME`.chomp
    
    # Use that to build a path to the presets .plist
-   #inputFile = homeLocation+'/Library/Application Support/HandBrake/UserPresets.plist'
-   inputFile = homeLocation+'/UserPresets.plist'
+   inputFile = homeLocation+'/Library/Application Support/HandBrake/UserPresets.plist'
    
     # Parse the presets into hashes
     @hashMasterList = Plist::parse_xml( inputFile )
