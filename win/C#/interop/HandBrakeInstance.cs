@@ -1,6 +1,11 @@
-﻿using HandBrake.Interop.Model;
-using HandBrake.Interop.Model.Encoding;
-using HandBrake.Interop.SourceData;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="HandBrakeInstance.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   A wrapper for a HandBrake instance.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.Interop
 {
@@ -10,6 +15,9 @@ namespace HandBrake.Interop
     using System.Linq;
     using System.Runtime.InteropServices;
     using System.Windows.Media.Imaging;
+    using Model;
+    using Model.Encoding;
+    using SourceData;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.

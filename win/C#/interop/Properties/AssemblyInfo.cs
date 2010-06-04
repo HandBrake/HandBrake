@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HandBrakeInterop")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("HandBrake Team")]
 [assembly: AssemblyProduct("HandBrakeInterop")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCopyright("Copyright © HandBrake Team")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

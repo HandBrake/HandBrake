@@ -1,4 +1,13 @@
-﻿namespace HandBrake.Interop
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="InteropUtilities.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Helper utilities for native interop.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.Interop
 {
     using System;
     using System.Collections.Generic;

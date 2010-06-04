@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HandBrake.Interop.Model;
-using HandBrake.Interop.Model.Encoding;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EncodingProfile.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the EncodingProfile type.
+// </summary>
 
-namespace HandBrake.Interop
+namespace HandBrake.Interop.Model.Encoding
 {
+    using System.Collections.Generic;
+
     public class EncodingProfile
     {
         public EncodingProfile()

@@ -1,8 +1,18 @@
-﻿namespace HandBrake.Interop.Model
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EncodeJob.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the EncodeJob type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.Interop.Model
 {
     using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
+    using Encoding;
 
     public class EncodeJob
     {
