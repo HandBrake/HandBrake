@@ -8,6 +8,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Audio Encoder
+    /// </summary>
     public enum AudioEncoder
     {
         [DisplayString("AAC (faac)")]

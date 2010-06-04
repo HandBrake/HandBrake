@@ -11,7 +11,6 @@ namespace HandBrake.Interop.SourceData
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using Model;
 
     /// <summary>
@@ -19,74 +18,63 @@ namespace HandBrake.Interop.SourceData
     /// </summary>
     public class Title
     {
-        private static readonly CultureInfo Culture = new CultureInfo("en-US", false);
-        private readonly List<AudioTrack> audioTracks;
-        private readonly List<Chapter> chapters;
-        private readonly List<Subtitle> subtitles;
-        
         /// <summary>
-        /// The constructor for this object
+        /// Initializes a new instance of the <see cref="Title"/> class. 
         /// </summary>
         public Title()
         {
-            this.audioTracks = new List<AudioTrack>();
-            this.chapters = new List<Chapter>();
-            this.subtitles = new List<Subtitle>();
+            this.AudioTracks = new List<AudioTrack>();
+            this.Chapters = new List<Chapter>();
+            this.Subtitles = new List<Subtitle>();
         }
 
         /// <summary>
-        /// Collection of chapters in this Title
+        /// Gets Collection of chapters in this Title
         /// </summary>
-        public List<Chapter> Chapters
-        {
-            get { return this.chapters; }
-        }
+        public List<Chapter> Chapters { get; private set; }
 
         /// <summary>
-        /// Collection of audio tracks associated with this Title
+        /// Gets Collection of audio tracks associated with this Title
         /// </summary>
-        public List<AudioTrack> AudioTracks
-        {
-            get { return this.audioTracks; }
-        }
+        public List<AudioTrack> AudioTracks { get; private set; }
 
         /// <summary>
-        /// Collection of subtitles associated with this Title
+        /// Gets Collection of subtitles associated with this Title
         /// </summary>
-        public List<Subtitle> Subtitles
-        {
-            get { return this.subtitles; }
-        }
+        public List<Subtitle> Subtitles { get; private set; }
 
         /// <summary>
-        /// The track number of this Title (1-based).
+        /// Gets or sets The track number of this Title (1-based).
         /// </summary>
         public int TitleNumber { get; set; }
 
         /// <summary>
-        /// The length in time of this Title
+        /// Gets or sets The length in time of this Title
         /// </summary>
         public TimeSpan Duration { get; set; }
 
         /// <summary>
-        /// The resolution (width/height) of this Title
+        /// Gets or sets The resolution (width/height) of this Title
         /// </summary>
         public Size Resolution { get; set; }
 
         /// <summary>
-        /// The aspect ratio of this Title
+        /// Gets or sets The aspect ratio of this Title
         /// </summary>
         public double AspectRatio { get; set; }
 
+        /// <summary>
+        /// Gets or sets AngleCount.
+        /// </summary>
         public int AngleCount { get; set; }
 
         /// <summary>
-        /// Par Value
+        /// Gets or sets Par Value
         /// </summary>
         public Size ParVal { get; set; }
 
         /// <summary>
-        /// The automatically detected crop region for this Title.
+        /// Gets or sets the automatically detected crop region for this Title.
         /// This is an int array with 4 items in it as so:
         /// 0: 
         /// 1: 
@@ -94,6 +82,17 @@ namespace HandBrake.Interop.SourceData
         /// 3: 
         /// </summary>
         public Cropping AutoCropDimensions { get; set; }
+
+        /// <summary>
+        /// Gets Display.
+        /// </summary>
+        public string Display
+        {
+            get
+            {
+                return this.ToString();
+            }
+        }
   
         /// <summary>
         /// Override of the ToString method to provide an easy way to use this object in the UI
@@ -103,14 +102,6 @@ namespace HandBrake.Interop.SourceData
         {
             return string.Format("{0} ({1:00}:{2:00}:{3:00})", this.TitleNumber, this.Duration.Hours,
                                  this.Duration.Minutes, this.Duration.Seconds);
-        }
-
-        public string Display
-        {
-            get
-            {
-                return this.ToString();
-            }
         }
     }
 }

@@ -11,12 +11,34 @@ namespace HandBrake.Interop
 {
     using System;
 
+    /// <summary>
+    /// Encode Progress Event Arguments
+    /// </summary>
     public class EncodeProgressEventArgs : EventArgs
     {
+        /// <summary>
+        /// Gets or sets FractionComplete.
+        /// </summary>
         public float FractionComplete { get; set; }
+
+        /// <summary>
+        /// Gets or sets CurrentFrameRate.
+        /// </summary>
         public float CurrentFrameRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets AverageFrameRate.
+        /// </summary>
         public float AverageFrameRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets EstimatedTimeLeft.
+        /// </summary>
         public TimeSpan EstimatedTimeLeft { get; set; }
+
+        /// <summary>
+        /// Gets or sets Pass.
+        /// </summary>
         public int Pass { get; set; }
     }
 }

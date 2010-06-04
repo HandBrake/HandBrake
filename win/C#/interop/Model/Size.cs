@@ -9,15 +9,34 @@
 
 namespace HandBrake.Interop.Model
 {
+    /// <summary>
+    /// Picture Size
+    /// </summary>
     public class Size
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Size"/> class.
+        /// </summary>
+        /// <param name="width">
+        /// The width.
+        /// </param>
+        /// <param name="height">
+        /// The height.
+        /// </param>
         public Size(int width, int height)
         {
             this.Width = width;
             this.Height = height;
         }
 
+        /// <summary>
+        /// Gets or sets Width.
+        /// </summary>
         public int Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets Height.
+        /// </summary>
         public int Height { get; set; }
     }
 }

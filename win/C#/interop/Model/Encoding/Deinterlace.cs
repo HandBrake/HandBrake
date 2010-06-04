@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Delinterlace Mode
+    /// </summary>
     public enum Deinterlace
     {
         Off = 0,

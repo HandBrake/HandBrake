@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// The Mixdown mode
+    /// </summary>
     public enum Mixdown
     {
         [DisplayString("Dolby Pro Logic II")]

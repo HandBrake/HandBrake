@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Video Encoder Encode Mode
+    /// </summary>
     public enum VideoEncodeRateType
     {
         TargetSize = 0,

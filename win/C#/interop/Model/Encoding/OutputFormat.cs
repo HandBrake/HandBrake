@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Output File Format
+    /// </summary>
     public enum OutputFormat
     {
         [DisplayString("MP4")]

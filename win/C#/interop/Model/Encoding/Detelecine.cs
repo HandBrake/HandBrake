@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Detelecine Modes
+    /// </summary>
     public enum Detelecine
     {
         Off = 0,

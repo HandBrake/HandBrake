@@ -9,9 +9,21 @@
 
 namespace HandBrake.Interop.SourceData
 {
+    /// <summary>
+    /// Subtitle Type. 
+    /// 0: Picture
+    /// 1: Text
+    /// </summary>
     public enum SubtitleType
     {
+        /// <summary>
+        /// Picture Subtitle
+        /// </summary>
         Picture,
+
+        /// <summary>
+        /// Text Subtitle
+        /// </summary>
         Text
     }
 }

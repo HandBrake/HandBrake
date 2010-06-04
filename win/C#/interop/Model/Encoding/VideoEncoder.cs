@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Video Encoder
+    /// </summary>
     public enum VideoEncoder
     {
         [DisplayString("H.264 (x264)")]

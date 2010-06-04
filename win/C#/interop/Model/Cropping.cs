@@ -9,11 +9,29 @@
 
 namespace HandBrake.Interop.Model
 {
+    /// <summary>
+    /// Cropping T B L R
+    /// </summary>
     public class Cropping
     {
+        /// <summary>
+        /// Gets or sets Top.
+        /// </summary>
         public int Top { get; set; }
+
+        /// <summary>
+        /// Gets or sets Bottom.
+        /// </summary>
         public int Bottom { get; set; }
+
+        /// <summary>
+        /// Gets or sets Left.
+        /// </summary>
         public int Left { get; set; }
+
+        /// <summary>
+        /// Gets or sets Right.
+        /// </summary>
         public int Right { get; set; }
     }
 }

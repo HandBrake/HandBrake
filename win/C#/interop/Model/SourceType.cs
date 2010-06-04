@@ -9,11 +9,29 @@
 
 namespace HandBrake.Interop.Model
 {
+    /// <summary>
+    /// The Source Type. (File, Folder, DVD)
+    /// </summary>
     public enum SourceType
     {
+        /// <summary>
+        /// None
+        /// </summary>
         None = 0,
+
+        /// <summary>
+        /// File
+        /// </summary>
         File,
+
+        /// <summary>
+        /// Video Folder
+        /// </summary>
         VideoFolder,
+
+        /// <summary>
+        /// DVD
+        /// </summary>
         Dvd
     }
 }

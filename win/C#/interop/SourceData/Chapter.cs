@@ -17,12 +17,12 @@ namespace HandBrake.Interop.SourceData
     public class Chapter
     {
         /// <summary>
-        /// The number of this Chapter, in regards to its parent Title
+        /// Gets or sets the number of this Chapter, in regards to its parent Title
         /// </summary>
         public int ChapterNumber { get; set; }
 
         /// <summary>
-        /// The length in time this Chapter spans
+        /// Gets or sets the length in time this Chapter spans
         /// </summary>
         public TimeSpan Duration { get; set; }
 

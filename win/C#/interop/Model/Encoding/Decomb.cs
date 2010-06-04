@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Decomb Mode. Off, Default or Custom
+    /// </summary>
     public enum Decomb
     {
         Off = 0,

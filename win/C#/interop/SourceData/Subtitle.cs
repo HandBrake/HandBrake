@@ -15,37 +15,33 @@ namespace HandBrake.Interop.SourceData
     public class Subtitle
     {
         /// <summary>
-        /// The track number of this Subtitle
+        /// Gets or sets the track number of this Subtitle
         /// </summary>
         public int TrackNumber { get; set; }
 
         /// <summary>
-        /// The language (if detected) of this Subtitle
+        /// Gets or sets the language (if detected) of this Subtitle
         /// </summary>
         public string Language { get; set; }
 
         /// <summary>
-        /// Langauage Code
+        /// Gets or sets Langauage Code
         /// </summary>
         public string LanguageCode { get; set; }
 
+        /// <summary>
+        /// Gets or sets SubtitleType.
+        /// </summary>
         public SubtitleType SubtitleType { get; set; }
 
         /// <summary>
-        /// Subtitle Type
+        /// Gets Subtitle Type
         /// </summary>
         public string TypeString
         {
             get
             {
-                if (this.SubtitleType == SubtitleType.Picture)
-                {
-                    return "Bitmap";
-                }
-                else
-                {
-                    return "Text";
-                }
+                return this.SubtitleType == SubtitleType.Picture ? "Bitmap" : "Text";
             }
         }
 
@@ -56,14 +52,6 @@ namespace HandBrake.Interop.SourceData
         public override string ToString()
         {
             return string.Format("{0} {1} ({2})", this.TrackNumber, this.Language, this.TypeString);
-        }
-
-        public string Display
-        {
-            get
-            {
-                return this.ToString();
-            }
         }
     }
 }

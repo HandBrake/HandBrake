@@ -10,6 +10,9 @@ namespace HandBrake.Interop.Model.Encoding
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Encode Profiles
+    /// </summary>
     public class EncodingProfile
     {
         public EncodingProfile()
@@ -61,6 +64,12 @@ namespace HandBrake.Interop.Model.Encoding
 
         public List<AudioEncoding> AudioEncodings { get; set; }
 
+        /// <summary>
+        /// Clone this encode profile
+        /// </summary>
+        /// <returns>
+        /// An Encode Profile Object
+        /// </returns>
         public EncodingProfile Clone()
         {
             EncodingProfile profile = new EncodingProfile

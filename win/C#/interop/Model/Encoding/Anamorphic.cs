@@ -9,6 +9,9 @@
 
 namespace HandBrake.Interop.Model.Encoding
 {
+    /// <summary>
+    /// Anamorphic Modes
+    /// </summary>
     public enum Anamorphic
     {
         [DisplayString("None")]
