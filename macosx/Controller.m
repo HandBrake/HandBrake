@@ -4,6 +4,7 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License. */
 
+#include <dlfcn.h>
 #import "Controller.h"
 #import "HBOutputPanelController.h"
 #import "HBPreferencesController.h"
@@ -1614,31 +1615,20 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
     
     if( [detector isVideoDVD] )
     {
-        int hb_arch;
-#if defined( __LP64__ )
-        /* we are 64 bit */
-        hb_arch = 64;
-#else
-        /* we are 32 bit */
-        hb_arch = 32;
-#endif 
-        
-        
         // The chosen path was actually on a DVD, so use the raw block
         // device path instead.
         path = [detector devicePath];
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
         
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
-        NSString *vlcPath = @"/Applications/VLC.app/Contents/MacOS/lib/libdvdcss.2.dylib";
-        NSFileManager * fileManager = [NSFileManager defaultManager];
-	    if ([fileManager fileExistsAtPath:vlcPath] == 0) 
-	    {
-            /*vlc not found in /Applications so we set the bool to cancel scanning to 1 */
+        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+        if (dvdcss == NULL) 
+        {
+            /*compatible vlc not found, so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
             [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
             int status;
-            status = NSRunAlertPanel(@"HandBrake could not find VLC or your VLC is out of date.",@"Please download and install VLC media player in your /Applications folder if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
+            status = NSRunAlertPanel(@"HandBrake could not find VLC or your VLC is incompatible (Note: 32 bit vlc is not compatible with 64 bit HandBrake and vice-versa).",@"Please download and install VLC media player if you wish to read encrypted DVDs.", @"Get VLC", @"Cancel Scan", @"Attempt Scan Anyway");
             [NSApp requestUserAttention:NSCriticalRequest];
             
             if (status == NSAlertDefaultReturn)
@@ -1664,111 +1654,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
             [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
             vlcFound = 1;
+            dlclose(dvdcss);
         }
-        /* test for architecture of the vlc app */
-        NSArray *vlc_architecturesArray = [[NSBundle bundleWithPath:@"/Applications/VLC.app"] executableArchitectures];
-        BOOL vlcIntel32bit = NO;
-        BOOL vlcIntel64bit = NO;
-        BOOL vlcPPC32bit = NO;
-        BOOL vlcPPC64bit = NO;
-        /* check the available architectures for vlc and note accordingly */
-        NSEnumerator *enumerator = [vlc_architecturesArray objectEnumerator];
-        id tempObject;
-        while (tempObject = [enumerator nextObject])
-        {
-            
-            if ([tempObject intValue] == NSBundleExecutableArchitectureI386)
-            {
-                vlcIntel32bit = YES;   
-            }
-            if ([tempObject intValue] == NSBundleExecutableArchitectureX86_64)
-            {
-                vlcIntel64bit = YES;   
-            }
-            if ([tempObject intValue] == NSBundleExecutableArchitecturePPC)
-            {
-                vlcPPC32bit = YES;   
-            }
-            if ([tempObject intValue] == NSBundleExecutableArchitecturePPC64)
-            {
-                vlcPPC64bit = YES;   
-            }
-            
-        }
-        /* Write vlc architecture findings to activity window */
-        if (vlcIntel32bit)
-        {
-            [self writeToActivityLog: " 32-Bit VLC app found for decrypting physical dvd"];
-        }
-        if (vlcIntel64bit)
-        {
-            [self writeToActivityLog: " 64-Bit VLC app found for decrypting physical dvd"];
-        }
-        
-        
-        
-        if (vlcFound && hb_arch == 64 && !vlcIntel64bit && cancelScanDecrypt != 1)
-        {
-            
-            /* we are 64 bit */
-            
-            /* Appropriate VLC not found, so cancel */
-            cancelScanDecrypt = 1;
-            [self writeToActivityLog: "This version of HandBrake is 64 bit, 64 bit version of vlc not found, scan cancelled"];
-            /*On Screen Notification*/
-            int status;
-            NSBeep();
-            status = NSRunAlertPanel(@"This version of HandBrake is 64 bit, VLC found but not 64 bit!",@"", @"Cancel Scan", @"Attempt Scan Anyway", @"Get 64 bit VLC", nil);
-            [NSApp requestUserAttention:NSCriticalRequest];
-            
-            if (status == NSAlertDefaultReturn)
-            {
-                /* User chose to cancel the scan */
-                [self writeToActivityLog: "cannot open physical dvd VLC found but not 64 bit, scan cancelled"];
-                cancelScanDecrypt = 1;
-            }
-            else if (status == NSAlertAlternateReturn)
-            {
-                [self writeToActivityLog: "user overrode 64-bit warning trying to open physical dvd without proper decryption"];
-                cancelScanDecrypt = 0;
-            }
-            else
-            {
-                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/vlc/download-macosx.html"]];
-            }
-            
-        }    
-        else if (vlcFound && hb_arch == 32 && !vlcIntel32bit && cancelScanDecrypt != 1)
-        {
-            /* we are 32 bit */
-            /* Appropriate VLC not found, so cancel */
-            cancelScanDecrypt = 1;
-            [self writeToActivityLog: "This version of HandBrake is 32 bit, 32 bit version of vlc not found, scan cancelled"];
-            /*On Screen Notification*/
-            int status;
-            NSBeep();
-            status = NSRunAlertPanel(@"This version of HandBrake is 32 bit, VLC found but not 32 bit!",@"", @"Cancel Scan", @"Attempt Scan Anyway", @"Get 32 bit VLC", nil);
-            [NSApp requestUserAttention:NSCriticalRequest];
-            
-            if (status == NSAlertDefaultReturn)
-            {
-                /* User chose to cancel the scan */
-                [self writeToActivityLog: "cannot open physical dvd VLC found but not 32 bit, scan cancelled"];
-                cancelScanDecrypt = 1;
-            }
-            else if (status == NSAlertAlternateReturn)
-            {
-                [self writeToActivityLog: "user overrode 32-bit warning trying to open physical dvd without proper decryption"];
-                cancelScanDecrypt = 0;
-            }
-            else
-            {
-                /* User chose to go download vlc (as they rightfully should) so we send them to the vlc site */
-                [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.videolan.org/vlc/download-macosx.html"]];
-            }
-            
-        } 
     }
     
     if (cancelScanDecrypt == 0)
@@ -2557,10 +2444,9 @@ fWorkingCount = 0;
         [self writeToActivityLog: "trying to open a physical dvd at: %s", [scanPath UTF8String]];
 
         /* lets check for vlc here to make sure we have a dylib available to use for decrypting */
-        NSString *vlcPath = @"/Applications/VLC.app";
-        NSFileManager * fileManager = [NSFileManager defaultManager];
-	    if ([fileManager fileExistsAtPath:vlcPath] == 0) 
-	    {
+        void *dvdcss = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+        if (dvdcss == NULL) 
+        {
             /*vlc not found in /Applications so we set the bool to cancel scanning to 1 */
             cancelScanDecrypt = 1;
             [self writeToActivityLog: "VLC app not found for decrypting physical dvd"];
@@ -2589,6 +2475,7 @@ fWorkingCount = 0;
         else
         {
             /* VLC was found in /Applications so all is well, we can carry on using vlc's libdvdcss.dylib for decrypting if needed */
+            dlclose(dvdcss);
             [self writeToActivityLog: "VLC app found for decrypting physical dvd"];
         }
     }

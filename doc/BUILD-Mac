@@ -1,4 +1,4 @@
-Build Guide for HandBrake svn2591 on Mac OS X
+Build Guide for HandBrake svn3349 on Mac OS X
 *********************************************
 
 Table of Contents
@@ -504,6 +504,13 @@ to build the default configuration:
 
    * click Build or Build and Go
 
+When using Build and Go, xcode launches the application under the gdb
+debugger.  gdb will encounter a trap when starting the program.  This
+trap is harmless and you should just 'continue'.  For the curious, the
+trap occurs because we add some values to the environment with setenv,
+then do a brain transplant with execv. Restarting the application with
+execv triggers the trap.
+
 The first build (on an empty `build' directory) will take a bit of
 time. You may use the Build Results window to observe progress. The
 most time-consuming part of the build is when the external build system
@@ -646,6 +653,10 @@ When troubleshooting build issues, the following files relative to the
      Environment (variables) dump as seen when Xcode forks `make'.
      Mac OS X only.
 
+A note about gdb: We perform an extra execv when starting the
+application.  This triggers a trap in gdb.  It is harmless.  You should
+just 'continue' from the trap.
+
 Appendix A Project Repository Details
 *************************************
 
@@ -653,7 +664,7 @@ Appendix A Project Repository Details
      root:   svn://svn.handbrake.fr/HandBrake
      branch: trunk
      uuid:   b64f7644-9d1e-0410-96f1-a4d463321fa5
-     rev:    2591
-     date:   2009-06-21 13:15:04 -0400
+     rev:    3349
+     date:   2010-06-02 09:49:18 -0700
      type:   developer
 
