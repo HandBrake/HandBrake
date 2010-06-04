@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+    using System;
+
     public class MessageLoggedEventArgs : EventArgs
     {
         public string Message { get; set; }

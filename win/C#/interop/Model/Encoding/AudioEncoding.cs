@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop.Model.Encoding
 {
     public class AudioEncoding
     {

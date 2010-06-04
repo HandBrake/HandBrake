@@ -1,16 +1,15 @@
-﻿namespace HandBrake.Interop
+﻿using HandBrake.Interop.Model;
+using HandBrake.Interop.Model.Encoding;
+using HandBrake.Interop.SourceData;
+
+namespace HandBrake.Interop
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using System.Text;
-    using System.Timers;
-    using System.Threading;
     using System.Windows.Media.Imaging;
-    using HandBrake.SourceData;
-    using HandBrake.Interop;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -137,7 +136,7 @@
                 HbLib.hb_register_error_handler(errorCallback);
             }
 
-            this.hbHandle = HbLib.hb_init(verbosity, update_check: 0);
+            this.hbHandle = HbLib.hb_init(verbosity, 0);
         }
 
         /// <summary>
@@ -252,7 +251,7 @@
             for (int i = 0; i < nativeJob.height; i++)
             {
                 Marshal.Copy(managedBuffer, i * nativeJob.width * 4, ptr, nativeJob.width * 4);
-                ptr = IntPtr.Add(ptr, bitmapData.Stride);
+                ptr = AddOffset(ptr, bitmapData.Stride);
             }
 
             bitmap.UnlockBits(bitmapData);
@@ -271,6 +270,11 @@
 
                 return wpfBitmap;
             }
+        }
+
+        public static IntPtr AddOffset(IntPtr src, int offset)
+        {
+            return new IntPtr(src.ToInt64() + offset);
         }
 
         /// <summary>

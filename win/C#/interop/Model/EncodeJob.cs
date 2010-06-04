@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Serialization;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Xml.Serialization;
+
     public class EncodeJob
     {
         public SourceType SourceType { get; set; }

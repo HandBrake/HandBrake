@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.InteropServices;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop
 {
+    using System;
+    using System.Runtime.InteropServices;
 
     internal partial class NativeConstants
     {

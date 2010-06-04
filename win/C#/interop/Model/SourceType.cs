@@ -1,4 +1,4 @@
-﻿namespace HandBrake.Interop
+﻿namespace HandBrake.Interop.Model
 {
     public enum SourceType
     {

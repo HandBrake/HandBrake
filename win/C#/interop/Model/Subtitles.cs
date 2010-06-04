@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace HandBrake.Interop
+﻿namespace HandBrake.Interop.Model
 {
+    using System.Collections.Generic;
+
     public class Subtitles
     {
         public List<SrtSubtitle> SrtSubtitles { get; set; }
