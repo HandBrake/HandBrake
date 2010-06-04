@@ -3177,6 +3177,10 @@ ghb_log(gchar *log, ...)
 static void
 browse_url(const gchar *url)
 {
+#if defined(_WIN32)
+	HINSTANCE r;
+	r = ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+#else
 	gboolean result;
 	char *argv[] = 
 		{"xdg-open",NULL,NULL,NULL};
@@ -3202,6 +3206,7 @@ browse_url(const gchar *url)
 	argv[2] = NULL;
 	result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
 				NULL, NULL, NULL);
+#endif
 }
 
 void
