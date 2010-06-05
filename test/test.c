@@ -2641,9 +2641,12 @@ static int ParseOptions( int argc, char ** argv )
 
         int option_index = 0;
         int c;
+        int cur_optind;
 
-		c = getopt_long( argc, argv,
-						 "hv::uC:f:4i:Io:t:Lc:m::M:a:A:6:s:UF::N:e:E:2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
+        cur_optind = optind;
+        c = getopt_long( argc, argv,
+                         "hv::uC:f:4i:Io:t:c:m::M:a:A:6:s:UF::N:e:E:"
+                         "2dD:7895gOw:l:n:b:q:S:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
         {
@@ -3099,7 +3102,7 @@ static int ParseOptions( int argc, char ** argv )
                     color_matrix = 2;
                 break;
             default:
-                fprintf( stderr, "unknown option (%s)\n", argv[optind] );
+                fprintf( stderr, "unknown option (%s)\n", argv[cur_optind] );
                 return -1;
         }
     }
