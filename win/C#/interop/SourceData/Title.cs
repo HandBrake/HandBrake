@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Drawing;
+
 namespace HandBrake.Interop.SourceData
 {
     using System;

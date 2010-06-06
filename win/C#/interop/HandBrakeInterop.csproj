@@ -100,7 +100,6 @@
     <Compile Include="Model\Encoding\OutputFormat.cs" />
     <Compile Include="Model\Encoding\VideoEncoder.cs" />
     <Compile Include="Model\Encoding\VideoEncodeRateType.cs" />
-    <Compile Include="Model\Size.cs" />
     <Compile Include="Model\SourceSubtitle.cs" />
     <Compile Include="Model\SourceType.cs" />
     <Compile Include="Model\SrtSubtitle.cs" />
