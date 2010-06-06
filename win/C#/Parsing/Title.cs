@@ -12,6 +12,8 @@ namespace Handbrake.Parsing
     using System.IO;
     using System.Text.RegularExpressions;
 
+    using Handbrake.Model;
+
     /// <summary>
     /// An object that represents a single Title of a DVD
     /// </summary>
@@ -24,15 +26,15 @@ namespace Handbrake.Parsing
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Title"/> class. 
-        /// The constructor for this object
         /// </summary>
         public Title()
         {
-            Angles = new List<string>();
             AudioTracks = new List<AudioTrack>();
             Chapters = new List<Chapter>();
             Subtitles = new List<Subtitle>();
         }
+
+        #region Properties
 
         /// <summary>
         /// Gets a Collection of chapters in this Title
@@ -55,16 +57,6 @@ namespace Handbrake.Parsing
         public int TitleNumber { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether this is a MainTitle.
-        /// </summary>
-        public bool MainTitle { get; private set; }
-
-        /// <summary>
-        /// Gets the Source Name
-        /// </summary>
-        public string SourceName { get; private set; }
-
-        /// <summary>
         /// Gets the length in time of this Title
         /// </summary>
         public TimeSpan Duration { get; private set; }
@@ -77,7 +69,12 @@ namespace Handbrake.Parsing
         /// <summary>
         /// Gets the aspect ratio of this Title
         /// </summary>
-        public float AspectRatio { get; private set; }
+        public double AspectRatio { get; private set; }
+
+        /// <summary>
+        /// Gets AngleCount.
+        /// </summary>
+        public int AngleCount { get; private set; }
 
         /// <summary>
         /// Gets Par Value
@@ -92,17 +89,93 @@ namespace Handbrake.Parsing
         /// 2: L
         /// 3: R
         /// </summary>
-        public int[] AutoCropDimensions { get; private set; }
-
-        /// <summary>
-        /// Gets a Collection of Angles in this Title
-        /// </summary>
-        public List<string> Angles { get; private set; }
+        public Cropping AutoCropDimensions { get; private set; }
 
         /// <summary>
         /// Gets the FPS of the source.
         /// </summary>
-        public float Fps { get; private set; }
+        public double Fps { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this is a MainTitle.
+        /// </summary>
+        public bool MainTitle { get; private set; }
+
+        /// <summary>
+        /// Gets the Source Name
+        /// </summary>
+        public string SourceName { get; private set; }
+
+        #endregion
+
+        /// <summary>
+        /// Creates a Title
+        /// </summary>
+        /// <param name="angles">
+        /// The angles.
+        /// </param>
+        /// <param name="aspectRatio">
+        /// The aspect Ratio.
+        /// </param>
+        /// <param name="audioTracks">
+        /// The audio Tracks.
+        /// </param>
+        /// <param name="crop">
+        /// The crop.
+        /// </param>
+        /// <param name="chapters">
+        /// The chapters.
+        /// </param>
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        /// <param name="fps">
+        /// The fps.
+        /// </param>
+        /// <param name="mainTitle">
+        /// The main Title.
+        /// </param>
+        /// <param name="parVal">
+        /// The par Val.
+        /// </param>
+        /// <param name="resolution">
+        /// The resolution.
+        /// </param>
+        /// <param name="sourceName">
+        /// The source Name.
+        /// </param>
+        /// <param name="subtitles">
+        /// The subtitles.
+        /// </param>
+        /// <param name="titleNumber">
+        /// The title Number.
+        /// </param>
+        /// <returns>
+        /// A Title Object
+        /// </returns>
+        public static Title CreateTitle(int angles, double aspectRatio, List<AudioTrack> audioTracks, Cropping crop, List<Chapter> chapters,
+                                 TimeSpan duration, float fps, bool mainTitle, Size parVal, Size resolution, string sourceName, List<Subtitle> subtitles,
+                                 int titleNumber)
+        {
+            Title title = new Title
+            {
+                AngleCount = angles,
+                AspectRatio = aspectRatio,
+                AudioTracks = audioTracks,
+                AutoCropDimensions = crop,
+                Chapters = chapters,
+                Duration = duration,
+                Fps = fps,
+                MainTitle = mainTitle,
+                ParVal = parVal,
+                Resolution = resolution,
+                SourceName = sourceName,
+                Subtitles = subtitles,
+                TitleNumber = titleNumber
+            };
+
+            return title;
+        }
 
         /// <summary>
         /// Parse the Title Information
@@ -142,8 +215,7 @@ namespace Handbrake.Parsing
                     int angleCount;
                     int.TryParse(angleList, out angleCount);
 
-                    for (int i = 1; i <= angleCount; i++)
-                        thisTitle.Angles.Add(i.ToString());
+                    thisTitle.AngleCount = angleCount;
                 }
             }
 
@@ -165,11 +237,15 @@ namespace Handbrake.Parsing
             // Get autocrop region for this title
             m = Regex.Match(output.ReadLine(), @"^  \+ autocrop: ([0-9]*)/([0-9]*)/([0-9]*)/([0-9]*)");
             if (m.Success)
-                thisTitle.AutoCropDimensions = new[]
-                                           {
-                                               int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value), 
-                                               int.Parse(m.Groups[3].Value), int.Parse(m.Groups[4].Value)
-                                           };
+            {
+                thisTitle.AutoCropDimensions = new Cropping
+                    {
+                        Top = int.Parse(m.Groups[1].Value),
+                        Bottom = int.Parse(m.Groups[2].Value),
+                        Left = int.Parse(m.Groups[3].Value),
+                        Right = int.Parse(m.Groups[4].Value)
+                    };
+            }
 
             thisTitle.Chapters.AddRange(Chapter.ParseList(output));
 
@@ -210,5 +286,6 @@ namespace Handbrake.Parsing
         {
             return string.Format("{0} ({1:00}:{2:00}:{3:00})", TitleNumber, Duration.Hours, Duration.Minutes, Duration.Seconds);
         }
+
     }
 }

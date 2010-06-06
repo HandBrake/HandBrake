@@ -154,6 +154,10 @@
       <HintPath>libraries\Growl.CoreLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="HandBrakeInterop, Version=1.3.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libraries\HandBrakeInterop.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -217,6 +221,8 @@
       <DependentUpon>frmExceptionWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ActivityLogMode.cs" />
+    <Compile Include="Model\Cropping.cs" />
+    <Compile Include="Model\SubtitleType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Encode.cs" />
     <Compile Include="frmPreview.cs">

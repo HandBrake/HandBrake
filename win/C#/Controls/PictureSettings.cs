@@ -97,10 +97,10 @@ namespace Handbrake.Controls
             // Set the Recommended Cropping values, but only if a preset doesn't have hard set picture settings.
             if ((CurrentlySelectedPreset != null && CurrentlySelectedPreset.PictureSettings == false) || CurrentlySelectedPreset == null)
             {
-                crop_top.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions[0]);
-                crop_bottom.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions[1]);
-                crop_left.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions[2]);
-                crop_right.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions[3]);
+                crop_top.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Top);
+                crop_bottom.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Bottom);
+                crop_left.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Left);
+                crop_right.Value = GetCropMod2Clean(sourceTitle.AutoCropDimensions.Right);
             }
 
             SetPresetCropWarningLabel(CurrentlySelectedPreset);
@@ -424,10 +424,10 @@ namespace Handbrake.Controls
 
             if (Source != null)
             {
-                crop_top.Value = Source.AutoCropDimensions[0];
-                crop_bottom.Value = Source.AutoCropDimensions[1];
-                crop_left.Value = Source.AutoCropDimensions[2];
-                crop_right.Value = Source.AutoCropDimensions[3];
+                crop_top.Value = Source.AutoCropDimensions.Top;
+                crop_bottom.Value = Source.AutoCropDimensions.Bottom;
+                crop_left.Value = Source.AutoCropDimensions.Left;
+                crop_right.Value = Source.AutoCropDimensions.Right;
             }
         }
 

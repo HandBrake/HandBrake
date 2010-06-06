@@ -26,6 +26,23 @@ namespace Handbrake.Parsing
         public TimeSpan Duration { get; private set; }
 
         /// <summary>
+        /// Create a chapter Object
+        /// </summary>
+        /// <param name="number">
+        /// The number.
+        /// </param>
+        /// <param name="duration">
+        /// The duration.
+        /// </param>
+        /// <returns>
+        /// A new Chapter Object
+        /// </returns>
+        public static Chapter CreateChapterOjbect(int number, TimeSpan duration)
+        {
+            return new Chapter { ChapterNumber = number, Duration = duration };
+        }
+
+        /// <summary>
         /// Parse a CLI string to a Chapter object
         /// </summary>
         /// <param name="output">

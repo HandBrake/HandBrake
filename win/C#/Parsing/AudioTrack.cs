@@ -25,19 +25,24 @@ namespace Handbrake.Parsing
         public string Language { get; private set; }
 
         /// <summary>
+        /// Gets or sets LanguageCode.
+        /// </summary>
+        public string LanguageCode { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets The primary format of this Audio Track
         /// </summary>
         public string Format { get; private set; }
 
         /// <summary>
-        /// Gets Additional format info for this Audio Track
-        /// </summary>
-        public string SubFormat { get; private set; }
-
-        /// <summary>
         /// Gets The frequency (in MHz) of this Audio Track
         /// </summary>
-        public int Frequency { get; private set; }
+        public int SampleRate { get; private set; }
 
         /// <summary>
         /// Gets The bitrate (in kbps) of this Audio Track
@@ -45,9 +50,48 @@ namespace Handbrake.Parsing
         public int Bitrate { get; private set; }
 
         /// <summary>
-        /// Gets ISO639_2.
+        /// Create a new Audio Track object
         /// </summary>
-        public string ISO639_2 { get; private set; }
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        /// <param name="lang">
+        /// The lang.
+        /// </param>
+        /// <param name="langCode">
+        /// The lang code.
+        /// </param>
+        /// <param name="desc">
+        /// The desc.
+        /// </param>
+        /// <param name="format">
+        /// The format.
+        /// </param>
+        /// <param name="samplerate">
+        /// The samplerate.
+        /// </param>
+        /// <param name="bitrate">
+        /// The bitrate.
+        /// </param>
+        /// <returns>
+        /// A new Audio Track
+        /// </returns>
+        public static AudioTrack CreateAudioTrack(int track, string lang, string langCode, string desc, string format, int samplerate, int bitrate)
+        {
+            AudioTrack newTrack = new AudioTrack
+                {
+                    TrackNumber = track,
+                    Language = lang,
+                    LanguageCode = langCode,
+                    Description = desc,
+                    Format = format,
+                    SampleRate = samplerate,
+                    Bitrate = bitrate
+                };
+
+            return newTrack;
+
+        }
 
         /// <summary>
         /// Parse the CLI input to an Audio Track object
@@ -77,12 +121,11 @@ namespace Handbrake.Parsing
                                     {
                                         TrackNumber = int.Parse(track.Groups[1].Value.Trim()), 
                                         Language = track.Groups[2].Value, 
-                                        Format = m.Groups[3].Value, 
-                                        SubFormat = subformat, 
-                                        Frequency = int.Parse(samplerateVal), 
-                                        Bitrate = int.Parse(bitrateVal), 
-                                        ISO639_2 =
-                                            iso639_2.Value.Replace("iso639-2: ", string.Empty).Replace(")", string.Empty)
+                                        Format = m.Groups[3].Value,
+                                        Description = subformat, 
+                                        SampleRate = int.Parse(samplerateVal), 
+                                        Bitrate = int.Parse(bitrateVal),
+                                        LanguageCode = iso639_2.Value.Replace("iso639-2: ", string.Empty).Replace(")", string.Empty)
                                     };
                 return thisTrack;
             }
@@ -119,10 +162,10 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {track #} {language} ({format}) ({sub-format})</returns>
         public override string ToString()
         {
-            if (SubFormat == null)
+            if (Description == null)
                 return string.Format("{0} {1} ({2})", TrackNumber, Language, Format);
 
-            return string.Format("{0} {1} ({2}) ({3})", TrackNumber, Language, Format, SubFormat);
+            return string.Format("{0} {1} ({2}) ({3})", TrackNumber, Language, Format, Description);
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Handbrake.Parsing
     using System.IO;
     using System.Text.RegularExpressions;
 
+    using Handbrake.Model;
+
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD
     /// </summary>
@@ -32,7 +34,41 @@ namespace Handbrake.Parsing
         /// <summary>
         /// Gets the Subtitle Type
         /// </summary>
-        public string Type { get; private set; }
+        public SubtitleType SubtitleType { get; private set; }
+
+        /// <summary>
+        /// Gets Subtitle Type
+        /// </summary>
+        public string TypeString
+        {
+            get
+            {
+                return this.SubtitleType == SubtitleType.Picture ? "Bitmap" : "Text";
+            }
+        }
+
+        /// <summary>
+        /// Create a new Subtitle Object
+        /// </summary>
+        /// <param name="track">
+        /// The track.
+        /// </param>
+        /// <param name="lang">
+        /// The lang.
+        /// </param>
+        /// <param name="langCode">
+        /// The lang code.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// A Subtitle Object
+        /// </returns>
+        public static Subtitle CreateSubtitleObject(int track, string lang, string langCode, SubtitleType type)
+        {
+            return new Subtitle { TrackNumber = track, Language = lang, LanguageCode = langCode, SubtitleType = type };
+        }
 
         /// <summary>
         /// Parse the input strings related to subtitles
@@ -55,7 +91,7 @@ namespace Handbrake.Parsing
                                            TrackNumber = int.Parse(m.Groups[1].Value.Trim()), 
                                            Language = m.Groups[2].Value, 
                                            LanguageCode = m.Groups[3].Value, 
-                                           Type = m.Groups[4].Value
+                                           SubtitleType = m.Groups[4].Value.Contains("Text") ? SubtitleType.Text : SubtitleType.Picture
                                        };
                 return thisSubtitle;
             }
@@ -92,7 +128,7 @@ namespace Handbrake.Parsing
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2})", TrackNumber, Language, Type);
+            return string.Format("{0} {1} ({2})", TrackNumber, Language, TypeString);
         }
     }
 }

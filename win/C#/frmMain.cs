@@ -1377,7 +1377,10 @@ namespace Handbrake
                 {
                     drop_angle.Visible = true;
                     lbl_angle.Visible = true;
-                    drop_angle.Items.AddRange(selectedTitle.Angles.ToArray());
+
+                    for (int i = 1; i <= selectedTitle.AngleCount; i++)
+                        drop_angle.Items.Add(i.ToString());
+
                     if (drop_angle.Items.Count != 0)
                         drop_angle.SelectedIndex = 0;
                 }
