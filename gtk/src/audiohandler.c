@@ -23,7 +23,7 @@
 void
 ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 {
-	gint titleindex, audioindex, acodec, mix;
+	gint titleindex, track, acodec, mix;
 	ghb_audio_info_t ainfo;
 	GtkWidget *widget;
 	GValue *gval;
@@ -33,7 +33,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 
 	widget = GHB_WIDGET(ud->builder, "AudioTrack");
 	gval = ghb_widget_value(widget);
-	audioindex = ghb_lookup_combo_int("AudioTrack", gval);
+	track = ghb_lookup_combo_int("AudioTrack", gval);
 	ghb_value_free(gval);
 
 	widget = GHB_WIDGET(ud->builder, "AudioEncoder");
@@ -48,7 +48,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	if (ghb_audio_is_passthru (acodec))
 	{
 		ghb_set_default_bitrate_opts (ud->builder, 0, -1);
-		if (ghb_get_audio_info (&ainfo, titleindex, audioindex))
+		if (ghb_get_audio_info (&ainfo, titleindex, track))
 		{
 			gint br = ainfo.bitrate / 1000;
 			// Set the values for bitrate and samplerate to the input rates
@@ -58,12 +58,21 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 			{
 				ghb_set_passthru_bitrate_opts (ud->builder, br);
 				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(0));
+				acodec &= ainfo.codec;
 			}
 			else
 			{
-				acodec = ghb_select_audio_codec(ud, audioindex);
+				if (acodec != HB_ACODEC_MASK)
+				{
+					acodec = ghb_select_audio_codec(ud, track);
+					ghb_ui_update(ud, "AudioEncoder", ghb_int64_value(acodec));
+				}
+				else
+				{
+					acodec = ghb_select_audio_codec(ud, track);
+				}
 				br = ghb_find_closest_audio_bitrate(acodec, br);
-				mix = ghb_get_best_mix( titleindex, audioindex, acodec, 0);
+				mix = ghb_get_best_mix( titleindex, track, acodec, 0);
 				ghb_ui_update(ud, "AudioMixdown", ghb_int64_value(mix));
 			}
 			ghb_ui_update(ud, "AudioBitrate", ghb_int64_value(br));
@@ -101,6 +110,9 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud)
 	{
 		ghb_set_default_bitrate_opts (ud->builder, 0, -1);
 	}
+	ghb_settings_take_value(ud->settings, "AudioEncoderActual", 
+							ghb_lookup_acodec_value(acodec));
+	ghb_check_dependency(ud, NULL, "AudioEncoderActual");
 }
 
 static void
@@ -171,7 +183,6 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		rate = ghb_settings_combo_double(audio, "AudioSamplerate");
 		mix = ghb_settings_combo_int(audio, "AudioMixdown");
 		drc = ghb_settings_get_value(audio, "AudioTrackDRCSlider");
-		//acodec_code = ghb_lookup_combo_int("AudioEncoder", acodec);
 		// If there are multiple audios using the same codec, then
 		// select sequential tracks for each.  The hash keeps track 
 		// of the tracks used for each codec.
@@ -187,7 +198,8 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 			// HB_ACODEC_* are bit fields.  Treat acodec as mask
 			if (!(ainfo.codec & acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)))
 			{
-				acodec = fallback_acodec;
+				if (acodec != HB_ACODEC_MASK)
+					acodec = fallback_acodec;
 				// If there's more audio to process, or we've already
 				// placed one in the list, then we can skip this one
 				if ((ii + 1 < count) || (list_count != 0))
@@ -203,10 +215,6 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 					rate = 0;
 					mix = HB_AMIXDOWN_DOLBYPLII;
 				}
-			}
-			else
-			{
-				acodec &= ainfo.codec;
 			}
 		}
 		if (titleindex >= 0 && track < 0)
@@ -286,7 +294,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
 		const gchar *track, *codec, *br, *sr, *mix;
-		gchar *s_drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+		gchar *actual_codec, *s_drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
 		gint itrack, icodec;
 		gdouble drc;
 		// Get the row number
@@ -311,6 +319,7 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 
 		s_track = ghb_settings_get_string(asettings, "AudioTrack");
 		s_codec = ghb_settings_get_string(asettings, "AudioEncoder");
+		actual_codec = ghb_settings_get_string(asettings, "AudioEncoderActual");
 		s_br = ghb_settings_get_string(asettings, "AudioBitrate");
 		s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
 		s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
@@ -338,10 +347,12 @@ ghb_audio_list_refresh_selected(signal_user_data_t *ud)
 			9, s_sr,
 			10, s_mix,
 			11, drc,
+			12, actual_codec,
 			-1);
 		g_free(s_drc);
 		g_free(s_track);
 		g_free(s_codec);
+		g_free(actual_codec);
 		g_free(s_br);
 		g_free(s_sr);
 		g_free(s_mix);
@@ -514,7 +525,7 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 	GtkListStore *store;
 	GtkTreeSelection *selection;
 	const gchar *track, *codec, *br, *sr, *mix;
-	gchar *s_drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+	gchar *s_drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix, *actual_codec;
 	gint icodec, itrack;
 	gdouble drc;
 	
@@ -533,6 +544,7 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 
 	s_track = ghb_settings_get_string(settings, "AudioTrack");
 	s_codec = ghb_settings_get_string(settings, "AudioEncoder");
+	actual_codec = ghb_settings_get_string(settings, "AudioEncoderActual");
 	s_br = ghb_settings_get_string(settings, "AudioBitrate");
 	s_sr = ghb_settings_get_string(settings, "AudioSamplerate");
 	s_mix = ghb_settings_get_string(settings, "AudioMixdown");
@@ -563,11 +575,13 @@ add_to_audio_list(signal_user_data_t *ud, GValue *settings)
 		9, s_sr,
 		10, s_mix,
 		11, drc,
+		12, actual_codec,
 		-1);
 	gtk_tree_selection_select_iter(selection, &iter);
 	g_free(s_drc);
 	g_free(s_track);
 	g_free(s_codec);
+	g_free(actual_codec);
 	g_free(s_br);
 	g_free(s_sr);
 	g_free(s_mix);
@@ -583,7 +597,7 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 	g_debug("audio_list_selection_changed_cb ()");
 	if (gtk_tree_selection_get_selected(selection, &store, &iter))
 	{
-		const gchar *track, *codec, *bitrate, *sample_rate, *mix;
+		const gchar *actual_codec, *track, *codec, *bitrate, *sample_rate, *mix;
 		gdouble drc;
 
 		gtk_tree_model_get(store, &iter,
@@ -593,9 +607,12 @@ audio_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
 						   9, &sample_rate,
 						   10, &mix,
 						   11, &drc,
+						   12, &actual_codec,
 						   -1);
 		ghb_ui_update(ud, "AudioTrack", ghb_string_value(track));
 		ghb_ui_update(ud, "AudioEncoder", ghb_string_value(codec));
+		ghb_settings_set_string(ud->settings, "AudioEncoderActual", actual_codec);
+		ghb_check_dependency(ud, NULL, "AudioEncoderActual");
 		ghb_ui_update(ud, "AudioBitrate", ghb_string_value(bitrate));
 		ghb_ui_update(ud, "AudioSamplerate", ghb_string_value(sample_rate));
 		ghb_ui_update(ud, "AudioMixdown", ghb_string_value(mix));
@@ -746,6 +763,7 @@ ghb_set_audio(signal_user_data_t *ud, GValue *settings)
 				ghb_ui_update(ud, "AudioMixdown", mix);
 			}
 			ghb_ui_update(ud, "AudioTrackDRCSlider", drc);
+			ghb_adjust_audio_rate_combos(ud);
 		}
 	}
 }

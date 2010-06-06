@@ -2454,7 +2454,7 @@ small_opts_set(GtkBuilder *builder, const gchar *name, combo_opts_t *opts)
 	gint ii;
 	gchar *str;
 	
-	g_debug("generic_opts_set ()\n");
+	g_debug("small_opts_set ()\n");
 	if (name == NULL || opts == NULL) return;
 	store = get_combo_box_store(builder, name);
 	gtk_list_store_clear(store);
