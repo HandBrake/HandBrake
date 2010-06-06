@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Services
+namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
@@ -11,9 +11,11 @@ namespace Handbrake.Services
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using Functions;
-    using Model;
-    using Properties;
+
+    using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Properties;
+
     using Timer = System.Threading.Timer;
 
     /// <summary>
@@ -222,12 +224,7 @@ namespace Handbrake.Services
             }
             catch (Exception exc)
             {
-                MessageBox.Show(
-                    "It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()\n\n" +
-                    exc,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Main.ShowExceptiowWindow("It would appear that HandBrakeCLI has not started correctly. You should take a look at the Activity log as it may indicate the reason why.\n\nDetailed Error Information: error occured in runCli()", exc.ToString());
             }
         }
 
@@ -340,7 +337,7 @@ namespace Handbrake.Services
                 this.EncodeEnded(this, new EventArgs());
 
             // Growl
-            if (Settings.Default.growlQueue)
+        if (Settings.Default.growlQueue)
                 GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
 
             // Do something whent he encode ends.
@@ -440,11 +437,7 @@ namespace Handbrake.Services
             }
             catch (Exception exc)
             {
-                MessageBox.Show(
-                    "Something went a bit wrong trying to copy your log file.\nError Information:\n\n" + exc,
-                    "Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Main.ShowExceptiowWindow("Unable to make a copy of the log file", exc.ToString());
             }
         }
 

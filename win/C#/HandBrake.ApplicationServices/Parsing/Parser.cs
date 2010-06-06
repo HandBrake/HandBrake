@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Parsing
+namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
     using System.Globalization;
@@ -41,7 +41,7 @@ namespace Handbrake.Parsing
     /// <summary>
     /// A simple wrapper around a StreamReader to keep track of the entire output from a cli process
     /// </summary>
-    internal class Parser : StreamReader
+    public class Parser : StreamReader
     {
         /// <summary>
         /// The Buffer StringBuilder

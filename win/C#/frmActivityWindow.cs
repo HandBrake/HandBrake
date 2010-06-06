@@ -13,8 +13,10 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
     using Functions;
+
+    using HandBrake.ApplicationServices.Services;
+
     using Model;
-    using Services;
     using Timer = System.Threading.Timer;
 
     /// <summary>

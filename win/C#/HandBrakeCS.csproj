@@ -217,10 +217,7 @@
       <DependentUpon>frmExceptionWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ActivityLogMode.cs" />
-    <Compile Include="Model\Cropping.cs" />
-    <Compile Include="Model\SubtitleType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Encode.cs" />
     <Compile Include="frmPreview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,7 +270,6 @@
     <Compile Include="Functions\PresetLoader.cs" />
     <Compile Include="Functions\QueryGenerator.cs" />
     <Compile Include="Functions\Main.cs" />
-    <Compile Include="Services\Scan.cs" />
     <Compile Include="Functions\System.cs" />
     <Compile Include="Functions\UpdateCheckInformation.cs" />
     <Compile Include="Functions\Win32.cs" />
@@ -290,15 +286,8 @@
     <Compile Include="Presets\PlistPresetHandler.cs" />
     <Compile Include="Presets\Preset.cs" />
     <Compile Include="Presets\PresetsHandler.cs" />
-    <Compile Include="Services\Queue.cs" />
     <Compile Include="Functions\AppcastReader.cs" />
     <Compile Include="Functions\QueryParser.cs" />
-    <Compile Include="Parsing\AudioTrack.cs" />
-    <Compile Include="Parsing\Chapter.cs" />
-    <Compile Include="Parsing\DVD.cs" />
-    <Compile Include="Parsing\Parser.cs" />
-    <Compile Include="Parsing\Subtitle.cs" />
-    <Compile Include="Parsing\Title.cs" />
     <Compile Include="Program.cs" />
     <EmbeddedResource Include="Controls\AudioPanel.resx">
       <DependentUpon>AudioPanel.cs</DependentUpon>
@@ -393,7 +382,6 @@
     <Compile Include="frmSplashScreen.Designer.cs">
       <DependentUpon>frmSplashScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\Job.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="handbrakepineapple.ico" />
@@ -492,6 +480,12 @@
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj">
+      <Project>{087A2BA8-BAC2-4577-A46F-07FF9D420016}</Project>
+      <Name>HandBrake.ApplicationServices</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,6 +12,10 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
+    using HandBrake.ApplicationServices;
+
+    using Handbrake.Properties;
+
     public partial class frmOptions : Form
     {
         private frmMain mainWindow;
@@ -483,7 +487,20 @@ namespace Handbrake
         private void btn_close_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save(); // Small hack for Vista. Seems to work fine on XP without this
+            UpdateApplicationServicesSettings();
+
             this.Close();
+        }
+
+        /// <summary>
+        /// Initialize App Services
+        /// </summary>
+        private static void UpdateApplicationServicesSettings()
+        {
+            Init.SetupSettings(Settings.Default.cli_minimized, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+                               Settings.Default.enocdeStatusInGui, Settings.Default.growlEncode, Settings.Default.growlQueue,
+                               Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
+                               Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus);
         }
 
     }

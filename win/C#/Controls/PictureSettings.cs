@@ -9,7 +9,9 @@ namespace Handbrake.Controls
     using System.Drawing;
     using System.Globalization;
     using System.Windows.Forms;
-    using Parsing;
+
+    using HandBrake.ApplicationServices.Parsing;
+
     using Presets;
 
     /// <summary>

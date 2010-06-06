@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Parsing
+namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
     using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace Handbrake.Parsing
     using System.IO;
     using System.Text.RegularExpressions;
 
-    using Handbrake.Model;
+    using HandBrake.ApplicationServices.Model;
 
     /// <summary>
     /// An object that represents a single Title of a DVD
@@ -205,7 +205,7 @@ namespace Handbrake.Parsing
             if (m.Success)
                 thisTitle.SourceName = path.Replace("+ stream:", string.Empty).Trim();
 
-            if (!Properties.Settings.Default.noDvdNav)
+            if (!Properties.Settings.Default.disableDvdNav)
             {
                 // Get the Angles for the title.
                 m = Regex.Match(output.ReadLine(), @"  \+ angle\(s\) ([0-9])");

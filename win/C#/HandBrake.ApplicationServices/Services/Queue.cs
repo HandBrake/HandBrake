@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr/>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Services
+namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Collections.Generic;
@@ -13,8 +13,9 @@ namespace Handbrake.Services
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
-    using Functions;
-    using Model;
+
+    using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Model;
 
     /// <summary>
     /// The HandBrake Queue
@@ -237,7 +238,7 @@ namespace Handbrake.Services
         /// Writes the current state of the queue in the form of a batch (.bat) file.
         /// </summary>
         /// <param name="file">The location of the file to write the batch file to.</param>
-        public void WriteBatchScriptToFile(string file)
+        public bool WriteBatchScriptToFile(string file)
         {
             string queries = string.Empty;
             foreach (Job queueItem in this.queue)
@@ -263,14 +264,14 @@ namespace Handbrake.Services
                         line.WriteLine(strCmdLine);
                     }
 
-                    MessageBox.Show("Your batch script has been sucessfully saved.", "Status", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Asterisk);
+                    return true;
                 }
                 catch (Exception exc)
                 {
                     Main.ShowExceptiowWindow("Unable to write to the file. Please make sure that the location has the correct permissions for file writing.", exc.ToString());
                 }
             }
+            return false;
         }
 
         /// <summary>

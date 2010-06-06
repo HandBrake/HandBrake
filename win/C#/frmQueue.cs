@@ -11,8 +11,11 @@ namespace Handbrake
     using System.ComponentModel;
     using System.Windows.Forms;
     using Functions;
+
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services;
+
     using Model;
-    using Services;
 
     /// <summary>
     /// The Queue Window

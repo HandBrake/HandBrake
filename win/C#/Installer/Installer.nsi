@@ -80,7 +80,7 @@ Function .onInit
   StrCmp $R0 "" done
 
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  "${PRODUCT_NAME} ${PRODUCT_VERSION} is already installed. $\n$\nClick `OK` to remove the \
+  "${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
   previous version or `Cancel` to continue." \
   IDOK uninst
   goto done
@@ -131,10 +131,10 @@ Section "Handbrake" SEC01
   File "AxInterop.QTOControlLib.dll"
   File "Growl.Connector.dll"
   File "Growl.CoreLibrary.dll"
-  File "libgcc_s_sjlj-1.dll"
   File "HandBrakeCLI.exe"
   File "Handbrake.exe.config"
   File "handbrakepineapple.ico"
+  File "HandBrake.ApplicationServices.dll"
 
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -182,6 +182,7 @@ Section Uninstall
   Delete "$INSTDIR\Growl.Connector.dll"
   Delete "$INSTDIR\Growl.CoreLibrary.dll"
   Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
+  Delete "$INSTDIR\HandBrake.ApplicationServices.dll"
   Delete "$INSTDIR\doc\AUTHORS"
   Delete "$INSTDIR\doc\COPYING"
   Delete "$INSTDIR\doc\CREDITS"

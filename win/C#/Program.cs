@@ -9,6 +9,8 @@ namespace Handbrake
     using System.IO;
     using System.Windows.Forms;
 
+    using HandBrake.ApplicationServices;
+
     using Handbrake.Properties;
 
     using Presets;
@@ -73,10 +75,23 @@ namespace Handbrake
                     x.UpdateBuiltInPresets();
                 }
 
+                InitializeApplicationServices();
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new frmMain());
             }
+        }
+
+        /// <summary>
+        /// Initialize App Services
+        /// </summary>
+        private static void InitializeApplicationServices()
+        {
+            Init.SetupSettings(Settings.Default.cli_minimized, Settings.Default.CompletionOption, Settings.Default.noDvdNav,
+                               Settings.Default.enocdeStatusInGui, Settings.Default.growlEncode, Settings.Default.growlQueue,
+                               Settings.Default.processPriority, Settings.Default.saveLogPath, Settings.Default.saveLogToSpecifiedPath,
+                               Settings.Default.saveLogWithVideo, Settings.Default.showCliForInGuiEncodeStatus);
         }
 
         /// <summary>

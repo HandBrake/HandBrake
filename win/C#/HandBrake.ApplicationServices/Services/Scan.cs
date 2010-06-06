@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Services
+namespace HandBrake.ApplicationServices.Services
 {
     using System;
     using System.Diagnostics;
@@ -11,7 +11,9 @@ namespace Handbrake.Services
     using System.Text;
     using System.Threading;
     using System.Windows.Forms;
-    using Parsing;
+
+    using HandBrake.ApplicationServices.Functions;
+    using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// Scan a Source
@@ -125,9 +127,9 @@ namespace Handbrake.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Unable to kill HandBrakeCLI.exe \nYou may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically within the next few minutes. \n\nError Information: \n" +
-                    ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Main.ShowExceptiowWindow("Unable to kill HandBrakeCLI.exe \n" +
+                "You may need to manually kill HandBrakeCLI.exe using the Windows Task Manager if it does not close automatically" + 
+                " within the next few minutes. ", ex.ToString());
             }
         }
 
@@ -158,7 +160,7 @@ namespace Handbrake.Services
                     File.Delete(dvdInfoPath);
 
                 string extraArguments = string.Empty;
-                if (Properties.Settings.Default.noDvdNav)
+                if (Properties.Settings.Default.disableDvdNav)
                     extraArguments = " --no-dvdnav";
 
                 if (title > 0)
@@ -200,9 +202,7 @@ namespace Handbrake.Services
             }
             catch (Exception exc)
             {
-                frmExceptionWindow exceptionWindow = new frmExceptionWindow();
-                exceptionWindow.Setup("frmMain.cs - scanProcess() Error", exc.ToString());
-                exceptionWindow.ShowDialog();
+                Main.ShowExceptiowWindow("frmMain.cs - scanProcess() Error", exc.ToString());
             }
         }
 

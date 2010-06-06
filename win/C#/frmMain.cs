@@ -16,11 +16,14 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
     using Functions;
+
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services;
+
     using Model;
-    using Parsing;
     using Presets;
     using Properties;
-    using Services;
 
     public partial class frmMain : Form
     {

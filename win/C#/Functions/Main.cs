@@ -8,7 +8,6 @@ namespace Handbrake.Functions
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Globalization;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -16,8 +15,11 @@ namespace Handbrake.Functions
     using System.Threading;
     using System.Windows.Forms;
     using System.Xml.Serialization;
+
+    using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
+
     using Model;
-    using Parsing;
 
     /// <summary>
     /// Useful functions which various screens can use.

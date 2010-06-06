@@ -12,10 +12,12 @@ namespace Handbrake
     using System.Threading;
     using System.Windows.Forms;
     using Functions;
+
+    using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services;
+
     using QTOControlLib;
     using QTOLibrary;
-    using Services;
-    using Parsing;
 
     public partial class frmPreview : Form
     {

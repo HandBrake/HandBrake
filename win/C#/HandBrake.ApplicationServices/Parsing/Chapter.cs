@@ -3,7 +3,7 @@
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
-namespace Handbrake.Parsing
+namespace HandBrake.ApplicationServices.Parsing
 {
     using System;
     using System.Collections.Generic;

@@ -10,7 +10,9 @@ namespace Handbrake.Controls
     using System.Linq;
     using System.Windows.Forms;
     using Functions;
-    using Parsing;
+
+    using HandBrake.ApplicationServices.Parsing;
+
     using Presets;
     using AudioTrack = Model.AudioTrack;
 
