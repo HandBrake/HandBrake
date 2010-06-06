@@ -644,6 +644,8 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 	ghb_settings_take_value(asettings, "AudioTrack", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "AudioEncoder");
 	ghb_settings_take_value(asettings, "AudioEncoder", ghb_widget_value(widget));
+	ghb_settings_set_value(asettings, "AudioEncoderActual", 
+		ghb_settings_get_value(ud->settings, "AudioEncoderActual"));
 	widget = GHB_WIDGET(ud->builder, "AudioBitrate");
 	ghb_settings_take_value(asettings, "AudioBitrate", ghb_widget_value(widget));
 	widget = GHB_WIDGET(ud->builder, "AudioSamplerate");

@@ -1071,6 +1071,7 @@ ghb_lookup_acodec_value(gint val)
 			break;
 		}
 	}
+	value = ghb_string_value_new("auto");
 	return value;
 }
 

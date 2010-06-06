@@ -4,6 +4,8 @@
 <dict>
 	<key>Initialization</key>
 	<dict>
+		<key>AudioEncoderActual</key>
+		<string></string>
 		<key>angle_count</key>
 		<integer>1</integer>
 		<key>angle</key>
