@@ -731,23 +731,67 @@ ghb_vquality_range(
 	}
 }
 
+gint
+find_combo_entry(combo_opts_t *opts, const GValue *gval)
+{
+	gint ii;
+
+	if (G_VALUE_TYPE(gval) == G_TYPE_STRING)
+	{
+		gchar *str;
+		str = ghb_value_string(gval);
+		for (ii = 0; ii < opts->count; ii++)
+		{
+			if (strcmp(opts->map[ii].shortOpt, str) == 0)
+			{
+				break;
+			}
+		}
+		g_free(str);
+		return ii;
+	}
+	else if (G_VALUE_TYPE(gval) == G_TYPE_DOUBLE)
+	{
+		gdouble val;
+		val = ghb_value_double(gval);
+		for (ii = 0; ii < opts->count; ii++)
+		{
+			if (opts->map[ii].ivalue == val)
+			{
+				break;
+			}
+		}
+		return ii;
+	}
+	else if (G_VALUE_TYPE(gval) == G_TYPE_INT ||
+			 G_VALUE_TYPE(gval) == G_TYPE_BOOLEAN ||
+			 G_VALUE_TYPE(gval) == G_TYPE_INT64)
+	{
+		gint64 val;
+		val = ghb_value_int64(gval);
+		for (ii = 0; ii < opts->count; ii++)
+		{
+			if ((gint64)opts->map[ii].ivalue == val)
+			{
+				break;
+			}
+		}
+		return ii;
+	}
+	return opts->count;
+}
+
 static const gchar*
 lookup_generic_string(combo_opts_t *opts, const GValue *gval)
 {
 	gint ii;
-	gchar *str;
 	const gchar *result = "";
 
-	str = ghb_value_string(gval);
-	for (ii = 0; ii < opts->count; ii++)
+	ii = find_combo_entry(opts, gval);
+	if (ii < opts->count)
 	{
-		if (strcmp(opts->map[ii].shortOpt, str) == 0)
-		{
-			result = opts->map[ii].svalue;
-			break;
-		}
+		result = opts->map[ii].svalue;
 	}
-	g_free(str);
 	return result;
 }
 
@@ -755,19 +799,13 @@ static gint
 lookup_generic_int(combo_opts_t *opts, const GValue *gval)
 {
 	gint ii;
-	gchar *str;
 	gint result = -1;
 
-	str = ghb_value_string(gval);
-	for (ii = 0; ii < opts->count; ii++)
+	ii = find_combo_entry(opts, gval);
+	if (ii < opts->count)
 	{
-		if (strcmp(opts->map[ii].shortOpt, str) == 0)
-		{
-			result = opts->map[ii].ivalue;
-			break;
-		}
+		result = opts->map[ii].ivalue;
 	}
-	g_free(str);
 	return result;
 }
 
@@ -775,19 +813,13 @@ static gdouble
 lookup_generic_double(combo_opts_t *opts, const GValue *gval)
 {
 	gint ii;
-	gchar *str;
 	gdouble result = -1;
 
-	str = ghb_value_string(gval);
-	for (ii = 0; ii < opts->count; ii++)
+	ii = find_combo_entry(opts, gval);
+	if (ii < opts->count)
 	{
-		if (strcmp(opts->map[ii].shortOpt, str) == 0)
-		{
-			result = opts->map[ii].ivalue;
-			break;
-		}
+		result = opts->map[ii].ivalue;
 	}
-	g_free(str);
 	return result;
 }
 
@@ -795,19 +827,13 @@ static const gchar*
 lookup_generic_option(combo_opts_t *opts, const GValue *gval)
 {
 	gint ii;
-	gchar *str;
 	const gchar *result = "";
 
-	str = ghb_value_string(gval);
-	for (ii = 0; ii < opts->count; ii++)
+	ii = find_combo_entry(opts, gval);
+	if (ii < opts->count)
 	{
-		if (strcmp(opts->map[ii].shortOpt, str) == 0)
-		{
-			result = opts->map[ii].option;
-			break;
-		}
+		result = opts->map[ii].option;
 	}
-	g_free(str);
 	return result;
 }
 
@@ -2132,6 +2158,7 @@ ghb_find_audio_track(
 	gint try_acodec;
 	gint passthru_acodec;
 	gboolean passthru;
+	gint channels;
 	
 	g_debug("find_audio_track ()\n");
 	if (h_scan == NULL) return -1;
@@ -2149,8 +2176,6 @@ ghb_find_audio_track(
 	{
 		for (ii = 0; ii < count; ii++)
 		{
-			gint channels;
-
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
 			passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
@@ -2189,6 +2214,7 @@ ghb_find_audio_track(
 		return track;
 	}
 	// Try to find an item that matches the preferred language
+	max_chan = 0;
 	used = get_track_used(try_acodec, track_indices, count);
 	for (ii = 0; ii < count; ii++)
 	{
@@ -2205,13 +2231,18 @@ ghb_find_audio_track(
 			if (passthru_used[ii])
 				continue;
 		}
+		channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+												audio->in.channel_layout);
 		// Find a track that is not visually impaired or dirctor's commentary
 		if ((audio->lang.type < 2) &&
 			((strcmp(lang, audio->lang.iso639_2) == 0) ||
 			(strcmp(lang, "und") == 0)))
 		{
-			track = ii;
-			break;
+			if (channels > max_chan)
+			{
+				track = ii;
+				max_chan = channels;
+			}
 		}
 	}
 	if (track > -1)
@@ -2221,6 +2252,7 @@ ghb_find_audio_track(
 	}
 	// Try to fine an item that does not match the preferred language and
 	// matches the passthru codec type
+	max_chan = 0;
 	if (passthru)
 	{
 		for (ii = 0; ii < count; ii++)
@@ -2263,6 +2295,7 @@ ghb_find_audio_track(
 		return track;
 	}
 	// Try to fine an item that does not match the preferred language
+	max_chan = 0;
 	used = get_track_used(try_acodec, track_indices, count);
 	for (ii = 0; ii < count; ii++)
 	{
@@ -2282,8 +2315,11 @@ ghb_find_audio_track(
 		// Find a track that is not visually impaired or dirctor's commentary
 		if (audio->lang.type < 2)
 		{
-			track = ii;
-			break;
+			if (channels > max_chan)
+			{
+				track = ii;
+				max_chan = channels;
+			}
 		}
 	}
 	if (track > -1)

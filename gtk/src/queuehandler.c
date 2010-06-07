@@ -405,16 +405,21 @@ add_to_queue_list(signal_user_data_t *ud, GValue *settings, GtkTreeIter *piter)
 		gchar *bitrate, *samplerate, *track;
 		const gchar *acodec, *mix;
 		GValue *asettings;
+		gdouble sr;
 
 		asettings = ghb_array_get_nth(audio_list, ii);
 
 		acodec = ghb_settings_combo_option(asettings, "AudioEncoder");
 		bitrate = ghb_settings_get_string(asettings, "AudioBitrate");
+		sr = ghb_settings_get_double(asettings, "AudioSamplerate");
 		samplerate = ghb_settings_get_string(asettings, "AudioSamplerate");
-		if (strcmp("source", samplerate) == 0)
+		if ((int)sr == 0)
 		{
-			g_free(samplerate);
 			samplerate = g_strdup("Same As Source");
+		}
+		else
+		{
+			samplerate = g_strdup_printf("%.4g", sr);
 		}
 		track = ghb_settings_get_string(asettings, "AudioTrackDescription");
 		mix = ghb_settings_combo_option(asettings, "AudioMixdown");
@@ -520,9 +525,9 @@ audio_list_refresh(signal_user_data_t *ud)
 		do
 		{
 			const gchar *track, *codec, *br, *sr, *mix;
-			gchar *drc, *s_track, *s_codec, *s_br, *s_sr, *s_mix;
+			gchar *s_drc;
 			gint itrack, icodec;
-			gdouble s_drc;
+			gdouble drc;
 			GValue *asettings;
 
 			audio_list = ghb_settings_get_value(ud->settings, "audio_list");
@@ -538,16 +543,11 @@ audio_list_refresh(signal_user_data_t *ud)
 			sr = ghb_settings_combo_option(asettings, "AudioSamplerate");
 			mix = ghb_settings_combo_option(asettings, "AudioMixdown");
 
-			s_track = ghb_settings_get_string(asettings, "AudioTrack");
-			s_codec = ghb_settings_get_string(asettings, "AudioEncoder");
-			s_br = ghb_settings_get_string(asettings, "AudioBitrate");
-			s_sr = ghb_settings_get_string(asettings, "AudioSamplerate");
-			s_mix = ghb_settings_get_string(asettings, "AudioMixdown");
-			s_drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
-			if (s_drc < 1.0)
-				drc = g_strdup("Off");
+			drc = ghb_settings_get_double(asettings, "AudioTrackDRCSlider");
+			if (drc < 1.0)
+				s_drc = g_strdup("Off");
 			else
-				drc = g_strdup_printf("%.1f", s_drc);
+				s_drc = g_strdup_printf("%.1f", drc);
 
 			if (icodec == HB_ACODEC_MASK)
 				codec = ghb_select_audio_codec_str(ud, itrack);
@@ -559,21 +559,9 @@ audio_list_refresh(signal_user_data_t *ud)
 				2, br,
 				3, sr,
 				4, mix,
-				5, drc,
-				// These are used to set combo values when an item is selected
-				6, s_track,
-				7, s_codec,
-				8, s_br,
-				9, s_sr,
-				10, s_mix,
-				11, s_drc,
+				5, s_drc,
 				-1);
-			g_free(drc);
-			g_free(s_track);
-			g_free(s_codec);
-			g_free(s_br);
-			g_free(s_sr);
-			g_free(s_mix);
+			g_free(s_drc);
 			done = !gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter);
 			row++;
 		} while (!done);
