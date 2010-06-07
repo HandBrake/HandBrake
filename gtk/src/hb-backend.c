@@ -1068,7 +1068,7 @@ ghb_lookup_acodec_value(gint val)
 		if ((int)acodec_opts.map[ii].ivalue == val)
 		{
 			value = ghb_string_value_new(acodec_opts.map[ii].shortOpt);
-			break;
+			return value;
 		}
 	}
 	value = ghb_string_value_new("auto");
