@@ -37,145 +37,76 @@ namespace HandBrake.ApplicationServices.Parsing
         #region Properties
 
         /// <summary>
-        /// Gets a Collection of chapters in this Title
+        /// Gets or sets a Collection of chapters in this Title
         /// </summary>
-        public List<Chapter> Chapters { get; private set; }
+        public List<Chapter> Chapters { get; set; }
 
         /// <summary>
-        /// Gets a Collection of audio tracks associated with this Title
+        /// Gets or sets a Collection of audio tracks associated with this Title
         /// </summary>
-        public List<AudioTrack> AudioTracks { get; private set; }
+        public List<AudioTrack> AudioTracks { get; set; }
 
         /// <summary>
-        /// Gets aCollection of subtitles associated with this Title
+        /// Gets or sets a Collection of subtitles associated with this Title
         /// </summary>
-        public List<Subtitle> Subtitles { get; private set; }
+        public List<Subtitle> Subtitles { get; set; }
 
         /// <summary>
-        /// Gets The track number of this Title
+        /// Gets or sets The track number of this Title
         /// </summary>
-        public int TitleNumber { get; private set; }
+        public int TitleNumber { get; set; }
 
         /// <summary>
-        /// Gets the length in time of this Title
+        /// Gets or sets the length in time of this Title
         /// </summary>
-        public TimeSpan Duration { get; private set; }
+        public TimeSpan Duration { get; set; }
 
         /// <summary>
-        /// Gets the resolution (width/height) of this Title
+        /// Gets or sets the resolution (width/height) of this Title
         /// </summary>
-        public Size Resolution { get; private set; }
+        public Size Resolution { get; set; }
 
         /// <summary>
-        /// Gets the aspect ratio of this Title
+        /// Gets or sets the aspect ratio of this Title
         /// </summary>
-        public double AspectRatio { get; private set; }
+        public double AspectRatio { get; set; }
 
         /// <summary>
-        /// Gets AngleCount.
+        /// Gets or sets AngleCount.
         /// </summary>
-        public int AngleCount { get; private set; }
+        public int AngleCount { get; set; }
 
         /// <summary>
-        /// Gets Par Value
+        /// Gets or sets Par Value
         /// </summary>
-        public Size ParVal { get; private set; }
+        public Size ParVal { get; set; }
 
         /// <summary>
-        /// Gets the automatically detected crop region for this Title.
+        /// Gets or sets the automatically detected crop region for this Title.
         /// This is an int array with 4 items in it as so:
         /// 0: T
         /// 1: B
         /// 2: L
         /// 3: R
         /// </summary>
-        public Cropping AutoCropDimensions { get; private set; }
+        public Cropping AutoCropDimensions { get; set; }
 
         /// <summary>
-        /// Gets the FPS of the source.
+        /// Gets or sets the FPS of the source.
         /// </summary>
-        public double Fps { get; private set; }
+        public double Fps { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this is a MainTitle.
+        /// Gets or sets a value indicating whether this is a MainTitle.
         /// </summary>
-        public bool MainTitle { get; private set; }
+        public bool MainTitle { get; set; }
 
         /// <summary>
-        /// Gets the Source Name
+        /// Gets or sets the Source Name
         /// </summary>
-        public string SourceName { get; private set; }
+        public string SourceName { get; set; }
 
         #endregion
-
-        /// <summary>
-        /// Creates a Title
-        /// </summary>
-        /// <param name="angles">
-        /// The angles.
-        /// </param>
-        /// <param name="aspectRatio">
-        /// The aspect Ratio.
-        /// </param>
-        /// <param name="audioTracks">
-        /// The audio Tracks.
-        /// </param>
-        /// <param name="crop">
-        /// The crop.
-        /// </param>
-        /// <param name="chapters">
-        /// The chapters.
-        /// </param>
-        /// <param name="duration">
-        /// The duration.
-        /// </param>
-        /// <param name="fps">
-        /// The fps.
-        /// </param>
-        /// <param name="mainTitle">
-        /// The main Title.
-        /// </param>
-        /// <param name="parVal">
-        /// The par Val.
-        /// </param>
-        /// <param name="resolution">
-        /// The resolution.
-        /// </param>
-        /// <param name="sourceName">
-        /// The source Name.
-        /// </param>
-        /// <param name="subtitles">
-        /// The subtitles.
-        /// </param>
-        /// <param name="titleNumber">
-        /// The title Number.
-        /// </param>
-        /// <returns>
-        /// A Title Object
-        /// </returns>
-        public static Title CreateTitle(int angles, double aspectRatio, List<AudioTrack> audioTracks, Cropping crop, List<Chapter> chapters,
-                                 TimeSpan duration, float fps, bool mainTitle, Size parVal, Size resolution, string sourceName, List<Subtitle> subtitles,
-                                 int titleNumber)
-        {
-            Title title = new Title
-            {
-                AngleCount = angles,
-                AspectRatio = aspectRatio,
-                AudioTracks = audioTracks,
-                AutoCropDimensions = crop,
-                Chapters = chapters,
-                Duration = duration,
-                Fps = fps,
-                MainTitle = mainTitle,
-                ParVal = parVal,
-                Resolution = resolution,
-                SourceName = sourceName,
-                Subtitles = subtitles,
-                TitleNumber = titleNumber
-            };
-
-            return title;
-        }
 
         /// <summary>
         /// Parse the Title Information

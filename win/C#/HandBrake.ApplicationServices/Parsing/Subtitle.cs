@@ -17,24 +17,24 @@ namespace HandBrake.ApplicationServices.Parsing
     public class Subtitle
     {
         /// <summary>
-        /// Gets the track number of this Subtitle
+        /// Gets or sets the track number of this Subtitle
         /// </summary>
-        public int TrackNumber { get; private set; }
+        public int TrackNumber { get; set; }
 
         /// <summary>
-        /// Gets the The language (if detected) of this Subtitle
+        /// Gets or sets the The language (if detected) of this Subtitle
         /// </summary>
-        public string Language { get; private set; }
+        public string Language { get; set; }
 
         /// <summary>
-        /// Gets the Langauage Code
+        /// Gets or sets the Langauage Code
         /// </summary>
-        public string LanguageCode { get; private set; }
+        public string LanguageCode { get; set; }
 
         /// <summary>
-        /// Gets the Subtitle Type
+        /// Gets or sets the Subtitle Type
         /// </summary>
-        public SubtitleType SubtitleType { get; private set; }
+        public SubtitleType SubtitleType { get; set; }
 
         /// <summary>
         /// Gets Subtitle Type
@@ -45,29 +45,6 @@ namespace HandBrake.ApplicationServices.Parsing
             {
                 return this.SubtitleType == SubtitleType.Picture ? "Bitmap" : "Text";
             }
-        }
-
-        /// <summary>
-        /// Create a new Subtitle Object
-        /// </summary>
-        /// <param name="track">
-        /// The track.
-        /// </param>
-        /// <param name="lang">
-        /// The lang.
-        /// </param>
-        /// <param name="langCode">
-        /// The lang code.
-        /// </param>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// A Subtitle Object
-        /// </returns>
-        public static Subtitle CreateSubtitleObject(int track, string lang, string langCode, SubtitleType type)
-        {
-            return new Subtitle { TrackNumber = track, Language = lang, LanguageCode = langCode, SubtitleType = type };
         }
 
         /// <summary>

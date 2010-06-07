@@ -16,31 +16,14 @@ namespace HandBrake.ApplicationServices.Parsing
     public class Chapter
     {
         /// <summary>
-        /// Gets The number of this Chapter, in regards to it's parent Title
+        /// Gets or sets The number of this Chapter, in regards to it's parent Title
         /// </summary>
-        public int ChapterNumber { get; private set; }
+        public int ChapterNumber { get; set; }
 
         /// <summary>
-        /// Gets The length in time this Chapter spans
+        /// Gets or sets The length in time this Chapter spans
         /// </summary>
-        public TimeSpan Duration { get; private set; }
-
-        /// <summary>
-        /// Create a chapter Object
-        /// </summary>
-        /// <param name="number">
-        /// The number.
-        /// </param>
-        /// <param name="duration">
-        /// The duration.
-        /// </param>
-        /// <returns>
-        /// A new Chapter Object
-        /// </returns>
-        public static Chapter CreateChapterOjbect(int number, TimeSpan duration)
-        {
-            return new Chapter { ChapterNumber = number, Duration = duration };
-        }
+        public TimeSpan Duration { get; set; }
 
         /// <summary>
         /// Parse a CLI string to a Chapter object

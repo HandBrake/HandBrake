@@ -15,14 +15,14 @@ namespace HandBrake.ApplicationServices.Parsing
     public class AudioTrack
     {
         /// <summary>
-        /// Gets The track number of this Audio Track
+        /// Gets or sets The track number of this Audio Track
         /// </summary>
-        public int TrackNumber { get; private set; }
+        public int TrackNumber { get; set; }
 
         /// <summary>
-        /// Gets The language (if detected) of this Audio Track
+        /// Gets or sets The language (if detected) of this Audio Track
         /// </summary>
-        public string Language { get; private set; }
+        public string Language { get; set; }
 
         /// <summary>
         /// Gets or sets LanguageCode.
@@ -35,62 +35,19 @@ namespace HandBrake.ApplicationServices.Parsing
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets The primary format of this Audio Track
+        /// Gets or sets The primary format of this Audio Track
         /// </summary>
-        public string Format { get; private set; }
+        public string Format { get; set; }
 
         /// <summary>
-        /// Gets The frequency (in MHz) of this Audio Track
+        /// Gets or sets The frequency (in MHz) of this Audio Track
         /// </summary>
-        public int SampleRate { get; private set; }
+        public int SampleRate { get; set; }
 
         /// <summary>
-        /// Gets The bitrate (in kbps) of this Audio Track
+        /// Gets or sets The bitrate (in kbps) of this Audio Track
         /// </summary>
-        public int Bitrate { get; private set; }
-
-        /// <summary>
-        /// Create a new Audio Track object
-        /// </summary>
-        /// <param name="track">
-        /// The track.
-        /// </param>
-        /// <param name="lang">
-        /// The lang.
-        /// </param>
-        /// <param name="langCode">
-        /// The lang code.
-        /// </param>
-        /// <param name="desc">
-        /// The desc.
-        /// </param>
-        /// <param name="format">
-        /// The format.
-        /// </param>
-        /// <param name="samplerate">
-        /// The samplerate.
-        /// </param>
-        /// <param name="bitrate">
-        /// The bitrate.
-        /// </param>
-        /// <returns>
-        /// A new Audio Track
-        /// </returns>
-        public static AudioTrack CreateAudioTrack(int track, string lang, string langCode, string desc, string format, int samplerate, int bitrate)
-        {
-            AudioTrack newTrack = new AudioTrack
-                {
-                    TrackNumber = track,
-                    Language = lang,
-                    LanguageCode = langCode,
-                    Description = desc,
-                    Format = format,
-                    SampleRate = samplerate,
-                    Bitrate = bitrate
-                };
-
-            return newTrack;
-        }
+        public int Bitrate { get; set; }
 
         /// <summary>
         /// Parse the CLI input to an Audio Track object
