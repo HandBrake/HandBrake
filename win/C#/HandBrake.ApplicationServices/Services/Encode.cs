@@ -15,13 +15,14 @@ namespace HandBrake.ApplicationServices.Services
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Properties;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Timer = System.Threading.Timer;
 
     /// <summary>
     /// Class which handles the CLI
     /// </summary>
-    public class Encode
+    public class Encode : IEncode
     {
         /* Private Variables */
 
@@ -150,10 +151,10 @@ namespace HandBrake.ApplicationServices.Services
         /// <param name="encJob">
         /// The enc Job.
         /// </param>
-        /// <param name="RequireStandardOuput">
+        /// <param name="requireStandardOuput">
         /// Set to True to show no window and force standard output redirect
         /// </param>
-        protected void Run(Job encJob, bool RequireStandardOuput)
+        protected void Run(Job encJob, bool requireStandardOuput)
         {
             this.job = encJob;
             try
@@ -166,11 +167,11 @@ namespace HandBrake.ApplicationServices.Services
                 string strCmdLine = String.Format(@" /C """"{0}"" {1} 2>""{2}"" """, handbrakeCLIPath, encJob.Query, logPath);
                 var cliStart = new ProcessStartInfo("CMD.exe", strCmdLine);
 
-                if (Settings.Default.enocdeStatusInGui || RequireStandardOuput)
+                if (Settings.Default.enocdeStatusInGui || requireStandardOuput)
                 {
                     cliStart.RedirectStandardOutput = true;
                     cliStart.UseShellExecute = false;
-                    if (!Settings.Default.showCliForInGuiEncodeStatus || RequireStandardOuput)
+                    if (!Settings.Default.showCliForInGuiEncodeStatus || requireStandardOuput)
                         cliStart.CreateNoWindow = true;
                 }
                 if (Settings.Default.cli_minimized)

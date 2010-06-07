@@ -14,7 +14,7 @@ namespace Handbrake
     using System.Windows.Forms;
     using Functions;
 
-    using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Model;
     using Timer = System.Threading.Timer;
@@ -39,12 +39,12 @@ namespace Handbrake
         /// <summary>
         /// The Encode Object
         /// </summary>
-        private Encode encode;
+        private IQueue encode;
 
         /// <summary>
         /// The Scan Object
         /// </summary>
-        private ScanService scan;
+        private IScan scan;
 
         /// <summary>
         /// The Type of log that the window is currently dealing with
@@ -62,7 +62,7 @@ namespace Handbrake
         /// <param name="scan">
         /// The scan.
         /// </param>
-        public frmActivityWindow(Encode encode, ScanService scan)
+        public frmActivityWindow(IQueue encode, IScan scan)
         {
             InitializeComponent();
 

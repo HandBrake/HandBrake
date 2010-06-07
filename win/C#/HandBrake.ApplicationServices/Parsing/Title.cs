@@ -286,6 +286,5 @@ namespace HandBrake.ApplicationServices.Parsing
         {
             return string.Format("{0} ({1:00}:{2:00}:{3:00})", TitleNumber, Duration.Hours, Duration.Minutes, Duration.Seconds);
         }
-
     }
 }

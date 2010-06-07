@@ -16,11 +16,12 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// The HandBrake Queue
     /// </summary>
-    public class Queue : Encode
+    public class Queue : Encode, IQueue
     {
         /// <summary>
         /// The Queue Job List

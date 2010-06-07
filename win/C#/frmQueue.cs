@@ -14,6 +14,7 @@ namespace Handbrake
 
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Model;
 
@@ -30,7 +31,7 @@ namespace Handbrake
         /// <summary>
         /// An instance of the Queue service
         /// </summary>
-        private readonly Queue queue;
+        private readonly IQueue queue;
 
         /// <summary>
         /// A reference to the main application window
@@ -46,7 +47,7 @@ namespace Handbrake
         /// <param name="mw">
         /// The main window.
         /// </param>
-        public frmQueue(Queue q, frmMain mw)
+        public frmQueue(IQueue q, frmMain mw)
         {
             InitializeComponent();
 

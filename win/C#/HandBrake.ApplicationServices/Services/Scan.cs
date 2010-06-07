@@ -14,11 +14,12 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Parsing;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
     /// Scan a Source
     /// </summary>
-    public class ScanService
+    public class ScanService : IScan
     {
         /* Private Variables */
 

@@ -20,6 +20,7 @@ namespace Handbrake
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Services;
+    using HandBrake.ApplicationServices.Services.Interfaces;
 
     using Model;
     using Presets;
@@ -28,7 +29,7 @@ namespace Handbrake
     public partial class frmMain : Form
     {
         // Objects which may be used by one or more other objects *************
-        private Queue encodeQueue = new Queue();
+        private IQueue encodeQueue = new Queue();
         private PresetsHandler presetHandler = new PresetsHandler();
 
         // Windows ************************************************************
@@ -45,7 +46,7 @@ namespace Handbrake
         private string dvdDriveLabel;
         private Preset CurrentlySelectedPreset;
         private DVD currentSource;
-        private ScanService SourceScan = new ScanService();
+        private IScan SourceScan = new ScanService();
         private List<DriveInformation> drives;
         private Thread encodeMonitor;
 

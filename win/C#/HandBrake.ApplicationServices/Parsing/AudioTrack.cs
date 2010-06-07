@@ -90,7 +90,6 @@ namespace HandBrake.ApplicationServices.Parsing
                 };
 
             return newTrack;
-
         }
 
         /// <summary>
