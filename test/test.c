@@ -1769,14 +1769,9 @@ static int HandleEvents( hb_handle_t * h )
                             }
                             sub_burned = 1;
                         }
-                        if ( !( !burn && mux == HB_MUX_MP4 ) )
-                        {
-                            job->select_subtitle_config.force = force;
-                            job->select_subtitle_config.default_track = def;
-                            subtitle_scan = 1;
-                        } else {
-                            fprintf( stderr, "Warning: Subtitle Scan for MP4 requires the '--subtitle-burn' option to be selected\n");
-                        }
+                        job->select_subtitle_config.force = force;
+                        job->select_subtitle_config.default_track = def;
+                        subtitle_scan = 1;
                     }
                     else
                     {
