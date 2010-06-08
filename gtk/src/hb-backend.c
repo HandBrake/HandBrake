@@ -4719,7 +4719,6 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				channels = 2;
 
 			// Make sure the mixdown is valid and pick a new one if not.
-printf("mix %x\n", audio.out.mixdown);
 			audio.out.mixdown = ghb_get_best_mix(titleindex, 
 				audio.in.track, audio.out.codec, audio.out.mixdown);
 			audio.out.bitrate = 
