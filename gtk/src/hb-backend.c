@@ -841,20 +841,36 @@ static gint
 lookup_mix_int(const GValue *mix)
 {
 	gint ii;
-	gchar *str;
 	gint result = 0;
 
 
-	str = ghb_value_string(mix);
-	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
 	{
-		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+		gchar * str = ghb_value_string(mix);
+		for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
 		{
-			result = hb_audio_mixdowns[ii].amixdown;
-			break;
+			if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+			{
+				result = hb_audio_mixdowns[ii].amixdown;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(mix) == G_TYPE_INT ||
+			 G_VALUE_TYPE(mix) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(mix) == G_TYPE_DOUBLE)
+	{
+		gint val = ghb_value_int(mix);
+		for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+		{
+			if (hb_audio_mixdowns[ii].amixdown == val)
+			{
+				result = hb_audio_mixdowns[ii].amixdown;
+				break;
+			}
 		}
 	}
-	g_free(str);
 	return result;
 }
 
@@ -862,20 +878,73 @@ static const gchar*
 lookup_mix_option(const GValue *mix)
 {
 	gint ii;
-	gchar *str;
 	gchar *result = "None";
 
 
-	str = ghb_value_string(mix);
-	for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+	if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
 	{
-		if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+		gchar *str = ghb_value_string(mix);
+		for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
 		{
-			result = hb_audio_mixdowns[ii].human_readable_name;
-			break;
+			if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+			{
+				result = hb_audio_mixdowns[ii].human_readable_name;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(mix) == G_TYPE_INT ||
+			 G_VALUE_TYPE(mix) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(mix) == G_TYPE_DOUBLE)
+	{
+		gint val = ghb_value_int(mix);
+		for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+		{
+			if (hb_audio_mixdowns[ii].amixdown == val)
+			{
+				result = hb_audio_mixdowns[ii].human_readable_name;
+				break;
+			}
 		}
 	}
-	g_free(str);
+	return result;
+}
+
+static const gchar*
+lookup_mix_string(const GValue *mix)
+{
+	gint ii;
+	gchar *result = "None";
+
+
+	if (G_VALUE_TYPE(mix) == G_TYPE_STRING)
+	{
+		gchar *str = ghb_value_string(mix);
+		for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+		{
+			if (strcmp(hb_audio_mixdowns[ii].short_name, str) == 0)
+			{
+				result = hb_audio_mixdowns[ii].short_name;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(mix) == G_TYPE_INT ||
+			 G_VALUE_TYPE(mix) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(mix) == G_TYPE_DOUBLE)
+	{
+		gint val = ghb_value_int(mix);
+		for (ii = 0; ii < hb_audio_mixdowns_count; ii++)
+		{
+			if (hb_audio_mixdowns[ii].amixdown == val)
+			{
+				result = hb_audio_mixdowns[ii].short_name;
+				break;
+			}
+		}
+	}
 	return result;
 }
 
@@ -925,21 +994,37 @@ static gint
 lookup_audio_rate_int(const GValue *rate)
 {
 	gint ii;
-	gchar *str;
 	gint result = 0;
 
-	// Coincidentally, the string "source" will return 0
-	// which is our flag to use "same as source"
-	str = ghb_value_string(rate);
-	for (ii = 0; ii < hb_audio_rates_count; ii++)
+	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
-		if (strcmp(hb_audio_rates[ii].string, str) == 0)
+		// Coincidentally, the string "source" will return 0
+		// which is our flag to use "same as source"
+		gchar * str = ghb_value_string(rate);
+		for (ii = 0; ii < hb_audio_rates_count; ii++)
 		{
-			result = hb_audio_rates[ii].rate;
-			break;
+			if (strcmp(hb_audio_rates[ii].string, str) == 0)
+			{
+				result = hb_audio_rates[ii].rate;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
+			 G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
+	{
+		for (ii = 0; ii < hb_audio_rates_count; ii++)
+		{
+			gint val = ghb_value_int(rate);
+			if (val == hb_audio_rates[ii].rate)
+			{
+				result = hb_audio_rates[ii].rate;
+				break;
+			}
 		}
 	}
-	g_free(str);
 	return result;
 }
 
@@ -947,21 +1032,37 @@ static const gchar*
 lookup_audio_rate_option(const GValue *rate)
 {
 	gint ii;
-	gchar *str;
 	const gchar *result = "Same as source";
 
-	// Coincidentally, the string "source" will return 0
-	// which is our flag to use "same as source"
-	str = ghb_value_string(rate);
-	for (ii = 0; ii < hb_audio_rates_count; ii++)
+	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
-		if (strcmp(hb_audio_rates[ii].string, str) == 0)
+		// Coincidentally, the string "source" will return 0
+		// which is our flag to use "same as source"
+		gchar *str = ghb_value_string(rate);
+		for (ii = 0; ii < hb_audio_rates_count; ii++)
 		{
-			result = hb_audio_rates[ii].string;
-			break;
+			if (strcmp(hb_audio_rates[ii].string, str) == 0)
+			{
+				result = hb_audio_rates[ii].string;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
+			 G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
+	{
+		for (ii = 0; ii < hb_audio_rates_count; ii++)
+		{
+			gint val = ghb_value_int(rate);
+			if (val == hb_audio_rates[ii].rate)
+			{
+				result = hb_audio_rates[ii].string;
+				break;
+			}
 		}
 	}
-	g_free(str);
 	return result;
 }
 
@@ -996,21 +1097,37 @@ static gint
 lookup_audio_bitrate_int(const GValue *rate)
 {
 	gint ii;
-	gchar *str;
 	gint result = 0;
 
-	// Coincidentally, the string "source" will return 0
-	// which is our flag to use "same as source"
-	str = ghb_value_string(rate);
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
-		if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+		// Coincidentally, the string "source" will return 0
+		// which is our flag to use "same as source"
+		gchar *str = ghb_value_string(rate);
+		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
 		{
-			result = hb_audio_bitrates[ii].rate;
-			break;
+			if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+			{
+				result = hb_audio_bitrates[ii].rate;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
+			 G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
+	{
+		gint val = ghb_value_int(rate);
+		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+		{
+			if (hb_audio_bitrates[ii].rate == val)
+			{
+				result = hb_audio_bitrates[ii].rate;
+				break;
+			}
 		}
 	}
-	g_free(str);
 	return result;
 }
 
@@ -1018,21 +1135,37 @@ static const gchar*
 lookup_audio_bitrate_option(const GValue *rate)
 {
 	gint ii;
-	gchar *str;
 	const gchar *result = "Same as source";
 
-	// Coincidentally, the string "source" will return 0
-	// which is our flag to use "same as source"
-	str = ghb_value_string(rate);
-	for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+	if (G_VALUE_TYPE(rate) == G_TYPE_STRING)
 	{
-		if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+		// Coincidentally, the string "source" will return 0
+		// which is our flag to use "same as source"
+		gchar *str = ghb_value_string(rate);
+		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
 		{
-			result = hb_audio_bitrates[ii].string;
-			break;
+			if (strcmp(hb_audio_bitrates[ii].string, str) == 0)
+			{
+				result = hb_audio_bitrates[ii].string;
+				break;
+			}
+		}
+		g_free(str);
+	}
+	else if (G_VALUE_TYPE(rate) == G_TYPE_INT ||
+			 G_VALUE_TYPE(rate) == G_TYPE_INT64 ||
+			 G_VALUE_TYPE(rate) == G_TYPE_DOUBLE)
+	{
+		gint val = ghb_value_int(rate);
+		for (ii = 0; ii < hb_audio_bitrates_count; ii++)
+		{
+			if (hb_audio_bitrates[ii].rate == val)
+			{
+				result = hb_audio_bitrates[ii].string;
+				break;
+			}
 		}
 	}
-	g_free(str);
 	return result;
 }
 
@@ -2612,7 +2745,7 @@ ghb_lookup_combo_string(const gchar *name, const GValue *gval)
 	else if (strcmp(name, "VideoFramerate") == 0)
 		return lookup_video_rate_option(gval);
 	else if (strcmp(name, "AudioMixdown") == 0)
-		return lookup_mix_option(gval);
+		return lookup_mix_string(gval);
 	else if (strcmp(name, "SrtLanguage") == 0)
 		return lookup_audio_lang_option(gval);
 	else if (strcmp(name, "PreferredLanguage") == 0)
@@ -4586,6 +4719,7 @@ add_job(hb_handle_t *h, GValue *js, gint unique_id, gint titleindex)
 				channels = 2;
 
 			// Make sure the mixdown is valid and pick a new one if not.
+printf("mix %x\n", audio.out.mixdown);
 			audio.out.mixdown = ghb_get_best_mix(titleindex, 
 				audio.in.track, audio.out.codec, audio.out.mixdown);
 			audio.out.bitrate = 

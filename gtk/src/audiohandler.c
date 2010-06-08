@@ -226,14 +226,18 @@ ghb_set_pref_audio(gint titleindex, signal_user_data_t *ud)
 		{
 			GValue *settings = ghb_dict_value_new();
 			ghb_settings_set_int(settings, "AudioTrack", track);
-			ghb_settings_set_int(settings, "AudioEncoder", acodec);
+			ghb_settings_set_string(settings, "AudioEncoder", 
+				ghb_lookup_combo_string("AudioEncoder", ghb_int_value(acodec)));
 			ghb_settings_set_value(settings, "AudioEncoderActual", 
 				ghb_settings_get_value(ud->settings, "AudioEncoderActual"));
 			// This gets set autimatically if the codec is passthru
-			ghb_settings_set_int(settings, "AudioBitrate", bitrate);
-			ghb_settings_set_double(settings, "AudioSamplerate", rate);
+			ghb_settings_set_string(settings, "AudioBitrate",
+				ghb_lookup_combo_string("AudioBitrate", ghb_int_value(bitrate)));
+			ghb_settings_set_string(settings, "AudioSamplerate",
+				ghb_lookup_combo_string("AudioSamplerate", ghb_int_value(rate)));
 			mix = ghb_get_best_mix( titleindex, track, acodec, mix);
-			ghb_settings_set_int(settings, "AudioMixdown", mix);
+			ghb_settings_set_string(settings, "AudioMixdown",
+				ghb_lookup_combo_string("AudioMixdown", ghb_int_value(mix)));
 			ghb_settings_set_value(settings, "AudioTrackDRCSlider", drc);
 			ghb_add_audio(ud, settings);
 			ghb_adjust_audio_rate_combos(ud);
