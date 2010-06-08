@@ -1757,11 +1757,11 @@ static int HandleEvents( hb_handle_t * h )
                         }
                         force = test_sub_list( subforce, "scan", pos );
 
-                        if ( !burn && mux == HB_MUX_MKV )
+                        if ( !burn )
                         {
                             job->select_subtitle_config.dest = PASSTHRUSUB;
                         }
-                        else if ( burn )
+                        else
                         {
                             if ( sub_burned )
                             {

@@ -322,6 +322,7 @@ void hb_display_job_info( hb_job_t * job )
                         subtitle->source == UTF8SUB ? "UTF-8" : 
                         subtitle->source == TX3GSUB ? "TX3G" : 
                         subtitle->source == SSASUB ? "SSA" : "Unknown",
+                        job->indepth_scan ? "Foreign Audio Search" :
                         subtitle->config.dest == RENDERSUB ? "Render/Burn in" : "Pass-Through",
                         subtitle->config.force ? ", Forced Only" : "",
                         subtitle->config.default_track ? ", Default" : "" );
