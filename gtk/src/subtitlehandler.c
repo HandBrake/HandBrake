@@ -1124,13 +1124,15 @@ srt_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
 	// Add the current subtitle settings to the list.
 	GValue *settings;
-	gchar *dir, *filename;
+	gchar *dir, *filename, *lang;
 	
 	g_debug("subtitle_add_clicked_cb ()");
 
 	settings = ghb_dict_value_new();
 	ghb_settings_set_int(settings, "SubtitleSource", SRTSUB);
-	ghb_settings_set_string(settings, "SrtLanguage", "und");
+	lang = ghb_settings_get_string(ud->settings, "PreferredLanguage");
+	ghb_settings_set_string(settings, "SrtLanguage", lang);
+	g_free(lang);
 	ghb_settings_set_string(settings, "SrtCodeset", "UTF-8");
 
 	dir = ghb_settings_get_string(ud->settings, "SrtDir");
