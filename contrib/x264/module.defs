@@ -1,20 +1,18 @@
 $(eval $(call import.MODULE.defs,X264,x264,PTHREADW32))
 $(eval $(call import.CONTRIB.defs,X264))
 
-X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r1627-d0d8751.tar.gz
+X264.FETCH.url = http://download.handbrake.fr/handbrake/contrib/x264-r1643-59a9e03.tar.gz
 X264.EXTRACT.tarbase = x264
 
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 X264.CONFIGURE.static =
 
-X264.CONFIGURE.extra = --disable-mp4-output
-X264.CONFIGURE.extra += --disable-avs-input --disable-lavf-input --disable-ffms-input
+X264.CONFIGURE.extra = --disable-gpac
+X264.CONFIGURE.extra += --disable-avs --disable-lavf --disable-ffms
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-    X264.CONFIGURE.extra += --enable-pthread --cross-prefix=$(BUILD.spec)-
+    X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
     X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
-else
-    X264.CONFIGURE.extra += --enable-pthread
 endif
