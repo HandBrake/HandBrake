@@ -9,6 +9,7 @@ namespace Handbrake
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.IO;
     using System.Windows.Forms;
     using Functions;
 
@@ -57,6 +58,80 @@ namespace Handbrake
             queue.EncodeStarted += new EventHandler(QueueOnEncodeStart);
             queue.QueueCompleted += new EventHandler(QueueOnQueueFinished);
             queue.QueuePauseRequested += new EventHandler(QueueOnPaused);
+            queue.QueueListChanged += new EventHandler(queue_QueueListChanged);
+
+            queue.EncodeStarted += new EventHandler(queue_EncodeStarted);
+            queue.EncodeEnded += new EventHandler(queue_EncodeEnded);
+        }
+
+        /// <summary>
+        /// Queue Changed
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void queue_QueueListChanged(object sender, EventArgs e)
+        {
+            UpdateUiElementsOnQueueChange();
+        }
+
+        /// <summary>
+        /// Encode Ended
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void queue_EncodeEnded(object sender, EventArgs e)
+        {
+            queue.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
+            ResetEncodeText();
+        }
+
+        /// <summary>
+        /// Queue Started
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void queue_EncodeStarted(object sender, EventArgs e)
+        {
+            this.SetCurrentEncodeInformation();
+            queue.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;        
+        }
+
+        /// <summary>
+        /// Display the Encode Status
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void EncodeQueue_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EncodeProgressEventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Encode.EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
+                return;
+            }
+
+            lbl_encodeStatus.Text =
+                string.Format(
+                "Encoding: Pass {0} of {1}, {2:00.00}% Time Remaining: {3}",
+                e.Task,
+                e.Task,
+                e.PercentComplete,
+                e.EstimatedTimeLeft);
         }
 
         /// <summary>
@@ -71,7 +146,7 @@ namespace Handbrake
         private void QueueOnPaused(object sender, EventArgs e)
         {
             SetUiEncodeFinished();
-            UpdateUiElements();
+            UpdateUiElementsOnQueueChange();
         }
 
         /// <summary>
@@ -101,8 +176,7 @@ namespace Handbrake
         private void QueueOnEncodeStart(object sender, EventArgs e)
         {
             SetUiEncodeStarted(); // make sure the UI is set correctly
-            SetCurrentEncodeInformation();
-            UpdateUiElements(); // Redraw the Queue, a new encode has started.
+            UpdateUiElementsOnQueueChange(); // Redraw the Queue, a new encode has started.
         }
 
         /// <summary>
@@ -110,7 +184,7 @@ namespace Handbrake
         /// </summary>
         public void SetQueue()
         {
-            UpdateUiElements();
+            UpdateUiElementsOnQueueChange();
         }
 
         /// <summary>
@@ -143,8 +217,8 @@ namespace Handbrake
                 SetUiEncodeStarted();
             }
 
-            if (!queue.IsEncoding)
-                queue.Start();
+            lbl_encodeStatus.Text = "Encoding ...";
+            queue.Start();
         }
 
         /// <summary>
@@ -159,8 +233,6 @@ namespace Handbrake
         private void BtnPauseClick(object sender, EventArgs e)
         {
             queue.Pause();
-            SetUiEncodeFinished();
-            ResetQueue();
             MessageBox.Show(
                 "No further items on the queue will start. The current encode process will continue until it is finished. \nClick 'Encode' when you wish to continue encoding the queue.",
                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -209,12 +281,24 @@ namespace Handbrake
             btn_pause.Visible = false;
             btn_encode.Enabled = true;
 
+            ResetEncodeText();
+        }
+
+        /// <summary>
+        /// Reset the current job text
+        /// </summary>
+        private void ResetEncodeText()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new UpdateHandler(ResetEncodeText));
+                return;
+            }
+            lbl_encodeStatus.Text = "Ready";
+
             lbl_source.Text = "-";
             lbl_dest.Text = "-";
-            lbl_vEnc.Text = "-";
-            lbl_aEnc.Text = "-";
-            lbl_title.Text = "-";
-            lbl_chapt.Text = "-";
+            lbl_encodeOptions.Text = "-";
 
             lbl_encodesPending.Text = list_queue.Items.Count + " encode(s) pending";
         }
@@ -276,11 +360,11 @@ namespace Handbrake
         /// <summary>
         /// Update the UI elements
         /// </summary>
-        private void UpdateUiElements()
+        private void UpdateUiElementsOnQueueChange()
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new UpdateHandler(UpdateUiElements));
+                BeginInvoke(new UpdateHandler(UpdateUiElementsOnQueueChange));
                 return;
             }
 
@@ -300,75 +384,45 @@ namespace Handbrake
                     BeginInvoke(new UpdateHandler(SetCurrentEncodeInformation));
                 }
 
-                // found query is a global varible
                 QueryParser parsed = QueryParser.Parse(queue.LastEncode.Query);
-                lbl_source.Text = queue.LastEncode.Source;
-                lbl_dest.Text = queue.LastEncode.Destination;
 
-                lbl_title.Text = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
-
+                // Get title and chapters
+                string title = parsed.Title == 0 ? "Auto" : parsed.Title.ToString();
+                string chapterlbl;
                 if (Equals(parsed.ChapterStart, 0))
-                    lbl_chapt.Text = "Auto";
+                    chapterlbl = "Auto";
                 else
                 {
                     string chapters = parsed.ChapterStart.ToString();
                     if (parsed.ChapterFinish != 0)
                         chapters = chapters + " - " + parsed.ChapterFinish;
-                    lbl_chapt.Text = chapters;
+                    chapterlbl = chapters;
                 }
 
-                lbl_vEnc.Text = parsed.VideoEncoder;
-
-                // Display The Audio Track Information
+                // Get audio information
                 string audio = string.Empty;
                 foreach (AudioTrack track in parsed.AudioInformation)
                 {
-                    if (audio != string.Empty)
+                    if (audio != string.Empty) 
                         audio += ", " + track.Encoder;
                     else
                         audio = track.Encoder;
                 }
-                lbl_aEnc.Text = audio;
-            }
+
+                // found query is a global varible        
+                lbl_encodeStatus.Text = "Encoding ...";
+                lbl_source.Text = queue.LastEncode.Source + "(Title: " + title + " Chapters: " + chapterlbl + ")";
+                lbl_dest.Text = queue.LastEncode.Destination;
+                lbl_encodeOptions.Text = "Video: " + parsed.VideoEncoder + " Audio: " + audio + Environment.NewLine +
+                                    "x264 Options: " + parsed.H264Query;
+               }
             catch (Exception)
             {
                 // Do Nothing
             }
         }
 
-        /// <summary>
-        /// Delete the currently selected items on the queue
-        /// </summary>
-        private void DeleteSelectedItems()
-        {
-            // If there are selected items
-            if (list_queue.SelectedIndices.Count > 0)
-            {
-                // Save the selected indices to select them after the move
-                List<int> selectedIndices = new List<int>(list_queue.SelectedIndices.Count);
-                foreach (int selectedIndex in list_queue.SelectedIndices)
-                    selectedIndices.Add(selectedIndex);
-
-                int firstSelectedIndex = selectedIndices[0];
-
-                // Reverse the list to delete the items from last to first (preserves indices)
-                selectedIndices.Reverse();
-
-                // Remove each selected item
-                foreach (int selectedIndex in selectedIndices)
-                    queue.Remove(selectedIndex);
-
-                UpdateUiElements();
-
-                // Select the item where the first deleted item was previously
-                if (firstSelectedIndex < list_queue.Items.Count)
-                    list_queue.Items[firstSelectedIndex].Selected = true;
-            }
-
-            list_queue.Select(); // Activate the control to show the selected items
-        }
-
-        // Queue Management
+        /* Right Click Menu */
         /// <summary>
         /// Handle the Move Up Menu Item
         /// </summary>
@@ -437,47 +491,7 @@ namespace Handbrake
             DeleteSelectedItems();
         }
 
-        /// <summary>
-        /// Handle the Button Up Click
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void BtnUpClick(object sender, EventArgs e)
-        {
-            MoveUp();
-        }
-
-        /// <summary>
-        /// Handle the button down click
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void BtnDownClick(object sender, EventArgs e)
-        {
-            MoveDown();
-        }
-
-        /// <summary>
-        /// Handle the delete button click
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void BtnDeleteClick(object sender, EventArgs e)
-        {
-            DeleteSelectedItems();
-        }
+        /* Keyboard Shortcuts */
 
         /// <summary>
         /// Handle the delete keyboard press
@@ -493,6 +507,8 @@ namespace Handbrake
             if (e.KeyCode == Keys.Delete)
                 DeleteSelectedItems();
         }
+
+        /* Queue Management */
 
         /// <summary>
         /// Move items up in the queue
@@ -510,8 +526,6 @@ namespace Handbrake
                 // Move up each selected item
                 foreach (int selectedIndex in selectedIndices)
                     queue.MoveUp(selectedIndex);
-
-                UpdateUiElements();
 
                 // Keep the selected item(s) selected, now moved up one index
                 foreach (int selectedIndex in selectedIndices)
@@ -543,8 +557,6 @@ namespace Handbrake
                 foreach (int selectedIndex in selectedIndices)
                     queue.MoveDown(selectedIndex);
 
-                UpdateUiElements();
-
                 // Keep the selected item(s) selected, now moved down one index
                 foreach (int selectedIndex in selectedIndices)
                     if (selectedIndex + 1 < list_queue.Items.Count) // Defensive programming: ensure index is good
@@ -554,7 +566,37 @@ namespace Handbrake
             list_queue.Select(); // Activate the control to show the selected items
         }
 
-        // Queue Import/Export Features
+        /// <summary>
+        /// Delete the currently selected items on the queue
+        /// </summary>
+        private void DeleteSelectedItems()
+        {
+            // If there are selected items
+            if (list_queue.SelectedIndices.Count > 0)
+            {
+                // Save the selected indices to select them after the move
+                List<int> selectedIndices = new List<int>(list_queue.SelectedIndices.Count);
+                foreach (int selectedIndex in list_queue.SelectedIndices)
+                    selectedIndices.Add(selectedIndex);
+
+                int firstSelectedIndex = selectedIndices[0];
+
+                // Reverse the list to delete the items from last to first (preserves indices)
+                selectedIndices.Reverse();
+
+                // Remove each selected item
+                foreach (int selectedIndex in selectedIndices)
+                    queue.Remove(selectedIndex);
+
+                // Select the item where the first deleted item was previously
+                if (firstSelectedIndex < list_queue.Items.Count)
+                    list_queue.Items[firstSelectedIndex].Selected = true;
+            }
+
+            list_queue.Select(); // Activate the control to show the selected items
+        }
+
+        /* Queue Import / Export features */
 
         /// <summary>
         /// Create a batch script
@@ -607,7 +649,6 @@ namespace Handbrake
             OpenFile.ShowDialog();
             if (OpenFile.FileName != String.Empty)
                 queue.LoadQueueFromFile(OpenFile.FileName);
-            UpdateUiElements();
         }
 
         /// <summary>
@@ -629,9 +670,10 @@ namespace Handbrake
                     queue.LastEncode.Source,
                     queue.LastEncode.Destination,
                     queue.LastEncode.CustomQuery);
-                UpdateUiElements();
             }
         }
+
+        /* Overrides */
 
         /// <summary>
         /// Hide's the window when the user tries to "x" out of the window instead of closing it.

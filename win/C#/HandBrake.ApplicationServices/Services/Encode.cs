@@ -595,7 +595,8 @@ namespace HandBrake.ApplicationServices.Services
                     CurrentFrameRate = currentFps,
                     EstimatedTimeLeft = timeRemaining,
                     PercentComplete = percentComplete,
-                    Task = currentTask
+                    Task = currentTask,
+                    TaskCount = taskCount
                 };
 
             if (this.EncodeStatusChanged != null)

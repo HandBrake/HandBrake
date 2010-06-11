@@ -36,5 +36,10 @@ namespace HandBrake.ApplicationServices
         /// Gets or sets Task.
         /// </summary>
         public int Task { get; set; }
+
+        /// <summary>
+        /// Gets or sets TaskCount.
+        /// </summary>
+        public int TaskCount { get; set; }
     }
 }
