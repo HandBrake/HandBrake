@@ -134,7 +134,7 @@
             this.btn_playQT.Name = "btn_playQT";
             this.btn_playQT.Size = new System.Drawing.Size(96, 22);
             this.btn_playQT.Text = "Play with QT";
-            this.btn_playQT.Click += new System.EventHandler(this.btn_playQT_Click);
+            this.btn_playQT.Click += new System.EventHandler(this.PlayQT_Click);
             // 
             // btn_playVLC
             // 
@@ -144,7 +144,7 @@
             this.btn_playVLC.Name = "btn_playVLC";
             this.btn_playVLC.Size = new System.Drawing.Size(101, 22);
             this.btn_playVLC.Text = "Play with VLC";
-            this.btn_playVLC.Click += new System.EventHandler(this.btn_playVLC_Click);
+            this.btn_playVLC.Click += new System.EventHandler(this.PlayVLC_Click);
             // 
             // QTControl
             // 

@@ -14,6 +14,7 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Parsing;
     using HandBrake.ApplicationServices.Properties;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
@@ -56,6 +57,29 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private int processID;
 
+        /* Constructor */
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Encode"/> class.
+        /// </summary>
+        public Encode()
+        {
+            this.EncodeStarted += Encode_EncodeStarted;
+        }
+
+        /* Delegates */
+
+        /// <summary>
+        /// Encode Progess Status
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EncodeProgressEventArgs.
+        /// </param>
+        public delegate void EncodeProgessStatus(object sender, EncodeProgressEventArgs e);
+
         /* Event Handlers */
 
         /// <summary>
@@ -68,12 +92,17 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         public event EventHandler EncodeEnded;
 
+        /// <summary>
+        /// Encode process has progressed
+        /// </summary>
+        public event EncodeProgessStatus EncodeStatusChanged;
+
         /* Properties */
 
         /// <summary>
         /// Gets or sets The HB Process
         /// </summary>
-        public Process HbProcess { get; set; }
+        protected Process HbProcess { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether IsEncoding.
@@ -183,7 +212,7 @@ namespace HandBrake.ApplicationServices.Services
 
                 if (HbProcess != null)
                     this.processHandle = HbProcess.MainWindowHandle; // Set the process Handle
-      
+
                 // Start the Log Monitor
                 windowTimer = new Timer(new TimerCallback(ReadFile), null, 1000, 1000);
 
@@ -241,6 +270,12 @@ namespace HandBrake.ApplicationServices.Services
         private void HbProcess_Exited(object sender, EventArgs e)
         {
             IsEncoding = false;
+
+            windowTimer.Dispose();
+            ReadFile(null);
+
+            if (this.EncodeEnded != null)
+                this.EncodeEnded(this, new EventArgs());
         }
 
         /// <summary>
@@ -320,50 +355,6 @@ namespace HandBrake.ApplicationServices.Services
             catch (Exception exc)
             {
                 Console.WriteLine(exc);
-            }
-        }
-
-        /// <summary>
-        /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
-        /// </summary>
-        protected void Finish()
-        {
-            if (!IsEncoding)
-            {
-                windowTimer.Dispose();
-                ReadFile(null);
-            }
-
-            if (this.EncodeEnded != null)
-                this.EncodeEnded(this, new EventArgs());
-
-            // Growl
-        if (Settings.Default.growlQueue)
-                GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
-
-            // Do something whent he encode ends.
-            switch (Settings.Default.CompletionOption)
-            {
-                case "Shutdown":
-                    Process.Start("Shutdown", "-s -t 60");
-                    break;
-                case "Log Off":
-                    Win32.ExitWindowsEx(0, 0);
-                    break;
-                case "Suspend":
-                    Application.SetSuspendState(PowerState.Suspend, true, true);
-                    break;
-                case "Hibernate":
-                    Application.SetSuspendState(PowerState.Hibernate, true, true);
-                    break;
-                case "Lock System":
-                    Win32.LockWorkStation();
-                    break;
-                case "Quit HandBrake":
-                    Application.Exit();
-                    break;
-                default:
-                    break;
             }
         }
 
@@ -549,6 +540,66 @@ namespace HandBrake.ApplicationServices.Services
                 lock (logBuffer)
                     logBuffer.AppendLine(e.Data);
             }
+        }
+
+        /// <summary>
+        /// Encode Started
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void Encode_EncodeStarted(object sender, EventArgs e)
+        {
+            Thread monitor = new Thread(EncodeMonitor);
+            monitor.Start();
+        }
+
+        /// <summary>
+        /// Monitor the Job
+        /// </summary>
+        private void EncodeMonitor()
+        {
+            try
+            {
+                Parser encode = new Parser(HbProcess.StandardOutput.BaseStream);
+                encode.OnEncodeProgress += EncodeOnEncodeProgress;
+                while (!encode.EndOfStream)
+                    encode.ReadEncodeStatus();
+
+               // Main.ShowExceptiowWindow("Encode Monitor Stopped", "Stopped");
+            }
+            catch (Exception exc)
+            {
+                Main.ShowExceptiowWindow("An Unknown Error has occured", exc.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Displays the Encode status in the GUI
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="currentTask">The current task</param>
+        /// <param name="taskCount">Number of tasks</param>
+        /// <param name="percentComplete">Percent complete</param>
+        /// <param name="currentFps">Current encode speed in fps</param>
+        /// <param name="avg">Avg encode speed</param>
+        /// <param name="timeRemaining">Time Left</param>
+        private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float avg, TimeSpan timeRemaining)
+        {
+            EncodeProgressEventArgs eventArgs = new EncodeProgressEventArgs
+                {
+                    AverageFrameRate = avg,
+                    CurrentFrameRate = currentFps,
+                    EstimatedTimeLeft = timeRemaining,
+                    PercentComplete = percentComplete,
+                    Task = currentTask
+                };
+
+            if (this.EncodeStatusChanged != null)
+                this.EncodeStatusChanged(this, eventArgs);
         }
     }
 }

@@ -48,7 +48,6 @@ namespace Handbrake
         private DVD currentSource;
         private IScan SourceScan = new ScanService();
         private List<DriveInformation> drives;
-        private Thread encodeMonitor;
 
         // Delegates **********************************************************
         private delegate void UpdateWindowHandler();
@@ -343,17 +342,12 @@ namespace Handbrake
         private void encodeStarted(object sender, EventArgs e)
         {
             SetEncodeStarted();
-
-            // Experimental HBProc Process Monitoring.
-            if (Properties.Settings.Default.enocdeStatusInGui)
-            {
-                encodeMonitor = new Thread(EncodeMonitorThread);
-                encodeMonitor.Start();
-            }
+            encodeQueue.EncodeStatusChanged += EncodeQueue_EncodeStatusChanged;
         }
 
         private void encodeEnded(object sender, EventArgs e)
         {
+            encodeQueue.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
             SetEncodeFinished();
         }
 
@@ -574,7 +568,7 @@ namespace Handbrake
         private void mnu_UpdateCheck_Click(object sender, EventArgs e)
         {
             lbl_updateCheck.Visible = true;
-            Main.BeginCheckForUpdates(new AsyncCallback(updateCheckDoneMenu), false);
+            Main.BeginCheckForUpdates(new AsyncCallback(this.UpdateCheckDoneMenu), false);
         }
 
         /// <summary>
@@ -1038,8 +1032,6 @@ namespace Handbrake
                         !Properties.Settings.Default.showCliForInGuiEncodeStatus)
                     {
                         encodeQueue.Stop();
-                        if (encodeQueue.HbProcess != null)
-                            encodeQueue.HbProcess.WaitForExit();
                     }
                     else
                     {
@@ -1104,7 +1096,7 @@ namespace Handbrake
                     if (overwrite == DialogResult.Yes)
                     {
                         if (encodeQueue.Count == 0)
-                            encodeQueue.Add(query, getTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                            encodeQueue.Add(query, this.GetTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
 
                         queueWindow.SetQueue();
                         if (encodeQueue.Count > 1)
@@ -1154,10 +1146,10 @@ namespace Handbrake
                             "There is already a queue item for this destination path. \n\n If you continue, the encode will be overwritten. Do you wish to continue?",
                             "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
-                        encodeQueue.Add(query, getTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                        encodeQueue.Add(query, this.GetTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
                 }
                 else
-                    encodeQueue.Add(query, getTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
+                    encodeQueue.Add(query, this.GetTitle(), sourcePath, text_destination.Text, (rtf_query.Text != string.Empty));
 
                 lbl_encode.Text = encodeQueue.Count + " encode(s) pending in the queue";
 
@@ -2255,6 +2247,34 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// Display the Encode Status
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void EncodeQueue_EncodeStatusChanged(object sender, HandBrake.ApplicationServices.EncodeProgressEventArgs e)
+        {
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Encode.EncodeProgessStatus(EncodeQueue_EncodeStatusChanged), new[] { sender, e });
+                return;
+            }
+
+            lbl_encode.Text =
+                string.Format(
+                "{0:00.00}%,    FPS: {1:000.0},    Avg FPS: {2:000.0},    Time Remaining: {3}",
+                e.PercentComplete,
+                e.CurrentFrameRate,
+                e.AverageFrameRate,
+                e.EstimatedTimeLeft);
+
+            ProgressBarStatus.Value = (int)Math.Round(e.PercentComplete);
+        }
+
+        /// <summary>
         /// Set the DVD Drive selection in the "Source" Menu
         /// </summary>
         private void SetDriveSelectionMenuItem()
@@ -2312,7 +2332,7 @@ namespace Handbrake
         /// <returns>
         /// The title.
         /// </returns>
-        private int getTitle()
+        private int GetTitle()
         {
             int title = 0;
             if (drp_dvdtitle.SelectedItem != null)
@@ -2330,12 +2350,12 @@ namespace Handbrake
         /// <param name="result">
         /// The result.
         /// </param>
-        private void updateCheckDoneMenu(IAsyncResult result)
+        private void UpdateCheckDoneMenu(IAsyncResult result)
         {
             // Make sure it's running on the calling thread
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(() => updateCheckDoneMenu(result)));
+                Invoke(new MethodInvoker(() => this.UpdateCheckDoneMenu(result)));
                 return;
             }
             UpdateCheckInformation info;
@@ -2420,60 +2440,6 @@ namespace Handbrake
                 SourceScan.Stop();
             }
             base.OnFormClosing(e);
-        }
-
-        #endregion
-
-        #region In-GUI Encode Status
-
-        /// <summary>
-        /// Starts a new thread to monitor and process the CLI encode status
-        /// </summary>
-        private void EncodeMonitorThread()
-        {
-            try
-            {
-                Parser encode = new Parser(encodeQueue.HbProcess.StandardOutput.BaseStream);
-                encode.OnEncodeProgress += EncodeOnEncodeProgress;
-                while (!encode.EndOfStream)
-                    encode.ReadEncodeStatus();
-
-                SetEncodeFinished();
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Displays the Encode status in the GUI
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="currentTask">The current task</param>
-        /// <param name="taskCount">Number of tasks</param>
-        /// <param name="percentComplete">Percent complete</param>
-        /// <param name="currentFps">Current encode speed in fps</param>
-        /// <param name="av">Avg encode speed</param>
-        /// <param name="timeRemaining">Time Left</param>
-        private void EncodeOnEncodeProgress(object sender, int currentTask, int taskCount, float percentComplete, float currentFps, float av, TimeSpan timeRemaining)
-        {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(
-                    new EncodeProgressEventHandler(EncodeOnEncodeProgress),
-                    new[] { sender, currentTask, taskCount, percentComplete, currentFps, av, timeRemaining });
-                return;
-            }
-            lbl_encode.Text =
-                string.Format(
-                "{0:00.00}%,    FPS: {1:000.0},    Avg FPS: {2:000.0},    Time Remaining: {3}",
-                percentComplete,
-                currentFps,
-                av,
-                timeRemaining);
-
-            ProgressBarStatus.Value = (int)Math.Round(percentComplete);
         }
 
         #endregion

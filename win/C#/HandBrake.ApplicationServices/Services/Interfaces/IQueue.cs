@@ -7,14 +7,13 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Diagnostics;
 
     using HandBrake.ApplicationServices.Model;
 
     /// <summary>
     /// The IQueue Interface
     /// </summary>
-    public interface IQueue
+    public interface IQueue : IEncode
     {
         /// <summary>
         /// Fires when the Queue has started
@@ -57,11 +56,6 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Gets the number of items in the queue.
         /// </summary>
         int Count { get; }
-
-        /// <summary>
-        /// Gets or sets The HB Process
-        /// </summary>
-        Process HbProcess { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether IsEncoding.
@@ -153,35 +147,5 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         /// Requests a pause of the encode queue.
         /// </summary>
         void Pause();
-
-        /// <summary>
-        /// Fires when a new CLI Job starts
-        /// </summary>
-        event EventHandler EncodeStarted;
-
-        /// <summary>
-        /// Fires when a CLI job finishes.
-        /// </summary>
-        event EventHandler EncodeEnded;
-
-        /// <summary>
-        /// Create a preview sample video
-        /// </summary>
-        /// <param name="query">
-        /// The CLI Query
-        /// </param>
-        void CreatePreviewSample(string query);
-
-        /// <summary>
-        /// Kill the CLI process
-        /// </summary>
-        void Stop();
-
-        /// <summary>
-        /// Attempt to Safely kill a DirectRun() CLI
-        /// NOTE: This will not work with a MinGW CLI
-        /// Note: http://www.cygwin.com/ml/cygwin/2006-03/msg00330.html
-        /// </summary>
-        void SafelyClose();
     }
 }

@@ -8,6 +8,7 @@ namespace HandBrake.ApplicationServices.Services
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -16,6 +17,7 @@ namespace HandBrake.ApplicationServices.Services
 
     using HandBrake.ApplicationServices.Functions;
     using HandBrake.ApplicationServices.Model;
+    using HandBrake.ApplicationServices.Properties;
     using HandBrake.ApplicationServices.Services.Interfaces;
 
     /// <summary>
@@ -38,6 +40,7 @@ namespace HandBrake.ApplicationServices.Services
         /// </summary>
         private int nextJobId;
 
+        #region Events
         /// <summary>
         /// Fires when the Queue has started
         /// </summary>
@@ -58,6 +61,7 @@ namespace HandBrake.ApplicationServices.Services
         /// Fires when the entire encode queue has completed.
         /// </summary>
         public event EventHandler QueueCompleted;
+        #endregion
 
         #region Properties
         /// <summary>
@@ -404,6 +408,41 @@ namespace HandBrake.ApplicationServices.Services
 
             // After the encode is done, we may want to shutdown, suspend etc.
             Finish();
+        }
+
+        /// <summary>
+        /// Perform an action after an encode. e.g a shutdown, standby, restart etc.
+        /// </summary>
+        private void Finish()
+        {
+            // Growl
+            if (Settings.Default.growlQueue)
+                GrowlCommunicator.Notify("Queue Completed", "Put down that cocktail...\nyour Handbrake queue is done.");
+
+            // Do something whent he encode ends.
+            switch (Settings.Default.CompletionOption)
+            {
+                case "Shutdown":
+                    Process.Start("Shutdown", "-s -t 60");
+                    break;
+                case "Log Off":
+                    Win32.ExitWindowsEx(0, 0);
+                    break;
+                case "Suspend":
+                    Application.SetSuspendState(PowerState.Suspend, true, true);
+                    break;
+                case "Hibernate":
+                    Application.SetSuspendState(PowerState.Hibernate, true, true);
+                    break;
+                case "Lock System":
+                    Win32.LockWorkStation();
+                    break;
+                case "Quit HandBrake":
+                    Application.Exit();
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion

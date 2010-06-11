@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EncodeProgressEventArgs.cs" />
     <Compile Include="frmExceptionWindow.cs">
       <SubType>Form</SubType>
     </Compile>

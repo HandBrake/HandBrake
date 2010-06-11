@@ -6,7 +6,6 @@
 namespace HandBrake.ApplicationServices.Services.Interfaces
 {
     using System;
-    using System.Diagnostics;
 
     /// <summary>
     /// The IEncode Interface
@@ -24,9 +23,9 @@ namespace HandBrake.ApplicationServices.Services.Interfaces
         event EventHandler EncodeEnded;
 
         /// <summary>
-        /// Gets or sets The HB Process
+        /// Encode process has progressed
         /// </summary>
-        Process HbProcess { get; set; }
+        event Encode.EncodeProgessStatus EncodeStatusChanged;
 
         /// <summary>
         /// Gets a value indicating whether IsEncoding.
