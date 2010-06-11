@@ -240,7 +240,6 @@ namespace Handbrake
                 this.Resize += new EventHandler(frmMain_Resize);
 
             // Handle Encode Start / Finish / Pause
-            encodeQueue.QueuePauseRequested += new EventHandler(encodePaused);
             encodeQueue.EncodeStarted += new EventHandler(encodeStarted);
             encodeQueue.EncodeEnded += new EventHandler(encodeEnded);
 
@@ -350,12 +349,6 @@ namespace Handbrake
             encodeQueue.EncodeStatusChanged -= EncodeQueue_EncodeStatusChanged;
             SetEncodeFinished();
         }
-
-        private void encodePaused(object sender, EventArgs e)
-        {
-            SetEncodeFinished();
-        }
-
         #endregion
 
         // User Interface Menus / Tool Strips *********************************
