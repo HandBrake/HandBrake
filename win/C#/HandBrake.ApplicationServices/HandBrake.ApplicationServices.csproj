@@ -83,7 +83,6 @@
     <Compile Include="Parsing\Parser.cs" />
     <Compile Include="Parsing\Subtitle.cs" />
     <Compile Include="Parsing\Title.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -126,6 +125,7 @@
     <None Include="Resources\ErrorX.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\AssemblyInfo.cs.tmpl" />
     <None Include="Resources\copy.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -137,4 +137,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>
+	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
+	subwcrev.exe "$(ProjectDir)." "$(ProjectDir)Properties\AssemblyInfo.cs.tmpl" "$(ProjectDir)Properties\AssemblyInfo.cs"
+	</PreBuildEvent>
+  </PropertyGroup>
 </Project>

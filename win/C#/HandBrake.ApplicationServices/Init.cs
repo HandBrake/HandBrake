@@ -5,6 +5,9 @@
 
 namespace HandBrake.ApplicationServices
 {
+    using System;
+    using System.Reflection;
+
     /// <summary>
     /// Initialize ApplicationServices
     /// </summary>
@@ -65,5 +68,15 @@ namespace HandBrake.ApplicationServices
             Properties.Settings.Default.Save();
         }
 
+        /// <summary>
+        /// Gets the Assembly version.
+        /// </summary>
+        /// <returns>
+        /// Version data
+        /// </returns>
+        public static Version AssemblyVersion()
+        {
+            return Assembly.GetExecutingAssembly().GetName().Version;
+        }
     }
 }
