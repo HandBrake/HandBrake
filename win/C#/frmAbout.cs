@@ -1,11 +1,12 @@
 /*  frmAbout.cs $
-   This file is part of the HandBrake source code.
+    This file is part of the HandBrake source code.
     Homepage: <http://handbrake.fr>.
     It may be used under the terms of the GNU General Public License. */
 
 namespace Handbrake
 {
     using System;
+    using System.Reflection;
     using System.Windows.Forms;
 
     /// <summary>
@@ -19,8 +20,12 @@ namespace Handbrake
         public frmAbout()
         {
             InitializeComponent();
-            lbl_HBBuild.Text = Properties.Settings.Default.hb_version + " (" + Properties.Settings.Default.hb_build +
+            lbl_HBBuild.Text = "CLI Build: " + Properties.Settings.Default.hb_version + " (" + Properties.Settings.Default.hb_build +
                                ") - " + Properties.Settings.Default.hb_platform;
+
+            Version gui = Assembly.GetExecutingAssembly().GetName().Version;
+            Version appServices = HandBrake.ApplicationServices.Init.AssemblyVersion();
+            lbl_GUIBuild.Text = gui.ToString(4) + " (Services: "  + appServices.ToString(4) + ")";
         }
 
         /// <summary>

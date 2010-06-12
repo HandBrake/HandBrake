@@ -527,7 +527,7 @@ namespace Handbrake.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("3264")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3378")]
         public int hb_min_cli {
             get {
                 return ((int)(this["hb_min_cli"]));
