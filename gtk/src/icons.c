@@ -3,7 +3,7 @@
 #include "values.h"
 #include "resources.h"
 
-#if 0
+#if 1
 void
 ghb_load_icons()
 {
