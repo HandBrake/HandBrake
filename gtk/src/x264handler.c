@@ -126,9 +126,59 @@ enum
 	X264_OPT_DEBLOCK,
 	X264_OPT_PSY,
 	X264_OPT_INT,
+	X264_OPT_DOUBLE,
 	X264_OPT_COMBO,
 	X264_OPT_BOOL,
+	X264_OPT_TRANS,
 };
+
+typedef struct
+{
+	gchar *x264_val;
+	char *ui_val;
+} trans_entry_t;
+
+typedef struct
+{
+	gint count;
+	gint x264_type;
+	gint ui_type;
+	trans_entry_t *map;
+} trans_table_t;
+
+static gchar *
+trans_x264_val(trans_table_t *trans, char *val)
+{
+	int ii;
+
+	if (val == NULL)
+		return NULL;
+	for (ii = 0; ii < trans->count; ii++)
+	{
+		if (strcmp(val, trans->map[ii].x264_val) == 0)
+		{
+			return trans->map[ii].ui_val;
+		}
+	}
+	return NULL;
+}
+
+static gchar *
+trans_ui_val(trans_table_t *trans, char *val)
+{
+	int ii;
+
+	if (val == NULL)
+		return NULL;
+	for (ii = 0; ii < trans->count; ii++)
+	{
+		if (strcmp(val, trans->map[ii].ui_val) == 0)
+		{
+			return trans->map[ii].x264_val;
+		}
+	}
+	return NULL;
+}
 
 struct x264_opt_map_s
 {
@@ -136,27 +186,28 @@ struct x264_opt_map_s
 	gchar *name;
 	gchar *def_val;
 	gint type;
+	trans_table_t *translation;
 	gboolean found;
 };
 
 static gchar *x264_ref_syns[] = {"ref", "frameref", NULL};
-static gchar *x264_mixed_syns[] = {"mixed-refs", "mixed_refs", NULL};
 static gchar *x264_bframes_syns[] = {"bframes", NULL};
 static gchar *x264_badapt_syns[] = {"b-adapt", "b_adapt", NULL};
 static gchar *x264_direct_syns[] = 
 	{"direct", "direct-pred", "direct_pred", NULL};
-static gchar *x264_weightb_syns[] = {"weightb", "weight-b", "weight_b", NULL};
+static gchar *x264_weightp_syns[] = {"weightp", NULL};
 static gchar *x264_bpyramid_syns[] = {"b-pyramid", "b_pyramid", NULL};
 static gchar *x264_me_syns[] = {"me", NULL};
 static gchar *x264_merange_syns[] = {"merange", "me-range", "me_range", NULL};
 static gchar *x264_subme_syns[] = {"subme", "subq", NULL};
 static gchar *x264_aqmode_syns[] = {"aq-mode", NULL};
-static gchar *x264_analyse_syns[] = {"analyse", "partitions", NULL};
+static gchar *x264_analyse_syns[] = {"partitions", "analyse", NULL};
 static gchar *x264_8x8dct_syns[] = {"8x8dct", NULL};
 static gchar *x264_deblock_syns[] = {"deblock", "filter", NULL};
 static gchar *x264_trellis_syns[] = {"trellis", NULL};
 static gchar *x264_pskip_syns[] = {"no-fast-pskip", "no_fast_pskip", NULL};
 static gchar *x264_psy_syns[] = {"psy-rd", "psy_rd", NULL};
+static gchar *x264_aq_strength_syns[] = {"aq-strength", "aq_strength", NULL};
 static gchar *x264_mbtree_syns[] = {"mbtree", NULL};
 static gchar *x264_decimate_syns[] = 
 	{"no-dct-decimate", "no_dct_decimate", NULL};
@@ -177,17 +228,16 @@ find_syn_match(const gchar *opt, gchar **syns)
 struct x264_opt_map_s x264_opt_map[] =
 {
 	{x264_ref_syns, "x264_refs", "3", X264_OPT_INT},
-	{x264_mixed_syns, "x264_mixed_refs", "1", X264_OPT_BOOL},
 	{x264_bframes_syns, "x264_bframes", "3", X264_OPT_INT},
 	{x264_direct_syns, "x264_direct", "spatial", X264_OPT_COMBO},
 	{x264_badapt_syns, "x264_b_adapt", "1", X264_OPT_COMBO},
-	{x264_weightb_syns, "x264_weighted_bframes", "1", X264_OPT_BOOL},
-	{x264_bpyramid_syns, "x264_bpyramid", "0", X264_OPT_BOOL},
+	{x264_weightp_syns, "x264_weighted_pframes", "2", X264_OPT_COMBO},
+	{x264_bpyramid_syns, "x264_bpyramid", "normal", X264_OPT_COMBO},
 	{x264_me_syns, "x264_me", "hex", X264_OPT_COMBO},
 	{x264_merange_syns, "x264_merange", "16", X264_OPT_INT},
 	{x264_subme_syns, "x264_subme", "7", X264_OPT_COMBO},
 	{x264_aqmode_syns, "x264_aqmode", "1", X264_OPT_INT_NONE},
-	{x264_analyse_syns, "x264_analyse", "some", X264_OPT_COMBO},
+	{x264_analyse_syns, "x264_analyse", "p8x8,b8x8,i8x8,i4x4", X264_OPT_COMBO},
 	{x264_8x8dct_syns, "x264_8x8dct", "1", X264_OPT_BOOL},
 	{x264_deblock_syns, "x264_deblock_alpha", "0,0", X264_OPT_DEBLOCK},
 	{x264_deblock_syns, "x264_deblock_beta", "0,0", X264_OPT_DEBLOCK},
@@ -195,6 +245,7 @@ struct x264_opt_map_s x264_opt_map[] =
 	{x264_pskip_syns, "x264_no_fast_pskip", "0", X264_OPT_BOOL},
 	{x264_decimate_syns, "x264_no_dct_decimate", "0", X264_OPT_BOOL},
 	{x264_cabac_syns, "x264_cabac", "1", X264_OPT_BOOL},
+	{x264_aq_strength_syns, "x264_aq_strength", "1", X264_OPT_DOUBLE},
 	{x264_psy_syns, "x264_psy_rd", "1,0", X264_OPT_PSY},
 	{x264_psy_syns, "x264_psy_trell", "1,0", X264_OPT_PSY},
 	{x264_mbtree_syns, "x264_mbtree", "1", X264_OPT_BOOL_NONE},
@@ -213,6 +264,16 @@ x264_opt_get_default(const gchar *opt)
 		}
 	}
 	return "";
+}
+
+static void
+x264_update_double(signal_user_data_t *ud, const gchar *name, const gchar *val)
+{
+	gdouble dval;
+
+	if (val == NULL) return;
+	dval = g_strtod (val, NULL);
+	ghb_ui_update(ud, name, ghb_double_value(dval));
 }
 
 static void
@@ -399,6 +460,31 @@ x264_update_psy(signal_user_data_t *ud, const gchar *xval)
 	ghb_ui_update(ud, "x264_psy_trell", ghb_double_value(trell_value));
 }
 
+static void do_update(signal_user_data_t *ud, char *name, gint type, char *val)
+{
+	switch(type)
+	{
+	case X264_OPT_INT:
+		x264_update_int(ud, name, val);
+		break;
+	case X264_OPT_DOUBLE:
+		x264_update_double(ud, name, val);
+		break;
+	case X264_OPT_BOOL:
+		x264_update_bool(ud, name, val);
+		break;
+	case X264_OPT_COMBO:
+		x264_update_combo(ud, name, val);
+		break;
+	case X264_OPT_BOOL_NONE:
+		x264_update_bool_setting(ud, name, val);
+		break;
+	case X264_OPT_INT_NONE:
+		x264_update_int_setting(ud, name, val);
+		break;
+	}
+}
+
 void
 ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 {
@@ -430,6 +516,9 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 				case X264_OPT_INT:
 					x264_update_int(ud, x264_opt_map[jj].name, val);
 					break;
+				case X264_OPT_DOUBLE:
+					x264_update_double(ud, x264_opt_map[jj].name, val);
+					break;
 				case X264_OPT_BOOL:
 					x264_update_bool(ud, x264_opt_map[jj].name, val);
 					break;
@@ -452,6 +541,21 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 				case X264_OPT_INT_NONE:
 					x264_update_int_setting(ud, x264_opt_map[jj].name, val);
 					break;
+				case X264_OPT_TRANS:
+					if (x264_opt_map[jj].translation == NULL)
+						break;
+					val = trans_x264_val(x264_opt_map[jj].translation, val);
+					if (val != NULL)
+					{
+						do_update(ud, x264_opt_map[jj].name, 
+							x264_opt_map[jj].translation->ui_type, val);
+						// TODO un-grey the ui control
+					}
+					else
+					{
+						// TODO grey out the ui control
+					}
+					break;
 				}
 				break;
 			}
@@ -468,6 +572,9 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 			{
 			case X264_OPT_INT:
 				x264_update_int(ud, x264_opt_map[jj].name, val);
+				break;
+			case X264_OPT_DOUBLE:
+				x264_update_double(ud, x264_opt_map[jj].name, val);
 				break;
 			case X264_OPT_BOOL:
 				x264_update_bool(ud, x264_opt_map[jj].name, val);
@@ -486,6 +593,21 @@ ghb_x264_parse_options(signal_user_data_t *ud, const gchar *options)
 				break;
 			case X264_OPT_INT_NONE:
 				x264_update_int_setting(ud, x264_opt_map[jj].name, val);
+				break;
+			case X264_OPT_TRANS:
+				if (x264_opt_map[jj].translation == NULL)
+					break;
+				val = g_strdup(trans_x264_val(x264_opt_map[jj].translation, val));
+				if (val != NULL)
+				{
+					do_update(ud, x264_opt_map[jj].name, 
+						x264_opt_map[jj].translation->ui_type, val);
+					// TODO un-grey the ui control
+				}
+				else
+				{
+					// TODO grey out the ui control
+				}
 				break;
 			}
 			x264_opt_map[jj].found = TRUE;
@@ -527,6 +649,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 	gchar **opt_syns = NULL;
 	const gchar *def_val = NULL;
 	gint type;
+	trans_table_t *trans;
 
 	for (jj = 0; jj < X264_OPT_MAP_SIZE; jj++)
 	{
@@ -536,6 +659,7 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 			opt_syns = x264_opt_map[jj].opt_syns;
 			def_val = x264_opt_map[jj].def_val;
 			type = x264_opt_map[jj].type;
+			trans = x264_opt_map[jj].translation;
 			break;
 		}
 	}
@@ -589,6 +713,16 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 					}
 					ghb_value_free(gval);
 				}
+				if (type == X264_OPT_TRANS)
+				{
+					gchar *tmp;
+					tmp = g_strdup(trans_ui_val(trans, val));
+					if (tmp)
+					{
+						g_free(val);
+						val = tmp;
+					}
+				}
 				if (strcmp(def_val, val) != 0)
 				{
 					g_string_append_printf(x264opts, "%s=%s:", opt_syns[syn], val);
@@ -625,6 +759,16 @@ x264_opt_update(signal_user_data_t *ud, GtkWidget *widget)
 					val = ghb_widget_string(widget);
 				}
 				ghb_value_free(gval);
+			}
+			if (type == X264_OPT_TRANS)
+			{
+				gchar *tmp;
+				tmp = g_strdup(trans_ui_val(trans, val));
+				if (tmp)
+				{
+					g_free(val);
+					val = tmp;
+				}
 			}
 			if (strcmp(def_val, val) != 0)
 			{
@@ -852,15 +996,9 @@ sanitize_x264opts(signal_user_data_t *ud, const gchar *options)
 			split[psy] = g_strdup_printf("psy-rd=%g,0", psy_rd);
 		}
 	}
-	gint refs = ghb_settings_get_int(ud->settings, "x264_refs");
-	if (refs <= 1)
-	{
-		x264_remove_opt(split, x264_mixed_syns);
-	}
 	gint bframes = ghb_settings_get_int(ud->settings, "x264_bframes");
 	if (bframes == 0)
 	{
-		x264_remove_opt(split, x264_weightb_syns);
 		x264_remove_opt(split, x264_direct_syns);
 		x264_remove_opt(split, x264_badapt_syns);
 	}

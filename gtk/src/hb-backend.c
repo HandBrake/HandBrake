@@ -287,6 +287,30 @@ combo_opts_t badapt_opts =
 	d_badapt_opts
 };
 
+static options_map_t d_bpyramid_opts[] =
+{
+	{"Off",    "none",   0, "none"},
+	{"Strict", "strict", 1, "strict"},
+	{"Normal", "normal", 2, "normal"},
+};
+combo_opts_t bpyramid_opts =
+{
+	sizeof(d_bpyramid_opts)/sizeof(options_map_t),
+	d_bpyramid_opts
+};
+
+static options_map_t d_weightp_opts[] =
+{
+	{"Off",   "0", 0, "0"},
+	{"Blind", "1", 1, "1"},
+	{"Smart", "2", 2, "2"},
+};
+combo_opts_t weightp_opts =
+{
+	sizeof(d_weightp_opts)/sizeof(options_map_t),
+	d_weightp_opts
+};
+
 static options_map_t d_me_opts[] =
 {
 	{"Diamond",              "dia",  0, "dia"},
@@ -303,16 +327,17 @@ combo_opts_t me_opts =
 
 static options_map_t d_subme_opts[] =
 {
-	{"1", "1", 1, "1"},
-	{"2", "2", 2, "2"},
-	{"3", "3", 3, "3"},
-	{"4", "4", 4, "4"},
-	{"5", "5", 5, "5"},
-	{"6", "6", 6, "6"},
-	{"7", "7", 7, "7"},
-	{"8", "8", 8, "8"},
-	{"9", "9", 9, "9"},
-	{"10", "10", 10, "10"},
+	{"0: SAD, no subpel",          "0", 0, "0"},
+	{"1: SAD, qpel",               "1", 1, "1"},
+	{"2: SATD, qpel",              "2", 2, "2"},
+	{"3: SATD: multi-qpel",        "3", 3, "3"},
+	{"4: SATD, qpel on all",       "4", 4, "4"},
+	{"5: SATD, multi-qpel on all", "5", 5, "5"},
+	{"6: RD in I/P-frames",        "6", 6, "6"},
+	{"7: RD in all frames",        "7", 7, "7"},
+	{"8: RD refine in I/P-frames", "8", 8, "8"},
+	{"9: RD refine in all frames", "9", 9, "9"},
+	{"10: QPRD in all frames",     "10", 10, "10"},
 };
 combo_opts_t subme_opts =
 {
@@ -322,10 +347,11 @@ combo_opts_t subme_opts =
 
 static options_map_t d_analyse_opts[] =
 {
-	{"Some", "some", 0, "some"},
+	{"Most", "p8x8,b8x8,i8x8,i4x4", 0, "p8x8,b8x8,i8x8,i4x4"},
 	{"None", "none", 1, "none"},
-	{"All",  "all",  2, "all"},
-	{"Custom",  "custom",  3, "all"},
+	{"Some", "i4x4,i8x8", 2, "i4x4,i8x8"},
+	{"All",  "all",  3, "all"},
+	{"Custom",  "custom",  4, "all"},
 };
 combo_opts_t analyse_opts =
 {
@@ -335,9 +361,9 @@ combo_opts_t analyse_opts =
 
 static options_map_t d_trellis_opts[] =
 {
-	{"Disabled",          "0", 0, "0"},
-	{"Final Macro Block", "1", 1, "1"},
-	{"Always",            "2", 2, "2"},
+	{"Off",         "0", 0, "0"},
+	{"Encode only", "1", 1, "1"},
+	{"Always",      "2", 2, "2"},
 };
 combo_opts_t trellis_opts =
 {
@@ -388,6 +414,8 @@ combo_name_map_t combo_name_map[] =
 	{"AudioEncoder", &acodec_opts},
 	{"x264_direct", &direct_opts},
 	{"x264_b_adapt", &badapt_opts},
+	{"x264_bpyramid", &bpyramid_opts},
+	{"x264_weighted_pframes", &weightp_opts},
 	{"x264_me", &me_opts},
 	{"x264_subme", &subme_opts},
 	{"x264_analyse", &analyse_opts},
@@ -1527,7 +1555,7 @@ ghb_grey_combo_options(GtkBuilder *builder)
 	container = ghb_lookup_combo_int("FileFormat", gval);
 	ghb_value_free(gval);
 
-	grey_combo_box_item(builder, "x264_analyse", 3, TRUE);
+	grey_combo_box_item(builder, "x264_analyse", 4, TRUE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_FAAC, FALSE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_LAME, FALSE);
 	grey_combo_box_item(builder, "AudioEncoder", HB_ACODEC_VORBIS, FALSE);
@@ -2285,7 +2313,7 @@ ghb_find_audio_track(
 	gint ii;
 	gint count = 0;
 	gint track = -1;
-	gint max_chan = 0;
+	gint max_chan;
 	gboolean *used = NULL;
 	gboolean *passthru_used;
 	gint try_acodec;
@@ -2304,6 +2332,7 @@ ghb_find_audio_track(
 	if (count > 10) count = 10;
 	// Try to find an item that matches the preferred language and
 	// the passthru codec type
+	max_chan = 0;
 	passthru = (acodec & (HB_ACODEC_AC3 | HB_ACODEC_DCA)) != 0;
 	if (passthru)
 	{
@@ -2390,8 +2419,6 @@ ghb_find_audio_track(
 	{
 		for (ii = 0; ii < count; ii++)
 		{
-			gint channels;
-
 			audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
 			passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
@@ -2438,6 +2465,8 @@ ghb_find_audio_track(
 		audio = (hb_audio_config_t*)hb_list_audio_config_item( 
 													title->list_audio, ii );
 		passthru_acodec = (HB_ACODEC_AC3 | HB_ACODEC_DCA) & audio->in.codec;
+		channels = HB_INPUT_CH_LAYOUT_GET_DISCRETE_COUNT(
+												audio->in.channel_layout);
 		if (passthru_acodec && passthru)
 		{
 			passthru_used = get_track_used(passthru_acodec, track_indices, count);
@@ -2816,12 +2845,14 @@ ghb_update_ui_combo_box(
 		generic_opts_set(ud->builder, "PictureDenoise", &denoise_opts);
 		generic_opts_set(ud->builder, "VideoEncoder", &vcodec_opts);
 		small_opts_set(ud->builder, "AudioEncoder", &acodec_opts);
-		generic_opts_set(ud->builder, "x264_direct", &direct_opts);
-		generic_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
-		generic_opts_set(ud->builder, "x264_me", &me_opts);
-		generic_opts_set(ud->builder, "x264_subme", &subme_opts);
-		generic_opts_set(ud->builder, "x264_analyse", &analyse_opts);
-		generic_opts_set(ud->builder, "x264_trellis", &trellis_opts);
+		small_opts_set(ud->builder, "x264_direct", &direct_opts);
+		small_opts_set(ud->builder, "x264_b_adapt", &badapt_opts);
+		small_opts_set(ud->builder, "x264_bpyramid", &bpyramid_opts);
+		small_opts_set(ud->builder, "x264_weighted_pframes", &weightp_opts);
+		small_opts_set(ud->builder, "x264_me", &me_opts);
+		small_opts_set(ud->builder, "x264_subme", &subme_opts);
+		small_opts_set(ud->builder, "x264_analyse", &analyse_opts);
+		small_opts_set(ud->builder, "x264_trellis", &trellis_opts);
 	}
 	else
 	{

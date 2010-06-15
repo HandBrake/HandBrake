@@ -753,6 +753,15 @@ xform_string_double(const GValue *sval, GValue *dval)
 }
 
 static void
+xform_double_string(const GValue *dval, GValue *sval)
+{
+	gchar *str;
+	double val = g_value_get_double(dval);
+	str = g_strdup_printf("%g", val);
+	g_value_take_string(sval, str);
+}
+
+static void
 xform_boolean_double(const GValue *bval, GValue *dval)
 {
 	gboolean b = g_value_get_boolean(bval);
@@ -771,4 +780,6 @@ ghb_register_transforms()
 								xform_string_double);
 	g_value_register_transform_func(G_TYPE_BOOLEAN, G_TYPE_DOUBLE, 
 								xform_boolean_double);
+	g_value_register_transform_func(G_TYPE_DOUBLE, G_TYPE_STRING, 
+								xform_double_string);
 }
