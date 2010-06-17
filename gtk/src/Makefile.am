@@ -124,8 +124,8 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	python $(srcdir)/makedeps.py
 
-resources.plist: create_resources.py resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget.deps widget_reverse.deps
-	python $(srcdir)/create_resources.py -I$(srcdir) $(srcdir)/resources.list resources.plist
+resources.plist: create_resources resources.list $(icons_dep) internal_defaults.xml standard_presets.xml ghb.ui widget.deps widget_reverse.deps
+	./create_resources -I$(srcdir) $(srcdir)/resources.list resources.plist
 
 ghbcellrenderertext.$(OBJEXT): marshalers.h
 

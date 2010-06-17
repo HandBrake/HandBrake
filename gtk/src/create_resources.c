@@ -7,6 +7,8 @@
 #include "icon_tools.h"
 #include "plist.h"
 #include "values.h"
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <gdk-pixbuf/gdk-pixdata.h>
 
 enum
 {
@@ -177,12 +179,42 @@ start_element(
 			if (filename && name)
 			{
 				ghb_rawdata_t *rd;
-				guint size;
+				GdkPixbuf *pb;
+				GError *err = NULL;
+
+				pb = gdk_pixbuf_new_from_file(filename, &err);
+				if (pb == NULL)
+				{
+					g_warning("Failed to open icon file %s: %s", filename, err->message);
+					break;
+				}
+				gval = ghb_dict_value_new();
+				int colorspace = gdk_pixbuf_get_colorspace(pb);
+				gboolean alpha = gdk_pixbuf_get_has_alpha(pb);
+				int width = gdk_pixbuf_get_width(pb);
+				int height = gdk_pixbuf_get_height(pb);
+				int bps = gdk_pixbuf_get_bits_per_sample(pb);
+				int rowstride = gdk_pixbuf_get_rowstride(pb);
+
+				ghb_dict_insert(gval, g_strdup("colorspace"), 
+								ghb_int_value_new(colorspace));
+				ghb_dict_insert(gval, g_strdup("alpha"), 
+								ghb_boolean_value_new(alpha));
+				ghb_dict_insert(gval, g_strdup("width"), 
+								ghb_int_value_new(width));
+				ghb_dict_insert(gval, g_strdup("height"), 
+								ghb_int_value_new(height));
+				ghb_dict_insert(gval, g_strdup("bps"), 
+								ghb_int_value_new(bps));
+				ghb_dict_insert(gval, g_strdup("rowstride"), 
+								ghb_int_value_new(rowstride));
 
 				rd = g_malloc(sizeof(ghb_rawdata_t));
-				rd->data = icon_file_serialize(filename, &size);
-				rd->size = size;
-				gval = ghb_rawdata_value_new(rd);
+				rd->data = gdk_pixbuf_get_pixels(pb);
+				rd->size = height * rowstride * bps / 8;
+				GValue *data = ghb_rawdata_value_new(rd);
+				ghb_dict_insert(gval, g_strdup("data"), data);
+
 				if (pd->key) g_free(pd->key);
 				pd->key = g_strdup(name);
 				g_free(filename);

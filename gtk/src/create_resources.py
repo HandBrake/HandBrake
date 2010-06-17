@@ -1,7 +1,6 @@
 #! /bin/python
 #
 
-import gtk
 import types
 import os
 import sys
@@ -10,7 +9,7 @@ import datetime
 import plistlib
 import getopt
 from xml.parsers import expat
-
+from gtk import gdk
 
 pl = dict()
 stack = list()
@@ -41,7 +40,7 @@ def start_element_handler(tag, attr):
 		key = attr["name"]
 		if fname != None and key != None:
 			val = dict()
-			pb = gtk.gdk.pixbuf_new_from_file(fname)
+			pb = gdk.pixbuf_new_from_file(fname)
 			val["colorspace"] = pb.get_colorspace()
 			val["alpha"] = pb.get_has_alpha()
 			val["bps"] = pb.get_bits_per_sample()
