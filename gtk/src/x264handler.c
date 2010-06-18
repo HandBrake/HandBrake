@@ -42,6 +42,38 @@ x264_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+x264_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+	ghb_widget_to_setting(ud->settings, widget);
+
+	// Lock slider values to multiples of step_increment
+	GtkAdjustment * adj = gtk_range_get_adjustment(GTK_RANGE(widget));
+	gdouble step = gtk_adjustment_get_step_increment(adj);
+	gdouble val = gtk_range_get_value(GTK_RANGE(widget));
+	gdouble new_val = ((int)((val + step / 2) / step)) * step;
+	gdouble diff = val - new_val;
+	if ( diff > 0.0001 || diff < -0.0001 )
+	{
+		gtk_range_set_value(GTK_RANGE(widget), new_val);
+	}
+	else if (!ignore_options_update)
+	{
+		ignore_options_update = TRUE;
+		x264_opt_update(ud, widget);
+		ignore_options_update = FALSE;
+	}
+	ghb_check_dependency(ud, widget, NULL);
+	ghb_clear_presets_selection(ud);
+}
+
+G_MODULE_EXPORT gchar*
+x264_format_slider_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+	return g_strdup_printf("%-6.6g", val);
+}
+
+
+G_MODULE_EXPORT void
 x264_me_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
 	gint me;
