@@ -1753,6 +1753,10 @@ namespace Handbrake
             {
                 this.checkMaximumFramerate.Visible = false;
                 this.checkMaximumFramerate.CheckState = CheckState.Unchecked;
+            } 
+            else
+            {
+                this.checkMaximumFramerate.Visible = true;
             }
         }
 
