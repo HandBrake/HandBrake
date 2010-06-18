@@ -515,7 +515,8 @@ static NSString *        ChooseSourceIdentifier             = @"Choose Source It
         fQueueStatus,fPresetsAdd,fPresetsDelete,fSrcAngleLabel,fSrcAnglePopUp,
 		fCreateChapterMarkers,fVidTurboPassCheck,fDstMp4LargeFileCheck,fSubForcedCheck,fPresetsOutlineView,
         fAudDrcLabel,fDstMp4HttpOptFileCheck,fDstMp4iPodFileCheck,fVidQualityRFField,fVidQualityRFLabel,
-        fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton};
+        fEncodeStartStopPopUp,fSrcTimeStartEncodingField,fSrcTimeEndEncodingField,fSrcFrameStartEncodingField,
+        fSrcFrameEndEncodingField, fLoadChaptersButton, fSaveChaptersButton, fFrameratePfrCheck};
     
     for( unsigned i = 0;
         i < sizeof( controls ) / sizeof( NSControl * ); i++ )
@@ -2186,6 +2187,7 @@ fWorkingCount = 0;
 	[queueFileJob setObject:[NSNumber numberWithFloat:[fVidQualityRFField floatValue]] forKey:@"VideoQualitySlider"];
     /* Framerate */
     [queueFileJob setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
+    [queueFileJob setObject:[NSNumber numberWithInt:[fFrameratePfrCheck state]] forKey:@"VideoFrameratePFR"];
     
 	/* 2 Pass Encoding */
 	[queueFileJob setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];
@@ -3032,7 +3034,14 @@ fWorkingCount = 0;
         /* We are not same as source so we set job->cfr to 1 
          * to enable constant frame rate since user has specified
          * a specific framerate*/
-        job->cfr = 1;
+        if ([fFrameratePfrCheck state] == 1)
+        {
+            job->cfr = 2;
+        }
+        else
+        {
+            job->cfr = 1;
+        }
     }
     else
     {
@@ -3589,7 +3598,15 @@ bool one_burned = FALSE;
         /* We are not same as source so we set job->cfr to 1 
          * to enable constant frame rate since user has specified
          * a specific framerate*/
-        job->cfr = 1;
+        
+        if ([[queueToApply objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+        {
+            job->cfr = 2;
+        }
+        else
+        {
+            job->cfr = 1;
+        }
     }
     else
     {
@@ -4751,6 +4768,17 @@ the user is using "Custom" settings by determining the sender*/
 
 - (IBAction ) videoFrameRateChanged: (id) sender
 {
+    /* Hide and set the PFR Checkbox to OFF if we are set to Same as Source */
+    if ([fVidRatePopUp indexOfSelectedItem] == 0)
+    {
+        [fFrameratePfrCheck setHidden:YES];
+        [fFrameratePfrCheck setState:0];
+    }
+    else
+    {
+        [fFrameratePfrCheck setHidden:NO];
+    }
+    
     /* We call method method to calculatePictureSizing to error check detelecine*/
     [self calculatePictureSizing: sender];
 
@@ -6550,7 +6578,9 @@ return YES;
         {
             [fVidRatePopUp selectItemWithTitle:[chosenPreset objectForKey:@"VideoFramerate"]];
         }
-        
+        /* Set PFR */
+        [fFrameratePfrCheck setState:[[chosenPreset objectForKey:@"VideoFrameratePFR"] intValue]];
+        [self videoFrameRateChanged:nil];
         
         /* 2 Pass Encoding */
         [fVidTwoPassCheck setState:[[chosenPreset objectForKey:@"VideoTwoPass"] intValue]];
@@ -7287,6 +7317,7 @@ return YES;
         {
             [preset setObject:[fVidRatePopUp titleOfSelectedItem] forKey:@"VideoFramerate"];
         }
+        [preset setObject:[NSNumber numberWithInt:[fFrameratePfrCheck state]] forKey:@"VideoFrameratePFR"];
         
         /* 2 Pass Encoding */
         [preset setObject:[NSNumber numberWithInt:[fVidTwoPassCheck state]] forKey:@"VideoTwoPass"];

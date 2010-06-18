@@ -1325,7 +1325,14 @@ return ![(HBQueueOutlineView*)outlineView isDragging];
         else
         {
             /* we have a specified, constant framerate */
+            if ([[item objectForKey:@"VideoFrameratePFR"] intValue] == 1)
+            {
+            videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (peak framerate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
+            }
+            else
+            {
             videoInfo = [NSString stringWithFormat:@"%@ Framerate: %@ (constant framerate)", videoInfo ,[item objectForKey:@"VideoFramerate"]];
+            }
         }
         
         if ([[item objectForKey:@"VideoQualityType"] intValue] == 0)// Target Size MB
