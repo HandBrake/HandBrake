@@ -25,6 +25,7 @@ dep_map = (
 	DepEntry("vquality_type_constant", "VideoQualitySlider", "TRUE", False, False),
 	DepEntry("vquality_type_constant", "VideoTwoPass", "TRUE", True, False),
 	DepEntry("vquality_type_constant", "VideoTurboTwoPass", "TRUE", True, False),
+	DepEntry("VideoFramerate", "VideoFrameratePFR", "source", True, False),
 	DepEntry("VideoTwoPass", "VideoTurboTwoPass", "TRUE", False, False),
 	DepEntry("FileFormat", "Mp4LargeFile", "mp4", False, True),
 	DepEntry("FileFormat", "Mp4HttpOptimize", "mp4", False, True),
