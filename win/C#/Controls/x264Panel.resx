@@ -125,122 +125,121 @@
 as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise.</value>
   </data>
   <data name="drop_adaptBFrames.ToolTip" xml:space="preserve">
-    <value>When adaptive B-Frames are disabled, the number of B-Frames you specify is the constant length of every B-Frame sequence. 
-When one of the adaptive modes is enabled, the number of B-Frames is treated as a maximum, with the length of each sequence varying, but never exceeding the max.
+    <value>x264 has a variety of algorithms to decide when to use B-frames and how many to use.
 
-Fast mode takes the same amount of time no matter how many B-frames you specify. However, it doesn't always make the best decisions on how many B-Frames to use in a sequence.
+Fast mode takes roughly the same amount of time no matter how many B-frames you specify.  However, while fast, its decisions are often suboptimal.
 
-Optimal mode gets slower as the maximum number of B-Frames increases, but does a much better job at deciding sequence length, which can mean smaller file sizes and better quality.</value>
+Optimal mode gets slower as the maximum number of B-Frames increases, but makes much more accurate decisions, especially when used with B-pyramid.</value>
   </data>
   <data name="check_Cabac.ToolTip" xml:space="preserve">
-    <value>CABAC, or context adaptive binary arithmetic coding, is used by x264 to reduce the bitrate needed for a given quality by 15\%. 
-This makes it very cool and very useful, and it should be left on whenever possible. However, it is incompatible with the iPod, and makes the AppleTV struggle. So turn it off for those.
-
-CABAC is a kind of entropy coding, which means that it compresses data by making shorthand symbols to represent long streams of data. The \"entropy\" part means that the symbols it uses the most often are the smallest. 
-When you disable CABAC, another entropy coding scheme gets enabled, called CAVLC (context adaptive variable-length coding). 
-CAVLC is a lot less efficient, which is why it needs 15\% more bitrate to achieve the same quality as CABAC.</value>
+    <value>After the encoder has done its work, it has a bunch of data that needs to be compressed losslessly, similar to ZIP or RAR.  
+H.264 provides two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but compresses significantly better (10-30%), especially at lower bitrates.  
+If you're looking to minimize CPU requirements for video playback, disable this option.
+Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled.</value>
   </data>
   <data name="check_noDCTDecimate.ToolTip" xml:space="preserve">
-    <value>To save space, x264 will \"zero out\" blocks when it thinks they won't be perceptible by the viewer. 
-This negligibly reduces quality, but in rare cases it can mess up and produce visible artifacts. 
-This situation can be alleviated by telling x264 not to decimate DCT blocks.
-
-It increases quality but also bitrate/file size, so if you use it when you've specified a target bitrate you will end up with a worse picture than without it. 
-However, when used with constant quality encoding, or if you boost the average bitrate to compensate, you might get a better result.</value>
+    <value>x264 normally zeroes out nearly-empty data blocks to save bits to be better used for some other purpose in the video.  
+However, this can sometimes have slight negative effects on retention of subtle grain and dither.  
+Don't touch this unless you're having banding issues or other such cases where you are having trouble keeping fine noise.</value>
   </data>
   <data name="drop_trellis.ToolTip" xml:space="preserve">
-    <value>Trellis fine-tunes how bitrate is doled out, so it can reduce file size/bitrate or increase quality. 
-A value of 1 means it only fine-tunes the final encode of a block of pixels, while 2 means it is considered during earlier phases of the decision-making process as well.</value>
+    <value>Trellis fine-tunes the rounding of transform coefficients to squeeze out 3-5% more compression at the cost of some speed. 
+\"Always\" uses trellis not only during the main encoding process, but also during analysis, 
+which improves compression even more, albeit at great speed cost.  
+
+Trellis costs more speed at higher bitrates and requires CABAC.</value>
   </data>
   <data name="drop_deblockBeta.ToolTip" xml:space="preserve">
-    <value>x264 includes an in-loop deblocking filter. What this means is that blocky compression artifacts are smoothed away when you play back the video. 
-It has two settings: strength and threshold, just like a simple filter in Photoshop.
+    <value>H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. 
+The deblocking filter takes a lot of CPU power, so if you're looking to minimize CPU requirements for video playback, disable it.
 
-Strength controls the amount of deblocking applied to the whole frame. If you drop down below 0, you reduce the amount of blurring. 
-Go too negative, and you'll get an effect somewhat like oversharpening an image. Go into positive values, and the image may become too soft.
-
-Threshold controls how sensitive the filter is to whether something in a block is detail that needs to be preserved: lower numbers blur details less.
-
-The default deblocking values are 0 and 0. 
-This does not mean zero deblocking. 
-It means x264 will apply the regular deblocking strength and thresholds the codec authors have selected as working the best in most cases.
-
-While many, many people stick with the default deblocking values of 0,0, and you should never change the deblocking without disabling adaptive quantization, 
-other people disagree. 
-Some prefer a slightly less blurred image for live action material, and use values like -2,-1 or -2,-2. Others will raise it to 1,1 or even 3,3 for animation. 
-While the values for each setting extend from -6 to 6, the consensus is that going below -3 or above 3 is worthless.</value>
+The deblocking filter has two adjustable parameters, \"strength\" and \"threshold\". 
+The former controls how strong (or weak) the deblocker is, while the latter controls how many (or few)  edges it applies to. 
+Lower values mean less deblocking, higher values mean more deblocking. The default is 0 (normal strength) for both parameters.</value>
   </data>
   <data name="drop_deblockAlpha.ToolTip" xml:space="preserve">
-    <value>x264 includes an in-loop deblocking filter. What this means is that blocky compression artifacts are smoothed away when you play back the video. 
-It has two settings: strength and threshold, just like a simple filter in Photoshop.
+    <value>H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. 
+The deblocking filter takes a lot of CPU power, so if you're looking to minimize CPU requirements for video playback, disable it.
 
-Strength controls the amount of deblocking applied to the whole frame. If you drop down below 0, you reduce the amount of blurring. 
-Go too negative, and you'll get an effect somewhat like oversharpening an image. Go into positive values, and the image may become too soft.
-
-Threshold controls how sensitive the filter is to whether something in a block is detail that needs to be preserved: lower numbers blur details less.
-
-The default deblocking values are 0 and 0. 
-This does not mean zero deblocking. 
-It means x264 will apply the regular deblocking strength and thresholds the codec authors have selected as working the best in most cases.
-
-While many, many people stick with the default deblocking values of 0,0, and you should never change the deblocking without disabling adaptive quantization, 
-other people disagree. 
-Some prefer a slightly less blurred image for live action material, and use values like -2,-1 or -2,-2. Others will raise it to 1,1 or even 3,3 for animation. 
-While the values for each setting extend from -6 to 6, the consensus is that going below -3 or above 3 is worthless.</value>
+The deblocking filter has two adjustable parameters, \"strength\" and \"threshold\". 
+The former controls how strong (or weak) the deblocker is, while the latter controls how many (or few)  edges it applies to. 
+Lower values mean less deblocking, higher values mean more deblocking. The default is 0 (normal strength) for both parameters.</value>
   </data>
   <data name="check_8x8DCT.ToolTip" xml:space="preserve">
-    <value>Checking this box lets x264 break key frames down into 8x8 blocks of pixels for analysis. 
-This is a high profile feature of H.264, which makes it less compatible. It should slightly decrease bitrate or improve quality. 
-Turn it on whenever possible.</value>
+    <value>The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.  
+It improves compression by at least 5% at a very small speed cost and may provide an unusually high visual quality benefit compared to its compression gain.  
+However, it requires High Profile, which many devices may not support.</value>
   </data>
   <data name="drop_analysis.ToolTip" xml:space="preserve">
-    <value>Analysis controls how finely x264 divides up a frame to capture detail. Full macroblocks are 16x16 pixels, but x264 can go down all the way to 4x4 blocks if it judges it necessary. 
-By default it only breaks up key frames that much. To give x264 the freedom to make the best decisions for all frames, use \"all\" analysis. 
-If you want to create a high profile H.264 video (which is less compatible with the world at large than main profile), also check the \"8x8 DCT blocks\" box to add yet another block size for analysis.</value>
+    <value>Mode decision picks from a variety of options to make its decision: this option chooses what options those are.  
+Fewer partitions to check means faster encoding, at the cost of worse decisions, since the best option might have been one that was turned off.</value>
   </data>
   <data name="drop_subpixelMotionEstimation.ToolTip" xml:space="preserve">
-    <value>This setting is finer-grained than the motion estimation settings above. Instead of dealing with whole pixels, it deals with 4 fractional pixels, or quarter pixels (qpel). 
-Higher levels increase quality by further refining the motion prediction for these quarter pixels, but take longer to encode.
+    <value>This setting controls both subpixel-precision motion estimation and mode decision methods.
 
-Level 6, turns on a feature called rate distortion optimization, including psychovisual enhancements. 
-7, the default, enables that rate distortion for B-frames.
-8 refines those decisions for I and P frames, and 9 adds on refinement for B-frames as well.</value>
+Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.
+
+Mode decision is the method used to choose how to encode each block of the frame: a very important decision.
+
+SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.
+6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.
+10, the most powerful and slowest option, requires trellis=2.</value>
   </data>
   <data name="drop_MotionEstimationRange.ToolTip" xml:space="preserve">
-    <value>This range is the radius, in pixels, x264 should use for motion estimation searches. 
-It only has an effect when you use Uneven Multi-Hexagonal, Exhaustive, or Transformed Exhaustive searching. 
-24, 32, and 64 are good values, with each being progressively smaller for progressively less improvement to picture quality.</value>
+    <value>This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
+Doesn't apply to Diamond or Hexagon search options.  
+The default is fine for most content, but extremely high motion video, especially at HD resolutions, may benefit from higher ranges, albeit at a high speed cost.</value>
   </data>
   <data name="drop_MotionEstimationMethod.ToolTip" xml:space="preserve">
-    <value>Controls the motion estimation method. 
-Motion estimation is how the encoder decides how each block of pixels in a frame has moved, compared to most similar blocks in the other frames it references. 
-There are many ways of finding the most similar blocks, with varying speeds and accuracy.
+    <value>Controls the motion estimation method. Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.  
+A better motion search method improves compression at the cost of speed.
 
-At the most basic setting, dia, x264 will only consider a diamond-shaped region around each pixel.
+Diamond: performs an extremely fast and simple search using a diamond pattern.
 
-The default setting, hex, is similar to dia but uses a hexagon shape.
+Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
 
-Uneven multi-hexagon, umh, searches a number of different patterns across a wider area and thus is slower than hex and dia but further increases compression efficiency and quality.
+Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
 
-esa, an exhaustive search of a square around each pixel (whose size is controlled by the me-range parameter), is much slower and offers only minimal quality gains.
+Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.
 
-tesa, transformed exhaustive search, which performs just as thorough a search, is slower still but offers further slight improvements to quality.</value>
-  </data>
-  <data name="check_pyrmidalBFrames.ToolTip" xml:space="preserve">
-    <value>B-frame pyramids are a High Profile feature. Pyramidal B-frames mean that B-frames don't just reference surrounding reference frames - 
-instead, it also treats a previous B-frame as a reference, improving quality/lowering bitrate at the expense of complexity. 
-Logically, to reference an earlier B-frame, you must tell x264 to use at least 2 B-frames.</value>
-  </data>
-  <data name="check_weightedBFrames.ToolTip" xml:space="preserve">
-    <value>Sometimes x264 will base a B-frame's motion compensation on frames both before and after. 
-With weighted B-frames, the amount of influence each frame has is related to its distance from the frame being encoded, 
-instead of both having equal influence. 
-The AppleTV can have issues with this.</value>
+Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement.</value>
   </data>
   <data name="drop_directPrediction.ToolTip" xml:space="preserve">
-    <value>Direct prediction tells x264 what method to use when guessing motion for certain parts of a B-frame. 
-It can either look at other parts of the current frame (spatial) or compare against the following P-frameframe (temporal). 
-You're best off setting this to automatic, so x264 decides which method is best on its own. 
-Don't select none assuming it will be faster; instead it will take longer and look worse. If you're going to choose between spatial and temporal, spatial is usually better.</value>
+    <value>H.264 allows for two different prediction modes, spatial and temporal, in B-frames.
+
+Spatial, the default, is almost always better, but temporal is sometimes useful too.
+
+x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain), adaptively select which is better for each particular frame.</value>
+  </data>
+  <data name="drop_bFrames.ToolTip" xml:space="preserve">
+    <value>Sane values are ~2-5.  
+This specifies the maximum number of sequential B-frames that the encoder can use. 
+ Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.  
+Cel-animated source material and B-pyramid also significantly increase the usefulness of larger values. 
+Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off).</value>
+  </data>
+  <data name="drop_refFrames.ToolTip" xml:space="preserve">
+    <value>Sane values are ~1-6.  
+The more you add, the better the compression, but the slower the encode.  
+Cel animation tends to benefit from more reference frames a lot more than film content. 
+Note that many hardware devices have limitations on the number of supported reference frames, so if you're encoding for a handheld or standalone player, 
+don't touch this unless you're absolutely sure you know what you're doing!</value>
+  </data>
+  <data name="check_weightp.ToolTip" xml:space="preserve">
+    <value>Performs extra analysis to decide upon weighting parameters for each frame.  
+This improves overall compression slightly and improves the quality of fades greatly. 
+Baseline profile, as required for iPods and similar devices, requires weighted P-frame prediction to be disabled.  
+Note that some devices and players, even those that support Main Profile, 
+may have problems with Weighted P-frame prediction: the Apple TV is completely incompatible with it, for example.</value>
+  </data>
+  <data name="slider_adaptiveQuantStrength.ToolTip" xml:space="preserve">
+    <value>Psychovisual Rate Distortion Optimization sure is a mouthful, isn't it? Basically, it means x264 tries to retain detail, for better quality to the human eye, 
+as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise.</value>
+  </data>
+  <data name="combo_pyrmidalBFrames.ToolTip" xml:space="preserve">
+    <value>This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
+Doesn't apply to Diamond or Hexagon search options.  
+The default is fine for most content, but extremely high motion video, especially at HD resolutions, 
+may benefit from higher ranges, albeit at a high speed cost.</value>
   </data>
 </root>

@@ -48,11 +48,9 @@ namespace Handbrake.Controls
         {
             check_8x8DCT.CheckState = CheckState.Checked;
             check_Cabac.CheckState = CheckState.Checked;
-            check_mixedReferences.CheckState = CheckState.Checked;
+            check_weightp.CheckState = CheckState.Checked;
             check_noDCTDecimate.CheckState = CheckState.Unchecked;
-            check_noFastPSkip.CheckState = CheckState.Unchecked;
-            check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
-            check_weightedBFrames.CheckState = CheckState.Checked;
+            combo_pyrmidalBFrames.SelectedIndex = 0;
             drop_analysis.SelectedIndex = 0;
             drop_bFrames.SelectedIndex = 0;
             drop_deblockAlpha.SelectedIndex = 0;
@@ -70,10 +68,11 @@ namespace Handbrake.Controls
             rtf_x264Query.Text = string.Empty;
         }
 
+        #region Standardize Option String
         /// <summary>
         /// Iterate over every x264 option, standardize it, write the full string to the x264 rtf box
         /// </summary>
-        public void X264_StandardizeOptString()
+        public void StandardizeOptString()
         {
             /* Set widgets depending on the opt string in field */
             string thisOpt; // The separated option such as "bframes=3"
@@ -109,14 +108,14 @@ namespace Handbrake.Controls
                             optValue = splitOptRange[1];
 
                             /* Standardize the names here depending on whats in the string */
-                            optName = X264_StandardizeOptNames(optName);
+                            optName = StandardizeOptName(optName);
                             thisOpt = optName + "=" + optValue;
                         }
                         else // No value given so we use a default of "1"
                         {
                             optName = thisOpt;
                             /* Standardize the names here depending on whats in the string */
-                            optName = X264_StandardizeOptNames(optName);
+                            optName = StandardizeOptName(optName);
                             thisOpt = optName + "=1";
                         }
                     }
@@ -146,16 +145,13 @@ namespace Handbrake.Controls
         /// </summary>
         /// <param name="cleanOptNameString">a string of x264 options to clean</param>
         /// <returns>A string containing standardized x264 option names</returns>
-        private static string X264_StandardizeOptNames(string cleanOptNameString)
+        private static string StandardizeOptName(string cleanOptNameString)
         {
             string input = cleanOptNameString;
 
+            /* Reference Frames */
             if (input.Equals("ref") || input.Equals("frameref"))
                 cleanOptNameString = "ref";
-
-            /*No Fast PSkip nofast_pskip*/
-            if (input.Equals("no-fast-pskip") || input.Equals("no_fast_pskip") || input.Equals("nofast_pskip"))
-                cleanOptNameString = "no-fast-pskip";
 
             /*No Dict Decimate*/
             if (input.Equals("no-dct-decimate") || input.Equals("no_dct_decimate") || input.Equals("nodct_decimate"))
@@ -168,10 +164,6 @@ namespace Handbrake.Controls
             /*ME Range*/
             if (input.Equals("me-range") || input.Equals("me_range"))
                 cleanOptNameString = "merange";
-
-            /*WeightB*/
-            if (input.Equals("weight-b") || input.Equals("weight_b"))
-                cleanOptNameString = "weightb";
 
             /*B Pyramid*/
             if (input.Equals("b_pyramid"))
@@ -191,11 +183,12 @@ namespace Handbrake.Controls
 
             return cleanOptNameString;
         }
+        #endregion
 
         /// <summary>
         /// Resets the GUI widgets to the contents of the option string.
         /// </summary>
-        public void X264_SetCurrentSettingsInPanel()
+        public void SetCurrentSettingsInPanel()
         {
             /* Set widgets depending on the opt string in field */
             string thisOpt; // The separated option such as "bframes=3"
@@ -237,8 +230,8 @@ namespace Handbrake.Controls
                             case "ref":
                                 drop_refFrames.SelectedItem = optValue;
                                 continue;
-                            case "no-fast-pskip":
-                                check_noFastPSkip.CheckState = CheckState.Checked;
+                            case "weightp":
+                                this.check_weightp.CheckState = optValue == "0" ? CheckState.Unchecked : CheckState.Checked;
                                 continue;
                             case "no-dct-decimate":
                                 check_noDCTDecimate.CheckState = CheckState.Checked;
@@ -247,10 +240,18 @@ namespace Handbrake.Controls
                                 drop_subpixelMotionEstimation.SelectedItem = optValue;
                                 continue;
                             case "trellis":
-                                drop_trellis.SelectedItem = optValue;
-                                continue;
-                            case "mixed-refs":
-                                check_mixedReferences.CheckState = CheckState.Checked;
+                                switch (optValue)
+                                {
+                                    case "0":
+                                        drop_trellis.SelectedIndex = 1;
+                                        break;
+                                    case "1":
+                                         drop_trellis.SelectedIndex = 2;
+                                        break;
+                                    case "2":
+                                        drop_trellis.SelectedIndex = 3;
+                                        break;
+                                }
                                 continue;
                             case "me":
                                 if (optValue.Equals("dia"))
@@ -272,14 +273,19 @@ namespace Handbrake.Controls
                                 int.TryParse(optValue, out badapt);
                                 drop_adaptBFrames.SelectedIndex = (badapt + 1);
                                 continue;
-                            case "weightb":
-                                if (optValue != "0")
-                                    check_weightedBFrames.CheckState = CheckState.Checked;
-                                else
-                                    check_weightedBFrames.CheckState = CheckState.Unchecked;
-                                continue;
                             case "b-pyramid":
-                                check_pyrmidalBFrames.CheckState = CheckState.Checked;
+                                switch (optValue)
+                                {
+                                    case "normal":
+                                        combo_pyrmidalBFrames.SelectedIndex = 0;
+                                        break;
+                                    case "strict":
+                                        combo_pyrmidalBFrames.SelectedIndex = 2;
+                                        break;
+                                    case "none":
+                                        combo_pyrmidalBFrames.SelectedIndex = 1;
+                                        break;
+                                }
                                 continue;
                             case "direct":
                                 if (optValue == "auto")
@@ -315,14 +321,23 @@ namespace Handbrake.Controls
                                 continue;
                             case "analyse":
                                 if (optValue.Equals("p8x8,b8x8,i8x8,i4x4"))
-                                    drop_analysis.SelectedItem = "Default (some)";
+                                    drop_analysis.SelectedItem = "Default (most)";
                                 if (optValue.Equals("none"))
                                     drop_analysis.SelectedItem = "None";
+                                if (optValue.Equals("i4x4,i8x8"))
+                                    drop_analysis.SelectedItem = "Some";
                                 if (optValue.Equals("all"))
                                     drop_analysis.SelectedItem = "All";
                                 continue;
                             case "8x8dct":
                                 check_8x8DCT.CheckState = optValue == "1" ? CheckState.Checked : CheckState.Unchecked;
+                                continue;
+                            case "aq-strength":
+                                float value;
+                                float.TryParse(optValue, out value);
+                                int sliderValue;
+                                int.TryParse((value * 10).ToString(), out sliderValue);
+                                slider_adaptiveQuantStrength.Value = sliderValue;
                                 continue;
                             case "cabac":
                                 check_Cabac.CheckState = CheckState.Unchecked;
@@ -336,7 +351,7 @@ namespace Handbrake.Controls
                                 // default psy-rd = 1 (10 for the slider)
                                 psyrd = double.TryParse(x[0], out psyrd) ? psyrd * 10 : 10.0;
                                 // default psy-trellis = 0
-                                psytrellis = double.TryParse(x[1], out psytrellis) ? psytrellis * 10 : 0.0;
+                                psytrellis = double.TryParse(x[1], out psytrellis) ? psytrellis * 20 : 0.0;
 
                                 int.TryParse(psyrd.ToString(), out val);
                                 int.TryParse(psytrellis.ToString(), out val2);
@@ -368,8 +383,7 @@ namespace Handbrake.Controls
             string checkOptNameToChangeBegin = optNameToChange + "=";
 
             // IF the current H264 Option String Contains Multiple Items or Just 1 Item
-            if ((currentOptString.Contains(checkOptNameToChange)) ||
-                (currentOptString.StartsWith(checkOptNameToChangeBegin)))
+            if ((currentOptString.Contains(checkOptNameToChange)) || (currentOptString.StartsWith(checkOptNameToChangeBegin)))
                 HasOptions(currentOptString, optNameToChange);
             else // IF there is no options in the rich text box!
                 HasNoOptions(optNameToChange);
@@ -437,6 +451,17 @@ namespace Handbrake.Controls
                             else if ((!da.Contains("Default")) && (!db.Contains("Default")))
                                 thisOpt = "deblock=" + da + "," + db;
                         }
+                        else if (optNameToChange.Equals("aq-strength"))
+                        {
+                            if (slider_adaptiveQuantStrength.Value == 10)
+                                thisOpt = string.Empty;
+                            else
+                            {
+                                double value = slider_adaptiveQuantStrength.Value * 0.1;
+                                string aqs = value.ToString("f1");
+                                thisOpt = "aq-strength=" + aqs;
+                            }
+                        }
                         else if (optNameToChange.Equals("psy-rd"))
                         {
                             if (slider_psyrd.Value == 10 && slider_psytrellis.Value == 0)
@@ -444,30 +469,37 @@ namespace Handbrake.Controls
                             else
                             {
                                 double psyrd = slider_psyrd.Value * 0.1;
-                                double psytre = slider_psytrellis.Value * 0.1;
+                                double psytre = slider_psytrellis.Value * 0.05;
 
-                                string rd = psyrd.ToString("f1");
-                                string rt = psytre.ToString("f1");
+                                string rd = psyrd.ToString("f2");
+                                string rt = psytre.ToString("f2");
 
                                 thisOpt = "psy-rd=" + rd + "," + rt;
                             }
                         }
-                        else if (optNameToChange.Equals("mixed-refs"))
-                            thisOpt = check_mixedReferences.CheckState == CheckState.Checked
-                                          ? "mixed-refs=1"
-                                          : "mixed-refs=0";
-                        else if (optNameToChange.Equals("weightb"))
-                            thisOpt = check_weightedBFrames.CheckState == CheckState.Checked ? string.Empty : "weightb=0";
                         else if (optNameToChange.Equals("b-pyramid"))
-                            thisOpt = check_pyrmidalBFrames.CheckState == CheckState.Checked ? "b-pyramid=1" : string.Empty;
-                        else if (optNameToChange.Equals("no-fast-pskip"))
-                            thisOpt = check_noFastPSkip.CheckState == CheckState.Checked ? "no-fast-pskip=1" : string.Empty;
+                        {
+                            switch (combo_pyrmidalBFrames.SelectedIndex)
+                            {
+                                case 0: // Default
+                                    thisOpt = string.Empty;
+                                    break;
+                                case 1: // Off
+                                    thisOpt = "b-pyramid=none";
+                                    break;
+                                case 2: // Strict
+                                    thisOpt = "b-pyramid=strict";
+                                    break;
+                            }
+                        }
                         else if (optNameToChange.Equals("no-dct-decimate"))
                             thisOpt = check_noDCTDecimate.CheckState == CheckState.Checked ? "no-dct-decimate=1" : string.Empty;
                         else if (optNameToChange.Equals("8x8dct"))
-                            thisOpt = check_8x8DCT.CheckState == CheckState.Checked ? "8x8dct=1" : "8x8dct=0";
+                            thisOpt = check_8x8DCT.CheckState == CheckState.Unchecked ? "8x8dct=0" : string.Empty;
                         else if (optNameToChange.Equals("cabac"))
                             thisOpt = check_Cabac.CheckState == CheckState.Checked ? string.Empty : "cabac=0";
+                        else if (optNameToChange.Equals("weightp"))
+                            thisOpt = check_Cabac.CheckState == CheckState.Checked ? string.Empty : "weightp=0";
                         else if (optNameToChange.Equals("me"))
                         {
                             switch (drop_MotionEstimationMethod.SelectedIndex)
@@ -531,6 +563,10 @@ namespace Handbrake.Controls
                                     break;
 
                                 case 2:
+                                    thisOpt = "analyse=some";
+                                    break;
+
+                                case 3:
                                     thisOpt = "analyse=all";
                                     break;
 
@@ -567,16 +603,28 @@ namespace Handbrake.Controls
                         else if (optNameToChange.Equals("subq"))
                         {
                             string value = drop_subpixelMotionEstimation.SelectedItem.ToString();
+                            string[] val = value.Split(':');
                             thisOpt = !drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default")
-                                          ? "subq=" + value
+                                          ? "subq=" + val[0]
                                           : string.Empty;
                         }
                         else if (optNameToChange.Equals("trellis"))
                         {
-                            string value = drop_trellis.SelectedItem.ToString();
-                            thisOpt = !drop_trellis.SelectedItem.ToString().Contains("Default")
-                                          ? "trellis=" + value
-                                          : string.Empty;
+                            switch (drop_trellis.SelectedIndex)
+                            {
+                                case 1: // Off
+                                    thisOpt = "trellis=0";
+                                    break;
+                                case 2: // Encode Only
+                                    thisOpt = "trellis=1";
+                                    break;
+                                case 3: // Always
+                                    thisOpt = "trellis=2";
+                                    break;
+                                default:
+                                    thisOpt = string.Empty;
+                                    break;
+                            }
                         }
                     }
                 }
@@ -664,6 +712,10 @@ namespace Handbrake.Controls
                         break;
 
                     case 2:
+                        query = query + colon + "analyse=some";
+                        break;
+
+                    case 3:
                         query = query + colon + "analyse=all";
                         break;
 
@@ -702,6 +754,17 @@ namespace Handbrake.Controls
                     query = query + colon + "deblock=" + da + "," + db;
                 }
             }
+            else if (optNameToChange.Equals("aq-strength"))
+            {
+                if (slider_adaptiveQuantStrength.Value == 10)
+                    query = string.Empty;
+                else
+                {
+                    double value = slider_adaptiveQuantStrength.Value * 0.1;
+                    string aqs = value.ToString("f1");
+                    query += colon + "aq-strength=" + aqs;
+                }
+            }
             else if (optNameToChange.Equals("psy-rd"))
             {
                 if (slider_psyrd.Value == 10 && slider_psytrellis.Value == 0)
@@ -709,35 +772,27 @@ namespace Handbrake.Controls
                 else
                 {
                     double psyrd = slider_psyrd.Value * 0.1;
-                    double psytre = slider_psytrellis.Value * 0.1;
+                    double psytre = slider_psytrellis.Value * 0.05;
 
                     string rd = psyrd.ToString("f1");
-                    string rt = psytre.ToString("f1");
+                    string rt = psytre.ToString("f2");
 
                     query += colon + "psy-rd=" + rd + "," + rt;
                 }
             }
-            else if (optNameToChange.Equals("mixed-refs"))
-            {
-                if (check_mixedReferences.CheckState == CheckState.Checked)
-                    query = query + colon + "mixed-refs=1";
-                else
-                    query = query + colon + "mixed-refs=0";
-            }
-            else if (optNameToChange.Equals("weightb"))
-            {
-                if (check_weightedBFrames.CheckState != CheckState.Checked)
-                    query = query + colon + "weightb=0";
-            }
             else if (optNameToChange.Equals("b-pyramid"))
             {
-                if (check_pyrmidalBFrames.CheckState == CheckState.Checked)
-                    query = query + colon + "b-pyramid=1";
-            }
-            else if (optNameToChange.Equals("no-fast-pskip"))
-            {
-                if (check_noFastPSkip.CheckState == CheckState.Checked)
-                    query = query + colon + "no-fast-pskip=1";
+                switch (combo_pyrmidalBFrames.SelectedIndex)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        query = query + colon + "b-pyramid=none";
+                        break;
+                    case 2:
+                        query = query + colon + "b-pyramid=strict";
+                        break;
+                }
             }
             else if (optNameToChange.Equals("no-dct-decimate"))
             {
@@ -746,13 +801,18 @@ namespace Handbrake.Controls
             }
             else if (optNameToChange.Equals("8x8dct"))
             {
-                if (check_8x8DCT.CheckState == CheckState.Checked)
-                    query = query + colon + "8x8dct=1";
+                if (check_8x8DCT.CheckState == CheckState.Unchecked)
+                    query = query + colon + "8x8dct=0";
             }
             else if (optNameToChange.Equals("cabac"))
             {
                 if (check_Cabac.CheckState != CheckState.Checked)
                     query = query + colon + "cabac=0";
+            }
+            else if (optNameToChange.Equals("weightp"))
+            {
+                if (check_weightp.CheckState != CheckState.Unchecked)
+                    query = query + colon + "weightp=0";
             }
             else if (optNameToChange.Equals("ref"))
             {
@@ -769,12 +829,27 @@ namespace Handbrake.Controls
             {
                 string value = drop_subpixelMotionEstimation.SelectedItem.ToString();
                 if (!drop_subpixelMotionEstimation.SelectedItem.ToString().Contains("Default"))
-                    query = query + colon + "subq=" + value;
+                {
+                    string[] val = value.Split(':');
+                    query = query + colon + "subq=" + val[0];
+                }
             }
             else if (optNameToChange.Equals("trellis"))
             {
-                if (!drop_trellis.SelectedItem.ToString().Contains("Default"))
-                    query = query + colon + "trellis=" + drop_trellis.SelectedItem;
+                switch (drop_trellis.SelectedIndex)
+                {
+                    case 1: // Off
+                        query = query + colon + "trellis=0";
+                        break;
+                    case 2: // Encode Only
+                        query = query + colon + "trellis=1";
+                        break;
+                    case 3: // Always
+                        query = query + colon + "trellis=2";
+                        break;
+                    default:
+                        break;
+                }
             }
 
             rtf_x264Query.Text = query;
@@ -788,9 +863,7 @@ namespace Handbrake.Controls
         {
             /* Lots of situations to cover.
                - B-frames (when 0 turn of b-frame specific stuff, when < 2 disable b-pyramid)
-               - CABAC (when 0 turn off trellis)
-               - analysis (if none, turn off 8x8dct)
-               - refs (under 2, disable mixed-refs)
+               - CABAC (when 0 turn off trellis and psy-trel
                - subme (if under 6, turn off psy-rd and psy-trel)
                - trellis (if 0, turn off psy-trel)
              */
@@ -798,18 +871,16 @@ namespace Handbrake.Controls
             switch (sender)
             {
                 case "bframes":
-                    if (drop_bFrames.SelectedIndex > 0 && drop_bFrames.SelectedIndex < 2)
+                    if (drop_bFrames.SelectedIndex == 1)
                     {
-                        /* If the b-frame widget is at 0 or 1, the user has chosen
+                        /* If the b-frame widget is at 1, the user has chosen
                            not to use b-frames at all. So disable the options
                            that can only be used when b-frames are enabled.        */
-                        check_weightedBFrames.Visible = false;
-                        check_pyrmidalBFrames.Visible = false;
+                        combo_pyrmidalBFrames.Visible = false;
                         drop_directPrediction.Visible = false;
                         lbl_direct_prediction.Visible = false;
 
-                        check_weightedBFrames.CheckState = CheckState.Unchecked;
-                        check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
+                        combo_pyrmidalBFrames.SelectedIndex = 0;
                         drop_directPrediction.SelectedIndex = 0;
 
                         drop_adaptBFrames.Visible = false;
@@ -819,10 +890,9 @@ namespace Handbrake.Controls
                     else if (drop_bFrames.SelectedIndex == 2)
                     {
                         /* Only 1 b-frame? Disable b-pyramid. */
-                        check_pyrmidalBFrames.Visible = false;
-                        check_pyrmidalBFrames.CheckState = CheckState.Unchecked;
+                        combo_pyrmidalBFrames.Visible = false;
+                        combo_pyrmidalBFrames.SelectedIndex = 0;
 
-                        check_weightedBFrames.Visible = true;
                         drop_directPrediction.Visible = true;
                         lbl_direct_prediction.Visible = true;
 
@@ -831,8 +901,7 @@ namespace Handbrake.Controls
                     }
                     else
                     {
-                        check_weightedBFrames.Visible = true;
-                        check_pyrmidalBFrames.Visible = true;
+                        combo_pyrmidalBFrames.Visible = true;
                         drop_directPrediction.Visible = true;
                         lbl_direct_prediction.Visible = true;
 
@@ -847,33 +916,19 @@ namespace Handbrake.Controls
                         drop_trellis.Visible = false;
                         drop_trellis.SelectedIndex = 0;
                         lbl_trellis.Visible = false;
+
+                        slider_psytrellis.Visible = false;
+                        lbl_psytrellis.Visible = false;
+                        slider_psytrellis.Value = 0;
                     }
                     else
                     {
                         drop_trellis.Visible = true;
                         lbl_trellis.Visible = true;
+
+                        slider_psytrellis.Visible = true;
+                        lbl_psytrellis.Visible = true;
                     }
-                    break;
-                case "analyse":
-                    if (drop_analysis.SelectedIndex == 1)
-                    {
-                        /* No analysis? Disable 8x8dct */
-                        check_8x8DCT.Visible = false;
-                        if (sender != "8x8dct")
-                            check_8x8DCT.CheckState = CheckState.Unchecked;
-                    }
-                    else
-                        check_8x8DCT.Visible = true;
-                    break;
-                case "ref":
-                    if (drop_refFrames.SelectedIndex > 0 && drop_refFrames.SelectedIndex < 3)
-                    {
-                        check_mixedReferences.Visible = false;
-                        if (sender != "mixed-refs")
-                            check_mixedReferences.CheckState = CheckState.Unchecked;
-                    }
-                    else
-                        check_mixedReferences.Visible = true;
                     break;
                 case "me": // Motion Estimation
                     if (drop_MotionEstimationMethod.SelectedIndex < 3)
@@ -933,6 +988,8 @@ namespace Handbrake.Controls
             }
         }
 
+        /* UI Events */
+
         private void widgetControlChanged(object sender, EventArgs e)
         {
             Control changedControlName = (Control) sender;
@@ -943,19 +1000,16 @@ namespace Handbrake.Controls
                 case "drop_refFrames":
                     controlName = "ref";
                     break;
-                case "check_mixedReferences":
-                    controlName = "mixed-refs";
-                    break;
                 case "drop_bFrames":
                     controlName = "bframes";
                     break;
                 case "drop_directPrediction":
                     controlName = "direct";
                     break;
-                case "check_weightedBFrames":
-                    controlName = "weightb";
+                case "check_weightp":
+                    controlName = "weightp";
                     break;
-                case "check_pyrmidalBFrames":
+                case "combo_pyrmidalBFrames":
                     controlName = "b-pyramid";
                     break;
                 case "drop_MotionEstimationMethod":
@@ -982,9 +1036,6 @@ namespace Handbrake.Controls
                 case "drop_trellis":
                     controlName = "trellis";
                     break;
-                case "check_noFastPSkip":
-                    controlName = "no-fast-pskip";
-                    break;
                 case "check_noDCTDecimate":
                     controlName = "no-dct-decimate";
                     break;
@@ -996,6 +1047,9 @@ namespace Handbrake.Controls
                     break;
                 case "slider_psytrellis":
                     controlName = "psy-rd";
+                    break;
+                case "slider_adaptiveQuantStrength":
+                    controlName = "aq-strength";
                     break;
                 case "drop_adaptBFrames":
                     controlName = "b-adapt";
@@ -1011,8 +1065,8 @@ namespace Handbrake.Controls
                 string query = rtf_x264Query.Text.Replace("\n", string.Empty);
                 Reset2Defaults();
                 rtf_x264Query.Text = query;
-                X264_StandardizeOptString();
-                X264_SetCurrentSettingsInPanel();
+                this.StandardizeOptString();
+                this.SetCurrentSettingsInPanel();
 
                 if (rtf_x264Query.Text == string.Empty)
                     Reset2Defaults();

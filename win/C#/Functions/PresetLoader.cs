@@ -183,6 +183,7 @@ namespace Handbrake.Functions
             mainWindow.check_2PassEncode.CheckState = presetQuery.TwoPass ? CheckState.Checked : CheckState.Unchecked;
 
             mainWindow.drp_videoFramerate.Text = presetQuery.VideoFramerate;
+            mainWindow.checkMaximumFramerate.Checked = presetQuery.Pfr;
 
             mainWindow.check_turbo.CheckState = presetQuery.TurboFirstPass ? CheckState.Checked : CheckState.Unchecked;
 

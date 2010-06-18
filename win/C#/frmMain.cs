@@ -149,8 +149,8 @@ namespace Handbrake
                     PresetLoader.LoadPreset(this, presetQuery, Properties.Settings.Default.defaultPreset,
                                             presetHandler.GetPreset(Properties.Settings.Default.defaultPreset).PictureSettings);
 
-                    x264Panel.X264_StandardizeOptString();
-                    x264Panel.X264_SetCurrentSettingsInPanel();
+                    x264Panel.StandardizeOptString();
+                    x264Panel.SetCurrentSettingsInPanel();
                 }
             }
             else
@@ -866,8 +866,8 @@ namespace Handbrake
                         PresetLoader.LoadPreset(this, presetQuery, presetName, loadPictureSettings);
 
                         // The x264 widgets will need updated, so do this now:
-                        x264Panel.X264_StandardizeOptString();
-                        x264Panel.X264_SetCurrentSettingsInPanel();
+                        x264Panel.StandardizeOptString();
+                        x264Panel.SetCurrentSettingsInPanel();
 
                         // Finally, let this window have a copy of the preset settings.
                         CurrentlySelectedPreset = preset;
@@ -1739,6 +1739,24 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// When the FrameRate is not Same As Source, show the Max/Constant Mode dropdown
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void drp_videoFramerate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.drp_videoFramerate.SelectedIndex == 0)
+            {
+                this.checkMaximumFramerate.Visible = false;
+                this.checkMaximumFramerate.CheckState = CheckState.Unchecked;
+            }
+        }
+
+        /// <summary>
         /// Set the container format options
         /// </summary>
         public void setContainerOpts()
@@ -2167,8 +2185,8 @@ namespace Handbrake
                 PresetLoader.LoadPreset(this, presetQuery, "Load Back From Queue", true);
 
                 // The x264 widgets will need updated, so do this now:
-                x264Panel.X264_StandardizeOptString();
-                x264Panel.X264_SetCurrentSettingsInPanel();
+                x264Panel.StandardizeOptString();
+                x264Panel.SetCurrentSettingsInPanel();
 
                 // Finally, let this window have a copy of the preset settings.
                 CurrentlySelectedPreset = null;

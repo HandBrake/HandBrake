@@ -248,6 +248,9 @@ namespace Handbrake.Functions
             if (mainWindow.drp_videoFramerate.Text != "Same as source")
                 query += " -r " + mainWindow.drp_videoFramerate.Text;
 
+            if (mainWindow.checkMaximumFramerate.Checked)
+                query += " --pfr ";
+
             #endregion
 
             #region Audio Settings Tab

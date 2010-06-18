@@ -197,6 +197,11 @@ namespace Handbrake.Functions
         public string VideoFramerate { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether Pfr.
+        /// </summary>
+        public bool Pfr { get; set; }
+
+        /// <summary>
         /// Gets or sets AverageVideoBitrate.
         /// </summary>
         public string AverageVideoBitrate { get; set; }
@@ -343,6 +348,7 @@ namespace Handbrake.Functions
             Match twoPass = Regex.Match(input, @" -2");
             Match turboFirstPass = Regex.Match(input, @" -T");
             Match optimizeMP4 = Regex.Match(input, @" -O");
+            Match pfr = Regex.Match(input, @" --pfr");
 
             // Audio Settings Tab
             Match noAudio = Regex.Match(input, @"-a none");
@@ -522,6 +528,8 @@ namespace Handbrake.Functions
                 thisQuery.VideoFramerate = videoFramerate.Success
                                                ? videoFramerate.ToString().Replace("-r ", string.Empty)
                                                : "Same as source";
+
+                thisQuery.Pfr = pfr.Success;
                 thisQuery.Grayscale = grayscale.Success;
                 thisQuery.TwoPass = twoPass.Success;
                 thisQuery.TurboFirstPass = turboFirstPass.Success;
