@@ -311,6 +311,10 @@ class Display
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
+      
+      if hash["VideoFrameratePFR"] == 1
+        commandString << " --pfr "
+      end
     end
     
     #Audio tracks
@@ -554,6 +558,10 @@ class Display
       else
         commandString << " -r " << hash["VideoFramerate"]
       end
+      
+      if hash["VideoFrameratePFR"] == 1
+        commandString << " --pfr "
+      end
     end
     
     #Audio tracks
@@ -790,7 +798,12 @@ class Display
         commandString << "job->vrate_base = " << "1080000\n    "
       # Gotta add the rest of the framerates for completion's sake.
       end
-      commandString << "job->cfr = 1;\n    "
+      
+      if hash["VideoFrameratePFR"] == 1
+        commandString << "job->cfr = 2;\n    "
+      else
+        commandString << "job->cfr = 1;\n    "
+      end
     end
     
     #Audio tracks
@@ -1065,6 +1078,10 @@ class Display
         commandString << " -r " << "25"
       else
         commandString << " -r " << hash["VideoFramerate"]
+      end
+      
+      if hash["VideoFrameratePFR"] == 1
+        commandString << " --pfr "
       end
     end
     
