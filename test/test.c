@@ -642,6 +642,7 @@ static int HandleEvents( hb_handle_t * h )
                         anamorphic_mode = 2;
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "iPod"))
@@ -683,6 +684,7 @@ static int HandleEvents( hb_handle_t * h )
                         x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=768:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "iPhone & iPod Touch"))
@@ -723,6 +725,51 @@ static int HandleEvents( hb_handle_t * h )
                         x264opts = strdup("cabac=0:ref=2:me=umh:bframes=0:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
+
+                }
+
+                if (!strcmp(preset_name, "iPad"))
+                {
+                    if( !mux )
+                    {
+                        mux = HB_MUX_MP4;
+                    }
+                    job->largeFileSize = 1;
+                    vcodec = HB_VCODEC_X264;
+                    job->vquality = 20.0;
+                    job->vrate_base = 900900;
+                    job->cfr = 2;
+                    if( !atracks )
+                    {
+                        atracks = strdup("1");
+                    }
+                    if( !acodecs )
+                    {
+                        acodecs = strdup("faac");
+                    }
+                    if( !abitrates )
+                    {
+                        abitrates = strdup("160");
+                    }
+                    if( !mixdowns )
+                    {
+                        mixdowns = strdup("dpl2");
+                    }
+                    if( !arates )
+                    {
+                        arates = strdup("48");
+                    }
+                    if( !dynamic_range_compression )
+                    {
+                        dynamic_range_compression = strdup("0.0");
+                    }
+                    maxWidth = 1024;
+                    if( !anamorphic_mode )
+                    {
+                        anamorphic_mode = 2;
+                    }
+                    job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "AppleTV"))
@@ -768,6 +815,7 @@ static int HandleEvents( hb_handle_t * h )
                         anamorphic_mode = 2;
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "Normal"))
@@ -811,6 +859,7 @@ static int HandleEvents( hb_handle_t * h )
                         anamorphic_mode = 1;
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "High Profile"))
@@ -856,6 +905,7 @@ static int HandleEvents( hb_handle_t * h )
                         anamorphic_mode = 2;
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "Classic"))
@@ -889,6 +939,7 @@ static int HandleEvents( hb_handle_t * h )
                     {
                         dynamic_range_compression = strdup("0.0");
                     }
+
                 }
 
                 if (!strcmp(preset_name, "AppleTV Legacy"))
@@ -933,6 +984,7 @@ static int HandleEvents( hb_handle_t * h )
                         anamorphic_mode = 1;
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "iPhone Legacy"))
@@ -974,6 +1026,7 @@ static int HandleEvents( hb_handle_t * h )
                         x264opts = strdup("level=30:cabac=0:ref=1:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:bframes=0:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
+
                 }
 
                 if (!strcmp(preset_name, "iPod Legacy"))
@@ -1015,7 +1068,9 @@ static int HandleEvents( hb_handle_t * h )
                         x264opts = strdup("level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0");
                     }
                     job->chapter_markers = 1;
+
                 }
+
             }
 
 			if ( chapter_markers )
@@ -2449,6 +2504,8 @@ static void ShowPresets()
 
     printf("\n   + iPhone & iPod Touch:  -e x264  -q 20.0 -a 1 -E faac -B 128 -6 dpl2 -R 48 -D 0.0 -f mp4 -X 480 -m -x cabac=0:ref=2:me=umh:bframes=0:subme=6:8x8dct=0:trellis=0\n");
 
+    printf("\n   + iPad:  -e x264  -q 20.0 -r 29.97 --pfr  -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -4 -X 1024 --loose-anamorphic -m\n");
+
     printf("\n   + AppleTV:  -e x264  -q 20.0 -a 1,1 -E faac,ac3 -B 160,160 -6 dpl2,auto -R 48,Auto -D 0.0,0.0 -f mp4 -4 -X 960 --loose-anamorphic -m -x cabac=0:ref=2:me=umh:b-adapt=2:weightb=0:trellis=0:weightp=0:vbv-maxrate=9500:vbv-bufsize=9500\n");
 
     printf("\n>\n");
@@ -2472,6 +2529,7 @@ static void ShowPresets()
     printf("\n   + iPod Legacy:  -e x264  -b 1500 -a 1 -E faac -B 160 -6 dpl2 -R 48 -D 0.0 -f mp4 -I -X 640 -m -x level=30:bframes=0:cabac=0:ref=1:vbv-maxrate=1500:vbv-bufsize=2000:analyse=all:me=umh:no-fast-pskip=1:psy-rd=0,0:subme=6:8x8dct=0:trellis=0\n");
 
     printf("\n>\n");
+
 }
 
 static char * hb_strndup( char * str, int len )
