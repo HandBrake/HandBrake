@@ -17,6 +17,7 @@
 - (NSDictionary *)createRegularPresetFolder;
 - (NSDictionary *)createLegacyPresetFolder;
 
+- (NSDictionary *)createiPadPreset;
 - (NSDictionary *)createAppleTVPreset;
 - (NSDictionary *)createAppleTVLegacyPreset;
 - (NSDictionary *)createAppleUniversalPreset;
