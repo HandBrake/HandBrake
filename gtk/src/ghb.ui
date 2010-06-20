@@ -234,7 +234,7 @@
     <property name="value">0</property>
   </object>
   <object class="GtkAdjustment" id="adjustment34">
-    <property name="upper">1</property>
+    <property name="upper">2</property>
     <property name="lower">0</property>
     <property name="page_increment">0.5</property>
     <property name="step_increment">0.1</property>
