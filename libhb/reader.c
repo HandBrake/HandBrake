@@ -167,8 +167,12 @@ static void update_ipt( hb_reader_t *r, const hb_buffer_t *buf )
 {
     stream_timing_t *st = id_to_st( r, buf );
     double dt = buf->renderOffset - st->last;
-    st->average += ( dt - st->average ) * (1./32.);
-    st->last = buf->renderOffset;
+    // Protect against spurious bad timestamps
+    if ( dt > -5 * 90000LL && dt < 5 * 90000LL )
+    {
+        st->average += ( dt - st->average ) * (1./32.);
+        st->last = buf->renderOffset;
+    }
 }
 
 // use the per-stream state associated with 'buf' to compute a new scr_offset
@@ -180,9 +184,8 @@ static void new_scr_offset( hb_reader_t *r, hb_buffer_t *buf )
     stream_timing_t *st = id_to_st( r, buf );
     int64_t nxt = st->last + st->average;
     r->scr_offset = buf->renderOffset - nxt;
-    buf->renderOffset = nxt;
     r->scr_changes = r->demux.scr_changes;
-    st->last = buf->renderOffset;
+    st->last = nxt;
 }
 
 /***********************************************************************
