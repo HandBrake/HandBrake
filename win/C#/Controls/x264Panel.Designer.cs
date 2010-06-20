@@ -73,7 +73,7 @@ namespace Handbrake.Controls
             this.combo_pyrmidalBFrames = new System.Windows.Forms.ComboBox();
             this.lbl_adaptiveQuantStrength = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lbl_prymidalBframes = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.slider_psytrellis)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.slider_psyrd)).BeginInit();
@@ -654,14 +654,14 @@ namespace Handbrake.Controls
             this.label1.TabIndex = 90;
             this.label1.Text = "Psychovisual:";
             // 
-            // label2
+            // lbl_prymidalBframes
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 160);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(105, 13);
-            this.label2.TabIndex = 91;
-            this.label2.Text = "Pyramidal B-Frames:";
+            this.lbl_prymidalBframes.AutoSize = true;
+            this.lbl_prymidalBframes.Location = new System.Drawing.Point(20, 160);
+            this.lbl_prymidalBframes.Name = "lbl_prymidalBframes";
+            this.lbl_prymidalBframes.Size = new System.Drawing.Size(105, 13);
+            this.lbl_prymidalBframes.TabIndex = 91;
+            this.lbl_prymidalBframes.Text = "Pyramidal B-Frames:";
             // 
             // label3
             // 
@@ -680,7 +680,7 @@ namespace Handbrake.Controls
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.label3);
             this.Controls.Add(this.rtf_x264Query);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbl_prymidalBframes);
             this.Controls.Add(this.combo_pyrmidalBFrames);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.slider_psytrellis);
@@ -765,7 +765,7 @@ namespace Handbrake.Controls
         internal System.Windows.Forms.Label lbl_adaptiveQuantStrength;
         internal System.Windows.Forms.TrackBar slider_adaptiveQuantStrength;
         internal System.Windows.Forms.Label label1;
-        internal System.Windows.Forms.Label label2;
+        internal System.Windows.Forms.Label lbl_prymidalBframes;
         internal System.Windows.Forms.ComboBox combo_pyrmidalBFrames;
         internal System.Windows.Forms.Label label3;
     }

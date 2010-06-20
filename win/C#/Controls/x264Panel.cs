@@ -499,7 +499,7 @@ namespace Handbrake.Controls
                         else if (optNameToChange.Equals("cabac"))
                             thisOpt = check_Cabac.CheckState == CheckState.Checked ? string.Empty : "cabac=0";
                         else if (optNameToChange.Equals("weightp"))
-                            thisOpt = check_Cabac.CheckState == CheckState.Checked ? string.Empty : "weightp=0";
+                            thisOpt = check_weightp.CheckState == CheckState.Checked ? string.Empty : "weightp=0";
                         else if (optNameToChange.Equals("me"))
                         {
                             switch (drop_MotionEstimationMethod.SelectedIndex)
@@ -811,7 +811,7 @@ namespace Handbrake.Controls
             }
             else if (optNameToChange.Equals("weightp"))
             {
-                if (check_weightp.CheckState != CheckState.Unchecked)
+                if (check_weightp.CheckState == CheckState.Unchecked)
                     query = query + colon + "weightp=0";
             }
             else if (optNameToChange.Equals("ref"))
@@ -877,6 +877,7 @@ namespace Handbrake.Controls
                            not to use b-frames at all. So disable the options
                            that can only be used when b-frames are enabled.        */
                         combo_pyrmidalBFrames.Visible = false;
+                        lbl_prymidalBframes.Visible = false;
                         drop_directPrediction.Visible = false;
                         lbl_direct_prediction.Visible = false;
 
@@ -891,6 +892,7 @@ namespace Handbrake.Controls
                     {
                         /* Only 1 b-frame? Disable b-pyramid. */
                         combo_pyrmidalBFrames.Visible = false;
+                        lbl_prymidalBframes.Visible = false;
                         combo_pyrmidalBFrames.SelectedIndex = 0;
 
                         drop_directPrediction.Visible = true;
@@ -902,6 +904,7 @@ namespace Handbrake.Controls
                     else
                     {
                         combo_pyrmidalBFrames.Visible = true;
+                        lbl_prymidalBframes.Visible = true;
                         drop_directPrediction.Visible = true;
                         lbl_direct_prediction.Visible = true;
 
