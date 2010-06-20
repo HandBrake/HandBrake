@@ -103,6 +103,21 @@ static void add_mux_track( hb_mux_t *mux, hb_mux_data_t *mux_data,
     mux->allRdy |= is_continuous << t;
 }
 
+static int mf_full( hb_track_t * track )
+{
+    uint32_t mask = track->mf.flen - 1;
+    uint32_t in = track->mf.in;
+
+    if ( ( ( in + 1 ) & mask ) == ( track->mf.out & mask ) )
+    {
+        if ( track->mf.flen >= 256 )
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 static void mf_push( hb_mux_t * mux, int tk, hb_buffer_t *buf )
 {
     hb_track_t * track = mux->track[tk];
@@ -241,6 +256,13 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             track = mux->track[i];
             OutputTrackChunk( mux, track, mux->m );
+            if ( mf_full( track ) )
+            {
+                // If the track's fifo is still full, advance
+                // the currint interleave point and try again.
+                mux->rdy = mux->allRdy;
+                break;
+            }
 
             // if the track is at eof or still has data that's past
             // our next interleave point then leave it marked as rdy.
