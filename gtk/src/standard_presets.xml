@@ -16,7 +16,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -117,7 +117,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -204,7 +204,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -291,7 +291,96 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
+						<key>AudioTrack</key>
+						<integer>1</integer>
+						<key>AudioTrackDRCSlider</key>
+						<real>0.0</real>
+					</dict>
+				</array>
+				<key>ChapterMarkers</key>
+				<integer>1</integer>
+				<key>Default</key>
+				<integer>0</integer>
+				<key>FileFormat</key>
+				<string>MP4 file</string>
+				<key>Folder</key>
+				<false/>
+				<key>Mp4LargeFile</key>
+				<integer>1</integer>
+				<key>PictureAutoCrop</key>
+				<integer>1</integer>
+				<key>PictureBottomCrop</key>
+				<integer>0</integer>
+				<key>PictureDeblock</key>
+				<integer>0</integer>
+				<key>PictureDeinterlace</key>
+				<integer>0</integer>
+				<key>PictureDenoise</key>
+				<integer>0</integer>
+				<key>PictureDetelecine</key>
+				<integer>0</integer>
+				<key>PictureHeight</key>
+				<integer>0</integer>
+				<key>PictureKeepRatio</key>
+				<integer>0</integer>
+				<key>PictureLeftCrop</key>
+				<integer>0</integer>
+				<key>PicturePAR</key>
+				<integer>2</integer>
+				<key>PictureRightCrop</key>
+				<integer>0</integer>
+				<key>PictureTopCrop</key>
+				<integer>0</integer>
+				<key>PictureWidth</key>
+				<integer>1024</integer>
+				<key>PresetDescription</key>
+				<string>HandBrake's preset for the iPad (1st gen) is optimized for viewing on its 1024x768 display.</string>
+				<key>PresetName</key>
+				<string>iPad</string>
+				<key>Subtitles</key>
+				<string>None</string>
+				<key>Type</key>
+				<integer>0</integer>
+				<key>UsesPictureFilters</key>
+				<integer>1</integer>
+				<key>UsesPictureSettings</key>
+				<integer>1</integer>
+				<key>VFR</key>
+				<integer>0</integer>
+				<key>VideoAvgBitrate</key>
+				<string>2500</string>
+				<key>VideoEncoder</key>
+				<string>H.264 (x264)</string>
+				<key>VideoFramerate</key>
+				<string>29.97 (NTSC Video)</string>
+				<key>VideoFrameratePFR</key>
+				<integer>1</integer>
+				<key>VideoGrayScale</key>
+				<integer>0</integer>
+				<key>VideoQualitySlider</key>
+				<real>20</real>
+				<key>VideoQualityType</key>
+				<integer>2</integer>
+				<key>VideoTargetSize</key>
+				<string>700</string>
+				<key>VideoTwoPass</key>
+				<integer>0</integer>
+				<key>x264Option</key>
+				<string></string>
+			</dict>
+			<dict>
+				<key>AudioList</key>
+				<array>
+					<dict>
+						<key>AudioBitrate</key>
+						<string>160</string>
+						<key>AudioEncoder</key>
+						<string>AAC (faac)</string>
+						<key>AudioMixdown</key>
+						<string>Dolby Pro Logic II</string>
+						<key>AudioSamplerate</key>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -387,7 +476,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009112101</integer>
+		<integer>2010061801</integer>
 		<key>PresetName</key>
 		<string>Apple</string>
 		<key>Type</key>
@@ -407,7 +496,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -494,7 +583,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -592,7 +681,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009112101</integer>
+		<integer>2010061801</integer>
 		<key>PresetName</key>
 		<string>Regular</string>
 		<key>Type</key>
@@ -612,7 +701,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -697,7 +786,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -798,7 +887,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -885,7 +974,7 @@
 						<key>AudioMixdown</key>
 						<string>Dolby Pro Logic II</string>
 						<key>AudioSamplerate</key>
-						<string>48</string>
+						<string>Auto</string>
 						<key>AudioTrack</key>
 						<integer>1</integer>
 						<key>AudioTrackDRCSlider</key>
@@ -967,7 +1056,7 @@
 		<key>Folder</key>
 		<true/>
 		<key>PresetBuildNumber</key>
-		<integer>2009112101</integer>
+		<integer>2010061801</integer>
 		<key>PresetName</key>
 		<string>Legacy</string>
 		<key>Type</key>
