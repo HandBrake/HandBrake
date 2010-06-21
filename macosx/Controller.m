@@ -5603,10 +5603,7 @@ the user is using "Custom" settings by determining the sender*/
         if (audio != NULL)
         {
 
-            /* find out if our selected output audio codec supports mono and / or 6ch */
-            /* audioCodecsSupportMono and audioCodecsSupport6Ch are the same for now,
-             but this may change in the future, so they are separated for flexibility */
-            int audioCodecsSupportMono = (audio->in.codec && acodec != HB_ACODEC_LAME);
+            /* find out if our selected output audio codec supports 6ch */
             int audioCodecsSupport6Ch = (audio->in.codec && acodec != HB_ACODEC_LAME);
             
             /* check for AC-3 passthru */
@@ -5639,21 +5636,17 @@ the user is using "Custom" settings by determining the sender*/
                 /* get the input channel layout without any lfe channels */
                 int layout = audio->in.channel_layout & HB_INPUT_CH_LAYOUT_DISCRETE_NO_LFE_MASK;
                 
-                /* do we want to add a mono option? */
-                if (audioCodecsSupportMono == 1)
-                {
-                    NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
-                                            [NSString stringWithUTF8String: hb_audio_mixdowns[0].human_readable_name]
-                                                                          action: NULL keyEquivalent: @""];
-                    [menuItem setTag: hb_audio_mixdowns[0].amixdown];
-                    if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
-                    maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[0].amixdown);
-                }
+                /* add a mono option */
+                NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
+                                        [NSString stringWithUTF8String: hb_audio_mixdowns[0].human_readable_name]
+                                                                      action: NULL keyEquivalent: @""];
+                [menuItem setTag: hb_audio_mixdowns[0].amixdown];
+                if (minMixdownUsed == 0) minMixdownUsed = hb_audio_mixdowns[0].amixdown;
+                maxMixdownUsed = MAX(maxMixdownUsed, hb_audio_mixdowns[0].amixdown);
                 
                 /* do we want to add a stereo option? */
-                /* offer stereo if we have a mono source and non-mono-supporting codecs, as otherwise we won't have a mixdown at all */
-                /* also offer stereo if we have a stereo-or-better source */
-                if ((layout == HB_INPUT_CH_LAYOUT_MONO && audioCodecsSupportMono == 0) || layout >= HB_INPUT_CH_LAYOUT_STEREO)
+                /* offer stereo if we have a stereo-or-better source */
+                if (layout >= HB_INPUT_CH_LAYOUT_STEREO)
                 {
                     NSMenuItem *menuItem = [[mixdownPopUp menu] addItemWithTitle:
                                             [NSString stringWithUTF8String: hb_audio_mixdowns[1].human_readable_name]
