@@ -918,6 +918,16 @@ preset_to_ui(signal_user_data_t *ud, GValue *dict)
 			dd = ghb_value_boolean(val);
 			ghb_ui_update(ud, "PictureDeinterlaceDecomb", ghb_boolean_value(!dd));
 		}
+		val = ghb_dict_lookup(dict, "PictureHeight");
+		if (val != NULL)
+		{
+			ghb_ui_update(ud, "scale_height", val);
+		}
+		val = ghb_dict_lookup(dict, "PictureWidth");
+		if (val != NULL)
+		{
+			ghb_ui_update(ud, "scale_width", val);
+		}
 	}
 }
 
